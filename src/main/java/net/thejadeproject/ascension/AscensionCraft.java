@@ -2,6 +2,7 @@ package net.thejadeproject.ascension;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.thejadeproject.ascension.block.ModBlocks;
 import net.thejadeproject.ascension.item.ModItems;
 import org.slf4j.Logger;
 
@@ -38,6 +39,7 @@ public class AscensionCraft {
         NeoForge.EVENT_BUS.register(this);
 
         ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -53,6 +55,14 @@ public class AscensionCraft {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
             event.accept(ModItems.PEACH);
+        }
+
+        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(ModItems.JADE);
+        }
+
+        if(event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
+            event.accept(ModBlocks.JADE_BLOCK);
         }
     }
 

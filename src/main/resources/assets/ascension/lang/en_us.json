@@ -1,3 +1,7 @@
 {
-  "item.ascension.peach": "Peach"
+  "item.ascension.peach": "Peach",
+  "item.ascension.jade": "Jade",
+
+
+  "block.ascension.jade_block": "Block of Jade"
 }

@@ -11,6 +11,8 @@ public class ModItems {
 
     public static final DeferredItem<Item> PEACH = ITEMS.register("peach",
             () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> JADE = ITEMS.register("jade",
+            () -> new Item(new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
