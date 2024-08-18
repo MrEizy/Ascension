@@ -2,6 +2,8 @@
   "item.ascension.peach": "Peach",
   "item.ascension.jade": "Jade",
 
+  "block.ascension.jade_block": "Block of Jade",
 
-  "block.ascension.jade_block": "Block of Jade"
+  "creativetab.ascension.ascension_items_tab": "Ascension Items",
+  "creativetab.ascension.ascension_blocks_tab": "Ascension Blocks"
 }

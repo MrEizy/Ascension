@@ -10,7 +10,7 @@ public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(AscensionCraft.MOD_ID);
 
     public static final DeferredItem<Item> PEACH = ITEMS.register("peach",
-            () -> new Item(new Item.Properties()));
+            () -> new Item(new Item.Properties().food(ModFoods.PEACH)));
     public static final DeferredItem<Item> JADE = ITEMS.register("jade",
             () -> new Item(new Item.Properties()));
 
