@@ -30,7 +30,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.JADE.get(), 9)
                 .requires(ModBlocks.JADE_BLOCK)
                 .unlockedBy("has_jade_block", has(ModBlocks.JADE_BLOCK))
-                .save(recipeOutput, "ascenion:jade_block_to_jade");
+                .save(recipeOutput, "ascension:jade_block_to_jade");
 
     }
 }

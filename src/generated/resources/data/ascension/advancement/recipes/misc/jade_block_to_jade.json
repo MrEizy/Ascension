@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "ascenion:jade_block_to_jade"
+        "recipe": "ascension:jade_block_to_jade"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "ascenion:jade_block_to_jade"
+      "ascension:jade_block_to_jade"
     ]
   }
 }
