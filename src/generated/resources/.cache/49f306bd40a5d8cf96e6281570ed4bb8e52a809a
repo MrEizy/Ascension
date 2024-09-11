@@ -1,0 +1,3 @@
+// 1.21	2024-09-11T10:22:29.8725753	Tags for minecraft:block mod id ascension
+d9443f955f1eb385377adc7594d2873c571243ab data/minecraft/tags/block/mineable/pickaxe.json
+d9443f955f1eb385377adc7594d2873c571243ab data/minecraft/tags/block/needs_iron_tool.json

@@ -6,5 +6,5 @@ import net.minecraft.world.food.FoodProperties;
 
 public class ModFoods {
     public static final FoodProperties PEACH = new FoodProperties.Builder().nutrition(4)
-            .saturationModifier(0.4f).effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 200), 0.5f).build();
+            .saturationModifier(0.4f).effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 200), 0.33f).build();
 }

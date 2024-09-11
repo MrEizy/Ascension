@@ -22,6 +22,7 @@ public class ModCreativeModeTabs {
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.JADE);
                         output.accept(ModItems.PEACH);
+                        output.accept(ModItems.SPIRITUAL_FIRE);
 
                     }).build());
 

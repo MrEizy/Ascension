@@ -18,4 +18,7 @@ public class ModItems {
         ITEMS.register(eventBus);
     }
 
+    public static final DeferredItem<Item> SPIRITUAL_FIRE = ITEMS.register("spiritual_fire",
+            () -> new Item(new Item.Properties()));
+
 }
