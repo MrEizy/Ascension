@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sects - Documentation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="mountains-bg">
+  <svg viewBox="0 0 1440 400" preserveAspectRatio="none" style="height:400px">
+    <polygon fill="rgba(15,32,64,0.6)" points="0,400 200,180 400,280 600,120 800,220 1000,100 1200,200 1440,140 1440,400"/>
+    <polygon fill="rgba(10,22,40,0.8)" points="0,400 150,250 350,320 550,200 750,300 950,180 1150,260 1350,200 1440,240 1440,400"/>
+    <polygon fill="rgba(8,18,35,0.95)" points="0,400 100,320 300,360 500,300 700,350 900,280 1100,340 1300,300 1440,330 1440,400"/>
+  </svg>
+</div>
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><div class="logo-icon">Z</div><span>Zenith Interactive Creations</span></a>
+  <div class="navbar-links"><a href="index.html">Home</a><a href="mods.html" class="active">Mods</a></div>
+</nav>
+<div class="page-content">
+  <div class="layout-with-sidebar">
+    <aside class="sidebar">
+      <div class="sidebar-title">Sects</div>
+      <a href="#overview">📋 Overview</a>
+      <a href="#creation">🏗️ Sect Creation</a>
+      <a href="#hierarchy">👥 Hierarchy</a>
+      <a href="#territory">🗺️ Territory</a>
+      <a href="#warfare">⚔️ Warfare</a>
+      <a href="#missions">📜 Missions</a>
+      <div class="sidebar-title" style="margin-top:2rem">Other Mods</div>
+      <a href="ascension.html">🌟 Ascension</a>
+      <a href="formations.html">🔷 Formations</a>
+    </aside>
+    <div class="main-content">
+      <h1>Sects <span class="wip-badge">Work in Progress</span></h1>
+      <p>The Sects system is a major expansion for Perfect Ascension, introducing player-run organizations with territories, hierarchies, resources, and inter-sect warfare.</p>
+
+      <div class="info-box warning"><strong>⚠️ Work in Progress:</strong> This module is currently under active development. Features described here are planned and subject to change. Stay tuned for updates!</div>
+
+      <h2 id="overview">Overview</h2>
+      <p>Sects are player-created organizations that serve as the social backbone of the Ascension world. Each sect occupies territory, gathers resources, trains disciples, and competes for dominance. The system draws inspiration from traditional Xianxia novels where sects are powerful institutions that shape the cultivation world.</p>
+
+      <h2 id="creation">Sect Creation</h2>
+      <p>To found a sect, a player must meet the following requirements:</p>
+      <ul>
+        <li>Reach at least Foundation Establishment realm</li>
+        <li>Possess a Sect Foundation Token (crafted or found)</li>
+        <li>Place a Sect Banner to claim initial territory</li>
+        <li>Name the sect and choose a sect emblem</li>
+      </ul>
+      <p>Once founded, the sect leader becomes the Sect Master and gains access to the Sect Management Interface, where they can manage all aspects of the organization.</p>
+
+      <h2 id="hierarchy">Sect Hierarchy</h2>
+      <p>Each sect features a hierarchical structure with customizable ranks:</p>
+      <table>
+        <thead><tr><th>Default Rank</th><th>Permissions</th><th>Max Count</th></tr></thead>
+        <tbody>
+          <tr><td>Sect Master</td><td>Full control, can dissolve sect</td><td>1</td></tr>
+          <tr><td>Grand Elder</td><td>Manage elders, territory, diplomacy</td><td>3</td></tr>
+          <tr><td>Elder</td><td>Recruit members, manage resources</td><td>10</td></tr>
+          <tr><td>Inner Disciple</td><td>Access inner sect areas, missions</td><td>50</td></tr>
+          <tr><td>Outer Disciple</td><td>Basic sect access, training grounds</td><td>Unlimited</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="territory">Territory System</h2>
+      <p>Sects claim territory using Boundary Stones. Territory provides several benefits:</p>
+      <ul>
+        <li><strong>Qi Enhancement</strong> — Higher ambient Qi density within territory</li>
+        <li><strong>Protection</strong> — Sect formations can be placed within territory</li>
+        <li><strong>Resource Generation</strong> — Spirit Stone mines and herb gardens within territory produce resources for the sect</li>
+        <li><strong>Building Rights</strong> — Only sect members can build within claimed territory</li>
+      </ul>
+
+      <h2 id="warfare">Sect Warfare</h2>
+      <p>Sects can declare war on each other, leading to organized PvP battles with objectives and rewards. War mechanics include siege battles, resource raids, and territory capture. The losing sect may be forced to pay tribute or cede territory.</p>
+
+      <h2 id="missions">Sect Missions</h2>
+      <p>Sect leaders can create and assign missions to disciples. Missions provide contribution points that determine a disciple's rank and access to sect resources. Planned mission types include gathering, exploration, combat, and crafting missions.</p>
+
+      <div class="info-box info"><strong>📢 Want to contribute?</strong> We're looking for community input on the Sects system. Join our Discord to share your ideas and feedback!</div>
+    </div>
+  </div>
+  <footer class="footer"><p>© 2024 Zenith Interactive Creations. All rights reserved.</p></footer>
+</div>
+</body>
+</html>

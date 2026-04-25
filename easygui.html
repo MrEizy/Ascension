@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EasyGUI - Documentation</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .main-content p, .main-content li, .main-content td { color: #c9d1d9; }
+    .main-content strong { color: #f1f5f9; }
+    .main-content h3 { margin-top: 2.2rem; }
+    .main-content h4 { margin-top: 1.6rem; color: #93c5fd; font-size: 1.1rem; }
+    .code-block {
+      line-height: 1.85;
+      font-size: 0.9rem;
+      padding: 1.5rem 1.75rem;
+      background: rgba(0,0,0,0.55);
+      border-color: rgba(59,130,246,0.25);
+      color: #d4d4d4;
+      margin: 1.25rem 0 1.75rem;
+      width: calc(100% + 6rem);
+      max-width: none;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .code-block code {
+      background: transparent;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+      color: inherit;
+      font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .code-block .keyword { color: #ff7b72; font-weight: 600; }
+    .code-block .type    { color: #79c0ff; }
+    .code-block .string  { color: #a5d6ff; }
+    .code-block .comment { color: #8b949e; font-style: italic; }
+    .code-block .number  { color: #79c0ff; }
+    .code-block .func    { color: #d2a8ff; }
+    table { margin: 1.25rem 0 1.75rem; }
+    th { color: #e2e8f0; font-size: 0.95rem; }
+    td { color: #c9d1d9; font-size: 0.9rem; }
+
+    /* Accordion Sidebar — matches regular sidebar links */
+    .sidebar .accordion-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 1.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      user-select: none;
+    }
+    .sidebar .accordion-toggle:hover {
+      color: var(--accent-glow);
+      border-left-color: var(--accent);
+      background: rgba(59,130,246,0.05);
+    }
+    .sidebar .accordion-toggle.open {
+      color: var(--accent-glow);
+      border-left-color: var(--accent);
+      background: rgba(59,130,246,0.08);
+    }
+    .sidebar .accordion-toggle .arrow {
+      font-size: 0.7rem;
+      transition: transform 0.3s ease;
+      opacity: 0.6;
+      margin-left: auto;
+    }
+    .sidebar .accordion-toggle.open .arrow {
+      transform: rotate(90deg);
+      opacity: 1;
+    }
+    .sidebar .accordion-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+    .sidebar .accordion-menu.open {
+      max-height: 500px;
+    }
+    .sidebar .accordion-menu a {
+      padding-left: 3rem;
+      font-size: 0.85rem;
+    }
+    .sidebar a.active { color: #60a5fa; border-left-color: #3b82f6; background: rgba(59,130,246,0.1); }
+  </style>
+</head>
+<body>
+<div class="mountains-bg">
+  <svg viewBox="0 0 1440 400" preserveAspectRatio="none" style="height:400px">
+    <polygon fill="rgba(15,32,64,0.6)" points="0,400 200,180 400,280 600,120 800,220 1000,100 1200,200 1440,140 1440,400"/>
+    <polygon fill="rgba(10,22,40,0.8)" points="0,400 150,250 350,320 550,200 750,300 950,180 1150,260 1350,200 1440,240 1440,400"/>
+    <polygon fill="rgba(8,18,35,0.95)" points="0,400 100,320 300,360 500,300 700,350 900,280 1100,340 1300,300 1440,330 1440,400"/>
+  </svg>
+</div>
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><div class="logo-icon">Z</div><span>Zenith Interactive Creations</span></a>
+  <div class="navbar-links"><a href="index.html">Home</a><a href="mods.html" class="active">Mods</a></div>
+</nav>
+<div class="page-content">
+  <div class="layout-with-sidebar">
+    <aside class="sidebar">
+      <div class="sidebar-title">EasyGUI</div>
+      <a href="#overview">✨ Overview</a>
+      <a href="#quickstart">🚀 Quick Start</a>
+
+      <div class="accordion-toggle" data-target="menu-core">
+        <span>🔧 Core Concepts</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="accordion-menu" id="menu-core">
+        <a href="#uiframe" class="sub-item">UIFrame</a>
+        <a href="#renderableelement" class="sub-item">RenderableElement</a>
+      </div>
+
+      <div class="accordion-toggle" data-target="menu-layout">
+        <span>📐 Layout & Positioning</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="accordion-menu" id="menu-layout">
+        <a href="#positioning" class="sub-item">Positioning</a>
+        <a href="#transform" class="sub-item">Transform</a>
+      </div>
+
+      <div class="accordion-toggle" data-target="menu-events">
+        <span>⚡ Event System</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="accordion-menu" id="menu-events">
+        <a href="#mouseevents" class="sub-item">Mouse & Key</a>
+      </div>
+
+      <div class="accordion-toggle" data-target="menu-elements">
+        <span>🧩 Elements</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="accordion-menu" id="menu-elements">
+        <a href="#easybutton" class="sub-item">EasyButton</a>
+        <a href="#easylabel" class="sub-item">EasyLabel</a>
+        <a href="#easydraggable" class="sub-item">EasyDraggable</a>
+        <a href="#healthbar" class="sub-item">HealthBar</a>
+        <a href="#tooltip" class="sub-item">EasyTooltip</a>
+      </div>
+
+      <a href="#screens">🖥️ Screens & Overlays</a>
+      <a href="#textures">🎨 Textures</a>
+      <a href="#examples">📖 Examples</a>
+
+      <div class="sidebar-title" style="margin-top:2rem">Other Mods</div>
+      <a href="ascension.html">🌟 Ascension</a>
+      <a href="formations.html">🔷 Formations</a>
+      <a href="builders-zenith.html">🏗️ Builder's Zenith</a>
+    </aside>
+    <div class="main-content">
+      <h1>EasyGUI</h1>
+      <div class="version-badge" style="margin-bottom:1.5rem">Minecraft 1.21.1 • NeoForge • Library Mod</div>
+      <p>EasyGUI is a retained-mode GUI framework for NeoForge. Instead of drawing every frame imperatively, you build a tree of <code>RenderableElement</code> objects, position them with rules, and respond to events. It handles transforms, Z-ordering, scissor culling, focus, and event propagation automatically.</p>
+
+      <div class="btn-group" style="justify-content:flex-start;margin:1.5rem 0">
+        <a href="https://modrinth.com/mod/easygui" class="btn btn-primary" target="_blank">⬇ Modrinth</a>
+        <a href="https://www.curseforge.com/minecraft/mc-mods/easygui" class="btn btn-secondary" target="_blank">⬇ CurseForge</a>
+      </div>
+
+      <div class="info-box tip">
+        <strong>💡 Tip:</strong> If you have ever written HTML/CSS, EasyGUI will feel familiar. Elements have IDs, classes, positioning contexts, and an event flow that captures, targets, then bubbles.
+      </div>
+
+      <h2 id="overview">Overview</h2>
+      <p>EasyGUI replaces the boilerplate of vanilla screen code with a declarative, object-oriented API. You create a <code>UIFrame</code>, attach a tree of <code>RenderableElement</code> nodes, and let the framework handle rendering, input, and layout. This makes complex UIs — draggable panels, animated menus, custom HUDs — straightforward to build and maintain.</p>
+
+      <h3>Why EasyGUI?</h3>
+      <ul>
+        <li><strong>Retained Mode</strong> — Build a scene graph once; the framework redraws it every frame.</li>
+        <li><strong>Automatic Input Handling</strong> — Mouse, keyboard, scroll, and drag events propagate through the tree.</li>
+        <li><strong>Flexible Positioning</strong> — Absolute, fixed, centered, and end-aligned rules out of the box.</li>
+        <li><strong>Transforms</strong> — Rotate and scale elements around their center without manual matrix math.</li>
+        <li><strong>Scissor Culling</strong> — Clip overflowing children with a single boolean flag.</li>
+        <li><strong>Focus Management</strong> — Keyboard focus moves between elements automatically.</li>
+      </ul>
+
+      <h2 id="quickstart">Quick Start</h2>
+      <p>Creating a screen takes three steps:</p>
+      <ol>
+        <li>Create a <code>UIFrame</code>.</li>
+        <li>Add elements to a root <code>RenderableElement</code>.</li>
+        <li>Wrap the frame in an <code>EasyScreen</code> and open it.</li>
+      </ol>
+
+      <div class="code-block"><code><span class="comment">// ============================================================</span>
+<span class="comment">// 1. Create the frame — this is your top-level container</span>
+<span class="comment">// ============================================================</span>
+
+<span class="type">UIFrame</span> <span class="func">frame</span> = <span class="keyword">new</span> <span class="type">UIFrame</span>();
+
+
+<span class="comment">// ============================================================</span>
+<span class="comment">// 2. Build a root element and add children to it</span>
+<span class="comment">// ============================================================</span>
+
+<span class="type">RenderableElement</span> <span class="func">root</span> = <span class="keyword">new</span> <span class="type">RenderableElement</span>(frame);
+
+root.<span class="func">setWidth</span>(<span class="number">200</span>);
+root.<span class="func">setHeight</span>(<span class="number">100</span>);
+
+
+<span class="type">EasyLabel</span> <span class="func">label</span> = <span class="keyword">new</span> <span class="type">EasyLabel</span>(frame);
+
+label.<span class="func">setText</span>(<span class="type">Component</span>.<span class="func">literal</span>(<span class="string">"Hello World"</span>));
+label.<span class="func">setTextColor</span>(<span class="number">0xFFFFFFFF</span>);
+
+
+<span class="comment">// Attach the label to the root</span>
+root.<span class="func">addChild</span>(label);
+
+
+<span class="comment">// Attach the root to the frame</span>
+frame.<span class="func">setRoot</span>(root);
+
+
+<span class="comment">// ============================================================</span>
+<span class="comment">// 3. Open the screen</span>
+<span class="comment">// ============================================================</span>
+
+<span class="type">Minecraft</span>.<span class="func">getInstance</span>().<span class="func">setScreen</span>(
+    <span class="keyword">new</span> <span class="type">EasyScreen</span>(
+        <span class="type">Component</span>.<span class="func">literal</span>(<span class="string">"My Screen"</span>),
+        frame
+    )
+);</code></div>
+
+      <div class="info-box info">
+        <strong>📘 Note:</strong> <code>Component.literal("...")</code> creates a vanilla Minecraft text component. EasyGUI uses these for all text rendering.
+      </div>
+
+      <h2 id="core">Core Concepts</h2>
+
+      <h3 id="uiframe">UIFrame</h3>
+      <p>The <code>UIFrame</code> is the top-level container. It owns the element tree, handles all input, manages IDs/classes for lookup, and drives the render loop.</p>
+
+      <table>
+        <thead><tr><th>Property</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>root</code></td><td>The top-level <code>RenderableElement</code>.</td></tr>
+          <tr><td><code>pauseGame</code></td><td>Pauses single-player when <code>true</code>.</td></tr>
+          <tr><td><code>useMinecraftScale</code></td><td>Applies Minecraft's GUI scale to the base transform.</td></tr>
+          <tr><td><code>tooltip</code></td><td>Global <code>EasyTooltip</code> instance.</td></tr>
+          <tr><td><code>idMap</code></td><td>Elements indexed by string ID.</td></tr>
+          <tr><td><code>classMap</code></td><td>Elements indexed by class name.</td></tr>
+          <tr><td><code>focusedElement</code></td><td>Element that receives keyboard events.</td></tr>
+          <tr><td><code>highestPriorityHoveredElement</code></td><td>Element currently under the mouse cursor.</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Key Methods</h4>
+      <ul>
+        <li><code>run(guiGraphics, mouseX, mouseY, partialTick)</code> — Renders the tree and updates hover state.</li>
+        <li><code>onWindowResize(minecraft)</code> — Recalculates transforms when the window changes.</li>
+        <li><code>mouseClicked / mouseReleased / mouseMoved / ...</code> — Input entry points forwarded from the screen.</li>
+        <li><code>trySetFocus(element, focus)</code> — Sets keyboard focus on an element.</li>
+        <li><code>setId(id, element) / addClass(classId, element)</code> — Register elements for lookup.</li>
+      </ul>
+
+      <h3 id="renderableelement">RenderableElement</h3>
+      <p>Every visual component extends <code>RenderableElement</code>. It is the backbone of the scene graph.</p>
+
+      <table>
+        <thead><tr><th>Property</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>positioning</code></td><td><code>Positioning</code> instance defining layout.</td></tr>
+          <tr><td><code>transform</code></td><td><code>Transform</code> instance defining rotation/scale.</td></tr>
+          <tr><td><code>parent</code></td><td>Parent in the element tree.</td></tr>
+          <tr><td><code>uiFrame</code></td><td>Owning <code>UIFrame</code>.</td></tr>
+          <tr><td><code>id</code></td><td>String identifier for lookup.</td></tr>
+          <tr><td><code>classes</code></td><td>List of class strings.</td></tr>
+          <tr><td><code>width / height</code></td><td>Dimensions in pixels.</td></tr>
+          <tr><td><code>active</code></td><td>If <code>false</code>, skips rendering and input entirely.</td></tr>
+          <tr><td><code>visible</code></td><td>If <code>false</code>, skips rendering but still runs <code>renderTick</code>.</td></tr>
+          <tr><td><code>cull</code></td><td>Enables scissor culling for children.</td></tr>
+          <tr><td><code>zIndex</code></td><td>Local Z-order offset (higher = on top).</td></tr>
+          <tr><td><code>children</code></td><td>Child elements.</td></tr>
+          <tr><td><code>canBeFocused</code></td><td>Whether the element can receive keyboard focus.</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Lifecycle</h4>
+      <ul>
+        <li><code>run(...)</code> — Main loop. Applies pose, calls <code>renderTick</code>, then <code>render</code>, then children.</li>
+        <li><code>renderTick(...)</code> — Called every frame even when invisible. Use for animations and logic.</li>
+        <li><code>render(...)</code> — Called only when active and visible. Override to draw your content.</li>
+        <li><code>onRemove()</code> — Cleanup hook when the element is removed from the tree.</li>
+      </ul>
+
+      <h4>Coordinate Helpers</h4>
+      <ul>
+        <li><code>getGlobalPoint()</code> — Top-left corner in screen space.</li>
+        <li><code>getGlobalCornerPoint()</code> — Bottom-right corner in screen space.</li>
+        <li><code>isPointBounded(x, y)</code> — Hit test against element bounds.</li>
+        <li><code>globalToLocalPoint(x, y)</code> — Screen mouse to local space (includes rotation/scale).</li>
+        <li><code>globalToLocalPositionPoint(x, y)</code> — Screen mouse to local space (position only).</li>
+      </ul>
+
+      <h2 id="layout">Layout & Positioning</h2>
+
+      <h3 id="positioning">Positioning System</h3>
+      <p>Every element has a <code>Positioning</code> object that combines a <strong>context</strong> (coordinate space) and <strong>rules</strong> (alignment).</p>
+
+      <h4>Contexts</h4>
+      <table>
+        <thead><tr><th>Context</th><th>Behavior</th></tr></thead>
+        <tbody>
+          <tr><td><code>ABSOLUTE</code></td><td>Relative to parent (or frame root). Identity matrix.</td></tr>
+          <tr><td><code>FIXED</code></td><td>Fixed relative to the frame, ignoring parent transforms.</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Rules</h4>
+      <table>
+        <thead><tr><th>Rule</th><th>X Behavior</th><th>Y Behavior</th></tr></thead>
+        <tbody>
+          <tr><td><code>START</code></td><td>Left / Top edge is at coordinate.</td><td>Same.</td></tr>
+          <tr><td><code>CENTER</code></td><td>Centered on parent/frame width.</td><td>Centered on parent/frame height.</td></tr>
+          <tr><td><code>END</code></td><td>Right / Bottom edge is at coordinate.</td><td>Same.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box warning">
+        <strong>⚠️ Note:</strong> <code>END</code> uses the parent's width/height to calculate the raw position. Positive values move inward from the edge.
+      </div>
+
+      <h3 id="transform">Transform System</h3>
+      <p>The <code>Transform</code> class handles rotation and scaling around the element's center.</p>
+      <table>
+        <thead><tr><th>Property</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>scale</code></td><td>Uniform scale factor.</td></tr>
+          <tr><td><code>useScale</code></td><td>Whether scaling is active.</td></tr>
+          <tr><td><code>xRotation / yRotation / zRotation</code></td><td>Euler angles in degrees.</td></tr>
+        </tbody>
+      </table>
+      <p>Transforms are applied <em>after</em> positioning in the pose stack. The pivot is the element's geometric center, so rotation and scale feel natural.</p>
+
+      <h2 id="events">Event System</h2>
+      <p>Events flow in three phases, just like the DOM:</p>
+      <ol>
+        <li><strong>Capture</strong> — Travels from root down to the target element.</li>
+        <li><strong>At Target</strong> — Runs on the target itself.</li>
+        <li><strong>Bubble</strong> — Travels from the target back up to the root.</li>
+      </ol>
+      <p>Any listener can call <code>event.setCanceled(true)</code> to stop propagation immediately.</p>
+
+      <h4>Targeted Events</h4>
+      <ul>
+        <li><code>MOUSE_DOWN_EVENT</code>, <code>MOUSE_UP_EVENT</code>, <code>MOUSE_MOVE_EVENT</code></li>
+        <li><code>MOUSE_SCROLL_EVENT</code>, <code>MOUSE_DRAG_EVENT</code></li>
+        <li><code>KEY_DOWN_EVENT</code>, <code>KEY_UP_EVENT</code></li>
+        <li><code>CHILD_POSITION_TRANSFORM_CHANGED_EVENT</code>, <code>CHILD_TRANSFORM_CHANGED_EVENT</code></li>
+      </ul>
+
+      <h4>Global Events</h4>
+      <ul>
+        <li><code>FRAME_DIMENSIONS_CHANGE_EVENT</code></li>
+        <li><code>ELEMENT_POSITION_TRANSFORM_CHANGED_EVENT</code>, <code>ELEMENT_TRANSFORM_CHANGED_EVENT</code></li>
+        <li><code>GLOBAL_MOUSE_DOWN_EVENT</code>, <code>GLOBAL_MOUSE_UP_EVENT</code>, <code>GLOBAL_MOUSE_MOVE_EVENT</code></li>
+        <li><code>GLOBAL_MOUSE_SCROLL_EVENT</code>, <code>GLOBAL_MOUSE_DRAG_EVENT</code></li>
+        <li><code>GLOBAL_KEY_DOWN_EVENT</code>, <code>GLOBAL_KEY_UP_EVENT</code></li>
+      </ul>
+
+      <h3 id="mouseevents">Mouse & Key Events</h3>
+      <p><code>EasyMouseEvent</code> and <code>EasyKeyEvent</code> extend <code>EasyEvent</code> and carry detailed input data.</p>
+
+      <h4>EasyMouseEvent Fields</h4>
+      <table>
+        <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>mouseX / mouseY</code></td><td><code>double</code></td><td>Cursor position.</td></tr>
+          <tr><td><code>button</code></td><td><code>int</code></td><td>Mouse button index (0 = left, 1 = right, 2 = middle).</td></tr>
+          <tr><td><code>deltaX / deltaY</code></td><td><code>double</code></td><td>Scroll wheel deltas.</td></tr>
+          <tr><td><code>dragX / dragY</code></td><td><code>double</code></td><td>Drag movement since last frame.</td></tr>
+        </tbody>
+      </table>
+
+      <h4>EasyKeyEvent Fields</h4>
+      <table>
+        <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>keyCode</code></td><td><code>int</code></td><td>GLFW key code.</td></tr>
+          <tr><td><code>scanCode</code></td><td><code>int</code></td><td>Platform scan code.</td></tr>
+          <tr><td><code>modifiers</code></td><td><code>int</code></td><td>Modifier bitmask (Shift, Ctrl, Alt).</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="elements">Built-in Elements</h2>
+
+      <h3 id="easybutton">EasyButton</h3>
+      <p>A clickable element with <code>pressed</code> and <code>hovered</code> states. Override <code>onClick()</code> to handle activation.</p>
+
+      <div class="code-block"><code><span class="comment">// ── Basic Button ──</span>
+
+<span class="type">EasyButton</span> <span class="func">btn</span> = <span class="keyword">new</span> <span class="type">EasyButton</span>(frame, <span class="number">10</span>, <span class="number">10</span>);
+
+btn.<span class="func">setWidth</span>(<span class="number">80</span>);
+btn.<span class="func">setHeight</span>(<span class="number">20</span>);
+btn.<span class="func">setId</span>(<span class="string">"my_button"</span>);
+
+
+<span class="comment">// ── Custom Rendering via Subclass ──</span>
+
+<span class="keyword">new</span> <span class="type">EasyButton</span>(frame, <span class="number">10</span>, <span class="number">10</span>) {
+
+    <span class="keyword">@Override</span>
+    <span class="keyword">public void</span> <span class="func">render</span>(<span class="type">GuiGraphics</span> g, <span class="keyword">int</span> mx, <span class="keyword">int</span> my, <span class="keyword">float</span> pt) {
+
+        <span class="keyword">int</span> color = <span class="func">isPressed</span>()
+            ? <span class="number">0xFF5555</span>
+            : <span class="func">isHovered</span>() ? <span class="number">0x55FF55</span> : <span class="number">0xFFFFFF</span>;
+
+        g.<span class="func">fill</span>(
+            <span class="number">0</span>, <span class="number">0</span>,
+            <span class="func">getWidth</span>(), <span class="func">getHeight</span>(),
+            color
+        );
+    }
+
+    <span class="keyword">@Override</span>
+    <span class="keyword">public void</span> <span class="func">onClick</span>() {
+        <span class="type">System</span>.out.<span class="func">println</span>(<span class="string">"Clicked!"</span>);
+    }
+};</code></div>
+
+      <h3 id="easylabel">EasyLabel</h3>
+      <p>Text rendering with alignment, scaling, and auto-fit options.</p>
+      <table>
+        <thead><tr><th>Property</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>textPositioningX / textPositioningY</code></td><td><code>START</code>, <code>CENTER</code>, or <code>END</code>.</td></tr>
+          <tr><td><code>textScale</code></td><td>Uniform text scale.</td></tr>
+          <tr><td><code>fitWidth / fitHeight</code></td><td>Auto-size container to text bounds.</td></tr>
+          <tr><td><code>maxWidth / maxHeight</code></td><td>Clamp auto-sized dimensions.</td></tr>
+          <tr><td><code>scaleToFit</code></td><td>Reduce scale so text fits inside fixed width.</td></tr>
+          <tr><td><code>color</code></td><td>Text color (default <code>0xFF000000</code>).</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-block"><code><span class="type">EasyLabel</span> <span class="func">label</span> = <span class="keyword">new</span> <span class="type">EasyLabel</span>(frame);
+
+
+<span class="comment">// Text content</span>
+label.<span class="func">setText</span>(<span class="type">Component</span>.<span class="func">literal</span>(<span class="string">"Centered Label"</span>));
+
+label.<span class="func">setTextColor</span>(<span class="number">0xFFFFFFFF</span>);
+label.<span class="func">setTextScale</span>(<span class="number">1.5f</span>);
+
+
+<span class="comment">// Alignment</span>
+label.<span class="func">setTextPositioningX</span>(<span class="type">EasyLabel</span>.<span class="type">TextPositionRule</span>.<span class="type">CENTER</span>);
+label.<span class="func">setTextPositioningY</span>(<span class="type">EasyLabel</span>.<span class="type">TextPositionRule</span>.<span class="type">CENTER</span>);
+
+
+<span class="comment">// Size</span>
+label.<span class="func">setWidth</span>(<span class="number">200</span>);   <span class="comment">// fixed width</span>
+label.<span class="func">setHeight</span>(<span class="number">40</span>);</code></div>
+
+      <h3 id="easydraggable">EasyDraggableElement</h3>
+      <p>An element that can be dragged with the left mouse button. Automatically brings itself to the front via <code>zIndex</code>.</p>
+
+      <div class="info-box tip">
+        <strong>💡 Tip:</strong> The drag offset is calculated in local space, so dragging works correctly even if the element is rotated or scaled.
+      </div>
+
+      <div class="code-block"><code><span class="type">EasyDraggableElement</span> <span class="func">drag</span> = <span class="keyword">new</span> <span class="type">EasyDraggableElement</span>(frame, <span class="number">50</span>, <span class="number">50</span>);
+
+<span class="comment">// Size</span>
+drag.<span class="func">setWidth</span>(<span class="number">60</span>);
+drag.<span class="func">setHeight</span>(<span class="number">60</span>);
+
+
+<span class="comment">// Subclass render() to draw your own content inside</span></code></div>
+
+      <h3 id="healthbar">HealthBar</h3>
+      <p>A survival-mode health bar that mirrors the player's health. It is positioned like the vanilla bar and increments <code>leftHeight</code> to avoid overlap with other HUD elements.</p>
+
+      <div class="code-block"><code><span class="type">HealthBar</span> <span class="func">health</span> = <span class="keyword">new</span> <span class="type">HealthBar</span>(frame);
+
+
+<span class="comment">// Position and size are pre-configured:</span>
+<span class="comment">//</span>
+<span class="comment">//   width  = 80</span>
+<span class="comment">//   height = 10</span>
+<span class="comment">//   X      = centered</span>
+<span class="comment">//   Y      = END with offsets (-91, 39)</span></code></div>
+
+      <h3 id="tooltip">EasyTooltip</h3>
+      <p>A tooltip element rendered via Minecraft's native tooltip system. It is inactive by default and clears its text when hidden.</p>
+
+      <div class="code-block"><code><span class="type">EasyTooltip</span> <span class="func">tooltip</span> = <span class="keyword">new</span> <span class="type">EasyTooltip</span>(frame);
+
+frame.<span class="func">setTooltip</span>(tooltip);
+
+
+<span class="comment">// Activate and populate</span>
+tooltip.<span class="func">setActive</span>(<span class="keyword">true</span>);
+
+tooltip.<span class="func">appendText</span>(<span class="type">Component</span>.<span class="func">literal</span>(<span class="string">"Hello"</span>));
+tooltip.<span class="func">appendText</span>(<span class="type">Component</span>.<span class="func">literal</span>(<span class="string">"World"</span>));
+
+tooltip.<span class="func">setScale</span>(<span class="number">0.8f</span>);</code></div>
+
+      <h2 id="screens">Screens & Overlays</h2>
+
+      <h3>EasyScreen</h3>
+      <p>Wraps a <code>UIFrame</code> in a standard Minecraft <code>Screen</code>. All input is forwarded to the frame.</p>
+
+      <div class="code-block"><code><span class="type">UIFrame</span> <span class="func">frame</span> = <span class="keyword">new</span> <span class="type">UIFrame</span>();
+
+<span class="comment">// ... build your UI ...</span>
+
+
+<span class="type">EasyScreen</span> <span class="func">screen</span> = <span class="keyword">new</span> <span class="type">EasyScreen</span>(
+    <span class="type">Component</span>.<span class="func">literal</span>(<span class="string">"My GUI"</span>),
+    frame
+);
+
+<span class="type">Minecraft</span>.<span class="func">getInstance</span>().<span class="func">setScreen</span>(screen);</code></div>
+
+      <h3>EasyContainerScreen</h3>
+      <p>Extends <code>AbstractContainerScreen</code> and integrates EasyGUI with inventory slots. You can link a <code>RenderableElement</code> to a slot index, and the screen will use that element's transform/position for slot rendering, highlighting, tooltips, and floating items.</p>
+
+      <div class="code-block"><code><span class="keyword">public class</span> <span class="type">MyContainerScreen</span> <span class="keyword">extends</span> <span class="type">EasyContainerScreen</span>&lt;<span class="type">MyMenu</span>&gt; {
+
+    <span class="keyword">public</span> <span class="func">MyContainerScreen</span>(
+            <span class="type">MyMenu</span> menu,
+            <span class="type">Inventory</span> inv,
+            <span class="type">Component</span> title) {
+
+        <span class="keyword">super</span>(menu, inv, title);
+
+        <span class="type">UIFrame</span> <span class="func">frame</span> = <span class="func">getUIFrame</span>();
+
+        <span class="type">RenderableElement</span> <span class="func">root</span> = <span class="keyword">new</span> <span class="type">RenderableElement</span>(frame);
+
+        root.<span class="func">setWidth</span>(<span class="number">176</span>);
+        root.<span class="func">setHeight</span>(<span class="number">166</span>);
+
+
+        <span class="comment">// Link slot 0 to a custom element</span>
+        <span class="type">RenderableElement</span> <span class="func">slot0</span> = <span class="keyword">new</span> <span class="type">RenderableElement</span>(frame, <span class="number">8</span>, <span class="number">18</span>);
+
+        slot0.<span class="func">setWidth</span>(<span class="number">16</span>);
+        slot0.<span class="func">setHeight</span>(<span class="number">16</span>);
+        slot0.<span class="func">setId</span>(<span class="string">"slot_index_0"</span>);   <span class="comment">// required pattern</span>
+
+        root.<span class="func">addChild</span>(slot0);
+        frame.<span class="func">setRoot</span>(root);
+    }
+}</code></div>
+
+      <div class="info-box warning">
+        <strong>⚠️ Important:</strong> Slot elements <strong>must</strong> use the ID pattern <code>slot_index_&lt;n&gt;</code> so the container screen can map them to the correct inventory slot.
+      </div>
+
+      <h3>Overlays</h3>
+      <p>Register HUD layers that persist outside of screens.</p>
+
+      <div class="code-block"><code><span class="comment">// In your mod init or client setup:</span>
+
+<span class="type">UIFrame</span> <span class="func">hudFrame</span> = <span class="keyword">new</span> <span class="type">UIFrame</span>();
+
+<span class="comment">// ... build your HUD ...</span>
+
+
+<span class="type">EasyOverlayHandler</span>.<span class="func">registerOverlay</span>(
+    <span class="type">ResourceLocation</span>.<span class="func">fromNamespaceAndPath</span>(
+        <span class="string">"mymod"</span>,
+        <span class="string">"custom_hud"</span>
+    ),
+    <span class="type">EasyOverlayPosition</span>.<span class="func">ABOVE_ALL</span>(),
+    hudFrame
+);
+
+
+<span class="comment">// Override a vanilla layer (e.g. player health):</span>
+
+<span class="type">EasyOverlayHandler</span>.<span class="func">overrideVanillaOverlay</span>(
+    <span class="type">VanillaGuiLayers</span>.<span class="type">PLAYER_HEALTH</span>,
+    myHealthFrame
+);</code></div>
+
+      <h2 id="textures">Textures</h2>
+      <p>EasyGUI provides three texture data types that wrap Minecraft's blit methods.</p>
+
+      <table>
+        <thead><tr><th>Type</th><th>Use When</th></tr></thead>
+        <tbody>
+          <tr><td><code>TextureData</code></td><td>Rendering a full image file.</td></tr>
+          <tr><td><code>TextureDataSubsection</code></td><td>Rendering a UV region from a larger atlas.</td></tr>
+          <tr><td><code>TextureSpriteData</code></td><td>Rendering a sprite from the GUI atlas.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-block"><code><span class="type">ITextureData</span> <span class="func">icon</span> = <span class="keyword">new</span> <span class="type">TextureDataSubsection</span>(
+    <span class="type">ResourceLocation</span>.<span class="func">parse</span>(<span class="string">"mymod:textures/gui/icons.png"</span>),
+    <span class="number">256</span>, <span class="number">256</span>,     <span class="comment">// texture size</span>
+    <span class="number">0</span>, <span class="number">0</span>,           <span class="comment">// u, v</span>
+    <span class="number">16</span>, <span class="number">16</span>          <span class="comment">// region size</span>
+);
+
+
+<span class="comment">// Inside an element's render():</span>
+
+icon.<span class="func">renderAt</span>(guiGraphics, <span class="number">0</span>, <span class="number">0</span>);</code></div>
+
+      <h2 id="examples">Usage Examples</h2>
+
+      <h3>1. A Simple Menu Screen</h3>
+      <div class="code-block"><code><span class="keyword">public class</span> <span class="type">MainMenuScreen</span> <span class="keyword">extends</span> <span class="type">EasyScreen</span> {
+
+    <span class="keyword">public</span> <span class="func">MainMenuScreen</span>() {
+        <span class="keyword">super</span>(<span class="type">Component</span>.<span class="func">literal</span>(<span class="string">"Main Menu"</span>));
+
+        <span class="type">UIFrame</span> <span class="func">frame</span> = <span class="func">getUIFrame</span>();
+        frame.<span class="func">setPauseGame</span>(<span class="keyword">true</span>);
+
+
+        <span class="comment">// ── Root fills the entire screen ──</span>
+
+        <span class="type">RenderableElement</span> <span class="func">root</span> = <span class="keyword">new</span> <span class="type">RenderableElement</span>(frame);
+
+        root.<span class="func">setWidth</span>(frame.<span class="func">getWidth</span>());
+        root.<span class="func">setHeight</span>(frame.<span class="func">getHeight</span>());
+
+        frame.<span class="func">setRoot</span>(root);
+
+
+        <span class="comment">// ── Title ──</span>
+
+        <span class="type">EasyLabel</span> <span class="func">title</span> = <span class="keyword">new</span> <span class="type">EasyLabel</span>(frame);
+
+        title.<span class="func">setText</span>(<span class="type">Component</span>.<span class="func">literal</span>(<span class="string">"My Mod"</span>));
+        title.<span class="func">setTextPositioningX</span>(<span class="type">EasyLabel</span>.<span class="type">TextPositionRule</span>.<span class="type">CENTER</span>);
+        title.<span class="func">getPositioning</span>().<span class="func">setY</span>(<span class="number">20</span>);
+        title.<span class="func">setTextScale</span>(<span class="number">2.0f</span>);
+
+        root.<span class="func">addChild</span>(title);
+
+
+        <span class="comment">// ── Play Button ──</span>
+
+        <span class="type">EasyButton</span> <span class="func">play</span> = <span class="keyword">new</span> <span class="type">EasyButton</span>(frame, <span class="number">0</span>, <span class="number">60</span>) {
+
+            <span class="keyword">@Override</span>
+            <span class="keyword">public void</span> <span class="func">render</span>(<span class="type">GuiGraphics</span> g, <span class="keyword">int</span> mx, <span class="keyword">int</span> my, <span class="keyword">float</span> pt) {
+
+                <span class="keyword">int</span> c = <span class="func">isHovered</span>()
+                    ? <span class="number">0xFF66AA66</span>
+                    : <span class="number">0xFF444444</span>;
+
+                g.<span class="func">fill</span>(
+                    <span class="number">0</span>, <span class="number">0</span>,
+                    <span class="func">getWidth</span>(), <span class="func">getHeight</span>(),
+                    c
+                );
+
+                g.<span class="func">drawString</span>(
+                    <span class="type">Minecraft</span>.<span class="func">getInstance</span>().font,
+                    <span class="string">"Play"</span>,
+                    <span class="func">getWidth</span>() / <span class="number">2</span> - <span class="number">10</span>,
+                    <span class="number">6</span>,
+                    <span class="number">0xFFFFFFFF</span>
+                );
+            }
+
+            <span class="keyword">@Override</span>
+            <span class="keyword">public void</span> <span class="func">onClick</span>() {
+                <span class="type">Minecraft</span>.<span class="func">getInstance</span>().<span class="func">setScreen</span>(<span class="keyword">null</span>);
+            }
+        };
+
+        play.<span class="func">setWidth</span>(<span class="number">80</span>);
+        play.<span class="func">setHeight</span>(<span class="number">20</span>);
+        play.<span class="func">getPositioning</span>().<span class="func">setXPositioningRule</span>(<span class="type">PositioningRules</span>.<span class="type">CENTER</span>);
+
+        root.<span class="func">addChild</span>(play);
+    }
+}</code></div>
+
+      <h3>2. Draggable Inventory Panel</h3>
+      <div class="code-block"><code><span class="comment">// ── Create a draggable panel ──</span>
+
+<span class="type">RenderableElement</span> <span class="func">panel</span> = <span class="keyword">new</span> <span class="type">EasyDraggableElement</span>(frame, <span class="number">20</span>, <span class="number">20</span>);
+
+panel.<span class="func">setWidth</span>(<span class="number">140</span>);
+panel.<span class="func">setHeight</span>(<span class="number">100</span>);
+panel.<span class="func">setShouldCull</span>(<span class="keyword">true</span>);   <span class="comment">// clip children</span>
+
+
+<span class="comment">// ── Background renderer ──</span>
+
+<span class="keyword">new</span> <span class="type">RenderableElement</span>(frame) {
+
+    <span class="keyword">@Override</span>
+    <span class="keyword">public void</span> <span class="func">render</span>(<span class="type">GuiGraphics</span> g, <span class="keyword">int</span> mx, <span class="keyword">int</span> my, <span class="keyword">float</span> pt) {
+
+        g.<span class="func">fill</span>(
+            <span class="number">0</span>, <span class="number">0</span>,
+            <span class="func">getWidth</span>(), <span class="func">getHeight</span>(),
+            <span class="number">0xCC000000</span>
+        );
+
+        g.<span class="func">renderOutline</span>(
+            <span class="number">0</span>, <span class="number">0</span>,
+            <span class="func">getWidth</span>(), <span class="func">getHeight</span>(),
+            <span class="number">0xFFFFFFFF</span>
+        );
+    }
+};
+
+
+<span class="comment">// ── Content inside the panel ──</span>
+
+<span class="type">EasyLabel</span> <span class="func">content</span> = <span class="keyword">new</span> <span class="type">EasyLabel</span>(frame);
+
+content.<span class="func">setText</span>(<span class="type">Component</span>.<span class="func">literal</span>(<span class="string">"Drag me around!"</span>));
+content.<span class="func">setTextColor</span>(<span class="number">0xFFFFFFFF</span>);
+content.<span class="func">getPositioning</span>().<span class="func">setX</span>(<span class="number">10</span>);
+content.<span class="func">getPositioning</span>().<span class="func">setY</span>(<span class="number">10</span>);
+
+panel.<span class="func">addChild</span>(content);
+root.<span class="func">addChild</span>(panel);</code></div>
+
+      <h3>3. Responding to Global Events</h3>
+      <div class="code-block"><code><span class="comment">// ── Recenter an element when the window resizes ──</span>
+
+root.<span class="func">addEventListener</span>(
+    <span class="type">EasyEvents</span>.<span class="type">FRAME_DIMENSIONS_CHANGE_EVENT</span>,
+    event -> {
+
+        myElement.<span class="func">getPositioning</span>().<span class="func">setX</span>(
+            frame.<span class="func">getWidth</span>() / <span class="number">2</span>
+        );
+    }
+);
+
+
+<span class="comment">// ── Close a dropdown when clicking outside of it ──</span>
+
+root.<span class="func">addEventListener</span>(
+    <span class="type">EasyEvents</span>.<span class="type">GLOBAL_MOUSE_DOWN_EVENT</span>,
+    event -> {
+
+        <span class="keyword">if</span> (event.<span class="func">getTarget</span>() != dropdown) {
+            dropdown.<span class="func">setVisible</span>(<span class="keyword">false</span>);
+        }
+    }
+);</code></div>
+
+      <h3>4. Custom Element with Transform</h3>
+      <div class="code-block"><code><span class="keyword">public class</span> <span class="type">RotatedIcon</span> <span class="keyword">extends</span> <span class="type">RenderableElement</span> {
+
+    <span class="keyword">private final</span> <span class="type">ITextureData</span> <span class="func">texture</span>;
+
+
+    <span class="keyword">public</span> <span class="func">RotatedIcon</span>(
+            <span class="type">UIFrame</span> frame,
+            <span class="keyword">int</span> x,
+            <span class="keyword">int</span> y,
+            <span class="type">ITextureData</span> texture) {
+
+        <span class="keyword">super</span>(frame, x, y);
+
+        <span class="keyword">this</span>.texture = texture;
+
+        <span class="func">setWidth</span>(texture.<span class="func">getWidth</span>());
+        <span class="func">setHeight</span>(texture.<span class="func">getHeight</span>());
+
+        <span class="comment">// Rotate 45 degrees around the center</span>
+        <span class="func">getTransform</span>().<span class="func">setZRotation</span>(<span class="number">45</span>);
+    }
+
+
+    <span class="keyword">@Override</span>
+    <span class="keyword">public void</span> <span class="func">render</span>(<span class="type">GuiGraphics</span> g, <span class="keyword">int</span> mx, <span class="keyword">int</span> my, <span class="keyword">float</span> pt) {
+        texture.<span class="func">render</span>(g);
+    }
+}</code></div>
+
+      <div class="info-box tip">
+        <strong>💡 Remember:</strong> Transforms are applied automatically by <code>run()</code> before <code>render()</code> is called. You only need to draw at local <code>(0,0)</code>.
+      </div>
+
+      <h3>5. Animated Progress Bar</h3>
+      <div class="code-block"><code><span class="keyword">public class</span> <span class="type">ProgressBar</span> <span class="keyword">extends</span> <span class="type">RenderableElement</span> {
+
+    <span class="keyword">private float</span> <span class="func">progress</span> = <span class="number">0f</span>;   <span class="comment">// 0.0 to 1.0</span>
+
+
+    <span class="keyword">public</span> <span class="func">ProgressBar</span>(
+            <span class="type">UIFrame</span> frame,
+            <span class="keyword">int</span> x, <span class="keyword">int</span> y,
+            <span class="keyword">int</span> w, <span class="keyword">int</span> h) {
+
+        <span class="keyword">super</span>(frame, x, y);
+
+        <span class="func">setWidth</span>(w);
+        <span class="func">setHeight</span>(h);
+    }
+
+
+    <span class="keyword">public void</span> <span class="func">setProgress</span>(<span class="keyword">float</span> p) {
+        <span class="keyword">this</span>.progress = <span class="type">Math</span>.<span class="func">clamp</span>(p, <span class="number">0f</span>, <span class="number">1f</span>);
+    }
+
+
+    <span class="keyword">@Override</span>
+    <span class="keyword">public void</span> <span class="func">render</span>(<span class="type">GuiGraphics</span> g, <span class="keyword">int</span> mx, <span class="keyword">int</span> my, <span class="keyword">float</span> pt) {
+
+        <span class="comment">// Background track</span>
+        g.<span class="func">fill</span>(
+            <span class="number">0</span>, <span class="number">0</span>,
+            <span class="func">getWidth</span>(), <span class="func">getHeight</span>(),
+            <span class="number">0xFF333333</span>
+        );
+
+        <span class="comment">// Filled portion</span>
+        <span class="keyword">int</span> <span class="func">fillWidth</span> = (<span class="keyword">int</span>) (<span class="func">getWidth</span>() * progress);
+
+        g.<span class="func">fill</span>(
+            <span class="number">0</span>, <span class="number">0</span>,
+            fillWidth, <span class="func">getHeight</span>(),
+            <span class="number">0xFF3B82F6</span>
+        );
+
+        <span class="comment">// Border outline</span>
+        g.<span class="func">renderOutline</span>(
+            <span class="number">0</span>, <span class="number">0</span>,
+            <span class="func">getWidth</span>(), <span class="func">getHeight</span>(),
+            <span class="number">0xFFFFFFFF</span>
+        );
+    }
+}
+
+
+<span class="comment">// ── Usage ──</span>
+
+<span class="type">ProgressBar</span> <span class="func">bar</span> = <span class="keyword">new</span> <span class="type">ProgressBar</span>(frame, <span class="number">10</span>, <span class="number">10</span>, <span class="number">100</span>, <span class="number">12</span>);
+
+bar.<span class="func">setProgress</span>(<span class="number">0.75f</span>);
+root.<span class="func">addChild</span>(bar);</code></div>
+
+      <h3>6. Tab Container</h3>
+      <div class="code-block"><code><span class="keyword">public class</span> <span class="type">TabPanel</span> <span class="keyword">extends</span> <span class="type">RenderableElement</span> {
+
+    <span class="keyword">private final</span> <span class="type">List</span>&lt;<span class="type">RenderableElement</span>&gt; <span class="func">tabs</span> = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+    <span class="keyword">private int</span> <span class="func">activeTab</span> = <span class="number">0</span>;
+
+
+    <span class="keyword">public</span> <span class="func">TabPanel</span>(
+            <span class="type">UIFrame</span> frame,
+            <span class="keyword">int</span> x, <span class="keyword">int</span> y,
+            <span class="keyword">int</span> w, <span class="keyword">int</span> h) {
+
+        <span class="keyword">super</span>(frame, x, y);
+
+        <span class="func">setWidth</span>(w);
+        <span class="func">setHeight</span>(h);
+    }
+
+
+    <span class="keyword">public void</span> <span class="func">addTab</span>(<span class="type">String</span> name, <span class="type">RenderableElement</span> content) {
+
+        <span class="keyword">int</span> <span class="func">index</span> = tabs.<span class="func">size</span>();
+
+
+        <span class="comment">// ── Tab Button ──</span>
+
+        <span class="type">EasyButton</span> <span class="func">tabBtn</span> = <span class="keyword">new</span> <span class="type">EasyButton</span>(<span class="func">getUIFrame</span>(), index * <span class="number">60</span>, <span class="number">0</span>) {
+
+            <span class="keyword">@Override</span>
+            <span class="keyword">public void</span> <span class="func">onClick</span>() {
+                <span class="func">setActiveTab</span>(index);
+            }
+
+            <span class="keyword">@Override</span>
+            <span class="keyword">public void</span> <span class="func">render</span>(<span class="type">GuiGraphics</span> g, <span class="keyword">int</span> mx, <span class="keyword">int</span> my, <span class="keyword">float</span> pt) {
+
+                <span class="keyword">boolean</span> <span class="func">active</span> = (index == activeTab);
+
+                <span class="keyword">int</span> <span class="func">c</span> = active
+                    ? <span class="number">0xFF3B82F6</span>
+                    : <span class="func">isHovered</span>() ? <span class="number">0xFF555555</span> : <span class="number">0xFF222222</span>;
+
+                g.<span class="func">fill</span>(
+                    <span class="number">0</span>, <span class="number">0</span>,
+                    <span class="func">getWidth</span>(), <span class="func">getHeight</span>(),
+                    c
+                );
+
+                g.<span class="func">drawCenteredString</span>(
+                    <span class="type">Minecraft</span>.<span class="func">getInstance</span>().font,
+                    name,
+                    <span class="func">getWidth</span>() / <span class="number">2</span>,
+                    <span class="number">6</span>,
+                    <span class="number">0xFFFFFFFF</span>
+                );
+            }
+        };
+
+        tabBtn.<span class="func">setWidth</span>(<span class="number">58</span>);
+        tabBtn.<span class="func">setHeight</span>(<span class="number">20</span>);
+
+        <span class="func">addChild</span>(tabBtn);
+
+
+        <span class="comment">// ── Tab Content ──</span>
+
+        content.<span class="func">getPositioning</span>().<span class="func">setY</span>(<span class="number">22</span>);
+        content.<span class="func">setVisible</span>(index == <span class="number">0</span>);
+
+        tabs.<span class="func">add</span>(content);
+        <span class="func">addChild</span>(content);
+    }
+
+
+    <span class="keyword">public void</span> <span class="func">setActiveTab</span>(<span class="keyword">int</span> index) {
+
+        activeTab = index;
+
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; tabs.<span class="func">size</span>(); i++) {
+            tabs.<span class="func">get</span>(i).<span class="func">setVisible</span>(i == index);
+        }
+    }
+}</code></div>
+
+      <h3>7. Hover Tooltip on Custom Element</h3>
+      <div class="code-block"><code><span class="keyword">public class</span> <span class="type">ItemIcon</span> <span class="keyword">extends</span> <span class="type">RenderableElement</span> {
+
+    <span class="keyword">private final</span> <span class="type">ItemStack</span> <span class="func">stack</span>;
+
+
+    <span class="keyword">public</span> <span class="func">ItemIcon</span>(
+            <span class="type">UIFrame</span> frame,
+            <span class="keyword">int</span> x, <span class="keyword">int</span> y,
+            <span class="type">ItemStack</span> stack) {
+
+        <span class="keyword">super</span>(frame, x, y);
+
+        <span class="keyword">this</span>.stack = stack;
+
+        <span class="func">setWidth</span>(<span class="number">16</span>);
+        <span class="func">setHeight</span>(<span class="number">16</span>);
+    }
+
+
+    <span class="keyword">@Override</span>
+    <span class="keyword">public void</span> <span class="func">renderTick</span>(<span class="keyword">int</span> mx, <span class="keyword">int</span> my, <span class="keyword">float</span> pt) {
+
+        <span class="comment">// Show tooltip when hovered</span>
+        <span class="keyword">if</span> (<span class="func">isHovered</span>()) {
+
+            <span class="type">EasyTooltip</span> <span class="func">tip</span> = <span class="func">getUIFrame</span>().<span class="func">getTooltip</span>();
+
+            tip.<span class="func">setActive</span>(<span class="keyword">true</span>);
+            tip.<span class="func">clearText</span>();
+            tip.<span class="func">appendText</span>(stack.<span class="func">getHoverName</span>());
+        }
+    }
+
+
+    <span class="keyword">@Override</span>
+    <span class="keyword">public void</span> <span class="func">render</span>(<span class="type">GuiGraphics</span> g, <span class="keyword">int</span> mx, <span class="keyword">int</span> my, <span class="keyword">float</span> pt) {
+        g.<span class="func">renderItem</span>(stack, <span class="number">0</span>, <span class="number">0</span>);
+    }
+}</code></div>
+
+      <div class="info-box info">
+        <strong>📘 Pro Tip:</strong> Use <code>EasyScreen.debug(true)</code> during development to visualize widget boundaries and event handling. It draws colored outlines around every element so you can spot layout issues instantly.
+      </div>
+
+      <div class="info-box tip">
+        <strong>💡 Performance Tip:</strong> Set <code>active = false</code> on off-screen or hidden menus instead of just <code>visible = false</code> to skip both rendering and input processing entirely.
+      </div>
+    </div>
+  </div>
+  <footer class="footer"><p>© 2024 Zenith Interactive Creations. All rights reserved.</p></footer>
+</div>
+
+<script>
+  // Accordion sidebar toggles
+  document.querySelectorAll('.accordion-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const target = document.getElementById(toggle.dataset.target);
+      const isOpen = target.classList.contains('open');
+      target.classList.toggle('open', !isOpen);
+      toggle.classList.toggle('open', !isOpen);
+    });
+  });
+
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('h2[id], h3[id]');
+  const links = document.querySelectorAll('.sidebar a[href^="#"]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (scrollY >= sec.offsetTop - 120) current = sec.getAttribute('id');
+    });
+    links.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>

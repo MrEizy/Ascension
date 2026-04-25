@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formation Arrays - Documentation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="mountains-bg">
+  <svg viewBox="0 0 1440 400" preserveAspectRatio="none" style="height:400px">
+    <polygon fill="rgba(15,32,64,0.6)" points="0,400 200,180 400,280 600,120 800,220 1000,100 1200,200 1440,140 1440,400"/>
+    <polygon fill="rgba(10,22,40,0.8)" points="0,400 150,250 350,320 550,200 750,300 950,180 1150,260 1350,200 1440,240 1440,400"/>
+    <polygon fill="rgba(8,18,35,0.95)" points="0,400 100,320 300,360 500,300 700,350 900,280 1100,340 1300,300 1440,330 1440,400"/>
+  </svg>
+</div>
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><div class="logo-icon">Z</div><span>Zenith Interactive Creations</span></a>
+  <div class="navbar-links"><a href="index.html">Home</a><a href="mods.html" class="active">Mods</a></div>
+</nav>
+<div class="page-content">
+  <div class="layout-with-sidebar">
+    <aside class="sidebar">
+      <div class="sidebar-title">Formations</div>
+      <a href="#basics">📋 Basics</a>
+      <a href="#setup">🔧 Setup Guide</a>
+      <a href="#types">📑 Formation Types</a>
+      <a href="#defensive" class="sub-item">🛡️ Defensive</a>
+      <a href="#buff" class="sub-item">✨ Buff</a>
+      <a href="#offensive" class="sub-item">⚔️ Offensive</a>
+      <a href="#utility" class="sub-item">🔧 Utility</a>
+      <a href="#advanced">⚡ Advanced</a>
+      <div class="sidebar-title" style="margin-top:2rem">Other Mods</div>
+      <a href="ascension.html">🌟 Ascension</a>
+      <a href="easygui.html">🖥️ EasyGUI</a>
+    </aside>
+    <div class="main-content">
+      <h1>Formation Arrays</h1>
+      <div class="version-badge" style="margin-bottom:1.5rem">Minecraft 1.21.1</div>
+      <p>Formation Arrays adds a powerful system of mystical formations to Minecraft. Place formation nodes in specific patterns to create area effects ranging from defensive barriers to resource generation.</p>
+
+      <div class="btn-group" style="justify-content:flex-start;margin:1.5rem 0">
+        <a href="https://modrinth.com/mod/formation-arrays" class="btn btn-primary" target="_blank">⬇ Modrinth</a>
+        <a href="https://www.curseforge.com/minecraft/mc-mods/formation-arrays" class="btn btn-secondary" target="_blank">⬇ CurseForge</a>
+      </div>
+
+      <h2 id="basics">Formation Basics</h2>
+      <p>Formations consist of Formation Nodes placed in specific geometric patterns. Each formation requires a Formation Core at its center and Formation Nodes at the vertices. The formation activates when all nodes are correctly placed and powered with Spirit Stones.</p>
+
+      <h3>Components</h3>
+      <ul>
+        <li><strong>Formation Core</strong> — The central block that controls the formation</li>
+        <li><strong>Formation Nodes</strong> — Placed at specific positions to define the formation shape</li>
+        <li><strong>Formation Flags</strong> — Optional modifiers that enhance or alter formation effects</li>
+        <li><strong>Spirit Stones</strong> — Fuel source for active formations</li>
+      </ul>
+
+      <h2 id="setup">Setting Up Formations</h2>
+      <ol>
+        <li>Craft a Formation Core and the required number of Formation Nodes</li>
+        <li>Place the Formation Core where you want the center of the formation</li>
+        <li>Right-click the Core with a Formation Blueprint to see the node placement guide</li>
+        <li>Place Formation Nodes at the highlighted positions</li>
+        <li>Insert Spirit Stones into the Core to power the formation</li>
+        <li>Right-click the Core to activate</li>
+      </ol>
+
+      <div class="info-box tip"><strong>💡 Tip:</strong> Use a Formation Compass to verify node placement. It will glow when pointing at a correctly placed node.</div>
+
+      <h2 id="types">Formation Types</h2>
+
+      <h3 id="defensive">🛡️ Defensive Formations</h3>
+      <table>
+        <thead><tr><th>Formation</th><th>Nodes</th><th>Range</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>Spirit Shield</td><td>4</td><td>16 blocks</td><td>Creates an invisible barrier that blocks hostile mobs</td></tr>
+          <tr><td>Mountain Guard</td><td>8</td><td>32 blocks</td><td>Reduces all incoming damage by 30% for allies</td></tr>
+          <tr><td>Void Barrier</td><td>12</td><td>48 blocks</td><td>Complete protection dome, blocks all entry</td></tr>
+        </tbody>
+      </table>
+
+      <h3 id="buff">✨ Buff Formations</h3>
+      <table>
+        <thead><tr><th>Formation</th><th>Nodes</th><th>Range</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>Spirit Gathering</td><td>4</td><td>16 blocks</td><td>Increases cultivation speed by 50%</td></tr>
+          <tr><td>Vitality Spring</td><td>6</td><td>24 blocks</td><td>Regeneration II to all allies in range</td></tr>
+          <tr><td>War Drum</td><td>8</td><td>32 blocks</td><td>Strength II and Speed I to allies</td></tr>
+        </tbody>
+      </table>
+
+      <h3 id="offensive">⚔️ Offensive Formations</h3>
+      <table>
+        <thead><tr><th>Formation</th><th>Nodes</th><th>Range</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>Killing Array</td><td>6</td><td>16 blocks</td><td>Deals continuous damage to hostile entities</td></tr>
+          <tr><td>Thunder Cage</td><td>8</td><td>24 blocks</td><td>Calls lightning on enemies within range</td></tr>
+          <tr><td>Soul Suppression</td><td>12</td><td>32 blocks</td><td>Weakens enemy cultivation abilities</td></tr>
+        </tbody>
+      </table>
+
+      <h3 id="utility">🔧 Utility Formations</h3>
+      <table>
+        <thead><tr><th>Formation</th><th>Nodes</th><th>Range</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>Teleportation Array</td><td>8</td><td>N/A</td><td>Instant travel between linked arrays</td></tr>
+          <tr><td>Illusion Maze</td><td>6</td><td>24 blocks</td><td>Confuses and misdirects intruders</td></tr>
+          <tr><td>Resource Vein</td><td>4</td><td>8 blocks</td><td>Slowly generates Spirit Stones over time</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="advanced">Advanced Mechanics</h2>
+      <h3>Formation Stacking</h3>
+      <p>Multiple formations can overlap. Compatible formations stack their effects, while conflicting formations cancel each other out. Use Formation Flags to resolve conflicts.</p>
+
+      <h3>Formation Linking</h3>
+      <p>Some formations can be linked together using Formation Bridges. Linked formations share power and can trigger chain reactions for devastating combined effects.</p>
+
+      <h3>Upgrading Formations</h3>
+      <p>Formations can be upgraded by replacing standard Formation Nodes with higher-tier variants (Iron → Gold → Diamond → Netherite). Higher-tier nodes increase range, reduce power consumption, and enhance effects.</p>
+    </div>
+  </div>
+  <footer class="footer"><p>© 2024 Zenith Interactive Creations. All rights reserved.</p></footer>
+</div>
+</body>
+</html>
