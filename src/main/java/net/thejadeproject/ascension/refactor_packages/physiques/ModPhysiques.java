@@ -228,11 +228,13 @@ public class ModPhysiques {
                     .addPathBonus(ModPaths.FIST.getId(), 2.2)
     );
 
-//    public static final DeferredHolder<IPhysique, ? extends GenericPhysique> SCHOLARS_SOUL = PHYSIQUES.register("scholars_soul",()->
-//            new GenericPhysique(Component.translatable("ascension.physiques.scholars_soul"))
-//                    .addPath(ModPaths.SOUL.getId())
-//                    .addPathBonus(ModPaths.SOUL.getId(),1.5)
-//    );
+
+    // TODO: change this
+    public static final DeferredHolder<IPhysique, ? extends GenericPhysique> SCHOLARS_SOUL = PHYSIQUES.register("scholars_soul",()->
+            new GenericPhysique(Component.translatable("ascension.physiques.scholars_soul"))
+                    .addPath(ModPaths.SOUL.getId())
+                    .addPathBonus(ModPaths.SOUL.getId(),1.5)
+    );
 
     public static final DeferredHolder<IPhysique, ? extends GenericPhysique> WORLD_DOMINATOR =
             PHYSIQUES.register("world_dominator", () ->
