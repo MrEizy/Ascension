@@ -1,0 +1,21 @@
+{
+  "title": "Peach",
+  "icon": { "id": "ascension:peach" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:peach" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Peach", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Not the fruit I knew from villages. Eating one caused a long unintended meditation. The cleansing effect is immediate and strong — more so raw than most herbs achieve in the cauldron. I have not found a cauldron formula for it yet. Handle carefully." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "How to Obtain", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "I cannot account for a reliable source. The ones I have found were not from any market I recognised." }
+      ]
+    }
+  ]
+}

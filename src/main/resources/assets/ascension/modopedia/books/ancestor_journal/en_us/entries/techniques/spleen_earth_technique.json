@@ -1,0 +1,19 @@
+{
+  "title": "Spleen Earth Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:spleen_earth_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:spleen_earth_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Spleen Earth Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in desert pyramids. The trap is still active in most of them." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Settles earth qi through the body using the spleen as its anchor. In organ theory the spleen governs conversion of what is taken in — the technique uses that to build physical density slowly and durably. Endurance builds heavily. Force follows. The mind sharpens least." }
+      ]
+    }
+  ]
+}

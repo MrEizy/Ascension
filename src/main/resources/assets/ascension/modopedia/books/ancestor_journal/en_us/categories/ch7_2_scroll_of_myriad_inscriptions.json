@@ -1,0 +1,17 @@
+﻿{
+  "title": "Scroll of Myriad Inscriptions",
+  "landing_text": "What is recorded here is what I have confirmed myself. Each inscription has a purpose and a cost — the paper does not last, and neither does the patience needed to make it.\n\nThey are not weapons. They are contingencies.",
+  "icon": { "id": "ascension:soul_anchor_talisman" },
+  "entries": [
+    "talismans/talisman_soul_anchor",
+    "talismans/talisman_soulstead_return",
+    "talismans/talisman_world_axis",
+    "talismans/talisman_spatial_rupture_t1",
+    "talismans/talisman_spatial_rupture_t2",
+    "talismans/talisman_spatial_rupture_t3",
+    "talismans/talisman_void_marking",
+    "talismans/talisman_death_recall"
+  ],
+  "sort_num": 2,
+  "display_on_front_page": false
+}

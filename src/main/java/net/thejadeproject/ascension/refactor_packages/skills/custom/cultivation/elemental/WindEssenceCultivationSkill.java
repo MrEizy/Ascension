@@ -2,14 +2,14 @@ package net.thejadeproject.ascension.refactor_packages.skills.custom.cultivation
 
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureData;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.thejadeproject.ascension.AscensionCraft;
 import net.thejadeproject.ascension.refactor_packages.paths.ModPaths;
-import net.thejadeproject.ascension.refactor_packages.skills.custom.cultivation.ElementalEssenceCultivationSkill;
-import net.thejadeproject.ascension.refactor_packages.techniques.custom.ElementalEssenceTechnique;
-import net.thejadeproject.ascension.refactor_packages.techniques.custom.elemental.WindEssenceTechnique;
+import net.thejadeproject.ascension.refactor_packages.techniques.custom.essence.ElementalEssenceTechnique;
+import net.thejadeproject.ascension.refactor_packages.techniques.custom.essence.WindEssenceTechnique;
 
 public class WindEssenceCultivationSkill extends ElementalEssenceCultivationSkill {
 
@@ -47,19 +47,7 @@ public class WindEssenceCultivationSkill extends ElementalEssenceCultivationSkil
     protected Class<? extends ElementalEssenceTechnique> getTechniqueClass() {
         return WindEssenceTechnique.class;
     }
-
-    @Override
-    protected Component getSkillTitle() {
-        return Component.literal("Wind Essence Cultivation");
-    }
-
-    @Override
-    protected Component getSkillDescription() {
-        return Component.literal(
-                "Cultivates Essence through open sky and high altitude. It weakens in enclosed spaces and strengthens the higher you stand beneath the wind."
-        );
-    }
-
+    @OnlyIn(Dist.CLIENT)
     @Override
     public ITextureData getIcon() {
         return new TextureData(

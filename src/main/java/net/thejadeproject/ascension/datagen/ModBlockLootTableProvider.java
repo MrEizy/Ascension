@@ -19,10 +19,11 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.thejadeproject.ascension.blocks.ModBlocks;
-import net.thejadeproject.ascension.blocks.custom.crops.GenericSlowCropBlock;
-import net.thejadeproject.ascension.blocks.custom.crops.StemSlowCropBlock;
-import net.thejadeproject.ascension.items.ModItems;
+import net.thejadeproject.ascension.common.blocks.ModBlocks;
+import net.thejadeproject.ascension.common.blocks.custom.crops.GenericSlowCropBlock;
+import net.thejadeproject.ascension.common.blocks.custom.crops.StemSlowCropBlock;
+import net.thejadeproject.ascension.common.blocks.custom.crops.jadedew.JadeDewGrassCropBlock;
+import net.thejadeproject.ascension.common.items.ModItems;
 
 import java.util.Set;
 
@@ -56,6 +57,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.CUSHION_PURPLE.get());
         dropSelf(ModBlocks.CUSHION_MAGENTA.get());
         dropSelf(ModBlocks.CUSHION_PINK.get());
+        dropSelf(ModBlocks.TECHNIQUE_STAND.get());
 
 
         /** Marble */
@@ -155,8 +157,6 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
 
         //Herbs
-        add(ModBlocks.IRONWOOD_SPROUT_CROP.get(),
-                block -> createSingleItemTable(ModItems.IRONWOOD_SPROUT.get()));
         add(ModBlocks.WHITE_JADE_ORCHID_CROP.get(),
                 block -> createSingleItemTable(ModItems.WHITE_JADE_ORCHID.get()));
         add(ModBlocks.SPIRIT_VEIN.get(),
@@ -395,6 +395,31 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(StemSlowCropBlock.AGE, 3));
         this.add(ModBlocks.WHITE_JADE_ORCHID_CROP.get(), this.createCropDrops(ModBlocks.WHITE_JADE_ORCHID_CROP.get(),
                 ModItems.WHITE_JADE_ORCHID.get(), ModItems.WHITE_JADE_ORCHID.get(), lootItemConditionBuilder4));
+
+        LootItemCondition.Builder jadeDewGrassMature =
+                LootItemBlockStatePropertyCondition
+                        .hasBlockStateProperties(ModBlocks.JADE_DEW_GRASS_CROP.get())
+                        .setProperties(StatePropertiesPredicate.Builder.properties()
+                                .hasProperty(JadeDewGrassCropBlock.AGE, 7));
+
+        this.add(ModBlocks.JADE_DEW_GRASS_CROP.get(),
+                LootTable.lootTable()
+                        .withPool(LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(ModItems.JADE_DEW_GRASS.get())
+                                        .when(jadeDewGrassMature))
+                                .apply(ApplyExplosionDecay.explosionDecay()))
+                        .withPool(LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(ModItems.JADE_DEW_GRASS_SEEDS.get())
+                                        .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))
+                                .apply(ApplyExplosionDecay.explosionDecay()))
+                        .withPool(LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(ModItems.JADE_DEW_GRASS_SEEDS.get())
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0f, 2.0f)))
+                                        .when(jadeDewGrassMature))
+                                .apply(ApplyExplosionDecay.explosionDecay())));
 
 
     }

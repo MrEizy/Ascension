@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "ascension:block/technique_stand",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "ascension:block/technique_stand"
+    },
+    "facing=south": {
+      "model": "ascension:block/technique_stand",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ascension:block/technique_stand",
+      "y": 270
+    }
+  }
+}

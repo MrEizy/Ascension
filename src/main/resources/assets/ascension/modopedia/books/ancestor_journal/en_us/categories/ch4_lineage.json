@@ -1,0 +1,8 @@
+{
+  "title": "Lineage",
+  "icon": { "id": "ascension:physique_essence" },
+  "landing_text": "The diary had more to say about the blood we carry than I expected. Lineage is not Physique — it cannot be earned, trained, or purified on an anvil. It is either there or it is not. This chapter holds what I have gathered about it.",
+  "entries": ["ch4/ch4_1_what_the_blood_carries", "ch4/ch4_2_the_jade_record"],
+  "children": [],
+  "sort_num": 3
+}

@@ -2,6 +2,8 @@ package net.thejadeproject.ascension.refactor_packages.gui.elements.skill_castin
 
 import net.lucent.easygui.gui.RenderableElement;
 import net.lucent.easygui.gui.UIFrame;
+import net.lucent.easygui.gui.events.EasyEvents;
+import net.lucent.easygui.gui.events.type.EasyEvent;
 import net.lucent.easygui.gui.layout.positioning.rules.PositioningRules;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,7 +19,10 @@ public class SkillHotBarContainer extends RenderableElement {
         super(frame);
         getPositioning().setPositioningRule(PositioningRules.CENTER);
         setActive(false);
-
+        addEventListener(EasyEvents.FRAME_DIMENSIONS_CHANGE_EVENT,this::rePosition);
+    }
+    public void rePosition(EasyEvent event){
+        getPositioning().updatePositionMatrix();
     }
     public void open(){
         removeChildren();

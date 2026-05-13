@@ -1,6 +1,8 @@
 package net.thejadeproject.ascension.mixins;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.thejadeproject.ascension.data_attachments.ModAttachments;
@@ -12,6 +14,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
+    @Inject(method = "getAttributeValue",at=@At("HEAD"),cancellable = true)
+    private void getAttributeValue(Holder<Attribute> attributeHolder,CallbackInfoReturnable<Double> cir){
+        LivingEntity self = (LivingEntity) (Object) this;
+
+        if(self.hasData(ModAttachments.ENTITY_DATA)){
+            IEntityData entityData = self.getData(ModAttachments.ENTITY_DATA);
+            if(entityData.getAscensionAttributeHolder().getAttribute(attributeHolder) != null){
+                cir.setReturnValue(entityData.getAscensionAttributeHolder().getAttribute(attributeHolder).getValue());
+            }
+        }
+    }
+
     @Inject(method = "getMaxAbsorption",at=@At("HEAD"),cancellable = true)
     private void getMaxAbsorption(CallbackInfoReturnable<Float> cir){
 

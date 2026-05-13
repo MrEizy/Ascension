@@ -1,0 +1,72 @@
+{
+  "title": "Fire and Intention",
+  "icon": { "id": "ascension:flame" },
+  "pages": [
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Cultivation is a never-ending path requiring endless resources. From the qi that exists all around us to the meat of spirit beasts and the countless herbs hidden within heaven and earth, every treasure contains potential. Yet consuming such materials directly is wasteful. Only through refinement can their true essence be revealed."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Among the many professions dedicated to this pursuit, none stand above Alchemists. Masters who have studied all sorts of materials and natural treasures, learning ways to preserve their effects, amplify their natural traits, and combine them to create entirely different results."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Through flame and intention they refine herbs, beast materials, and spiritual treasures into pills with various effects. Some suppress hunger for days, others restore qi after battle, cleanse deadly poisons, heal life-threatening wounds, or assist one's cultivation.\n\nFire refines the material, Intention refines the essence."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Yet alchemy is far from safe. A single mistake in flame control or timing may reduce precious ingredients into worthless ash or corrupt the refinement entirely, producing Pill Residue instead. Pill Residue contains unstable and impure essence no different from poison if consumed."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The quality of a pill is determined by its purity. Higher purity pills contain fewer impurities, allowing their effects to be absorbed more efficiently while placing less strain upon the body. \n\nThe age of herbs and spiritual materials also plays an important role in refinement, as older materials often contain denser essence and greater medicinal value, though they are far more difficult to refine successfully."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "For an alchemist's flame reflects their very soul, and only those with unwavering control can truly refine the essence of heaven and earth."
+        }
+      ]
+    }
+  ]
+}

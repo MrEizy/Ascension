@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ascension:mortar_pestle"
+    },
+    {
+      "item": "ascension:spiritual_stone"
+    },
+    {
+      "item": "ascension:spiritual_stone"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "ascension:spiritual_meal"
+  }
+}

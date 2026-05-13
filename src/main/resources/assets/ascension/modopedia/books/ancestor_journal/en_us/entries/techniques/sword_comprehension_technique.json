@@ -1,0 +1,19 @@
+{
+  "title": "Sword Comprehension Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:sword_comprehension_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:sword_comprehension_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Sword Comprehension Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in woodland mansions and pillager outposts, and dropped by vindicators." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Less a training manual than a record of principles — comprehension of the sword as a medium for qi, not a guide for physical repetition. What it builds is difficult to separate from the weapon itself." }
+      ]
+    }
+  ]
+}

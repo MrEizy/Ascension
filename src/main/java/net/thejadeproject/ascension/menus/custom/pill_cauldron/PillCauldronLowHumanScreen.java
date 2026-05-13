@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.thejadeproject.ascension.AscensionCraft;
-import net.thejadeproject.ascension.blocks.entity.FlameStandBlockEntity;
+import net.thejadeproject.ascension.common.blocks.entity.FlameStandBlockEntity;
 
 @OnlyIn(Dist.CLIENT)
 public class PillCauldronLowHumanScreen extends AbstractContainerScreen<PillCauldronLowHumanMenu> {

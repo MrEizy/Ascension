@@ -2,14 +2,14 @@ package net.thejadeproject.ascension.refactor_packages.skills.custom.cultivation
 
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureData;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.thejadeproject.ascension.AscensionCraft;
 import net.thejadeproject.ascension.refactor_packages.paths.ModPaths;
-import net.thejadeproject.ascension.refactor_packages.skills.custom.cultivation.ElementalEssenceCultivationSkill;
-import net.thejadeproject.ascension.refactor_packages.techniques.custom.ElementalEssenceTechnique;
-import net.thejadeproject.ascension.refactor_packages.techniques.custom.elemental.FireEssenceTechnique;
+import net.thejadeproject.ascension.refactor_packages.techniques.custom.essence.ElementalEssenceTechnique;
+import net.thejadeproject.ascension.refactor_packages.techniques.custom.essence.FireEssenceTechnique;
 
 public class FireEssenceCultivationSkill extends ElementalEssenceCultivationSkill {
 
@@ -35,19 +35,7 @@ public class FireEssenceCultivationSkill extends ElementalEssenceCultivationSkil
     protected Class<? extends ElementalEssenceTechnique> getTechniqueClass() {
         return FireEssenceTechnique.class;
     }
-
-    @Override
-    protected Component getSkillTitle() {
-        return Component.literal("Fire Essence Cultivation");
-    }
-
-    @Override
-    protected Component getSkillDescription() {
-        return Component.literal(
-                "Cultivates Essence through fire. 75% base speed, 150% while burning, and 225% while in lava."
-        );
-    }
-
+    @OnlyIn(Dist.CLIENT)
     @Override
     public ITextureData getIcon() {
         return new TextureData(

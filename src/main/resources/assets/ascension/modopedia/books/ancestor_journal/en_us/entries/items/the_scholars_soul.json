@@ -1,0 +1,19 @@
+{
+  "title": "The Scholar's Soul",
+  "icon": { "id": "ascension:scholarly_soul_rectification_of_names" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:scholarly_soul_rectification_of_names" }, { "id": "ascension:scholarly_soul_great_learning" }, { "id": "ascension:scholarly_soul_thousand_commentaries" }, { "id": "ascension:scholarly_soul_sage_mandate" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "The Scholar's Soul", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "A technique in four chapters. Rectification of Names: clarity of intent. Great Learning: the correct cultivation sequence. Thousand Commentaries: distinguishing between paths. Sage Mandate: authority through practice." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "I found the first chapter in a trader's pack for three jade pieces. He was pleased. I got considerably the better end of that deal." }
+      ]
+    }
+  ]
+}

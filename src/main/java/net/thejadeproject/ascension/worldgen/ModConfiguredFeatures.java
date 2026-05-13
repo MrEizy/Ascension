@@ -25,12 +25,16 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.thejadeproject.ascension.AscensionCraft;
-import net.thejadeproject.ascension.blocks.ModBlocks;
-import net.thejadeproject.ascension.blocks.custom.SpiritVeinBlock;
+import net.thejadeproject.ascension.common.blocks.ModBlocks;
+import net.thejadeproject.ascension.common.blocks.custom.SpiritVeinBlock;
+import net.thejadeproject.ascension.worldgen.custom.WildHerbFeatureConfig;
 
 import java.util.List;
 
 public class ModConfiguredFeatures {
+
+    // ── Ores ─────────────────────────────────────────────────────────────────
+
     public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_JADE_ORE_KEY = registerKey("jade_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_BLACK_IRON_ORE_KEY = registerKey("black_iron_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_FROST_SILVER_ORE_KEY = registerKey("frost_silver_ore");
@@ -43,8 +47,17 @@ public class ModConfiguredFeatures {
 
 
 
-
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SPIRIT_VEIN_FEATURE_KEY = registerKey("spirit_vein_feature");
+    // ── Wild Herbs ────────────────────────────────────────────────────────────
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WILD_GINSENG_KEY =
+            registerKey("wild_hundred_year_ginseng");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WILD_SNOW_GINSENG_KEY =
+            registerKey("wild_hundred_year_snow_ginseng");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WILD_FIRE_GINSENG_KEY =
+            registerKey("wild_hundred_year_fire_ginseng");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WILD_WHITE_JADE_ORCHID_KEY =
+            registerKey("wild_white_jade_orchid");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WILD_JADE_DEW_GRASS_KEY =
+            registerKey("wild_jade_dew_grass");
 
 
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
@@ -95,12 +108,39 @@ public class ModConfiguredFeatures {
 
 
 
-        //Spirit Veins
-        register(context, SPIRIT_VEIN_FEATURE_KEY,
-                ModFeatureRegistration.SPIRIT_VEIN_FEATURE.get(),
-                FeatureConfiguration.NONE);
 
 
+        // ── Wild Herbs ────────────────────────────────────────────────────────
+        register(context, WILD_GINSENG_KEY,
+                ModFeatureRegistration.WILD_HERB_FEATURE.get(),
+                new WildHerbFeatureConfig(
+                        ModBlocks.HUNDRED_YEAR_GINSENG_CROP.get(),
+                        List.of(Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.PODZOL,
+                                Blocks.COARSE_DIRT, Blocks.ROOTED_DIRT)));
+        register(context, WILD_SNOW_GINSENG_KEY,
+                ModFeatureRegistration.WILD_HERB_FEATURE.get(),
+                new WildHerbFeatureConfig(
+                        ModBlocks.HUNDRED_YEAR_SNOW_GINSENG_CROP.get(),
+                        List.of(Blocks.SNOW_BLOCK, Blocks.ICE, Blocks.PACKED_ICE,
+                                Blocks.BLUE_ICE, Blocks.POWDER_SNOW)));
+        register(context, WILD_FIRE_GINSENG_KEY,
+                ModFeatureRegistration.WILD_HERB_FEATURE.get(),
+                new WildHerbFeatureConfig(
+                        ModBlocks.HUNDRED_YEAR_FIRE_GINSENG_CROP.get(),
+                        List.of(Blocks.NETHERRACK, Blocks.MAGMA_BLOCK,
+                                Blocks.BASALT, Blocks.BLACKSTONE)));
+        register(context, WILD_WHITE_JADE_ORCHID_KEY,
+                ModFeatureRegistration.WILD_HERB_FEATURE.get(),
+                new WildHerbFeatureConfig(
+                        ModBlocks.WHITE_JADE_ORCHID_CROP.get(),
+                        List.of(Blocks.GRASS_BLOCK, Blocks.MOSS_BLOCK,
+                                Blocks.MOSS_CARPET, Blocks.DIRT)));
+        register(context, WILD_JADE_DEW_GRASS_KEY,
+                ModFeatureRegistration.WILD_HERB_FEATURE.get(),
+                new WildHerbFeatureConfig(
+                        ModBlocks.JADE_DEW_GRASS_CROP.get(),
+                        List.of(Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.COARSE_DIRT,
+                                Blocks.ROOTED_DIRT, Blocks.PODZOL)));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {

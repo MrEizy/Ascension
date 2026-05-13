@@ -32,12 +32,12 @@ public record SyncStat(String form, ValueContainer container)implements CustomPa
     }
     public static void handlePayload(SyncStat payload, IPayloadContext context) {
         context.enqueueWork(()->{
-            System.out.println("stat was synced");
+            //System.out.println("stat was synced");
             IEntityData entityData = context.player().getData(ModAttachments.ENTITY_DATA);
             Stat stat = AscensionRegistries.Stats.STATS_REGISTRY.get(payload.container.getIdentifier());
             entityData.getEntityFormData(ResourceLocation.parse(payload.form)).getStatSheet().setContainer(stat,payload.container);
             entityData.getAscensionAttributeHolder().updateAttributes(entityData);
-            System.out.println("==============================================");
+            //System.out.println("==============================================");
             entityData.getEntityFormData(ResourceLocation.parse(payload.form)).getStatSheet().log();
             entityData.getAscensionAttributeHolder().log();
         });

@@ -1,0 +1,83 @@
+{
+  "title": "Personal Notes",
+  "icon": { "id": "ascension:soul_flame" },
+  "pages": [
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The diary's records on bloodlines are thorough up to a point.\n\nBeyond that point — the higher tiers, the ones that appear once in a generation or not at all — its entries grow sparse. Almost reluctant.\n\nWhat follows is my own. Not the diary's. Mine."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "On Ancient bloodlines —\n\nWhen they appear, the surrounding world responds. The Qi in the region shifts. Creatures behave differently. Even those with no cultivation ability sense that something has entered the world that should not be there.\n\nI have heard this from three separate sources I would stake my life on."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The records on Ancient bloodlines are incomplete.\n\nI suspect deliberately so.\n\nWho would want them incomplete, and why, I have not been able to determine. But the gaps follow a pattern. The same names missing. The same periods unaccounted for.\n\nSomeone went to the trouble."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "On Ascendant bloodlines —\n\nI have seen one carrier in my lifetime.\n\nI did not speak to them. I was not certain it would have been safe to. They were young — younger than I expected — and they moved through a crowded market as though the crowd was parting around something it could not see.\n\nIt was."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "I spoke afterward with a man who had been standing close. He was a cultivator — I could tell. Not remarkable, but practiced.\n\nHe said his Qi had felt slow. Not blocked. Not drained. Just... less willing. As if it had pulled back from his call without being asked to.\n\nHe could not explain it better than that. He did not know why."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "I have thought about that description more than I probably should.\n\nQi does not feel. It does not retreat out of caution or recognize things it has no capacity to recognize.\n\nAnd yet — less willing. That was the phrase he used. As if it had somewhere quieter to be.\n\nI did not press him further."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "I watched them for a long time before I left.\n\nEven a watered-down inheritance from something that great is beyond what this world was built to hold.\n\nI have thought about that person many times since.\n\nI wonder if they know what they carry. I wonder if knowing would change anything."
+        }
+      ]
+    }
+  ]
+}

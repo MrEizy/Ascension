@@ -1,0 +1,32 @@
+{
+  "title": "Paper Teeth",
+  "icon": { "id": "ascension:soul_anchor_talisman" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:spatial_rupture_talisman_t1" }, { "id": "ascension:soul_anchor_talisman" }, { "id": "ascension:soulstead_return_talisman" }, { "id": "ascension:world_axis_talisman" }, { "id": "ascension:void_marking_talisman" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Talismans", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Talismans are inscribed on Talisman Paper with cultivated intent. The paper carries the inscription; the intent makes it respond. Three weeks of paper that did nothing before I understood this." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Spatial Rupture: tears through space. Soul Anchor: prevents spirit displacement. Soulstead Return: finds home. World Axis: pins reality in place. Void Marking: records a location." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:death_recall_talisman" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Death Recall Talisman", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The Death Recall Talisman intervenes at the moment of fatal injury and returns the user from the threshold. The cultivator who wrote about it was deliberately vague on the cost, which I found suspicious." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "I carry one at all times. I sleep better knowing it is there. I sleep slightly less well not knowing what it takes in exchange." }
+      ]
+    }
+  ]
+}

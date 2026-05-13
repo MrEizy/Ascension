@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "minecraft:plains",
+    "minecraft:meadow",
+    "minecraft:sunflower_plains",
+    "minecraft:forest",
+    "minecraft:birch_forest",
+    "minecraft:flower_forest"
+  ],
+  "features": "ascension:wild_jade_dew_grass_placed",
+  "step": "vegetal_decoration"
+}

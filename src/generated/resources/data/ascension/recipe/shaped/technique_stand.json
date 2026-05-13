@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "minecraft:deepslate"
+    },
+    "S": {
+      "item": "minecraft:spruce_planks"
+    }
+  },
+  "pattern": [
+    "DDD",
+    " S ",
+    "SSS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ascension:technique_stand"
+  }
+}

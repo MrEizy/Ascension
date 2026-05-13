@@ -1,0 +1,19 @@
+{
+  "title": "The Flamestand",
+  "icon": { "id": "ascension:flame_stand" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:flame_stand" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "The Flamestand", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Holds the flame beneath the cauldron. Part of the standard cauldron setup — without it, the fire has no anchor and the cauldron will not operate.\nCrafted from Black Iron." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Place it directly below the cauldron. Place the flame source inside it. That is the entire setup on this side.\nThe choice of flame matters for what you are refining." }
+      ]
+    }
+  ]
+}

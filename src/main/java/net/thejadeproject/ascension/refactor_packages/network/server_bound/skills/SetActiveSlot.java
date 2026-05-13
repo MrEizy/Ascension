@@ -13,7 +13,7 @@ import net.thejadeproject.ascension.refactor_packages.registries.AscensionRegist
 import net.thejadeproject.ascension.refactor_packages.skills.castable.ICastableSkill;
 
 public record SetActiveSlot(int slot)implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<SetActiveSlot> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AscensionCraft.MOD_ID,"set_active_slot"));
+    public static final Type<SetActiveSlot> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(AscensionCraft.MOD_ID,"set_active_slot"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SetActiveSlot> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT,
             SetActiveSlot::slot,
@@ -21,7 +21,7 @@ public record SetActiveSlot(int slot)implements CustomPacketPayload {
             SetActiveSlot::new
     );
     @Override
-    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+    public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
     public static void handlePayload(SetActiveSlot payload, IPayloadContext context) {

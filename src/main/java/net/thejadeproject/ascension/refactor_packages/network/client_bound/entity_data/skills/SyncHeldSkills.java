@@ -31,7 +31,7 @@ public record SyncHeldSkills(String form,HeldSkills heldSkills)implements Custom
             IEntityData entityData = context.player().getData(ModAttachments.ENTITY_DATA);
             IEntityFormData formData = entityData.getEntityFormData(ResourceLocation.parse(payload.form));
             formData.setHeldSkills(payload.heldSkills());
-            System.out.println("skill list synced to client");
+            //System.out.println("skill list synced to client");
         });
     }
 }

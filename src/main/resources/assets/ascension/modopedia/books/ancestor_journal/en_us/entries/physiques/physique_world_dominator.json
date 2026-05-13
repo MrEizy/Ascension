@@ -1,0 +1,14 @@
+﻿{
+  "title": "World Dominator",
+  "icon": { "id": "ascension:physique_essence" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:physique_essence" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "World Dominator", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Rare. A body physique of exceptional power — those who possess it do not go unannounced for long." }
+      ]
+    }
+  ]
+}

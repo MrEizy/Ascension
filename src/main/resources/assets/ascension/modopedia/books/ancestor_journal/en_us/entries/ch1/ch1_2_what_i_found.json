@@ -1,0 +1,171 @@
+{
+  "title": "What I Found",
+  "icon": { "id": "ascension:ancestor_journal" },
+  "pages": [
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "When I awoke, the sun was nearly gone. Only a few fading rays reached through the cave entrance.\n\nMy body ached, yet curiosity overcame fear."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "As I approached the entrance, I discovered the strange veil was soft to the touch, like water stretched into a thin membrane. With slight pressure my hand passed through it effortlessly. I could leave and enter as I pleased, though the beasts outside could not."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Realizing night would soon fall, I gathered firewood and returned to the cave. After lighting a small fire with flint, I ate the remaining mushrooms and finally began observing my surroundings.\n\nThe cave walls were unnaturally smooth."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Upon them were symbols unlike any language I had ever seen — elegant strokes etched with impossible precision. Though ancient beyond measure, they carried a strange presence, as though the words themselves remained alive."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "I fashioned a crude torch and ventured deeper.\n\nThe cave widened into what appeared to be an ancient study. A cushion rested at its center, so old it nearly crumbled into dust when touched."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Shelves and tables surrounded the room, buried beneath scattered papers crafted from materials far sturdier than common parchment.\n\nMost writings had faded with time.\n\nOne object, however, remained untouched."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "A book.\n\nPerfect.\n\nNot a single scratch marked its cover. It seemed untouched by age itself."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The moment I saw it, I felt drawn toward it.\n\nWhen I lifted it, the weight startled me. It was heavier than any ordinary book should have been. Yet when I opened it, I discovered something even stranger.\n\nI could read it."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The diary belonged to a man who referred to himself as a cultivator.\n\nWithin its pages were descriptions of powers beyond imagination — men who flew across the heavens, shattered mountains with a gesture, commanded storms, refined fire, and lived for centuries."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Had I not witnessed the hidden cave myself, I would have dismissed it all as madness.\n\nBut the impossible had already saved my life."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The cultivator explained that the hidden entrance was formed through an Illusion Array — one of many formations capable of deceiving the senses and manipulating the world itself.\n\nFurther within the study I discovered texts explaining the strange language carved upon the walls. It was the language of cultivators, used for techniques, arrays, talismans, and ancient records."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "From that day onward, my life changed forever.\n\nI returned to the village only long enough to gather supplies — ink, brushes, paper, oil, preserved food. Then I spent every possible moment inside the hidden cave studying."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Whenever I attempted to copy the wall inscriptions, however, something peculiar occurred.\n\nMy mind would enter a trance.\n\nHours vanished like moments."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "When awareness returned, the paper contained only meaningless scribbles.\n\nYet each failure sharpened my mind slightly. My thoughts became clearer. My memory stronger. Slowly, over many attempts, I began understanding fragments of the writings."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "They were cultivation techniques.\n\nMethods to transcend mortality itself."
+        }
+      ]
+    }
+  ]
+}

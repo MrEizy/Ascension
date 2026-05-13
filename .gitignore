@@ -25,3 +25,10 @@ run-data
 *.cache
 
 repo
+
+# claude code
+.claude
+docs/superpowers
+
+# no markdown files
+*.md

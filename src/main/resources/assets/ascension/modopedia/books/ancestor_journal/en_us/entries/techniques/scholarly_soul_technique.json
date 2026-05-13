@@ -1,0 +1,19 @@
+{
+  "title": "Scholarly Soul Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:scholarly_soul_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:scholarly_soul_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Scholarly Soul Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in stronghold libraries and on zombie villagers. It places limits on how certain major realms can be advanced — worth understanding before committing." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Sharpens the mind above all else, with quickness of thought following close. Physical strength and endurance grow the least. Some major realm advancements become inaccessible under this method — a deliberate restriction, not a flaw. Worth knowing before it cannot be undone." }
+      ]
+    }
+  ]
+}

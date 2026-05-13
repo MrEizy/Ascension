@@ -18,8 +18,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import net.thejadeproject.ascension.data_attachments.ModAttachments;
 
-import net.thejadeproject.ascension.items.artifacts.TabletOfDestructionEarth;
-import net.thejadeproject.ascension.items.artifacts.TabletOfDestructionHeaven;
+import net.thejadeproject.ascension.common.items.artifacts.TabletOfDestructionEarth;
+import net.thejadeproject.ascension.common.items.artifacts.TabletOfDestructionHeaven;
 
 import net.thejadeproject.ascension.network.serverBound.ToggleTabletDropModePayload;
 import net.thejadeproject.ascension.particle.ModParticles;
@@ -36,22 +36,7 @@ public class KeyBindHandler {
     private KeyBindHandler() {
     }
 
-    public static boolean isCultivating(Player player) {
-        if (player.level().isClientSide) {
-            boolean isDown = KeyBindHandler.CULTIVATE_KEY.isDown();
-            if (isDown && !wasCultivating) {
-                //TODO
-            }
-            wasCultivating = isDown;
 
-            if (isDown) {
-                spawnCultivationParticles(player);
-            }
-
-            return isDown;
-        }
-        return player.getPersistentData().getBoolean("isCultivating");
-    }
 
     private static void spawnCultivationParticles(Player player) {
         // Spawn particles less frequently
@@ -114,13 +99,7 @@ public class KeyBindHandler {
         }
     }
 
-    public static final KeyMapping OPEN_SPATIAL_RING_KEY = new KeyMapping("key.ascension.open_spatial_ring", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_B, CULTIVATION_CATEGORY);
     public static final KeyMapping TOGGLE_ARTIFACT_MODE_KEY = new KeyMapping("key.ascension.toggle_artifact_mode", 77, CULTIVATION_CATEGORY);
-    public static final KeyMapping INTROSPECTION_KEY = new KeyMapping("key.ascension.introspection", 73, CULTIVATION_CATEGORY);
-    public static final KeyMapping SKILL_MENU_KEY = new KeyMapping("key.ascension.skill_menu", 74, CULTIVATION_CATEGORY);
-    public static final KeyMapping CULTIVATE_KEY = new KeyMapping("key.ascension.cultivate", 67, CULTIVATION_CATEGORY);
-    public static final KeyMapping SKILL_WHEEL_KEY = new KeyMapping("key.ascension.skill_wheel", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_R, CULTIVATION_CATEGORY);
-    public static final KeyMapping CAST_SKILL_KEY = new KeyMapping("key.ascension.cast_skill", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_V, CULTIVATION_CATEGORY);
 
 
 

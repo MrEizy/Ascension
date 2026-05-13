@@ -1,5 +1,37 @@
 {
   "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "ascension:item/fire_body_technique",
+      "predicate": {
+        "ascension:technique_variant": 1.0
+      }
+    },
+    {
+      "model": "ascension:item/water_body_technique",
+      "predicate": {
+        "ascension:technique_variant": 2.0
+      }
+    },
+    {
+      "model": "ascension:item/wood_body_technique",
+      "predicate": {
+        "ascension:technique_variant": 3.0
+      }
+    },
+    {
+      "model": "ascension:item/earth_body_technique",
+      "predicate": {
+        "ascension:technique_variant": 4.0
+      }
+    },
+    {
+      "model": "ascension:item/metal_body_technique",
+      "predicate": {
+        "ascension:technique_variant": 5.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "ascension:item/technique_manual"
   }

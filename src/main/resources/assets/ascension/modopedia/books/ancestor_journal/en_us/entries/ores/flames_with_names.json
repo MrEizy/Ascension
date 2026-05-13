@@ -1,0 +1,19 @@
+{
+  "title": "Flames With Names",
+  "icon": { "id": "ascension:crimson_lotus_flame" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:flame" }, { "id": "ascension:soul_flame" }, { "id": "ascension:crimson_lotus_flame" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Spiritual Fires", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Ordinary fire burns and forgets. These three have memory.\nThe Flame carries spirit energy. The Soul Flame targets the spiritual body — burns that leave no mark on skin." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "The Crimson Lotus Flame remembers what it has burned and burns those things more efficiently each time.\nAll three are used in the cauldron. The wrong flame ruins the batch." }
+      ]
+    }
+  ]
+}

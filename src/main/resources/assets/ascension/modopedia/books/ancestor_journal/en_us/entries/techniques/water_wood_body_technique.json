@@ -1,0 +1,19 @@
+{
+  "title": "Evergreen Current Method",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:water_wood_body_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:water_wood_body_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Evergreen Current Method", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in dungeon chests — straightforward to reach if you can handle what guards them." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Water's persistence and wood's steady growth — the body builds endurance through accumulation rather than force or heat. Slower to develop than fire combinations, but more consistent. Force follows endurance closely. The mind sharpens least." }
+      ]
+    }
+  ]
+}

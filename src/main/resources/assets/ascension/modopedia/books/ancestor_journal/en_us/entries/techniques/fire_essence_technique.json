@@ -1,0 +1,19 @@
+{
+  "title": "Fire Essence Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:fire_essence_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:fire_essence_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Fire Essence Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Taken from blazes in the Nether. Demands some willingness to go looking." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Channels fire qi through the meridians, burning away impurities with each pass. Perception and quickness of thought are what it builds — the fire element pushes harder and faster than the unaligned version. Physical force still trails furthest behind." }
+      ]
+    }
+  ]
+}

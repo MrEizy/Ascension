@@ -1,0 +1,19 @@
+{
+  "title": "Water Essence Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:water_essence_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:water_essence_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Water Essence Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Taken from elder guardians in the ocean monuments." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Draws water qi through the meridians in a steady circular flow — not burning, not forcing. Perception deepens with patience rather than urgency. Quickness of thought follows the same unhurried pattern. Physical force still trails furthest behind." }
+      ]
+    }
+  ]
+}

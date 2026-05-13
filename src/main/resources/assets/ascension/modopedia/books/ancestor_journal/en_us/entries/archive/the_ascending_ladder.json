@@ -1,0 +1,25 @@
+{
+  "title": "The Ascending Ladder",
+  "icon": { "id": "minecraft:nether_star" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "The Ascending Ladder", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "I broke through my first realm on accident. I had been in meditation for what I thought was an hour — it was four days. When I opened my eyes, the air felt different and a wound had closed without treatment.\nI did not understand what had happened. I wrote it down anyway. If something works, record it first and explain it later." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "Breakthroughs", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "There are realms above the one you occupy. Each is a threshold that looks like a wall until something inside you accumulates enough that it cannot hold.\nBreakthroughs are not achievements you reach for." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "They are moments when what you have built exceeds the boundary on its own.\nCultivate consistently. The threshold breaks when it is ready, not when you are impatient." }
+      ]
+    }
+  ]
+}

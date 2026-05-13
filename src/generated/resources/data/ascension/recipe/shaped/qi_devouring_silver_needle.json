@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "ascension:qi_devouring_powder"
+    },
+    "S": {
+      "item": "ascension:silver_needle"
+    }
+  },
+  "pattern": [
+    "PPP",
+    "PSP",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "ascension:needle_effect": "ascension:needle_qi_devouring_poison"
+    },
+    "count": 8,
+    "id": "ascension:silver_needle"
+  }
+}

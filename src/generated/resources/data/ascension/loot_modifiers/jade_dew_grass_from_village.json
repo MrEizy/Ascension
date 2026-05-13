@@ -1,0 +1,14 @@
+{
+  "type": "ascension:add_item",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/village/village_plains_house"
+    },
+    {
+      "chance": 0.27,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "item": "ascension:jade_dew_grass_seeds"
+}

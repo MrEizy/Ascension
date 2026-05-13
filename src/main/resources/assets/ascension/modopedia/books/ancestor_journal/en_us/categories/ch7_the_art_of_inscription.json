@@ -1,0 +1,9 @@
+﻿{
+  "title": "The Art of Inscription",
+  "landing_text": "W.I.P.",
+  "icon": { "id": "ascension:talisman_paper" },
+  "children": ["ch7_1_ink_and_intent", "ch7_2_scroll_of_myriad_inscriptions"],
+  "entries": [],
+  "sort_num": 7
+}
+

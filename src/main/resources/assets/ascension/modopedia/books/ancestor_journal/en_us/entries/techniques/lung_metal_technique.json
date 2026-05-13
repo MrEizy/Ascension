@@ -1,0 +1,19 @@
+{
+  "title": "Lung Metal Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:lung_metal_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:lung_metal_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Lung Metal Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Dropped by iron golems and found in abandoned mineshafts." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Moves metal qi through the body using the lungs as its foundation. In organ theory the lungs govern intake and distribution — the technique sharpens the body's efficiency in processing qi during cultivation. Endurance and force build with precision. The mind sharpens least." }
+      ]
+    }
+  ]
+}

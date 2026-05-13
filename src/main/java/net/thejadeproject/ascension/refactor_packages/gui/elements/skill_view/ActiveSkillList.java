@@ -46,7 +46,7 @@ public class ActiveSkillList extends RenderableElement {
             if(!(AscensionRegistries.Skills.SKILL_REGISTRY.get(skillId) instanceof ICastableSkill skill)) continue;
             //only do active skills
             ActiveSkillIcon skillIcon = new ActiveSkillIcon(getUiFrame());
-            System.out.println("trying to add skill :" +skillId.toString());
+            //System.out.println("trying to add skill :" +skillId.toString());
             skillIcon.setSkill(skillId);
             scrollBox.addChild(skillIcon);
         }

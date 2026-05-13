@@ -1,0 +1,14 @@
+﻿{
+  "title": "Ashen Soul Flame",
+  "icon": { "id": "ascension:physique_essence" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:physique_essence" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Ashen Soul Flame", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The spirit burns with a cold fire — not warm, not comforting, but extremely effective. Soul and fire reinforce each other in this physique rather than conflicting." }
+      ]
+    }
+  ]
+}

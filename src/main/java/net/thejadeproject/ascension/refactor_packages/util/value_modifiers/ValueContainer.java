@@ -83,6 +83,7 @@ public class ValueContainer {
         calculateCachedVal();
     }
     public void addModifier(ValueContainerModifier modifier){
+        if(modifier == null) return;
         if(modifier.getOperation() == ModifierOperation.ADD_BASE)addBase.put(modifier.getIdentifier(),modifier);
         else if(modifier.getOperation() == ModifierOperation.ADD_FINAL) addFinal.put(modifier.getIdentifier(),modifier);
         else if (modifier.getOperation() == ModifierOperation.MULTIPLY_BASE) {

@@ -1,0 +1,12 @@
+{
+  "type": "ascension:wild_herb_feature",
+  "config": {
+    "crop_block": "ascension:white_jade_orchid_crop",
+    "valid_ground": [
+      "minecraft:grass_block",
+      "minecraft:moss_block",
+      "minecraft:moss_carpet",
+      "minecraft:dirt"
+    ]
+  }
+}

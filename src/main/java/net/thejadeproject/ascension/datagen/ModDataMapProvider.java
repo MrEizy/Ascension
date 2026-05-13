@@ -6,7 +6,7 @@ import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.registries.datamaps.builtin.Compostable;
 import net.neoforged.neoforge.registries.datamaps.builtin.FurnaceFuel;
 import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
-import net.thejadeproject.ascension.items.ModItems;
+import net.thejadeproject.ascension.common.items.ModItems;
 
 import java.util.concurrent.CompletableFuture;
 

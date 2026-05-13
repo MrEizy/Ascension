@@ -18,8 +18,6 @@ public class ScrollItemContainer extends ScrollBox {
         setWidth(18*9);
         this.maxVisibleRows = maxVisible;
         totalRows = Math.ceilDiv(finalSlot-startSlot,9);
-        System.out.println("slots :"+(finalSlot-startSlot));
-        System.out.println("total rows : "+totalRows);
         generateSlots(startSlot,finalSlot);
     }
 
@@ -36,9 +34,7 @@ public class ScrollItemContainer extends ScrollBox {
     }
 
     public void generateSlots(int startSlot, int finalSlot){
-        System.out.println("trying to generate slots");
         for (int i = 0; i < totalRows; ++i) {
-            System.out.println("row :"+i);
             for (int l = 0; l < 9; ++l) {
                 if(finalSlot<(startSlot+i*9+l)) return;
                 RenderableElement element = new RenderableElement(getUiFrame());
@@ -48,9 +44,6 @@ public class ScrollItemContainer extends ScrollBox {
                 element.setWidth(16);
                 element.setHeight(16);
                 element.setId("slot_index_"+(startSlot+i*9+l));
-                System.out.println("generated slot : "+(startSlot+i*9+l));
-                System.out.println((1+l*18));
-                System.out.println((1+i*18));
                 updateVisibility(element);
             }
         }
@@ -58,10 +51,6 @@ public class ScrollItemContainer extends ScrollBox {
 
     @Override
     public void updateVisibility(RenderableElement element) {
-        System.out.println("updating");
-        System.out.println("height : "+getHeight());
-        System.out.println("y : "+element.getPositioning().getY());
         element.setActive(element.getPositioning().getY() >= 1 && element.getPositioning().getY() < getHeight());
-        System.out.println(element.isActive());
     }
 }

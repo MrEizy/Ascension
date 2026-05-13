@@ -1,0 +1,45 @@
+{
+  "title": "The Three Medicines",
+  "icon": { "id": "ascension:essence_gathering_pill" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:essence_gathering_pill" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Essence Gathering Pill", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Accelerates Qi absorption significantly — days of careful meditation compressed into hours. The first time I used one I had to stop halfway through to let my meridians settle." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "This is the pill I reach for most during intensive cultivation. It does not do the work for you. It makes the work faster. The distinction matters." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:inner_reinforcement_pill" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Inner Reinforcement Pill", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Strengthens the body to better contain and process higher volumes of Qi. As cultivation deepens, the body must be strong enough to hold what the spirit accumulates — otherwise the excess damages from inside." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "I learned this after an aggressive session left me bedridden for three days with what felt like bruising from inside my chest. Use this alongside the Essence Gathering Pill." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:soul_focus_pill" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Soul Focus Pill", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Sharpens the spirit's ability to direct and control cultivated Qi. Qi without direction is pressure without purpose — it accumulates and causes problems." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Without soul focus, the other two pills produce Qi that goes nowhere useful. All three work together. Neglect one and the others become less effective or actively harmful." }
+      ]
+    }
+  ]
+}

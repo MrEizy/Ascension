@@ -11,8 +11,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
-import net.thejadeproject.ascension.blocks.entity.FlameStandBlockEntity;
-import net.thejadeproject.ascension.blocks.entity.PillCauldronLowHumanEntity;
+import net.thejadeproject.ascension.common.blocks.entity.FlameStandBlockEntity;
+import net.thejadeproject.ascension.common.blocks.entity.PillCauldronLowHumanEntity;
 
 /**
  * HUD overlay shown when looking at a Flame Stand or Pill Cauldron.

@@ -39,11 +39,15 @@ public class ModTags {
 
     public static class Items {
 
+        public static final TagKey<Item> HERBS = createTag("herbs");
         public static final TagKey<Item> MEDICINAL = createTag("herbs/medicinal");
         public static final TagKey<Item> HUMAN = createTag("herbs/human");
         public static final TagKey<Item> BLADE = createTag("blade");
         public static final TagKey<Item> SPEAR = createTag("spear");
         public static final TagKey<Item> SPEAR_ENCHANTABLE = createTag("spear_enchantable");
+
+
+        public static final TagKey<Item> FLAMES = createTag("flames");
 
 
 

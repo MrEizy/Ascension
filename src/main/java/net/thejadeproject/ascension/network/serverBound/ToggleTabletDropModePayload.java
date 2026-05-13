@@ -8,8 +8,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.thejadeproject.ascension.AscensionCraft;
-import net.thejadeproject.ascension.items.artifacts.TabletOfDestructionHeaven;
-import net.thejadeproject.ascension.items.artifacts.TabletOfDestructionEarth;
+import net.thejadeproject.ascension.common.items.artifacts.TabletOfDestructionHeaven;
+import net.thejadeproject.ascension.common.items.artifacts.TabletOfDestructionEarth;
 
 import java.util.HashMap;
 import java.util.Map;

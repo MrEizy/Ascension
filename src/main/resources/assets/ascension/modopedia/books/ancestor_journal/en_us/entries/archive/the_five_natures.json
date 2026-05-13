@@ -1,0 +1,14 @@
+{
+  "title": "The Five Natures",
+  "icon": { "id": "ascension:physique_essence" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:physique_essence" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Physique Essence", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The Physique Essence carries the distilled nature of another cultivator's body — their elemental alignment, compressed and transferable. I held one for three days before understanding what it was.\nFive elements, five natures: Fire, Water, Wood, Metal, Earth. Each does not simply add power — it reshapes what the body understands itself to be. A Fire physique cultivator I once observed stood in a burning structure and breathed slowly. The fire did not touch him." }
+      ]
+    }
+  ]
+}

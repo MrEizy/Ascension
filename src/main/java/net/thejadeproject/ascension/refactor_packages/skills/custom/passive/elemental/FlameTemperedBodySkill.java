@@ -7,13 +7,13 @@ public class FlameTemperedBodySkill extends SimplePassiveSkill {
     // marker class
 
     @Override
-    protected String getName() {
-        return "Flame Tempered Body";
+    protected String getTitleKey() {
+        return "ascension.skill.flame_tempered_body";
     }
 
     @Override
-    protected String getTooltip() {
-        return "Negates fire and lava damage.";
+    protected String getDescriptionKey() {
+        return "ascension.skill.flame_tempered_body.description";
     }
 
     @Override

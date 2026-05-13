@@ -32,6 +32,7 @@ public class ModPaths {
      */
 
 
+    // Central Paths
     public static final DeferredHolder<IPath, ? extends GenericPath> ESSENCE = PATHS.register("essence",()->
             new GenericPath(Component.translatable("ascension.path.essence"))
                     .addMajorRealmName("ascension.path.essence.mortal")
@@ -57,7 +58,8 @@ public class ModPaths {
                     .addMajorRealmName("ascension.path.soul.gold_battle_soul")
     );
 
-    // 5 Elements
+
+    // 5 Elements Paths
     public static final DeferredHolder<IPath, ? extends GenericPath> FIRE = PATHS.register("fire",()->
             new ComprehensionPath(Component.translatable("ascension.path.fire"))
                     .addMajorRealmName("ascension.path.fire.kindling")
@@ -94,8 +96,7 @@ public class ModPaths {
                     .addMajorRealmName("ascension.path.metal.origin_metal")
     );
 
-    //Deviated Elements
-
+    //Deviated Elements Paths
     public static final DeferredHolder<IPath, ? extends GenericPath> LIGHTNING = PATHS.register("lightning",()->
             new ComprehensionPath(Component.translatable("ascension.path.lightning"))
                     .addMajorRealmName("ascension.path.lightning.spark")
@@ -112,6 +113,7 @@ public class ModPaths {
     );
 
 
+    // Weapon Paths
     public static final DeferredHolder<IPath, ? extends GenericPath> SWORD = PATHS.register("sword",()->
             new ComprehensionPath(Component.translatable("ascension.path.sword"))
                     .addMajorRealmName("ascension.path.sword.initiate")
@@ -177,7 +179,7 @@ public class ModPaths {
     );
 
 
-
+    // Other
     public static final DeferredHolder<IPath, ? extends GenericPath> BUDDHIST = PATHS.register("buddhist",()->
             new ComprehensionPath(Component.translatable("ascension.path.buddhist"))
                     .addMajorRealmName("ascension.path.buddhist.sramana")

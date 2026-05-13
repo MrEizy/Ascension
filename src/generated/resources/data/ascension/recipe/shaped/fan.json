@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    " WW",
+    " WW",
+    "S  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "ascension:fan"
+  }
+}

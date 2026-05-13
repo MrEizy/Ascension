@@ -34,8 +34,8 @@ public record SyncAttributeHolder(AscensionAttributeHolder holder)implements Cus
             IEntityData entityData = context.player().getData(ModAttachments.ENTITY_DATA);
             entityData.setAscensionAttributeHolder(context.player(),payload.holder);
             entityData.getAscensionAttributeHolder().updateAttributes(entityData);
-            System.out.println("attributes synced");
-            System.out.println(context.player().getAttribute(Attributes.MAX_HEALTH).getValue());
+            //System.out.println("attributes synced");
+            //System.out.println(context.player().getAttribute(Attributes.MAX_HEALTH).getValue());
             entityData.getAscensionAttributeHolder().log();
         });
     }

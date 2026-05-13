@@ -1,0 +1,8 @@
+{
+  "title": "Common Bloodlines",
+  "icon": { "id": "ascension:physique_essence" },
+  "landing_text": "Minor bloodlines — present in certain families and clans over multiple generations. The power they grant is modest, but consistent. Cultivators who carry them often find one aspect of their practice comes slightly more naturally than it should.\n\nRare enough to attract notice. Not rare enough to be spoken of in legend.",
+  "entries": [],
+  "sort_num": 2,
+  "display_on_front_page": false
+}

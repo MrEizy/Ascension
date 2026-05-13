@@ -1,0 +1,19 @@
+{
+  "title": "Five Element Cultivation Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:five_element_cultivation_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:five_element_cultivation_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Five Element Cultivation Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in end city treasure. Rare enough that most practitioners only read descriptions of it." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Channels all five elements through the meridians simultaneously, balancing what most techniques specialize in. Perception sharpens broadly across every domain. Quickness of response follows. Physical force grows more than most essence techniques allow — though still not the focus." }
+      ]
+    }
+  ]
+}

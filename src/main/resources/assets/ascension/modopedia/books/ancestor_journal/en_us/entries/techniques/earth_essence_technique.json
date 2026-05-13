@@ -1,0 +1,19 @@
+{
+  "title": "Earth Essence Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:earth_essence_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:earth_essence_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Earth Essence Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Buried in trail ruins — found by digging, rarely by accident." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Earth qi moves slowly through the meridians and sets down deeply. Perception does not sharpen quickly, but what settles is difficult to disturb. Quickness of thought follows the same unhurried pace. Physical force still trails furthest behind." }
+      ]
+    }
+  ]
+}

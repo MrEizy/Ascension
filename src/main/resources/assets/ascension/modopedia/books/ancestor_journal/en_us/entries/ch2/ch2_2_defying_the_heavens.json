@@ -1,0 +1,106 @@
+{
+  "title": "Defying the Heavens",
+  "icon": { "id": "ascension:physique_essence" },
+  "pages": [
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The diary labelled this section with a single heading.\n\nDefying Heaven.\n\nI thought it dramatic at first. I was wrong."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Heaven, in the cultivation world, does not refer to the sky above. It refers to Fate — the decree written into your blood and bones before you drew your first breath.\n\nYour Physique is that decree.\n\nMost cultivators accept it."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "A rare few do not.\n\nThe diary spoke of those who had refused the body they were given. Through relentless, punishing cultivation — decades of effort most would not survive — some had slowly reshaped their own meridians, altered their affinities, replaced weakness with something earned.\n\nIt was not common. It was not easy. But it was possible."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "There is another path.\n\nChance encounters — rare substances, heavenly treasures, ancient inheritances stumbled upon or bled for — have granted cultivators new physiques without decades of toil.\n\nThe universe occasionally offers what fate withheld."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "One such substance is called Physique Essence.\n\nA refined concentration of energy aligned to a specific physique. Consuming it rewrites the body from within, forcing flesh and meridians to conform to a new pattern entirely.\n\nThe change is violent. The body resists what it was not born for."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Physique Essence cannot simply be consumed as found.\n\nThe essence carries impurities — remnants of the creature or environment it was drawn from. Consuming it unpurified risks contaminating one's meridians permanently, corrupting what little foundation already exists.\n\nIt must first be purged."
+        }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:physique_essence" } } },
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 22,
+          "width": 110,
+          "text": "Place the essence upon an anvil and strike it — repeatedly, deliberately — driving the impurities outward with each blow.\n\nA single essence is rarely pure enough on its own. Several must be combined and worked together until what remains is clean enough to safely absorb."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "There is one final truth the diary recorded on this matter.\n\nSome physiques do not remain what they are.\n\nGiven sufficient cultivation, the right resources, or the right circumstances — certain physiques awaken into higher forms. What was ordinary becomes rare. What was rare becomes something the old texts struggle to name."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Fate is not a wall.\n\nIt is a starting point.\n\nWhat you were born with is simply where you begin."
+        }
+      ]
+    }
+  ]
+}

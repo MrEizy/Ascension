@@ -1,0 +1,18 @@
+{
+  "title": "The Three Pillars",
+  "icon": { "id": "minecraft:quartz" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "The Three Pillars", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "Essence, Breath, Spirit. I heard these terms from a dying cultivator I found collapsed at the edge of a forest. He looked at me and said I was imbalanced, then laughed." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "I did not find it funny at the time. Eight months later my Qi nearly tore through my ribs because I had been feeding one pillar and ignoring the other two.\nTend to all three equally. The body does not forgive imbalance quietly." }
+      ]
+    }
+  ]
+}

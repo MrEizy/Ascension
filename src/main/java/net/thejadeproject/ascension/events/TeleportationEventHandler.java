@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
-import net.thejadeproject.ascension.items.artifacts.bases.BaseTeleportTalisman;
+import net.thejadeproject.ascension.common.items.artifacts.bases.BaseTeleportTalisman;
 
 public class TeleportationEventHandler {
 

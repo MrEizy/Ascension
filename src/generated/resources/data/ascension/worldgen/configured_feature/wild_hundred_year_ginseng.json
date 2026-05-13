@@ -1,0 +1,13 @@
+{
+  "type": "ascension:wild_herb_feature",
+  "config": {
+    "crop_block": "ascension:hundred_year_ginseng_crop",
+    "valid_ground": [
+      "minecraft:grass_block",
+      "minecraft:dirt",
+      "minecraft:podzol",
+      "minecraft:coarse_dirt",
+      "minecraft:rooted_dirt"
+    ]
+  }
+}

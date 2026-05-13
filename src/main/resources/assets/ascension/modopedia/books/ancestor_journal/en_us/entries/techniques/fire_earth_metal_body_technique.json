@@ -1,0 +1,19 @@
+{
+  "title": "Forge and Harvest Method",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:fire_earth_metal_body_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:fire_earth_metal_body_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Forge and Harvest Method", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in bastion remnant treasure rooms." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Intensity grounded and sharpened — fire's force compressed into earth's density, then refined to a precise edge by metal. Endurance and physical force both grow substantially. The technique leaves little room for anything else. The mind sharpens least." }
+      ]
+    }
+  ]
+}

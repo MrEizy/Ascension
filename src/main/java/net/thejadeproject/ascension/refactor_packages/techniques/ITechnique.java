@@ -1,14 +1,18 @@
 package net.thejadeproject.ascension.refactor_packages.techniques;
 
+import net.lucent.easygui.gui.RenderableElement;
+import net.lucent.easygui.gui.UIFrame;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.thejadeproject.ascension.AscensionCraft;
 import net.thejadeproject.ascension.refactor_packages.breakthroughs.IBreakthroughInstance;
 import net.thejadeproject.ascension.refactor_packages.entity_data.IEntityData;
 import net.thejadeproject.ascension.refactor_packages.forms.IEntityFormData;
 import net.thejadeproject.ascension.refactor_packages.paths.ModPaths;
 import net.thejadeproject.ascension.refactor_packages.paths.PathData;
+import net.thejadeproject.ascension.refactor_packages.physiques.IPhysique;
 import net.thejadeproject.ascension.refactor_packages.physiques.IPhysiqueData;
 import net.thejadeproject.ascension.refactor_packages.registries.AscensionRegistries;
 import net.thejadeproject.ascension.refactor_packages.techniques.stability.IStabilityHandler;
@@ -71,6 +75,7 @@ public interface ITechnique {
     default ResourceLocation getDefaultForm(){
         return AscensionRegistries.Paths.PATHS_REGISTRY.get(getPath()).defaultForm();
     }
+    RenderableElement getInformationContainer(UIFrame frame,PathData pathData);
 
     IStabilityHandler getStabilityHandler();
 
@@ -81,4 +86,14 @@ public interface ITechnique {
     IBreakthroughInstance freshBreakthroughData(IEntityData heldEntity);
     IBreakthroughInstance breakthroughInstanceFromCompound(CompoundTag tag,int majorRealm,int minorRealm,ITechniqueData techniqueData);
     IBreakthroughInstance breakthroughInstanceFromNetwork(RegistryFriendlyByteBuf buf,int majorRealm,int minorRealm,ITechniqueData techniqueData);
+
+    static ITechniqueData getFromCompound(IEntityData entityData, ITechnique technique, CompoundTag tag){
+        try {
+            return technique.fromCompound(tag);
+        }catch (Exception e){
+            AscensionCraft.LOGGER.error("error trying to load technique data data data for technique: "+
+                    AscensionRegistries.Techniques.TECHNIQUES_REGISTRY.getKey(technique),e);
+            return technique.freshTechniqueData(entityData);
+        }
+    }
 }

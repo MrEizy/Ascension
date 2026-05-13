@@ -1,0 +1,30 @@
+{
+  "type": "ascension:pill_cauldron_low_human",
+  "chance": 0.8,
+  "fail": {
+    "count": 1,
+    "id": "ascension:pill_residue"
+  },
+  "ingredients": [
+    {
+      "count": 4,
+      "item": "minecraft:carrot"
+    },
+    {
+      "count": 4,
+      "item": "minecraft:apple"
+    },
+    {
+      "count": 4,
+      "item": "minecraft:beetroot"
+    }
+  ],
+  "max_temp": 1000,
+  "min_temp": 100,
+  "purity_max": 70,
+  "recipe_time": 4,
+  "success": {
+    "count": 1,
+    "id": "ascension:fasting_pill_t1"
+  }
+}

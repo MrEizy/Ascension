@@ -1,0 +1,94 @@
+{
+  "title": "Mysteries of the Body",
+  "icon": { "id": "ascension:physique_essence" },
+  "pages": [
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The cultivator's diary devoted an entire section to what it called the Physique.\n\nI had assumed the body was simply a vessel — flesh and bone, no different from one mortal to the next.\n\nThe diary corrected this immediately."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Every person is born with a Physique.\n\nNot chosen. Not earned.\n\nGiven."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Some bodies absorb certain energies more naturally than others. Some resist damage, recover faster, move quicker, or perceive the world more keenly.\n\nIn the cultivation world, the body a person is born into determines the foundation of everything they will ever become."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The diary noted that most mortals never sense what they carry within themselves.\n\nTheir physiques lie dormant — unrealized. Quiet gifts they will carry to the grave.\n\nA cultivator cannot afford such ignorance."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Before choosing a technique, before selecting a path, a cultivator must first understand the vessel they were born into.\n\nI spent long nights pressing meridians I could not feel. Testing limits I could not find. Searching for affinities I could not identify.\n\nI found nothing — for a long time."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The diary warned this would happen to most.\n\nOrdinary physiques are far more common than exceptional ones. They are the soil from which most cultivators grow — unremarkable, but workable.\n\nThe exceptional ones are something else entirely."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "After many weeks, I found something — a faint warmth in the lower meridians that appeared only during deep meditation. Too subtle to name. Too persistent to ignore.\n\nThe diary, when I found the right passage, gave it a name."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Even a minor affinity, properly cultivated, is worth more than having no direction at all.\n\nThe diary reminded me of this often. Many cultivators spent their early years chasing techniques suited to physiques far stronger than their own.\n\nSome realized their mistake in time. Others did not."
+        }
+      ]
+    }
+  ]
+}

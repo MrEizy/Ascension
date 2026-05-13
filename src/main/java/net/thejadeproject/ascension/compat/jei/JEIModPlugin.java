@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.thejadeproject.ascension.AscensionCraft;
-import net.thejadeproject.ascension.blocks.ModBlocks;
+import net.thejadeproject.ascension.common.blocks.ModBlocks;
 import net.thejadeproject.ascension.menus.custom.spirit_ring.SpatialRingInventoryScreen;
 import net.thejadeproject.ascension.menus.custom.spirit_ring.SpatialRingModifierScreen;
 import net.thejadeproject.ascension.recipe.LowHumanPillCauldronRecipe;

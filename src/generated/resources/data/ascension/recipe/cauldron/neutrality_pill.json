@@ -1,0 +1,32 @@
+{
+  "type": "ascension:pill_cauldron_low_human",
+  "bonus_chance": 0.1,
+  "chance": 0.8,
+  "fail": {
+    "count": 1,
+    "id": "ascension:pill_residue"
+  },
+  "ideal_temp": 592,
+  "ingredients": [
+    {
+      "count": 2,
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "count": 1,
+      "item": "ascension:golden_sun_leaf"
+    },
+    {
+      "count": 8,
+      "item": "minecraft:bone"
+    }
+  ],
+  "max_temp": 975,
+  "min_temp": 365,
+  "purity_max": 80,
+  "recipe_time": 4,
+  "success": {
+    "count": 1,
+    "id": "ascension:neutrality_pill"
+  }
+}

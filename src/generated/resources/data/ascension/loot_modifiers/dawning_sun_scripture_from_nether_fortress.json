@@ -1,0 +1,14 @@
+{
+  "type": "ascension:add_technique_manual",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/nether_bridge"
+    },
+    {
+      "chance": 0.07,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "techniqueId": "ascension:dawning_sun_scripture"
+}

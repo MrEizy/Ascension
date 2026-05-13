@@ -8,7 +8,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.thejadeproject.ascension.AscensionCraft;
+import net.thejadeproject.ascension.common.items.tools.hidden_weapons.NeedleItem;
 import net.thejadeproject.ascension.entity.custom.CushionEntity;
+import net.thejadeproject.ascension.entity.custom.NeedleProjectile;
 import net.thejadeproject.ascension.entity.custom.PillProjectile;
 import net.thejadeproject.ascension.entity.custom.form.PlayerBodyEntity;
 import net.thejadeproject.ascension.entity.custom.shaders.RiftEntity;
@@ -47,6 +49,18 @@ public class ModEntities {
                             .clientTrackingRange(4)
                             .updateInterval(10)
                             .build("poison_pill"));
+
+    public static final Supplier<EntityType<NeedleProjectile>> NEEDLE_PROJECTILE =
+            ENTITY_TYPES.register("needle_projectile",
+                    () -> EntityType.Builder.<NeedleProjectile>of(
+                            ((entityType, level) -> new NeedleProjectile(entityType, level)),
+                            MobCategory.MISC
+                    )
+                            .sized(0.1f, 0.1f)
+                            .clientTrackingRange(4)
+                            .updateInterval(5)
+                            .build("needle_projectile")
+                    );
 
     public static final DeferredHolder<EntityType<?>, EntityType<RiftEntity>> RIFT =
             ENTITY_TYPES.register("rift",

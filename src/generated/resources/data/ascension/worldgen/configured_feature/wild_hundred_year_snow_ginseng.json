@@ -1,0 +1,13 @@
+{
+  "type": "ascension:wild_herb_feature",
+  "config": {
+    "crop_block": "ascension:hundred_year_snow_ginseng_crop",
+    "valid_ground": [
+      "minecraft:snow_block",
+      "minecraft:ice",
+      "minecraft:packed_ice",
+      "minecraft:blue_ice",
+      "minecraft:powder_snow"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "title": "The First Breath",
+  "icon": { "id": "minecraft:experience_bottle" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "The First Breath", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "An old hermit by the river did not teach me. He pointed at the water and said nothing for several minutes, then left. I sat there for what I think was two days." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "At some point — cold, hungry, irritated — something shifted inside my chest. Not my heart. Something behind it.\nI ran after the hermit. He was already gone. I have been chasing that feeling ever since." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "Learning to Begin", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "What I learned after much pain: Qi does not respond to wanting. It responds to a stillness that has given up on wanting. I discovered this by almost starving on a riverbank.\nBe still. Be patient. The moment you stop performing patience and actually become it, something answers." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Do not skip this part. Everything else depends on it." }
+      ]
+    }
+  ]
+}

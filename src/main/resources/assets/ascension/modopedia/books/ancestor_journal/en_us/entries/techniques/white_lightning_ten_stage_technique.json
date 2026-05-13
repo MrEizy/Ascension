@@ -1,0 +1,19 @@
+{
+  "title": "White Lightning Ten Stage Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:white_lightning_ten_stage_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:white_lightning_ten_stage_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "White Lightning Ten Stage Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Ten stages, each documented in sequence. Where it came from, the record does not say — I found it, and that had to be enough." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Tempers the body through ten defined stages, each progressively harder on the physical frame. Lightning qi threads through muscle and bone at every stage, building endurance and raw force above all else. The mind sharpens least — this technique does not refine. It reinforces." }
+      ]
+    }
+  ]
+}

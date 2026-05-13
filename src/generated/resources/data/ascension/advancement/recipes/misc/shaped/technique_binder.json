@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_technique_page": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:technique_page"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:shaped/technique_binder"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_technique_page"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:shaped/technique_binder"
+    ]
+  }
+}

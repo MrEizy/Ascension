@@ -52,14 +52,16 @@ public class AscensionDamageHandler {
     public static void onAttack(AttackEntityEvent event){
 
     }
+
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onIncomingDamage(LivingIncomingDamageEvent event){
         if(event.getSource().getEntity() == null) return;
         if(event.getSource().getDirectEntity() != event.getSource().getEntity()) return;
 
         if(!event.getSource().getEntity().hasData(ModAttachments.ENTITY_DATA)) return;
-        System.out.println("dealing increased damage");
-        event.setAmount((float)event.getSource().getEntity().getData(ModAttachments.ENTITY_DATA).getAscensionAttributeHolder().getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+        //System.out.println("dealing increased damage");
+        //event.setAmount((float)event.getSource().getEntity().getData(ModAttachments.ENTITY_DATA).getAscensionAttributeHolder().getAttribute(Attributes.ATTACK_DAMAGE).getValue());
     }
 
 
@@ -100,17 +102,17 @@ public class AscensionDamageHandler {
         );
         AscensionDamageEvent.Pre preEvent = new AscensionDamageEvent.Pre(finalDamageSource,event.getContainer(),container,event.getEntity());
         NeoForge.EVENT_BUS.post(preEvent);
-        System.out.println("dealt : "+preEvent.getDamage());
+        //System.out.println("dealt : "+preEvent.getDamage());
         AscensionDamageEvent.Post postEvent = new AscensionDamageEvent.Post(finalDamageSource,event.getContainer(),container,event.getEntity());
         NeoForge.EVENT_BUS.post(postEvent);
         event.setNewDamage((float) postEvent.getDamage());
         if(event.getSource().getEntity() != null && event.getSource().getEntity().hasData(ModAttachments.ENTITY_DATA)){
             IEntityData entityData = event.getSource().getEntity().getData(ModAttachments.ENTITY_DATA);
             for(ResourceLocation path : finalDamageSource.getPathAttributes()){
-                System.out.println();
                 event.setNewDamage((float) (event.getNewDamage()*entityData.getPathBonusHandler().getPathBonus(path)));
             }
         }
+        //System.out.println("final damage "+event.getNewDamage());
 
 
     }

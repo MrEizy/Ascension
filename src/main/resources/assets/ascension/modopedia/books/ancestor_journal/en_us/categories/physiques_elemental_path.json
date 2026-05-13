@@ -1,0 +1,17 @@
+{
+  "title": "Elemental Path",
+  "icon": { "id": "ascension:physique_essence" },
+  "entries": [
+    "physiques/physique_fire_attuned",
+    "physiques/physique_water_attuned",
+    "physiques/physique_earth_attuned",
+    "physiques/physique_wood_attuned",
+    "physiques/physique_metal_attuned",
+    "physiques/physique_lightning_attuned",
+    "physiques/physique_wind_attuned",
+    "physiques/physique_flame_touched",
+    "physiques/physique_stone_monkey"
+  ],
+  "sort_num": 3,
+  "display_on_front_page": false
+}

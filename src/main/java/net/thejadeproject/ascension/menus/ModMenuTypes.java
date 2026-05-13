@@ -10,6 +10,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.thejadeproject.ascension.AscensionCraft;
 
+import net.thejadeproject.ascension.menus.custom.herb_pouch.HerbPouchMenu;
 import net.thejadeproject.ascension.menus.custom.pill_cauldron.PillCauldronLowHumanMenu;
 import net.thejadeproject.ascension.menus.custom.spirit_ring.SpatialRingInventoryMenu;
 import net.thejadeproject.ascension.menus.custom.spirit_ring.SpatialRingModifierMenu;
@@ -30,6 +31,9 @@ public class ModMenuTypes {
 
     public static final DeferredHolder<MenuType<?>,MenuType<SpatialRingModifierMenu>> SPATIAL_RING_MODIFIER_MENU =
             registerMenuType("spirit_ring_modifier_menu", SpatialRingModifierMenu::new);
+
+    public static final DeferredHolder<MenuType<?>, MenuType<HerbPouchMenu>> HERB_POUCH_MENU =
+            registerMenuType("herb_pouch_menu", HerbPouchMenu::new);
 
 
 

@@ -1,0 +1,15 @@
+﻿{
+  "title": "Scroll of Myriad Techniques",
+  "icon": { "id": "ascension:technique_manual" },
+  "landing_text": "Techniques organized by path. Your physique decides which path is yours — and with it, which techniques you can follow. There is no choosing around it.\n\nWhat is recorded here is what I have confirmed or witnessed. There is more I have not yet encountered.",
+  "children": [
+    "techniques_body_path",
+    "techniques_essence_path",
+    "techniques_soul_path",
+    "techniques_weapon_path",
+    "techniques_deviant_path"
+  ],
+  "entries": [],
+  "sort_num": 3,
+  "display_on_front_page": false
+}

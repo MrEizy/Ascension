@@ -1,0 +1,21 @@
+{
+  "title": "Hundred Year Ginseng",
+  "icon": { "id": "ascension:hundred_year_ginseng" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:hundred_year_ginseng" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Hundred Year Ginseng", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "A century to full potency. The body resists it raw — do not eat it unrefined. Properly treated in the cauldron it becomes something else entirely: deep reinforcement of the inner body, marrow cleansing included." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "How to Obtain", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "Found wild in forest and taiga biomes. Also turns up in village chests and dungeons.\n\nCan be grown as a crop." }
+      ]
+    }
+  ]
+}

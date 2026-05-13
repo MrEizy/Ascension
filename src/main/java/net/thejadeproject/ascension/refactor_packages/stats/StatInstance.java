@@ -24,8 +24,8 @@ public class StatInstance extends ValueContainer {
 
 
     public void log(){
-        System.out.print(getDisplayName().getString()+" : ");
-        System.out.print(getValue());
-        System.out.println(" ("+getBaseValue()+")");
+//        //System.out.print(getDisplayName().getString()+" : ");
+//        //System.out.print(getValue());
+//        //System.out.println(" ("+getBaseValue()+")");
     }
 }

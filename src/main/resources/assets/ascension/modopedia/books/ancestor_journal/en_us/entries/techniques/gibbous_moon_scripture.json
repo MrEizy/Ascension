@@ -1,0 +1,19 @@
+{
+  "title": "Gibbous Moon Scripture",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:gibbous_moon_scripture" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:gibbous_moon_scripture" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Gibbous Moon Scripture", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in end city treasure and taken from endermen. Neither source is simple to reach." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "A middle position in the moon cycle — faster than the pale moon scripture, with perception developing in a more focused way. Quickness of thought is what it builds most aggressively. Physical strength and endurance grow the least." }
+      ]
+    }
+  ]
+}

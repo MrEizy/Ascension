@@ -1,0 +1,13 @@
+{
+  "type": "modopedia:dense",
+  "pattern": [
+    [".....", ".....", "..F..", ".....", "....."],
+    ["..P..", ".....", "P.C.P", ".....", "....."]
+  ],
+  "key": {
+    ".": { "type": "modopedia:air" },
+    "F": { "type": "modopedia:simple", "states": ["ascension:flame_stand"] },
+    "C": { "type": "modopedia:simple", "states": ["ascension:pill_cauldron_low_human"] },
+    "P": { "type": "modopedia:simple", "states": ["ascension:cauldron_pedestal"] }
+  }
+}

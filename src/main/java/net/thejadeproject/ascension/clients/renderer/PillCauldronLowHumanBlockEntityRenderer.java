@@ -16,8 +16,8 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.thejadeproject.ascension.blocks.ModBlocks;
-import net.thejadeproject.ascension.blocks.entity.PillCauldronLowHumanEntity;
+import net.thejadeproject.ascension.common.blocks.ModBlocks;
+import net.thejadeproject.ascension.common.blocks.entity.PillCauldronLowHumanEntity;
 import net.thejadeproject.ascension.shaders.client.ModRenderTypes;
 
 /**

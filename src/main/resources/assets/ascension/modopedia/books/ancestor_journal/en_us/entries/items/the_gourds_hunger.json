@@ -1,0 +1,19 @@
+{
+  "title": "The Gourd's Hunger",
+  "icon": { "id": "ascension:fire_gourd" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:fire_gourd" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Fire Gourd", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The Fire Gourd grew in ash fields south of the volcanic region, in soil that should not have supported anything. It was the only growth in the area.\nIt naturally contains and channels spiritual fire. Aim, compress, release." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "The fire regenerates from within the gourd between uses.\nI have singed myself with it more times than I am comfortable recording." }
+      ]
+    }
+  ]
+}

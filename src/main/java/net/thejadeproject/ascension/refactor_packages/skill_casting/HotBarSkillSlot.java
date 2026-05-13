@@ -1,12 +1,14 @@
 package net.thejadeproject.ascension.refactor_packages.skill_casting;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.thejadeproject.ascension.refactor_packages.entity_data.IEntityData;
 import net.thejadeproject.ascension.refactor_packages.registries.AscensionRegistries;
 import net.thejadeproject.ascension.refactor_packages.skills.ISkill;
 import net.thejadeproject.ascension.refactor_packages.skills.castable.ICastableSkill;
 import net.thejadeproject.ascension.refactor_packages.skills.castable.IPreCastData;
+import org.xml.sax.helpers.AttributesImpl;
 
 public class HotBarSkillSlot {
 
@@ -20,6 +22,7 @@ public class HotBarSkillSlot {
         this.skillKey = skillKey;
         this.preCastData = preCastData;
         markDirty();
+
     }
 
     public ISkill getSkill(){return AscensionRegistries.Skills.SKILL_REGISTRY.get(skillKey);};

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:leather"
+    },
+    "B": {
+      "item": "minecraft:string"
+    },
+    "C": {
+      "item": "ascension:spiritual_stone"
+    },
+    "D": {
+      "tag": "ascension:herbs"
+    }
+  },
+  "pattern": [
+    "BCB",
+    "ADA",
+    " A "
+  ],
+  "result": {
+    "count": 1,
+    "id": "ascension:herb_pouch"
+  }
+}

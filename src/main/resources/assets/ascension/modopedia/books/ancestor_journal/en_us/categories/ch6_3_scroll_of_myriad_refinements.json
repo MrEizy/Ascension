@@ -1,0 +1,18 @@
+﻿{
+  "title": "Scroll of Myriad Refinements",
+  "landing_text": "Pills are not shortcuts. Each one is a refinement — hours of controlled heat, careful ingredients, and intent. What is recorded here is what has come out of the cauldron whole.\n\nWhat comes out wrong is also recorded. Separately.",
+  "icon": { "id": "ascension:neutrality_pill" },
+  "entries": [
+    "pills/cultivation_pills",
+    "pills/cleansing_pills",
+    "pills/fasting_pills",
+    "pills/neutrality_pill",
+    "pills/regeneration_pill",
+    "pills/qi_devouring_parasite_pill",
+    "pills/antidote_pill",
+    "pills/marrow_cleanse_pill",
+    "pills/pill_residue"
+  ],
+  "sort_num": 3,
+  "display_on_front_page": false
+}

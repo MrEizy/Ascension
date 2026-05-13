@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_jade_bamboo_of_serenity": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:jade_bamboo_of_serenity"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:cauldron/soul_focus_pill"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_jade_bamboo_of_serenity"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:cauldron/soul_focus_pill"
+    ]
+  }
+}

@@ -6,6 +6,7 @@ import net.lucent.easygui.gui.overaly.EasyOverlayHandler;
 import net.lucent.easygui.gui.overaly.EasyOverlayPosition;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.thejadeproject.ascension.AscensionCraft;
 import net.thejadeproject.ascension.refactor_packages.gui.elements.general.Container;
 import net.thejadeproject.ascension.refactor_packages.gui.elements.hud.HudContainer;
@@ -28,7 +29,7 @@ public class ModOverlays {
         UIFrame hudFrame=new UIFrame();
         HudContainer hudContainer = new HudContainer(frame);
         hudFrame.setRoot(hudContainer);
-        EasyOverlayHandler.registerOverlay(ResourceLocation.fromNamespaceAndPath(AscensionCraft.MOD_ID,"hud_overlay"),EasyOverlayPosition.ABOVE_ALL(),hudFrame);
+        EasyOverlayHandler.overrideVanillaOverlay(VanillaGuiLayers.PLAYER_HEALTH,hudFrame);
 
     }
 

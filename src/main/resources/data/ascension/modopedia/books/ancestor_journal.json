@@ -1,0 +1,8 @@
+{
+  "title": "      Journal",
+  "landing_text": "I do not have much time left.\nI walked this path further than most dare to go, and still it was not far enough.\nI did not choose this life — it chose me. A wanderer and an alchemist, making do with whatever I could find, none of it planned and all of it hard won.\nThis journal will guide you, if you are capable enough to uncover what it hides.",
+  "model": "ascension:item/modopedia_books/scroll",
+"texture": "modopedia:brown_iron",
+  "text_colour": "3B2A1A",
+  "header_colour": "8B6914"
+}

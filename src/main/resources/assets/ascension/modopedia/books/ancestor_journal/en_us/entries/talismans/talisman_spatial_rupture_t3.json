@@ -1,0 +1,19 @@
+{
+  "title": "Greater Spatial Rupture Talisman",
+  "icon": { "id": "ascension:spatial_rupture_talisman_t3" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:spatial_rupture_talisman_t3" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Greater Spatial Rupture Talisman", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The furthest reach of the three — up to 7500 blocks. Twenty minutes to recharge. Upgraded from the standard version." }
+      ]
+    },
+    {
+      "components": [
+        { "template": "modopedia:recipe/crafting", "recipe": "ascension:shaped/spatial_rupture_talisman_t3" }
+      ]
+    }
+  ]
+}

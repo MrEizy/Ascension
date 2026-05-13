@@ -1,0 +1,19 @@
+{
+  "title": "The Viper's Gift",
+  "icon": { "id": "ascension:qi_devouring_parasite_pill" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:qi_devouring_parasite_pill" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Qi Devouring Parasite", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "I found this recipe in the compound's records, written in what appeared to be blood. Dramatic, but effective as a warning label.\nThe Qi Devouring Parasite disrupts and consumes cultivated Qi in whoever ingests it. It was designed as a weapon." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "I made a small batch and keep it separate. I have not used it. I have not decided if I want to." }
+      ]
+    }
+  ]
+}

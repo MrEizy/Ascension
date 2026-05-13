@@ -1,0 +1,14 @@
+{
+  "title": "Yin-Yang Eyes",
+  "icon": { "id": "ascension:physique_essence", "components": { "ascension:physique_id": "ascension:yin_yang_eyes" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:physique_essence", "components": { "ascension:physique_id": "ascension:yin_yang_eyes" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Yin-Yang Eyes", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The divided gaze has found its balance. Moon and sun, stillness and fire — both Soul and Essence paths now Within your Reach." }
+      ]
+    }
+  ]
+}

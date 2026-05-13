@@ -1,0 +1,105 @@
+{
+  "title": "The Beginning",
+  "icon": { "id": "ascension:ancestor_journal" },
+  "pages": [
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "It was a day like any other.\n\nI woke before sunrise, as I always did, and began my routine. I prepared breakfast, fed the cattle, and watered the small garden beside my home. Life in the village was simple and predictable. The seasons changed, the crops grew, and the years passed quietly."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "That morning, however, I noticed I was running low on dried mushrooms for the coming weeks. Reluctantly, I took my basket and knife and made my way toward my usual foraging grounds deep within the forest beyond the village hills.\n\nThe journey was long enough that by the time I arrived, the sun already stood high overhead."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "It was quiet.\n\nToo quiet.\n\nThe forest had always been lively — birds calling between branches, insects humming, leaves shifting with the wind — yet that day the woods felt empty, as though even nature itself was holding its breath.\n\nAn unease settled in my chest.\n\nI decided to gather what I could and return home quickly."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Before long my basket was nearly full, but just as I bent to pick another cluster, I heard it.\n\nHowling.\n\nClose.\n\nFar too close."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "In the distance I saw the greenery shifting violently between the trees. Whatever hunted me had abandoned stealth entirely.\n\nI ran."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Branches tore at my clothes as I rushed through the forest, my basket bouncing wildly at my side. Behind me the howls grew louder. When I dared glance back, I saw them clearly at last — wolves, lean and starving, racing after me with terrifying speed.\n\nI pushed my legs harder than ever before.\n\nStill, they gained ground."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "In my panic I strayed from the familiar path and found myself cornered before a sheer mountain wall. The wolves spread out slowly around me, yellow eyes fixed upon their prey.\n\nWith nowhere left to run, I stumbled backward toward the stone.\n\nThen the impossible happened.\n\nI fell through it."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "One moment solid rock stood behind me, the next I crashed onto rough stone inside a hidden cavern. Pain exploded through the back of my head as I struck the ground. Dazed, I looked upward to see the wolves pacing outside the mountain wall, confused and unable to enter.\n\nBetween us shimmered a faint transparent veil.\n\nLater, I would learn its name.\n\nAn Illusion Array."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "At that moment, however, I knew only one thing.\n\nI was alive.\n\nThe last of my strength left me, and darkness claimed my vision."
+        }
+      ]
+    }
+  ]
+}

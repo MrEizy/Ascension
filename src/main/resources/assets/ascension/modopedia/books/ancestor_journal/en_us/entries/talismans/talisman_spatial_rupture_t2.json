@@ -1,0 +1,19 @@
+{
+  "title": "Standard Spatial Rupture Talisman",
+  "icon": { "id": "ascension:spatial_rupture_talisman_t2" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:spatial_rupture_talisman_t2" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Standard Spatial Rupture Talisman", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "A wider reach than the lesser — up to 5000 blocks into the unknown. Forty minutes to recharge. Upgraded from the lesser version." }
+      ]
+    },
+    {
+      "components": [
+        { "template": "modopedia:recipe/crafting", "recipe": "ascension:shaped/spatial_rupture_talisman_t2" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Wood Essence Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:wood_essence_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:wood_essence_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Wood Essence Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in jungle temples — overgrown, frequently picked over. Finding one intact takes patience." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Wood qi strengthens the meridians through steady accumulation rather than force or heat. Perception deepens durably over time — slower to feel than fire or lightning, but more difficult to disrupt once settled. Quickness of thought follows. Physical force trails furthest behind." }
+      ]
+    }
+  ]
+}

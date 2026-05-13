@@ -1,0 +1,19 @@
+{
+  "title": "Heaven, Earth, Human",
+  "icon": { "id": "ascension:todh" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:todhe" }, { "id": "ascension:tode" }, { "id": "ascension:todh" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Tablets of Destruction", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found sealed in a jade box beneath the compound. I could feel the density of Qi in them from several paces away.\nHeaven tears downward. Earth tears upward. Human tears outward from the center — the one named for us." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "I use them carefully, rarely, and never in enclosed spaces. I learned the last part empirically." }
+      ]
+    }
+  ]
+}

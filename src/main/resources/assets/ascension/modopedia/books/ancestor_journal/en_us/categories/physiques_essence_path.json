@@ -1,0 +1,14 @@
+{
+  "title": "Essence Path",
+  "icon": { "id": "ascension:physique_essence" },
+  "entries": [
+    "physiques/physique_cripple",
+    "physiques/physique_mortal",
+    "physiques/physique_mortal_essence_bone",
+    "physiques/physique_special_essence_bone",
+    "physiques/physique_heavenly_essence_bone",
+    "physiques/physique_divine_essence_bone"
+  ],
+  "sort_num": 2,
+  "display_on_front_page": false
+}

@@ -1,0 +1,83 @@
+{
+  "title": "What the Blood Carries",
+  "icon": { "id": "ascension:soul_flame" },
+  "pages": [
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The diary had spoken of physiques at length.\n\nI had come to understand them — imperfectly, but enough. What the body carries by nature. What can be changed, and what cannot.\n\nThen it turned to something it called Lineage.\n\nI had to read the passage three times before I believed what I was reading."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "A Bloodline is not a Physique.\n\nA Physique is written into your meridians at birth — the shape of how you receive and hold the world's energy. It is yours, and it is knowable.\n\nA Bloodline is older. Carried in the blood itself, passed between generations, sometimes dormant for centuries before surfacing again in someone worthy of carrying it."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Those who carry a strong Bloodline cultivate differently.\n\nNot better, necessarily — the diary was careful about this. But differently. As if a current ran through their practice that did not run through ordinary cultivation.\n\nPowers manifested that no technique could explain. Affinities that were not trained.\n\nInherited. From blood going back further than the carrier could trace."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "I have seen such a person once.\n\nA young man, no older than twenty, who had only been cultivating for two years. He had no exceptional physique — I checked. No advanced technique.\n\nBut the way Qi moved around him was different. Not stronger. Older.\n\nLike something in his blood recognized what mine did not."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The diary was clear on this.\n\nEveryone carries a bloodline. Most of them mean nothing — too thin, too diluted, too far removed from whatever source gave them life. They leave no mark on cultivation and no trace on the world.\n\nBut bloodlines of any note are rare. A full empire might produce one carrier per generation — if that.\n\nAnd when a powerful one surfaces, the world notices."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "There is a reason cultivators kill for bloodlines.\n\nThe diary touched on this only briefly — and what it did say, it said carefully. Wars. Families destroyed. Cultivators who spent lifetimes hunting something they could not even name.\n\nWhatever methods exist for taking what another carries, the diary did not commit them to full record.\n\nSome knowledge, it seemed, was too dangerous to write plainly."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The diary ended the section with something I did not expect.\n\nA bloodline is not fixed. It can be c█a█g█d — through m█th██s the diary described only in fr██m██ts, calling them dangerous, costly, and in some cases i██ev█rs█ble. ████m██at██n is the most brutal of these. But there are ot██rs, whose names the diary left deliberately obscured.\n\nWhat you are born carrying is a starting point, not a sentence.\n\nMany of the greatest cultivators in any record carried nothing exceptional in their blood at all. They simply refused to accept what the blood offered them.\n\nThe diary seemed to consider that sufficient."
+        }
+      ]
+    }
+  ]
+}

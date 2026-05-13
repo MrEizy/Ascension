@@ -1,0 +1,19 @@
+{
+  "title": "The Great Washing",
+  "icon": { "id": "ascension:marrow_cleanse_pill" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:marrow_cleanse_pill" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Marrow Cleanse Pill", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The Marrow Cleanse Pill is the worst thing I have voluntarily done to myself.\nFor two days I could not move. Whatever it burns through, it burns completely." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "What remains is different — lighter in a way I cannot explain to someone who has not felt it. The bones remember the fire and do not return to what they were.\nIt is worth it. I can say that from the other side." }
+      ]
+    }
+  ]
+}

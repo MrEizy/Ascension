@@ -1,0 +1,19 @@
+{
+  "title": "Marble",
+  "icon": { "id": "ascension:raw_marble" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:raw_marble" }, { "id": "ascension:polished_marble" }, { "id": "ascension:marble_bricks" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Marble", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Appears throughout the stone layers in large deposits — far more common than anything refined. Takes polish without complaint and holds carved detail well.\nIt only comes out of the ground white. The color can be changed." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "No Qi properties I have been able to detect. Its value is practical: durable material for building and it does not look like a cave floor once cut.\nFound at most depths. Hard to miss." }
+      ]
+    }
+  ]
+}

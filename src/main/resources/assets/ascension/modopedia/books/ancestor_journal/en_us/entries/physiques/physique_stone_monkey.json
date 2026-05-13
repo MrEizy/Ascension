@@ -1,0 +1,14 @@
+﻿{
+  "title": "Stone Monkey",
+  "icon": { "id": "ascension:physique_essence" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:physique_essence" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Stone Monkey", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "A body born from rock and obstinacy in equal measure. Unusually strong and unusually earthen in nature." }
+      ]
+    }
+  ]
+}

@@ -90,7 +90,7 @@ public class ActiveSkillSlot extends RenderableElement {
     }
     public void setSkill(ResourceLocation skill){
         if(!enabled) return;
-        System.out.println("trying to add "+skill+" to slot "+slot);
+        //System.out.println("trying to add "+skill+" to slot "+slot);
         //TODO send update packet then update self
         if(skill == null){
             PacketDistributor.sendToServer(new ClearSlot(slot));

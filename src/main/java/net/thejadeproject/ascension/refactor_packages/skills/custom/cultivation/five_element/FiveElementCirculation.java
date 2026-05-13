@@ -20,6 +20,7 @@ import net.thejadeproject.ascension.refactor_packages.breakthroughs.IBreakthroug
 import net.thejadeproject.ascension.refactor_packages.breakthroughs.NineHeavenlyTribulations;
 import net.thejadeproject.ascension.refactor_packages.entity_data.IEntityData;
 import net.thejadeproject.ascension.refactor_packages.events.CultivateEvent;
+import net.thejadeproject.ascension.refactor_packages.gui.elements.info_elements.DescriptionDisplayContainer;
 import net.thejadeproject.ascension.refactor_packages.gui.elements.skills.cultivation.CultivationProgressBar;
 import net.thejadeproject.ascension.refactor_packages.paths.ModPaths;
 import net.thejadeproject.ascension.refactor_packages.paths.PathData;
@@ -33,7 +34,7 @@ import net.thejadeproject.ascension.refactor_packages.skills.castable.ICastData;
 import net.thejadeproject.ascension.refactor_packages.skills.castable.ICastableSkill;
 import net.thejadeproject.ascension.refactor_packages.skills.castable.IPreCastData;
 import net.thejadeproject.ascension.refactor_packages.techniques.ITechnique;
-import net.thejadeproject.ascension.refactor_packages.techniques.custom.FiveElementCultivationTechnique;
+import net.thejadeproject.ascension.refactor_packages.techniques.custom.essence.FiveElementCultivationTechnique;
 
 import java.util.List;
 
@@ -72,9 +73,10 @@ public class FiveElementCirculation implements ICastableSkill {
         if(!caster.level().isClientSide()){
 
             IEntityData entityData = caster.getData(ModAttachments.ENTITY_DATA);
-            System.out.println("Player is trying to cultivate");
+            //System.out.println("Player is trying to cultivate");
             PathData pathData = caster.getData(ModAttachments.ENTITY_DATA).getPathData(ModPaths.ESSENCE.getId());
 
+            if(pathData == null) return false;
             if(pathData.isBreakingThrough()) return false;
 
             //TODO add a cultivate event
@@ -234,7 +236,7 @@ public class FiveElementCirculation implements ICastableSkill {
     public IPersistentSkillData fromNetwork(RegistryFriendlyByteBuf buf) {
         return null;
     }
-
+    @OnlyIn(Dist.CLIENT)
     @Override
     public ITextureData getIcon() {
         return new TextureData(
@@ -242,14 +244,20 @@ public class FiveElementCirculation implements ICastableSkill {
                 16,16
         );
     }
-
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public RenderableElement getInformationContainer(UIFrame frame) {
+        return new DescriptionDisplayContainer(frame,
+                getTitle(),
+                getDescription());
+    }
     @Override
     public Component getTitle() {
-        return null;
+        return Component.translatable("ascension.skill.five_element_circulation");
     }
 
     @Override
     public Component getDescription() {
-        return null;
+        return Component.translatable("ascension.skill.five_element_circulation.description");
     }
 }

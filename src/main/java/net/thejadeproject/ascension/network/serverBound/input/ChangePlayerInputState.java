@@ -12,7 +12,7 @@ import net.thejadeproject.ascension.data_attachments.attachments.PlayerInputStat
 
 
 public record ChangePlayerInputState(String input,int modifier,boolean isDown)implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<ChangePlayerInputState> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AscensionCraft.MOD_ID, "change_player_input_sate"));
+    public static final Type<ChangePlayerInputState> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(AscensionCraft.MOD_ID, "change_player_input_sate"));
     public static final StreamCodec<ByteBuf, ChangePlayerInputState> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8,
             ChangePlayerInputState::input,

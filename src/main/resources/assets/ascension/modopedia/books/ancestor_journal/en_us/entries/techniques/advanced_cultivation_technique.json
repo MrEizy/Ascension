@@ -1,0 +1,19 @@
+{
+  "title": "Advanced Cultivation Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:advanced_cultivation_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:advanced_cultivation_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Advanced Cultivation Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in stronghold libraries and on zombie villagers. A more developed version of what circulates through villages — faster, and more structured." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "The practice is the same at its core — qi drawn in, refined, returned cleaner. What differs is how thoroughly the method is laid out. A more structured practice yields a cleaner result in less time. Perception and quickness of thought are still what it builds toward. Physical force still trails furthest behind." }
+      ]
+    }
+  ]
+}

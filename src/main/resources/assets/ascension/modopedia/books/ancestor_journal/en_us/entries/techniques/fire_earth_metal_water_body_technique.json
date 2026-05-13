@@ -1,0 +1,19 @@
+{
+  "title": "Sunken Forge Method",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:fire_earth_metal_water_body_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:fire_earth_metal_water_body_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Sunken Forge Method", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Four elements in cycle. Where it came from, I could not confirm." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Heat compressed into mass, sharpened and made to flow — four elements building a body that is simultaneously hard to stop and difficult to damage. Endurance is dominant. Force follows close. The mind sharpens least." }
+      ]
+    }
+  ]
+}

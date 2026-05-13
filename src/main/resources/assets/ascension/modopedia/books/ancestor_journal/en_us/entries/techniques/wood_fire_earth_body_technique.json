@@ -1,0 +1,19 @@
+{
+  "title": "Ascending Pyre Method",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:wood_fire_earth_body_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:wood_fire_earth_body_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Ascending Pyre Method", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in woodland mansions. Three elements, one source." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Growth, intensity, and weight cycling through the body in sequence — each element reinforcing the next. Endurance grows dense and force grows hard together. The body becomes something difficult to damage. The mind sharpens least." }
+      ]
+    }
+  ]
+}

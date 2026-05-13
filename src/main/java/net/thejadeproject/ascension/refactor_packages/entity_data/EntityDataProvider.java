@@ -14,7 +14,7 @@ public class EntityDataProvider implements IAttachmentSerializer<CompoundTag,IEn
     public IEntityData read(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider provider) {
 
         if(holder instanceof Entity entity){
-            System.out.println("trying to create entity data");
+            //System.out.println("trying to create entity data");
             if(EntityDataManager.isWatching(entity.getUUID())) return new RemoteEntityData(entity,tag);
             return new GenericEntityData(entity,tag);
         }
@@ -26,7 +26,7 @@ public class EntityDataProvider implements IAttachmentSerializer<CompoundTag,IEn
     public @Nullable CompoundTag write(IEntityData entityData, HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         entityData.write(tag);
-        System.out.println("saving entity data");
+        //System.out.println("saving entity data");
         return tag;
     }
 }

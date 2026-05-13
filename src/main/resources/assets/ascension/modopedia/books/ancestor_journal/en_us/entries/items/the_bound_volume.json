@@ -1,0 +1,19 @@
+{
+  "title": "The Bound Volume",
+  "icon": { "id": "ascension:technique_binder" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:technique_binder" }, { "id": "ascension:technique_page" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Technique Binder", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Technique Pages carry fragments of knowledge — partial methods, observations, components of larger techniques. Individually useful; together they compound into something more complete." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "The Binder holds pages in the correct order so the knowledge functions as a cohesive whole. Assembling mine properly was one of the better decisions I made during that period." }
+      ]
+    }
+  ]
+}

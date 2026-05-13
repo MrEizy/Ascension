@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_hundred_year_fire_ginseng": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:hundred_year_fire_ginseng"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:cauldron/crimson_lotus_bone_pill"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_hundred_year_fire_ginseng"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:cauldron/crimson_lotus_bone_pill"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "title": "The Four Cleanses",
+  "icon": { "id": "ascension:cleansing_pill_t1" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:cleansing_pill_t1" }, { "id": "ascension:cleansing_pill_t2" }, { "id": "ascension:cleansing_pill_t3" }, { "id": "ascension:cleansing_pill_t4" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Cleansing Pills", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "As Qi accumulates, so does residue. I noticed this as a growing heaviness in my meridians that rest and meditation were not resolving.\nThe four tiers address this progressively." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Tier one is mild and appropriate for early cultivation. The fourth I took once and spent the following day in considerable discomfort. Match the tier to your current realm." }
+      ]
+    }
+  ]
+}

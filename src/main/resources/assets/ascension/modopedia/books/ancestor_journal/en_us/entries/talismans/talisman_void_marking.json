@@ -1,0 +1,19 @@
+{
+  "title": "Void-Marking Talisman",
+  "icon": { "id": "ascension:void_marking_talisman" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:void_marking_talisman" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Void-Marking Talisman", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Shift to fix a location to the paper — anywhere, any dimension. Use it again to return there. Thirty seconds between uses." }
+      ]
+    },
+    {
+      "components": [
+        { "template": "modopedia:recipe/crafting", "recipe": "ascension:shaped/void_marking_talisman" }
+      ]
+    }
+  ]
+}

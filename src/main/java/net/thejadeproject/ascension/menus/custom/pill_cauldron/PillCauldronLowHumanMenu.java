@@ -8,8 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.SlotItemHandler;
-import net.thejadeproject.ascension.blocks.ModBlocks;
-import net.thejadeproject.ascension.blocks.entity.PillCauldronLowHumanEntity;
+import net.thejadeproject.ascension.common.blocks.ModBlocks;
+import net.thejadeproject.ascension.common.blocks.entity.PillCauldronLowHumanEntity;
 import net.thejadeproject.ascension.menus.ModMenuTypes;
 
 /**
@@ -134,7 +134,7 @@ public class PillCauldronLowHumanMenu extends AbstractContainerMenu {
      * A slot that cannot be interacted with by the player.
      * Used to show pedestal item mirrors without allowing insertion/removal.
      */
-    private static class LockedSlot extends net.neoforged.neoforge.items.SlotItemHandler {
+    private static class LockedSlot extends SlotItemHandler {
         public LockedSlot(net.neoforged.neoforge.items.IItemHandler handler, int index, int x, int y) {
             super(handler, index, x, y);
         }

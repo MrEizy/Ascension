@@ -2,3 +2,11 @@ this is where all the new packages will be stored until im finished.
 once i am done I will then start reorganising all the packages properly
 
 most of the util package will get moved to our libs mod
+
+
+
+
+FOundations need to be added -> Suppress (toggle off cultivation) to train foundation
+Technique Mastery -> Master techniques
+Skill Mastery -> Depending on special circumstances give other types of types of stuffs (augments).
+Bloodline Altar Ritual Bullshit. (Future mixing Bloodlines.) 4 new cauldrons + ritual block. Fluid Handling

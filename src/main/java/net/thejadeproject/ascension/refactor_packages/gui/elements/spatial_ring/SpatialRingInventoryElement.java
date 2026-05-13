@@ -44,7 +44,7 @@ public class SpatialRingInventoryElement extends RenderableElement {
         int startSlot = 36;
         int totalSlots = menu.getSpatialRingInventorySlots();
         ScrollItemContainer spatialRingItemContainer = new ScrollItemContainer(frame,6,startSlot,startSlot+totalSlots-1);
-        extraRows = Math.min((spatialRingItemContainer.getHeight() - 18) / 18, 3);
+        extraRows = Math.min((spatialRingItemContainer.getHeight() - 18) / 18, 5);
 
         spatialRingItemContainer.getPositioning().setY(17);
         spatialRingItemContainer.getPositioning().setX(7);
@@ -70,5 +70,9 @@ public class SpatialRingInventoryElement extends RenderableElement {
             rowBgElement.renderAt(guiGraphics,0,35+18*i);
         }
         playerInventoryBgElement.renderAt(guiGraphics,0,35+18*extraRows);
+    }
+
+    public int getExtraRows() {
+        return extraRows;
     }
 }

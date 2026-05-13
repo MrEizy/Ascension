@@ -2,16 +2,16 @@ package net.thejadeproject.ascension.refactor_packages.skills.custom.cultivation
 
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureData;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.Tags;
 import net.thejadeproject.ascension.AscensionCraft;
 import net.thejadeproject.ascension.refactor_packages.paths.ModPaths;
-import net.thejadeproject.ascension.refactor_packages.skills.custom.cultivation.ElementalEssenceCultivationSkill;
-import net.thejadeproject.ascension.refactor_packages.techniques.custom.ElementalEssenceTechnique;
-import net.thejadeproject.ascension.refactor_packages.techniques.custom.elemental.MetalEssenceTechnique;
+import net.thejadeproject.ascension.refactor_packages.techniques.custom.essence.ElementalEssenceTechnique;
+import net.thejadeproject.ascension.refactor_packages.techniques.custom.essence.MetalEssenceTechnique;
 
 public class MetalEssenceCultivationSkill extends ElementalEssenceCultivationSkill {
 
@@ -44,18 +44,7 @@ public class MetalEssenceCultivationSkill extends ElementalEssenceCultivationSki
         return MetalEssenceTechnique.class;
     }
 
-    @Override
-    protected Component getSkillTitle() {
-        return Component.literal("Metal Essence Cultivation");
-    }
-
-    @Override
-    protected Component getSkillDescription() {
-        return Component.literal(
-                "Cultivates Essence through nearby ores and condensed mineral power."
-        );
-    }
-
+    @OnlyIn(Dist.CLIENT)
     @Override
     public ITextureData getIcon() {
         return new TextureData(

@@ -2,16 +2,16 @@ package net.thejadeproject.ascension.refactor_packages.skills.custom.cultivation
 
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureData;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.thejadeproject.ascension.AscensionCraft;
 import net.thejadeproject.ascension.refactor_packages.paths.ModPaths;
-import net.thejadeproject.ascension.refactor_packages.skills.custom.cultivation.ElementalEssenceCultivationSkill;
-import net.thejadeproject.ascension.refactor_packages.techniques.custom.elemental.EarthEssenceTechnique;
-import net.thejadeproject.ascension.refactor_packages.techniques.custom.ElementalEssenceTechnique;
+import net.thejadeproject.ascension.refactor_packages.techniques.custom.essence.EarthEssenceTechnique;
+import net.thejadeproject.ascension.refactor_packages.techniques.custom.essence.ElementalEssenceTechnique;
 
 public class EarthEssenceCultivationSkill extends ElementalEssenceCultivationSkill {
 
@@ -48,18 +48,7 @@ public class EarthEssenceCultivationSkill extends ElementalEssenceCultivationSki
         return EarthEssenceTechnique.class;
     }
 
-    @Override
-    protected Component getSkillTitle() {
-        return Component.literal("Earth Essence Cultivation");
-    }
-
-    @Override
-    protected Component getSkillDescription() {
-        return Component.literal(
-                "Cultivates Essence through stone, soil, depth, and grounded stillness."
-        );
-    }
-
+    @OnlyIn(Dist.CLIENT)
     @Override
     public ITextureData getIcon() {
         return new TextureData(

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_hundred_year_snow_ginseng": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:hundred_year_snow_ginseng"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:cauldron/fasting_pill_t3"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_hundred_year_snow_ginseng"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:cauldron/fasting_pill_t3"
+    ]
+  }
+}

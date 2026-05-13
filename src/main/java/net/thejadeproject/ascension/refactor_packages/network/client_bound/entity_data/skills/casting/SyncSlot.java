@@ -49,7 +49,7 @@ public record SyncSlot(int slot, ResourceLocation skill, IPreCastData preCastDat
         context.enqueueWork(()->{
             IEntityData entityData = context.player().getData(ModAttachments.ENTITY_DATA);
             if(payload.skill == null){
-                System.out.println("un slotting skill");
+                //System.out.println("un slotting skill");
                 entityData.getSkillCastHandler().getHotBar().unSlotSkill(entityData,payload.slot);
 
             }else{

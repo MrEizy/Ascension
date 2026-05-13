@@ -1,10 +1,18 @@
 package net.thejadeproject.ascension.refactor_packages.bloodlines;
 
+import net.lucent.easygui.gui.RenderableElement;
+import net.lucent.easygui.gui.UIFrame;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.thejadeproject.ascension.AscensionCraft;
 import net.thejadeproject.ascension.refactor_packages.entity_data.IEntityData;
+import net.thejadeproject.ascension.refactor_packages.physiques.IPhysique;
 import net.thejadeproject.ascension.refactor_packages.physiques.IPhysiqueData;
+import net.thejadeproject.ascension.refactor_packages.registries.AscensionRegistries;
 
 import java.util.UUID;
 
@@ -39,4 +47,23 @@ public interface IBloodline {
     IBloodlineData freshBloodlineData(IEntityData heldEntity);
     IBloodlineData fromCompound(CompoundTag tag, IEntityData heldEntity);
     IBloodlineData fromNetwork(RegistryFriendlyByteBuf buf);
+
+    static IBloodlineData getFromCompound(IEntityData entityData, IBloodline bloodline, CompoundTag tag){
+        try {
+            return bloodline.fromCompound(tag,entityData);
+        }catch (Exception e){
+            AscensionCraft.LOGGER.error("error trying to load bloodline data data data for bloodline: "+
+                    AscensionRegistries.Bloodlines.BLOODLINE_REGISTRY.getKey(bloodline),e);
+            return bloodline.freshBloodlineData(entityData);
+        }
+    }
+
+    Component getDisplayTitle();
+
+    Component getShortDescription();
+
+    Component getDescription();
+
+    @OnlyIn(Dist.CLIENT)
+    RenderableElement getInformationContainer(UIFrame frame);
 }

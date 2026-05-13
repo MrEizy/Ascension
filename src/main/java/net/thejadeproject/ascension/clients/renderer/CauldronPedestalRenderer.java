@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.thejadeproject.ascension.blocks.entity.CauldronPedestalBlockEntity;
+import net.thejadeproject.ascension.common.blocks.entity.CauldronPedestalBlockEntity;
 
 /**
  * Renders the ItemStack stored in a CauldronPedestal floating above the block,

@@ -1,0 +1,19 @@
+{
+  "title": "Iron Root Current Method",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:metal_water_wood_body_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:metal_water_wood_body_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Iron Root Current Method", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in end city treasure. Reaching it is the harder part of obtaining it." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Precision flowing through persistent growth — the three elements move through the body in natural sequence. Endurance develops with an unusual quality of directional control. Force follows without lagging far behind. The mind sharpens least." }
+      ]
+    }
+  ]
+}

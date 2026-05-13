@@ -53,7 +53,7 @@ public class AttributeValueContainer extends ValueContainer {
                 AscensionRegistries.Stats.STATS_REGISTRY.getKey(stat),
                 stat.getDisplayName(),
                 0
-                ));
+        ));
         statMultipliers.get(stat).setBaseValue(Math.max(0,statMultipliers.get(stat).getBaseValue()+scaling));
     }
     public void removeStatScaling(Stat stat,double scaling){
@@ -86,8 +86,10 @@ public class AttributeValueContainer extends ValueContainer {
     }
     public void validateAttributeValue(){
         if(attachedEntity == null) return;
-        if(attachedEntity.getAttribute(attributeHolder)!=null && attachedEntity.getAttribute(attributeHolder).getValue() != cachedAttributeValue) {
-            cachedAttributeValue = attachedEntity.getAttribute(attributeHolder).getValue();
+        var inst = attachedEntity.getAttribute(attributeHolder);
+        double target = (inst != null) ? inst.getValue() : attributeHolder.value().getDefaultValue();
+        if(target != cachedAttributeValue) {
+            cachedAttributeValue = target;
             calculateCachedVal();
         }
     }
@@ -96,7 +98,9 @@ public class AttributeValueContainer extends ValueContainer {
         validateAttributeValue();
         return isSuppressed()?getSuppressedValue():super.getValue();
     }
-
+    public double getUnsuppressedValue(){
+        return super.getValue();
+    }
     @Override
     public double getBaseValue() {
         validateAttributeValue();
@@ -108,13 +112,17 @@ public class AttributeValueContainer extends ValueContainer {
     }
     public void setSuppressedValue(double value){
         this.suppressedValue = value;
-        setSuppressed(getValue()>getSuppressedValue());
+        setSuppressed(getUnsuppressedValue()>getSuppressedValue() && getSuppressedValue() > 0);
     }
     public void setSuppressed(boolean suppressed){
         this.suppressed = suppressed;
     }
     public boolean isSuppressed(){
-        if(super.getValue()<=getSuppressedValue()) setSuppressed(false);
+        if(super.getValue()<=getSuppressedValue() || getSuppressedValue() <= 0) {
+            setSuppressed(false);
+            setSuppressedValue(0);
+        }else if(getSuppressedValue() > 0) setSuppressed(true);
+
         return suppressed;
     }
 
@@ -145,14 +153,17 @@ public class AttributeValueContainer extends ValueContainer {
             ValueContainer statContainer = ValueContainer.decode(buf);
             container.statMultipliers.put(AscensionRegistries.Stats.STATS_REGISTRY.get(statContainer.getIdentifier()),statContainer);
         }
+
         container.suppressed = buf.readBoolean();
         container.suppressedValue=buf.readDouble();
+
         return container;
     }
     public void log(){
-        System.out.print(getDisplayName().getString() +" : ");
-        System.out.print((isSuppressed() ? getSuppressedValue() : getValue()));
-        if(isSuppressed()) System.out.print(" ("+getValue()+")");
-        System.out.println(" base : "+getBaseValue());
+        //System.out.print(getDisplayName().getString() +" : ");
+        //System.out.print((isSuppressed() ? getSuppressedValue() : getValue()));
+        //if(isSuppressed()) //System.out.print(" ("+getUnsuppressedValue()+")");
+        //System.out.println(" base : "+getBaseValue());
+        //System.out.println("suppressed value : "+getSuppressedValue());
     }
 }

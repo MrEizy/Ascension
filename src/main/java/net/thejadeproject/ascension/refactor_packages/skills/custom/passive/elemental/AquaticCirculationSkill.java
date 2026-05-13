@@ -10,13 +10,13 @@ import net.thejadeproject.ascension.refactor_packages.skills.custom.passive.Simp
 public class AquaticCirculationSkill extends SimplePassiveSkill implements ITickingSkill {
 
     @Override
-    protected String getName() {
-        return "Aquatic Circulation";
+    protected String getTitleKey() {
+        return "ascension.skill.aquatic_circulation";
     }
 
     @Override
-    protected String getTooltip() {
-        return "Grants conduit-like power while underwater.";
+    protected String getDescriptionKey() {
+        return "ascension.skill.aquatic_circulation.description";
     }
 
     @Override

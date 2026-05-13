@@ -18,7 +18,9 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.thejadeproject.ascension.AscensionCraft;
 import net.thejadeproject.ascension.data_attachments.ModAttachments;
+import net.thejadeproject.ascension.refactor_packages.breakthroughs.IBreakthroughInstance;
 import net.thejadeproject.ascension.refactor_packages.entity_data.IEntityData;
+import net.thejadeproject.ascension.refactor_packages.gui.elements.info_elements.DescriptionDisplayContainer;
 import net.thejadeproject.ascension.refactor_packages.gui.elements.skills.cultivation.CultivationProgressBar;
 import net.thejadeproject.ascension.refactor_packages.paths.PathData;
 import net.thejadeproject.ascension.refactor_packages.physiques.IPhysiqueData;
@@ -51,12 +53,12 @@ public class GenericCultivationSkill implements ICastableSkill {
 
     @Override
     public void onAdded(IEntityData attachedEntityData) {
-        System.out.println("added skill : "+ AscensionRegistries.Skills.SKILL_REGISTRY.getKey(this).toString());
+        //System.out.println("added skill : "+ AscensionRegistries.Skills.SKILL_REGISTRY.getKey(this).toString());
     }
 
     @Override
     public void onRemoved(IEntityData attachedEntityData, IPersistentSkillData persistentData) {
-        System.out.println("removed skill : "+ AscensionRegistries.Skills.SKILL_REGISTRY.getKey(this).toString());
+        //System.out.println("removed skill : "+ AscensionRegistries.Skills.SKILL_REGISTRY.getKey(this).toString());
     }
 
     @Override
@@ -91,7 +93,7 @@ public class GenericCultivationSkill implements ICastableSkill {
     public IPersistentSkillData fromNetwork(RegistryFriendlyByteBuf buf) {
         return new GenericCultivationSkillData(buf);
     }
-
+    @OnlyIn(Dist.CLIENT)
     @Override
     public ITextureData getIcon() {
         return new TextureData(
@@ -100,14 +102,25 @@ public class GenericCultivationSkill implements ICastableSkill {
         );
     }
 
+    private Component getPathTitle() {
+        var pathObj = AscensionRegistries.Paths.PATHS_REGISTRY.get(path);
+        return pathObj != null ? pathObj.getDisplayTitle() : Component.literal(path.toString());
+    }
+
     @Override
     public Component getTitle() {
-        return Component.empty().append(AscensionRegistries.Paths.PATHS_REGISTRY.get(path).getDisplayTitle()).append(" Cultivation Skill");
+        return Component.translatable(
+                "ascension.skill.cultivation_skill",
+                getPathTitle()
+        );
     }
 
     @Override
     public Component getDescription() {
-        return Component.empty();
+        return Component.translatable(
+                "ascension.skill.cultivation_skill.description",
+                getPathTitle()
+        );
     }
 
 
@@ -138,18 +151,25 @@ public class GenericCultivationSkill implements ICastableSkill {
         return new CastResult(CastResult.Type.SUCCESS);
     }
 
+    protected double getEffectiveRate(Entity caster) {
+        return baseRate;
+    }
+
     @Override
     public boolean continueCasting(int ticksElapsed, Entity caster, ICastData castData) {
         if(!caster.hasData(ModAttachments.INPUT_STATES)) return false;
 
         if(!caster.level().isClientSide()){
 
-            System.out.println("Player is trying to cultivate");
+            //System.out.println("Player is trying to cultivate");
             PathData pathData = caster.getData(ModAttachments.ENTITY_DATA).getPathData(path);
+
+            if (pathData == null || pathData.getLastUsedTechnique() == null) return false;
 
             //TODO add a cultivate event
             ITechnique technique = AscensionRegistries.Techniques.TECHNIQUES_REGISTRY.get(pathData.getLastUsedTechnique());
-            double amount = baseRate;
+            if (technique == null) return false;
+            double amount = getEffectiveRate(caster);
 
 
             if(pathData.getCurrentRealmProgress()+amount >= technique.getMaxQiForRealm(pathData.getMajorRealm(),pathData.getMinorRealm())){
@@ -163,8 +183,23 @@ public class GenericCultivationSkill implements ICastableSkill {
                         pathData.getCurrentRealmProgress()
                 )){
                     pathData.handleRealmChange(pathData.getMajorRealm(),pathData.getMinorRealm()+1,caster.getData(ModAttachments.ENTITY_DATA));
-                } else if(pathData.getMajorRealm()<technique.getMaxMajorRealm() && technique.getStabilityHandler() != null && pathData.getCurrentRealmStability() < technique.getStabilityHandler().getMaxCultivationTicks()) {
-                    pathData.setCurrentRealmStability(pathData.getCurrentRealmStability()+1);
+                } else if (
+                        pathData.getMajorRealm() < technique.getMaxMajorRealm()
+                                && technique.canBreakthrough(
+                                caster.getData(ModAttachments.ENTITY_DATA),
+                                pathData.getMajorRealm(),
+                                pathData.getMinorRealm(),
+                                pathData.getCurrentRealmProgress()
+                        )
+                ) {
+                    IBreakthroughInstance instance = technique.freshBreakthroughData(
+                            caster.getData(ModAttachments.ENTITY_DATA)
+                    );
+
+                    if (instance != null) {
+                        pathData.setBreakthroughInstance(instance);
+                        pathData.setBreakingThrough(true);
+                    }
                 }
             }else {
                 pathData.setCurrentRealmProgress(pathData.getCurrentRealmProgress()+amount);
@@ -242,6 +277,13 @@ public class GenericCultivationSkill implements ICastableSkill {
         return CastType.LONG;
     }
 
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public RenderableElement getInformationContainer(UIFrame frame) {
+        return new DescriptionDisplayContainer(frame,
+                getTitle(),
+                getDescription());
+    }
     @OnlyIn(Dist.CLIENT)
     @Override
     public RenderableElement getCastElement(UIFrame frame) {

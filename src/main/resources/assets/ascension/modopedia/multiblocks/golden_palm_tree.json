@@ -1,0 +1,108 @@
+{
+  "type": "modopedia:dense",
+  "pattern": [
+    [
+      "       ",
+      "       ",
+      "       ",
+      "    T  ",
+      "       ",
+      "       ",
+      "       "
+    ],
+    [
+      "       ",
+      "       ",
+      "       ",
+      "    T  ",
+      "       ",
+      "       ",
+      "       "
+    ],
+    [
+      "       ",
+      "       ",
+      "       ",
+      "    T  ",
+      "       ",
+      "       ",
+      "       "
+    ],
+    [
+      "       ",
+      "       ",
+      "       ",
+      "    T  ",
+      "       ",
+      "       ",
+      "       "
+    ],
+    [
+      "       ",
+      "       ",
+      "       ",
+      "    T  ",
+      "       ",
+      "       ",
+      "       "
+    ],
+    [
+      "       ",
+      "       ",
+      "   T   ",
+      "       ",
+      "       ",
+      "       ",
+      "       "
+    ],
+    [
+      "       ",
+      "       ",
+      "   T   ",
+      "       ",
+      "       ",
+      "       ",
+      "       "
+    ],
+    [
+      "  LLL  ",
+      " LLLLL ",
+      " LLLLL ",
+      " LLLLL ",
+      "  LLL  ",
+      "       ",
+      "       "
+    ],
+    [
+      "  LLL  ",
+      " LLLLL ",
+      " LLLLL ",
+      " LLLLL ",
+      "  LLL  ",
+      "       ",
+      "       "
+    ],
+    [
+      "       ",
+      "   L   ",
+      "  LLL  ",
+      "   L   ",
+      "       ",
+      "       ",
+      "       "
+    ],
+    [
+      "       ",
+      "   L   ",
+      "  LLL  ",
+      "   L   ",
+      "       ",
+      "       ",
+      "       "
+    ]
+  ],
+  "key": {
+    "T": { "type": "modopedia:simple", "states": ["ascension:golden_palm_log[axis=y]"] },
+    "L": { "type": "modopedia:simple", "states": ["ascension:golden_palm_leaves"] }
+  }
+}

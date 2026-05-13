@@ -1,0 +1,20 @@
+﻿{
+  "title": "What Takes Root",
+  "landing_text": "W.I.P.",
+  "icon": { "id": "ascension:jade_dew_grass" },
+  "entries": [
+    "herbs/golden_sun_leaf",
+    "herbs/jade_bamboo_of_serenity",
+    "herbs/jade_dew_grass",
+    "herbs/ironwood_sprout",
+    "herbs/white_jade_orchid",
+    "herbs/hundred_year_ginseng",
+    "herbs/hundred_year_snow_ginseng",
+    "herbs/hundred_year_fire_ginseng",
+    "herbs/peach",
+    "trees/golden_palm",
+    "trees/ironwood"
+  ],
+  "sort_num": 1,
+  "display_on_front_page": false
+}

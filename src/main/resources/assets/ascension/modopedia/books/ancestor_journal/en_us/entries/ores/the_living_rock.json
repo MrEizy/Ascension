@@ -1,0 +1,19 @@
+{
+  "title": "The Living Rock",
+  "icon": { "id": "ascension:spiritual_stone_cluster" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:spiritual_stone_cluster" }, { "id": "ascension:spiritual_stone" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Spiritual Stone", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found while mining for something else. The moment it separated from the wall, the ambient Qi shifted noticeably — as if pressure had been released.\nSpiritual Stones carry Qi passively without cultivating it. They are simply full." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Used to craft spiritual stone tools — picks, axes, shovels, hoes — and to make the Herb Pouch.\nEvery location I have found them has been eventful. What draws the stones draws other things. Come prepared." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Winter Silver",
+  "icon": { "id": "ascension:frost_silver_ingot" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:raw_frost_silver" }, { "id": "ascension:frost_silver_ingot" }, { "id": "ascension:frost_silver_nugget" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Frost Silver", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found deep in the stone of frozen lands — snowy plains, frozen peaks, ice spike fields. Also beneath frozen oceans and rivers where the cold goes all the way down.\nThe smelted ingot retains a faint chill even near open flame — not temperature, but something the metal holds from its origin." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Conducts Qi with unusual smoothness. Combined with Black Iron, it forms the Spatial Ring.\nIf you are not in the right biome you will not find it. Do not dig in the wrong place expecting luck." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+﻿{
+  "title": "The Art of Refinement",
+  "landing_text": "W.I.P.",
+  "icon": { "id": "ascension:flame" },
+  "children": ["ch6_2_tools_of_the_trade", "ch6_3_scroll_of_myriad_refinements"],
+  "entries": ["ch6/ch6_1_fire_and_intention"],
+  "sort_num": 6
+}
+

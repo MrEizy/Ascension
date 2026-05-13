@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:cauldron/cleansing_pill_t4"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_white_jade_orchid": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:white_jade_orchid"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_white_jade_orchid"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:cauldron/cleansing_pill_t4"
+    ]
+  }
+}

@@ -1,10 +1,18 @@
 package net.thejadeproject.ascension.refactor_packages.physiques.custom;
 
+import net.lucent.easygui.gui.RenderableElement;
+import net.lucent.easygui.gui.UIFrame;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraft.server.level.ServerPlayer;
 import net.thejadeproject.ascension.refactor_packages.entity_data.IEntityData;
+import net.thejadeproject.ascension.refactor_packages.gui.elements.info_elements.DescriptionDisplayContainer;
+import net.thejadeproject.ascension.refactor_packages.gui.elements.info_elements.IInformationContainer;
 import net.thejadeproject.ascension.refactor_packages.paths.custom.GenericPath;
 import net.thejadeproject.ascension.refactor_packages.physiques.IPhysique;
 import net.thejadeproject.ascension.refactor_packages.physiques.IPhysiqueData;
@@ -49,7 +57,7 @@ public class GenericPhysique implements IPhysique {
     @Override
     public void onPhysiqueAdded(IEntityData heldEntity, ResourceLocation oldPhysique,IPhysiqueData oldPhysiqueData) {
         //do not need to apply applied path bonuses, since this is handled by the entity data
-        System.out.println("player has been given physique");
+        //System.out.println("player has been given physique");
     }
 
     @Override
@@ -82,6 +90,12 @@ public class GenericPhysique implements IPhysique {
         return description;
     }
 
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public RenderableElement getInformationContainer(UIFrame frame) {
+        return new DescriptionDisplayContainer(frame,getDisplayTitle(),getDescription());
+    }
+
     @Override
     public Collection<ResourceLocation> paths() {
         return paths;
@@ -105,6 +119,19 @@ public class GenericPhysique implements IPhysique {
     @Override
     public IPhysiqueData fromNetwork(RegistryFriendlyByteBuf buf) {
         return null;
+    }
+
+    protected void broadcastRareAcquired(IEntityData heldEntity, String translationKey) {
+        if (heldEntity.isLoading()) return;
+        if (!(heldEntity.getAttachedEntity() instanceof ServerPlayer player)) return;
+
+        Component message = Component.translatable(
+                translationKey,
+                player.getDisplayName().copy().withStyle(ChatFormatting.WHITE),
+                getDisplayTitle().copy().withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD)
+        ).withStyle(ChatFormatting.GOLD);
+
+        player.server.getPlayerList().broadcastSystemMessage(message, false);
     }
 
 

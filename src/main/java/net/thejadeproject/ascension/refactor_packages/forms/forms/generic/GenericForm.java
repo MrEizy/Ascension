@@ -122,7 +122,7 @@ public class GenericForm implements IEntityForm {
             formData.setBloodline(bloodline,data);
         }
         int paths = buf.readInt();
-        System.out.println("reading " + paths + " paths" );
+        //System.out.println("reading " + paths + " paths" );
         for(int i =0;i<paths;i++){
             ResourceLocation path = ResourceLocation.parse((String) buf.readCharSequence(buf.readInt(),Charset.defaultCharset()));
             PathData pathData = AscensionRegistries.Paths.PATHS_REGISTRY.get(path).fromNetwork(buf);

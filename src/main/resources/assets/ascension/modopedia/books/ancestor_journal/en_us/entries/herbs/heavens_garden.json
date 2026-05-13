@@ -1,0 +1,70 @@
+{
+  "title": "Heaven's Garden",
+  "icon": { "id": "ascension:golden_sun_leaf" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:golden_sun_leaf" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Golden Sun Leaf", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Grows on sun-warmed ridges. The warmth stays in the leaves after picking. Good heat-aligned ingredient in the cauldron." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:jade_bamboo_of_serenity" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Jade Bamboo of Serenity", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Grows only in still, windless places. Cold and sweet raw. Carries cooling properties that balance heat-heavy cauldron batches." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:ironwood_sprout" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Ironwood Sprout", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Young growth of the Ironwood tree. Dense with spirit energy and can be replanted for a reliable renewable supply." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:white_jade_orchid" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "White Jade Orchid", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Rare. Found near Spiritual Stone deposits. The petals hold ambient light. Do not crush them — the medicinal properties degrade completely." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:hundred_year_ginseng" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Hundred Year Ginseng", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "A century to full potency. Found behind two glaciers. The cultivator who planted them was long dead. Their journal confirmed I had been making avoidable errors." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:hundred_year_snow_ginseng" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Hundred Year Snow Ginseng", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found only in permanent snowfields. The Qi stored carries a distinct chill. Bare hands when harvesting are a serious mistake." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:hundred_year_fire_ginseng" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Hundred Year Fire Ginseng", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found near volcanic soil. Warm to the touch after removal. Looks nearly identical to Snow Ginseng. I have mixed them up. Store separately." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:peach" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Peach", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Not the fruit I knew from villages. I ate one and entered a sixteen-hour unintended meditation. These are not ordinary fruit. Do not eat casually." }
+      ]
+    }
+  ]
+}

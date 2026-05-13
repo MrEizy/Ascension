@@ -1,0 +1,19 @@
+{
+  "title": "The Breath of Wind",
+  "icon": { "id": "ascension:fan" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:fan" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "The Breath of Wind", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "I found it near the cauldron. For a long time I thought it was a scholar's accessory — decorative, or carried by someone who wanted to appear unarmed.\n\nIt is neither." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Opened and moved with intention, it channels airflow directly beneath the cauldron's base. The flame does not grow larger — it concentrates. The heat climbs faster and holds steadier than any fire I could manage without it.\n\nSome refinements I had written off as failures were not failures. They needed more heat than I was producing. The fan fixed that." }
+      ]
+    }
+  ]
+}

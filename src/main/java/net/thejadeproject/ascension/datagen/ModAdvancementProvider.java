@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.AdvancementProvider; // Correct import
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.thejadeproject.ascension.items.ModItems;
+import net.thejadeproject.ascension.common.items.ModItems;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -21,7 +21,7 @@ public class ModAdvancementProvider extends AdvancementProvider {
         super(output, registries, existingFileHelper, List.of(new QiGeneration()));
     }
 
-    public static class QiGeneration implements AdvancementProvider.AdvancementGenerator {
+    public static class QiGeneration implements AdvancementGenerator {
 
         @Override
         public void generate(HolderLookup.Provider provider, Consumer<AdvancementHolder> consumer, ExistingFileHelper existingFileHelper) {

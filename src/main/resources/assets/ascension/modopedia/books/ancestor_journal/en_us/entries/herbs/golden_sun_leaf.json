@@ -1,0 +1,21 @@
+{
+  "title": "Golden Sun Leaf",
+  "icon": { "id": "ascension:golden_sun_leaf" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:golden_sun_leaf" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Golden Sun Leaf", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Warm to the touch even after picking. A fire-aligned herb. Eaten raw it closes wounds briefly. In the cauldron it serves cleansing and reinforcement work — I use it in more recipes than any other single herb." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "How to Obtain", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "Rarely drops when Golden Palm Leaves decay. The Golden Palm grows on beaches, though sparsely.\n\nCan be replanted as a crop." }
+      ]
+    }
+  ]
+}

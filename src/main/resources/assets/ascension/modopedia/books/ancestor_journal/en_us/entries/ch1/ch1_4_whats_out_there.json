@@ -1,0 +1,105 @@
+{
+  "title": "What Lies Out There",
+  "icon": { "id": "ascension:ancestor_journal" },
+  "pages": [
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The world of cultivators is vast beyond imagination.\n\nMortals see only kingdoms, villages, forests, and mountains.\n\nCultivators see opportunity."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Across the world exist hidden sects, ancient ruins, forbidden realms, spirit veins, and secret inheritances left behind by long-dead experts.\n\nResources determine everything.\n\nWithout resources, even the greatest genius eventually stagnates."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Spiritual Stones — Crystallized Qi formed naturally within spirit veins beneath the earth. They are used as currency among cultivators and aid cultivation by providing pure Qi directly.\n\nSpirit Herbs — Plants nourished by Heaven and Earth Qi over many years. Some heal wounds; others strengthen cultivation, refine the body, or extend lifespan."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Pills — Created by alchemists through refining spirit herbs and treasures. Pills may accelerate cultivation, heal injuries, cleanse impurities, or assist breakthroughs.\n\nTalismans — Crafted by talisman masters using special ink, Qi, and inscriptions. Some unleash flames, summon barriers, increase speed, or ward against evil spirits."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Arrays and Formations — Complex structures capable of hiding locations, trapping enemies, gathering Qi, or protecting entire sects.\n\nSpirit Beasts — Creatures that absorb Qi naturally. Their bodies contain valuable materials used for pills, weapons, armor, and cultivation."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Natural Treasures — Rare objects born from unique environments — heavenly flames, frost crystals, lightning wood, moon essence, spirit metals, and countless others."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The strong rise through these resources.\n\nThe weak die pursuing them.\n\nThis is the true face of the cultivation world."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Beautiful.\n\nCruel.\n\nEndless."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "And despite all the dangers awaiting me, I knew from the moment I stepped through that hidden cave wall…\n\nI could never turn back."
+        }
+      ]
+    }
+  ]
+}

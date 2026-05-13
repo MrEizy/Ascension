@@ -1,0 +1,19 @@
+{
+  "title": "Dawning Sun Scripture",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:dawning_sun_scripture" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:dawning_sun_scripture" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Dawning Sun Scripture", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in nether fortress chests and dropped by blazes." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Perception sharpens toward intensity rather than breadth — the soul path's fire-associated technique cultivates with more aggression than most. Quickness of thought grows alongside it. Physical strength and endurance grow the least." }
+      ]
+    }
+  ]
+}

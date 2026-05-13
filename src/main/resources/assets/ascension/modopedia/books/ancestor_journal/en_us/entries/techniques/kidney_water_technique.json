@@ -1,0 +1,19 @@
+{
+  "title": "Kidney Water Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:kidney_water_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:kidney_water_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Kidney Water Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in ocean ruins and taken from drowned. Neither requires pleasant circumstances to reach." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Draws water qi through the body with the kidneys as its root — in organ theory the kidneys hold the body's foundational reserves, and the technique builds from there. Endurance grows deeply and steadily. Physical force follows. The mind sharpens least." }
+      ]
+    }
+  ]
+}

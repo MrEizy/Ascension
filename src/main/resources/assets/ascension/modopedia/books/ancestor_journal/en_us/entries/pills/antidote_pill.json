@@ -1,0 +1,14 @@
+{
+  "title": "Antidote Pill",
+  "icon": { "id": "ascension:antidote_qdp_pill" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:antidote_qdp_pill" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Antidote Pill", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Counters the Qi Devouring Parasite. Works quickly. Keep one on hand if you intend to carry the other." }
+      ]
+    }
+  ]
+}

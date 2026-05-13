@@ -1,0 +1,19 @@
+{
+  "title": "The Invisible Fang",
+  "icon": { "id": "ascension:silver_needle" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:silver_needle" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Silver Needle", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Not a weapon in the way blades are. A precision instrument that happens to be dangerous when used correctly.\nWith sufficient skill, a needle can pass through armor gaps into spaces larger weapons cannot reach." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Incapacitation or death — placement, measured in finger-widths.\nI practice against trees. Accuracy is improving. It is useful to have something that does not announce itself before it arrives." }
+      ]
+    }
+  ]
+}

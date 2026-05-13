@@ -1,0 +1,21 @@
+{
+  "title": "Hundred Year Fire Ginseng",
+  "icon": { "id": "ascension:hundred_year_fire_ginseng" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:hundred_year_fire_ginseng" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Hundred Year Fire Ginseng", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found near dry, scorched earth. Warm after picking. Looks nearly identical to Snow Ginseng — I have mixed them up. Store separately. Used in essence gathering and the highest-tier cleansing formulas. Combined with Snow Ginseng it forces a deeper reaction in marrow work." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "How to Obtain", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "Grows wild in savanna and badlands biomes. Also found in desert pyramids and bastion chests.\n\nCan be grown as a crop." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_spiritual_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:spiritual_stone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:shaped/herb_pouch"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_spiritual_stone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:shaped/herb_pouch"
+    ]
+  }
+}

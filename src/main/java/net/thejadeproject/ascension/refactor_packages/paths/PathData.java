@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.thejadeproject.ascension.AscensionCraft;
 import net.thejadeproject.ascension.data_attachments.ModAttachments;
 import net.thejadeproject.ascension.refactor_packages.breakthroughs.IBreakthroughInstance;
 import net.thejadeproject.ascension.refactor_packages.entity_data.IEntityData;
@@ -190,11 +191,11 @@ public class PathData {
                     minorRealm =0;
                     technique.onRealmChange(entityData,oldMajorRealm,oldMinorRealm,majorRealm,minorRealm);
                     ITechnique breakthroughTechnique = technique;
-                    if(!getLastUsedTechnique().equals(techniqueHistory.get(majorRealm))){
+                    if(!getLastUsedTechnique().equals(techniqueHistory.get(majorRealm - 1))){
                         removeLastUsedTechnique();
                         technique.onTechniqueRemoved(entityData,techniqueData);
 
-                        setLastUsedTechnique(techniqueHistory.get(majorRealm));
+                        setLastUsedTechnique(techniqueHistory.get(majorRealm - 1));
 
                         breakthroughTechnique = AscensionRegistries.Techniques.TECHNIQUES_REGISTRY.get(getLastUsedTechnique());
                         breakthroughTechnique.onTechniqueAdded(entityData);
@@ -298,49 +299,87 @@ public class PathData {
         return tag;
     }
 
-    public void read(CompoundTag tag,IEntityData entityData){
-        ListTag previousStability = tag.getList("previous_stability", Tag.TAG_INT);
-        ListTag techniqueData = tag.getList("technique_data",Tag.TAG_COMPOUND);
-        ListTag techniqueHistory = tag.getList("technique_history",Tag.TAG_STRING);
+    public void load(CompoundTag tag, IEntityData entityData){
+        try {
+            System.out.println(tag);
+            ListTag previousStability = tag.getList("previous_stability", Tag.TAG_INT);
+            ListTag techniqueData = tag.getList("technique_data",Tag.TAG_COMPOUND);
+            ListTag techniqueHistory = tag.getList("technique_history",Tag.TAG_STRING);
 
-        //load stability
-        for(int i =0;i<previousStability.size();i++){
-            int stability = previousStability.getInt(i);
-            this.realmStability.add(stability);
-        }
-        //load techniques
-        HashMap<ResourceLocation,ITechniqueData> cachedTechniqueData = new HashMap<>();
-        for(int i=0;i<techniqueData.size();i++){
-            CompoundTag techniqueDataTag = techniqueData.getCompound(i);
-            ResourceLocation techniqueId = ResourceLocation.bySeparator(techniqueDataTag.getString("technique"),':');
-            ITechniqueData techniqueDataInstance = AscensionRegistries.Techniques.TECHNIQUES_REGISTRY.get(techniqueId).fromCompound(techniqueDataTag.getCompound("data"));
-            if(techniqueDataInstance != null) cachedTechniqueData.put(techniqueId,techniqueDataInstance);
-        }
-        //simulate history
-        for(int i =0;i<techniqueHistory.size();i++){
-            ResourceLocation techniqueId = ResourceLocation.bySeparator(techniqueHistory.getString(i),':');
+            //load stability
+            for(int i =0;i<previousStability.size();i++){
+                int stability = previousStability.getInt(i);
+                this.realmStability.add(stability);
+            }
+            //load techniques
+            HashMap<ResourceLocation,ITechniqueData> cachedTechniqueData = new HashMap<>();
+            for(int i=0;i<techniqueData.size();i++){
+                CompoundTag techniqueDataTag = techniqueData.getCompound(i);
+                ResourceLocation techniqueId = ResourceLocation.bySeparator(techniqueDataTag.getString("technique"),':');
+                ITechnique technique = AscensionRegistries.getRegistryObject(techniqueId,AscensionRegistries.Techniques.TECHNIQUES_REGISTRY);
+                ITechniqueData techniqueDataInstance = ITechnique.getFromCompound(entityData,technique,techniqueDataTag.getCompound("data"));
+                if(techniqueDataInstance != null) cachedTechniqueData.put(techniqueId,techniqueDataInstance);
+            }
+            //simulate history
+            for(int i =0;i<techniqueHistory.size();i++){
+                ResourceLocation techniqueId = ResourceLocation.bySeparator(techniqueHistory.getString(i),':');
+                ITechnique technique = AscensionRegistries.getRegistryObject(techniqueId,AscensionRegistries.Techniques.TECHNIQUES_REGISTRY);
+                if(technique == null) {
+                    //remove non used technique data
+                    Collection<ResourceLocation> techniques = cachedTechniqueData.keySet();
+                    for(ResourceLocation dataTechniqueId : techniques){
+                        if(!this.techniqueHistory.contains(dataTechniqueId)){
+                            this.techniqueData.remove(dataTechniqueId);
+                        }
+                    }
 
-            if(entityData.setTechnique(techniqueId,cachedTechniqueData.get(techniqueId))){
-                System.out.println("current technique for sim : "+(lastUsedTechnique == null?"none":lastUsedTechnique.toString()));
-            }else System.out.println("failed to set technique for sim");
-            handleRealmChange(i+1,0,entityData);
-        }
+                    for(int realm = realmStability.size()-1;realm>=majorRealm;realm--){
+                        realmStability.removeLast();
+                    }
+                    AscensionCraft.LOGGER.error("error loading technique: {} removing clearing data from realm {} onwards", techniqueHistory.getString(i),i);
+                    return;
+                };
+                if(!entityData.setTechnique(techniqueId,cachedTechniqueData.get(techniqueId))){
+                    AscensionCraft.LOGGER.error("failed to set technique {} for simulation of realm {}", techniqueId,majorRealm);
+                }
+                handleRealmChange(i+1,0,entityData);
+            }
 
-        //simulate current realm
-        int majorRealm = tag.getInt("major_realm");
-        int minorRealm = tag.getInt("minor_realm");
-        double progress = tag.getDouble("progress");
-        int stability = tag.getInt("stability");
-        String rawTechnique = tag.getString("technique");
-        if(!rawTechnique.equals("none")){
-            ResourceLocation technique = ResourceLocation.bySeparator(tag.getString("technique"),':');
+            //simulate current realm
+            int majorRealm = tag.getInt("major_realm");
+            int minorRealm = tag.getInt("minor_realm");
+            double progress = tag.getDouble("progress");
+            int stability = tag.getInt("stability");
+            String rawTechnique = tag.getString("technique");
+            if(!rawTechnique.equals("none")){
+                ResourceLocation techniqueId = ResourceLocation.bySeparator(tag.getString("technique"),':');
+                ITechnique technique = AscensionRegistries.getRegistryObject(techniqueId,AscensionRegistries.Techniques.TECHNIQUES_REGISTRY);
+                if(technique == null){
+                    AscensionCraft.LOGGER.error("error loading technique: {} removing clearing data from realm {} onwards", techniqueId,majorRealm);
+                    return;
+                }
+                entityData.setTechnique(techniqueId,cachedTechniqueData.get(techniqueId));
 
-            entityData.setTechnique(technique,cachedTechniqueData.get(technique));
+                handleRealmChange(majorRealm,minorRealm,entityData);
 
-            handleRealmChange(majorRealm,minorRealm,entityData);
+                this.currentRealmProgress = progress;
+                this.currentRealmStability = stability;
+            }
 
-            this.currentRealmProgress = progress;
-            this.currentRealmStability = stability;
+        }catch (Exception e){
+            AscensionCraft.LOGGER.error("error when trying to load path data for path: "+path,e);
+
+            minorRealm = 0;
+            majorRealm = 0;
+            cultivating = false;
+            currentRealmStability = 0;
+            currentRealmProgress = 0;
+            lastUsedTechnique = null;
+            techniqueHistory.clear();
+            techniqueData.clear();
+            breakthroughInstance = null;
+            breakingThrough = false;
+            realmStability.clear();
         }
 
 
@@ -378,7 +417,7 @@ public class PathData {
         buf.writeInt(techniqueData.size());
         for(ResourceLocation technique:techniqueData.keySet()){
             ByteBufUtil.encodeString(buf,technique.toString());
-            System.out.println("trying to write data for skill : "+technique.toString());
+            //System.out.println("trying to write data for skill : "+technique.toString());
             techniqueData.get(technique).encode(buf);
         }
         //breakthrough stuff

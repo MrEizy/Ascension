@@ -44,7 +44,7 @@ public class AscensionModifier implements IDataInstance {
     public static double calculateBaseValue(Collection<AscensionModifier> modifiers,double base){
         double flatBase = 0;
         for(AscensionModifier modifier : modifiers) {
-            if (modifier.getOperator() == AscensionModifier.Operator.TRUE_ADD_BASE) flatBase += modifier.getValue();
+            if (modifier.getOperator() == Operator.TRUE_ADD_BASE) flatBase += modifier.getValue();
         }
         return base+flatBase;
     }
@@ -57,11 +57,11 @@ public class AscensionModifier implements IDataInstance {
         double flatTrueBase = 0;
 
         for(AscensionModifier modifier : modifiers){
-            if(modifier.getOperator() == AscensionModifier.Operator.ADD_BASE) flatBase += modifier.getValue();
-            else if(modifier.getOperator() == AscensionModifier.Operator.TRUE_ADD_BASE) flatTrueBase += modifier.getValue();
-            else if(modifier.getOperator() == AscensionModifier.Operator.MULTIPLY_BASE){
+            if(modifier.getOperator() == Operator.ADD_BASE) flatBase += modifier.getValue();
+            else if(modifier.getOperator() == Operator.TRUE_ADD_BASE) flatTrueBase += modifier.getValue();
+            else if(modifier.getOperator() == Operator.MULTIPLY_BASE){
                 groupedBaseMultipliers.put(modifier.getGroupId(),modifier.getValue());
-            } else if (modifier.getOperator() == AscensionModifier.Operator.MULTIPLY_FINAL) {
+            } else if (modifier.getOperator() == Operator.MULTIPLY_FINAL) {
                 groupedFinalMultipliers.put(modifier.getGroupId(),modifier.getValue());
             }
         }

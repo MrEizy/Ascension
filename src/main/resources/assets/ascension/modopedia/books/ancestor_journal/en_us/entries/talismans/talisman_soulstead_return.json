@@ -1,0 +1,19 @@
+{
+  "title": "Soulstead Return Talisman",
+  "icon": { "id": "ascension:soulstead_return_talisman" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:soulstead_return_talisman" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Soulstead Return Talisman", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Returns you to your bed or last set spawn. Five minutes before it works again. Better than walking back." }
+      ]
+    },
+    {
+      "components": [
+        { "template": "modopedia:recipe/crafting", "recipe": "ascension:shaped/soulstead_return_talisman" }
+      ]
+    }
+  ]
+}

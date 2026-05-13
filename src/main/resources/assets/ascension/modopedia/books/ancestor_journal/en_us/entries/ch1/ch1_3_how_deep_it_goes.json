@@ -1,0 +1,116 @@
+{
+  "title": "How Deep It Goes",
+  "icon": { "id": "ascension:ancestor_journal" },
+  "pages": [
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The deeper I studied, the more I realized cultivation was not a single path, but an endless sea of paths.\n\nSome techniques tempered the body, turning flesh harder than iron and granting monstrous strength.\n\nOthers refined the soul and spirit, strengthening perception, memory, and willpower."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Some cultivators absorbed the essence of heavenly bodies — the sun, moon, stars, or storms.\n\nOthers refined the elements themselves: fire, lightning, wind, ice, earth, wood, metal, poison, blood, shadow, and countless more.\n\nThere were as many paths to power as stars in the night sky."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Yet I also discovered a truth many beginners never understand:\n\nA cultivator cannot simply practise any technique.\n\nThe technique must suit the cultivator."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Every person possesses different affinities, physiques, souls, and destinies. A technique mismatched to one's nature may lead to stagnation, crippled meridians, madness, or death itself.\n\nCompatibility matters as much as talent."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "A man born with strong fire affinity may never succeed in cultivating an ice art regardless of effort. Another with a weak body may fail completely when attempting brutal body refinement methods.\n\nBecause of this, cultivators spend years searching for techniques suited to themselves."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "The ancient diary also explained the early cultivation realms.\n\nBody Tempering — the strengthening of flesh, bones, organs, and blood. Most mortals unknowingly remain weaker than even the lowest body cultivator."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Qi Condensation — the first true step beyond mortality. At this stage, one learns to sense and gather the Qi of Heaven and Earth into the body.\n\nFoundation Establishment — where gathered Qi forms a stable foundation for future cultivation. A weak foundation limits one's future forever."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Beyond those realms lay many others the diary described only briefly, as though even the author considered them distant legends."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "It took me many winters before I finally crossed the threshold into Qi Condensation.\n\nI made countless mistakes.\n\nSome nearly killed me."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "text": "Yet perseverance succeeded where talent alone could not.\n\nWhen I first sensed Qi flowing through my meridians, I understood then that I had truly stepped onto the path of cultivators.\n\nAnd once one walks that path, there is no returning to ordinary life."
+        }
+      ]
+    }
+  ]
+}

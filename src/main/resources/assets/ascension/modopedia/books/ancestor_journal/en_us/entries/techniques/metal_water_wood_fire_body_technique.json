@@ -1,0 +1,19 @@
+{
+  "title": "Untempered Blaze Method",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:metal_water_wood_fire_body_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:metal_water_wood_fire_body_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Untempered Blaze Method", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Four elements running the full active cycle. The source is unconfirmed." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Precision flowing into persistence, growing toward heat — the four elements pass through the body in the order they are named. Endurance and force develop together, neither significantly ahead of the other. The mind sharpens least." }
+      ]
+    }
+  ]
+}

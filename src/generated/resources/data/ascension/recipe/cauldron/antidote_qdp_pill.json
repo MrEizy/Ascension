@@ -1,0 +1,33 @@
+{
+  "type": "ascension:pill_cauldron_low_human",
+  "bonus_chance": 0.06,
+  "chance": 0.7,
+  "fail": {
+    "count": 1,
+    "id": "ascension:pill_residue"
+  },
+  "ideal_temp": 535,
+  "ingredients": [
+    {
+      "count": 1,
+      "item": "ascension:jade_bamboo_of_serenity"
+    },
+    {
+      "count": 1,
+      "item": "ascension:hundred_year_snow_ginseng"
+    },
+    {
+      "count": 1,
+      "item": "ascension:golden_sun_leaf"
+    }
+  ],
+  "max_temp": 895,
+  "min_temp": 327,
+  "purity_max": 90,
+  "purity_min": 20,
+  "recipe_time": 6,
+  "success": {
+    "count": 1,
+    "id": "ascension:antidote_qdp_pill"
+  }
+}

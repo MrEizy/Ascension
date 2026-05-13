@@ -1,0 +1,14 @@
+﻿{
+  "title": "Metal Body",
+  "icon": { "id": "ascension:physique_essence" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:physique_essence" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Metal Body", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The body has fully integrated metal as its foundational nature. Sharp, hard, and difficult to damage." }
+      ]
+    }
+  ]
+}

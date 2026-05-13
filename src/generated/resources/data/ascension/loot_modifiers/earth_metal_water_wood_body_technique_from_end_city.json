@@ -1,0 +1,14 @@
+{
+  "type": "ascension:add_technique_manual",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/end_city_treasure"
+    },
+    {
+      "chance": 0.02,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "techniqueId": "ascension:earth_metal_water_wood_body_technique"
+}

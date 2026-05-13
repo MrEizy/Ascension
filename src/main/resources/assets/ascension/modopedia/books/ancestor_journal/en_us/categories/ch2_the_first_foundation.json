@@ -1,0 +1,8 @@
+﻿{
+  "title": "The First Foundation",
+  "icon": { "id": "ascension:physique_essence" },
+  "entries": ["ch2/ch2_1_mysteries_of_the_body", "ch2/ch2_2_defying_the_heavens"],
+  "children": ["ch2_3_scroll_of_myriad_physiques"],
+  "sort_num": 2
+}
+

@@ -1,0 +1,14 @@
+﻿{
+  "title": "Heavenly Essence Bone",
+  "icon": { "id": "ascension:physique_essence" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:physique_essence" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Heavenly Essence Bone", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The third tier of the Essence Bone lineage. The bones absorb Qi at a rate that would alarm most cultivators if they witnessed it." }
+      ]
+    }
+  ]
+}

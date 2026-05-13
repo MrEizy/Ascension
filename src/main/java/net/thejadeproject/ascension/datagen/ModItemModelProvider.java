@@ -12,8 +12,8 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.thejadeproject.ascension.AscensionCraft;
-import net.thejadeproject.ascension.blocks.ModBlocks;
-import net.thejadeproject.ascension.items.ModItems;
+import net.thejadeproject.ascension.common.blocks.ModBlocks;
+import net.thejadeproject.ascension.common.items.ModItems;
 
 import java.util.Objects;
 
@@ -77,9 +77,13 @@ public class ModItemModelProvider extends ItemModelProvider {
         //Artifacts
 
 
-        basicItem(ModItems.SPIRIT_SEALING_RING.get());
+        basicItem(ModItems.SPATIAL_RING.get());
         basicItem(ModItems.REPAIR_SLIP.get());
         basicItem(ModItems.ENDER_POUCH.get());
+
+
+        talisman(ModItems.SOUL_ANCHOR_TALISMAN.get());
+
 
 
         talisman(ModItems.SPATIAL_RUPTURE_TALISMAN_T1.get());
@@ -97,6 +101,10 @@ public class ModItemModelProvider extends ItemModelProvider {
 
 
         //Tools & Armors & Weapons
+
+        basicItem(ModItems.SPIRITUAL_MEAL.get());
+        basicItem(ModItems.MORTAR_PESTLE.get());
+
         handheldItem(ModItems.WOODEN_BLADE.get());
         handheldItem(ModItems.STONE_BLADE.get());
         handheldItem(ModItems.IRON_BLADE.get());
@@ -127,7 +135,6 @@ public class ModItemModelProvider extends ItemModelProvider {
 
 
         basicItem(ModItems.SPATIAL_STONE_TIER_1.get());
-        basicItem(ModItems.SPATIAL_STONE_TIER_2.get());
 
         basicItem(ModItems.RAW_BLACK_IRON.get());
         basicItem(ModItems.BLACK_IRON_INGOT.get());
@@ -144,7 +151,20 @@ public class ModItemModelProvider extends ItemModelProvider {
 
 
 
-        basicItem(ModItems.TECHNIQUE_MANUAL.get());
+        withExistingParent(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(ModItems.TECHNIQUE_MANUAL.get())).getPath(), "item/generated")
+                .texture("layer0", "ascension:item/technique_manual")
+                .override().predicate(ResourceLocation.fromNamespaceAndPath("ascension", "technique_variant"), 1.0F)
+                    .model(new ModelFile.UncheckedModelFile("ascension:item/fire_body_technique")).end()
+                .override().predicate(ResourceLocation.fromNamespaceAndPath("ascension", "technique_variant"), 2.0F)
+                    .model(new ModelFile.UncheckedModelFile("ascension:item/water_body_technique")).end()
+                .override().predicate(ResourceLocation.fromNamespaceAndPath("ascension", "technique_variant"), 3.0F)
+                    .model(new ModelFile.UncheckedModelFile("ascension:item/wood_body_technique")).end()
+                .override().predicate(ResourceLocation.fromNamespaceAndPath("ascension", "technique_variant"), 4.0F)
+                    .model(new ModelFile.UncheckedModelFile("ascension:item/earth_body_technique")).end()
+                .override().predicate(ResourceLocation.fromNamespaceAndPath("ascension", "technique_variant"), 5.0F)
+                    .model(new ModelFile.UncheckedModelFile("ascension:item/metal_body_technique")).end();
+        basicItem(ModItems.TECHNIQUE_PAGE.get());
+        basicItem(ModItems.TECHNIQUE_BINDER.get());
 
         //Spiritual Fires
         basicItem(ModItems.CRIMSON_LOTUS_FLAME.get());
@@ -174,17 +194,30 @@ public class ModItemModelProvider extends ItemModelProvider {
         pills(ModItems.CLEANSING_PILL_T4.get());
 
 
+        pills(ModItems.QI_ENHANCED_REGEN_PILL.get());
+
+
 
         pills(ModItems.ESSENCE_GATHERING_PILL.get());
         pills(ModItems.SOUL_FOCUS_PILL.get());
         pills(ModItems.INNER_REINFORCEMENT_PILL.get());
 
 
+        pills(ModItems.QI_REPLENISHING_PILL.get());
+
+
         pills(ModItems.ANTIDOTE_PILL_QDP.get());
 
 
+        pills(ModItems.MARROW_CLEANSE_PILL.get());
+        pills(ModItems.CRIMSON_LOTUS_BONE_PILL.get());
+
 
         pills(ModItems.QI_DEVOURING_PARASITE_PILL.get());
+
+
+        //Powders
+        powder(ModItems.QI_DEVOURING_POWDER.get());
 
 
 
@@ -206,12 +239,15 @@ public class ModItemModelProvider extends ItemModelProvider {
         herbs(ModItems.IRONWOOD_SPROUT.get());
 
 
-        herbsBlockItem(ModBlocks.IRONWOOD_SPROUT_CROP);
         herbsBlockItem(ModBlocks.WHITE_JADE_ORCHID_CROP);
         herbsBlockItem(ModBlocks.HUNDRED_YEAR_SNOW_GINSENG_CROP);
         herbsBlockItem(ModBlocks.HUNDRED_YEAR_FIRE_GINSENG_CROP);
         herbsBlockItem(ModBlocks.HUNDRED_YEAR_GINSENG_CROP);
 
+        herbs(ModItems.JADE_DEW_GRASS.get());
+        basicItem(ModItems.JADE_DEW_GRASS_SEEDS.get());
+
+        basicItem(ModItems.HERB_POUCH.get());
 
         //Saplings
         saplingItem(ModBlocks.GOLDEN_PALM_SAPLING);
@@ -282,6 +318,15 @@ public class ModItemModelProvider extends ItemModelProvider {
         ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
         String itemName = itemId.getPath();
         ResourceLocation textureLoc = ResourceLocation.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/pills/" + itemName);
+
+        return getBuilder(itemName)
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", textureLoc);
+    }
+    public ItemModelBuilder powder(Item item) {
+        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
+        String itemName = itemId.getPath();
+        ResourceLocation textureLoc = ResourceLocation.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/powders/" + itemName);
 
         return getBuilder(itemName)
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))

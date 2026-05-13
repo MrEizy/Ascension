@@ -1,0 +1,19 @@
+{
+  "title": "Jade Spring Method",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:metal_water_body_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:metal_water_body_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Jade Spring Method", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in shipwrecks — what is preserved depends on how long the ship has been down." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "A sharp edge carried by adaptive flow — metal's precision moving through the body the way water finds every available path. Endurance and force build together without one outpacing the other. The mind sharpens least." }
+      ]
+    }
+  ]
+}

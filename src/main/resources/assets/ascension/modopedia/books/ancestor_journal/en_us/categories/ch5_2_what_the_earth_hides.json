@@ -1,0 +1,14 @@
+﻿{
+  "title": "What the Earth Hides",
+  "landing_text": "W.I.P.",
+  "icon": { "id": "ascension:raw_marble" },
+  "entries": [
+    "ores/the_green_stone",
+    "ores/dark_metal",
+    "ores/winter_silver",
+    "ores/the_living_rock",
+    "ores/marble"
+  ],
+  "sort_num": 2,
+  "display_on_front_page": false
+}

@@ -1,0 +1,14 @@
+{
+  "type": "ascension:add_technique_manual",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/bastion_treasure"
+    },
+    {
+      "chance": 0.03,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "techniqueId": "ascension:zenith_sun_scripture"
+}

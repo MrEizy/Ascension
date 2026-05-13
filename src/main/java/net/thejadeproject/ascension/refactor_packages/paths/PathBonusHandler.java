@@ -16,7 +16,7 @@ public class PathBonusHandler {
 
     public void addPathBonus(ResourceLocation path,double bonus){
         if(!pathBonuses.containsKey(path)){
-            pathBonuses.put(path,new ValueContainer(path, AscensionRegistries.Paths.PATHS_REGISTRY.get(path).getDisplayTitle(),0));
+            pathBonuses.put(path,new ValueContainer(path, AscensionRegistries.Paths.PATHS_REGISTRY.get(path).getDisplayTitle(),1));
         }
         pathBonuses.get(path).setBaseValue(pathBonuses.get(path).getBaseValue()+bonus);
     }

@@ -1,0 +1,30 @@
+{
+  "title": "Body Path",
+  "icon": { "id": "ascension:technique_manual" },
+  "entries": [
+    "techniques/white_lightning_ten_stage_technique",
+    "techniques/heart_fire_technique",
+    "techniques/kidney_water_technique",
+    "techniques/liver_wood_technique",
+    "techniques/spleen_earth_technique",
+    "techniques/lung_metal_technique",
+    "techniques/wood_fire_body_technique",
+    "techniques/fire_earth_body_technique",
+    "techniques/earth_metal_body_technique",
+    "techniques/metal_water_body_technique",
+    "techniques/water_wood_body_technique",
+    "techniques/wood_fire_earth_body_technique",
+    "techniques/fire_earth_metal_body_technique",
+    "techniques/earth_metal_water_body_technique",
+    "techniques/metal_water_wood_body_technique",
+    "techniques/water_wood_fire_body_technique",
+    "techniques/wood_fire_earth_metal_body_technique",
+    "techniques/fire_earth_metal_water_body_technique",
+    "techniques/earth_metal_water_wood_body_technique",
+    "techniques/metal_water_wood_fire_body_technique",
+    "techniques/water_wood_fire_earth_body_technique",
+    "techniques/five_element_body_technique"
+  ],
+  "sort_num": 2,
+  "display_on_front_page": false
+}

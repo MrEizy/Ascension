@@ -48,10 +48,10 @@ public class HeldSkill  {
     }
 
     public void encode(RegistryFriendlyByteBuf buf){
-        System.out.println("writing skill : "+getKey().toString());
+        //System.out.println("writing skill : "+getKey().toString());
         ByteBufUtil.encodeString(buf,getKey().toString());
 
-        System.out.println("data encoded? : "+(persistentData != null));
+        //System.out.println("data encoded? : "+(persistentData != null));
         if(persistentData != null) persistentData.encode(buf);
 
 

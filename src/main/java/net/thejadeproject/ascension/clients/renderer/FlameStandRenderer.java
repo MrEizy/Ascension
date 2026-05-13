@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.thejadeproject.ascension.blocks.entity.FlameStandBlockEntity;
+import net.thejadeproject.ascension.common.blocks.entity.FlameStandBlockEntity;
 
 /**
  * Renders the flame item currently burning in the Flame Stand,

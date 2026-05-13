@@ -1,0 +1,21 @@
+{
+  "title": "Hundred Year Snow Ginseng",
+  "icon": { "id": "ascension:hundred_year_snow_ginseng" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:hundred_year_snow_ginseng" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Hundred Year Snow Ginseng", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found only in frozen places. The Qi stored carries a distinct chill. No useful effect raw — it needs the cauldron. More versatile than its cold nature suggests: essence gathering, soul work, antidotes, marrow cleansing. Bare hands when harvesting are a mistake." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "How to Obtain", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "Grows wild in snowy and frozen biomes — ice spikes, frozen peaks, snowy slopes. Also found in igloos and snowy village chests.\n\nCan be grown as a crop." }
+      ]
+    }
+  ]
+}

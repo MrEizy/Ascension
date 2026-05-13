@@ -1,0 +1,17 @@
+{
+  "title": "Body Path",
+  "icon": { "id": "ascension:physique_essence" },
+  "entries": [
+    "physiques/physique_severed_meridians",
+    "physiques/physique_fire_body",
+    "physiques/physique_water_body",
+    "physiques/physique_earth_body",
+    "physiques/physique_wood_body",
+    "physiques/physique_metal_body",
+    "physiques/physique_world_dominator",
+    "physiques/physique_virtuoso_buddha",
+    "physiques/physique_wrathful_vajra"
+  ],
+  "sort_num": 1,
+  "display_on_front_page": false
+}

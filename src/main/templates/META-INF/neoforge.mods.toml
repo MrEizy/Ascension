@@ -110,6 +110,14 @@ versionRange="${jei_version}"
 ordering="NONE"
 side="CLIENT"
 
+# Modopedia
+[[dependencies.${mod_id}]]
+    modId="modopedia"
+    type="optional"
+    versionRange="[${modopedia_version},)"
+    ordering="NONE"
+    side="BOTH"
+
 # JADE
 [[dependencies.${mod_id}]]
 modId="jade"
@@ -118,6 +126,7 @@ type="optional"
 versionRange="${jade_version}"
 ordering="NONE"
 side="CLIENT"
+
 
 
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares

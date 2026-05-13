@@ -1,0 +1,33 @@
+{
+  "type": "ascension:pill_cauldron_low_human",
+  "bonus_chance": 0.05,
+  "chance": 0.6,
+  "fail": {
+    "count": 1,
+    "id": "ascension:pill_residue"
+  },
+  "ideal_temp": 670,
+  "ingredients": [
+    {
+      "count": 16,
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "count": 1,
+      "item": "ascension:ironwood_sprout"
+    },
+    {
+      "count": 16,
+      "item": "minecraft:fermented_spider_eye"
+    }
+  ],
+  "max_temp": 1479,
+  "min_temp": 587,
+  "purity_max": 80,
+  "purity_min": 20,
+  "recipe_time": 5,
+  "success": {
+    "count": 1,
+    "id": "ascension:qi_devouring_parasite_pill"
+  }
+}

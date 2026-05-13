@@ -1,0 +1,25 @@
+{
+  "type": "ascension:add_technique_manual",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:entities/blaze"
+    },
+    {
+      "condition": "minecraft:killed_by_player"
+    },
+    {
+      "chance": 0.03,
+      "condition": "minecraft:random_chance"
+    },
+    {
+      "condition": "ascension:mob_rank",
+      "mode": "BETWEEN",
+      "other_realm": "formation_establishment",
+      "other_stage": 9,
+      "realm": "formation_establishment",
+      "stage": 6
+    }
+  ],
+  "techniqueId": "ascension:dawning_sun_scripture"
+}

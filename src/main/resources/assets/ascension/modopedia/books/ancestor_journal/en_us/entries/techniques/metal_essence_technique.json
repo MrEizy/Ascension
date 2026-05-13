@@ -1,0 +1,19 @@
+{
+  "title": "Metal Essence Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:metal_essence_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:metal_essence_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Metal Essence Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Dropped rarely by iron golems. I did not expect to find it there." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Metal qi cuts through the meridians precisely, sharpening perception in clean defined lines rather than broadly. Quickness of response follows — fast and accurate more than fast and general. Physical force lags furthest behind." }
+      ]
+    }
+  ]
+}

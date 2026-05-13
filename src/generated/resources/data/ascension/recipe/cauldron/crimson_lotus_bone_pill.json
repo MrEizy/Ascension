@@ -1,0 +1,34 @@
+{
+  "type": "ascension:pill_cauldron_low_human",
+  "bonus_chance": 0.03,
+  "chance": 0.35,
+  "fail": {
+    "count": 1,
+    "id": "ascension:pill_residue"
+  },
+  "ideal_temp": 1100,
+  "ingredients": [
+    {
+      "count": 2,
+      "item": "ascension:hundred_year_fire_ginseng"
+    },
+    {
+      "count": 2,
+      "item": "ascension:white_jade_orchid"
+    },
+    {
+      "count": 4,
+      "item": "minecraft:bone_block"
+    }
+  ],
+  "max_temp": 1600,
+  "min_temp": 700,
+  "pill_realm_major": 4,
+  "purity_max": 100,
+  "purity_min": 60,
+  "recipe_time": 20,
+  "success": {
+    "count": 1,
+    "id": "ascension:crimson_lotus_bone_pill"
+  }
+}

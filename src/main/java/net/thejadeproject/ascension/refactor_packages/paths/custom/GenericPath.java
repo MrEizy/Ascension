@@ -1,12 +1,16 @@
 package net.thejadeproject.ascension.refactor_packages.paths.custom;
 
+import net.lucent.easygui.gui.RenderableElement;
+import net.lucent.easygui.gui.UIFrame;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.animal.Panda;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.thejadeproject.ascension.refactor_packages.entity_data.IEntityData;
 import net.thejadeproject.ascension.refactor_packages.forms.forms.ModForms;
+import net.thejadeproject.ascension.refactor_packages.gui.elements.info_elements.PathDataDisplayElement;
 import net.thejadeproject.ascension.refactor_packages.paths.IPath;
 import net.thejadeproject.ascension.refactor_packages.paths.PathData;
 import net.thejadeproject.ascension.refactor_packages.paths.PathInteraction;
@@ -14,7 +18,6 @@ import net.thejadeproject.ascension.refactor_packages.registries.AscensionRegist
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class GenericPath implements IPath {
     private final Component title;
@@ -68,12 +71,21 @@ public class GenericPath implements IPath {
 
     @Override
     public Component getMajorRealmName(int majorRealm) {
-        return realmNames.size()>=majorRealm ? Component.literal(String.valueOf(majorRealm)) : realmNames.get(majorRealm);
+        return majorRealm >= realmNames.size() ? Component.literal(String.valueOf(majorRealm)) : realmNames.get(majorRealm);
     }
 
     @Override
     public Component getMinorRealmName(int majorRealm, int minorRealm) {
         return Component.literal(String.valueOf(minorRealm));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public RenderableElement getInformationContainer(UIFrame frame, PathData pathData) {
+        return new PathDataDisplayElement(frame,
+                getMajorRealmName(pathData.getMajorRealm()),
+                getMinorRealmName(pathData.getMajorRealm(),pathData.getMinorRealm()),
+                getDescription());
     }
 
 
@@ -89,7 +101,31 @@ public class GenericPath implements IPath {
 
     @Override
     public double getMaxQiForRealm(int majorRealm, int minorRealm) {
-        return 100;
+        double baseValue = 6485.0;
+        double minorMultiplier = 1.3;
+        double majorMultiplier = 3.5;
+        double minorMultiplierGrowth = 0.4;
+        double majorMultiplierGrowth = 0.6;
+
+        double value = baseValue;
+        double currentMajorMultiplier = majorMultiplier;
+        double currentMinorMultiplier = minorMultiplier;
+
+        for (int maj = 0; maj < majorRealm; maj++) {
+
+            for (int min = 0; min < getMaxMinorRealm(maj); min++) {
+                value *= currentMinorMultiplier;
+            }
+            value *= currentMajorMultiplier;
+            currentMinorMultiplier += minorMultiplierGrowth;
+            currentMajorMultiplier += majorMultiplierGrowth;
+        }
+
+        for (int min = 0; min < minorRealm; min++) {
+            value *= currentMinorMultiplier;
+        }
+
+        return value;
     }
 
     @Override
@@ -133,7 +169,8 @@ public class GenericPath implements IPath {
         //todo handle cultivation data simulations
         PathData pathData = freshPathData(heldEntity);
         heldEntity.addPathData(AscensionRegistries.Paths.PATHS_REGISTRY.getKey(this),pathData);
-        pathData.read(tag,heldEntity);
+        pathData = heldEntity.getPathData(AscensionRegistries.Paths.PATHS_REGISTRY.getKey(this)); //makes sure we are modifying the saved instance
+        pathData.load(tag,heldEntity);
         return pathData;
     }
 

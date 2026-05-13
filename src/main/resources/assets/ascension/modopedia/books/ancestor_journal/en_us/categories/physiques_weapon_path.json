@@ -1,0 +1,17 @@
+{
+  "title": "Weapon Path",
+  "icon": { "id": "ascension:physique_essence" },
+  "entries": [
+    "physiques/physique_thin_sword_pulse",
+    "physiques/physique_sword_bone",
+    "physiques/physique_flow_severing_eyes",
+    "physiques/physique_wild_cleaver_veteran",
+    "physiques/physique_arrow_blessed",
+    "physiques/physique_iron_bulwark_spine",
+    "physiques/physique_bruised_knuckle_body",
+    "physiques/physique_pointed_eyes",
+    "physiques/physique_tyrant_body"
+  ],
+  "sort_num": 5,
+  "display_on_front_page": false
+}

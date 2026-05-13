@@ -1,0 +1,19 @@
+{
+  "title": "Death Recall Talisman",
+  "icon": { "id": "ascension:death_recall_talisman" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:death_recall_talisman" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Death Recall Talisman", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The inscription remembers where you fell. Use it to return there. Thirty seconds between uses. Binds again on your next death." }
+      ]
+    },
+    {
+      "components": [
+        { "template": "modopedia:recipe/crafting", "recipe": "ascension:shaped/death_recall_talisman" }
+      ]
+    }
+  ]
+}

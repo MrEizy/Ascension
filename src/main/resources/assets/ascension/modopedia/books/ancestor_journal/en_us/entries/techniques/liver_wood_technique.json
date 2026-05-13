@@ -1,0 +1,19 @@
+{
+  "title": "Liver Wood Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:liver_wood_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:liver_wood_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Liver Wood Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in jungle temples — frequently looted. What remains is worth the search." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Moves wood qi through the body using the liver as its focus. In organ theory the liver governs the free flow of qi — the technique uses that to build physical capacity steadily over time. Endurance and force grow together. The mind sharpens least." }
+      ]
+    }
+  ]
+}

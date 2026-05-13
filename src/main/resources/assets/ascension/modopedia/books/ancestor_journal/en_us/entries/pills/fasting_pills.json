@@ -1,0 +1,19 @@
+{
+  "title": "The Hunger Argument",
+  "icon": { "id": "ascension:fasting_pill_t1" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:fasting_pill_t1" }, { "id": "ascension:fasting_pill_t2" }, { "id": "ascension:fasting_pill_t3" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Fasting Pills", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Extended cultivation requires stillness. Physical hunger disrupts that. Fasting Pills suppress appetite for a significant period — tier one for standard sessions, tier three for multi-day work." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "They are not a substitute for eating. The body does not forget being owed meals, and it collects the debt all at once." }
+      ]
+    }
+  ]
+}

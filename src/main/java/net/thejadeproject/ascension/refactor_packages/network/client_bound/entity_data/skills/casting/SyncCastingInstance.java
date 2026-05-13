@@ -52,7 +52,7 @@ public record SyncCastingInstance(ResourceLocation skill, ICastData castData)imp
         context.enqueueWork(()->{
             CastingInstance castingInstance = context.player().getData(ModAttachments.ENTITY_DATA).getSkillCastHandler().getCastingInstance();
 
-            System.out.println("trying to sync cast instance");
+            //System.out.println("trying to sync cast instance");
             castingInstance.startClientCast(context.player(),payload.skill);
             castingInstance.setCastData(payload.castData);
 

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "J": {
+      "item": "ascension:jade"
+    },
+    "T": {
+      "item": "ascension:talisman_paper"
+    }
+  },
+  "pattern": [
+    "TTT",
+    "TJT",
+    "TTT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ascension:ancestor_journal"
+  }
+}

@@ -26,6 +26,7 @@ public interface IEntityFormData extends IDataInstance {
 
     void addPathData(ResourceLocation path,PathData pathData);
     PathData getPathData(ResourceLocation path);
+    void removePathData(ResourceLocation path);
     Collection<PathData> getAllPathData();
     Collection<ResourceLocation> getPaths();
     boolean hasPathData(ResourceLocation path);

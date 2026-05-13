@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_golden_sun_leaf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:golden_sun_leaf"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:cauldron/cleansing_pill_t1"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_golden_sun_leaf"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:cauldron/cleansing_pill_t1"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "type": "ascension:pill_cauldron_low_human",
+  "bonus_chance": 0.06,
+  "chance": 0.5,
+  "fail": {
+    "count": 1,
+    "id": "ascension:pill_residue"
+  },
+  "ideal_temp": 546,
+  "ingredients": [
+    {
+      "count": 3,
+      "item": "ascension:jade_dew_grass"
+    },
+    {
+      "count": 1,
+      "item": "minecraft:golden_apple"
+    },
+    {
+      "count": 3,
+      "item": "ascension:jade_dew_grass"
+    }
+  ],
+  "max_temp": 785,
+  "min_temp": 325,
+  "purity_max": 100,
+  "purity_min": 15,
+  "recipe_time": 5,
+  "success": {
+    "count": 1,
+    "id": "ascension:qi_replenishing_pill"
+  }
+}

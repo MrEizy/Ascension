@@ -16,10 +16,11 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.thejadeproject.ascension.AscensionCraft;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.thejadeproject.ascension.blocks.ModBlocks;
-import net.thejadeproject.ascension.blocks.custom.crops.GenericSlowCropBlock;
-import net.thejadeproject.ascension.blocks.custom.crops.StemSlowCropBlock;
-import net.thejadeproject.ascension.blocks.custom.fires.CrimsonLotusFire;
+import net.thejadeproject.ascension.common.blocks.ModBlocks;
+import net.thejadeproject.ascension.common.blocks.custom.crops.GenericSlowCropBlock;
+import net.thejadeproject.ascension.common.blocks.custom.crops.StemSlowCropBlock;
+import net.thejadeproject.ascension.common.blocks.custom.crops.jadedew.JadeDewGrassCropBlock;
+import net.thejadeproject.ascension.common.blocks.custom.fires.CrimsonLotusFire;
 
 import java.util.function.Function;
 
@@ -41,8 +42,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         makeCrop(((CropBlock) ModBlocks.HUNDRED_YEAR_FIRE_GINSENG_CROP.get()), "hundred_year_fire_ginseng_stage", "hundred_year_fire_ginseng_stage");
         makeStemCrop(((CropBlock) ModBlocks.WHITE_JADE_ORCHID_CROP.get()), "white_jade_orchid_stage", "white_jade_orchid_stage");
 
+        makeJadeDewGrassCrop(((CropBlock) ModBlocks.JADE_DEW_GRASS_CROP.get()), "jade_dew_grass_stage", "jade_dew_grass_stage");
+
         //Herbs Blocks
-        herbsBlockCross(ModBlocks.IRONWOOD_SPROUT_CROP);
 
 
 
@@ -437,6 +439,19 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         return models;
 
+    }
+
+    public void makeJadeDewGrassCrop(CropBlock block, String modelName, String textureName) {
+        getVariantBuilder(block).forAllStates(state -> {
+            int age = state.getValue(JadeDewGrassCropBlock.AGE);
+            return new ConfiguredModel[]{
+                    new ConfiguredModel(
+                            models().crop(modelName + age,
+                                            ResourceLocation.fromNamespaceAndPath(AscensionCraft.MOD_ID,
+                                                    "block/herbs/" + textureName + age))
+                                    .renderType("cutout"))
+            };
+        });
     }
 
 

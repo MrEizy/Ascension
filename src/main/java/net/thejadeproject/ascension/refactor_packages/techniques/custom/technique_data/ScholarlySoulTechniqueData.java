@@ -10,8 +10,7 @@ import net.thejadeproject.ascension.AscensionCraft;
 import net.thejadeproject.ascension.refactor_packages.techniques.ITechniqueData;
 import net.thejadeproject.ascension.refactor_packages.util.ByteBufUtil;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,17 +33,17 @@ public class ScholarlySoulTechniqueData implements ITechniqueData {
     public static final ResourceLocation SAGE_MANDATE =
             ResourceLocation.fromNamespaceAndPath(AscensionCraft.MOD_ID, "scholarly_soul/sage_mandate");
 
-    private static final Map<ResourceLocation, Integer> CHAPTER_MAJOR_REALM_UNLOCKS = new HashMap<>();
+    private static final Map<ResourceLocation, Integer> CHAPTER_MAJOR_REALM_UNLOCKS = Map.of(
+            INTRODUCTION, 1,
+            RECTIFICATION_OF_NAMES, 2,
+            GREAT_LEARNING, 3,
+            THOUSAND_COMMENTARIES, 4,
+            SAGE_MANDATE, 5
+    );
 
-    static {
-        CHAPTER_MAJOR_REALM_UNLOCKS.put(INTRODUCTION, 1);
-        CHAPTER_MAJOR_REALM_UNLOCKS.put(RECTIFICATION_OF_NAMES, 2);
-        CHAPTER_MAJOR_REALM_UNLOCKS.put(GREAT_LEARNING, 3);
-        CHAPTER_MAJOR_REALM_UNLOCKS.put(THOUSAND_COMMENTARIES, 4);
-        CHAPTER_MAJOR_REALM_UNLOCKS.put(SAGE_MANDATE, 5);
-    }
+    private final Set<ResourceLocation> unlockedChapters = new LinkedHashSet<>();
 
-    private final Set<ResourceLocation> unlockedChapters = new HashSet<>();
+    private int maxUnlockedMajorRealm = 1;
 
     public ScholarlySoulTechniqueData() {
         unlockChapter(INTRODUCTION);
@@ -54,24 +53,22 @@ public class ScholarlySoulTechniqueData implements ITechniqueData {
         ListTag chapters = tag.getList(UNLOCKED_CHAPTERS, Tag.TAG_STRING);
 
         for (int i = 0; i < chapters.size(); i++) {
-            unlockedChapters.add(ResourceLocation.parse(chapters.getString(i)));
+            ResourceLocation chapter = ResourceLocation.tryParse(chapters.getString(i));
+            addLoadedChapter(chapter);
         }
 
-        if (unlockedChapters.isEmpty()) {
-            unlockChapter(INTRODUCTION);
-        }
+        ensureIntroduction();
     }
 
     public ScholarlySoulTechniqueData(RegistryFriendlyByteBuf buf) {
         int size = buf.readInt();
 
         for (int i = 0; i < size; i++) {
-            unlockedChapters.add(ByteBufUtil.readResourceLocation(buf));
+            ResourceLocation chapter = ByteBufUtil.readResourceLocation(buf);
+            addLoadedChapter(chapter);
         }
 
-        if (unlockedChapters.isEmpty()) {
-            unlockChapter(INTRODUCTION);
-        }
+        ensureIntroduction();
     }
 
     public boolean hasChapter(ResourceLocation chapter) {
@@ -79,11 +76,19 @@ public class ScholarlySoulTechniqueData implements ITechniqueData {
     }
 
     public boolean unlockChapter(ResourceLocation chapter) {
-        if (!CHAPTER_MAJOR_REALM_UNLOCKS.containsKey(chapter)) {
+        Integer unlockedRealm = CHAPTER_MAJOR_REALM_UNLOCKS.get(chapter);
+
+        if (unlockedRealm == null) {
             return false;
         }
 
-        return unlockedChapters.add(chapter);
+        boolean added = unlockedChapters.add(chapter);
+
+        if (added) {
+            maxUnlockedMajorRealm = Math.max(maxUnlockedMajorRealm, unlockedRealm);
+        }
+
+        return added;
     }
 
     public Set<ResourceLocation> getUnlockedChapters() {
@@ -91,21 +96,36 @@ public class ScholarlySoulTechniqueData implements ITechniqueData {
     }
 
     public int getMaxUnlockedMajorRealm() {
-        int maxMajorRealm = 1;
-
-        for (ResourceLocation chapter : unlockedChapters) {
-            maxMajorRealm = Math.max(maxMajorRealm, getMajorRealmUnlockedByChapter(chapter));
-        }
-
-        return maxMajorRealm;
+        return maxUnlockedMajorRealm;
     }
 
     public boolean canCultivateMajorRealm(int majorRealm) {
-        return majorRealm <= getMaxUnlockedMajorRealm();
+        return majorRealm <= maxUnlockedMajorRealm;
     }
 
     public static int getMajorRealmUnlockedByChapter(ResourceLocation chapter) {
         return CHAPTER_MAJOR_REALM_UNLOCKS.getOrDefault(chapter, 1);
+    }
+
+    private void addLoadedChapter(ResourceLocation chapter) {
+        if (chapter == null) {
+            return;
+        }
+
+        Integer unlockedRealm = CHAPTER_MAJOR_REALM_UNLOCKS.get(chapter);
+
+        if (unlockedRealm == null) {
+            return;
+        }
+
+        unlockedChapters.add(chapter);
+        maxUnlockedMajorRealm = Math.max(maxUnlockedMajorRealm, unlockedRealm);
+    }
+
+    private void ensureIntroduction() {
+        if (unlockedChapters.isEmpty()) {
+            unlockChapter(INTRODUCTION);
+        }
     }
 
     @Override

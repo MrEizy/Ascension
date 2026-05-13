@@ -38,7 +38,7 @@ public class NineHeavenlyTribulations implements IBreakthroughInstance{
         damage *= (currentTribulation+1);
         damage *= (1+ (double) ticksSinceFired /MIN_TICKS);
         entity.hurt(new DamageSource(entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.LIGHTNING_BOLT)), (float) damage);
-        System.out.println("dealing : "+damage);
+        //System.out.println("dealing : "+damage);
         if(!entity.level().isClientSide()){
             LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(entity.level());
 

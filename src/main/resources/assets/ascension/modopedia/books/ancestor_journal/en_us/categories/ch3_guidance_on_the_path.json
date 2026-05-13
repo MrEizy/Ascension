@@ -1,0 +1,9 @@
+﻿{
+  "title": "Guidance on the Path",
+  "landing_text": "W.I.P.",
+  "icon": { "id": "ascension:technique_manual" },
+  "children": ["ch3_1_the_key", "ch3_2_the_right_path", "ch3_3_scroll_of_myriad_techniques"],
+  "entries": [],
+  "sort_num": 4
+}
+

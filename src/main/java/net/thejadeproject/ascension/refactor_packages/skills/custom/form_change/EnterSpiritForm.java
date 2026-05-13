@@ -12,10 +12,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.thejadeproject.ascension.AscensionCraft;
 import net.thejadeproject.ascension.entity.ModEntities;
 import net.thejadeproject.ascension.entity.custom.form.PlayerBodyEntity;
 import net.thejadeproject.ascension.refactor_packages.entity_data.IEntityData;
+import net.thejadeproject.ascension.refactor_packages.gui.elements.info_elements.DescriptionDisplayContainer;
+import net.thejadeproject.ascension.refactor_packages.paths.PathData;
 import net.thejadeproject.ascension.refactor_packages.physiques.IPhysiqueData;
 import net.thejadeproject.ascension.refactor_packages.skill_casting.casting.CastEndData;
 import net.thejadeproject.ascension.refactor_packages.skill_casting.casting.CastResult;
@@ -130,6 +134,7 @@ public class EnterSpiritForm implements ICastableSkill {
         return CastType.INSTANT;
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public RenderableElement getCastElement(UIFrame frame) {
         return null;
@@ -174,7 +179,7 @@ public class EnterSpiritForm implements ICastableSkill {
     public IPersistentSkillData fromNetwork(RegistryFriendlyByteBuf buf) {
         return null;
     }
-
+    @OnlyIn(Dist.CLIENT)
     @Override
     public ITextureData getIcon() {
         return new TextureData(
@@ -182,14 +187,20 @@ public class EnterSpiritForm implements ICastableSkill {
                 16,16
         );
     }
-
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public RenderableElement getInformationContainer(UIFrame frame) {
+        return new DescriptionDisplayContainer(frame,
+                getTitle(),
+                getDescription());
+    }
     @Override
     public Component getTitle() {
-        return null;
+        return Component.translatable("ascension.skill.enter_spirit_form");
     }
 
     @Override
     public Component getDescription() {
-        return null;
+        return Component.translatable("ascension.skill.enter_spirit_form.description");
     }
 }

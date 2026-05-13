@@ -7,8 +7,8 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.thejadeproject.ascension.blocks.ModBlocks;
-import net.thejadeproject.ascension.items.ModItems;
+import net.thejadeproject.ascension.common.blocks.ModBlocks;
+import net.thejadeproject.ascension.common.items.ModItems;
 
 
 import java.util.function.Supplier;
@@ -30,12 +30,13 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.FROST_SILVER_NUGGET);
                         output.accept(ModItems.SPIRITUAL_STONE);
                         output.accept(ModItems.SPATIAL_STONE_TIER_1);
-                        output.accept(ModItems.SPATIAL_STONE_TIER_2);
                         output.accept(ModItems.JADE_NUGGET);
                         output.accept(ModItems.JADE);
                         output.accept(ModItems.UNDEAD_CORE);
                         output.accept(ModItems.LIVING_CORE);
                         output.accept(ModItems.TALISMAN_PAPER);
+
+                        output.accept(ModItems.ANCESTOR_JOURNAL);
 
                         output.accept(ModItems.SCHOLARLY_SOUL_RECTIFICATION_OF_NAMES);
                         output.accept(ModItems.SCHOLARLY_SOUL_GREAT_LEARNING);
@@ -51,6 +52,7 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("creativetab.ascension.artifacts"))
                     .displayItems((itemDisplayParameters, output) -> {
 
+                        output.accept(ModItems.SPATIAL_RING);
                         output.accept(ModItems.REPAIR_SLIP);
                         output.accept(ModItems.ENDER_POUCH);
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_HUMAN);
@@ -58,7 +60,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_HEAVEN);
 
 
-                        output.accept(ModItems.SPIRIT_SEALING_RING);
                         output.accept(ModItems.FIRE_GOURD);
 
                         output.accept(ModItems.SPATIAL_RUPTURE_TALISMAN_T1);
@@ -68,6 +69,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.WORLD_AXIS_TALISMAN);
                         output.accept(ModItems.VOID_MARKING_TALISMAN);
                         output.accept(ModItems.DEATH_RECALL_TALISMAN);
+                        output.accept(ModItems.SOUL_ANCHOR_TALISMAN);
                     }).build());
 
     public static final Supplier<CreativeModeTab> ASCENSION_TOOLS_TAB = CREATIVE_MODE_TAB.register("ascension_tools_tab",
@@ -89,6 +91,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.DIAMOND_SPEAR);
                         output.accept(ModItems.NETHERITE_SPEAR);
 
+                        output.accept(ModItems.SILVER_NEEDLE);
+
                         output.accept(ModItems.SPIRITUAL_STONE_PICKAXE);
                         output.accept(ModItems.SPIRITUAL_STONE_AXE);
                         output.accept(ModItems.SPIRITUAL_STONE_SHOVEL);
@@ -100,6 +104,8 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("creativetab.ascension.blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
 
+
+                        output.accept(ModBlocks.TECHNIQUE_STAND);
 
                         output.accept(ModBlocks.CUSHION_WHITE);
                         output.accept(ModBlocks.CUSHION_LIGHT_GRAY);
@@ -354,6 +360,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.FLAME_STAND_BLOCK);
                         output.accept(ModBlocks.SPIRIT_CONDENSER_BLOCK);
                         output.accept(ModItems.FAN);
+                        output.accept(ModItems.MORTAR_PESTLE);
+                        output.accept(ModItems.SPIRITUAL_MEAL);
 
                         output.accept(ModItems.FLAME);
                         output.accept(ModItems.SOUL_FLAME);
@@ -362,11 +370,16 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.PEACH);
                         output.accept(ModItems.GOLDEN_SUN_LEAF);
                         output.accept(ModItems.JADE_BAMBOO_OF_SERENITY);
+                        output.accept(ModItems.JADE_DEW_GRASS_SEEDS);
+                        output.accept(ModItems.JADE_DEW_GRASS);
                         output.accept(ModItems.HUNDRED_YEAR_GINSENG);
                         output.accept(ModItems.HUNDRED_YEAR_SNOW_GINSENG);
                         output.accept(ModItems.HUNDRED_YEAR_FIRE_GINSENG);
                         output.accept(ModItems.IRONWOOD_SPROUT);
                         output.accept(ModItems.WHITE_JADE_ORCHID);
+
+
+                        output.accept(ModItems.HERB_POUCH);
 
 
                     }).build());
@@ -385,6 +398,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SOUL_FOCUS_PILL);
                         output.accept(ModItems.ESSENCE_GATHERING_PILL);
 
+                        //Qi
+                        output.accept(ModItems.QI_REPLENISHING_PILL);
+
                         //Medicinal
                         output.accept(ModItems.FASTING_PILL_T1);
                         output.accept(ModItems.FASTING_PILL_T2);
@@ -394,15 +410,17 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.CLEANSING_PILL_T3);
                         output.accept(ModItems.CLEANSING_PILL_T4);
                         output.accept(ModItems.ANTIDOTE_PILL_QDP);
+                        output.accept(ModItems.QI_ENHANCED_REGEN_PILL);
 
                         //Poison
                         output.accept(ModItems.QI_DEVOURING_PARASITE_PILL);
+                        output.accept(ModItems.QI_DEVOURING_POWDER);
 
 
                         //Misc
                         output.accept(ModItems.NEUTRALITY_PILL);
-
-                        //Cultivation
+                        output.accept(ModItems.MARROW_CLEANSE_PILL);
+                        output.accept(ModItems.CRIMSON_LOTUS_BONE_PILL);
 
 
                         //Important Pills

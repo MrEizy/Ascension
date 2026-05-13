@@ -1,0 +1,32 @@
+{
+  "type": "ascension:pill_cauldron_low_human",
+  "bonus_chance": 0.1,
+  "chance": 0.85,
+  "fail": {
+    "count": 1,
+    "id": "ascension:pill_residue"
+  },
+  "ideal_temp": 460,
+  "ingredients": [
+    {
+      "count": 1,
+      "item": "ascension:golden_sun_leaf"
+    },
+    {
+      "count": 1,
+      "item": "minecraft:milk_bucket"
+    },
+    {
+      "count": 1,
+      "item": "ascension:white_jade_orchid"
+    }
+  ],
+  "max_temp": 975,
+  "min_temp": 212,
+  "purity_max": 60,
+  "recipe_time": 3,
+  "success": {
+    "count": 1,
+    "id": "ascension:cleansing_pill_t1"
+  }
+}

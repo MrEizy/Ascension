@@ -1,0 +1,19 @@
+{
+  "title": "Earthbound Cycle Method",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:wood_fire_earth_metal_body_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:wood_fire_earth_metal_body_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Earthbound Cycle Method", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Four elements. The source I did not record — it arrived through other means." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Growth, heat, weight, and precision combined — four elements that rarely coexist cleanly in a single body. Endurance and force grow to a level most single-element techniques cannot approach. The mind sharpens least, as ever." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "ascension:black_iron_ingot"
+    },
+    "F": {
+      "tag": "ascension:flames"
+    }
+  },
+  "pattern": [
+    "B B",
+    "BFB",
+    "BBB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ascension:flame_stand"
+  }
+}

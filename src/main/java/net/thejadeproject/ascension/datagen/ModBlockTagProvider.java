@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.thejadeproject.ascension.AscensionCraft;
-import net.thejadeproject.ascension.blocks.ModBlocks;
+import net.thejadeproject.ascension.common.blocks.ModBlocks;
 import net.thejadeproject.ascension.util.ModTags;
 
 import javax.annotation.Nullable;
@@ -224,6 +224,8 @@ public class ModBlockTagProvider extends BlockTagsProvider {
 
 
 
+                .add(ModBlocks.CAULDRON_PEDESTAL_BLOCK.get())
+                .add(ModBlocks.FLAME_STAND_BLOCK.get())
                 .add(ModBlocks.PILL_CAULDRON_HUMAN_LOW.get());
 
 
@@ -250,14 +252,17 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.JADE_ORE.get())
                 .add(ModBlocks.SPIRITUAL_STONE_CLUSTER.get())
                 .add(ModBlocks.JADE_BLOCK.get())
-                .add(ModBlocks.PILL_CAULDRON_HUMAN_LOW.get());
+                .add(ModBlocks.PILL_CAULDRON_HUMAN_LOW.get())
+                .add(ModBlocks.CAULDRON_PEDESTAL_BLOCK.get())
+                .add(ModBlocks.FLAME_STAND_BLOCK.get());
 
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.JADE_ORE.get())
                 .add(ModBlocks.BLACK_IRON_ORE.get())
                 .add(ModBlocks.BLACK_IRON_BLOCK.get())
                 .add(ModBlocks.FROST_SILVER_BLOCK.get())
-                .add(ModBlocks.FROST_SILVER_ORE.get());
+                .add(ModBlocks.FROST_SILVER_ORE.get())
+                .add(ModBlocks.TECHNIQUE_STAND.get());
 
         tag(BlockTags.FENCES)
                 .add(ModBlocks.GOLDEN_PALM_FENCE.get())
@@ -395,6 +400,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                         .add(ModBlocks.CUSHION_PURPLE.get())
                         .add(ModBlocks.CUSHION_MAGENTA.get())
                         .add(ModBlocks.CUSHION_PINK.get())
+                        .add(ModBlocks.TECHNIQUE_STAND.get())
                         .add(ModBlocks.GOLDEN_PALM_PLANKS.get())
                         .add(ModBlocks.IRONWOOD_PLANKS.get());
 

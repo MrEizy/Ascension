@@ -1,0 +1,19 @@
+{
+  "title": "The Herb Pouch",
+  "icon": { "id": "ascension:herb_pouch" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:herb_pouch" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "The Herb Pouch", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Keeps herbs separate from everything else. Opens on use and holds twenty-seven slots — more than enough unless one is collecting obsessively.\nThe Spiritual Stone in the lining seems to slow whatever degradation process affects herbs in ordinary storage." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Crafted from leather, string, a Spiritual Stone, and any herb. The herb used in the pattern does not matter — it sets the affinity of the stitching, but I have found no practical difference between them.\nI carry one at all times now." }
+      ]
+    }
+  ]
+}

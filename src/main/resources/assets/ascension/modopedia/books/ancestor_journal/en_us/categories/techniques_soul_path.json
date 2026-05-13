@@ -1,0 +1,13 @@
+{
+  "title": "Soul Path",
+  "icon": { "id": "ascension:technique_manual" },
+  "entries": [
+    "techniques/scholarly_soul_technique",
+    "techniques/pale_moon_scripture",
+    "techniques/gibbous_moon_scripture",
+    "techniques/dawning_sun_scripture",
+    "techniques/zenith_sun_scripture"
+  ],
+  "sort_num": 3,
+  "display_on_front_page": false
+}

@@ -1,0 +1,33 @@
+{
+  "type": "ascension:pill_cauldron_low_human",
+  "bonus_chance": 0.04,
+  "chance": 0.55,
+  "fail": {
+    "count": 1,
+    "id": "ascension:pill_residue"
+  },
+  "ideal_temp": 649,
+  "ingredients": [
+    {
+      "count": 1,
+      "item": "ascension:hundred_year_ginseng"
+    },
+    {
+      "count": 1,
+      "item": "ascension:hundred_year_fire_ginseng"
+    },
+    {
+      "count": 1,
+      "item": "ascension:hundred_year_snow_ginseng"
+    }
+  ],
+  "max_temp": 1247,
+  "min_temp": 175,
+  "pill_realm_major": 2,
+  "purity_max": 100,
+  "purity_min": 25,
+  "success": {
+    "count": 1,
+    "id": "ascension:marrow_cleanse_pill"
+  }
+}

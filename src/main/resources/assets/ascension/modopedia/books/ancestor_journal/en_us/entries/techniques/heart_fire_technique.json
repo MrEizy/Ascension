@@ -1,0 +1,19 @@
+{
+  "title": "Heart Fire Technique",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:heart_fire_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:heart_fire_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Heart Fire Technique", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Found in nether fortress chests and dropped by wither skeletons. Neither is obtained without going into the Nether." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Drives fire qi through the body with the heart as its center — organ theory holds the heart as fire's natural seat, and the technique builds from that assumption. Endurance and physical force grow strongly. The mind sharpens least." }
+      ]
+    }
+  ]
+}

@@ -15,7 +15,10 @@ import net.thejadeproject.ascension.refactor_packages.util.value_modifiers.Value
 import net.thejadeproject.ascension.refactor_packages.util.value_modifiers.ValueContainerModifier;
 import org.checkerframework.checker.units.qual.C;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public class StatSheet {
 
@@ -47,7 +50,9 @@ public class StatSheet {
         sheetStats.get(stat).removeModifier(identifier);
     }
     public boolean hasStat(Stat stat){return sheetStats.containsKey(stat);}
-
+    public Collection<Stat> getStats(){
+        return Set.copyOf(sheetStats.keySet());
+    }
     public void setContainer(Stat stat, ValueContainer container){
         sheetStats.put(stat,new StatInstance(container));
     }
@@ -57,7 +62,7 @@ public class StatSheet {
         }
     }
     public void log(){
-        System.out.println("Stats on " + FMLEnvironment.dist.toString() +" :");
+//        //System.out.println("Stats on " + FMLEnvironment.dist.toString() +" :");
         for(StatInstance instance:sheetStats.values()){
             instance.log();
         }

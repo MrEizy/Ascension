@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "tag": "minecraft:stone_crafting_materials"
+    },
+    "F": {
+      "item": "ascension:frost_silver_ingot"
+    }
+  },
+  "pattern": [
+    "   ",
+    "AFA",
+    " A "
+  ],
+  "result": {
+    "count": 1,
+    "id": "ascension:mortar_pestle"
+  }
+}

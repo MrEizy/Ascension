@@ -1,0 +1,14 @@
+{
+  "title": "Qi Devouring Parasite Pill",
+  "icon": { "id": "ascension:qi_devouring_parasite_pill" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:qi_devouring_parasite_pill" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Qi Devouring Parasite Pill", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Thrown at a target. Infects with a parasite that drains internal energy until it runs dry, then turns on the body itself. There is an antidote." }
+      ]
+    }
+  ]
+}

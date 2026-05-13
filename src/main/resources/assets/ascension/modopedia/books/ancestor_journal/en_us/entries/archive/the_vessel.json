@@ -1,0 +1,13 @@
+{
+  "title": "The Vessel",
+  "icon": { "id": "ascension:physique_essence" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "The Vessel", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "I met a woman near the northern marshes whose body deflected a blow by briefly turning to water at the point of impact, then reforming. She called it her nature.\nA physique is something the body is, not something it does. It either runs in the blood or it does not.\nI spent a year cultivating without knowing this. It explains several things my body did and refused to do during that time." }
+      ]
+    }
+  ]
+}

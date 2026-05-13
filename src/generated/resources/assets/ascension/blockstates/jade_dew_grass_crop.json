@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "ascension:block/jade_dew_grass_stage0"
+    },
+    "age=1": {
+      "model": "ascension:block/jade_dew_grass_stage1"
+    },
+    "age=2": {
+      "model": "ascension:block/jade_dew_grass_stage2"
+    },
+    "age=3": {
+      "model": "ascension:block/jade_dew_grass_stage3"
+    },
+    "age=4": {
+      "model": "ascension:block/jade_dew_grass_stage4"
+    },
+    "age=5": {
+      "model": "ascension:block/jade_dew_grass_stage5"
+    },
+    "age=6": {
+      "model": "ascension:block/jade_dew_grass_stage6"
+    },
+    "age=7": {
+      "model": "ascension:block/jade_dew_grass_stage7"
+    }
+  }
+}

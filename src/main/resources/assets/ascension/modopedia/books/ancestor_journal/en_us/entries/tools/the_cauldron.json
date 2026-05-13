@@ -1,0 +1,44 @@
+{
+  "title": "The Cauldron",
+  "icon": { "id": "ascension:pill_cauldron_low_human" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:pill_cauldron_low_human" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "The Pill Cauldron", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "I found it buried in a ruined compound under collapsed stone. The first result was ash. The second was unidentifiable. The third was a pill that closed a gash on my forearm in minutes.\nI have not moved the cauldron since. Some things are worth building a camp around." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "How It Works", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "Place the cauldron. Provide fire — the right kind matters more than the amount. Add the herbs in the right combinations. Wait.\nThe process is not forgiving of impatience. Rushing the refinement ruins the batch. I have wasted more herbs than I care to count learning that." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "On Results", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "What emerges depends on what you put in. The quality of the flame, the purity of the herbs, the order they enter — all of it shapes the outcome.\nA poor batch is not wasted. It is a record of what went wrong." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "The Setup", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:large_frame", "x": -2, "y": 22 },
+        {
+          "type": "modopedia:multiblock",
+          "x": 4, "y": 28,
+          "width": 88,
+          "height": 88,
+          "scale": 1.6,
+          "previewable": false,
+          "multiblock_id": "ascension:cauldron_setup"
+        }
+      ]
+    }
+  ]
+}

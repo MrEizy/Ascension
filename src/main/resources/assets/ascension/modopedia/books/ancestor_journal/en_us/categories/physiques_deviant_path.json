@@ -1,0 +1,11 @@
+{
+  "title": "Deviant Path",
+  "icon": { "id": "ascension:physique_essence" },
+  "entries": [
+    "physiques/physique_blessed",
+    "physiques/physique_blood_fiend",
+    "physiques/physique_blood_wraith"
+  ],
+  "sort_num": 6,
+  "display_on_front_page": false
+}

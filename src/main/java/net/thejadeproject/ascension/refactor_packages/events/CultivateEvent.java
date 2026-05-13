@@ -40,13 +40,13 @@ public class CultivateEvent extends Event implements ICancellableEvent {
     public List<ResourceLocation> getAttributedPaths(){return attributedPaths;}
 
     public void log(){
-        System.out.print("cultivated ");
-        System.out.print(AscensionRegistries.Paths.PATHS_REGISTRY.get(path).getDisplayTitle().getString());
-        System.out.print(" with attributes ");
-        for(ResourceLocation attributedPath : getAttributedPaths()){
-            System.out.println(AscensionRegistries.Paths.PATHS_REGISTRY.get(attributedPath).getDisplayTitle().getString());
-            System.out.print(" ");
-        }
-        System.out.println("for "+getRate() + " qi");
+        //System.out.print("cultivated ");
+        //System.out.print(AscensionRegistries.Paths.PATHS_REGISTRY.get(path).getDisplayTitle().getString());
+        //System.out.print(" with attributes ");
+//        for(ResourceLocation attributedPath : getAttributedPaths()){
+//            //System.out.println(AscensionRegistries.Paths.PATHS_REGISTRY.get(attributedPath).getDisplayTitle().getString());
+//            //System.out.print(" ");
+//        }
+//        //System.out.println("for "+getRate() + " qi");
     }
 }

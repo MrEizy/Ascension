@@ -1,0 +1,19 @@
+{
+  "title": "Five Harmony Body Method",
+  "icon": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:five_element_body_technique" } },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:technique_manual", "components": { "ascension:technique_id": "ascension:five_element_body_technique" } } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Five Harmony Body Method", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The complete version. I have not confirmed how many practitioners have successfully used it." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "All five elements simultaneously — each occupying its natural position through the body. Endurance and physical force grow to a level no partial technique approaches. The mind sharpens least. Incompatible with any other elemental body technique." }
+      ]
+    }
+  ]
+}

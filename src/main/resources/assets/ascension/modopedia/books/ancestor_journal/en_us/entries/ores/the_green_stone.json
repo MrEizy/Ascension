@@ -1,0 +1,19 @@
+{
+  "title": "The Green Stone",
+  "icon": { "id": "ascension:jade" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:jade" }, { "id": "ascension:jade_nugget" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Jade", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "The spiritual variety looks identical to decorative jade to an untrained eye. It took me some time to learn to feel the difference reliably.\nTreasure rats are drawn to it. I have lost more than I care to admit." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Jade takes Qi impressions well and can be shaped by intent in ways ordinary stone cannot. The one confirmed use I have found is in the Ender Pouch — the jade holds the spatial link stable. Nuggets for fine work; full pieces where the recipe demands it." }
+      ]
+    }
+  ]
+}

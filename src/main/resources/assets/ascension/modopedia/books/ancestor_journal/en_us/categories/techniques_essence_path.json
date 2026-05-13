@@ -1,0 +1,19 @@
+{
+  "title": "Essence Path",
+  "icon": { "id": "ascension:technique_manual" },
+  "entries": [
+    "techniques/basic_cultivation_technique",
+    "techniques/advanced_cultivation_technique",
+    "techniques/fire_essence_technique",
+    "techniques/water_essence_technique",
+    "techniques/wood_essence_technique",
+    "techniques/earth_essence_technique",
+    "techniques/metal_essence_technique",
+    "techniques/lightning_essence_technique",
+    "techniques/wind_essence_technique",
+    "techniques/five_element_cultivation_technique",
+    "techniques/bloodfeast_soul_refining_scripture"
+  ],
+  "sort_num": 1,
+  "display_on_front_page": false
+}

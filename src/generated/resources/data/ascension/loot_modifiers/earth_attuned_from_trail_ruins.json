@@ -1,0 +1,16 @@
+{
+  "type": "ascension:add_physique_random_purity",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:archaeology/trail_ruins_common"
+    },
+    {
+      "chance": 0.23,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "maxPurity": 12,
+  "minPurity": 5,
+  "physiqueId": "ascension:earth_attuned"
+}

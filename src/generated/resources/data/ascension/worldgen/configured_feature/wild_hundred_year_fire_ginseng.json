@@ -1,0 +1,12 @@
+{
+  "type": "ascension:wild_herb_feature",
+  "config": {
+    "crop_block": "ascension:hundred_year_fire_ginseng_crop",
+    "valid_ground": [
+      "minecraft:netherrack",
+      "minecraft:magma_block",
+      "minecraft:basalt",
+      "minecraft:blackstone"
+    ]
+  }
+}

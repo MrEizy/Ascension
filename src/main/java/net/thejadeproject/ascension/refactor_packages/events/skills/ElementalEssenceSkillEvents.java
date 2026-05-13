@@ -2,6 +2,7 @@ package net.thejadeproject.ascension.refactor_packages.events.skills;
 
 
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -17,17 +18,17 @@ import net.thejadeproject.ascension.refactor_packages.skills.custom.ModSkills;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class ElementalEssenceSkillEvents {
 
-    private static final int WOOD_SCAN_RADIUS = 4;
-    private static final int WOOD_REQUIRED_PLANTS = 8;
+    private static final float FLAME_BASE_REDUCTION = 0.30F;
+    private static final float FLAME_REDUCTION_PER_MAJOR_REALM = 0.05F;
+    private static final float FLAME_MAX_REDUCTION = 0.90F;
 
     private static final String LIGHTNING_BOOST_UNTIL =
             AscensionCraft.MOD_ID + ":lightning_essence_boost_until";
 
     private static final int BOOST_DURATION_TICKS = 20 * 60;
 
-    private ElementalEssenceSkillEvents() {
 
-    }
+    private ElementalEssenceSkillEvents() {}
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -39,7 +40,6 @@ public final class ElementalEssenceSkillEvents {
         if (player.tickCount % 20 != 0) return;
 
         IEntityData entityData = player.getData(ModAttachments.ENTITY_DATA);
-
     }
 
     @SubscribeEvent
@@ -53,10 +53,27 @@ public final class ElementalEssenceSkillEvents {
                 entityData.hasSkill(ModSkills.FLAME_TEMPERED_BODY.getId())
                         && event.getSource().is(DamageTypeTags.IS_FIRE)
         ) {
-            // TODO: Make Realm Based Reduction
-            event.setAmount(event.getAmount() * 0.5F);
+            float reduction = getFireRealmBasedDamageReduction(entityData);
+            event.setAmount(event.getAmount() * (1.0F - reduction));
         }
     }
+
+    private static float getFireRealmBasedDamageReduction(IEntityData entityData) {
+        int fireMajorRealm = getFireMajorRealm(entityData);
+
+        float reduction = FLAME_BASE_REDUCTION + fireMajorRealm * FLAME_REDUCTION_PER_MAJOR_REALM;
+
+        return Mth.clamp(reduction, 0.0F, FLAME_MAX_REDUCTION);
+    }
+
+    private static int getFireMajorRealm(IEntityData entityData) {
+        if (entityData == null) return 0;
+        if (!entityData.hasPath(ModPaths.FIRE.getId())) return 0;
+        if (entityData.getPathData(ModPaths.FIRE.getId()) == null) return 0;
+
+        return Math.max(0, entityData.getPathData(ModPaths.FIRE.getId()).getMajorRealm());
+    }
+
 
     @SubscribeEvent
     public static void onEntityStruckByLightning(EntityStruckByLightningEvent event) {

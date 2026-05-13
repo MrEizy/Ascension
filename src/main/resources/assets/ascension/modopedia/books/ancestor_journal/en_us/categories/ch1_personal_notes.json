@@ -1,0 +1,8 @@
+﻿{
+  "title": "Personal Notes",
+  "icon": { "id": "ascension:ancestor_journal" },
+  "entries": ["ch1/ch1_1_the_beginning", "ch1/ch1_2_what_i_found", "ch1/ch1_3_how_deep_it_goes", "ch1/ch1_4_whats_out_there"],
+  "sort_num": 1
+}
+
+

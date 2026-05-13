@@ -14,6 +14,8 @@ import net.thejadeproject.ascension.refactor_packages.attributes.AscensionAttrib
 import net.thejadeproject.ascension.refactor_packages.attributes.AttributeValueContainer;
 import net.thejadeproject.ascension.refactor_packages.bloodlines.IBloodline;
 import net.thejadeproject.ascension.refactor_packages.bloodlines.IBloodlineData;
+import net.thejadeproject.ascension.refactor_packages.entity_data_source.IEntityDataSource;
+import net.thejadeproject.ascension.refactor_packages.entity_data_source.IEntityDataSourceContainer;
 import net.thejadeproject.ascension.refactor_packages.forms.IEntityForm;
 import net.thejadeproject.ascension.refactor_packages.forms.IEntityFormData;
 import net.thejadeproject.ascension.refactor_packages.paths.PathBonusHandler;
@@ -26,6 +28,8 @@ import net.thejadeproject.ascension.refactor_packages.skills.IPersistentSkillDat
 import net.thejadeproject.ascension.refactor_packages.stats.custom.ModStats;
 import net.thejadeproject.ascension.refactor_packages.techniques.ITechniqueData;
 import net.thejadeproject.ascension.util.ModAttributes;
+import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.*;
 
@@ -53,6 +57,7 @@ public interface IEntityData {
 
     Collection<IEntityFormData> getFormData();
 
+    boolean hasForm(ResourceLocation form);
 
     void addEntityForm(ResourceLocation form);
     void addEntityForm(ResourceLocation form, IEntityFormData formData);
@@ -99,7 +104,7 @@ public interface IEntityData {
     //give some sort of warning beforehand?
     boolean setTechnique(ResourceLocation technique);
     boolean setTechnique(ResourceLocation technique,ITechniqueData techniqueData);
-
+    void addPathData(ResourceLocation path,PathData pathData, ResourceLocation form);
     void addPathData(ResourceLocation path,PathData pathData);
     //a shortcut for removing cultivation, anything more complex must be done through the path data and path
     void removePath(ResourceLocation path);
@@ -113,14 +118,22 @@ public interface IEntityData {
 
     //only removes from that specific form.
     void removeSkill(ResourceLocation skill,ResourceLocation form);
-
+    void removeSkill(ResourceLocation skill); // removes from all forms
     boolean hasSkill(ResourceLocation skill);
     IPersistentSkillData getSkillData(ResourceLocation skill);
 
     Set<ResourceLocation> getAllSkills();
+
     //============================= SKILL CASTING ====================================
     SkillCastHandler getSkillCastHandler();
     EntityQiContainer getQiContainer();
+    default void tick() {}
+    //============================= ENTITY DATA SOURCES ===============================
+    //TODO need to update to include form stuff as well
+    void addEntityDataSource(IEntityDataSourceContainer container);
+    IEntityDataSourceContainer getSourceContainer(ResourceLocation identifier);
+    IEntityDataSourceContainer removeEntitySource(ResourceLocation identifier);
+    Collection<IEntityDataSourceContainer> getContainersOfType(IEntityDataSource source);
     //============================= ATTRIBUTES =======================================
     AscensionAttributeHolder getAscensionAttributeHolder();
     void setAscensionAttributeHolder(LivingEntity entity,AscensionAttributeHolder holder);
@@ -130,24 +143,48 @@ public interface IEntityData {
         holder.addAttribute(Attributes.MAX_HEALTH, Component.literal("Max Health"));
         holder.getAttribute(Attributes.MAX_HEALTH).addStatScaling(ModStats.VITALITY.get(),2); //200% of vitality
 
+
         holder.addAttribute(Attributes.ATTACK_DAMAGE,Component.literal("Attack Damage"));
         holder.getAttribute(Attributes.ATTACK_DAMAGE).addStatScaling(ModStats.STRENGTH.get(),1); //100% of strength
 
         holder.addAttribute(Attributes.JUMP_STRENGTH,Component.literal("Jump Strength"));
-        holder.getAttribute(Attributes.JUMP_STRENGTH).addStatScaling(ModStats.STRENGTH.get(),0.1); //10% of strength
+        holder.getAttribute(Attributes.JUMP_STRENGTH).addStatScaling(ModStats.STRENGTH.get(),0.005); //0.5% of strength
 
         //due to how speed scales in mc these need to be low
         //this will also be further suppressed while in combat
         holder.addAttribute(Attributes.MOVEMENT_SPEED,Component.literal("Movement Speed"));
-        holder.getAttribute(Attributes.MOVEMENT_SPEED).addStatScaling(ModStats.STRENGTH.get(),0.0001); //0.01% of strength
-        holder.getAttribute(Attributes.MOVEMENT_SPEED).addStatScaling(ModStats.AGILITY.get(),0.01); //0.1% of agility
-        holder.addAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY,Component.literal("Swim Speed"));
-        holder.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).addStatScaling(ModStats.STRENGTH.get(),0.0001); //0.01% of strength
-        holder.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).addStatScaling(ModStats.AGILITY.get(),0.5); //50% of agility
+        holder.getAttribute(Attributes.MOVEMENT_SPEED).addStatScaling(ModStats.STRENGTH.get(),0.00005); //0.005% of strength
+        holder.getAttribute(Attributes.MOVEMENT_SPEED).addStatScaling(ModStats.AGILITY.get(),0.002); //0.05% of agility
+//        holder.addAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY,Component.literal("Swim Speed"));
+//        holder.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).addStatScaling(ModStats.STRENGTH.get(),0.0001); //0.01% of strength
+//        holder.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).addStatScaling(ModStats.AGILITY.get(),0.5); //50% of agility
 
         holder.addAttribute(ModAttributes.MAX_QI,Component.literal("Max Qi"));
+        holder.getAttribute(ModAttributes.MAX_QI).addStatScaling(ModStats.INTELLIGENCE.get(),10);
         holder.addAttribute(ModAttributes.QI_REGEN_RATE,Component.literal("Qi Regen Rate"));
+        holder.getAttribute(ModAttributes.QI_REGEN_RATE).addStatScaling(ModStats.INTELLIGENCE.get(),0.01);
         holder.updateAttributes(this);
+
+        holder.addAttribute(Attributes.STEP_HEIGHT, Component.literal("Step Height"));
+        holder.getAttribute(Attributes.STEP_HEIGHT).addStatScaling(ModStats.AGILITY.get(),0.05);
+
+        holder.addAttribute(Attributes.ARMOR_TOUGHNESS,Component.literal("Armor Toughness"));
+
+        holder.addAttribute(Attributes.ARMOR,Component.literal("Armor"));
+
+
+        holder.addAttribute(Attributes.ATTACK_SPEED, Component.literal("Attack Speed"));
+        holder.getAttribute(Attributes.ATTACK_SPEED).addStatScaling(ModStats.STRENGTH.get(),0.001);
+        holder.getAttribute(Attributes.ATTACK_SPEED).addStatScaling(ModStats.AGILITY.get(),0.001);
+
+        holder.addAttribute(Attributes.LUCK,Component.literal("Luck"));
+
+
+        holder.addAttribute(Attributes.MINING_EFFICIENCY,Component.literal("Mining Efficiency"));
+        holder.getAttribute(Attributes.MINING_EFFICIENCY).addStatScaling(ModStats.STRENGTH.get(),0.001);
+
+        holder.addAttribute(Attributes.SAFE_FALL_DISTANCE,Component.literal("Safe Fall Distance"));
+        holder.getAttribute(Attributes.SAFE_FALL_DISTANCE).addStatScaling(ModStats.STRENGTH.get(),0.1);
         //if(entity.getAttribute(Attributes.MOVEMENT_SPEED) != null) entity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.0);
     }
     default AttributeValueContainer getAttribute(Holder<Attribute> attributeHolder){
@@ -169,6 +206,8 @@ public interface IEntityData {
     default boolean isClientSide(){
         return FMLEnvironment.dist.isClient();
     }
+
+    default boolean isLoading() { return false; }
 
 
 

@@ -1,0 +1,21 @@
+{
+  "title": "White Jade Orchid",
+  "icon": { "id": "ascension:white_jade_orchid" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:white_jade_orchid" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "White Jade Orchid", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Grows only on Jade Ore. The petals carry a pale metallic quality. A brief cleansing effect raw. In the cauldron it is the primary cleansing agent — present in nearly every purification formula I have found. Do not crush before use." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "How to Obtain", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:text", "x": 0, "y": 20, "text": "Found wild in Jungle biomes and Lush Caves. Also turns up in abandoned mineshafts and strongholds.\n\nCan be grown as a crop." }
+      ]
+    }
+  ]
+}

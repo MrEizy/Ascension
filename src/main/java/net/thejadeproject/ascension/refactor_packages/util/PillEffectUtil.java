@@ -2,7 +2,7 @@ package net.thejadeproject.ascension.refactor_packages.util;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.thejadeproject.ascension.items.data_components.ModDataComponents;
+import net.thejadeproject.ascension.common.items.data_components.ModDataComponents;
 import net.thejadeproject.ascension.refactor_packages.alchemy.IPillEffect;
 import net.thejadeproject.ascension.refactor_packages.registries.AscensionRegistries;
 

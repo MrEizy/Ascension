@@ -1,0 +1,8 @@
+{
+  "title": "Personal Notes",
+  "icon": { "id": "ascension:physique_essence" },
+  "landing_text": "What the diary could not tell me — I have gathered myself.\n\nThese are my own observations. Things I have witnessed, or heard from those I trust enough to believe.",
+  "entries": ["bloodlines/bloodlines_personal_notes"],
+  "sort_num": 0,
+  "display_on_front_page": false
+}

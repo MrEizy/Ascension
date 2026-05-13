@@ -1,0 +1,22 @@
+{
+  "title": "Ironwood",
+  "icon": { "id": "ascension:ironwood_sapling" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:ironwood_sapling" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Ironwood", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "A dense, wide-canopied tree with iron-grey bark found in Stony Peaks biomes.\n\nIronwood Sprouts grow on the stone around its roots and can be harvested as an herb." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:header", "x": 0, "y": 0, "text": "Ironwood Tree", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 12 },
+        { "type": "modopedia:large_frame", "x": -2, "y": 22 },
+        { "type": "modopedia:multiblock", "x": 4, "y": 28, "width": 88, "height": 88, "scale": 1.4, "previewable": false, "multiblock_id": "ascension:ironwood_tree" }
+      ]
+    }
+  ]
+}

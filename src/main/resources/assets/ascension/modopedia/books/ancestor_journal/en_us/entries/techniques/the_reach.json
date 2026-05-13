@@ -1,0 +1,19 @@
+{
+  "title": "The Reach",
+  "icon": { "id": "ascension:iron_spear" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:cycling", "items": [{ "id": "ascension:wooden_spear" }, { "id": "ascension:stone_spear" }, { "id": "ascension:iron_spear" }, { "id": "ascension:diamond_spear" }, { "id": "ascension:netherite_spear" }] } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Spears", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "I began carrying a spear after a close encounter with something faster than I was ready for. An extra meter would have prevented the scar on my left shoulder.\nThe Spear sets engagement distance on your terms." }
+      ]
+    },
+    {
+      "components": [
+        { "type": "modopedia:text", "x": 0, "y": 0, "text": "Qi flows through the length cleanly, arriving at the point with more force than the arm alone.\nRange is a resource. Distance is a philosophy. Do not confuse the two." }
+      ]
+    }
+  ]
+}

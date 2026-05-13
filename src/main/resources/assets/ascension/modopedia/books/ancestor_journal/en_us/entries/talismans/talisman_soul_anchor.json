@@ -1,0 +1,19 @@
+{
+  "title": "Soul Anchor Talisman",
+  "icon": { "id": "ascension:soul_anchor_talisman" },
+  "pages": [
+    {
+      "components": [
+        { "type": "modopedia:item_gallery", "x": 42, "y": 2, "display": { "type": "modopedia:simple", "item": { "id": "ascension:soul_anchor_talisman" } } },
+        { "type": "modopedia:header", "x": 0, "y": 22, "text": "Soul Anchor Talisman", "centered": true },
+        { "type": "modopedia:separator", "x": 0, "y": 34 },
+        { "type": "modopedia:text", "x": 0, "y": 42, "text": "Shift to mark a location. Your drops go there when you die instead of scattering where you fell. Burns out after use." }
+      ]
+    },
+    {
+      "components": [
+        { "template": "modopedia:recipe/crafting", "recipe": "ascension:shaped/soul_anchor_talisman" }
+      ]
+    }
+  ]
+}

@@ -10,7 +10,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.thejadeproject.ascension.data_attachments.ModAttachments;
 import net.thejadeproject.ascension.refactor_packages.entity_data.IEntityData;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class AscensionAttributeHolder {
 
@@ -40,9 +42,11 @@ public class AscensionAttributeHolder {
         for(AttributeValueContainer container:attributes.values()) container.updateValue(entityData);
 
     }
-
+    public Collection<AttributeValueContainer> getContainers(){
+        return List.copyOf(attributes.values());
+    }
     public void log(){
-        System.out.println("Ascension Attributes: ");
+//        //System.out.println("Ascension Attributes: ");
         for(AttributeValueContainer instance : attributes.values()){
             instance.log();
         }

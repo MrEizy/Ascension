@@ -1,0 +1,9 @@
+{
+  "title": "Scroll of Myriad Bloodlines",
+  "icon": { "id": "ascension:physique_essence" },
+  "landing_text": "Bloodlines gathered from records both confirmed and questionable — organized by the grade of power they carry, from those barely perceptible in the blood to those that have shaped the course of entire ages. A bloodline cannot be chosen, but understanding what one carries — or what one might encounter — is knowledge worth having. What is written here is what I have been able to verify. There is more I have not.",
+  "children": ["bloodlines_personal_notes"],
+  "entries": [],
+  "sort_num": 3,
+  "display_on_front_page": false
+}
