@@ -1,0 +1,6 @@
+think about how I want to handle data pack stuff
+
+
+we will basically have a Type for each Data Packable registry
+
+this Type tells us how to map a json file -> a registry object
