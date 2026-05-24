@@ -11,4 +11,7 @@ public interface  Physique {
 
 
     PhysiqueType getType();
+
+
+    PhysiqueData newData();
 }

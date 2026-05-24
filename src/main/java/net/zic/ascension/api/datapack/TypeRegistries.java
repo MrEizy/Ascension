@@ -4,6 +4,7 @@ import net.minecraft.core.Registry;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.datapack.data_source.DataSourceType;
 import net.zic.ascension.api.datapack.path.PathType;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.datapack.skill.SkillType;
@@ -29,6 +30,8 @@ public class TypeRegistries {
     public static final Registry<TechniqueType> TECHNIQUE_TYPE_REGISTRY = RegistryHelper.registry("technique_types");
 
     public static final Registry<PathType> PATH_TYPE_REGISTRY = RegistryHelper.registry("path_types");
+
+    public static final Registry<DataSourceType> DATA_SOURCE_TYPE_REGISTRY = RegistryHelper.registry("data_source_types");
 
     public static final Registry<TribulationType> TRIBULATION_TYPE_REGISTRY = RegistryHelper.registry("tribulation_type_registry");
 

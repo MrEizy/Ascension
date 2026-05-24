@@ -8,4 +8,6 @@ public interface Bloodline {
 
 
     BloodlineType getType();
+
+    BloodlineData newData();
 }

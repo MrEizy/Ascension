@@ -4,6 +4,7 @@ import net.zic.ascension.api.datapack.path.PathType;
 
 public interface Path {
 
-
     PathType getType();
+
+    PathData newData();
 }

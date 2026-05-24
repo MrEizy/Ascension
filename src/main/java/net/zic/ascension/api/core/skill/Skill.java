@@ -7,4 +7,6 @@ public interface Skill {
 
 
     SkillType getType();
+
+    SkillData newData();
 }
