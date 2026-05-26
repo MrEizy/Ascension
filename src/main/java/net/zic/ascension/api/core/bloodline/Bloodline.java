@@ -2,6 +2,7 @@ package net.zic.ascension.api.core.bloodline;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.OriginSource;
 import net.zic.ascension.api.core.path.Path;
@@ -35,6 +36,12 @@ public interface Bloodline {
      * @return a collection of paths this bloodline wants to try and remove
      */
     Collection<Path> onRemoved(OriginSource source, BloodlineData data);
+
+    //called when an entity that owns an origin detects the bloodline was changed
+    void applyToEntity(LivingEntity entity,BloodlineData data);
+
+    //called when either an entity is detached from an origin or the bloodline is removed from the origin
+    void removeFromEntity(LivingEntity entity,BloodlineData data);
 
 
     BloodlineData newData();

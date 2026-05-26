@@ -1,7 +1,9 @@
 package net.zic.ascension.api.core.path;
 
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.core.OriginSource;
 import net.zic.ascension.api.core.technique.TechniqueData;
 
@@ -64,6 +66,7 @@ public interface PathData {
     void simulateProgression(OriginSource source);
     //──Save Data────────────────────────────────────────────────────────
 
+    void write(ValueOutput output);
     //──Network────────────────────────────────────────────────────────
-
+    void encode(RegistryFriendlyByteBuf buf);
 }

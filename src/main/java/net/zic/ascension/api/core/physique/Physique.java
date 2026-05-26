@@ -8,6 +8,7 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.OriginSource;
+import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.datapack.TypeRegistries;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
@@ -40,15 +41,12 @@ public interface  Physique {
     Collection<Path> onRemoved(OriginSource source, PhysiqueData data);
 
     //called when an entity that owns an origin detects the physique was changed
-    void applyToEntity(LivingEntity entity);
+    void applyToEntity(LivingEntity entity,PhysiqueData data);
 
     //called when either an entity is detached from an origin or the physique is removed from the origin
-    void removeFromEntity(LivingEntity entity);
-
-
+    void removeFromEntity(LivingEntity entity,PhysiqueData data);
 
     PhysiqueData newData();
     PhysiqueData loadData(ValueInput input);
     PhysiqueData loadData(RegistryFriendlyByteBuf buf);
-
 }
