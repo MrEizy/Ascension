@@ -1,8 +1,0 @@
-{
-  "remove": [
-    "#ascension:need_for_spiritual_stone_tool"
-  ],
-  "values": [
-    "#minecraft:incorrect_for_iron_tool"
-  ]
-}

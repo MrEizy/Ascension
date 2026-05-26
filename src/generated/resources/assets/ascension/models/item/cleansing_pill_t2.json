@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "ascension:item/pills/cleansing_pill_t2"
-  }
-}

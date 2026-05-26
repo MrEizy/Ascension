@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "ascension:block/magenta_marble_bricks",
-    "side": "ascension:block/magenta_marble_bricks",
-    "top": "ascension:block/magenta_marble_bricks"
-  }
-}

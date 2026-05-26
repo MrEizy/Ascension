@@ -10,6 +10,7 @@ import net.zic.ascension.api.core.data_source.DataSourceInstance;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.event.EventReason;
 import net.zic.zenithlib.stats.StatSheet;
 
 import java.util.Collection;
@@ -57,6 +58,9 @@ public class OriginSource {
     }
     //Sets the current physique, cannot be null
     public boolean setPhysique(Identifier physique,PhysiqueData physiqueData){
+        return setPhysique(physique,physiqueData,null);
+    }
+    public boolean setPhysique(Identifier physique, PhysiqueData physiqueData, EventReason reason){
         if(physique == null) return false;
         if(physique.equals(this.physique)) return false;
 
@@ -74,20 +78,34 @@ public class OriginSource {
 
     //──Bloodline────────────────────────────────────────────────────────
 
+    //TODO add merge logic here?
     //add a fresh instance of a bloodline
     public boolean addBloodline(Identifier bloodline,RegistryAccess registryAccess){
         if(bloodline == null)return false;
-
+        if(hasBloodline(bloodline)) return false;
         return addBloodline(bloodline,CoreRegistries.BLOODLINE_REGISTRY.get(registryAccess).getValue(bloodline).newData());
     }
     public boolean addBloodline(Identifier bloodline,BloodlineData data){
+        return addBloodline(bloodline,data,null);
+    }
+    public boolean addBloodline(Identifier bloodline,BloodlineData data,EventReason reason){
         if(bloodline == null) return false;
         this.bloodlines.put(bloodline,data);
         return false;
     }
-    public void removeBloodline(Identifier bloodline){
-        bloodlines.remove(bloodline);
+
+    public boolean removeBloodline(Identifier bloodline){
+        return removeBloodline(bloodline,null);
     }
+    public boolean removeBloodline(Identifier bloodline,EventReason reason){
+
+        return !(bloodlines.remove(bloodline) == null);
+    }
+
+    public boolean hasBloodline(Identifier bloodline){
+        return bloodlines.containsKey(bloodline);
+    }
+
     public Collection<Identifier> getBloodlines(){
         return bloodlines.keySet();
     }

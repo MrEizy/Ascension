@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "ascension:block/herbs/hundred_year_fire_ginseng_crop"
-  }
-}

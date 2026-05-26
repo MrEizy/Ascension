@@ -43,14 +43,14 @@ public abstract class PhysiqueChangedEvent extends PhysiqueEvent{
     public static class Pre extends PhysiqueChangedEvent implements ICancellableEvent {
 
 
-        protected Pre(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source, EventReason reason) {
+        public Pre(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source, EventReason reason) {
             super(physique, data, newPhysique, newPhysiqueData, source, reason);
         }
     }
     public static class Post extends PhysiqueChangedEvent {
 
 
-        protected Post(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source, EventReason reason) {
+        public Post(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source, EventReason reason) {
             super(physique, data, newPhysique, newPhysiqueData, source, reason);
         }
     }

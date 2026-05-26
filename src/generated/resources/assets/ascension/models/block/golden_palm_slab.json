@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "ascension:block/golden_palm_planks",
-    "side": "ascension:block/golden_palm_planks",
-    "top": "ascension:block/golden_palm_planks"
-  }
-}

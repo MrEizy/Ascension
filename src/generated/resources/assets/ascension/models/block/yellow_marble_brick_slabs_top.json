@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "ascension:block/yellow_marble_bricks",
-    "side": "ascension:block/yellow_marble_bricks",
-    "top": "ascension:block/yellow_marble_bricks"
-  }
-}

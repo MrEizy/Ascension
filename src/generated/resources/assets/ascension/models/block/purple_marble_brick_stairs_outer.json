@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "ascension:block/purple_marble_bricks",
-    "side": "ascension:block/purple_marble_bricks",
-    "top": "ascension:block/purple_marble_bricks"
-  }
-}

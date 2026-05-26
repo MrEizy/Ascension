@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "ascension:block/purple_marble_tiles",
-    "side": "ascension:block/purple_marble_tiles",
-    "top": "ascension:block/purple_marble_tiles"
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "type": "neoforge:add_features",
-  "biomes": "#minecraft:is_overworld",
-  "features": [
-    "ascension:ore_marble_lower",
-    "ascension:ore_marble_upper"
-  ],
-  "step": "underground_ores"
-}
