@@ -6,6 +6,7 @@ import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.event.EventReason;
 import net.zic.ascension.api.event.bloodline.BloodlineAddedEvent;
+import net.zic.ascension.api.event.bloodline.BloodlineRemovedEvent;
 import net.zic.ascension.api.event.physique.PhysiqueChangedEvent;
 
 /**
@@ -50,6 +51,24 @@ public class ServerOriginSource extends OriginSource {
 
         return true;
 
+    }
 
+    @Override
+    public boolean removeBloodline(Identifier bloodline, EventReason reason) {
+        if(bloodline == null) return false;
+        if(!hasBloodline(bloodline)) return false;
+
+        BloodlineData data = getBloodlineData(bloodline);
+        BloodlineRemovedEvent.Pre pre = new BloodlineRemovedEvent.Pre(bloodline,data,this,reason);
+        NeoForge.EVENT_BUS.post(pre);
+        if(pre.isCanceled()) return false;
+        boolean result =  super.removeBloodline(bloodline, reason);
+
+        if(!result) return false;
+
+        BloodlineRemovedEvent.Post post= new BloodlineRemovedEvent.Post(bloodline,data,this,reason);
+        NeoForge.EVENT_BUS.post(post);
+
+        return true;
     }
 }

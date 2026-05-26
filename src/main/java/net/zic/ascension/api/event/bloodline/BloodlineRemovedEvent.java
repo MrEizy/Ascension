@@ -14,14 +14,14 @@ public abstract class BloodlineRemovedEvent extends BloodlineAddedEvent{
     public static class Pre extends BloodlineRemovedEvent implements ICancellableEvent {
 
 
-        protected Pre(Identifier bloodline, BloodlineData data, OriginSource source, EventReason reason) {
+        public Pre(Identifier bloodline, BloodlineData data, OriginSource source, EventReason reason) {
             super(bloodline, data, source, reason);
         }
     }
     public static class Post extends BloodlineRemovedEvent{
 
 
-        protected Post(Identifier bloodline, BloodlineData data, OriginSource source, EventReason reason) {
+        public Post(Identifier bloodline, BloodlineData data, OriginSource source, EventReason reason) {
             super(bloodline, data, source, reason);
         }
     }
