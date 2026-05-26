@@ -32,3 +32,11 @@ docs/superpowers
 
 # no markdown files
 *.md
+
+
+### Minecraft Modding ###
+run/
+!**/src/**/run/
+**/src/generated/**/.cache/
+repo/
+!**/src/**/repo/
