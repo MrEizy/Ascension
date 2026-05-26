@@ -57,6 +57,7 @@ public interface PathData {
     void onMinorRealmDown(OriginSource source);
 
     //takes in a potential realm change, and breaks it down into individual steps
+    //TODO write default implementation
     void handlerRealmChange(OriginSource source,int newMajorRealm,int newMinorRealm);
 
     //caches the current state then simulates applying it

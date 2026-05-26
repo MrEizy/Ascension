@@ -22,6 +22,8 @@ import java.util.HashMap;
  * holds no logic on HOW its content can be manipulated (other than basic null checks)
  *<br>
  * that is the job of the source wrapper
+ *<br>
+ * does not trigger events, that will only be done by ServerOriginSource
  *
  * TODO for each trigger onAdded
  */
@@ -45,18 +47,23 @@ public class OriginSource {
 
     //──Physique────────────────────────────────────────────────────────
 
-    //add a fresh instance of a physique
-    public void setPhysique(Identifier physique, RegistryAccess registryAccess){
+    //add a fresh instance of a physique, cannot be null
+    public boolean setPhysique(Identifier physique, RegistryAccess registryAccess){
         if(physique == null){
-            setPhysique(null,(PhysiqueData) null);
-        }else{
-            setPhysique(physique,CoreRegistries.PHYSIQUE_REGISTRY.get(registryAccess).getValue(physique).newData());
+            return false;
         }
+        return setPhysique(physique,CoreRegistries.PHYSIQUE_REGISTRY.get(registryAccess).getValue(physique).newData());
+
     }
-    public void setPhysique(Identifier physique,PhysiqueData physiqueData){
-        if(this.physique != null && !this.physique.equals(physique) || physique == null) physiqueData = null;
+    //Sets the current physique, cannot be null
+    public boolean setPhysique(Identifier physique,PhysiqueData physiqueData){
+        if(physique == null) return false;
+        if(physique.equals(this.physique)) return false;
+
         this.physique = physique;
         this.physiqueData = physiqueData;
+
+        return true;
     }
     public Identifier getPhysique(){
         return physique;
@@ -68,14 +75,15 @@ public class OriginSource {
     //──Bloodline────────────────────────────────────────────────────────
 
     //add a fresh instance of a bloodline
-    public void addBloodline(Identifier bloodline,RegistryAccess registryAccess){
-        if(bloodline == null)return;
+    public boolean addBloodline(Identifier bloodline,RegistryAccess registryAccess){
+        if(bloodline == null)return false;
 
-        addBloodline(bloodline,CoreRegistries.BLOODLINE_REGISTRY.get(registryAccess).getValue(bloodline).newData());
+        return addBloodline(bloodline,CoreRegistries.BLOODLINE_REGISTRY.get(registryAccess).getValue(bloodline).newData());
     }
-    public void addBloodline(Identifier bloodline,BloodlineData data){
-        if(bloodline == null) return;
+    public boolean addBloodline(Identifier bloodline,BloodlineData data){
+        if(bloodline == null) return false;
         this.bloodlines.put(bloodline,data);
+        return false;
     }
     public void removeBloodline(Identifier bloodline){
         bloodlines.remove(bloodline);
@@ -89,19 +97,19 @@ public class OriginSource {
 
     //──Path────────────────────────────────────────────────────────
 
-    public void addPath(Identifier path, RegistryAccess registryAccess){
-        if(path == null) return;
-        addPath(path,CoreRegistries.PATH_REGISTRY.get(registryAccess).getValue(path).newData());
+    public boolean addPath(Identifier path, RegistryAccess registryAccess){
+        if(path == null) return false;
+        return addPath(path,CoreRegistries.PATH_REGISTRY.get(registryAccess).getValue(path).newData());
     }
     //used when adding an existing path to a source
-    public void addPath(Identifier path,PathData existingData){
-        if(path == null || existingData == null) return;
-        if(paths.containsKey(path)) return;
+    public boolean addPath(Identifier path,PathData existingData){
+        if(path == null || existingData == null) return false;
+        if(paths.containsKey(path)) return false;
 
         //TODO simulate realm change if existing data realms are greater than 0,0 and technique != null
 
         paths.put(path,existingData);
-
+        return true;
     }
     public PathData removePath(Identifier path){
         return paths.remove(path);
@@ -115,14 +123,15 @@ public class OriginSource {
 
     //──Skill────────────────────────────────────────────────────────
 
-    public void addSkill(Identifier skill,RegistryAccess registryAccess){
-        if(skill == null) return;
-        addSkill(skill,CoreRegistries.SKILL_REGISTRY.get(registryAccess).getValue(skill).newData());
+    public boolean addSkill(Identifier skill,RegistryAccess registryAccess){
+        if(skill == null) return false;
+        return addSkill(skill,CoreRegistries.SKILL_REGISTRY.get(registryAccess).getValue(skill).newData());
 
     }
-    public void addSkill(Identifier skill,SkillData data){
-        if(skill == null) return;
+    public boolean addSkill(Identifier skill,SkillData data){
+        if(skill == null) return false;
         skills.put(skill,data);
+        return true;
     }
     public boolean hasSkill(Identifier skill){
         return skills.containsKey(skill);
@@ -133,12 +142,14 @@ public class OriginSource {
 
     //──Data Source────────────────────────────────────────────────────────
 
-    public void addDataSource(Identifier source,RegistryAccess registryAccess){
-        if(source == null) return;
-        addDataSource(source,CoreRegistries.DATA_SOURCE_REGISTRY.get(registryAccess).getValue(source).newInstance());
+    public boolean addDataSource(Identifier source,RegistryAccess registryAccess){
+        if(source == null) return false;
+        return addDataSource(source,CoreRegistries.DATA_SOURCE_REGISTRY.get(registryAccess).getValue(source).newInstance());
     }
-    public void addDataSource(Identifier source,DataSourceInstance instance){
+    public boolean addDataSource(Identifier source,DataSourceInstance instance){
+        if(source == null) return false;
         dataSources.put(source,instance);
+        return true;
     }
 
     public DataSourceInstance getDataSourceInstance(Identifier source){
