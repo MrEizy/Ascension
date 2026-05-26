@@ -53,14 +53,14 @@ public class OriginSource {
         if(physique == null){
             return false;
         }
-        return setPhysique(physique,CoreRegistries.PHYSIQUE_REGISTRY.get(registryAccess).getValue(physique).newData());
+        return setPhysique(physique,CoreRegistries.PHYSIQUE_REGISTRY.get(registryAccess).getValue(physique).newData(),registryAccess);
 
     }
     //Sets the current physique, cannot be null
-    public boolean setPhysique(Identifier physique,PhysiqueData physiqueData){
-        return setPhysique(physique,physiqueData,null);
+    public boolean setPhysique(Identifier physique,PhysiqueData physiqueData,RegistryAccess registryAccess){
+        return setPhysique(physique,physiqueData,registryAccess,null);
     }
-    public boolean setPhysique(Identifier physique, PhysiqueData physiqueData, EventReason reason){
+    public boolean setPhysique(Identifier physique, PhysiqueData physiqueData,RegistryAccess registryAccess, EventReason reason){
         if(physique == null) return false;
         if(physique.equals(this.physique)) return false;
 
@@ -83,21 +83,21 @@ public class OriginSource {
     public boolean addBloodline(Identifier bloodline,RegistryAccess registryAccess){
         if(bloodline == null)return false;
         if(hasBloodline(bloodline)) return false;
-        return addBloodline(bloodline,CoreRegistries.BLOODLINE_REGISTRY.get(registryAccess).getValue(bloodline).newData());
+        return addBloodline(bloodline,CoreRegistries.BLOODLINE_REGISTRY.get(registryAccess).getValue(bloodline).newData(),registryAccess);
     }
-    public boolean addBloodline(Identifier bloodline,BloodlineData data){
-        return addBloodline(bloodline,data,null);
+    public boolean addBloodline(Identifier bloodline,BloodlineData data,RegistryAccess access){
+        return addBloodline(bloodline,data, access,null);
     }
-    public boolean addBloodline(Identifier bloodline,BloodlineData data,EventReason reason){
+    public boolean addBloodline(Identifier bloodline,BloodlineData data,RegistryAccess access,EventReason reason){
         if(bloodline == null) return false;
         this.bloodlines.put(bloodline,data);
         return false;
     }
 
-    public boolean removeBloodline(Identifier bloodline){
-        return removeBloodline(bloodline,null);
+    public boolean removeBloodline(Identifier bloodline,RegistryAccess access){
+        return removeBloodline(bloodline,access,null);
     }
-    public boolean removeBloodline(Identifier bloodline,EventReason reason){
+    public boolean removeBloodline(Identifier bloodline,RegistryAccess access,EventReason reason){
 
         return !(bloodlines.remove(bloodline) == null);
     }
@@ -117,10 +117,13 @@ public class OriginSource {
 
     public boolean addPath(Identifier path, RegistryAccess registryAccess){
         if(path == null) return false;
-        return addPath(path,CoreRegistries.PATH_REGISTRY.get(registryAccess).getValue(path).newData());
+        return addPath(path,CoreRegistries.PATH_REGISTRY.get(registryAccess).getValue(path).newData(),registryAccess);
     }
     //used when adding an existing path to a source
-    public boolean addPath(Identifier path,PathData existingData){
+    public boolean addPath(Identifier path,PathData existingData,RegistryAccess registryAccess){
+        return addPath(path,existingData,registryAccess,null);
+    }
+    public boolean addPath(Identifier path,PathData existingData,RegistryAccess registryAccess,EventReason reason){
         if(path == null || existingData == null) return false;
         if(paths.containsKey(path)) return false;
 
@@ -129,9 +132,16 @@ public class OriginSource {
         paths.put(path,existingData);
         return true;
     }
-    public PathData removePath(Identifier path){
-        return paths.remove(path);
+
+
+    public boolean removePath(Identifier path,RegistryAccess access){return removePath(path,access,null);}
+    public boolean removePath(Identifier path,RegistryAccess access,EventReason reason){
+        if(!paths.containsKey(path)) return false;
+
+        paths.remove(path);
+        return true;
     }
+
     public boolean hasPath(Identifier path){
         return paths.containsKey(path);
     }

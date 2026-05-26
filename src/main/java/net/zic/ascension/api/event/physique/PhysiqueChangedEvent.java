@@ -17,14 +17,21 @@ import net.zic.ascension.api.event.EventReason;
  *
  */
 public abstract class PhysiqueChangedEvent extends PhysiqueEvent{
-    private final Identifier newPhysique;
-    private final PhysiqueData newPhysiqueData;
+    private Identifier newPhysique;
+    private PhysiqueData newPhysiqueData;
     private final EventReason reason;
     protected PhysiqueChangedEvent(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source, EventReason reason) {
         super(physique, data, source);
         this.newPhysique = newPhysique;
         this.newPhysiqueData = newPhysiqueData;
         this.reason = reason;
+    }
+
+    protected void setNewPhysique(Identifier newPhysique){
+        this.newPhysique = newPhysique;
+    }
+    protected void setNewPhysiqueData(PhysiqueData physiqueData){
+        this.newPhysiqueData = physiqueData;
     }
 
     public Identifier getNewPhysiqueIdentifier(){
@@ -45,6 +52,16 @@ public abstract class PhysiqueChangedEvent extends PhysiqueEvent{
 
         public Pre(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source, EventReason reason) {
             super(physique, data, newPhysique, newPhysiqueData, source, reason);
+        }
+        @Override
+        public void setNewPhysique(Identifier physique){
+            super.setNewPhysique(physique);
+            super.setNewPhysiqueData(null);
+        }
+
+        @Override
+        public void setNewPhysiqueData(PhysiqueData physiqueData) {
+            super.setNewPhysiqueData(physiqueData);
         }
     }
     public static class Post extends PhysiqueChangedEvent {

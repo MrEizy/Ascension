@@ -1,7 +1,9 @@
 package net.zic.ascension.api.core.path;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.core.OriginSource;
@@ -16,8 +18,8 @@ public interface PathData {
     int getMajorRealm();
     int getMinorRealm();
 
-    int getMaxMinorRealm(int majorRealm);
-    int getMaxMajorRealm();
+    int getMaxMinorRealm(int majorRealm, RegistryAccess access);
+    int getMaxMajorRealm(RegistryAccess access);
 
     double getProgress();
 
@@ -42,28 +44,33 @@ public interface PathData {
     Collection<Integer> getCultivatedRealms(Identifier technique);
 
     //──Setters────────────────────────────────────────────────────────
-
     void setMajorRealm(int majorRealm);
     void setMinorRealm(int minorRealm);
 
     void setProgress(double progress);
 
-    void setCurrentTechnique(Identifier technique);
-
-    void setTechniqueData(Identifier technique,TechniqueData data);
+    void setCurrentTechnique(Identifier technique,OriginSource source, RegistryAccess access);
+    void setCurrentTechnique(Identifier technique,TechniqueData data,OriginSource source,RegistryAccess access);
 
     //──Logic────────────────────────────────────────────────────────
-    void onMajorRealmUp(OriginSource source);
-    void onMajorRealmDown(OriginSource source);
-    void onMinorRealmUp(OriginSource source);
-    void onMinorRealmDown(OriginSource source);
+    void onMajorRealmUp(OriginSource source, RegistryAccess access);
+    void onMajorRealmDown(OriginSource source, RegistryAccess access);
+    void onMinorRealmUp(OriginSource source, RegistryAccess access);
+    void onMinorRealmDown(OriginSource source, RegistryAccess access);
 
     //takes in a potential realm change, and breaks it down into individual steps
     //TODO write default implementation
-    void handlerRealmChange(OriginSource source,int newMajorRealm,int newMinorRealm);
+    void handlerRealmChange(OriginSource source,int newMajorRealm,int newMinorRealm, RegistryAccess access);
 
     //caches the current state then simulates applying it
-    void simulateProgression(OriginSource source);
+    void simulateProgression(OriginSource source, RegistryAccess access);
+
+    //removes it from a specific source but should still save its data (mainly used when transferring path data)
+    void removeFromSource(OriginSource source,RegistryAccess access);
+
+    //for implementations like foundation that might have non exposed behaviour
+    void applyToEntity(LivingEntity entity);
+    void removeFromEntity(LivingEntity entity);
     //──Save Data────────────────────────────────────────────────────────
 
     void write(ValueOutput output);

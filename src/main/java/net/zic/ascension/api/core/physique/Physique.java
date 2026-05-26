@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.OriginSource;
@@ -30,7 +31,7 @@ public interface  Physique {
      * @param data the data for this physique
      * @return a collection of paths this physique wants to try and add
      */
-    Collection<Path> onAdded(OriginSource source, PhysiqueData data);
+    Collection<Identifier> onAdded(OriginSource source, PhysiqueData data);
 
     /**
      * Called when the physique is removed from a source
@@ -38,7 +39,7 @@ public interface  Physique {
      * @param data the data of this physique
      * @return a collection of paths this physique wants to try and remove
      */
-    Collection<Path> onRemoved(OriginSource source, PhysiqueData data);
+    Collection<Identifier> onRemoved(OriginSource source, PhysiqueData data);
 
     //called when an entity that owns an origin detects the physique was changed
     void applyToEntity(LivingEntity entity,PhysiqueData data);
