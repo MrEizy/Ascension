@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
+import net.zic.ascension.api.core.path.AffinityHolder;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.SkillData;
@@ -44,7 +45,7 @@ public class OriginSource {
     private final HashMap<Identifier, DataSourceInstance> dataSources = new HashMap<>();
 
     private final StatSheet statSheet = new StatSheet();
-
+    private final AffinityHolder affinityHolder = new AffinityHolder();
 
     //──Physique────────────────────────────────────────────────────────
 
@@ -197,4 +198,5 @@ public class OriginSource {
     StatSheet getStatSheet(){
         return statSheet;
     }
+    AffinityHolder getAffinityHolder(){return affinityHolder;}
 }

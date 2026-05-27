@@ -1,11 +1,9 @@
-package net.zic.ascension.api.datapack.technique.realm_change;
+package net.zic.ascension.api.core.technique.realm_change;
 
 import net.zic.ascension.api.core.OriginSource;
-import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
-import net.zic.ascension.api.datapack.technique.realm_change.type.ListenerActionType;
-import net.zic.ascension.api.datapack.technique.realm_change.type.ListenerConditionType;
+import net.zic.ascension.api.datapack.technique.realm_change.ListenerConditionType;
 
 /**
  * this is ran to determine if the Listener should be run

@@ -1,10 +1,9 @@
-package net.zic.ascension.api.datapack.technique.realm_change.type;
+package net.zic.ascension.api.datapack.technique.realm_change;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.zic.ascension.api.datapack.TypeRegistries;
-import net.zic.ascension.api.datapack.technique.realm_change.ListenerAction;
-import net.zic.ascension.api.datapack.technique.realm_change.ListenerCondition;
+import net.zic.ascension.api.core.technique.realm_change.ListenerCondition;
 
 public abstract class ListenerConditionType {
     public abstract MapCodec<? extends ListenerCondition> codec();

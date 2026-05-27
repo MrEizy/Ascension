@@ -1,11 +1,9 @@
-package net.zic.ascension.api.datapack.technique.realm_change.type;
+package net.zic.ascension.api.datapack.technique.realm_change;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.datapack.TypeRegistries;
-import net.zic.ascension.api.datapack.physique.PhysiqueType;
-import net.zic.ascension.api.datapack.technique.realm_change.ListenerAction;
+import net.zic.ascension.api.core.technique.realm_change.ListenerAction;
 
 public abstract class ListenerActionType {
 

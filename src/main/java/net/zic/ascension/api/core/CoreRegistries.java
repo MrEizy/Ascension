@@ -1,53 +1,71 @@
 package net.zic.ascension.api.core;
 
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.data_source.DataSource;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.technique.Technique;
+import net.zic.ascension.api.core.technique.realm_change.ListenerAction;
+import net.zic.ascension.api.core.technique.realm_change.ListenerCondition;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
 import net.zic.ascension.api.datapack.data_source.DataSourceType;
 import net.zic.ascension.api.datapack.path.PathType;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
+import net.zic.ascension.api.datapack.technique.realm_change.ListenerActionType;
+import net.zic.ascension.api.datapack.technique.realm_change.ListenerConditionType;
 import net.zic.zenithlib.ZenithLib;
 import net.zic.zenithlib.registry.RegistryHelper;
-
+@EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class CoreRegistries {
 
     public static final RegistryHelper.DataPackRegistry<Physique> PHYSIQUE_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID,
             "physiques",
-            ZenithLib.MOD_ID,
             ()->PhysiqueType.PHYSIQUE_CODEC
     );
     public static final RegistryHelper.DataPackRegistry<Bloodline> BLOODLINE_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID,
             "bloodlines",
-            ZenithLib.MOD_ID,
             ()-> BloodlineType.BLOODLINE_CODEC
     );
     public static final RegistryHelper.DataPackRegistry<Technique> TECHNIQUE_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID,
             "technique",
-            ZenithLib.MOD_ID,
             ()-> TechniqueType.TECHNIQUE_CODEC
     );
     public static final RegistryHelper.DataPackRegistry<Path> PATH_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID,
             "paths",
-            ZenithLib.MOD_ID,
             ()-> PathType.PATH_CODEC
     );
     public static final RegistryHelper.DataPackRegistry<Skill> SKILL_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID,
             "skills",
-            ZenithLib.MOD_ID,
             ()-> SkillType.SKILL_CODEC
     );
     public static final RegistryHelper.DataPackRegistry<DataSource> DATA_SOURCE_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID,
             "data_sources",
-            ZenithLib.MOD_ID,
             ()-> DataSourceType.DATA_SOURCE_CODEC
+    );
+
+    public static final RegistryHelper.DataPackRegistry<ListenerCondition> LISTENER_CONDITION_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID,
+            "listener_condition",
+            ()-> ListenerConditionType.LISTENER_ACTION_CODEC
+    );
+
+    public static final RegistryHelper.DataPackRegistry<ListenerAction> LISTENER_ACTION_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID,
+            "listener_actions",
+            ()-> ListenerActionType.LISTENER_ACTION_CODEC
     );
 
     //TODO think about if tribulations need their own registry or not. aka do we want them to make them in place
@@ -56,11 +74,46 @@ public class CoreRegistries {
 
     @SubscribeEvent
     public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-        ZenithLib.LOGGER.info("creating core registries");
+        AscensionCraft.LOGGER.info("creating core registries");
         event.dataPackRegistry(
                 PHYSIQUE_REGISTRY.key(),
                 PHYSIQUE_REGISTRY.codec().get(),
                 PHYSIQUE_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(
+                TECHNIQUE_REGISTRY.key(),
+                TECHNIQUE_REGISTRY.codec().get(),
+                TECHNIQUE_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(
+                BLOODLINE_REGISTRY.key(),
+                BLOODLINE_REGISTRY.codec().get(),
+                BLOODLINE_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(
+                PATH_REGISTRY.key(),
+                PATH_REGISTRY.codec().get(),
+                PATH_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(
+                SKILL_REGISTRY.key(),
+                SKILL_REGISTRY.codec().get(),
+                SKILL_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(
+                DATA_SOURCE_REGISTRY.key(),
+                DATA_SOURCE_REGISTRY.codec().get(),
+                DATA_SOURCE_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(
+                LISTENER_CONDITION_REGISTRY.key(),
+                LISTENER_CONDITION_REGISTRY.codec().get(),
+                LISTENER_CONDITION_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(
+                LISTENER_ACTION_REGISTRY.key(),
+                LISTENER_ACTION_REGISTRY.codec().get(),
+                LISTENER_ACTION_REGISTRY.codec().get()
         );
     }
 }

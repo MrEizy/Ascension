@@ -1,4 +1,4 @@
-package net.zic.ascension.api.datapack.technique.realm_change;
+package net.zic.ascension.api.core.technique.realm_change;
 
 /**
  * whilst not a required part of the Technique interface

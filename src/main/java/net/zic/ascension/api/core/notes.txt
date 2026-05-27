@@ -23,4 +23,3 @@ there are 2 solutions to this.
 
 Active skills are no problem since they are given a direct entity reference
 
-TODO Skill,Physique, Bloodline share a lot of similarities... to many. think about making them data sources

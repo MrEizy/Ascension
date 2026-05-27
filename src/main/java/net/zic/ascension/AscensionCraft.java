@@ -13,6 +13,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 
+import net.zic.ascension.datapack.physique.AscensionPhysiqueTypes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -65,7 +66,7 @@ public class AscensionCraft {
         modEventBus.addListener(this::onLoadComplete);
 
 
-
+        AscensionPhysiqueTypes.register(modEventBus);
         register(modEventBus);
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
