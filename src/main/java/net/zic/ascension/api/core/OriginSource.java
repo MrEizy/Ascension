@@ -1,10 +1,13 @@
 package net.zic.ascension.api.core;
 
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.Level;
-import net.zic.ascension.api.core.bloodline.Bloodline;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.common.NeoForge;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
 import net.zic.ascension.api.core.path.AffinityHolder;
@@ -12,10 +15,18 @@ import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.ascension.api.event.EventReason;
+import net.zic.ascension.core.source.SourceHandler;
+import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
+import net.zic.zenithlib.nbt.NbtHelpers;
+import net.zic.zenithlib.stats.Stat;
+import net.zic.zenithlib.stats.StatInstance;
 import net.zic.zenithlib.stats.StatSheet;
+import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
+import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * the data of an entities abstract identity (multiple entities
@@ -46,6 +57,16 @@ public class OriginSource {
 
     private final StatSheet statSheet = new StatSheet();
     private final AffinityHolder affinityHolder = new AffinityHolder();
+
+
+    private final RegistryAccess registryAccess;
+    public OriginSource(RegistryAccess access){
+        this.registryAccess = access;
+    }
+
+    public RegistryAccess getRegistryAccess(){
+        return registryAccess;
+    }
 
     //──Physique────────────────────────────────────────────────────────
 
@@ -118,6 +139,7 @@ public class OriginSource {
 
     public boolean addPath(Identifier path, RegistryAccess registryAccess){
         if(path == null) return false;
+        if(!CoreRegistries.PATH_REGISTRY.get(registryAccess).containsKey(path)) return false; //TODO add this for everything
         return addPath(path,CoreRegistries.PATH_REGISTRY.get(registryAccess).getValue(path).newData(),registryAccess);
     }
     //used when adding an existing path to a source
@@ -195,8 +217,99 @@ public class OriginSource {
 
     //──Stat Sheet────────────────────────────────────────────────────────
 
-    StatSheet getStatSheet(){
-        return statSheet;
+    //NOTE im fully hiding the implementation here. i would do the same for pathData but i know i will have
+    //implementation specific behaviour that i will want displayable on the client
+
+    public void addStat(Stat stat, double val){
+        statSheet.addStat(stat,val);
+        updateStatSheet();
     }
-    AffinityHolder getAffinityHolder(){return affinityHolder;}
+    public void addStat(StatInstance instance){
+        statSheet.addStat(instance);
+        updateStatSheet();
+    }
+
+    public void removeStat(Stat stat, double val){
+        addStat(stat,-val);
+    }
+
+    public void addStatModifier(Stat stat,ValueContainerModifier modifier){
+        statSheet.getStatInstance(stat).addModifier(modifier);
+        updateStatSheet();
+    }
+    public void removeStatModifier(Stat stat,Identifier identifier){
+        statSheet.getStatInstance(stat).removeModifier(identifier);
+        updateStatSheet();
+    }
+
+    public double getValue(Stat stat){
+        return statSheet.getStatInstance(stat) != null ?
+                statSheet.getStatInstance(stat).getValue() :
+                0;
+    }
+    public double getBaseValue(Stat stat){
+        return statSheet.getStatInstance(stat) != null ?
+                statSheet.getStatInstance(stat).getBaseValue() :
+                0;
+    }
+
+    public Collection<Stat> getAllStats(){
+        return statSheet.asMap().keySet();
+    }
+    public void updateStatSheet(){
+        Collection<LivingEntity> entities = SourceHandler.getLoadedWatchers(this);
+        for(LivingEntity entity : entities) NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(entity,statSheet));
+    }
+    public void updateAttributes(ZenithAttributeHolder holder){
+        holder.update(statSheet.asMap());
+    }
+
+    //──Affinity Holder────────────────────────────────────────────────────────
+
+    //NOTES do smth similar to stat handler where i FULLY hide Implementation. then add a blank sync method
+    //that is overridden by server source to sync for all watchers on a change
+    //this will be done through a markDirty method that loops through all attached
+    public AffinityHolder getAffinityHolder(){return affinityHolder;}
+
+    //──Data────────────────────────────────────────────────────────
+
+    public void write(ValueOutput output){
+
+
+        try{
+            ValueOutput physiqueOutput = output.child("physique");
+            NbtHelpers.writeIdentifier(physiqueOutput,"id",getPhysique());
+            ValueOutput data = physiqueOutput.child("data");
+            if(getPhysiqueData() != null) getPhysiqueData().write(data);
+        }catch (Throwable throwable){
+            AscensionCraft.LOGGER.error("error writing physique {}",getPhysique());
+            AscensionCraft.LOGGER.error("stacktrace: ",throwable);
+        }
+    }
+
+    public void load(ValueInput input){
+
+        try{
+            ValueInput physiqueInput = input.child("physique").get();
+            Identifier id = NbtHelpers.readIdentifier(physiqueInput,"id");
+
+
+            Optional<ValueInput> data = physiqueInput.child("data");
+            PhysiqueData physiqueData = data.map(valueInput -> CoreRegistries.PHYSIQUE_REGISTRY.get(getRegistryAccess()).getValue(id).loadData(valueInput)).orElse(CoreRegistries.PHYSIQUE_REGISTRY.get(getRegistryAccess()).getValue(id).newData());
+
+            setPhysique(id,physiqueData, getRegistryAccess());
+
+            AscensionCraft.LOGGER.info("Loaded physique {}",id);
+        }catch (Throwable throwable){
+            AscensionCraft.LOGGER.error("error loading physique");
+            AscensionCraft.LOGGER.error("stacktrace : ",throwable);
+            //TODO set technique to default
+        }
+
+    }
+
+    public void encode(RegistryFriendlyByteBuf buf){
+
+    }
+    public void decode(RegistryFriendlyByteBuf buf){}
 }

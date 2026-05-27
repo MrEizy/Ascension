@@ -13,6 +13,10 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 
+import net.zic.ascension.common.AscensionAttachments;
+import net.zic.ascension.common.item.AscensionItems;
+import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.core.entity.AscensionStats;
 import net.zic.ascension.datapack.physique.AscensionPhysiqueTypes;
 import org.slf4j.Logger;
 
@@ -67,6 +71,10 @@ public class AscensionCraft {
 
 
         AscensionPhysiqueTypes.register(modEventBus);
+        AscensionAttachments.register(modEventBus);
+        AscensionComponents.register(modEventBus);
+        AscensionItems.register(modEventBus);
+        AscensionStats.register(modEventBus);
         register(modEventBus);
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);

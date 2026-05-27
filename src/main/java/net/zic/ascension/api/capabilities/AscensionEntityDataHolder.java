@@ -6,4 +6,7 @@ import net.zic.ascension.api.core.entity.AscensionEntityData;
 public interface AscensionEntityDataHolder {
 
     AscensionEntityData getData(LivingEntity entity);
+
+    void markDirty(LivingEntity entity);
+
 }

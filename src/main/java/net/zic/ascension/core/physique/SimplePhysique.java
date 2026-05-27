@@ -10,6 +10,8 @@ import net.zic.ascension.api.core.OriginSource;
 import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
+import net.zic.ascension.datapack.physique.AscensionPhysiqueTypes;
+import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
@@ -48,7 +50,7 @@ public class SimplePhysique implements Physique {
 
     @Override
     public PhysiqueType getType() {
-        return null;
+        return AscensionPhysiqueTypes.SIMPLE_PHYSIQUE_TYPE.get();
     }
 
     public List<ValueContainer.BaseModifier> getBaseAffinities() {
@@ -76,12 +78,36 @@ public class SimplePhysique implements Physique {
 
     @Override
     public Collection<Identifier> onAdded(OriginSource source, PhysiqueData data) {
-        return List.of();
+
+        for(ValueContainer.BaseModifier baseModifier : baseStats){
+            source.addStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()),baseModifier.val());
+        }
+        for(Identifier stat : statModifiers.keySet()){
+            for(ValueContainerModifier modifier : statModifiers.get(stat)){
+                source.addStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat),modifier);
+            }
+        }
+
+        return unlockedPaths;
     }
 
     @Override
     public Collection<Identifier> onRemoved(OriginSource source, PhysiqueData data) {
-        return List.of();
+        for(ValueContainer.BaseModifier baseModifier : baseStats){
+            source.removeStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()),baseModifier.val());
+        }
+        for(Identifier stat : statModifiers.keySet()){
+            for(ValueContainerModifier modifier : statModifiers.get(stat)){
+
+                source.removeStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat),modifier.getIdentifier());
+            }
+        }
+        //TODO need to think of a general way to let all entities listening to the source know stats where changed.
+        //TODO so make a basic StatChangeEvent that holds an entity in the lib
+        //TODO then the source is able to call a SourceStatChangeEvent. Entity Listeners that see this event(and "own" the source)
+        //TODO are able to call StatChangeEvent, which is picked up by my lib Listener
+        //TODO this should allow for compatability with other mods using a similar system
+        return unlockedPaths;
     }
 
     @Override

@@ -11,4 +11,7 @@ public interface AscensionEntityData {
     LivingEntity getEntity();
 
     OriginSource getSource();
+
+    //runs when the entity is fully constructed
+    void initialize();
 }
