@@ -1,12 +1,13 @@
 package net.zic.ascension.core.physique;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.OriginSource;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
@@ -102,11 +103,6 @@ public class SimplePhysique implements Physique {
                 source.removeStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat),modifier.getIdentifier());
             }
         }
-        //TODO need to think of a general way to let all entities listening to the source know stats where changed.
-        //TODO so make a basic StatChangeEvent that holds an entity in the lib
-        //TODO then the source is able to call a SourceStatChangeEvent. Entity Listeners that see this event(and "own" the source)
-        //TODO are able to call StatChangeEvent, which is picked up by my lib Listener
-        //TODO this should allow for compatability with other mods using a similar system
         return unlockedPaths;
     }
 
@@ -131,7 +127,7 @@ public class SimplePhysique implements Physique {
     }
 
     @Override
-    public PhysiqueData loadData(RegistryFriendlyByteBuf buf) {
+    public PhysiqueData loadData(ByteBuf buf) {
         return null;
     }
 

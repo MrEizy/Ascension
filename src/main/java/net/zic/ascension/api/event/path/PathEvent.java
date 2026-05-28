@@ -4,8 +4,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.Event;
 import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.OriginSource;
-import net.zic.ascension.api.core.bloodline.BloodlineData;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
 

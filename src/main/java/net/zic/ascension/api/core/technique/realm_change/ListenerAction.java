@@ -1,6 +1,6 @@
 package net.zic.ascension.api.core.technique.realm_change;
 
-import net.zic.ascension.api.core.OriginSource;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
 import net.zic.ascension.api.datapack.technique.realm_change.ListenerActionType;

@@ -1,19 +1,14 @@
 package net.zic.ascension.core.source;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.MobDespawnEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.OriginSource;
-import net.zic.ascension.common.AscensionAttachments;
+import net.zic.ascension.api.core.source.OriginSource;
 
 import java.util.*;
 
@@ -87,6 +82,7 @@ public class SourceHandler {
         AscensionEntityDataHolder holder = livingEntity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
         if(holder == null) return;
         holder.getData(livingEntity).initialize();
+        //TODO currently has a bug where event when calling getValue() it is not updated to reflect the Attribute value
         addWatcher(livingEntity);
     }
 }

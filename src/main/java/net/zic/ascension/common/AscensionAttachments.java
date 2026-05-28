@@ -6,7 +6,7 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.OriginSource;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.core.entity.SimpleAscensionEntityData;
 
 import java.util.function.Supplier;

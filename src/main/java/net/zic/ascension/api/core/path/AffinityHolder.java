@@ -34,5 +34,11 @@ public class AffinityHolder {
         if(!affinity.containsKey(path)) return 1;
         return affinity.get(path).getValue();
     }
-
+    public double getBaseAffinity(Identifier path){
+        if(!affinity.containsKey(path)) return 1;
+        return affinity.get(path).getBaseValue();
+    }
+    public ValueContainer getAffinityContainer(Identifier path){
+        return affinity.get(path);
+    }
 }

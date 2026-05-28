@@ -2,7 +2,7 @@ package net.zic.ascension.api.event.bloodline;
 
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.ICancellableEvent;
-import net.zic.ascension.api.core.OriginSource;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.event.EventReason;
 

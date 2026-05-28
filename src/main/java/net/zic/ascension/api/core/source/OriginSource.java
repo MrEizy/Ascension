@@ -1,4 +1,4 @@
-package net.zic.ascension.api.core;
+package net.zic.ascension.api.core.source;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -8,6 +8,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
 import net.zic.ascension.api.core.path.AffinityHolder;
@@ -22,6 +23,7 @@ import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.StatInstance;
 import net.zic.zenithlib.stats.StatSheet;
 import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
+import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
 import java.util.Collection;
@@ -75,7 +77,7 @@ public class OriginSource {
         if(physique == null){
             return false;
         }
-        return setPhysique(physique,CoreRegistries.PHYSIQUE_REGISTRY.get(registryAccess).getValue(physique).newData(),registryAccess);
+        return setPhysique(physique, CoreRegistries.PHYSIQUE_REGISTRY.get(registryAccess).getValue(physique).newData(),registryAccess);
 
     }
     //Sets the current physique, cannot be null
@@ -98,6 +100,7 @@ public class OriginSource {
         return physiqueData;
     }
 
+    public void markPhysiqueDirty(){} //should be used if you modified physiqueData
     //──Bloodline────────────────────────────────────────────────────────
 
     //TODO add merge logic here?
@@ -135,6 +138,7 @@ public class OriginSource {
         return bloodlines.get(bloodline);
     }
 
+    public void markBloodlineDirty(Identifier bloodline){}//should be used if you modified a bloodlines data
     //──Path────────────────────────────────────────────────────────
 
     public boolean addPath(Identifier path, RegistryAccess registryAccess){
@@ -172,6 +176,9 @@ public class OriginSource {
         return paths.get(path);
     }
 
+
+    public void markPathDirty(Identifier path){}//should be used if you changed a paths pathData
+
     //──Skill────────────────────────────────────────────────────────
 
     public boolean addSkill(Identifier skill,RegistryAccess registryAccess){
@@ -191,6 +198,7 @@ public class OriginSource {
         return skills.get(skill);
     }
 
+    public void markSkillDirty(Identifier skill){}//should be used if you changed a skills skilLData
     //──Data Source────────────────────────────────────────────────────────
 
     public boolean addDataSource(Identifier source,RegistryAccess registryAccess){
@@ -215,6 +223,8 @@ public class OriginSource {
         return dataSources.remove(source);
     }
 
+
+    public void markDataSourceDirty(Identifier source){}//should be used if you changed a data sources instance
     //──Stat Sheet────────────────────────────────────────────────────────
 
     //NOTE im fully hiding the implementation here. i would do the same for pathData but i know i will have
@@ -252,6 +262,9 @@ public class OriginSource {
                 statSheet.getStatInstance(stat).getBaseValue() :
                 0;
     }
+    protected StatInstance getStatInstance(Stat stat){
+        return statSheet.getStatInstance(stat);
+    }
 
     public Collection<Stat> getAllStats(){
         return statSheet.asMap().keySet();
@@ -269,7 +282,29 @@ public class OriginSource {
     //NOTES do smth similar to stat handler where i FULLY hide Implementation. then add a blank sync method
     //that is overridden by server source to sync for all watchers on a change
     //this will be done through a markDirty method that loops through all attached
-    public AffinityHolder getAffinityHolder(){return affinityHolder;}
+    protected AffinityHolder getAffinityHolder(){return affinityHolder;}
+
+    public void addAffinity(Identifier path,double val){
+        getAffinityHolder().addAffinity(path,val);
+    }
+    public void removeAffinity(Identifier path,double val){
+        addAffinity(path,-val);
+
+    }
+    public void addAffinityModifier(Identifier path,ValueContainerModifier modifier){
+        getAffinityHolder().addAffinityModifier(path,modifier);
+    }
+
+    public void removeAffinityModifier(Identifier path,Identifier modifier){
+        getAffinityHolder().removeAffinityModifier(path,modifier);
+    }
+
+    public double getAffinity(Identifier path){
+        return getAffinityHolder().getAffinity(path);
+    }
+    public double getBaseAffinity(Identifier path){
+        return getAffinityHolder().getBaseAffinity(path);
+    }
 
     //──Data────────────────────────────────────────────────────────
 
@@ -312,4 +347,14 @@ public class OriginSource {
 
     }
     public void decode(RegistryFriendlyByteBuf buf){}
+
+    /**
+     * takes a snapshot and applies the changes
+     *
+     * if physique == null it means it was not changed
+     * @param snapshot
+     */
+    public void load(SourceChangesSnapshot snapshot){
+
+    }
 }

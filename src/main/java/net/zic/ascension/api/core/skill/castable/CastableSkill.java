@@ -1,5 +1,6 @@
 package net.zic.ascension.api.core.skill.castable;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
@@ -75,9 +76,9 @@ public interface CastableSkill extends Skill {
     void finalCast(LivingEntity caster,CastData castData,CastEndResult result);
 
 
-    CastData loadCastData(RegistryFriendlyByteBuf buf);
+    CastData loadCastData(ByteBuf buf);
     PreCastData newPreCastData();
     PreCastData loadPreCastData(ValueInput input);
-    PreCastData loadPreCastData(RegistryFriendlyByteBuf buf);
+    PreCastData loadPreCastData(ByteBuf buf);
 
 }

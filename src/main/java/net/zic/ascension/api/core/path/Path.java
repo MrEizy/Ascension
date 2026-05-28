@@ -1,5 +1,6 @@
 package net.zic.ascension.api.core.path;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -40,5 +41,5 @@ public interface Path {
 
     PathData newData();
     PathData loadData(ValueInput input);
-    PathData loadDAta(RegistryFriendlyByteBuf buf);
+    PathData loadData(ByteBuf buf);
 }

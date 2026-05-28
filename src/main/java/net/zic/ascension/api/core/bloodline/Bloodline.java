@@ -1,13 +1,12 @@
 package net.zic.ascension.api.core.bloodline;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.core.OriginSource;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.core.physique.PhysiqueData;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
 
 import java.util.Collection;
@@ -47,5 +46,5 @@ public interface Bloodline {
 
     BloodlineData newData();
     BloodlineData loadData(ValueInput input);
-    BloodlineData loadData(RegistryFriendlyByteBuf buf);
+    BloodlineData loadData(ByteBuf buf);
 }

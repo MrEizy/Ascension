@@ -1,12 +1,12 @@
 package net.zic.ascension.api.core.technique;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.core.OriginSource;
-import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
 
 public interface Technique {
@@ -58,6 +58,6 @@ public interface Technique {
 
     TechniqueData newData();
     TechniqueData loadData(ValueInput input);
-    TechniqueData loadData(RegistryFriendlyByteBuf buf);
+    TechniqueData loadData(ByteBuf buf);
 
 }

@@ -1,10 +1,8 @@
 package net.zic.ascension.core.entity;
 
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.storage.ValueInput;
@@ -12,15 +10,13 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.OriginSource;
-import net.zic.ascension.api.core.ServerOriginSource;
+import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.core.source.ServerOriginSource;
 import net.zic.ascension.api.core.entity.AscensionEntityData;
+import net.zic.ascension.api.core.source.SourceChangesSnapshot;
 import net.zic.ascension.core.source.SourceHandler;
 import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.cooldown.EntityCooldownHandler;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -75,6 +71,12 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         initializeAttributes();
         SourceHandler.addWatcher(attachedEntity,getSource());
     }
+
+    @Override
+    public void markDirty(SourceChangesSnapshot snapshot) {
+
+    }
+
 
     public static class SyncHandler implements AttachmentSyncHandler<SimpleAscensionEntityData> {
 

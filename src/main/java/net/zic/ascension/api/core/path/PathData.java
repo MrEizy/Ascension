@@ -1,12 +1,12 @@
 package net.zic.ascension.api.core.path;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.core.OriginSource;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.TechniqueData;
 
 import java.util.ArrayList;
@@ -75,5 +75,5 @@ public interface PathData {
 
     void write(ValueOutput output);
     //──Network────────────────────────────────────────────────────────
-    void encode(RegistryFriendlyByteBuf buf);
+    void encode(ByteBuf buf);
 }

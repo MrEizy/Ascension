@@ -1,10 +1,10 @@
 package net.zic.ascension.api.core.data_source;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.core.OriginSource;
-import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.data_source.DataSourceType;
 
 public interface DataSource {
@@ -34,5 +34,5 @@ public interface DataSource {
 
     DataSourceInstance newInstance();
     DataSourceInstance loadInstance(ValueInput input);
-    DataSourceInstance loadInstance(RegistryFriendlyByteBuf buf);
+    DataSourceInstance loadInstance(ByteBuf buf);
 }

@@ -2,7 +2,7 @@ package net.zic.ascension.api.event.data_source;
 
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.ICancellableEvent;
-import net.zic.ascension.api.core.OriginSource;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
 
 public abstract class DataSourceAddedEvent extends DataSourceEvent{

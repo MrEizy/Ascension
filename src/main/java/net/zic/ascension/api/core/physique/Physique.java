@@ -1,17 +1,12 @@
 package net.zic.ascension.api.core.physique;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.core.OriginSource;
-import net.zic.ascension.api.core.bloodline.BloodlineData;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.datapack.TypeRegistries;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
 
 import java.util.Collection;
@@ -49,5 +44,5 @@ public interface  Physique {
 
     PhysiqueData newData();
     PhysiqueData loadData(ValueInput input);
-    PhysiqueData loadData(RegistryFriendlyByteBuf buf);
+    PhysiqueData loadData(ByteBuf buf);
 }

@@ -2,7 +2,7 @@ package net.zic.ascension.api.event.path;
 
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.ICancellableEvent;
-import net.zic.ascension.api.core.OriginSource;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.path.PathData;
 
 public class PathRemovedEvent extends PathEvent{

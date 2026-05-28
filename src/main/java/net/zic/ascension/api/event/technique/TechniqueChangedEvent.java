@@ -5,7 +5,7 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.OriginSource;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
 
