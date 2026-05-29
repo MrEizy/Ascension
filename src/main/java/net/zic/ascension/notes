@@ -6,3 +6,10 @@ PathData (initial)
 Technique (initial)
 PathData (finish)
 Technique (finish)
+
+
+
+
+create a dashboard.
+so write a mod that can hook into the server endpoints and read certain data from it
+this would then be displayable on a (local) browser window, with realtime updates
