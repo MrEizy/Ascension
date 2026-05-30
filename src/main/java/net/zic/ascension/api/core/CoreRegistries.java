@@ -1,5 +1,7 @@
 package net.zic.ascension.api.core;
 
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
@@ -83,6 +85,14 @@ public class CoreRegistries {
             ()-> PurityChangeActionConditionType.PURITY_CHANGE_ACTION_CONDITION_CODEC
     );
 
+    public static <T> T safeAccess(RegistryHelper.DataPackRegistry<T> registry, Identifier id, RegistryAccess access){
+        try {
+            return registry.get(access).getValue(id);
+        }catch (Throwable throwable) {
+            return null;
+        }
+    }
+
     //TODO think about if tribulations need their own registry or not. aka do we want them to make them in place
     //TODO like realm change, or do we want them to be able to define them elsewhere then reuse them using the registry (prob 2)
 
@@ -129,6 +139,16 @@ public class CoreRegistries {
                 REALM_CHANGE_ACTION_CONDITION_REGISTRY.key(),
                 REALM_CHANGE_ACTION_CONDITION_REGISTRY.codec().get(),
                 REALM_CHANGE_ACTION_CONDITION_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(
+                PURITY_CHANGE_ACTION_REGISTRY.key(),
+                PURITY_CHANGE_ACTION_REGISTRY.codec().get(),
+                PURITY_CHANGE_ACTION_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(
+                PURITY_CHANGE_ACTION_CONDITION_REGISTRY.key(),
+                PURITY_CHANGE_ACTION_CONDITION_REGISTRY.codec().get(),
+                PURITY_CHANGE_ACTION_CONDITION_REGISTRY.codec().get()
         );
 
     }

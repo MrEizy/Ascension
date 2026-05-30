@@ -1,7 +1,9 @@
 package net.zic.ascension.common.item.components;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -19,6 +21,13 @@ public class AscensionComponents {
             ()->DataComponentType.<Identifier>builder()
                     .persistent(Identifier.CODEC)
                     .networkSynchronized(Identifier.STREAM_CODEC)
+                    .build()
+    );
+    public static final Supplier<DataComponentType<Integer>> PURITY = DATA_COMPONENTS.register(
+            "purity",
+            ()->DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.INT)
                     .build()
     );
     public static void register(IEventBus eventBus) {

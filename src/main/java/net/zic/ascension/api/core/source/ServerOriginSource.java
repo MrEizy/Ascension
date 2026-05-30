@@ -121,7 +121,10 @@ public class ServerOriginSource extends OriginSource {
     @Override
     public boolean addBloodline(Identifier bloodline, BloodlineData data, RegistryAccess access, EventReason reason) {
         if(bloodline == null) return false;
-        if(hasBloodline(bloodline)) return false;
+        if(hasBloodline(bloodline)) {
+            mergeBloodline(bloodline,data);
+            return true;
+        };
 
         BloodlineAddedEvent.Pre pre = new BloodlineAddedEvent.Pre(bloodline,data,this,reason);
         NeoForge.EVENT_BUS.post(pre);
@@ -131,8 +134,11 @@ public class ServerOriginSource extends OriginSource {
         if(!result) return false;
 
         startProcess(ProcessType.ADD_BLOODLINE);
-
+        int purity = data.getPurity();
+        data.setPurity(1);
         Collection<Identifier> toAdd = pre.getBloodline(access).onAdded(this,pre.getBloodlineData());
+
+        pre.getBloodline(access).handlePurityChange(this,data,purity);
 
         for(Identifier path : toAdd){
             addPath(path,access);

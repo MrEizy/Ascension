@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
 import net.zic.ascension.api.core.path.AffinityHolder;
@@ -127,16 +128,27 @@ public class OriginSource {
     //add a fresh instance of a bloodline
     public boolean addBloodline(Identifier bloodline,RegistryAccess registryAccess){
         if(bloodline == null)return false;
-        if(hasBloodline(bloodline)) return false;
         return addBloodline(bloodline,CoreRegistries.BLOODLINE_REGISTRY.get(registryAccess).getValue(bloodline).newData(),registryAccess);
+    }
+    public void mergeBloodline(Identifier bloodline,BloodlineData data){
+        CoreRegistries.BLOODLINE_REGISTRY.get(getRegistryAccess()).getValue(bloodline).handlePurityChange(
+                this,
+                getBloodlineData(bloodline),
+                getBloodlineData(bloodline).getPurity()+data.getPurity()
+        );
     }
     public boolean addBloodline(Identifier bloodline,BloodlineData data,RegistryAccess access){
         return addBloodline(bloodline,data, access,null);
     }
     public boolean addBloodline(Identifier bloodline,BloodlineData data,RegistryAccess access,EventReason reason){
         if(bloodline == null) return false;
+        if(hasBloodline(bloodline)){
+            mergeBloodline(bloodline,data);
+            return true;
+        }
         this.bloodlines.put(bloodline,data);
-        return false;
+
+        return true;
     }
 
     public boolean removeBloodline(Identifier bloodline,RegistryAccess access){
@@ -340,6 +352,24 @@ public class OriginSource {
             AscensionCraft.LOGGER.error("error writing physique {}",getPhysique());
             AscensionCraft.LOGGER.error("stacktrace: ",throwable);
         }
+
+        try {
+            ValueOutput.ValueOutputList bloodlines = output.childrenList("bloodlines");
+            for(Identifier bloodline : getBloodlines()){
+               try{
+                   ValueOutput bloodlineOutput = bloodlines.addChild();
+                   NbtHelpers.writeIdentifier(bloodlineOutput,"id",bloodline);
+                   ValueOutput dataOutput = bloodlineOutput.child("data");
+                   getBloodlineData(bloodline).write(dataOutput);
+               } catch (Throwable throwable){
+                   AscensionCraft.LOGGER.error("error writing bloodline {}",bloodline);
+                   AscensionCraft.LOGGER.error("stacktrace: ",throwable);
+               }
+            }
+        }catch (Throwable throwable){
+            AscensionCraft.LOGGER.error("error writing bloodlines");
+            AscensionCraft.LOGGER.error("stacktrace: ",throwable);
+        }
     }
 
     public void load(RegistryAccess access){
@@ -381,6 +411,27 @@ public class OriginSource {
             AscensionCraft.LOGGER.error("stacktrace : ",throwable);
             //TODO set technique to default
         }
+        try {
+            ValueInput.ValueInputList bloodlinesInput = input.childrenListOrEmpty("bloodlines");
+
+            for(ValueInput bloodlineInput : bloodlinesInput.stream().toList()){
+                try {
+                    Identifier id = NbtHelpers.readIdentifier(bloodlineInput,"id");
+                    Optional<ValueInput> data = bloodlineInput.child("data");
+                    Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,id,getRegistryAccess());
+                    if(data.isEmpty()) addBloodline(id,registryAccess);
+                    else addBloodline(id,bloodline.loadData(data.get()),registryAccess);
+
+                    AscensionCraft.LOGGER.info("Loaded bloodline {} with purity {}",id,getBloodlineData(id).getPurity());
+                } catch (Throwable throwable){
+                    AscensionCraft.LOGGER.error("error loading bloodline");
+                    AscensionCraft.LOGGER.error("stacktrace : ",throwable);
+                }
+            }
+        } catch (Throwable throwable){
+            AscensionCraft.LOGGER.error("error loading all bloodlines");
+            AscensionCraft.LOGGER.error("stacktrace : ",throwable);
+        }
 
     }
 
@@ -395,7 +446,7 @@ public class OriginSource {
      * if physique == null it means it was not changed
      * @param snapshot
      */
-    public void load(SourceChangesSnapshot snapshot){
-
+    public void apply(SourceChangesSnapshot snapshot){
+        //TODO implement
     }
 }

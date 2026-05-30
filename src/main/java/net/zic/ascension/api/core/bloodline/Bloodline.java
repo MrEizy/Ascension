@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
+import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
 
@@ -46,7 +47,9 @@ public interface Bloodline {
 
     //takes in a prospective purity change, clamps it and then breaks it down into percentage increments
     default void handlePurityChange(OriginSource source,BloodlineData data, int newPurity){
+
         newPurity = Math.clamp(newPurity,1,100);
+        int oldPurity = data.getPurity();
         if(newPurity < data.getPurity()){
             //purity decreased
             for(int purity = data.getPurity();purity>newPurity;purity--){
@@ -60,6 +63,8 @@ public interface Bloodline {
                 purityUp(source,data,purity);
             }
         }
+
+        if(newPurity != oldPurity) source.markBloodlineDirty(CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this));
 
     }
 

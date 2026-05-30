@@ -9,6 +9,8 @@ Technique (finish)
 
 
 
+TODO create a global server registry access?
+
 
 create a dashboard.
 so write a mod that can hook into the server endpoints and read certain data from it

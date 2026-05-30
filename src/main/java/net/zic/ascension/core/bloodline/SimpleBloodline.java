@@ -50,12 +50,15 @@ public class SimpleBloodline implements Bloodline {
 
     @Override
     public Collection<Identifier> onAdded(OriginSource source, BloodlineData data) {
-        return List.of(); //TODO run purity change 1 up
+        handler.runPurityUp(source,this,data);
+        return List.of();
     }
 
     @Override
     public Collection<Identifier> onRemoved(OriginSource source, BloodlineData data) {
-        return List.of(); //TODO run purity change 1 down
+        data.setPurity(0);
+        handler.runPurityDown(source,this,data);
+        return List.of();
     }
 
     @Override
