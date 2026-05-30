@@ -1,0 +1,12 @@
+{
+  "type": "ascension:simple",
+  "name": "Test",
+  "description": "this is an example description",
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "action" : "ascension:generic_give_stats"
+    }
+  ]
+
+}

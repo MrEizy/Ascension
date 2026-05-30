@@ -23,14 +23,16 @@ import org.jspecify.annotations.Nullable;
 
 public class SimpleAscensionEntityData implements AscensionEntityData {
 
-    private OriginSource source;
+    private final OriginSource source;
 
 
     private final LivingEntity attachedEntity;
 
     public SimpleAscensionEntityData(OriginSource source,LivingEntity entity) {
-
+        this.source = source;
         attachedEntity = entity;
+
+        AscensionCraft.getSourceHandler().addWatcher(attachedEntity,source);
     }
 
     public void initializeAttributes(){

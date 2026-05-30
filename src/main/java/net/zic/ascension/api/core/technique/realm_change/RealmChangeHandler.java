@@ -6,4 +6,7 @@ package net.zic.ascension.api.core.technique.realm_change;
  * TODO implement codec and logic
  */
 public class RealmChangeHandler {
+
+
+
 }

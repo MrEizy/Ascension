@@ -1,6 +1,7 @@
 package net.zic.ascension.api.core.source;
 
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -69,7 +70,7 @@ public class ServerOriginSource extends OriginSource {
     public ServerOriginSource(RegistryAccess access, ValueInput input){
         super(access,input);
     }
-    public ServerOriginSource(ValueInput input){
+    public ServerOriginSource(CompoundTag input){
         super(input);
     }
 

@@ -1,0 +1,9 @@
+{
+  "type": "ascension:give_base_stats",
+  "stats": [
+    {
+      "id": "ascension:vitality",
+      "value": 2
+    }
+  ]
+}

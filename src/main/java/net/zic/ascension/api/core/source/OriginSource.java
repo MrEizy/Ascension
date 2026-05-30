@@ -348,7 +348,9 @@ public class OriginSource {
     }
 
     public void load(){
+        System.out.println("source is being loaded");
         if(cachedCached != null) {
+            System.out.println("loading source from compound tag");
             if(registryAccess != null) {
                 cached = TagValueInput.create(ProblemReporter.DISCARDING, registryAccess, cachedCached);
                 cachedCached = null;
@@ -362,7 +364,7 @@ public class OriginSource {
 
 
     public void load(ValueInput input){
-
+        System.out.println("source is being loaded from value input");
         try{
             ValueInput physiqueInput = input.child("physique").get();
             Identifier id = NbtHelpers.readIdentifier(physiqueInput,"id");

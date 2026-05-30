@@ -9,6 +9,8 @@ import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -17,6 +19,10 @@ import net.zic.ascension.common.AscensionAttachments;
 import net.zic.ascension.common.item.AscensionItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.core.entity.AscensionStats;
+import net.zic.ascension.core.source.SourceHandler;
+import net.zic.ascension.datapack.bloodline.AscensionBloodlineTypes;
+import net.zic.ascension.datapack.bloodline.purity.action.AscensionPurityChangeActionTypes;
+import net.zic.ascension.datapack.bloodline.purity.condition.AscensionPurityChangeActionConditionsTypes;
 import net.zic.ascension.datapack.physique.AscensionPhysiqueTypes;
 import org.slf4j.Logger;
 
@@ -36,12 +42,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
+@EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 @Mod(AscensionCraft.MOD_ID)
 public class AscensionCraft {
     public static float hue;
     public static final String MOD_ID = "ascension";
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final Map<String, String> SECT_DATA = new HashMap<>();
+
+    private static SourceHandler sourceHandler;
 
     public static Identifier prefix(String name){
         return Identifier.fromNamespaceAndPath(MOD_ID, name);
@@ -75,6 +84,9 @@ public class AscensionCraft {
         AscensionComponents.register(modEventBus);
         AscensionItems.register(modEventBus);
         AscensionStats.register(modEventBus);
+        AscensionBloodlineTypes.register(modEventBus);
+        AscensionPurityChangeActionTypes.register(modEventBus);
+        AscensionPurityChangeActionConditionsTypes.register(modEventBus);
         register(modEventBus);
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -85,6 +97,8 @@ public class AscensionCraft {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.CULTIVATION_SPEC, "ascension/Ascension-Cultivation.toml");
 
         modEventBus.addListener(this::registerKeyBindings);
+
+
 
     }
 
@@ -127,6 +141,13 @@ public class AscensionCraft {
     }
 
 
+    @SubscribeEvent
+    public static void onServerLaunch(ServerStartingEvent event){
+        event.getServer().overworld().getDataStorage().computeIfAbsent(SourceHandler.ID);
+
+        sourceHandler = event.getServer().overworld().getDataStorage().get(SourceHandler.ID);
+    }
+    public static SourceHandler getSourceHandler(){return sourceHandler;}
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
     public static class ModEvents {
 

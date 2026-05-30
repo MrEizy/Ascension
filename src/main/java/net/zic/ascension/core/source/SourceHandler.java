@@ -1,13 +1,21 @@
 package net.zic.ascension.core.source;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.Hash;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
@@ -23,6 +31,8 @@ import java.util.*;
 //TODO for non player entities when they die we REMOVE their listener instead of changing to offline
 //TODO listeners can then manually change this for themselves
 
+//TODO need to get the rest of the mod in a good state so i can test this
+@EventBusSubscriber
 public class SourceHandler extends SavedData {
 
     private final HashMap<UUID,OriginSource> remoteSources = new HashMap<>();
@@ -33,9 +43,46 @@ public class SourceHandler extends SavedData {
 
     private static final HashMap<OriginSource, HashSet<LivingEntity>> sourceWatchers2 = new HashMap<>();
 
-    private static final HashMap<LivingEntity,OriginSource> watchers2 = new HashMap<>();
+    public static final Codec<OriginSource> ORIGIN_CODEC = Codec.of(new SourceEncoder(),new SourceDecoder());
+    public static final SavedDataType<SourceHandler> ID = new SavedDataType<>(
+
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "source_handler"),
+            SourceHandler::new,
+            level -> RecordCodecBuilder.create(instance -> instance.group(
+                    RecordCodecBuilder.point(level),
+
+                    Codec.unboundedMap(
+                                    UUIDUtil.CODEC,
+                                    ORIGIN_CODEC
+                            ).fieldOf("remote_sources")
+                            .forGetter(SourceHandler::getRemoteSources),
+
+                    Codec.unboundedMap(
+                                    UUIDUtil.CODEC,
+                                    UUIDUtil.CODEC
+                            ).fieldOf("watchers")
+                            .forGetter(SourceHandler::getWatchers)
+            ).apply(instance, SourceHandler::new))
+    );
 
 
+    public SourceHandler(ServerLevel level){
+
+    }
+    public SourceHandler(ServerLevel level, Map<UUID,OriginSource> remoteSources, Map<UUID,UUID> watchers){
+        //TODO implement and load
+    }
+
+    public Map<UUID,OriginSource> getRemoteSources(){
+        return Map.copyOf(remoteSources);
+    }
+    public Map<UUID,UUID> getWatchers(){
+        HashMap<UUID,UUID> map = new HashMap<>();
+        watchers.forEach((watcher,source)->{
+            if(sourceIdMap.containsKey(source)) map.put(watcher.getUuid(),sourceIdMap.get(source));
+        });
+        return map;
+    }
 
     public UUID getTrackedSourceUUID(OriginSource source){
         return sourceIdMap.get(source);
@@ -78,10 +125,8 @@ public class SourceHandler extends SavedData {
 
         watcher.setEntity(null);
     }
-    public void addWatcher(LivingEntity entity){
-        AscensionEntityDataHolder holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
-        if(holder == null) return;
-        OriginSource source = holder.getData(entity).getSource();
+    public void addWatcher(LivingEntity entity,OriginSource source){
+
         if(!sourceWatchers.containsKey(source)){
             sourceWatchers.put(source,new HashSet<>());
         }
@@ -123,9 +168,14 @@ public class SourceHandler extends SavedData {
      * THE PROCESS, ON ENTITY LOAD FIRST INITIALIZE THE ENTITY,
      * THEN ADD IT AS A WATCHER
      */
-
-
     //TODO get save states working
     //TODO register static event listeners, that Reach to AscensionCraft.SourceHandler
 
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
+        AscensionEntityDataHolder holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        if(holder == null) return;
+
+        holder.getData(event.getEntity()).initialize();
+    }
 }

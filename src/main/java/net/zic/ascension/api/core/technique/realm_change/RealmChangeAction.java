@@ -1,9 +1,12 @@
 package net.zic.ascension.api.core.technique.realm_change;
 
+import net.zic.ascension.api.core.ProgressDirection;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
-import net.zic.ascension.api.datapack.technique.realm_change.ListenerActionType;
+import net.zic.ascension.api.datapack.technique.realm_change.RealmChangeActionType;
+
+import java.util.UUID;
 
 /**
  * The action taken when a realm change happens that matches the Listener condition
@@ -25,8 +28,8 @@ import net.zic.ascension.api.datapack.technique.realm_change.ListenerActionType;
  *
  *
  */
-public interface ListenerAction {
-    void run(OriginSource source, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, RealmChangeDirection direction);
+public interface RealmChangeAction {
+    void run(UUID handlerId,OriginSource source, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction);
 
-    ListenerActionType getType();
+    RealmChangeActionType getType();
 }

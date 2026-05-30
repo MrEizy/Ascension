@@ -1,15 +1,16 @@
 package net.zic.ascension.api.core.technique.realm_change;
 
+import net.zic.ascension.api.core.ProgressDirection;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
-import net.zic.ascension.api.datapack.technique.realm_change.ListenerConditionType;
+import net.zic.ascension.api.datapack.technique.realm_change.RealmChangeActionConditionType;
 
 /**
  * this is ran to determine if the Listener should be run
  * instances of this are part of a registry that can be referenced in datapacks
  */
-public interface ListenerCondition {
+public interface RealmChangeActionCondition {
 
     /**
      * 0,0 up/down is a special realm condition. this is only run when FIRST getting a technique
@@ -41,7 +42,7 @@ public interface ListenerCondition {
      * @param direction if we are going up into this realm or falling into i
      * @return true-> run listener false -> dont run listener
      */
-    boolean test(OriginSource source, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, RealmChangeDirection direction);
+    boolean test(OriginSource source, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction);
 
-    ListenerConditionType getType();
+    RealmChangeActionConditionType getType();
 }

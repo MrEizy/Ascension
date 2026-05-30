@@ -1,6 +1,7 @@
 package net.zic.ascension.api.core.bloodline;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -43,6 +44,30 @@ public interface Bloodline {
     //called when either an entity is detached from an origin or the bloodline is removed from the origin
     void removeFromEntity(LivingEntity entity,BloodlineData data);
 
+    //takes in a prospective purity change, clamps it and then breaks it down into percentage increments
+    default void handlePurityChange(OriginSource source,BloodlineData data, int newPurity){
+        newPurity = Math.clamp(newPurity,1,100);
+        if(newPurity < data.getPurity()){
+            //purity decreased
+            for(int purity = data.getPurity();purity>newPurity;purity--){
+                data.setPurity(purity);
+                purityDown(source,data,purity);
+            }
+        }else{
+            //purity increased
+            for(int purity = data.getPurity()+1;purity<=newPurity;purity++){
+                data.setPurity(purity);
+                purityUp(source,data,purity);
+            }
+        }
+
+    }
+
+    //represents a single purity increment
+    //for handler on down should actually use the previous value rather than the current one
+
+    void purityDown(OriginSource source,BloodlineData data, int newPurity);
+    void purityUp(OriginSource source,BloodlineData data, int newPurity);
 
     BloodlineData newData();
     BloodlineData loadData(ValueInput input);
