@@ -1,9 +1,12 @@
 package net.zic.ascension.api.core.source;
 
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.NeoForge;
@@ -61,13 +64,30 @@ public class OriginSource {
     private final AffinityHolder affinityHolder = new AffinityHolder();
 
 
-    private final RegistryAccess registryAccess;
+    private RegistryAccess registryAccess;
+    private CompoundTag cachedCached;
+    private ValueInput cached;
     public OriginSource(RegistryAccess access){
         this.registryAccess = access;
     }
+    public OriginSource(CompoundTag input){
+        this.cachedCached = input;
+    }
+    public OriginSource(RegistryAccess access,ValueInput input){
+
+        this.registryAccess = access;
+        this.cached = input;
+    }
+    public boolean isLoaded(){ return cached != null;}
+
+    public ValueInput getCached(){return cached;}
 
     public RegistryAccess getRegistryAccess(){
         return registryAccess;
+    }
+
+    public void setRegistryAccess(RegistryAccess access){
+        this.registryAccess = access;
     }
 
     //──Physique────────────────────────────────────────────────────────
@@ -321,6 +341,25 @@ public class OriginSource {
             AscensionCraft.LOGGER.error("stacktrace: ",throwable);
         }
     }
+
+    public void load(RegistryAccess access){
+        setRegistryAccess(access);
+        load();
+    }
+
+    public void load(){
+        if(cachedCached != null) {
+            if(registryAccess != null) {
+                cached = TagValueInput.create(ProblemReporter.DISCARDING, registryAccess, cachedCached);
+                cachedCached = null;
+            }else return;
+        }
+        if(cached != null) {
+            load(cached);
+            cached = null;
+        }
+    }
+
 
     public void load(ValueInput input){
 

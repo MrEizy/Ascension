@@ -25,19 +25,14 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
     private OriginSource source;
 
-    private ValueInput cachedData;
+
     private final LivingEntity attachedEntity;
 
-    public SimpleAscensionEntityData(OriginSource source,ValueInput input,LivingEntity entity) {
-        this.source = source;
-        cachedData = input;
+    public SimpleAscensionEntityData(OriginSource source,LivingEntity entity) {
+
         attachedEntity = entity;
     }
 
-    public SimpleAscensionEntityData(OriginSource source,LivingEntity entity) {
-        this.source = source;
-        attachedEntity = entity;
-    }
     public void initializeAttributes(){
         ZenithAttributeHolder attributeHolder = attachedEntity.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
 
@@ -62,14 +57,12 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     @Override
     public void initialize() {
 
-        source.load(cachedData);
-        cachedData = null;
-
+        source.load();
         //TODO make sure this properly handles simulation of adding
         //TODO make sure the PathData knows which side it is on for event handling
 
         initializeAttributes();
-        SourceHandler.addWatcher(attachedEntity,getSource());
+
     }
 
     @Override
@@ -105,9 +98,9 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             if(holder instanceof LivingEntity entity){
                 OriginSource source =
                         entity.level().isClientSide() ?
-                        new OriginSource(entity.level().registryAccess()) :
-                        new ServerOriginSource(entity.level().registryAccess());
-                return new SimpleAscensionEntityData(source,input,entity);
+                        new OriginSource(entity.level().registryAccess(),input) :
+                        new ServerOriginSource(entity.level().registryAccess(),input);
+                return new SimpleAscensionEntityData(source,entity);
             }
             return null;
         }

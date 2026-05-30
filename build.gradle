@@ -24,7 +24,7 @@ repositories {
     maven { url = "https://maven.theillusivec4.top/" }
     maven {
         name = 'Favouriteless Maven'
-        url 'https://maven.favouriteless.net/releases'
+        url 'https://maven.favouriteless.dev/releases'
     }
     maven {
         // location of the maven that hosts JEI files since January 2023

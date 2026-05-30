@@ -4,6 +4,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.storage.ValueInput;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
@@ -64,6 +65,12 @@ public class ServerOriginSource extends OriginSource {
 
     public ServerOriginSource(RegistryAccess access) {
         super(access);
+    }
+    public ServerOriginSource(RegistryAccess access, ValueInput input){
+        super(access,input);
+    }
+    public ServerOriginSource(ValueInput input){
+        super(input);
     }
 
 
