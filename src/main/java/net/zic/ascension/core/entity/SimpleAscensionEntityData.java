@@ -15,6 +15,7 @@ import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.ServerOriginSource;
 import net.zic.ascension.api.core.entity.AscensionEntityData;
 import net.zic.ascension.api.core.source.SourceChangesSnapshot;
+import net.zic.ascension.common.AscensionAttachments;
 import net.zic.ascension.core.source.SourceHandler;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
@@ -25,14 +26,16 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
     private final OriginSource source;
 
+    private SourceChangesSnapshot snapshot;
 
     private final LivingEntity attachedEntity;
 
     public SimpleAscensionEntityData(OriginSource source,LivingEntity entity) {
         this.source = source;
         attachedEntity = entity;
-
-        AscensionCraft.getSourceHandler().addWatcher(attachedEntity,source);
+        System.out.println("created data attachment on side :"+(entity.level().isClientSide()?"Client" :"Server"));
+        System.out.println(source.getClass().getName());;
+        if(!attachedEntity.level().isClientSide()) AscensionCraft.getSourceHandler().addWatcher(attachedEntity,source);
     }
 
     public void initializeAttributes(){
@@ -69,7 +72,10 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
     @Override
     public void markDirty(SourceChangesSnapshot snapshot) {
-
+        System.out.println("marked dirty starting synced on side : "+(attachedEntity.level().isClientSide()?"Client":"Server"));
+        this.snapshot = snapshot;
+        //TODO this is not working properly look into it
+         attachedEntity.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
     }
 
 
@@ -82,14 +88,24 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
         @Override
         public void write(RegistryFriendlyByteBuf buf, SimpleAscensionEntityData attachment, boolean initialSync) {
-            attachment.getSource().encode(buf);
+            buf.writeBoolean(attachment.snapshot != null);//if true we are encoding a patch otherwise full encode
+            System.out.println("trying to sync patch : "+(attachment.snapshot != null));
+            if(attachment.snapshot == null) attachment.getSource().encode(buf);
+            else attachment.snapshot.encode(buf);
         }
 
         @Override
         public @Nullable SimpleAscensionEntityData read(IAttachmentHolder holder, RegistryFriendlyByteBuf buf, @Nullable SimpleAscensionEntityData previousValue) {
             if(!(holder instanceof LivingEntity entity)) return null;
-            if(previousValue == null) previousValue = new SimpleAscensionEntityData(new OriginSource(entity.level().registryAccess()),entity);
-            previousValue.getSource().decode(buf);
+            if(previousValue == null) previousValue = new SimpleAscensionEntityData(new OriginSource(buf.registryAccess()),entity);
+            if(buf.readBoolean()){
+                AscensionCraft.LOGGER.debug("decoding patch");
+                previousValue.getSource().apply(SourceChangesSnapshot.decode(buf,buf.registryAccess()));
+            }else {
+                AscensionCraft.LOGGER.debug("decoding full");
+                previousValue.getSource().decode(buf);
+            };
+            previousValue.getSource().updateAttributes(entity.getData(ZenithAttachments.ATTRIBUTE_HOLDER));
             return previousValue;
         }
     }

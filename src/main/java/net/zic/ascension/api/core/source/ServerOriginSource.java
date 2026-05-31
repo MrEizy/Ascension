@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.neoforged.neoforge.common.NeoForge;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
 import net.zic.ascension.api.core.CoreRegistries;
@@ -305,6 +306,7 @@ public class ServerOriginSource extends OriginSource {
 
     @Override
     public void markBloodlineDirty(Identifier bloodline) {
+        System.out.println("bloodline was marked as dirty");
         toAddBloodlines.put(bloodline,getBloodlineData(bloodline));
         startProcess(ProcessType.MODIFY_BLOODLINE);
         resolveProcess(ProcessType.MODIFY_BLOODLINE);
@@ -334,7 +336,7 @@ public class ServerOriginSource extends OriginSource {
 
 
     public void startProcess(ProcessType processType){
-        if(currentProcess == null) return;
+        if(currentProcess != null) return;
 
         currentProcess = processType;
     }
@@ -347,7 +349,8 @@ public class ServerOriginSource extends OriginSource {
 
     }
     protected void sync(){
-        Collection<LivingEntity> entities = SourceHandler.getLoadedWatchers(this);
+        System.out.println("initializing sync");
+        Collection<LivingEntity> entities = AscensionCraft.getSourceHandler().getLoadedWatchers(this);
         SourceChangesSnapshot snapshot = new SourceChangesSnapshot(
                 physiqueDirty ? getPhysique() : null,
                 physiqueDirty ? getPhysiqueData() : null,
@@ -363,8 +366,10 @@ public class ServerOriginSource extends OriginSource {
                 Set.copyOf(dirtyAffinity)
         );
         for(LivingEntity entity : entities){
+            System.out.println("looking at entity");
             AscensionEntityDataHolder holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
             if(holder == null) continue;
+            System.out.println("marking dirty");
             holder.getData(entity).markDirty(snapshot);
         }
         //clear sync caches

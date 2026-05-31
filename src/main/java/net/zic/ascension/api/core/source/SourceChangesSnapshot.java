@@ -22,23 +22,23 @@ import java.util.*;
  * a snapshot of the changes a source has undergone
  */
 public class SourceChangesSnapshot {
-    private Identifier physique;
-    private PhysiqueData physiqueData;
+     Identifier physique;
+     PhysiqueData physiqueData;
 
-    private List<Pair<Identifier,BloodlineData>> toAddBloodlines = new ArrayList<>();
-    private Set<Identifier> toRemoveBloodline = new HashSet<>();
+     List<Pair<Identifier,BloodlineData>> toAddBloodlines = new ArrayList<>();
+     Set<Identifier> toRemoveBloodline = new HashSet<>();
 
-    private List<Pair<Identifier,PathData>> toAddPaths = new ArrayList<>();
-    private Set<Identifier> toRemovePaths= new HashSet<>();
+     List<Pair<Identifier,PathData>> toAddPaths = new ArrayList<>();
+     Set<Identifier> toRemovePaths= new HashSet<>();
 
-    private List<Pair<Identifier,SkillData>> toAddSkills = new ArrayList<>();
-    private Set<Identifier> toRemoveSkills = new HashSet<>();
+     List<Pair<Identifier,SkillData>> toAddSkills = new ArrayList<>();
+     Set<Identifier> toRemoveSkills = new HashSet<>();
 
-    private List<Pair<Identifier,DataSourceInstance>> toAddDataSources = new ArrayList<>();
-    private Set<Identifier> toRemoveDataSources = new HashSet<>();
+     List<Pair<Identifier,DataSourceInstance>> toAddDataSources = new ArrayList<>();
+     Set<Identifier> toRemoveDataSources = new HashSet<>();
 
-    private Set<StatInstance> dirtyStats = new HashSet<>();
-    private Set<ValueContainer> dirtyAffinity = new HashSet<>();
+     Set<StatInstance> dirtyStats = new HashSet<>();
+     Set<ValueContainer> dirtyAffinity = new HashSet<>();
 
     private SourceChangesSnapshot(){
 

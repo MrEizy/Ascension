@@ -64,8 +64,6 @@ public interface Bloodline {
             }
         }
 
-        if(newPurity != oldPurity) source.markBloodlineDirty(CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this));
-
     }
 
     //represents a single purity increment

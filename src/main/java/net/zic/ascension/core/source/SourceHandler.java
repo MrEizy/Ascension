@@ -15,6 +15,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
@@ -41,7 +42,6 @@ public class SourceHandler extends SavedData {
     private final HashMap<SourceWatcher,OriginSource> watchers = new HashMap<>();
     private final HashMap<UUID,SourceWatcher> watchersIdMap = new HashMap<>();
 
-    private static final HashMap<OriginSource, HashSet<LivingEntity>> sourceWatchers2 = new HashMap<>();
 
     public static final Codec<OriginSource> ORIGIN_CODEC = Codec.of(new SourceEncoder(),new SourceDecoder());
     public static final SavedDataType<SourceHandler> ID = new SavedDataType<>(
@@ -118,6 +118,7 @@ public class SourceHandler extends SavedData {
         }
         //change to offline, itf only listener remove
         SourceWatcher watcher = watchersIdMap.get(entity.getUUID());
+        if(watcher == null) return;
         if(sourceWatchers.get(watchers.get(watcher)).size() == 1){
             removeWatcher(entity);
             return;
@@ -125,6 +126,11 @@ public class SourceHandler extends SavedData {
 
         watcher.setEntity(null);
     }
+    public void updateWatcherEntity(LivingEntity entity){
+        if(watchersIdMap.containsKey(entity.getUUID())) watchersIdMap.get(entity.getUUID()).setEntity(entity);
+        System.out.println(watchersIdMap.get(entity.getUUID()).isLoaded());
+    }
+
     public void addWatcher(LivingEntity entity,OriginSource source){
 
         if(!sourceWatchers.containsKey(source)){
@@ -132,6 +138,7 @@ public class SourceHandler extends SavedData {
         }
         if(watchersIdMap.containsKey(entity.getUUID())){
             changeWatcherState(entity,true);
+            updateWatcherEntity(entity);
             return;
         }
 
@@ -147,22 +154,17 @@ public class SourceHandler extends SavedData {
         SourceWatcher watcher = watchersIdMap.remove(entity.getUUID());
         OriginSource source = watchers.remove(watcher);
         sourceWatchers.get(source).remove(watcher);
+        if(sourceWatchers.get(source).isEmpty()) sourceWatchers.remove(source);
     }
 
-    public static Collection<LivingEntity> getLoadedWatchers(OriginSource source){
-        if(!sourceWatchers2.containsKey(source)) return Set.of();
-        return sourceWatchers2.get(source);
-    }
-    //when an origin source is modified you should always call updateSource so all watchers can sync themselves
-    //To the client
-    public static void updateSource(OriginSource source){
-        Set<LivingEntity> entities = sourceWatchers2.get(source);
-        for(LivingEntity entity : entities){
-            AscensionEntityDataHolder holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
-            if(holder == null) continue;
-            holder.markDirty(entity);
+    public Collection<LivingEntity> getLoadedWatchers(OriginSource source){
+        ArrayList<LivingEntity> arrayList = new ArrayList<>();
+        for(SourceWatcher watcher : sourceWatchers.get(source)){
+            if(watcher.isLoaded()) arrayList.add(watcher.getEntity());
         }
+        return arrayList;
     }
+
 
     /**TODO
      * THE PROCESS, ON ENTITY LOAD FIRST INITIALIZE THE ENTITY,
@@ -177,5 +179,19 @@ public class SourceHandler extends SavedData {
         if(holder == null) return;
 
         holder.getData(event.getEntity()).initialize();
+    }
+    @SubscribeEvent
+    public static void onLivingDeath(LivingDeathEvent event){
+        AscensionCraft.getSourceHandler().changeWatcherState(event.getEntity(),false);
+    }
+    @SubscribeEvent
+    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event){
+        AscensionEntityDataHolder holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        if(holder == null) return;
+
+        AscensionCraft.getSourceHandler().addWatcher(event.getEntity(),holder.getData(event.getEntity()).getSource());
+
+        holder.getData(event.getEntity()).initialize();
+
     }
 }

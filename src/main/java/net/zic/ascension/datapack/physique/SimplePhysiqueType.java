@@ -19,6 +19,7 @@ public class SimplePhysiqueType extends PhysiqueType {
                         ComponentSerialization.CODEC.fieldOf("name").forGetter(SimplePhysique::getName),
                         ComponentSerialization.CODEC.fieldOf("description").forGetter(SimplePhysique::getDescription),
                         Identifier.CODEC.listOf().fieldOf("paths").forGetter(SimplePhysique::getUnlockedPaths),
+                        Identifier.CODEC.listOf().fieldOf("skills").forGetter(SimplePhysique::getSkills),
                         ValueContainer.BASE_MODIFIER_CODEC.listOf().fieldOf("base_stats").forGetter(SimplePhysique::getBaseStats),
                         ValueContainerModifier.MAP_CODEC.fieldOf("stat_modifiers").forGetter(SimplePhysique::getStatModifiers),
                         ValueContainer.BASE_MODIFIER_CODEC.listOf().fieldOf("base_affinity").forGetter(SimplePhysique::getBaseAffinities),

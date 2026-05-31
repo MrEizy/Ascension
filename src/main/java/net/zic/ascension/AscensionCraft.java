@@ -16,6 +16,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 
 import net.zic.ascension.common.AscensionAttachments;
+import net.zic.ascension.common.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.AscensionItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.core.entity.AscensionStats;
@@ -24,6 +25,7 @@ import net.zic.ascension.datapack.bloodline.AscensionBloodlineTypes;
 import net.zic.ascension.datapack.bloodline.purity.action.AscensionPurityChangeActionTypes;
 import net.zic.ascension.datapack.bloodline.purity.condition.AscensionPurityChangeActionConditionsTypes;
 import net.zic.ascension.datapack.physique.AscensionPhysiqueTypes;
+import net.zic.ascension.datapack.skill.AscensionSkillTypes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -68,7 +70,7 @@ public class AscensionCraft {
         RECIPES.register(modEventBus);
 
 
-        NeoForge.EVENT_BUS.addListener(this::registerCommands);
+
 
 
     }
@@ -87,6 +89,7 @@ public class AscensionCraft {
         AscensionBloodlineTypes.register(modEventBus);
         AscensionPurityChangeActionTypes.register(modEventBus);
         AscensionPurityChangeActionConditionsTypes.register(modEventBus);
+        AscensionSkillTypes.register(modEventBus);
         register(modEventBus);
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -136,10 +139,10 @@ public class AscensionCraft {
     }
 
 
-    private void registerCommands(RegisterCommandsEvent event) {
-
+    @SubscribeEvent
+    public static void registerCommands(RegisterCommandsEvent event){
+        StatDisplayCommand.register(event.getDispatcher());
     }
-
 
     @SubscribeEvent
     public static void onServerLaunch(ServerStartingEvent event){
@@ -147,6 +150,8 @@ public class AscensionCraft {
 
         sourceHandler = event.getServer().overworld().getDataStorage().get(SourceHandler.ID);
     }
+
+
     public static SourceHandler getSourceHandler(){return sourceHandler;}
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
     public static class ModEvents {

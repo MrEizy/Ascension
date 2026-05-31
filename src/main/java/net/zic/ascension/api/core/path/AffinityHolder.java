@@ -41,4 +41,8 @@ public class AffinityHolder {
     public ValueContainer getAffinityContainer(Identifier path){
         return affinity.get(path);
     }
+
+    public void setAffinity(ValueContainer container){
+        affinity.put(container.getIdentifier(),container);
+    }
 }

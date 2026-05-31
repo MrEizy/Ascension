@@ -1,0 +1,14 @@
+{
+  "type": "ascension:simple_passive",
+  "name": "Iron Skin",
+  "description": "You have tempered your skin for years, tempering it like iron",
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.2,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:iron_skin_vitality_multiplier"
+      }
+    ]
+  }
+}

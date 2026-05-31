@@ -16,6 +16,7 @@ import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
 import net.zic.ascension.api.core.path.AffinityHolder;
+import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.SkillData;
@@ -29,6 +30,7 @@ import net.zic.zenithlib.stats.StatSheet;
 import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import oshi.util.tuples.Pair;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -131,11 +133,16 @@ public class OriginSource {
         return addBloodline(bloodline,CoreRegistries.BLOODLINE_REGISTRY.get(registryAccess).getValue(bloodline).newData(),registryAccess);
     }
     public void mergeBloodline(Identifier bloodline,BloodlineData data){
+
+        if(this instanceof ServerOriginSource source) source.startProcess(ProcessType.MODIFY_BLOODLINE);
         CoreRegistries.BLOODLINE_REGISTRY.get(getRegistryAccess()).getValue(bloodline).handlePurityChange(
                 this,
                 getBloodlineData(bloodline),
                 getBloodlineData(bloodline).getPurity()+data.getPurity()
         );
+
+        markBloodlineDirty(bloodline);
+
     }
     public boolean addBloodline(Identifier bloodline,BloodlineData data,RegistryAccess access){
         return addBloodline(bloodline,data, access,null);
@@ -223,6 +230,11 @@ public class OriginSource {
         skills.put(skill,data);
         return true;
     }
+
+    public void removeSkill(Identifier skill,RegistryAccess registryAccess){
+        skills.remove(skill);
+    }
+
     public boolean hasSkill(Identifier skill){
         return skills.containsKey(skill);
     }
@@ -302,7 +314,7 @@ public class OriginSource {
         return statSheet.asMap().keySet();
     }
     public void updateStatSheet(){
-        Collection<LivingEntity> entities = SourceHandler.getLoadedWatchers(this);
+        Collection<LivingEntity> entities = AscensionCraft.getSourceHandler().getLoadedWatchers(this);
         for(LivingEntity entity : entities) NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(entity,statSheet));
     }
     public void updateAttributes(ZenithAttributeHolder holder){
@@ -343,6 +355,7 @@ public class OriginSource {
     public void write(ValueOutput output){
 
 
+        AscensionCraft.LOGGER.debug("Saving Physique");
         try{
             ValueOutput physiqueOutput = output.child("physique");
             NbtHelpers.writeIdentifier(physiqueOutput,"id",getPhysique());
@@ -352,10 +365,12 @@ public class OriginSource {
             AscensionCraft.LOGGER.error("error writing physique {}",getPhysique());
             AscensionCraft.LOGGER.error("stacktrace: ",throwable);
         }
-
+        AscensionCraft.LOGGER.debug("Finished Saving Physique");
+        AscensionCraft.LOGGER.debug("Saving Bloodlines");
         try {
             ValueOutput.ValueOutputList bloodlines = output.childrenList("bloodlines");
             for(Identifier bloodline : getBloodlines()){
+                AscensionCraft.LOGGER.debug("Saving Bloodline {}",bloodline);
                try{
                    ValueOutput bloodlineOutput = bloodlines.addChild();
                    NbtHelpers.writeIdentifier(bloodlineOutput,"id",bloodline);
@@ -365,11 +380,13 @@ public class OriginSource {
                    AscensionCraft.LOGGER.error("error writing bloodline {}",bloodline);
                    AscensionCraft.LOGGER.error("stacktrace: ",throwable);
                }
+               AscensionCraft.LOGGER.debug("Finished Saving Bloodline");
             }
         }catch (Throwable throwable){
             AscensionCraft.LOGGER.error("error writing bloodlines");
             AscensionCraft.LOGGER.error("stacktrace: ",throwable);
         }
+        AscensionCraft.LOGGER.debug("Finished Saving Bloodlines");
     }
 
     public void load(RegistryAccess access){
@@ -377,10 +394,14 @@ public class OriginSource {
         load();
     }
 
+    /**
+     * A lazy init method for SaveData, lets us hold the compoundTag to later be wrapped in TagValueInput
+     * if we already have a ValueInput cached run that
+     */
     public void load(){
-        System.out.println("source is being loaded");
+
         if(cachedCached != null) {
-            System.out.println("loading source from compound tag");
+
             if(registryAccess != null) {
                 cached = TagValueInput.create(ProblemReporter.DISCARDING, registryAccess, cachedCached);
                 cachedCached = null;
@@ -394,7 +415,7 @@ public class OriginSource {
 
 
     public void load(ValueInput input){
-        System.out.println("source is being loaded from value input");
+        AscensionCraft.LOGGER.debug("Reading Physique");
         try{
             ValueInput physiqueInput = input.child("physique").get();
             Identifier id = NbtHelpers.readIdentifier(physiqueInput,"id");
@@ -411,12 +432,15 @@ public class OriginSource {
             AscensionCraft.LOGGER.error("stacktrace : ",throwable);
             //TODO set technique to default
         }
+        AscensionCraft.LOGGER.debug("Finished Reading Physique");
+        AscensionCraft.LOGGER.debug("Reading Bloodlines");
         try {
             ValueInput.ValueInputList bloodlinesInput = input.childrenListOrEmpty("bloodlines");
 
             for(ValueInput bloodlineInput : bloodlinesInput.stream().toList()){
                 try {
                     Identifier id = NbtHelpers.readIdentifier(bloodlineInput,"id");
+                    AscensionCraft.LOGGER.debug("Reading Bloodline {}",id);
                     Optional<ValueInput> data = bloodlineInput.child("data");
                     Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,id,getRegistryAccess());
                     if(data.isEmpty()) addBloodline(id,registryAccess);
@@ -427,13 +451,17 @@ public class OriginSource {
                     AscensionCraft.LOGGER.error("error loading bloodline");
                     AscensionCraft.LOGGER.error("stacktrace : ",throwable);
                 }
+                AscensionCraft.LOGGER.debug("Finished Reading Bloodline");
             }
         } catch (Throwable throwable){
             AscensionCraft.LOGGER.error("error loading all bloodlines");
             AscensionCraft.LOGGER.error("stacktrace : ",throwable);
         }
+        AscensionCraft.LOGGER.debug("Finished Reading BLoodlines");
 
     }
+
+    //TODO add full sync
 
     public void encode(RegistryFriendlyByteBuf buf){
 
@@ -447,6 +475,33 @@ public class OriginSource {
      * @param snapshot
      */
     public void apply(SourceChangesSnapshot snapshot){
-        //TODO implement
+        AscensionCraft.LOGGER.info("Applying patch");
+        if(snapshot.physique != null){
+            this.physique = snapshot.physique;
+            this.physiqueData = snapshot.physiqueData;
+        }
+
+        for(Pair<Identifier,BloodlineData> bloodline : snapshot.toAddBloodlines) bloodlines.put(bloodline.getA(),bloodline.getB());
+
+        for(Identifier toRemove : snapshot.toRemoveBloodline) bloodlines.remove(toRemove);
+
+        for(Pair<Identifier,PathData> path : snapshot.toAddPaths) paths.put(path.getA(),path.getB());
+
+        for(Identifier toRemove :snapshot.toRemovePaths) paths.remove(toRemove);
+
+        for(Pair<Identifier,SkillData> skill : snapshot.toAddSkills) skills.put(skill.getA(),skill.getB());
+
+        for(Identifier toRemove : snapshot.toRemoveSkills) skills.remove(toRemove);
+
+        for(Pair<Identifier,DataSourceInstance> dataSource : snapshot.toAddDataSources) dataSources.put(dataSource.getA(),dataSource.getB());
+
+        for(Identifier toRemove : snapshot.toRemoveDataSources) dataSources.remove(toRemove);
+
+
+        for(StatInstance stat : snapshot.dirtyStats) statSheet.setStat(stat);
+
+        for(ValueContainer affinity : snapshot.dirtyAffinity) affinityHolder.setAffinity(affinity);
+        AscensionCraft.LOGGER.info("Finished applying patch");
+
     }
 }
