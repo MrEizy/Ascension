@@ -107,16 +107,16 @@ public class SimplePassiveSkill implements Skill {
 
     @Override
     public SkillData newData() {
-        return null;
+        return new EmptySkillData();
     }
 
     @Override
     public SkillData loadData(ValueInput input) {
-        return null;
+        return new EmptySkillData();
     }
 
     @Override
     public SkillData loadData(ByteBuf buf) {
-        return null;
+        return new EmptySkillData();
     }
 }

@@ -1,7 +1,6 @@
 package net.zic.ascension.core.physique;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,27 +19,23 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class SimplePhysique implements Physique {
+public record SimplePhysique(Component name, Component description, List<Identifier> unlockedPaths,
+                             List<Identifier> skills, List<ValueContainer.BaseModifier> baseStats,
+                             Map<Identifier, List<ValueContainerModifier>> statModifiers,
+                             List<ValueContainer.BaseModifier> baseAffinities,
+                             Map<Identifier, List<ValueContainerModifier>> affinityModifiers) implements Physique {
 
 
-    private final Component name;
-    private final Component description;
-    private final List<Identifier> unlockedPaths;
-    private final List<Identifier> skills;
-    private final List<ValueContainer.BaseModifier> baseStats;
-    private final Map<Identifier,List<ValueContainerModifier>> statModifiers;
-    private final List<ValueContainer.BaseModifier> baseAffinities;
-    private final Map<Identifier,List<ValueContainerModifier>> affinityModifiers;
     public SimplePhysique(
             Component name,
             Component description,
             List<Identifier> unlockedPaths,
             List<Identifier> skills,
             List<ValueContainer.BaseModifier> baseStats,
-            Map<Identifier,List<ValueContainerModifier>> statModifiers,
+            Map<Identifier, List<ValueContainerModifier>> statModifiers,
             List<ValueContainer.BaseModifier> baseAffinities,
-            Map<Identifier,List<ValueContainerModifier>> affinityModifiers
-    ){
+            Map<Identifier, List<ValueContainerModifier>> affinityModifiers
+    ) {
         this.name = name;
         this.description = description;
         this.unlockedPaths = unlockedPaths;
@@ -48,7 +43,7 @@ public class SimplePhysique implements Physique {
         this.baseStats = baseStats;
         this.baseAffinities = baseAffinities;
         this.statModifiers = statModifiers;
-        this.affinityModifiers =affinityModifiers;
+        this.affinityModifiers = affinityModifiers;
         AscensionCraft.LOGGER.info("created Simple Physique {}", name);
     }
 
@@ -57,44 +52,19 @@ public class SimplePhysique implements Physique {
         return AscensionPhysiqueTypes.SIMPLE_PHYSIQUE_TYPE.get();
     }
 
-    public List<Identifier> getSkills(){return skills;}
-
-    public List<ValueContainer.BaseModifier> getBaseAffinities() {
-        return baseAffinities;
-    }
-
-    public List<ValueContainer.BaseModifier> getBaseStats() {
-        return baseStats;
-    }
-
-    public Map<Identifier, List<ValueContainerModifier>> getAffinityModifiers() {
-        return affinityModifiers;
-    }
-
-    public Map<Identifier, List<ValueContainerModifier>> getStatModifiers() {
-        return statModifiers;
-    }
-
-    public Component getName(){
-        return name;
-    }
-    public Component getDescription(){
-        return description;
-    }
-
     @Override
     public Collection<Identifier> onAdded(OriginSource source, PhysiqueData data) {
 
-        for(ValueContainer.BaseModifier baseModifier : baseStats){
-            source.addStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()),baseModifier.val());
+        for (ValueContainer.BaseModifier baseModifier : baseStats) {
+            source.addStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()), baseModifier.val());
         }
-        for(Identifier stat : statModifiers.keySet()){
-            for(ValueContainerModifier modifier : statModifiers.get(stat)){
-                source.addStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat),modifier);
+        for (Identifier stat : statModifiers.keySet()) {
+            for (ValueContainerModifier modifier : statModifiers.get(stat)) {
+                source.addStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat), modifier);
             }
         }
-        for(Identifier skill : skills){
-            source.addSkill(skill,source.getRegistryAccess());
+        for (Identifier skill : skills) {
+            source.addSkill(skill, source.getRegistryAccess());
         }
 
         return unlockedPaths;
@@ -102,19 +72,19 @@ public class SimplePhysique implements Physique {
 
     @Override
     public Collection<Identifier> onRemoved(OriginSource source, PhysiqueData data) {
-        for(ValueContainer.BaseModifier baseModifier : baseStats){
-            source.removeStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()),baseModifier.val());
+        for (ValueContainer.BaseModifier baseModifier : baseStats) {
+            source.removeStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()), baseModifier.val());
         }
-        for(Identifier stat : statModifiers.keySet()){
-            for(ValueContainerModifier modifier : statModifiers.get(stat)){
+        for (Identifier stat : statModifiers.keySet()) {
+            for (ValueContainerModifier modifier : statModifiers.get(stat)) {
 
-                source.removeStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat),modifier.getIdentifier());
+                source.removeStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat), modifier.getIdentifier());
             }
         }
         //TODO update to more properly handle the try remove to more efficiently check by directly calling skillRemovalAttempt on bloodline,technique, physique and data source
 
-        for(Identifier skill : skills){
-            source.removeSkill(skill,source.getRegistryAccess());
+        for (Identifier skill : skills) {
+            source.removeSkill(skill, source.getRegistryAccess());
         }
 
         return unlockedPaths;
@@ -143,9 +113,5 @@ public class SimplePhysique implements Physique {
     @Override
     public PhysiqueData loadData(ByteBuf buf) {
         return null;
-    }
-
-    public List<Identifier> getUnlockedPaths(){
-        return unlockedPaths;
     }
 }

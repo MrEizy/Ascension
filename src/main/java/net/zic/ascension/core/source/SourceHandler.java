@@ -20,6 +20,10 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
+import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.bloodline.Bloodline;
+import net.zic.ascension.api.core.physique.Physique;
+import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.source.OriginSource;
 
 import java.util.*;
@@ -158,6 +162,7 @@ public class SourceHandler extends SavedData {
     }
 
     public Collection<LivingEntity> getLoadedWatchers(OriginSource source){
+        if(!sourceWatchers.containsKey(source)) return List.of();
         ArrayList<LivingEntity> arrayList = new ArrayList<>();
         for(SourceWatcher watcher : sourceWatchers.get(source)){
             if(watcher.isLoaded()) arrayList.add(watcher.getEntity());
@@ -165,7 +170,47 @@ public class SourceHandler extends SavedData {
         return arrayList;
     }
 
+    public void applyToWatcher(LivingEntity watcher){
+        if(!watchersIdMap.containsKey(watcher.getUUID())) return;
+        OriginSource source = watchers.get(watchersIdMap.get(watcher.getUUID()));
+        Physique physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,source.getPhysique(),source.getRegistryAccess());
+        if(physique != null){
+            physique.applyToEntity(watcher,source.getPhysiqueData());
+        }
+        for(Identifier bloodline : source.getBloodlines()){
+            Bloodline bloodlineInstance = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodline,source.getRegistryAccess());
+            if(bloodlineInstance != null){
+                bloodlineInstance.applyToEntity(watcher,source.getBloodlineData(bloodline));
+            }
+        }
+        for(Identifier skill: source.getSkills()){
+            Skill skillInstance = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,source.getRegistryAccess());
+            if(skillInstance != null){
+                skillInstance.applyToEntity(watcher,source.getSkillData(skill));
+            }
+        }
 
+    }
+    public void removeFromWatcher(LivingEntity watcher){
+        if(!watchersIdMap.containsKey(watcher.getUUID())) return;
+        OriginSource source = watchers.get(watchersIdMap.get(watcher.getUUID()));
+        Physique physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,source.getPhysique(),source.getRegistryAccess());
+        if(physique != null){
+            physique.removeFromEntity(watcher,source.getPhysiqueData());
+        }
+        for(Identifier bloodline : source.getBloodlines()){
+            Bloodline bloodlineInstance = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodline,source.getRegistryAccess());
+            if(bloodlineInstance != null){
+                bloodlineInstance.removeFromEntity(watcher,source.getBloodlineData(bloodline));
+            }
+        }
+        for(Identifier skill: source.getSkills()){
+            Skill skillInstance = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,source.getRegistryAccess());
+            if(skillInstance != null){
+                skillInstance.removeFromEntity(watcher,source.getSkillData(skill));
+            }
+        }
+    }
     /**TODO
      * THE PROCESS, ON ENTITY LOAD FIRST INITIALIZE THE ENTITY,
      * THEN ADD IT AS A WATCHER

@@ -1,5 +1,6 @@
 package net.zic.ascension.api.core.source;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.bloodline.Bloodline;
@@ -86,7 +88,7 @@ public class OriginSource {
     public ValueInput getCached(){return cached;}
 
     public RegistryAccess getRegistryAccess(){
-        return registryAccess;
+       return Minecraft.getInstance().getConnection() == null ? null : Minecraft.getInstance().getConnection().registryAccess();
     }
 
     public void setRegistryAccess(RegistryAccess access){
@@ -231,9 +233,12 @@ public class OriginSource {
         return true;
     }
 
-    public void removeSkill(Identifier skill,RegistryAccess registryAccess){
+    public boolean removeSkill(Identifier skill,RegistryAccess registryAccess){
         skills.remove(skill);
+        return true;
     }
+
+    public Collection<Identifier> getSkills(){return skills.keySet();}
 
     public boolean hasSkill(Identifier skill){
         return skills.containsKey(skill);

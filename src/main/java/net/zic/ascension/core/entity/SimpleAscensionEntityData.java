@@ -62,11 +62,16 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     @Override
     public void initialize() {
 
-        source.load();
         //TODO make sure this properly handles simulation of adding
         //TODO make sure the PathData knows which side it is on for event handling
+        //TODO potentially have the source call the events (as in the path tells source hey call this event)
+        //TODO and blank source does nothing
+        source.load();
+
 
         initializeAttributes();
+
+        AscensionCraft.getSourceHandler().applyToWatcher(attachedEntity);
 
     }
 

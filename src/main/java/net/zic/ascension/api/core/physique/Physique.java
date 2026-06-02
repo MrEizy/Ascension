@@ -16,9 +16,9 @@ public interface  Physique {
 
     PhysiqueType getType();
 
-    Component getName();
+    Component name();
 
-    Component getDescription();
+    Component description();
 
     /**
      * called when the physique is added to an origin source

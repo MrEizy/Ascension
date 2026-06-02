@@ -105,7 +105,8 @@ public class SourceChangesSnapshot {
         //encode skills
         ByteBufHelpers.encodeCollection(toAddSkills,buf,(pair,byteBuf)->{
             ByteBufHelpers.encodeIdentifier(pair.getA(),byteBuf);
-            pair.getB().encode(byteBuf);
+            buf.writeBoolean(pair.getB()!=null);
+            if(pair.getB() != null) pair.getB().encode(byteBuf);
         });
         ByteBufHelpers.encodeCollection(toRemoveSkills,buf,ByteBufHelpers::encodeIdentifier);
 
@@ -145,7 +146,8 @@ public class SourceChangesSnapshot {
 
         snapshot.toAddSkills = ByteBufHelpers.decodeArray(buf,(byteBuf)->{
             Identifier identifier = ByteBufHelpers.decodeIdentifier(byteBuf);
-            SkillData data = CoreRegistries.SKILL_REGISTRY.get(access).getValue(identifier).loadData(byteBuf);
+            SkillData data = null;
+            if(buf.readBoolean()) data = CoreRegistries.SKILL_REGISTRY.get(access).getValue(identifier).loadData(byteBuf);
             return new Pair<>(identifier,data);
         });
         snapshot.toRemoveSkills = new HashSet<>(ByteBufHelpers.decodeArray(buf, ByteBufHelpers::decodeIdentifier));

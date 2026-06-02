@@ -5,7 +5,7 @@
   "stat_modifiers": {
     "ascension:vitality": [
       {
-        "value": 0.2,
+        "value": 4,
         "operation": "MULTIPLY_FINAL",
         "id": "ascension:iron_skin_vitality_multiplier"
       }

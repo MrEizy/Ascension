@@ -1,6 +1,5 @@
 package net.zic.ascension.datapack.physique;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -11,19 +10,22 @@ import net.zic.ascension.core.physique.SimplePhysique;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
+import java.util.List;
+import java.util.Map;
+
 public class SimplePhysiqueType extends PhysiqueType {
     @Override
     public MapCodec<? extends Physique> codec() {
         return RecordCodecBuilder.<SimplePhysique>mapCodec(instance ->
                 instance.group(
-                        ComponentSerialization.CODEC.fieldOf("name").forGetter(SimplePhysique::getName),
-                        ComponentSerialization.CODEC.fieldOf("description").forGetter(SimplePhysique::getDescription),
-                        Identifier.CODEC.listOf().fieldOf("paths").forGetter(SimplePhysique::getUnlockedPaths),
-                        Identifier.CODEC.listOf().fieldOf("skills").forGetter(SimplePhysique::getSkills),
-                        ValueContainer.BASE_MODIFIER_CODEC.listOf().fieldOf("base_stats").forGetter(SimplePhysique::getBaseStats),
-                        ValueContainerModifier.MAP_CODEC.fieldOf("stat_modifiers").forGetter(SimplePhysique::getStatModifiers),
-                        ValueContainer.BASE_MODIFIER_CODEC.listOf().fieldOf("base_affinity").forGetter(SimplePhysique::getBaseAffinities),
-                        ValueContainerModifier.MAP_CODEC.fieldOf("affinity_modifiers").forGetter(SimplePhysique::getAffinityModifiers)
+                        ComponentSerialization.CODEC.fieldOf("name").forGetter(SimplePhysique::name),
+                        ComponentSerialization.CODEC.fieldOf("description").forGetter(SimplePhysique::description),
+                        Identifier.CODEC.listOf().fieldOf("paths").forGetter(SimplePhysique::unlockedPaths),
+                        Identifier.CODEC.listOf().optionalFieldOf("skills", List.of()).forGetter(SimplePhysique::skills),
+                        ValueContainer.BASE_MODIFIER_CODEC.listOf().optionalFieldOf("base_stats",List.of()).forGetter(SimplePhysique::baseStats),
+                        ValueContainerModifier.MAP_CODEC.optionalFieldOf("stat_modifiers", Map.of()).forGetter(SimplePhysique::statModifiers),
+                        ValueContainer.BASE_MODIFIER_CODEC.listOf().optionalFieldOf("base_affinity",List.of()).forGetter(SimplePhysique::baseAffinities),
+                        ValueContainerModifier.MAP_CODEC.optionalFieldOf("affinity_modifiers",Map.of()).forGetter(SimplePhysique::affinityModifiers)
                         ).apply(instance, SimplePhysique::new)
         );
     }

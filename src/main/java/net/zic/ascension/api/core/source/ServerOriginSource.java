@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
@@ -22,6 +23,8 @@ import net.zic.ascension.api.event.bloodline.BloodlineRemovedEvent;
 import net.zic.ascension.api.event.path.PathAddedEvent;
 import net.zic.ascension.api.event.path.PathRemovedEvent;
 import net.zic.ascension.api.event.physique.PhysiqueChangedEvent;
+import net.zic.ascension.api.event.skill.SkillAddedEvent;
+import net.zic.ascension.api.event.skill.SkillRemovedEvent;
 import net.zic.ascension.core.source.SourceHandler;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.StatInstance;
@@ -47,6 +50,7 @@ import java.util.*;
  * TODO this way we only sync when whatever started the process wants to sync
  * TODO so lets say i add a physique, even though we add stats, modifers skills and paths, it will not sync until physique calls resolve
  */
+//TODO go through and update EVERYTHING to not rely on a registry access stored inside OriginSource, if it needs it the method should accept registryaccess
 public class ServerOriginSource extends OriginSource {
     //──Sync Data────────────────────────────────────────────────────────
     private boolean physiqueDirty = true;
@@ -100,9 +104,17 @@ public class ServerOriginSource extends OriginSource {
         startProcess(ProcessType.PHYSIQUE);
 
         Collection<Identifier> toRemove = oldPhysique == null ? List.of() : pre.getPhysique(access).onRemoved(this,oldPhysiqueData);
-
+        if(pre.getPhysique(getRegistryAccess()) != null){
+            for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
+                pre.getPhysique(getRegistryAccess()).removeFromEntity(entity,oldPhysiqueData);
+            }
+        }
         Collection<Identifier> toAdd = pre.getNewPhysique(access).onAdded(this, pre.getNewPhysiqueData());
-
+        if(pre.getNewPhysique(getRegistryAccess()) != null){
+            for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
+                pre.getNewPhysique(getRegistryAccess()).applyToEntity(entity,pre.getNewPhysiqueData());
+            }
+        }
         PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData(),this,reason);
         NeoForge.EVENT_BUS.post(post);
 
@@ -139,11 +151,17 @@ public class ServerOriginSource extends OriginSource {
         data.setPurity(1);
         Collection<Identifier> toAdd = pre.getBloodline(access).onAdded(this,pre.getBloodlineData());
 
+        if(pre.getBloodline(getRegistryAccess()) != null){
+            for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
+                pre.getBloodline(getRegistryAccess()).applyToEntity(entity,pre.getBloodlineData());
+            }
+        }
         pre.getBloodline(access).handlePurityChange(this,data,purity);
 
         for(Identifier path : toAdd){
             addPath(path,access);
         }
+
 
 
         BloodlineAddedEvent.Post post= new BloodlineAddedEvent.Post(bloodline,data,this,reason);
@@ -173,7 +191,11 @@ public class ServerOriginSource extends OriginSource {
         startProcess(ProcessType.REMOVE_BLOODLINE);
 
         Collection<Identifier> toRemove = pre.getBloodline(access).onRemoved(this,pre.getBloodlineData());
-
+        if(pre.getBloodline(getRegistryAccess()) != null){
+            for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
+                pre.getBloodline(getRegistryAccess()).removeFromEntity(entity,pre.getBloodlineData());
+            }
+        }
         for(Identifier path : toRemove){
             removePath(path,access);
         }
@@ -230,6 +252,67 @@ public class ServerOriginSource extends OriginSource {
         resolveProcess(ProcessType.REMOVE_PATH);
         return true;
     }
+
+
+    @Override
+    public boolean addSkill(Identifier skill, SkillData data) {
+        if(skill == null) return false;
+        if(!CoreRegistries.SKILL_REGISTRY.get(getRegistryAccess()).containsKey(skill)) return false;
+
+        SkillAddedEvent.Pre pre = new SkillAddedEvent.Pre(this,skill,data,null);
+        NeoForge.EVENT_BUS.post(pre);
+        if(pre.isCanceled()) return false;
+
+        boolean result = super.addSkill(skill, data);
+        if(!result) return false;
+
+        startProcess(ProcessType.ADD_SKILL);
+        if(pre.getSkill(getRegistryAccess()) != null){
+            for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
+                pre.getSkill(getRegistryAccess()).applyToEntity(entity,pre.getSkillData());
+            }
+        }
+        pre.getSkill(getRegistryAccess()).onAdded(this,data);
+        SkillAddedEvent.Post post = new SkillAddedEvent.Post(this,skill,data,null);
+        NeoForge.EVENT_BUS.post(post);
+
+        toAddSkills.put(skill,data);
+        resolveProcess(ProcessType.ADD_SKILL);
+        return true;
+    }
+    //TODO updated to include EventReason
+    @Override
+    public boolean removeSkill(Identifier skill, RegistryAccess registryAccess) {
+        if(skill == null || !hasSkill(skill)) return false;
+        if(!CoreRegistries.SKILL_REGISTRY.get(registryAccess).containsKey(skill)) return false;
+        SkillData data = getSkillData(skill);
+        SkillRemovedEvent.Pre pre = new SkillRemovedEvent.Pre(this,skill,data,null);
+        NeoForge.EVENT_BUS.post(pre);
+        if(pre.isCanceled()) return false;
+
+        boolean result = super.removeSkill(skill, registryAccess);
+        if(!result) return false;
+
+        startProcess(ProcessType.REMOVE_SKILL);
+        pre.getSkill(registryAccess).onRemoved(this,data);
+        if(pre.getSkill(getRegistryAccess()) != null){
+            for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
+                pre.getSkill(getRegistryAccess()).removeFromEntity(entity,pre.getSkillData());
+            }
+        }
+        SkillRemovedEvent.Post post = new SkillRemovedEvent.Post(this,skill,data,null);
+        NeoForge.EVENT_BUS.post(post);
+
+        toRemoveSkills.add(skill);
+        resolveProcess(ProcessType.REMOVE_SKILL);
+        return true;
+    }
+
+    @Override
+    public RegistryAccess getRegistryAccess() {
+        return ServerLifecycleHooks.getCurrentServer() != null ? ServerLifecycleHooks.getCurrentServer().registryAccess() : null;
+    }
+
     //──Network────────────────────────────────────────────────────────
 
 

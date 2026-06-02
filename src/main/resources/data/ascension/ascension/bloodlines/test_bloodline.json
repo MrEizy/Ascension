@@ -6,6 +6,10 @@
     {
       "condition": "ascension:all_purity",
       "action" : "ascension:generic_give_stats"
+    },
+    {
+      "condition": "ascension:on_gained",
+      "action": "ascension:give_iron_skin"
     }
   ]
 

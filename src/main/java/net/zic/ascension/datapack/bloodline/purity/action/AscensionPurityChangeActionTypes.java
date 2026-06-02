@@ -6,6 +6,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.datapack.TypeRegistries;
 import net.zic.ascension.api.datapack.bloodline.purity.PurityChangeActionType;
+import net.zic.ascension.core.bloodline.purity.action.GiveSkillsAction;
 
 public class AscensionPurityChangeActionTypes {
     public static final DeferredRegister<PurityChangeActionType> PURITY_CHANGE_ACTION_TYPES =
@@ -15,7 +16,10 @@ public class AscensionPurityChangeActionTypes {
             "give_base_stats",
             GiveBaseStatsActionType::new
     );
-
+    public static final DeferredHolder<PurityChangeActionType,PurityChangeActionType> GIVE_SKILLS_TYPE = PURITY_CHANGE_ACTION_TYPES.register(
+            "give_skills",
+            GiveSkillsActionType::new
+    );
     public static void register(IEventBus eventBus){
 
         PURITY_CHANGE_ACTION_TYPES.register(eventBus);

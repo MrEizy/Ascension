@@ -14,15 +14,8 @@ import java.util.UUID;
  * Similar to realm change handler but for bloodline purity
  */
 public interface PurityChangeAction {
-    /**
-     *
-     * @param handlerId the unique Id of the handler which can be used for modifier Id
-     * @param source
-     * @param bloodline
-     * @param bloodlineData
-     * @param direction
-     * @return
-     */
+
+
     void run(UUID handlerId, OriginSource source, Bloodline bloodline, BloodlineData bloodlineData,int purity, ProgressDirection direction);
 
 
