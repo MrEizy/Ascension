@@ -12,20 +12,22 @@ import net.zic.ascension.api.core.bloodline.purity.PurityChangeActionCondition;
 import net.zic.ascension.api.core.data_source.DataSource;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.physique.Physique;
+import net.zic.ascension.api.core.progression.ProgressAction;
+import net.zic.ascension.api.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.realm_change.RealmChangeAction;
 import net.zic.ascension.api.core.technique.realm_change.RealmChangeActionCondition;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
-import net.zic.ascension.api.datapack.bloodline.purity.PurityChangeActionConditionType;
-import net.zic.ascension.api.datapack.bloodline.purity.PurityChangeActionType;
+
 import net.zic.ascension.api.datapack.data_source.DataSourceType;
 import net.zic.ascension.api.datapack.path.PathType;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
+import net.zic.ascension.api.datapack.progresison.ProgressActionConditionType;
+import net.zic.ascension.api.datapack.progresison.ProgressActionType;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
-import net.zic.ascension.api.datapack.technique.realm_change.RealmChangeActionType;
-import net.zic.ascension.api.datapack.technique.realm_change.RealmChangeActionConditionType;
+
 import net.zic.zenithlib.registry.RegistryHelper;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class CoreRegistries {
@@ -61,29 +63,17 @@ public class CoreRegistries {
             ()-> DataSourceType.DATA_SOURCE_CODEC
     );
 
-    public static final RegistryHelper.DataPackRegistry<RealmChangeActionCondition> REALM_CHANGE_ACTION_CONDITION_REGISTRY = RegistryHelper.dataPackRegistry(
+    public static final RegistryHelper.DataPackRegistry<ProgressAction> PROGRESS_ACTION_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID,
-            "realm_change_action_conditions",
-            ()-> RealmChangeActionConditionType.REALM_CHANGE_ACTION_CONDITION_CODEC
+            "progress_actions",
+            ()-> ProgressActionType.PROGRESS_ACTION_CODEC
+    );
+    public static final RegistryHelper.DataPackRegistry<ProgressActionCondition> PROGRESS_ACTION_CONDITION_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID,
+            "progress_action_conditions",
+            ()-> ProgressActionConditionType.PROGRESS_ACTION_CONDITION_CODEC
     );
 
-    public static final RegistryHelper.DataPackRegistry<RealmChangeAction> REALM_CHANGE_ACTION_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID,
-            "realm_change_actions",
-            ()-> RealmChangeActionType.REALM_CHANGE_ACTION_CODEC
-    );
-
-    public static final RegistryHelper.DataPackRegistry<PurityChangeAction> PURITY_CHANGE_ACTION_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID,
-            "purity_change_actions",
-            ()-> PurityChangeActionType.PURITY_CHANGE_ACTION_CODEC
-    );
-
-    public static final RegistryHelper.DataPackRegistry<PurityChangeActionCondition> PURITY_CHANGE_ACTION_CONDITION_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID,
-            "purity_change_action_conditions",
-            ()-> PurityChangeActionConditionType.PURITY_CHANGE_ACTION_CONDITION_CODEC
-    );
 
     public static <T> T safeAccess(RegistryHelper.DataPackRegistry<T> registry, Identifier id, RegistryAccess access){
         try {
@@ -131,25 +121,16 @@ public class CoreRegistries {
                 DATA_SOURCE_REGISTRY.codec().get()
         );
         event.dataPackRegistry(
-                REALM_CHANGE_ACTION_REGISTRY.key(),
-                REALM_CHANGE_ACTION_REGISTRY.codec().get(),
-                REALM_CHANGE_ACTION_REGISTRY.codec().get()
+                PROGRESS_ACTION_REGISTRY.key(),
+                PROGRESS_ACTION_REGISTRY.codec().get(),
+                PROGRESS_ACTION_REGISTRY.codec().get()
         );
         event.dataPackRegistry(
-                REALM_CHANGE_ACTION_CONDITION_REGISTRY.key(),
-                REALM_CHANGE_ACTION_CONDITION_REGISTRY.codec().get(),
-                REALM_CHANGE_ACTION_CONDITION_REGISTRY.codec().get()
+                PROGRESS_ACTION_CONDITION_REGISTRY.key(),
+                PROGRESS_ACTION_CONDITION_REGISTRY.codec().get(),
+                PROGRESS_ACTION_CONDITION_REGISTRY.codec().get()
         );
-        event.dataPackRegistry(
-                PURITY_CHANGE_ACTION_REGISTRY.key(),
-                PURITY_CHANGE_ACTION_REGISTRY.codec().get(),
-                PURITY_CHANGE_ACTION_REGISTRY.codec().get()
-        );
-        event.dataPackRegistry(
-                PURITY_CHANGE_ACTION_CONDITION_REGISTRY.key(),
-                PURITY_CHANGE_ACTION_CONDITION_REGISTRY.codec().get(),
-                PURITY_CHANGE_ACTION_CONDITION_REGISTRY.codec().get()
-        );
+
 
     }
 }

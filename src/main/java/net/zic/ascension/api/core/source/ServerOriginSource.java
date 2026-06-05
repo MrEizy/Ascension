@@ -17,6 +17,7 @@ import net.zic.ascension.api.core.data_source.DataSourceInstance;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.core.technique.TechniqueData;
 import net.zic.ascension.api.event.EventReason;
 import net.zic.ascension.api.event.bloodline.BloodlineAddedEvent;
 import net.zic.ascension.api.event.bloodline.BloodlineRemovedEvent;
@@ -229,6 +230,29 @@ public class ServerOriginSource extends OriginSource {
         toAddPaths.put(path,existingData);
         resolveProcess(ProcessType.ADD_PATH);
         return true;
+    }
+
+    //TODO implement such that a technique removed and added event is called that are cancellable
+
+
+    @Override
+    public boolean broadcastTechniqueAddedAttempt(Identifier technique, TechniqueData data) {
+        return super.broadcastTechniqueAddedAttempt(technique, data);
+    }
+
+    @Override
+    public void broadcastTechniqueAdded(Identifier technique, TechniqueData data) {
+        super.broadcastTechniqueAdded(technique, data);
+    }
+
+    @Override
+    public boolean broadcastTechniqueRemovedAttempt(Identifier technique, TechniqueData data) {
+        return super.broadcastTechniqueRemovedAttempt(technique, data);
+    }
+
+    @Override
+    public void broadcastTechniqueRemoved(Identifier technique, TechniqueData data) {
+        super.broadcastTechniqueRemoved(technique, data);
     }
 
     @Override

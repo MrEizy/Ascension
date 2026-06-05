@@ -5,6 +5,21 @@
   "paths": [
     "ascension:essence"
   ],
+  "item_tooltip": {
+    "title": [
+
+    ],
+    "1": [
+      "ascension:name",
+      "ascension:descriptions"
+    ],
+    "2": [
+
+    ],
+    "footer": [
+
+    ]
+  },
   "base_stats": [
     {
       "id": "ascension:vitality",

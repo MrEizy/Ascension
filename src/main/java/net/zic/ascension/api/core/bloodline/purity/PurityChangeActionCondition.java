@@ -1,25 +1,28 @@
 package net.zic.ascension.api.core.bloodline.purity;
 
-import net.zic.ascension.api.core.ProgressDirection;
+import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
+import net.zic.ascension.api.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.datapack.bloodline.purity.PurityChangeActionConditionType;
-
-/**
- * every purity change this is tested, if true we run the purity change action it is associated with
- */
-public interface PurityChangeActionCondition {
-    /**
-     * purity 1 up/down is a special condition, equivalent to adding/removing said bloodline
-     * @param source
-     * @param bloodline
-     * @param bloodlineData
-     * @param direction
-     * @return
-     */
-    boolean test(OriginSource source, Bloodline bloodline, BloodlineData bloodlineData,int purity, ProgressDirection direction);
 
 
-    PurityChangeActionConditionType getType();
+public interface PurityChangeActionCondition extends ProgressActionCondition {
+    @Override
+    default boolean test(OriginSource source, Identifier contextIdentifier, ProgressDirection direction){
+        //first test to make sure context is a bloodline
+        Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,contextIdentifier,source.getRegistryAccess());
+        if(bloodline == null) return false;
+
+        BloodlineData data = source.getBloodlineData(contextIdentifier);
+        int purity = data.getPurity();
+        if(direction == ProgressDirection.DOWN) purity++;
+
+        return test(source,bloodline,data,purity,direction);
+    }
+
+    boolean test(OriginSource source,Bloodline bloodline,BloodlineData data,int purity,ProgressDirection direction);
+
 }

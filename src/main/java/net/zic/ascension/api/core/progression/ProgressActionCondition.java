@@ -1,10 +1,10 @@
 package net.zic.ascension.api.core.progression;
 
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.core.ProgressDirection;
 import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.datapack.progresison.ProgressActionConditionType;
 
-public interface ProgressionActionCondition {
+public interface ProgressActionCondition {
     /**
      *
      * @param source the origin source this condition is called on
@@ -14,4 +14,6 @@ public interface ProgressionActionCondition {
      */
     boolean test(OriginSource source, Identifier contextIdentifier, ProgressDirection direction);
 
+
+    ProgressActionConditionType getType();
 }

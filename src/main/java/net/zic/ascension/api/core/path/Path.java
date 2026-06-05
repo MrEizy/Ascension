@@ -18,8 +18,8 @@ public interface Path {
 
     //──Realms────────────────────────────────────────────────────────
 
-    Component getMajorRealmName();
-    Component getMinorRealmName();
+    Component getMajorRealmName(int majorRealm);
+    Component getMinorRealmName(int majorRealm,int minorRealm);
 
     // returns the formatted name of the realm when both major and minor realm are displayed together
     Component getRealmName(int majorRealm, int minorRealm);

@@ -1,4 +1,4 @@
-package net.zic.ascension.api.core;
+package net.zic.ascension.api.core.progression;
 
 public enum ProgressDirection {
     UP,

@@ -54,13 +54,15 @@ public interface Bloodline {
             //purity decreased
             for(int purity = data.getPurity();purity>newPurity;purity--){
                 data.setPurity(purity);
-                purityDown(source,data,purity);
+                purityDown(source,data);
             }
         }else{
+
             //purity increased
             for(int purity = data.getPurity()+1;purity<=newPurity;purity++){
+                System.out.println(purity);
                 data.setPurity(purity);
-                purityUp(source,data,purity);
+                purityUp(source,data);
             }
         }
 
@@ -69,8 +71,8 @@ public interface Bloodline {
     //represents a single purity increment
     //for handler on down should actually use the previous value rather than the current one
 
-    void purityDown(OriginSource source,BloodlineData data, int newPurity);
-    void purityUp(OriginSource source,BloodlineData data, int newPurity);
+    void purityDown(OriginSource source,BloodlineData data);
+    void purityUp(OriginSource source,BloodlineData data);
 
     BloodlineData newData();
     BloodlineData loadData(ValueInput input);

@@ -22,6 +22,7 @@ import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.core.technique.TechniqueData;
 import net.zic.ascension.api.event.EventReason;
 import net.zic.ascension.core.source.SourceHandler;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
@@ -216,8 +217,18 @@ public class OriginSource {
     public PathData getPathData(Identifier path){
         return paths.get(path);
     }
+    public boolean broadcastTechniqueAddedAttempt(Identifier technique, TechniqueData data){
+        return true;
+    }
+    public void broadcastTechniqueAdded(Identifier technique, TechniqueData data){
 
+    }
+    public boolean broadcastTechniqueRemovedAttempt(Identifier technique, TechniqueData data){
+        return true;
+    }
+    public void broadcastTechniqueRemoved(Identifier technique, TechniqueData data){
 
+    }
     public void markPathDirty(Identifier path){}//should be used if you changed a paths pathData
 
     //──Skill────────────────────────────────────────────────────────
@@ -293,10 +304,12 @@ public class OriginSource {
     }
 
     public void addStatModifier(Stat stat,ValueContainerModifier modifier){
+        statSheet.addStat(stat,0); //makes sure the stat is present
         statSheet.getStatInstance(stat).addModifier(modifier);
         updateStatSheet();
     }
     public void removeStatModifier(Stat stat,Identifier identifier){
+        if(statSheet.getStatInstance(stat) == null) return;
         statSheet.getStatInstance(stat).removeModifier(identifier);
         updateStatSheet();
     }

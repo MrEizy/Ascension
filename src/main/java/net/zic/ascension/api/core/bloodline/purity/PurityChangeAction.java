@@ -1,23 +1,34 @@
 package net.zic.ascension.api.core.bloodline.purity;
 
-import net.zic.ascension.api.core.ProgressDirection;
+import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
+import net.zic.ascension.api.core.progression.ProgressAction;
 import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.technique.Technique;
-import net.zic.ascension.api.core.technique.TechniqueData;
-import net.zic.ascension.api.datapack.bloodline.purity.PurityChangeActionType;
+
 
 import java.util.UUID;
 
 /**
- * Similar to realm change handler but for bloodline purity
+ * provides context needed for purity changes
  */
-public interface PurityChangeAction {
+public interface PurityChangeAction extends ProgressAction {
 
+    @Override
+    default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, ProgressDirection direction){
+        //first test to make sure context is a bloodline
+        Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,contextIdentifier,source.getRegistryAccess());
+        if(bloodline == null) return;
 
-    void run(UUID handlerId, OriginSource source, Bloodline bloodline, BloodlineData bloodlineData,int purity, ProgressDirection direction);
+        BloodlineData data = source.getBloodlineData(contextIdentifier);
+        int purity = data.getPurity();
+        if(direction == ProgressDirection.DOWN) purity++;
 
+        run(holderId,source,bloodline,data,purity,direction);
+    }
 
-    PurityChangeActionType getType();
+    void run(UUID holderId,OriginSource source,Bloodline bloodline,BloodlineData data,int purity,ProgressDirection direction);
+
 }

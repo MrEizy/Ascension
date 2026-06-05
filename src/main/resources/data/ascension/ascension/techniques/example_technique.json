@@ -1,0 +1,7 @@
+{
+  "type": "ascension:simple_technique",
+  "name": "Example Technique",
+  "description": "this is an example",
+  "path": "ascension:foundation/essence",
+  "max_realm": 4
+}

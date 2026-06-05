@@ -15,6 +15,8 @@ import java.util.Collection;
 //TODO decide if i want to pass source or entity wrapper
 public interface PathData {
     //──Getters────────────────────────────────────────────────────────
+    Identifier getPath();
+
     int getMajorRealm();
     int getMinorRealm();
 

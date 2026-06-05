@@ -9,7 +9,6 @@ import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -22,10 +21,11 @@ import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.core.entity.AscensionStats;
 import net.zic.ascension.core.source.SourceHandler;
 import net.zic.ascension.datapack.bloodline.AscensionBloodlineTypes;
-import net.zic.ascension.datapack.bloodline.purity.action.AscensionPurityChangeActionTypes;
-import net.zic.ascension.datapack.bloodline.purity.condition.AscensionPurityChangeActionConditionsTypes;
 import net.zic.ascension.datapack.physique.AscensionPhysiqueTypes;
+import net.zic.ascension.datapack.progression.AscensionProgressActionConditionTypes;
+import net.zic.ascension.datapack.progression.AscensionProgressActionTypes;
 import net.zic.ascension.datapack.skill.AscensionSkillTypes;
+import net.zic.ascension.datapack.technique.AscensionTechniqueTypes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -37,7 +37,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
 import java.util.HashMap;
@@ -87,9 +86,10 @@ public class AscensionCraft {
         AscensionItems.register(modEventBus);
         AscensionStats.register(modEventBus);
         AscensionBloodlineTypes.register(modEventBus);
-        AscensionPurityChangeActionTypes.register(modEventBus);
-        AscensionPurityChangeActionConditionsTypes.register(modEventBus);
+        AscensionProgressActionTypes.register(modEventBus);
+        AscensionProgressActionConditionTypes.register(modEventBus);
         AscensionSkillTypes.register(modEventBus);
+        AscensionTechniqueTypes.register(modEventBus);
         register(modEventBus);
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);

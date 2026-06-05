@@ -1,6 +1,7 @@
 package net.zic.ascension.api.core.technique;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -9,12 +10,16 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Set;
+
 public interface Technique {
 
     TechniqueType getType();
 
-    Component getName();
-    Component getDescription();
+    Component getName(@Nullable TechniqueData techniqueData);
+    Component getDescription(@Nullable TechniqueData techniqueData);
 
     Identifier getPath();
     /**
@@ -31,30 +36,42 @@ public interface Technique {
      */
     void onRemoved(OriginSource source, TechniqueData data);
 
-    //called when an entity that owns an origin detects the technique was changed
-    void applyToEntity(LivingEntity entity, TechniqueData data);
-
-    //called when either an entity is detached from an origin or the technique is removed from the origin
-    void removeFromEntity(LivingEntity entity,TechniqueData data);
 
 
+    /**
+     * a milestone realm is used when removing a technique,
+     * when removed we decrease the major realm until we either hit a different technique or a milestone realm
+     * @return a Collection of milestone major realms
+     */
+    Collection<Integer> getMilestoneRealms();
+
+    /**
+     * a technique family refers to if 2 techniques are compatible or not
+     * when trying to learn a technique ALL previous techniques must share at least 1 common family
+     * @return a Collection of families this technique has
+     */
+    Collection<String> getTechniqueFamilies();
     //──Realms────────────────────────────────────────────────────────
 
-    Component getMajorRealmName();
-    Component getMinorRealmName();
+    Component getMajorRealmName(int majorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
+    Component getMinorRealmName(int majorRealm,int minorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
 
     // returns the formatted name of the realm when both major and minor realm are displayed together
-    Component getRealmName(int majorRealm, int minorRealm);
+    Component getRealmName(int majorRealm, int minorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
 
     //gives the default max minor realm and major realm a technique can cultivate
-    int getMaxMajorRealm();
-    int getMaxMinorRealm(int majorRealm);
+    int getMaxMajorRealm(@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
+    int getMaxMinorRealm(int majorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
+
+    //the minimum realm the user needs to be at to learn
+    int getMinMajorRealm(RegistryAccess registryAccess);
 
     //gives the progress needed to progress a given realm
-    double getMaxProgress(int majorRealm,int minorRealm);
+    double getMaxProgress(int majorRealm,int minorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
 
     //is used for both minor and major realm breakthroughs
-    boolean canBreakthrough(OriginSource source,int majorRealm,int minorRealm,double progress);
+    boolean canBreakthrough(OriginSource source,int majorRealm,int minorRealm,double progress,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
+
 
     TechniqueData newData();
     TechniqueData loadData(ValueInput input);

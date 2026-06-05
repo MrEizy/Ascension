@@ -9,6 +9,18 @@ Technique (finish)
 
 
 
+TODO set up the tooltip thing eizy wanted
+smth like
+item_tooltip : [
+    "title":[
+        "ascension:technique_name"
+    ],
+    "1":[
+        "ascension:technique_description"
+    ]
+]
+
+the tooltips then receives a "context" that holds an identifier
 TODO create a global server registry access?
 
 

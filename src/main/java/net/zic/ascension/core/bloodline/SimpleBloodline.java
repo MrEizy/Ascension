@@ -1,32 +1,33 @@
 package net.zic.ascension.core.bloodline;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
+import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
-import net.zic.ascension.api.core.bloodline.purity.PurityChangeHandler;
+import net.zic.ascension.api.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
 import net.zic.ascension.datapack.bloodline.AscensionBloodlineTypes;
-import net.zic.ascension.datapack.bloodline.SimpleBloodlineType;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class SimpleBloodline implements Bloodline {
 
     private final Component name;
     private final Component description;
-    private final PurityChangeHandler handler;
+    private final ProgressActionHolder holder;
 
-    public SimpleBloodline(Component name, Component description, List<PurityChangeHandler.PurityChangeListener> handler){
+    public SimpleBloodline(Component name, Component description, Map<Identifier,List<Identifier>> listeners){
         this.name = name;
         this.description = description;
-        this.handler = new PurityChangeHandler(handler);
+        this.holder = ProgressActionHolder.fromMap(listeners);
     }
 
     @Override
@@ -34,8 +35,8 @@ public class SimpleBloodline implements Bloodline {
         return AscensionBloodlineTypes.SIMPLE_BLOODLINE_TYPE.get();
     }
 
-    public List<PurityChangeHandler.PurityChangeListener> getListeners(){
-        return handler.getListeners();
+    public Map<Identifier,List<Identifier>> getListeners(){
+        return holder.listeners();
     }
 
     @Override
@@ -50,14 +51,16 @@ public class SimpleBloodline implements Bloodline {
 
     @Override
     public Collection<Identifier> onAdded(OriginSource source, BloodlineData data) {
-        handler.runPurityUp(source,this,data);
+        //TODO make sure the we properly simulate 0-data.getPurity
+        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), ProgressDirection.UP);
         return List.of();
     }
 
     @Override
     public Collection<Identifier> onRemoved(OriginSource source, BloodlineData data) {
+        //TODO properly simulate going from data.getPurity to this purity
         data.setPurity(0);
-        handler.runPurityDown(source,this,data);
+        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), ProgressDirection.DOWN);
         return List.of();
     }
 
@@ -72,13 +75,14 @@ public class SimpleBloodline implements Bloodline {
     }
 
     @Override
-    public void purityDown(OriginSource source, BloodlineData data, int newPurity) {
-        handler.runPurityDown(source,this,data);
+    public void purityDown(OriginSource source, BloodlineData data) {
+        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), ProgressDirection.DOWN);
     }
 
     @Override
-    public void purityUp(OriginSource source, BloodlineData data, int newPurity) {
-        handler.runPurityUp(source,this,data);
+    public void purityUp(OriginSource source, BloodlineData data) {
+        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), ProgressDirection.UP);
+
     }
 
     @Override

@@ -8,7 +8,6 @@ import net.zic.ascension.common.AscensionAttachments;
 public class PlayerDataHolder implements AscensionEntityDataHolder {
     @Override
     public AscensionEntityData getData(LivingEntity entity) {
-
         //all other things should go ABOVE here. if it reaches this point always return it
         return entity.getData(AscensionAttachments.SIMPLE_ENTITY_DATA);
     }
