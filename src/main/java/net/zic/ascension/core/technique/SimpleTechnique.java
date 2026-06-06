@@ -9,12 +9,18 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.path.Path;
+import net.zic.ascension.api.core.progression.ProgressAction;
+import net.zic.ascension.api.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.core.progression.ProgressActionHolder;
+import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
+import net.zic.ascension.api.core.technique.realm_change.RealmChangeAction;
+import net.zic.ascension.api.core.technique.realm_change.RealmChangeActionCondition;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
 import net.zic.ascension.datapack.technique.AscensionTechniqueTypes;
 import org.jspecify.annotations.Nullable;
@@ -26,9 +32,32 @@ public class SimpleTechnique implements Technique {
     private final Component name;
     private final Component description;
     private final Identifier path;
-    private final List<Integer> milestoneRealms;
-    private final List<String> techniqueFamilies;
 
+    private final List<Integer> milestoneRealms;
+    //{2,6}
+    //technique 1 at realm 4
+    //swap with technique 2.
+    // resetting to realm 4 -> 2
+    // real was 8 -> 6
+
+    //technique 2 had a min requirement of 3
+    //in the attempt to swap realm 4->2, 2 <3 fail to set
+    //add warning
+    private final List<String> techniqueFamilies;
+    //bloodfeast
+    //standard_demonic
+
+    //enhance bloodfeast
+    //standard_demonic
+
+    //budhist technique
+    //standard_budisht
+
+    //demonic bodvista technique
+    //standard_demonic,standard_budhist
+
+    //technique compatible, if not compatible try force learn. it would reset cultivation. learn it
+    //add warning
     private final Integer maxMajorRealm;
     private final int minMajorRealm;
 
@@ -121,12 +150,12 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public void onAdded(OriginSource source, TechniqueData data) {
-
+        holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data,ProgressDirection.UP);
     }
-
+    //TODO UPDATE PROGRESSION TEST TO TAKE IN A TYPE CALLED REGISTRY_OBJECT_DATA AS CONTEXT DATA
     @Override
     public void onRemoved(OriginSource source, TechniqueData data) {
-
+        holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data,ProgressDirection.DOWN);
     }
 
 
@@ -196,10 +225,10 @@ public class SimpleTechnique implements Technique {
     }
 
     @Override
-    public boolean canBreakthrough(OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData, RegistryAccess registryAccess) {
-        double maxProgress = getMaxProgress(majorRealm,minorRealm,techniqueData,registryAccess);
-        double maxMajorRealm = getMaxMajorRealm(techniqueData,registryAccess);
-        double maxMinorRealm = getMaxMinorRealm(majorRealm,techniqueData,registryAccess);
+    public boolean canBreakthrough(OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData) {
+        double maxProgress = getMaxProgress(majorRealm,minorRealm,techniqueData,source.getRegistryAccess());
+        double maxMajorRealm = getMaxMajorRealm(techniqueData,source.getRegistryAccess());
+        double maxMinorRealm = getMaxMinorRealm(majorRealm,techniqueData,source.getRegistryAccess());
 
         /*
             first check if progress is max
@@ -209,6 +238,16 @@ public class SimpleTechnique implements Technique {
          */
         return maxProgress <= progress && ((maxMinorRealm > minorRealm && maxMajorRealm > majorRealm) || (maxMinorRealm <= minorRealm && maxMajorRealm > majorRealm));
 
+    }
+
+    @Override
+    public void onRealmUp(OriginSource source, TechniqueData techniqueData) {
+        holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),techniqueData,ProgressDirection.UP);
+    }
+
+    @Override
+    public void onRealmDown(OriginSource source, TechniqueData techniqueData) {
+        holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),techniqueData,ProgressDirection.DOWN);
     }
 
     @Override

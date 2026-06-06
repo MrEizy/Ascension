@@ -1,6 +1,7 @@
 package net.zic.ascension.api.core.progression;
 
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.core.RegistryObjectData;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.progresison.ProgressActionType;
 
@@ -18,9 +19,10 @@ public interface ProgressAction {
      * @param  holderId the unique id of the holder Holing this, can be used to avoid duplicate keys
      * @param source the origin source this condition is called on
      * @param contextIdentifier the Identifier of the registry object this action is being queried for(e.g a path, technique, bloodline, physique etc)
+     * @param  contextData the data for the contextIdentifier RegistryObject (e.g technique data or bloodline data)
      * @param direction is the expected progression gained/up or lost/down
      */
-    void run(UUID holderId, OriginSource source, Identifier contextIdentifier, ProgressDirection direction);
+    void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction);
 
     ProgressActionType getType();
 }

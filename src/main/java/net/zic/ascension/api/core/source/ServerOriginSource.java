@@ -190,6 +190,7 @@ public class ServerOriginSource extends OriginSource {
         if(!result) return false;
 
         startProcess(ProcessType.REMOVE_BLOODLINE);
+        pre.getBloodline(access).handlePurityChange(this,data,1);
 
         Collection<Identifier> toRemove = pre.getBloodline(access).onRemoved(this,pre.getBloodlineData());
         if(pre.getBloodline(getRegistryAccess()) != null){

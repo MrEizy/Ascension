@@ -2,6 +2,7 @@ package net.zic.ascension.api.core.technique.realm_change;
 
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.RegistryObjectData;
 import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
@@ -23,23 +24,32 @@ public interface RealmChangeAction extends ProgressAction {
 
 
     @Override
-    default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, ProgressDirection direction){
-        //first test to make sure context is a bloodline
-        Path path  = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,contextIdentifier,source.getRegistryAccess());
-        if(path == null) return;
-        PathData data = source.getPathData(contextIdentifier);
-        if(data == null) return;
-        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,data.getCurrentTechnique(),source.getRegistryAccess());
-        if(direction == ProgressDirection.UP){
-            run(holderId,source,data,technique,data.getCurrentTechniqueData(),data.getMajorRealm(),data.getMinorRealm(),direction);
+    default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
+        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,contextIdentifier,source.getRegistryAccess());
+        if(technique == null) return;
+
+        TechniqueData data = null;
+        if(contextData instanceof TechniqueData) data = (TechniqueData) contextData;
+
+        PathData pathData = source.getPathData(technique.getPath());
+        if(pathData == null) return;
+
+        if(pathData.getCultivatedRealms(contextIdentifier).isEmpty() || pathData.getCultivatedRealms(contextIdentifier).size() == 1){
+            run(holderId,source,pathData,technique,data,0,0,direction);
         }else{
-            if(data.getMinorRealm() == data.getMaxMinorRealm(data.getMajorRealm(),source.getRegistryAccess())){
-                //we fell down a major realm
-                run(holderId,source,data,technique, data.getCurrentTechniqueData(), data.getMajorRealm()+1,0,direction);
+
+            if(direction == ProgressDirection.UP){
+                run(holderId,source,pathData,technique,data,pathData.getMajorRealm(),pathData.getMinorRealm(),direction);
             }else{
-                run(holderId,source,data,technique,data.getCurrentTechniqueData(),data.getMajorRealm(),data.getMinorRealm()+1,direction);
+                if(pathData.getMinorRealm() == pathData.getMaxMinorRealm(pathData.getMajorRealm(),source.getRegistryAccess())){
+                    //we fell down a major realm
+                    run(holderId,source,pathData,technique, data, pathData.getMajorRealm()+1,0,direction);
+                }else{
+                    run(holderId,source,pathData,technique,data,pathData.getMajorRealm(),pathData.getMinorRealm()+1,direction);
+                }
             }
         }
+
     }
 
     /**

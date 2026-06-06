@@ -2,6 +2,7 @@ package net.zic.ascension.api.core.technique.realm_change;
 
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.RegistryObjectData;
 import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
@@ -16,22 +17,28 @@ import net.zic.ascension.api.core.technique.TechniqueData;
  */
 public interface RealmChangeActionCondition extends ProgressActionCondition {
     @Override
-    default boolean test( OriginSource source, Identifier contextIdentifier, ProgressDirection direction){
-        //first test to make sure context is a bloodline
-        Path path  = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,contextIdentifier,source.getRegistryAccess());
-        if(path == null) return false;
-        PathData data = source.getPathData(contextIdentifier);
-        if(data == null) return false;
-        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,data.getCurrentTechnique(),source.getRegistryAccess());
-        if(direction == ProgressDirection.UP){
-            return test(source,data,technique,data.getCurrentTechniqueData(),data.getMajorRealm(),data.getMinorRealm(),direction);
+    default boolean test(OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
+        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,contextIdentifier,source.getRegistryAccess());
+        if(technique == null) return false;
+
+        TechniqueData data = null;
+        if(contextData instanceof TechniqueData) data = (TechniqueData) contextData;
+
+        PathData pathData = source.getPathData(technique.getPath());
+        if(pathData == null) return false;
+        if(pathData.getCultivatedRealms(contextIdentifier).isEmpty() || pathData.getCultivatedRealms(contextIdentifier).size() == 1){
+             return test(source,pathData,technique,data,0,0,direction);
         }
-        if(data.getMinorRealm() == data.getMaxMinorRealm(data.getMajorRealm(),source.getRegistryAccess())){
-            //we fell down a major realm
-            return test(source,data,technique, data.getCurrentTechniqueData(), data.getMajorRealm()+1,0,direction);
+        if(direction == ProgressDirection.UP){
+            return test(source,pathData,technique,data,pathData.getMajorRealm(),pathData.getMinorRealm(),direction);
         }
 
-        return test(source,data,technique,data.getCurrentTechniqueData(),data.getMajorRealm(),data.getMinorRealm()+1,direction);
+        if(pathData.getMinorRealm() == pathData.getMaxMinorRealm(pathData.getMajorRealm(),source.getRegistryAccess())){
+            //we fell down a major realm
+            return test(source,pathData,technique, data, pathData.getMajorRealm()+1,0,direction);
+        }
+
+        return test(source,pathData,technique,data,pathData.getMajorRealm(),pathData.getMinorRealm()+1,direction);
     }
 
     /**

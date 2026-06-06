@@ -51,16 +51,16 @@ public class SimpleBloodline implements Bloodline {
 
     @Override
     public Collection<Identifier> onAdded(OriginSource source, BloodlineData data) {
-        //TODO make sure the we properly simulate 0-data.getPurity
-        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), ProgressDirection.UP);
+
+        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), data,ProgressDirection.UP);
         return List.of();
     }
 
     @Override
     public Collection<Identifier> onRemoved(OriginSource source, BloodlineData data) {
-        //TODO properly simulate going from data.getPurity to this purity
+
         data.setPurity(0);
-        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), ProgressDirection.DOWN);
+        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.DOWN);
         return List.of();
     }
 
@@ -76,12 +76,12 @@ public class SimpleBloodline implements Bloodline {
 
     @Override
     public void purityDown(OriginSource source, BloodlineData data) {
-        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), ProgressDirection.DOWN);
+        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.DOWN);
     }
 
     @Override
     public void purityUp(OriginSource source, BloodlineData data) {
-        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), ProgressDirection.UP);
+        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.UP);
 
     }
 

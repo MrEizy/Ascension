@@ -1,6 +1,7 @@
 package net.zic.ascension.core.progression;
 
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.core.RegistryObjectData;
 import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.progression.ProgressAction;
 import net.zic.ascension.api.core.source.OriginSource;
@@ -22,7 +23,7 @@ public record GiveSkillsAction(UUID uuid,List<Identifier> skills)  implements Pr
     }
 
     @Override
-    public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, ProgressDirection direction) {
+    public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction) {
         for(Identifier skill:skills){
             if(direction.equals(ProgressDirection.UP)) source.addSkill(skill,source.getRegistryAccess());
             else source.removeSkill(skill,source.getRegistryAccess());

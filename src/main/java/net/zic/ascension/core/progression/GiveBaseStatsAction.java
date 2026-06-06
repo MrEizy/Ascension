@@ -1,6 +1,7 @@
 package net.zic.ascension.core.progression;
 
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.core.RegistryObjectData;
 import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.progression.ProgressAction;
 import net.zic.ascension.api.core.source.OriginSource;
@@ -24,7 +25,7 @@ public record GiveBaseStatsAction(UUID uuid,List<ValueContainer.BaseModifier> ba
     }
 
     @Override
-    public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, ProgressDirection direction) {
+    public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction) {
         for(ValueContainer.BaseModifier modifier : baseStats){
             System.out.println("trying to give stats");
             if(direction == ProgressDirection.UP) source.addStat(ZenithRegistries.STAT_REGISTRY.getValue(modifier.container()), modifier.val());

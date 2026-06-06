@@ -2,6 +2,7 @@ package net.zic.ascension.api.core.bloodline.purity;
 
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.RegistryObjectData;
 import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
@@ -17,12 +18,12 @@ import java.util.UUID;
 public interface PurityChangeAction extends ProgressAction {
 
     @Override
-    default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, ProgressDirection direction){
+    default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
         //first test to make sure context is a bloodline
         Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,contextIdentifier,source.getRegistryAccess());
         if(bloodline == null) return;
+        if(!(contextData instanceof BloodlineData data)) return;
 
-        BloodlineData data = source.getBloodlineData(contextIdentifier);
         int purity = data.getPurity();
         if(direction == ProgressDirection.DOWN) purity++;
 

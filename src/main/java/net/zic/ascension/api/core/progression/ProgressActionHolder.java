@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.RegistryObjectData;
 import net.zic.ascension.api.core.source.OriginSource;
 
 import java.util.*;
@@ -21,17 +22,17 @@ public record ProgressActionHolder(UUID holderId, Map<Identifier, List<Identifie
         return new ProgressActionHolder(UUID.randomUUID(),listeners);
     }
 
-    public void run(OriginSource source, Identifier contextIdentifier,ProgressDirection direction){
+    public void run(OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
         for(Identifier condition:listeners.keySet()){
             ProgressActionCondition conditionInstance = CoreRegistries.safeAccess(CoreRegistries.PROGRESS_ACTION_CONDITION_REGISTRY,condition,source.getRegistryAccess());
             AscensionCraft.LOGGER.debug("Running condition : {}", condition);
-            if(conditionInstance == null || !conditionInstance.test(source,contextIdentifier,direction)) continue;
+            if(conditionInstance == null || !conditionInstance.test(source,contextIdentifier,contextData,direction)) continue;
             AscensionCraft.LOGGER.debug("Running actions");
             for(Identifier action : listeners.get(condition)){
                 AscensionCraft.LOGGER.debug("Running action {}",action);
                 ProgressAction actionInstance = CoreRegistries.safeAccess(CoreRegistries.PROGRESS_ACTION_REGISTRY,action,source.getRegistryAccess());
                 if(actionInstance == null) continue;
-                actionInstance.run(holderId,source,contextIdentifier,direction);
+                actionInstance.run(holderId,source,contextIdentifier,contextData,direction);
             }
         }
     }

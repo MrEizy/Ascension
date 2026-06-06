@@ -9,6 +9,11 @@ import net.zic.ascension.api.datapack.data_source.DataSourceType;
 
 public interface DataSource {
 
+    //zhao family style <- mastering
+    // footwork skill <- mastering
+    // sword skill
+
+
 
     DataSourceType getType();
     /**
