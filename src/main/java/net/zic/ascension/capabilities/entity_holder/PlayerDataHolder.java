@@ -3,7 +3,7 @@ package net.zic.ascension.capabilities.entity_holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.core.entity.AscensionEntityData;
-import net.zic.ascension.common.AscensionAttachments;
+import net.zic.ascension.common.data_attachements.AscensionAttachments;
 
 public class PlayerDataHolder implements AscensionEntityDataHolder {
     @Override
