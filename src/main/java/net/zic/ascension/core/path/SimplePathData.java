@@ -2,15 +2,21 @@ package net.zic.ascension.core.path;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
+import net.zic.zenithlib.nbt.NbtHelpers;
+import net.zic.zenithlib.network.ByteBufHelpers;
+import org.apache.logging.log4j.core.Core;
 
 import java.util.*;
 
@@ -51,17 +57,40 @@ public class SimplePathData implements PathData {
 
     @Override
     public int getMaxMinorRealm(int majorRealm, RegistryAccess access) {
-        return 0;//TODO
+        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getCurrentTechnique(),access);
+        if(technique == null){
+            Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,getPath(),access);
+            return pathInstance == null ? 0 : pathInstance.getMaxMinorRealm(majorRealm);
+        }
+
+        return technique.getMaxMinorRealm(majorRealm,getCurrentTechniqueData(),access);
     }
 
     @Override
     public int getMaxMajorRealm(RegistryAccess access) {
-        return 0;//TODO
+        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getCurrentTechnique(),access);
+        if(technique == null){
+            Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,getPath(),access);
+            return pathInstance == null ? 0 : pathInstance.getMaxMajorRealm();
+        }
+
+        return technique.getMaxMajorRealm(getCurrentTechniqueData(),access);
     }
 
     @Override
     public double getProgress() {
         return progress;
+    }
+
+    @Override
+    public double getMaxProgress(int majorRealm, int minorRealm, RegistryAccess access) {
+        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getCurrentTechnique(),access);
+        if(technique == null){
+            Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,getPath(),access);
+            return pathInstance == null ? 0 : pathInstance.getMaxProgress(majorRealm,minorRealm);
+        }
+
+        return technique.getMaxProgress(majorRealm,minorRealm,getCurrentTechniqueData(),access);
     }
 
     @Override
@@ -76,12 +105,16 @@ public class SimplePathData implements PathData {
 
     @Override
     public Identifier getCurrentTechnique() {
+        if(techniqueHistory.isEmpty()){
+            techniqueHistory.add(null);
+        }
         return techniqueHistory.getLast();
     }
 
     @Override
     public TechniqueData getCurrentTechniqueData() {
-        return (techniqueHistory.getLast() == null ||!techniqueData.containsKey(techniqueHistory.getLast())) ? null : techniqueData.get(techniqueHistory.getLast()) ;
+
+        return (getCurrentTechnique() == null ||!techniqueData.containsKey(getCurrentTechnique())) ? null : techniqueData.get(getCurrentTechnique()) ;
     }
 
     @Override
@@ -112,15 +145,51 @@ public class SimplePathData implements PathData {
     @Override
     public Collection<Integer> getCultivatedRealms(Identifier technique) {
         ArrayList<Integer> realms = new ArrayList<>();
-        for(int realm = 0; realm <= techniqueHistory.size(); realm ++) if(technique.equals(techniqueHistory.get(realm))) realms.add(realm);
+        for(int realm = 0; realm < techniqueHistory.size(); realm ++) if(technique.equals(techniqueHistory.get(realm))) realms.add(realm);
         return realms;
     }
 
     @Override
-    public void setMajorRealm(int majorRealm) {
+    public Component getMajorRealmName(int majorRealm, RegistryAccess access) {
+        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getTechniqueForRealm(majorRealm),access);
+        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,getPath(),access);
+        return technique == null ? pathInstance.getMajorRealmName(majorRealm) : technique.getMajorRealmName(majorRealm,getTechniqueData(getTechniqueForRealm(majorRealm)),access);
+    }
+
+    @Override
+    public Component getMinorRealmName(int majorRealm, int minorRealm, RegistryAccess access) {
+        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getTechniqueForRealm(majorRealm),access);
+        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,getPath(),access);
+        return technique == null ? pathInstance.getMinorRealmName(majorRealm,minorRealm) :
+                technique.getMinorRealmName(majorRealm,minorRealm,getTechniqueData(getTechniqueForRealm(majorRealm)),access);
+
+    }
+
+    @Override
+    public Component getRealmName(int majorRealm, int minorRealm, RegistryAccess access) {
+        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getTechniqueForRealm(majorRealm),access);
+        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,getPath(),access);
+        return technique == null ? pathInstance.getRealmName(majorRealm,minorRealm) :
+                technique.getRealmName(majorRealm,minorRealm,getTechniqueData(getTechniqueForRealm(majorRealm)),access);
+
+    }
+
+    @Override
+    public void setMajorRealm(int majorRealm,OriginSource source) {
         if(majorRealm > techniqueHistory.size()-1){
             for(int i = techniqueHistory.size(); i <=majorRealm;i++){
                 techniqueHistory.add(null);
+            }
+        }else {
+            for(int i = techniqueHistory.size()-1;i>majorRealm;i--){
+
+                Identifier techniqueId = techniqueHistory.removeLast();
+                Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,techniqueId,source.getRegistryAccess());
+                if(technique == null) continue;
+                if(!hasCultivatedTechnique(techniqueId)){
+                    TechniqueData data = techniqueData.remove(techniqueId);
+                    technique.onRemoved(source,data);
+                }
             }
         }
     }
@@ -145,7 +214,8 @@ public class SimplePathData implements PathData {
 
     @Override
     public boolean setCurrentTechnique(Identifier technique, TechniqueData data, OriginSource source) {
-        //TODO
+        if(getCurrentTechnique() == null && technique == null) return true;
+
         /*
             if current technique != null, it means we must first handle the logic to remove that technique
             to remove it we first get the highest realm between
@@ -204,58 +274,146 @@ public class SimplePathData implements PathData {
         boolean result = source.broadcastTechniqueAddedAttempt(technique,data);
         if(!result) return false;
         techniqueHistory.removeLast();
-        techniqueHistory.add(technique);
         if (!hasCultivatedTechnique(technique)){
             techniqueInstance.onAdded(source,data);
+            techniqueHistory.add(technique);
             techniqueData.put(technique,data);
-        }
+        }else techniqueHistory.add(technique);
+
         source.broadcastTechniqueAdded(technique,techniqueData.get(technique));
         return true;
     }
 
+
+
     @Override
-    public void updateTechnique(OriginSource source) {
-        if(techniqueHistory.size() >getMajorRealm()+1){
-            for(int i = techniqueHistory.size()-1;i>getMajorRealm();i--){
-                Identifier toBeRemoved = techniqueHistory.removeLast();
-                if(getCultivatedRealms(toBeRemoved).isEmpty()){
-                    //Technique is now no longer in the history
-                    Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,toBeRemoved,source.getRegistryAccess());
-                    if(technique == null) continue;
-                    technique.onRemoved(source,techniqueData.remove(toBeRemoved));
-                }
-            }
+    public void simulateProgression(OriginSource source) {
+
+        ArrayList<Identifier> cachedTechniqueHistory = new ArrayList<>(techniqueHistory);
+        HashMap<Identifier,TechniqueData> cachedTechniqueData = new HashMap<>(techniqueData);
+        int cachedMinorRealm = minorRealm;
+        double cachedProgress = progress;
+
+        minorRealm = 0;
+        progress = 0;
+        techniqueHistory.clear();
+        techniqueData.clear();
+
+        while(cachedTechniqueHistory.size() > 1){
+            Identifier technique = cachedTechniqueHistory.removeFirst();
+            TechniqueData data = cachedTechniqueData.get(technique);
+            setCurrentTechnique(technique,data,source);
+            handlerRealmChange(source,getMajorRealm()+1,0);
         }
+        Identifier currentTechnique = techniqueHistory.removeFirst();
+        setCurrentTechnique(currentTechnique,cachedTechniqueData.get(currentTechnique),source);
+        handlerRealmChange(source,getMajorRealm(),cachedMinorRealm);
+        setProgress(progress);
     }
 
     @Override
-    public void simulateProgression(OriginSource source, RegistryAccess access) {
-        //TODO
-        //important notes, create a cache of everything, then simulate every major realm
-    }
+    public void removeFromSource(OriginSource source) {
+        ArrayList<Identifier> cachedTechniqueHistory = new ArrayList<>(techniqueHistory);
+        HashMap<Identifier,TechniqueData> cachedTechniqueData = new HashMap<>(techniqueData);
+        int cachedMinorRealm = minorRealm;
+        double cachedProgress = progress;
 
-    @Override
-    public void removeFromSource(OriginSource source, RegistryAccess access) {
-        //TODO
-        //same as simulate but in reverse, cacheEverything, handle realm to 0,0, remove final technique then reinstate everything
+        handlerRealmChange(source,0,0);
+
+        setCurrentTechnique(null,source);
+
+        techniqueHistory.clear();
+        techniqueHistory.addAll(cachedTechniqueHistory);
+        techniqueData.clear();
+        techniqueData.putAll(cachedTechniqueData);
+        minorRealm = cachedMinorRealm;
+        progress = cachedProgress;
     }
 
 
 
     @Override
     public void write(ValueOutput output) {
-        //TODO
+
+        //write the current realm
+        output.putInt("minor_realm",getMinorRealm());
+        output.putDouble("progress",getProgress());
+
+        //write technique history
+        ValueOutput.ValueOutputList techniqueHistoryOutput = output.childrenList("technique_history");
+        for(Identifier technique : techniqueHistory) techniqueHistoryOutput.addChild().putString("technique",(technique == null ? "none" : technique.toString()));
+
+        //write technique data
+
+        ValueOutput.ValueOutputList techniqueDataOutput = output.childrenList("technique_data");
+        for(Identifier technique : techniqueData.keySet()){
+            ValueOutput dataOutput = techniqueDataOutput.addChild();
+            dataOutput.putString("technique",(technique == null ? "none" : technique.toString()));
+            TechniqueData data = techniqueData.get(technique);
+            if(data != null) data.write(dataOutput.child("data"));
+        }
+
     }
 
-    public void load(ValueInput input){
-        //TODO
+    public void load(ValueInput input,RegistryAccess registryAccess){
+
         //important note, here we should as early as possible trim error data before simulating
         //for this reason directly add to technique history FIRST, the moment we hit an error stop
         //then when adding data check if the technique is Cultivated, if so add otherwise remove
+        minorRealm = input.getIntOr("minor_realm",0);
+        progress = input.getDoubleOr("progress",0);
+
+        ValueInput.ValueInputList techniqueHistoryInput = input.childrenListOrEmpty("technique_history");
+        for(ValueInput techniqueInput : techniqueHistoryInput){
+            String rawTechnique = techniqueInput.getStringOr("technique","none");
+            if(rawTechnique.equals("none")){
+                techniqueHistory.add(null);
+                continue;
+            }
+            Identifier technique = Identifier.parse(rawTechnique);
+
+            // there was a problem with the technique, cut cultivation after this point
+            if(CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,technique,registryAccess) == null) break;
+
+            techniqueHistory.add(technique);
+        }
+
+        ValueInput.ValueInputList techniqueDataInput = input.childrenListOrEmpty("technique_data");
+        for(ValueInput techniqueInput : techniqueDataInput){
+            String rawTechnique = techniqueInput.getStringOr("technique","none");
+            if(rawTechnique.equals("none")){
+                continue;
+            }
+            Identifier technique = Identifier.parse(rawTechnique);
+            Technique techniqueInstance = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,technique,registryAccess);
+
+            if(techniqueInstance == null) continue;
+
+            //was removed so do not load
+            if(!techniqueHistory.contains(technique)) continue;
+
+            TechniqueData data = techniqueInstance.loadData(techniqueInput.childOrEmpty("data"));
+
+            techniqueData.put(technique,data);
+        }
     }
 
     @Override
     public void encode(ByteBuf buf) {
+        buf.writeInt(getMinorRealm());
+        buf.writeDouble(progress);
+
+        ByteBufHelpers.encodeCollection(techniqueHistory,buf,(id,byteBuf)->{
+            byteBuf.writeBoolean(id != null);
+            if(id != null) ByteBufHelpers.encodeIdentifier(id,byteBuf);
+        });
+
+        ByteBufHelpers.encodeMap(techniqueData,ByteBufHelpers::encodeIdentifier,(data,byteBuf)->{
+            byteBuf.writeBoolean(data != null);
+            if(data != null)data.encode(byteBuf);
+        },buf);
+    }
+    public void decode(ByteBuf buf){
 
     }
 }

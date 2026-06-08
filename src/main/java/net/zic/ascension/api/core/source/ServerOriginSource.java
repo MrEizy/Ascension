@@ -215,7 +215,9 @@ public class ServerOriginSource extends OriginSource {
     public boolean addPath(Identifier path, PathData existingData, RegistryAccess registryAccess, EventReason reason) {
         if(path == null || existingData == null) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(registryAccess).containsKey(path)) return false;
+        if(cachedPathData.containsKey(path)) existingData = cachedPathData.get(path);
         PathAddedEvent.Pre pre = new PathAddedEvent.Pre(path,existingData,this);
+
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
@@ -224,7 +226,7 @@ public class ServerOriginSource extends OriginSource {
 
         startProcess(ProcessType.ADD_PATH);
 
-        existingData.simulateProgression(this,registryAccess);
+        existingData.simulateProgression(this);
         PathAddedEvent.Post post = new PathAddedEvent.Post(path,existingData,this);
         NeoForge.EVENT_BUS.post(post);
 
@@ -269,7 +271,7 @@ public class ServerOriginSource extends OriginSource {
         if(!result) return false;
 
         startProcess(ProcessType.REMOVE_PATH);
-        data.removeFromSource(this,access);
+        data.removeFromSource(this);
         PathRemovedEvent.Post post = new PathRemovedEvent.Post(path,data,this);
         NeoForge.EVENT_BUS.post(post);
 
@@ -283,7 +285,7 @@ public class ServerOriginSource extends OriginSource {
     public boolean addSkill(Identifier skill, SkillData data) {
         if(skill == null) return false;
         if(!CoreRegistries.SKILL_REGISTRY.get(getRegistryAccess()).containsKey(skill)) return false;
-
+        if(cachedSkillData.containsKey(skill))  data = cachedSkillData.get(skill);
         SkillAddedEvent.Pre pre = new SkillAddedEvent.Pre(this,skill,data,null);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;

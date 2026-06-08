@@ -139,7 +139,7 @@ public class SourceChangesSnapshot {
 
         snapshot.toAddPaths = ByteBufHelpers.decodeArray(buf,(byteBuf)->{
             Identifier identifier = ByteBufHelpers.decodeIdentifier(byteBuf);
-            PathData data = CoreRegistries.PATH_REGISTRY.get(access).getValue(identifier).loadData(byteBuf);
+            PathData data = CoreRegistries.PATH_REGISTRY.get(access).getValue(identifier).loadData(byteBuf,access);
             return new Pair<>(identifier,data);
         });
         snapshot.toRemovePaths = new HashSet<>(ByteBufHelpers.decodeArray(buf, ByteBufHelpers::decodeIdentifier));

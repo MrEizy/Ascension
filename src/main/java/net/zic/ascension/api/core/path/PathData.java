@@ -3,6 +3,7 @@ package net.zic.ascension.api.core.path;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -28,6 +29,8 @@ public interface PathData {
 
     double getProgress();
 
+    double getMaxProgress(int majorRealm,int minorRealm,RegistryAccess access);
+
     boolean isCultivating();
 
     boolean isBreakingThrough();
@@ -48,8 +51,14 @@ public interface PathData {
 
     Collection<Integer> getCultivatedRealms(Identifier technique);
 
+
+    Component getMajorRealmName(int majorRealm,RegistryAccess access);
+    Component getMinorRealmName(int majorRealm,int minorRealm,RegistryAccess access);
+
+    Component getRealmName(int majorRealm,int minorRealm,RegistryAccess access);
+
     //──Setters────────────────────────────────────────────────────────
-    void setMajorRealm(int majorRealm);
+    void setMajorRealm(int majorRealm,OriginSource source);
     void setMinorRealm(int minorRealm);
 
     void setProgress(double progress);
@@ -58,10 +67,7 @@ public interface PathData {
     boolean setCurrentTechnique(Identifier technique,OriginSource source);
     boolean setCurrentTechnique(Identifier technique,TechniqueData data,OriginSource source);
 
-    //updates the current technique, will call remove technique
-    //if the new technique being "slotted" is different AND the to be removed is being FULLY removed
-    //should also remove any and all technique history entries occurring after the current realm
-    void updateTechnique(OriginSource source);
+
     //──Logic────────────────────────────────────────────────────────
     default void onRealmUp(OriginSource source) {
         if(getCurrentTechnique() == null) return;
@@ -78,6 +84,7 @@ public interface PathData {
     //takes in a potential realm change, and breaks it down into individual steps
     //TODO write default implementation
     default void handlerRealmChange(OriginSource source,int newMajorRealm,int newMinorRealm){
+        if(getCurrentTechnique() == null) return;
         int oldMajorRealm = getMajorRealm();
         int oldMinorRealm = getMinorRealm();
         if(oldMajorRealm < newMajorRealm || (oldMajorRealm == newMajorRealm && newMinorRealm>oldMinorRealm)){
@@ -92,17 +99,23 @@ public interface PathData {
                 }
                 for(int i = oldMajorRealm+1;i<newMajorRealm;i++){
 
-
-                    setMajorRealm(i);
+                    Identifier technique = getCurrentTechnique();
+                    setMajorRealm(i,source);
                     setMinorRealm(0);
+                    getTechniqueHistory().set(getTechniqueHistory().size()-1,technique);
+
                     onRealmUp(source);
                     for(int j = 1;j <= getMaxMinorRealm(oldMajorRealm,source.getRegistryAccess());j++){
                         setMinorRealm(j);
                         onRealmUp(source);
                     }
                 }
-                setMajorRealm(newMajorRealm);
+
+                Identifier technique = getCurrentTechnique();
+                setMajorRealm(newMajorRealm,source);
                 setMinorRealm(0);
+                getTechniqueHistory().set(getTechniqueHistory().size()-1,technique);
+
                 onRealmUp(source);
 
                 for(int i =1;i<=newMinorRealm;i++){
@@ -123,26 +136,26 @@ public interface PathData {
             newMinorRealm = Math.max(newMinorRealm,0);
 
             if(newMajorRealm != oldMajorRealm){
-                for(int i = oldMajorRealm-1;i>0;i--){
+                for(int i = oldMinorRealm-1;i>=0;i--){
                     setMinorRealm(i);
                     onRealmDown(source);
                 }
 
                 for(int i = oldMajorRealm-1;i>newMajorRealm;i--){
 
-                    updateTechnique(source);
-                    setMajorRealm(i);
+
+                    setMajorRealm(i,source);
                     setMinorRealm(getMaxMinorRealm(getMajorRealm(),source.getRegistryAccess()));
                     onRealmDown(source);
 
-                    for(int j = getMinorRealm()-1;j>0;j--){
+                    for(int j = getMinorRealm()-1;j>=0;j--){
                         setMinorRealm(j);
                         onRealmDown(source);
                     }
                 }
-                updateTechnique(source);
 
-                setMajorRealm(newMajorRealm);
+
+                setMajorRealm(newMajorRealm,source);
                 setMinorRealm(getMaxMinorRealm(getMajorRealm(),source.getRegistryAccess()));
                 onRealmDown(source);
 
@@ -211,10 +224,10 @@ public interface PathData {
         }
     }
     //caches the current state then simulates applying it
-    void simulateProgression(OriginSource source, RegistryAccess access);
+    void simulateProgression(OriginSource source);
 
     //removes it from a specific source but should still save its data (mainly used when transferring path data)
-    void removeFromSource(OriginSource source,RegistryAccess access);
+    void removeFromSource(OriginSource source);
 
 
     //──Save Data────────────────────────────────────────────────────────

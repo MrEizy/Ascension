@@ -21,6 +21,7 @@ import net.zic.ascension.api.core.path.AffinityHolder;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.physique.PhysiqueData;
+import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.ascension.api.core.technique.TechniqueData;
 import net.zic.ascension.api.event.EventReason;
@@ -33,6 +34,7 @@ import net.zic.zenithlib.stats.StatSheet;
 import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import org.apache.logging.log4j.core.Core;
 import oshi.util.tuples.Pair;
 
 import java.util.Collection;
@@ -68,6 +70,10 @@ public class OriginSource {
 
     private final StatSheet statSheet = new StatSheet();
     private final AffinityHolder affinityHolder = new AffinityHolder();
+
+    //──Cached data────────────────────────────────────────────────────────
+    protected HashMap<Identifier,PathData> cachedPathData = new HashMap<>();
+    protected HashMap<Identifier,SkillData> cachedSkillData = new HashMap<>();
 
 
     private RegistryAccess registryAccess;
@@ -186,7 +192,7 @@ public class OriginSource {
     public boolean addPath(Identifier path, RegistryAccess registryAccess){
         if(path == null) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(registryAccess).containsKey(path)) return false; //TODO add this for everything
-        return addPath(path,CoreRegistries.PATH_REGISTRY.get(registryAccess).getValue(path).newData(),registryAccess);
+        return addPath(path,CoreRegistries.PATH_REGISTRY.get(registryAccess).getValue(path).newData(registryAccess),registryAccess);
     }
     //used when adding an existing path to a source
     public boolean addPath(Identifier path,PathData existingData,RegistryAccess registryAccess){
@@ -202,7 +208,9 @@ public class OriginSource {
         return true;
     }
 
-
+    public Collection<Identifier> getPaths(){
+        return paths.keySet();
+    }
     public boolean removePath(Identifier path,RegistryAccess access){return removePath(path,access,null);}
     public boolean removePath(Identifier path,RegistryAccess access,EventReason reason){
         if(!paths.containsKey(path)) return false;
@@ -379,32 +387,62 @@ public class OriginSource {
             NbtHelpers.writeIdentifier(physiqueOutput,"id",getPhysique());
             ValueOutput data = physiqueOutput.child("data");
             if(getPhysiqueData() != null) getPhysiqueData().write(data);
-        }catch (Throwable throwable){
+        }catch (Exception e){
             AscensionCraft.LOGGER.error("error writing physique {}",getPhysique());
-            AscensionCraft.LOGGER.error("stacktrace: ",throwable);
+            AscensionCraft.LOGGER.error("stacktrace: ",e);
         }
         AscensionCraft.LOGGER.debug("Finished Saving Physique");
         AscensionCraft.LOGGER.debug("Saving Bloodlines");
-        try {
-            ValueOutput.ValueOutputList bloodlines = output.childrenList("bloodlines");
-            for(Identifier bloodline : getBloodlines()){
-                AscensionCraft.LOGGER.debug("Saving Bloodline {}",bloodline);
-               try{
-                   ValueOutput bloodlineOutput = bloodlines.addChild();
-                   NbtHelpers.writeIdentifier(bloodlineOutput,"id",bloodline);
-                   ValueOutput dataOutput = bloodlineOutput.child("data");
-                   getBloodlineData(bloodline).write(dataOutput);
-               } catch (Throwable throwable){
-                   AscensionCraft.LOGGER.error("error writing bloodline {}",bloodline);
-                   AscensionCraft.LOGGER.error("stacktrace: ",throwable);
-               }
-               AscensionCraft.LOGGER.debug("Finished Saving Bloodline");
-            }
-        }catch (Throwable throwable){
-            AscensionCraft.LOGGER.error("error writing bloodlines");
-            AscensionCraft.LOGGER.error("stacktrace: ",throwable);
+
+        ValueOutput.ValueOutputList bloodlines = output.childrenList("bloodlines");
+        for(Identifier bloodline : getBloodlines()){
+            AscensionCraft.LOGGER.debug("Saving Bloodline {}",bloodline);
+           try{
+               ValueOutput bloodlineOutput = bloodlines.addChild();
+               NbtHelpers.writeIdentifier(bloodlineOutput,"id",bloodline);
+               ValueOutput dataOutput = bloodlineOutput.child("data");
+               getBloodlineData(bloodline).write(dataOutput);
+           } catch (Exception e){
+               AscensionCraft.LOGGER.error("error writing bloodline {}",bloodline);
+               AscensionCraft.LOGGER.error("stacktrace: ",e);
+           }
+
         }
+
         AscensionCraft.LOGGER.debug("Finished Saving Bloodlines");
+
+        AscensionCraft.LOGGER.debug("Saving Skill Data");
+
+        ValueOutput.ValueOutputList skills = output.childrenList("skills");
+        for(Identifier skill : getSkills()){
+            AscensionCraft.LOGGER.debug("Saving Skill {}",skill);
+            try {
+                ValueOutput skillOutput = skills.addChild();
+                NbtHelpers.writeIdentifier(skillOutput,"skill",skill);
+                ValueOutput skillData = skillOutput.child("data");
+                if(getSkillData(skill) != null) getSkillData(skill).write(skillData);
+            }catch (Exception e){
+                AscensionCraft.LOGGER.debug("error writing skill {}",skill);
+                AscensionCraft.LOGGER.debug("stacktrace",e);
+            }
+        }
+        AscensionCraft.LOGGER.debug("Finished Saving Skill Data");
+        AscensionCraft.LOGGER.debug("Saving Skill Path Data");
+
+        ValueOutput.ValueOutputList paths = output.childrenList("paths");
+        for(Identifier path : getPaths()){
+            AscensionCraft.LOGGER.debug("Saving Path {}",path);
+            try {
+                ValueOutput pathOutput = paths.addChild();
+                NbtHelpers.writeIdentifier(pathOutput,"path",path);
+                ValueOutput pathData = pathOutput.child("data");
+                if(getPathData(path) != null) getPathData(path).write(pathOutput);
+            }catch (Exception e){
+                AscensionCraft.LOGGER.debug("error writing path {}",path);
+                AscensionCraft.LOGGER.debug("stacktrace",e);
+            }
+        }
+        AscensionCraft.LOGGER.debug("Finished Saving Skill Path Data");
     }
 
     public void load(RegistryAccess access){
@@ -433,6 +471,43 @@ public class OriginSource {
 
 
     public void load(ValueInput input){
+        AscensionCraft.LOGGER.debug("Reading Skill Data");
+        cachedSkillData.clear();
+        ValueInput.ValueInputList skillsInput = input.childrenListOrEmpty("skills");
+
+        for(ValueInput skillInput : skillsInput){
+
+            try {
+                Identifier skillId = NbtHelpers.readIdentifier(skillInput,"skill");
+                ValueInput skillData = skillInput.childOrEmpty("data");
+
+                Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skillId,getRegistryAccess());
+                if(skill == null) continue;
+
+                SkillData data = skill.loadData(skillData);
+                cachedSkillData.put(skillId,data);
+
+            }catch (Exception e){
+                AscensionCraft.LOGGER.debug("Error loading skill");
+                AscensionCraft.LOGGER.debug("stacktrace: ",e);
+            }
+        }
+
+        AscensionCraft.LOGGER.debug("Reading Path Data");
+        cachedPathData.clear();
+        ValueInput.ValueInputList pathsInput = input.childrenListOrEmpty("paths");
+        for(ValueInput pathInput : pathsInput){
+            try {
+
+
+            }catch (Exception e){
+                AscensionCraft.LOGGER.debug("Error loading path");
+                AscensionCraft.LOGGER.debug("stacktrace: ",e);
+            }
+        }
+
+
+
         AscensionCraft.LOGGER.debug("Reading Physique");
         try{
             ValueInput physiqueInput = input.child("physique").get();
@@ -445,9 +520,9 @@ public class OriginSource {
             setPhysique(id,physiqueData, getRegistryAccess());
 
             AscensionCraft.LOGGER.info("Loaded physique {}",id);
-        }catch (Throwable throwable){
+        }catch (Exception e){
             AscensionCraft.LOGGER.error("error loading physique");
-            AscensionCraft.LOGGER.error("stacktrace : ",throwable);
+            AscensionCraft.LOGGER.error("stacktrace : ",e);
             //TODO set technique to default
         }
         AscensionCraft.LOGGER.debug("Finished Reading Physique");
@@ -471,11 +546,11 @@ public class OriginSource {
                 }
                 AscensionCraft.LOGGER.debug("Finished Reading Bloodline");
             }
-        } catch (Throwable throwable){
+        } catch (Exception e){
             AscensionCraft.LOGGER.error("error loading all bloodlines");
-            AscensionCraft.LOGGER.error("stacktrace : ",throwable);
+            AscensionCraft.LOGGER.error("stacktrace : ",e);
         }
-        AscensionCraft.LOGGER.debug("Finished Reading BLoodlines");
+        AscensionCraft.LOGGER.debug("Finished Reading Bloodlines");
 
     }
 

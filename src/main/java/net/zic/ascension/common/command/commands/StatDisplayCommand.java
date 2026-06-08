@@ -1,4 +1,4 @@
-package net.zic.ascension.common.commands;
+package net.zic.ascension.common.command.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
@@ -8,10 +8,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
+import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.entity.AscensionEntityData;
+import net.zic.ascension.api.core.path.Path;
+import net.zic.ascension.api.core.path.PathData;
 import net.zic.zenithlib.stats.Stat;
-
-import java.util.Map;
 
 public class StatDisplayCommand {
 
@@ -27,7 +28,7 @@ public class StatDisplayCommand {
                             AscensionEntityData data = holder.getData(player);
                             for(Stat stat:holder.getData(player).getSource().getAllStats()){
                                 //TODO fix later to include name
-                                player.sendSystemMessage(Component.literal("stat : "+holder.getData(player).getSource().getValue(stat)));
+                                player.sendSystemMessage(Component.literal(stat.getName()+":"+holder.getData(player).getSource().getValue(stat)));
                             }
                             player.sendSystemMessage(Component.literal("max health : "+player.getMaxHealth()));
                             player.sendSystemMessage(Component.literal("Physique :" +(data.getSource().getPhysique() == null ? "none":data.getSource().getPhysique())));
@@ -37,6 +38,14 @@ public class StatDisplayCommand {
                             player.sendSystemMessage(Component.literal("skills:"));
                             for(Identifier skill : data.getSource().getSkills()){
                                 player.sendSystemMessage(Component.literal(skill.toString()));
+                            }
+                            for(Identifier path : data.getSource().getPaths()){
+                                Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,data.getSource().getRegistryAccess());
+                                player.sendSystemMessage(pathInstance.name());
+                                PathData pathData = data.getSource().getPathData(path);
+                                player.sendSystemMessage(Component.literal("realm : ").append(pathData.getRealmName(pathData.getMajorRealm(),pathData.getMinorRealm(),data.getSource().getRegistryAccess())));
+                                player.sendSystemMessage(Component.literal("progress : "+pathData.getProgress()));
+                                player.sendSystemMessage(Component.literal("technique : "+pathData.getCurrentTechnique()));
                             }
                             return 1;
                         })

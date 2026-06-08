@@ -13,6 +13,8 @@ public class AscensionProgressActionTypes {
     public static final DeferredRegister<ProgressActionType> PROGRESS_ACTION_TYPES =
             DeferredRegister.create(TypeRegistries.PROGRESS_ACTION_TYPE_REGISTRY, AscensionCraft.MOD_ID);
 
+
+
     public static final DeferredHolder<ProgressActionType,ProgressActionType> GIVE_BASE_STATS_TYPE = PROGRESS_ACTION_TYPES.register(
             "give_base_stats",
             GiveBaseStatsActionType::new

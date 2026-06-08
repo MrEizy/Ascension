@@ -15,12 +15,14 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 
 import net.zic.ascension.common.AscensionAttachments;
-import net.zic.ascension.common.commands.StatDisplayCommand;
+import net.zic.ascension.common.command.AscensionCommand;
+import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.AscensionItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.core.entity.AscensionStats;
 import net.zic.ascension.core.source.SourceHandler;
 import net.zic.ascension.datapack.bloodline.AscensionBloodlineTypes;
+import net.zic.ascension.datapack.path.AscensionPathTypes;
 import net.zic.ascension.datapack.physique.AscensionPhysiqueTypes;
 import net.zic.ascension.datapack.progression.AscensionProgressActionConditionTypes;
 import net.zic.ascension.datapack.progression.AscensionProgressActionTypes;
@@ -90,6 +92,7 @@ public class AscensionCraft {
         AscensionProgressActionConditionTypes.register(modEventBus);
         AscensionSkillTypes.register(modEventBus);
         AscensionTechniqueTypes.register(modEventBus);
+        AscensionPathTypes.register(modEventBus);
         register(modEventBus);
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -142,6 +145,7 @@ public class AscensionCraft {
     @SubscribeEvent
     public static void registerCommands(RegisterCommandsEvent event){
         StatDisplayCommand.register(event.getDispatcher());
+        AscensionCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent

@@ -1,0 +1,31 @@
+{
+  "type": "ascension:simple_path",
+  "name": "Essence",
+  "description": "cultivate the essence that permeates existence",
+  "realms": [
+    {
+      "name": "Qi Formation",
+      "minor_realms": [
+        "low",
+        "mid",
+        "high"
+      ]
+    },
+    {
+      "name": "Foundation Building",
+      "minor_realms": [
+        "low",
+        "mid",
+        "high"
+      ]
+    },
+    {
+      "name": "Core Formation",
+      "minor_realms": [
+        "low",
+        "mid",
+        "high"
+      ]
+    }
+  ]
+}

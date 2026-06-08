@@ -1,0 +1,14 @@
+{
+  "type": "ascension:simple_passive",
+  "name": "Iron Skin",
+  "description": "deal {x} fire damage",
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 10,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:iron_skin_vitality_multiplier"
+      }
+    ]
+  }
+}

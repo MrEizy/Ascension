@@ -1,0 +1,55 @@
+package net.zic.ascension.common.item.transfer_item;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
+import net.zic.ascension.api.capabilities.CoreCapabilities;
+import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.technique.Technique;
+import net.zic.ascension.common.item.components.AscensionComponents;
+
+public class TechniqueTransferItem  extends Item {
+    public TechniqueTransferItem(Properties properties) {
+        super(properties);
+    }
+
+    @Override
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+
+        if (level.isClientSide()) return InteractionResult.PASS;
+
+        if(!stack.has(AscensionComponents.REGISTRY_ID_HOLDER)) return InteractionResult.FAIL;
+
+        Technique targetTechnique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,stack.get(AscensionComponents.REGISTRY_ID_HOLDER),level.registryAccess());
+
+        if(targetTechnique == null) {
+            player.sendSystemMessage(Component.literal("[technique does not exist :" +stack.get(AscensionComponents.REGISTRY_ID_HOLDER)+"]"));
+
+            return InteractionResult.FAIL;
+        }
+
+        AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+
+        if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
+        Identifier path = targetTechnique.getPath();
+        if(holder.getData(player).getSource().getPathData(path) == null){
+            player.sendSystemMessage(Component.literal("[You are do not have path : "+path+"]"));
+            return InteractionResult.FAIL;
+        }
+        if(!holder.getData(player).getSource().getPathData(path).setCurrentTechnique(stack.get(AscensionComponents.REGISTRY_ID_HOLDER),holder.getData(player).getSource())){
+            player.sendSystemMessage(Component.literal("[Learned technique :" +stack.get(AscensionComponents.REGISTRY_ID_HOLDER)+"]"));
+            return InteractionResult.FAIL;
+        }
+        stack.shrink(1);
+        AscensionCraft.LOGGER.info("Player {} has transferred their technique",player.getName().getString());
+        return InteractionResult.SUCCESS;
+    }
+}

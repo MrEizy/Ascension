@@ -44,7 +44,7 @@ public class CoreRegistries {
     );
     public static final RegistryHelper.DataPackRegistry<Technique> TECHNIQUE_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID,
-            "technique",
+            "techniques",
             ()-> TechniqueType.TECHNIQUE_CODEC
     );
     public static final RegistryHelper.DataPackRegistry<Path> PATH_REGISTRY = RegistryHelper.dataPackRegistry(
@@ -78,7 +78,7 @@ public class CoreRegistries {
     public static <T> T safeAccess(RegistryHelper.DataPackRegistry<T> registry, Identifier id, RegistryAccess access){
         try {
             return registry.get(access).getValue(id);
-        }catch (Throwable throwable) {
+        }catch (Exception e) {
             return null;
         }
     }

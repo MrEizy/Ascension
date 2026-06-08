@@ -3,7 +3,7 @@
   "name": "Example",
   "description": "This is an example physique",
   "paths": [
-    "ascension:essence"
+    "ascension:foundation/essence"
   ],
   "item_tooltip": {
     "title": [

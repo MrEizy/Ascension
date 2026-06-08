@@ -150,6 +150,7 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public void onAdded(OriginSource source, TechniqueData data) {
+
         holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data,ProgressDirection.UP);
     }
     //TODO UPDATE PROGRESSION TEST TO TAKE IN A TYPE CALLED REGISTRY_OBJECT_DATA AS CONTEXT DATA

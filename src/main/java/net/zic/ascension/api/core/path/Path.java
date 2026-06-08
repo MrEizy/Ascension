@@ -1,6 +1,7 @@
 package net.zic.ascension.api.core.path;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -13,8 +14,8 @@ public interface Path {
 
     PathType getType();
 
-    Component getName();
-    Component getDescription();
+    Component name();
+    Component description();
 
     //──Realms────────────────────────────────────────────────────────
 
@@ -39,7 +40,7 @@ public interface Path {
 
     //──Data────────────────────────────────────────────────────────
 
-    PathData newData();
-    PathData loadData(ValueInput input);
-    PathData loadData(ByteBuf buf);
+    PathData newData(RegistryAccess access);
+    PathData loadData(ValueInput input,RegistryAccess access);
+    PathData loadData(ByteBuf buf,RegistryAccess access);
 }
