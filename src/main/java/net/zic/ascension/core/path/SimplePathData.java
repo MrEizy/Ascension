@@ -215,6 +215,7 @@ public class SimplePathData implements PathData {
     @Override
     public boolean setCurrentTechnique(Identifier technique, TechniqueData data, OriginSource source) {
         if(getCurrentTechnique() == null && technique == null) return true;
+        if(getCurrentTechnique() != null && technique != null && getCurrentTechnique().equals(technique))return true;
 
         /*
             if current technique != null, it means we must first handle the logic to remove that technique
@@ -239,6 +240,7 @@ public class SimplePathData implements PathData {
 
 
          */
+
         //remove existing technique
         if(getCurrentTechnique() != null){
             int targetRealm = getMaxMilestoneRealm(source.getRegistryAccess());
@@ -305,10 +307,10 @@ public class SimplePathData implements PathData {
             setCurrentTechnique(technique,data,source);
             handlerRealmChange(source,getMajorRealm()+1,0);
         }
-        Identifier currentTechnique = techniqueHistory.removeFirst();
+        Identifier currentTechnique = cachedTechniqueHistory.removeFirst();
         setCurrentTechnique(currentTechnique,cachedTechniqueData.get(currentTechnique),source);
         handlerRealmChange(source,getMajorRealm(),cachedMinorRealm);
-        setProgress(progress);
+        setProgress(cachedProgress);
     }
 
     @Override

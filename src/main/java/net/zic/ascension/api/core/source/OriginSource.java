@@ -436,7 +436,7 @@ public class OriginSource {
                 ValueOutput pathOutput = paths.addChild();
                 NbtHelpers.writeIdentifier(pathOutput,"path",path);
                 ValueOutput pathData = pathOutput.child("data");
-                if(getPathData(path) != null) getPathData(path).write(pathOutput);
+                if(getPathData(path) != null) getPathData(path).write(pathData);
             }catch (Exception e){
                 AscensionCraft.LOGGER.debug("error writing path {}",path);
                 AscensionCraft.LOGGER.debug("stacktrace",e);
@@ -498,8 +498,14 @@ public class OriginSource {
         ValueInput.ValueInputList pathsInput = input.childrenListOrEmpty("paths");
         for(ValueInput pathInput : pathsInput){
             try {
+                Identifier pathId = NbtHelpers.readIdentifier(pathInput,"path");
+                ValueInput pathData = pathInput.childOrEmpty("data");
 
+                Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,getRegistryAccess());
+                if(path == null) continue;
 
+                PathData data = path.loadData(pathData,getRegistryAccess());
+                cachedPathData.put(pathId,data);
             }catch (Exception e){
                 AscensionCraft.LOGGER.debug("Error loading path");
                 AscensionCraft.LOGGER.debug("stacktrace: ",e);
@@ -552,6 +558,11 @@ public class OriginSource {
         }
         AscensionCraft.LOGGER.debug("Finished Reading Bloodlines");
 
+
+
+
+        cachedPathData.clear();
+        cachedSkillData.clear();
     }
 
     //TODO add full sync
