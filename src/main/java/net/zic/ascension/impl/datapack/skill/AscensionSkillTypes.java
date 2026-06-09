@@ -6,6 +6,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.datapack.TypeRegistries;
 import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.impl.datapack.skill.castable.DebugCastableType;
 import net.zic.ascension.impl.datapack.skill.passive.SimplePassiveSkillType;
 
 public class AscensionSkillTypes {
@@ -15,6 +16,10 @@ public class AscensionSkillTypes {
     public static final DeferredHolder<SkillType,SkillType> SIMPLE_PASSIVE_SKILL_TYPE = SKILL_TYPES.register(
             "simple_passive",
             SimplePassiveSkillType::new
+    );
+    public static final DeferredHolder<SkillType,SkillType> DEBUG_CASTABLE_TYPE = SKILL_TYPES.register(
+            "debug_castable",
+            DebugCastableType::new
     );
     public static void register(IEventBus eventBus){
 

@@ -107,7 +107,7 @@ public record SimplePath(Component name, Component description, List<MajorRealm>
     @Override
     public PathData loadData(ByteBuf buf, RegistryAccess access) {
         SimplePathData pathData = new SimplePathData(CoreRegistries.PATH_REGISTRY.get(access).getKey(this));
-        pathData.decode(buf);
+        pathData.decode(buf,access);
         return pathData;
     }
 }

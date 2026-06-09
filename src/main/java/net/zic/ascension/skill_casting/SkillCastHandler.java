@@ -1,31 +1,27 @@
-package net.zic.ascension.skil_casting;
+package net.zic.ascension.skill_casting;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
-import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.core.skill.castable.PreCastData;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.source.SourceChangesSnapshot;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
-import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
-import net.zic.ascension.skil_casting.hotbar.SkillHotBar;
-import net.zic.ascension.skil_casting.hotbar.SkillHotBarSlot;
-import net.zic.zenithlib.common.ZenithAttachments;
+import net.zic.ascension.skill_casting.hotbar.SkillHotBar;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
+//TODO. listen too skillCastEnd and call resolve.
 public class SkillCastHandler {
     private final Player player;
     private final CastingInstance instance = new CastingInstance();
     private final SkillHotBar hotBar = new SkillHotBar();
+
 
 
     public SkillCastHandler(Player player) {
@@ -41,6 +37,20 @@ public class SkillCastHandler {
             player.syncData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER);
         }
     }
+    public int getMaxSlots(){
+        return hotBar.getMaxSlots();
+    }
+    public Identifier getSkill(int slot){
+        return hotBar.getSkill(slot);
+    }
+    public PreCastData getPreCastData(int slot){
+        return hotBar.getPreCastData(slot);
+    }
+
+    public void markHotBarDirty(){
+        hotBar.markDirty();
+        resolve();
+    }
 
     public void slotSkill(Identifier skill,int slot){
         hotBar.slotSkill(player,skill,slot);
@@ -52,11 +62,22 @@ public class SkillCastHandler {
 
     //generic for items with skills and stuff
     public void castSkill(Identifier skill, PreCastData castData){
-        //TODO
+        System.out.println("casting skill");
+        instance.startCast(
+                player,
+                skill,
+                castData
+        );
+        resolve();
     }
 
     public void castSelectedSkill(){
         //TODO
+        Identifier skill = hotBar.getSkill(hotBar.getSelectedSlot());
+        if(skill == null )return;
+        if(!(CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,player.registryAccess()) instanceof CastableSkill castableSkill)) return;
+
+        castSkill(skill, hotBar.getPreCastData(hotBar.getSelectedSlot()));
     }
 
     public static class Provider implements IAttachmentSerializer<SkillCastHandler>{

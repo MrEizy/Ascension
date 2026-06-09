@@ -1,10 +1,12 @@
 package net.zic.ascension.common.command;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
 import net.zic.ascension.common.command.commands.SetRealmCommand;
+import net.zic.ascension.common.command.commands.SlotSkillCommand;
 
 public class AscensionCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -24,6 +26,11 @@ public class AscensionCommand {
 
 
                 .then(SetRealmCommand.build())
+                .then(Commands.literal("skill")
+                        .then(SlotSkillCommand.buildSlot())
+                        .then(SlotSkillCommand.buildUnSlot())
+                        .then(SlotSkillCommand.buildDisplay())
+                )
 
 
         );

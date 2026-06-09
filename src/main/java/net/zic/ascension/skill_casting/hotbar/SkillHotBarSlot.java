@@ -1,9 +1,7 @@
-package net.zic.ascension.skil_casting.hotbar;
+package net.zic.ascension.skill_casting.hotbar;
 
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.core.skill.castable.PreCastData;
@@ -17,7 +15,7 @@ public class SkillHotBarSlot {
 
     public void setSkill(LivingEntity entity, Identifier skill){
         if(skill == null){
-            setSkill(null,null);
+            unslotSkill(entity);
             return;
         }
 

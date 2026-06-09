@@ -10,7 +10,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.ServerOriginSource;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
-import net.zic.ascension.skil_casting.SkillCastHandler;
+import net.zic.ascension.skill_casting.SkillCastHandler;
 
 import java.util.function.Supplier;
 

@@ -137,6 +137,7 @@ public class SourceChangesSnapshot {
         });
         snapshot.toRemoveBloodline = new HashSet<>(ByteBufHelpers.decodeArray(buf, ByteBufHelpers::decodeIdentifier));
 
+        //TODO bug here
         snapshot.toAddPaths = ByteBufHelpers.decodeArray(buf,(byteBuf)->{
             Identifier identifier = ByteBufHelpers.decodeIdentifier(byteBuf);
             PathData data = CoreRegistries.PATH_REGISTRY.get(access).getValue(identifier).loadData(byteBuf,access);

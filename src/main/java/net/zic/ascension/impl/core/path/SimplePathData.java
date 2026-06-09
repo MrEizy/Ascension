@@ -12,6 +12,7 @@ import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
+import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.*;
@@ -411,7 +412,25 @@ public class SimplePathData implements PathData {
             if(data != null)data.encode(byteBuf);
         },buf);
     }
-    public void decode(ByteBuf buf){
+    public void decode(ByteBuf buf,RegistryAccess access){
+        minorRealm = buf.readInt();
+        progress = buf.readDouble();
 
+        techniqueHistory.clear();
+        techniqueHistory.addAll(ByteBufHelpers.decodeArray(
+                buf,
+                (byteBuf)-> buf.readBoolean() ? ByteBufHelpers.decodeIdentifier(buf) : null
+        ));
+
+        techniqueData.clear();
+        int size = buf.readInt();
+        for(int i = 0;i<size;i++){
+            Identifier techniqueId = ByteBufHelpers.decodeIdentifier(buf);
+            if(!buf.readBoolean()) continue;
+            Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,techniqueId,access);
+            if(technique == null) continue;
+            techniqueData.put(techniqueId,technique.loadData(buf));
+
+        }
     }
 }

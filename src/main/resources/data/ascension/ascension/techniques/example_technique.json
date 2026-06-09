@@ -10,7 +10,8 @@
       "ascension:generic_give_stats"
     ],
     "ascension:realm_change/on_gained": [
-      "ascension:give_qi_body"
+      "ascension:give_qi_body",
+      "ascension:give_test_cast"
     ]
 
   }

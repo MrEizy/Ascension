@@ -127,7 +127,7 @@ configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 dependencies {
-    implementation("com.github.MrEizy:ZenithLib:d0870f0197")
+    implementation("com.github.MrEizy:ZenithLib:b45cf3f392")
     // compile against the JEI API but do not include it at runtime
     //compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
     // at runtime, use the full JEI jar for NeoForge

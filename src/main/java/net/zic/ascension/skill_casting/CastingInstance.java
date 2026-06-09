@@ -1,10 +1,8 @@
-package net.zic.ascension.skil_casting;
+package net.zic.ascension.skill_casting;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.skill.castable.CastData;
@@ -39,6 +37,7 @@ public class CastingInstance {
         if(!result.isSuccess()){
             caster.sendOverlayMessage(result.message);
             markDirty();
+            this.skill = null;
             return;
         }
 

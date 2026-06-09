@@ -1,15 +1,13 @@
-package net.zic.ascension.skil_casting.hotbar;
+package net.zic.ascension.skill_casting.hotbar;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufHolder;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.core.skill.castable.PreCastData;
 import net.zic.zenithlib.nbt.NbtHelpers;
@@ -36,6 +34,10 @@ public class SkillHotBar {
 
     public PreCastData getPreCastData(int slot){
         return slots[slot].getPreCastData();
+    }
+
+    public int getSelectedSlot(){
+        return selectedSlot;
     }
 
     public void slotSkill(LivingEntity entity,Identifier skill,int slot){
@@ -79,6 +81,7 @@ public class SkillHotBar {
     }
 
     public void write(ValueOutput output){
+        output.putInt("selected",selectedSlot);
         NbtHelpers.writeArray(output,"slots",slots,(holder,id,val)->{
             if(val.getSkill() != null){
                 NbtHelpers.writeIdentifier(holder,"skill",val.getSkill());
@@ -101,6 +104,7 @@ public class SkillHotBar {
         for(int i = 0;i<slots.length;i++){
             slots[i] = loadedSlots.get(i);
         }
+        select(entity,input.getIntOr("selected",0));
     }
     public void encode(ByteBuf buf){
         ByteBufHelpers.encodeArray(slots,buf,((val, buf1) -> {
@@ -111,6 +115,7 @@ public class SkillHotBar {
                 if(val.getPreCastData() != null) val.getPreCastData().encode(buf1);
             }
         }));
+        buf.writeInt(selectedSlot);
     }
     public void decode(RegistryFriendlyByteBuf buf, LivingEntity entity){
         List<SkillHotBarSlot> newSlots = ByteBufHelpers.decodeArray(buf,(buf1 -> {
@@ -134,5 +139,6 @@ public class SkillHotBar {
         for(int i = 0;i<slots.length;i++){
             slots[i] = newSlots.get(i);
         }
+        select(entity,buf.readInt());
     }
 }

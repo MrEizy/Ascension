@@ -1,0 +1,5 @@
+{
+  "type": "ascension:debug_castable",
+  "message": "this was cast",
+  "cooldown": 20
+}
