@@ -1,19 +1,20 @@
 package net.zic.ascension.common.item;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionEarth;
+import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHeaven;
+import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHuman;
 import net.zic.ascension.common.item.transfer_item.BloodlineTransferItem;
 import net.zic.ascension.common.item.transfer_item.PhysiqueTransferItem;
 import net.zic.ascension.common.item.transfer_item.TechniqueTransferItem;
 import net.zic.zenithlib.registry.RegistryHelper;
 
-public class AscensionItems {
+public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(AscensionCraft.MOD_ID);
 
 
@@ -31,6 +32,17 @@ public class AscensionItems {
                     .setId(RegistryHelper.key(Registries.ITEM,AscensionCraft.MOD_ID,"technique_manual"))
                     .stacksTo(1)
             ));
+
+
+    public static final DeferredItem<Item> TABLET_OF_DESTRUCTION_HUMAN = ITEMS.register("tablet_of_destruction_human",
+            () -> new TabletOfDestructionHuman(new Item.Properties()
+                    .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "tablet_of_destruction_human"))));
+    public static final DeferredItem<Item> TABLET_OF_DESTRUCTION_EARTH = ITEMS.register("tablet_of_destruction_earth",
+            () -> new TabletOfDestructionEarth(new Item.Properties()
+                    .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "tablet_of_destruction_earth"))));
+    public static final DeferredItem<Item> TABLET_OF_DESTRUCTION_HEAVEN = ITEMS.register("tablet_of_destruction_heaven",
+            () -> new TabletOfDestructionHeaven(new Item.Properties()
+                    .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "tablet_of_destruction_heaven"))));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

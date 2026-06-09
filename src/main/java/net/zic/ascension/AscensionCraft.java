@@ -14,11 +14,25 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 
+import net.zic.ascension.client.keybind.ModKeybinds;
+import net.zic.ascension.common.AscensionAttachments;
+import net.zic.ascension.common.ModCreativeModeTabs;
+import net.zic.ascension.common.commands.StatDisplayCommand;
+import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.AscensionItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.core.entity.AscensionStats;
+import net.zic.ascension.core.source.SourceHandler;
+import net.zic.ascension.datapack.bloodline.AscensionBloodlineTypes;
+import net.zic.ascension.datapack.physique.AscensionPhysiqueTypes;
+import net.zic.ascension.datapack.progression.AscensionProgressActionConditionTypes;
+import net.zic.ascension.datapack.progression.AscensionProgressActionTypes;
+import net.zic.ascension.datapack.skill.AscensionSkillTypes;
+import net.zic.ascension.datapack.technique.AscensionTechniqueTypes;
+import net.zic.ascension.network.CycleDropModePacket;
 import net.zic.ascension.impl.core.entity.AscensionStats;
 import net.zic.ascension.impl.core.source.SourceHandler;
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
@@ -85,7 +99,11 @@ public class AscensionCraft {
         AscensionPhysiqueTypes.register(modEventBus);
         AscensionAttachments.register(modEventBus);
         AscensionComponents.register(modEventBus);
-        AscensionItems.register(modEventBus);
+        ModItems.register(modEventBus);
+
+        ModCreativeModeTabs.register(modEventBus);
+
+
         AscensionStats.register(modEventBus);
         AscensionBloodlineTypes.register(modEventBus);
         AscensionProgressActionTypes.register(modEventBus);
@@ -110,7 +128,7 @@ public class AscensionCraft {
 
 
     private void registerKeyBindings(RegisterKeyMappingsEvent event) {
-
+        event.register(ModKeybinds.CYCLE_MODE);
 
     }
 
@@ -171,7 +189,13 @@ public class AscensionCraft {
 
         @SubscribeEvent
         public static void registerPayloads(RegisterPayloadHandlersEvent event) {
+            PayloadRegistrar registrar = event.registrar(AscensionCraft.MOD_ID);
 
+            registrar.playToServer(
+                    CycleDropModePacket.TYPE,
+                    CycleDropModePacket.STREAM_CODEC,
+                    CycleDropModePacket::handle
+            );
 
 
         }

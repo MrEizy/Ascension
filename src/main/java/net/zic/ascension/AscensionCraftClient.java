@@ -14,6 +14,9 @@ import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
+import net.zic.ascension.client.keybind.ModKeybinds;
+import net.zic.ascension.client.keybind.TabletKeybindHandler;
+import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.zenithlib.input.InputHandler;
 import net.zic.zenithlib.input.MappingHandler;
 import org.lwjgl.glfw.GLFW;
@@ -21,6 +24,9 @@ import org.lwjgl.glfw.GLFW;
 
 @Mod(value = AscensionCraft.MOD_ID,dist = Dist.CLIENT)
 public class AscensionCraftClient {
+
+    private static final TabletOutlineRenderer TABLET_OUTLINE = new TabletOutlineRenderer();
+
 
 
     public AscensionCraftClient(IEventBus modEventBus, ModContainer modContainer)
@@ -65,6 +71,21 @@ public class AscensionCraftClient {
             });
         }
 
+    }
+
+    // ── GAME bus events (in-game ticks, rendering) ────────────────────────────
+    @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
+    static class ClientGameEvents {
+
+        @SubscribeEvent
+        public static void onRenderLevelStage(net.neoforged.neoforge.client.event.RenderLevelStageEvent.AfterTranslucentFeatures event) {
+            TABLET_OUTLINE.onRenderLevelStage(event);
+        }
+
+        @SubscribeEvent
+        public static void onClientTick(net.neoforged.neoforge.client.event.ClientTickEvent.Post event) {
+            TabletKeybindHandler.onClientTick(event);
+        }
     }
 
 
