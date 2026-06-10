@@ -15,10 +15,12 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
+import net.zic.ascension.api.core.data_source.DataSource;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
 import net.zic.ascension.api.core.path.AffinityHolder;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
+import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.skill.SkillData;
@@ -32,6 +34,7 @@ import net.zic.zenithlib.stats.StatSheet;
 import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import org.apache.logging.log4j.core.Core;
 import oshi.util.tuples.Pair;
 
 import java.util.Collection;
@@ -106,7 +109,9 @@ public class OriginSource {
         if(physique == null){
             return false;
         }
-        return setPhysique(physique, CoreRegistries.PHYSIQUE_REGISTRY.get(registryAccess).getValue(physique).newData(),registryAccess);
+        Physique physiqueInstance = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,physique,getRegistryAccess());
+        if(physiqueInstance == null) return false;
+        return setPhysique(physique, physiqueInstance.newData(),registryAccess);
 
     }
     //Sets the current physique, cannot be null
@@ -136,7 +141,9 @@ public class OriginSource {
     //add a fresh instance of a bloodline
     public boolean addBloodline(Identifier bloodline,RegistryAccess registryAccess){
         if(bloodline == null)return false;
-        return addBloodline(bloodline,CoreRegistries.BLOODLINE_REGISTRY.get(registryAccess).getValue(bloodline).newData(),registryAccess);
+        Bloodline bloodlineInstance = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodline,getRegistryAccess());
+        if(bloodlineInstance == null) return false;
+        return addBloodline(bloodline,bloodlineInstance.newData(),registryAccess);
     }
     public void mergeBloodline(Identifier bloodline,BloodlineData data){
 
@@ -188,8 +195,9 @@ public class OriginSource {
 
     public boolean addPath(Identifier path, RegistryAccess registryAccess){
         if(path == null) return false;
-        if(!CoreRegistries.PATH_REGISTRY.get(registryAccess).containsKey(path)) return false; //TODO add this for everything
-        return addPath(path,CoreRegistries.PATH_REGISTRY.get(registryAccess).getValue(path).newData(registryAccess),registryAccess);
+        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,getRegistryAccess());
+        if(pathInstance == null) return false;
+        return addPath(path,pathInstance.newData(registryAccess),registryAccess);
     }
     //used when adding an existing path to a source
     public boolean addPath(Identifier path,PathData existingData,RegistryAccess registryAccess){
@@ -240,7 +248,9 @@ public class OriginSource {
 
     public boolean addSkill(Identifier skill,RegistryAccess registryAccess){
         if(skill == null) return false;
-        return addSkill(skill,CoreRegistries.SKILL_REGISTRY.get(registryAccess).getValue(skill).newData());
+        Skill skillInstance = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,getRegistryAccess());
+        if(skillInstance == null) return false;
+        return addSkill(skill,skillInstance.newData());
 
     }
     public boolean addSkill(Identifier skill,SkillData data){
@@ -268,7 +278,9 @@ public class OriginSource {
 
     public boolean addDataSource(Identifier source,RegistryAccess registryAccess){
         if(source == null) return false;
-        return addDataSource(source,CoreRegistries.DATA_SOURCE_REGISTRY.get(registryAccess).getValue(source).newInstance());
+        DataSource dataSource = CoreRegistries.safeAccess(CoreRegistries.DATA_SOURCE_REGISTRY,source,getRegistryAccess());
+        if(dataSource == null) return false;
+        return addDataSource(source,dataSource.newInstance());
     }
     public boolean addDataSource(Identifier source,DataSourceInstance instance){
         if(source == null) return false;

@@ -2,12 +2,12 @@
   "type": "ascension:simple",
   "name": "Test",
   "description": "this is an example description",
-  "purity_handler": {
-    "ascension:all_purity": [
-      "ascension:generic_give_stats"
-    ],
-    "ascension:on_gained": [
-      "ascension:give_iron_skin"
-    ]
-  }
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        "ascension:generic_give_stats"
+      ]
+    }
+  ]
 }

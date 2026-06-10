@@ -13,6 +13,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.client.keybind.ModKeybinds;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.item.ModItems;
@@ -56,7 +57,7 @@ public class AscensionCraft {
     public static final Map<String, String> SECT_DATA = new HashMap<>();
 
     private static SourceHandler sourceHandler;
-
+    private static PathInteractionHolder pathInteractionHolder = new PathInteractionHolder();
     public static Identifier prefix(String name){
         return Identifier.fromNamespaceAndPath(MOD_ID, name);
     }
@@ -163,6 +164,7 @@ public class AscensionCraft {
 
 
     public static SourceHandler getSourceHandler(){return sourceHandler;}
+    public static PathInteractionHolder getPathInteractionHolder(){return pathInteractionHolder;}
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
     public static class ModEvents {
 

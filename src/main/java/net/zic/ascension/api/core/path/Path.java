@@ -2,10 +2,11 @@ package net.zic.ascension.api.core.path;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
+import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
+import net.zic.ascension.api.core.path.interactions.PathInteractionType;
 import net.zic.ascension.api.datapack.path.PathType;
 
 import java.util.Collection;
@@ -34,9 +35,10 @@ public interface Path {
 
     //──Interaction────────────────────────────────────────────────────────
     double getInteractionValue(Identifier path);
-    PathInteraction getInteractionType(Identifier path);
-    Collection<Identifier> getPathsOfInteraction(PathInteraction type);
+    PathInteractionType getInteractionType(Identifier path);
+    Collection<Identifier> getPathsOfInteraction(PathInteractionType type);
 
+    void registerInteractions(PathInteractionHolder holder);
 
     //──Data────────────────────────────────────────────────────────
 

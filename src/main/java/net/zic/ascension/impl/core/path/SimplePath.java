@@ -11,7 +11,8 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
-import net.zic.ascension.api.core.path.PathInteraction;
+import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
+import net.zic.ascension.api.core.path.interactions.PathInteractionType;
 import net.zic.ascension.api.datapack.path.PathType;
 
 import java.util.Collection;
@@ -83,13 +84,18 @@ public record SimplePath(Component name, Component description, List<MajorRealm>
     }
 
     @Override
-    public PathInteraction getInteractionType(Identifier path) {
+    public PathInteractionType getInteractionType(Identifier path) {
         return null; //TODO
     }
 
     @Override
-    public Collection<Identifier> getPathsOfInteraction(PathInteraction type) {
+    public Collection<Identifier> getPathsOfInteraction(PathInteractionType type) {
         return List.of(); //TODO
+    }
+
+    @Override
+    public void registerInteractions(PathInteractionHolder holder) {
+
     }
 
     @Override

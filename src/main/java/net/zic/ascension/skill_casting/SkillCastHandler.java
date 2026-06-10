@@ -79,7 +79,10 @@ public class SkillCastHandler {
 
         castSkill(skill, hotBar.getPreCastData(hotBar.getSelectedSlot()));
     }
+    public void tick(){
 
+        instance.continueCasting(player);
+    }
     public static class Provider implements IAttachmentSerializer<SkillCastHandler>{
 
         @Override

@@ -1,12 +1,14 @@
-package net.zic.ascension.impl.core.skill.castable;
+package net.zic.ascension.impl.core.skill.castable.cultivation;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
+import net.zic.ascension.api.capabilities.CoreCapabilities;
+import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.ascension.api.core.skill.castable.CastData;
 import net.zic.ascension.api.core.skill.castable.CastableSkill;
@@ -17,17 +19,23 @@ import net.zic.ascension.api.core.skill.castable.data.CastType;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.impl.core.skill.EmptySkillData;
+import net.zic.ascension.impl.core.skill.castable.cultivation.util.CultivationUtil;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
+import net.zic.ascension.skill_casting.AscensionSkillListener;
+import net.zic.zenithlib.ZenithLib;
 import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.cooldown.EntityCooldownHandler;
 
-import java.util.UUID;
+import java.util.List;
 
-public record DebugCastable(String message,int cooldown,UUID uuid) implements CastableSkill {
-
+public record SimpleCultivationSkill(
+        Component name,
+        Component description,
+        Identifier primaryPath,
+        List<Identifier> secondaryPaths,
+        double baseRate) implements CastableSkill {
     @Override
     public CastType getCastType() {
-        return CastType.INSTANT;
+        return CastType.LONG;
     }
 
     @Override
@@ -52,36 +60,43 @@ public record DebugCastable(String message,int cooldown,UUID uuid) implements Ca
 
     @Override
     public CastResult tryCast(LivingEntity caster) {
-        EntityCooldownHandler handler = caster.getData(ZenithAttachments.COOLDOWN_HANDLER);
-        Identifier identifier =Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,uuid.toString());
-        return handler.isOnCooldown(identifier) ?
-                CastResult.fail(Component.literal("On Cooldown("+(handler.getCooldown(identifier)/20.0)+"s)")) :
-                CastResult.success();
+        return CastResult.success();
     }
 
-    @Override
-    public CastData initialCast(LivingEntity caster, PreCastData preCastData) {
-
-        if(caster instanceof ServerPlayer player){
-            player.sendSystemMessage(
-                    Component.literal(message)
-            );
-        }
-
-         caster.getData(ZenithAttachments.COOLDOWN_HANDLER).addCooldown(
-                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,uuid.toString()),
-                cooldown
-        );
-        return null;
-    }
 
     @Override
     public void continueCasting(LivingEntity caster, CastStatus castStatus, CastData castData, int ticksElapsed) {
 
+        if(!caster.getData(ZenithAttachments.ACTION_MANAGER).isActive(AscensionSkillListener.skillCast)) {
+            castStatus.finish();
+            return;
+        };
+        if(caster.level().isClientSide()) return;
+
+        AscensionEntityDataHolder holder = caster.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        if(holder == null) return;
+
+        OriginSource source = holder.getData(caster).getSource();
+
+
+        PathData pathData = source.getPathData(primaryPath());
+
+        if(pathData == null) return;
+
+        CultivationUtil.cultivate(source,pathData,secondaryPaths(),baseRate);
+        if(caster instanceof Player player){
+            player.sendOverlayMessage(Component.literal("Progress : "+pathData.getProgress()));
+        }
+
     }
 
     @Override
-    public void finalCast(LivingEntity caster, CastStatus status, CastData castData,int ticksElapsed) {
+    public CastData initialCast(LivingEntity caster, PreCastData preCastData) {
+        return null;
+    }
+
+    @Override
+    public void finalCast(LivingEntity caster, CastStatus status, CastData castData, int ticksElapsed) {
 
     }
 
@@ -107,17 +122,17 @@ public record DebugCastable(String message,int cooldown,UUID uuid) implements Ca
 
     @Override
     public SkillType getType() {
-        return AscensionSkillTypes.DEBUG_CASTABLE_TYPE.get();
+        return AscensionSkillTypes.SIMPLE_CULTIVATION_SKILL_TYPE.get();
     }
 
     @Override
     public Component getName() {
-        return Component.literal("DEBUG");
+        return name;
     }
 
     @Override
     public Component getDescription() {
-        return Component.literal("A debug skill");
+        return description;
     }
 
     @Override

@@ -1,0 +1,7 @@
+{
+  "type": "ascension:simple_cultivation_skill",
+  "name": "true_breath",
+  "description": "breath in the essence, let it settle",
+  "path": "ascension:foundation/essence",
+  "rate": 2
+}

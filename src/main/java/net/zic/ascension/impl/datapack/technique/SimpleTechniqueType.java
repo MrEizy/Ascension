@@ -23,10 +23,11 @@ public class SimpleTechniqueType extends TechniqueType {
                         Identifier.CODEC.fieldOf("path").forGetter(SimpleTechnique::getPath),
                         Codec.INT.listOf().optionalFieldOf("milestone_realms",List.of()).forGetter(SimpleTechnique::getMilestoneRealms),
                         Codec.STRING.listOf().optionalFieldOf("technique_families",List.of()).forGetter(SimpleTechnique::getTechniqueFamilies),
-                        Codec.INT.optionalFieldOf("max_realm").forGetter(SimpleTechnique::getHardCodedMaxMinorRealm),
+                        Codec.INT.optionalFieldOf("max_realm").forGetter(SimpleTechnique::getHardCodedMaxMajorRealm),
+                        Codec.INT.optionalFieldOf("max_minor_realm").forGetter(SimpleTechnique::getHardCodedMaxMinorRealm),
                         Codec.INT.optionalFieldOf("min_realm").forGetter(SimpleTechnique::getHardCodedMinMajorRealm),
                         Codec.unboundedMap(Codec.INT,SimpleTechnique.MajorRealmNames.CODEC).optionalFieldOf("realm_names",Map.of()).forGetter(SimpleTechnique::getMajorRealmOverrides),
-                        ProgressActionHolder.CODEC.fieldOf("realm_change_handler").forGetter(SimpleTechnique::getListeners)
+                        ProgressActionHolder.PROGRESS_HOLDER_CODEC.fieldOf("realm_change_handler").forGetter(SimpleTechnique::getHolder)
 
                 ).apply(instance,
                         (name,
@@ -35,6 +36,7 @@ public class SimpleTechniqueType extends TechniqueType {
                          milestones,
                          families,
                          max,
+                         max_minor,
                          min,
                          overrides,
                          handler)->
@@ -45,6 +47,7 @@ public class SimpleTechniqueType extends TechniqueType {
                                         milestones,
                                         families,
                                         max.orElse(null),
+                                        max_minor.orElse(null),
                                         min.orElse(0),
                                         handler,
                                         overrides

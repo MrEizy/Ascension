@@ -116,6 +116,8 @@ public class SetRealmCommand {
             if(progressPercent > 0){
                 progressPercent = Math.clamp(progressPercent,0,100);
                 data.setProgress(data.getMaxProgress(data.getMajorRealm(),data.getMinorRealm(),originSource.getRegistryAccess())*progressPercent/100.0);
+            }else{
+                data.setProgress(0);
             }
             String progressStr = (progressPercent >= 0)
                     ? String.format(" with %d%% progress", progressPercent) : "";

@@ -52,6 +52,7 @@ public class SimpleTechnique implements Technique {
     //technique compatible, if not compatible try force learn. it would reset cultivation. learn it
     //add warning
     private final Integer maxMajorRealm;
+    private final Integer maxMinorRealm;
     private final int minMajorRealm;
 
     private final ProgressActionHolder holder;
@@ -66,17 +67,19 @@ public class SimpleTechnique implements Technique {
             List<Integer> milestoneRealms,
             List<String> techniqueFamilies,
             Integer maxMajorRealm,
+            Integer maxMinorRealm,
             int minMajorRealm,
-            Map<Identifier,List<Identifier>> holder,
+            ProgressActionHolder holder,
             Map<Integer, MajorRealmNames> majorRealmOverrides) {
         this.name = name;
         this.description = description;
         this.path = path;
-        this.holder = ProgressActionHolder.fromMap(holder);
+        this.holder = holder;
         this.milestoneRealms = milestoneRealms;
         this.techniqueFamilies = techniqueFamilies;
         this.majorRealmOverrides = majorRealmOverrides;
         this.maxMajorRealm = maxMajorRealm;
+        this.maxMinorRealm = maxMinorRealm;
         this.minMajorRealm = minMajorRealm;
     }
 
@@ -105,15 +108,18 @@ public class SimpleTechnique implements Technique {
         );
     }
 
-    public Map<Identifier,List<Identifier>> getListeners(){
-        return holder.listeners();
+    public ProgressActionHolder getHolder(){
+        return holder;
     }
     public Map<Integer,MajorRealmNames> getMajorRealmOverrides(){
         return majorRealmOverrides;
     }
 
-    public Optional<Integer> getHardCodedMaxMinorRealm(){
+    public Optional<Integer> getHardCodedMaxMajorRealm(){
         return Optional.of(maxMajorRealm);
+    }
+    public Optional<Integer> getHardCodedMaxMinorRealm(){
+        return Optional.of(maxMinorRealm);
     }
     public Optional<Integer> getHardCodedMinMajorRealm(){
         return Optional.of(minMajorRealm);
@@ -204,7 +210,7 @@ public class SimpleTechnique implements Technique {
     @Override
     public int getMaxMinorRealm(int majorRealm, @Nullable TechniqueData techniqueData, RegistryAccess registryAccess) {
         Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,registryAccess);
-
+        if(majorRealm == getMaxMajorRealm(techniqueData,registryAccess)) return maxMinorRealm;
         return pathInstance == null ? 9: pathInstance.getMaxMinorRealm(majorRealm);
     }
 
@@ -224,13 +230,10 @@ public class SimpleTechnique implements Technique {
         double maxMajorRealm = getMaxMajorRealm(techniqueData,source.getRegistryAccess());
         double maxMinorRealm = getMaxMinorRealm(majorRealm,techniqueData,source.getRegistryAccess());
 
-        /*
-            first check if progress is max
-            then check if it is a minor realm breakthrough where major realm < max
-            (if for example our max is 12 we can breakthrough into 12 but not progress in it)
-            if it is a major realm breakthrough ensure the new major realm is accessible
-         */
-        return maxProgress <= progress && ((maxMinorRealm > minorRealm && maxMajorRealm > majorRealm) || (maxMinorRealm <= minorRealm && maxMajorRealm > majorRealm));
+        return maxProgress <= progress &&
+                (
+                        (maxMinorRealm > minorRealm && maxMajorRealm >= majorRealm) ||
+                        (maxMinorRealm <= minorRealm && maxMajorRealm > majorRealm) );
 
     }
 

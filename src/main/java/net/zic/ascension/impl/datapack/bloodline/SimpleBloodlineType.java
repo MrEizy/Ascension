@@ -17,7 +17,7 @@ public class SimpleBloodlineType extends BloodlineType {
                 instance.group(
                         ComponentSerialization.CODEC.fieldOf("name").forGetter(SimpleBloodline::getName),
                         ComponentSerialization.CODEC.fieldOf("description").forGetter(SimpleBloodline::getDescription),
-                        ProgressActionHolder.CODEC.fieldOf("purity_handler").forGetter(SimpleBloodline::getListeners)
+                        ProgressActionHolder.PROGRESS_HOLDER_CODEC.fieldOf("purity_handler").forGetter(SimpleBloodline::getHolder)
                 ).apply(instance, SimpleBloodline::new)
         );
     }

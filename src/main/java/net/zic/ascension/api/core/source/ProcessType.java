@@ -3,6 +3,7 @@ package net.zic.ascension.api.core.source;
 /**
  * describes a process the server source can perform. a sync will only be triggered
  * if resolveSource is called with the same process as the current process
+ * TODO update to be Strings, that way we have an infinite number, then use static strings to save on memory
  */
 public enum ProcessType {
     PHYSIQUE,
