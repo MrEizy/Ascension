@@ -1,23 +1,99 @@
 {
-  "type":"ascension:simple",
+  "type": "ascension:simple",
   "name": "Example",
   "description": "This is an example physique",
   "paths": [
     "ascension:foundation/essence"
   ],
   "item_tooltip": {
-    "title": [
-
-    ],
-    "1": [
-      "ascension:name",
-      "ascension:descriptions"
-    ],
-    "2": [
-
-    ],
-    "footer": [
-
+    "theme": "zenithlib:mana_blue",
+    "pages": [
+      {
+        "title": {
+          "literal": "Example Physique"
+        },
+        "elements": [
+          {
+            "type": "title_icon",
+            "title": {
+              "literal": "Example Physique"
+            },
+            "subtitle": {
+              "literal": "A test physique rendered through ZenithLib"
+            }
+          },
+          {
+            "type": "badge",
+            "text": {
+              "literal": "ESSENCE PHYSIQUE"
+            },
+            "text_color": "background",
+            "background_color": "accent",
+            "border_color": "accent"
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "text",
+            "text": {
+              "literal": "This is an example physique."
+            }
+          }
+        ]
+      },
+      {
+        "title": {
+          "literal": "Stats"
+        },
+        "elements": [
+          {
+            "type": "header",
+            "text": {
+              "literal": "Base Stats"
+            }
+          },
+          {
+            "type": "row",
+            "left": {
+              "literal": "Vitality"
+            },
+            "right": {
+              "literal": "+2"
+            },
+            "right_color": "positive"
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "header",
+            "text": {
+              "literal": "Modifiers"
+            }
+          },
+          {
+            "type": "row",
+            "left": {
+              "literal": "Vitality Multiplier"
+            },
+            "right": {
+              "literal": "+20%"
+            },
+            "right_color": "positive"
+          },
+          {
+            "type": "row",
+            "left": {
+              "literal": "Essence Affinity"
+            },
+            "right": {
+              "literal": "+0.1"
+            },
+            "right_color": "accent"
+          }
+        ]
+      }
     ]
   },
   "base_stats": [

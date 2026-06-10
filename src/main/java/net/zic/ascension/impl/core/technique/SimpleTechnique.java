@@ -16,6 +16,7 @@ import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
+import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
 import org.jspecify.annotations.Nullable;
 
@@ -58,6 +59,8 @@ public class SimpleTechnique implements Technique {
 
     private final Map<Integer,MajorRealmNames> majorRealmOverrides;
 
+    private final Optional<AscensionItemTooltipDefinition> itemTooltip;
+
 
     public SimpleTechnique(
             Component name,
@@ -68,7 +71,8 @@ public class SimpleTechnique implements Technique {
             Integer maxMajorRealm,
             int minMajorRealm,
             Map<Identifier,List<Identifier>> holder,
-            Map<Integer, MajorRealmNames> majorRealmOverrides) {
+            Map<Integer, MajorRealmNames> majorRealmOverrides,
+            Optional<AscensionItemTooltipDefinition> itemTooltip) {
         this.name = name;
         this.description = description;
         this.path = path;
@@ -78,6 +82,7 @@ public class SimpleTechnique implements Technique {
         this.majorRealmOverrides = majorRealmOverrides;
         this.maxMajorRealm = maxMajorRealm;
         this.minMajorRealm = minMajorRealm;
+        this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
     }
 
     public record MajorRealmNames(Component name, Map<Integer, Component> minorRealmOverrides) {
@@ -139,6 +144,11 @@ public class SimpleTechnique implements Technique {
     @Override
     public Identifier getPath() {
         return path;
+    }
+
+    @Override
+    public Optional<AscensionItemTooltipDefinition> itemTooltip() {
+        return itemTooltip;
     }
 
     @Override

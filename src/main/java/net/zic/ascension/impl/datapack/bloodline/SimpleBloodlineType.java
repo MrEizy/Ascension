@@ -6,6 +6,7 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 
 public class SimpleBloodlineType extends BloodlineType {
@@ -17,7 +18,8 @@ public class SimpleBloodlineType extends BloodlineType {
                 instance.group(
                         ComponentSerialization.CODEC.fieldOf("name").forGetter(SimpleBloodline::getName),
                         ComponentSerialization.CODEC.fieldOf("description").forGetter(SimpleBloodline::getDescription),
-                        ProgressActionHolder.CODEC.fieldOf("purity_handler").forGetter(SimpleBloodline::getListeners)
+                        ProgressActionHolder.CODEC.fieldOf("purity_handler").forGetter(SimpleBloodline::getListeners),
+                        AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(SimpleBloodline::itemTooltip)
                 ).apply(instance, SimpleBloodline::new)
         );
     }

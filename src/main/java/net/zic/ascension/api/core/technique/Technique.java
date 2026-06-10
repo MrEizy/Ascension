@@ -9,9 +9,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
+import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
 public interface Technique {
@@ -78,6 +80,10 @@ public interface Technique {
     TechniqueData newData();
     TechniqueData loadData(ValueInput input);
     TechniqueData loadData(ByteBuf buf);
+
+    default Optional<AscensionItemTooltipDefinition> itemTooltip() {
+        return Optional.empty();
+    }
 
 
 

@@ -10,6 +10,7 @@ import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
+import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.value_containers.ValueContainer;
@@ -18,12 +19,14 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public record SimplePhysique(Component name, Component description, List<Identifier> unlockedPaths,
                              List<Identifier> skills, List<ValueContainer.BaseModifier> baseStats,
                              Map<Identifier, List<ValueContainerModifier>> statModifiers,
                              List<ValueContainer.BaseModifier> baseAffinities,
-                             Map<Identifier, List<ValueContainerModifier>> affinityModifiers) implements Physique {
+                             Map<Identifier, List<ValueContainerModifier>> affinityModifiers,
+                             Optional<AscensionItemTooltipDefinition> itemTooltip) implements Physique {
 
 
     public SimplePhysique(
@@ -34,7 +37,8 @@ public record SimplePhysique(Component name, Component description, List<Identif
             List<ValueContainer.BaseModifier> baseStats,
             Map<Identifier, List<ValueContainerModifier>> statModifiers,
             List<ValueContainer.BaseModifier> baseAffinities,
-            Map<Identifier, List<ValueContainerModifier>> affinityModifiers
+            Map<Identifier, List<ValueContainerModifier>> affinityModifiers,
+            Optional<AscensionItemTooltipDefinition> itemTooltip
     ) {
         this.name = name;
         this.description = description;
@@ -44,6 +48,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
         this.baseAffinities = baseAffinities;
         this.statModifiers = statModifiers;
         this.affinityModifiers = affinityModifiers;
+        this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
         AscensionCraft.LOGGER.info("created Simple Physique {}", name);
     }
 

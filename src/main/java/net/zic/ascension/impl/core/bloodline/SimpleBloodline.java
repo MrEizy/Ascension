@@ -12,22 +12,31 @@ import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class SimpleBloodline implements Bloodline {
 
     private final Component name;
     private final Component description;
     private final ProgressActionHolder holder;
+    private final Optional<AscensionItemTooltipDefinition> itemTooltip;
 
-    public SimpleBloodline(Component name, Component description, Map<Identifier,List<Identifier>> listeners){
+    public SimpleBloodline(
+            Component name,
+            Component description,
+            Map<Identifier, List<Identifier>> listeners,
+            Optional<AscensionItemTooltipDefinition> itemTooltip
+    ) {
         this.name = name;
         this.description = description;
         this.holder = ProgressActionHolder.fromMap(listeners);
+        this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
     }
 
     @Override
@@ -47,6 +56,11 @@ public class SimpleBloodline implements Bloodline {
     @Override
     public Component getDescription() {
         return description;
+    }
+
+    @Override
+    public Optional<AscensionItemTooltipDefinition> itemTooltip() {
+        return itemTooltip;
     }
 
     @Override

@@ -10,8 +10,10 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface Bloodline {
 
@@ -77,4 +79,8 @@ public interface Bloodline {
     BloodlineData newData();
     BloodlineData loadData(ValueInput input);
     BloodlineData loadData(ByteBuf buf);
+
+    default Optional<AscensionItemTooltipDefinition> itemTooltip() {
+        return Optional.empty();
+    }
 }

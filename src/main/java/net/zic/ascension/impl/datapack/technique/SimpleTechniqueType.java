@@ -8,6 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
+import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
 
 import java.util.List;
@@ -26,8 +27,8 @@ public class SimpleTechniqueType extends TechniqueType {
                         Codec.INT.optionalFieldOf("max_realm").forGetter(SimpleTechnique::getHardCodedMaxMinorRealm),
                         Codec.INT.optionalFieldOf("min_realm").forGetter(SimpleTechnique::getHardCodedMinMajorRealm),
                         Codec.unboundedMap(Codec.INT,SimpleTechnique.MajorRealmNames.CODEC).optionalFieldOf("realm_names",Map.of()).forGetter(SimpleTechnique::getMajorRealmOverrides),
-                        ProgressActionHolder.CODEC.fieldOf("realm_change_handler").forGetter(SimpleTechnique::getListeners)
-
+                        ProgressActionHolder.CODEC.fieldOf("realm_change_handler").forGetter(SimpleTechnique::getListeners),
+                        AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(Technique::itemTooltip)
                 ).apply(instance,
                         (name,
                          description,
@@ -37,7 +38,8 @@ public class SimpleTechniqueType extends TechniqueType {
                          max,
                          min,
                          overrides,
-                         handler)->
+                         handler,
+                         itemTooltip)->
                                 new SimpleTechnique(
                                         name,
                                         description,
@@ -47,7 +49,8 @@ public class SimpleTechniqueType extends TechniqueType {
                                         max.orElse(null),
                                         min.orElse(0),
                                         handler,
-                                        overrides
+                                        overrides,
+                                        itemTooltip
                                 )
                         )
         );

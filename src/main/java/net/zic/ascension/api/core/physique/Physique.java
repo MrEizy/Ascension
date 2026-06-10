@@ -8,8 +8,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
+import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface  Physique {
 
@@ -45,4 +47,8 @@ public interface  Physique {
     PhysiqueData newData();
     PhysiqueData loadData(ValueInput input);
     PhysiqueData loadData(ByteBuf buf);
+
+    default Optional<AscensionItemTooltipDefinition> itemTooltip() {
+        return Optional.empty();
+    }
 }

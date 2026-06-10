@@ -6,6 +6,7 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
+import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
@@ -25,8 +26,9 @@ public class SimplePhysiqueType extends PhysiqueType {
                         ValueContainer.BASE_MODIFIER_CODEC.listOf().optionalFieldOf("base_stats",List.of()).forGetter(SimplePhysique::baseStats),
                         ValueContainerModifier.MAP_CODEC.optionalFieldOf("stat_modifiers", Map.of()).forGetter(SimplePhysique::statModifiers),
                         ValueContainer.BASE_MODIFIER_CODEC.listOf().optionalFieldOf("base_affinity",List.of()).forGetter(SimplePhysique::baseAffinities),
-                        ValueContainerModifier.MAP_CODEC.optionalFieldOf("affinity_modifiers",Map.of()).forGetter(SimplePhysique::affinityModifiers)
-                        ).apply(instance, SimplePhysique::new)
+                        ValueContainerModifier.MAP_CODEC.optionalFieldOf("affinity_modifiers",Map.of()).forGetter(SimplePhysique::affinityModifiers),
+                        AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(SimplePhysique::itemTooltip)
+                ).apply(instance, SimplePhysique::new)
         );
     }
 }

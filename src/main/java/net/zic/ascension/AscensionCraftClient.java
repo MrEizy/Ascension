@@ -17,6 +17,7 @@ import net.neoforged.neoforge.client.settings.KeyModifier;
 import net.zic.ascension.client.keybind.ModKeybinds;
 import net.zic.ascension.client.keybind.TabletKeybindHandler;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
+import net.zic.ascension.client.tooltip.AscensionZenithTooltipProvider;
 import net.zic.zenithlib.input.InputHandler;
 import net.zic.zenithlib.input.MappingHandler;
 import org.lwjgl.glfw.GLFW;
@@ -34,6 +35,7 @@ public class AscensionCraftClient {
 
 
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        modEventBus.addListener(ClientEvents::onClientSetup);
 
     }
 
@@ -67,7 +69,7 @@ public class AscensionCraftClient {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             event.enqueueWork(() -> {
-
+                AscensionZenithTooltipProvider.register();
             });
         }
 

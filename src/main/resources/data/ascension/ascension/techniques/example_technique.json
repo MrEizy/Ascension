@@ -4,8 +4,56 @@
   "description": "this is an example",
   "path": "ascension:foundation/essence",
   "max_realm": 2,
+  "item_tooltip": {
+    "theme": "zenithlib:mana_blue",
+    "pages": [
+      {
+        "title": {
+          "literal": "Example Technique"
+        },
+        "elements": [
+          {
+            "type": "title_icon",
+            "title": {
+              "literal": "Example Technique"
+            },
+            "subtitle": {
+              "literal": "A test technique rendered with ZenithLib"
+            }
+          },
+          {
+            "type": "badge",
+            "text": {
+              "literal": "ESSENCE TECHNIQUE"
+            },
+            "text_color": "background",
+            "background_color": "accent",
+            "border_color": "accent"
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "text",
+            "text": {
+              "literal": "This technique cultivates the Essence path."
+            }
+          },
+          {
+            "type": "row",
+            "left": {
+              "literal": "Max Realm"
+            },
+            "right": {
+              "literal": "2"
+            },
+            "right_color": "accent"
+          }
+        ]
+      }
+    ]
+  },
   "realm_change_handler": {
-
     "ascension:realm_change/all_realms": [
       "ascension:generic_give_stats"
     ],
@@ -13,6 +61,5 @@
       "ascension:give_qi_body",
       "ascension:give_test_cast"
     ]
-
   }
 }

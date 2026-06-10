@@ -2,6 +2,45 @@
   "type": "ascension:simple",
   "name": "Test",
   "description": "this is an example description",
+  "item_tooltip": {
+    "theme": "zenithlib:mana_blue",
+    "pages": [
+      {
+        "title": {
+          "literal": "Test Bloodline"
+        },
+        "elements": [
+          {
+            "type": "title_icon",
+            "title": {
+              "literal": "Test Bloodline"
+            },
+            "subtitle": {
+              "literal": "A test bloodline rendered through ZenithLib"
+            }
+          },
+          {
+            "type": "badge",
+            "text": {
+              "literal": "BLOODLINE"
+            },
+            "text_color": "background",
+            "background_color": "accent",
+            "border_color": "accent"
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "text",
+            "text": {
+              "literal": "This is an example bloodline tooltip."
+            }
+          }
+        ]
+      }
+    ]
+  },
   "purity_handler": {
     "ascension:all_purity": [
       "ascension:generic_give_stats"
