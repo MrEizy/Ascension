@@ -20,6 +20,7 @@ public class PhysiqueOpenButton extends BetterButton {
     );
 
     private final MainContainer owner;
+    private final EasyLabel titleLabel;
     private final ITextureData alternateTexture = new TextureDataSubsection(
             TEXTURE, 89, 24, 0, 0, 89, 12
     );
@@ -33,17 +34,22 @@ public class PhysiqueOpenButton extends BetterButton {
         setWidth(defaultTexture.getWidth());
         setHeight(defaultTexture.getHeight());
 
-        EasyLabel title = new EasyLabel(frame);
-        title.setText(resolveTitle());
-        title.getPositioning().setX(2);
-        title.getPositioning().setY(2);
-        title.setWidth(85);
-        title.setHeight(8);
-        title.setScaleToFit(true);
-        title.setTextColor(0xFFFFFFFF);
-        title.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
-        title.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
-        addChild(title);
+        titleLabel = new EasyLabel(frame);
+        titleLabel.getPositioning().setX(2);
+        titleLabel.getPositioning().setY(2);
+        titleLabel.setWidth(85);
+        titleLabel.setHeight(8);
+        titleLabel.setScaleToFit(true);
+        titleLabel.setTextColor(0xFFFFFFFF);
+        titleLabel.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
+        titleLabel.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
+        addChild(titleLabel);
+
+        refreshTitle();
+    }
+
+    public void refreshTitle() {
+        titleLabel.setText(resolveTitle());
     }
 
     private static Component resolveTitle() {

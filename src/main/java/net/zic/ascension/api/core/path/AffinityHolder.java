@@ -2,7 +2,6 @@ package net.zic.ascension.api.core.path;
 
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.path.interactions.PathInteraction;
 import net.zic.ascension.api.core.path.interactions.PathInteractionType;
 import net.zic.zenithlib.value_containers.ValueContainer;
@@ -10,6 +9,7 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class AffinityHolder {
     private final HashMap<Identifier, ValueContainer> affinity = new HashMap<>();
@@ -78,5 +78,13 @@ public class AffinityHolder {
 
     public void setAffinity(ValueContainer container){
         affinity.put(container.getIdentifier(),container);
+    }
+
+    public Collection<ValueContainer> getAllAffinityContainers() {
+        return List.copyOf(affinity.values());
+    }
+
+    public void clear() {
+        affinity.clear();
     }
 }

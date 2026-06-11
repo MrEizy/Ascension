@@ -28,7 +28,13 @@ public class AscensionCraftClient {
 
 
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        modEventBus.addListener(AscensionCraftClient::registerKeyBindings);
 
+    }
+
+    private static void registerKeyBindings(RegisterKeyMappingsEvent event) {
+        event.register(ModKeybinds.CYCLE_MODE);
+        event.register(ModKeybinds.OPEN_INTROSPECTION);
     }
 
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID,value = Dist.CLIENT)
@@ -68,7 +74,7 @@ public class AscensionCraftClient {
     }
 
     // ── GAME bus events (in-game ticks, rendering) ────────────────────────────
-    @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
+    @EventBusSubscriber(modid = AscensionCraft.MOD_ID, value = Dist.CLIENT)
     static class ClientGameEvents {
 
         @SubscribeEvent

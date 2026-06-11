@@ -51,6 +51,8 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.physique", "Physique");
         add("gui.ascension.introspection.bloodlines", "Bloodlines");
         add("gui.ascension.introspection.bloodline_count", "Bloodlines (%s)");
+        add("gui.ascension.introspection.bloodline_multiple", "%s +%s");
+        add("gui.ascension.introspection.bloodline_purity", "Purity: %s%%");
         add("gui.ascension.introspection.technique", "Technique");
         add("gui.ascension.introspection.none", "None");
         add("gui.ascension.introspection.no_physique", "No physique");

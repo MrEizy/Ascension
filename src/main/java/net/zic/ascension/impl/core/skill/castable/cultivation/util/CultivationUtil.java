@@ -45,5 +45,6 @@ public class CultivationUtil {
             pathData.setProgress(0);
         }
 
+        source.markPathDirty(pathData.getPath());
     }
 }

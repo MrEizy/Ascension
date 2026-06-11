@@ -1,6 +1,5 @@
 package net.zic.ascension.api.core.source;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -34,12 +33,9 @@ import net.zic.zenithlib.stats.StatSheet;
 import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
-import org.apache.logging.log4j.core.Core;
 import oshi.util.tuples.Pair;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * the data of an entities abstract identity (multiple entities
@@ -77,6 +73,7 @@ public class OriginSource {
 
 
     private RegistryAccess registryAccess;
+    private long revision;
     private CompoundTag cachedCached;
     private ValueInput cached;
     public OriginSource(RegistryAccess access){
@@ -95,7 +92,11 @@ public class OriginSource {
     public ValueInput getCached(){return cached;}
 
     public RegistryAccess getRegistryAccess(){
-       return Minecraft.getInstance().getConnection() == null ? null : Minecraft.getInstance().getConnection().registryAccess();
+        return registryAccess;
+    }
+
+    public long getRevision() {
+        return revision;
     }
 
     public void setRegistryAccess(RegistryAccess access){
@@ -574,12 +575,50 @@ public class OriginSource {
         cachedSkillData.clear();
     }
 
-    //TODO add full sync
-
-    public void encode(RegistryFriendlyByteBuf buf){
-
+    public void encode(RegistryFriendlyByteBuf buf) {
+        SourceChangesSnapshot fullSnapshot = new SourceChangesSnapshot(
+                physique,
+                physiqueData,
+                new HashMap<>(bloodlines),
+                Set.of(),
+                new HashMap<>(paths),
+                Set.of(),
+                new HashMap<>(skills),
+                Set.of(),
+                new HashMap<>(dataSources),
+                Set.of(),
+                getAllStatInstances(),
+                new HashSet<>(affinityHolder.getAllAffinityContainers())
+        );
+        fullSnapshot.encode(buf);
     }
-    public void decode(RegistryFriendlyByteBuf buf){}
+
+
+    private Set<StatInstance> getAllStatInstances() {
+        Set<StatInstance> instances = new HashSet<>();
+        for (Stat stat : getAllStats()) {
+            StatInstance instance = getStatInstance(stat);
+            if (instance != null) {
+                instances.add(instance);
+            }
+        }
+        return instances;
+    }
+
+    public void decode(RegistryFriendlyByteBuf buf) {
+        setRegistryAccess(buf.registryAccess());
+
+        physique = null;
+        physiqueData = null;
+        bloodlines.clear();
+        paths.clear();
+        skills.clear();
+        dataSources.clear();
+        statSheet.asMap().clear();
+        affinityHolder.clear();
+
+        apply(SourceChangesSnapshot.decode(buf, buf.registryAccess()));
+    }
 
     /**
      * takes a snapshot and applies the changes
@@ -588,7 +627,7 @@ public class OriginSource {
      * @param snapshot
      */
     public void apply(SourceChangesSnapshot snapshot){
-        AscensionCraft.LOGGER.info("Applying patch");
+        AscensionCraft.LOGGER.debug("Applying source update");
         if(snapshot.physique != null){
             this.physique = snapshot.physique;
             this.physiqueData = snapshot.physiqueData;
@@ -614,7 +653,8 @@ public class OriginSource {
         for(StatInstance stat : snapshot.dirtyStats) statSheet.setStat(stat);
 
         for(ValueContainer affinity : snapshot.dirtyAffinity) affinityHolder.setAffinity(affinity);
-        AscensionCraft.LOGGER.info("Finished applying patch");
+        revision++;
+        AscensionCraft.LOGGER.debug("Finished applying source update at revision {}", revision);
 
     }
 }

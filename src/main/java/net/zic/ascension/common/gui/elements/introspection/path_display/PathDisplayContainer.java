@@ -13,6 +13,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.Container;
@@ -24,6 +25,14 @@ import java.util.Comparator;
 import java.util.List;
 
 public class PathDisplayContainer extends RenderableElement {
+    private record PathDetailsState(
+            Identifier pathId,
+            int majorRealm,
+            int minorRealm,
+            Identifier techniqueId
+    ) {
+    }
+
     private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(
             AscensionCraft.MOD_ID,
             "textures/gui/main/path_menu/path_menu.png"
@@ -33,9 +42,16 @@ public class PathDisplayContainer extends RenderableElement {
             TEXTURE, 234, 287, 0, 39, 234, 140
     );
 
+    private final Container optionsHolder;
     private final Container pathInformationContainer;
     private final EasyLabel selectedTechniqueLabel;
     private final PathProgressBar progressBar;
+
+    private OriginSource observedSource;
+    private long observedRevision = Long.MIN_VALUE;
+    private List<Identifier> displayedPaths = List.of();
+    private Identifier selectedPath;
+    private PathDetailsState displayedPathDetails;
 
     public PathDisplayContainer(UIFrame frame, IntrospectionContainer owner) {
         super(frame);
@@ -44,10 +60,10 @@ public class PathDisplayContainer extends RenderableElement {
         getPositioning().setX(-getWidth() / 2);
         getPositioning().setY(-getHeight() / 2);
 
-        PathOptionsScrollBox options = new PathOptionsScrollBox(frame);
-        options.getPositioning().setX(6);
-        options.getPositioning().setY(43);
-        addChild(options);
+        optionsHolder = new Container(frame, 89, 91);
+        optionsHolder.getPositioning().setX(6);
+        optionsHolder.getPositioning().setY(43);
+        addChild(optionsHolder);
 
         selectedTechniqueLabel = new EasyLabel(frame);
         selectedTechniqueLabel.setText(Component.translatable("gui.ascension.introspection.none"));
@@ -76,42 +92,105 @@ public class PathDisplayContainer extends RenderableElement {
         backButton.getPositioning().setY(5);
         addChild(backButton);
 
-        List<Identifier> paths = ClientAscensionData.getSource()
-                .map(source -> source.getPaths().stream()
-                        .sorted(Comparator.comparing(Identifier::toString))
-                        .toList())
-                .orElse(List.of());
-
-        for (Identifier pathId : paths) {
-            options.addChild(new PathSelectionButton(frame, this, pathId));
-        }
-
-        if (paths.isEmpty()) {
-            showEmptyState();
-        } else {
-            selectPath(paths.getFirst());
-        }
+        refreshSynchronizedState();
     }
 
     public void selectPath(Identifier pathId) {
+        selectedPath = pathId;
         progressBar.setPath(pathId);
-        pathInformationContainer.removeChildren();
+        displayedPathDetails = null;
+        refreshSelectedPath(true);
+    }
+
+    private void refreshSynchronizedState() {
+        OriginSource source = ClientAscensionData.getSource().orElse(null);
+        long revision = source == null ? -1L : source.getRevision();
+        if (source == observedSource && revision == observedRevision) {
+            return;
+        }
+
+        boolean sourceChanged = source != observedSource;
+        observedSource = source;
+        observedRevision = revision;
+
+        if (source == null) {
+            displayedPaths = List.of();
+            selectedPath = null;
+            progressBar.setPath(null);
+            displayedPathDetails = null;
+            rebuildPathOptions(displayedPaths);
+            showUnavailableState();
+            return;
+        }
+
+        List<Identifier> paths = source.getPaths().stream()
+                .sorted(Comparator.comparing(Identifier::toString))
+                .toList();
+
+        if (!paths.equals(displayedPaths)) {
+            displayedPaths = paths;
+            rebuildPathOptions(paths);
+        }
+
+        if (paths.isEmpty()) {
+            selectedPath = null;
+            progressBar.setPath(null);
+            displayedPathDetails = null;
+            showEmptyState();
+            return;
+        }
+
+        if (selectedPath == null || !paths.contains(selectedPath)) {
+            selectedPath = paths.getFirst();
+        }
+        progressBar.setPath(selectedPath);
+        refreshSelectedPath(sourceChanged);
+    }
+
+    private void rebuildPathOptions(List<Identifier> paths) {
+        optionsHolder.removeChildren();
+        PathOptionsScrollBox options = new PathOptionsScrollBox(getUiFrame());
+        optionsHolder.addChild(options);
+        for (Identifier pathId : paths) {
+            options.addChild(new PathSelectionButton(getUiFrame(), this, pathId));
+        }
+    }
+
+    private void refreshSelectedPath(boolean force) {
+        if (selectedPath == null) {
+            displayedPathDetails = null;
+            showEmptyState();
+            return;
+        }
 
         ClientAscensionData.getSource().ifPresentOrElse(source -> {
-            PathData pathData = source.getPathData(pathId);
+            PathData pathData = source.getPathData(selectedPath);
             if (pathData == null) {
-                showMissingPath(pathId);
+                displayedPathDetails = null;
+                showMissingPath(selectedPath);
                 return;
             }
 
-            ClientAscensionData.getPlayer().ifPresent(player -> {
+            PathDetailsState currentDetails = new PathDetailsState(
+                    selectedPath,
+                    pathData.getMajorRealm(),
+                    pathData.getMinorRealm(),
+                    pathData.getCurrentTechnique()
+            );
+            if (!force && currentDetails.equals(displayedPathDetails)) {
+                return;
+            }
+            displayedPathDetails = currentDetails;
+            pathInformationContainer.removeChildren();
+
+            ClientAscensionData.getPlayer().ifPresentOrElse(player -> {
                 Path path = CoreRegistries.safeAccess(
                         CoreRegistries.PATH_REGISTRY,
-                        pathId,
+                        selectedPath,
                         player.registryAccess()
                 );
                 if (path == null) {
-                    showMissingPath(pathId);
+                    showMissingPath(selectedPath);
                     return;
                 }
 
@@ -127,10 +206,17 @@ public class PathDisplayContainer extends RenderableElement {
                                 : technique.getName(pathData.getCurrentTechniqueData())
                 );
 
-                MutableComponent description = Component.empty().append(path.description());
+                MutableComponent description = Component.empty();
+                if (path.description() != null) {
+                    description.append(path.description());
+                }
                 if (technique != null) {
-                    description.append("\n\n")
-                            .append(Component.translatable("gui.ascension.introspection.technique"))
+                    if (!description.getString().isEmpty()) {
+                        description.append("\n\n");
+                    }
+                    description.append(Component.translatable(
+                                    "gui.ascension.introspection.technique"
+                            ))
                             .append(": ")
                             .append(technique.getName(pathData.getCurrentTechniqueData()));
                     Component techniqueDescription = technique.getDescription(
@@ -152,30 +238,51 @@ public class PathDisplayContainer extends RenderableElement {
                 );
                 pathInformationContainer.addChild(display);
                 display.refresh();
-            });
-        }, () -> showMissingPath(pathId));
+            }, this::showUnavailableState);
+        }, this::showUnavailableState);
     }
 
     private void showEmptyState() {
         selectedTechniqueLabel.setText(Component.translatable("gui.ascension.introspection.none"));
-        PathDataDisplayElement display = new PathDataDisplayElement(
+        replaceInformation(new PathDataDisplayElement(
                 getUiFrame(),
                 Component.translatable("gui.ascension.introspection.no_paths"),
                 Component.translatable("gui.ascension.introspection.no_paths_description")
-        );
-        pathInformationContainer.addChild(display);
-        display.refresh();
+        ));
+    }
+
+    private void showUnavailableState() {
+        selectedTechniqueLabel.setText(Component.translatable("gui.ascension.introspection.none"));
+        replaceInformation(new PathDataDisplayElement(
+                getUiFrame(),
+                Component.translatable("gui.ascension.introspection.cultivation"),
+                Component.translatable("gui.ascension.introspection.data_unavailable")
+        ));
     }
 
     private void showMissingPath(Identifier pathId) {
         selectedTechniqueLabel.setText(Component.translatable("gui.ascension.introspection.none"));
-        PathDataDisplayElement display = new PathDataDisplayElement(
+        replaceInformation(new PathDataDisplayElement(
                 getUiFrame(),
                 Component.literal(pathId.toString()),
                 Component.translatable("gui.ascension.introspection.missing_registry_entry")
-        );
+        ));
+    }
+
+    private void replaceInformation(PathDataDisplayElement display) {
+        pathInformationContainer.removeChildren();
         pathInformationContainer.addChild(display);
         display.refresh();
+    }
+
+    @Override
+    public void renderTick(
+            GuiGraphicsExtractor graphics,
+            int mouseX,
+            int mouseY,
+            float partialTick
+    ) {
+        refreshSynchronizedState();
     }
 
     @Override

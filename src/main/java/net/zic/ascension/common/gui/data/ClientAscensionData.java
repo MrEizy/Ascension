@@ -9,7 +9,6 @@ import net.zic.ascension.api.core.source.OriginSource;
 
 import java.util.Optional;
 
-
 public final class ClientAscensionData {
     private ClientAscensionData() {
     }
@@ -32,5 +31,9 @@ public final class ClientAscensionData {
 
     public static Optional<OriginSource> getSource() {
         return getEntityData().map(AscensionEntityData::getSource);
+    }
+
+    public static long getRevision() {
+        return getSource().map(OriginSource::getRevision).orElse(-1L);
     }
 }

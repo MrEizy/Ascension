@@ -119,6 +119,8 @@ public class SetRealmCommand {
             }else{
                 data.setProgress(0);
             }
+            originSource.markPathDirty(pathId);
+
             String progressStr = (progressPercent >= 0)
                     ? String.format(" with %d%% progress", progressPercent) : "";
 

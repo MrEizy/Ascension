@@ -29,6 +29,7 @@ public class PathDataDisplayElement extends ScrollBox implements IInformationCon
         descriptionLabel.setText(description == null ? Component.empty() : description);
         descriptionLabel.setTextColor(0xFFFFFFFF);
         descriptionLabel.setTextScale(0.65F);
+        descriptionLabel.setFitHeight(true);
         descriptionLabel.getPositioning().setX(2);
         descriptionLabel.getPositioning().setY(24);
         addChild(descriptionLabel);
@@ -56,9 +57,15 @@ public class PathDataDisplayElement extends ScrollBox implements IInformationCon
 
         setWidth(getParent().getWidth());
         setHeight(getParent().getHeight());
+        setVisible(true);
+        setActive(true);
+
         int contentWidth = Math.max(1, getWidth() - 4);
         realmLabel.setWidth(contentWidth);
         descriptionLabel.setWidth(contentWidth);
+        descriptionLabel.setFitHeight(true);
+
+        getPositioning().updatePositionMatrix();
         realmLabel.getPositioning().updatePositionMatrix();
         descriptionLabel.getPositioning().updatePositionMatrix();
         updateVisibility(realmLabel);

@@ -30,6 +30,7 @@ public class DescriptionDisplayContainer extends ScrollBox implements IInformati
         descriptionLabel.getPositioning().setY(18);
         descriptionLabel.setTextColor(0xFFFFFFFF);
         descriptionLabel.setTextScale(0.8F);
+        descriptionLabel.setFitHeight(true);
         addChild(descriptionLabel);
     }
 
@@ -55,11 +56,16 @@ public class DescriptionDisplayContainer extends ScrollBox implements IInformati
 
         setWidth(getParent().getWidth());
         setHeight(getParent().getHeight());
+        setVisible(true);
+        setActive(true);
 
         int contentWidth = Math.max(1, getWidth() - 4);
         titleLabel.setWidth(contentWidth);
         titleLabel.setHeight(10);
         descriptionLabel.setWidth(contentWidth);
+        descriptionLabel.setFitHeight(true);
+
+        getPositioning().updatePositionMatrix();
         titleLabel.getPositioning().updatePositionMatrix();
         descriptionLabel.getPositioning().updatePositionMatrix();
         updateVisibility(titleLabel);
