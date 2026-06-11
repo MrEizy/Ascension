@@ -43,9 +43,9 @@ public class AttributeDisplayContainer extends RenderableElement {
         EasyLabel nameLabel = new EasyLabel(frame);
         nameLabel.setText(getDisplayName(attribute));
         nameLabel.setTextColor(0xFFFFFFFF);
-        nameLabel.setWidth(Math.max(1, 56 - iconWidth));
-        nameLabel.setHeight(6);
         nameLabel.setScaleToFit(true);
+        nameLabel.setWidth(Math.max(1, getWidth() - iconWidth - 1));
+        nameLabel.setHeight(6);
         nameLabel.getPositioning().setX(iconWidth + 1);
         nameLabel.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
         addChild(nameLabel);
@@ -53,9 +53,9 @@ public class AttributeDisplayContainer extends RenderableElement {
         valueLabel = new EasyLabel(frame);
         valueLabel.setText(Component.literal("-"));
         valueLabel.setTextColor(0xFFFFFFFF);
+        valueLabel.setScaleToFit(true);
         valueLabel.setWidth(53);
         valueLabel.setHeight(6);
-        valueLabel.setScaleToFit(true);
         valueLabel.getPositioning().setY(iconHeight + 1);
         valueLabel.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
         valueLabel.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
@@ -71,12 +71,18 @@ public class AttributeDisplayContainer extends RenderableElement {
                             ZenithAttachments.ATTRIBUTE_HOLDER
                     );
 
-                    var attributeValue = holder.getAttribute(attribute);
-                    if (attributeValue == null) {
-                        return "-";
+                    var zenithAttribute = holder.getAttribute(attribute);
+                    if (zenithAttribute != null) {
+                        return FORMAT.format(zenithAttribute.getValue());
                     }
 
-                    return FORMAT.format(attributeValue.getValue());
+                    if (player.getAttributes().hasAttribute(attribute)) {
+                        return FORMAT.format(
+                                player.getAttributeValue(attribute)
+                        );
+                    }
+
+                    return "-";
                 })
                 .orElse("-");
 
@@ -86,6 +92,7 @@ public class AttributeDisplayContainer extends RenderableElement {
 
         displayedValue = value;
         valueLabel.setText(Component.literal(value));
+        valueLabel.setTextScale(1.0F);
     }
 
     private static Component getDisplayName(Holder<Attribute> attribute) {
@@ -143,7 +150,9 @@ public class AttributeDisplayContainer extends RenderableElement {
             );
         }
 
-        return Component.translatable(attribute.value().getDescriptionId());
+        return Component.translatable(
+                attribute.value().getDescriptionId()
+        );
     }
 
     @Override
