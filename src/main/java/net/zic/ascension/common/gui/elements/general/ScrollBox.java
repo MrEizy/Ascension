@@ -23,9 +23,6 @@ public class ScrollBox extends RenderableElement {
 
     @Override
     public void createCullRegion(GuiGraphicsExtractor graphics) {
-        // GuiGraphicsExtractor records the current pose with the scissor.
-        // EasyGUI's base implementation supplies already-global coordinates,
-        // which applies the parent transforms twice in 26.1.
         graphics.enableScissor(0, 0, getWidth(), getHeight());
     }
 
