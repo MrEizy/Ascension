@@ -14,7 +14,7 @@ import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.List;
 
-// TODO update to include a config option for skill slots.
+// TODO update to include a config option for skill slots
 public class SkillHotBar {
     private final SkillHotBarSlot[] slots;
 

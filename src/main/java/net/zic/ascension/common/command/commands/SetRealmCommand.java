@@ -53,7 +53,6 @@ public class SetRealmCommand {
             try {
                 progressPercent = IntegerArgumentType.getInteger(context, "progress");
             } catch (IllegalArgumentException e) {
-                // Not provided — fine
 
             }
             Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,context.getSource().registryAccess());

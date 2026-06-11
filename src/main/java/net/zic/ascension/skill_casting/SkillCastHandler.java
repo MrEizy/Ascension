@@ -17,7 +17,7 @@ import net.zic.ascension.skill_casting.hotbar.SkillHotBar;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-// TODO listen to skill-cast end and resolve immediately.
+// TODO listen too skillCastEnd and call resolve.
 public class SkillCastHandler {
     private final Player player;
     private final CastingInstance instance = new CastingInstance();

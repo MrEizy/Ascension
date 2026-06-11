@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A network snapshot containing either a complete source state or a set of source changes.
+ * A snapshot of the change a source has undergone
  */
 public class SourceChangesSnapshot {
     Identifier physique;
