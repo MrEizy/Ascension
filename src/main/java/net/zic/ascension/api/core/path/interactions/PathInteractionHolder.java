@@ -53,7 +53,7 @@ public class PathInteractionHolder {
 
     public PathInteractionHolder(){
         NeoForge.EVENT_BUS.addListener(this::addServerListener);
-        NeoForge.EVENT_BUS.addListener(this::addClientListener);
+        //NeoForge.EVENT_BUS.addListener(this::addClientListener);
     }
 
     private void clear(){
@@ -119,12 +119,12 @@ public class PathInteractionHolder {
     public void addServerListener(AddServerReloadListenersEvent event){
 
         event.addListener(KEY,new ServerListener());
-        event.addDependency(CoreRegistries.PATH_REGISTRY.key().identifier(),KEY);
+        //event.addDependency(CoreRegistries.PATH_REGISTRY.key().identifier(),KEY);
     }
-    @SubscribeEvent
-    public void addClientListener(AddClientReloadListenersEvent event){
-
-    }
+//    @SubscribeEvent
+//    public void addClientListener(AddClientReloadListenersEvent event){
+//
+//    }
 
 
 }
