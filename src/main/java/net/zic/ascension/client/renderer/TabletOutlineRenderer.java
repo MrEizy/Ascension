@@ -1,22 +1,19 @@
 package net.zic.ascension.client.renderer;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.ShapeRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.zic.ascension.common.item.artifacts.base_templates.BaseTabletOfDestruction;
@@ -24,9 +21,7 @@ import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHea
 import net.zic.ascension.util.ModTags;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class TabletOutlineRenderer {
 
@@ -41,12 +36,10 @@ public class TabletOutlineRenderer {
             return;
 
         Level level  = player.level();
-        // Camera comes from gameRenderer in 26.1.x — the stage events don't carry it
         Vec3  camPos = mc.gameRenderer.getMainCamera().position();
 
-        PoseStack                    poseStack    = event.getPoseStack();
+        PoseStack                      poseStack    = event.getPoseStack();
         MultiBufferSource.BufferSource bufferSource = mc.renderBuffers().bufferSource();
-
 
         // ── Tunnel preview ────────────────────────────────────────────────────
         List<BlockPos> tunnelBlocks = computeTunnelBlocks(player, tabletItem, level);
@@ -54,15 +47,15 @@ public class TabletOutlineRenderer {
         boolean onCooldown = player.getCooldowns().isOnCooldown(tabletItem.getDefaultInstance());
         int color;
         if (onCooldown) {
-            color = toARGB(220, 50, 50, 255);
+            color = toARGB(255, 220, 50, 50);
         } else {
             int raw = getOutlineColor(tablet.getItem());
-            color = toARGB((raw >> 16) & 0xFF, (raw >> 8) & 0xFF, raw & 0xFF, 255);
+            color = toARGB(255, (raw >> 16) & 0xFF, (raw >> 8) & 0xFF, raw & 0xFF);
         }
 
         if (!tunnelBlocks.isEmpty()) {
             VertexConsumer lines = bufferSource.getBuffer(RenderTypes.lines());
-            drawBlockListOutline(poseStack, lines, tunnelBlocks, camPos, color);
+            drawBoundingBox(poseStack, lines, tunnelBlocks, camPos, color);
             bufferSource.endLastBatch();
         }
 
@@ -80,10 +73,10 @@ public class TabletOutlineRenderer {
                     float pulse = (float)
                             ((Math.sin(System.currentTimeMillis() / 500.0 * Math.PI) + 1.0) / 2.0);
                     int alpha = 130 + (int) (pulse * 125f);
-                    int linkedColor = toARGB(255, 199, 0, alpha);
+                    int linkedColor = toARGB(alpha, 255, 199, 0);
 
                     VertexConsumer lines = bufferSource.getBuffer(RenderTypes.lines());
-                    drawBlockListOutline(poseStack, lines, linkedBlocks, camPos, linkedColor);
+                    drawBoundingBox(poseStack, lines, linkedBlocks, camPos, linkedColor);
                     bufferSource.endLastBatch();
                 }
             }
@@ -116,9 +109,7 @@ public class TabletOutlineRenderer {
                     for (int y = 0; y < depth; y++) {
                         BlockPos target = startPos.offset(x, stepY * y, z);
                         if (!level.isInWorldBounds(target)) break;
-                        if (level.getBlockState(target).isAir()) break;
-                        if (level.getBlockState(target).is(ModTags.Blocks.DESTRUCTIBLE_BLOCKS))
-                            result.add(target);
+                        result.add(target);
                     }
                 }
             }
@@ -132,21 +123,10 @@ public class TabletOutlineRenderer {
                     BlockPos colBase = startPos.offset(
                             dx * z + dz * x, 0, dz * z + dx * x);
 
-                    boolean hasAir = false;
-                    for (int y = -1; y <= height; y++) {
-                        if (level.getBlockState(colBase.above(y)).isAir()) {
-                            hasAir = true;
-                            break;
-                        }
-                    }
-                    if (hasAir) continue;
-
                     for (int y = -1; y <= height; y++) {
                         BlockPos target = colBase.above(y);
                         if (!level.isInWorldBounds(target)) continue;
-                        BlockState bs = level.getBlockState(target);
-                        if (!bs.isAir() && bs.is(ModTags.Blocks.DESTRUCTIBLE_BLOCKS))
-                            result.add(target);
+                        result.add(target);
                     }
                 }
             }
@@ -174,43 +154,84 @@ public class TabletOutlineRenderer {
         return blocks;
     }
 
-    // ── Outline drawing ───────────────────────────────────────────────────────
-    private void drawBlockListOutline(PoseStack poseStack,
-                                      VertexConsumer lines,
-                                      List<BlockPos> blocks,
-                                      Vec3 camPos,
-                                      int color) {
-        Set<BlockPos> blockSet = new HashSet<>(blocks);
+    // ── Bounding box drawing ──────────────────────────────────────────────────
+
+    /**
+     * Draws a single bounding box around the entire block list,
+     * visible through walls (depth test disabled by caller).
+     */
+    private void drawBoundingBox(PoseStack poseStack,
+                                 VertexConsumer lines,
+                                 List<BlockPos> blocks,
+                                 Vec3 camPos,
+                                 int color) {
+        if (blocks.isEmpty()) return;
+
+        int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
 
         for (BlockPos pos : blocks) {
-            double ox = pos.getX() - camPos.x;
-            double oy = pos.getY() - camPos.y;
-            double oz = pos.getZ() - camPos.z;
-
-            for (Direction face : Direction.values()) {
-                if (blockSet.contains(pos.relative(face))) continue;
-                ShapeRenderer.renderShape(
-                        poseStack, lines,
-                        getFaceShape(face),
-                        ox, oy, oz,
-                        color, 1);
-            }
+            if (pos.getX() < minX) minX = pos.getX();
+            if (pos.getY() < minY) minY = pos.getY();
+            if (pos.getZ() < minZ) minZ = pos.getZ();
+            if (pos.getX() > maxX) maxX = pos.getX();
+            if (pos.getY() > maxY) maxY = pos.getY();
+            if (pos.getZ() > maxZ) maxZ = pos.getZ();
         }
+
+        final double E = 0.002; // expand slightly so the box sits outside blocks
+        double x0 = minX - camPos.x - E;
+        double y0 = minY - camPos.y - E;
+        double z0 = minZ - camPos.z - E;
+        double x1 = maxX - camPos.x + 1 + E;
+        double y1 = maxY - camPos.y + 1 + E;
+        double z1 = maxZ - camPos.z + 1 + E;
+
+        int a = (color >> 24) & 0xFF;
+        int r = (color >> 16) & 0xFF;
+        int g = (color >>  8) & 0xFF;
+        int b = (color      ) & 0xFF;
+
+        PoseStack.Pose pose = poseStack.last();
+
+        // Bottom face edges
+        line(lines, pose, x0,y0,z0, x1,y0,z0, r,g,b,a);
+        line(lines, pose, x1,y0,z0, x1,y0,z1, r,g,b,a);
+        line(lines, pose, x1,y0,z1, x0,y0,z1, r,g,b,a);
+        line(lines, pose, x0,y0,z1, x0,y0,z0, r,g,b,a);
+
+        // Top face edges
+        line(lines, pose, x0,y1,z0, x1,y1,z0, r,g,b,a);
+        line(lines, pose, x1,y1,z0, x1,y1,z1, r,g,b,a);
+        line(lines, pose, x1,y1,z1, x0,y1,z1, r,g,b,a);
+        line(lines, pose, x0,y1,z1, x0,y1,z0, r,g,b,a);
+
+        // Vertical edges
+        line(lines, pose, x0,y0,z0, x0,y1,z0, r,g,b,a);
+        line(lines, pose, x1,y0,z0, x1,y1,z0, r,g,b,a);
+        line(lines, pose, x1,y0,z1, x1,y1,z1, r,g,b,a);
+        line(lines, pose, x0,y0,z1, x0,y1,z1, r,g,b,a);
     }
-    /**
-     * A thin VoxelShape slab on one face of a unit cube.
-     * ShapeRenderer draws the edges of this shape, giving us the face outline.
-     */
-    private static VoxelShape getFaceShape(Direction face) {
-        final double T = 0.002;
-        return switch (face) {
-            case DOWN  -> Shapes.box(0,   0,   0,   1,   T,   1  );
-            case UP    -> Shapes.box(0,   1-T, 0,   1,   1,   1  );
-            case NORTH -> Shapes.box(0,   0,   0,   1,   1,   T  );
-            case SOUTH -> Shapes.box(0,   0,   1-T, 1,   1,   1  );
-            case WEST  -> Shapes.box(0,   0,   0,   T,   1,   1  );
-            case EAST  -> Shapes.box(1-T, 0,   0,   1,   1,   1  );
-        };
+
+    private void line(VertexConsumer lines, PoseStack.Pose pose,
+                      double x0, double y0, double z0,
+                      double x1, double y1, double z1,
+                      int r, int g, int b, int a) {
+        float nx = (float)(x1 - x0);
+        float ny = (float)(y1 - y0);
+        float nz = (float)(z1 - z0);
+        float len = (float) Math.sqrt(nx * nx + ny * ny + nz * nz);
+        if (len > 0) { nx /= len; ny /= len; nz /= len; }
+
+        lines.addVertex(pose, (float) x0, (float) y0, (float) z0)
+                .setColor(r, g, b, a)
+                .setNormal(pose, nx, ny, nz)
+                .setLineWidth(2.0f);
+
+        lines.addVertex(pose, (float) x1, (float) y1, (float) z1)
+                .setColor(r, g, b, a)
+                .setNormal(pose, nx, ny, nz)
+                .setLineWidth(2.0f);
     }
 
     // ── Utility ───────────────────────────────────────────────────────────────
@@ -231,8 +252,8 @@ public class TabletOutlineRenderer {
         }
     }
 
-    /** Packs r, g, b, a (0–255 each) into a single ARGB int. */
-    private static int toARGB(int r, int g, int b, int a) {
+    /** Packs a, r, g, b (0–255 each) into a single ARGB int. */
+    private static int toARGB(int a, int r, int g, int b) {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 }
