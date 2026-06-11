@@ -46,6 +46,7 @@ public class StatsDisplay extends RenderableElement {
         double value = ClientAscensionData.getSource()
                 .map(source -> source.getValue(stat))
                 .orElse(0.0D);
+        valueLabel.setTextScale(1.0F);
         valueLabel.setText(Component.literal(FORMAT.format(value)));
     }
 

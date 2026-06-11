@@ -20,6 +20,8 @@ import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.network.CycleDropModePacket;
+import net.zic.ascension.network.SelectSkillSlotPacket;
+import net.zic.ascension.network.UpdateSkillSlotPacket;
 import net.zic.ascension.impl.core.entity.AscensionStats;
 import net.zic.ascension.impl.core.source.SourceHandler;
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
@@ -174,7 +176,16 @@ public class AscensionCraft {
                     CycleDropModePacket.STREAM_CODEC,
                     CycleDropModePacket::handle
             );
-
+            registrar.playToServer(
+                    UpdateSkillSlotPacket.TYPE,
+                    UpdateSkillSlotPacket.STREAM_CODEC,
+                    UpdateSkillSlotPacket::handle
+            );
+            registrar.playToServer(
+                    SelectSkillSlotPacket.TYPE,
+                    SelectSkillSlotPacket.STREAM_CODEC,
+                    SelectSkillSlotPacket::handle
+            );
 
         }
     }

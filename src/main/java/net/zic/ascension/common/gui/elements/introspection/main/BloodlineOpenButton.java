@@ -52,6 +52,7 @@ public class BloodlineOpenButton extends BetterButton {
     }
 
     public void refreshTitle() {
+        titleLabel.setTextScale(1.0F);
         titleLabel.setText(resolveTitle());
     }
 

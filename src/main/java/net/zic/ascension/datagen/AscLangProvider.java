@@ -65,6 +65,8 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.select_identity", "Select the physique or bloodline panel above.");
         add("gui.ascension.introspection.data_unavailable", "Synchronized Ascension data is temporarily unavailable.");
         add("gui.ascension.introspection.missing_registry_entry", "The synchronized identifier is not present in the client registry.");
+        add("gui.ascension.introspection.empty_slot", "Empty");
+        add("gui.ascension.introspection.castable_skill", "Castable skill. Select it, then click a hotbar slot below to assign or remove it.");
         add("stat.ascension.vitality", "Vitality");
         add("stat.ascension.agility", "Agility");
         add("stat.ascension.strength", "Strength");

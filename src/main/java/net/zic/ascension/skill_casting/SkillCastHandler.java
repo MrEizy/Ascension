@@ -16,124 +16,156 @@ import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.hotbar.SkillHotBar;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-//TODO. listen too skillCastEnd and call resolve.
+
+// TODO listen to skill-cast end and resolve immediately.
 public class SkillCastHandler {
     private final Player player;
     private final CastingInstance instance = new CastingInstance();
     private final SkillHotBar hotBar = new SkillHotBar();
 
-
-
     public SkillCastHandler(Player player) {
         this.player = player;
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 
-    public void resolve(){
-        if(hotBar.isDirty() || instance.isDirty()){
+    public void resolve() {
+        if (player.level().isClientSide()) {
+            return;
+        }
+        if (hotBar.isDirty() || instance.isDirty()) {
             player.syncData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER);
         }
     }
-    public int getMaxSlots(){
+
+    public int getMaxSlots() {
         return hotBar.getMaxSlots();
     }
-    public Identifier getSkill(int slot){
+
+    public int getSelectedSlot() {
+        return hotBar.getSelectedSlot();
+    }
+
+    public Identifier getSkill(int slot) {
         return hotBar.getSkill(slot);
     }
-    public PreCastData getPreCastData(int slot){
+
+    public PreCastData getPreCastData(int slot) {
         return hotBar.getPreCastData(slot);
     }
 
-    public void markHotBarDirty(){
+    public void markHotBarDirty() {
         hotBar.markDirty();
         resolve();
     }
 
-    public void slotSkill(Identifier skill,int slot){
-        hotBar.slotSkill(player,skill,slot);
-    }
-    public void select(int slot){
-        hotBar.select(player,slot);
+    public void slotSkill(Identifier skill, int slot) {
+        if (slot < 0 || slot >= getMaxSlots()) {
+            return;
+        }
+        hotBar.slotSkill(player, skill, slot);
     }
 
+    public void select(int slot) {
+        if (slot < 0 || slot >= getMaxSlots()) {
+            return;
+        }
+        hotBar.select(player, slot);
+    }
 
-    //generic for items with skills and stuff
-    public void castSkill(Identifier skill, PreCastData castData){
-        System.out.println("casting skill");
-        instance.startCast(
-                player,
-                skill,
-                castData
-        );
+    public void castSkill(Identifier skill, PreCastData castData) {
+        instance.startCast(player, skill, castData);
         resolve();
     }
 
-    public void castSelectedSkill(){
-        //TODO
+    public void castSelectedSkill() {
         Identifier skill = hotBar.getSkill(hotBar.getSelectedSlot());
-        if(skill == null )return;
-        if(!(CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,player.registryAccess()) instanceof CastableSkill castableSkill)) return;
+        if (skill == null) {
+            return;
+        }
+        if (!(CoreRegistries.safeAccess(
+                CoreRegistries.SKILL_REGISTRY,
+                skill,
+                player.registryAccess()
+        ) instanceof CastableSkill)) {
+            return;
+        }
 
         castSkill(skill, hotBar.getPreCastData(hotBar.getSelectedSlot()));
     }
-    public void tick(){
 
+    public void tick() {
         instance.continueCasting(player);
+        resolve();
     }
-    public static class Provider implements IAttachmentSerializer<SkillCastHandler>{
 
+    public static class Provider implements IAttachmentSerializer<SkillCastHandler> {
         @Override
         public SkillCastHandler read(IAttachmentHolder holder, ValueInput input) {
-            if(!(holder instanceof Player entity)) return null;
-            SkillCastHandler handle = new SkillCastHandler(entity);
-            handle.hotBar.load(input,entity);
-            return handle;
+            if (!(holder instanceof Player entity)) {
+                return null;
+            }
+            SkillCastHandler handler = new SkillCastHandler(entity);
+            handler.hotBar.load(input, entity);
+            return handler;
         }
 
         @Override
         public boolean write(SkillCastHandler attachment, ValueOutput output) {
-
             attachment.hotBar.write(output);
             return true;
         }
     }
-    public static class SyncHandler implements AttachmentSyncHandler<SkillCastHandler> {
 
+    public static class SyncHandler implements AttachmentSyncHandler<SkillCastHandler> {
         @Override
         public boolean sendToPlayer(@NonNull IAttachmentHolder holder, @NonNull ServerPlayer to) {
             return holder == to;
         }
 
         @Override
-        public void write(RegistryFriendlyByteBuf buf, SkillCastHandler attachment, boolean initialSync) {
-            buf.writeBoolean(attachment.hotBar.isDirty());
-            if(attachment.hotBar.isDirty()){
-
+        public void write(
+                RegistryFriendlyByteBuf buf,
+                SkillCastHandler attachment,
+                boolean initialSync
+        ) {
+            boolean syncHotBar = initialSync || attachment.hotBar.isDirty();
+            buf.writeBoolean(syncHotBar);
+            if (syncHotBar) {
                 attachment.hotBar.encode(buf);
                 attachment.hotBar.resolveDirty();
             }
-            buf.writeBoolean(attachment.instance.isDirty());
-            if(attachment.instance.isDirty()){
+
+            boolean syncCasting = initialSync || attachment.instance.isDirty();
+            buf.writeBoolean(syncCasting);
+            if (syncCasting) {
                 attachment.instance.encode(buf);
-                attachment.instance.resolveDirty();;
+                attachment.instance.resolveDirty();
             }
         }
 
         @Override
-        public @Nullable SkillCastHandler read(IAttachmentHolder holder, RegistryFriendlyByteBuf buf, @Nullable SkillCastHandler previousValue) {
-            if(previousValue == null) previousValue = new SkillCastHandler((Player) holder);
-            if(buf.readBoolean()){
-                previousValue.hotBar.decode(buf,previousValue.getPlayer());
+        public @Nullable SkillCastHandler read(
+                IAttachmentHolder holder,
+                RegistryFriendlyByteBuf buf,
+                @Nullable SkillCastHandler previousValue
+        ) {
+            if (!(holder instanceof Player player)) {
+                return previousValue;
             }
-            if(buf.readBoolean()){
-                previousValue.instance.decode(buf,previousValue.getPlayer());
+
+            SkillCastHandler handler = previousValue == null
+                    ? new SkillCastHandler(player)
+                    : previousValue;
+            if (buf.readBoolean()) {
+                handler.hotBar.decode(buf, player);
             }
-            return previousValue;
+            if (buf.readBoolean()) {
+                handler.instance.decode(buf, player);
+            }
+            return handler;
         }
     }
-
-
 }

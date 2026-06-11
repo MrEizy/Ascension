@@ -15,7 +15,6 @@ import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
-import net.zic.ascension.common.gui.elements.general.Container;
 import net.zic.ascension.common.gui.elements.info.DescriptionDisplayContainer;
 
 import java.util.Comparator;
@@ -37,7 +36,7 @@ public class MainContainer extends RenderableElement {
             TEXTURE, 256, 260, 0, 40, 234, 140
     );
 
-    private final Container informationContainer;
+    private final DescriptionDisplayContainer informationDisplay;
     private final PhysiqueOpenButton physiqueButton;
     private final BloodlineOpenButton bloodlineButton;
 
@@ -53,10 +52,16 @@ public class MainContainer extends RenderableElement {
         getPositioning().setX(-getWidth() / 2);
         getPositioning().setY(-getHeight() / 2);
 
-        informationContainer = new Container(frame, 126, 67);
-        informationContainer.getPositioning().setX(94);
-        informationContainer.getPositioning().setY(51);
-        addChild(informationContainer);
+        informationDisplay = new DescriptionDisplayContainer(
+                frame,
+                126,
+                67,
+                Component.translatable("gui.ascension.introspection.main"),
+                Component.translatable("gui.ascension.introspection.select_identity")
+        );
+        informationDisplay.getPositioning().setX(94);
+        informationDisplay.getPositioning().setY(51);
+        addChild(informationDisplay);
 
         physiqueButton = new PhysiqueOpenButton(frame, this);
         physiqueButton.getPositioning().setX(112);
@@ -270,14 +275,7 @@ public class MainContainer extends RenderableElement {
     }
 
     private void showInformation(Component title, Component description) {
-        informationContainer.removeChildren();
-        DescriptionDisplayContainer display = new DescriptionDisplayContainer(
-                getUiFrame(),
-                title,
-                description
-        );
-        informationContainer.addChild(display);
-        display.refresh();
+        informationDisplay.setInformation(title, description);
     }
 
     @Override

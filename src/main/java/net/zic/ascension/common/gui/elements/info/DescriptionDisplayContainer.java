@@ -3,35 +3,74 @@ package net.zic.ascension.common.gui.elements.info;
 import net.lucent.easygui.gui.RenderableElement;
 import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.elements.built_in.EasyLabel;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.zic.ascension.common.gui.elements.general.ScrollBox;
 
 public class DescriptionDisplayContainer extends ScrollBox implements IInformationContainer {
+    private static final float DESCRIPTION_SCALE = 0.8F;
+
     private final EasyLabel titleLabel;
     private final EasyLabel descriptionLabel;
 
+    private int observedParentWidth = -1;
+    private int observedParentHeight = -1;
+    private boolean sizeFromParent;
+
     public DescriptionDisplayContainer(UIFrame frame, Component title, Component description) {
+        this(frame, 0, 0, title, description);
+        sizeFromParent = true;
+    }
+
+    public DescriptionDisplayContainer(
+            UIFrame frame,
+            int width,
+            int height,
+            Component title,
+            Component description
+    ) {
         super(frame, 9);
         useCustomChildAdditionLogic = false;
+        setWidth(Math.max(0, width));
+        setHeight(Math.max(0, height));
 
         titleLabel = new EasyLabel(frame);
-        titleLabel.setText(title == null ? Component.empty() : title);
+        titleLabel.setText(Component.empty());
         titleLabel.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
         titleLabel.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
         titleLabel.getPositioning().setX(2);
         titleLabel.getPositioning().setY(5);
-        titleLabel.setScaleToFit(true);
         titleLabel.setTextColor(0xFFFFFFFF);
         addChild(titleLabel);
 
         descriptionLabel = new EasyLabel(frame);
-        descriptionLabel.setText(description == null ? Component.empty() : description);
+        descriptionLabel.setText(Component.empty());
         descriptionLabel.getPositioning().setX(2);
         descriptionLabel.getPositioning().setY(18);
         descriptionLabel.setTextColor(0xFFFFFFFF);
-        descriptionLabel.setTextScale(0.8F);
-        descriptionLabel.setFitHeight(true);
+        descriptionLabel.setTextScale(DESCRIPTION_SCALE);
         addChild(descriptionLabel);
+
+        applyDimensions();
+        setInformation(title, description);
+    }
+
+    public void setInformation(Component title, Component description) {
+        resetScroll();
+
+        titleLabel.setText(title == null ? Component.empty() : title);
+        titleLabel.setTextScale(1.0F);
+
+        descriptionLabel.setText(description == null ? Component.empty() : description);
+        descriptionLabel.setTextScale(DESCRIPTION_SCALE);
+
+        setVisible(true);
+        setActive(true);
+        titleLabel.setVisible(true);
+        titleLabel.setActive(true);
+        descriptionLabel.setVisible(true);
+        descriptionLabel.setActive(true);
+        refreshChildVisibility();
     }
 
     @Override
@@ -50,15 +89,16 @@ public class DescriptionDisplayContainer extends ScrollBox implements IInformati
 
     @Override
     public void refresh() {
-        if (getParent() == null) {
-            return;
+        if (sizeFromParent && getParent() != null) {
+            observedParentWidth = getParent().getWidth();
+            observedParentHeight = getParent().getHeight();
+            setWidth(observedParentWidth);
+            setHeight(observedParentHeight);
         }
+        applyDimensions();
+    }
 
-        setWidth(getParent().getWidth());
-        setHeight(getParent().getHeight());
-        setVisible(true);
-        setActive(true);
-
+    private void applyDimensions() {
         int contentWidth = Math.max(1, getWidth() - 4);
         titleLabel.setWidth(contentWidth);
         titleLabel.setHeight(10);
@@ -68,7 +108,28 @@ public class DescriptionDisplayContainer extends ScrollBox implements IInformati
         getPositioning().updatePositionMatrix();
         titleLabel.getPositioning().updatePositionMatrix();
         descriptionLabel.getPositioning().updatePositionMatrix();
-        updateVisibility(titleLabel);
-        updateVisibility(descriptionLabel);
+        setVisible(true);
+        setActive(true);
+        titleLabel.setVisible(true);
+        titleLabel.setActive(true);
+        descriptionLabel.setVisible(true);
+        descriptionLabel.setActive(true);
+        refreshChildVisibility();
+    }
+
+    @Override
+    public void renderTick(
+            GuiGraphicsExtractor graphics,
+            int mouseX,
+            int mouseY,
+            float partialTick
+    ) {
+        if (!sizeFromParent || getParent() == null) {
+            return;
+        }
+        if (getParent().getWidth() != observedParentWidth
+                || getParent().getHeight() != observedParentHeight) {
+            refresh();
+        }
     }
 }

@@ -5,6 +5,7 @@ import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.events.EasyEvents;
 import net.lucent.easygui.gui.events.type.EasyEvent;
 import net.lucent.easygui.gui.events.type.EasyMouseEvent;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public class ScrollBox extends RenderableElement {
     public boolean useCustomChildAdditionLogic = true;
@@ -17,6 +18,15 @@ public class ScrollBox extends RenderableElement {
         this.scrollRate = Math.max(1, scrollRate);
         setShouldCull(true);
         addEventListener(EasyEvents.MOUSE_SCROLL_EVENT, this::onMouseScroll);
+    }
+
+
+    @Override
+    public void createCullRegion(GuiGraphicsExtractor graphics) {
+        // GuiGraphicsExtractor records the current pose with the scissor.
+        // EasyGUI's base implementation supplies already-global coordinates,
+        // which applies the parent transforms twice in 26.1.
+        graphics.enableScissor(0, 0, getWidth(), getHeight());
     }
 
     private void onMouseScroll(EasyEvent event) {
@@ -34,7 +44,13 @@ public class ScrollBox extends RenderableElement {
     public int getMaxYScroll() {
         int bottom = 0;
         for (RenderableElement child : getChildren()) {
-            bottom = Math.max(bottom, child.getPositioning().getRawY() + child.getHeight() + yOffset);
+            if (!child.isActive()) {
+                continue;
+            }
+            bottom = Math.max(
+                    bottom,
+                    child.getPositioning().getRawY() + child.getHeight() + yOffset
+            );
         }
         return Math.max(0, bottom - getHeight());
     }
@@ -75,11 +91,32 @@ public class ScrollBox extends RenderableElement {
         element.setActive(visible);
     }
 
+    protected final int getYOffset() {
+        return yOffset;
+    }
+
+    protected final void refreshChildVisibility() {
+        for (RenderableElement child : getChildren()) {
+            updateVisibility(child);
+        }
+    }
+
     private void updateChildrenY(int change) {
         for (RenderableElement child : getChildren()) {
             child.getPositioning().setY(child.getPositioning().getY() + change);
             updateVisibility(child);
         }
+    }
+
+    public void resetScroll() {
+        if (yOffset == 0) {
+            refreshChildVisibility();
+            return;
+        }
+
+        int oldYOffset = yOffset;
+        yOffset = 0;
+        updateChildrenY(oldYOffset);
     }
 
     public void scroll(int amount) {

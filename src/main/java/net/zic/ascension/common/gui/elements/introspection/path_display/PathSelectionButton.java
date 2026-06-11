@@ -21,6 +21,7 @@ public class PathSelectionButton extends BetterButton {
 
     private final PathDisplayContainer owner;
     private final Identifier pathId;
+    private final EasyLabel label;
     private final ITextureData alternateTexture = new TextureDataSubsection(
             TEXTURE, 89, 24, 0, 0, 89, 12
     );
@@ -35,8 +36,7 @@ public class PathSelectionButton extends BetterButton {
         setWidth(defaultTexture.getWidth());
         setHeight(defaultTexture.getHeight());
 
-        EasyLabel label = new EasyLabel(frame);
-        label.setText(resolveName(pathId));
+        label = new EasyLabel(frame);
         label.setTextColor(0xFFFFFFFF);
         label.setWidth(85);
         label.setHeight(8);
@@ -46,6 +46,16 @@ public class PathSelectionButton extends BetterButton {
         label.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
         label.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
         addChild(label);
+        refreshTitle();
+    }
+
+    public Identifier getPathId() {
+        return pathId;
+    }
+
+    public void refreshTitle() {
+        label.setTextScale(1.0F);
+        label.setText(resolveName(pathId));
     }
 
     private static Component resolveName(Identifier pathId) {
@@ -66,7 +76,7 @@ public class PathSelectionButton extends BetterButton {
 
     @Override
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        if (isHovered() || isPressed()) {
+        if (owner.isSelectedPath(pathId) || isHovered() || isPressed()) {
             alternateTexture.render(graphics);
         } else {
             defaultTexture.render(graphics);

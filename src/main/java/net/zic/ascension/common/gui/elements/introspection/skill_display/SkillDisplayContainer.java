@@ -7,15 +7,18 @@ import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.skill.Skill;
+import net.zic.ascension.api.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
-import net.zic.ascension.common.gui.elements.general.Container;
 import net.zic.ascension.common.gui.elements.info.DescriptionDisplayContainer;
 import net.zic.ascension.common.gui.elements.introspection.BackButton;
 import net.zic.ascension.common.gui.elements.introspection.IntrospectionContainer;
+import net.zic.ascension.network.SelectSkillSlotPacket;
+import net.zic.ascension.network.UpdateSkillSlotPacket;
 
 import java.util.Comparator;
 import java.util.List;
@@ -30,8 +33,9 @@ public class SkillDisplayContainer extends RenderableElement {
             TEXTURE, 234, 286, 0, 40, 234, 157
     );
 
-    private final Container optionsHolder;
-    private final Container selectedSkillContainer;
+    private final SkillOptionsScrollBox skillOptions;
+    private final DescriptionDisplayContainer selectedSkillInformation;
+    private final SkillBarContainer skillBar;
 
     private OriginSource observedSource;
     private long observedRevision = Long.MIN_VALUE;
@@ -50,22 +54,77 @@ public class SkillDisplayContainer extends RenderableElement {
         backButton.getPositioning().setY(5);
         addChild(backButton);
 
-        optionsHolder = new Container(frame, 89, 91);
-        optionsHolder.getPositioning().setX(6);
-        optionsHolder.getPositioning().setY(43);
-        addChild(optionsHolder);
+        skillOptions = new SkillOptionsScrollBox(frame);
+        skillOptions.getPositioning().setX(6);
+        skillOptions.getPositioning().setY(43);
+        addChild(skillOptions);
 
-        selectedSkillContainer = new Container(frame, 90, 83);
-        selectedSkillContainer.getPositioning().setX(121);
-        selectedSkillContainer.getPositioning().setY(49);
-        addChild(selectedSkillContainer);
+        selectedSkillInformation = new DescriptionDisplayContainer(
+                frame,
+                90,
+                83,
+                Component.translatable("gui.ascension.introspection.skills"),
+                Component.translatable("gui.ascension.introspection.data_unavailable")
+        );
+        selectedSkillInformation.getPositioning().setX(121);
+        selectedSkillInformation.getPositioning().setY(49);
+        addChild(selectedSkillInformation);
 
+        skillBar = new SkillBarContainer(frame, this);
+        skillBar.getPositioning().setX(3);
+        skillBar.getPositioning().setY(154);
+        skillBar.setActive(false);
+        addChild(skillBar);
+
+        addChild(new OpenActiveSelection(frame, skillBar, 96, 141));
         refreshSynchronizedState();
     }
 
+    public Identifier getSelectedSkill() {
+        return selectedSkill;
+    }
+
+    public boolean isSelectedSkill(Identifier skillId) {
+        return skillId != null && skillId.equals(selectedSkill);
+    }
+
     public void selectSkill(Identifier skillId) {
+        if (skillId == null || !displayedSkills.contains(skillId)) {
+            return;
+        }
         selectedSkill = skillId;
         showSelectedSkill();
+    }
+
+    public void handleSlotClick(SkillSlotButton slotButton) {
+        Identifier skillToAssign = getCastableSelectedSkill();
+        if (skillToAssign == null) {
+            ClientPacketDistributor.sendToServer(
+                    new SelectSkillSlotPacket(slotButton.getSlot())
+            );
+            return;
+        }
+
+        Identifier currentSkill = slotButton.getDisplayedSkill();
+        ClientPacketDistributor.sendToServer(new UpdateSkillSlotPacket(
+                slotButton.getSlot(),
+                skillToAssign.equals(currentSkill) ? null : skillToAssign
+        ));
+    }
+
+    private Identifier getCastableSelectedSkill() {
+        if (selectedSkill == null) {
+            return null;
+        }
+
+        return ClientAscensionData.getPlayer().map(player -> {
+            Skill skill = CoreRegistries.safeAccess(
+                    CoreRegistries.SKILL_REGISTRY,
+                    selectedSkill,
+                    player.registryAccess()
+            );
+            return skill instanceof CastableSkill ? selectedSkill : null;
+        }).orElse(null);
     }
 
     private void refreshSynchronizedState() {
@@ -75,14 +134,13 @@ public class SkillDisplayContainer extends RenderableElement {
             return;
         }
 
-        boolean sourceChanged = source != observedSource;
         observedSource = source;
         observedRevision = revision;
 
         if (source == null) {
             displayedSkills = List.of();
             selectedSkill = null;
-            rebuildSkillOptions(displayedSkills);
+            skillOptions.setSkills(this, displayedSkills);
             showInformation(
                     Component.translatable("gui.ascension.introspection.skills"),
                     Component.translatable("gui.ascension.introspection.data_unavailable")
@@ -94,10 +152,9 @@ public class SkillDisplayContainer extends RenderableElement {
                 .sorted(Comparator.comparing(Identifier::toString))
                 .toList();
 
-        boolean skillsChanged = !skills.equals(displayedSkills);
-        if (skillsChanged) {
+        if (!skills.equals(displayedSkills)) {
             displayedSkills = skills;
-            rebuildSkillOptions(skills);
+            skillOptions.setSkills(this, skills);
         }
 
         if (skills.isEmpty()) {
@@ -111,22 +168,8 @@ public class SkillDisplayContainer extends RenderableElement {
 
         if (selectedSkill == null || !skills.contains(selectedSkill)) {
             selectedSkill = skills.getFirst();
-            showSelectedSkill();
-            return;
         }
-
-        if (skillsChanged || sourceChanged) {
-            showSelectedSkill();
-        }
-    }
-
-    private void rebuildSkillOptions(List<Identifier> skills) {
-        optionsHolder.removeChildren();
-        SkillOptionsScrollBox options = new SkillOptionsScrollBox(getUiFrame());
-        optionsHolder.addChild(options);
-        for (Identifier skillId : skills) {
-            options.addChild(new SkillSelectionButton(getUiFrame(), this, skillId));
-        }
+        showSelectedSkill();
     }
 
     private void showSelectedSkill() {
@@ -152,10 +195,18 @@ public class SkillDisplayContainer extends RenderableElement {
                 return;
             }
 
-            showInformation(
-                    skill.getName(),
-                    skill.getDescription() == null ? Component.empty() : skill.getDescription()
-            );
+            Component description = skill.getDescription() == null
+                    ? Component.empty()
+                    : skill.getDescription();
+            if (skill instanceof CastableSkill) {
+                description = Component.empty()
+                        .append(Component.translatable(
+                                "gui.ascension.introspection.castable_skill"
+                        ))
+                        .append("\n\n")
+                        .append(description);
+            }
+            showInformation(skill.getName(), description);
         }, () -> showInformation(
                 Component.literal(selectedSkill.toString()),
                 Component.translatable("gui.ascension.introspection.data_unavailable")
@@ -163,14 +214,7 @@ public class SkillDisplayContainer extends RenderableElement {
     }
 
     private void showInformation(Component title, Component description) {
-        selectedSkillContainer.removeChildren();
-        DescriptionDisplayContainer display = new DescriptionDisplayContainer(
-                getUiFrame(),
-                title,
-                description
-        );
-        selectedSkillContainer.addChild(display);
-        display.refresh();
+        selectedSkillInformation.setInformation(title, description);
     }
 
     @Override

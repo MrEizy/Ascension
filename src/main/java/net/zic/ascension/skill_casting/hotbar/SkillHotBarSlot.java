@@ -24,17 +24,23 @@ public class SkillHotBarSlot {
         setSkill(entity,skill,castableSkill.newPreCastData());
 
     }
-    public void unslotSkill(LivingEntity entity){
-        if(skill == null) return;
-        if(!(CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,entity.level().registryAccess()) instanceof CastableSkill castableSkill)) return;
-        castableSkill.onUnEquip(
-            entity,
-            preCastData
-        );
+    public void unslotSkill(LivingEntity entity) {
+        if (skill == null) {
+            return;
+        }
 
+        Identifier oldSkill = skill;
+        PreCastData oldPreCastData = preCastData;
         skill = null;
         preCastData = null;
 
+        if (CoreRegistries.safeAccess(
+                CoreRegistries.SKILL_REGISTRY,
+                oldSkill,
+                entity.level().registryAccess()
+        ) instanceof CastableSkill castableSkill) {
+            castableSkill.onUnEquip(entity, oldPreCastData);
+        }
     }
 
     public void setSkill(LivingEntity entity,Identifier skill,PreCastData preCastData){
