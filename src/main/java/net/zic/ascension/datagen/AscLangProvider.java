@@ -62,11 +62,21 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.no_skills", "No skills");
         add("gui.ascension.introspection.no_skills_description", "This character has not acquired any skills.");
         add("gui.ascension.introspection.no_stats", "No Ascension stats are currently available.");
-        add("gui.ascension.introspection.select_identity", "Select the physique or bloodline panel above.");
         add("gui.ascension.introspection.data_unavailable", "Synchronized Ascension data is temporarily unavailable.");
         add("gui.ascension.introspection.missing_registry_entry", "The synchronized identifier is not present in the client registry.");
         add("gui.ascension.introspection.empty_slot", "Empty");
         add("gui.ascension.introspection.castable_skill", "Castable skill. Select it, then click a hotbar slot below to assign or remove it.");
+
+        add("gui.ascension.introspection.attribute.health", "Health");
+        add("gui.ascension.introspection.attribute.damage", "Damage");
+        add("gui.ascension.introspection.attribute.armor", "Armor");
+        add("gui.ascension.introspection.attribute.toughness", "Toughness");
+        add("gui.ascension.introspection.attribute.attack_speed", "Attack Speed");
+        add("gui.ascension.introspection.attribute.speed", "Speed");
+        add("gui.ascension.introspection.attribute.jump", "Jump");
+        add("gui.ascension.introspection.attribute.step_height", "Step Height");
+        add("gui.ascension.introspection.attribute.mining", "Mining");
+
         add("stat.ascension.vitality", "Vitality");
         add("stat.ascension.agility", "Agility");
         add("stat.ascension.strength", "Strength");

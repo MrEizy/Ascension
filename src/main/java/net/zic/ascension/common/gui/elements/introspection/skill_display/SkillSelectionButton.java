@@ -37,6 +37,7 @@ public class SkillSelectionButton extends BetterButton {
         setHeight(defaultTexture.getHeight());
 
         label = new EasyLabel(frame);
+        label.setText(Component.empty());
         label.setTextColor(0xFFFFFFFF);
         label.setWidth(85);
         label.setHeight(8);
@@ -54,8 +55,8 @@ public class SkillSelectionButton extends BetterButton {
     }
 
     public void refreshTitle() {
-        label.setTextScale(1.0F);
         label.setText(resolveName(skillId));
+        label.setTextScale(1.0F);
     }
 
     private static Component resolveName(Identifier skillId) {

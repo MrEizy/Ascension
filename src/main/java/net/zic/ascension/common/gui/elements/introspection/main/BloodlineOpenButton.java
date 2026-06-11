@@ -38,6 +38,7 @@ public class BloodlineOpenButton extends BetterButton {
         setHeight(defaultTexture.getHeight());
 
         titleLabel = new EasyLabel(frame);
+        titleLabel.setText(Component.empty());
         titleLabel.getPositioning().setX(2);
         titleLabel.getPositioning().setY(2);
         titleLabel.setWidth(85);
@@ -52,8 +53,8 @@ public class BloodlineOpenButton extends BetterButton {
     }
 
     public void refreshTitle() {
-        titleLabel.setTextScale(1.0F);
         titleLabel.setText(resolveTitle());
+        titleLabel.setTextScale(1.0F);
     }
 
     private static Component resolveTitle() {

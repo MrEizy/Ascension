@@ -41,6 +41,7 @@ public class SkillSlotButton extends BetterButton {
         getTransform().setScale(0.75F);
 
         label = new EasyLabel(frame);
+        label.setText(Component.empty());
         label.setTextColor(0xFFFFFFFF);
         label.setWidth(85);
         label.setHeight(8);
@@ -71,35 +72,36 @@ public class SkillSlotButton extends BetterButton {
 
             displayedSkill = skill;
             selected = selectedNow;
+            label.setText(createLabel(skill));
             label.setTextScale(1.0F);
-            label.setText(createLabel(skill, selectedNow));
         }, () -> {
             displayedSkill = null;
             selected = false;
+            label.setText(createLabel(null));
             label.setTextScale(1.0F);
-            label.setText(createLabel(null, false));
         });
     }
 
-    private Component createLabel(Identifier skillId, boolean selectedSlot) {
-        Component skillName = skillId == null
-                ? Component.translatable("gui.ascension.introspection.empty_slot")
-                : ClientAscensionData.getPlayer().map(player -> {
+    private Component createLabel(Identifier skillId) {
+        if (skillId == null) {
+            return Component.translatable(
+                    "gui.ascension.introspection.empty_slot"
+            );
+        }
+
+        return ClientAscensionData.getPlayer()
+                .map(player -> {
                     Skill skill = CoreRegistries.safeAccess(
                             CoreRegistries.SKILL_REGISTRY,
                             skillId,
                             player.registryAccess()
                     );
+
                     return skill == null
                             ? Component.literal(skillId.toString())
                             : skill.getName();
-                }).orElseGet(() -> Component.literal(skillId.toString()));
-
-        return Component.empty()
-                .append(selectedSlot ? "▶ " : "")
-                .append(Integer.toString(slot + 1))
-                .append(": ")
-                .append(skillName);
+                })
+                .orElseGet(() -> Component.literal(skillId.toString()));
     }
 
     @Override

@@ -56,8 +56,8 @@ public class MainContainer extends RenderableElement {
                 frame,
                 126,
                 67,
-                Component.translatable("gui.ascension.introspection.main"),
-                Component.translatable("gui.ascension.introspection.select_identity")
+                Component.empty(),
+                Component.empty()
         );
         informationDisplay.getPositioning().setX(94);
         informationDisplay.getPositioning().setY(51);
@@ -133,10 +133,7 @@ public class MainContainer extends RenderableElement {
     }
 
     private void showDefaultInformation() {
-        showInformation(
-                Component.translatable("gui.ascension.introspection.main"),
-                Component.translatable("gui.ascension.introspection.select_identity")
-        );
+
     }
 
     private void showPhysiqueInformation() {

@@ -8,7 +8,10 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
+import net.zic.zenithlib.common.ZenithAttachments;
+import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 
 import java.text.DecimalFormat;
 
@@ -19,24 +22,29 @@ public class AttributeDisplayContainer extends RenderableElement {
     private final ITextureData icon;
     private final EasyLabel valueLabel;
 
+    private String displayedValue;
+
     public AttributeDisplayContainer(
             UIFrame frame,
             Holder<Attribute> attribute,
             ITextureData icon
     ) {
         super(frame);
+
         this.attribute = attribute;
         this.icon = icon;
-        setWidth(56);
-        setHeight(Math.max(16, icon == null ? 16 : icon.getHeight() + 8));
 
         int iconWidth = icon == null ? 0 : icon.getWidth();
+        int iconHeight = icon == null ? 0 : icon.getHeight();
+
+        setWidth(56);
+        setHeight(Math.max(13, iconHeight + 7));
 
         EasyLabel nameLabel = new EasyLabel(frame);
-        nameLabel.setText(Component.translatable(attribute.value().getDescriptionId()));
+        nameLabel.setText(getDisplayName(attribute));
         nameLabel.setTextColor(0xFFFFFFFF);
-        nameLabel.setWidth(Math.max(1, getWidth() - iconWidth - 1));
-        nameLabel.setHeight(7);
+        nameLabel.setWidth(Math.max(1, 56 - iconWidth));
+        nameLabel.setHeight(6);
         nameLabel.setScaleToFit(true);
         nameLabel.getPositioning().setX(iconWidth + 1);
         nameLabel.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
@@ -44,25 +52,98 @@ public class AttributeDisplayContainer extends RenderableElement {
 
         valueLabel = new EasyLabel(frame);
         valueLabel.setText(Component.literal("-"));
-        valueLabel.setWidth(getWidth());
-        valueLabel.setHeight(7);
-        valueLabel.setScaleToFit(true);
         valueLabel.setTextColor(0xFFFFFFFF);
-        valueLabel.getPositioning().setY((icon == null ? 7 : icon.getHeight()) + 1);
+        valueLabel.setWidth(53);
+        valueLabel.setHeight(6);
+        valueLabel.setScaleToFit(true);
+        valueLabel.getPositioning().setY(iconHeight + 1);
         valueLabel.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
         valueLabel.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
         addChild(valueLabel);
+
+        updateValue();
     }
 
     private void updateValue() {
-        Component value = ClientAscensionData.getPlayer()
-                .filter(player -> player.getAttributes().hasAttribute(attribute))
-                .map(player -> Component.literal(FORMAT.format(
-                        player.getAttributeValue(attribute)
-                )))
-                .orElseGet(() -> Component.literal("-"));
-        valueLabel.setTextScale(1.0F);
-        valueLabel.setText(value);
+        String value = ClientAscensionData.getPlayer()
+                .map(player -> {
+                    ZenithAttributeHolder holder = player.getData(
+                            ZenithAttachments.ATTRIBUTE_HOLDER
+                    );
+
+                    var attributeValue = holder.getAttribute(attribute);
+                    if (attributeValue == null) {
+                        return "-";
+                    }
+
+                    return FORMAT.format(attributeValue.getValue());
+                })
+                .orElse("-");
+
+        if (value.equals(displayedValue)) {
+            return;
+        }
+
+        displayedValue = value;
+        valueLabel.setText(Component.literal(value));
+    }
+
+    private static Component getDisplayName(Holder<Attribute> attribute) {
+        if (attribute.equals(Attributes.MAX_HEALTH)) {
+            return Component.translatable(
+                    "gui.ascension.introspection.attribute.health"
+            );
+        }
+
+        if (attribute.equals(Attributes.ATTACK_DAMAGE)) {
+            return Component.translatable(
+                    "gui.ascension.introspection.attribute.damage"
+            );
+        }
+
+        if (attribute.equals(Attributes.ARMOR)) {
+            return Component.translatable(
+                    "gui.ascension.introspection.attribute.armor"
+            );
+        }
+
+        if (attribute.equals(Attributes.ARMOR_TOUGHNESS)) {
+            return Component.translatable(
+                    "gui.ascension.introspection.attribute.toughness"
+            );
+        }
+
+        if (attribute.equals(Attributes.ATTACK_SPEED)) {
+            return Component.translatable(
+                    "gui.ascension.introspection.attribute.attack_speed"
+            );
+        }
+
+        if (attribute.equals(Attributes.MOVEMENT_SPEED)) {
+            return Component.translatable(
+                    "gui.ascension.introspection.attribute.speed"
+            );
+        }
+
+        if (attribute.equals(Attributes.JUMP_STRENGTH)) {
+            return Component.translatable(
+                    "gui.ascension.introspection.attribute.jump"
+            );
+        }
+
+        if (attribute.equals(Attributes.STEP_HEIGHT)) {
+            return Component.translatable(
+                    "gui.ascension.introspection.attribute.step_height"
+            );
+        }
+
+        if (attribute.equals(Attributes.MINING_EFFICIENCY)) {
+            return Component.translatable(
+                    "gui.ascension.introspection.attribute.mining"
+            );
+        }
+
+        return Component.translatable(attribute.value().getDescriptionId());
     }
 
     @Override

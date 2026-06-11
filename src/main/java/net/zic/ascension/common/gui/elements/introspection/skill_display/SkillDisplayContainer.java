@@ -200,10 +200,6 @@ public class SkillDisplayContainer extends RenderableElement {
                     : skill.getDescription();
             if (skill instanceof CastableSkill) {
                 description = Component.empty()
-                        .append(Component.translatable(
-                                "gui.ascension.introspection.castable_skill"
-                        ))
-                        .append("\n\n")
                         .append(description);
             }
             showInformation(skill.getName(), description);

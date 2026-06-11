@@ -7,7 +7,6 @@ import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
@@ -182,25 +181,9 @@ public class PathDisplayContainer extends RenderableElement {
                                 : technique.getName(pathData.getCurrentTechniqueData())
                 );
 
-                MutableComponent description = Component.empty()
-                        .append(path.name());
-                if (path.description() != null && !path.description().getString().isBlank()) {
-                    description.append("\n").append(path.description());
-                }
-
-                if (technique != null) {
-                    description.append("\n\n")
-                            .append(Component.translatable("gui.ascension.introspection.technique"))
-                            .append(": ")
-                            .append(technique.getName(pathData.getCurrentTechniqueData()));
-                    Component techniqueDescription = technique.getDescription(
-                            pathData.getCurrentTechniqueData()
-                    );
-                    if (techniqueDescription != null
-                            && !techniqueDescription.getString().isBlank()) {
-                        description.append("\n").append(techniqueDescription);
-                    }
-                }
+                Component description = path.description() == null
+                        ? Component.empty()
+                        : path.description();
 
                 pathInformation.setInformation(
                         pathData.getRealmName(
@@ -215,8 +198,8 @@ public class PathDisplayContainer extends RenderableElement {
     }
 
     private void setTechniqueTitle(Component title) {
+        selectedTechniqueLabel.setText(title == null ? Component.empty() : title);
         selectedTechniqueLabel.setTextScale(1.0F);
-        selectedTechniqueLabel.setText(title);
     }
 
     private void showEmptyState() {
