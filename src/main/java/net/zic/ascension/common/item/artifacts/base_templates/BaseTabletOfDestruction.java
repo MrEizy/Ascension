@@ -275,7 +275,7 @@ public abstract class BaseTabletOfDestruction extends Item {
         int px = direction.getClockWise().getStepX();
         int pz = direction.getClockWise().getStepZ();
 
-        for (int z = 6; z <= depth; z += 6) {
+        for (int z = 7; z <= depth; z += 7) {
             BlockPos beamBase = startPos.offset(dx * z, 0, dz * z);
 
             BlockPos ceilCheck = beamBase.above(height + 1);
@@ -340,10 +340,19 @@ public abstract class BaseTabletOfDestruction extends Item {
         BlockPos  wallBase     = startPos.relative(ladderWall, getWidth());
 
         for (int y = 0; y < depth; y++) {
-            BlockPos target = wallBase.above(stepY * y);
+            BlockPos target      = wallBase.above(stepY * y);
+            BlockPos wallSupport = target.relative(ladderWall);
+
             if (!level.isInWorldBounds(target)) break;
 
-            BlockPos wallSupport = target.relative(ladderWall);
+            // If the wall support block is air, place stone so the ladder has something to attach to
+            if (level.getBlockState(wallSupport).isAir()) {
+                level.setBlock(wallSupport,
+                        Blocks.STONE.defaultBlockState(),
+                        Block.UPDATE_ALL);
+            }
+
+            // Place ladder if the target is air and now has a solid support
             if (level.getBlockState(target).isAir()
                     && level.getBlockState(wallSupport)
                     .isFaceSturdy(level, wallSupport, ladderFacing)) {

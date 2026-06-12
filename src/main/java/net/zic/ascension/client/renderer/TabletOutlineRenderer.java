@@ -109,7 +109,10 @@ public class TabletOutlineRenderer {
                     for (int y = 0; y < depth; y++) {
                         BlockPos target = startPos.offset(x, stepY * y, z);
                         if (!level.isInWorldBounds(target)) break;
-                        result.add(target);
+                        // Only add non-air blocks
+                        if (!level.getBlockState(target).isAir()) {
+                            result.add(target);
+                        }
                     }
                 }
             }
@@ -126,7 +129,10 @@ public class TabletOutlineRenderer {
                     for (int y = -1; y <= height; y++) {
                         BlockPos target = colBase.above(y);
                         if (!level.isInWorldBounds(target)) continue;
-                        result.add(target);
+                        // Only add non-air blocks
+                        if (!level.getBlockState(target).isAir()) {
+                            result.add(target);
+                        }
                     }
                 }
             }
