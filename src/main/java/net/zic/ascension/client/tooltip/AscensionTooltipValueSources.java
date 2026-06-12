@@ -59,8 +59,6 @@ public final class AscensionTooltipValueSources {
     public static final Identifier BLOODLINE_PURITY = AscensionCraft.prefix("bloodline_purity");
     public static final Identifier BLOODLINE_PURITY_GAINS = AscensionCraft.prefix("bloodline_purity_gains");
 
-    private static final String PASSIVE_CADENCE = "While Active";
-
     private static boolean registered;
 
     private AscensionTooltipValueSources() {}
@@ -88,7 +86,8 @@ public final class AscensionTooltipValueSources {
     private static Optional<ZenithTooltipValue> physiquePaths(
             ZenithTooltipContext context
     ) {
-        Optional<SimplePhysique> physique = context.subject(SimplePhysique.class);
+        Optional<SimplePhysique> physique =
+                context.subject(SimplePhysique.class);
 
         if (physique.isEmpty() || context.registryAccess().isEmpty()) {
             return Optional.empty();
@@ -114,10 +113,14 @@ public final class AscensionTooltipValueSources {
             return ZenithTooltipValue.rows(
                     combineRows(
                             baseRows(
-                                    physique.baseStats(), false, access, PASSIVE_CADENCE
+                                    physique.baseStats(),
+                                    false,
+                                    access
                             ),
                             modifierRows(
-                                    physique.statModifiers(), false, access, PASSIVE_CADENCE
+                                    physique.statModifiers(),
+                                    false,
+                                    access
                             )
                     )
             );
@@ -133,10 +136,14 @@ public final class AscensionTooltipValueSources {
             return ZenithTooltipValue.rows(
                     combineRows(
                             baseRows(
-                                    physique.baseAffinities(), true, access, PASSIVE_CADENCE
+                                    physique.baseAffinities(),
+                                    true,
+                                    access
                             ),
                             modifierRows(
-                                    physique.affinityModifiers(), true, access, PASSIVE_CADENCE
+                                    physique.affinityModifiers(),
+                                    true,
+                                    access
                             )
                     )
             );
@@ -160,7 +167,8 @@ public final class AscensionTooltipValueSources {
         return Optional.of(
                 ZenithTooltipValue.text(
                         pathName(
-                                pathId, context.registryAccess().orElseThrow()
+                                pathId,
+                                context.registryAccess().orElseThrow()
                         )
                 )
         );
@@ -214,7 +222,9 @@ public final class AscensionTooltipValueSources {
         return Optional.of(
                 ZenithTooltipValue.rows(
                         progressionRows(
-                                technique.orElseThrow().getHolder(), context.registryAccess().orElseThrow(), AscensionTooltipValueSources::techniqueCadence
+                                technique.orElseThrow().getHolder(),
+                                context.registryAccess().orElseThrow(),
+                                AscensionTooltipValueSources::techniqueCadence
                         )
                 )
         );
@@ -231,6 +241,7 @@ public final class AscensionTooltipValueSources {
                 AscensionComponents.PURITY,
                 1
         );
+
         purity = Math.max(1, Math.min(100, purity));
 
         return Optional.of(
@@ -255,7 +266,9 @@ public final class AscensionTooltipValueSources {
         return Optional.of(
                 ZenithTooltipValue.rows(
                         progressionRows(
-                                bloodline.orElseThrow().getHolder(), context.registryAccess().orElseThrow(), AscensionTooltipValueSources::purityCadence
+                                bloodline.orElseThrow().getHolder(),
+                                context.registryAccess().orElseThrow(),
+                                AscensionTooltipValueSources::purityCadence
                         )
                 )
         );
@@ -277,8 +290,7 @@ public final class AscensionTooltipValueSources {
     private static List<ZenithTooltipValue.Row> baseRows(
             Collection<ValueContainer.BaseModifier> modifiers,
             boolean affinity,
-            RegistryAccess access,
-            String cadence
+            RegistryAccess access
     ) {
         return modifiers.stream()
                 .sorted(
@@ -294,8 +306,6 @@ public final class AscensionTooltipValueSources {
                         ),
                         Component.literal(
                                 signedNumber(modifier.val())
-                                        + " · "
-                                        + cadence
                         ),
                         tone(modifier.val())
                 ))
@@ -305,8 +315,7 @@ public final class AscensionTooltipValueSources {
     private static List<ZenithTooltipValue.Row> modifierRows(
             Map<Identifier, List<ValueContainerModifier>> modifiers,
             boolean affinity,
-            RegistryAccess access,
-            String cadence
+            RegistryAccess access
     ) {
         List<ZenithTooltipValue.Row> rows = new ArrayList<>();
 
@@ -334,8 +343,6 @@ public final class AscensionTooltipValueSources {
                                         ),
                                         Component.literal(
                                                 formatModifier(modifier)
-                                                        + " · "
-                                                        + cadence
                                         ),
                                         tone(modifier.getVal())
                                 )
@@ -492,19 +499,13 @@ public final class AscensionTooltipValueSources {
     private static String formatModifier(
             ValueContainerModifier modifier
     ) {
-        String value = switch (modifier.getOperation()) {
+        return switch (modifier.getOperation()) {
             case MULTIPLY_BASE, MULTIPLY_FINAL ->
                     signedNumber(modifier.getVal() * 100.0) + "%";
+
             case ADD_BASE, ADD_FINAL ->
                     signedNumber(modifier.getVal());
         };
-
-        String stage = switch (modifier.getOperation()) {
-            case ADD_BASE, MULTIPLY_BASE -> "base";
-            case ADD_FINAL, MULTIPLY_FINAL -> "final";
-        };
-
-        return value + " " + stage;
     }
 
     private static String signedNumber(double value) {
