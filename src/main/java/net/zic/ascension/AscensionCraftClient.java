@@ -15,8 +15,6 @@ import net.zic.ascension.client.keybind.ModKeybinds;
 import net.zic.ascension.client.keybind.TabletKeybindHandler;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
-import net.zic.ascension.client.tooltip.AscensionTransferItemTooltipProvider;
-import net.zic.ascension.client.tooltip.AscensionTabletTooltipProvider;
 
 
 @Mod(value = AscensionCraft.MOD_ID,dist = Dist.CLIENT)

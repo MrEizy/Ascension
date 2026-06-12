@@ -1,4 +1,4 @@
-package net.zic.ascension.client.tooltip;
+package net.zic.ascension.client.tooltip.providers;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
