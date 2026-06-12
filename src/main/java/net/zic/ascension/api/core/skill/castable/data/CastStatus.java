@@ -21,7 +21,7 @@ public class CastStatus {
     }
 
     public boolean isCasting(){
-        return reason != null;
+        return reason == null;
     }
     public boolean isCancelled(){
         return reason == Reason.CANCELLED;

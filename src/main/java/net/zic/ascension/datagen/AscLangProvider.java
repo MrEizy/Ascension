@@ -40,5 +40,46 @@ public class AscLangProvider extends LanguageProvider {
 
         add("key.categories.ascension", "Ascension");
         add("key.ascension.cycle_mode", "Cycle Modes");
+
+        add("key.ascension.open_introspection", "Open Introspection");
+
+        add("gui.ascension.introspection.title", "Introspection");
+        add("gui.ascension.introspection.main", "Main");
+        add("gui.ascension.introspection.stats", "Stats");
+        add("gui.ascension.introspection.skills", "Skills");
+        add("gui.ascension.introspection.cultivation", "Cultivation");
+        add("gui.ascension.introspection.physique", "Physique");
+        add("gui.ascension.introspection.bloodlines", "Bloodlines");
+        add("gui.ascension.introspection.bloodline_count", "Bloodlines (%s)");
+        add("gui.ascension.introspection.bloodline_multiple", "%s +%s");
+        add("gui.ascension.introspection.bloodline_purity", "Purity: %s%%");
+        add("gui.ascension.introspection.technique", "Technique");
+        add("gui.ascension.introspection.none", "None");
+        add("gui.ascension.introspection.no_physique", "No physique");
+        add("gui.ascension.introspection.no_bloodlines", "No bloodlines");
+        add("gui.ascension.introspection.no_paths", "No cultivation paths");
+        add("gui.ascension.introspection.no_paths_description", "This character has not acquired a cultivation path.");
+        add("gui.ascension.introspection.no_skills", "No skills");
+        add("gui.ascension.introspection.no_skills_description", "This character has not acquired any skills.");
+        add("gui.ascension.introspection.no_stats", "No Ascension stats are currently available.");
+        add("gui.ascension.introspection.data_unavailable", "Synchronized Ascension data is temporarily unavailable.");
+        add("gui.ascension.introspection.missing_registry_entry", "The synchronized identifier is not present in the client registry.");
+        add("gui.ascension.introspection.empty_slot", "Empty");
+        add("gui.ascension.introspection.castable_skill", "Castable skill. Select it, then click a hotbar slot below to assign or remove it.");
+
+        add("gui.ascension.introspection.attribute.health", "Health");
+        add("gui.ascension.introspection.attribute.damage", "Damage");
+        add("gui.ascension.introspection.attribute.armor", "Armor");
+        add("gui.ascension.introspection.attribute.toughness", "Toughness");
+        add("gui.ascension.introspection.attribute.attack_speed", "Attack Speed");
+        add("gui.ascension.introspection.attribute.speed", "Speed");
+        add("gui.ascension.introspection.attribute.jump", "Jump");
+        add("gui.ascension.introspection.attribute.step_height", "Step Height");
+        add("gui.ascension.introspection.attribute.mining", "Mining");
+
+        add("stat.ascension.vitality", "Vitality");
+        add("stat.ascension.agility", "Agility");
+        add("stat.ascension.strength", "Strength");
+        add("stat.ascension.intelligence", "Intelligence");
     }
 }

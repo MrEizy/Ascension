@@ -70,7 +70,7 @@ public interface CastableSkill extends Skill {
      * @param status how/why casting has finished
      * @param castData the data for this cast
      */
-    void finalCast(LivingEntity caster,CastStatus status,CastData castData);
+    void finalCast(LivingEntity caster,CastStatus status,CastData castData,int ticksElapsed);
 
 
     CastData loadCastData(ByteBuf buf);

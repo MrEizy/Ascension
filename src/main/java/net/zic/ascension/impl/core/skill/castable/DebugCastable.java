@@ -55,7 +55,7 @@ public record DebugCastable(String message,int cooldown,UUID uuid) implements Ca
         EntityCooldownHandler handler = caster.getData(ZenithAttachments.COOLDOWN_HANDLER);
         Identifier identifier =Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,uuid.toString());
         return handler.isOnCooldown(identifier) ?
-                CastResult.fail(Component.literal("on Cooldown("+(handler.getCooldown(identifier)/20.0)+"s)")) :
+                CastResult.fail(Component.literal("On Cooldown("+(handler.getCooldown(identifier)/20.0)+"s)")) :
                 CastResult.success();
     }
 
@@ -81,7 +81,7 @@ public record DebugCastable(String message,int cooldown,UUID uuid) implements Ca
     }
 
     @Override
-    public void finalCast(LivingEntity caster, CastStatus status, CastData castData) {
+    public void finalCast(LivingEntity caster, CastStatus status, CastData castData,int ticksElapsed) {
 
     }
 

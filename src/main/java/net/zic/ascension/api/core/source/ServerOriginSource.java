@@ -414,7 +414,6 @@ public class ServerOriginSource extends OriginSource {
 
     @Override
     public void markBloodlineDirty(Identifier bloodline) {
-        System.out.println("bloodline was marked as dirty");
         toAddBloodlines.put(bloodline,getBloodlineData(bloodline));
         startProcess(ProcessType.MODIFY_BLOODLINE);
         resolveProcess(ProcessType.MODIFY_BLOODLINE);
@@ -457,27 +456,24 @@ public class ServerOriginSource extends OriginSource {
 
     }
     protected void sync(){
-        System.out.println("initializing sync");
         Collection<LivingEntity> entities = AscensionCraft.getSourceHandler().getLoadedWatchers(this);
         SourceChangesSnapshot snapshot = new SourceChangesSnapshot(
                 physiqueDirty ? getPhysique() : null,
                 physiqueDirty ? getPhysiqueData() : null,
-                Map.copyOf(toAddBloodlines),
+                new HashMap<>(toAddBloodlines),
                 Set.copyOf(toRemoveBloodlines),
-                Map.copyOf(toAddPaths),
+                new HashMap<>(toAddPaths),
                 Set.copyOf(toRemovePaths),
-                Map.copyOf(toAddSkills),
+                new HashMap<>(toAddSkills),
                 Set.copyOf(toRemoveSkills),
-                Map.copyOf(toAddDataSources),
+                new HashMap<>(toAddDataSources),
                 Set.copyOf(toRemoveDataSources),
                 Set.copyOf(dirtyStats),
                 Set.copyOf(dirtyAffinity)
         );
         for(LivingEntity entity : entities){
-            System.out.println("looking at entity");
             AscensionEntityDataHolder holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
             if(holder == null) continue;
-            System.out.println("marking dirty");
             holder.getData(entity).markDirty(snapshot);
         }
         //clear sync caches

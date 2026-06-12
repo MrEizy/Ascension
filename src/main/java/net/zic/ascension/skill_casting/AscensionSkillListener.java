@@ -2,18 +2,17 @@ package net.zic.ascension.skill_casting;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.zenithlib.input.InputHandler;
 import net.zic.zenithlib.input.MappingHandler;
 import net.zic.zenithlib.input.action.ActionEvent;
-import net.zic.zenithlib.input.action.ActionHandler;
-import net.zic.zenithlib.input.action.PlayerActionManager;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -24,8 +23,8 @@ import org.lwjgl.glfw.GLFW;
  * does not handle action end, since the skill and cast instance handle that
  */
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
-class Listener {
-    private static final Identifier skillCast = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"skill_cast");
+public class AscensionSkillListener {
+    public static final Identifier skillCast = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"skill_cast");
     private static final MappingHandler handler = InputHandler.registerAction(
             skillCast,
             new KeyMapping(
@@ -36,6 +35,13 @@ class Listener {
                     KeyMapping.Category.MISC
             )
     );
+
+    @SubscribeEvent
+    public static void onEntityTick(EntityTickEvent.Pre event){
+        if (!(event.getEntity() instanceof Player player))return;
+        player.getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER).tick();
+    }
+
     @SubscribeEvent
     public static void onActionStart(ActionEvent.Start event){
         if(!event.getAction().equals(skillCast)) return;

@@ -37,10 +37,9 @@ import java.util.function.Consumer;
 
 public abstract class BaseTabletOfDestruction extends Item {
 
-    // ── NBT keys ──────────────────────────────────────────────────────────────
-    private static final String DROP_MODE_TAG    = "DropMode";
-    protected static final String LINKED_POS_TAG = "LinkedPos";
-    protected static final String LINKED_DIM_TAG = "LinkedDimension";
+    private static final String DROP_MODE_TAG     = "DropMode";
+    protected static final String LINKED_POS_TAG  = "LinkedPos";
+    protected static final String LINKED_DIM_TAG  = "LinkedDimension";
 
     public static final int DROP_OFF = 0;
     public static final int DROP_ON  = 1;
@@ -80,8 +79,8 @@ public abstract class BaseTabletOfDestruction extends Item {
             return handleContainerLinking(level, player, stack, clickedPos);
         }
 
-        // Show cooldown message client-side but still return SUCCESS
-        // so the server side gets the packet
+        // Client side: show cooldown message if needed, always return SUCCESS
+        // so the server-side packet is always sent
         if (level.isClientSide()) {
             if (player.getCooldowns().isOnCooldown(this.getDefaultInstance())) {
                 player.sendOverlayMessage(getCooldownMessage());
@@ -89,13 +88,14 @@ public abstract class BaseTabletOfDestruction extends Item {
             return InteractionResult.SUCCESS;
         }
 
-        // Server side only from here
-        ServerLevel serverLevel = (ServerLevel) level;
+        // ── Server side only ──────────────────────────────────────────────────
 
         if (player.getCooldowns().isOnCooldown(this.getDefaultInstance())) {
             player.sendOverlayMessage(getCooldownMessage());
             return InteractionResult.FAIL;
         }
+
+        ServerLevel serverLevel = (ServerLevel) level;
 
         serverLevel.playSeededSound(
                 null,
@@ -166,8 +166,8 @@ public abstract class BaseTabletOfDestruction extends Item {
             return InteractionResult.FAIL;
         }
 
-        LinkedContainerData current = getLinkedContainer(stack);
-        String currentDim = level.dimension().identifier().toString();
+        LinkedContainerData current   = getLinkedContainer(stack);
+        String              currentDim = level.dimension().identifier().toString();
 
         if (current.pos() != null
                 && current.pos().equals(pos)
@@ -205,15 +205,6 @@ public abstract class BaseTabletOfDestruction extends Item {
                 BlockPos colBase = startPos.offset(
                         dx * z + dz * x, 0, dz * z + dx * x);
 
-                boolean hasAir = false;
-                for (int y = -1; y <= height; y++) {
-                    if (level.getBlockState(colBase.above(y)).isAir()) {
-                        hasAir = true;
-                        break;
-                    }
-                }
-                if (hasAir) continue;
-
                 for (int y = height; y >= -1; y--) {
                     BlockPos target = colBase.above(y);
                     if (!shouldRemoveBlock(level, target)) continue;
@@ -249,7 +240,6 @@ public abstract class BaseTabletOfDestruction extends Item {
                 for (int y = 0; y < depth; y++) {
                     BlockPos target = startPos.offset(x, stepY * y, z);
                     if (!level.isInWorldBounds(target)) break;
-                    if (level.getBlockState(target).isAir()) break;
                     if (!shouldRemoveBlock(level, target)) continue;
                     BlockState state = level.getBlockState(target);
                     if (dropBlocks) toDrop.add(new BlockStatePos(target, state));
@@ -292,9 +282,10 @@ public abstract class BaseTabletOfDestruction extends Item {
             }
 
             for (int side : new int[]{ -width, width }) {
-                BlockPos wallBase = beamBase.offset(px * side, 0, pz * side);
+                // Start one below startPos so y=0 is the floor level
+                BlockPos wallBase = beamBase.offset(px * side, 0, pz * side).below();
 
-                for (int y = 0; y <= ceilY; y++) {
+                for (int y = 0; y <= ceilY + 1; y++) {
                     BlockPos plankPos = wallBase.above(y);
                     if (level.getBlockState(plankPos).isAir()) {
                         level.setBlock(plankPos,
@@ -302,6 +293,7 @@ public abstract class BaseTabletOfDestruction extends Item {
                                 Block.UPDATE_ALL);
                     }
 
+                    // Torch on second plank from floor (y == 1)
                     if (y == 1) {
                         Direction torchFacing = (side < 0)
                                 ? direction.getClockWise()
@@ -318,6 +310,7 @@ public abstract class BaseTabletOfDestruction extends Item {
                 }
             }
 
+            // Lintel across the top
             for (int s = -width; s <= width; s++) {
                 BlockPos lintPos = beamBase.offset(px * s, ceilY, pz * s);
                 if (level.getBlockState(lintPos).isAir()) {
@@ -365,7 +358,6 @@ public abstract class BaseTabletOfDestruction extends Item {
         }
     }
 
-
     // ── Drop-mode cycling ─────────────────────────────────────────────────────
 
     public int getDropMode(ItemStack stack) {
@@ -376,9 +368,7 @@ public abstract class BaseTabletOfDestruction extends Item {
     }
 
     public void cycleDropMode(ItemStack stack, ServerPlayer player) {
-        if (!supportsDropBlocks()) {
-            return;
-        }
+        if (!supportsDropBlocks()) return;
 
         var tag  = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         int cur  = tag.getInt(DROP_MODE_TAG).orElse(0);
@@ -413,16 +403,14 @@ public abstract class BaseTabletOfDestruction extends Item {
     }
 
     protected void setLinkedContainer(ItemStack stack, BlockPos pos, String dimension) {
-        var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)
-                .copyTag();
+        var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         tag.putLong(LINKED_POS_TAG, pos.asLong());
         tag.putString(LINKED_DIM_TAG, dimension);
         stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }
 
     protected void clearLinkedContainer(ItemStack stack) {
-        var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)
-                .copyTag();
+        var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         tag.remove(LINKED_POS_TAG);
         tag.remove(LINKED_DIM_TAG);
         if (tag.isEmpty()) stack.remove(DataComponents.CUSTOM_DATA);
@@ -437,7 +425,6 @@ public abstract class BaseTabletOfDestruction extends Item {
                                 TooltipFlag flag) {
         super.appendHoverText(stack, context, display, tooltip, flag);
 
-        // Only show drop mode info on tiers that support it
         if (supportsDropBlocks()) {
             int dropMode = getDropMode(stack);
             Component modeLabel = dropMode == DROP_ON
@@ -445,7 +432,6 @@ public abstract class BaseTabletOfDestruction extends Item {
                     .withStyle(ChatFormatting.GREEN)
                     : Component.translatable("ascension.tablet.drop_mode.off")
                     .withStyle(ChatFormatting.RED);
-
             tooltip.accept(Component.translatable("ascension.tablet.drop_mode").append(modeLabel));
             tooltip.accept(Component.translatable("ascension.tablet.cycle_mode_info")
                     .withStyle(ChatFormatting.DARK_GRAY));

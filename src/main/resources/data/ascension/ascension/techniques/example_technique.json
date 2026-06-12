@@ -4,6 +4,27 @@
   "description": "this is an example",
   "path": "ascension:foundation/essence",
   "max_realm": 2,
+  "max_minor_realm": 2,
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        "ascension:generic_give_stats"
+      ]
+    },
+    {
+      "condition": "ascension:realm_change/on_gained",
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/cultivation/true_breath",
+            "ascension:castable/test_cast"
+          ]
+        }
+      ]
+    }
+  ],
   "item_tooltip": {
     "theme": "zenithlib:mana_blue",
     "pages": [

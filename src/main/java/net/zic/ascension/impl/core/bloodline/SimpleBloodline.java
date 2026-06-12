@@ -33,10 +33,12 @@ public class SimpleBloodline implements Bloodline {
             Map<Identifier, List<Identifier>> listeners,
             Optional<AscensionItemTooltipDefinition> itemTooltip
     ) {
+    public SimpleBloodline(Component name, Component description, ProgressActionHolder holder){
         this.name = name;
         this.description = description;
         this.holder = ProgressActionHolder.fromMap(listeners);
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
+        this.holder = holder;
     }
 
     @Override
@@ -44,9 +46,7 @@ public class SimpleBloodline implements Bloodline {
         return AscensionBloodlineTypes.SIMPLE_BLOODLINE_TYPE.get();
     }
 
-    public Map<Identifier,List<Identifier>> getListeners(){
-        return holder.listeners();
-    }
+    public ProgressActionHolder getHolder(){return holder;}
 
     @Override
     public Component getName() {

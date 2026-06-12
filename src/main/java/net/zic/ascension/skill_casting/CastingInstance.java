@@ -66,7 +66,7 @@ public class CastingInstance {
         if(!(CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,caster.level().registryAccess()) instanceof CastableSkill castableSkill)) return;
 
 
-        castableSkill.finalCast(caster,status,castData);
+        castableSkill.finalCast(caster,status,castData,ticksElapsed);
 
         skill = null;
         castData = null;

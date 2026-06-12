@@ -2,6 +2,14 @@
   "type": "ascension:simple",
   "name": "Test",
   "description": "this is an example description",
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        "ascension:generic_give_stats"
+      ]
+    }
+  ],
   "item_tooltip": {
     "theme": "zenithlib:mana_blue",
     "pages": [

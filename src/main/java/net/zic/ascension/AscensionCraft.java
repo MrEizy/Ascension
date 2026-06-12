@@ -6,14 +6,13 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.zic.ascension.client.keybind.ModKeybinds;
+import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
@@ -21,6 +20,8 @@ import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.network.CycleDropModePacket;
+import net.zic.ascension.network.SelectSkillSlotPacket;
+import net.zic.ascension.network.UpdateSkillSlotPacket;
 import net.zic.ascension.impl.core.entity.AscensionStats;
 import net.zic.ascension.impl.core.source.SourceHandler;
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
@@ -56,7 +57,7 @@ public class AscensionCraft {
     public static final Map<String, String> SECT_DATA = new HashMap<>();
 
     private static SourceHandler sourceHandler;
-
+    private static PathInteractionHolder pathInteractionHolder = new PathInteractionHolder();
     public static Identifier prefix(String name){
         return Identifier.fromNamespaceAndPath(MOD_ID, name);
     }
@@ -108,16 +109,6 @@ public class AscensionCraft {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC, "ascension/Ascension-Common.toml");
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.CULTIVATION_SPEC, "ascension/Ascension-Cultivation.toml");
 
-        modEventBus.addListener(this::registerKeyBindings);
-
-
-
-    }
-
-
-    private void registerKeyBindings(RegisterKeyMappingsEvent event) {
-        event.register(ModKeybinds.CYCLE_MODE);
-
     }
 
 
@@ -163,6 +154,7 @@ public class AscensionCraft {
 
 
     public static SourceHandler getSourceHandler(){return sourceHandler;}
+    public static PathInteractionHolder getPathInteractionHolder(){return pathInteractionHolder;}
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
     public static class ModEvents {
 
@@ -184,7 +176,16 @@ public class AscensionCraft {
                     CycleDropModePacket.STREAM_CODEC,
                     CycleDropModePacket::handle
             );
-
+            registrar.playToServer(
+                    UpdateSkillSlotPacket.TYPE,
+                    UpdateSkillSlotPacket.STREAM_CODEC,
+                    UpdateSkillSlotPacket::handle
+            );
+            registrar.playToServer(
+                    SelectSkillSlotPacket.TYPE,
+                    SelectSkillSlotPacket.STREAM_CODEC,
+                    SelectSkillSlotPacket::handle
+            );
 
         }
     }

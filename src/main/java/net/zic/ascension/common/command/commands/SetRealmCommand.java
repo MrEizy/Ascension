@@ -53,7 +53,6 @@ public class SetRealmCommand {
             try {
                 progressPercent = IntegerArgumentType.getInteger(context, "progress");
             } catch (IllegalArgumentException e) {
-                // Not provided — fine
 
             }
             Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,context.getSource().registryAccess());
@@ -116,7 +115,11 @@ public class SetRealmCommand {
             if(progressPercent > 0){
                 progressPercent = Math.clamp(progressPercent,0,100);
                 data.setProgress(data.getMaxProgress(data.getMajorRealm(),data.getMinorRealm(),originSource.getRegistryAccess())*progressPercent/100.0);
+            }else{
+                data.setProgress(0);
             }
+            originSource.markPathDirty(pathId);
+
             String progressStr = (progressPercent >= 0)
                     ? String.format(" with %d%% progress", progressPercent) : "";
 

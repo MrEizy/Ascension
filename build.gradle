@@ -67,7 +67,6 @@ neoForge {
 
         server {
             server()
-            programArgument '--nogui'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
@@ -127,7 +126,7 @@ configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 dependencies {
-    implementation("com.github.MrEizy:ZenithLib:6fb061ebc5")
+    implementation("com.github.MrEizy:ZenithLib:bcb99765ee")
     // compile against the JEI API but do not include it at runtime
     //compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
     // at runtime, use the full JEI jar for NeoForge
@@ -135,7 +134,7 @@ dependencies {
 
     //implementation "maven.modrinth:jade:${project.jade_version}"
 
-   // implementation 'com.github.OliverHesse:EasyGui:9f4a4b2aa1'
+   implementation('com.github.OliverHesse:EasyGui:d71b1e115c')
     //implementation 'com.github.MrEizy:Builders-Zenith:ae34247ef0'
 
    // implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"

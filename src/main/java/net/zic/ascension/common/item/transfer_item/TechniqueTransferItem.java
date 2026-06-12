@@ -12,6 +12,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
 import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
@@ -39,15 +40,20 @@ public class TechniqueTransferItem  extends Item {
         AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
 
         if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
+        OriginSource source = holder.getData(player).getSource();
         Identifier path = targetTechnique.getPath();
-        if(holder.getData(player).getSource().getPathData(path) == null){
+        if(source.getPathData(path) == null){
             player.sendSystemMessage(Component.literal("[You are do not have path : "+path+"]"));
             return InteractionResult.FAIL;
         }
-        if(!holder.getData(player).getSource().getPathData(path).setCurrentTechnique(stack.get(AscensionComponents.REGISTRY_ID_HOLDER),holder.getData(player).getSource())){
+        if(!source.getPathData(path).setCurrentTechnique(
+                stack.get(AscensionComponents.REGISTRY_ID_HOLDER),
+                source
+        )){
             player.sendSystemMessage(Component.literal("[Learned technique :" +stack.get(AscensionComponents.REGISTRY_ID_HOLDER)+"]"));
             return InteractionResult.FAIL;
         }
+        source.markPathDirty(path);
         stack.shrink(1);
         AscensionCraft.LOGGER.info("Player {} has transferred their technique",player.getName().getString());
         return InteractionResult.SUCCESS;
