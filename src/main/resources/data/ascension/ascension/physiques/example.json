@@ -10,22 +10,22 @@
     "pages": [
       {
         "title": {
-          "literal": "Example Physique"
+          "source": "zenithlib:subject_name"
         },
         "elements": [
           {
             "type": "title_icon",
             "title": {
-              "literal": "Example Physique"
+              "source": "zenithlib:subject_name"
             },
             "subtitle": {
-              "literal": "A test physique rendered through ZenithLib"
+              "literal": "Physique Essence"
             }
           },
           {
             "type": "badge",
             "text": {
-              "literal": "ESSENCE PHYSIQUE"
+              "literal": "PHYSIQUE"
             },
             "text_color": "background",
             "background_color": "accent",
@@ -37,7 +37,7 @@
           {
             "type": "text",
             "text": {
-              "literal": "This is an example physique."
+              "source": "zenithlib:subject_description"
             }
           }
         ]

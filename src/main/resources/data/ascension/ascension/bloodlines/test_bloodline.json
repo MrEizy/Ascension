@@ -15,16 +15,16 @@
     "pages": [
       {
         "title": {
-          "literal": "Test Bloodline"
+          "source": "zenithlib:subject_name"
         },
         "elements": [
           {
             "type": "title_icon",
             "title": {
-              "literal": "Test Bloodline"
+              "source": "zenithlib:subject_name"
             },
             "subtitle": {
-              "literal": "A test bloodline rendered through ZenithLib"
+              "literal": "Bloodline Essence"
             }
           },
           {
@@ -42,8 +42,16 @@
           {
             "type": "text",
             "text": {
-              "literal": "This is an example bloodline tooltip."
+              "source": "zenithlib:subject_description"
             }
+          },
+          {
+            "type": "bar",
+            "label": {
+              "literal": "Purity"
+            },
+            "source": "ascension:bloodline_purity",
+            "color": "accent"
           }
         ]
       }

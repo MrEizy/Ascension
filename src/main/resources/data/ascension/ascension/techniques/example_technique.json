@@ -3,7 +3,7 @@
   "name": "Example Technique",
   "description": "this is an example",
   "path": "ascension:foundation/essence",
-  "max_realm": 2,
+  "max_realm": 5,
   "max_minor_realm": 2,
   "realm_change_handler": [
     {
@@ -30,22 +30,22 @@
     "pages": [
       {
         "title": {
-          "literal": "Example Technique"
+          "source": "zenithlib:subject_name"
         },
         "elements": [
           {
             "type": "title_icon",
             "title": {
-              "literal": "Example Technique"
+              "source": "zenithlib:subject_name"
             },
             "subtitle": {
-              "literal": "A test technique rendered with ZenithLib"
+              "literal": "Technique Manual"
             }
           },
           {
             "type": "badge",
             "text": {
-              "literal": "ESSENCE TECHNIQUE"
+              "source": "ascension:technique_path"
             },
             "text_color": "background",
             "background_color": "accent",
@@ -57,7 +57,7 @@
           {
             "type": "text",
             "text": {
-              "literal": "This technique cultivates the Essence path."
+              "source": "zenithlib:subject_description"
             }
           },
           {
@@ -66,7 +66,7 @@
               "literal": "Max Realm"
             },
             "right": {
-              "literal": "2"
+              "source": "ascension:technique_max_realm"
             },
             "right_color": "accent"
           }

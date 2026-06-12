@@ -5,16 +5,7 @@ import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipTheme;
 import net.zic.zenithlib.tooltip.datagen.ZenithTooltipDataProvider;
 
-import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.badge;
-import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.divider;
-import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.header;
-import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.literal;
-import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.page;
-import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.row;
-import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.spacer;
-import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.text;
-import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.titleIcon;
-import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.translated;
+import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.*;
 
 /**
  * Generates ZenithLib tooltip documents for registered
