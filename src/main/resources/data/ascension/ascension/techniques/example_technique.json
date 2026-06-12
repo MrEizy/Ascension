@@ -3,7 +3,7 @@
   "name": "Example Technique",
   "description": "this is an example",
   "path": "ascension:foundation/essence",
-  "max_realm": 5,
+  "max_realm": 2,
   "max_minor_realm": 2,
   "realm_change_handler": [
     {
@@ -52,9 +52,6 @@
             "border_color": "accent"
           },
           {
-            "type": "divider"
-          },
-          {
             "type": "text",
             "text": {
               "source": "zenithlib:subject_description"
@@ -69,6 +66,28 @@
               "source": "ascension:technique_max_realm"
             },
             "right_color": "accent"
+          },
+          {
+            "type": "collection",
+            "source": "ascension:technique_families",
+            "presentation": "badges",
+            "header": {
+              "literal": "Technique Families"
+            },
+            "hide_when_empty": true
+          }
+        ]
+      },
+      {
+        "title": {
+          "literal": "Realm Growth"
+        },
+        "elements": [
+          {
+            "type": "collection",
+            "source": "ascension:technique_progression_gains",
+            "presentation": "rows",
+            "hide_when_empty": true
           }
         ]
       }

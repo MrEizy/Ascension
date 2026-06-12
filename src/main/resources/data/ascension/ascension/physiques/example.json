@@ -23,74 +23,41 @@
             }
           },
           {
-            "type": "badge",
-            "text": {
-              "literal": "PHYSIQUE"
-            },
-            "text_color": "background",
-            "background_color": "accent",
-            "border_color": "accent"
-          },
-          {
-            "type": "divider"
-          },
-          {
             "type": "text",
             "text": {
               "source": "zenithlib:subject_description"
             }
+          },
+          {
+            "type": "collection",
+            "source": "ascension:physique_paths",
+            "presentation": "badges",
+            "hide_when_empty": true
           }
         ]
       },
       {
         "title": {
-          "literal": "Stats"
+          "literal": "Attributes"
         },
         "elements": [
           {
-            "type": "header",
-            "text": {
-              "literal": "Base Stats"
-            }
+            "type": "collection",
+            "source": "ascension:physique_stats",
+            "presentation": "rows",
+            "header": {
+              "literal": "Statistics"
+            },
+            "hide_when_empty": true
           },
           {
-            "type": "row",
-            "left": {
-              "literal": "Vitality"
+            "type": "collection",
+            "source": "ascension:physique_affinities",
+            "presentation": "rows",
+            "header": {
+              "literal": "Affinities"
             },
-            "right": {
-              "literal": "+2"
-            },
-            "right_color": "positive"
-          },
-          {
-            "type": "divider"
-          },
-          {
-            "type": "header",
-            "text": {
-              "literal": "Modifiers"
-            }
-          },
-          {
-            "type": "row",
-            "left": {
-              "literal": "Vitality Multiplier"
-            },
-            "right": {
-              "literal": "+20%"
-            },
-            "right_color": "positive"
-          },
-          {
-            "type": "row",
-            "left": {
-              "literal": "Essence Affinity"
-            },
-            "right": {
-              "literal": "+0.1"
-            },
-            "right_color": "accent"
+            "hide_when_empty": true
           }
         ]
       }

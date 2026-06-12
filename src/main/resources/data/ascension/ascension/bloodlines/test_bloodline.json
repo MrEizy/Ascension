@@ -28,30 +28,31 @@
             }
           },
           {
-            "type": "badge",
-            "text": {
-              "literal": "BLOODLINE"
-            },
-            "text_color": "background",
-            "background_color": "accent",
-            "border_color": "accent"
-          },
-          {
-            "type": "divider"
-          },
-          {
-            "type": "text",
-            "text": {
-              "source": "zenithlib:subject_description"
-            }
-          },
-          {
             "type": "bar",
             "label": {
               "literal": "Purity"
             },
             "source": "ascension:bloodline_purity",
             "color": "accent"
+          },
+          {
+            "type": "text",
+            "text": {
+              "source": "zenithlib:subject_description"
+            }
+          }
+        ]
+      },
+      {
+        "title": {
+          "literal": "Purity Growth"
+        },
+        "elements": [
+          {
+            "type": "collection",
+            "source": "ascension:bloodline_purity_gains",
+            "presentation": "rows",
+            "hide_when_empty": true
           }
         ]
       }
