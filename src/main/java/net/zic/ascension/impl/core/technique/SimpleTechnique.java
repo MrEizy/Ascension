@@ -72,9 +72,7 @@ public class SimpleTechnique implements Technique {
             Integer maxMajorRealm,
             Integer maxMinorRealm,
             int minMajorRealm,
-            Map<Identifier,List<Identifier>> holder,
-            Map<Integer, MajorRealmNames> majorRealmOverrides,
-            Optional<AscensionItemTooltipDefinition> itemTooltip) {
+            Optional<AscensionItemTooltipDefinition> itemTooltip,
             ProgressActionHolder holder,
             Map<Integer, MajorRealmNames> majorRealmOverrides) {
         this.name = name;

@@ -1,0 +1,17 @@
+
+
+    For static tooltips, use the Ascension DataGen tooltip provider.
+
+    For dynamic tooltips, or tooltips that depend on item components,
+    CustomData, registry values, player data, or other runtime state,
+    add a runtime provider in this package and register it through
+    AscensionClientTooltipProviders.
+
+    Also, if you want specific items to have custom tooltips
+    and I haven't made a guide for it yet,
+    or you want new elements/features to make them,
+    leave a request here and I will try to do it asap :)
+
+                                                    - sortOfSmart?
+
+

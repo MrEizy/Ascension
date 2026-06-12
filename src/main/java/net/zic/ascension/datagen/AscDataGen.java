@@ -18,6 +18,7 @@ public class AscDataGen {
         generator.addProvider(true, new AscLangProvider(packOutput));
         generator.addProvider(true, new AscModelProvider(packOutput));
         generator.addProvider(true, new AscBlockTagProvider(packOutput, lookupProvider));
+        generator.addProvider(true, new AscTooltipDataProvider(packOutput, AscensionCraft.MOD_ID));
 
     }
 }

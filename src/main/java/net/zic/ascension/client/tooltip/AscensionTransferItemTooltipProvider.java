@@ -23,13 +23,13 @@ import java.util.Optional;
  * ItemStack component → registry id → datapack registry entry → item_tooltip → ZenithLib document
  */
 
-public final class AscensionZenithTooltipProvider implements ZenithTooltipDocumentProvider {
+public final class AscensionTransferItemTooltipProvider implements ZenithTooltipDocumentProvider {
     public static final Identifier ID = AscensionCraft.prefix("registry_tooltips");
 
-    private AscensionZenithTooltipProvider() {}
+    private AscensionTransferItemTooltipProvider() {}
 
     public static void register() {
-        ZenithTooltipProviders.register(ID, new AscensionZenithTooltipProvider());
+        ZenithTooltipProviders.register(ID, new AscensionTransferItemTooltipProvider());
     }
 
     @Override

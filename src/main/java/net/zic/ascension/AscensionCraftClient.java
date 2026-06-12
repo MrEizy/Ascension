@@ -14,10 +14,9 @@ import net.zic.ascension.client.keybind.IntrospectionKeybindHandler;
 import net.zic.ascension.client.keybind.ModKeybinds;
 import net.zic.ascension.client.keybind.TabletKeybindHandler;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
-import net.zic.ascension.client.tooltip.AscensionZenithTooltipProvider;
-import net.zic.zenithlib.input.InputHandler;
-import net.zic.zenithlib.input.MappingHandler;
-import org.lwjgl.glfw.GLFW;
+import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
+import net.zic.ascension.client.tooltip.AscensionTransferItemTooltipProvider;
+import net.zic.ascension.client.tooltip.AscensionTabletTooltipProvider;
 
 
 @Mod(value = AscensionCraft.MOD_ID,dist = Dist.CLIENT)
@@ -71,9 +70,9 @@ public class AscensionCraftClient {
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            event.enqueueWork(() -> {
-                AscensionZenithTooltipProvider.register();
-            });
+            event.enqueueWork(
+                    AscensionClientTooltipProviders::registerAll
+            );
         }
 
     }

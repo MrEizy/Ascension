@@ -28,9 +28,7 @@ public class SimpleTechniqueType extends TechniqueType {
                         Codec.INT.optionalFieldOf("max_minor_realm").forGetter(SimpleTechnique::getHardCodedMaxMinorRealm),
                         Codec.INT.optionalFieldOf("min_realm").forGetter(SimpleTechnique::getHardCodedMinMajorRealm),
                         Codec.unboundedMap(Codec.INT,SimpleTechnique.MajorRealmNames.CODEC).optionalFieldOf("realm_names",Map.of()).forGetter(SimpleTechnique::getMajorRealmOverrides),
-                        ProgressActionHolder.PROGRESS_HOLDER_CODEC.fieldOf("realm_change_handler").forGetter(SimpleTechnique::getHolder)
-
-                        ProgressActionHolder.CODEC.fieldOf("realm_change_handler").forGetter(SimpleTechnique::getListeners),
+                        ProgressActionHolder.PROGRESS_HOLDER_CODEC.fieldOf("realm_change_handler").forGetter(SimpleTechnique::getHolder),
                         AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(Technique::itemTooltip)
                 ).apply(instance,
                         (name,
@@ -53,9 +51,9 @@ public class SimpleTechniqueType extends TechniqueType {
                                         max.orElse(null),
                                         max_minor.orElse(null),
                                         min.orElse(0),
+                                        itemTooltip,
                                         handler,
-                                        overrides,
-                                        itemTooltip
+                                        overrides
                                 )
                         )
         );

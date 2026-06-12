@@ -30,13 +30,11 @@ public class SimpleBloodline implements Bloodline {
     public SimpleBloodline(
             Component name,
             Component description,
-            Map<Identifier, List<Identifier>> listeners,
+            ProgressActionHolder holder,
             Optional<AscensionItemTooltipDefinition> itemTooltip
     ) {
-    public SimpleBloodline(Component name, Component description, ProgressActionHolder holder){
         this.name = name;
         this.description = description;
-        this.holder = ProgressActionHolder.fromMap(listeners);
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
         this.holder = holder;
     }

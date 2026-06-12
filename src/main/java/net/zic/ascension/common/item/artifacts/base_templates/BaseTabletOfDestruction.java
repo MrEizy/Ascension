@@ -63,6 +63,15 @@ public abstract class BaseTabletOfDestruction extends Item {
     public int getHeightPublic() { return getHeight(); }
     public int getDepthPublic()  { return getDepth();  }
 
+
+    // Added for custom tooltip support - sortOfSmart?
+    public final boolean supportsBlockDrops() {
+        return supportsDropBlocks();
+    }
+    public final boolean supportsContainerLinks() {
+        return supportsContainerLinking();
+    }
+
     // ── Interaction ───────────────────────────────────────────────────────────
 
     @Nonnull
