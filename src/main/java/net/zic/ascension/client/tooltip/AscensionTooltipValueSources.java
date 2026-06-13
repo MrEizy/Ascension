@@ -28,9 +28,14 @@ import net.zic.ascension.impl.core.technique.realm_change.condition.EveryRealmCo
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryRealmInCondition;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
+import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
+import net.zic.zenithlib.tooltip.api.ZenithTooltipText;
 import net.zic.zenithlib.tooltip.api.context.ZenithTooltipContext;
+import net.zic.zenithlib.tooltip.api.element.BadgeElement;
+import net.zic.zenithlib.tooltip.api.element.RowElement;
+import net.zic.zenithlib.tooltip.api.element.ZenithTooltipElement;
+import net.zic.zenithlib.tooltip.api.value.ZenithTooltipSources;
 import net.zic.zenithlib.tooltip.api.value.ZenithTooltipValue;
-import net.zic.zenithlib.tooltip.api.value.ZenithTooltipValueSources;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
@@ -52,7 +57,6 @@ public final class AscensionTooltipValueSources {
     public static final Identifier PHYSIQUE_AFFINITIES = AscensionCraft.prefix("physique_affinities");
 
     public static final Identifier TECHNIQUE_PATH = AscensionCraft.prefix("technique_path");
-    public static final Identifier TECHNIQUE_FAMILIES = AscensionCraft.prefix("technique_families");
     public static final Identifier TECHNIQUE_MAX_REALM = AscensionCraft.prefix("technique_max_realm");
     public static final Identifier TECHNIQUE_PROGRESSION_GAINS = AscensionCraft.prefix("technique_progression_gains");
 
@@ -70,17 +74,66 @@ public final class AscensionTooltipValueSources {
 
         registered = true;
 
-        ZenithTooltipValueSources.register(PHYSIQUE_PATHS, AscensionTooltipValueSources::physiquePaths);
-        ZenithTooltipValueSources.register(PHYSIQUE_STATS, AscensionTooltipValueSources::physiqueStats);
-        ZenithTooltipValueSources.register(PHYSIQUE_AFFINITIES, AscensionTooltipValueSources::physiqueAffinities);
+        ZenithTooltipSources.registerValue(PHYSIQUE_PATHS, AscensionTooltipValueSources::physiquePaths);
+        ZenithTooltipSources.registerValue(PHYSIQUE_STATS, AscensionTooltipValueSources::physiqueStats);
+        ZenithTooltipSources.registerValue(PHYSIQUE_AFFINITIES, AscensionTooltipValueSources::physiqueAffinities);
 
-        ZenithTooltipValueSources.register(TECHNIQUE_PATH, AscensionTooltipValueSources::techniquePath);
-        ZenithTooltipValueSources.register(TECHNIQUE_FAMILIES, AscensionTooltipValueSources::techniqueFamilies);
-        ZenithTooltipValueSources.register(TECHNIQUE_MAX_REALM, AscensionTooltipValueSources::techniqueMaxRealm);
-        ZenithTooltipValueSources.register(TECHNIQUE_PROGRESSION_GAINS, AscensionTooltipValueSources::techniqueProgressionGains);
+        ZenithTooltipSources.registerValue(TECHNIQUE_PATH, AscensionTooltipValueSources::techniquePath);
+        ZenithTooltipSources.registerValue(TECHNIQUE_MAX_REALM, AscensionTooltipValueSources::techniqueMaxRealm);
+        ZenithTooltipSources.registerValue(TECHNIQUE_PROGRESSION_GAINS, AscensionTooltipValueSources::techniqueProgressionGains);
 
-        ZenithTooltipValueSources.register(BLOODLINE_PURITY, AscensionTooltipValueSources::bloodlinePurity);
-        ZenithTooltipValueSources.register(BLOODLINE_PURITY_GAINS, AscensionTooltipValueSources::bloodlinePurityGains);
+        ZenithTooltipSources.registerValue(BLOODLINE_PURITY, AscensionTooltipValueSources::bloodlinePurity);
+        ZenithTooltipSources.registerValue(BLOODLINE_PURITY_GAINS, AscensionTooltipValueSources::bloodlinePurityGains);
+
+        ZenithTooltipSources.registerElement(PHYSIQUE_PATHS, context -> badges(PHYSIQUE_PATHS, context, ZenithTooltipColor.ACCENT));
+        ZenithTooltipSources.registerElement(PHYSIQUE_STATS, context -> rows(PHYSIQUE_STATS, context));
+        ZenithTooltipSources.registerElement(PHYSIQUE_AFFINITIES, context -> rows(PHYSIQUE_AFFINITIES, context));
+        ZenithTooltipSources.registerElement(TECHNIQUE_PROGRESSION_GAINS, context -> rows(TECHNIQUE_PROGRESSION_GAINS, context));
+        ZenithTooltipSources.registerElement(BLOODLINE_PURITY_GAINS, context -> rows(BLOODLINE_PURITY_GAINS, context));
+    }
+
+    private static List<ZenithTooltipElement> badges(
+            Identifier source,
+            ZenithTooltipContext context,
+            ZenithTooltipColor color
+    ) {
+        return ZenithTooltipSources.resolveValue(source, context, ZenithTooltipValue.TextList.class)
+                .stream()
+                .flatMap(value -> value.entries().stream())
+                .map(component -> new BadgeElement(
+                        ZenithTooltipText.resolved(component),
+                        ZenithTooltipColor.BACKGROUND,
+                        color,
+                        color
+                ))
+                .map(element -> (ZenithTooltipElement) element)
+                .toList();
+    }
+
+    private static List<ZenithTooltipElement> rows(
+            Identifier source,
+            ZenithTooltipContext context
+    ) {
+        return ZenithTooltipSources.resolveValue(source, context, ZenithTooltipValue.Rows.class)
+                .stream()
+                .flatMap(value -> value.entries().stream())
+                .map(row -> new RowElement(
+                        ZenithTooltipText.resolved(row.left()),
+                        ZenithTooltipText.resolved(row.right()),
+                        ZenithTooltipColor.TEXT,
+                        toneColor(row.tone())
+                ))
+                .map(element -> (ZenithTooltipElement) element)
+                .toList();
+    }
+
+    private static ZenithTooltipColor toneColor(ZenithTooltipValue.Tone tone) {
+        return switch (tone) {
+            case POSITIVE -> ZenithTooltipColor.POSITIVE;
+            case NEGATIVE -> ZenithTooltipColor.NEGATIVE;
+            case SPECIAL -> ZenithTooltipColor.ACCENT;
+            case NEUTRAL -> ZenithTooltipColor.MUTED;
+        };
     }
 
     private static Optional<ZenithTooltipValue> physiquePaths(
@@ -170,20 +223,6 @@ public final class AscensionTooltipValueSources {
                                 pathId,
                                 context.registryAccess().orElseThrow()
                         )
-                )
-        );
-    }
-
-    private static Optional<ZenithTooltipValue> techniqueFamilies(
-            ZenithTooltipContext context
-    ) {
-        return context.subject(Technique.class).map(technique ->
-                ZenithTooltipValue.textList(
-                        technique.getTechniqueFamilies()
-                                .stream()
-                                .map(AscensionTooltipValueSources::humanName)
-                                .map(Component::literal)
-                                .toList()
                 )
         );
     }

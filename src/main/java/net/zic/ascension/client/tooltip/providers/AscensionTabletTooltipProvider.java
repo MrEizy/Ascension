@@ -12,7 +12,6 @@ import net.zic.ascension.common.item.artifacts.base_templates.BaseTabletOfDestru
 import net.zic.ascension.common.item.artifacts.base_templates.BaseTabletOfDestruction.LinkedContainerData;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipDocument;
-import net.zic.zenithlib.tooltip.api.ZenithTooltipDocumentProvider;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipPage;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipProviders;
 import net.zic.zenithlib.tooltip.api.element.DividerElement;
@@ -29,7 +28,7 @@ import java.util.Optional;
  * Adds stack-dependent state to the Tablet of Destruction tooltips.
  */
 public final class AscensionTabletTooltipProvider
-        implements ZenithTooltipDocumentProvider {
+        implements ZenithTooltipProviders.Provider {
 
     public static final Identifier ID = Identifier.fromNamespaceAndPath(
             AscensionCraft.MOD_ID,
@@ -82,7 +81,8 @@ public final class AscensionTabletTooltipProvider
 
         return Optional.of(new ZenithTooltipDocument(
                 baseDocument.theme(),
-                pages
+                pages,
+                baseDocument.animationPresets()
         ));
     }
 

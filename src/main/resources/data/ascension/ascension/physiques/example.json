@@ -6,7 +6,10 @@
     "ascension:foundation/essence"
   ],
   "item_tooltip": {
-    "theme": "zenithlib:mana_blue",
+    "theme": "ascension:physique_essence",
+    "animation_presets": [
+      "zenithlib:living"
+    ],
     "pages": [
       {
         "title": {
@@ -23,16 +26,15 @@
             }
           },
           {
+            "type": "dynamic",
+            "source": "ascension:physique_paths",
+            "hide_when_empty": true
+          },
+          {
             "type": "text",
             "text": {
               "source": "zenithlib:subject_description"
             }
-          },
-          {
-            "type": "collection",
-            "source": "ascension:physique_paths",
-            "presentation": "badges",
-            "hide_when_empty": true
           }
         ]
       },
@@ -42,21 +44,30 @@
         },
         "elements": [
           {
-            "type": "collection",
-            "source": "ascension:physique_stats",
-            "presentation": "rows",
-            "header": {
+            "type": "header",
+            "text": {
               "literal": "Statistics"
             },
+            "color": "positive"
+          },
+          {
+            "type": "dynamic",
+            "source": "ascension:physique_stats",
             "hide_when_empty": true
           },
           {
-            "type": "collection",
-            "source": "ascension:physique_affinities",
-            "presentation": "rows",
-            "header": {
+            "type": "divider"
+          },
+          {
+            "type": "header",
+            "text": {
               "literal": "Affinities"
             },
+            "color": "accent"
+          },
+          {
+            "type": "dynamic",
+            "source": "ascension:physique_affinities",
             "hide_when_empty": true
           }
         ]

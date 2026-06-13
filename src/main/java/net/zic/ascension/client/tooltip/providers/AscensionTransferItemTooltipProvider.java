@@ -12,8 +12,6 @@ import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
-import net.zic.zenithlib.tooltip.api.ZenithContextualTooltipDocumentProvider;
-import net.zic.zenithlib.tooltip.api.ZenithTooltipProviderResult;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipProviders;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipTheme;
 import net.zic.zenithlib.tooltip.api.context.ZenithTooltipContext;
@@ -25,7 +23,7 @@ import java.util.Optional;
 /**
  * ItemStack component → registry id → datapack registry entry → item_tooltip → contextual ZenithLib document.
  */
-public final class AscensionTransferItemTooltipProvider implements ZenithContextualTooltipDocumentProvider {
+public final class AscensionTransferItemTooltipProvider implements ZenithTooltipProviders.ContextualProvider {
     public static final Identifier ID = AscensionCraft.prefix("registry_tooltips");
 
     private AscensionTransferItemTooltipProvider() {}
@@ -35,7 +33,7 @@ public final class AscensionTransferItemTooltipProvider implements ZenithContext
     }
 
     @Override
-    public Optional<ZenithTooltipProviderResult> create(ZenithTooltipContext context) {
+    public Optional<ZenithTooltipProviders.Result> create(ZenithTooltipContext context) {
         ItemStack stack = context.stack();
 
         if (context.registryAccess().isEmpty() || !stack.has(AscensionComponents.REGISTRY_ID_HOLDER)) {
@@ -94,7 +92,7 @@ public final class AscensionTransferItemTooltipProvider implements ZenithContext
         return Optional.empty();
     }
 
-    private static <T> Optional<ZenithTooltipProviderResult> toResult(
+    private static <T> Optional<ZenithTooltipProviders.Result> toResult(
             ZenithTooltipContext context,
             Identifier registryId,
             T subjectValue,
@@ -102,7 +100,7 @@ public final class AscensionTransferItemTooltipProvider implements ZenithContext
             Component description,
             Optional<AscensionItemTooltipDefinition> tooltip
     ) {
-        return tooltip.map(definition -> ZenithTooltipProviderResult.withSubject(
+        return tooltip.map(definition -> ZenithTooltipProviders.Result.withSubject(
                 definition.themed(resolveTheme(definition)),
                 context,
                 registryId,

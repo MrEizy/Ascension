@@ -11,7 +11,10 @@
     }
   ],
   "item_tooltip": {
-    "theme": "zenithlib:mana_blue",
+    "theme": "ascension:bloodline_essence",
+    "animation_presets": [
+      "zenithlib:corrupted"
+    ],
     "pages": [
       {
         "title": {
@@ -28,17 +31,32 @@
             }
           },
           {
+            "type": "badge",
+            "text": {
+              "literal": "BLOODLINE ESSENCE"
+            },
+            "text_color": "background",
+            "background_color": "negative",
+            "border_color": "negative"
+          },
+          {
             "type": "bar",
             "label": {
               "literal": "Purity"
             },
             "source": "ascension:bloodline_purity",
-            "color": "accent"
+            "color": "negative"
           },
           {
             "type": "text",
             "text": {
               "source": "zenithlib:subject_description"
+            },
+            "effect": {
+              "type": "shimmer",
+              "period": 2400,
+              "width": 0.14,
+              "brightness": 0.45
             }
           }
         ]
@@ -49,9 +67,15 @@
         },
         "elements": [
           {
-            "type": "collection",
+            "type": "header",
+            "text": {
+              "literal": "Purity Growth"
+            },
+            "color": "negative"
+          },
+          {
+            "type": "dynamic",
             "source": "ascension:bloodline_purity_gains",
-            "presentation": "rows",
             "hide_when_empty": true
           }
         ]
