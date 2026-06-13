@@ -37,6 +37,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
         addHumanTabletTooltip();
         addEarthTabletTooltip();
         addHeavenTabletTooltip();
+        addAscendantTabletTooltip();
     }
 
     private void addHumanTabletTooltip() {
@@ -163,6 +164,85 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                         )));
     }
 
+    private void addAscendantTabletTooltip() {
+        template(id("tablet_of_destruction_ascendant_document"))
+                .animationPreset(ZenithTooltipPresets.KINETIC)
+                .animationPreset(ZenithTooltipPresets.NEBULA)
+                .page(page(literal("Tablet of Destruction: Ascendant"))
+                        .add(titleIcon(
+                                literal("Tablet of Destruction"),
+                                literal("Ascendant Grade")
+                        ))
+                        .add(badge(
+                                literal("ASCENDANT GRADE"),
+                                ZenithTooltipColor.BACKGROUND,
+                                ZenithTooltipColor.ACCENT,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(divider())
+                        .add(header(literal("Excavation"), ZenithTooltipColor.ACCENT))
+                        .add(row(
+                                literal("Block Limit"),
+                                literal("128 blocks"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(row(
+                                literal("Cooldown"),
+                                literal("3 seconds"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.POSITIVE
+                        ))
+                        .add(row(
+                                literal("Modes"),
+                                literal("4 shapes"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(divider())
+                        .add(text(
+                                literal("Cycle between shapeless excavation, mining tunnel, escape tunnel, and dome excavation."),
+                                ZenithTooltipColor.MUTED,
+                                shimmer(2400, 0.14F, 0.42F)
+                        )))
+                .page(page(literal("Shapes"))
+                        .add(header(literal("Shape Modes"), ZenithTooltipColor.ACCENT))
+                        .add(row(
+                                literal("Shapeless"),
+                                literal("Expanding sphere"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(row(
+                                literal("Mining Tunnel"),
+                                literal("Descending 3 × 3 tunnel"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(row(
+                                literal("Escape Tunnel"),
+                                literal("Ascending 3 × 3 tunnel"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.POSITIVE
+                        ))
+                        .add(row(
+                                literal("Dome"),
+                                literal("Hemisphere excavation"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(divider())
+                        .add(header(literal("Controls"), ZenithTooltipColor.ACCENT))
+                        .add(text(
+                                translated("ascension.tablet.ascendant.shape_info"),
+                                ZenithTooltipColor.MUTED
+                        ))
+                        .add(text(
+                                translated("ascension.tablet.cycle_mode_info"),
+                                ZenithTooltipColor.MUTED
+                        )));
+    }
+
     private void addTabletOfDestructionRules() {
         rule(id("tablet_of_destruction_human"))
                 .priority(200)
@@ -180,6 +260,11 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                 .priority(200)
                 .items(id("tablet_of_destruction_heaven"))
                 .document(id("tablet_of_destruction_heaven_document"))
+                .theme(id("tablet_of_destruction"));
+        rule(id("tablet_of_destruction_ascendant"))
+                .priority(200)
+                .items(id("tablet_of_destruction_ascendant"))
+                .document(id("tablet_of_destruction_ascendant_document"))
                 .theme(id("tablet_of_destruction"));
     }
 }

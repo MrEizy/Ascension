@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.item.artifacts.base_templates.BaseTabletOfDestruction;
 import net.zic.ascension.common.item.artifacts.base_templates.BaseTabletOfDestruction.LinkedContainerData;
+import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionAscendant;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipDocument;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipPage;
@@ -109,6 +110,10 @@ public final class AscensionTabletTooltipProvider
 
         if (tablet.supportsContainerLinking()) {
             addLinkedStorageSummary(elements, tablet, stack);
+        }
+
+        if (tablet instanceof TabletOfDestructionAscendant ascendantTablet) {
+            addAscendantShapeSummary(elements, ascendantTablet, stack);
         }
 
         pages.set(
@@ -291,6 +296,33 @@ public final class AscensionTabletTooltipProvider
                 state.getBlock().getName().getString(),
                 ZenithTooltipColor.POSITIVE
         );
+    }
+
+    private static void addAscendantShapeSummary(
+            List<ZenithTooltipElement> elements,
+            TabletOfDestructionAscendant tablet,
+            ItemStack stack
+    ) {
+        TabletOfDestructionAscendant.MineShape shape =
+                tablet.getShapeForRenderer(stack);
+
+        elements.add(RowElement.literal(
+                "Shape",
+                shapeDisplayName(shape),
+                ZenithTooltipColor.TEXT,
+                ZenithTooltipColor.ACCENT
+        ));
+    }
+
+    private static String shapeDisplayName(
+            TabletOfDestructionAscendant.MineShape shape
+    ) {
+        return switch (shape) {
+            case SHAPELESS -> "Shapeless";
+            case TUNNEL -> "Mining Tunnel";
+            case ESCAPE -> "Escape Tunnel";
+            case DOME -> "Dome";
+        };
     }
 
     private static String formatPosition(BlockPos pos) {

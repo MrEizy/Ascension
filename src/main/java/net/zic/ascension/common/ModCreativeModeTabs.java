@@ -22,11 +22,12 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_HUMAN);
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_EARTH);
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_HEAVEN);
+                        output.accept(ModItems.TABLET_OF_DESTRUCTION_ASCENDANT);
 
 
                     }).build());
 
     public static void register(IEventBus eventBus) {
-
+        CREATIVE_MODE_TABS.register(eventBus);
     }
 }
