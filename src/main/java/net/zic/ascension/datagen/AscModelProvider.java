@@ -18,6 +18,7 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_HUMAN.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_EARTH.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_HEAVEN.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_ASCENDANT.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(ModItems.BLOODLINE_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.PHYSIQUE_ESSENCE.get(), ModelTemplates.FLAT_ITEM);

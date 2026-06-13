@@ -6,6 +6,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionAscendant;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionEarth;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHeaven;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHuman;
@@ -43,6 +44,10 @@ public class ModItems {
     public static final DeferredItem<Item> TABLET_OF_DESTRUCTION_HEAVEN = ITEMS.register("tablet_of_destruction_heaven",
             () -> new TabletOfDestructionHeaven(new Item.Properties()
                     .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "tablet_of_destruction_heaven"))));
+    public static final DeferredItem<Item> TABLET_OF_DESTRUCTION_ASCENDANT =
+            ITEMS.register("tablet_of_destruction_ascendant",
+                    () -> new TabletOfDestructionAscendant(new Item.Properties()
+                            .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "tablet_of_destruction_ascendant"))));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

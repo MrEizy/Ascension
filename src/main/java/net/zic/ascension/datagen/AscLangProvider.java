@@ -19,14 +19,23 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.tablet_of_destruction_human", "Tablet of Destruction - Human");
         add("item.ascension.tablet_of_destruction_earth", "Tablet of Destruction - Earth");
         add("item.ascension.tablet_of_destruction_heaven", "Tablet of Destruction - Heaven");
+        add("item.ascension.tablet_of_destruction_ascendant", "Tablet of Destruction - Ascendant");
 
         add("item.ascension.tablet_of_destruction_human.cooldown", "§cTablet is on cooldown.");
         add("item.ascension.tablet_of_destruction_earth.cooldown", "§cTablet is on cooldown.");
         add("item.ascension.tablet_of_destruction_heaven.cooldown", "§cTablet is on cooldown.");
+        add("item.ascension.tablet_of_destruction_ascendant.cooldown", "§cTablet is on cooldown.");
 
         add("item.ascension.tablet_of_destruction_earth.hint", "§Press [V] to cycle block drop mode.");
         add("item.ascension.tablet_of_destruction_heaven.link_info", "Shift + Right-click a container to link it.");
         add("item.ascension.tablet_of_destruction_heaven.linked_to", "Linked: %s @ %d, %d, %d");
+
+        add("ascension.tablet.ascendant.shape", "Shape: ");
+        add("ascension.tablet.ascendant.shape.shapeless", "Shapeless");
+        add("ascension.tablet.ascendant.shape.tunnel", "Mining Tunnel");
+        add("ascension.tablet.ascendant.shape.escape", "Escape Tunnel");
+        add("ascension.tablet.ascendant.shape.dome", "Dome");
+        add("ascension.tablet.ascendant.shape_info", "Hold SHIFT + [V] to cycle shape.");
 
         add("item.ascension.tablet.link_invalid", "§cThat block cannot be linked.");
         add("item.ascension.tablet.link_success", "§aLinked to %s @ %d, %d, %d");

@@ -36,8 +36,16 @@ public class TabletOfDestructionHeaven extends BaseTabletOfDestruction {
     @Override protected int getWidth()                     { return WIDTH;    }
     @Override protected int getHeight()                    { return HEIGHT;   }
     @Override protected int getDepth()                     { return DEPTH;    }
-    @Override protected boolean supportsDropBlocks()       { return true;     }
-    @Override protected boolean supportsContainerLinking() { return true;     }
+
+    @Override
+    public boolean supportsDropBlocks() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsContainerLinking() {
+        return true;
+    }
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context,

@@ -48,31 +48,16 @@ public abstract class BaseTabletOfDestruction extends Item {
         super(properties);
     }
 
-    // ── Abstract configuration ────────────────────────────────────────────────
-
     protected abstract int getCooldownTicks();
     protected abstract int getWidth();
     protected abstract int getHeight();
     protected abstract int getDepth();
-    protected abstract boolean supportsDropBlocks();
-    protected abstract boolean supportsContainerLinking();
-
-    // ── Public dimension accessors (used by client renderer) ──────────────────
+    public abstract boolean supportsDropBlocks();
+    public abstract boolean supportsContainerLinking();
 
     public int getWidthPublic()  { return getWidth();  }
     public int getHeightPublic() { return getHeight(); }
     public int getDepthPublic()  { return getDepth();  }
-
-
-    // Added for custom tooltip support - sortOfSmart?
-    public final boolean supportsBlockDrops() {
-        return supportsDropBlocks();
-    }
-    public final boolean supportsContainerLinks() {
-        return supportsContainerLinking();
-    }
-
-    // ── Interaction ───────────────────────────────────────────────────────────
 
     @Nonnull
     @Override
@@ -88,16 +73,12 @@ public abstract class BaseTabletOfDestruction extends Item {
             return handleContainerLinking(level, player, stack, clickedPos);
         }
 
-        // Client side: show cooldown message if needed, always return SUCCESS
-        // so the server-side packet is always sent
         if (level.isClientSide()) {
             if (player.getCooldowns().isOnCooldown(this.getDefaultInstance())) {
                 player.sendOverlayMessage(getCooldownMessage());
             }
             return InteractionResult.SUCCESS;
         }
-
-        // ── Server side only ──────────────────────────────────────────────────
 
         if (player.getCooldowns().isOnCooldown(this.getDefaultInstance())) {
             player.sendOverlayMessage(getCooldownMessage());
@@ -106,11 +87,9 @@ public abstract class BaseTabletOfDestruction extends Item {
 
         ServerLevel serverLevel = (ServerLevel) level;
 
-        serverLevel.playSeededSound(
-                null,
+        serverLevel.playSeededSound(null,
                 clickedPos.getX(), clickedPos.getY(), clickedPos.getZ(),
-                SoundEvents.LODESTONE_COMPASS_LOCK,
-                SoundSource.PLAYERS,
+                SoundEvents.LODESTONE_COMPASS_LOCK, SoundSource.PLAYERS,
                 0.6F, 1.4F, serverLevel.getRandom().nextLong());
 
         player.getCooldowns().addCooldown(this.getDefaultInstance(), getCooldownTicks());
@@ -134,11 +113,9 @@ public abstract class BaseTabletOfDestruction extends Item {
                     player.position(), dropBlocks, linkedPos, linkedDim);
         }
 
-        serverLevel.playSeededSound(
-                null,
+        serverLevel.playSeededSound(null,
                 clickedPos.getX(), clickedPos.getY(), clickedPos.getZ(),
-                SoundEvents.ITEM_BREAK,
-                SoundSource.BLOCKS,
+                SoundEvents.ITEM_BREAK, SoundSource.BLOCKS,
                 1.0F, 0.8F, serverLevel.getRandom().nextLong());
 
         if (!player.getAbilities().instabuild) {
@@ -148,13 +125,9 @@ public abstract class BaseTabletOfDestruction extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    // ── Vertical-aim helper ───────────────────────────────────────────────────
-
     public static boolean isVerticalAim(Player player) {
         return Math.abs(player.getXRot()) >= 45f;
     }
-
-    // ── Container linking ─────────────────────────────────────────────────────
 
     private InteractionResult handleContainerLinking(Level level, Player player,
                                                      ItemStack stack, BlockPos pos) {
@@ -178,8 +151,7 @@ public abstract class BaseTabletOfDestruction extends Item {
         LinkedContainerData current   = getLinkedContainer(stack);
         String              currentDim = level.dimension().identifier().toString();
 
-        if (current.pos() != null
-                && current.pos().equals(pos)
+        if (current.pos() != null && current.pos().equals(pos)
                 && currentDim.equals(current.dimension())) {
             clearLinkedContainer(stack);
             player.sendOverlayMessage(
@@ -193,8 +165,6 @@ public abstract class BaseTabletOfDestruction extends Item {
         }
         return InteractionResult.SUCCESS;
     }
-
-    // ── Horizontal clearing ───────────────────────────────────────────────────
 
     private void clearAreaHorizontal(ServerLevel level, BlockPos startPos,
                                      Direction direction, Vec3 playerPos,
@@ -213,7 +183,6 @@ public abstract class BaseTabletOfDestruction extends Item {
             for (int z = 0; z <= depth; z++) {
                 BlockPos colBase = startPos.offset(
                         dx * z + dz * x, 0, dz * z + dx * x);
-
                 for (int y = height; y >= -1; y--) {
                     BlockPos target = colBase.above(y);
                     if (!shouldRemoveBlock(level, target)) continue;
@@ -231,8 +200,6 @@ public abstract class BaseTabletOfDestruction extends Item {
                     linkedContainerPos, linkedDimension);
         }
     }
-
-    // ── Vertical clearing ─────────────────────────────────────────────────────
 
     private void clearAreaVertical(ServerLevel level, BlockPos startPos,
                                    Player player, boolean dropBlocks,
@@ -265,8 +232,6 @@ public abstract class BaseTabletOfDestruction extends Item {
         }
     }
 
-    // ── Support beams ─────────────────────────────────────────────────────────
-
     private void placeSupportBeamsHorizontal(ServerLevel level, BlockPos startPos,
                                              Direction direction, int depth,
                                              int width, int height) {
@@ -275,6 +240,7 @@ public abstract class BaseTabletOfDestruction extends Item {
         int px = direction.getClockWise().getStepX();
         int pz = direction.getClockWise().getStepZ();
 
+        // 7 spacing = 6 blocks between pillars
         for (int z = 7; z <= depth; z += 7) {
             BlockPos beamBase = startPos.offset(dx * z, 0, dz * z);
 
@@ -291,7 +257,7 @@ public abstract class BaseTabletOfDestruction extends Item {
             }
 
             for (int side : new int[]{ -width, width }) {
-                // Start one below startPos so y=0 is the floor level
+                // Start one below so floor plank is always placed
                 BlockPos wallBase = beamBase.offset(px * side, 0, pz * side).below();
 
                 for (int y = 0; y <= ceilY + 1; y++) {
@@ -301,7 +267,6 @@ public abstract class BaseTabletOfDestruction extends Item {
                                 Blocks.SPRUCE_PLANKS.defaultBlockState(),
                                 Block.UPDATE_ALL);
                     }
-
                     // Torch on second plank from floor (y == 1)
                     if (y == 1) {
                         Direction torchFacing = (side < 0)
@@ -319,7 +284,6 @@ public abstract class BaseTabletOfDestruction extends Item {
                 }
             }
 
-            // Lintel across the top
             for (int s = -width; s <= width; s++) {
                 BlockPos lintPos = beamBase.offset(px * s, ceilY, pz * s);
                 if (level.getBlockState(lintPos).isAir()) {
@@ -331,8 +295,6 @@ public abstract class BaseTabletOfDestruction extends Item {
         }
     }
 
-    // ── Ladders ───────────────────────────────────────────────────────────────
-
     private void placeLaddersVertical(ServerLevel level, BlockPos startPos,
                                       Player player, int depth, int stepY) {
         Direction ladderWall   = player.getDirection().getOpposite();
@@ -342,17 +304,14 @@ public abstract class BaseTabletOfDestruction extends Item {
         for (int y = 0; y < depth; y++) {
             BlockPos target      = wallBase.above(stepY * y);
             BlockPos wallSupport = target.relative(ladderWall);
-
             if (!level.isInWorldBounds(target)) break;
 
-            // If the wall support block is air, place stone so the ladder has something to attach to
+            // Place stone support if wall is air so ladder always attaches
             if (level.getBlockState(wallSupport).isAir()) {
                 level.setBlock(wallSupport,
-                        Blocks.STONE.defaultBlockState(),
-                        Block.UPDATE_ALL);
+                        Blocks.STONE.defaultBlockState(), Block.UPDATE_ALL);
             }
 
-            // Place ladder if the target is air and now has a solid support
             if (level.getBlockState(target).isAir()
                     && level.getBlockState(wallSupport)
                     .isFaceSturdy(level, wallSupport, ladderFacing)) {
@@ -364,8 +323,6 @@ public abstract class BaseTabletOfDestruction extends Item {
         }
     }
 
-    // ── Block drop handling ───────────────────────────────────────────────────
-
     private void handleBlockDrops(ServerLevel level, List<BlockStatePos> blocks,
                                   Vec3 playerPos, Direction direction,
                                   @Nullable BlockPos linkedContainerPos,
@@ -376,18 +333,13 @@ public abstract class BaseTabletOfDestruction extends Item {
         }
     }
 
-    // ── Drop-mode cycling ─────────────────────────────────────────────────────
-
     public int getDropMode(ItemStack stack) {
         return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)
-                .copyTag()
-                .getInt(DROP_MODE_TAG)
-                .orElse(0);
+                .copyTag().getInt(DROP_MODE_TAG).orElse(0);
     }
 
     public void cycleDropMode(ItemStack stack, ServerPlayer player) {
         if (!supportsDropBlocks()) return;
-
         var tag  = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         int cur  = tag.getInt(DROP_MODE_TAG).orElse(0);
         int next = (cur >= DROP_ON) ? DROP_OFF : DROP_ON;
@@ -399,19 +351,15 @@ public abstract class BaseTabletOfDestruction extends Item {
                 .withStyle(ChatFormatting.GREEN)
                 : Component.translatable("ascension.tablet.drop_mode.off")
                 .withStyle(ChatFormatting.RED);
-
         player.sendOverlayMessage(
                 Component.translatable("ascension.tablet.drop_mode").append(label));
     }
-
-    // ── Linked-container data ─────────────────────────────────────────────────
 
     public record LinkedContainerData(@Nullable BlockPos pos,
                                       @Nullable String dimension) {}
 
     public LinkedContainerData getLinkedContainer(ItemStack stack) {
-        var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)
-                .copyTag();
+        var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (tag.contains(LINKED_POS_TAG)) {
             return new LinkedContainerData(
                     BlockPos.of(tag.getLong(LINKED_POS_TAG).orElse(0L)),
@@ -435,14 +383,11 @@ public abstract class BaseTabletOfDestruction extends Item {
         else stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }
 
-    // ── Tooltip ───────────────────────────────────────────────────────────────
-
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context,
                                 TooltipDisplay display, Consumer<Component> tooltip,
                                 TooltipFlag flag) {
         super.appendHoverText(stack, context, display, tooltip, flag);
-
         if (supportsDropBlocks()) {
             int dropMode = getDropMode(stack);
             Component modeLabel = dropMode == DROP_ON
@@ -455,8 +400,6 @@ public abstract class BaseTabletOfDestruction extends Item {
                     .withStyle(ChatFormatting.DARK_GRAY));
         }
     }
-
-    // ── Overrideable helpers ──────────────────────────────────────────────────
 
     protected Component getCooldownMessage() {
         return Component.translatable("ascension.tablet.cooldown");
@@ -471,7 +414,5 @@ public abstract class BaseTabletOfDestruction extends Item {
         return supportsDropBlocks() && getDropMode(stack) == DROP_ON;
     }
 
-    // ── Internal record ───────────────────────────────────────────────────────
-
-    protected record BlockStatePos(BlockPos pos, BlockState state) {}
+    public record BlockStatePos(BlockPos pos, BlockState state) {}
 }

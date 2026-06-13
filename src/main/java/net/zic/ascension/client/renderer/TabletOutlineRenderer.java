@@ -1,6 +1,5 @@
 package net.zic.ascension.client.renderer;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -17,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.zic.ascension.common.item.artifacts.base_templates.BaseTabletOfDestruction;
+import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionAscendant;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHeaven;
 import net.zic.ascension.util.ModTags;
 
@@ -42,7 +42,7 @@ public class TabletOutlineRenderer {
         MultiBufferSource.BufferSource bufferSource = mc.renderBuffers().bufferSource();
 
         // ── Tunnel preview ────────────────────────────────────────────────────
-        List<BlockPos> tunnelBlocks = computeTunnelBlocks(player, tabletItem, level);
+        List<BlockPos> tunnelBlocks = computeTunnelBlocks(player, tabletItem, tablet, level);
 
         boolean onCooldown = player.getCooldowns().isOnCooldown(tabletItem.getDefaultInstance());
         int color;
@@ -87,6 +87,7 @@ public class TabletOutlineRenderer {
 
     private List<BlockPos> computeTunnelBlocks(Player player,
                                                BaseTabletOfDestruction tabletItem,
+                                               ItemStack stack,
                                                Level level) {
         HitResult hit = Minecraft.getInstance().hitResult;
         if (!(hit instanceof BlockHitResult bhr)
@@ -95,6 +96,22 @@ public class TabletOutlineRenderer {
         BlockPos startPos = bhr.getBlockPos();
         if (!level.getBlockState(startPos).is(ModTags.Blocks.DESTRUCTIBLE_BLOCKS))
             return List.of();
+
+        // Ascendant uses its own shape system
+        if (tabletItem instanceof TabletOfDestructionAscendant ascendant) {
+            TabletOfDestructionAscendant.MineShape shape =
+                    ascendant.getShapeForRenderer(stack);
+            List<BlockPos> raw = ascendant.computeShape(level, startPos, player, shape);
+            // Filter to only non-air destructible blocks
+            List<BlockPos> result = new ArrayList<>();
+            for (BlockPos pos : raw) {
+                if (!level.getBlockState(pos).isAir()
+                        && level.getBlockState(pos).is(ModTags.Blocks.DESTRUCTIBLE_BLOCKS)) {
+                    result.add(pos);
+                }
+            }
+            return result;
+        }
 
         int width  = tabletItem.getWidthPublic();
         int height = tabletItem.getHeightPublic();
@@ -109,7 +126,7 @@ public class TabletOutlineRenderer {
                     for (int y = 0; y < depth; y++) {
                         BlockPos target = startPos.offset(x, stepY * y, z);
                         if (!level.isInWorldBounds(target)) break;
-                        // Only add non-air blocks
+                        // Only non-air blocks
                         if (!level.getBlockState(target).isAir()) {
                             result.add(target);
                         }
@@ -129,7 +146,7 @@ public class TabletOutlineRenderer {
                     for (int y = -1; y <= height; y++) {
                         BlockPos target = colBase.above(y);
                         if (!level.isInWorldBounds(target)) continue;
-                        // Only add non-air blocks
+                        // Only non-air blocks
                         if (!level.getBlockState(target).isAir()) {
                             result.add(target);
                         }
@@ -146,10 +163,8 @@ public class TabletOutlineRenderer {
     private List<BlockPos> resolveLinkedBlocks(BlockPos pos, Level level) {
         List<BlockPos> blocks = new ArrayList<>();
         blocks.add(pos);
-
         net.minecraft.world.level.block.Block linkedBlock =
                 level.getBlockState(pos).getBlock();
-
         for (Direction dir : Direction.Plane.HORIZONTAL) {
             BlockPos neighbour = pos.relative(dir);
             if (level.getBlockState(neighbour).getBlock() == linkedBlock) {
@@ -162,10 +177,6 @@ public class TabletOutlineRenderer {
 
     // ── Bounding box drawing ──────────────────────────────────────────────────
 
-    /**
-     * Draws a single bounding box around the entire block list,
-     * visible through walls (depth test disabled by caller).
-     */
     private void drawBoundingBox(PoseStack poseStack,
                                  VertexConsumer lines,
                                  List<BlockPos> blocks,
@@ -185,7 +196,7 @@ public class TabletOutlineRenderer {
             if (pos.getZ() > maxZ) maxZ = pos.getZ();
         }
 
-        final double E = 0.002; // expand slightly so the box sits outside blocks
+        final double E = 0.002;
         double x0 = minX - camPos.x - E;
         double y0 = minY - camPos.y - E;
         double z0 = minZ - camPos.z - E;
@@ -200,19 +211,16 @@ public class TabletOutlineRenderer {
 
         PoseStack.Pose pose = poseStack.last();
 
-        // Bottom face edges
         line(lines, pose, x0,y0,z0, x1,y0,z0, r,g,b,a);
         line(lines, pose, x1,y0,z0, x1,y0,z1, r,g,b,a);
         line(lines, pose, x1,y0,z1, x0,y0,z1, r,g,b,a);
         line(lines, pose, x0,y0,z1, x0,y0,z0, r,g,b,a);
 
-        // Top face edges
         line(lines, pose, x0,y1,z0, x1,y1,z0, r,g,b,a);
         line(lines, pose, x1,y1,z0, x1,y1,z1, r,g,b,a);
         line(lines, pose, x1,y1,z1, x0,y1,z1, r,g,b,a);
         line(lines, pose, x0,y1,z1, x0,y1,z0, r,g,b,a);
 
-        // Vertical edges
         line(lines, pose, x0,y0,z0, x0,y1,z0, r,g,b,a);
         line(lines, pose, x1,y0,z0, x1,y1,z0, r,g,b,a);
         line(lines, pose, x1,y0,z1, x1,y1,z1, r,g,b,a);
@@ -233,7 +241,6 @@ public class TabletOutlineRenderer {
                 .setColor(r, g, b, a)
                 .setNormal(pose, nx, ny, nz)
                 .setLineWidth(2.0f);
-
         lines.addVertex(pose, (float) x1, (float) y1, (float) z1)
                 .setColor(r, g, b, a)
                 .setNormal(pose, nx, ny, nz)
@@ -258,7 +265,6 @@ public class TabletOutlineRenderer {
         }
     }
 
-    /** Packs a, r, g, b (0–255 each) into a single ARGB int. */
     private static int toARGB(int a, int r, int g, int b) {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }

@@ -64,8 +64,8 @@ public final class AscensionTabletTooltipProvider
             return Optional.empty();
         }
 
-        if (!tablet.supportsBlockDrops()
-                && !tablet.supportsContainerLinks()) {
+        if (!tablet.supportsDropBlocks()
+                && !tablet.supportsContainerLinking()) {
 
             return Optional.empty();
         }
@@ -75,7 +75,7 @@ public final class AscensionTabletTooltipProvider
 
         addStateSummary(pages, tablet, stack);
 
-        if (tablet.supportsContainerLinks()) {
+        if (tablet.supportsContainerLinking()) {
             addLinkedStorageDetails(pages, tablet, stack);
         }
 
@@ -103,11 +103,11 @@ public final class AscensionTabletTooltipProvider
                 ZenithTooltipColor.ACCENT
         ));
 
-        if (tablet.supportsBlockDrops()) {
+        if (tablet.supportsDropBlocks()) {
             addDropModeSummary(elements, tablet, stack);
         }
 
-        if (tablet.supportsContainerLinks()) {
+        if (tablet.supportsContainerLinking()) {
             addLinkedStorageSummary(elements, tablet, stack);
         }
 

@@ -19,8 +19,16 @@ public class TabletOfDestructionHuman extends BaseTabletOfDestruction {
     @Override protected int getWidth()                     { return WIDTH;    }
     @Override protected int getHeight()                    { return HEIGHT;   }
     @Override protected int getDepth()                     { return DEPTH;    }
-    @Override protected boolean supportsDropBlocks()       { return false;    }
-    @Override protected boolean supportsContainerLinking() { return false;    }
+
+    @Override
+    public boolean supportsDropBlocks() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsContainerLinking() {
+        return false;
+    }
 
     @Override
     protected Component getCooldownMessage() {
