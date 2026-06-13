@@ -1,5 +1,6 @@
 package net.zic.ascension.api.core.source;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -16,9 +17,10 @@ import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.data_source.DataSource;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
-import net.zic.ascension.api.core.path.AffinityHolder;
+import net.zic.ascension.api.core.path.affinity.AffinityCategoryHolder;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
+import net.zic.ascension.api.core.path.affinity.AffinityHolder;
 import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.Skill;
@@ -92,13 +94,11 @@ public class OriginSource {
     public ValueInput getCached(){return cached;}
 
     public RegistryAccess getRegistryAccess(){
-        return registryAccess;
+       return Minecraft.getInstance().getConnection() == null ? null : Minecraft.getInstance().getConnection().registryAccess();
     }
-
     public long getRevision() {
         return revision;
     }
-
     public void setRegistryAccess(RegistryAccess access){
         this.registryAccess = access;
     }
@@ -386,6 +386,29 @@ public class OriginSource {
         return getAffinityHolder().getBaseAffinity(path);
     }
 
+    public void addAffinity(Identifier category,Identifier path,double val){
+        affinityHolder.addAffinity(category,path,val);
+    }
+    public void removeAffinity(Identifier category,Identifier path,double val){
+        affinityHolder.removeAffinity(category,path,val);
+
+    }
+    public void addAffinityModifier(Identifier category,Identifier path,ValueContainerModifier modifier){
+        affinityHolder.addAffinityModifier(category,path,modifier);
+    }
+
+    public void removeAffinityModifier(Identifier category,Identifier path,Identifier modifier){
+        affinityHolder.removeAffinityModifier(category,path,modifier);
+    }
+
+    public double getAffinity(Identifier category,Identifier path){
+
+        return affinityHolder.getAffinity(category,path);
+    }
+    public double getBaseAffinity(Identifier category,Identifier path){
+        return affinityHolder.getBaseAffinity(category,path);
+    }
+
     //──Data────────────────────────────────────────────────────────
 
     public void write(ValueOutput output){
@@ -653,8 +676,14 @@ public class OriginSource {
         for(StatInstance stat : snapshot.dirtyStats) statSheet.setStat(stat);
 
         for(ValueContainer affinity : snapshot.dirtyAffinity) affinityHolder.setAffinity(affinity);
+        for(Identifier category : snapshot.dirtyCategorizedAffinity.keySet()){
+
+            for (ValueContainer container : snapshot.dirtyCategorizedAffinity.get(category)) affinityHolder.setAffinity(category,container);
+        }
         revision++;
         AscensionCraft.LOGGER.debug("Finished applying source update at revision {}", revision);
+
+
 
     }
 }

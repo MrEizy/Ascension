@@ -38,7 +38,7 @@ public interface Path {
     PathInteractionType getInteractionType(Identifier path);
     Collection<Identifier> getPathsOfInteraction(PathInteractionType type);
 
-    void registerInteractions(PathInteractionHolder holder);
+    void registerInteractions(PathInteractionHolder holder,RegistryAccess access);
 
     //──Data────────────────────────────────────────────────────────
 

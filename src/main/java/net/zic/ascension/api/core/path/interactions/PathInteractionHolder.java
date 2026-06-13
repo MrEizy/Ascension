@@ -10,6 +10,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
@@ -17,7 +18,7 @@ import net.zic.ascension.api.core.path.Path;
 
 import java.util.*;
 
-
+@EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class PathInteractionHolder {
     private static final Identifier KEY= Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"path_interaction_listener");
 
@@ -33,13 +34,14 @@ public class PathInteractionHolder {
         protected void apply(Void unused, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
             MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
             if(server == null)return;
-
+            //TODO also needs to be run on server launch
+            System.out.println("SETTING UP INTERACTION MAP ON SERVER");
             AscensionCraft.getPathInteractionHolder().clear();
 
             Collection<Path> paths = CoreRegistries.PATH_REGISTRY.get(server.registryAccess()).stream().toList();
 
             for(Path path : paths){
-                path.registerInteractions(AscensionCraft.getPathInteractionHolder());
+                path.registerInteractions(AscensionCraft.getPathInteractionHolder(),server.registryAccess());
             }
         }
     }
@@ -52,7 +54,7 @@ public class PathInteractionHolder {
 
 
     public PathInteractionHolder(){
-        NeoForge.EVENT_BUS.addListener(this::addServerListener);
+        //NeoForge.EVENT_BUS.addListener(this::addServerListener);
         //NeoForge.EVENT_BUS.addListener(this::addClientListener);
     }
 
@@ -94,7 +96,7 @@ public class PathInteractionHolder {
 
 
     //TODO add logging for self referencing and duplicates
-    public static void registerInteraction(PathInteraction interaction){
+    public void registerInteraction(PathInteraction interaction){
         Identifier sourcePath = interaction.pathA();
         Identifier targetPath = interaction.pathB();
         if(sourcePath.equals(targetPath)) {
@@ -113,18 +115,34 @@ public class PathInteractionHolder {
         targetPathInteractions .get(targetPath).put(sourcePath,interaction);
         sourcePathInteractions.get(sourcePath).put(targetPath,interaction);
 
+
+        AscensionCraft.LOGGER.debug("Created Path Interaction {}",interaction);
+
     }
 
     @SubscribeEvent
-    public void addServerListener(AddServerReloadListenersEvent event){
+    public static void addServerListener(AddServerReloadListenersEvent event){
 
         event.addListener(KEY,new ServerListener());
         //event.addDependency(CoreRegistries.PATH_REGISTRY.key().identifier(),KEY);
     }
-//    @SubscribeEvent
-//    public void addClientListener(AddClientReloadListenersEvent event){
-//
-//    }
+
+    @SubscribeEvent
+    public static void onServerLaunch(ServerStartingEvent event){
+
+        //TODO also needs to be run on server launch
+        System.out.println("SETTING UP INTERACTION MAP ON SERVER");
+        AscensionCraft.getPathInteractionHolder().clear();
+
+        Collection<Path> paths = CoreRegistries.PATH_REGISTRY.get(event.getServer().registryAccess()).stream().toList();
+
+        for(Path path : paths){
+            path.registerInteractions(AscensionCraft.getPathInteractionHolder(),event.getServer().registryAccess());
+        }
+    }
+    public static void addClientListener(AddClientReloadListenersEvent event){
+
+    }
 
 
 }

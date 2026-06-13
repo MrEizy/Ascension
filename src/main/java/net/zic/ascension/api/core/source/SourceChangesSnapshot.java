@@ -14,11 +14,7 @@ import net.zic.zenithlib.stats.StatInstance;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A snapshot of the change a source has undergone
@@ -39,11 +35,14 @@ public class SourceChangesSnapshot {
     List<Pair<Identifier, DataSourceInstance>> toAddDataSources = new ArrayList<>();
     Set<Identifier> toRemoveDataSources = new HashSet<>();
 
-    Set<StatInstance> dirtyStats = new HashSet<>();
-    Set<ValueContainer> dirtyAffinity = new HashSet<>();
+     Set<StatInstance> dirtyStats = new HashSet<>();
+     Set<ValueContainer> dirtyAffinity = new HashSet<>();
+     HashMap<Identifier,Set<ValueContainer>> dirtyCategorizedAffinity = new HashMap<>();
+     private SourceChangesSnapshot(){
 
-    private SourceChangesSnapshot() {
     }
+
+
 
     public SourceChangesSnapshot(
             Identifier physique,
@@ -57,7 +56,8 @@ public class SourceChangesSnapshot {
             Map<Identifier, DataSourceInstance> toAddDataSources,
             Set<Identifier> toRemoveDataSources,
             Set<StatInstance> dirtyStats,
-            Set<ValueContainer> dirtyAffinity
+            Set<ValueContainer> dirtyAffinity,
+            HashMap<Identifier,Set<ValueContainer>> dirtyCategorizedAffinity
     ) {
         this.physique = physique;
         this.physiqueData = physiqueData;
@@ -84,6 +84,8 @@ public class SourceChangesSnapshot {
 
         this.dirtyStats = new HashSet<>(dirtyStats);
         this.dirtyAffinity = new HashSet<>(dirtyAffinity);
+
+        this.dirtyCategorizedAffinity = new HashMap<>(dirtyCategorizedAffinity);
     }
 
     public void encode(ByteBuf buf) {
@@ -127,6 +129,11 @@ public class SourceChangesSnapshot {
         ByteBufHelpers.encodeCollection(dirtyAffinity, buf, (container, byteBuf) ->
                 ValueContainer.encode(byteBuf, container)
         );
+        ByteBufHelpers.encodeMap(dirtyCategorizedAffinity,ByteBufHelpers::encodeIdentifier, (data,byteBuf)->{
+            ByteBufHelpers.encodeCollection(data,byteBuf,(container,byteBuf2)->{
+                ValueContainer.encode(byteBuf2,container);
+            });
+        },buf);
     }
 
     public static SourceChangesSnapshot decode(ByteBuf buf, RegistryAccess access) {
@@ -198,6 +205,10 @@ public class SourceChangesSnapshot {
         snapshot.dirtyAffinity = new HashSet<>(
                 ByteBufHelpers.decodeArray(buf, ValueContainer::decode)
         );
+
+        ByteBufHelpers.decodeMap(snapshot.dirtyCategorizedAffinity,ByteBufHelpers::decodeIdentifier,(byteBuf)->
+            new HashSet<>(ByteBufHelpers.decodeArray(byteBuf,ValueContainer::decode))
+        ,buf);
 
         return snapshot;
     }

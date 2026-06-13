@@ -1,0 +1,28 @@
+{
+  "type": "ascension:simple_path",
+  "name": "Ice",
+  "description": "cultivate the cold",
+  "realms": [
+    {
+      "name": "Smth",
+      "minor_realms": [
+        "low",
+        "mid",
+        "high"
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "path": "ascension:elemental/water",
+      "type": "related",
+      "value": 0.5
+    },
+    {
+      "path": "ascension:elemental/water",
+      "target": "other",
+      "type": "related",
+      "value": 0.2
+    }
+  ]
+}

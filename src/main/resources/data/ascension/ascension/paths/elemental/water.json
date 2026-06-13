@@ -1,0 +1,16 @@
+{
+  "type": "ascension:simple_path",
+  "name": "Water",
+  "description": "cultivate the essence of life",
+  "realms": [
+    {
+      "name": "Droplet",
+      "minor_realms": [
+        "low",
+        "mid",
+        "high"
+      ]
+    }
+  ]
+
+}

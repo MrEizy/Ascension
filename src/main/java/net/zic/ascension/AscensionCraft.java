@@ -4,14 +4,19 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.item.ModItems;
@@ -44,6 +49,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +63,7 @@ public class AscensionCraft {
     public static final Map<String, String> SECT_DATA = new HashMap<>();
 
     private static SourceHandler sourceHandler;
-    private static PathInteractionHolder pathInteractionHolder = new PathInteractionHolder();
+    private static final PathInteractionHolder pathInteractionHolder = new PathInteractionHolder();
     public static Identifier prefix(String name){
         return Identifier.fromNamespaceAndPath(MOD_ID, name);
     }
@@ -146,11 +152,17 @@ public class AscensionCraft {
     }
 
     @SubscribeEvent
-    public static void onServerLaunch(ServerStartingEvent event){
+    public static void onServerLaunch(ServerStartedEvent event){
         event.getServer().overworld().getDataStorage().computeIfAbsent(SourceHandler.ID);
 
         sourceHandler = event.getServer().overworld().getDataStorage().get(SourceHandler.ID);
+
+
+
     }
+
+
+
 
 
     public static SourceHandler getSourceHandler(){return sourceHandler;}

@@ -11,6 +11,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
+import net.zic.ascension.api.core.path.interactions.PathInteraction;
 import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.api.core.path.interactions.PathInteractionType;
 import net.zic.ascension.api.datapack.path.PathType;
@@ -18,7 +19,7 @@ import net.zic.ascension.api.datapack.path.PathType;
 import java.util.Collection;
 import java.util.List;
 
-public record SimplePath(Component name, Component description, List<MajorRealm> realmNames) implements Path {
+public record SimplePath(Component name, Component description, List<MajorRealm> realms,List<PathRelationship> pathRelationships) implements Path {
     public record MajorRealm(Component name, List<Component> minorRealms) {
 
         public static Codec<MajorRealm> CODEC =
@@ -38,16 +39,16 @@ public record SimplePath(Component name, Component description, List<MajorRealm>
     @Override
     public Component getMajorRealmName(int majorRealm) {
 
-        return realmNames.size() < majorRealm ? Component.empty() : realmNames.get(majorRealm).name;
+        return realms.size() < majorRealm ? Component.empty() : realms.get(majorRealm).name;
     }
 
     @Override
     public Component getMinorRealmName(int majorRealm, int minorRealm) {
-        return realmNames.size() < majorRealm ?
+        return realms.size() < majorRealm ?
                 Component.empty() :
-                (realmNames.get(majorRealm).minorRealms.size() < minorRealm ?
+                (realms.get(majorRealm).minorRealms.size() < minorRealm ?
                         Component.empty() :
-                        realmNames.get(majorRealm).minorRealms.get(minorRealm));
+                        realms.get(majorRealm).minorRealms.get(minorRealm));
     }
 
     @Override
@@ -63,14 +64,14 @@ public record SimplePath(Component name, Component description, List<MajorRealm>
     //returns the INDEX of the max major realm
     @Override
     public int getMaxMajorRealm() {
-        return realmNames.size() - 1;
+        return realms.size() - 1;
     }
 
     //returns the INDEX of the max minor realm
     @Override
     public int getMaxMinorRealm(int majorRealm) {
         if (majorRealm > getMaxMajorRealm()) return 0;
-        return realmNames.get(majorRealm).minorRealms().size() - 1;
+        return realms.get(majorRealm).minorRealms().size() - 1;
     }
 
     @Override
@@ -94,8 +95,11 @@ public record SimplePath(Component name, Component description, List<MajorRealm>
     }
 
     @Override
-    public void registerInteractions(PathInteractionHolder holder) {
-
+    public void registerInteractions(PathInteractionHolder holder,RegistryAccess access) {
+        Identifier selfIdentifier = CoreRegistries.PATH_REGISTRY.get(access).getKey(this);
+        for(PathRelationship relationship : pathRelationships){
+            holder.registerInteraction(relationship.asInteraction(selfIdentifier));
+        }
     }
 
     @Override

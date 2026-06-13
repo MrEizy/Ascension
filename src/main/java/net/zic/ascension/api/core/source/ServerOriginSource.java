@@ -64,7 +64,7 @@ public class ServerOriginSource extends OriginSource {
     private final HashSet<Identifier> toRemoveDataSources = new HashSet<>();
     private final HashSet<StatInstance> dirtyStats = new HashSet<>();
     private final HashSet<ValueContainer> dirtyAffinity = new HashSet<>();
-
+    private final HashMap<Identifier,HashSet<ValueContainer>> dirtyCategorizedAffinity = new HashMap<>();
 
     private ProcessType currentProcess = null;
 
@@ -382,9 +382,27 @@ public class ServerOriginSource extends OriginSource {
     }
 
     @Override
+    public void addAffinity(Identifier category, Identifier path, double val) {
+        super.addAffinity(category, path, val);
+        dirtyCategorizedAffinity.computeIfAbsent(category,key->new HashSet<>());
+        dirtyCategorizedAffinity.get(path).add(getAffinityHolder().getAffinityContainer(category,path));
+        startProcess(ProcessType.AFFINITY);
+        resolveProcess(ProcessType.AFFINITY);
+    }
+
+    @Override
     public void removeAffinity(Identifier path, double val) {
         super.removeAffinity(path, val);
         dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
+        startProcess(ProcessType.AFFINITY);
+        resolveProcess(ProcessType.AFFINITY);
+    }
+
+    @Override
+    public void removeAffinity(Identifier category, Identifier path, double val) {
+        super.removeAffinity(category, path, val);
+        dirtyCategorizedAffinity.computeIfAbsent(category,key->new HashSet<>());
+        dirtyCategorizedAffinity.get(path).add(getAffinityHolder().getAffinityContainer(category,path));
         startProcess(ProcessType.AFFINITY);
         resolveProcess(ProcessType.AFFINITY);
     }
@@ -398,9 +416,27 @@ public class ServerOriginSource extends OriginSource {
     }
 
     @Override
+    public void addAffinityModifier(Identifier category, Identifier path, ValueContainerModifier modifier) {
+        super.addAffinityModifier(category, path, modifier);
+        dirtyCategorizedAffinity.computeIfAbsent(category,key->new HashSet<>());
+        dirtyCategorizedAffinity.get(path).add(getAffinityHolder().getAffinityContainer(category,path));
+        startProcess(ProcessType.AFFINITY);
+        resolveProcess(ProcessType.AFFINITY);
+    }
+
+    @Override
     public void removeAffinityModifier(Identifier path, Identifier modifier) {
         super.removeAffinityModifier(path, modifier);
         dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
+        startProcess(ProcessType.AFFINITY);
+        resolveProcess(ProcessType.AFFINITY);
+    }
+
+    @Override
+    public void removeAffinityModifier(Identifier category, Identifier path, Identifier modifier) {
+        super.removeAffinityModifier(category, path, modifier);
+        dirtyCategorizedAffinity.computeIfAbsent(category,key->new HashSet<>());
+        dirtyCategorizedAffinity.get(path).add(getAffinityHolder().getAffinityContainer(category,path));
         startProcess(ProcessType.AFFINITY);
         resolveProcess(ProcessType.AFFINITY);
     }
@@ -469,7 +505,8 @@ public class ServerOriginSource extends OriginSource {
                 new HashMap<>(toAddDataSources),
                 Set.copyOf(toRemoveDataSources),
                 Set.copyOf(dirtyStats),
-                Set.copyOf(dirtyAffinity)
+                Set.copyOf(dirtyAffinity),
+                new HashMap<>(dirtyCategorizedAffinity)
         );
         for(LivingEntity entity : entities){
             AscensionEntityDataHolder holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
@@ -489,5 +526,6 @@ public class ServerOriginSource extends OriginSource {
         toRemoveDataSources.clear();
         dirtyStats.clear();
         dirtyAffinity.clear();
+        dirtyCategorizedAffinity.clear();
     }
 }
