@@ -599,6 +599,7 @@ public class OriginSource {
     }
 
     public void encode(RegistryFriendlyByteBuf buf) {
+        /*
         SourceChangesSnapshot fullSnapshot = new SourceChangesSnapshot(
                 physique,
                 physiqueData,
@@ -614,10 +615,13 @@ public class OriginSource {
                 new HashSet<>(affinityHolder.getAllAffinityContainers())
         );
         fullSnapshot.encode(buf);
+
+         */
     }
 
-
+/*
     private Set<StatInstance> getAllStatInstances() {
+
         Set<StatInstance> instances = new HashSet<>();
         for (Stat stat : getAllStats()) {
             StatInstance instance = getStatInstance(stat);
@@ -626,9 +630,13 @@ public class OriginSource {
             }
         }
         return instances;
+
+
     }
+   */
 
     public void decode(RegistryFriendlyByteBuf buf) {
+         /*
         setRegistryAccess(buf.registryAccess());
 
         physique = null;
@@ -641,7 +649,11 @@ public class OriginSource {
         affinityHolder.clear();
 
         apply(SourceChangesSnapshot.decode(buf, buf.registryAccess()));
+        */
     }
+
+
+
 
     /**
      * takes a snapshot and applies the changes
