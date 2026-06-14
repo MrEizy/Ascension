@@ -24,7 +24,7 @@ public class SimplePathData implements PathData {
     private double progress;
     private boolean cultivating;
     private boolean breakingThrough;
-
+    private UUID breakthroughInstance; //TODO implement
     //holds the technique used/being used to cultivate that realm
     private final ArrayList<Identifier> techniqueHistory = new ArrayList<>();
 

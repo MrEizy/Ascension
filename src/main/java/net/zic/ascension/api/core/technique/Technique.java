@@ -72,7 +72,7 @@ public interface Technique {
     double getMaxProgress(int majorRealm,int minorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
 
     //is used for both minor and major realm breakthroughs
-    boolean canBreakthrough(OriginSource source,int majorRealm,int minorRealm,double progress,@Nullable TechniqueData techniqueData);
+    boolean tryBreakthrough(LivingEntity entity,OriginSource source,int majorRealm,int minorRealm,double progress,@Nullable TechniqueData techniqueData);
 
 
     void onRealmUp(OriginSource source,TechniqueData techniqueData);

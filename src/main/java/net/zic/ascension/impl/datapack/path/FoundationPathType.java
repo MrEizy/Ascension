@@ -8,6 +8,7 @@ import net.zic.ascension.api.datapack.path.PathType;
 import net.zic.ascension.impl.core.path.MajorRealmDefinition;
 import net.zic.ascension.impl.core.path.PathRelationship;
 import net.zic.ascension.impl.core.path.RealmDefinition;
+import net.zic.ascension.impl.core.path.foundation.FoundationMajorRealmDefinition;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.simple.SimplePath;
 
@@ -20,8 +21,7 @@ public class FoundationPathType extends PathType {
                 instance.group(
                         ComponentSerialization.CODEC.fieldOf("name").forGetter(FoundationPath::name),
                         ComponentSerialization.CODEC.fieldOf("description").forGetter(FoundationPath::description),
-                        MajorRealmDefinition.CODEC.listOf().fieldOf("realms").forGetter(FoundationPath::realms),
-                        RealmDefinition.CODEC.listOf().fieldOf("foundation_realms").forGetter(FoundationPath::foundationRealms),
+                        FoundationMajorRealmDefinition.CODEC.listOf().fieldOf("realms").forGetter(FoundationPath::realms),
                         PathRelationship.CODEC.listOf().optionalFieldOf("interactions", List.of()).forGetter(FoundationPath::pathRelationships)
                 ).apply(instance, FoundationPath::new)
         );

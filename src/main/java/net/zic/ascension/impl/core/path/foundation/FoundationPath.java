@@ -4,16 +4,20 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.api.core.path.interactions.PathInteractionType;
+import net.zic.ascension.api.core.progression.ProgressActionHolder;
+import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.path.PathType;
 import net.zic.ascension.impl.core.path.PathRelationship;
 import net.zic.ascension.impl.core.path.MajorRealmDefinition;
 import net.zic.ascension.impl.core.path.RealmDefinition;
+import net.zic.ascension.impl.core.path.simple.SimplePathData;
 import net.zic.ascension.impl.datapack.path.AscensionPathTypes;
 
 import java.util.Collection;
@@ -25,16 +29,45 @@ import java.util.List;
  * @param name
  * @param description
  * @param realms
- * @param foundationRealms
  * @param pathRelationships
  */
-public record FoundationPath(Component name, Component description, List<MajorRealmDefinition> realms, List<RealmDefinition> foundationRealms, List<PathRelationship> pathRelationships) implements Path {
+public record FoundationPath(Component name, Component description, List<FoundationMajorRealmDefinition> realms, List<PathRelationship> pathRelationships) implements Path {
 
 
     @Override
     public PathType getType() {
         return AscensionPathTypes.FOUNDATION_PATH_TYPE.get();
     }
+    //──Foundation────────────────────────────────────────────────────────
+
+    public int getMaxFoundationRealm(int majorRealm){
+        if(majorRealm > getMaxMajorRealm()) return 0;
+        return Math.max(realms.get(majorRealm).foundationRealms().size()-1,0);
+    }
+
+    public double getMaxFoundationProgress(int majorRealm,int foundationRealm){
+        if (majorRealm > getMaxMajorRealm()) return 1000;
+        if(realms.get(majorRealm).foundationRealms().size() >= foundationRealm) return 1000;
+        return realms.get(majorRealm).foundationRealms().get(foundationRealm).progress();
+    }
+
+    public Component getFoundationRealmName(int majorRealm,int foundationRealm){
+        if (majorRealm > getMaxMajorRealm()) return Component.empty();
+        if(realms.get(majorRealm).foundationRealms().size() >= foundationRealm) return Component.empty();
+        return realms.get(majorRealm).foundationRealms().get(foundationRealm).name();
+    }
+    public ProgressActionHolder getFoundationActionHolder(int majorRealm){
+        if (majorRealm > getMaxMajorRealm()) return null;
+        return realms.get(majorRealm).foundationActionHolder();
+    }
+
+    public boolean tryBreakthroughFoundation(LivingEntity entity, OriginSource source, int majorRealm, int foundationRealm, double foundationProgress){
+        if(majorRealm > getMaxMajorRealm()) return false;
+        if(foundationRealm >= getMaxFoundationRealm(majorRealm)) return false;
+
+        return foundationProgress >= getMaxFoundationProgress(majorRealm,foundationRealm);
+    }
+    //──Cultivation────────────────────────────────────────────────────────
 
     @Override
     public Component getMajorRealmName(int majorRealm) {
@@ -81,6 +114,8 @@ public record FoundationPath(Component name, Component description, List<MajorRe
         return realms.get(majorRealm).minorRealms().get(minorRealm).progress();
     }
 
+
+
     @Override
     public double getInteractionValue(Identifier path) {
         return 0; //TODO
@@ -105,16 +140,20 @@ public record FoundationPath(Component name, Component description, List<MajorRe
     }
     @Override
     public PathData newData(RegistryAccess access) {
-        return null;
+        return new FoundationPathData(CoreRegistries.PATH_REGISTRY.get(access).getKey(this));
     }
 
     @Override
     public PathData loadData(ValueInput input, RegistryAccess access) {
-        return null;
+        SimplePathData pathData = new FoundationPathData(CoreRegistries.PATH_REGISTRY.get(access).getKey(this));
+        pathData.load(input, access);
+        return pathData;
     }
 
     @Override
     public PathData loadData(ByteBuf buf, RegistryAccess access) {
-        return null;
+        SimplePathData pathData = new FoundationPathData(CoreRegistries.PATH_REGISTRY.get(access).getKey(this));
+        pathData.decode(buf,access);
+        return pathData;
     }
 }

@@ -7,6 +7,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.path.Path;
@@ -235,7 +236,7 @@ public class SimpleTechnique implements Technique {
     }
 
     @Override
-    public boolean canBreakthrough(OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData) {
+    public boolean tryBreakthrough(LivingEntity entity, OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData) {
         double maxProgress = getMaxProgress(majorRealm,minorRealm,techniqueData,source.getRegistryAccess());
         double maxMajorRealm = getMaxMajorRealm(techniqueData,source.getRegistryAccess());
         double maxMinorRealm = getMaxMinorRealm(majorRealm,techniqueData,source.getRegistryAccess());

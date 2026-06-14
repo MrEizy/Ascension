@@ -18,6 +18,7 @@ import net.zic.ascension.api.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.core.skill.castable.data.CastType;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 import net.zic.ascension.impl.core.skill.EmptySkillData;
 import net.zic.ascension.impl.core.skill.castable.cultivation.util.CultivationUtil;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
@@ -82,8 +83,13 @@ public record SimpleCultivationSkill(
         PathData pathData = source.getPathData(primaryPath());
 
         if(pathData == null) return;
-
-        CultivationUtil.cultivate(source,pathData,secondaryPaths(),baseRate);
+        if(holder.getData(caster).isCultivationSuppressed() && pathData instanceof FoundationPathData foundationPathData){
+            CultivationUtil.cultivateFoundation(
+                    caster,
+                    source,
+                    foundationPathData,
+                    baseRate);
+        }else CultivationUtil.cultivate(caster,source,pathData,secondaryPaths(),baseRate);
         if(caster instanceof Player player){
             player.sendOverlayMessage(Component.literal("Progress : "+pathData.getProgress()));
         }

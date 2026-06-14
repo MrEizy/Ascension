@@ -1,6 +1,13 @@
 package net.zic.ascension.impl.core.path.foundation;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.path.Path;
+import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.impl.core.path.MajorRealmDefinition;
 import net.zic.ascension.impl.core.path.simple.SimplePathData;
@@ -36,28 +43,81 @@ public class FoundationPathData extends SimplePathData {
     @Override
     public void onRealmUp(OriginSource source) {
         super.onRealmUp(source);
-        if(getMinorRealm() == 0 && foundations.size() <=getMajorRealm()) addFoundation();
+        if(getMinorRealm() == 0 && foundations.size() <=getMajorRealm()) addFoundation(source);
     }
 
     @Override
     public void onRealmDown(OriginSource source) {
         super.onRealmDown(source);
-        if(getMinorRealm() == getMaxMinorRealm(getMajorRealm(),source.getRegistryAccess())) removeFoundation();
+        if(getMinorRealm() == getMaxMinorRealm(getMajorRealm(),source.getRegistryAccess())) removeFoundation(source);
     }
 
-    public void addFoundation(){
+    public void addFoundation(OriginSource source){
         MajorRealmFoundation foundation = cachedFoundations.isEmpty() ? new MajorRealmFoundation() : cachedFoundations.removeFirst();
         foundations.add(foundation);
+        int foundationRealm = foundation.foundationRealm;
+        foundation.setFoundationRealm(0);
+        handleFoundationRealmChange(source,getMajorRealm(),foundationRealm);
     }
-    public void removeFoundation(){
+    public void removeFoundation(OriginSource source){
         //TODO handle foundation change
+        MajorRealmFoundation foundation = foundations.getLast();
+
+        int foundationRealm = foundation.foundationRealm;
+        handleFoundationRealmChange(source,getMajorRealm()+1,0);
+        foundation.setFoundationRealm(foundationRealm); //since the cache holds onto an object reference we restore value
         foundations.removeLast();
     }
+
     public int getFoundationRealm(int majorRealm){
         return majorRealm>=foundations.size() ? 0 : foundations.get(majorRealm).foundationRealm;
     }
     public double getFoundationRealmProgress(int majorRealm){
         return majorRealm>=foundations.size() ? 0 : foundations.get(majorRealm).progress;
+    }
+    public void setFoundationRealmProgress(int majorRealm,double progress){
+        if(majorRealm>=foundations.size()) return;
+
+        foundations.get(majorRealm).setProgress(progress);
+    }
+
+    public void handleFoundationRealmChange(OriginSource source,int majorRealm,int foundationRealm){
+        if(foundations.size() <= majorRealm) return;
+
+        Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,getPath(),source.getRegistryAccess());
+        if(!(path instanceof FoundationPath foundationPath)) return;
+
+        //TODO clamp foundation realm
+
+        MajorRealmFoundation foundation = foundations.get(majorRealm);
+        foundationRealm = Math.clamp(foundationRealm,0,foundationPath.getMaxFoundationRealm(majorRealm));
+
+        if(foundation.foundationRealm == foundationRealm) return;
+
+        if(foundation.foundationRealm < foundationRealm){
+            for(int i = foundation.foundationRealm+1; i<= foundationRealm;i++){
+                foundation.setFoundationRealm(i);
+                if(foundationPath.getFoundationActionHolder(majorRealm) == null) continue;
+                foundationPath.getFoundationActionHolder(majorRealm).run(
+                        source,
+                        getPath(),
+                        this,
+                        ProgressDirection.UP
+                );
+            }
+        }else{
+            for (int i = foundation.foundationRealm-1;i>=foundationRealm;i--){
+                foundation.setFoundationRealm(i);
+                if(foundationPath.getFoundationActionHolder(majorRealm) == null) continue;
+                foundationPath.getFoundationActionHolder(majorRealm).run(
+                        source,
+                        getPath(),
+                        this,
+                        ProgressDirection.DOWN
+                );
+
+            }
+        }
     }
 
     @Override
@@ -77,5 +137,27 @@ public class FoundationPathData extends SimplePathData {
         foundations.clear();
         foundations.addAll(cachedFoundations);
         cachedFoundations.clear();
+    }
+
+    //TODO
+
+    @Override
+    public void load(ValueInput input, RegistryAccess registryAccess) {
+        super.load(input, registryAccess);
+    }
+
+    @Override
+    public void write(ValueOutput output) {
+        super.write(output);
+    }
+
+    @Override
+    public void encode(ByteBuf buf) {
+        super.encode(buf);
+    }
+
+    @Override
+    public void decode(ByteBuf buf, RegistryAccess access) {
+        super.decode(buf, access);
     }
 }

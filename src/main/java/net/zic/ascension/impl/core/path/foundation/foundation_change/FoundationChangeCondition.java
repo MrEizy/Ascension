@@ -28,7 +28,8 @@ public interface FoundationChangeCondition extends ProgressActionCondition {
                 foundationPathData,
                 majorRealm,
                 direction == ProgressDirection.DOWN ? foundationRealm+1: foundationRealm,
-                direction);
+                direction
+        );
 
     }
     boolean test(OriginSource source, FoundationPath path, FoundationPathData foundationPathData,int majorRealm,int foundationRealm,ProgressDirection direction);

@@ -4,11 +4,19 @@
   "description": "cultivate the cold",
   "realms": [
     {
-      "name": "Smth",
+      "name": "SMTH",
       "minor_realms": [
-        "low",
-        "mid",
-        "high"
+        {
+          "name": "low",
+          "progress": 1000
+        },
+        {
+          "name": "mid",
+          "progress": 10000
+        },{
+          "name": "high",
+          "progress": 100000
+        }
       ]
     }
   ],

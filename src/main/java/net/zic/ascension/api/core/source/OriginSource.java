@@ -17,6 +17,7 @@ import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.data_source.DataSource;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
+import net.zic.ascension.api.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.core.path.affinity.AffinityCategoryHolder;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
@@ -409,6 +410,12 @@ public class OriginSource {
         return affinityHolder.getBaseAffinity(category,path);
     }
 
+    public double getEffectiveAffinity(Identifier path){
+        return getEffectiveAffinity(null,path);
+    }
+    public double getEffectiveAffinity(Identifier category,Identifier path){
+        return PathEffectValueUtil.getEffectValue(getAffinity(path),getAffinityHolder(),path,category);
+    }
     //──Data────────────────────────────────────────────────────────
 
     public void write(ValueOutput output){

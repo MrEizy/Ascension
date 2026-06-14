@@ -20,6 +20,9 @@ public interface AscensionEntityData {
 
     void markDirty(SourceChangesSnapshot snapshot);
 
+    default boolean isCultivationSuppressed(){
+        return false;
+    }
 
     //──Affinity────────────────────────────────────────────────────────
 

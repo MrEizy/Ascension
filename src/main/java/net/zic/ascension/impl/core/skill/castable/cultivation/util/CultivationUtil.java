@@ -1,24 +1,34 @@
 package net.zic.ascension.impl.core.skill.castable.cultivation.util;
 
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.LivingEntity;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
+import net.zic.ascension.impl.core.path.foundation.FoundationPath;
+import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 
 import java.util.List;
 
 public class CultivationUtil {
+    public static final Identifier CULTIVATION_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"cultivation");
+    public static final Identifier FOUNDATION_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"foundation");
+
     /**
+
      * TODO update canBreakthrough to tryBreakthrough, that way you can safely assume it is safe to trigger things like tribulations from it
-     *
+     * TODO update to use effect Value
+     * @param caster
      * @param source
      * @param pathData
      * @param secondaryPaths
      * @param baseRate
      */
-    public static void cultivate(OriginSource source, PathData pathData, List<Identifier> secondaryPaths,double baseRate){
+    public static void cultivate(LivingEntity caster,OriginSource source, PathData pathData, List<Identifier> secondaryPaths,double baseRate){
 
 
         if(pathData.getCurrentTechnique() == null) return;
@@ -26,16 +36,16 @@ public class CultivationUtil {
         if(technique == null) return;
         TechniqueData data = pathData.getCurrentTechniqueData();
 
-        double cultivationAmount = baseRate*(1+source.getAffinity(pathData.getPath()));
+        double cultivationAmount = baseRate*(1+source.getEffectiveAffinity(CULTIVATION_CATEGORY,pathData.getPath()));
 
         for(Identifier secondaryPath : secondaryPaths){
-            cultivationAmount += baseRate*(1+source.getAffinity(secondaryPath));
+            cultivationAmount += baseRate*(1+source.getEffectiveAffinity(CULTIVATION_CATEGORY,secondaryPath));
         }
         double maxProgress = pathData.getMaxProgress(pathData.getMajorRealm(),pathData.getMinorRealm(),source.getRegistryAccess());
 
         pathData.setProgress(Math.min(maxProgress,cultivationAmount+pathData.getProgress()));
 
-        if(technique.canBreakthrough(source,pathData.getMajorRealm(),pathData.getMinorRealm(),pathData.getProgress(),data)){
+        if(technique.tryBreakthrough(caster,source,pathData.getMajorRealm(),pathData.getMinorRealm(),pathData.getProgress(),data)){
 
             if(pathData.getMinorRealm() == pathData.getMaxMinorRealm(pathData.getMajorRealm(),source.getRegistryAccess())){
                 pathData.handlerRealmChange(source, pathData.getMajorRealm()+1,0);
@@ -46,5 +56,28 @@ public class CultivationUtil {
         }
 
         source.markPathDirty(pathData.getPath());
+    }
+
+    public static void cultivateFoundation(LivingEntity entity, OriginSource source, FoundationPathData foundationPathData, double baseRate){
+        Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,foundationPathData.getPath(),source.getRegistryAccess());
+
+        if(!(path instanceof FoundationPath foundationPath)) return;
+
+        double rate  =baseRate*(1+source.getEffectiveAffinity(FOUNDATION_CATEGORY,foundationPathData.getPath()));
+
+        int majorRealm = foundationPathData.getMajorRealm();
+        int foundationRealm = foundationPathData.getFoundationRealm(majorRealm);
+
+        double maxProgress = foundationPath.getMaxFoundationProgress(majorRealm, foundationRealm);
+
+        if(foundationPath.tryBreakthroughFoundation(
+                entity,
+                source,
+                majorRealm,
+                foundationRealm,
+                foundationPathData.getFoundationRealmProgress(majorRealm)+rate)){
+            foundationPathData.handleFoundationRealmChange(source, majorRealm,foundationRealm+1);
+            foundationPathData.setFoundationRealmProgress(majorRealm,foundationPathData.getFoundationRealmProgress(majorRealm)+rate);
+        }
     }
 }
