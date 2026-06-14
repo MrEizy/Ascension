@@ -1,4 +1,4 @@
-package net.zic.ascension.impl.core.path;
+package net.zic.ascension.impl.core.path.simple;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
@@ -12,7 +12,6 @@ import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
-import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.*;

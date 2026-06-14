@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.RegistryObjectData;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 //TODO decide if i want to pass source or entity wrapper
-public interface PathData {
+public interface PathData extends RegistryObjectData {
     //──Getters────────────────────────────────────────────────────────
     Identifier getPath();
 
@@ -230,9 +231,5 @@ public interface PathData {
     void removeFromSource(OriginSource source);
 
 
-    //──Save Data────────────────────────────────────────────────────────
 
-    void write(ValueOutput output);
-    //──Network────────────────────────────────────────────────────────
-    void encode(ByteBuf buf);
 }

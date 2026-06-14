@@ -15,6 +15,10 @@ public class AscensionPathTypes {
             "simple_path",
             SimplePathType::new
     );
+    public static final DeferredHolder<PathType,PathType> FOUNDATION_PATH_TYPE = PATH_TYPES.register(
+            "foundation_path",
+            FoundationPathType::new
+    );
 
     public static void register(IEventBus eventBus){
 

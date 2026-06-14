@@ -76,11 +76,7 @@ public class CoreRegistries {
 
 
     public static <T> T safeAccess(RegistryHelper.DataPackRegistry<T> registry, Identifier id, RegistryAccess access){
-        try {
-            return registry.get(access).getValue(id);
-        }catch (Exception e) {
-            return null;
-        }
+        return registry.get(access).containsKey(id) ? registry.get(access).getValue(id) : null;
     }
 
     //TODO think about if tribulations need their own registry or not. aka do we want them to make them in place
