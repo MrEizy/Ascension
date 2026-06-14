@@ -35,7 +35,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tablet.ascendant.shape.tunnel", "Mining Tunnel");
         add("ascension.tablet.ascendant.shape.escape", "Escape Tunnel");
         add("ascension.tablet.ascendant.shape.dome", "Dome");
-        add("ascension.tablet.ascendant.shape_info", "Hold SHIFT + [V] to cycle shape.");
+        add("ascension.tablet.ascendant.shape_info", "Hold SHIFT + [Scroll] to cycle shape.");
 
         add("item.ascension.tablet.link_invalid", "§cThat block cannot be linked.");
         add("item.ascension.tablet.link_success", "§aLinked to %s @ %d, %d, %d");

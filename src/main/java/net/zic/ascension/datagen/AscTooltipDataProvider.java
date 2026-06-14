@@ -166,8 +166,8 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
 
     private void addAscendantTabletTooltip() {
         template(id("tablet_of_destruction_ascendant_document"))
-                .animationPreset(ZenithTooltipPresets.KINETIC)
-                .animationPreset(ZenithTooltipPresets.NEBULA)
+                .animationPreset(ZenithTooltipPresets.CELESTIAL)
+                .animationPreset(ZenithTooltipPresets.CORRUPTED)
                 .page(page(literal("Tablet of Destruction: Ascendant"))
                         .add(titleIcon(
                                 literal("Tablet of Destruction"),
@@ -182,63 +182,64 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                         .add(divider())
                         .add(header(literal("Excavation"), ZenithTooltipColor.ACCENT))
                         .add(row(
-                                literal("Block Limit"),
-                                literal("128 blocks"),
-                                ZenithTooltipColor.TEXT,
-                                ZenithTooltipColor.ACCENT
-                        ))
-                        .add(row(
                                 literal("Cooldown"),
                                 literal("3 seconds"),
                                 ZenithTooltipColor.TEXT,
                                 ZenithTooltipColor.POSITIVE
                         ))
                         .add(row(
-                                literal("Modes"),
-                                literal("4 shapes"),
+                                literal("Shapeless / Dome Max"),
+                                literal("128 blocks"),
                                 ZenithTooltipColor.TEXT,
                                 ZenithTooltipColor.ACCENT
                         ))
-                        .add(divider())
-                        .add(text(
-                                literal("Cycle between shapeless excavation, mining tunnel, escape tunnel, and dome excavation."),
-                                ZenithTooltipColor.MUTED,
-                                shimmer(2400, 0.14F, 0.42F)
+                        .add(row(
+                                literal("Tunnel / Escape Max"),
+                                literal("256 blocks"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
                         )))
-                .page(page(literal("Shapes"))
-                        .add(header(literal("Shape Modes"), ZenithTooltipColor.ACCENT))
+                .page(page(literal("Mining Shapes"))
+                        .add(header(literal("Shapes"), ZenithTooltipColor.ACCENT))
                         .add(row(
-                                literal("Shapeless"),
-                                literal("Expanding sphere"),
+                                translated("ascension.tablet.ascendant.shape.shapeless"),
+                                literal("Sphere shell around target"),
                                 ZenithTooltipColor.TEXT,
-                                ZenithTooltipColor.ACCENT
+                                ZenithTooltipColor.MUTED
                         ))
                         .add(row(
-                                literal("Mining Tunnel"),
-                                literal("Descending 3 × 3 tunnel"),
+                                translated("ascension.tablet.ascendant.shape.tunnel"),
+                                literal("3×4 descending staircase"),
                                 ZenithTooltipColor.TEXT,
-                                ZenithTooltipColor.ACCENT
+                                ZenithTooltipColor.MUTED
                         ))
                         .add(row(
-                                literal("Escape Tunnel"),
-                                literal("Ascending 3 × 3 tunnel"),
+                                translated("ascension.tablet.ascendant.shape.escape"),
+                                literal("3×4 ascending staircase"),
                                 ZenithTooltipColor.TEXT,
-                                ZenithTooltipColor.POSITIVE
+                                ZenithTooltipColor.MUTED
                         ))
                         .add(row(
-                                literal("Dome"),
-                                literal("Hemisphere excavation"),
+                                translated("ascension.tablet.ascendant.shape.dome"),
+                                literal("Hemisphere around target"),
                                 ZenithTooltipColor.TEXT,
-                                ZenithTooltipColor.ACCENT
-                        ))
+                                ZenithTooltipColor.MUTED
+                        )))
+                .page(page(literal("Controls"))
                         .add(divider())
                         .add(header(literal("Controls"), ZenithTooltipColor.ACCENT))
                         .add(text(
-                                translated("ascension.tablet.ascendant.shape_info"),
+                                translated("ascension.tablet.cycle_mode_info"),
                                 ZenithTooltipColor.MUTED
                         ))
                         .add(text(
-                                translated("ascension.tablet.cycle_mode_info"),
+                                translated("ascension.tablet.ascendant.shape_info"),
+                                ZenithTooltipColor.MUTED,
+                                shimmer(2200, 0.15F, 0.45F)
+                        ))
+                        .add(spacer(3))
+                        .add(text(
+                                literal("Tunnels and Escape tunnels place torches every 5 steps along the staircase wall."),
                                 ZenithTooltipColor.MUTED
                         )));
     }
@@ -261,6 +262,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                 .items(id("tablet_of_destruction_heaven"))
                 .document(id("tablet_of_destruction_heaven_document"))
                 .theme(id("tablet_of_destruction"));
+
         rule(id("tablet_of_destruction_ascendant"))
                 .priority(200)
                 .items(id("tablet_of_destruction_ascendant"))

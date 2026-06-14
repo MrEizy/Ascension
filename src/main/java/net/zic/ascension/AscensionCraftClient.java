@@ -13,6 +13,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.zic.ascension.client.keybind.IntrospectionKeybindHandler;
 import net.zic.ascension.client.keybind.ModKeybinds;
 import net.zic.ascension.client.keybind.TabletKeybindHandler;
+import net.zic.ascension.client.keybind.TabletScrollHandler;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 
@@ -73,6 +74,14 @@ public class AscensionCraftClient {
             );
         }
 
+    }
+
+    @EventBusSubscriber(modid = AscensionCraft.MOD_ID, value = Dist.CLIENT)
+    static class ScrollEvents {
+        @SubscribeEvent
+        public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
+            TabletScrollHandler.onMouseScroll(event);
+        }
     }
 
     // ── GAME bus events (in-game ticks, rendering) ────────────────────────────

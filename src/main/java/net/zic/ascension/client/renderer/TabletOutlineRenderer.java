@@ -21,7 +21,9 @@ import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHea
 import net.zic.ascension.util.ModTags;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TabletOutlineRenderer {
 
@@ -55,7 +57,7 @@ public class TabletOutlineRenderer {
 
         if (!tunnelBlocks.isEmpty()) {
             VertexConsumer lines = bufferSource.getBuffer(RenderTypes.lines());
-            drawBoundingBox(poseStack, lines, tunnelBlocks, camPos, color);
+            drawBlockGroupOutline(poseStack, lines, tunnelBlocks, camPos, color);
             bufferSource.endLastBatch();
         }
 
@@ -76,7 +78,7 @@ public class TabletOutlineRenderer {
                     int linkedColor = toARGB(alpha, 255, 199, 0);
 
                     VertexConsumer lines = bufferSource.getBuffer(RenderTypes.lines());
-                    drawBoundingBox(poseStack, lines, linkedBlocks, camPos, linkedColor);
+                    drawBlockGroupOutline(poseStack, lines, linkedBlocks, camPos, linkedColor);
                     bufferSource.endLastBatch();
                 }
             }
@@ -102,7 +104,6 @@ public class TabletOutlineRenderer {
             TabletOfDestructionAscendant.MineShape shape =
                     ascendant.getShapeForRenderer(stack);
             List<BlockPos> raw = ascendant.computeShape(level, startPos, player, shape);
-            // Filter to only non-air destructible blocks
             List<BlockPos> result = new ArrayList<>();
             for (BlockPos pos : raw) {
                 if (!level.getBlockState(pos).isAir()
@@ -126,8 +127,8 @@ public class TabletOutlineRenderer {
                     for (int y = 0; y < depth; y++) {
                         BlockPos target = startPos.offset(x, stepY * y, z);
                         if (!level.isInWorldBounds(target)) break;
-                        // Only non-air blocks
-                        if (!level.getBlockState(target).isAir()) {
+                        if (!level.getBlockState(target).isAir()
+                                && level.getBlockState(target).is(ModTags.Blocks.DESTRUCTIBLE_BLOCKS)) {
                             result.add(target);
                         }
                     }
@@ -146,8 +147,8 @@ public class TabletOutlineRenderer {
                     for (int y = -1; y <= height; y++) {
                         BlockPos target = colBase.above(y);
                         if (!level.isInWorldBounds(target)) continue;
-                        // Only non-air blocks
-                        if (!level.getBlockState(target).isAir()) {
+                        if (!level.getBlockState(target).isAir()
+                                && level.getBlockState(target).is(ModTags.Blocks.DESTRUCTIBLE_BLOCKS)) {
                             result.add(target);
                         }
                     }
@@ -175,56 +176,125 @@ public class TabletOutlineRenderer {
         return blocks;
     }
 
-    // ── Bounding box drawing ──────────────────────────────────────────────────
+    // ── Per-block exposed-face outline ────────────────────────────────────────
 
-    private void drawBoundingBox(PoseStack poseStack,
-                                 VertexConsumer lines,
-                                 List<BlockPos> blocks,
-                                 Vec3 camPos,
-                                 int color) {
+    /**
+     * Draws only the silhouette/perimeter edges of the exposed surface,
+     * skipping internal edges shared between two coplanar exposed faces.
+     * This produces one continuous outline that hugs the volume and wraps
+     * around any internal air pockets.
+     */
+    private void drawBlockGroupOutline(PoseStack poseStack,
+                                       VertexConsumer lines,
+                                       List<BlockPos> blocks,
+                                       Vec3 camPos,
+                                       int color) {
         if (blocks.isEmpty()) return;
 
-        int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
-
-        for (BlockPos pos : blocks) {
-            if (pos.getX() < minX) minX = pos.getX();
-            if (pos.getY() < minY) minY = pos.getY();
-            if (pos.getZ() < minZ) minZ = pos.getZ();
-            if (pos.getX() > maxX) maxX = pos.getX();
-            if (pos.getY() > maxY) maxY = pos.getY();
-            if (pos.getZ() > maxZ) maxZ = pos.getZ();
-        }
-
-        final double E = 0.002;
-        double x0 = minX - camPos.x - E;
-        double y0 = minY - camPos.y - E;
-        double z0 = minZ - camPos.z - E;
-        double x1 = maxX - camPos.x + 1 + E;
-        double y1 = maxY - camPos.y + 1 + E;
-        double z1 = maxZ - camPos.z + 1 + E;
+        Set<BlockPos> blockSet = new HashSet<>(blocks);
+        PoseStack.Pose pose = poseStack.last();
 
         int a = (color >> 24) & 0xFF;
         int r = (color >> 16) & 0xFF;
         int g = (color >>  8) & 0xFF;
         int b = (color      ) & 0xFF;
 
-        PoseStack.Pose pose = poseStack.last();
+        for (BlockPos pos : blocks) {
+            double ox = pos.getX() - camPos.x;
+            double oy = pos.getY() - camPos.y;
+            double oz = pos.getZ() - camPos.z;
 
-        line(lines, pose, x0,y0,z0, x1,y0,z0, r,g,b,a);
-        line(lines, pose, x1,y0,z0, x1,y0,z1, r,g,b,a);
-        line(lines, pose, x1,y0,z1, x0,y0,z1, r,g,b,a);
-        line(lines, pose, x0,y0,z1, x0,y0,z0, r,g,b,a);
+            for (Direction face : Direction.values()) {
+                // Only consider faces exposed to a position not in the set
+                if (blockSet.contains(pos.relative(face))) continue;
 
-        line(lines, pose, x0,y1,z0, x1,y1,z0, r,g,b,a);
-        line(lines, pose, x1,y1,z0, x1,y1,z1, r,g,b,a);
-        line(lines, pose, x1,y1,z1, x0,y1,z1, r,g,b,a);
-        line(lines, pose, x0,y1,z1, x0,y1,z0, r,g,b,a);
+                Direction[] uv = getFaceAxes(face);
+                Direction u = uv[0];
+                Direction v = uv[1];
 
-        line(lines, pose, x0,y0,z0, x0,y1,z0, r,g,b,a);
-        line(lines, pose, x1,y0,z0, x1,y1,z0, r,g,b,a);
-        line(lines, pose, x1,y0,z1, x1,y1,z1, r,g,b,a);
-        line(lines, pose, x0,y0,z1, x0,y1,z1, r,g,b,a);
+                // Edge at u=0 — shared with neighbor in -u direction
+                drawEdgeIfBoundary(lines, pose, blockSet, pos, face, u.getOpposite(),
+                        ox, oy, oz, face, 0, 0, 0, 1, u, v, r, g, b, a);
+
+                // Edge at u=1 — shared with neighbor in +u direction
+                drawEdgeIfBoundary(lines, pose, blockSet, pos, face, u,
+                        ox, oy, oz, face, 1, 0, 1, 1, u, v, r, g, b, a);
+
+                // Edge at v=0 — shared with neighbor in -v direction
+                drawEdgeIfBoundary(lines, pose, blockSet, pos, face, v.getOpposite(),
+                        ox, oy, oz, face, 0, 0, 1, 0, u, v, r, g, b, a);
+
+                // Edge at v=1 — shared with neighbor in +v direction
+                drawEdgeIfBoundary(lines, pose, blockSet, pos, face, v,
+                        ox, oy, oz, face, 0, 1, 1, 1, u, v, r, g, b, a);
+            }
+        }
+    }
+
+    /**
+     * Returns the two perpendicular "in-plane" directions for a given face,
+     * used to walk along its edges.
+     */
+    private Direction[] getFaceAxes(Direction face) {
+        return switch (face) {
+            case DOWN, UP    -> new Direction[]{ Direction.EAST, Direction.SOUTH };
+            case NORTH, SOUTH -> new Direction[]{ Direction.EAST, Direction.UP };
+            case WEST, EAST  -> new Direction[]{ Direction.SOUTH, Direction.UP };
+        };
+    }
+
+    /**
+     * Returns the base corner (u=0, v=0) of the face's unit square, in local
+     * 0..1 cube coordinates.
+     */
+    private double[] getFaceBase(Direction face) {
+        return switch (face) {
+            case DOWN  -> new double[]{0, 0, 0};
+            case UP    -> new double[]{0, 1, 0};
+            case NORTH -> new double[]{0, 0, 0};
+            case SOUTH -> new double[]{0, 0, 1};
+            case WEST  -> new double[]{0, 0, 0};
+            case EAST  -> new double[]{1, 0, 0};
+        };
+    }
+
+    /**
+     * Checks whether the neighbor block (in the given in-plane direction) also
+     * has an exposed face in the same direction `face`. If it does, this edge
+     * is internal/shared and is skipped. Otherwise the edge is part of the
+     * silhouette and gets drawn from corner (u0,v0) to (u1,v1).
+     */
+    private void drawEdgeIfBoundary(VertexConsumer lines, PoseStack.Pose pose,
+                                    Set<BlockPos> blockSet, BlockPos pos,
+                                    Direction face, Direction neighborDir,
+                                    double ox, double oy, double oz,
+                                    Direction faceForBase,
+                                    double u0, double v0, double u1, double v1,
+                                    Direction uAxis, Direction vAxis,
+                                    int r, int g, int b, int a) {
+        BlockPos neighbor = pos.relative(neighborDir);
+        boolean neighborAlsoExposed = blockSet.contains(neighbor)
+                && !blockSet.contains(neighbor.relative(face));
+        if (neighborAlsoExposed) return; // internal edge — skip
+
+        double[] base = getFaceBase(faceForBase);
+
+        double ux = uAxis.getStepX();
+        double uy = uAxis.getStepY();
+        double uz = uAxis.getStepZ();
+        double vx = vAxis.getStepX();
+        double vy = vAxis.getStepY();
+        double vz = vAxis.getStepZ();
+
+        double x0 = ox + base[0] + u0 * ux + v0 * vx;
+        double y0 = oy + base[1] + u0 * uy + v0 * vy;
+        double z0 = oz + base[2] + u0 * uz + v0 * vz;
+
+        double x1 = ox + base[0] + u1 * ux + v1 * vx;
+        double y1 = oy + base[1] + u1 * uy + v1 * vy;
+        double z1 = oz + base[2] + u1 * uz + v1 * vz;
+
+        line(lines, pose, x0, y0, z0, x1, y1, z1, r, g, b, a);
     }
 
     private void line(VertexConsumer lines, PoseStack.Pose pose,

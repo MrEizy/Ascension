@@ -18,7 +18,9 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.common.item.artifacts.base_templates.BaseTabletOfDestruction;
 import net.zic.ascension.util.ModTags;
@@ -29,16 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Ascendant Tablet — highest tier.
- * Shape is cycled by holding SHIFT while in main hand and pressing the cycle key.
- * All shapes are capped at 128 blocks broken.
- * Outline colour: purple/magenta dye.
- */
 public class TabletOfDestructionAscendant extends BaseTabletOfDestruction {
 
     private static final int COOLDOWN = 60; // 3s
-    private static final int MAX_BLOCKS = 128;
+
+    private static final int MAX_BLOCKS        = 128; // SHAPELESS / DOME cap
+    private static final int TUNNEL_MAX_BLOCKS = 256; // TUNNEL / ESCAPE cap
 
     public static final int OUTLINE_COLOR = 0xFF_8932B8; // purple dye
 
@@ -77,7 +75,7 @@ public class TabletOfDestructionAscendant extends BaseTabletOfDestruction {
 
     @Override
     public boolean supportsContainerLinking() {
-        return true;
+        return false;
     }
 
     // ── Shape accessors ───────────────────────────────────────────────────────
@@ -111,15 +109,6 @@ public class TabletOfDestructionAscendant extends BaseTabletOfDestruction {
 
         ItemStack stack      = ctx.getItemInHand();
         BlockPos  clickedPos = ctx.getClickedPos();
-
-        // Shift + main hand = cycle shape
-        if (player.isShiftKeyDown()
-                && player.getMainHandItem() == stack) {
-            if (!level.isClientSide()) {
-                cycleShape(stack, (ServerPlayer) player);
-            }
-            return InteractionResult.SUCCESS;
-        }
 
         if (level.isClientSide()) {
             if (player.getCooldowns().isOnCooldown(this.getDefaultInstance())) {
@@ -162,6 +151,11 @@ public class TabletOfDestructionAscendant extends BaseTabletOfDestruction {
             }
         }
 
+        // Place torches every 5 steps for staircase shapes
+        if (shape == MineShape.TUNNEL || shape == MineShape.ESCAPE) {
+            placeStaircaseTorches(serverLevel, clickedPos, player, shape == MineShape.ESCAPE);
+        }
+
         serverLevel.playSeededSound(null,
                 clickedPos.getX(), clickedPos.getY(), clickedPos.getZ(),
                 SoundEvents.ITEM_BREAK, SoundSource.BLOCKS,
@@ -177,8 +171,8 @@ public class TabletOfDestructionAscendant extends BaseTabletOfDestruction {
     // ── Shape computation ─────────────────────────────────────────────────────
 
     /**
-     * Returns up to MAX_BLOCKS positions to break for the given shape.
-     * Tunnel and Escape always end on a full 3x3 cross-section slice.
+     * Returns the positions to break for the given shape.
+     * Tunnel and Escape always end on a full 3x4 cross-section slice.
      */
     public List<BlockPos> computeShape(Level level, BlockPos origin,
                                        Player player, MineShape shape) {
@@ -190,18 +184,18 @@ public class TabletOfDestructionAscendant extends BaseTabletOfDestruction {
         };
     }
 
-    // ── Shapeless: sphere of radius up to 128 blocks total ───────────────────
+    // ── Shapeless: sphere shells until cap ────────────────────────────────────
 
     private List<BlockPos> computeShapeless(Level level, BlockPos origin) {
+        BlockPos center = origin.below();
         List<BlockPos> result = new ArrayList<>();
-        // Expand outward in a sphere, add destructible blocks until cap
         for (int r = 0; r <= 7 && result.size() < MAX_BLOCKS; r++) {
             for (int x = -r; x <= r && result.size() < MAX_BLOCKS; x++) {
                 for (int y = -r; y <= r && result.size() < MAX_BLOCKS; y++) {
                     for (int z = -r; z <= r && result.size() < MAX_BLOCKS; z++) {
                         if (Math.abs(x) != r && Math.abs(y) != r && Math.abs(z) != r)
                             continue; // shell only
-                        BlockPos pos = origin.offset(x, y, z);
+                        BlockPos pos = center.offset(x, y, z);
                         if (!level.isInWorldBounds(pos)) continue;
                         if (level.getBlockState(pos).is(ModTags.Blocks.DESTRUCTIBLE_BLOCKS)
                                 && !result.contains(pos)) {
@@ -214,13 +208,17 @@ public class TabletOfDestructionAscendant extends BaseTabletOfDestruction {
         return result;
     }
 
-    // ── Staircase tunnel: 3 wide x 3 tall, descends/ascends 1 per forward ────
+    // ── Staircase tunnel: 3 wide x 4 tall, descends/ascends 1 per forward ────
 
     /**
      * Builds a staircase tunnel.
-     * Each step forward also moves down (TUNNEL) or up (ESCAPE) by 1.
-     * The total block count is always a multiple of 3x3=9 so it never ends
-     * mid-slice. We compute how many full slices fit within MAX_BLOCKS.
+     * Step 0 is the targeted block's column, shifted down by 1 so the
+     * staircase floor starts one block below the aimed block (no
+     * self-breaking required to enter). Each subsequent step moves
+     * forward and down (TUNNEL) or up (ESCAPE) by 1.
+     *
+     * The total block count is always a multiple of 3x4=12 so it never
+     * ends mid-slice.
      */
     private List<BlockPos> computeStairTunnel(Level level, BlockPos origin,
                                               Player player, boolean goingUp) {
@@ -231,21 +229,23 @@ public class TabletOfDestructionAscendant extends BaseTabletOfDestruction {
         int px = forward.getClockWise().getStepX();
         int pz = forward.getClockWise().getStepZ();
 
-        int stepY    = goingUp ? 1 : -1;
-        int sliceSize = 9; // 3 wide x 3 tall
-        int maxSlices = MAX_BLOCKS / sliceSize; // 14 full slices = 126 blocks
+        int stepY       = goingUp ? 1 : -1;
+        int sliceWidth  = 3;
+        int sliceHeight = 4;
+        int sliceSize   = sliceWidth * sliceHeight; // 12
+        int maxSlices   = TUNNEL_MAX_BLOCKS / sliceSize; // 256 / 12 = 21 slices = 252 blocks
 
         List<BlockPos> result = new ArrayList<>();
 
         for (int step = 0; step < maxSlices; step++) {
             int yOffset = stepY * step;
-            // Centre of this slice
-            int cx = origin.getX() + dx * (step + 1);
-            int cy = origin.getY() + yOffset;
-            int cz = origin.getZ() + dz * (step + 1);
+            // Step 0 is the targeted block, shifted down by 1
+            int cx = origin.getX() + dx * step;
+            int cy = origin.getY() + yOffset - 1;
+            int cz = origin.getZ() + dz * step;
 
-            for (int w = -1; w <= 1; w++) {       // 3 wide
-                for (int h = 0; h <= 2; h++) {     // 3 tall
+            for (int w = -1; w <= 1; w++) {               // 3 wide
+                for (int h = 0; h <= sliceHeight - 1; h++) { // 4 tall
                     BlockPos pos = new BlockPos(
                             cx + px * w,
                             cy + h,
@@ -262,17 +262,15 @@ public class TabletOfDestructionAscendant extends BaseTabletOfDestruction {
     // ── Dome: hemisphere centred on aimed block ───────────────────────────────
 
     private List<BlockPos> computeDome(Level level, BlockPos origin) {
+        BlockPos center = origin.below();
         List<BlockPos> result = new ArrayList<>();
-        // Radius grows until we fill MAX_BLOCKS
-        // A hemisphere of radius r has roughly (2/3)π r³ blocks
-        // r=4 gives ~134 so we use r=4 and cap
         int radius = 4;
         for (int x = -radius; x <= radius && result.size() < MAX_BLOCKS; x++) {
             for (int y = 0; y <= radius && result.size() < MAX_BLOCKS; y++) {
                 for (int z = -radius; z <= radius && result.size() < MAX_BLOCKS; z++) {
                     double dist = Math.sqrt(x * x + y * y + z * z);
                     if (dist <= radius) {
-                        BlockPos pos = origin.offset(x, y, z);
+                        BlockPos pos = center.offset(x, y, z);
                         if (!level.isInWorldBounds(pos)) continue;
                         if (level.getBlockState(pos)
                                 .is(ModTags.Blocks.DESTRUCTIBLE_BLOCKS)) {
@@ -283,6 +281,64 @@ public class TabletOfDestructionAscendant extends BaseTabletOfDestruction {
             }
         }
         return result;
+    }
+
+    // ── Torch placement for staircase shapes ──────────────────────────────────
+
+    /**
+     * Places wall torches every 5 steps, on the third block from the floor
+     * (h == 2), on both side walls of the staircase, facing inward.
+     */
+    private void placeStaircaseTorches(ServerLevel level, BlockPos origin,
+                                       Player player, boolean goingUp) {
+        Direction forward = player.getDirection();
+        int dx = forward.getStepX();
+        int dz = forward.getStepZ();
+        int px = forward.getClockWise().getStepX();
+        int pz = forward.getClockWise().getStepZ();
+
+        int stepY = goingUp ? 1 : -1;
+        int sliceHeight = 4;
+        int maxSlices   = TUNNEL_MAX_BLOCKS / (3 * sliceHeight);
+
+        for (int step = 5; step < maxSlices; step += 5) {
+            int yOffset = stepY * step;
+            int cx = origin.getX() + dx * step;
+            int cy = origin.getY() + yOffset - 1; // floor level at this step
+            int cz = origin.getZ() + dz * step;
+
+            // Two blocks above the floor, following the staircase diagonal
+            int torchY = cy + 2;
+
+            for (int side : new int[]{ -1, 1 }) {
+                // Wall is the outermost block of the 3-wide tunnel (w = ±2)
+                int wallW  = side * 2;
+                // Torch sits in the tunnel interior, attached to that wall (w = ±1)
+                int torchW = side;
+
+                BlockPos wallPos  = new BlockPos(cx + px * wallW,  torchY, cz + pz * wallW);
+                BlockPos torchPos = new BlockPos(cx + px * torchW, torchY, cz + pz * torchW);
+
+                if (!level.isInWorldBounds(wallPos) || !level.isInWorldBounds(torchPos)) continue;
+
+                // Only place if the wall is solid AND the inner spot is clear air —
+                // if an undestroyed ore or anything else occupies the inner spot,
+                // skip this side entirely rather than placing elsewhere.
+                if (!level.getBlockState(torchPos).isAir()) continue;
+
+                Direction torchFacing = (side < 0)
+                        ? forward.getClockWise()
+                        : forward.getCounterClockWise();
+
+                if (level.getBlockState(wallPos)
+                        .isFaceSturdy(level, wallPos, torchFacing)) {
+                    level.setBlock(torchPos,
+                            Blocks.WALL_TORCH.defaultBlockState()
+                                    .setValue(BlockStateProperties.HORIZONTAL_FACING, torchFacing),
+                            Block.UPDATE_ALL);
+                }
+            }
+        }
     }
 
     // ── Tooltip ───────────────────────────────────────────────────────────────
