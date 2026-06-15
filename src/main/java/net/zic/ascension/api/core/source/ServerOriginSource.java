@@ -83,7 +83,7 @@ public class ServerOriginSource extends OriginSource {
 
 
     @Override
-    public boolean setPhysique(Identifier physique, PhysiqueData physiqueData, RegistryAccess access, EventReason reason) {
+    public boolean setPhysique(Identifier physique, PhysiqueData physiqueData, EventReason reason) {
         if(physique == null) return false;
         Identifier oldPhysique = getPhysique();
         PhysiqueData oldPhysiqueData = getPhysiqueData();
@@ -95,20 +95,20 @@ public class ServerOriginSource extends OriginSource {
 
 
 
-        boolean result = super.setPhysique(pre.getNewPhysiqueIdentifier(), pre.getPhysiqueData(),access,reason);
+        boolean result = super.setPhysique(pre.getNewPhysiqueIdentifier(), pre.getPhysiqueData(),reason);
         if(!result) return false;
 
         physiqueDirty = true;
 
         startProcess(ProcessType.PHYSIQUE);
 
-        Collection<Identifier> toRemove = oldPhysique == null ? List.of() : pre.getPhysique(access).onRemoved(this,oldPhysiqueData);
+        Collection<Identifier> toRemove = oldPhysique == null ? List.of() : pre.getPhysique(getRegistryAccess()).onRemoved(this,oldPhysiqueData);
         if(pre.getPhysique(getRegistryAccess()) != null){
             for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
                 pre.getPhysique(getRegistryAccess()).removeFromEntity(entity,oldPhysiqueData);
             }
         }
-        Collection<Identifier> toAdd = pre.getNewPhysique(access).onAdded(this, pre.getNewPhysiqueData());
+        Collection<Identifier> toAdd = pre.getNewPhysique(getRegistryAccess()).onAdded(this, pre.getNewPhysiqueData());
         if(pre.getNewPhysique(getRegistryAccess()) != null){
             for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
                 pre.getNewPhysique(getRegistryAccess()).applyToEntity(entity,pre.getNewPhysiqueData());
@@ -119,11 +119,11 @@ public class ServerOriginSource extends OriginSource {
 
         for(Identifier path : toRemove){
             if(toAdd.contains(path)) continue;
-            removePath(path,access);
+            removePath(path);
         }
         for(Identifier path : toAdd){
             if(toRemove.contains(path)) continue;
-            addPath(path,access);
+            addPath(path);
         }
         resolveProcess(ProcessType.PHYSIQUE);
         return true;
@@ -131,7 +131,7 @@ public class ServerOriginSource extends OriginSource {
 
     //TODO consider creating a replace bloodline event as well
     @Override
-    public boolean addBloodline(Identifier bloodline, BloodlineData data, RegistryAccess access, EventReason reason) {
+    public boolean addBloodline(Identifier bloodline, BloodlineData data , EventReason reason) {
         if(bloodline == null) return false;
         if(hasBloodline(bloodline)) {
             mergeBloodline(bloodline,data);
@@ -142,23 +142,23 @@ public class ServerOriginSource extends OriginSource {
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = super.addBloodline(bloodline, data, access,reason);
+        boolean result = super.addBloodline(bloodline, data,reason);
         if(!result) return false;
 
         startProcess(ProcessType.ADD_BLOODLINE);
         int purity = data.getPurity();
         data.setPurity(1);
-        Collection<Identifier> toAdd = pre.getBloodline(access).onAdded(this,pre.getBloodlineData());
+        Collection<Identifier> toAdd = pre.getBloodline(getRegistryAccess()).onAdded(this,pre.getBloodlineData());
 
         if(pre.getBloodline(getRegistryAccess()) != null){
             for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
                 pre.getBloodline(getRegistryAccess()).applyToEntity(entity,pre.getBloodlineData());
             }
         }
-        pre.getBloodline(access).handlePurityChange(this,data,purity);
+        pre.getBloodline(getRegistryAccess()).handlePurityChange(this,data,purity);
 
         for(Identifier path : toAdd){
-            addPath(path,access);
+            addPath(path);
         }
 
 
@@ -173,7 +173,7 @@ public class ServerOriginSource extends OriginSource {
     }
     //TODO consider adding a replace bloodline event
     @Override
-    public boolean removeBloodline(Identifier bloodline, RegistryAccess access, EventReason reason) {
+    public boolean removeBloodline(Identifier bloodline, EventReason reason) {
         if(bloodline == null) return false;
         if(!hasBloodline(bloodline)) return false;
 
@@ -184,20 +184,20 @@ public class ServerOriginSource extends OriginSource {
 
 
 
-        boolean result =  super.removeBloodline(bloodline, access,reason);
+        boolean result =  super.removeBloodline(bloodline,reason);
         if(!result) return false;
 
         startProcess(ProcessType.REMOVE_BLOODLINE);
-        pre.getBloodline(access).handlePurityChange(this,data,1);
+        pre.getBloodline(getRegistryAccess()).handlePurityChange(this,data,1);
 
-        Collection<Identifier> toRemove = pre.getBloodline(access).onRemoved(this,pre.getBloodlineData());
+        Collection<Identifier> toRemove = pre.getBloodline(getRegistryAccess()).onRemoved(this,pre.getBloodlineData());
         if(pre.getBloodline(getRegistryAccess()) != null){
             for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
                 pre.getBloodline(getRegistryAccess()).removeFromEntity(entity,pre.getBloodlineData());
             }
         }
         for(Identifier path : toRemove){
-            removePath(path,access);
+            removePath(path);
         }
 
         BloodlineRemovedEvent.Post post= new BloodlineRemovedEvent.Post(bloodline,data,this,reason);
@@ -210,16 +210,16 @@ public class ServerOriginSource extends OriginSource {
 
 
     @Override
-    public boolean addPath(Identifier path, PathData existingData, RegistryAccess registryAccess, EventReason reason) {
+    public boolean addPath(Identifier path, PathData existingData, EventReason reason) {
         if(path == null || existingData == null) return false;
-        if(!CoreRegistries.PATH_REGISTRY.get(registryAccess).containsKey(path)) return false;
+        if(!CoreRegistries.PATH_REGISTRY.get(getRegistryAccess()).containsKey(path)) return false;
         if(cachedPathData.containsKey(path)) existingData = cachedPathData.get(path);
         PathAddedEvent.Pre pre = new PathAddedEvent.Pre(path,existingData,this);
 
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = super.addPath(path, existingData, registryAccess, reason);
+        boolean result = super.addPath(path, existingData, reason);
         if(!result) return false;
 
         startProcess(ProcessType.ADD_PATH);
@@ -257,15 +257,15 @@ public class ServerOriginSource extends OriginSource {
     }
 
     @Override
-    public boolean removePath(Identifier path, RegistryAccess access, EventReason reason) {
+    public boolean removePath(Identifier path, EventReason reason) {
         if(path == null || !hasPath(path)) return false;
-        if(!CoreRegistries.PATH_REGISTRY.get(access).containsKey(path)) return false;
+        if(!CoreRegistries.PATH_REGISTRY.get(getRegistryAccess()).containsKey(path)) return false;
         PathData data = getPathData(path);
         PathRemovedEvent.Pre pre = new PathRemovedEvent.Pre(path,data,this);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = super.removePath(path, access, reason);
+        boolean result = super.removePath(path, reason);
         if(!result) return false;
 
         startProcess(ProcessType.REMOVE_PATH);
@@ -307,19 +307,19 @@ public class ServerOriginSource extends OriginSource {
     }
     //TODO updated to include EventReason
     @Override
-    public boolean removeSkill(Identifier skill, RegistryAccess registryAccess) {
+    public boolean removeSkill(Identifier skill) {
         if(skill == null || !hasSkill(skill)) return false;
-        if(!CoreRegistries.SKILL_REGISTRY.get(registryAccess).containsKey(skill)) return false;
+        if(!CoreRegistries.SKILL_REGISTRY.get(getRegistryAccess()).containsKey(skill)) return false;
         SkillData data = getSkillData(skill);
         SkillRemovedEvent.Pre pre = new SkillRemovedEvent.Pre(this,skill,data,null);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = super.removeSkill(skill, registryAccess);
+        boolean result = super.removeSkill(skill);
         if(!result) return false;
 
         startProcess(ProcessType.REMOVE_SKILL);
-        pre.getSkill(registryAccess).onRemoved(this,data);
+        pre.getSkill(getRegistryAccess()).onRemoved(this,data);
         if(pre.getSkill(getRegistryAccess()) != null){
             for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
                 pre.getSkill(getRegistryAccess()).removeFromEntity(entity,pre.getSkillData());

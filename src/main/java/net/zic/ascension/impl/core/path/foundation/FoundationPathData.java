@@ -124,8 +124,10 @@ public class FoundationPathData extends SimplePathData {
     public void simulateProgression(OriginSource source) {
         cachedFoundations = new ArrayList<>(foundations);
         foundations.clear();
+        addFoundation(source); //ensures we add the first foundation
         super.simulateProgression(source);
         cachedFoundations.clear();
+
 
     }
 

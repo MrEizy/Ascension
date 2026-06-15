@@ -69,6 +69,7 @@ public class CultivationUtil {
         int foundationRealm = foundationPathData.getFoundationRealm(majorRealm);
 
         double maxProgress = foundationPath.getMaxFoundationProgress(majorRealm, foundationRealm);
+        foundationPathData.setFoundationRealmProgress(majorRealm, foundationPathData.getFoundationRealmProgress(majorRealm) + rate);
 
         if(foundationPath.tryBreakthroughFoundation(
                 entity,
@@ -77,7 +78,9 @@ public class CultivationUtil {
                 foundationRealm,
                 foundationPathData.getFoundationRealmProgress(majorRealm)+rate)){
             foundationPathData.handleFoundationRealmChange(source, majorRealm,foundationRealm+1);
-            foundationPathData.setFoundationRealmProgress(majorRealm,foundationPathData.getFoundationRealmProgress(majorRealm)+rate);
+            foundationPathData.setFoundationRealmProgress(majorRealm,0);
         }
+
+        source.markPathDirty(foundationPathData.getPath());
     }
 }

@@ -286,6 +286,7 @@ public class SimplePathData implements PathData {
 
     @Override
     public void simulateProgression(OriginSource source) {
+        if(techniqueHistory.isEmpty()) return;
 
         ArrayList<Identifier> cachedTechniqueHistory = new ArrayList<>(techniqueHistory);
         HashMap<Identifier,TechniqueData> cachedTechniqueData = new HashMap<>(techniqueData);
@@ -303,6 +304,7 @@ public class SimplePathData implements PathData {
             setCurrentTechnique(technique,data,source);
             handlerRealmChange(source,getMajorRealm()+1,0);
         }
+
         Identifier currentTechnique = cachedTechniqueHistory.removeFirst();
         setCurrentTechnique(currentTechnique,cachedTechniqueData.get(currentTechnique),source);
         handlerRealmChange(source,getMajorRealm(),cachedMinorRealm);

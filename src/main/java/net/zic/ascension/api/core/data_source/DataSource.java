@@ -1,6 +1,7 @@
 package net.zic.ascension.api.core.data_source;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
@@ -9,11 +10,8 @@ import net.zic.ascension.api.datapack.data_source.DataSourceType;
 
 public interface DataSource {
 
-    //zhao family style <- mastering
-    // footwork skill <- mastering
-    // sword skill
 
-
+    LoadOrder getLoadOrder();
 
     DataSourceType getType();
     /**
@@ -37,7 +35,7 @@ public interface DataSource {
     void removeFromEntity(LivingEntity entity,DataSourceInstance data);
 
 
-    DataSourceInstance newInstance();
-    DataSourceInstance loadInstance(ValueInput input);
+    DataSourceInstance newInstance(RegistryAccess access);
+    DataSourceInstance loadInstance(ValueInput input,RegistryAccess access);
     DataSourceInstance loadInstance(ByteBuf buf);
 }

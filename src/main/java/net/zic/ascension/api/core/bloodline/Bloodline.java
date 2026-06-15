@@ -76,8 +76,8 @@ public interface Bloodline {
     void purityDown(OriginSource source,BloodlineData data);
     void purityUp(OriginSource source,BloodlineData data);
 
-    BloodlineData newData();
-    BloodlineData loadData(ValueInput input);
+    BloodlineData newData(RegistryAccess access);
+    BloodlineData loadData(ValueInput input,RegistryAccess access);
     BloodlineData loadData(ByteBuf buf);
 
     default Optional<AscensionItemTooltipDefinition> itemTooltip() {

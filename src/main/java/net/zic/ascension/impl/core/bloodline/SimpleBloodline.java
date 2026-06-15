@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.core.bloodline;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
@@ -98,12 +99,12 @@ public class SimpleBloodline implements Bloodline {
     }
 
     @Override
-    public BloodlineData newData() {
+    public BloodlineData newData(RegistryAccess access) {
         return new SimpleBloodlineData();
     }
 
     @Override
-    public BloodlineData loadData(ValueInput input) {
+    public BloodlineData loadData(ValueInput input,RegistryAccess access) {
         return new SimpleBloodlineData(input);
     }
 

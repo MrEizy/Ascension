@@ -25,8 +25,8 @@ public record GiveSkillsAction(UUID uuid,List<Identifier> skills)  implements Pr
     @Override
     public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction) {
         for(Identifier skill:skills){
-            if(direction.equals(ProgressDirection.UP)) source.addSkill(skill,source.getRegistryAccess());
-            else source.removeSkill(skill,source.getRegistryAccess());
+            if(direction.equals(ProgressDirection.UP)) source.addSkill(skill);
+            else source.removeSkill(skill);
         }
     }
 

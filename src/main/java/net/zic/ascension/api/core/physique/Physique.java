@@ -1,6 +1,7 @@
 package net.zic.ascension.api.core.physique;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -44,8 +45,8 @@ public interface  Physique {
     //called when either an entity is detached from an origin or the physique is removed from the origin
     void removeFromEntity(LivingEntity entity,PhysiqueData data);
 
-    PhysiqueData newData();
-    PhysiqueData loadData(ValueInput input);
+    PhysiqueData newData(RegistryAccess access);
+    PhysiqueData loadData(ValueInput input, RegistryAccess access);
     PhysiqueData loadData(ByteBuf buf);
 
     default Optional<AscensionItemTooltipDefinition> itemTooltip() {

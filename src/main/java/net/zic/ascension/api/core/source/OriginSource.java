@@ -17,6 +17,7 @@ import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.data_source.DataSource;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
+import net.zic.ascension.api.core.data_source.LoadOrder;
 import net.zic.ascension.api.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.core.path.affinity.AffinityCategoryHolder;
 import net.zic.ascension.api.core.path.Path;
@@ -107,20 +108,20 @@ public class OriginSource {
     //──Physique────────────────────────────────────────────────────────
 
     //add a fresh instance of a physique, cannot be null
-    public boolean setPhysique(Identifier physique, RegistryAccess registryAccess){
+    public boolean setPhysique(Identifier physique){
         if(physique == null){
             return false;
         }
         Physique physiqueInstance = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,physique,getRegistryAccess());
         if(physiqueInstance == null) return false;
-        return setPhysique(physique, physiqueInstance.newData(),registryAccess);
+        return setPhysique(physique, physiqueInstance.newData(getRegistryAccess()));
 
     }
     //Sets the current physique, cannot be null
-    public boolean setPhysique(Identifier physique,PhysiqueData physiqueData,RegistryAccess registryAccess){
-        return setPhysique(physique,physiqueData,registryAccess,null);
+    public boolean setPhysique(Identifier physique,PhysiqueData physiqueData){
+        return setPhysique(physique,physiqueData,null);
     }
-    public boolean setPhysique(Identifier physique, PhysiqueData physiqueData,RegistryAccess registryAccess, EventReason reason){
+    public boolean setPhysique(Identifier physique, PhysiqueData physiqueData, EventReason reason){
         if(physique == null) return false;
         if(physique.equals(this.physique)) return false;
 
@@ -141,11 +142,11 @@ public class OriginSource {
 
     //TODO add merge logic here?
     //add a fresh instance of a bloodline
-    public boolean addBloodline(Identifier bloodline,RegistryAccess registryAccess){
+    public boolean addBloodline(Identifier bloodline){
         if(bloodline == null)return false;
         Bloodline bloodlineInstance = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodline,getRegistryAccess());
         if(bloodlineInstance == null) return false;
-        return addBloodline(bloodline,bloodlineInstance.newData(),registryAccess);
+        return addBloodline(bloodline,bloodlineInstance.newData(getRegistryAccess()));
     }
     public void mergeBloodline(Identifier bloodline,BloodlineData data){
 
@@ -159,10 +160,10 @@ public class OriginSource {
         markBloodlineDirty(bloodline);
 
     }
-    public boolean addBloodline(Identifier bloodline,BloodlineData data,RegistryAccess access){
-        return addBloodline(bloodline,data, access,null);
+    public boolean addBloodline(Identifier bloodline,BloodlineData data){
+        return addBloodline(bloodline,data,null);
     }
-    public boolean addBloodline(Identifier bloodline,BloodlineData data,RegistryAccess access,EventReason reason){
+    public boolean addBloodline(Identifier bloodline,BloodlineData data,EventReason reason){
         if(bloodline == null) return false;
         if(hasBloodline(bloodline)){
             mergeBloodline(bloodline,data);
@@ -173,10 +174,10 @@ public class OriginSource {
         return true;
     }
 
-    public boolean removeBloodline(Identifier bloodline,RegistryAccess access){
-        return removeBloodline(bloodline,access,null);
+    public boolean removeBloodline(Identifier bloodline){
+        return removeBloodline(bloodline,null);
     }
-    public boolean removeBloodline(Identifier bloodline,RegistryAccess access,EventReason reason){
+    public boolean removeBloodline(Identifier bloodline,EventReason reason){
 
         return !(bloodlines.remove(bloodline) == null);
     }
@@ -195,17 +196,17 @@ public class OriginSource {
     public void markBloodlineDirty(Identifier bloodline){}//should be used if you modified a bloodlines data
     //──Path────────────────────────────────────────────────────────
 
-    public boolean addPath(Identifier path, RegistryAccess registryAccess){
+    public boolean addPath(Identifier path){
         if(path == null) return false;
         Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,getRegistryAccess());
         if(pathInstance == null) return false;
-        return addPath(path,pathInstance.newData(registryAccess),registryAccess);
+        return addPath(path,pathInstance.newData(getRegistryAccess()));
     }
     //used when adding an existing path to a source
-    public boolean addPath(Identifier path,PathData existingData,RegistryAccess registryAccess){
-        return addPath(path,existingData,registryAccess,null);
+    public boolean addPath(Identifier path,PathData existingData){
+        return addPath(path,existingData,null);
     }
-    public boolean addPath(Identifier path,PathData existingData,RegistryAccess registryAccess,EventReason reason){
+    public boolean addPath(Identifier path,PathData existingData,EventReason reason){
         if(path == null || existingData == null) return false;
         if(paths.containsKey(path)) return false;
 
@@ -218,8 +219,8 @@ public class OriginSource {
     public Collection<Identifier> getPaths(){
         return paths.keySet();
     }
-    public boolean removePath(Identifier path,RegistryAccess access){return removePath(path,access,null);}
-    public boolean removePath(Identifier path,RegistryAccess access,EventReason reason){
+    public boolean removePath(Identifier path){return removePath(path,null);}
+    public boolean removePath(Identifier path,EventReason reason){
         if(!paths.containsKey(path)) return false;
 
         paths.remove(path);
@@ -248,11 +249,11 @@ public class OriginSource {
 
     //──Skill────────────────────────────────────────────────────────
 
-    public boolean addSkill(Identifier skill,RegistryAccess registryAccess){
+    public boolean addSkill(Identifier skill){
         if(skill == null) return false;
         Skill skillInstance = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,getRegistryAccess());
         if(skillInstance == null) return false;
-        return addSkill(skill,skillInstance.newData());
+        return addSkill(skill,skillInstance.newData(getRegistryAccess()));
 
     }
     public boolean addSkill(Identifier skill,SkillData data){
@@ -261,7 +262,7 @@ public class OriginSource {
         return true;
     }
 
-    public boolean removeSkill(Identifier skill,RegistryAccess registryAccess){
+    public boolean removeSkill(Identifier skill){
         skills.remove(skill);
         return true;
     }
@@ -278,11 +279,11 @@ public class OriginSource {
     public void markSkillDirty(Identifier skill){}//should be used if you changed a skills skilLData
     //──Data Source────────────────────────────────────────────────────────
 
-    public boolean addDataSource(Identifier source,RegistryAccess registryAccess){
+    public boolean addDataSource(Identifier source){
         if(source == null) return false;
         DataSource dataSource = CoreRegistries.safeAccess(CoreRegistries.DATA_SOURCE_REGISTRY,source,getRegistryAccess());
         if(dataSource == null) return false;
-        return addDataSource(source,dataSource.newInstance());
+        return addDataSource(source,dataSource.newInstance(getRegistryAccess()));
     }
     public boolean addDataSource(Identifier source,DataSourceInstance instance){
         if(source == null) return false;
@@ -302,7 +303,7 @@ public class OriginSource {
         return dataSources.remove(source);
     }
 
-
+    public Collection<Identifier> getDataSources(){return dataSources.keySet();}
     public void markDataSourceDirty(Identifier source){}//should be used if you changed a data sources instance
     //──Stat Sheet────────────────────────────────────────────────────────
 
@@ -483,12 +484,23 @@ public class OriginSource {
             }
         }
         AscensionCraft.LOGGER.debug("Finished Saving Skill Path Data");
+
+        ValueOutput.ValueOutputList dataSourcesOutput = output.childrenList("data_sources");
+        AscensionCraft.LOGGER.debug("Saving Data Sources");
+        for(Identifier dataSource : getDataSources()){
+            AscensionCraft.LOGGER.debug("Saving Data Source {}",dataSource);
+            try {
+                ValueOutput dataSourceOutput = dataSourcesOutput.addChild();
+                dataSourceOutput.putString("id",dataSource.toString());
+                getDataSourceInstance(dataSource).write(dataSourceOutput.child("data"));
+            }catch (Exception e){
+                AscensionCraft.LOGGER.debug("error writing data source {}",dataSource);
+                AscensionCraft.LOGGER.debug("stacktrace",e);
+            }
+        }
     }
 
-    public void load(RegistryAccess access){
-        setRegistryAccess(access);
-        load();
-    }
+
 
     /**
      * A lazy init method for SaveData, lets us hold the compoundTag to later be wrapped in TagValueInput
@@ -511,6 +523,27 @@ public class OriginSource {
 
 
     public void load(ValueInput input){
+        ArrayList<ValueInput> loadAfterDataSources = new ArrayList<>();
+        AscensionCraft.LOGGER.debug("Reading Initial Data Sources");
+
+        ValueInput.ValueInputList dataSourcesInput = input.childrenListOrEmpty("data_sources");
+        for(ValueInput dataSourceInput : dataSourcesInput){
+            try {
+                Identifier id = Identifier.parse(dataSourceInput.getStringOr("id","ascension:none"));
+                DataSource source = CoreRegistries.DATA_SOURCE_REGISTRY.get(getRegistryAccess()).getValue(id);//done on purpose to throw error
+                if(source.getLoadOrder() == LoadOrder.FINAL){
+                    loadAfterDataSources.add(dataSourceInput);
+                    continue;
+                }
+                DataSourceInstance instance = source.loadInstance(dataSourceInput.childOrEmpty("data"),getRegistryAccess());
+
+                addDataSource(id,instance);
+            }catch (Exception e){
+                AscensionCraft.LOGGER.debug("Error loading data source");
+                AscensionCraft.LOGGER.debug("stacktrace: ",e);
+            }
+        }
+
         AscensionCraft.LOGGER.debug("Reading Skill Data");
         cachedSkillData.clear();
         ValueInput.ValueInputList skillsInput = input.childrenListOrEmpty("skills");
@@ -524,7 +557,7 @@ public class OriginSource {
                 Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skillId,getRegistryAccess());
                 if(skill == null) continue;
 
-                SkillData data = skill.loadData(skillData);
+                SkillData data = skill.loadData(skillData,getRegistryAccess());
                 cachedSkillData.put(skillId,data);
 
             }catch (Exception e){
@@ -561,9 +594,9 @@ public class OriginSource {
 
 
             Optional<ValueInput> data = physiqueInput.child("data");
-            PhysiqueData physiqueData = data.map(valueInput -> CoreRegistries.PHYSIQUE_REGISTRY.get(getRegistryAccess()).getValue(id).loadData(valueInput)).orElse(CoreRegistries.PHYSIQUE_REGISTRY.get(getRegistryAccess()).getValue(id).newData());
+            PhysiqueData physiqueData = data.map(valueInput -> CoreRegistries.PHYSIQUE_REGISTRY.get(getRegistryAccess()).getValue(id).loadData(valueInput,getRegistryAccess())).orElse(CoreRegistries.PHYSIQUE_REGISTRY.get(getRegistryAccess()).getValue(id).newData(getRegistryAccess()));
 
-            setPhysique(id,physiqueData, getRegistryAccess());
+            setPhysique(id,physiqueData);
 
             AscensionCraft.LOGGER.info("Loaded physique {}",id);
         }catch (Exception e){
@@ -582,8 +615,8 @@ public class OriginSource {
                     AscensionCraft.LOGGER.debug("Reading Bloodline {}",id);
                     Optional<ValueInput> data = bloodlineInput.child("data");
                     Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,id,getRegistryAccess());
-                    if(data.isEmpty()) addBloodline(id,registryAccess);
-                    else addBloodline(id,bloodline.loadData(data.get()),registryAccess);
+                    if(data.isEmpty()) addBloodline(id);
+                    else addBloodline(id,bloodline.loadData(data.get(),getRegistryAccess()));
 
                     AscensionCraft.LOGGER.info("Loaded bloodline {} with purity {}",id,getBloodlineData(id).getPurity());
                 } catch (Throwable throwable){
@@ -600,7 +633,19 @@ public class OriginSource {
 
 
 
+        for(ValueInput dataSourceInput : loadAfterDataSources){
+            try {
+                Identifier id = Identifier.parse(dataSourceInput.getStringOr("id","ascension:none"));
+                DataSource source = CoreRegistries.DATA_SOURCE_REGISTRY.get(getRegistryAccess()).getValue(id);//done on purpose to throw error
 
+                DataSourceInstance instance = source.loadInstance(dataSourceInput.childOrEmpty("data"),getRegistryAccess());
+
+                addDataSource(id,instance);
+            }catch (Exception e){
+                AscensionCraft.LOGGER.debug("Error loading final data source");
+                AscensionCraft.LOGGER.debug("stacktrace: ",e);
+            }
+        }
         cachedPathData.clear();
         cachedSkillData.clear();
     }

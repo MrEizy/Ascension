@@ -32,7 +32,7 @@ public class BloodlineTransferItem extends Item {
 
         Identifier targetBloodline = stack.get(AscensionComponents.REGISTRY_ID_HOLDER);
         Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,targetBloodline,level.registryAccess());
-        BloodlineData data = bloodline.newData();
+        BloodlineData data = bloodline.newData(level.registryAccess());
 
         int purity = stack.getOrDefault(AscensionComponents.PURITY,1);
         data.setPurity(purity);
@@ -42,7 +42,7 @@ public class BloodlineTransferItem extends Item {
 
         if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
 
-        if(!holder.getData(player).getSource().addBloodline(targetBloodline,data,level.registryAccess())){
+        if(!holder.getData(player).getSource().addBloodline(targetBloodline,data)){
             //TODO return error message to player here
             return InteractionResult.FAIL;
         }

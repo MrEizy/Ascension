@@ -53,7 +53,7 @@ public record FoundationPath(Component name, Component description, List<Foundat
 
     public Component getFoundationRealmName(int majorRealm,int foundationRealm){
         if (majorRealm > getMaxMajorRealm()) return Component.empty();
-        if(realms.get(majorRealm).foundationRealms().size() >= foundationRealm) return Component.empty();
+        if(  foundationRealm>= realms.get(majorRealm).foundationRealms().size()) return Component.empty();
         return realms.get(majorRealm).foundationRealms().get(foundationRealm).name();
     }
     public ProgressActionHolder getFoundationActionHolder(int majorRealm){

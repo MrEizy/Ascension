@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.core.skill.castable.cultivation;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
@@ -91,7 +92,12 @@ public record SimpleCultivationSkill(
                     baseRate);
         }else CultivationUtil.cultivate(caster,source,pathData,secondaryPaths(),baseRate);
         if(caster instanceof Player player){
-            player.sendOverlayMessage(Component.literal("Progress : "+pathData.getProgress()));
+            if(pathData instanceof FoundationPathData foundationPathData && holder.getData(caster).isCultivationSuppressed()){
+                player.sendOverlayMessage(Component.literal("Foundation Progress : "+
+                        foundationPathData.getFoundationRealmProgress(foundationPathData.getMajorRealm())
+                        ));
+
+            }else player.sendOverlayMessage(Component.literal("Progress : "+pathData.getProgress()));
         }
 
     }
@@ -162,12 +168,12 @@ public record SimpleCultivationSkill(
     }
 
     @Override
-    public SkillData newData() {
+    public SkillData newData(RegistryAccess access) {
         return new EmptySkillData();
     }
 
     @Override
-    public SkillData loadData(ValueInput input) {
+    public SkillData loadData(ValueInput input,RegistryAccess access) {
         return new EmptySkillData();
     }
 

@@ -25,6 +25,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private final OriginSource source;
     private final LivingEntity attachedEntity;
     private SourceChangesSnapshot snapshot;
+    private boolean cultivationSuppressed;
 
     public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
         this.source = source;
@@ -80,6 +81,16 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         attachedEntity.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
     }
 
+    @Override
+    public boolean isCultivationSuppressed() {
+        return cultivationSuppressed;
+    }
+
+    @Override
+    public void setCultivationSuppressed(boolean state) {
+        cultivationSuppressed = state;
+    }
+
     public static class SyncHandler implements AttachmentSyncHandler<SimpleAscensionEntityData> {
         @Override
         public boolean sendToPlayer(@NonNull IAttachmentHolder holder, @NonNull ServerPlayer to) {
@@ -92,6 +103,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                 SimpleAscensionEntityData attachment,
                 boolean initialSync
         ) {
+            buf.writeBoolean(attachment.cultivationSuppressed);
             boolean encodePatch = !initialSync && attachment.snapshot != null;
             buf.writeBoolean(encodePatch);
 
@@ -100,7 +112,6 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             } else {
                 attachment.source.encode(buf);
             }
-
             attachment.snapshot = null;
         }
 
@@ -120,7 +131,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                         entity
                 );
             }
-
+            previousValue.setCultivationSuppressed(buf.readBoolean());
             if (buf.readBoolean()) {
                 previousValue.source.apply(
                         SourceChangesSnapshot.decode(buf, buf.registryAccess())
@@ -147,14 +158,21 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             }
 
             OriginSource source = entity.level().isClientSide()
-                    ? new OriginSource(entity.level().registryAccess(), input)
-                    : new ServerOriginSource(entity.level().registryAccess(), input);
-            return new SimpleAscensionEntityData(source, entity);
+                    ? new OriginSource(entity.level().registryAccess(), input.childOrEmpty("source_data"))
+                    : new ServerOriginSource(entity.level().registryAccess(), input.childOrEmpty("source_data"));
+
+            SimpleAscensionEntityData data = new SimpleAscensionEntityData(source,entity);
+
+            data.setCultivationSuppressed(input.getBooleanOr("cultivation_suppressed",false));
+
+            return data;
+
         }
 
         @Override
         public boolean write(SimpleAscensionEntityData attachment, ValueOutput output) {
-            attachment.source.write(output);
+            attachment.source.write(output.child("source_data"));
+            output.putBoolean("cultivation_suppressed",attachment.isCultivationSuppressed());
             return true;
         }
     }

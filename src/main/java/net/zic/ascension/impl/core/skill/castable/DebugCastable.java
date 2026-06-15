@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.core.skill.castable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -141,12 +142,12 @@ public record DebugCastable(String message,int cooldown,UUID uuid) implements Ca
     }
 
     @Override
-    public SkillData newData() {
+    public SkillData newData(RegistryAccess access) {
         return new EmptySkillData();
     }
 
     @Override
-    public SkillData loadData(ValueInput input) {
+    public SkillData loadData(ValueInput input,RegistryAccess access) {
         return new EmptySkillData();
     }
 

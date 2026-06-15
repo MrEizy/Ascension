@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.core.physique;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
@@ -69,7 +70,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
             }
         }
         for (Identifier skill : skills) {
-            source.addSkill(skill, source.getRegistryAccess());
+            source.addSkill(skill);
         }
 
         return unlockedPaths;
@@ -89,7 +90,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
         //TODO update to more properly handle the try remove to more efficiently check by directly calling skillRemovalAttempt on bloodline,technique, physique and data source
 
         for (Identifier skill : skills) {
-            source.removeSkill(skill, source.getRegistryAccess());
+            source.removeSkill(skill);
         }
 
         return unlockedPaths;
@@ -106,12 +107,12 @@ public record SimplePhysique(Component name, Component description, List<Identif
     }
 
     @Override
-    public PhysiqueData newData() {
+    public PhysiqueData newData(RegistryAccess access) {
         return null;
     }
 
     @Override
-    public PhysiqueData loadData(ValueInput input) {
+    public PhysiqueData loadData(ValueInput input,RegistryAccess access) {
         return null;
     }
 

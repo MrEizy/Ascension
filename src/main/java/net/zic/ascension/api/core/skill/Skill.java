@@ -1,6 +1,7 @@
 package net.zic.ascension.api.core.skill;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,7 +39,7 @@ public interface Skill {
     void removeFromEntity(LivingEntity entity,SkillData data);
 
 
-    SkillData newData();
-    SkillData loadData(ValueInput input);
+    SkillData newData(RegistryAccess access);
+    SkillData loadData(ValueInput input,RegistryAccess access);
     SkillData loadData(ByteBuf buf);
 }

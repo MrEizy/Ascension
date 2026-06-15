@@ -35,7 +35,7 @@ public class PhysiqueTransferItem extends Item {
 
         if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
 
-        if(!holder.getData(player).getSource().setPhysique(targetPhysique,player.level().registryAccess())){
+        if(!holder.getData(player).getSource().setPhysique(targetPhysique)){
             //TODO return error message to player here
             return InteractionResult.FAIL;
         }

@@ -41,9 +41,24 @@ public class SetRealmCommand {
                                         )
                                 )
                         )
+                )
+                .then(Commands.literal("toggle_suppressed")
+                        .then(Commands.argument("target", EntityArgument.players())
+                        .executes(SetRealmCommand::toggleSuppressed))
                 );
         }
 
+        private static int toggleSuppressed(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+            var players = EntityArgument.getPlayers(context, "target");
+            for (ServerPlayer player : players) {
+                AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+                if(holder == null) continue;
+                holder.getData(player).setCultivationSuppressed(!holder.getData(player).isCultivationSuppressed());
+                player.sendSystemMessage(Component.literal("Cultivation Suppressed : "+holder.getData(player).isCultivationSuppressed()));
+
+            }
+            return 1;
+        }
         private static int setRealm(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
             var players = EntityArgument.getPlayers(context, "target");
             Identifier pathId = IdentifierArgument.getId(context, "path");
