@@ -7,72 +7,8 @@
   ],
   "item_tooltip": {
     "theme": "ascension:physique_essence",
-    "animation_presets": [
-      "zenithlib:living"
-    ],
-    "pages": [
-      {
-        "title": {
-          "source": "zenithlib:subject_name"
-        },
-        "elements": [
-          {
-            "type": "title_icon",
-            "title": {
-              "source": "zenithlib:subject_name"
-            },
-            "subtitle": {
-              "literal": "Physique Essence"
-            }
-          },
-          {
-            "type": "dynamic",
-            "source": "ascension:physique_paths",
-            "hide_when_empty": true
-          },
-          {
-            "type": "text",
-            "text": {
-              "source": "zenithlib:subject_description"
-            }
-          }
-        ]
-      },
-      {
-        "title": {
-          "literal": "Attributes"
-        },
-        "elements": [
-          {
-            "type": "header",
-            "text": {
-              "literal": "Statistics"
-            },
-            "color": "positive"
-          },
-          {
-            "type": "dynamic",
-            "source": "ascension:physique_stats",
-            "hide_when_empty": true
-          },
-          {
-            "type": "divider"
-          },
-          {
-            "type": "header",
-            "text": {
-              "literal": "Affinities"
-            },
-            "color": "accent"
-          },
-          {
-            "type": "dynamic",
-            "source": "ascension:physique_affinities",
-            "hide_when_empty": true
-          }
-        ]
-      }
-    ]
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:human"
   },
   "base_stats": [
     {

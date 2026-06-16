@@ -120,6 +120,7 @@ public final class AscensionTabletTooltipProvider
                 PRIMARY_PAGE_INDEX,
                 new ZenithTooltipPage(
                         firstPage.title(),
+                        firstPage.titleEffect(),
                         elements
                 )
         );
@@ -188,6 +189,7 @@ public final class AscensionTabletTooltipProvider
                 HEAVENLY_FUNCTIONS_PAGE_INDEX,
                 new ZenithTooltipPage(
                         storagePage.title(),
+                        storagePage.titleEffect(),
                         elements
                 )
         );

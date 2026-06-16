@@ -12,6 +12,7 @@ import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.zenithlib.tooltip.api.ZenithTooltipDocument;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipProviders;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipTheme;
 import net.zic.zenithlib.tooltip.api.context.ZenithTooltipContext;
@@ -21,10 +22,18 @@ import net.zic.zenithlib.tooltip.manager.ZenithTooltipRepository;
 import java.util.Optional;
 
 /**
- * ItemStack component → registry id → datapack registry entry → item_tooltip → contextual ZenithLib document.
+ * ItemStack component → registry id → datapack registry entry → item_tooltip/default template → contextual ZenithLib document.
  */
 public final class AscensionTransferItemTooltipProvider implements ZenithTooltipProviders.ContextualProvider {
     public static final Identifier ID = AscensionCraft.prefix("registry_tooltips");
+
+    private static final Identifier DEFAULT_BLOODLINE_TEMPLATE = AscensionCraft.prefix("default_bloodline_essence");
+    private static final Identifier DEFAULT_PHYSIQUE_TEMPLATE = AscensionCraft.prefix("default_physique_essence");
+    private static final Identifier DEFAULT_TECHNIQUE_TEMPLATE = AscensionCraft.prefix("default_technique_manual");
+
+    private static final Identifier BLOODLINE_THEME = AscensionCraft.prefix("bloodline_essence");
+    private static final Identifier PHYSIQUE_THEME = AscensionCraft.prefix("physique_essence");
+    private static final Identifier TECHNIQUE_THEME = AscensionCraft.prefix("technique_manual");
 
     private AscensionTransferItemTooltipProvider() {}
 
@@ -57,7 +66,9 @@ public final class AscensionTransferItemTooltipProvider implements ZenithTooltip
                             physique,
                             physique.name(),
                             physique.description(),
-                            physique.itemTooltip()
+                            physique.itemTooltip(),
+                            DEFAULT_PHYSIQUE_TEMPLATE,
+                            PHYSIQUE_THEME
                     );
         }
 
@@ -71,7 +82,9 @@ public final class AscensionTransferItemTooltipProvider implements ZenithTooltip
                             technique,
                             technique.getName(null),
                             technique.getDescription(null),
-                            technique.itemTooltip()
+                            technique.itemTooltip(),
+                            DEFAULT_TECHNIQUE_TEMPLATE,
+                            TECHNIQUE_THEME
                     );
         }
 
@@ -85,7 +98,9 @@ public final class AscensionTransferItemTooltipProvider implements ZenithTooltip
                             bloodline,
                             bloodline.getName(),
                             bloodline.getDescription(),
-                            bloodline.itemTooltip()
+                            bloodline.itemTooltip(),
+                            DEFAULT_BLOODLINE_TEMPLATE,
+                            BLOODLINE_THEME
                     );
         }
 
@@ -98,20 +113,48 @@ public final class AscensionTransferItemTooltipProvider implements ZenithTooltip
             T subjectValue,
             Component name,
             Component description,
-            Optional<AscensionItemTooltipDefinition> tooltip
+            Optional<AscensionItemTooltipDefinition> tooltip,
+            Identifier defaultTemplate,
+            Identifier defaultTheme
     ) {
-        return tooltip.map(definition -> ZenithTooltipProviders.Result.withSubject(
-                definition.themed(resolveTheme(definition)),
-                context,
-                registryId,
-                subjectValue,
-                ZenithTooltipSubject.of(name, description)
-        ));
+        return resolveDocument(tooltip, defaultTemplate, defaultTheme)
+                .map(document -> ZenithTooltipProviders.Result.withSubject(
+                        document,
+                        context,
+                        registryId,
+                        subjectValue,
+                        ZenithTooltipSubject.of(name, description)
+                ));
     }
 
-    private static ZenithTooltipTheme resolveTheme(AscensionItemTooltipDefinition definition) {
-        return definition.theme()
-                .map(id -> ZenithTooltipRepository.themesView().getOrDefault(id, ZenithTooltipTheme.defaultTheme()))
-                .orElseGet(ZenithTooltipTheme::defaultTheme);
+    private static Optional<ZenithTooltipDocument> resolveDocument(
+            Optional<AscensionItemTooltipDefinition> tooltip,
+            Identifier defaultTemplate,
+            Identifier defaultTheme
+    ) {
+        if (tooltip.isEmpty()) {
+            return ZenithTooltipRepository.fromTemplate(defaultTemplate, defaultTheme);
+        }
+
+        AscensionItemTooltipDefinition definition = tooltip.orElseThrow();
+        if (definition.hasInlineTemplate()) {
+            return Optional.of(definition.themed(resolveTheme(definition, defaultTheme)));
+        }
+
+        return ZenithTooltipRepository.fromTemplate(
+                definition.template().orElse(defaultTemplate),
+                definition.theme().orElse(defaultTheme)
+        );
+    }
+
+    private static ZenithTooltipTheme resolveTheme(
+            AscensionItemTooltipDefinition definition,
+            Identifier defaultTheme
+    ) {
+        return ZenithTooltipRepository.themesView()
+                .getOrDefault(
+                        definition.theme().orElse(defaultTheme),
+                        ZenithTooltipTheme.defaultTheme()
+                );
     }
 }

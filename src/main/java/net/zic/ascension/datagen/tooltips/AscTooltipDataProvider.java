@@ -1,14 +1,16 @@
-package net.zic.ascension.datagen;
+package net.zic.ascension.datagen.tooltips;
 
 import net.minecraft.data.PackOutput;
+import net.zic.ascension.datagen.AscTooltipThemes;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
 import net.zic.zenithlib.tooltip.api.animation.ZenithTooltipPresets;
+import net.zic.zenithlib.tooltip.api.element.ClassificationElement;
 import net.zic.zenithlib.tooltip.datagen.ZenithTooltipDataProvider;
 
 import static net.zic.zenithlib.tooltip.api.builder.ZenithTooltipBuilders.*;
 
 /**
- * Generates ZenithLib tooltip documents for registered Ascension items.
+ * Generates ZenithLib tooltip templates and definitions for registered Ascension items.
  *
  * <p>Registry-backed items such as physiques, techniques, and bloodlines keep
  * their item_tooltip blocks inside their own datapack JSONs.</p>
@@ -22,8 +24,97 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
     @Override
     protected void addTooltips() {
         addThemes();
+        addDefaultTransferItemTooltips();
         addTabletOfDestructionTooltips();
         addTabletOfDestructionRules();
+    }
+
+
+    private void addDefaultTransferItemTooltips() {
+        addDefaultBloodlineEssenceTooltip();
+        addDefaultPhysiqueEssenceTooltip();
+        addDefaultTechniqueManualTooltip();
+    }
+
+    private void addDefaultBloodlineEssenceTooltip() {
+        template(id("default_bloodline_essence"))
+                .animationPreset(ZenithTooltipPresets.CORRUPTED)
+                .page(page(sourced("zenithlib:subject_name"))
+                        .add(titleIcon(
+                                sourced("zenithlib:subject_name"),
+                                literal("Bloodline Essence")
+                        ).withOnAllPages(true))
+                        .add(classification(false, true, ClassificationElement.Style.BADGE))
+                        .add(divider())
+                        .add(dynamicBar(
+                                literal("Purity"),
+                                id("bloodline_purity"),
+                                ZenithTooltipColor.NEGATIVE
+                        ))
+                        .add(text(
+                                sourced("zenithlib:subject_description"),
+                                ZenithTooltipColor.TEXT,
+                                shimmer(2400, 0.14F, 0.45F)
+                        )))
+                .page(page(literal("Purity Growth"))
+                        .add(header(literal("Purity Growth"), ZenithTooltipColor.ACCENT).withEffect(shimmer()))
+                        .add(dynamic(id("bloodline_purity_gains"))));
+    }
+
+    private void addDefaultPhysiqueEssenceTooltip() {
+        template(id("default_physique_essence"))
+                .animationPreset(ZenithTooltipPresets.LIVING)
+                .page(page(sourced("zenithlib:subject_name"))
+                        .add(titleIcon(
+                                sourced("zenithlib:subject_name"),
+                                literal("Physique Essence")
+                        ).withOnAllPages(true))
+                        .add(classification(false, true, ClassificationElement.Style.BADGE))
+                        .add(dynamic(id("physique_paths")))
+                        .add(divider())
+                        .add(text(
+                                sourced("zenithlib:subject_description"),
+                                ZenithTooltipColor.TEXT
+                        )))
+                .page(page(literal("Attributes"))
+                        .add(header(literal("Statistics"), ZenithTooltipColor.POSITIVE))
+                        .add(dynamic(id("physique_stats")))
+                        .add(divider())
+                        .add(header(literal("Affinities"), ZenithTooltipColor.ACCENT))
+                        .add(dynamic(id("physique_affinities"))));
+    }
+
+    private void addDefaultTechniqueManualTooltip() {
+        template(id("default_technique_manual"))
+                .animationPreset(ZenithTooltipPresets.RUNIC)
+                .animationPreset(ZenithTooltipPresets.MECHANICAL)
+                .page(page(sourced("zenithlib:subject_name"))
+                        .add(titleIcon(
+                                sourced("zenithlib:subject_name"),
+                                literal("Technique Manual")
+                        ).withOnAllPages(true))
+                        .add(classification(false, true, ClassificationElement.Style.BADGE))
+                        .add(badge(
+                                sourced("ascension:technique_path"),
+                                ZenithTooltipColor.BACKGROUND,
+                                ZenithTooltipColor.ACCENT,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(divider())
+                        .add(text(
+                                sourced("zenithlib:subject_description"),
+                                ZenithTooltipColor.TEXT,
+                                typewriter(760, 80)
+                        ))
+                        .add(row(
+                                literal("Max Realm"),
+                                sourced("ascension:technique_max_realm"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
+                        )))
+                .page(page(literal("Realm Growth"))
+                        .add(header(literal("Realm Growth"), ZenithTooltipColor.ACCENT))
+                        .add(dynamic(id("technique_progression_gains"))));
     }
 
     private void addThemes() {
@@ -41,7 +132,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
     }
 
     private void addHumanTabletTooltip() {
-        template(id("tablet_of_destruction_human_document"))
+        template(id("tablet_of_destruction_human"))
                 .page(page(literal("Tablet of Destruction: Human"))
                         .add(titleIcon(
                                 literal("Tablet of Destruction"),
@@ -76,7 +167,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
     }
 
     private void addEarthTabletTooltip() {
-        template(id("tablet_of_destruction_earth_document"))
+        template(id("tablet_of_destruction_earth"))
                 .animationPreset(ZenithTooltipPresets.KINETIC)
                 .page(page(literal("Tablet of Destruction: Earth"))
                         .add(titleIcon(
@@ -112,7 +203,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
     }
 
     private void addHeavenTabletTooltip() {
-        template(id("tablet_of_destruction_heaven_document"))
+        template(id("tablet_of_destruction_heaven"))
                 .animationPreset(ZenithTooltipPresets.KINETIC)
                 .animationPreset(ZenithTooltipPresets.NEBULA)
                 .page(page(literal("Tablet of Destruction: Heaven"))
@@ -165,7 +256,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
     }
 
     private void addAscendantTabletTooltip() {
-        template(id("tablet_of_destruction_ascendant_document"))
+        template(id("tablet_of_destruction_ascendant"))
                 .animationPreset(ZenithTooltipPresets.CELESTIAL)
                 .animationPreset(ZenithTooltipPresets.CORRUPTED)
                 .page(page(literal("Tablet of Destruction: Ascendant"))
@@ -248,25 +339,25 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
         rule(id("tablet_of_destruction_human"))
                 .priority(200)
                 .items(id("tablet_of_destruction_human"))
-                .document(id("tablet_of_destruction_human_document"))
+                .template(id("tablet_of_destruction_human"))
                 .theme(id("tablet_of_destruction"));
 
         rule(id("tablet_of_destruction_earth"))
                 .priority(200)
                 .items(id("tablet_of_destruction_earth"))
-                .document(id("tablet_of_destruction_earth_document"))
+                .template(id("tablet_of_destruction_earth"))
                 .theme(id("tablet_of_destruction"));
 
         rule(id("tablet_of_destruction_heaven"))
                 .priority(200)
                 .items(id("tablet_of_destruction_heaven"))
-                .document(id("tablet_of_destruction_heaven_document"))
+                .template(id("tablet_of_destruction_heaven"))
                 .theme(id("tablet_of_destruction"));
 
         rule(id("tablet_of_destruction_ascendant"))
                 .priority(200)
                 .items(id("tablet_of_destruction_ascendant"))
-                .document(id("tablet_of_destruction_ascendant_document"))
+                .template(id("tablet_of_destruction_ascendant"))
                 .theme(id("tablet_of_destruction"));
     }
 }

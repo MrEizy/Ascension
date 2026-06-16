@@ -17,6 +17,7 @@ public final class AscensionClientTooltipProviders {
         registered = true;
 
         AscensionTooltipValueSources.register();
+        AscensionTransferItemClassifications.register();
         AscensionTransferItemTooltipProvider.register();
         AscensionTabletTooltipProvider.register();
     }
