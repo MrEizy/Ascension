@@ -12,3 +12,10 @@ TODO create a global server registry access?
 create a dashboard.
 so write a mod that can hook into the server endpoints and read certain data from it
 this would then be displayable on a (local) browser window, with realtime updates
+
+Tribulation TODO
+
+1. setup such that listener is re added on entity load
+2. seutp tick event
+3. setup TribulationData existence validation checks
+4. ensure tribulations are properly cleaned up
