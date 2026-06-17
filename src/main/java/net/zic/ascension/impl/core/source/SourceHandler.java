@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -33,7 +34,7 @@ import java.util.*;
 
 //TODO need to get the rest of the mod in a good state so i can test this
 @EventBusSubscriber
-public class SourceHandler extends SavedData {
+public class  SourceHandler extends SavedData {
 
     private final HashMap<UUID,OriginSource> remoteSources = new HashMap<>();
     private final HashMap<OriginSource,UUID> sourceIdMap = new HashMap<>();
@@ -65,10 +66,10 @@ public class SourceHandler extends SavedData {
     );
 
 
-    public SourceHandler(ServerLevel level){
+    public SourceHandler(ServerLevel server){
 
     }
-    public SourceHandler(ServerLevel level, Map<UUID,OriginSource> remoteSources, Map<UUID,UUID> watchers){
+    public SourceHandler(ServerLevel server, Map<UUID,OriginSource> remoteSources, Map<UUID,UUID> watchers){
         //TODO implement and load
     }
 

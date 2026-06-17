@@ -8,6 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 
@@ -71,6 +72,7 @@ public interface Technique {
     //gives the progress needed to progress a given realm
     double getMaxProgress(int majorRealm,int minorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
 
+    TribulationDefinition getTribulation(int majorRealm,int minorRealm,RegistryAccess access);
     //is used for both minor and major realm breakthroughs
     boolean tryBreakthrough(LivingEntity entity,OriginSource source,int majorRealm,int minorRealm,double progress,@Nullable TechniqueData techniqueData);
 

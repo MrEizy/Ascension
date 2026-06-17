@@ -10,6 +10,7 @@ import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.api.core.path.interactions.PathInteractionType;
+import net.zic.ascension.api.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.datapack.path.PathType;
 import net.zic.ascension.impl.core.path.PathRelationship;
 import net.zic.ascension.impl.core.path.MajorRealmDefinition;
@@ -69,6 +70,20 @@ public record SimplePath(Component name, Component description, List<MajorRealmD
         if(majorRealm > getMaxMajorRealm()) return 100;
         if(realms.get(majorRealm).minorRealms().size() <= minorRealm) return 100;
         return realms.get(majorRealm).minorRealms().get(minorRealm).progress();
+    }
+
+    @Override
+    public TribulationDefinition getTribulationDefinition(int majorRealm, int minorRealm,RegistryAccess access) {
+
+        return hasTribulation(majorRealm,minorRealm) ? realms.get(majorRealm).minorRealms().get(majorRealm).tribulationReference().resolve(access) :null;
+    }
+
+    @Override
+    public boolean hasTribulation(int majorRealm, int minorRealm) {
+        if(majorRealm>=realms.size())return false;
+        if(minorRealm>= realms.get(majorRealm).minorRealms().size()) return false;
+
+        return realms.get(majorRealm).minorRealms().get(minorRealm).tribulationReference() != null;
     }
 
     @Override

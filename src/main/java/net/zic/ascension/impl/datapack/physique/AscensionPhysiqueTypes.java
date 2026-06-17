@@ -11,10 +11,13 @@ public class AscensionPhysiqueTypes {
     public static final DeferredRegister<PhysiqueType> PHYSIQUE_TYPES =
             DeferredRegister.create(TypeRegistries.PHYSIQUE_TYPE_REGISTRY, AscensionCraft.MOD_ID);
 
+
     public static final DeferredHolder<PhysiqueType,PhysiqueType> SIMPLE_PHYSIQUE_TYPE = PHYSIQUE_TYPES.register(
             "simple",
             SimplePhysiqueType::new
     );
+
+
 
     public static void register(IEventBus eventBus){
 

@@ -1,23 +1,21 @@
 package net.zic.ascension.api.core.path;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.RegistryObjectData;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
+import net.zic.ascension.api.core.tribulation.TribulationData;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
-//TODO decide if i want to pass source or entity wrapper
+//TODO ensure proper cleanup of any active tribulations on technique or path removal
 public interface PathData extends RegistryObjectData {
     //──Getters────────────────────────────────────────────────────────
     Identifier getPath();
@@ -58,6 +56,10 @@ public interface PathData extends RegistryObjectData {
 
     Component getRealmName(int majorRealm,int minorRealm,RegistryAccess access);
 
+
+    TribulationData getTribulationData(int majorRealm,int minorRealm);
+    Collection<Realm> getTribulationRealms();
+    UUID getBreakthroughTribulation();
     //──Setters────────────────────────────────────────────────────────
     void setMajorRealm(int majorRealm,OriginSource source);
     void setMinorRealm(int minorRealm);
@@ -68,7 +70,9 @@ public interface PathData extends RegistryObjectData {
     boolean setCurrentTechnique(Identifier technique,OriginSource source);
     boolean setCurrentTechnique(Identifier technique,TechniqueData data,OriginSource source);
 
-
+    void setTribulationData(OriginSource source,int majorRealm,int minorRealm,TribulationData data);
+    void removeTribulationData(OriginSource source,int majorRealm,int minorRealm);
+    void setBreakthroughTribulation(UUID tribulation);
     //──Logic────────────────────────────────────────────────────────
     default void onRealmUp(OriginSource source) {
         if(getCurrentTechnique() == null) return;
@@ -77,6 +81,16 @@ public interface PathData extends RegistryObjectData {
         technique.onRealmUp(source,getCurrentTechniqueData());
     }
     default void onRealmDown(OriginSource source){
+
+        int majorRealm = getMajorRealm();
+        int minorRealm = getMinorRealm();
+        if(getMaxMinorRealm(majorRealm,source.getRegistryAccess()) == minorRealm){
+            majorRealm += 1;
+            minorRealm = 0;
+        }else minorRealm -=1;
+
+        removeTribulationData(source,majorRealm,minorRealm);
+
         Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getCurrentTechnique(),source.getRegistryAccess());
         if(technique == null) return;//TODO add log here
         technique.onRealmDown(source,getCurrentTechniqueData());
@@ -84,7 +98,7 @@ public interface PathData extends RegistryObjectData {
 
     //takes in a potential realm change, and breaks it down into individual steps
     //TODO write default implementation
-    default void handlerRealmChange(OriginSource source,int newMajorRealm,int newMinorRealm){
+    default void handleRealmChange(OriginSource source, int newMajorRealm, int newMinorRealm){
         if(getCurrentTechnique() == null) return;
         int oldMajorRealm = getMajorRealm();
         int oldMinorRealm = getMinorRealm();
@@ -210,7 +224,7 @@ public interface PathData extends RegistryObjectData {
             Identifier techniqueForRealm = getTechniqueForRealm(peekRealm);
             Technique instance = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,techniqueForRealm,source.getRegistryAccess());
             if(instance == null){
-                handlerRealmChange(source,peekRealm,0);
+                handleRealmChange(source,peekRealm,0);
                 continue;
             }
             for(String family : families){
@@ -220,7 +234,7 @@ public interface PathData extends RegistryObjectData {
                 }
             }
             //no valid families lower realm and remove technique
-            handlerRealmChange(source,peekRealm,0);
+            handleRealmChange(source,peekRealm,0);
             setCurrentTechnique(null,source); //may also fully drop us down to 0 0
         }
     }

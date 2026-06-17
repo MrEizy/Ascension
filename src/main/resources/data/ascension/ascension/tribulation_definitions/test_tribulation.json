@@ -1,0 +1,6 @@
+{
+  "type": "ascension:lightning",
+  "strikes": 4,
+  "damage": 2.0,
+  "tick_delay": 10
+}

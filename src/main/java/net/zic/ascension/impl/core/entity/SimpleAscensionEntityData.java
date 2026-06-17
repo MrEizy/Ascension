@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.entity;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,6 +21,8 @@ import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import java.util.function.Function;
 
 public class SimpleAscensionEntityData implements AscensionEntityData {
     private final OriginSource source;
@@ -127,7 +130,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
             if (previousValue == null) {
                 previousValue = new SimpleAscensionEntityData(
-                        new OriginSource(buf.registryAccess()),
+                        new OriginSource(),
                         entity
                 );
             }
@@ -148,6 +151,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     }
 
     public static class Provider implements IAttachmentSerializer<SimpleAscensionEntityData> {
+
         @Override
         public SimpleAscensionEntityData read(
                 @NonNull IAttachmentHolder holder,
@@ -157,9 +161,12 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                 return null;
             }
 
+
             OriginSource source = entity.level().isClientSide()
-                    ? new OriginSource(entity.level().registryAccess(), input.childOrEmpty("source_data"))
-                    : new ServerOriginSource(entity.level().registryAccess(), input.childOrEmpty("source_data"));
+                    ? new OriginSource( input.childOrEmpty("source_data"))
+                    : new ServerOriginSource(input.childOrEmpty("source_data"));
+
+
 
             SimpleAscensionEntityData data = new SimpleAscensionEntityData(source,entity);
 
@@ -171,6 +178,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
         @Override
         public boolean write(SimpleAscensionEntityData attachment, ValueOutput output) {
+
             attachment.source.write(output.child("source_data"));
             output.putBoolean("cultivation_suppressed",attachment.isCultivationSuppressed());
             return true;

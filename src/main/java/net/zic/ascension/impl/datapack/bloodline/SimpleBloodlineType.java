@@ -4,10 +4,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.core.bloodline.Bloodline;
+import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
+import net.zic.ascension.impl.core.bloodline.SimpleBloodlineData;
 
 public class SimpleBloodlineType extends BloodlineType {
 
@@ -22,5 +24,10 @@ public class SimpleBloodlineType extends BloodlineType {
                         AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(SimpleBloodline::itemTooltip)
                 ).apply(instance, SimpleBloodline::new)
         );
+    }
+
+    @Override
+    public MapCodec<? extends BloodlineData> dataCodec() {
+        return MapCodec.unit(new SimpleBloodlineData());
     }
 }

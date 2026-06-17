@@ -5,8 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.physique.Physique;
+import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
+import net.zic.ascension.impl.core.physique.EmptyPhysiqueData;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
@@ -30,5 +32,10 @@ public class SimplePhysiqueType extends PhysiqueType {
                         AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(SimplePhysique::itemTooltip)
                 ).apply(instance, SimplePhysique::new)
         );
+    }
+
+    @Override
+    public MapCodec<? extends PhysiqueData> dataCodec() {
+        return MapCodec.unit(new EmptyPhysiqueData());
     }
 }

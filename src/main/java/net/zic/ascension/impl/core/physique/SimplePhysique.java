@@ -55,7 +55,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
 
     @Override
     public PhysiqueType getType() {
-        return AscensionPhysiqueTypes.SIMPLE_PHYSIQUE_TYPE.get();
+        return   AscensionPhysiqueTypes.SIMPLE_PHYSIQUE_TYPE.get();
     }
 
     @Override
@@ -108,16 +108,16 @@ public record SimplePhysique(Component name, Component description, List<Identif
 
     @Override
     public PhysiqueData newData(RegistryAccess access) {
-        return null;
+        return new EmptyPhysiqueData();
     }
 
     @Override
     public PhysiqueData loadData(ValueInput input,RegistryAccess access) {
-        return null;
+        return new EmptyPhysiqueData();
     }
 
     @Override
     public PhysiqueData loadData(ByteBuf buf) {
-        return null;
+        return new EmptyPhysiqueData();
     }
 }

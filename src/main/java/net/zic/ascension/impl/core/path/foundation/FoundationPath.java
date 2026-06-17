@@ -13,6 +13,7 @@ import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.api.core.path.interactions.PathInteractionType;
 import net.zic.ascension.api.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.datapack.path.PathType;
 import net.zic.ascension.impl.core.path.PathRelationship;
 import net.zic.ascension.impl.core.path.MajorRealmDefinition;
@@ -114,7 +115,19 @@ public record FoundationPath(Component name, Component description, List<Foundat
         return realms.get(majorRealm).minorRealms().get(minorRealm).progress();
     }
 
+    @Override
+    public TribulationDefinition getTribulationDefinition(int majorRealm, int minorRealm,RegistryAccess access) {
 
+        return hasTribulation(majorRealm,minorRealm) ? realms.get(majorRealm).minorRealms().get(minorRealm).tribulationReference().resolve(access) :null;
+    }
+
+    @Override
+    public boolean hasTribulation(int majorRealm, int minorRealm) {
+        if(majorRealm>=realms.size())return false;
+        if(minorRealm>= realms.get(majorRealm).minorRealms().size()) return false;
+
+        return realms.get(majorRealm).minorRealms().get(minorRealm).tribulationReference() != null;
+    }
 
     @Override
     public double getInteractionValue(Identifier path) {

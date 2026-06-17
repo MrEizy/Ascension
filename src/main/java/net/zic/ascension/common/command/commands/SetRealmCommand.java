@@ -125,7 +125,7 @@ public class SetRealmCommand {
             }
             int oldMajor = data.getMajorRealm();
             int oldMinor = data.getMinorRealm();
-            data.handlerRealmChange(originSource,newMajorRealm,newMinorRealm);
+            data.handleRealmChange(originSource,newMajorRealm,newMinorRealm);
 
             if(progressPercent > 0){
                 progressPercent = Math.clamp(progressPercent,0,100);

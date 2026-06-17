@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.skill.Skill;
+import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.impl.core.skill.castable.DebugCastable;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
@@ -25,5 +26,10 @@ public class SimpleCultivationSkillType extends SkillType {
                         Codec.DOUBLE.fieldOf("rate").forGetter(SimpleCultivationSkill::baseRate)
                 ).apply(instance, SimpleCultivationSkill::new)
         );
+    }
+
+    @Override
+    public MapCodec<? extends SkillData> dataCodec() {
+        return null;
     }
 }

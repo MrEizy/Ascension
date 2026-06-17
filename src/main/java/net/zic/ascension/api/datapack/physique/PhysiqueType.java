@@ -3,19 +3,27 @@ package net.zic.ascension.api.datapack.physique;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.zic.ascension.api.core.physique.Physique;
+import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.datapack.TypeRegistries;
-
-import java.util.function.Supplier;
 
 public abstract class PhysiqueType {
 
 
     public abstract MapCodec<? extends Physique> codec();
 
+    public abstract MapCodec<? extends PhysiqueData> dataCodec();
 
-    public static Codec<Physique> PHYSIQUE_CODEC = TypeRegistries.PHYSIQUE_TYPE_REGISTRY.byNameCodec()
+    public static final Codec<Physique> PHYSIQUE_CODEC = TypeRegistries.PHYSIQUE_TYPE_REGISTRY.byNameCodec()
             .dispatch(
                     Physique::getType,
                     PhysiqueType::codec
             );
+
+    public static Codec<PhysiqueData> PHYSIQUE_DATA_CODEC = TypeRegistries.PHYSIQUE_TYPE_REGISTRY.byNameCodec()
+            .dispatch(
+                    PhysiqueData::getType,
+                    PhysiqueType::dataCodec
+            );
+
+
 }

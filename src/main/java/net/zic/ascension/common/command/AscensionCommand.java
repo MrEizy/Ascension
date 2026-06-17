@@ -7,6 +7,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
 import net.zic.ascension.common.command.commands.SetRealmCommand;
 import net.zic.ascension.common.command.commands.SlotSkillCommand;
+import net.zic.ascension.common.command.commands.TribulationCommand;
 
 public class AscensionCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -31,6 +32,7 @@ public class AscensionCommand {
                         .then(SlotSkillCommand.buildUnSlot())
                         .then(SlotSkillCommand.buildDisplay())
                 )
+                .then(TribulationCommand.build())
 
 
         );

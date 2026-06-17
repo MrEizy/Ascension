@@ -18,6 +18,7 @@ import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.realm_change.RealmChangeAction;
 import net.zic.ascension.api.core.technique.realm_change.RealmChangeActionCondition;
+import net.zic.ascension.api.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
 
 import net.zic.ascension.api.datapack.data_source.DataSourceType;
@@ -28,6 +29,7 @@ import net.zic.ascension.api.datapack.progresison.ProgressActionType;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
 
+import net.zic.ascension.api.datapack.tribulation.TribulationType;
 import net.zic.zenithlib.registry.RegistryHelper;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class CoreRegistries {
@@ -74,6 +76,11 @@ public class CoreRegistries {
             ()-> ProgressActionConditionType.PROGRESS_ACTION_CONDITION_CODEC
     );
 
+    public static final RegistryHelper.DataPackRegistry<TribulationDefinition> TRIBULATION_DEFINITION_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID,
+            "tribulation_definitions",
+            ()-> TribulationType.TRIBULATION_CODEC
+    );
 
     public static <T> T safeAccess(RegistryHelper.DataPackRegistry<T> registry, Identifier id, RegistryAccess access){
         return registry.get(access).containsKey(id) ? registry.get(access).getValue(id) : null;
@@ -127,6 +134,10 @@ public class CoreRegistries {
                 PROGRESS_ACTION_CONDITION_REGISTRY.codec().get()
         );
 
-
+        event.dataPackRegistry(
+                TRIBULATION_DEFINITION_REGISTRY.key(),
+                TRIBULATION_DEFINITION_REGISTRY.codec().get(),
+                TRIBULATION_DEFINITION_REGISTRY.codec().get()
+        );
     }
 }

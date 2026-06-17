@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
+import net.zic.ascension.api.datapack.bloodline.BloodlineType;
+import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
 
 public class SimpleBloodlineData implements BloodlineData {
 
@@ -32,6 +34,11 @@ public class SimpleBloodlineData implements BloodlineData {
     @Override
     public void setPurity(int newPurity) {
         this.purity = newPurity;
+    }
+
+    @Override
+    public BloodlineType getType() {
+        return AscensionBloodlineTypes.SIMPLE_BLOODLINE_TYPE.get();
     }
 
     @Override

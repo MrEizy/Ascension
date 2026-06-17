@@ -48,9 +48,9 @@ public class CultivationUtil {
         if(technique.tryBreakthrough(caster,source,pathData.getMajorRealm(),pathData.getMinorRealm(),pathData.getProgress(),data)){
 
             if(pathData.getMinorRealm() == pathData.getMaxMinorRealm(pathData.getMajorRealm(),source.getRegistryAccess())){
-                pathData.handlerRealmChange(source, pathData.getMajorRealm()+1,0);
+                pathData.handleRealmChange(source, pathData.getMajorRealm()+1,0);
             }else{
-                pathData.handlerRealmChange(source,pathData.getMajorRealm(), pathData.getMinorRealm()+1);
+                pathData.handleRealmChange(source,pathData.getMajorRealm(), pathData.getMinorRealm()+1);
             }
             pathData.setProgress(0);
         }

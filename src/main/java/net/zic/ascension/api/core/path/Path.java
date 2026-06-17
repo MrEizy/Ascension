@@ -7,6 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.api.core.path.interactions.PathInteractionType;
+import net.zic.ascension.api.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.datapack.path.PathType;
 
 import java.util.Collection;
@@ -33,11 +34,13 @@ public interface Path {
     //gives the progress needed to progress a given realm
     double getMaxProgress(int majorRealm,int minorRealm);
 
+    //──Tribulations────────────────────────────────────────────────────────
+    TribulationDefinition getTribulationDefinition(int majorRealm,int minorRealm,RegistryAccess access);
+    boolean hasTribulation(int majorRealm,int minorRealm);
     //──Interaction────────────────────────────────────────────────────────
     double getInteractionValue(Identifier path);
     PathInteractionType getInteractionType(Identifier path);
     Collection<Identifier> getPathsOfInteraction(PathInteractionType type);
-
     void registerInteractions(PathInteractionHolder holder,RegistryAccess access);
 
     //──Data────────────────────────────────────────────────────────

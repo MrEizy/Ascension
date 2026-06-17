@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.technique.realm_change.condition;
 
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.source.OriginSource;
@@ -14,6 +15,10 @@ import java.util.List;
 public record EveryMajorRealmInCondition(List<Integer> majorRealms) implements RealmChangeActionCondition {
     @Override
     public boolean test(OriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction) {
+
+        System.out.println(minorRealm);
+        System.out.println(majorRealm);
+        System.out.println(minorRealm == 0 && majorRealms.contains(majorRealm));
         return minorRealm == 0 && majorRealms.contains(majorRealm);
     }
 

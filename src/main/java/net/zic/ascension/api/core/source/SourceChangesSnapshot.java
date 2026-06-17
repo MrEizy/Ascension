@@ -1,5 +1,6 @@
 package net.zic.ascension.api.core.source;
 
+import com.mojang.datafixers.util.Pair;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
@@ -12,7 +13,6 @@ import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.stats.StatInstance;
 import net.zic.zenithlib.value_containers.ValueContainer;
-import oshi.util.tuples.Pair;
 
 import java.util.*;
 
@@ -99,29 +99,29 @@ public class SourceChangesSnapshot {
         }
 
         ByteBufHelpers.encodeCollection(toAddBloodlines, buf, (pair, byteBuf) -> {
-            ByteBufHelpers.encodeIdentifier(pair.getA(), byteBuf);
-            pair.getB().encode(byteBuf);
+            ByteBufHelpers.encodeIdentifier(pair.getFirst(), byteBuf);
+            pair.getSecond().encode(byteBuf);
         });
         ByteBufHelpers.encodeCollection(toRemoveBloodline, buf, ByteBufHelpers::encodeIdentifier);
 
         ByteBufHelpers.encodeCollection(toAddPaths, buf, (pair, byteBuf) -> {
-            ByteBufHelpers.encodeIdentifier(pair.getA(), byteBuf);
-            pair.getB().encode(byteBuf);
+            ByteBufHelpers.encodeIdentifier(pair.getFirst(), byteBuf);
+            pair.getSecond().encode(byteBuf);
         });
         ByteBufHelpers.encodeCollection(toRemovePaths, buf, ByteBufHelpers::encodeIdentifier);
 
         ByteBufHelpers.encodeCollection(toAddSkills, buf, (pair, byteBuf) -> {
-            ByteBufHelpers.encodeIdentifier(pair.getA(), byteBuf);
-            byteBuf.writeBoolean(pair.getB() != null);
-            if (pair.getB() != null) {
-                pair.getB().encode(byteBuf);
+            ByteBufHelpers.encodeIdentifier(pair.getFirst(), byteBuf);
+            byteBuf.writeBoolean(pair.getSecond() != null);
+            if (pair.getSecond() != null) {
+                pair.getSecond().encode(byteBuf);
             }
         });
         ByteBufHelpers.encodeCollection(toRemoveSkills, buf, ByteBufHelpers::encodeIdentifier);
 
         ByteBufHelpers.encodeCollection(toAddDataSources, buf, (pair, byteBuf) -> {
-            ByteBufHelpers.encodeIdentifier(pair.getA(), byteBuf);
-            pair.getB().encode(byteBuf);
+            ByteBufHelpers.encodeIdentifier(pair.getFirst(), byteBuf);
+            pair.getSecond().encode(byteBuf);
         });
         ByteBufHelpers.encodeCollection(toRemoveDataSources, buf, ByteBufHelpers::encodeIdentifier);
 

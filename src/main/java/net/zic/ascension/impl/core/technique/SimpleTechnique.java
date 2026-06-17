@@ -11,13 +11,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.path.Path;
+import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
+import net.zic.ascension.api.core.tribulation.TribulationDefinition;
+import net.zic.ascension.api.core.tribulation.TribulationManager;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
+import net.zic.ascension.impl.core.technique.realm.MajorRealmDefinitionOverride;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
 import org.jspecify.annotations.Nullable;
 
@@ -59,7 +63,7 @@ public class SimpleTechnique implements Technique {
 
     private final ProgressActionHolder holder;
 
-    private final Map<Integer,MajorRealmNames> majorRealmOverrides;
+    private final Map<Integer,MajorRealmDefinitionOverride> majorRealmOverrides;
 
     private final Optional<AscensionItemTooltipDefinition> itemTooltip;
 
@@ -75,7 +79,7 @@ public class SimpleTechnique implements Technique {
             int minMajorRealm,
             Optional<AscensionItemTooltipDefinition> itemTooltip,
             ProgressActionHolder holder,
-            Map<Integer, MajorRealmNames> majorRealmOverrides) {
+            Map<Integer, MajorRealmDefinitionOverride> majorRealmOverrides) {
         this.name = name;
         this.description = description;
         this.path = path;
@@ -89,35 +93,12 @@ public class SimpleTechnique implements Technique {
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
     }
 
-    public record MajorRealmNames(Component name, Map<Integer, Component> minorRealmOverrides) {
-        public boolean hasName(){return name != null;}
-        public boolean hasMinorRealmName(int minorRealm){return minorRealmOverrides.containsKey(minorRealm);}
 
-        public Component getName(int majorRealm,Identifier path, RegistryAccess registryAccess){
-            if(hasName()) return name;
-            Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,registryAccess);
-            return pathInstance == null ? Component.empty() : pathInstance.getMajorRealmName(majorRealm);
-        }
-        public Component getMinorRealmName(int majorRealm,int minorRealm,Identifier path,RegistryAccess registryAccess){
-            if(hasMinorRealmName(minorRealm)) return minorRealmOverrides.get(minorRealm);
-            Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,registryAccess);
-
-            return pathInstance == null ? Component.empty() : pathInstance.getMinorRealmName(majorRealm,minorRealm);
-        }
-
-        public static final Codec<MajorRealmNames> CODEC = RecordCodecBuilder.create(
-                instance->
-                        instance.group(
-                            ComponentSerialization.CODEC.optionalFieldOf("name").forGetter(names-> Optional.of(names.name)),
-                            Codec.unboundedMap(Codec.INT,ComponentSerialization.CODEC).fieldOf("minor_realms").forGetter(MajorRealmNames::minorRealmOverrides)
-                    ).apply(instance,(name,names)->new MajorRealmNames(name.orElse(null),names))
-        );
-    }
 
     public ProgressActionHolder getHolder(){
         return holder;
     }
-    public Map<Integer,MajorRealmNames> getMajorRealmOverrides(){
+    public Map<Integer,MajorRealmDefinitionOverride> getMajorRealmOverrides(){
         return majorRealmOverrides;
     }
 
@@ -130,6 +111,7 @@ public class SimpleTechnique implements Technique {
     public Optional<Integer> getHardCodedMinMajorRealm(){
         return Optional.of(minMajorRealm);
     }
+
 
     @Override
     public TechniqueType getType() {
@@ -183,8 +165,8 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public Component getMajorRealmName(int majorRealm, @Nullable TechniqueData techniqueData, RegistryAccess registryAccess) {
-        if(majorRealmOverrides.containsKey(majorRealm)){
-            return majorRealmOverrides.get(majorRealm).getName(majorRealm,getPath(),registryAccess);
+        if(majorRealmOverrides.containsKey(majorRealm) && majorRealmOverrides.get(majorRealm).hasNameOverride()){
+            return majorRealmOverrides.get(majorRealm).getName();
         }
         Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,registryAccess);
         return pathInstance == null ? Component.empty() : pathInstance.getMajorRealmName(majorRealm);
@@ -192,10 +174,11 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public Component getMinorRealmName(int majorRealm, int minorRealm, @Nullable TechniqueData techniqueData, RegistryAccess registryAccess) {
-        if(majorRealmOverrides.containsKey(majorRealm)){
-            return majorRealmOverrides.get(majorRealm).getMinorRealmName(majorRealm,minorRealm,path,registryAccess);
+        if(majorRealmOverrides.containsKey(majorRealm) &&
+                majorRealmOverrides.get(majorRealm).hasRealmOverride(minorRealm) &&
+                majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).hasNameOverride()){
+            return majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).getName();
         }
-
         Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,registryAccess);
 
         return pathInstance == null ? Component.empty() : pathInstance.getMinorRealmName(majorRealm,minorRealm);
@@ -232,19 +215,59 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public double getMaxProgress(int majorRealm, int minorRealm, @Nullable TechniqueData techniqueData, RegistryAccess registryAccess) {
-        return 100; //TODO
+        if(majorRealmOverrides.containsKey(majorRealm) &&
+                majorRealmOverrides.get(majorRealm).hasRealmOverride(minorRealm) &&
+                majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).hasProgressOverride()){
+            return majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).getProgress();
+        }
+        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,registryAccess);
+
+        return pathInstance == null ? 100 : pathInstance.getMaxProgress(majorRealm,minorRealm);
+    }
+
+    @Override
+    public TribulationDefinition getTribulation(int majorRealm, int minorRealm, RegistryAccess access) {
+        if(majorRealmOverrides.containsKey(majorRealm) &&
+                majorRealmOverrides.get(majorRealm).hasRealmOverride(minorRealm) &&
+                majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).hasTribulationOverride()){
+            return majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).getTribulation(access);
+        }
+        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,access);
+
+        return pathInstance == null ? null : pathInstance.getTribulationDefinition(majorRealm,minorRealm,access);
     }
 
     @Override
     public boolean tryBreakthrough(LivingEntity entity, OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData) {
+        if(source.getPathData(getPath()).isBreakingThrough()) return false;
         double maxProgress = getMaxProgress(majorRealm,minorRealm,techniqueData,source.getRegistryAccess());
         double maxMajorRealm = getMaxMajorRealm(techniqueData,source.getRegistryAccess());
         double maxMinorRealm = getMaxMinorRealm(majorRealm,techniqueData,source.getRegistryAccess());
+        //TODO trigger breakthrough here
 
-        return maxProgress <= progress &&
+        boolean canBreakthrough = maxProgress <= progress &&
                 (
                         (maxMinorRealm > minorRealm && maxMajorRealm >= majorRealm) ||
-                        (maxMinorRealm <= minorRealm && maxMajorRealm > majorRealm) );
+                                (maxMinorRealm <= minorRealm && maxMajorRealm > majorRealm) );
+        if(!canBreakthrough) return false;
+
+
+        TribulationDefinition definition = getTribulation(majorRealm,minorRealm,source.getRegistryAccess());
+        if(definition == null) return true;
+        UUID id =   TribulationManager.getInstance().triggerTribulation(definition,entity);
+        source.getPathData(getPath()).setBreakthroughTribulation(
+                id
+        );
+
+        TribulationManager.getInstance().setTribulationConsumer(id,(data)->{
+            PathData pathData = source.getPathData(getPath());
+
+            pathData.handleRealmChange(
+                source,pathData.getMajorRealm()+1,0);
+
+            pathData.setTribulationData(source,pathData.getMajorRealm(),pathData.getMinorRealm(),data);
+        });
+        return false;
 
     }
 

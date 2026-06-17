@@ -10,6 +10,7 @@ import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
+import net.zic.ascension.impl.core.technique.realm.MajorRealmDefinitionOverride;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,12 @@ public class SimpleTechniqueType extends TechniqueType {
                         Codec.INT.optionalFieldOf("max_realm").forGetter(SimpleTechnique::getHardCodedMaxMajorRealm),
                         Codec.INT.optionalFieldOf("max_minor_realm").forGetter(SimpleTechnique::getHardCodedMaxMinorRealm),
                         Codec.INT.optionalFieldOf("min_realm").forGetter(SimpleTechnique::getHardCodedMinMajorRealm),
-                        Codec.unboundedMap(Codec.INT,SimpleTechnique.MajorRealmNames.CODEC).optionalFieldOf("realm_names",Map.of()).forGetter(SimpleTechnique::getMajorRealmOverrides),
+                        Codec.unboundedMap(
+                            Codec.STRING.xmap(
+                                Integer::parseInt,Object::toString),
+                                MajorRealmDefinitionOverride.CODEC)
+                                .optionalFieldOf("realm_overrides",Map.of()).
+                                forGetter(SimpleTechnique::getMajorRealmOverrides),
                         ProgressActionHolder.PROGRESS_HOLDER_CODEC.fieldOf("realm_change_handler").forGetter(SimpleTechnique::getHolder),
                         AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(Technique::itemTooltip)
                 ).apply(instance,

@@ -1,5 +1,8 @@
 package net.zic.ascension.api.core.source;
 
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
@@ -28,6 +31,9 @@ import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.ascension.api.core.technique.TechniqueData;
+import net.zic.ascension.api.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.datapack.physique.PhysiqueType;
+import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.api.event.EventReason;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.nbt.NbtHelpers;
@@ -37,9 +43,11 @@ import net.zic.zenithlib.stats.StatSheet;
 import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
-import oshi.util.tuples.Pair;
+
 
 import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * the data of an entities abstract identity (multiple entities
@@ -80,15 +88,17 @@ public class OriginSource {
     private long revision;
     private CompoundTag cachedCached;
     private ValueInput cached;
-    public OriginSource(RegistryAccess access){
-        this.registryAccess = access;
+
+
+    public OriginSource(){
+
     }
+
     public OriginSource(CompoundTag input){
         this.cachedCached = input;
     }
-    public OriginSource(RegistryAccess access,ValueInput input){
+    public OriginSource(ValueInput input){
 
-        this.registryAccess = access;
         this.cached = input;
     }
     public boolean isLoaded(){ return cached != null;}
@@ -189,6 +199,9 @@ public class OriginSource {
     public Collection<Identifier> getBloodlines(){
         return bloodlines.keySet();
     }
+    protected Map<Identifier,BloodlineData> getAllBloodlines(){
+        return bloodlines;
+    }
     public BloodlineData getBloodlineData(Identifier bloodline){
         return bloodlines.get(bloodline);
     }
@@ -274,6 +287,9 @@ public class OriginSource {
     }
     public SkillData getSkillData(Identifier skill){
         return skills.get(skill);
+    }
+    protected Map<Identifier,SkillData> getAllSkills(){
+        return skills;
     }
 
     public void markSkillDirty(Identifier skill){}//should be used if you changed a skills skilLData
@@ -720,19 +736,19 @@ public class OriginSource {
             this.physiqueData = snapshot.physiqueData;
         }
 
-        for(Pair<Identifier,BloodlineData> bloodline : snapshot.toAddBloodlines) bloodlines.put(bloodline.getA(),bloodline.getB());
+        for(Pair<Identifier,BloodlineData> bloodline : snapshot.toAddBloodlines) bloodlines.put(bloodline.getFirst(),bloodline.getSecond());
 
         for(Identifier toRemove : snapshot.toRemoveBloodline) bloodlines.remove(toRemove);
 
-        for(Pair<Identifier,PathData> path : snapshot.toAddPaths) paths.put(path.getA(),path.getB());
+        for(Pair<Identifier,PathData> path : snapshot.toAddPaths) paths.put(path.getFirst(),path.getSecond());
 
         for(Identifier toRemove :snapshot.toRemovePaths) paths.remove(toRemove);
 
-        for(Pair<Identifier,SkillData> skill : snapshot.toAddSkills) skills.put(skill.getA(),skill.getB());
+        for(Pair<Identifier,SkillData> skill : snapshot.toAddSkills) skills.put(skill.getFirst(),skill.getSecond());
 
         for(Identifier toRemove : snapshot.toRemoveSkills) skills.remove(toRemove);
 
-        for(Pair<Identifier,DataSourceInstance> dataSource : snapshot.toAddDataSources) dataSources.put(dataSource.getA(),dataSource.getB());
+        for(Pair<Identifier,DataSourceInstance> dataSource : snapshot.toAddDataSources) dataSources.put(dataSource.getFirst(),dataSource.getSecond());
 
         for(Identifier toRemove : snapshot.toRemoveDataSources) dataSources.remove(toRemove);
 

@@ -6,12 +6,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
+import net.zic.ascension.api.core.path.Realm;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
+import net.zic.ascension.api.core.tribulation.TribulationData;
+import net.zic.ascension.api.core.tribulation.TribulationInstance;
+import net.zic.ascension.api.core.tribulation.TribulationManager;
+import net.zic.ascension.api.datapack.tribulation.TribulationType;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.*;
@@ -23,7 +29,7 @@ public class SimplePathData implements PathData {
     private int minorRealm;
     private double progress;
     private boolean cultivating;
-    private boolean breakingThrough;
+
     private UUID breakthroughInstance; //TODO implement
     //holds the technique used/being used to cultivate that realm
     private final ArrayList<Identifier> techniqueHistory = new ArrayList<>();
@@ -31,6 +37,10 @@ public class SimplePathData implements PathData {
     //holds the technique data for each "loaded" technique
     private final HashMap<Identifier,TechniqueData> techniqueData = new HashMap<>();
 
+    //TODO update to be a record of techniqueSource(if null assume path) that can be used to validate
+    private final HashMap<Realm, TribulationData> tribulationHistory = new HashMap<>();
+    private final HashMap<Realm,TribulationData> cachedTribulationHistory = new HashMap<>();
+    private UUID tribulationId;
     public SimplePathData(Identifier path) {
         this.path = path;
     }
@@ -96,7 +106,7 @@ public class SimplePathData implements PathData {
 
     @Override
     public boolean isBreakingThrough() {
-        return breakingThrough;
+        return tribulationId != null;
     }
 
     @Override
@@ -171,6 +181,21 @@ public class SimplePathData implements PathData {
     }
 
     @Override
+    public TribulationData getTribulationData(int majorRealm, int minorRealm) {
+        return tribulationHistory.get(new Realm(majorRealm,minorRealm));
+    }
+
+    @Override
+    public Collection<Realm> getTribulationRealms() {
+        return tribulationHistory.keySet();
+    }
+
+    @Override
+    public UUID getBreakthroughTribulation() {
+        return tribulationId;
+    }
+
+    @Override
     public void setMajorRealm(int majorRealm,OriginSource source) {
         if(majorRealm > techniqueHistory.size()-1){
             for(int i = techniqueHistory.size(); i <=majorRealm;i++){
@@ -208,40 +233,38 @@ public class SimplePathData implements PathData {
         return techniqueInstance != null && setCurrentTechnique(technique, techniqueInstance.newData(), source);
     }
 
+    /*
+    if current technique != null, it means we must first handle the logic to remove that technique
+    to remove it we first get the highest realm between
+        1. realm with different technique (e.g if technique 1 is realms 5 6 7 and technique 2 is 0-4. we can drop to 5 0 and remove the technique
+        2. first milestone realm (e.g if we are m 6 and milestone realm is 5 it means we can drop to realm 5 0 and remove the technique
+
+
+    then we run handleRealmChange IF the target realm is != current realm
+
+    before this we run broadcastTechnqiueRemovedAttempt()
+    and only run realm change if that is true
+
+    then if the above ran fine we add our new technique
+    then we validate the technique family of the new technique (if it is not valid we need to fully reset the cultivation)
+
+
+    then after we have done all that we validate the min realm required
+
+    TODO have transfer items warn players about compatability issues
+    */
     @Override
     public boolean setCurrentTechnique(Identifier technique, TechniqueData data, OriginSource source) {
         if(getCurrentTechnique() == null && technique == null) return true;
         if(getCurrentTechnique() != null && technique != null && getCurrentTechnique().equals(technique))return true;
 
-        /*
-            if current technique != null, it means we must first handle the logic to remove that technique
-            to remove it we first get the highest realm between
-                1. realm with different technique (e.g if technique 1 is realms 5 6 7 and technique 2 is 0-4. we can drop to 5 0 and remove the technique
-                2. first milestone realm (e.g if we are m 6 and milestone realm is 5 it means we can drop to realm 5 0 and remove the technique
 
-
-            then we run handleRealmChange IF the target realm is != current realm
-
-            before this we run broadcastTechnqiueRemovedAttempt()
-            and only run realm change if that is true
-
-            then if the above ran fine we add our new technique
-            then we validate the technique family of the new technique (if it is not valid we need to fully reset the cultivation)
-
-
-            then after we have done all that we validate the min realm required
-
-            TODO have transfer items warn players about compatability issues
-
-
-
-         */
 
         //remove existing technique
         if(getCurrentTechnique() != null){
             int targetRealm = getMaxMilestoneRealm(source.getRegistryAccess());
             if(targetRealm != getMajorRealm()){
-                handlerRealmChange(source,targetRealm,0);
+                handleRealmChange(source,targetRealm,0);
             }
             Identifier old = getCurrentTechnique();
             TechniqueData oldData = techniqueData.get(old);
@@ -282,7 +305,36 @@ public class SimplePathData implements PathData {
         return true;
     }
 
+    @Override
+    public void setTribulationData(OriginSource source,int majorRealm, int minorRealm,TribulationData data) {
 
+        tribulationHistory.put(new Realm(majorRealm,minorRealm),data);
+        data.getType().onAdded(source,data);
+        source.markPathDirty(getPath());
+    }
+
+    @Override
+    public void removeTribulationData(OriginSource source, int majorRealm, int minorRealm) {
+        TribulationData data =  tribulationHistory.remove(new Realm(majorRealm,minorRealm));
+        if(data == null) return;
+        data.getType().onRemoved(source,data);
+    }
+
+    @Override
+    public void setBreakthroughTribulation(UUID tribulation) {
+        if(!TribulationManager.getInstance().hasTribulation(tribulation)) return;
+        this.tribulationId = tribulation;
+    }
+
+    @Override
+    public void onRealmUp(OriginSource source) {
+        PathData.super.onRealmUp(source);
+
+        TribulationData data = cachedTribulationHistory.remove(new Realm(getMajorRealm(),getMinorRealm()));
+        if(data != null){
+            data.getType().onAdded(source,data);
+        }
+    }
 
     @Override
     public void simulateProgression(OriginSource source) {
@@ -290,6 +342,7 @@ public class SimplePathData implements PathData {
 
         ArrayList<Identifier> cachedTechniqueHistory = new ArrayList<>(techniqueHistory);
         HashMap<Identifier,TechniqueData> cachedTechniqueData = new HashMap<>(techniqueData);
+        cachedTribulationHistory.putAll(tribulationHistory);
         int cachedMinorRealm = minorRealm;
         double cachedProgress = progress;
 
@@ -297,28 +350,33 @@ public class SimplePathData implements PathData {
         progress = 0;
         techniqueHistory.clear();
         techniqueData.clear();
+        tribulationHistory.clear();
+
 
         while(cachedTechniqueHistory.size() > 1){
             Identifier technique = cachedTechniqueHistory.removeFirst();
             TechniqueData data = cachedTechniqueData.get(technique);
             setCurrentTechnique(technique,data,source);
-            handlerRealmChange(source,getMajorRealm()+1,0);
+            handleRealmChange(source,getMajorRealm()+1,0);
         }
 
         Identifier currentTechnique = cachedTechniqueHistory.removeFirst();
         setCurrentTechnique(currentTechnique,cachedTechniqueData.get(currentTechnique),source);
-        handlerRealmChange(source,getMajorRealm(),cachedMinorRealm);
+        handleRealmChange(source,getMajorRealm(),cachedMinorRealm);
         setProgress(cachedProgress);
+
+        cachedTribulationHistory.clear();
     }
 
     @Override
     public void removeFromSource(OriginSource source) {
         ArrayList<Identifier> cachedTechniqueHistory = new ArrayList<>(techniqueHistory);
         HashMap<Identifier,TechniqueData> cachedTechniqueData = new HashMap<>(techniqueData);
+        cachedTribulationHistory.putAll(tribulationHistory);
         int cachedMinorRealm = minorRealm;
         double cachedProgress = progress;
 
-        handlerRealmChange(source,0,0);
+        handleRealmChange(source,0,0);
 
         setCurrentTechnique(null,source);
 
@@ -326,6 +384,8 @@ public class SimplePathData implements PathData {
         techniqueHistory.addAll(cachedTechniqueHistory);
         techniqueData.clear();
         techniqueData.putAll(cachedTechniqueData);
+        tribulationHistory.putAll(cachedTribulationHistory);
+        cachedTribulationHistory.clear();
         minorRealm = cachedMinorRealm;
         progress = cachedProgress;
     }
@@ -352,6 +412,17 @@ public class SimplePathData implements PathData {
             TechniqueData data = techniqueData.get(technique);
             if(data != null) data.write(dataOutput.child("data"));
         }
+
+        //write tribulation history
+        ValueOutput.ValueOutputList tribulationHistoryOutput = output.childrenList("tribulation_history");
+        for(Realm realm : getTribulationRealms()){
+            ValueOutput realmOutput = tribulationHistoryOutput.addChild();
+            realmOutput.putInt("major_realm",realm.majorRealm());
+            realmOutput.putInt("minor_realm",realm.minorRealm());
+
+            realmOutput.store("data", TribulationType.TRIBULATION_DATA_CODEC,tribulationHistory.get(realm));
+        }
+        if(getBreakthroughTribulation() != null) output.putString("tribulation",getBreakthroughTribulation().toString());
 
     }
 
@@ -396,6 +467,22 @@ public class SimplePathData implements PathData {
 
             techniqueData.put(technique,data);
         }
+
+        //read tribulation history
+        ValueInput.ValueInputList tribulationHistoryInput = input.childrenListOrEmpty("tribulation_history");
+        for(ValueInput realmInput : tribulationHistoryInput){
+            int major = realmInput.getIntOr("major_realm",0);
+            int minor = realmInput.getIntOr("minor_realm",0);
+
+            TribulationData data = realmInput.read("data", TribulationType.TRIBULATION_DATA_CODEC).orElse(null);
+            if(data == null){
+                AscensionCraft.LOGGER.debug("Invalid Tribulation Type discarding");
+                continue;
+            }
+            tribulationHistory.put(new Realm(major,major),data);
+        }
+        Optional<String> tribulationId = input.getString("tribulation");
+        tribulationId.ifPresent(s -> setBreakthroughTribulation(UUID.fromString(s)));
     }
 
     @Override

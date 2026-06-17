@@ -68,11 +68,10 @@ public class ServerOriginSource extends OriginSource {
 
     private ProcessType currentProcess = null;
 
-    public ServerOriginSource(RegistryAccess access) {
-        super(access);
-    }
-    public ServerOriginSource(RegistryAccess access, ValueInput input){
-        super(access,input);
+
+    public ServerOriginSource(){}
+    public ServerOriginSource(ValueInput input){
+        super(input);
     }
     public ServerOriginSource(CompoundTag input){
         super(input);

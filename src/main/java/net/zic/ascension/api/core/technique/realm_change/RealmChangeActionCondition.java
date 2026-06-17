@@ -26,7 +26,8 @@ public interface RealmChangeActionCondition extends ProgressActionCondition {
 
         PathData pathData = source.getPathData(technique.getPath());
         if(pathData == null) return false;
-        if(pathData.getCultivatedRealms(contextIdentifier).isEmpty() || pathData.getCultivatedRealms(contextIdentifier).size() == 1){
+        if((pathData.getCultivatedRealms(contextIdentifier).isEmpty()) ||
+                (pathData.getCultivatedRealms(contextIdentifier).size() == 1 && direction == ProgressDirection.UP )){
              return test(source,pathData,technique,data,0,0,direction);
         }
         if(direction == ProgressDirection.UP){

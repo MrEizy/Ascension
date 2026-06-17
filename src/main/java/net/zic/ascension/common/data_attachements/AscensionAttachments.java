@@ -23,8 +23,8 @@ public class AscensionAttachments {
                         if(holder instanceof LivingEntity entity){
                             return new SimpleAscensionEntityData(
                                     entity.level().isClientSide() ?
-                                            new OriginSource(entity.level().registryAccess()) :
-                                            new ServerOriginSource(entity.level().registryAccess()),
+                                            new OriginSource() :
+                                            new ServerOriginSource(),
                                     entity
                             );
                         }

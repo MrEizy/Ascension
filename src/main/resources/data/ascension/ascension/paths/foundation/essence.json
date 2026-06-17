@@ -15,7 +15,13 @@
           "progress": 10000
         },{
           "name": "high",
-          "progress": 100000
+          "progress": 100000,
+          "tribulation": {
+            "type": "ascension:lightning",
+            "strikes": 4,
+            "damage": 2.0,
+            "tick_delay": 10
+          }
         }
       ],
       "foundation_realms":[

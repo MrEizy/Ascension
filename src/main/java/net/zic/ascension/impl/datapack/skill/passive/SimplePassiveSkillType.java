@@ -4,7 +4,9 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.core.skill.Skill;
+import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.impl.core.skill.EmptySkillData;
 import net.zic.ascension.impl.core.skill.SimplePassiveSkill;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
@@ -25,5 +27,10 @@ public class SimplePassiveSkillType extends SkillType {
                         ValueContainerModifier.MAP_CODEC.optionalFieldOf("affinity_modifiers",Map.of()).forGetter(SimplePassiveSkill::getAffinityModifiers)
                 ).apply(instance, SimplePassiveSkill::new)
         );
+    }
+
+    @Override
+    public MapCodec<? extends SkillData> dataCodec() {
+        return MapCodec.unit(EmptySkillData::new);
     }
 }

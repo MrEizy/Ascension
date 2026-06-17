@@ -25,6 +25,16 @@
       ]
     }
   ],
+  "realm_overrides": {
+    "0": {
+      "name": "test realm",
+      "realm_overrides": {
+        "2":{
+          "progress": 100
+        }
+      }
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_technique_manual",

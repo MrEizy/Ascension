@@ -24,6 +24,7 @@ import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 import net.zic.ascension.network.CycleDropModePacket;
 import net.zic.ascension.network.CycleShapePacket;
 import net.zic.ascension.network.SelectSkillSlotPacket;
@@ -107,6 +108,7 @@ public class AscensionCraft {
         AscensionSkillTypes.register(modEventBus);
         AscensionTechniqueTypes.register(modEventBus);
         AscensionPathTypes.register(modEventBus);
+        AscensionTribulationTypes.register(modEventBus);
         register(modEventBus);
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -154,6 +156,7 @@ public class AscensionCraft {
 
     @SubscribeEvent
     public static void onServerLaunch(ServerStartedEvent event){
+
         event.getServer().overworld().getDataStorage().computeIfAbsent(SourceHandler.ID);
 
         sourceHandler = event.getServer().overworld().getDataStorage().get(SourceHandler.ID);
