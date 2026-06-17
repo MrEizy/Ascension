@@ -15,7 +15,8 @@ this would then be displayable on a (local) browser window, with realtime update
 
 Tribulation TODO
 
-1. setup such that listener is re added on entity load
-2. seutp tick event
 3. setup TribulationData existence validation checks
+    - link realm tribulation data to a source(technique or self path)
+    - then validate by checking against the definition type of realm on below
 4. ensure tribulations are properly cleaned up
+    - by default tribulations will wait for entity to return, add a timeout?

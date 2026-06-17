@@ -106,7 +106,7 @@ public class SimplePathData implements PathData {
 
     @Override
     public boolean isBreakingThrough() {
-        return tribulationId != null;
+        return tribulationId != null && TribulationManager.getInstance().hasTribulation(tribulationId);
     }
 
     @Override
@@ -365,6 +365,20 @@ public class SimplePathData implements PathData {
         handleRealmChange(source,getMajorRealm(),cachedMinorRealm);
         setProgress(cachedProgress);
 
+        if(isBreakingThrough()){
+
+            TribulationManager.getInstance().setTribulationConsumer(
+                    getBreakthroughTribulation(),
+                    (data)->{
+                        PathData pathData = source.getPathData(getPath());
+
+                        pathData.handleRealmChange(
+                                source,pathData.getMajorRealm()+1,0);
+                        pathData.setProgress(0);
+                        pathData.setTribulationData(source,pathData.getMajorRealm(),pathData.getMinorRealm(),data);
+                    }
+            );
+        }
         cachedTribulationHistory.clear();
     }
 
@@ -481,8 +495,10 @@ public class SimplePathData implements PathData {
             }
             tribulationHistory.put(new Realm(major,major),data);
         }
+        //TODO validate that no major realms where lost. if so ignore this field
         Optional<String> tribulationId = input.getString("tribulation");
         tribulationId.ifPresent(s -> setBreakthroughTribulation(UUID.fromString(s)));
+
     }
 
     @Override

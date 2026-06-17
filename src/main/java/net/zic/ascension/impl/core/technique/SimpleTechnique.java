@@ -264,7 +264,7 @@ public class SimpleTechnique implements Technique {
 
             pathData.handleRealmChange(
                 source,pathData.getMajorRealm()+1,0);
-
+            pathData.setProgress(0);
             pathData.setTribulationData(source,pathData.getMajorRealm(),pathData.getMinorRealm(),data);
         });
         return false;

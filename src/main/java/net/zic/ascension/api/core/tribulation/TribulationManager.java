@@ -13,7 +13,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.datapack.tribulation.TribulationType;
 import net.zic.ascension.impl.core.source.SourceHandler;
@@ -62,14 +64,44 @@ public class TribulationManager extends SavedData {
     @SubscribeEvent
     public static void onJoinLevel(EntityJoinLevelEvent event){
         if(!(event.getEntity() instanceof LivingEntity entity)) return;
+        if(getInstance() == null) return;//very rare, if this occurs try relog
         if(!getInstance().entityTribulations.containsKey(entity.getUUID())) return;
 
         for(UUID tribulationId : getInstance().entityTribulations.get(entity.getUUID())){
             getInstance().tribulations.get(tribulationId).setEntityReference(entity);
         }
     }
+    @SubscribeEvent
+    public static void onServerTick(ServerTickEvent.Pre  event){
+        for (UUID tribulationId : getInstance().tribulations.keySet()) {
+            getInstance().tribulations.get(tribulationId).getTribulation().getType().tick(
+                    getInstance(),
+                    tribulationId,
+                    getInstance().tribulations.get(tribulationId)
+            );
+        }
+
+        getInstance().resolveFinishedTribulations();
+    }
+    @SubscribeEvent
+    public static void onEntityDeath(LivingDeathEvent event){
+        if(!getInstance().entityTribulations.containsKey(event.getEntity().getUUID())) return;
+
+        HashSet<UUID> tribulations = getInstance().entityTribulations.remove(event.getEntity().getUUID());
+
+        for(UUID tribulationId : tribulations) {
+            getInstance().tribulations.get(tribulationId).getTribulation().getType().
+                    onTargetDeath(
+                            getInstance(),
+                            tribulationId,
+                            getInstance().tribulations.get(tribulationId)
+                    );
+            getInstance().tribulations.remove(tribulationId);
+        }
+    }
 
     private final HashMap<UUID,TribulationInstance> tribulations = new HashMap<>();
+    private final ArrayList<UUID> toRemoveUUID = new ArrayList<>();
     private final HashMap<UUID, HashSet<UUID>> entityTribulations = new HashMap<>();
     public TribulationManager(){
 
@@ -105,7 +137,7 @@ public class TribulationManager extends SavedData {
     }
     public UUID triggerTribulation(TribulationDefinition definition, LivingEntity targetEntity){
 
-        TribulationData data = definition.getType().newData();
+        TribulationData data = definition.getType().newData(definition);
         UUID id = UUID.randomUUID();
         tribulations.put(id,new TribulationInstance(definition,data,targetEntity));
 
@@ -117,16 +149,22 @@ public class TribulationManager extends SavedData {
     }
 
     public void finishTribulation(UUID id){
-        TribulationInstance tribulationInstance = tribulations.remove(id);
-        entityTribulations.get(tribulationInstance.getEntityId()).remove(id);
-        if(entityTribulations.get(tribulationInstance.getEntityId()).isEmpty()) entityTribulations.remove(tribulationInstance.getEntityId());
+        toRemoveUUID.add(id);
+    }
+    private void resolveFinishedTribulations(){
+
+        while(!toRemoveUUID.isEmpty()){
+            UUID id = toRemoveUUID.removeLast();
+            TribulationInstance tribulationInstance = tribulations.remove(id);
+            entityTribulations.get(tribulationInstance.getEntityId()).remove(id);
+            if(entityTribulations.get(tribulationInstance.getEntityId()).isEmpty()) entityTribulations.remove(tribulationInstance.getEntityId());
+
+        }
         setDirty();
     }
 
-
-
     public void setTribulationConsumer(UUID tribulation, Consumer<TribulationData> consumer){
         if(!hasTribulation(tribulation)) return;
-        //TODO
+        getTribulations().get(tribulation).setFinalizationConsumer(consumer);
     }
 }

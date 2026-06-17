@@ -56,6 +56,7 @@ public class TribulationInstance {
     }
 
     public void setEntityReference(LivingEntity entity){
+        if(entity == null && !isEntityLoaded()) return;
         if(entity == null) lastKnownBlockBos = entityReference.blockPosition();
 
         entityReference = entity;
