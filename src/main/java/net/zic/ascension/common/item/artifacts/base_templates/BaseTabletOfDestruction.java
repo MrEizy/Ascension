@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,11 +24,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
-import net.zic.ascension.util.ModTags;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import net.zic.ascension.common.util.ModTags;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -151,7 +154,8 @@ public abstract class BaseTabletOfDestruction extends Item {
         LinkedContainerData current   = getLinkedContainer(stack);
         String              currentDim = level.dimension().identifier().toString();
 
-        if (current.pos() != null && current.pos().equals(pos)
+        if (current.pos() != null
+                && current.pos().equals(pos)
                 && currentDim.equals(current.dimension())) {
             clearLinkedContainer(stack);
             player.sendOverlayMessage(
@@ -240,7 +244,6 @@ public abstract class BaseTabletOfDestruction extends Item {
         int px = direction.getClockWise().getStepX();
         int pz = direction.getClockWise().getStepZ();
 
-        // 7 spacing = 6 blocks between pillars
         for (int z = 7; z <= depth; z += 7) {
             BlockPos beamBase = startPos.offset(dx * z, 0, dz * z);
 
@@ -257,7 +260,6 @@ public abstract class BaseTabletOfDestruction extends Item {
             }
 
             for (int side : new int[]{ -width, width }) {
-                // Start one below so floor plank is always placed
                 BlockPos wallBase = beamBase.offset(px * side, 0, pz * side).below();
 
                 for (int y = 0; y <= ceilY + 1; y++) {
@@ -267,7 +269,6 @@ public abstract class BaseTabletOfDestruction extends Item {
                                 Blocks.SPRUCE_PLANKS.defaultBlockState(),
                                 Block.UPDATE_ALL);
                     }
-                    // Torch on second plank from floor (y == 1)
                     if (y == 1) {
                         Direction torchFacing = (side < 0)
                                 ? direction.getClockWise()
@@ -306,7 +307,6 @@ public abstract class BaseTabletOfDestruction extends Item {
             BlockPos wallSupport = target.relative(ladderWall);
             if (!level.isInWorldBounds(target)) break;
 
-            // Place stone support if wall is air so ladder always attaches
             if (level.getBlockState(wallSupport).isAir()) {
                 level.setBlock(wallSupport,
                         Blocks.STONE.defaultBlockState(), Block.UPDATE_ALL);
@@ -323,13 +323,73 @@ public abstract class BaseTabletOfDestruction extends Item {
         }
     }
 
+    // ── Block drop handling ───────────────────────────────────────────────────
+
+    /**
+     * Drops the given blocks. If a valid linked container is provided
+     * (same dimension as the link), the dropped items are inserted
+     * directly into that container's item handler. Anything that
+     * doesn't fit is left as a normal item drop on the ground.
+     */
     private void handleBlockDrops(ServerLevel level, List<BlockStatePos> blocks,
                                   Vec3 playerPos, Direction direction,
                                   @Nullable BlockPos linkedContainerPos,
                                   @Nullable String linkedDimension) {
+        ResourceHandler<ItemResource> handler = null;
+
+        if (linkedContainerPos != null && linkedDimension != null
+                && linkedDimension.equals(level.dimension().identifier().toString())) {
+            handler = level.getCapability(Capabilities.Item.BLOCK, linkedContainerPos, null);
+        }
+
         for (BlockStatePos bd : blocks) {
-            Block.dropResources(bd.state(), level, bd.pos(),
-                    level.getBlockEntity(bd.pos()));
+            if (handler != null) {
+                dropDirectlyIntoContainer(level, bd, handler);
+            } else {
+                Block.dropResources(bd.state(), level, bd.pos(),
+                        level.getBlockEntity(bd.pos()));
+            }
+        }
+    }
+
+    /**
+     * Computes the actual drops for a broken block (via Block.getDrops /
+     * dropResources semantics) and inserts them straight into the linked
+     * container's handler, without ever spawning an ItemEntity for the
+     * portion that fits. Leftovers that don't fit are dropped normally.
+     */
+    private void dropDirectlyIntoContainer(ServerLevel level, BlockStatePos bd,
+                                           ResourceHandler<ItemResource> handler) {
+        // Spawn the drops first (vanilla behaviour), then immediately try
+        // to vacuum any item entities created at this position into the
+        // container. This reuses vanilla's loot-table resolution instead
+        // of reimplementing it.
+        int beforeCount = level.getEntitiesOfClass(ItemEntity.class,
+                new AABB(bd.pos()).inflate(0.6)).size();
+
+        Block.dropResources(bd.state(), level, bd.pos(), level.getBlockEntity(bd.pos()));
+
+        AABB box = new AABB(bd.pos()).inflate(0.6);
+        List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, box);
+
+        for (ItemEntity itemEntity : items) {
+            ItemStack stack = itemEntity.getItem();
+            if (stack.isEmpty()) continue;
+
+            ItemResource resource = ItemResource.of(stack);
+
+            try (Transaction tx = Transaction.open(null)) {
+                int inserted = handler.insert(resource, stack.getCount(), tx);
+                if (inserted > 0) {
+                    tx.commit();
+                    stack.shrink(inserted);
+                    if (stack.isEmpty()) {
+                        itemEntity.discard();
+                    } else {
+                        itemEntity.setItem(stack);
+                    }
+                }
+            }
         }
     }
 

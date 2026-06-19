@@ -5,6 +5,7 @@ import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Item;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.item.ModItems;
 
@@ -15,10 +16,13 @@ public class AscModelProvider extends ModelProvider {
 
     @Override
     protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
-        itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_HUMAN.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_EARTH.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_HEAVEN.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_ASCENDANT.get(), ModelTemplates.FLAT_ITEM);
+
+
+        Item tabletTexture = ModItems.TABLET_OF_DESTRUCTION_HUMAN.get();
+        itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_HUMAN.get(), tabletTexture, ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_EARTH.get(), tabletTexture, ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_HEAVEN.get(), tabletTexture, ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_ASCENDANT.get(), tabletTexture, ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(ModItems.BLOODLINE_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.PHYSIQUE_ESSENCE.get(), ModelTemplates.FLAT_ITEM);

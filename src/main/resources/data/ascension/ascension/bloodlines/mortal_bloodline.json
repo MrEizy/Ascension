@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Test",
-  "description": "this is an example description",
+  "name": "ascension.bloodline.mortal.name",
+  "description": "ascension.bloodline.mortal.desc",
   "purity_handler": [
     {
       "condition": "ascension:all_purity",

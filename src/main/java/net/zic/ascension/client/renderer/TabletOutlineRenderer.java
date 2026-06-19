@@ -18,7 +18,7 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.zic.ascension.common.item.artifacts.base_templates.BaseTabletOfDestruction;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionAscendant;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHeaven;
-import net.zic.ascension.util.ModTags;
+import net.zic.ascension.common.util.ModTags;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -56,7 +56,7 @@ public class TabletOutlineRenderer {
         }
 
         if (!tunnelBlocks.isEmpty()) {
-            VertexConsumer lines = bufferSource.getBuffer(RenderTypes.lines());
+            VertexConsumer lines = bufferSource.getBuffer(ModRenderTypes.linesNoDepth());
             drawBlockGroupOutline(poseStack, lines, tunnelBlocks, camPos, color);
             bufferSource.endLastBatch();
         }
@@ -77,7 +77,7 @@ public class TabletOutlineRenderer {
                     int alpha = 130 + (int) (pulse * 125f);
                     int linkedColor = toARGB(alpha, 255, 199, 0);
 
-                    VertexConsumer lines = bufferSource.getBuffer(RenderTypes.lines());
+                    VertexConsumer lines = bufferSource.getBuffer(ModRenderTypes.linesNoDepth());
                     drawBlockGroupOutline(poseStack, lines, linkedBlocks, camPos, linkedColor);
                     bufferSource.endLastBatch();
                 }

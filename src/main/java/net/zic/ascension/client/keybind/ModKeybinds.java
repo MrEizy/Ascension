@@ -8,7 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class ModKeybinds {
     private static final KeyMapping.Category ASCENSION_CATEGORY = KeyMapping.Category.register(
-            Identifier.parse("key.categories.ascension")
+            Identifier.parse("ascension")
     );
 
     public static final KeyMapping CYCLE_MODE = new KeyMapping(

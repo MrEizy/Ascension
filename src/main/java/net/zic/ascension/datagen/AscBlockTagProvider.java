@@ -5,7 +5,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.util.ModTags;
+import net.zic.ascension.common.util.ModTags;
 
 import java.util.concurrent.CompletableFuture;
 

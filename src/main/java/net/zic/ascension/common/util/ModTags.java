@@ -1,4 +1,4 @@
-package net.zic.ascension.util;
+package net.zic.ascension.common.util;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;

@@ -47,11 +47,6 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tablet.drop_mode.on", "On");
         add("ascension.tablet.cycle_mode_info", "Press [V] to cycle drop mode.");
 
-        add("key.categories.ascension", "Ascension");
-        add("key.ascension.cycle_mode", "Cycle Modes");
-
-        add("key.ascension.open_introspection", "Open Introspection");
-
         add("gui.ascension.introspection.title", "Introspection");
         add("gui.ascension.introspection.main", "Main");
         add("gui.ascension.introspection.stats", "Stats");
@@ -90,5 +85,25 @@ public class AscLangProvider extends LanguageProvider {
         add("stat.ascension.agility", "Agility");
         add("stat.ascension.strength", "Strength");
         add("stat.ascension.intelligence", "Intelligence");
+
+
+
+
+
+
+        //Keybinds
+        add("key.category.minecraft.ascension", "Ascension");
+        add("key.ascension.cycle_mode", "Cycle Modes");
+        add("key.ascension.open_introspection", "Open Introspection");
+
+
+
+
+
+        //Datapack lang stuff
+
+            //Bloodline
+        add("ascension.bloodline.mortal.name", "Mortal");
+        add("ascension.bloodline.mortal.desc", "All things start as mortal");
     }
 }
