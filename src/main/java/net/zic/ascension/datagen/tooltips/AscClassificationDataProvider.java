@@ -48,7 +48,7 @@ public final class AscClassificationDataProvider extends ZenithClassificationDat
                 .color(ZenithTooltipColor.WARNING);
 
         rank("ascendant")
-                .literalLabel("Ascendant")
+                .literalLabel("AscendanT")
                 .color(ZenithTooltipColor.ACCENT);
     }
 }
