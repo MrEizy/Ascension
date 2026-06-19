@@ -22,6 +22,7 @@ Tribulation TODO
 Still TODO
 Finish tribulations
 setting up custom damage formula + event
+Setup logic to ensure that physiques,bloodlines,and techniques with overlapping skills do not remove a skill if it still has a source
 Battle styles
 setting up atmospheric(chunk) qi
 update most systems to handle data generation + decoding and loading to type
