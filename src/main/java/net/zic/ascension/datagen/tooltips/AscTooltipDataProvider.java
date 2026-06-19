@@ -135,15 +135,9 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
         template(id("tablet_of_destruction_human"))
                 .page(page(literal("Tablet of Destruction: Human"))
                         .add(titleIcon(
-                                literal("Tablet of Destruction"),
-                                literal("Human Grade")
+                                literal("Tablet of Destruction")
                         ))
-                        .add(badge(
-                                literal("HUMAN GRADE"),
-                                ZenithTooltipColor.BACKGROUND,
-                                ZenithTooltipColor.MUTED,
-                                ZenithTooltipColor.ACCENT
-                        ))
+                        .add(classificationRankBadge())
                         .add(divider())
                         .add(header(literal("Excavation"), ZenithTooltipColor.ACCENT))
                         .add(row(
@@ -171,15 +165,9 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                 .animationPreset(ZenithTooltipPresets.KINETIC)
                 .page(page(literal("Tablet of Destruction: Earth"))
                         .add(titleIcon(
-                                literal("Tablet of Destruction"),
-                                literal("Earth Grade")
+                                literal("Tablet of Destruction")
                         ))
-                        .add(badge(
-                                literal("EARTH GRADE"),
-                                ZenithTooltipColor.BACKGROUND,
-                                ZenithTooltipColor.POSITIVE,
-                                ZenithTooltipColor.POSITIVE
-                        ))
+                        .add(classificationRankBadge())
                         .add(divider())
                         .add(header(literal("Excavation"), ZenithTooltipColor.POSITIVE))
                         .add(row(
@@ -208,15 +196,9 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                 .animationPreset(ZenithTooltipPresets.NEBULA)
                 .page(page(literal("Tablet of Destruction: Heaven"))
                         .add(titleIcon(
-                                literal("Tablet of Destruction"),
-                                literal("Heaven Grade")
+                                literal("Tablet of Destruction")
                         ))
-                        .add(badge(
-                                literal("HEAVEN GRADE"),
-                                ZenithTooltipColor.BACKGROUND,
-                                ZenithTooltipColor.ACCENT,
-                                ZenithTooltipColor.ACCENT
-                        ))
+                        .add(classificationRankBadge())
                         .add(divider())
                         .add(header(literal("Excavation"), ZenithTooltipColor.ACCENT))
                         .add(row(
@@ -261,15 +243,9 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                 .animationPreset(ZenithTooltipPresets.CORRUPTED)
                 .page(page(literal("Tablet of Destruction: Ascendant"))
                         .add(titleIcon(
-                                literal("Tablet of Destruction"),
-                                literal("Ascendant Grade")
+                                literal("Tablet of Destruction")
                         ))
-                        .add(badge(
-                                literal("ASCENDANT GRADE"),
-                                ZenithTooltipColor.BACKGROUND,
-                                ZenithTooltipColor.ACCENT,
-                                ZenithTooltipColor.ACCENT
-                        ))
+                        .add(classificationRankBadge())
                         .add(divider())
                         .add(header(literal("Excavation"), ZenithTooltipColor.ACCENT))
                         .add(row(

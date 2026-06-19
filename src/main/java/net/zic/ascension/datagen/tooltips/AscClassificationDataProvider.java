@@ -14,6 +14,7 @@ public final class AscClassificationDataProvider extends ZenithClassificationDat
     protected void addClassifications() {
         addCategories();
         addRanks();
+        addItemClassifications();
     }
 
     private void addCategories() {
@@ -28,27 +29,58 @@ public final class AscClassificationDataProvider extends ZenithClassificationDat
         category("technique_manual")
                 .literalLabel("Technique Manual")
                 .color(ZenithTooltipColor.ACCENT);
+
+        category("artifact")
+                .literalLabel("Artifact")
+                .color("#E8B85FFF");
     }
 
     private void addRanks() {
         rank("human")
-                .literalLabel("Human")
-                .color(ZenithTooltipColor.MUTED);
+                .literalLabel("Human") // change to translatable at some point
+                .color("#A99678FF");
 
         rank("earth")
                 .literalLabel("Earth")
-                .color(ZenithTooltipColor.POSITIVE);
+                .color("#66D487FF");
 
         rank("sky")
-                .literalLabel("Sky")
-                .color(ZenithTooltipColor.ACCENT);
+                .literalLabel("Sky") // a placeholder because I think five ranks is cool, but names are hard...
+                .color("#74C8FFFF");
 
         rank("heaven")
                 .literalLabel("Heaven")
-                .color(ZenithTooltipColor.WARNING);
+                .color("#F0C45CFF");
 
         rank("ascendant")
-                .literalLabel("AscendanT")
-                .color(ZenithTooltipColor.ACCENT);
+                .literalLabel("Ascendant")
+                .color("#D58CFFFF");
     }
+
+    private void addItemClassifications() {
+        classification("human_items")
+                .priority(210)
+                .tags(id("human_items"))
+                .category(id("artifact"))
+                .rank(id("human"));
+
+        classification("earth_items")
+                .priority(220)
+                .tags(id("earth_items"))
+                .category(id("artifact"))
+                .rank(id("earth"));
+
+        classification("heaven_items")
+                .priority(230)
+                .tags(id("heaven_items"))
+                .category(id("artifact"))
+                .rank(id("heaven"));
+
+        classification("ascendant_items")
+                .priority(240)
+                .tags(id("ascendant_items"))
+                .category(id("artifact"))
+                .rank(id("ascendant"));
+    }
+
 }
