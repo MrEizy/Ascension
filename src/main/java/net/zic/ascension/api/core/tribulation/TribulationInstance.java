@@ -15,6 +15,7 @@ import net.zic.ascension.api.datapack.tribulation.TribulationType;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class TribulationInstance {
@@ -23,8 +24,8 @@ public class TribulationInstance {
     private final UUID entityId;
     private LivingEntity entityReference;
     private BlockPos lastKnownBlockBos;
-    private Consumer<TribulationData> finalizationConsumer;
-    private final static Consumer<TribulationData> EMPTY_CONSUMER = (data)->{};
+    private BiConsumer<TribulationDefinition,TribulationData> finalizationConsumer;
+    private final static BiConsumer<TribulationDefinition,TribulationData> EMPTY_CONSUMER = (definition,data)->{};
     public final static TribulationInstance INVALID = new TribulationInstance(null,null,null,null);
 
     public TribulationInstance(TribulationDefinition definition,TribulationData data,LivingEntity entity){
@@ -62,10 +63,10 @@ public class TribulationInstance {
         entityReference = entity;
     }
 
-    public void setFinalizationConsumer(Consumer<TribulationData> consumer){
+    public void setFinalizationConsumer(BiConsumer<TribulationDefinition,TribulationData> consumer){
         this.finalizationConsumer =consumer;
     }
-    public Consumer<TribulationData> getFinalizationConsumer(){
+    public BiConsumer<TribulationDefinition,TribulationData> getFinalizationConsumer(){
         return finalizationConsumer == null ? EMPTY_CONSUMER : finalizationConsumer;
     }
 

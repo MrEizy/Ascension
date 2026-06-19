@@ -10,6 +10,7 @@ import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
 import net.zic.ascension.api.core.tribulation.TribulationData;
+import net.zic.ascension.api.core.tribulation.TribulationDefinition;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,8 +58,9 @@ public interface PathData extends RegistryObjectData {
     Component getRealmName(int majorRealm,int minorRealm,RegistryAccess access);
 
 
-    TribulationData getTribulationData(int majorRealm,int minorRealm);
-    Collection<Realm> getTribulationRealms();
+    TribulationData getCompletedTribulationData(int majorRealm,int minorRealm);
+    TribulationDefinition getCompletedTribulationDefinition(int majorRealm,int minorRealm);
+    Collection<Realm> getCompletedTribulationRealms();
     UUID getBreakthroughTribulation();
     //──Setters────────────────────────────────────────────────────────
     void setMajorRealm(int majorRealm,OriginSource source);
@@ -70,9 +72,9 @@ public interface PathData extends RegistryObjectData {
     boolean setCurrentTechnique(Identifier technique,OriginSource source);
     boolean setCurrentTechnique(Identifier technique,TechniqueData data,OriginSource source);
 
-    void setTribulationData(OriginSource source,int majorRealm,int minorRealm,TribulationData data);
-    void removeTribulationData(OriginSource source,int majorRealm,int minorRealm);
-    void setBreakthroughTribulation(UUID tribulation);
+    void setCompletedTribulation(OriginSource source,int majorRealm,int minorRealm,TribulationDefinition definition,TribulationData data);
+    void removeCompletedTribulation(OriginSource source,int majorRealm,int minorRealm);
+    void setBreakthroughTribulation(UUID tribulation,RegistryAccess access);
     //──Logic────────────────────────────────────────────────────────
     default void onRealmUp(OriginSource source) {
         if(getCurrentTechnique() == null) return;
@@ -87,9 +89,9 @@ public interface PathData extends RegistryObjectData {
         if(getMaxMinorRealm(majorRealm,source.getRegistryAccess()) == minorRealm){
             majorRealm += 1;
             minorRealm = 0;
-        }else minorRealm -=1;
+        }else minorRealm +=1;
 
-        removeTribulationData(source,majorRealm,minorRealm);
+        removeCompletedTribulation(source,majorRealm,minorRealm);
 
         Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getCurrentTechnique(),source.getRegistryAccess());
         if(technique == null) return;//TODO add log here

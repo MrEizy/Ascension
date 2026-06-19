@@ -1,11 +1,3 @@
-priority:
-
-origin source
-SimpleEntityData Wrapper
-PathData (initial)
-Technique (initial)
-PathData (finish)
-Technique (finish)
 
 TODO create a global server registry access?
 
@@ -16,7 +8,22 @@ this would then be displayable on a (local) browser window, with realtime update
 Tribulation TODO
 
 3. setup TribulationData existence validation checks
-    - link realm tribulation data to a source(technique or self path)
-    - then validate by checking against the definition type of realm on below
+    - update to also store a tribulation definition so we can ensure they match
+    - when checking validate the definition against the expected definition,
+    - if there is a difference create a new data instance
+    - if they are of the same type then validate the data
+    - for path data we are checking the tribulation for the realm below what it is stored at
+
+    - so if the tribulation type has changed to a full reset?
 4. ensure tribulations are properly cleaned up
     - by default tribulations will wait for entity to return, add a timeout?
+
+
+Still TODO
+Finish tribulations
+setting up custom damage formula + event
+Battle styles
+setting up atmospheric(chunk) qi
+update most systems to handle data generation + decoding and loading to type
+    (essentially make it use the Type/Definition/Data model of tribulations)
+    - basically seperate the logic from the definition of that logic

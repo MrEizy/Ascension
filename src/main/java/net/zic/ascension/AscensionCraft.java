@@ -1,5 +1,7 @@
 package net.zic.ascension;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 
@@ -210,4 +212,6 @@ public class AscensionCraft {
 
         }
     }
+
+
 }

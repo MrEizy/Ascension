@@ -15,9 +15,11 @@ import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
 import net.zic.ascension.api.core.tribulation.TribulationData;
+import net.zic.ascension.api.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.core.tribulation.TribulationInstance;
 import net.zic.ascension.api.core.tribulation.TribulationManager;
 import net.zic.ascension.api.datapack.tribulation.TribulationType;
+import net.zic.ascension.impl.core.path.CompletedTribulation;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.*;
@@ -38,8 +40,8 @@ public class SimplePathData implements PathData {
     private final HashMap<Identifier,TechniqueData> techniqueData = new HashMap<>();
 
     //TODO update to be a record of techniqueSource(if null assume path) that can be used to validate
-    private final HashMap<Realm, TribulationData> tribulationHistory = new HashMap<>();
-    private final HashMap<Realm,TribulationData> cachedTribulationHistory = new HashMap<>();
+    private final HashMap<Realm, CompletedTribulation> tribulationHistory = new HashMap<>();
+    private final HashMap<Realm, CompletedTribulation> cachedTribulationHistory = new HashMap<>();
     private UUID tribulationId;
     public SimplePathData(Identifier path) {
         this.path = path;
@@ -181,12 +183,19 @@ public class SimplePathData implements PathData {
     }
 
     @Override
-    public TribulationData getTribulationData(int majorRealm, int minorRealm) {
-        return tribulationHistory.get(new Realm(majorRealm,minorRealm));
+    public TribulationData getCompletedTribulationData(int majorRealm, int minorRealm) {
+        return tribulationHistory.containsKey(new Realm(majorRealm,minorRealm)) ?
+                tribulationHistory.get(new Realm(majorRealm,minorRealm)).data() : null;
     }
 
     @Override
-    public Collection<Realm> getTribulationRealms() {
+    public TribulationDefinition getCompletedTribulationDefinition(int majorRealm, int minorRealm) {
+        return tribulationHistory.containsKey(new Realm(majorRealm,minorRealm)) ?
+                tribulationHistory.get(new Realm(majorRealm,minorRealm)).definition() : null;
+    }
+
+    @Override
+    public Collection<Realm> getCompletedTribulationRealms() {
         return tribulationHistory.keySet();
     }
 
@@ -306,33 +315,68 @@ public class SimplePathData implements PathData {
     }
 
     @Override
-    public void setTribulationData(OriginSource source,int majorRealm, int minorRealm,TribulationData data) {
-
-        tribulationHistory.put(new Realm(majorRealm,minorRealm),data);
-        data.getType().onAdded(source,data);
+    public void setCompletedTribulation(OriginSource source, int majorRealm, int minorRealm, TribulationDefinition definition, TribulationData data) {
+        tribulationHistory.put(new Realm(majorRealm,minorRealm),new CompletedTribulation(definition,data));
+        data.getType().onAdded(source,definition,data);
         source.markPathDirty(getPath());
     }
 
     @Override
-    public void removeTribulationData(OriginSource source, int majorRealm, int minorRealm) {
-        TribulationData data =  tribulationHistory.remove(new Realm(majorRealm,minorRealm));
-        if(data == null) return;
-        data.getType().onRemoved(source,data);
+    public void removeCompletedTribulation(OriginSource source, int majorRealm, int minorRealm) {
+        tribulationHistory.remove(new Realm(majorRealm,minorRealm));
     }
 
+
+    //TODO validate the definition against what we expect to be there
     @Override
-    public void setBreakthroughTribulation(UUID tribulation) {
+    public void setBreakthroughTribulation(UUID tribulation,RegistryAccess access) {
         if(!TribulationManager.getInstance().hasTribulation(tribulation)) return;
+        TribulationDefinition definition = TribulationManager.getInstance().getTribulation(tribulation);
+        Realm realm = new Realm(getMajorRealm(),getMinorRealm());
+        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getCurrentTechnique(),access);
+        if(technique == null) {
+            TribulationManager.getInstance().finishTribulation(tribulationId);
+            return;
+        }
+        TribulationDefinition expected = technique.getTribulation(
+                realm.majorRealm(),
+                realm.minorRealm(),
+                access
+        );
+        if(!definition.equals(expected)){
+            TribulationManager.getInstance().finishTribulation(tribulationId);
+            return;
+        }
+
         this.tribulationId = tribulation;
     }
 
     @Override
     public void onRealmUp(OriginSource source) {
         PathData.super.onRealmUp(source);
+        //TODO
+        CompletedTribulation completedTribulation = cachedTribulationHistory.remove(new Realm(getMajorRealm(),getMinorRealm()));
+        if(completedTribulation != null){
+            //validate
+            Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getCurrentTechnique(),source.getRegistryAccess());
+            int majorRealm = getMajorRealm();
+            int minorRealm = getMinorRealm()-1;
+            if(minorRealm <= 0){
+                majorRealm -=1;
+                technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getTechniqueForRealm(majorRealm),source.getRegistryAccess());
+                if(technique==null){
+                    return; //no valid technique found
+                }
+                minorRealm = technique.getMaxMinorRealm(majorRealm,getTechniqueData(getTechniqueForRealm(majorRealm)),source.getRegistryAccess());
+            }
+            if(technique == null) return;
+            TribulationDefinition expected = technique.getTribulation(majorRealm,minorRealm,source.getRegistryAccess());
 
-        TribulationData data = cachedTribulationHistory.remove(new Realm(getMajorRealm(),getMinorRealm()));
-        if(data != null){
-            data.getType().onAdded(source,data);
+            TribulationData freshData = expected.getType().validateAndCovert(expected,completedTribulation.definition(),completedTribulation.data());
+
+            setCompletedTribulation(source,getMajorRealm(),getMinorRealm(),expected,freshData);
+
+
         }
     }
 
@@ -369,13 +413,13 @@ public class SimplePathData implements PathData {
 
             TribulationManager.getInstance().setTribulationConsumer(
                     getBreakthroughTribulation(),
-                    (data)->{
+                    (definition,data)->{
                         PathData pathData = source.getPathData(getPath());
 
                         pathData.handleRealmChange(
                                 source,pathData.getMajorRealm()+1,0);
                         pathData.setProgress(0);
-                        pathData.setTribulationData(source,pathData.getMajorRealm(),pathData.getMinorRealm(),data);
+                        pathData.setCompletedTribulation(source,pathData.getMajorRealm(),pathData.getMinorRealm(),definition,data);
                     }
             );
         }
@@ -429,12 +473,12 @@ public class SimplePathData implements PathData {
 
         //write tribulation history
         ValueOutput.ValueOutputList tribulationHistoryOutput = output.childrenList("tribulation_history");
-        for(Realm realm : getTribulationRealms()){
+        for(Realm realm : getCompletedTribulationRealms()){
             ValueOutput realmOutput = tribulationHistoryOutput.addChild();
             realmOutput.putInt("major_realm",realm.majorRealm());
             realmOutput.putInt("minor_realm",realm.minorRealm());
-
-            realmOutput.store("data", TribulationType.TRIBULATION_DATA_CODEC,tribulationHistory.get(realm));
+            realmOutput.store("definition", TribulationType.TRIBULATION_CODEC,tribulationHistory.get(realm).definition());
+            realmOutput.store("data", TribulationType.TRIBULATION_DATA_CODEC,tribulationHistory.get(realm).data());
         }
         if(getBreakthroughTribulation() != null) output.putString("tribulation",getBreakthroughTribulation().toString());
 
@@ -449,6 +493,7 @@ public class SimplePathData implements PathData {
         progress = input.getDoubleOr("progress",0);
 
         ValueInput.ValueInputList techniqueHistoryInput = input.childrenListOrEmpty("technique_history");
+        boolean realmsDiscarded = false;
         for(ValueInput techniqueInput : techniqueHistoryInput){
             String rawTechnique = techniqueInput.getStringOr("technique","none");
             if(rawTechnique.equals("none")){
@@ -458,8 +503,10 @@ public class SimplePathData implements PathData {
             Identifier technique = Identifier.parse(rawTechnique);
 
             // there was a problem with the technique, cut cultivation after this point
-            if(CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,technique,registryAccess) == null) break;
-
+            if(CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,technique,registryAccess) == null) {
+                realmsDiscarded = true;
+                break;
+            }
             techniqueHistory.add(technique);
         }
 
@@ -487,17 +534,18 @@ public class SimplePathData implements PathData {
         for(ValueInput realmInput : tribulationHistoryInput){
             int major = realmInput.getIntOr("major_realm",0);
             int minor = realmInput.getIntOr("minor_realm",0);
-
+            TribulationDefinition definition = realmInput.read("definition",TribulationType.TRIBULATION_CODEC).orElse(null);
             TribulationData data = realmInput.read("data", TribulationType.TRIBULATION_DATA_CODEC).orElse(null);
-            if(data == null){
+            if(data == null || definition == null){
                 AscensionCraft.LOGGER.debug("Invalid Tribulation Type discarding");
                 continue;
             }
-            tribulationHistory.put(new Realm(major,major),data);
+            tribulationHistory.put(new Realm(major,minor),new CompletedTribulation(definition,data));
         }
+        if(realmsDiscarded) return;
         //TODO validate that no major realms where lost. if so ignore this field
         Optional<String> tribulationId = input.getString("tribulation");
-        tribulationId.ifPresent(s -> setBreakthroughTribulation(UUID.fromString(s)));
+        tribulationId.ifPresent(s -> setBreakthroughTribulation(UUID.fromString(s),registryAccess));
 
     }
 

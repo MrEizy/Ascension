@@ -31,8 +31,22 @@ public abstract class TribulationType {
 
     public abstract TribulationData newData(TribulationDefinition definition);
 
-    public abstract void onAdded(OriginSource source, TribulationData tribulationData);
-    public abstract void onRemoved(OriginSource source,TribulationData tribulationData);
+    public abstract void onAdded(OriginSource source,TribulationDefinition definition, TribulationData tribulationData);
+    public abstract void onRemoved(OriginSource source,TribulationDefinition definition,TribulationData tribulationData);
+
+
+    /**
+     * called when a saved tribulation definition type does not match the type we expect,
+     * or when the definitions do not match(same type but different values)
+     * in that scenario try to convert the TribulationData to match the new definition
+     * if this is not possible create a new data instance
+     * @param definition the new definition
+     * @param oldDefinition the old definition
+     * @param oldData the old data
+     * @return the new data to be used in place of the old one
+     */
+    public abstract TribulationData validateAndCovert(TribulationDefinition definition,TribulationDefinition oldDefinition, TribulationData oldData);
+
 
     /**
      * runs every tick, will run even if the entity is not loaded,

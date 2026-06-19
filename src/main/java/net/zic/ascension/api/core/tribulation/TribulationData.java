@@ -10,4 +10,5 @@ public interface TribulationData {
     //use a saved ID to salt any Identifiers
     UUID getUUID();
     TribulationType getType();
+
 }

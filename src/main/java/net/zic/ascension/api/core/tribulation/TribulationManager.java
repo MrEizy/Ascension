@@ -21,6 +21,7 @@ import net.zic.ascension.api.datapack.tribulation.TribulationType;
 import net.zic.ascension.impl.core.source.SourceHandler;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
@@ -130,8 +131,12 @@ public class TribulationManager extends SavedData {
     public HashMap<UUID,TribulationInstance> getTribulations(){
         return tribulations;
     }
+    public TribulationDefinition getTribulation(UUID tribulation){
+        if(!tribulations.containsKey(tribulation)) return null;
+        return tribulations.get(tribulation).getTribulation();
+    }
     public HashMap<UUID,HashSet<UUID>> getEntities() {return entityTribulations;}
-    public void setOnFinishListener(UUID id, Consumer<TribulationData> tribulationDataConsumer){
+    public void setOnFinishListener(UUID id, BiConsumer<TribulationDefinition,TribulationData> tribulationDataConsumer){
         if(!tribulations.containsKey(id))return;
         tribulations.get(id).setFinalizationConsumer(tribulationDataConsumer);
     }
@@ -163,7 +168,7 @@ public class TribulationManager extends SavedData {
         setDirty();
     }
 
-    public void setTribulationConsumer(UUID tribulation, Consumer<TribulationData> consumer){
+    public void setTribulationConsumer(UUID tribulation, BiConsumer<TribulationDefinition,TribulationData> consumer){
         if(!hasTribulation(tribulation)) return;
         getTribulations().get(tribulation).setFinalizationConsumer(consumer);
     }

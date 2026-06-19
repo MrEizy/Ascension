@@ -5,23 +5,14 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.tribulation.TribulationData;
 import net.zic.ascension.api.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.core.tribulation.TribulationInstance;
 import net.zic.ascension.api.core.tribulation.TribulationManager;
-import net.zic.ascension.api.datapack.TypeRegistries;
-import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.api.datapack.tribulation.TribulationType;
-import net.zic.ascension.impl.core.tribulation.LightingTribulationData;
+import net.zic.ascension.impl.core.tribulation.LightningTribulationData;
 import net.zic.ascension.impl.core.tribulation.LightningTribulationDefinition;
-import net.zic.ascension.impl.datapack.skill.castable.DebugCastableType;
-import net.zic.ascension.impl.datapack.skill.castable.cultivation.SimpleCultivationSkillType;
-import net.zic.ascension.impl.datapack.skill.passive.SimplePassiveSkillType;
 
 import java.util.UUID;
 
@@ -40,34 +31,48 @@ public class LightningTribulationType extends TribulationType {
 
     @Override
     public MapCodec<? extends TribulationData> dataCodec() {
-        return RecordCodecBuilder.<LightingTribulationData>mapCodec(
+        return RecordCodecBuilder.<LightningTribulationData>mapCodec(
                 instance->instance.group(
-                        Codec.INT.fieldOf("strikes").forGetter(LightingTribulationData::getLightningSurvived),
-                        Codec.STRING.xmap(UUID::fromString,UUID::toString).optionalFieldOf("id",UUID.randomUUID()).forGetter(LightingTribulationData::getUUID)
-                ).apply(instance,LightingTribulationData::new)
+                        Codec.INT.fieldOf("strikes").forGetter(LightningTribulationData::getLightningSurvived),
+                        Codec.STRING.xmap(UUID::fromString,UUID::toString).optionalFieldOf("id",UUID.randomUUID()).forGetter(LightningTribulationData::getUUID)
+                ).apply(instance, LightningTribulationData::new)
         );
     }
 
 
     @Override
     public TribulationData newData(TribulationDefinition  definition) {
-        return new LightingTribulationData(0,UUID.randomUUID());
+        return new LightningTribulationData(0,UUID.randomUUID());
     }
 
     @Override
-    public void onAdded(OriginSource source, TribulationData tribulationData) {
+    public void onAdded(OriginSource source, TribulationDefinition definition, TribulationData tribulationData) {
 
     }
 
     @Override
-    public void onRemoved(OriginSource source, TribulationData tribulationData) {
+    public void onRemoved(OriginSource source, TribulationDefinition definition, TribulationData tribulationData) {
 
     }
+
+    @Override
+    public TribulationData validateAndCovert(TribulationDefinition definition, TribulationDefinition oldDefinition, TribulationData oldData) {
+        if(oldData instanceof LightningTribulationData lightningData){
+            //the data can be converted as long as it extends LightningTribulationData
+            LightningTribulationDefinition lightningDefinition = (LightningTribulationDefinition) definition;
+
+            lightningData.setLightningSurvived(Math.min(lightningData.getLightningSurvived(),lightningDefinition.lightingStrikes()));
+            return lightningData;
+        }else{
+            return newData(definition);
+        }
+    }
+
 
     @Override
     public void tick(TribulationManager manager, UUID uuid, TribulationInstance instance) {
         if(!instance.isEntityLoaded()) return;
-        if(!(instance.getData() instanceof LightingTribulationData data)) return;
+        if(!(instance.getData() instanceof LightningTribulationData data)) return;
         if(!(instance.getTribulation() instanceof LightningTribulationDefinition definition)) return;
 
         if(data.getLightningSurvived() == definition.lightingStrikes()){
@@ -75,8 +80,7 @@ public class LightningTribulationType extends TribulationType {
             manager.finishTribulation(uuid);
 
             System.out.println("entity survived");
-            //TODO call conusmer if present
-            if(instance.getFinalizationConsumer() != null)instance.getFinalizationConsumer().accept(instance.getData());
+            if(instance.getFinalizationConsumer() != null)instance.getFinalizationConsumer().accept(instance.getTribulation(),instance.getData());
             return;
         }
 

@@ -6,11 +6,11 @@ import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 
 import java.util.UUID;
 
-public class LightingTribulationData implements TribulationData {
+public class LightningTribulationData implements TribulationData {
     private UUID id;
     private int survived;
     private int ticks;
-    public LightingTribulationData(int number,UUID id) {
+    public LightningTribulationData(int number, UUID id) {
         setLightningSurvived(number);
         this.id = id;
     }

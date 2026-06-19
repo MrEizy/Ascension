@@ -256,16 +256,17 @@ public class SimpleTechnique implements Technique {
         if(definition == null) return true;
         UUID id =   TribulationManager.getInstance().triggerTribulation(definition,entity);
         source.getPathData(getPath()).setBreakthroughTribulation(
-                id
+                id,
+                source.getRegistryAccess()
         );
 
-        TribulationManager.getInstance().setTribulationConsumer(id,(data)->{
+        TribulationManager.getInstance().setTribulationConsumer(id,(tribulationDefinition,data)->{
             PathData pathData = source.getPathData(getPath());
 
             pathData.handleRealmChange(
                 source,pathData.getMajorRealm()+1,0);
             pathData.setProgress(0);
-            pathData.setTribulationData(source,pathData.getMajorRealm(),pathData.getMinorRealm(),data);
+            pathData.setCompletedTribulation(source,pathData.getMajorRealm(),pathData.getMinorRealm(),tribulationDefinition,data);
         });
         return false;
 
