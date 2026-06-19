@@ -19,15 +19,15 @@ public final class AscClassificationDataProvider extends ZenithClassificationDat
 
     private void addCategories() {
         category("bloodline_essence")
-                .literalLabel("Bloodline Essence")
+                .label("zenith.ascension.category.bloodline")
                 .color(ZenithTooltipColor.NEGATIVE);
 
         category("physique_essence")
-                .literalLabel("Physique Essence")
+                .label("zenith.ascension.category.physique")
                 .color(ZenithTooltipColor.POSITIVE);
 
         category("technique_manual")
-                .literalLabel("Technique Manual")
+                .label("zenith.ascension.category.technique")
                 .color(ZenithTooltipColor.ACCENT);
 
         category("artifact")
@@ -37,24 +37,20 @@ public final class AscClassificationDataProvider extends ZenithClassificationDat
 
     private void addRanks() {
         rank("human")
-                .literalLabel("Human") // change to translatable at some point
-                .color("#A99678FF");
+                .label("zenith.ascension.tier.human")
+                .color(ZenithTooltipColor.MUTED);
 
         rank("earth")
-                .literalLabel("Earth")
-                .color("#66D487FF");
-
-        rank("sky")
-                .literalLabel("Sky") // a placeholder because I think five ranks is cool, but names are hard...
-                .color("#74C8FFFF");
+                .label("zenith.ascension.tier.earth")
+                .color(ZenithTooltipColor.POSITIVE);
 
         rank("heaven")
-                .literalLabel("Heaven")
-                .color("#F0C45CFF");
+                .label("zenith.ascension.tier.heaven")
+                .color(ZenithTooltipColor.WARNING);
 
         rank("ascendant")
-                .literalLabel("Ascendant")
-                .color("#D58CFFFF");
+                .label("zenith.ascension.tier.ascendant")
+                .color(ZenithTooltipColor.ACCENT);
     }
 
     private void addItemClassifications() {

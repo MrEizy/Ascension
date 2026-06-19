@@ -100,6 +100,16 @@ public class AscLangProvider extends LanguageProvider {
 
 
 
+        //Classifications
+        add("zenith.ascension.category.bloodline", "Bloodline");
+        add("zenith.ascension.category.physique", "Physique");
+        add("zenith.ascension.category.technique", "Technique");
+
+        add("zenith.ascension.tier.human", "Human");
+        add("zenith.ascension.tier.earth", "Earth");
+        add("zenith.ascension.tier.heaven", "Heaven");
+        add("zenith.ascension.tier.ascendant", "Ascendant");
+
         //Datapack lang stuff
 
             //Bloodline
