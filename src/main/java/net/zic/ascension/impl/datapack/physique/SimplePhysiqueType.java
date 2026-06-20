@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.datapack.physique;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -10,6 +11,8 @@ import net.zic.ascension.api.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.core.physique.EmptyPhysiqueData;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
+import net.zic.ascension.impl.datapack.util.AffinityModifier;
+import net.zic.ascension.impl.datapack.util.BaseAffinity;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
@@ -27,8 +30,8 @@ public class SimplePhysiqueType extends PhysiqueType {
                         Identifier.CODEC.listOf().optionalFieldOf("skills", List.of()).forGetter(SimplePhysique::skills),
                         ValueContainer.BASE_MODIFIER_CODEC.listOf().optionalFieldOf("base_stats",List.of()).forGetter(SimplePhysique::baseStats),
                         ValueContainerModifier.MAP_CODEC.optionalFieldOf("stat_modifiers", Map.of()).forGetter(SimplePhysique::statModifiers),
-                        ValueContainer.BASE_MODIFIER_CODEC.listOf().optionalFieldOf("base_affinity",List.of()).forGetter(SimplePhysique::baseAffinities),
-                        ValueContainerModifier.MAP_CODEC.optionalFieldOf("affinity_modifiers",Map.of()).forGetter(SimplePhysique::affinityModifiers),
+                        BaseAffinity.CODEC.listOf().optionalFieldOf("base_affinity",List.of()).forGetter(SimplePhysique::baseAffinities),
+                        Codec.unboundedMap(Identifier.CODEC,AffinityModifier.CODEC.listOf()).optionalFieldOf("affinity_modifiers",Map.of()).forGetter(SimplePhysique::affinityModifiers),
                         AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(SimplePhysique::itemTooltip)
                 ).apply(instance, SimplePhysique::new)
         );

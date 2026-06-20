@@ -13,6 +13,8 @@ import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
+import net.zic.ascension.impl.datapack.util.AffinityModifier;
+import net.zic.ascension.impl.datapack.util.BaseAffinity;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
@@ -25,8 +27,8 @@ import java.util.Optional;
 public record SimplePhysique(Component name, Component description, List<Identifier> unlockedPaths,
                              List<Identifier> skills, List<ValueContainer.BaseModifier> baseStats,
                              Map<Identifier, List<ValueContainerModifier>> statModifiers,
-                             List<ValueContainer.BaseModifier> baseAffinities,
-                             Map<Identifier, List<ValueContainerModifier>> affinityModifiers,
+                             List<BaseAffinity> baseAffinities,
+                             Map<Identifier, List<AffinityModifier>> affinityModifiers,
                              Optional<AscensionItemTooltipDefinition> itemTooltip) implements Physique {
 
 
@@ -37,8 +39,8 @@ public record SimplePhysique(Component name, Component description, List<Identif
             List<Identifier> skills,
             List<ValueContainer.BaseModifier> baseStats,
             Map<Identifier, List<ValueContainerModifier>> statModifiers,
-            List<ValueContainer.BaseModifier> baseAffinities,
-            Map<Identifier, List<ValueContainerModifier>> affinityModifiers,
+            List<BaseAffinity> baseAffinities,
+            Map<Identifier, List<AffinityModifier>> affinityModifiers,
             Optional<AscensionItemTooltipDefinition> itemTooltip
     ) {
         this.name = name;

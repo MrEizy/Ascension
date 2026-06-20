@@ -26,6 +26,8 @@ import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMinorRe
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMinorRealmInCondition;
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryRealmCondition;
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryRealmInCondition;
+import net.zic.ascension.impl.datapack.util.AffinityModifier;
+import net.zic.ascension.impl.datapack.util.BaseAffinity;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
@@ -188,14 +190,12 @@ public final class AscensionTooltipValueSources {
 
             return ZenithTooltipValue.rows(
                     combineRows(
-                            baseRows(
+                            baseAffinityRows(
                                     physique.baseAffinities(),
-                                    true,
                                     access
                             ),
-                            modifierRows(
+                            affinityModifierRows(
                                     physique.affinityModifiers(),
-                                    true,
                                     access
                             )
                     )
@@ -326,6 +326,26 @@ public final class AscensionTooltipValueSources {
         return List.copyOf(rows);
     }
 
+    private static List<ZenithTooltipValue.Row> baseAffinityRows(
+            Collection<BaseAffinity> baseAffinities,
+            RegistryAccess access
+    ){
+        return baseAffinities.stream()
+                .sorted(
+                        Comparator.comparing(
+                                baseAffinity -> baseAffinity.base().container().toString()+baseAffinity.category()
+                        )
+                )
+                .map(modifier -> ZenithTooltipValue.row(
+                        pathName(modifier.base().container(), access),
+                        Component.literal(
+                                signedNumber(modifier.base().val())
+                        ),
+                        tone(modifier.base().val())
+                ))
+                .toList();
+    }
+
     private static List<ZenithTooltipValue.Row> baseRows(
             Collection<ValueContainer.BaseModifier> modifiers,
             boolean affinity,
@@ -350,7 +370,42 @@ public final class AscensionTooltipValueSources {
                 ))
                 .toList();
     }
+    private static List<ZenithTooltipValue.Row> affinityModifierRows(
+            Map<Identifier, List<AffinityModifier>> affinityModifiers,
+            RegistryAccess access
+    ){
+        List<ZenithTooltipValue.Row> rows = new ArrayList<>();
 
+        affinityModifiers.entrySet()
+                .stream()
+                .sorted(
+                        Comparator.comparing(
+                                entry -> entry.getKey().toString()
+                        )
+                )
+                .forEach(entry -> entry.getValue()
+                        .stream()
+                        .sorted(
+                                Comparator.comparing(
+                                        modifier ->
+                                                modifier.modifier().getIdentifier().toString()
+                                )
+                        )
+                        .forEach(modifier -> rows.add(
+                                ZenithTooltipValue.row(
+                                        pathName(
+                                                entry.getKey(),
+                                                access
+                                        ),
+                                        Component.literal(
+                                                formatModifier(modifier.modifier())
+                                        ),
+                                        tone(modifier.modifier().getVal())
+                                )
+                        )));
+
+        return List.copyOf(rows);
+    }
     private static List<ZenithTooltipValue.Row> modifierRows(
             Map<Identifier, List<ValueContainerModifier>> modifiers,
             boolean affinity,

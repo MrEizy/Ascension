@@ -94,8 +94,41 @@ operation is one of:
 
 Id is the unique identifier for this modifier, which can be used to easily remove individual modifiers
 
-Group referes the which group this modifier is part of
+Group refers the which group this modifier is part of
 
+### Base Affinity
+Base affinity is a specialised Base Value for affinity, which includes a <b>category</b>.
+
+Here a category allows us to only apply that affinity in specific circumstances
+
+For Example `ascension:none` would be applied everywhere while `ascension:damage` is only applied on damage
+
+There are 2 different formats
+
+<b>EITHER</b>
+```json
+{
+  "[field_name]": {
+    "id": "ascension:vitality",
+    "value": 2
+  }
+}
+```
+<b>OR</b>
+
+### Affinity Modifier
+
+```json
+{
+  "[field_name]": {
+    "base": {
+      "id": "ascension:vitality",
+      "value": 2
+    },
+    "category": "ascension:damage"
+  }
+}
+```
 ### Physiques
 | Built In                            |  
 |-------------------------------------|
