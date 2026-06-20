@@ -116,8 +116,6 @@ There are 2 different formats
 ```
 <b>OR</b>
 
-### Affinity Modifier
-
 ```json
 {
   "[field_name]": {
@@ -129,6 +127,33 @@ There are 2 different formats
   }
 }
 ```
+
+For a list of Categories view the wiki
+### Affinity Modifier
+Similar to Base Affinity, an extension of Value Container Modifier that has an optional category
+
+<b>EITHER</b>
+```json
+{
+  "value": 0.2,
+  "operation": "MULTIPLY_FINAL",
+  "id": "ascension:example",
+  "group": "ascension:example_group"
+}
+```
+<b>OR</b>
+
+```json
+{
+  "modifier": {
+    "value": 0.2,
+    "operation": "MULTIPLY_FINAL",
+    "id": "ascension:example",
+    "group": "ascension:example_group"
+  },
+  "category": "ascension:damage"
+}
+```
 ### Physiques
 | Built In                            |  
 |-------------------------------------|
@@ -137,22 +162,23 @@ There are 2 different formats
 [comment]: <> (add extra columns for things like optional and type and default?)
 
 #### Simple Physique
-| Fields                               |  
-|--------------------------------------|
-| [`name`](#name)                      | 
-| [`description`](#description)        | 
-| [`paths`](#paths)                    | 
-| [`skills`](#skills)                  | 
-| [`base_stats`](#simple-physique)     | 
-| [`stat_modifiers`](#simple-physique) | 
-| [`base_affinity`](#simple-physique)  | 
-| [`item_tooltip`](#simple-physique)   | 
+| Fields                                      |  
+|---------------------------------------------|
+| [`name`](#name)                             | 
+| [`description`](#description)               | 
+| [`paths`](#paths)                           | 
+| [`skills`](#skills)                         | 
+| [`base_stats`](#base_stats)                 | 
+| [`stat_modifiers`](#stat_modifiers)         | 
+| [`base_affinity`](#base_affinity)           | 
+| [`affinity_modifiers`](#affinity_modifiers) | 
+| [`item_tooltip`](#simple-physique)          | 
 
 ##### `name`
 Uses a Component see [Components](#component)
 ##### `description`
 Uses a Component see [Components](#component)
-#### `paths`
+##### `paths`
 Takes in a List of Paths as Identifiers, once the player gains the physique they will unlock these paths
 
 Example
@@ -167,7 +193,7 @@ Example
 
 For a list of available paths either view the datapack or check the wiki
 
-#### `skills`
+##### `skills`
 Takes in a list of skills as Identifiers, once the player gains the physique they will unlock these skills
 
 Example
@@ -182,13 +208,22 @@ Example
 ```
 For a list of available skills either view the datapack or check the wiki
 
-#### `base stats`
+##### `base_stats`
 
-For JSON see [Base Value](#base-value)
+```json
+{
+  "base_stats": [
+    ...
+  ]
+  
+}
+```
+Takes in a List of Base Values
+For Base Value JSON see [Base Value](#base-value)
 
 The context is stats, so for a list of available stats view the datapack or check the wiki
 
-#### `stat_modifiers`
+##### `stat_modifiers`
 
 Takes in a map of stat as an Identifier -> list of modifiers
 
@@ -217,3 +252,32 @@ Example
 }
 ```
 In the example above we provide a 20% final multiplier to Vitality and a +3 to base Strength
+
+##### `base_affinity`
+
+```json
+{
+  "base_affinity": [
+    ...
+  ]
+  
+}
+```
+Takes in a List of Base Affinities
+For Base Affinity JSON see [Base Affinity](#base-affinity)
+
+##### `affinity_modifiers`
+```json
+{
+  "affinity_modifiers": {
+    "ascension:water": [
+      ...
+    ],
+    "ascension:essence": [
+      ...
+    ]
+  }
+}
+```
+Takes in an unbounded map with each key being a `path`, each key path takes in a list
+of [Affinity Modifiers](#affinity-modifier)

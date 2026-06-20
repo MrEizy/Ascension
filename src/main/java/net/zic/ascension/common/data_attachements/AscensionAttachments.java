@@ -9,6 +9,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.ServerOriginSource;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
@@ -54,7 +55,14 @@ public class AscensionAttachments {
                     .copyOnDeath()
                     .build()
     );
-
+    public static final Supplier<AttachmentType<ChunkQiContainer>> ASCENSION_CHUNK_QI_CONTAINER = ATTACHMENT_TYPES.register(
+            "ascension_chunk_qi_container",()->AttachmentType.builder(
+                holder-> new ChunkQiContainer(0,0,0)
+            )
+                    .sync(new ChunkQiContainer.SyncHandler())
+                    .serialize(new ChunkQiContainer.Provider())
+                    .build()
+    );
     public static void register(IEventBus bus){
         ATTACHMENT_TYPES.register(bus);
     }
