@@ -134,7 +134,7 @@ There are 2 different formats
 |-------------------------------------|
 | [Simple Physique](#simple-physique) | 
 
-[comment]: <> (add extar columns for things like optional and type and default?)
+[comment]: <> (add extra columns for things like optional and type and default?)
 
 #### Simple Physique
 | Fields                               |  

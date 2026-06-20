@@ -38,19 +38,19 @@ public final class AscClassificationDataProvider extends ZenithClassificationDat
     private void addRanks() {
         rank("human")
                 .label("zenith.ascension.tier.human")
-                .color(ZenithTooltipColor.MUTED);
+                .color("#A99678FF");
 
         rank("earth")
                 .label("zenith.ascension.tier.earth")
-                .color(ZenithTooltipColor.POSITIVE);
+                .color("#66D487FF");
 
         rank("heaven")
                 .label("zenith.ascension.tier.heaven")
-                .color(ZenithTooltipColor.WARNING);
+                .color("#F0C45CFF");
 
         rank("ascendant")
                 .label("zenith.ascension.tier.ascendant")
-                .color(ZenithTooltipColor.ACCENT);
+                .color("#D58CFFFF");
     }
 
     private void addItemClassifications() {
