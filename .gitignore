@@ -30,9 +30,6 @@ repo
 .claude
 docs/superpowers
 
-# no markdown files
-*.md
-
 
 ### Minecraft Modding ###
 run/
