@@ -433,6 +433,13 @@ public class OriginSource {
     public double getEffectiveAffinity(Identifier category,Identifier path){
         return PathEffectValueUtil.getEffectValue(getAffinity(path),getAffinityHolder(),path,category);
     }
+    public Collection<Identifier> getAllAffinity(){
+        return affinityHolder.getPaths();
+    }
+    public Collection<Identifier> getAllAffinity(Identifier category){
+        return affinityHolder.getPaths(category);
+    }
+
     //──Data────────────────────────────────────────────────────────
 
     public void write(ValueOutput output){

@@ -24,8 +24,11 @@ setting up atmospheric(chunk) qi
 setting up custom damage formula + event
     - calculate effect value using players affinities and the damage events affinity
     - then get the players affinity for the element itself and use some extra formula to modify the value
+Do more foundation path testing
 Setup logic to ensure that physiques,bloodlines,and techniques with overlapping skills do not remove a skill if it still has a source
 Battle styles
+
+when in combat cap speed
 
 update most systems to handle data generation + decoding and loading to type
     (essentially make it use the Type/Definition/Data model of tribulations)

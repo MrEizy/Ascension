@@ -20,6 +20,7 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +43,7 @@ public class ChunkQiContainer {
     }
 
 
+
     public void addAffinity(Identifier path, double val) {}
     public void addAffinityModifier(Identifier path, ValueContainerModifier modifier) {}
     public void removeAffinityModifier(Identifier path,Identifier modifier) {}
@@ -56,6 +58,13 @@ public class ChunkQiContainer {
         return energy;
     }
 
+
+    public Collection<Identifier> getAllAffinities(){
+        return affinities.keySet();
+    }
+    public double getAffinity(Identifier path){
+        return affinities.get(path).getValue();
+    }
     public void regenEnergy(){
         energy = Math.min(energyCap.getValue(), energyRegenRate.getValue()+energy);
     }
@@ -91,16 +100,12 @@ public class ChunkQiContainer {
         @Override
         public ChunkQiContainer read(IAttachmentHolder holder, ValueInput input) {
             double energy = input.getDoubleOr("energy",0);
-            double baseEnergy = input.getDoubleOr("energy_cap",0);
-            double baseRegen = input.getDoubleOr("energy_regen",0);
-            return new ChunkQiContainer(energy, baseEnergy, baseRegen);
+            return new ChunkQiContainer(energy, 0, 0);
         }
 
         @Override
         public boolean write(ChunkQiContainer attachment, ValueOutput output) {
             output.putDouble("energy",attachment.energy);
-            output.putDouble("energy_cap",attachment.energyCap.getBaseValue());
-            output.putDouble("energy_regen",attachment.energyRegenRate.getBaseValue());
             return true;
         }
     }

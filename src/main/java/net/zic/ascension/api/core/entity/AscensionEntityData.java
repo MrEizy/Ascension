@@ -6,6 +6,9 @@ import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.SourceChangesSnapshot;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * All OriginSource wrappers must Implement this
  */
@@ -72,5 +75,12 @@ public interface AscensionEntityData {
     }
     default double getBaseAffinity(Identifier category,Identifier path){
         return getSource().getBaseAffinity(category,path);
+    }
+
+    default Collection<Identifier> getAllAffinities(){
+        return getSource().getAllAffinity();
+    }
+    default Collection<Identifier> getAllAffinities(Identifier category){
+        return getSource().getAllAffinity(category);
     }
 }

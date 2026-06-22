@@ -1,0 +1,5 @@
+not sure if this is the best way to do this, but we can always change it later
+
+potentially move to a configuration package, and in those configurations you can handle both biomes and dimensions
+and whatever else,
+these are then resolved
