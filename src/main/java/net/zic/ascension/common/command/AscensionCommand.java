@@ -4,10 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
-import net.zic.ascension.common.command.commands.ChunkCommand;
-import net.zic.ascension.common.command.commands.CultivationCommand;
-import net.zic.ascension.common.command.commands.SlotSkillCommand;
-import net.zic.ascension.common.command.commands.TribulationCommand;
+import net.zic.ascension.common.command.commands.*;
 
 public class AscensionCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -34,6 +31,7 @@ public class AscensionCommand {
                 )
                 .then(TribulationCommand.build())
                 .then(ChunkCommand.build())
+                .then(AffinityCommand.build())
 
 
         );

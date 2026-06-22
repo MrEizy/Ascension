@@ -376,7 +376,7 @@ public class OriginSource {
     }
 
     //──Affinity Holder────────────────────────────────────────────────────────
-
+    public static final Identifier NO_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"none");
     //NOTES do smth similar to stat handler where i FULLY hide Implementation. then add a blank sync method
     //that is overridden by server source to sync for all watchers on a change
     //this will be done through a markDirty method that loops through all attached
@@ -405,25 +405,30 @@ public class OriginSource {
     }
 
     public void addAffinity(Identifier category,Identifier path,double val){
-        affinityHolder.addAffinity(category,path,val);
+        if(category.equals(NO_CATEGORY)) addAffinity(path,val);
+        else affinityHolder.addAffinity(category,path,val);
     }
     public void removeAffinity(Identifier category,Identifier path,double val){
-        affinityHolder.removeAffinity(category,path,val);
+        if(category.equals(NO_CATEGORY)) removeAffinity(path,val);
+        else affinityHolder.removeAffinity(category,path,val);
 
     }
     public void addAffinityModifier(Identifier category,Identifier path,ValueContainerModifier modifier){
+        if(category.equals(NO_CATEGORY)) addAffinityModifier(path,modifier);
         affinityHolder.addAffinityModifier(category,path,modifier);
     }
 
     public void removeAffinityModifier(Identifier category,Identifier path,Identifier modifier){
+        if(category.equals(NO_CATEGORY)) removeAffinityModifier(path,modifier);
         affinityHolder.removeAffinityModifier(category,path,modifier);
     }
 
     public double getAffinity(Identifier category,Identifier path){
-
+        if(category.equals(NO_CATEGORY)) getAffinity(path);
         return affinityHolder.getAffinity(category,path);
     }
     public double getBaseAffinity(Identifier category,Identifier path){
+        if(category.equals(NO_CATEGORY)) getBaseAffinity(path);
         return affinityHolder.getBaseAffinity(category,path);
     }
 
@@ -431,13 +436,15 @@ public class OriginSource {
         return getEffectiveAffinity(null,path);
     }
     public double getEffectiveAffinity(Identifier category,Identifier path){
+        if(category.equals(NO_CATEGORY)) return getEffectiveAffinity(path);
         return PathEffectValueUtil.getEffectValue(getAffinity(path),getAffinityHolder(),path,category);
     }
     public Collection<Identifier> getAllAffinity(){
         return affinityHolder.getPaths();
     }
     public Collection<Identifier> getAllAffinity(Identifier category){
-        return affinityHolder.getPaths(category);
+
+        return category.equals(NO_CATEGORY)? getAllAffinity() : affinityHolder.getPaths(category);
     }
 
     //──Data────────────────────────────────────────────────────────

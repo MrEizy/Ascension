@@ -11,7 +11,9 @@ import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.zic.ascension.AscensionCraft;
@@ -43,7 +45,7 @@ public class BiomeConfigurations {
     }
 
     @SubscribeEvent
-    public static void onServerStarted(ServerStartedEvent event){
+    public static void onServerStarting(ServerAboutToStartEvent event){
 
         RegistryAccess access =event.getServer().registryAccess();
         Registry<RawBiomeConfiguration> rawConfigurations = RAW_CONFIGURATION_REGISTRY.get(access);

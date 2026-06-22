@@ -10,6 +10,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.zic.ascension.AscensionCraft;
@@ -128,7 +129,7 @@ public class PathInteractionHolder {
     }
 
     @SubscribeEvent
-    public static void onServerLaunch(ServerStartingEvent event){
+    public static void onServerLaunch(ServerAboutToStartEvent event){
 
         //TODO also needs to be run on server launch
         System.out.println("SETTING UP INTERACTION MAP ON SERVER");
@@ -141,7 +142,7 @@ public class PathInteractionHolder {
         }
     }
     public static void addClientListener(AddClientReloadListenersEvent event){
-
+        //TODO
     }
 
 

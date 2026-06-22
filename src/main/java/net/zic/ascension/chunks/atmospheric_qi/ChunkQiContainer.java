@@ -4,6 +4,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
@@ -14,6 +15,7 @@ import net.zic.ascension.api.core.path.affinity.AffinityCategoryHolder;
 import net.zic.ascension.api.core.path.affinity.AffinityHolder;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.SourceChangesSnapshot;
+import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.network.ByteBufHelpers;
@@ -36,14 +38,23 @@ public class ChunkQiContainer {
     final ValueContainer energyRegenRate;
     final ValueContainer energyCap;
 
+    private boolean loaded;
+
     private final AffinityCategoryHolder affinities = new AffinityCategoryHolder();
     public ChunkQiContainer(double energy, double baseEnergyCap,double baseEnergyRegenRate) {
+        this(energy,baseEnergyCap,baseEnergyRegenRate,false);
+    }
+    public ChunkQiContainer(double energy, double baseEnergyCap,double baseEnergyRegenRate,boolean loaded){
         this.energy = energy;
         this.energyCap = new ValueContainer(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"energy_cap"),baseEnergyCap);
         this.energyRegenRate = new ValueContainer(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"energy_cap"),baseEnergyRegenRate);
+        this.loaded = loaded;
     }
 
-
+    public static ChunkQiContainer getContainer(ChunkAccess access){
+        ChunkQiContainer container = access.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
+        return null;
+    }
 
     public void addAffinity(Identifier path, double val) {
         affinities.addAffinity(path, val);
@@ -99,6 +110,7 @@ public class ChunkQiContainer {
         @Override
         public ChunkQiContainer read(IAttachmentHolder holder, ValueInput input) {
             double energy = input.getDoubleOr("energy",0);
+
             return new ChunkQiContainer(energy, 0, 0);
         }
 

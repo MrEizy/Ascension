@@ -15,7 +15,7 @@ public class AffinityCategoryHolder {
 
     public void addAffinity(Identifier path,double bonus){
         if(!affinity.containsKey(path)){
-            affinity.put(path,new ValueContainer(path, 1));
+            affinity.put(path,new ValueContainer(path, 0));
         }
         affinity.get(path).setBaseValue(affinity.get(path).getBaseValue()+bonus);
     }
