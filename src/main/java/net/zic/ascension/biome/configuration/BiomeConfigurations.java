@@ -46,8 +46,7 @@ public class BiomeConfigurations {
     public static void onServerStarted(ServerStartedEvent event){
 
         RegistryAccess access =event.getServer().registryAccess();
-        Registry<RawBiomeConfiguration> rawConfigurations = RegistryHelper.registry(AscensionCraft.MOD_ID,"raw_configurations");
-
+        Registry<RawBiomeConfiguration> rawConfigurations = RAW_CONFIGURATION_REGISTRY.get(access);
         builders.clear();
         //TODO a lot of nested looping, see if i can make it more efficient
         for(RawBiomeConfiguration rawConfiguration : rawConfigurations){
@@ -65,7 +64,6 @@ public class BiomeConfigurations {
         Reference2ObjectOpenHashMap<Holder<Biome>,BiomeConfiguration> configurations = new Reference2ObjectOpenHashMap<>();
 
         builders.forEach((key,builder)->configurations.put(key,builder.build()));
-
         instance = new  BiomeConfigurations(configurations);
     }
     @SubscribeEvent
@@ -90,7 +88,9 @@ public class BiomeConfigurations {
     public BiomeConfiguration getConfiguration(Holder<Biome> holder){
         return configurations.get(holder);
     }
-
+    public boolean hasConfiguration(Holder<Biome> holder){
+        return configurations.containsKey(holder);
+    }
 
 
 }

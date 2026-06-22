@@ -10,6 +10,8 @@ import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.core.path.affinity.AffinityCategoryHolder;
+import net.zic.ascension.api.core.path.affinity.AffinityHolder;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.SourceChangesSnapshot;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
@@ -34,8 +36,7 @@ public class ChunkQiContainer {
     final ValueContainer energyRegenRate;
     final ValueContainer energyCap;
 
-    private final HashMap<Identifier,ValueContainer> affinities = new HashMap<>();
-
+    private final AffinityCategoryHolder affinities = new AffinityCategoryHolder();
     public ChunkQiContainer(double energy, double baseEnergyCap,double baseEnergyRegenRate) {
         this.energy = energy;
         this.energyCap = new ValueContainer(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"energy_cap"),baseEnergyCap);
@@ -44,7 +45,9 @@ public class ChunkQiContainer {
 
 
 
-    public void addAffinity(Identifier path, double val) {}
+    public void addAffinity(Identifier path, double val) {
+        affinities.addAffinity(path, val);
+    }
     public void addAffinityModifier(Identifier path, ValueContainerModifier modifier) {}
     public void removeAffinityModifier(Identifier path,Identifier modifier) {}
 
@@ -57,13 +60,14 @@ public class ChunkQiContainer {
     public double getEnergy() {
         return energy;
     }
-
+    public double getEnergyCap(){return energyCap.getValue();}
+    public double getEnergyRegenRate(){return energyRegenRate.getValue();}
 
     public Collection<Identifier> getAllAffinities(){
-        return affinities.keySet();
+        return affinities.getPaths();
     }
     public double getAffinity(Identifier path){
-        return affinities.get(path).getValue();
+        return affinities.getAffinity(path);
     }
     public void regenEnergy(){
         energy = Math.min(energyCap.getValue(), energyRegenRate.getValue()+energy);
@@ -74,8 +78,7 @@ public class ChunkQiContainer {
         @Override
         public void write(RegistryFriendlyByteBuf buf, ChunkQiContainer attachment, boolean initialSync) {
             buf.writeDouble(attachment.energy);
-            ByteBufHelpers.encodeMap(attachment.affinities,ByteBufHelpers::encodeIdentifier,(val,byteBuf)->ValueContainer.encode(byteBuf,val),buf);
-        }
+      }
 
         @Override
         public @Nullable ChunkQiContainer read(IAttachmentHolder holder, RegistryFriendlyByteBuf buf, @Nullable ChunkQiContainer previousValue) {
@@ -85,10 +88,6 @@ public class ChunkQiContainer {
                    0.0);
 
             previousValue.energy = buf.readDouble();
-            Map<Identifier,ValueContainer> affinities = ByteBufHelpers.decodeMap(ByteBufHelpers::decodeIdentifier,ValueContainer::decode,buf);
-
-            previousValue.affinities.clear();
-            previousValue.affinities.putAll(affinities);
 
             return previousValue;
         }
