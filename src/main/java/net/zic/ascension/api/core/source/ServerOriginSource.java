@@ -116,13 +116,16 @@ public class ServerOriginSource extends OriginSource {
         PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData(),this,reason);
         NeoForge.EVENT_BUS.post(post);
 
-        for(Identifier path : toRemove){
-            if(toAdd.contains(path)) continue;
-            removePath(path);
-        }
+
+        //first add all new paths with the new physique as owner, this ensures that if there is path overlap there is owners >1
+
         for(Identifier path : toAdd){
             if(toRemove.contains(path)) continue;
-            addPath(path);
+            addPath(path,post.getNewPhysiqueIdentifier());
+        }
+        for(Identifier path : toRemove){
+            if(toAdd.contains(path)) continue;
+            removePath(path,oldPhysique);
         }
         resolveProcess(ProcessType.PHYSIQUE);
         return true;
@@ -157,7 +160,7 @@ public class ServerOriginSource extends OriginSource {
         pre.getBloodline(getRegistryAccess()).handlePurityChange(this,data,purity);
 
         for(Identifier path : toAdd){
-            addPath(path);
+            addPath(path,pre.getBloodlineIdentifier());
         }
 
 
@@ -196,7 +199,7 @@ public class ServerOriginSource extends OriginSource {
             }
         }
         for(Identifier path : toRemove){
-            removePath(path);
+            removePath(path,pre.getBloodlineIdentifier());
         }
 
         BloodlineRemovedEvent.Post post= new BloodlineRemovedEvent.Post(bloodline,data,this,reason);
@@ -209,7 +212,7 @@ public class ServerOriginSource extends OriginSource {
 
 
     @Override
-    public boolean addPath(Identifier path, PathData existingData, EventReason reason) {
+    public boolean addPath(Identifier path, PathData existingData,Identifier owner, EventReason reason) {
         if(path == null || existingData == null) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(getRegistryAccess()).containsKey(path)) return false;
         if(cachedPathData.containsKey(path)) existingData = cachedPathData.get(path);
@@ -218,7 +221,7 @@ public class ServerOriginSource extends OriginSource {
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = super.addPath(path, existingData, reason);
+        boolean result = super.addPath(path, existingData,owner, reason);
         if(!result) return false;
 
         startProcess(ProcessType.ADD_PATH);
@@ -256,7 +259,7 @@ public class ServerOriginSource extends OriginSource {
     }
 
     @Override
-    public boolean removePath(Identifier path, EventReason reason) {
+    public boolean removePath(Identifier path,Identifier owner, EventReason reason) {
         if(path == null || !hasPath(path)) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(getRegistryAccess()).containsKey(path)) return false;
         PathData data = getPathData(path);
@@ -264,7 +267,7 @@ public class ServerOriginSource extends OriginSource {
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = super.removePath(path, reason);
+        boolean result = super.removePath(path,owner, reason);
         if(!result) return false;
 
         startProcess(ProcessType.REMOVE_PATH);
@@ -279,7 +282,7 @@ public class ServerOriginSource extends OriginSource {
 
 
     @Override
-    public boolean addSkill(Identifier skill, SkillData data) {
+    public boolean addSkill(Identifier skill, SkillData data,Identifier owner) {
         if(skill == null) return false;
         if(!CoreRegistries.SKILL_REGISTRY.get(getRegistryAccess()).containsKey(skill)) return false;
         if(cachedSkillData.containsKey(skill))  data = cachedSkillData.get(skill);
@@ -287,7 +290,7 @@ public class ServerOriginSource extends OriginSource {
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = super.addSkill(skill, data);
+        boolean result = super.addSkill(skill, data,owner);
         if(!result) return false;
 
         startProcess(ProcessType.ADD_SKILL);
@@ -306,7 +309,7 @@ public class ServerOriginSource extends OriginSource {
     }
     //TODO updated to include EventReason
     @Override
-    public boolean removeSkill(Identifier skill) {
+    public boolean removeSkill(Identifier skill,Identifier owner) {
         if(skill == null || !hasSkill(skill)) return false;
         if(!CoreRegistries.SKILL_REGISTRY.get(getRegistryAccess()).containsKey(skill)) return false;
         SkillData data = getSkillData(skill);
@@ -314,7 +317,7 @@ public class ServerOriginSource extends OriginSource {
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = super.removeSkill(skill);
+        boolean result = super.removeSkill(skill,owner);
         if(!result) return false;
 
         startProcess(ProcessType.REMOVE_SKILL);

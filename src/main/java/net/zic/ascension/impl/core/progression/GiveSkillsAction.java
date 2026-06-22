@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.core.progression;
 
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.RegistryObjectData;
 import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.progression.ProgressAction;
@@ -17,6 +18,14 @@ public record GiveSkillsAction(UUID uuid,List<Identifier> skills)  implements Pr
         return new GiveSkillsAction(UUID.randomUUID(),skills);
     }
 
+    /**
+     *
+     * @return the owner ID passed when adding or removing skills
+     */
+    public Identifier getOwnerId(){
+       return Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"give_skills_"+getUniqueId());
+    }
+
     @Override
     public UUID getUniqueId() {
         return uuid;
@@ -25,8 +34,8 @@ public record GiveSkillsAction(UUID uuid,List<Identifier> skills)  implements Pr
     @Override
     public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction) {
         for(Identifier skill:skills){
-            if(direction.equals(ProgressDirection.UP)) source.addSkill(skill);
-            else source.removeSkill(skill);
+            if(direction.equals(ProgressDirection.UP)) source.addSkill(skill,getOwnerId());
+            else source.removeSkill(skill,getOwnerId());
         }
     }
 

@@ -69,9 +69,12 @@ public class OriginSource {
     private final HashMap<Identifier,BloodlineData> bloodlines = new HashMap<>();
 
     private final HashMap<Identifier, PathData> paths = new HashMap<>();
+    private final HashMap<Identifier,HashSet<Identifier>> pathOwners = new HashMap<>();
 
     //TODO since not all skills have data consider wrapping in a skillInstance type?
     private final HashMap<Identifier, SkillData> skills = new HashMap<>();
+    private final HashMap<Identifier,HashSet<Identifier>> skillOwners = new HashMap<>();
+
 
     //???? TODO once again consider a wrapper since not all will have an instance for extra storage
     private final HashMap<Identifier, DataSourceInstance> dataSources = new HashMap<>();
@@ -209,34 +212,75 @@ public class OriginSource {
     public void markBloodlineDirty(Identifier bloodline){}//should be used if you modified a bloodlines data
     //──Path────────────────────────────────────────────────────────
 
-    public boolean addPath(Identifier path){
+    /**
+     * Adds a path, creating a fresh pathData instance
+     * @param path the path to add
+     * @param owner the source of this addition
+     * @return true-> added, false -> not added
+     */
+    public boolean addPath(Identifier path,Identifier owner){
         if(path == null) return false;
         Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,getRegistryAccess());
         if(pathInstance == null) return false;
-        return addPath(path,pathInstance.newData(getRegistryAccess()));
+        return addPath(path,pathInstance.newData(getRegistryAccess()),owner);
     }
-    //used when adding an existing path to a source
-    public boolean addPath(Identifier path,PathData existingData){
-        return addPath(path,existingData,null);
+
+    /**
+     * generic add path data (no specific event reason provided)
+     * @param path the path to add
+     * @param existingData either a fresh data instance or existing one
+     * @param owner the source of this addition
+     * @return true-> added, false -> not added
+     */
+    public boolean addPath(Identifier path,PathData existingData,Identifier owner){
+        return addPath(path,existingData,owner,null);
     }
-    public boolean addPath(Identifier path,PathData existingData,EventReason reason){
+
+    /**
+     * add a path to the source, along with a reason for the addition
+     * @param path the path to add
+     * @param existingData either a fresh data instance or existing one
+     * @param owner the source of this addition
+     * @param reason the reason for this addition (mostly null, see documentation for implementation details)
+     * @return  true-> added, false -> not added
+     */
+    public boolean addPath(Identifier path,PathData existingData,Identifier owner,EventReason reason){
         if(path == null || existingData == null) return false;
+
+        pathOwners.computeIfAbsent(path,key->new HashSet<>());
+        pathOwners.get(path).add(owner);
+
         if(paths.containsKey(path)) return false;
-
-        //TODO simulate realm change if existing data realms are greater than 0,0 and technique != null
-
         paths.put(path,existingData);
+
         return true;
     }
 
-    public Collection<Identifier> getPaths(){
-        return paths.keySet();
-    }
-    public boolean removePath(Identifier path){return removePath(path,null);}
-    public boolean removePath(Identifier path,EventReason reason){
+    /**
+     * removes a path if there are no owners remaining
+     * @param path the path to remove
+     * @param owner the source of the removal
+     * @return true->removed, false-> not removed
+     */
+    public boolean removePath(Identifier path,Identifier owner){return removePath(path,owner,null);}
+
+    /**
+     * removes a path if there are no owners remaining with a specific reason
+     * @param path the path to remove
+     * @param owner the source of the removal
+     * @param reason the reason for the removal
+     * @return true->removed, false-> not removed
+     */
+    public boolean removePath(Identifier path,Identifier owner,EventReason reason){
         if(!paths.containsKey(path)) return false;
+        if(!pathOwners.containsKey(path)) return false;
+
+        pathOwners.get(path).remove(owner);
+
+        if(!pathOwners.get(path).isEmpty()) return false;
 
         paths.remove(path);
+        pathOwners.remove(path);
         return true;
     }
 
@@ -246,6 +290,11 @@ public class OriginSource {
     public PathData getPathData(Identifier path){
         return paths.get(path);
     }
+
+    public Collection<Identifier> getPaths(){
+        return paths.keySet();
+    }
+
     public boolean broadcastTechniqueAddedAttempt(Identifier technique, TechniqueData data){
         return true;
     }
@@ -262,21 +311,48 @@ public class OriginSource {
 
     //──Skill────────────────────────────────────────────────────────
 
-    public boolean addSkill(Identifier skill){
+    /**
+     * adds a skill, creating a new skillData instance
+     * @param skill the skill we are adding
+     * @param owner the source of this skill
+     * @return true -> added, false -> not added
+     */
+    public boolean addSkill(Identifier skill,Identifier owner){
         if(skill == null) return false;
         Skill skillInstance = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,getRegistryAccess());
         if(skillInstance == null) return false;
-        return addSkill(skill,skillInstance.newData(getRegistryAccess()));
+        return addSkill(skill,skillInstance.newData(getRegistryAccess()),owner);
 
     }
-    public boolean addSkill(Identifier skill,SkillData data){
+    /**
+     * adds a skill
+     * @param skill the skill we are adding
+     * @param data the data for this skill can be fresh or existing
+     * @param owner the source of this skill
+     * @return true -> added, false -> not added
+     */
+    public boolean addSkill(Identifier skill,SkillData data,Identifier owner){
         if(skill == null) return false;
         skills.put(skill,data);
+        skillOwners.computeIfAbsent(skill,key->new HashSet<>());
+        skillOwners.get(skill).add(owner);
         return true;
     }
 
-    public boolean removeSkill(Identifier skill){
+    /**
+     * removes a skill only if the ownerIdMap is empty
+     * @param skill the skill we want to remove
+     * @param owner the source of the removal
+     * @return true->removed, false -> not removed
+     */
+    public boolean removeSkill(Identifier skill,Identifier owner){
+        if(!skillOwners.containsKey(skill)) return false;
+
+        skillOwners.get(skill).remove(owner);
+
+        if(!skillOwners.get(skill).isEmpty()) return false;
         skills.remove(skill);
+        skillOwners.remove(skill);
         return true;
     }
 

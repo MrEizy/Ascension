@@ -7,6 +7,21 @@
   "max_minor_realm": 2,
   "realm_change_handler": [
     {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [1]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/test_cast"
+          ]
+        }
+      ]
+    },
+
+    {
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         "ascension:generic_give_stats"
@@ -18,8 +33,7 @@
         {
           "type": "ascension:give_skills",
           "skills": [
-            "ascension:castable/cultivation/true_breath",
-            "ascension:castable/test_cast"
+            "ascension:castable/cultivation/true_breath"
           ]
         }
       ]

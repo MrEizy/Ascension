@@ -5,6 +5,9 @@
   "paths": [
     "ascension:foundation/essence"
   ],
+  "skills": [
+    "ascension:castable/test_cast"
+  ],
   "item_tooltip": {
     "theme": "ascension:physique_essence",
     "template": "ascension:default_physique_essence",
@@ -40,4 +43,5 @@
       }
     ]
   }
+
 }

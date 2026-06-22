@@ -7,6 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.core.physique.PhysiqueData;
@@ -63,6 +64,8 @@ public record SimplePhysique(Component name, Component description, List<Identif
     @Override
     public Collection<Identifier> onAdded(OriginSource source, PhysiqueData data) {
 
+        Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
+
         for (ValueContainer.BaseModifier baseModifier : baseStats) {
             source.addStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()), baseModifier.val());
         }
@@ -80,7 +83,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
             }
         }
         for (Identifier skill : skills) {
-            source.addSkill(skill);
+            source.addSkill(skill,physiqueId);
         }
 
         return unlockedPaths;
@@ -88,6 +91,8 @@ public record SimplePhysique(Component name, Component description, List<Identif
 
     @Override
     public Collection<Identifier> onRemoved(OriginSource source, PhysiqueData data) {
+        Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
+
         for (ValueContainer.BaseModifier baseModifier : baseStats) {
             source.removeStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()), baseModifier.val());
         }
@@ -108,7 +113,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
         //TODO update to more properly handle the try remove to more efficiently check by directly calling skillRemovalAttempt on bloodline,technique, physique and data source
 
         for (Identifier skill : skills) {
-            source.removeSkill(skill);
+            source.removeSkill(skill,physiqueId);
         }
 
         return unlockedPaths;
