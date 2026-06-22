@@ -71,6 +71,14 @@ public record SimplePhysique(Component name, Component description, List<Identif
                 source.addStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat), modifier);
             }
         }
+        for(BaseAffinity baseAffinity : baseAffinities){
+            source.addAffinity(baseAffinity.category(),baseAffinity.base().container(),baseAffinity.base().val());
+        }
+        for(Identifier path : affinityModifiers.keySet()){
+            for (AffinityModifier modifier : affinityModifiers.get(path)){
+                source.addAffinityModifier(modifier.category(),path,modifier.modifier());
+            }
+        }
         for (Identifier skill : skills) {
             source.addSkill(skill);
         }
@@ -87,6 +95,14 @@ public record SimplePhysique(Component name, Component description, List<Identif
             for (ValueContainerModifier modifier : statModifiers.get(stat)) {
 
                 source.removeStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat), modifier.getIdentifier());
+            }
+        }
+        for(BaseAffinity baseAffinity : baseAffinities){
+            source.removeAffinity(baseAffinity.category(),baseAffinity.base().container(),baseAffinity.base().val());
+        }
+        for(Identifier path : affinityModifiers.keySet()){
+            for (AffinityModifier modifier : affinityModifiers.get(path)){
+                source.removeAffinityModifier(modifier.category(),path,modifier.modifier().getIdentifier());
             }
         }
         //TODO update to more properly handle the try remove to more efficiently check by directly calling skillRemovalAttempt on bloodline,technique, physique and data source
