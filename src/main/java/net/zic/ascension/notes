@@ -7,6 +7,7 @@ this would then be displayable on a (local) browser window, with realtime update
 
 Tribulation TODO
 
+FINISHED (TESTING NEEDED)
 3. setup TribulationData existence validation checks
     - update to also store a tribulation definition so we can ensure they match
     - when checking validate the definition against the expected definition,
@@ -15,30 +16,30 @@ Tribulation TODO
     - for path data we are checking the tribulation for the realm below what it is stored at
 
     - so if the tribulation type has changed to a full reset?
+FINISHED (TESTING NEEDED)
 4. ensure tribulations are properly cleaned up
-    - by default tribulations will wait for entity to return, add a timeout?
+    - by default tribulations will wait for entity to return
 
 
-
+FINISHED (TESTING NEEDED)
 Data integrity update:
     - to insure that paths and skills are not randomly removed, assuming multiple sources ensure their existence I will add
     an ownershipIdMap for each, anything that wishes to add a skill or path must pass some sort of ownership Id,
     - when calling remove, it will only truly remove any data once there are no ownership Ids left
     - for physiques it is either the physique Id or ascension:physique, as for progression holders it is their unique id.
-TODO
+FINISHED (TESTING NEEDED)
 make sure to remember to add foundation to write + load
 
-Still TODO
+
+FINISHED (TESTING NEEDED)
 setting up atmospheric(chunk) qi
+TODO
 setting up custom damage formula + event
     - calculate effect value using players affinities and the damage events affinity
     - then get the players affinity for the element itself and use some extra formula to modify the value
-Do more foundation path testing
-Setup logic to ensure that physiques,bloodlines,and techniques with overlapping skills do not remove a skill if it still has a source
+TODO
 Battle styles
 
+TODO
 when in combat cap speed
 
-update most systems to handle data generation + decoding and loading to type
-    (essentially make it use the Type/Definition/Data model of tribulations)
-    - basically seperate the logic from the definition of that logic

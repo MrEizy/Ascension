@@ -11,6 +11,7 @@ import net.zic.ascension.api.core.progression.ProgressDirection;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.impl.core.path.MajorRealmDefinition;
 import net.zic.ascension.impl.core.path.simple.SimplePathData;
+import net.zic.zenithlib.nbt.NbtHelpers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,17 +146,35 @@ public class FoundationPathData extends SimplePathData {
 
     @Override
     public void load(ValueInput input, RegistryAccess registryAccess) {
+
         super.load(input, registryAccess);
+        foundations.clear();
+        foundations.addAll(NbtHelpers.readList(input,"foundation",(elementInput,id)->{
+            MajorRealmFoundation majorRealmFoundation = new MajorRealmFoundation();
+            majorRealmFoundation.setFoundationRealm(elementInput.getIntOr("realm",0));
+            majorRealmFoundation.setProgress(elementInput.getDoubleOr("progress",0));
+
+            return majorRealmFoundation;
+        }));
+
+        System.out.println(foundations);
     }
 
     @Override
     public void write(ValueOutput output) {
         super.write(output);
+
+        NbtHelpers.writeCollection(output,"foundation",foundations,(elementOutput,id,value)->{
+            elementOutput.putInt("realm",value.foundationRealm);
+            elementOutput.putDouble("progress",value.progress);
+        });
     }
 
     @Override
     public void encode(ByteBuf buf) {
         super.encode(buf);
+
+
     }
 
     @Override
