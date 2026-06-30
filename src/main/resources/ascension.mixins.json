@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "net.thejadeproject.ascension.mixins",
+  "package": "net.zic.ascension.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
   ],

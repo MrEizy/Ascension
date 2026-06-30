@@ -37,8 +37,5 @@ public class SimplePhysiqueType extends PhysiqueType {
         );
     }
 
-    @Override
-    public MapCodec<? extends PhysiqueData> dataCodec() {
-        return MapCodec.unit(new EmptyPhysiqueData());
-    }
+
 }

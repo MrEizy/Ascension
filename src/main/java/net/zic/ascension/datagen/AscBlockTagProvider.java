@@ -35,6 +35,7 @@ public class AscBlockTagProvider extends BlockTagsProvider {
 
         tag(ModTags.Blocks.LINKABLE_CONTAINERS)
                 .add(Blocks.CHEST)
+
                 .add(Blocks.BARREL);
 
     }

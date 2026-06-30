@@ -11,7 +11,6 @@ public abstract class PhysiqueType {
 
     public abstract MapCodec<? extends Physique> codec();
 
-    public abstract MapCodec<? extends PhysiqueData> dataCodec();
 
     public static final Codec<Physique> PHYSIQUE_CODEC = TypeRegistries.PHYSIQUE_TYPE_REGISTRY.byNameCodec()
             .dispatch(
@@ -19,11 +18,6 @@ public abstract class PhysiqueType {
                     PhysiqueType::codec
             );
 
-    public static Codec<PhysiqueData> PHYSIQUE_DATA_CODEC = TypeRegistries.PHYSIQUE_TYPE_REGISTRY.byNameCodec()
-            .dispatch(
-                    PhysiqueData::getType,
-                    PhysiqueType::dataCodec
-            );
 
 
 }

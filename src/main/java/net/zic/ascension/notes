@@ -33,6 +33,8 @@ make sure to remember to add foundation to write + load
 
 FINISHED (TESTING NEEDED)
 setting up atmospheric(chunk) qi
+
+
 TODO
 setting up custom damage formula + event
     - calculate effect value using players affinities and the damage events affinity
