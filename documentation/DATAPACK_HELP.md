@@ -48,21 +48,22 @@ This is a built-in Minecraft codec and has many options, here i will only introd
   }
 }
 ```
-### Base Value
+### Base Values
 everything from stats to affinities to attributes uses value containers,
-to provide a base value to a container you use
+to provide a base value to a container you use.
+everywhere will expect a map of the container name -> base value
 ```json
 {
   "[field_name]": {
-    "id": "ascension:vitality",
-    "value": 2
+    "ascension:vitality": 2,
+    "ascension:strength": 1
   }
 }
 ```
-the example above provides +2 to the base of vitality,
-`id` in this context refers to a specific value container.
+the example above provides +2 to the base of vitality and +1 to the base of strength,
+`container` in this context refers to a specific value container.
 
-the available ID's depends on the context
+the available containers depends on the context
 
 ### Value Modifier
 this is used to provide a modifier to a value container
@@ -103,30 +104,19 @@ Here a category allows us to only apply that affinity in specific circumstances
 
 For Example `ascension:none` would be applied everywhere while `ascension:damage` is only applied on damage
 
-There are 2 different formats
-
-<b>EITHER</b>
+Below you can see the 2 different implementations
 ```json
 {
   "[field_name]": {
-    "id": "ascension:vitality",
-    "value": 2
+    "ascension:essence": 3,
+    "ascension:sword": {
+      "ascension:none": 1,
+      "ascension:damage": 0.5
+    }
   }
 }
 ```
-<b>OR</b>
-
-```json
-{
-  "[field_name]": {
-    "base": {
-      "id": "ascension:vitality",
-      "value": 2
-    },
-    "category": "ascension:damage"
-  }
-}
-```
+above we added 300% affinity to the default essence category,100% to default sword and 50% to damage sword 
 
 For a list of Categories view the wiki
 ### Affinity Modifier
