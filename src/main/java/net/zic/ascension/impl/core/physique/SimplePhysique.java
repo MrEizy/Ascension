@@ -75,7 +75,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
             }
         }
         for(BaseAffinity baseAffinity : baseAffinities){
-            source.addAffinity(baseAffinity.category(),baseAffinity.base().container(),baseAffinity.base().val());
+            source.addAffinity(baseAffinity.category(),baseAffinity.path(),baseAffinity.value());
         }
         for(Identifier path : affinityModifiers.keySet()){
             for (AffinityModifier modifier : affinityModifiers.get(path)){
@@ -103,7 +103,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
             }
         }
         for(BaseAffinity baseAffinity : baseAffinities){
-            source.removeAffinity(baseAffinity.category(),baseAffinity.base().container(),baseAffinity.base().val());
+            source.removeAffinity(baseAffinity.category(),baseAffinity.path(),baseAffinity.value());
         }
         for(Identifier path : affinityModifiers.keySet()){
             for (AffinityModifier modifier : affinityModifiers.get(path)){

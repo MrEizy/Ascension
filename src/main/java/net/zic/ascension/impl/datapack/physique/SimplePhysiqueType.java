@@ -16,8 +16,11 @@ import net.zic.ascension.impl.datapack.util.BaseAffinity;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SimplePhysiqueType extends PhysiqueType {
     @Override
@@ -28,9 +31,20 @@ public class SimplePhysiqueType extends PhysiqueType {
                         ComponentSerialization.CODEC.fieldOf("description").forGetter(SimplePhysique::description),
                         Identifier.CODEC.listOf().fieldOf("paths").forGetter(SimplePhysique::unlockedPaths),
                         Identifier.CODEC.listOf().optionalFieldOf("skills", List.of()).forGetter(SimplePhysique::skills),
-                        ValueContainer.BASE_MODIFIER_CODEC.listOf().optionalFieldOf("base_stats",List.of()).forGetter(SimplePhysique::baseStats),
+                        Codec.unboundedMap(Identifier.CODEC,Codec.DOUBLE).xmap(
+                                rawMap->
+                                            rawMap.entrySet().stream()
+                                                    .map(entry->new ValueContainer.BaseModifier(entry.getKey(),entry.getValue()))
+                                                    .toList(),
+                                array->
+                                        array.stream()
+                                                .collect(Collectors.toMap(
+                                                        ValueContainer.BaseModifier::container,
+                                                        ValueContainer.BaseModifier::val
+                                                ))
+                        ).optionalFieldOf("base_stats",List.of()).forGetter(SimplePhysique::baseStats),
                         ValueContainerModifier.MAP_CODEC.optionalFieldOf("stat_modifiers", Map.of()).forGetter(SimplePhysique::statModifiers),
-                        BaseAffinity.CODEC.listOf().optionalFieldOf("base_affinity",List.of()).forGetter(SimplePhysique::baseAffinities),
+                        BaseAffinity.CODEC.optionalFieldOf("base_affinity",List.of()).forGetter(SimplePhysique::baseAffinities),
                         Codec.unboundedMap(Identifier.CODEC,AffinityModifier.CODEC.listOf()).optionalFieldOf("affinity_modifiers",Map.of()).forGetter(SimplePhysique::affinityModifiers),
                         AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(SimplePhysique::itemTooltip)
                 ).apply(instance, SimplePhysique::new)

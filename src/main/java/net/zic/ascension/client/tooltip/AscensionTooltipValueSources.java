@@ -333,15 +333,15 @@ public final class AscensionTooltipValueSources {
         return baseAffinities.stream()
                 .sorted(
                         Comparator.comparing(
-                                baseAffinity -> baseAffinity.base().container().toString()+baseAffinity.category()
+                                baseAffinity -> baseAffinity.path().toString()+baseAffinity.category()
                         )
                 )
                 .map(modifier -> ZenithTooltipValue.row(
-                        pathName(modifier.base().container(), access),
+                        pathName(modifier.path(), access),
                         Component.literal(
-                                signedNumber(modifier.base().val())
+                                signedNumber(modifier.value())
                         ),
-                        tone(modifier.base().val())
+                        tone(modifier.value())
                 ))
                 .toList();
     }

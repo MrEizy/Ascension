@@ -13,12 +13,9 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:human"
   },
-  "base_stats": [
-    {
-      "id": "ascension:vitality",
-      "value": 2
-    }
-  ],
+  "base_stats": {
+    "ascension:vitality": 2
+  },
   "stat_modifiers": {
     "ascension:vitality": [
       {
@@ -28,16 +25,10 @@
       }
     ]
   },
-  "base_affinity": [
-    {
-      "id": "ascension:essence",
-      "value": 1
-    },
-    {
-      "id": "ascension:sword",
-      "value": 0.5
-    }
-  ],
+  "base_affinity": {
+    "ascension:essence": 1,
+    "ascension:sword": 2
+  },
   "affinity_modifiers": {
     "ascension:essence": [
       {
