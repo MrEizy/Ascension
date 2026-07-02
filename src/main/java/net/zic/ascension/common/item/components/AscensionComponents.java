@@ -30,6 +30,14 @@ public class AscensionComponents {
                     .networkSynchronized(ByteBufCodecs.INT)
                     .build()
     );
+
+    public static final Supplier<DataComponentType<Identifier>> PATH_DAMAGE_TYPE = DATA_COMPONENTS.register(
+            "path_damage_type",
+            ()->DataComponentType.<Identifier>builder()
+                    .persistent(Identifier.CODEC)
+                    .networkSynchronized(Identifier.STREAM_CODEC)
+                    .build()
+    );
     public static void register(IEventBus eventBus) {
         DATA_COMPONENTS.register(eventBus);
     }

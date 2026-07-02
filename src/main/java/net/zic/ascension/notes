@@ -45,3 +45,5 @@ Battle styles
 TODO
 when in combat cap speed
 
+TODO
+change base stats and affinity into an unbounded map of identifier -> double

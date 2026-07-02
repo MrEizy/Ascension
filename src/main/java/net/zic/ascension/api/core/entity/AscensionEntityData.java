@@ -32,6 +32,12 @@ public interface AscensionEntityData {
     so i am ensuring I expose the necessary api endpoints
      */
 
+    default boolean hasAffinity(Identifier path){
+         return getSource().hasAffinity(path);
+    }
+    default boolean hasAffinity(Identifier path,Identifier category){
+        return getSource().hasAffinity(path,category);
+    }
     default void addAffinity(Identifier path, double val){
         getSource().addAffinity(path,val);
     }

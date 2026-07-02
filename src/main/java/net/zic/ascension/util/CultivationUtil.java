@@ -1,4 +1,4 @@
-package net.zic.ascension.impl.core.skill.castable.cultivation.util;
+package net.zic.ascension.util;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;

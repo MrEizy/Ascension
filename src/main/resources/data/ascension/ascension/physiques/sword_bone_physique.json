@@ -1,0 +1,51 @@
+{
+  "type": "ascension:simple",
+  "name": "Sword Bone",
+  "description": "Your bones are forged into blades, letting out a hum as they resonate with your blade",
+  "paths": [
+    "ascension:foundation/essence"
+  ],
+  "skills": [
+
+  ],
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:human"
+  },
+  "base_stats": [
+    {
+      "id": "ascension:vitality",
+      "value": 2
+    }
+  ],
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.2,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:physique_vitality_multiplier"
+      }
+    ]
+  },
+  "base_affinity": [
+    {
+      "id": "ascension:essence",
+      "value": 1
+    },
+    {
+      "id": "ascension:sword",
+      "value": 0.5
+    }
+  ],
+  "affinity_modifiers": {
+    "ascension:essence": [
+      {
+        "value": 0.1,
+        "operation": "ADD_BASE",
+        "id": "ascension:physique_affinity_modifier"
+      }
+    ]
+  }
+
+}

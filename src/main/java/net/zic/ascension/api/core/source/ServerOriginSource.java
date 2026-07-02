@@ -14,6 +14,7 @@ import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.bloodline.BloodlineData;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
 import net.zic.ascension.api.core.path.PathData;
+import net.zic.ascension.api.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.ascension.api.core.technique.TechniqueData;
@@ -386,7 +387,7 @@ public class ServerOriginSource extends OriginSource {
     @Override
     public void addAffinity(Identifier category, Identifier path, double val) {
         super.addAffinity(category, path, val);
-        if(category.equals(OriginSource.NO_CATEGORY)) {
+        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) {
             dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
         }else {
             dirtyCategorizedAffinity.computeIfAbsent(category, key -> new HashSet<>());
@@ -407,7 +408,7 @@ public class ServerOriginSource extends OriginSource {
     @Override
     public void removeAffinity(Identifier category, Identifier path, double val) {
         super.removeAffinity(category, path, val);
-        if(category.equals(OriginSource.NO_CATEGORY)) {
+        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) {
             dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
         }else {
             dirtyCategorizedAffinity.computeIfAbsent(category, key -> new HashSet<>());
@@ -430,7 +431,7 @@ public class ServerOriginSource extends OriginSource {
     @Override
     public void addAffinityModifier(Identifier category, Identifier path, ValueContainerModifier modifier) {
         super.addAffinityModifier(category, path, modifier);
-        if(category.equals(OriginSource.NO_CATEGORY)) {
+        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) {
             dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
         }else {
             dirtyCategorizedAffinity.computeIfAbsent(category, key -> new HashSet<>());
@@ -454,7 +455,7 @@ public class ServerOriginSource extends OriginSource {
     public void removeAffinityModifier(Identifier category, Identifier path, Identifier modifier) {
         super.removeAffinityModifier(category, path, modifier);
 
-        if(category.equals(OriginSource.NO_CATEGORY)) {
+        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) {
             dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
         }else {
             dirtyCategorizedAffinity.computeIfAbsent(category, key -> new HashSet<>());

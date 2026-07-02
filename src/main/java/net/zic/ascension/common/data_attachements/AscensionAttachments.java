@@ -1,5 +1,6 @@
 package net.zic.ascension.common.data_attachements;
 
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
@@ -62,6 +63,12 @@ public class AscensionAttachments {
                     .sync(new ChunkQiContainer.SyncHandler())
                     .serialize(new ChunkQiContainer.Provider())
                     .build()
+    );
+
+    public static final Supplier<AttachmentType<Identifier>> ENTITY_PATH_DAMAGE_TYPE = ATTACHMENT_TYPES.register(
+            "entity_path_damage_type",()->AttachmentType.builder(
+                    iAttachmentHolder -> Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"none")
+            ).sync(Identifier.STREAM_CODEC).serialize(Identifier.CODEC.fieldOf("path")).build()
     );
     public static void register(IEventBus bus){
         ATTACHMENT_TYPES.register(bus);

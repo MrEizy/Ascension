@@ -23,7 +23,7 @@ The basic process.
 2. Provide a [Codec](https://docs.neoforged.net/docs/datastorage/codecs/)
 3. Register your new type in the correct registry
 
-You can view a List of possible Types in ```TypeRegistries.java```
+You can view a List of possible Types in `TypeRegistries.java`
 
 #### Example
 
@@ -53,7 +53,7 @@ public class SimplePhysiqueType extends PhysiqueType {
 }
 ```
 
-When extending the type you want to make, You must override ```codec()``` This must return a codec that creates an instance of your desired class
+When extending the type you want to make, You must override `codec()` This must return a codec that creates an instance of your desired class
 
 It is that simple.
 
@@ -63,12 +63,23 @@ For details on Codecs look [here](https://docs.neoforged.net/docs/datastorage/co
 This will give a basic overview of what a physique is expected to provide and how they are handled in Entity Data
 
 #### Methods
-
-##### ```getType()```
+| Fields                                    |  
+|-------------------------------------------|
+| [`getType()`](#getType)                   | 
+| [`name()`](#name)                         | 
+| [`description()`](#description)           | 
+| [`onAdded()`](#onAdded)                   | 
+| [`onRemoved()`](#onRemoved)               | 
+| [`applyToEntity()`](#applyToEntity)       | 
+| [`removeFromEntity()`](#removeFromEntity) | 
+| [`newData()`](#newData)                   | 
+| [`loadData()`](#loadData)                 |
+| [`itemTooltip()`](#itemTooltip)           | 
+##### `getType()`
 One of the most important methods, this allows the codebase link your physique with the type that created it.
 This is required by Neoforge and Minecraft for Datapack Registries.
 
-##### ```name()```
+##### `name()`
 The name of the physique as a Component
 ##### ```description()```
 The description of the physique as a Component
@@ -78,3 +89,13 @@ Expects a Collection of Identifiers, with each identifier referring to a path to
 ##### ```onRemoved()```
 ran when a physique is removed, and before the new physique is added
 Expects a Collection of Identifiers, with each identifier referring to a path we want to TRY remove (try is key, since if a path has multiple sources it will not be removed)
+##### ```applyToEntity()```
+ran when an entity that listens to an OriginSource is loaded and attached to the source or a new physique was added, This allows you to apply entity only bonuses if you so wish
+##### ```removeFromEntity()```
+ran when an entity is either removed as a listener from a source or the physique was removed. Allows for the cleanup of anything added in `applyToEntity()`
+##### ```newData()```
+returns a fresh instance of the PhysiqueData
+##### ```loadData()```
+two versions, one for decoding physique data from a byteBuffer, and the other from an ValueInput
+##### ```itemTooltip()```
+handles the tooltip the physique transfer item should display

@@ -21,10 +21,9 @@ import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 import net.zic.ascension.impl.core.skill.EmptySkillData;
-import net.zic.ascension.impl.core.skill.castable.cultivation.util.CultivationUtil;
+import net.zic.ascension.util.CultivationUtil;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.skill_casting.AscensionSkillListener;
-import net.zic.zenithlib.ZenithLib;
 import net.zic.zenithlib.common.ZenithAttachments;
 
 import java.util.List;
