@@ -7,6 +7,7 @@ import net.zic.ascension.api.capabilities.CoreCapabilities;
 import net.zic.ascension.api.core.entity.AscensionEntityData;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
+import net.zic.ascension.common.qi.EntityQi;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
 import java.util.Optional;
@@ -39,6 +40,10 @@ public final class ClientAscensionData {
         return getPlayer().map(player -> player.getData(
                 AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER
         ));
+    }
+
+    public static Optional<EntityQi> getQi() {
+        return getPlayer().map(player -> player.getData(AscensionAttachments.QI));
     }
 
     public static long getRevision() {

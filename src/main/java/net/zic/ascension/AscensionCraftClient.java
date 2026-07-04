@@ -7,6 +7,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -14,6 +15,7 @@ import net.zic.ascension.client.keybind.IntrospectionKeybindHandler;
 import net.zic.ascension.client.keybind.ModKeybinds;
 import net.zic.ascension.client.keybind.TabletKeybindHandler;
 import net.zic.ascension.client.keybind.TabletScrollHandler;
+import net.zic.ascension.client.gui.AscensionHudOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 
@@ -32,6 +34,8 @@ public class AscensionCraftClient {
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         modEventBus.addListener(AscensionCraftClient::registerKeyBindings);
         modEventBus.addListener(ClientEvents::onClientSetup);
+        modEventBus.addListener(AscensionHudOverlay::registerGuiLayers);
+        NeoForge.EVENT_BUS.addListener(AscensionHudOverlay::hideVanillaHealth);
 
     }
 

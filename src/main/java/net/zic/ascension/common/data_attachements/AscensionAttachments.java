@@ -11,6 +11,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.ServerOriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
+import net.zic.ascension.common.qi.EntityQi;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
@@ -70,6 +71,15 @@ public class AscensionAttachments {
                     iAttachmentHolder -> Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"none")
             ).sync(Identifier.STREAM_CODEC).serialize(Identifier.CODEC.fieldOf("path")).build()
     );
+
+    public static final Supplier<AttachmentType<EntityQi>> QI = ATTACHMENT_TYPES.register(
+            "qi",
+            () -> AttachmentType.builder(EntityQi::new)
+                    .serialize(new EntityQi.Serializer())
+                    .copyOnDeath()
+                    .build()
+    );
+
     public static void register(IEventBus bus){
         ATTACHMENT_TYPES.register(bus);
     }
