@@ -1,10 +1,10 @@
 {
   "type": "ascension:simple_path",
-  "name": "Water",
-  "description": "cultivate the essence of life",
+  "name": "Moon",
+  "description": "cultivate the quiet tide-pulling light of the night sky",
   "realms": [
     {
-      "name": "Droplet",
+      "name": "Moonlight",
       "minor_realms": [
         {
           "name": "low",
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "name": "Stream",
+      "name": "Lunar Glow",
       "minor_realms": [
         {
           "name": "low",
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "name": "River",
+      "name": "Lunar Tide",
       "minor_realms": [
         {
           "name": "low",
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "name": "Torrent",
+      "name": "Lunar Eclipse",
       "minor_realms": [
         {
           "name": "low",
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "name": "Tide",
+      "name": "Lunar Phase Mastery",
       "minor_realms": [
         {
           "name": "low",
@@ -89,7 +89,7 @@
       ]
     },
     {
-      "name": "Current",
+      "name": "Lunar Convergence",
       "minor_realms": [
         {
           "name": "low",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "name": "Maelstrom",
+      "name": "Lunar Sovereign",
       "minor_realms": [
         {
           "name": "low",
@@ -123,7 +123,7 @@
       ]
     },
     {
-      "name": "Abyssal Depths",
+      "name": "Celestial Moon",
       "minor_realms": [
         {
           "name": "low",
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "name": "Endless Ocean",
+      "name": "Eternal Moon",
       "minor_realms": [
         {
           "name": "low",

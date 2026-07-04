@@ -1,10 +1,10 @@
 {
   "type": "ascension:simple_path",
-  "name": "Water",
-  "description": "cultivate the essence of life",
+  "name": "Fate",
+  "description": "cultivate the destiny woven for all living things",
   "realms": [
     {
-      "name": "Droplet",
+      "name": "Fateful Thread",
       "minor_realms": [
         {
           "name": "low",
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "name": "Stream",
+      "name": "Fate Weaving",
       "minor_realms": [
         {
           "name": "low",
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "name": "River",
+      "name": "Fate Binding",
       "minor_realms": [
         {
           "name": "low",
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "name": "Torrent",
+      "name": "Fate Severance",
       "minor_realms": [
         {
           "name": "low",
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "name": "Tide",
+      "name": "Fate Rewriting",
       "minor_realms": [
         {
           "name": "low",
@@ -89,7 +89,7 @@
       ]
     },
     {
-      "name": "Current",
+      "name": "Destiny's Grasp",
       "minor_realms": [
         {
           "name": "low",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "name": "Maelstrom",
+      "name": "Fate Sovereign",
       "minor_realms": [
         {
           "name": "low",
@@ -123,7 +123,7 @@
       ]
     },
     {
-      "name": "Abyssal Depths",
+      "name": "Heaven's Decree",
       "minor_realms": [
         {
           "name": "low",
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "name": "Endless Ocean",
+      "name": "Eternal Fate",
       "minor_realms": [
         {
           "name": "low",

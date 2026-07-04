@@ -1,10 +1,10 @@
 {
   "type": "ascension:simple_path",
-  "name": "Water",
-  "description": "cultivate the essence of life",
+  "name": "Gravity",
+  "description": "cultivate the pull that binds all things down",
   "realms": [
     {
-      "name": "Droplet",
+      "name": "Gravitic Pull",
       "minor_realms": [
         {
           "name": "low",
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "name": "Stream",
+      "name": "Weighted Field",
       "minor_realms": [
         {
           "name": "low",
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "name": "River",
+      "name": "Crushing Force",
       "minor_realms": [
         {
           "name": "low",
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "name": "Torrent",
+      "name": "Gravity Well",
       "minor_realms": [
         {
           "name": "low",
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "name": "Tide",
+      "name": "Singular Collapse",
       "minor_realms": [
         {
           "name": "low",
@@ -89,7 +89,7 @@
       ]
     },
     {
-      "name": "Current",
+      "name": "Event Horizon",
       "minor_realms": [
         {
           "name": "low",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "name": "Maelstrom",
+      "name": "Gravitational Dominion",
       "minor_realms": [
         {
           "name": "low",
@@ -123,7 +123,7 @@
       ]
     },
     {
-      "name": "Abyssal Depths",
+      "name": "Celestial Anchor",
       "minor_realms": [
         {
           "name": "low",
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "name": "Endless Ocean",
+      "name": "Eternal Gravity",
       "minor_realms": [
         {
           "name": "low",

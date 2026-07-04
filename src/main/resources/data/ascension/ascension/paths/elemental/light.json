@@ -1,10 +1,10 @@
 {
   "type": "ascension:simple_path",
-  "name": "Water",
-  "description": "cultivate the essence of life",
+  "name": "Light",
+  "description": "cultivate the radiance that drives back the dark",
   "realms": [
     {
-      "name": "Droplet",
+      "name": "Glimmer",
       "minor_realms": [
         {
           "name": "low",
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "name": "Stream",
+      "name": "Glow",
       "minor_realms": [
         {
           "name": "low",
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "name": "River",
+      "name": "Radiance",
       "minor_realms": [
         {
           "name": "low",
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "name": "Torrent",
+      "name": "Luminance",
       "minor_realms": [
         {
           "name": "low",
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "name": "Tide",
+      "name": "Brilliance",
       "minor_realms": [
         {
           "name": "low",
@@ -89,7 +89,7 @@
       ]
     },
     {
-      "name": "Current",
+      "name": "Solar Light",
       "minor_realms": [
         {
           "name": "low",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "name": "Maelstrom",
+      "name": "Divine Light",
       "minor_realms": [
         {
           "name": "low",
@@ -123,7 +123,7 @@
       ]
     },
     {
-      "name": "Abyssal Depths",
+      "name": "Holy Radiance",
       "minor_realms": [
         {
           "name": "low",
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "name": "Endless Ocean",
+      "name": "Eternal Light",
       "minor_realms": [
         {
           "name": "low",

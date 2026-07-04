@@ -1,10 +1,10 @@
 {
   "type": "ascension:simple_path",
-  "name": "Water",
-  "description": "cultivate the essence of life",
+  "name": "Reincarnation",
+  "description": "cultivate the endless wheel of death and rebirth",
   "realms": [
     {
-      "name": "Droplet",
+      "name": "Fading Echo",
       "minor_realms": [
         {
           "name": "low",
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "name": "Stream",
+      "name": "Soul Drift",
       "minor_realms": [
         {
           "name": "low",
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "name": "River",
+      "name": "Cyclic Whisper",
       "minor_realms": [
         {
           "name": "low",
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "name": "Torrent",
+      "name": "Wheel Binding",
       "minor_realms": [
         {
           "name": "low",
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "name": "Tide",
+      "name": "Samsara's Grasp",
       "minor_realms": [
         {
           "name": "low",
@@ -89,7 +89,7 @@
       ]
     },
     {
-      "name": "Current",
+      "name": "Cyclic Convergence",
       "minor_realms": [
         {
           "name": "low",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "name": "Maelstrom",
+      "name": "Reincarnation Sovereign",
       "minor_realms": [
         {
           "name": "low",
@@ -123,7 +123,7 @@
       ]
     },
     {
-      "name": "Abyssal Depths",
+      "name": "Beyond the Wheel",
       "minor_realms": [
         {
           "name": "low",
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "name": "Endless Ocean",
+      "name": "Eternal Cycle",
       "minor_realms": [
         {
           "name": "low",

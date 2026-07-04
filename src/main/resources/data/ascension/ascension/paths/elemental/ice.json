@@ -4,7 +4,7 @@
   "description": "cultivate the cold",
   "realms": [
     {
-      "name": "SMTH",
+      "name": "Frost",
       "minor_realms": [
         {
           "name": "low",
@@ -13,9 +13,146 @@
         {
           "name": "mid",
           "progress": 10000
-        },{
+        },
+        {
           "name": "high",
           "progress": 100000
+        }
+      ]
+    },
+    {
+      "name": "Rime",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000
+        }
+      ]
+    },
+    {
+      "name": "Icicle",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000
+        }
+      ]
+    },
+    {
+      "name": "Glacier",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000000000
+        },
+        {
+          "name": "mid",
+          "progress": 10000000000
+        },
+        {
+          "name": "high",
+          "progress": 100000000000
+        }
+      ]
+    },
+    {
+      "name": "Permafrost",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000000000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000000000
+        }
+      ]
+    },
+    {
+      "name": "Blizzard",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000000000
+        }
+      ]
+    },
+    {
+      "name": "Absolute Zero",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 10000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 100000000000000000
+        }
+      ]
+    },
+    {
+      "name": "Everfrost",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000000000000000
+        }
+      ]
+    },
+    {
+      "name": "Eternal Glacier",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000000000000000
         }
       ]
     }

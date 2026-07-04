@@ -1,10 +1,10 @@
 {
   "type": "ascension:simple_path",
-  "name": "Water",
-  "description": "cultivate the essence of life",
+  "name": "Metal",
+  "description": "cultivate the edge and hardness of forged ore",
   "realms": [
     {
-      "name": "Droplet",
+      "name": "Ore",
       "minor_realms": [
         {
           "name": "low",
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "name": "Stream",
+      "name": "Iron",
       "minor_realms": [
         {
           "name": "low",
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "name": "River",
+      "name": "Steel",
       "minor_realms": [
         {
           "name": "low",
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "name": "Torrent",
+      "name": "Alloy",
       "minor_realms": [
         {
           "name": "low",
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "name": "Tide",
+      "name": "Mithril",
       "minor_realms": [
         {
           "name": "low",
@@ -89,7 +89,7 @@
       ]
     },
     {
-      "name": "Current",
+      "name": "Adamant",
       "minor_realms": [
         {
           "name": "low",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "name": "Maelstrom",
+      "name": "Meteoric Metal",
       "minor_realms": [
         {
           "name": "low",
@@ -123,7 +123,7 @@
       ]
     },
     {
-      "name": "Abyssal Depths",
+      "name": "Godsteel",
       "minor_realms": [
         {
           "name": "low",
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "name": "Endless Ocean",
+      "name": "Eternal Metal",
       "minor_realms": [
         {
           "name": "low",
@@ -155,6 +155,19 @@
           "progress": 1000000000000000000000
         }
       ]
+    }
+  ],
+  "interactions": [
+    {
+      "path": "ascension:elemental/earth",
+      "type": "related",
+      "value": 0.5
+    },
+    {
+      "path": "ascension:elemental/earth",
+      "target": "other",
+      "type": "related",
+      "value": 0.2
     }
   ]
 }
