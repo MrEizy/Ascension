@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Water",
-  "description": "cultivate the essence of life",
+  "name": {
+    "translate": "ascension.path.elemental.water.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.water.desc"
+  },
   "realms": [
     {
       "name": "Droplet",

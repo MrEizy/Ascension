@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Dark",
-  "description": "cultivate the shadow that swallows all light",
+  "name": {
+    "translate": "ascension.path.elemental.dark.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.dark.desc"
+  },
   "realms": [
     {
       "name": "Shadow",

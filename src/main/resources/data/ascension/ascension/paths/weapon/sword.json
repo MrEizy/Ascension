@@ -1,11 +1,114 @@
 {
   "type": "ascension:simple_path",
-  "name": "Sword",
-  "description": "Slice the heavens",
+  "name": {
+    "translate": "ascension.path.weapon.sword.name"
+  },
+  "description": {
+    "translate": "ascension.path.weapon.sword.desc"
+  },
   "realms": [
-
+    {
+      "name": "First Draw",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000
+        },
+        {
+          "name": "mid",
+          "progress": 10000
+        },
+        {
+          "name": "high",
+          "progress": 100000
+        }
+      ]
+    },
+    {
+      "name": "Steady Blade",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000
+        }
+      ]
+    },
+    {
+      "name": "Flowing Sword",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000
+        }
+      ]
+    },
+    {
+      "name": "Sword Intent",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000000000
+        },
+        {
+          "name": "mid",
+          "progress": 10000000000
+        },
+        {
+          "name": "high",
+          "progress": 100000000000
+        }
+      ]
+    },
+    {
+      "name": "Heart Sword",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000000000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000000000
+        }
+      ]
+    },
+    {
+      "name": "Sword Unity",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000000000
+        }
+      ]
+    }
   ],
-  "interactions": [
-
-  ]
+  "interactions": []
 }

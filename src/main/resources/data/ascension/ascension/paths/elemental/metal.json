@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Metal",
-  "description": "cultivate the edge and hardness of forged ore",
+  "name": {
+    "translate": "ascension.path.elemental.metal.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.metal.desc"
+  },
   "realms": [
     {
       "name": "Ore",

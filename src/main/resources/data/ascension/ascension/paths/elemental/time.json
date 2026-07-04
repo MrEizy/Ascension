@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Time",
-  "description": "cultivate mastery over the flow of moments",
+  "name": {
+    "translate": "ascension.path.elemental.time.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.time.desc"
+  },
   "realms": [
     {
       "name": "Temporal Flicker",

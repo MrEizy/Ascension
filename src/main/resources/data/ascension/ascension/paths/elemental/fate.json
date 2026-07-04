@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Fate",
-  "description": "cultivate the destiny woven for all living things",
+  "name": {
+    "translate": "ascension.path.elemental.fate.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.fate.desc"
+  },
   "realms": [
     {
       "name": "Fateful Thread",

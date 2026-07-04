@@ -1,7 +1,11 @@
 {
   "type": "ascension:foundation_path",
-  "name": "Essence",
-  "description": "Cultivate the essence that permeates existence",
+  "name": {
+    "translate": "ascension.path.foundation.essence.name"
+  },
+  "description": {
+    "translate": "ascension.path.foundation.essence.desc"
+  },
   "realms": [
     {
       "name": "Qi Formation",
@@ -170,7 +174,7 @@
       "foundation_change_handler": []
     },
     {
-      "name": "Golden Core",
+      "name": "Core Perfection",
       "minor_realms": [
         {
           "name": "low",

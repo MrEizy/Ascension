@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Fire",
-  "description": "cultivate the flame that consumes and purifies",
+  "name": {
+    "translate": "ascension.path.elemental.fire.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.fire.desc"
+  },
   "realms": [
     {
       "name": "Ember",

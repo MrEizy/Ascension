@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Death",
-  "description": "cultivate the silence that follows all things",
+  "name": {
+    "translate": "ascension.path.elemental.death.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.death.desc"
+  },
   "realms": [
     {
       "name": "Decay",

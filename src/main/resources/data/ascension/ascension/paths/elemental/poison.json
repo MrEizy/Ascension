@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Poison",
-  "description": "cultivate the blight that corrupts from within",
+  "name": {
+    "translate": "ascension.path.elemental.poison.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.poison.desc"
+  },
   "realms": [
     {
       "name": "Toxin",

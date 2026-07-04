@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Sun",
-  "description": "cultivate the searing, life-giving light of day",
+  "name": {
+    "translate": "ascension.path.elemental.sun.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.sun.desc"
+  },
   "realms": [
     {
       "name": "Sunlight",

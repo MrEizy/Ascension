@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Reincarnation",
-  "description": "cultivate the endless wheel of death and rebirth",
+  "name": {
+    "translate": "ascension.path.elemental.reincarnation.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.reincarnation.desc"
+  },
   "realms": [
     {
       "name": "Fading Echo",

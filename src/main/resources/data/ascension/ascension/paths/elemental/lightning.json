@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Lightning",
-  "description": "cultivate the wrath of the heavens made manifest",
+  "name": {
+    "translate": "ascension.path.elemental.lightning.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.lightning.desc"
+  },
   "realms": [
     {
       "name": "Spark",

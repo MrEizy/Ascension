@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Yin",
-  "description": "cultivate the receptive, cold, and hidden half of existence",
+  "name": {
+    "translate": "ascension.path.elemental.yin.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.yin.desc"
+  },
   "realms": [
     {
       "name": "Yin Whisper",

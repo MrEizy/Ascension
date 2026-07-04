@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Illusion",
-  "description": "cultivate the veil that bends perception and truth",
+  "name": {
+    "translate": "ascension.path.elemental.illusion.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.illusion.desc"
+  },
   "realms": [
     {
       "name": "Mirage",

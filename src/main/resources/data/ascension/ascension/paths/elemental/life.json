@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Life",
-  "description": "cultivate the force that grows, heals, and endures",
+  "name": {
+    "translate": "ascension.path.elemental.life.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.life.desc"
+  },
   "realms": [
     {
       "name": "Vital Spark",

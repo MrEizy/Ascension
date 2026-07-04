@@ -1,14 +1,14 @@
 {
   "type": "ascension:simple_path",
   "name": {
-    "translate": "ascension.path.elemental.order.name"
+    "translate": "ascension.path.weapon.fan.name"
   },
   "description": {
-    "translate": "ascension.path.elemental.order.desc"
+    "translate": "ascension.path.weapon.fan.desc"
   },
   "realms": [
     {
-      "name": "Ordered Pattern",
+      "name": "First Fold",
       "minor_realms": [
         {
           "name": "low",
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "name": "Ordered Flow",
+      "name": "Wind Fold",
       "minor_realms": [
         {
           "name": "low",
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "name": "Ordered Structure",
+      "name": "Flowing Fan",
       "minor_realms": [
         {
           "name": "low",
@@ -59,7 +59,7 @@
       ]
     },
     {
-      "name": "Law Formation",
+      "name": "Hidden Edge",
       "minor_realms": [
         {
           "name": "low",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "Law Enforcement",
+      "name": "Dancing Steel",
       "minor_realms": [
         {
           "name": "low",
@@ -93,7 +93,7 @@
       ]
     },
     {
-      "name": "Absolute Law",
+      "name": "Unbroken Fan",
       "minor_realms": [
         {
           "name": "low",
@@ -106,57 +106,6 @@
         {
           "name": "high",
           "progress": 1000000000000000
-        }
-      ]
-    },
-    {
-      "name": "Order Sovereign",
-      "minor_realms": [
-        {
-          "name": "low",
-          "progress": 1000000000000000
-        },
-        {
-          "name": "mid",
-          "progress": 10000000000000000
-        },
-        {
-          "name": "high",
-          "progress": 100000000000000000
-        }
-      ]
-    },
-    {
-      "name": "Heaven's Law",
-      "minor_realms": [
-        {
-          "name": "low",
-          "progress": 100000000000000000
-        },
-        {
-          "name": "mid",
-          "progress": 1000000000000000000
-        },
-        {
-          "name": "high",
-          "progress": 10000000000000000000
-        }
-      ]
-    },
-    {
-      "name": "Eternal Order",
-      "minor_realms": [
-        {
-          "name": "low",
-          "progress": 10000000000000000000
-        },
-        {
-          "name": "mid",
-          "progress": 100000000000000000000
-        },
-        {
-          "name": "high",
-          "progress": 1000000000000000000000
         }
       ]
     }

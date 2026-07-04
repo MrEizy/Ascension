@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Wood",
-  "description": "cultivate the growth and resilience of living green",
+  "name": {
+    "translate": "ascension.path.elemental.wood.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.wood.desc"
+  },
   "realms": [
     {
       "name": "Sprout",

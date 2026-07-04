@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Space",
-  "description": "cultivate mastery over distance and dimension",
+  "name": {
+    "translate": "ascension.path.elemental.space.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.space.desc"
+  },
   "realms": [
     {
       "name": "Spatial Ripple",

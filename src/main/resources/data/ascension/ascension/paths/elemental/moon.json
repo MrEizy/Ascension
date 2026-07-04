@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Moon",
-  "description": "cultivate the quiet tide-pulling light of the night sky",
+  "name": {
+    "translate": "ascension.path.elemental.moon.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.moon.desc"
+  },
   "realms": [
     {
       "name": "Moonlight",

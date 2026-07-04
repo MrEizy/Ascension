@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Sound",
-  "description": "cultivate the vibration that carries through all things",
+  "name": {
+    "translate": "ascension.path.elemental.sound.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.sound.desc"
+  },
   "realms": [
     {
       "name": "Faint Echo",

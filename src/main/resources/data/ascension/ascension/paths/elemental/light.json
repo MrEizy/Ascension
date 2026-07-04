@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Light",
-  "description": "cultivate the radiance that drives back the dark",
+  "name": {
+    "translate": "ascension.path.elemental.light.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.light.desc"
+  },
   "realms": [
     {
       "name": "Glimmer",

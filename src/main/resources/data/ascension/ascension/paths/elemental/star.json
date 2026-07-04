@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Star",
-  "description": "cultivate the light and fire of the distant heavens",
+  "name": {
+    "translate": "ascension.path.elemental.star.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.star.desc"
+  },
   "realms": [
     {
       "name": "Starlight",

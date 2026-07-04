@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Blood",
-  "description": "cultivate the vital fluid that fuels rage and life alike",
+  "name": {
+    "translate": "ascension.path.elemental.blood.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.blood.desc"
+  },
   "realms": [
     {
       "name": "Blood Drop",

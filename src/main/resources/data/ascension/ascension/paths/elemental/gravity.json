@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Gravity",
-  "description": "cultivate the pull that binds all things down",
+  "name": {
+    "translate": "ascension.path.elemental.gravity.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.gravity.desc"
+  },
   "realms": [
     {
       "name": "Gravitic Pull",

@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Wind",
-  "description": "cultivate the freedom of the ceaseless sky",
+  "name": {
+    "translate": "ascension.path.elemental.wind.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.wind.desc"
+  },
   "realms": [
     {
       "name": "Breeze",

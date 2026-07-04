@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Yang",
-  "description": "cultivate the active, radiant, and assertive half of existence",
+  "name": {
+    "translate": "ascension.path.elemental.yang.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.yang.desc"
+  },
   "realms": [
     {
       "name": "Yang Spark",

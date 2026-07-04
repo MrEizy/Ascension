@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Earth",
-  "description": "cultivate the weight and permanence of stone",
+  "name": {
+    "translate": "ascension.path.elemental.earth.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.earth.desc"
+  },
   "realms": [
     {
       "name": "Pebble",
