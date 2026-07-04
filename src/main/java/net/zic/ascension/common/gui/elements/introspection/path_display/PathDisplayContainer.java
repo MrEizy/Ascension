@@ -36,6 +36,7 @@ public class PathDisplayContainer extends RenderableElement {
     private final EasyLabel selectedTechniqueLabel;
     private final PathDataDisplayElement pathInformation;
     private final PathProgressBar progressBar;
+    private final FoundationProgressBar foundationProgressBar;
 
     private OriginSource observedSource;
     private long observedRevision = Long.MIN_VALUE;
@@ -53,6 +54,11 @@ public class PathDisplayContainer extends RenderableElement {
         pathOptions.getPositioning().setX(6);
         pathOptions.getPositioning().setY(43);
         addChild(pathOptions);
+
+        foundationProgressBar = new FoundationProgressBar(frame);
+        foundationProgressBar.getPositioning().setX(219);
+        foundationProgressBar.getPositioning().setY(46);
+        addChild(foundationProgressBar);
 
         selectedTechniqueLabel = new EasyLabel(frame);
         selectedTechniqueLabel.setTextColor(0xFFFFFFFF);
@@ -100,6 +106,7 @@ public class PathDisplayContainer extends RenderableElement {
         }
         selectedPath = pathId;
         progressBar.setPath(pathId);
+        foundationProgressBar.setPath(pathId);
         refreshSelectedPath();
     }
 
@@ -118,6 +125,7 @@ public class PathDisplayContainer extends RenderableElement {
             selectedPath = null;
             pathOptions.setPaths(this, displayedPaths);
             progressBar.setPath(null);
+            foundationProgressBar.setPath(null);
             showUnavailableState();
             return;
         }
@@ -134,6 +142,7 @@ public class PathDisplayContainer extends RenderableElement {
         if (paths.isEmpty()) {
             selectedPath = null;
             progressBar.setPath(null);
+            foundationProgressBar.setPath(null);
             showEmptyState();
             return;
         }
@@ -142,6 +151,7 @@ public class PathDisplayContainer extends RenderableElement {
             selectedPath = paths.getFirst();
         }
         progressBar.setPath(selectedPath);
+        foundationProgressBar.setPath(selectedPath);
         refreshSelectedPath();
     }
 

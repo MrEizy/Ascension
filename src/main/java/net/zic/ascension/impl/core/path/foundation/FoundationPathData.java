@@ -12,6 +12,7 @@ import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.impl.core.path.MajorRealmDefinition;
 import net.zic.ascension.impl.core.path.simple.SimplePathData;
 import net.zic.zenithlib.nbt.NbtHelpers;
+import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +77,14 @@ public class FoundationPathData extends SimplePathData {
     public double getFoundationRealmProgress(int majorRealm){
         return majorRealm>=foundations.size() ? 0 : foundations.get(majorRealm).progress;
     }
+
+    public int getCurrentFoundationRealm(){
+        return getFoundationRealm(getMajorRealm());
+    }
+    public double getCurrentFoundationProgress(){
+        return getFoundationRealmProgress(getMajorRealm());
+    }
+
     public void setFoundationRealmProgress(int majorRealm,double progress){
         if(majorRealm>=foundations.size()) return;
 
@@ -174,11 +183,26 @@ public class FoundationPathData extends SimplePathData {
     public void encode(ByteBuf buf) {
         super.encode(buf);
 
-
+        ByteBufHelpers.encodeCollection(foundations, buf, (foundation, byteBuf) -> {
+            byteBuf.writeInt(foundation.getFoundationRealm());
+            byteBuf.writeDouble(foundation.getProgress());
+        });
     }
 
     @Override
     public void decode(ByteBuf buf, RegistryAccess access) {
         super.decode(buf, access);
+
+        foundations.clear();
+        foundations.addAll(ByteBufHelpers.decodeArray(buf, byteBuf -> {
+            MajorRealmFoundation foundation = new MajorRealmFoundation();
+            foundation.setFoundationRealm(byteBuf.readInt());
+            foundation.setProgress(byteBuf.readDouble());
+            return foundation;
+        }));
+
+        if (foundations.isEmpty()) {
+            foundations.add(new MajorRealmFoundation());
+        }
     }
 }
