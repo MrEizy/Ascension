@@ -1,0 +1,39 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.feral_moon_body.name"
+  },
+  "description": {
+    "translate": "ascension.physique.feral_moon_body.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/wind",
+    "ascension:elemental/moon",
+    "ascension:weapon/knife"
+  ],
+  "skills": [],
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:human"
+  },
+  "base_stats": {
+    "ascension:vitality": 1
+  },
+  "base_affinity": {
+    "ascension:essence": 1,
+    "ascension:wind": 1,
+    "ascension:moon": 1,
+    "ascension:knife": 2
+  },
+  "affinity_modifiers": {
+    "ascension:knife": [
+      {
+        "value": 0.15,
+        "operation": "ADD_BASE",
+        "id": "ascension:feral_moon_body_knife_modifier"
+      }
+    ]
+  }
+}

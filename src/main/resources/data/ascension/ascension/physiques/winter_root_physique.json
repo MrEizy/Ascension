@@ -1,0 +1,48 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.winter_root.name"
+  },
+  "description": {
+    "translate": "ascension.physique.winter_root.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:foundation/body",
+    "ascension:elemental/ice",
+    "ascension:weapon/sword"
+  ],
+  "skills": [],
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:human"
+  },
+  "base_stats": {
+    "ascension:vitality": 1
+  },
+  "base_affinity": {
+    "ascension:essence": 1,
+    "ascension:body": 1,
+    "ascension:ice": 1,
+    "ascension:sword": 1.5
+  },
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.1,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:winter_root_vitality_modifier"
+      }
+    ]
+  },
+  "affinity_modifiers": {
+    "ascension:ice": [
+      {
+        "value": 0.15,
+        "operation": "ADD_BASE",
+        "id": "ascension:winter_root_ice_modifier"
+      }
+    ]
+  }
+}

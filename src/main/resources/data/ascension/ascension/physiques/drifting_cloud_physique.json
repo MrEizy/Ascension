@@ -1,0 +1,46 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.drifting_cloud_body.name"
+  },
+  "description": {
+    "translate": "ascension.physique.drifting_cloud_body.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/wind",
+    "ascension:elemental/water",
+    "ascension:weapon/fan"
+  ],
+  "skills": [],
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:human"
+  },
+  "base_stats": {
+    "ascension:vitality": 1
+  },
+  "base_affinity": {
+    "ascension:essence": 1,
+    "ascension:wind": 1,
+    "ascension:water": 1,
+    "ascension:fan": 2
+  },
+  "affinity_modifiers": {
+    "ascension:fan": [
+      {
+        "value": 0.15,
+        "operation": "ADD_BASE",
+        "id": "ascension:drifting_cloud_body_fan_modifier"
+      }
+    ],
+    "ascension:wind": [
+      {
+        "value": 0.1,
+        "operation": "ADD_BASE",
+        "id": "ascension:drifting_cloud_body_wind_modifier"
+      }
+    ]
+  }
+}
