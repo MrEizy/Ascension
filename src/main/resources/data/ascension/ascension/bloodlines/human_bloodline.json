@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple",
-  "name": "Human",
-  "description": "The most common and adaptable of mortal bloodlines, balanced in body and spirit",
+  "name": {
+    "translate": "ascension.bloodline.human.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.human.desc"
+  },
   "purity_handler": [
     {
       "condition": "ascension:all_purity",

@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple",
-  "name": "Barbarian",
-  "description": "Descendants of the untamed tribes beyond the sect lands, their bodies honed by hardship into raw, unyielding power",
+  "name": {
+    "translate": "ascension.bloodline.barbarian.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.barbarian.desc"
+  },
   "purity_handler": [
     {
       "condition": "ascension:all_purity",

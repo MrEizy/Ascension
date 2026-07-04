@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple",
-  "name": "Frostkin",
-  "description": "Descendants of the tribes that endured the frozen wastes for generations, their blood carries an innate resistance to the cold and a body built to endure",
+  "name": {
+    "translate": "ascension.bloodline.frostkin.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.frostkin.desc"
+  },
   "purity_handler": [
     {
       "condition": "ascension:all_purity",

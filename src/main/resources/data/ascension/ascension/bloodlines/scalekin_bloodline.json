@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple",
-  "name": "Scalekin",
-  "description": "Descendants of the deep-water jiao, their skin bears faint scales and their bodies endure where lesser mortals would drown",
+  "name": {
+    "translate": "ascension.bloodline.scalekin.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.scalekin.desc"
+  },
   "purity_handler": [
     {
       "condition": "ascension:all_purity",
