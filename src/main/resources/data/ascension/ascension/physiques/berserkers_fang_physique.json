@@ -35,11 +35,11 @@
     ]
   },
   "affinity_modifiers": {
-    "ascension:fist": [
+    "ascension:knife": [
       {
         "value": 0.2,
         "operation": "ADD_BASE",
-        "id": "ascension:berserkers_fang_fist_modifier"
+        "id": "ascension:berserkers_fang_knife_modifier"
       }
     ],
     "ascension:blood": [
