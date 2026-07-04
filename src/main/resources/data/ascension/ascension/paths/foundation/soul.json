@@ -1,0 +1,493 @@
+{
+  "type": "ascension:foundation_path",
+  "name": "Soul",
+  "description": "Awaken the spirit within and forge it into an unyielding will",
+  "realms": [
+    {
+      "name": "Soul Awakening",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000
+        },
+        {
+          "name": "mid",
+          "progress": 10000
+        },
+        {
+          "name": "high",
+          "progress": 100000,
+          "tribulation": {
+            "type": "ascension:lightning",
+            "strikes": 4,
+            "damage": 2.0,
+            "tick_delay": 10
+          }
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Spirit Forging",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Soul Fixation",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Spirit Tempering",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000000000
+        },
+        {
+          "name": "mid",
+          "progress": 10000000000
+        },
+        {
+          "name": "high",
+          "progress": 100000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Soul Condensation",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000000000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Spirit Severing",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Soul Ascension",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 10000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 100000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Divine Spirit",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Soul Transcendence",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Immortal Soul",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000000000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 10000000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 100000000000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Divine Soul",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000000000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000000000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Eternal Soul",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000000000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000000000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    }
+  ]
+}

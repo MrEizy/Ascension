@@ -1,0 +1,493 @@
+{
+  "type": "ascension:foundation_path",
+  "name": "Body",
+  "description": "Temper the flesh until it rivals iron and stone",
+  "realms": [
+    {
+      "name": "Body Tempering",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000
+        },
+        {
+          "name": "mid",
+          "progress": 10000
+        },
+        {
+          "name": "high",
+          "progress": 100000,
+          "tribulation": {
+            "type": "ascension:lightning",
+            "strikes": 4,
+            "damage": 2.0,
+            "tick_delay": 10
+          }
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Bone Forging",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Marrow Refinement",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Tendon Strengthening",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000000000
+        },
+        {
+          "name": "mid",
+          "progress": 10000000000
+        },
+        {
+          "name": "high",
+          "progress": 100000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Blood Refinement",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000000000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Flesh Sanctification",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Iron Body",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 10000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 100000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Diamond Body",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Vajra Body",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Divine Body",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000000000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 10000000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 100000000000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Immortal Body",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000000000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000000000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    },
+    {
+      "name": "Eternal Body",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000000000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000000000000000000000
+        }
+      ],
+      "foundation_realms": [
+        {
+          "name": "Weak",
+          "progress": 10000
+        },
+        {
+          "name": "Normal",
+          "progress": 100000
+        },
+        {
+          "name": "Strong",
+          "progress": 1000000
+        },
+        {
+          "name": "Perfect",
+          "progress": 10000000
+        },
+        {
+          "name": "Primordial",
+          "progress": 0
+        }
+      ],
+      "foundation_change_handler": []
+    }
+  ]
+}
