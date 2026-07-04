@@ -1,0 +1,30 @@
+{
+  "type": "ascension:simple",
+  "name": "Barbarian",
+  "description": "Descendants of the untamed tribes beyond the sect lands, their bodies honed by hardship into raw, unyielding power",
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 0.2
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:human"
+  }
+}

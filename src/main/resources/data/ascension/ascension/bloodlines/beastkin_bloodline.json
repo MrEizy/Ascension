@@ -1,0 +1,30 @@
+{
+  "type": "ascension:simple",
+  "name": "Beastkin",
+  "description": "Mortals born with a trace of ancient spirit beast blood in their veins, granting fierce vitality and primal instinct",
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 0.1
+            },
+            {
+              "id": "ascension:strength",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:human"
+  }
+}
