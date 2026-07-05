@@ -27,10 +27,7 @@ import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
-import net.zic.ascension.network.CycleDropModePacket;
-import net.zic.ascension.network.CycleShapePacket;
-import net.zic.ascension.network.SelectSkillSlotPacket;
-import net.zic.ascension.network.UpdateSkillSlotPacket;
+import net.zic.ascension.network.*;
 import net.zic.ascension.impl.core.entity.AscensionStats;
 import net.zic.ascension.impl.core.source.SourceHandler;
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
@@ -207,6 +204,12 @@ public class AscensionCraft {
                     SelectSkillSlotPacket.TYPE,
                     SelectSkillSlotPacket.STREAM_CODEC,
                     SelectSkillSlotPacket::handle
+            );
+
+            registrar.playToServer(
+                    ToggleCultivationSuppressedPacket.TYPE,
+                    ToggleCultivationSuppressedPacket.STREAM_CODEC,
+                    ToggleCultivationSuppressedPacket::handle
             );
 
         }

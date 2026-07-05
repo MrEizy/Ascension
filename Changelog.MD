@@ -5,7 +5,7 @@
 ## Added
 • Added 2 new Paths - Body, Soul
 • Health and Qi Hud
-•
+• Foundation Toggle back to GUI
 •
 
 ## Removed
