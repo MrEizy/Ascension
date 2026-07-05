@@ -17,7 +17,7 @@ public class AscensionComponents {
 
 
     public static final Supplier<DataComponentType<Identifier>> REGISTRY_ID_HOLDER = DATA_COMPONENTS.register(
-            "registry_id_holer",
+            "registry_id_holder",
             ()->DataComponentType.<Identifier>builder()
                     .persistent(Identifier.CODEC)
                     .networkSynchronized(Identifier.STREAM_CODEC)
