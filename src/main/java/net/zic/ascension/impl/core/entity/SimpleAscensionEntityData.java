@@ -19,6 +19,7 @@ import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.ServerOriginSource;
 import net.zic.ascension.api.core.source.SourceChangesSnapshot;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
+import net.zic.ascension.common.starter.StarterSelectionStage;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.ZenithAttribute;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
@@ -30,6 +31,8 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,9 +59,17 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private SourceChangesSnapshot snapshot;
     private boolean cultivationSuppressed;
 
+    private StarterSelectionStage starterSelectionStage = StarterSelectionStage.BLOODLINE;
+    private final List<Identifier> offeredStarterBloodlines = new ArrayList<>();
+    private final List<Identifier> offeredStarterPhysiques = new ArrayList<>();
+    private Identifier selectedStarterBloodline;
+    private Identifier selectedStarterPhysique;
+    private boolean starterSelectionComplete;
+
     public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
         this.source = source;
         this.attachedEntity = entity;
+        this.source.setRegistryAccess(entity.registryAccess());
 
         if (!attachedEntity.level().isClientSide()) {
             AscensionCraft.getSourceHandler().addWatcher(attachedEntity, source);
@@ -177,6 +188,69 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         cultivationSuppressed = state;
     }
 
+    public StarterSelectionStage getStarterSelectionStage() {
+        return starterSelectionStage;
+    }
+
+    public void setStarterSelectionStage(StarterSelectionStage stage) {
+        starterSelectionStage = stage == null ? StarterSelectionStage.BLOODLINE : stage;
+    }
+
+    public List<Identifier> getOfferedStarterBloodlines() {
+        return List.copyOf(offeredStarterBloodlines);
+    }
+
+    public void setOfferedStarterBloodlines(Collection<Identifier> bloodlines) {
+        offeredStarterBloodlines.clear();
+        if (bloodlines != null) {
+            offeredStarterBloodlines.addAll(bloodlines.stream()
+                    .filter(id -> id != null)
+                    .distinct()
+                    .toList());
+        }
+    }
+
+    public List<Identifier> getOfferedStarterPhysiques() {
+        return List.copyOf(offeredStarterPhysiques);
+    }
+
+    public void setOfferedStarterPhysiques(Collection<Identifier> physiques) {
+        offeredStarterPhysiques.clear();
+        if (physiques != null) {
+            offeredStarterPhysiques.addAll(physiques.stream()
+                    .filter(id -> id != null)
+                    .distinct()
+                    .toList());
+        }
+    }
+
+    public Identifier getSelectedStarterBloodline() {
+        return selectedStarterBloodline;
+    }
+
+    public void setSelectedStarterBloodline(Identifier bloodline) {
+        selectedStarterBloodline = bloodline;
+    }
+
+    public Identifier getSelectedStarterPhysique() {
+        return selectedStarterPhysique;
+    }
+
+    public void setSelectedStarterPhysique(Identifier physique) {
+        selectedStarterPhysique = physique;
+    }
+
+    public boolean isStarterSelectionComplete() {
+        return starterSelectionComplete;
+    }
+
+    public void setStarterSelectionComplete(boolean complete) {
+        starterSelectionComplete = complete;
+        if (complete) {
+            starterSelectionStage = StarterSelectionStage.COMPLETE;
+        }
+    }
+
     public static Identifier getAttributeId(Holder<Attribute> attribute) {
         return BuiltInRegistries.ATTRIBUTE.getKey(attribute.value());
     }
@@ -287,6 +361,85 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         }
     }
 
+    private static void encodeIdentifierList(RegistryFriendlyByteBuf buf, Collection<Identifier> identifiers) {
+        buf.writeVarInt(identifiers.size());
+        for (Identifier identifier : identifiers) {
+            ByteBufHelpers.encodeIdentifier(identifier, buf);
+        }
+    }
+
+    private static List<Identifier> decodeIdentifierList(RegistryFriendlyByteBuf buf) {
+        int size = buf.readVarInt();
+        List<Identifier> identifiers = new ArrayList<>(size);
+        for (int index = 0; index < size; index++) {
+            identifiers.add(ByteBufHelpers.decodeIdentifier(buf));
+        }
+        return identifiers;
+    }
+
+    private static void encodeOptionalIdentifier(RegistryFriendlyByteBuf buf, Identifier identifier) {
+        buf.writeBoolean(identifier != null);
+        if (identifier != null) {
+            ByteBufHelpers.encodeIdentifier(identifier, buf);
+        }
+    }
+
+    private static Identifier decodeOptionalIdentifier(RegistryFriendlyByteBuf buf) {
+        return buf.readBoolean() ? ByteBufHelpers.decodeIdentifier(buf) : null;
+    }
+
+    private static StarterSelectionStage readStarterSelectionStage(String name) {
+        try {
+            return StarterSelectionStage.valueOf(name);
+        } catch (IllegalArgumentException exception) {
+            return StarterSelectionStage.BLOODLINE;
+        }
+    }
+
+    private static Identifier readOptionalIdentifier(ValueInput input, String key) {
+        String value = input.getStringOr(key, "");
+        if (value.isBlank()) {
+            return null;
+        }
+        try {
+            return Identifier.parse(value);
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    private static List<Identifier> readIdentifierList(ValueInput input, String key) {
+        List<Identifier> identifiers = new ArrayList<>();
+        for (ValueInput element : input.childrenListOrEmpty(key)) {
+            String value = element.getStringOr("id", "");
+            if (value.isBlank()) {
+                continue;
+            }
+            try {
+                identifiers.add(Identifier.parse(value));
+            } catch (Exception ignored) {
+            }
+        }
+        return identifiers;
+    }
+
+    private static void writeOptionalIdentifier(ValueOutput output, String key, Identifier identifier) {
+        if (identifier != null) {
+            output.putString(key, identifier.toString());
+        }
+    }
+
+    private static void writeIdentifierList(ValueOutput output, String key, Collection<Identifier> identifiers) {
+        ValueOutput.ValueOutputList list = output.childrenList(key);
+        for (Identifier identifier : identifiers) {
+            if (identifier == null) {
+                continue;
+            }
+            ValueOutput element = list.addChild();
+            element.putString("id", identifier.toString());
+        }
+    }
+
     public static class SyncHandler implements AttachmentSyncHandler<SimpleAscensionEntityData> {
         @Override
         public boolean sendToPlayer(@NonNull IAttachmentHolder holder, @NonNull ServerPlayer to) {
@@ -306,6 +459,13 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                 ByteBufHelpers.encodeIdentifier(entry.getKey(), buf);
                 buf.writeDouble(entry.getValue());
             }
+
+            buf.writeEnum(attachment.starterSelectionStage);
+            buf.writeBoolean(attachment.starterSelectionComplete);
+            encodeIdentifierList(buf, attachment.offeredStarterBloodlines);
+            encodeIdentifierList(buf, attachment.offeredStarterPhysiques);
+            encodeOptionalIdentifier(buf, attachment.selectedStarterBloodline);
+            encodeOptionalIdentifier(buf, attachment.selectedStarterPhysique);
 
             boolean encodePatch = !initialSync && attachment.snapshot != null;
             buf.writeBoolean(encodePatch);
@@ -350,6 +510,13 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                         data.setAttributeSuppression(attribute, percentage)
                 );
             }
+
+            data.setStarterSelectionStage(buf.readEnum(StarterSelectionStage.class));
+            data.setStarterSelectionComplete(buf.readBoolean());
+            data.setOfferedStarterBloodlines(decodeIdentifierList(buf));
+            data.setOfferedStarterPhysiques(decodeIdentifierList(buf));
+            data.setSelectedStarterBloodline(decodeOptionalIdentifier(buf));
+            data.setSelectedStarterPhysique(decodeOptionalIdentifier(buf));
 
             if (buf.readBoolean()) {
                 data.source.apply(
@@ -399,6 +566,17 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                 return attributeId;
             });
 
+            data.setStarterSelectionStage(readStarterSelectionStage(
+                    input.getStringOr("starter_selection_stage", StarterSelectionStage.BLOODLINE.name())
+            ));
+            data.setStarterSelectionComplete(
+                    input.getBooleanOr("starter_selection_complete", false)
+            );
+            data.setOfferedStarterBloodlines(readIdentifierList(input, "offered_starter_bloodlines"));
+            data.setOfferedStarterPhysiques(readIdentifierList(input, "offered_starter_physiques"));
+            data.setSelectedStarterBloodline(readOptionalIdentifier(input, "selected_starter_bloodline"));
+            data.setSelectedStarterPhysique(readOptionalIdentifier(input, "selected_starter_physique"));
+
             return data;
         }
 
@@ -420,6 +598,13 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                         elementOutput.putDouble("percentage", entry.getValue());
                     }
             );
+
+            output.putString("starter_selection_stage", attachment.starterSelectionStage.name());
+            output.putBoolean("starter_selection_complete", attachment.starterSelectionComplete);
+            writeIdentifierList(output, "offered_starter_bloodlines", attachment.offeredStarterBloodlines);
+            writeIdentifierList(output, "offered_starter_physiques", attachment.offeredStarterPhysiques);
+            writeOptionalIdentifier(output, "selected_starter_bloodline", attachment.selectedStarterBloodline);
+            writeOptionalIdentifier(output, "selected_starter_physique", attachment.selectedStarterPhysique);
 
             return true;
         }

@@ -1,24 +1,17 @@
 package net.zic.ascension;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.item.ModItems;
@@ -50,7 +43,6 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -216,6 +208,18 @@ public class AscensionCraft {
                     UpdateAttributeSuppressionPacket.TYPE,
                     UpdateAttributeSuppressionPacket.STREAM_CODEC,
                     UpdateAttributeSuppressionPacket::handle
+            );
+
+            registrar.playToClient(
+                    OpenStarterSelectionPacket.TYPE,
+                    OpenStarterSelectionPacket.STREAM_CODEC,
+                    OpenStarterSelectionPacket::handle
+            );
+
+            registrar.playToServer(
+                    ChooseStarterOptionPacket.TYPE,
+                    ChooseStarterOptionPacket.STREAM_CODEC,
+                    ChooseStarterOptionPacket::handle
             );
 
         }

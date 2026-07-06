@@ -258,5 +258,10 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.bloodline.scalekin.desc", "Descendants of the deep-water jiao, their skin bears faint scales and their bodies endure where lesser mortals would drown");
         add("ascension.bloodline.frostkin.name", "Frostkin");
         add("ascension.bloodline.frostkin.desc", "Descendants of the tribes that endured the frozen wastes for generations, their blood carries an innate resistance to the cold and a body built to endure");
+
+        // Starter Screen Lang
+        add("gui.ascension.starter.title", "Starting Selection");
+        add("gui.ascension.starter.choose_bloodline", "Choose Your Bloodline");
+        add("gui.ascension.starter.choose_physique", "Choose Your Physique");
     }
 }

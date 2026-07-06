@@ -1,8 +1,6 @@
 package net.zic.ascension.api.core.source;
 
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
@@ -22,7 +20,6 @@ import net.zic.ascension.api.core.data_source.DataSource;
 import net.zic.ascension.api.core.data_source.DataSourceInstance;
 import net.zic.ascension.api.core.data_source.LoadOrder;
 import net.zic.ascension.api.core.path.PathEffectValueUtil;
-import net.zic.ascension.api.core.path.affinity.AffinityCategoryHolder;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.path.affinity.AffinityHolder;
@@ -31,9 +28,6 @@ import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.ascension.api.core.technique.TechniqueData;
-import net.zic.ascension.api.datapack.bloodline.BloodlineType;
-import net.zic.ascension.api.datapack.physique.PhysiqueType;
-import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.api.event.EventReason;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.nbt.NbtHelpers;
@@ -46,8 +40,6 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
 
 import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * the data of an entities abstract identity (multiple entities
@@ -109,7 +101,10 @@ public class OriginSource {
     public ValueInput getCached(){return cached;}
 
     public RegistryAccess getRegistryAccess(){
-       return Minecraft.getInstance().getConnection() == null ? null : Minecraft.getInstance().getConnection().registryAccess();
+        if (registryAccess != null) {
+            return registryAccess;
+        }
+        return Minecraft.getInstance().getConnection() == null ? null : Minecraft.getInstance().getConnection().registryAccess();
     }
     public long getRevision() {
         return revision;

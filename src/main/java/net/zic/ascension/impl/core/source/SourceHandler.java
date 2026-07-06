@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -21,6 +20,7 @@ import net.zic.ascension.api.core.bloodline.Bloodline;
 import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.common.starter.StarterSelectionManager;
 
 import java.util.*;
 
@@ -220,6 +220,9 @@ public class  SourceHandler extends SavedData {
         if(holder == null) return;
 
         holder.getData(event.getEntity()).initialize();
+        if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) {
+            StarterSelectionManager.openIfIncomplete(player);
+        }
     }
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event){
@@ -233,6 +236,9 @@ public class  SourceHandler extends SavedData {
         AscensionCraft.getSourceHandler().addWatcher(event.getEntity(),holder.getData(event.getEntity()).getSource());
 
         holder.getData(event.getEntity()).initialize();
+        if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) {
+            StarterSelectionManager.openIfIncomplete(player);
+        }
 
     }
 }
