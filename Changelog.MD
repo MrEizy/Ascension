@@ -6,6 +6,9 @@
 • Added 2 new Paths - Body, Soul
 • Health and Qi Hud
 • Foundation Toggle back to GUI
+• Added Attribute Suppression in GUI
+• Added Attribute scaling using Stats
+•
 •
 
 ## Removed

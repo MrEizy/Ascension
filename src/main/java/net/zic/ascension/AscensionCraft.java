@@ -212,6 +212,12 @@ public class AscensionCraft {
                     ToggleCultivationSuppressedPacket::handle
             );
 
+            registrar.playToServer(
+                    UpdateAttributeSuppressionPacket.TYPE,
+                    UpdateAttributeSuppressionPacket.STREAM_CODEC,
+                    UpdateAttributeSuppressionPacket::handle
+            );
+
         }
     }
 

@@ -77,9 +77,7 @@ public class AttributeDisplayContainer extends RenderableElement {
                     }
 
                     if (player.getAttributes().hasAttribute(attribute)) {
-                        return FORMAT.format(
-                                player.getAttributeValue(attribute)
-                        );
+                        return FORMAT.format(player.getAttributeValue(attribute));
                     }
 
                     return "-";
@@ -175,5 +173,7 @@ public class AttributeDisplayContainer extends RenderableElement {
         if (icon != null) {
             icon.render(graphics);
         }
+
+        super.render(graphics, mouseX, mouseY, partialTick);
     }
 }

@@ -5,6 +5,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.SourceChangesSnapshot;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import net.minecraft.core.Holder;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +27,13 @@ public interface AscensionEntityData {
 
     boolean isCultivationSuppressed();
     void setCultivationSuppressed(boolean state);
+
+    // Stat Suppression methods
+    default double getAttributeSuppression(Holder<Attribute> attribute) {return 1.0D;}
+    default void setAttributeSuppression(Holder<Attribute> attribute, double percentage) {}
+    default void applyAttributeSuppression(Holder<Attribute> attribute) {}
+    default void applyAllAttributeSuppressions() {}
+
     //──Affinity────────────────────────────────────────────────────────
 
     /*TODO

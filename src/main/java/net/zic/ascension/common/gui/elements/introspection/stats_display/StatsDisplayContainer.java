@@ -45,20 +45,20 @@ public class StatsDisplayContainer extends RenderableElement {
         int y = 18;
 
         addAttribute(frame, Attributes.MAX_HEALTH, 20, 227, 7, 7, x, y);
-        addAttribute(frame, Attributes.ATTACK_DAMAGE, 28, 227, 9, 9, x, y + 17);
+        addSuppressibleAttribute(frame, Attributes.ATTACK_DAMAGE, 28, 227, 9, 9, x, y + 17);
         addAttribute(frame, Attributes.ARMOR, 10, 227, 9, 9, x, y + 44);
         addAttribute(frame, Attributes.ARMOR_TOUGHNESS, 0, 227, 9, 9, x, y + 61);
-        addAttribute(frame, Attributes.ATTACK_SPEED, 28, 227, 9, 9, x, y + 78);
+        addSuppressibleAttribute(frame, Attributes.ATTACK_SPEED, 28, 227, 9, 9, x, y + 78);
     }
 
     private void addRightAttributes(UIFrame frame) {
         int x = 165;
         int y = 18;
 
-        addAttribute(frame, Attributes.MOVEMENT_SPEED, 185, 226, 9, 9, x, y);
-        addAttribute(frame, Attributes.JUMP_STRENGTH, 195, 226, 9, 9, x, y + 27);
-        addAttribute(frame, Attributes.STEP_HEIGHT, 205, 226, 9, 9, x, y + 54);
-        addAttribute(frame, Attributes.MINING_EFFICIENCY, 205, 226, 9, 9, x, y + 81);
+        addSuppressibleAttribute(frame, Attributes.MOVEMENT_SPEED, 185, 226, 9, 9, x, y);
+        addSuppressibleAttribute(frame, Attributes.JUMP_STRENGTH, 195, 226, 9, 9, x, y + 27);
+        addSuppressibleAttribute(frame, Attributes.STEP_HEIGHT, 205, 226, 9, 9, x, y + 54);
+        addSuppressibleAttribute(frame, Attributes.MINING_EFFICIENCY, 205, 226, 9, 9, x, y + 81);
     }
 
     private void addAttribute(
@@ -89,8 +89,39 @@ public class StatsDisplayContainer extends RenderableElement {
         addChild(display);
     }
 
+    private void addSuppressibleAttribute(
+            UIFrame frame,
+            Holder<Attribute> attribute,
+            int textureX,
+            int textureY,
+            int textureWidth,
+            int textureHeight,
+            int x,
+            int y
+    ) {
+        SuppressibleAttributeDisplayContainer display = new SuppressibleAttributeDisplayContainer(
+                frame,
+                attribute,
+                new TextureDataSubsection(
+                        TEXTURE,
+                        234,
+                        236,
+                        textureX,
+                        textureY,
+                        textureWidth,
+                        textureHeight
+                )
+        );
+
+        display.getPositioning().setX(x);
+        display.getPositioning().setY(y);
+        addChild(display);
+    }
+
     @Override
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         BACKGROUND.render(graphics);
+        super.render(graphics, mouseX, mouseY, partialTick);
+
     }
 }
