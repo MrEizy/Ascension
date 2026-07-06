@@ -1,14 +1,14 @@
 {
   "type": "ascension:simple_path",
   "name": {
-    "translate": "ascension.path.elemental.ice.name"
+    "translate": "ascension.path.elemental.gravity.name"
   },
   "description": {
-    "translate": "ascension.path.elemental.ice.desc"
+    "translate": "ascension.path.elemental.gravity.desc"
   },
   "realms": [
     {
-      "name": "Frost",
+      "name": "Gravitic Pull",
       "minor_realms": [
         {
           "name": "low",
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "name": "Rime",
+      "name": "Weighted Field",
       "minor_realms": [
         {
           "name": "low",
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "name": "Icicle",
+      "name": "Crushing Force",
       "minor_realms": [
         {
           "name": "low",
@@ -59,7 +59,7 @@
       ]
     },
     {
-      "name": "Glacier",
+      "name": "Gravity Well",
       "minor_realms": [
         {
           "name": "low",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "Permafrost",
+      "name": "Singular Collapse",
       "minor_realms": [
         {
           "name": "low",
@@ -93,7 +93,7 @@
       ]
     },
     {
-      "name": "Blizzard",
+      "name": "Event Horizon",
       "minor_realms": [
         {
           "name": "low",
@@ -110,7 +110,7 @@
       ]
     },
     {
-      "name": "Absolute Zero",
+      "name": "Gravitational Dominion",
       "minor_realms": [
         {
           "name": "low",
@@ -127,7 +127,7 @@
       ]
     },
     {
-      "name": "Everfrost",
+      "name": "Celestial Anchor",
       "minor_realms": [
         {
           "name": "low",
@@ -144,7 +144,7 @@
       ]
     },
     {
-      "name": "Eternal Glacier",
+      "name": "Eternal Gravity",
       "minor_realms": [
         {
           "name": "low",
@@ -159,19 +159,6 @@
           "progress": 1000000000000000000000
         }
       ]
-    }
-  ],
-  "interactions": [
-    {
-      "path": "ascension:elemental/water",
-      "type": "related",
-      "value": 0.5
-    },
-    {
-      "path": "ascension:elemental/water",
-      "target": "other",
-      "type": "related",
-      "value": 0.2
     }
   ]
 }

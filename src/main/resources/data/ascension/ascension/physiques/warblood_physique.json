@@ -1,0 +1,56 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.warblood_body.name"
+  },
+  "description": {
+    "translate": "ascension.physique.warblood_body.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/fire",
+    "ascension:elemental/blood",
+    "ascension:weapon/axe"
+  ],
+  "skills": [],
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:human"
+  },
+  "base_stats": {
+    "ascension:strength": 1.5,
+    "ascension:vitality": 1
+  },
+  "base_affinity": {
+    "ascension:body": 1,
+    "ascension:fire": 1,
+    "ascension:blood": 1,
+    "ascension:axe": 2
+  },
+  "stat_modifiers": {
+    "ascension:strength": [
+      {
+        "value": 0.15,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:warblood_body_strength_modifier"
+      }
+    ]
+  },
+  "affinity_modifiers": {
+    "ascension:blood": [
+      {
+        "value": 0.15,
+        "operation": "ADD_BASE",
+        "id": "ascension:warblood_body_blood_modifier"
+      }
+    ],
+    "ascension:axe": [
+      {
+        "value": 0.1,
+        "operation": "ADD_BASE",
+        "id": "ascension:warblood_body_axe_modifier"
+      }
+    ]
+  }
+}

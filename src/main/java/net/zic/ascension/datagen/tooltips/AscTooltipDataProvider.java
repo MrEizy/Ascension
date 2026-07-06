@@ -70,6 +70,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                                 literal("Physique Essence")
                         ).withOnAllPages(true))
                         .add(classification(false, true, ClassificationElement.Style.BADGE))
+                        .add(divider())
                         .add(dynamic(id("physique_paths")))
                         .add(divider())
                         .add(text(
@@ -94,6 +95,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                                 literal("Technique Manual")
                         ).withOnAllPages(true))
                         .add(classification(false, true, ClassificationElement.Style.BADGE))
+                        .add(divider())
                         .add(badge(
                                 sourced("ascension:technique_path"),
                                 ZenithTooltipColor.BACKGROUND,

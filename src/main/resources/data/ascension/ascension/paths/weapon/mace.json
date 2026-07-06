@@ -1,14 +1,14 @@
 {
   "type": "ascension:simple_path",
   "name": {
-    "translate": "ascension.path.elemental.ice.name"
+    "translate": "ascension.path.weapon.mace.name"
   },
   "description": {
-    "translate": "ascension.path.elemental.ice.desc"
+    "translate": "ascension.path.weapon.mace.desc"
   },
   "realms": [
     {
-      "name": "Frost",
+      "name": "First Swing",
       "minor_realms": [
         {
           "name": "low",
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "name": "Rime",
+      "name": "Heavy Swing",
       "minor_realms": [
         {
           "name": "low",
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "name": "Icicle",
+      "name": "Crushing Weight",
       "minor_realms": [
         {
           "name": "low",
@@ -59,7 +59,7 @@
       ]
     },
     {
-      "name": "Glacier",
+      "name": "Bone Breaker",
       "minor_realms": [
         {
           "name": "low",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "Permafrost",
+      "name": "Earthshaking Blow",
       "minor_realms": [
         {
           "name": "low",
@@ -93,7 +93,7 @@
       ]
     },
     {
-      "name": "Blizzard",
+      "name": "Unstoppable Swing",
       "minor_realms": [
         {
           "name": "low",
@@ -108,70 +108,6 @@
           "progress": 1000000000000000
         }
       ]
-    },
-    {
-      "name": "Absolute Zero",
-      "minor_realms": [
-        {
-          "name": "low",
-          "progress": 1000000000000000
-        },
-        {
-          "name": "mid",
-          "progress": 10000000000000000
-        },
-        {
-          "name": "high",
-          "progress": 100000000000000000
-        }
-      ]
-    },
-    {
-      "name": "Everfrost",
-      "minor_realms": [
-        {
-          "name": "low",
-          "progress": 100000000000000000
-        },
-        {
-          "name": "mid",
-          "progress": 1000000000000000000
-        },
-        {
-          "name": "high",
-          "progress": 10000000000000000000
-        }
-      ]
-    },
-    {
-      "name": "Eternal Glacier",
-      "minor_realms": [
-        {
-          "name": "low",
-          "progress": 10000000000000000000
-        },
-        {
-          "name": "mid",
-          "progress": 100000000000000000000
-        },
-        {
-          "name": "high",
-          "progress": 1000000000000000000000
-        }
-      ]
-    }
-  ],
-  "interactions": [
-    {
-      "path": "ascension:elemental/water",
-      "type": "related",
-      "value": 0.5
-    },
-    {
-      "path": "ascension:elemental/water",
-      "target": "other",
-      "type": "related",
-      "value": 0.2
     }
   ]
 }

@@ -1,0 +1,49 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.twin_root_body.name"
+  },
+  "description": {
+    "translate": "ascension.physique.twin_root_body.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:foundation/body",
+    "ascension:elemental/wood",
+    "ascension:weapon/staff"
+  ],
+  "skills": [],
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:human"
+  },
+  "base_stats": {
+    "ascension:vitality": 1,
+    "ascension:strength": 0.5
+  },
+  "base_affinity": {
+    "ascension:essence": 1,
+    "ascension:body": 1,
+    "ascension:wood": 1,
+    "ascension:staff": 2
+  },
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.1,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:twin_root_body_vitality_modifier"
+      }
+    ]
+  },
+  "affinity_modifiers": {
+    "ascension:staff": [
+      {
+        "value": 0.15,
+        "operation": "ADD_BASE",
+        "id": "ascension:twin_root_body_staff_modifier"
+      }
+    ]
+  }
+}

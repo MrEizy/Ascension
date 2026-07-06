@@ -1,0 +1,39 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.blizzard_spirit_body.name"
+  },
+  "description": {
+    "translate": "ascension.physique.blizzard_spirit_body.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/ice",
+    "ascension:elemental/wind",
+    "ascension:elemental/yin"
+  ],
+  "skills": [],
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:human"
+  },
+  "base_stats": {
+    "ascension:vitality": 1
+  },
+  "base_affinity": {
+    "ascension:essence": 1,
+    "ascension:ice": 1,
+    "ascension:wind": 0.5,
+    "ascension:yin": 0.5
+  },
+  "affinity_modifiers": {
+    "ascension:ice": [
+      {
+        "value": 0.15,
+        "operation": "ADD_BASE",
+        "id": "ascension:blizzard_spirit_body_ice_modifier"
+      }
+    ]
+  }
+}

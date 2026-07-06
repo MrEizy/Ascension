@@ -1,14 +1,14 @@
 {
   "type": "ascension:simple_path",
   "name": {
-    "translate": "ascension.path.elemental.ice.name"
+    "translate": "ascension.path.elemental.lightning.name"
   },
   "description": {
-    "translate": "ascension.path.elemental.ice.desc"
+    "translate": "ascension.path.elemental.lightning.desc"
   },
   "realms": [
     {
-      "name": "Frost",
+      "name": "Spark",
       "minor_realms": [
         {
           "name": "low",
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "name": "Rime",
+      "name": "Static Charge",
       "minor_realms": [
         {
           "name": "low",
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "name": "Icicle",
+      "name": "Arc",
       "minor_realms": [
         {
           "name": "low",
@@ -59,7 +59,7 @@
       ]
     },
     {
-      "name": "Glacier",
+      "name": "Bolt",
       "minor_realms": [
         {
           "name": "low",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "Permafrost",
+      "name": "Thunderclap",
       "minor_realms": [
         {
           "name": "low",
@@ -93,7 +93,7 @@
       ]
     },
     {
-      "name": "Blizzard",
+      "name": "Stormcall",
       "minor_realms": [
         {
           "name": "low",
@@ -110,7 +110,7 @@
       ]
     },
     {
-      "name": "Absolute Zero",
+      "name": "Voltaic Surge",
       "minor_realms": [
         {
           "name": "low",
@@ -127,7 +127,7 @@
       ]
     },
     {
-      "name": "Everfrost",
+      "name": "Heaven's Wrath",
       "minor_realms": [
         {
           "name": "low",
@@ -144,7 +144,7 @@
       ]
     },
     {
-      "name": "Eternal Glacier",
+      "name": "Eternal Thunder",
       "minor_realms": [
         {
           "name": "low",
@@ -159,19 +159,6 @@
           "progress": 1000000000000000000000
         }
       ]
-    }
-  ],
-  "interactions": [
-    {
-      "path": "ascension:elemental/water",
-      "type": "related",
-      "value": 0.5
-    },
-    {
-      "path": "ascension:elemental/water",
-      "target": "other",
-      "type": "related",
-      "value": 0.2
     }
   ]
 }

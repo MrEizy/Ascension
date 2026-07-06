@@ -1,0 +1,49 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.iron_blossom_body.name"
+  },
+  "description": {
+    "translate": "ascension.physique.iron_blossom_body.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/earth",
+    "ascension:elemental/wood",
+    "ascension:weapon/umbrella"
+  ],
+  "skills": [],
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:human"
+  },
+  "base_stats": {
+    "ascension:vitality": 1.5,
+    "ascension:strength": 0.5
+  },
+  "base_affinity": {
+    "ascension:body": 1,
+    "ascension:earth": 1,
+    "ascension:wood": 1,
+    "ascension:umbrella": 2
+  },
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.15,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:iron_blossom_body_vitality_modifier"
+      }
+    ]
+  },
+  "affinity_modifiers": {
+    "ascension:umbrella": [
+      {
+        "value": 0.15,
+        "operation": "ADD_BASE",
+        "id": "ascension:iron_blossom_body_shield_modifier"
+      }
+    ]
+  }
+}

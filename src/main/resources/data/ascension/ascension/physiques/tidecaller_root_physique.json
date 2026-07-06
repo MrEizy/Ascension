@@ -1,0 +1,37 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.tidecaller_root.name"
+  },
+  "description": {
+    "translate": "ascension.physique.tidecaller_root.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:foundation/soul",
+    "ascension:elemental/water"
+  ],
+  "skills": [],
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:human"
+  },
+  "base_stats": {
+    "ascension:vitality": 1
+  },
+  "base_affinity": {
+    "ascension:essence": 1,
+    "ascension:soul": 1,
+    "ascension:water": 1.5
+  },
+  "affinity_modifiers": {
+    "ascension:water": [
+      {
+        "value": 0.2,
+        "operation": "ADD_BASE",
+        "id": "ascension:tidecaller_root_water_modifier"
+      }
+    ]
+  }
+}

@@ -1,14 +1,14 @@
 {
   "type": "ascension:simple_path",
   "name": {
-    "translate": "ascension.path.elemental.ice.name"
+    "translate": "ascension.path.elemental.order.name"
   },
   "description": {
-    "translate": "ascension.path.elemental.ice.desc"
+    "translate": "ascension.path.elemental.order.desc"
   },
   "realms": [
     {
-      "name": "Frost",
+      "name": "Ordered Pattern",
       "minor_realms": [
         {
           "name": "low",
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "name": "Rime",
+      "name": "Ordered Flow",
       "minor_realms": [
         {
           "name": "low",
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "name": "Icicle",
+      "name": "Ordered Structure",
       "minor_realms": [
         {
           "name": "low",
@@ -59,7 +59,7 @@
       ]
     },
     {
-      "name": "Glacier",
+      "name": "Law Formation",
       "minor_realms": [
         {
           "name": "low",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "Permafrost",
+      "name": "Law Enforcement",
       "minor_realms": [
         {
           "name": "low",
@@ -93,7 +93,7 @@
       ]
     },
     {
-      "name": "Blizzard",
+      "name": "Absolute Law",
       "minor_realms": [
         {
           "name": "low",
@@ -110,7 +110,7 @@
       ]
     },
     {
-      "name": "Absolute Zero",
+      "name": "Order Sovereign",
       "minor_realms": [
         {
           "name": "low",
@@ -127,7 +127,7 @@
       ]
     },
     {
-      "name": "Everfrost",
+      "name": "Heaven's Law",
       "minor_realms": [
         {
           "name": "low",
@@ -144,7 +144,7 @@
       ]
     },
     {
-      "name": "Eternal Glacier",
+      "name": "Eternal Order",
       "minor_realms": [
         {
           "name": "low",
@@ -159,19 +159,6 @@
           "progress": 1000000000000000000000
         }
       ]
-    }
-  ],
-  "interactions": [
-    {
-      "path": "ascension:elemental/water",
-      "type": "related",
-      "value": 0.5
-    },
-    {
-      "path": "ascension:elemental/water",
-      "target": "other",
-      "type": "related",
-      "value": 0.2
     }
   ]
 }

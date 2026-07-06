@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_path",
-  "name": "Water",
-  "description": "cultivate the essence of life",
+  "name": {
+    "translate": "ascension.path.elemental.water.name"
+  },
+  "description": {
+    "translate": "ascension.path.elemental.water.desc"
+  },
   "realms": [
     {
       "name": "Droplet",
@@ -13,12 +17,148 @@
         {
           "name": "mid",
           "progress": 10000
-        },{
+        },
+        {
           "name": "high",
           "progress": 100000
         }
       ]
+    },
+    {
+      "name": "Stream",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000
+        }
+      ]
+    },
+    {
+      "name": "River",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000
+        }
+      ]
+    },
+    {
+      "name": "Torrent",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000000000
+        },
+        {
+          "name": "mid",
+          "progress": 10000000000
+        },
+        {
+          "name": "high",
+          "progress": 100000000000
+        }
+      ]
+    },
+    {
+      "name": "Tide",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000000000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000000000
+        }
+      ]
+    },
+    {
+      "name": "Current",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000000000
+        }
+      ]
+    },
+    {
+      "name": "Maelstrom",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 1000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 10000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 100000000000000000
+        }
+      ]
+    },
+    {
+      "name": "Abyssal Depths",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 100000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 1000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 10000000000000000000
+        }
+      ]
+    },
+    {
+      "name": "Endless Ocean",
+      "minor_realms": [
+        {
+          "name": "low",
+          "progress": 10000000000000000000
+        },
+        {
+          "name": "mid",
+          "progress": 100000000000000000000
+        },
+        {
+          "name": "high",
+          "progress": 1000000000000000000000
+        }
+      ]
     }
   ]
-
 }

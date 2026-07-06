@@ -1,14 +1,14 @@
 {
   "type": "ascension:simple_path",
   "name": {
-    "translate": "ascension.path.elemental.ice.name"
+    "translate": "ascension.path.elemental.wood.name"
   },
   "description": {
-    "translate": "ascension.path.elemental.ice.desc"
+    "translate": "ascension.path.elemental.wood.desc"
   },
   "realms": [
     {
-      "name": "Frost",
+      "name": "Sprout",
       "minor_realms": [
         {
           "name": "low",
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "name": "Rime",
+      "name": "Sapling",
       "minor_realms": [
         {
           "name": "low",
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "name": "Icicle",
+      "name": "Bloom",
       "minor_realms": [
         {
           "name": "low",
@@ -59,7 +59,7 @@
       ]
     },
     {
-      "name": "Glacier",
+      "name": "Root",
       "minor_realms": [
         {
           "name": "low",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "Permafrost",
+      "name": "Grove",
       "minor_realms": [
         {
           "name": "low",
@@ -93,7 +93,7 @@
       ]
     },
     {
-      "name": "Blizzard",
+      "name": "Forest",
       "minor_realms": [
         {
           "name": "low",
@@ -110,7 +110,7 @@
       ]
     },
     {
-      "name": "Absolute Zero",
+      "name": "Ancient Tree",
       "minor_realms": [
         {
           "name": "low",
@@ -127,7 +127,7 @@
       ]
     },
     {
-      "name": "Everfrost",
+      "name": "World Tree",
       "minor_realms": [
         {
           "name": "low",
@@ -144,7 +144,7 @@
       ]
     },
     {
-      "name": "Eternal Glacier",
+      "name": "Eternal Verdant",
       "minor_realms": [
         {
           "name": "low",

@@ -1,14 +1,14 @@
 {
   "type": "ascension:simple_path",
   "name": {
-    "translate": "ascension.path.elemental.ice.name"
+    "translate": "ascension.path.elemental.yang.name"
   },
   "description": {
-    "translate": "ascension.path.elemental.ice.desc"
+    "translate": "ascension.path.elemental.yang.desc"
   },
   "realms": [
     {
-      "name": "Frost",
+      "name": "Yang Spark",
       "minor_realms": [
         {
           "name": "low",
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "name": "Rime",
+      "name": "Yang Current",
       "minor_realms": [
         {
           "name": "low",
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "name": "Icicle",
+      "name": "Yang Blaze",
       "minor_realms": [
         {
           "name": "low",
@@ -59,7 +59,7 @@
       ]
     },
     {
-      "name": "Glacier",
+      "name": "Yang Tide",
       "minor_realms": [
         {
           "name": "low",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "Permafrost",
+      "name": "Yang Ascendance",
       "minor_realms": [
         {
           "name": "low",
@@ -93,7 +93,7 @@
       ]
     },
     {
-      "name": "Blizzard",
+      "name": "Yang Convergence",
       "minor_realms": [
         {
           "name": "low",
@@ -110,7 +110,7 @@
       ]
     },
     {
-      "name": "Absolute Zero",
+      "name": "Yang Dominion",
       "minor_realms": [
         {
           "name": "low",
@@ -127,7 +127,7 @@
       ]
     },
     {
-      "name": "Everfrost",
+      "name": "Primordial Yang",
       "minor_realms": [
         {
           "name": "low",
@@ -144,7 +144,7 @@
       ]
     },
     {
-      "name": "Eternal Glacier",
+      "name": "Eternal Yang",
       "minor_realms": [
         {
           "name": "low",
@@ -159,19 +159,6 @@
           "progress": 1000000000000000000000
         }
       ]
-    }
-  ],
-  "interactions": [
-    {
-      "path": "ascension:elemental/water",
-      "type": "related",
-      "value": 0.5
-    },
-    {
-      "path": "ascension:elemental/water",
-      "target": "other",
-      "type": "related",
-      "value": 0.2
     }
   ]
 }

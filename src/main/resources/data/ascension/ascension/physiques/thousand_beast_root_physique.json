@@ -1,0 +1,30 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.thousand_beast_root.name"
+  },
+  "description": {
+    "translate": "ascension.physique.thousand_beast_root.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/wood",
+    "ascension:elemental/blood",
+    "ascension:elemental/wind"
+  ],
+  "skills": [],
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:human"
+  },
+  "base_stats": {
+    "ascension:vitality": 1
+  },
+  "base_affinity": {
+    "ascension:essence": 1,
+    "ascension:wood": 0.5,
+    "ascension:blood": 0.5,
+    "ascension:wind": 0.5
+  }
+}
