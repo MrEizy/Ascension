@@ -44,7 +44,7 @@ public final class AscTooltipThemes {
                 .layout(7, 254, 222, 3, 1)
                 .iconHolder(ZenithTooltipTheme.Shape.GEM, 30, 2, 8, "accent", "background", 92)
                 .barStyle(5, 2, "border_bottom", 72, "positive", 1, 232)
-                .badgeStyle(6, 1, 1, 220)
+                .badgeStyle(6, 2, 1, 220)
                 .dividerStyle(1, 2, 3, "accent", ZenithTooltipTheme.Decoration.CENTER_RUNE)
                 .frameStyle(ZenithTooltipTheme.CornerDecoration.RUNE, 6, 2, "accent", true, 2, "border_bottom", 112)
                 .headerStyle(ZenithTooltipTheme.Ornament.SMALL_DIAMONDS, "accent")

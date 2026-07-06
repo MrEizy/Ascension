@@ -34,6 +34,7 @@ import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipText;
 import net.zic.zenithlib.tooltip.api.context.ZenithTooltipContext;
 import net.zic.zenithlib.tooltip.api.element.BadgeElement;
+import net.zic.zenithlib.tooltip.api.element.BadgeRowElement;
 import net.zic.zenithlib.tooltip.api.element.RowElement;
 import net.zic.zenithlib.tooltip.api.element.ZenithTooltipElement;
 import net.zic.zenithlib.tooltip.api.value.ZenithTooltipSources;
@@ -99,17 +100,24 @@ public final class AscensionTooltipValueSources {
             ZenithTooltipContext context,
             ZenithTooltipColor color
     ) {
-        return ZenithTooltipSources.resolveValue(source, context, ZenithTooltipValue.TextList.class)
+        List<BadgeElement> badges = ZenithTooltipSources.resolveValue(source, context, ZenithTooltipValue.TextList.class)
                 .stream()
                 .flatMap(value -> value.entries().stream())
                 .map(component -> new BadgeElement(
                         ZenithTooltipText.resolved(component),
-                        ZenithTooltipColor.BACKGROUND,
                         color,
+                        ZenithTooltipColor.BACKGROUND,
                         color
+                ).withBackgroundGradient(
+                        BadgeElement.GradientDirection.HORIZONTAL,
+                        ZenithTooltipColor.BACKGROUND,
+                        ZenithTooltipColor.BORDER_BOTTOM
                 ))
-                .map(element -> (ZenithTooltipElement) element)
                 .toList();
+
+        return badges.isEmpty()
+                ? List.of()
+                : List.of(new BadgeRowElement(badges));
     }
 
     private static List<ZenithTooltipElement> rows(
