@@ -18,17 +18,23 @@ public class AscItemTagProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
 
-        tag(ModTags.Items.ASCENDANT_ITEMS)
-                .add(ModItems.TABLET_OF_DESTRUCTION_ASCENDANT.get());
+
+
+        tag(ModTags.Items.ORDINARY_ITEMS)
+                .add(ModItems.TABLET_OF_DESTRUCTION_HUMAN.get());
+
+        tag(ModTags.Items.PROFOUND_ITEMS)
+                .add(ModItems.TABLET_OF_DESTRUCTION_EARTH.get());
 
         tag(ModTags.Items.HEAVEN_ITEMS)
                 .add(ModItems.TABLET_OF_DESTRUCTION_HEAVEN.get());
 
-        tag(ModTags.Items.EARTH_ITEMS)
-                .add(ModItems.TABLET_OF_DESTRUCTION_EARTH.get());
+        tag(ModTags.Items.SAINT_ITEMS)
+                .add(ModItems.TABLET_OF_DESTRUCTION_ASCENDANT.get());
 
-        tag(ModTags.Items.HUMAN_ITEMS)
-                .add(ModItems.TABLET_OF_DESTRUCTION_HUMAN.get());
+        tag(ModTags.Items.GOD_ITEMS);
+
+        tag(ModTags.Items.HEAVENS_PATH_ITEMS);
         
     }
 }

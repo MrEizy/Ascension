@@ -16,7 +16,7 @@
   "item_tooltip": {
     "theme": "ascension:physique_essence",
     "template": "ascension:default_physique_essence",
-    "rank": "ascension:human"
+    "rank": "ascension:ordinary"
   },
   "base_stats": {
     "ascension:vitality": 1.5,

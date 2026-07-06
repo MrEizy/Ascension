@@ -105,10 +105,12 @@ public class AscLangProvider extends LanguageProvider {
         add("zenith.ascension.category.physique", "Physique");
         add("zenith.ascension.category.technique", "Technique");
 
-        add("zenith.ascension.tier.human", "Human");
-        add("zenith.ascension.tier.earth", "Earth");
+        add("zenith.ascension.tier.ordinary", "Ordinary");
+        add("zenith.ascension.tier.profound", "Profound");
         add("zenith.ascension.tier.heaven", "Heaven");
-        add("zenith.ascension.tier.ascendant", "Ascendant");
+        add("zenith.ascension.tier.saint", "Saint");
+        add("zenith.ascension.tier.god", "God");
+        add("zenith.ascension.tier.heavens_path", "Heaven's Path");
 
     //Datapack lang stuff
 

@@ -27,10 +27,12 @@ public class ModTags {
     }
 
     public static class Items {
-        public static final TagKey<Item> ASCENDANT_ITEMS = createItemTag("ascendant_items");
+        public static final TagKey<Item> ORDINARY_ITEMS = createItemTag("ordinary_items");
+        public static final TagKey<Item> PROFOUND_ITEMS = createItemTag("profound_items");
         public static final TagKey<Item> HEAVEN_ITEMS = createItemTag("heaven_items");
-        public static final TagKey<Item> EARTH_ITEMS = createItemTag("earth_items");
-        public static final TagKey<Item> HUMAN_ITEMS = createItemTag("human_items");
+        public static final TagKey<Item> SAINT_ITEMS = createItemTag("saint_items");
+        public static final TagKey<Item> GOD_ITEMS = createItemTag("god_items");
+        public static final TagKey<Item> HEAVENS_PATH_ITEMS = createItemTag("heavens_path_items");
 
         private static TagKey<Item> createItemTag(String name) {
             return ItemTags.create(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));

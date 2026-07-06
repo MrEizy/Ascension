@@ -135,7 +135,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
 
     private void addHumanTabletTooltip() {
         template(id("tablet_of_destruction_human"))
-                .page(page(literal("Tablet of Destruction: Human"))
+                .page(page(literal("Tablet of Destruction: Ordinary"))
                         .add(titleIcon(
                                 literal("Tablet of Destruction")
                         ))
@@ -165,7 +165,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
     private void addEarthTabletTooltip() {
         template(id("tablet_of_destruction_earth"))
                 .animationPreset(ZenithTooltipPresets.KINETIC)
-                .page(page(literal("Tablet of Destruction: Earth"))
+                .page(page(literal("Tablet of Destruction: Profound"))
                         .add(titleIcon(
                                 literal("Tablet of Destruction")
                         ))
@@ -243,7 +243,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
         template(id("tablet_of_destruction_ascendant"))
                 .animationPreset(ZenithTooltipPresets.CELESTIAL)
                 .animationPreset(ZenithTooltipPresets.CORRUPTED)
-                .page(page(literal("Tablet of Destruction: Ascendant"))
+                .page(page(literal("Tablet of Destruction: Saint"))
                         .add(titleIcon(
                                 literal("Tablet of Destruction")
                         ))

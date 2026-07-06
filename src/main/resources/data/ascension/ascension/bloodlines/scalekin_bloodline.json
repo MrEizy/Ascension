@@ -29,6 +29,6 @@
   "item_tooltip": {
     "theme": "ascension:bloodline_essence",
     "template": "ascension:default_bloodline_essence",
-    "rank": "ascension:human"
+    "rank": "ascension:ordinary"
   }
 }

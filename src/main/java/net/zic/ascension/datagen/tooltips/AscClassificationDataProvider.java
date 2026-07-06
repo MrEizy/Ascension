@@ -36,35 +36,43 @@ public final class AscClassificationDataProvider extends ZenithClassificationDat
     }
 
     private void addRanks() {
-        rank("human")
-                .label("zenith.ascension.tier.human")
+        rank("ordinary")
+                .label("zenith.ascension.tier.ordinary")
                 .color("#A99678FF");
 
-        rank("earth")
-                .label("zenith.ascension.tier.earth")
+        rank("profound")
+                .label("zenith.ascension.tier.profound")
                 .color("#66D487FF");
 
         rank("heaven")
                 .label("zenith.ascension.tier.heaven")
                 .color("#F0C45CFF");
 
-        rank("ascendant")
-                .label("zenith.ascension.tier.ascendant")
-                .color("#D58CFFFF");
+        rank("saint")
+                .label("zenith.ascension.tier.saint")
+                .color("#E8E8E8FF");
+
+        rank("god")
+                .label("zenith.ascension.tier.god")
+                .color("#B388FFFF");
+
+        rank("heavens_path")
+                .label("zenith.ascension.tier.heavens_path")
+                .color("#00E5FFFF");
     }
 
     private void addItemClassifications() {
-        classification("human_items")
+        classification("ordinary_items")
                 .priority(210)
-                .tags(id("human_items"))
+                .tags(id("ordinary_items"))
                 .category(id("artifact"))
-                .rank(id("human"));
+                .rank(id("ordinary"));
 
-        classification("earth_items")
+        classification("profound_items")
                 .priority(220)
-                .tags(id("earth_items"))
+                .tags(id("profound_items"))
                 .category(id("artifact"))
-                .rank(id("earth"));
+                .rank(id("profound"));
 
         classification("heaven_items")
                 .priority(230)
@@ -72,11 +80,23 @@ public final class AscClassificationDataProvider extends ZenithClassificationDat
                 .category(id("artifact"))
                 .rank(id("heaven"));
 
-        classification("ascendant_items")
+        classification("saint_items")
                 .priority(240)
-                .tags(id("ascendant_items"))
+                .tags(id("saint_items"))
                 .category(id("artifact"))
-                .rank(id("ascendant"));
+                .rank(id("saint"));
+
+        classification("god_items")
+                .priority(250)
+                .tags(id("god_items"))
+                .category(id("artifact"))
+                .rank(id("god"));
+
+        classification("heavens_path_items")
+                .priority(260)
+                .tags(id("heavens_path_items"))
+                .category(id("artifact"))
+                .rank(id("heavens_path"));
     }
 
 }
