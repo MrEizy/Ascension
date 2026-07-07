@@ -1,0 +1,71 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.mount_hua_sword_manual.name"
+  },
+  "description": {
+    "translate": "ascension.technique.mount_hua_sword_manual.desc"
+  },
+  "path": "ascension:foundation/essence",
+  "milestone_realms": [
+    0,
+    2,
+    5
+  ],
+  "technique_families": [
+    "sword"
+  ],
+  "max_realm": 5,
+  "realm_change_handler": [
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          0
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/cultivation/plum_blossom_breathing"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          5
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:agility",
+              "value": 0.15
+            },
+            {
+              "id": "ascension:strength",
+              "value": 0.1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        "ascension:generic_give_stats"
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:profound"
+  }
+}

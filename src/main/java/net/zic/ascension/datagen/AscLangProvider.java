@@ -261,6 +261,15 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.bloodline.frostkin.name", "Frostkin");
         add("ascension.bloodline.frostkin.desc", "Descendants of the tribes that endured the frozen wastes for generations, their blood carries an innate resistance to the cold and a body built to endure");
 
+        //Techniques
+        add("ascension.technique.mount_hua_sword_manual.name", "Plum Blossom Sword Manual");
+        add("ascension.technique.mount_hua_sword_manual.desc", "A sword manual of Mount Hua that binds breath and sword as one, its gentle, falling-petal forms hiding a killing edge just a heartbeat behind");
+
+        //Skills
+        add("ascension.skill.plum_blossom_breathing.name", "Plum Blossom Breathing");
+        add("ascension.skill.plum_blossom_breathing.desc", "The first breathing method taught at Mount Hua, circulating qi until it flows naturally into the sword, letting sword and essence grow together as one");
+
+
         // Starter Screen Lang
         add("gui.ascension.starter.title", "Starting Selection");
         add("gui.ascension.starter.choose_bloodline", "Choose Your Bloodline");

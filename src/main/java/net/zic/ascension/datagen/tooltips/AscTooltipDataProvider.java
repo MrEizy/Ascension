@@ -108,6 +108,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                                 ZenithTooltipColor.TEXT,
                                 typewriter(760, 80)
                         ))
+                        .add(divider())
                         .add(row(
                                 literal("Max Realm"),
                                 sourced("ascension:technique_max_realm"),

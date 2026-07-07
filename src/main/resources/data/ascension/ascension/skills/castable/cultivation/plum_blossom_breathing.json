@@ -1,0 +1,15 @@
+{
+  "type": "ascension:simple_cultivation_skill",
+  "name": {
+    "translate": "ascension.skill.plum_blossom_breathing.name"
+  },
+  "description": {
+    "translate": "ascension.skill.plum_blossom_breathing.desc"
+  },
+  "path": "ascension:foundation/essence",
+  "secondary_paths": [
+    "ascension:weapon/sword",
+    "ascension:elemental/wood"
+  ],
+  "rate": 2
+}
