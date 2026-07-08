@@ -88,7 +88,8 @@ public class AscLangProvider extends LanguageProvider {
 
 
 
-
+        //Physiques
+        add("ascension.physique.sword_bone","Sword Bone");
 
 
         //Keybinds

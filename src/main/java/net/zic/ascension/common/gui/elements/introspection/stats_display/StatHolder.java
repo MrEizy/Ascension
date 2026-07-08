@@ -15,14 +15,14 @@ public class StatHolder extends RenderableElement {
         getPositioning().setX(-getWidth() / 2);
         getPositioning().setY(-getHeight() / 2);
 
-        addStat(frame, AscensionStats.VITALITY.get(), "stat.ascension.vitality", 0);
-        addStat(frame, AscensionStats.AGILITY.get(), "stat.ascension.agility", 20);
-        addStat(frame, AscensionStats.STRENGTH.get(), "stat.ascension.strength", 40);
-        addStat(frame, AscensionStats.INTELLIGENCE.get(), "stat.ascension.intelligence", 60);
+        addStat(frame, AscensionStats.VITALITY.get(),  0);
+        addStat(frame, AscensionStats.AGILITY.get(),  20);
+        addStat(frame, AscensionStats.STRENGTH.get(),  40);
+        addStat(frame, AscensionStats.SPIRIT.get(), 60);
     }
 
-    private void addStat(UIFrame frame, net.zic.zenithlib.stats.Stat stat, String key, int y) {
-        StatsDisplay display = new StatsDisplay(frame, stat, Component.translatable(key));
+    private void addStat(UIFrame frame, net.zic.zenithlib.stats.Stat stat,  int y) {
+        StatsDisplay display = new StatsDisplay(frame, stat, stat.getName());
         display.getPositioning().setX(10);
         display.getPositioning().setY(y);
         addChild(display);

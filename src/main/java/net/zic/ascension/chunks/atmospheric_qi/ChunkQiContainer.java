@@ -84,6 +84,7 @@ public class ChunkQiContainer {
         energy = Math.min(energyCap.getValue(), energyRegenRate.getValue()+energy);
     }
 
+
     public static class SyncHandler implements AttachmentSyncHandler<ChunkQiContainer> {
 
         @Override

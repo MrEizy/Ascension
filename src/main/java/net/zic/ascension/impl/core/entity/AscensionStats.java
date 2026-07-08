@@ -18,8 +18,8 @@ public class AscensionStats {
             new Stat(Component.literal("Agility")));
     public static final DeferredHolder<Stat,Stat> STRENGTH = STATS.register("strength",()->
             new Stat(Component.literal("Strength")));
-    public static final DeferredHolder<Stat,Stat> INTELLIGENCE = STATS.register("intelligence",()->
-            new Stat(Component.literal("Intelligence")));
+    public static final DeferredHolder<Stat,Stat> SPIRIT = STATS.register("spirit",()->
+            new Stat(Component.literal("Spirit")));
 
     public static void register(IEventBus modEventBus){
         STATS.register(modEventBus);

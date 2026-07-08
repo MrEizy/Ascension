@@ -26,7 +26,9 @@ public class AscensionCapabilities {
         event.registerEntity(
                 CoreCapabilities.ASCENSION_ENTITY_DAMAGE_SOURCE_PROVIDER,
                 EntityType.ARROW,
-                (entity,nul)->new SimpleEntityDamageSourceProvider(entity)
+                (entity,nul)->new SimpleEntityDamageSourceProvider(entity,
+                        Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"bow")
+                )
         );
         event.registerItem(
                 CoreCapabilities.ASCENSION_ITEM_STACK_DAMAGE_SOURCE_PROVIDER,

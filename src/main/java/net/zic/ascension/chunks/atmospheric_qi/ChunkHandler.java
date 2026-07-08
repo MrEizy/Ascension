@@ -7,14 +7,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
-import net.minecraft.world.ticks.LevelChunkTicks;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityEvent;
@@ -26,26 +24,29 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
 import net.zic.ascension.api.core.entity.AscensionEntityData;
-import net.zic.ascension.biome.configuration.BiomeConfiguration;
-import net.zic.ascension.biome.configuration.BiomeConfigurations;
+import net.zic.ascension.configuration.biome.BiomeConfiguration;
+import net.zic.ascension.configuration.biome.BiomeConfigurations;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
+import net.zic.ascension.configuration.dimension.DimensionConfiguration;
+import net.zic.ascension.configuration.dimension.DimensionConfigurations;
 import net.zic.zenithlib.value_containers.ModifierOperation;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class ChunkHandler {
     public static final  Identifier chunkModifierId = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"chunk_modifier");
 
-    /*TODO
-        on chunk load restore default options from either config or datapack (undecided)
+    /*
+        TODO on chunk load restore default options from either config or datapack (undecided)
 
         consider adding config options or datapack support so distance from spawn can be a factor
+        TODO add at least an initial client sync
     */
     @SubscribeEvent
     public static void onLoad(ChunkEvent.Load event) {
+        if(event.getChunk().getLevel().isClientSide()) return;
         LevelChunk chunk = event.getChunk();
         ChunkQiContainer chunkQiContainer = chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
 
@@ -67,7 +68,15 @@ public class ChunkHandler {
                 processed.add(biome);
             });
         }
+       DimensionConfiguration dimensionConfiguration = DimensionConfigurations.getInstance().getConfiguration(event.getChunk().getLevel().dimension().identifier());
 
+        if(dimensionConfiguration == null) return;
+
+        chunkQiContainer.energyCap.setBaseValue(chunkQiContainer.energyCap.getBaseValue()+dimensionConfiguration.energyCap());
+        chunkQiContainer.energyRegenRate.setBaseValue(chunkQiContainer.energyRegenRate.getBaseValue()+dimensionConfiguration.energyRegen());
+        for(Identifier path : dimensionConfiguration.affinities().keySet()){
+            chunkQiContainer.addAffinity(path, dimensionConfiguration.affinities().getDouble(path));
+        }
         //no need to mark unsaved
         //chunk.syncData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
     }

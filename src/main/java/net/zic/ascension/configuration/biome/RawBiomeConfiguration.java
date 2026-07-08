@@ -1,10 +1,8 @@
-package net.zic.ascension.biome.configuration;
+package net.zic.ascension.configuration.biome;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
@@ -12,7 +10,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

@@ -38,6 +38,7 @@ public interface Path {
     TribulationDefinition getTribulationDefinition(int majorRealm,int minorRealm,RegistryAccess access);
     boolean hasTribulation(int majorRealm,int minorRealm);
     //──Interaction────────────────────────────────────────────────────────
+    //TODO consider removing, OR updated to utilize path interaction holder
     double getInteractionValue(Identifier path);
     PathInteractionType getInteractionType(Identifier path);
     Collection<Identifier> getPathsOfInteraction(PathInteractionType type);

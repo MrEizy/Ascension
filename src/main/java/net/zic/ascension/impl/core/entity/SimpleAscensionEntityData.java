@@ -545,6 +545,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                 return null;
             }
 
+
             OriginSource source = entity.level().isClientSide()
                     ? new OriginSource(input.childOrEmpty("source_data"))
                     : new ServerOriginSource(input.childOrEmpty("source_data"));

@@ -9,7 +9,7 @@ import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.technique.TechniqueData;
 
-//TODO update all events to hold RegistryAccess by default
+
 public abstract class TechniqueChangedEvent extends Event {
 
     private final Identifier technique;

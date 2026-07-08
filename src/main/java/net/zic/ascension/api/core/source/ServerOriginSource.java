@@ -236,9 +236,6 @@ public class ServerOriginSource extends OriginSource {
         return true;
     }
 
-    //TODO implement such that a technique removed and added event is called that are cancellable
-
-
     @Override
     public boolean broadcastTechniqueAddedAttempt(Identifier technique, TechniqueData data) {
         return super.broadcastTechniqueAddedAttempt(technique, data);

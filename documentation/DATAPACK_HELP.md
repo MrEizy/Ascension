@@ -44,14 +44,13 @@ This is a built-in Minecraft codec and has many options, here i will only introd
 ```json
 {
   "name": {
-    "translatable" : "lang.example.name"
+    "translate" : "lang.example.name"
   }
 }
 ```
 ### Base Values
 everything from stats to affinities to attributes uses value containers,
-to provide a base value to a container you use.
-everywhere will expect a map of the container name -> base value
+all base value fields will expect a map of the container name -> base value
 ```json
 {
   "[field_name]": {
@@ -73,9 +72,12 @@ $(base*(1+multiplyBase)+addBase)*(1+multiplyFinal)+addFinal$
 
 addBase and addFinal are the sum of all modifiers of that type
 
-for multiplyBase and multiplyFinal it is a bid different, it first sums
+for multiplyBase and multiplyFinal it is a bit different, it first sums
 all multipliers of the same group, then multiplies it with all the other groups of the same type
 then applies it to the formula
+
+so 20% final multiplier group 1 and 30% final multiplier group 2 becomes 1.2*1.3=1.56
+but if they were of the same group it would be 1+(0.2+0.3) = 1.5
 
 Example
 
