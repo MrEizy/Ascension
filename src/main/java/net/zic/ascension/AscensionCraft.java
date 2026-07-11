@@ -19,6 +19,7 @@ import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.impl.datapack.data_source.AscensionDataSources;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 import net.zic.ascension.network.*;
 import net.zic.ascension.impl.core.entity.AscensionStats;
@@ -93,6 +94,7 @@ public class AscensionCraft {
 
 
         AscensionStats.register(modEventBus);
+
         AscensionBloodlineTypes.register(modEventBus);
         AscensionProgressActionTypes.register(modEventBus);
         AscensionProgressActionConditionTypes.register(modEventBus);
@@ -100,6 +102,8 @@ public class AscensionCraft {
         AscensionTechniqueTypes.register(modEventBus);
         AscensionPathTypes.register(modEventBus);
         AscensionTribulationTypes.register(modEventBus);
+        AscensionDataSources.register(modEventBus);
+
         register(modEventBus);
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);

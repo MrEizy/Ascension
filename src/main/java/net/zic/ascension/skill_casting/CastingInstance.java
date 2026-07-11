@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.skill.castable.CastData;
 import net.zic.ascension.api.core.skill.castable.CastableSkill;
@@ -45,6 +46,7 @@ public class CastingInstance {
                 caster,
                 preCastData
         );
+        NeoForge.EVENT_BUS.post(new SkillCastEvent(caster,skill,preCastData));
         if(castableSkill.getCastType() == CastType.INSTANT){
             this.skill = null;
             return;
