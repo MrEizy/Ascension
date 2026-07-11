@@ -74,3 +74,10 @@ update affinity modifier either codec and flatten it. use a temp record with an 
 
 TODO
 on entities add damage and resistance containers for modifiers (this is different than categorized affinity)
+
+
+TODO
+Request for Olli
+Can you add Requirement to Techniques, Skills, Bloodlines, Physiques etc?
+in case we want to make a Bloodline, Physique and Technique match
+so you have to have the bloodline to get the physique and you have to have the physique to get the technique=?
