@@ -1,16 +1,16 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.drifting_cloud_body.name"
+    "translate": "ascension.physique.heavy_bone_physique.name"
   },
   "description": {
-    "translate": "ascension.physique.drifting_cloud_body.desc"
+    "translate": "ascension.physique.heavy_bone_physique.desc"
   },
   "paths": [
     "ascension:foundation/essence",
-    "ascension:elemental/wind",
-    "ascension:elemental/water",
-    "ascension:weapon/fan"
+    "ascension:elemental/fire",
+    "ascension:elemental/metal",
+    "ascension:weapon/hammer"
   ],
   "skills": [],
   "item_tooltip": {
@@ -22,24 +22,24 @@
     "ascension:vitality": 1
   },
   "base_affinity": {
-    "ascension:essence": 1,
-    "ascension:wind": 1,
-    "ascension:water": 1,
-    "ascension:fan": 2
+    "ascension:body": 3,
+    "ascension:fire": 1,
+    "ascension:metal": 1,
+    "ascension:hammer": 2
   },
   "affinity_modifiers": {
-    "ascension:fan": [
+    "ascension:hammer": [
       {
         "value": 0.15,
         "operation": "ADD_BASE",
-        "id": "ascension:drifting_cloud_body_fan_modifier"
+        "id": "ascension:heavy_bone_physique_hammer_modifier"
       }
     ],
     "ascension:wind": [
       {
         "value": 0.1,
         "operation": "ADD_BASE",
-        "id": "ascension:drifting_cloud_body_wind_modifier"
+        "id": "ascension:heavy_bone_physique_metal_modifier"
       }
     ]
   }

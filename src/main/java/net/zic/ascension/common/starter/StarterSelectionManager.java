@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 public final class StarterSelectionManager {
-    public static final Identifier HUMAN = AscensionCraft.prefix("human_bloodline");
-    public static final Identifier BARBARIAN = AscensionCraft.prefix("barbarian_bloodline");
-    public static final Identifier BEASTKIN = AscensionCraft.prefix("beastkin_bloodline");
-    public static final Identifier SCALEKIN = AscensionCraft.prefix("scalekin_bloodline");
-    public static final Identifier FROSTKIN = AscensionCraft.prefix("frostkin_bloodline");
+    public static final Identifier HUMAN = AscensionCraft.prefix("1_ordinary/human_bloodline");
+    public static final Identifier BARBARIAN = AscensionCraft.prefix("1_ordinary/barbarian_bloodline");
+    public static final Identifier BEASTKIN = AscensionCraft.prefix("1_ordinary/beastkin_bloodline");
+    public static final Identifier SCALEKIN = AscensionCraft.prefix("1_ordinary/scalekin_bloodline");
+    public static final Identifier FROSTKIN = AscensionCraft.prefix("1_ordinary/frostkin_bloodline");
 
     public static final List<Identifier> STARTER_BLOODLINES = List.of(
             HUMAN,
@@ -31,29 +31,29 @@ public final class StarterSelectionManager {
 
     private static final Map<Identifier, List<Identifier>> STARTER_PHYSIQUES = Map.of(
             HUMAN, List.of(
-                    AscensionCraft.prefix("twin_root_physique"),
-                    AscensionCraft.prefix("drifting_cloud_physique"),
-                    AscensionCraft.prefix("iron_blossom_physique")
+                    AscensionCraft.prefix("1_ordinary/cursed_body_physique"),
+                    AscensionCraft.prefix("1_ordinary/drifting_cloud_physique"),
+                    AscensionCraft.prefix("1_ordinary/iron_blossom_physique")
             ),
             BARBARIAN, List.of(
-                    AscensionCraft.prefix("warblood_physique"),
-                    AscensionCraft.prefix("mountain_breaker_physique"),
-                    AscensionCraft.prefix("berserkers_fang_physique")
+                    AscensionCraft.prefix("1_ordinary/heavy_bone_physique"),
+                    AscensionCraft.prefix("1_ordinary/mountain_breaker_physique"),
+                    AscensionCraft.prefix("1_ordinary/berserkers_fang_physique")
             ),
             BEASTKIN, List.of(
-                    AscensionCraft.prefix("feral_moon_physique"),
-                    AscensionCraft.prefix("primal_fang_physique"),
-                    AscensionCraft.prefix("thousand_beast_root_physique")
+                    AscensionCraft.prefix("1_ordinary/brittle_bone_body_physique"),
+                    AscensionCraft.prefix("1_ordinary/primal_fang_physique"),
+                    AscensionCraft.prefix("1_ordinary/thousand_beast_root_physique")
             ),
             SCALEKIN, List.of(
-                    AscensionCraft.prefix("jiao_scale_physique"),
-                    AscensionCraft.prefix("tidecaller_root_physique"),
-                    AscensionCraft.prefix("abyss_drifter_physique")
+                    AscensionCraft.prefix("1_ordinary/dampened_fire_body_physique"),
+                    AscensionCraft.prefix("1_ordinary/tidecaller_root_physique"),
+                    AscensionCraft.prefix("1_ordinary/abyss_drifter_physique")
             ),
             FROSTKIN, List.of(
-                    AscensionCraft.prefix("rime_bone_physique"),
-                    AscensionCraft.prefix("winter_root_physique"),
-                    AscensionCraft.prefix("blizzard_spirit_physique")
+                    AscensionCraft.prefix("1_ordinary/five_elements_imbalance"),
+                    AscensionCraft.prefix("1_ordinary/winter_root_physique"),
+                    AscensionCraft.prefix("1_ordinary/blizzard_spirit_physique")
             )
     );
 

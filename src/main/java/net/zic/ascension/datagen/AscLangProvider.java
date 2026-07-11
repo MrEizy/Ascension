@@ -217,16 +217,20 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.path.weapon.umbrella.desc", "cultivate the deceptive grace of the warding canopy, sheltering blow and blade alike");
 
         //Physiques
-        add("ascension.physique.twin_root_body.name", "Twin Root Body");
-        add("ascension.physique.twin_root_body.desc", "A rare dual root granting equal footing in both body and qi cultivation, its focus settling naturally into the flowing forms of the staff");
-        add("ascension.physique.drifting_cloud_body.name", "Drifting Cloud Body");
-        add("ascension.physique.drifting_cloud_body.desc", "A restless qi that never settles in one place, drawn equally to wind and water, expressing itself through the deceptive arcs of the folding fan");
+
+        //Ordinary Physiques
+        add("ascension.physique.five_elements_imbalance.name", "Five Elements Imbalance");
+        add("ascension.physique.five_elements_imbalance.desc", "The five elements within the body are in chaos, causing cultivation instability and frequent qi deviations. Those who persevere with this may be surprised");
+        add("ascension.physique.brittle_bone_body.name", "Brittle Bone Body");
+        add("ascension.physique.brittle_bone_body.desc", "Bones are fragile and prone to breaking under stress, severely limiting physical combat and body cultivation. Those born with this physique can only cultivate Soul");
+        add("ascension.physique.heavy_bone_physique.name", "Heavy Bone Physique");
+        add("ascension.physique.heavy_bone_physique.desc", "Bones are abnormally heavy, making the user slow and lumbering, though slightly resistant to physical force. Those who cultivate Body with this physique will achieve success.");
         add("ascension.physique.iron_blossom_body.name", "Iron Blossom Body");
         add("ascension.physique.iron_blossom_body.desc", "A body as unyielding as stone yet still capable of growth, standing firm behind a shield like a flower rooted in bedrock");
-        add("ascension.physique.warblood_body.name", "Warblood Body");
-        add("ascension.physique.warblood_body.desc", "Blood that boils like molten iron at the first scent of battle, swinging an axe with strength that only grows as the fight goes on");
-        add("ascension.physique.mountain_breaker_body.name", "Mountain Breaker Body");
-        add("ascension.physique.mountain_breaker_body.desc", "A frame built like the mountains of home, driving a mace with the same crushing weight the earth itself carries");
+        add("ascension.physique.cursed_body_physique.name", "Cursed Body Physique");
+        add("ascension.physique.cursed_body_physique.desc", "A body afflicted by a powerful curse that weakens normal cultivation and attracts misfortune. The Curse may only be mitigated with Demonic Techniques");
+        add("ascension.physique.dampened_fire_body_physique.name", "Dampened Fire Body");
+        add("ascension.physique.dampened_fire_body_physique.desc", "A body with a natural dampness that extinguishes fire, making fire techniques unusable");
         add("ascension.physique.berserkers_fang.name", "Berserker's Fang");
         add("ascension.physique.berserkers_fang.desc", "A body that fights best when the blood is already spilling, channeling rage directly into bare-handed devastation");
         add("ascension.physique.feral_moon_body.name", "Feral Moon Body");
@@ -239,8 +243,6 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.jiao_scale_body.desc", "Faint dragon-kin scales beneath the skin, carrying the flow of deep water and the bite of arctic cold into every spear thrust");
         add("ascension.physique.tidecaller_root.name", "Tidecaller Root");
         add("ascension.physique.tidecaller_root.desc", "A root that binds body, spirit, and the deep water together as one, rare even among their own kind");
-        add("ascension.physique.abyss_drifter_body.name", "Abyss Drifter Body");
-        add("ascension.physique.abyss_drifter_body.desc", "A body drawn toward the cold, lightless depths, carrying an affinity for darkness and the stillness of yin qi as much as the water itself");
         add("ascension.physique.rime_bone_body.name", "Rime Bone Body");
         add("ascension.physique.rime_bone_body.desc", "Bones and sinew hardened by frost-forge tradition, built to drive a war hammer through anything that stands in the cold");
         add("ascension.physique.winter_root.name", "Winter Root");
