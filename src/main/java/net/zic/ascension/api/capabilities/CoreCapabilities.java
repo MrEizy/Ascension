@@ -21,7 +21,12 @@ public class CoreCapabilities {
                     AscensionDamageSourceProvider.class,
                     Void.class
             );
-
+    public static final EntityCapability<EntityQiProvider, Void> ASCENSION_ENTITY_QI_PROVIDER =
+            EntityCapability.create(
+                    Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"ascension_entity_qi_provider"),
+                    EntityQiProvider.class,
+                    Void.class
+            );
 
     public static final ItemCapability<AscensionDamageSourceProvider, Void> ASCENSION_ITEM_STACK_DAMAGE_SOURCE_PROVIDER =
             ItemCapability.create(

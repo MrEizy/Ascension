@@ -1,6 +1,7 @@
 package net.zic.ascension.common.data_attachements;
 
-import net.minecraft.resources.Identifier;
+import com.mojang.serialization.Codec;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
@@ -8,10 +9,11 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.capabilities.CoreCapabilities;
+import net.zic.ascension.api.capabilities.EntityQiProvider;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.ServerOriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
-import net.zic.ascension.common.qi.EntityQi;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
@@ -65,20 +67,19 @@ public class AscensionAttachments {
                     .serialize(new ChunkQiContainer.Provider())
                     .build()
     );
-
-    public static final Supplier<AttachmentType<Identifier>> ENTITY_PATH_DAMAGE_TYPE = ATTACHMENT_TYPES.register(
-            "entity_path_damage_type",()->AttachmentType.builder(
-                    iAttachmentHolder -> Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"none")
-            ).sync(Identifier.STREAM_CODEC).serialize(Identifier.CODEC.fieldOf("path")).build()
+    public static final Supplier<AttachmentType<Double>> ENTITY_QI = ATTACHMENT_TYPES.register(
+            "entity_qi", () -> AttachmentType.builder((holder)->{
+                        if(!(holder instanceof LivingEntity entity)) return 0.0;
+                        EntityQiProvider provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
+                        if(provider == null) return 0.0;
+                        return provider.getMaxQi();
+                    })
+                    .serialize(Codec.DOUBLE.fieldOf("value"))
+                    .sync(ByteBufCodecs.DOUBLE)
+                    .copyOnDeath().build()
     );
 
-    public static final Supplier<AttachmentType<EntityQi>> QI = ATTACHMENT_TYPES.register(
-            "qi",
-            () -> AttachmentType.builder(EntityQi::new)
-                    .serialize(new EntityQi.Serializer())
-                    .copyOnDeath()
-                    .build()
-    );
+
 
     public static void register(IEventBus bus){
         ATTACHMENT_TYPES.register(bus);

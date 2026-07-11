@@ -20,6 +20,7 @@ import net.zic.ascension.api.core.source.ServerOriginSource;
 import net.zic.ascension.api.core.source.SourceChangesSnapshot;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.starter.StarterSelectionStage;
+import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.ZenithAttribute;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
@@ -116,6 +117,9 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
         addStatScaling(attributeHolder, Attributes.SAFE_FALL_DISTANCE,
                 AscensionStats.STRENGTH.get(), "strength_safe_fall_scaling", 0.1D);
+
+        addStatScaling(attributeHolder, AscensionAttributes.MAX_QI,
+                AscensionStats.SPIRIT.get(), "spirit_max_qi_scaling", 10.0D);
 
         source.updateAttributes(attributeHolder);
         applyAllAttributeSuppressions();

@@ -12,6 +12,7 @@ import net.zic.ascension.api.capabilities.CoreCapabilities;
 import net.zic.ascension.capabilities.damage_provider.SimpleEntityDamageSourceProvider;
 import net.zic.ascension.capabilities.damage_provider.SimpleItemDamageSourceProvider;
 import net.zic.ascension.capabilities.entity_holder.PlayerDataHolder;
+import net.zic.ascension.capabilities.qi_provider.SimpleEntityQiProvider;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class AscensionCapabilities {
@@ -35,6 +36,11 @@ public class AscensionCapabilities {
                 (item,nul)->new SimpleItemDamageSourceProvider(item,
                         Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"sword")),
                 Items.DIAMOND_SWORD
+        );
+        event.registerEntity(
+                CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER,
+                EntityType.PLAYER,
+                (entity,nul)->new SimpleEntityQiProvider(entity)
         );
     }
 }

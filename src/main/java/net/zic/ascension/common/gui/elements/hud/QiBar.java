@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
-import net.zic.ascension.common.qi.EntityQi;
 
 import java.text.DecimalFormat;
 
@@ -50,17 +49,12 @@ public class QiBar extends RenderableElement {
         return (EasyLabel) getChildren().getFirst();
     }
 
-    private EntityQi getQi() {
-        return ClientAscensionData.getQi().orElse(null);
-    }
-
     @Override
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        EntityQi qi = getQi();
 
-        double currentQi = qi == null ? 0.0D : qi.getCurrentQi();
-        double maxQi = qi == null ? 0.0D : qi.getMaxQi();
-        double progress = qi == null ? 0.0D : qi.getProgress();
+        double currentQi = ClientAscensionData.getQi();
+        double maxQi = ClientAscensionData.getMaxQi();
+        double progress = maxQi == 0 ? 0 : currentQi/maxQi;
 
         getOrCreateLabel().setText(Component.literal(
                 FORMAT.format(currentQi) + "/" + FORMAT.format(maxQi)
