@@ -4,9 +4,11 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -19,6 +21,7 @@ import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.datapack.data_source.AscensionDataSources;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 import net.zic.ascension.network.*;
@@ -76,15 +79,6 @@ public class AscensionCraft {
 
 
 
-
-    }
-
-    public AscensionCraft(IEventBus modEventBus, ModContainer modContainer) {
-        // Register the commonSetup method for modloading
-        modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::onLoadComplete);
-
-
         AscensionPhysiqueTypes.register(modEventBus);
         AscensionAttachments.register(modEventBus);
         AscensionComponents.register(modEventBus);
@@ -103,6 +97,17 @@ public class AscensionCraft {
         AscensionPathTypes.register(modEventBus);
         AscensionTribulationTypes.register(modEventBus);
         AscensionDataSources.register(modEventBus);
+
+        AscensionAttributes.register(modEventBus);
+
+    }
+
+    public AscensionCraft(IEventBus modEventBus, ModContainer modContainer) {
+        // Register the commonSetup method for modloading
+        modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::onLoadComplete);
+
+
 
         register(modEventBus);
         // Register the item to a creative tab
@@ -171,8 +176,11 @@ public class AscensionCraft {
         @SubscribeEvent
         public static void onEntityAttributeModificationEvent(final EntityAttributeModificationEvent event) {
 
+            event.add(
+                    EntityType.PLAYER,
+                    AscensionAttributes.MAX_QI
+            );
         }
-
 
 
 
