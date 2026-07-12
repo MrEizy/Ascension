@@ -51,8 +51,7 @@ public class PathEffectValueUtil {
      */
 
 
-    //TODO note in the future you will be able to get an affinity holder from entityData directly which also holds a reference to source affinity
-    //TODO figure out how this will work with categories
+
     public static double getEffectValue(double initialAffinity,AffinityHolder holder,Identifier path, Identifier category){
         double affinity = initialAffinity;
         HashSet<Identifier> paths = new HashSet<>(holder.getPaths());

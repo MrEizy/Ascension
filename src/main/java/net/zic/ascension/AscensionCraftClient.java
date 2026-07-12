@@ -1,5 +1,6 @@
 package net.zic.ascension;
 
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;

@@ -12,7 +12,6 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.Config;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
-import net.zic.ascension.common.qi.EntityQi;
 
 import java.text.DecimalFormat;
 
@@ -22,11 +21,15 @@ public class QiBar extends RenderableElement {
             "textures/gui/main/overlays/qi_bar.png"
     );
 
-    private static final ITextureData BAR_TEXTURE = new TextureData(TEXTURE, 85, 9);
-    private static final DecimalFormat FORMAT = new DecimalFormat("#.0");
+    private static final ITextureData BAR_TEXTURE =
+            new TextureData(TEXTURE, 85, 9);
+
+    private static final DecimalFormat FORMAT =
+            new DecimalFormat("#.0");
 
     public QiBar(UIFrame frame) {
         super(frame);
+
         setWidth(BAR_TEXTURE.getWidth());
         setHeight(BAR_TEXTURE.getHeight());
     }
@@ -39,11 +42,20 @@ public class QiBar extends RenderableElement {
             label.setWidth(60);
             label.setHeight(getHeight());
 
-            label.getPositioning().setXPositioningRule(PositioningRules.CENTER);
-            label.getPositioning().setX(-label.getWidth() / 2);
+            label.getPositioning()
+                    .setXPositioningRule(PositioningRules.CENTER);
 
-            label.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
-            label.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
+            label.getPositioning()
+                    .setX(-label.getWidth() / 2);
+
+            label.setTextPositioningX(
+                    EasyLabel.TextPositionRule.CENTER
+            );
+
+            label.setTextPositioningY(
+                    EasyLabel.TextPositionRule.CENTER
+            );
+
             label.setTextColor(-1);
             label.setScaleToFit(true);
         }
@@ -51,41 +63,62 @@ public class QiBar extends RenderableElement {
         return (EasyLabel) getChildren().getFirst();
     }
 
-    private EntityQi getQi() {
-        return ClientAscensionData.getQi().orElse(null);
-    }
-
     @Override
-    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        EntityQi qi = getQi();
+    public void render(
+            GuiGraphicsExtractor graphics,
+            int mouseX,
+            int mouseY,
+            float partialTick
+    ) {
+        double currentQi = ClientAscensionData.getQi();
+        double maxQi = ClientAscensionData.getMaxQi();
 
-        double progress = qi == null ? 0.0D : qi.getProgress();
+        double progress = maxQi <= 0.0D
+                ? 0.0D
+                : Math.clamp(currentQi / maxQi, 0.0D, 1.0D);
 
-        updateLabel(qi);
+        updateLabel(currentQi, maxQi);
 
         int width = (int) Math.round(getWidth() * progress);
+
         if (width > 0) {
-            BAR_TEXTURE.render(graphics, width, getHeight());
+            BAR_TEXTURE.render(
+                    graphics,
+                    width,
+                    getHeight()
+            );
         }
 
-        super.render(graphics, mouseX, mouseY, partialTick);
+        super.render(
+                graphics,
+                mouseX,
+                mouseY,
+                partialTick
+        );
     }
 
-    private void updateLabel(EntityQi qi) {
+    private void updateLabel(
+            double currentQi,
+            double maxQi
+    ) {
         if (!Config.CLIENT.SHOW_EXACT_HUD_VALUES.get()) {
             clearLabel();
             return;
         }
 
-        double currentQi = qi == null ? 0.0D : qi.getCurrentQi();
-        double maxQi = qi == null ? 0.0D : qi.getMaxQi();
-
-        getOrCreateLabel().setText(Component.literal(FORMAT.format(currentQi) + "/" + FORMAT.format(maxQi)));
+        getOrCreateLabel().setText(
+                Component.literal(
+                        FORMAT.format(currentQi)
+                                + "/"
+                                + FORMAT.format(maxQi)
+                )
+        );
     }
 
     private void clearLabel() {
         if (!getChildren().isEmpty()) {
-            ((EasyLabel) getChildren().getFirst()).setText(Component.empty());
+            ((EasyLabel) getChildren().getFirst())
+                    .setText(Component.empty());
         }
     }
 }

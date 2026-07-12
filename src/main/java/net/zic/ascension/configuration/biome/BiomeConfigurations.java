@@ -1,4 +1,4 @@
-package net.zic.ascension.biome.configuration;
+package net.zic.ascension.configuration.biome;
 
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
@@ -7,16 +7,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
-import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
-import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.configuration.dimension.DimensionConfiguration;
 import net.zic.zenithlib.registry.RegistryHelper;
 
 /**
@@ -53,13 +49,13 @@ public class BiomeConfigurations {
         //TODO a lot of nested looping, see if i can make it more efficient
         for(RawBiomeConfiguration rawConfiguration : rawConfigurations){
             for(Holder<Biome> biome : rawConfiguration.biomes()){
-                builders.computeIfAbsent(biome,key->new BiomeConfiguration.Builder());
+                BiomeConfiguration.Builder builder =
+                        builders.computeIfAbsent(biome, key -> new BiomeConfiguration.Builder());
 
-                builders.get(biome).setEnergyCap(rawConfiguration.energyCap());
-                builders.get(biome).setEnergyRegen(rawConfiguration.energyRegen());
-                for(Identifier affinity : rawConfiguration.affinities().keySet()){
-                    builders.get(biome).addAffinity(affinity,rawConfiguration.affinities().getDouble(affinity));
-                }
+                builder.setEnergyCap(rawConfiguration.energyCap());
+                builder.setEnergyRegen(rawConfiguration.energyRegen());
+
+                rawConfiguration.affinities().forEach(builder::addAffinity);
             }
         }
 

@@ -39,6 +39,7 @@ public class CoreRegistries {
             "physiques",
             ()->PhysiqueType.PHYSIQUE_CODEC
     );
+
     public static final RegistryHelper.DataPackRegistry<Bloodline> BLOODLINE_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID,
             "bloodlines",
@@ -86,8 +87,6 @@ public class CoreRegistries {
         return registry.get(access).containsKey(id) ? registry.get(access).getValue(id) : null;
     }
 
-    //TODO think about if tribulations need their own registry or not. aka do we want them to make them in place
-    //TODO like realm change, or do we want them to be able to define them elsewhere then reuse them using the registry (prob 2)
 
 
     @SubscribeEvent

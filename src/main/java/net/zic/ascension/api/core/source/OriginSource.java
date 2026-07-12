@@ -63,12 +63,12 @@ public class OriginSource {
     private final HashMap<Identifier, PathData> paths = new HashMap<>();
     private final HashMap<Identifier,HashSet<Identifier>> pathOwners = new HashMap<>();
 
-    //TODO since not all skills have data consider wrapping in a skillInstance type?
+
     private final HashMap<Identifier, SkillData> skills = new HashMap<>();
     private final HashMap<Identifier,HashSet<Identifier>> skillOwners = new HashMap<>();
 
 
-    //???? TODO once again consider a wrapper since not all will have an instance for extra storage
+
     private final HashMap<Identifier, DataSourceInstance> dataSources = new HashMap<>();
 
     private final StatSheet statSheet = new StatSheet();

@@ -4,10 +4,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
+import net.zic.ascension.api.capabilities.EntityQiProvider;
 import net.zic.ascension.api.core.entity.AscensionEntityData;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
-import net.zic.ascension.common.qi.EntityQi;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
 import java.util.Optional;
@@ -41,10 +41,29 @@ public final class ClientAscensionData {
                 AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER
         ));
     }
+    public static double getQi(){
 
-    public static Optional<EntityQi> getQi() {
-        return getPlayer().map(player -> player.getData(AscensionAttachments.QI));
+        if(getPlayer().isEmpty()) return 0;
+
+        Player player = getPlayer().get();
+
+        EntityQiProvider provider = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
+        if(provider == null) return 0;
+        return provider.getQi();
+
     }
+    public static double getMaxQi(){
+
+        if(getPlayer().isEmpty()) return 0;
+
+        Player player = getPlayer().get();
+
+        EntityQiProvider provider = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
+        if(provider == null) return 0;
+        return provider.getMaxQi();
+    }
+
+
 
     public static long getRevision() {
         return getSource().map(OriginSource::getRevision).orElse(-1L);

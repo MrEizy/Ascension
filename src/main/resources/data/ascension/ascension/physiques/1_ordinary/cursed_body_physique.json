@@ -1,16 +1,16 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.warblood_body.name"
+    "translate": "ascension.physique.cursed_body_physique.name"
   },
   "description": {
-    "translate": "ascension.physique.warblood_body.desc"
+    "translate": "ascension.physique.cursed_body_physique.desc"
   },
   "paths": [
-    "ascension:foundation/body",
+    "ascension:foundation/essence",
     "ascension:elemental/fire",
     "ascension:elemental/blood",
-    "ascension:weapon/axe"
+    "ascension:weapon/blade"
   ],
   "skills": [],
   "item_tooltip": {
@@ -23,10 +23,10 @@
     "ascension:vitality": 1
   },
   "base_affinity": {
-    "ascension:body": 1,
+    "ascension:body": 2,
     "ascension:fire": 1,
-    "ascension:blood": 1,
-    "ascension:axe": 2
+    "ascension:blood": 2,
+    "ascension:blade": 1.5
   },
   "stat_modifiers": {
     "ascension:strength": [
@@ -45,7 +45,7 @@
         "id": "ascension:warblood_body_blood_modifier"
       }
     ],
-    "ascension:axe": [
+    "ascension:blade": [
       {
         "value": 0.1,
         "operation": "ADD_BASE",

@@ -36,10 +36,7 @@ public interface AscensionEntityData {
 
     //──Affinity────────────────────────────────────────────────────────
 
-    /*TODO
-    right now does nothing, but in the future will be used to allow for entity specific affinity bonuses,
-    so i am ensuring I expose the necessary api endpoints
-     */
+
 
     default boolean hasAffinity(Identifier path){
          return getSource().hasAffinity(path);

@@ -99,7 +99,6 @@ public interface PathData extends RegistryObjectData {
     }
 
     //takes in a potential realm change, and breaks it down into individual steps
-    //TODO write default implementation
     default void handleRealmChange(OriginSource source, int newMajorRealm, int newMinorRealm){
         if(getCurrentTechnique() == null) return;
         int oldMajorRealm = getMajorRealm();

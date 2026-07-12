@@ -30,7 +30,6 @@ public class StatDisplayCommand {
                             AscensionEntityData data = holder.getData(player);
                             player.sendSystemMessage(Component.literal("===Stats==="));
                             for(Stat stat:holder.getData(player).getSource().getAllStats()){
-                                //TODO fix later to include name
                                 player.sendSystemMessage(Component.literal(stat.getName()+":"+holder.getData(player).getSource().getValue(stat)));
                             }
                             player.sendSystemMessage(Component.literal("===Data==="));
