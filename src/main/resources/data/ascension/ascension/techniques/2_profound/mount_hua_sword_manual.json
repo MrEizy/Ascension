@@ -65,6 +65,20 @@
   ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
+    "theme_overrides": {
+      "colors": {
+        "accent": "#E8A9C4FF",
+        "border_top": "#F6D7E6FF",
+        "border_bottom": "#5B3A4EFF",
+        "background": "#120D12E8"
+      },
+      "background_style": {
+        "pattern": "stars",
+        "color": "accent",
+        "alpha": 8,
+        "spacing": 13
+      }
+    },
     "template": "ascension:default_technique_manual",
     "rank": "ascension:profound"
   }

@@ -137,24 +137,30 @@ public final class AscensionTransferItemTooltipProvider implements ZenithTooltip
         }
 
         AscensionItemTooltipDefinition definition = tooltip.orElseThrow();
+
         if (definition.hasInlineTemplate()) {
-            return Optional.of(definition.themed(resolveTheme(definition, defaultTheme)));
+            ZenithTooltipTheme resolvedTheme = resolveTheme(definition, defaultTheme);
+            return Optional.of(definition.themed(resolvedTheme));
         }
 
-        return ZenithTooltipRepository.fromTemplate(
-                definition.template().orElse(defaultTemplate),
-                definition.theme().orElse(defaultTheme)
-        );
+        return ZenithTooltipRepository.fromTemplate(definition.template().orElse(defaultTemplate), definition.theme().orElse(defaultTheme), definition.themeOverrides());
     }
 
     private static ZenithTooltipTheme resolveTheme(
             AscensionItemTooltipDefinition definition,
             Identifier defaultTheme
     ) {
-        return ZenithTooltipRepository.themesView()
-                .getOrDefault(
-                        definition.theme().orElse(defaultTheme),
-                        ZenithTooltipTheme.defaultTheme()
-                );
+        ZenithTooltipTheme baseTheme = ZenithTooltipRepository.themesView().getOrDefault(definition.theme().orElse(defaultTheme), ZenithTooltipTheme.defaultTheme());
+
+        if (definition.themeOverrides().isEmpty()) {
+            return baseTheme;
+        }
+
+        return definition.themeOverrides()
+                .orElseThrow()
+                .applyTo(baseTheme)
+                .resultOrPartial(error ->
+                        AscensionCraft.LOGGER.error("Failed to apply embedded tooltip theme override: {}", error))
+                .orElse(baseTheme);
     }
 }
