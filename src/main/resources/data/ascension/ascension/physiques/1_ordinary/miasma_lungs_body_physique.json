@@ -1,10 +1,10 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.winter_root.name"
+    "translate": "ascension.physique.miasma_lungs_body_physique.name"
   },
   "description": {
-    "translate": "ascension.physique.winter_root.desc"
+    "translate": "ascension.physique.miasma_lungs_body_physique.desc"
   },
   "paths": [
     "ascension:foundation/essence",

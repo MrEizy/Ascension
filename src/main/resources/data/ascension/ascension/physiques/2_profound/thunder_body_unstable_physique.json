@@ -1,0 +1,30 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.thunder_body_unstable_physique.name"
+  },
+  "description": {
+    "translate": "ascension.physique.thunder_body_unstable_physique.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/lightning",
+    "ascension:elemental/metal",
+    "ascension:elemental/blade"
+  ],
+  "skills": [],
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:profound"
+  },
+  "base_stats": {
+    "ascension:vitality": 1
+  },
+  "base_affinity": {
+    "ascension:body": 3,
+    "ascension:lightning": 2.5,
+    "ascension:metal": 1.5,
+    "ascension:blade": 2
+  }
+}

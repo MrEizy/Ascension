@@ -1,16 +1,17 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.blizzard_spirit_body.name"
+    "translate": "ascension.physique.weak_spirit_body_physique.name"
   },
   "description": {
-    "translate": "ascension.physique.blizzard_spirit_body.desc"
+    "translate": "ascension.physique.weak_spirit_body_physique.desc"
   },
   "paths": [
     "ascension:foundation/essence",
-    "ascension:elemental/ice",
+    "ascension:foundation/body",
     "ascension:elemental/wind",
-    "ascension:elemental/yin"
+    "ascension:elemental/metal",
+    "ascension:weapon/staff"
   ],
   "skills": [],
   "item_tooltip": {
@@ -22,17 +23,18 @@
     "ascension:vitality": 1
   },
   "base_affinity": {
-    "ascension:essence": 1,
-    "ascension:ice": 1,
-    "ascension:wind": 0.5,
-    "ascension:yin": 0.5
+    "ascension:essence": 0.8,
+    "ascension:body": 3,
+    "ascension:wind": 1.75,
+    "ascension:metal": 1.8,
+    "ascension:staff": 3.2
   },
   "affinity_modifiers": {
-    "ascension:ice": [
+    "ascension:wind": [
       {
         "value": 0.15,
         "operation": "ADD_BASE",
-        "id": "ascension:blizzard_spirit_body_ice_modifier"
+        "id": "ascension:weak_spirit_body_physique_wind_modifier"
       }
     ]
   }

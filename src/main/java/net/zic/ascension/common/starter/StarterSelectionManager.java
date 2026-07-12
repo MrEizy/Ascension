@@ -32,28 +32,28 @@ public final class StarterSelectionManager {
     private static final Map<Identifier, List<Identifier>> STARTER_PHYSIQUES = Map.of(
             HUMAN, List.of(
                     AscensionCraft.prefix("1_ordinary/cursed_body_physique"),
-                    AscensionCraft.prefix("1_ordinary/drifting_cloud_physique"),
+                    AscensionCraft.prefix("2_profound/sword_body_flawed_physique"),
                     AscensionCraft.prefix("1_ordinary/iron_blossom_physique")
             ),
             BARBARIAN, List.of(
                     AscensionCraft.prefix("1_ordinary/heavy_bone_physique"),
-                    AscensionCraft.prefix("1_ordinary/mountain_breaker_physique"),
-                    AscensionCraft.prefix("1_ordinary/berserkers_fang_physique")
+                    AscensionCraft.prefix("2_profound/fire_spirit_body_unstable_physique"),
+                    AscensionCraft.prefix("1_ordinary/weak_spirit_body_physique")
             ),
             BEASTKIN, List.of(
                     AscensionCraft.prefix("1_ordinary/brittle_bone_body_physique"),
-                    AscensionCraft.prefix("1_ordinary/primal_fang_physique"),
-                    AscensionCraft.prefix("1_ordinary/thousand_beast_root_physique")
+                    AscensionCraft.prefix("2_profound/thunder_body_unstable_physique"),
+                    AscensionCraft.prefix("1_ordinary/miasma_lungs_body_physique")
             ),
             SCALEKIN, List.of(
                     AscensionCraft.prefix("1_ordinary/dampened_fire_body_physique"),
-                    AscensionCraft.prefix("1_ordinary/tidecaller_root_physique"),
-                    AscensionCraft.prefix("1_ordinary/abyss_drifter_physique")
+                    AscensionCraft.prefix("2_profound/trembling_earth_body_unstable_physique"),
+                    AscensionCraft.prefix("1_ordinary/shallow_core_body_physique")
             ),
             FROSTKIN, List.of(
                     AscensionCraft.prefix("1_ordinary/five_elements_imbalance"),
-                    AscensionCraft.prefix("1_ordinary/winter_root_physique"),
-                    AscensionCraft.prefix("1_ordinary/blizzard_spirit_physique")
+                    AscensionCraft.prefix("2_profound/ice_soul_body_flawed_physique"),
+                    AscensionCraft.prefix("1_ordinary/frostbitten_vein_body_physique")
             )
     );
 

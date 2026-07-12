@@ -1,16 +1,16 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.jiao_scale_body.name"
+    "translate": "ascension.physique.trembling_earth_body_unstable_physique.name"
   },
   "description": {
-    "translate": "ascension.physique.jiao_scale_body.desc"
+    "translate": "ascension.physique.trembling_earth_body_unstable_physique.desc"
   },
   "paths": [
     "ascension:foundation/body",
-    "ascension:elemental/water",
-    "ascension:elemental/ice",
-    "ascension:weapon/spear"
+    "ascension:elemental/earth",
+    "ascension:elemental/metal",
+    "ascension:weapon/mace"
   ],
   "skills": [],
   "item_tooltip": {
@@ -22,17 +22,17 @@
     "ascension:vitality": 2
   },
   "base_affinity": {
-    "ascension:body": 1,
-    "ascension:water": 1,
-    "ascension:ice": 1,
-    "ascension:spear": 2
+    "ascension:body": 3,
+    "ascension:earth": 2.5,
+    "ascension:metal": 2,
+    "ascension:mace": 2.5
   },
   "stat_modifiers": {
     "ascension:vitality": [
       {
         "value": 0.15,
         "operation": "MULTIPLY_FINAL",
-        "id": "ascension:jiao_scale_body_vitality_modifier"
+        "id": "ascension:trembling_earth_body_unstable_physique_vitality_modifier"
       }
     ]
   },
@@ -41,7 +41,7 @@
       {
         "value": 0.15,
         "operation": "ADD_BASE",
-        "id": "ascension:jiao_scale_body_water_modifier"
+        "id": "ascension:trembling_earth_body_unstable_physique_earth_modifier"
       }
     ]
   }

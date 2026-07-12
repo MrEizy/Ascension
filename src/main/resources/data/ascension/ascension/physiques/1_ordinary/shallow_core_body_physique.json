@@ -1,16 +1,16 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.feral_moon_body.name"
+    "translate": "ascension.physique.shallow_core_body_physique.name"
   },
   "description": {
-    "translate": "ascension.physique.feral_moon_body.desc"
+    "translate": "ascension.physique.shallow_core_body_physique.desc"
   },
   "paths": [
     "ascension:foundation/essence",
-    "ascension:elemental/wind",
-    "ascension:elemental/moon",
-    "ascension:weapon/knife"
+    "ascension:foundation/soul",
+    "ascension:elemental/wood",
+    "ascension:elemental/sound"
   ],
   "skills": [],
   "item_tooltip": {
@@ -22,17 +22,17 @@
     "ascension:vitality": 1
   },
   "base_affinity": {
-    "ascension:essence": 1,
-    "ascension:wind": 1,
-    "ascension:moon": 1,
-    "ascension:knife": 2
+    "ascension:essence": 1.5,
+    "ascension:soul": 2,
+    "ascension:wood": 2.5,
+    "ascension:sound": 2.5
   },
   "affinity_modifiers": {
-    "ascension:knife": [
+    "ascension:water": [
       {
-        "value": 0.15,
+        "value": 0.2,
         "operation": "ADD_BASE",
-        "id": "ascension:feral_moon_body_knife_modifier"
+        "id": "ascension:tidecaller_root_water_modifier"
       }
     ]
   }
