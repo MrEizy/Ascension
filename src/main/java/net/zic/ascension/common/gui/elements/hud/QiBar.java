@@ -21,11 +21,8 @@ public class QiBar extends RenderableElement {
             "textures/gui/main/overlays/qi_bar.png"
     );
 
-    private static final ITextureData BAR_TEXTURE =
-            new TextureData(TEXTURE, 85, 9);
-
-    private static final DecimalFormat FORMAT =
-            new DecimalFormat("#.0");
+    private static final ITextureData BAR_TEXTURE = new TextureData(TEXTURE, 85, 9);
+    private static final DecimalFormat FORMAT = new DecimalFormat("#.0");
 
     public QiBar(UIFrame frame) {
         super(frame);
@@ -38,24 +35,12 @@ public class QiBar extends RenderableElement {
         if (getChildren().isEmpty()) {
             EasyLabel label = new EasyLabel(getUiFrame());
             addChild(label);
-
             label.setWidth(60);
             label.setHeight(getHeight());
-
-            label.getPositioning()
-                    .setXPositioningRule(PositioningRules.CENTER);
-
-            label.getPositioning()
-                    .setX(-label.getWidth() / 2);
-
-            label.setTextPositioningX(
-                    EasyLabel.TextPositionRule.CENTER
-            );
-
-            label.setTextPositioningY(
-                    EasyLabel.TextPositionRule.CENTER
-            );
-
+            label.getPositioning().setXPositioningRule(PositioningRules.CENTER);
+            label.getPositioning().setX(-label.getWidth() / 2);
+            label.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
+            label.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
             label.setTextColor(-1);
             label.setScaleToFit(true);
         }
@@ -64,61 +49,35 @@ public class QiBar extends RenderableElement {
     }
 
     @Override
-    public void render(
-            GuiGraphicsExtractor graphics,
-            int mouseX,
-            int mouseY,
-            float partialTick
-    ) {
+    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         double currentQi = ClientAscensionData.getQi();
         double maxQi = ClientAscensionData.getMaxQi();
-
-        double progress = maxQi <= 0.0D
-                ? 0.0D
-                : Math.clamp(currentQi / maxQi, 0.0D, 1.0D);
+        double progress = maxQi <= 0.0D ? 0.0D : Math.clamp(currentQi / maxQi, 0.0D, 1.0D);
 
         updateLabel(currentQi, maxQi);
 
         int width = (int) Math.round(getWidth() * progress);
 
         if (width > 0) {
-            BAR_TEXTURE.render(
-                    graphics,
-                    width,
-                    getHeight()
-            );
-        }
+            BAR_TEXTURE.render(graphics, width, getHeight());}
 
-        super.render(
-                graphics,
-                mouseX,
-                mouseY,
-                partialTick
-        );
+        super.render(graphics, mouseX, mouseY, partialTick);
     }
 
-    private void updateLabel(
-            double currentQi,
-            double maxQi
-    ) {
+    private void updateLabel(double currentQi, double maxQi) {
         if (!Config.CLIENT.SHOW_EXACT_HUD_VALUES.get()) {
             clearLabel();
             return;
         }
 
-        getOrCreateLabel().setText(
-                Component.literal(
-                        FORMAT.format(currentQi)
-                                + "/"
-                                + FORMAT.format(maxQi)
-                )
-        );
+        getOrCreateLabel().setText(Component.literal(
+                FORMAT.format(currentQi) + "/" + FORMAT.format(maxQi)
+        ));
     }
 
     private void clearLabel() {
         if (!getChildren().isEmpty()) {
-            ((EasyLabel) getChildren().getFirst())
-                    .setText(Component.empty());
+            ((EasyLabel) getChildren().getFirst()).setText(Component.empty());
         }
     }
 }
