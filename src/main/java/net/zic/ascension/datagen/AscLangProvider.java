@@ -12,10 +12,16 @@ public class AscLangProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
 
+        // Configs
+        add("ascension.config.hud", "HUD Settings");
+        add("ascension.config.showExactValues", "Show Values");
+
+
+        // Creative Tabs
         add("creativetab.ascension.artifact_items", "Ascension Artifacts");
 
 
-
+        // Items
         add("item.ascension.tablet_of_destruction_human", "Tablet of Destruction - Human");
         add("item.ascension.tablet_of_destruction_earth", "Tablet of Destruction - Earth");
         add("item.ascension.tablet_of_destruction_heaven", "Tablet of Destruction - Heaven");
@@ -47,6 +53,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tablet.drop_mode.on", "On");
         add("ascension.tablet.cycle_mode_info", "Press [V] to cycle drop mode.");
 
+
+        // GUI
         add("gui.ascension.introspection.title", "Introspection");
         add("gui.ascension.introspection.main", "Main");
         add("gui.ascension.introspection.stats", "Stats");
@@ -81,23 +89,24 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.attribute.step_height", "Step Height");
         add("gui.ascension.introspection.attribute.mining", "Mining");
 
+
+        // Starter Screen Lang
+        add("gui.ascension.starter.title", "Starting Selection");
+        add("gui.ascension.starter.choose_bloodline", "Choose Your Bloodline");
+        add("gui.ascension.starter.choose_physique", "Choose Your Physique");
+
+
+        // Stats
         add("stat.ascension.vitality", "Vitality");
         add("stat.ascension.agility", "Agility");
         add("stat.ascension.strength", "Strength");
         add("stat.ascension.intelligence", "Intelligence");
 
 
-
-
-
-
         //Keybinds
         add("key.category.minecraft.ascension", "Ascension");
         add("key.ascension.cycle_mode", "Cycle Modes");
         add("key.ascension.open_introspection", "Open Introspection");
-
-
-
 
 
         //Classifications
@@ -112,8 +121,9 @@ public class AscLangProvider extends LanguageProvider {
         add("zenith.ascension.tier.god", "God");
         add("zenith.ascension.tier.heavens_path", "Heaven's Path");
 
-    //Datapack lang stuff
 
+
+        // DATAPACK LANG STUFF
 
         //Paths - Foundation
         add("ascension.path.foundation.essence.name", "Essence");
@@ -269,10 +279,5 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.plum_blossom_breathing.name", "Plum Blossom Breathing");
         add("ascension.skill.plum_blossom_breathing.desc", "The first breathing method taught at Mount Hua, circulating qi until it flows naturally into the sword, letting sword and essence grow together as one");
 
-
-        // Starter Screen Lang
-        add("gui.ascension.starter.title", "Starting Selection");
-        add("gui.ascension.starter.choose_bloodline", "Choose Your Bloodline");
-        add("gui.ascension.starter.choose_physique", "Choose Your Physique");
     }
 }

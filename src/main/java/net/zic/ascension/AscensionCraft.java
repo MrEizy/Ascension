@@ -107,6 +107,7 @@ public class AscensionCraft {
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC, "ascension/Ascension-Common.toml");
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.CULTIVATION_SPEC, "ascension/Ascension-Cultivation.toml");
+        modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC, "ascension/Ascension-Client.toml");
 
     }
 

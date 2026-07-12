@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.Config;
 
 import java.text.DecimalFormat;
 
@@ -67,6 +68,11 @@ public class HealthBar extends RenderableElement {
     }
 
     private void updateLabel(Player player) {
+        if (!Config.CLIENT.SHOW_EXACT_HUD_VALUES.get()) {
+            clearLabel();
+            return;
+        }
+
         EasyLabel label = getOrCreateLabel();
 
         if (getAbsorptionProgress(player) > 0.0D) {
@@ -79,8 +85,14 @@ public class HealthBar extends RenderableElement {
         }
 
         label.setText(Component.literal(
-                FORMAT.format(player.getHealth()) + "/" + FORMAT.format(player.getMaxHealth())
-        ));
+                FORMAT.format(player.getHealth()) + "/" + FORMAT.format(player.getMaxHealth()))
+        );
+    }
+
+    private void clearLabel() {
+        if (!getChildren().isEmpty()) {
+            ((EasyLabel) getChildren().getFirst()).setText(Component.empty());
+        }
     }
 
     @Override

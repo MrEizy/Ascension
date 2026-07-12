@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.Config;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.qi.EntityQi;
 
@@ -58,13 +59,9 @@ public class QiBar extends RenderableElement {
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         EntityQi qi = getQi();
 
-        double currentQi = qi == null ? 0.0D : qi.getCurrentQi();
-        double maxQi = qi == null ? 0.0D : qi.getMaxQi();
         double progress = qi == null ? 0.0D : qi.getProgress();
 
-        getOrCreateLabel().setText(Component.literal(
-                FORMAT.format(currentQi) + "/" + FORMAT.format(maxQi)
-        ));
+        updateLabel(qi);
 
         int width = (int) Math.round(getWidth() * progress);
         if (width > 0) {
@@ -72,5 +69,23 @@ public class QiBar extends RenderableElement {
         }
 
         super.render(graphics, mouseX, mouseY, partialTick);
+    }
+
+    private void updateLabel(EntityQi qi) {
+        if (!Config.CLIENT.SHOW_EXACT_HUD_VALUES.get()) {
+            clearLabel();
+            return;
+        }
+
+        double currentQi = qi == null ? 0.0D : qi.getCurrentQi();
+        double maxQi = qi == null ? 0.0D : qi.getMaxQi();
+
+        getOrCreateLabel().setText(Component.literal(FORMAT.format(currentQi) + "/" + FORMAT.format(maxQi)));
+    }
+
+    private void clearLabel() {
+        if (!getChildren().isEmpty()) {
+            ((EasyLabel) getChildren().getFirst()).setText(Component.empty());
+        }
     }
 }
