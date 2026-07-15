@@ -12,6 +12,7 @@ import net.zic.ascension.api.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface  Physique {
@@ -48,6 +49,8 @@ public interface  Physique {
     PhysiqueData newData(RegistryAccess access);
     PhysiqueData loadData(ValueInput input, RegistryAccess access);
     PhysiqueData loadData(ByteBuf buf);
+
+    default Collection<Identifier> unlockedPaths() {return List.of();}
 
     default Optional<AscensionItemTooltipDefinition> itemTooltip() {
         return Optional.empty();

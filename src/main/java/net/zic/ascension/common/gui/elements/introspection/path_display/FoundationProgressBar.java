@@ -5,15 +5,18 @@ import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
+import net.zic.ascension.common.gui.elements.general.AscensionTooltip;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +35,9 @@ public class FoundationProgressBar extends RenderableElement {
             new TextureDataSubsection(TEXTURE, 234, 287, 219, 184, 9, 84)
     );
 
+    private static final DecimalFormat PERCENT_FORMAT = new DecimalFormat("0.##");
+
+    private final AscensionTooltip tooltip;
     private Identifier selectedPath;
 
     public FoundationProgressBar(UIFrame frame) {
@@ -39,6 +45,9 @@ public class FoundationProgressBar extends RenderableElement {
 
         setWidth(TIERS.getFirst().getWidth());
         setHeight(TIERS.getFirst().getHeight());
+
+        tooltip = new AscensionTooltip (frame);
+        tooltip.setActive(true);
     }
 
     public void setPath(Identifier pathId) {
@@ -69,23 +78,24 @@ public class FoundationProgressBar extends RenderableElement {
 
                     int majorRealm = foundationData.getMajorRealm();
                     int foundationRealm = foundationData.getCurrentFoundationRealm();
-
                     double current = foundationData.getCurrentFoundationProgress();
-                    double max = foundationPath.getMaxFoundationProgress(
-                            majorRealm,
-                            foundationRealm
-                    );
+                    double max = foundationPath.getMaxFoundationProgress(majorRealm, foundationRealm);
 
-                    double progress = max <= 0.0D
-                            ? 0.0D
-                            : Math.clamp(current / max, 0.0D, 1.0D);
+                    double progress = max <= 0.0D ? 0.0D : Math.clamp(current / max, 0.0D, 1.0D);
+
+                    Component realmName = resolveFoundationRealmName(foundationPath, majorRealm, foundationRealm);
 
                     return Optional.of(new FoundationState(
                             foundationRealm,
-                            progress
+                            progress,
+                            realmName
                     ));
                 })
         );
+    }
+
+    private static Component resolveFoundationRealmName(FoundationPath path, int majorRealm, int foundationRealm) {
+        return path.getFoundationRealmName(majorRealm, foundationRealm);
     }
 
     private ITextureData getTextureForRealm(int realm) {
@@ -93,29 +103,33 @@ public class FoundationProgressBar extends RenderableElement {
         return TIERS.get(index);
     }
 
+    private void showTooltip(FoundationState state) {
+        double percentage = state.progress() * 100.0D;
+        tooltip.setText(state.realmName().copy().append(Component.literal(" (" + PERCENT_FORMAT.format(percentage) + "%)")));
+        getUiFrame().setTooltip(tooltip);
+    }
+
     @Override
-    public void render(
-            GuiGraphicsExtractor graphics,
-            int mouseX,
-            int mouseY,
-            float partialTick
-    ) {
-        Optional<FoundationState> state = getFoundationState();
-        if (state.isEmpty()) {
+    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        Optional<FoundationState> optionalState = getFoundationState();
+        if (optionalState.isEmpty()) {
             return;
         }
 
-        ITextureData texture = getTextureForRealm(state.get().realm());
-        int height = (int) Math.round(texture.getHeight() * state.get().progress());
+        FoundationState state = optionalState.get();
+        ITextureData texture = getTextureForRealm(state.realm());
+
+        int height = (int) Math.round(texture.getHeight() * state.progress());
 
         if (height > 0) {
             texture.render(graphics, texture.getWidth(), height);
         }
+
+        if (isPointBounded(graphics, mouseX, mouseY)) {
+            showTooltip(state);
+        }
     }
 
-    private record FoundationState(
-            int realm,
-            double progress
-    ) {
+    private record FoundationState(int realm, double progress, Component realmName) {
     }
 }
