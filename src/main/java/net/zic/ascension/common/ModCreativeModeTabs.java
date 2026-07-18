@@ -67,8 +67,6 @@ public class ModCreativeModeTabs {
 
 
 
-
-
     public static final Supplier<CreativeModeTab> PHYSIQUE_TRANSFERS_TAB = CREATIVE_MODE_TABS.register("physique_transfers_tab",
             () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModItems.PHYSIQUE_ESSENCE.get()))
