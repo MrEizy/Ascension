@@ -18,9 +18,9 @@ public class ModCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AscensionCraft.MOD_ID);
 
-    public static final Supplier<CreativeModeTab> ARTIFACT_ITEMS_TAB = CREATIVE_MODE_TABS.register("artifact_items_tab",
+    public static final Supplier<CreativeModeTab> ASCENSION_ITEMS_TAB = CREATIVE_MODE_TABS.register("ascension_items_tab",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.TABLET_OF_DESTRUCTION_EARTH.get()))
-                    .title(Component.translatable("creativetab.ascension.artifact_items"))
+                    .title(Component.translatable("creativetab.ascension.items"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_HUMAN);
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_EARTH);
@@ -29,6 +29,9 @@ public class ModCreativeModeTabs {
 
 
                     }).build());
+
+
+
 
 
 
