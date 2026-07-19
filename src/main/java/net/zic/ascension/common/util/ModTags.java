@@ -27,6 +27,13 @@ public class ModTags {
     }
 
     public static class Items {
+        public static final TagKey<Item> ARTIFACTS = createItemTag("artifacts");
+        public static final TagKey<Item> PILLS = createItemTag("pills");
+        public static final TagKey<Item> ARMOR = createItemTag("armor");
+        public static final TagKey<Item> TOOLS = createItemTag("tools");
+        public static final TagKey<Item> TALISMANS = createItemTag("talismans");
+
+
         public static final TagKey<Item> ORDINARY_ITEMS = createItemTag("ordinary_items");
         public static final TagKey<Item> PROFOUND_ITEMS = createItemTag("profound_items");
         public static final TagKey<Item> HEAVEN_ITEMS = createItemTag("heaven_items");

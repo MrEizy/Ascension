@@ -19,7 +19,6 @@ public class AscItemTagProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
 
 
-
         tag(ModTags.Items.ORDINARY_ITEMS)
                 .add(ModItems.TABLET_OF_DESTRUCTION_HUMAN.get());
 
@@ -35,6 +34,15 @@ public class AscItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.GOD_ITEMS);
 
         tag(ModTags.Items.HEAVENS_PATH_ITEMS);
+
+
+        tag(ModTags.Items.ARTIFACTS)
+                .add(
+                        ModItems.TABLET_OF_DESTRUCTION_HUMAN.get(),
+                        ModItems.TABLET_OF_DESTRUCTION_EARTH.get(),
+                        ModItems.TABLET_OF_DESTRUCTION_HEAVEN.get(),
+                        ModItems.TABLET_OF_DESTRUCTION_ASCENDANT.get()
+                );
         
     }
 }

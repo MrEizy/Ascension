@@ -19,6 +19,7 @@ import net.zic.ascension.client.keybind.TabletScrollHandler;
 import net.zic.ascension.client.gui.AscensionHudOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
+import net.zic.ascension.common.AscensionCreativeSections;
 
 
 @Mod(value = AscensionCraft.MOD_ID,dist = Dist.CLIENT)
@@ -74,9 +75,10 @@ public class AscensionCraftClient {
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            event.enqueueWork(
-                    AscensionClientTooltipProviders::registerAll
-            );
+            event.enqueueWork(() -> {
+                AscensionClientTooltipProviders.registerAll();
+                AscensionCreativeSections.register();
+            });
         }
 
     }

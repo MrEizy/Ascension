@@ -19,6 +19,13 @@ public class AscLangProvider extends LanguageProvider {
 
         // Creative Tabs
         add("creativetab.ascension.items", "Ascension Items");
+        add("creativetab.ascension.physique_transfers", "Physiques");
+        add("creativetab.ascension.bloodline_transfers", "Bloodlines");
+        add("creativetab.ascension.technique_transfers", "Techniques");
+
+
+        // Creative Tab Sections
+        add("creative_section.ascension.artifacts", "Ascension Artifacts");
 
 
         // Items
