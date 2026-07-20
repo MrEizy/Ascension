@@ -9,6 +9,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.client.keybind.ModKeybinds;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.zenithlib.input.InputHandler;
 import net.zic.zenithlib.input.MappingHandler;
@@ -32,7 +33,7 @@ public class AscensionSkillListener {
                     KeyConflictContext.IN_GAME,
                     InputConstants.Type.KEYSYM,
                     GLFW.GLFW_KEY_V,
-                    KeyMapping.Category.MISC
+                    ModKeybinds.ASCENSION_CATEGORY
             )
     );
 

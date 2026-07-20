@@ -44,6 +44,7 @@ public class AscensionCraftClient {
     private static void registerKeyBindings(RegisterKeyMappingsEvent event) {
         event.register(ModKeybinds.CYCLE_MODE);
         event.register(ModKeybinds.OPEN_INTROSPECTION);
+        event.register(ModKeybinds.OPEN_SKILL_WHEEL);
     }
 
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID,value = Dist.CLIENT)

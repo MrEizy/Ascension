@@ -48,6 +48,10 @@ public class SkillCastHandler {
         return hotBar.getSelectedSlot();
     }
 
+    public Identifier getCastingSkill() {
+        return instance.getSkill();
+    }
+
     public Identifier getSkill(int slot) {
         return hotBar.getSkill(slot);
     }

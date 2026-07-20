@@ -5,7 +5,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
@@ -90,14 +89,7 @@ public record SimpleCultivationSkill(
                     foundationPathData,
                     baseRate);
         }else CultivationUtil.cultivate(caster,source,pathData,secondaryPaths(),baseRate);
-        if(caster instanceof Player player){
-            if(pathData instanceof FoundationPathData foundationPathData && holder.getData(caster).isCultivationSuppressed()){
-                player.sendOverlayMessage(Component.literal("Foundation Progress : "+
-                        foundationPathData.getFoundationRealmProgress(foundationPathData.getMajorRealm())
-                        ));
 
-            }else player.sendOverlayMessage(Component.literal("Progress : "+pathData.getProgress()));
-        }
 
     }
 

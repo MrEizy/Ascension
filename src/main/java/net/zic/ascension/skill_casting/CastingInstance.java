@@ -23,6 +23,10 @@ public class CastingInstance {
 
     private boolean dirty;
 
+    public Identifier getSkill() {
+        return skill;
+    }
+
     public void startCast(Player caster, Identifier skill, PreCastData preCastData){
         if(skill != null && skill.equals(this.skill)) return; //same skill ignore
 

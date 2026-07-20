@@ -7,7 +7,7 @@ import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
 public class ModKeybinds {
-    private static final KeyMapping.Category ASCENSION_CATEGORY = KeyMapping.Category.register(
+    public static final KeyMapping.Category ASCENSION_CATEGORY = KeyMapping.Category.register(
             Identifier.parse("ascension")
     );
 
@@ -24,6 +24,14 @@ public class ModKeybinds {
             KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_I,
+            ASCENSION_CATEGORY
+    );
+
+    public static final KeyMapping OPEN_SKILL_WHEEL = new KeyMapping(
+            "key.ascension.open_skill_wheel",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_R,
             ASCENSION_CATEGORY
     );
 }

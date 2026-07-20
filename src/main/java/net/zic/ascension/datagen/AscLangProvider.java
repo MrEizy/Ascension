@@ -121,6 +121,8 @@ public class AscLangProvider extends LanguageProvider {
         add("key.category.minecraft.ascension", "Ascension");
         add("key.ascension.cycle_mode", "Cycle Modes");
         add("key.ascension.open_introspection", "Open Introspection");
+        add("key.ascension.open_skill_wheel", "Open Skill Wheel");
+        add("key.ascension.skill.skill_cast", "Cast Skill");
 
 
         //Classifications

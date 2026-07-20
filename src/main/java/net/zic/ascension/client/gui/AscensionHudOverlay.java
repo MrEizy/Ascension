@@ -11,6 +11,7 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.gui.elements.hud.CultivationProgressBar;
 import net.zic.ascension.common.gui.elements.hud.HudContainer;
 
 public final class AscensionHudOverlay {
@@ -19,7 +20,8 @@ public final class AscensionHudOverlay {
             "ascension_hud"
     );
 
-    private static UIFrame frame;
+    private static UIFrame hudFrame;
+    private static UIFrame cultivationFrame;
 
     private AscensionHudOverlay() {
     }
@@ -46,12 +48,21 @@ public final class AscensionHudOverlay {
             return;
         }
 
-        if (frame == null) {
-            frame = new UIFrame();
-            frame.setPauseGame(false);
-            frame.setRoot(new HudContainer(frame));
+        float partialTick = deltaTracker.getGameTimeDeltaPartialTick(false);
+
+        if (hudFrame == null) {
+            hudFrame = new UIFrame();
+            hudFrame.setPauseGame(false);
+            hudFrame.setRoot(new HudContainer(hudFrame));
+        }
+        if (cultivationFrame == null) {
+            cultivationFrame = new UIFrame();
+            cultivationFrame.setPauseGame(false);
+            cultivationFrame.setRoot(new CultivationProgressBar(cultivationFrame));
         }
 
-        frame.run(graphics, 0, 0, deltaTracker.getGameTimeDeltaPartialTick(false));
+        hudFrame.run(graphics, 0, 0, partialTick);
+        cultivationFrame.run(graphics, 0, 0, partialTick);
+        SkillWheelOverlay.render(graphics, partialTick);
     }
 }
