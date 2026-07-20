@@ -3,10 +3,13 @@ package net.zic.ascension.common.gui.elements.skill_casting;
 import net.lucent.easygui.gui.RenderableElement;
 import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.layout.positioning.rules.PositioningRules;
+import net.lucent.easygui.gui.textures.ITextureData;
+import net.lucent.easygui.gui.textures.TextureData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
@@ -16,6 +19,18 @@ public class SkillHotBarContainer extends RenderableElement {
     private static final int HEIGHT = 240;
     private static final int WHEEL_LEFT = 34;
     private static final int WHEEL_TOP = 14;
+    private static final float WHEEL_SCALE = 3.0F;
+    private static final int BACKGROUND_PASSES = 4;
+
+    private static final Identifier WHEEL_TEXTURE = Identifier.fromNamespaceAndPath(
+            AscensionCraft.MOD_ID,
+            "textures/gui/overlay/skill_wheel.png"
+    );
+    private static final ITextureData WHEEL_BACKGROUND = new TextureData(
+            WHEEL_TEXTURE,
+            64,
+            64
+    );
 
     private int selectedSlot;
     private int maxSlots = 6;
@@ -80,7 +95,20 @@ public class SkillHotBarContainer extends RenderableElement {
 
     @Override
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        renderWheelBackground(graphics);
         renderSelectedSkillName(graphics);
+    }
+
+    private void renderWheelBackground(GuiGraphicsExtractor graphics) {
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(WHEEL_LEFT, WHEEL_TOP);
+        graphics.pose().scale(WHEEL_SCALE, WHEEL_SCALE);
+
+        for (int pass = 0; pass < BACKGROUND_PASSES; pass++) {
+            WHEEL_BACKGROUND.render(graphics);
+        }
+
+        graphics.pose().popMatrix();
     }
 
     private void renderSelectedSkillName(GuiGraphicsExtractor graphics) {

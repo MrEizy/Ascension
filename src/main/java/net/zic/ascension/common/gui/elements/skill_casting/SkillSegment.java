@@ -10,16 +10,11 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 
 public class SkillSegment extends RenderableElement {
-    private static final Identifier SEGMENT_TEXTURE = Identifier.fromNamespaceAndPath(
-            AscensionCraft.MOD_ID,
-            "textures/gui/overlay/skill_wheel_segment.png"
-    );
     private static final Identifier SELECTED_SEGMENT_TEXTURE = Identifier.fromNamespaceAndPath(
             AscensionCraft.MOD_ID,
             "textures/gui/overlay/skill_wheel_segment_selected.png"
     );
 
-    private static final ITextureData SEGMENT = new TextureData(SEGMENT_TEXTURE, 64, 32);
     private static final ITextureData SELECTED_SEGMENT = new TextureData(
             SELECTED_SEGMENT_TEXTURE,
             64,
@@ -49,19 +44,22 @@ public class SkillSegment extends RenderableElement {
 
     @Override
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        renderSegment(graphics);
+        renderSelectedSegment(graphics);
         renderSkillIcon(graphics);
     }
 
-    private void renderSegment(GuiGraphicsExtractor graphics) {
+    private void renderSelectedSegment(GuiGraphicsExtractor graphics) {
+        if (owner.getSelectedSlot() != slot) {
+            return;
+        }
+
         float rotation = (float) Math.toRadians(slot * owner.getSegmentDegrees());
-        ITextureData texture = owner.getSelectedSlot() == slot ? SELECTED_SEGMENT : SEGMENT;
 
         graphics.pose().pushMatrix();
         graphics.pose().translate(CENTER, CENTER);
         graphics.pose().rotate(rotation);
         graphics.pose().scale(SEGMENT_SCALE, SEGMENT_SCALE);
-        texture.renderAt(graphics, -32, -32);
+        SELECTED_SEGMENT.renderAt(graphics, -32, -32);
         graphics.pose().popMatrix();
     }
 

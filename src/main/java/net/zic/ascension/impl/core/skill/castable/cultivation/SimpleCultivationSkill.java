@@ -66,12 +66,14 @@ public record SimpleCultivationSkill(
 
     @Override
     public void continueCasting(LivingEntity caster, CastStatus castStatus, CastData castData, int ticksElapsed) {
+        if (caster.level().isClientSide()) {
+            return;
+        }
 
-        if(!caster.getData(ZenithAttachments.ACTION_MANAGER).isActive(AscensionSkillListener.skillCast)) {
+        if (!caster.getData(ZenithAttachments.ACTION_MANAGER).isActive(AscensionSkillListener.skillCast)) {
             castStatus.finish();
             return;
-        };
-        if(caster.level().isClientSide()) return;
+        }
 
         AscensionEntityDataHolder holder = caster.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
         if(holder == null) return;

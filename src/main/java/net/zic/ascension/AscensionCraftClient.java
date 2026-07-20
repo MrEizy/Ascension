@@ -17,6 +17,7 @@ import net.zic.ascension.client.keybind.ModKeybinds;
 import net.zic.ascension.client.keybind.TabletKeybindHandler;
 import net.zic.ascension.client.keybind.TabletScrollHandler;
 import net.zic.ascension.client.gui.AscensionHudOverlay;
+import net.zic.ascension.client.gui.SkillWheelOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 import net.zic.ascension.common.AscensionCreativeSections;
@@ -105,6 +106,7 @@ public class AscensionCraftClient {
         public static void onClientTick(net.neoforged.neoforge.client.event.ClientTickEvent.Post event) {
             TabletKeybindHandler.onClientTick(event);
             IntrospectionKeybindHandler.onClientTick(event);
+            SkillWheelOverlay.onClientTick();
         }
     }
 

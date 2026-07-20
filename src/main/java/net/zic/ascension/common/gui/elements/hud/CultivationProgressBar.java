@@ -16,6 +16,8 @@ import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
+import net.zic.ascension.skill_casting.AscensionSkillListener;
+import net.zic.zenithlib.common.ZenithAttachments;
 
 import java.util.Optional;
 
@@ -70,42 +72,36 @@ public class CultivationProgressBar extends RenderableElement {
     }
 
     private Optional<CultivationState> getState() {
-        return ClientAscensionData.getPlayer().flatMap(player ->
-                ClientAscensionData.getSkillCastHandler().flatMap(handler -> {
-                    Identifier castingSkillId = handler.getCastingSkill();
-                    if (castingSkillId == null) {
+        return ClientAscensionData.getPlayer().flatMap(player -> {
+            boolean castHeld = player.getData(ZenithAttachments.ACTION_MANAGER).isActive(AscensionSkillListener.skillCast);
+            if (!castHeld) {
+                return Optional.empty();
+            }
+
+            return ClientAscensionData.getSkillCastHandler().flatMap(handler -> {
+                Identifier castingSkillId = handler.getCastingSkill();
+                Identifier activeSkillId = castingSkillId != null ? castingSkillId : handler.getSkill(handler.getSelectedSlot());
+
+                if (activeSkillId == null) {
+                    return Optional.empty();
+                }
+
+                Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, activeSkillId, player.registryAccess());
+                if (!(skill instanceof SimpleCultivationSkill cultivationSkill)) {
+                    return Optional.empty();
+                }
+
+                return ClientAscensionData.getEntityData().flatMap(entityData -> {
+                    PathData pathData = entityData.getSource().getPathData(cultivationSkill.primaryPath());
+                    if (pathData == null) {
                         return Optional.empty();
                     }
 
-                    Skill skill = CoreRegistries.safeAccess(
-                            CoreRegistries.SKILL_REGISTRY,
-                            castingSkillId,
-                            player.registryAccess()
-                    );
-                    if (!(skill instanceof SimpleCultivationSkill cultivationSkill)) {
-                        return Optional.empty();
-                    }
-
-                    return ClientAscensionData.getEntityData().flatMap(entityData -> {
-                        PathData pathData = entityData.getSource().getPathData(cultivationSkill.primaryPath());
-                        if (pathData == null) {
-                            return Optional.empty();
-                        }
-
-                        double progress = resolveProgress(
-                                pathData,
-                                cultivationSkill.primaryPath(),
-                                entityData.isCultivationSuppressed(),
-                                player.registryAccess()
-                        );
-
-                        return Optional.of(new CultivationState(
-                                progress,
-                                resolveContent(cultivationSkill.primaryPath())
-                        ));
-                    });
-                })
-        );
+                    double progress = resolveProgress(pathData, cultivationSkill.primaryPath(), entityData.isCultivationSuppressed(), player.registryAccess());
+                    return Optional.of(new CultivationState(progress, resolveContent(cultivationSkill.primaryPath())));
+                });
+            });
+        });
     }
 
     private static double resolveProgress(
