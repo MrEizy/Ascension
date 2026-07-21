@@ -6,9 +6,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.core.skill.castable.PreCastData;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
+import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
 import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
 

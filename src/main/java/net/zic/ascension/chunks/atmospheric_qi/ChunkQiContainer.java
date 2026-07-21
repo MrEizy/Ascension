@@ -2,8 +2,6 @@ package net.zic.ascension.chunks.atmospheric_qi;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -11,22 +9,13 @@ import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.path.affinity.AffinityCategoryHolder;
-import net.zic.ascension.api.core.path.affinity.AffinityHolder;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.source.SourceChangesSnapshot;
+import net.zic.ascension.api.ascension.core.path.affinity.AffinityCategoryHolder;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
-import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
-import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Holds the qi of a chunk.

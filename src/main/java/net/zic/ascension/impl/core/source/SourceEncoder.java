@@ -6,7 +6,7 @@ import com.mojang.serialization.Encoder;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.TagValueOutput;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
 
 public class SourceEncoder implements Encoder<OriginSource> {
     @Override

@@ -5,18 +5,15 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.core.progression.ProgressDirection;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.impl.core.path.MajorRealmDefinition;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
 import net.zic.ascension.impl.core.path.simple.SimplePathData;
 import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class FoundationPathData extends SimplePathData {
     public FoundationPathData(Identifier path) {

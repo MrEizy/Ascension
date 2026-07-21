@@ -10,12 +10,9 @@ import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
-import net.zic.ascension.api.core.source.OriginSource;
-
-import java.util.Collection;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 
 public class AffinityCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> build() {
@@ -36,7 +33,7 @@ public class AffinityCommand {
         var players = EntityArgument.getPlayers(context, "target");
         Identifier category = IdentifierArgument.getId(context, "category");
         for(ServerPlayer player : players){
-            AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+            AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(holder == null) continue;
             AscensionEntityData data = holder.getData(player);
             player.sendSystemMessage(Component.literal("===Affinities ("+category+") (").append(player.getName()).append(Component.literal(")===")));
@@ -51,7 +48,7 @@ public class AffinityCommand {
         var players = EntityArgument.getPlayers(context, "target");
 
         for(ServerPlayer player : players){
-            AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+            AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(holder == null) continue;
             AscensionEntityData data = holder.getData(player);
             player.sendSystemMessage(Component.literal("===Affinities (").append(player.getName()).append(Component.literal(")===")));

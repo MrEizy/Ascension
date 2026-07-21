@@ -5,13 +5,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.NeoForge;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.skill.castable.CastData;
-import net.zic.ascension.api.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.core.skill.castable.PreCastData;
-import net.zic.ascension.api.core.skill.castable.data.CastResult;
-import net.zic.ascension.api.core.skill.castable.data.CastStatus;
-import net.zic.ascension.api.core.skill.castable.data.CastType;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.skill.castable.CastData;
+import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
+import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 public class CastingInstance {

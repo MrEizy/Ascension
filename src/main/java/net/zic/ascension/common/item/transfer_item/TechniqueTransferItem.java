@@ -9,11 +9,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.technique.Technique;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
 public class TechniqueTransferItem  extends Item {
@@ -37,7 +37,7 @@ public class TechniqueTransferItem  extends Item {
             return InteractionResult.FAIL;
         }
 
-        AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
 
         if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData(player).getSource();

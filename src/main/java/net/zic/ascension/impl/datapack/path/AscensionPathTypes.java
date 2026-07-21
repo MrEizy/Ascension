@@ -4,8 +4,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.datapack.TypeRegistries;
-import net.zic.ascension.api.datapack.path.PathType;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.path.PathType;
 
 public class AscensionPathTypes {
     public static final DeferredRegister<PathType> PATH_TYPES =

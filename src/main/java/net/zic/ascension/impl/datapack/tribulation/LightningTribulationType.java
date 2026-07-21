@@ -5,12 +5,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.tribulation.TribulationData;
-import net.zic.ascension.api.core.tribulation.TribulationDefinition;
-import net.zic.ascension.api.core.tribulation.TribulationInstance;
-import net.zic.ascension.api.core.tribulation.TribulationManager;
-import net.zic.ascension.api.datapack.tribulation.TribulationType;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationInstance;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationManager;
+import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 import net.zic.ascension.impl.core.tribulation.LightningTribulationData;
 import net.zic.ascension.impl.core.tribulation.LightningTribulationDefinition;
 

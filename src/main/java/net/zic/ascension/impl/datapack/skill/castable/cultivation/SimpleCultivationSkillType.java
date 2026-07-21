@@ -5,14 +5,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.core.skill.Skill;
-import net.zic.ascension.api.core.skill.SkillData;
-import net.zic.ascension.api.datapack.skill.SkillType;
-import net.zic.ascension.impl.core.skill.castable.DebugCastable;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
 
 import java.util.List;
-import java.util.UUID;
 
 public class SimpleCultivationSkillType extends SkillType {
     @Override

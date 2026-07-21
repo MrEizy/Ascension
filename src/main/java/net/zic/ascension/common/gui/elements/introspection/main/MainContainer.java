@@ -9,11 +9,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.bloodline.Bloodline;
-import net.zic.ascension.api.core.bloodline.BloodlineData;
-import net.zic.ascension.api.core.physique.Physique;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
+import net.zic.ascension.api.ascension.core.physique.Physique;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.info.DescriptionDisplayContainer;
 

@@ -2,7 +2,6 @@ package net.zic.ascension.handler;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageSource;
@@ -11,19 +10,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.capabilities.damage_provider.AscensionDamageSourceProvider;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
-import net.zic.ascension.api.core.path.PathEffectValueUtil;
-import net.zic.ascension.api.event.AscensionEntityDamagedEvents;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.capabilities.damage_provider.AscensionDamageSourceProvider;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.event.AscensionEntityDamagedEvents;
 import net.zic.ascension.util.AscensionDamageUtil;
 import net.zic.zenithlib.value_containers.ValueContainer;
 
@@ -81,7 +78,7 @@ public class AscensionDamageHandler {
 
         double attackerAffinity = 0;
 
-        AscensionEntityDataHolder holder = event.getSource().getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        AscensionEntityDataProvider holder = event.getSource().getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if(holder != null && event.getSource().getEntity() instanceof LivingEntity livingEntity){
 
             AscensionEntityData data = holder.getData(livingEntity);
@@ -93,7 +90,7 @@ public class AscensionDamageHandler {
         }
         System.out.println("attacker affinity :" +attackerAffinity);
         double defenderAffinity = 0;
-        AscensionEntityDataHolder defenderHolder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        AscensionEntityDataProvider defenderHolder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
 
         if(defenderHolder != null && event.getEntity() instanceof LivingEntity livingEntity){
             attackerAffinity = AscensionDamageUtil.getFinalAttackerAffinity(attackerAffinity,livingEntity,finalDamageSource.path);

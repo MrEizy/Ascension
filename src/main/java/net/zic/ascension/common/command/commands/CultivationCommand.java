@@ -14,14 +14,14 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.entity.player.Player;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.core.path.PathData;
-import net.zic.ascension.api.core.path.Realm;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.path.Realm;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 
@@ -67,7 +67,7 @@ public class CultivationCommand {
     private static int toggleSuppressed(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var players = EntityArgument.getPlayers(context, "target");
         for (ServerPlayer player : players) {
-            AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+            AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(holder == null) continue;
             holder.getData(player).setCultivationSuppressed(!holder.getData(player).isCultivationSuppressed());
             player.sendSystemMessage(Component.literal("Cultivation Suppressed : "+holder.getData(player).isCultivationSuppressed()));
@@ -86,7 +86,7 @@ public class CultivationCommand {
         Player player = context.getSource().getPlayer();
 
         for(ServerPlayer target : players) {
-            AscensionEntityDataHolder holder = target.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+            AscensionEntityDataProvider holder = target.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(holder == null) continue;
             player.sendSystemMessage(Component.literal("==="+target.getDisplayName().getString()+"==="));
 
@@ -155,7 +155,7 @@ public class CultivationCommand {
                                                      int progressPercent,
                                                      CommandSourceStack source) {
         try {
-            AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+            AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(holder == null){
                 source.sendFailure(Component.literal(
                         player.getName().getString() + " is missing an entity data holder"));

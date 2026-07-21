@@ -4,9 +4,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 
-import net.zic.ascension.api.datapack.progresison.ProgressActionConditionType;
+import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
 import net.zic.ascension.impl.core.path.foundation.foundation_change.condition.EveryFoundationRealmCondition;
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMajorRealmCondition;
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMinorRealmCondition;

@@ -6,19 +6,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.progression.ProgressDirection;
-import net.zic.ascension.api.core.bloodline.Bloodline;
-import net.zic.ascension.api.core.bloodline.BloodlineData;
-import net.zic.ascension.api.core.progression.ProgressActionHolder;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
+import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class SimpleBloodline implements Bloodline {

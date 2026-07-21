@@ -21,9 +21,9 @@ import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.configuration.biome.BiomeConfiguration;
 import net.zic.ascension.configuration.biome.BiomeConfigurations;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
@@ -86,7 +86,7 @@ public class ChunkHandler {
         if(!event.didChunkChange()) return;
         if(!(event.getEntity() instanceof LivingEntity entity)) return;
 
-        AscensionEntityDataHolder holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY, null);
+        AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY, null);
         if(holder == null) return;
 
         AscensionEntityData data = holder.getData(entity);
@@ -122,7 +122,7 @@ public class ChunkHandler {
         if(!(event.getEntity() instanceof LivingEntity entity)) return;
 
 
-        AscensionEntityDataHolder holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY, null);
+        AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY, null);
         if(holder == null) return;
 
         AscensionEntityData data = holder.getData(entity);
@@ -145,7 +145,7 @@ public class ChunkHandler {
     @SubscribeEvent
     public static void onLeaveLevel(EntityLeaveLevelEvent event){
         if(!(event.getEntity() instanceof LivingEntity entity)) return;
-        AscensionEntityDataHolder holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY, null);
+        AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY, null);
         if(holder == null) return;
 
         AscensionEntityData data = holder.getData(entity);

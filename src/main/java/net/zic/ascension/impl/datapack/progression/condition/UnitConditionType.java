@@ -2,8 +2,8 @@ package net.zic.ascension.impl.datapack.progression.condition;
 
 
 import com.mojang.serialization.MapCodec;
-import net.zic.ascension.api.core.progression.ProgressActionCondition;
-import net.zic.ascension.api.datapack.progresison.ProgressActionConditionType;
+import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
+import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
 
 import java.util.function.Supplier;
 

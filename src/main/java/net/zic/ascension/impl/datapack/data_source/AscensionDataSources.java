@@ -4,10 +4,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.datapack.TypeRegistries;
-import net.zic.ascension.api.datapack.data_source.DataSourceType;
-import net.zic.ascension.api.datapack.technique.TechniqueType;
-import net.zic.ascension.impl.datapack.technique.SimpleTechniqueType;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.data_source.DataSourceType;
 import net.zic.ascension.skill_manual.SkillManualSource;
 
 public class AscensionDataSources {

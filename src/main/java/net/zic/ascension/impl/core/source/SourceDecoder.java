@@ -5,7 +5,7 @@ import com.mojang.serialization.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
 
 
 public class SourceDecoder implements Decoder<OriginSource> {

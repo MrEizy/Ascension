@@ -7,11 +7,11 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.core.data_source.DataSource;
-import net.zic.ascension.api.core.data_source.DataSourceInstance;
-import net.zic.ascension.api.core.data_source.LoadOrder;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.datapack.data_source.DataSourceType;
+import net.zic.ascension.api.ascension.core.data_source.DataSource;
+import net.zic.ascension.api.ascension.core.data_source.DataSourceInstance;
+import net.zic.ascension.api.ascension.core.data_source.LoadOrder;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.datapack.data_source.DataSourceType;
 import net.zic.ascension.impl.datapack.data_source.AscensionDataSources;
 
 public class SkillManualSource implements DataSource {

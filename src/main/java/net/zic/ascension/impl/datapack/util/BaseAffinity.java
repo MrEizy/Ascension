@@ -3,12 +3,8 @@ package net.zic.ascension.impl.datapack.util;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.path.PathEffectValueUtil;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;

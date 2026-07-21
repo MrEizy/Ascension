@@ -1,6 +1,5 @@
 package net.zic.ascension.common.item.transfer_item;
 
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
@@ -10,11 +9,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.bloodline.Bloodline;
-import net.zic.ascension.api.core.bloodline.BloodlineData;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
 public class BloodlineTransferItem extends Item {
@@ -38,7 +37,7 @@ public class BloodlineTransferItem extends Item {
         data.setPurity(purity);
         if(targetBloodline == null)return InteractionResult.FAIL;
 
-        AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
 
         if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
 

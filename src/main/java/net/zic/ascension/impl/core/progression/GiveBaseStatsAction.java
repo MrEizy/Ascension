@@ -1,11 +1,11 @@
 package net.zic.ascension.impl.core.progression;
 
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.core.RegistryObjectData;
-import net.zic.ascension.api.core.progression.ProgressDirection;
-import net.zic.ascension.api.core.progression.ProgressAction;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.datapack.progresison.ProgressActionType;
+import net.zic.ascension.api.ascension.core.RegistryObjectData;
+import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.ascension.core.progression.ProgressAction;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.value_containers.ValueContainer;

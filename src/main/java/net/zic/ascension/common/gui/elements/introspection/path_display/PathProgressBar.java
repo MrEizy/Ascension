@@ -7,7 +7,7 @@ import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.path.PathData;
+import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 
 public class PathProgressBar extends RenderableElement {

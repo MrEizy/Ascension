@@ -2,11 +2,11 @@ package net.zic.ascension.common.gui.data;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.capabilities.EntityQiProvider;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
@@ -22,8 +22,8 @@ public final class ClientAscensionData {
 
     public static Optional<AscensionEntityData> getEntityData() {
         return getPlayer().flatMap(player -> {
-            AscensionEntityDataHolder holder = player.getCapability(
-                    CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+            AscensionEntityDataProvider holder = player.getCapability(
+                    CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
             );
             if (holder == null) {
                 return Optional.empty();

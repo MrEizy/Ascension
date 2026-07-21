@@ -8,10 +8,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.capabilities.AscensionCapabilities;
-import net.zic.ascension.capabilities.entity_holder.PlayerDataHolder;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
 public class PhysiqueTransferItem extends Item {
@@ -31,7 +29,7 @@ public class PhysiqueTransferItem extends Item {
 
         if(targetPhysique == null)return InteractionResult.FAIL;
 
-        AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
 
         if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
 

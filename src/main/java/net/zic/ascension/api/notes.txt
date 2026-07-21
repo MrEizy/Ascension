@@ -1,0 +1,19 @@
+API remake notes.
+
+I will be splitting it into 2 sections:
+
+Section 1:
+For now I will call this RPG engine, this will be a very simple set of API that build the backbone of ascension, and any future
+RPG esc mod I or the team will make.
+
+this will be done through an origin source, which holds a StatSheet, and then holds a map of Data Sources (kinda like data attachments)
+
+for example in the ascension implementation A data source would be PhysiqueHolder, BloodlineHolder, PathHolder and SkillHolder.
+
+This API will have very little logic concerned with how the origin source interacts with entities, that should all mostly be handled by the implementation
+
+Section 2:
+This will be the ascension specific stuff, mostly the different Holders as data sources, then reworking How OriginSources are stored/accessed.
+I will also modify how Attributes scale of stats in ZenithLib(
+    an entity can have multiple stat sources, and when a stat source is updated we need to recalculate our attributes)
+I will also create a class called AscensionOriginSource, or something similar, that auto handles ascension specific data sources

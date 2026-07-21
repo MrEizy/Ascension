@@ -13,13 +13,13 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.bloodline.Bloodline;
-import net.zic.ascension.api.core.physique.Physique;
-import net.zic.ascension.api.core.skill.Skill;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.physique.Physique;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
 import net.zic.ascension.common.starter.StarterSelectionManager;
 
 import java.util.*;
@@ -216,7 +216,7 @@ public class  SourceHandler extends SavedData {
 
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
-        AscensionEntityDataHolder holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        AscensionEntityDataProvider holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if(holder == null) return;
 
         holder.getData(event.getEntity()).initialize();
@@ -230,7 +230,7 @@ public class  SourceHandler extends SavedData {
     }
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event){
-        AscensionEntityDataHolder holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        AscensionEntityDataProvider holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if(holder == null) return;
 
         AscensionCraft.getSourceHandler().addWatcher(event.getEntity(),holder.getData(event.getEntity()).getSource());

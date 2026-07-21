@@ -4,16 +4,13 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.data_source.DataSource;
-import net.zic.ascension.api.core.data_source.DataSourceInstance;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.data_source.DataSourceInstance;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.skill_casting.SkillCastEvent;
 
-import java.rmi.registry.Registry;
-import java.util.HashMap;
 import java.util.HashSet;
 
 @EventBusSubscriber
@@ -31,7 +28,7 @@ public class SkillManualLevelingHandler {
 
     @SubscribeEvent
     private static void onSkillCast(SkillCastEvent event){
-        AscensionEntityDataHolder holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        AscensionEntityDataProvider holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if(holder == null) return;
         AscensionEntityData data = holder.getData(event.getEntity());
         if(data == null) return;

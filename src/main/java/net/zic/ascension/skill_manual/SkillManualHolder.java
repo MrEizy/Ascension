@@ -4,10 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.core.data_source.DataSourceInstance;
-import net.zic.ascension.skill_manual.manual.SkillManual;
-
-import java.util.ArrayList;
+import net.zic.ascension.api.ascension.core.data_source.DataSourceInstance;
 
 public class SkillManualHolder implements DataSourceInstance {
 

@@ -3,7 +3,7 @@ package net.zic.ascension.util;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.path.PathEffectValueUtil;
+import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 
 public class AscensionDamageUtil {
     public static final Identifier DAMAGE_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"damage");

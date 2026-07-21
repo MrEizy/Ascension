@@ -9,9 +9,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.zenithlib.network.ByteBufHelpers;
@@ -53,8 +53,8 @@ public record UpdateAttributeSuppressionPacket(
                 return;
             }
 
-            AscensionEntityDataHolder holder = player.getCapability(
-                    CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+            AscensionEntityDataProvider holder = player.getCapability(
+                    CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
             );
 
             if (holder == null) {

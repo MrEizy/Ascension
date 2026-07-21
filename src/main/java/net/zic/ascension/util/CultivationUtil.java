@@ -3,12 +3,12 @@ package net.zic.ascension.util;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.core.path.PathData;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.technique.Technique;
-import net.zic.ascension.api.core.technique.TechniqueData;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 

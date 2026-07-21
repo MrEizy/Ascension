@@ -6,12 +6,12 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.core.path.PathData;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 import net.zic.zenithlib.stats.Stat;
@@ -25,7 +25,7 @@ public class StatDisplayCommand {
                         .executes(context -> {
                             ServerPlayer player = context.getSource().getPlayerOrException();
 
-                            AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+                            AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
                             if(holder == null) return 0;
                             AscensionEntityData data = holder.getData(player);
                             player.sendSystemMessage(Component.literal("===Stats==="));
