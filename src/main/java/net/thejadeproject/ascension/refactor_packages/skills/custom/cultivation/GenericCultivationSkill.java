@@ -147,27 +147,47 @@ public class GenericCultivationSkill implements ICastableSkill {
         return new CastResult(CastResult.Type.SUCCESS);
     }
 
-    protected double getEffectiveRate(Entity caster) {
-        return baseRate;
+    private GenericCultivationSkillData getCultivationSkillData(Entity caster) {
+        IEntityData entityData = caster.getData(ModAttachments.ENTITY_DATA);
+        ResourceLocation skillId = AscensionRegistries.Skills.SKILL_REGISTRY.getKey(this);
+
+        if (skillId == null) {
+            return null;
+        }
+
+        IPersistentSkillData rawData = entityData.getSkillData(skillId);
+
+        if (rawData instanceof GenericCultivationSkillData cultivationData) {
+            return cultivationData;
+        }
+
+        return null;
     }
 
     @Override
     public boolean continueCasting(int ticksElapsed, Entity caster, ICastData castData) {
         if(!caster.hasData(ModAttachments.INPUT_STATES)) return false;
 
-        if(!caster.level().isClientSide()){
+        if (!caster.level().isClientSide()) {
+            IEntityData entityData = caster.getData(ModAttachments.ENTITY_DATA);
+            IPathData pathData = entityData.getPathData(path);
 
-            //System.out.println("Player is trying to cultivate");
-            IPathData pathData = caster.getData(ModAttachments.ENTITY_DATA).getPathData(path);
-
-            if (pathData == null || pathData.getCurrentTechniqueId() == null) return false;
+            if (pathData == null || pathData.getCurrentTechniqueId() == null) {
+                return false;
+            }
 
             ITechnique technique = pathData.getCurrentTechnique();
-            if (technique == null) return false;
-            double amount = getEffectiveRate(caster);
 
-            CultivationUtil.tryCultivate(caster,path, List.of(),amount);
+            if (technique == null) {
+                return false;
+            }
 
+            GenericCultivationSkillData cultivationData = getCultivationSkillData(caster);
+
+            double amount = cultivationData != null ? cultivationData.getBaseRate() : baseRate;
+            List<ResourceLocation> attributedPaths = cultivationData != null ? List.copyOf(cultivationData.getSecondaryPaths()) : List.of();
+
+            CultivationUtil.tryCultivate(caster, path, attributedPaths, amount);
         }
 
         return caster.getData(ModAttachments.INPUT_STATES).isHeld("skill_cast");

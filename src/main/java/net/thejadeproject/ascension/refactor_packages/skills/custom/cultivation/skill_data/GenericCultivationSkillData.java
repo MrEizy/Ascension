@@ -8,6 +8,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.thejadeproject.ascension.refactor_packages.skills.IPersistentSkillData;
 import net.thejadeproject.ascension.refactor_packages.skills.custom.cultivation.GenericCultivationSkill;
+import net.thejadeproject.ascension.refactor_packages.util.ByteBufUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,11 +18,11 @@ public class GenericCultivationSkillData implements IPersistentSkillData {
     private double baseRate;
     private Set<ResourceLocation> secondaryPaths;
 
-    public GenericCultivationSkillData(double baseRate, Set<ResourceLocation> secondaryPaths){
+    public GenericCultivationSkillData(double baseRate, Set<ResourceLocation> secondaryPaths) {
         this.baseRate = baseRate;
-
-        this.secondaryPaths = secondaryPaths;
+        this.secondaryPaths = secondaryPaths == null ? new HashSet<>() : new HashSet<>(secondaryPaths);
     }
+
     public GenericCultivationSkillData(CompoundTag tag){
         baseRate = tag.getDouble("base_rate");
 
@@ -32,9 +33,18 @@ public class GenericCultivationSkillData implements IPersistentSkillData {
         }
         this.secondaryPaths = secondaryPaths;
     }
-    public GenericCultivationSkillData(RegistryFriendlyByteBuf buf){
 
+    public GenericCultivationSkillData(RegistryFriendlyByteBuf buf) {
+        this.baseRate = buf.readDouble();
+
+        int pathCount = buf.readInt();
+        this.secondaryPaths = new HashSet<>();
+
+        for (int i = 0; i < pathCount; i++) {
+            this.secondaryPaths.add(ByteBufUtil.readResourceLocation(buf));
+        }
     }
+
     public double getBaseRate(){return baseRate;}
 
     public Set<ResourceLocation> getSecondaryPaths(){return secondaryPaths;}
@@ -55,16 +65,25 @@ public class GenericCultivationSkillData implements IPersistentSkillData {
 
     @Override
     public void encode(RegistryFriendlyByteBuf buf) {
+        buf.writeDouble(baseRate);
+        buf.writeInt(secondaryPaths.size());
 
+        for (ResourceLocation secondaryPath : secondaryPaths) {
+            ByteBufUtil.encodeString(buf, secondaryPath.toString());
+        }
     }
 
     @Override
     public IPersistentSkillData copy() {
-        return null;
+        return new GenericCultivationSkillData(baseRate, secondaryPaths);
     }
 
     @Override
     public IPersistentSkillData merge(IPersistentSkillData other) {
-        return null;
+        if (other instanceof GenericCultivationSkillData otherData) {
+            return otherData.copy();
+        }
+
+        return copy();
     }
 }
