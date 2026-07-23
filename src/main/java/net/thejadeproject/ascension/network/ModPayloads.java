@@ -8,6 +8,7 @@ import net.thejadeproject.ascension.network.serverBound.SoulboundPactScrollPacke
 import net.thejadeproject.ascension.network.serverBound.ToggleTabletDropModePayload;
 import net.thejadeproject.ascension.refactor_packages.network.client_bound.entity_data.SyncCultivationSuppressed;
 import net.thejadeproject.ascension.refactor_packages.network.client_bound.entity_data.bloodline.SyncBloodline;
+import net.thejadeproject.ascension.refactor_packages.network.client_bound.entity_data.path_data.RemovePathData;
 import net.thejadeproject.ascension.refactor_packages.network.client_bound.entity_data.qi.SyncQi;
 import net.thejadeproject.ascension.refactor_packages.network.client_bound.herb_pouch.SyncHerbPouchPayload;
 import net.thejadeproject.ascension.refactor_packages.network.client_bound.mob_culti.SyncMobCultivation;
@@ -73,6 +74,13 @@ public class ModPayloads {
                 SyncPathData.STREAM_CODEC,
                 SyncPathData::handlePayload
         );
+
+        registrar.playToClient(
+                RemovePathData.TYPE,
+                RemovePathData.STREAM_CODEC,
+                RemovePathData::handlePayload
+        );
+
         registrar.playToClient(
                 SyncAttributeHolder.TYPE,
                 SyncAttributeHolder.STREAM_CODEC,

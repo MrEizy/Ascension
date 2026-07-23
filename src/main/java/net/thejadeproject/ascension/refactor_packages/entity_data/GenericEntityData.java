@@ -35,6 +35,7 @@ import net.thejadeproject.ascension.refactor_packages.network.client_bound.entit
 import net.thejadeproject.ascension.refactor_packages.network.client_bound.entity_data.attributes.SyncAttributeHolder;
 import net.thejadeproject.ascension.refactor_packages.network.client_bound.entity_data.attributes.SyncCurrentHealth;
 import net.thejadeproject.ascension.refactor_packages.network.client_bound.entity_data.bloodline.SyncBloodline;
+import net.thejadeproject.ascension.refactor_packages.network.client_bound.entity_data.path_data.RemovePathData;
 import net.thejadeproject.ascension.refactor_packages.network.client_bound.entity_data.path_data.SyncPathData;
 import net.thejadeproject.ascension.refactor_packages.network.client_bound.entity_data.physique.SyncPhysique;
 import net.thejadeproject.ascension.refactor_packages.network.client_bound.entity_data.skills.SyncHeldSkills;
@@ -555,6 +556,11 @@ public class GenericEntityData implements IEntityData {
         }
     }
 
+    @Override
+    public void clearPathForm(ResourceLocation path) {
+        pathDataLocation.remove(path);
+    }
+
     //============================ PHYSIQUE HANDLING =======================================
     @Override
     public boolean setPhysique(ResourceLocation physique) {
@@ -987,8 +993,8 @@ public class GenericEntityData implements IEntityData {
         formData.removePathData(path);
         pathDataLocation.remove(path);
 
-        if(getAttachedEntity() instanceof ServerPlayer serverPlayer && serverPlayer.connection != null) {
-            PacketDistributor.sendToPlayer(serverPlayer, new SyncEntityForm(formData));
+        if (getAttachedEntity() instanceof ServerPlayer serverPlayer && serverPlayer.connection != null) {
+            PacketDistributor.sendToPlayer(serverPlayer, new RemovePathData(form, path));
         }
     }
 

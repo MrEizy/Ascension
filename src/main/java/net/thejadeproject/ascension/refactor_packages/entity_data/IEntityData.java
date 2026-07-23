@@ -65,6 +65,7 @@ public interface IEntityData {
     //should only be used during sync
     void setFormData(ResourceLocation form,IEntityFormData formData);
 
+    void clearPathForm(ResourceLocation path);
 
     //============================ PHYSIQUE HANDLING =======================================
     boolean setPhysique(ResourceLocation physique);

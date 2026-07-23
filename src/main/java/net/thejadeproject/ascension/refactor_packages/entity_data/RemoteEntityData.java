@@ -137,6 +137,11 @@ public class RemoteEntityData implements IEntityData{
     }
 
     @Override
+    public void clearPathForm(ResourceLocation path) {
+        EntityDataManager.getEntityData(getWatchedEntityData()).clearPathForm(path);
+    }
+
+    @Override
     public boolean setPhysique(ResourceLocation physique) {
         return EntityDataManager.getEntityData(getWatchedEntityData()).setPhysique(physique);
     }
