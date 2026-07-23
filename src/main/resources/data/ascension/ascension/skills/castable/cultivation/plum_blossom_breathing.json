@@ -11,5 +11,38 @@
     "ascension:weapon/sword",
     "ascension:elemental/wood"
   ],
-  "rate": 2
+  "rate": 2,
+  "particle_field": {
+    "style": "spiral",
+    "particles": [
+      {
+        "type": "spark",
+        "weight": 4
+      },
+      {
+        "type": "mote",
+        "weight": 4
+      },
+      {
+        "type": "wisp",
+        "weight": 2
+      },
+      {
+        "type": "blob",
+        "weight": 1
+      }
+    ],
+    "colours": [
+      "#F28EB7",
+      "#FFD6E5",
+      "#A7D98B"
+    ],
+    "density": 44,
+    "radius": {"min": 1.1, "max": 2.6},
+    "height": {"min": -0.15, "max": 2.3},
+    "speed": {"min": 0.032, "max": 0.066},
+    "size": {"min": 0.065, "max": 0.16},
+    "lifetime": {"min": 26, "max": 48},
+    "full_bright": true
+  }
 }

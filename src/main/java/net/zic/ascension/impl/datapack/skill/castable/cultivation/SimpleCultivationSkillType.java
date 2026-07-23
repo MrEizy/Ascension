@@ -7,12 +7,11 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
 import net.zic.ascension.api.datapack.skill.SkillType;
-import net.zic.ascension.impl.core.skill.castable.DebugCastable;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
 
 import java.util.List;
-import java.util.UUID;
 
 public class SimpleCultivationSkillType extends SkillType {
     @Override
@@ -23,7 +22,8 @@ public class SimpleCultivationSkillType extends SkillType {
                         ComponentSerialization.CODEC.fieldOf("description").forGetter(SimpleCultivationSkill::description),
                         Identifier.CODEC.fieldOf("path").forGetter(SimpleCultivationSkill::primaryPath),
                         Identifier.CODEC.listOf().optionalFieldOf("secondary_paths", List.of()).forGetter(SimpleCultivationSkill::secondaryPaths),
-                        Codec.DOUBLE.fieldOf("rate").forGetter(SimpleCultivationSkill::baseRate)
+                        Codec.DOUBLE.fieldOf("rate").forGetter(SimpleCultivationSkill::baseRate),
+                        ParticleFieldDefinition.CODEC.optionalFieldOf("particle_field").forGetter(SimpleCultivationSkill::particleField)
                 ).apply(instance, SimpleCultivationSkill::new)
         );
     }

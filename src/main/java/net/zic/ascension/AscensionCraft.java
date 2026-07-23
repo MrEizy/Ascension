@@ -8,7 +8,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -17,6 +16,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.api.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.item.ModItems;
+import net.zic.ascension.common.particle.AscensionParticles;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
@@ -82,6 +82,7 @@ public class AscensionCraft {
         AscensionPhysiqueTypes.register(modEventBus);
         AscensionAttachments.register(modEventBus);
         AscensionComponents.register(modEventBus);
+        AscensionParticles.register(modEventBus);
         ModItems.register(modEventBus);
 
         ModCreativeModeTabs.register(modEventBus);

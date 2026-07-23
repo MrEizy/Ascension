@@ -1,6 +1,5 @@
 package net.zic.ascension;
 
-import net.minecraft.client.particle.SingleQuadParticle;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -13,6 +12,8 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.zic.ascension.client.keybind.IntrospectionKeybindHandler;
+import net.zic.ascension.client.particle.ParticleFieldController;
+import net.zic.ascension.client.particle.ParticleFieldParticle;
 import net.zic.ascension.client.keybind.ModKeybinds;
 import net.zic.ascension.client.keybind.TabletKeybindHandler;
 import net.zic.ascension.client.keybind.TabletScrollHandler;
@@ -21,6 +22,8 @@ import net.zic.ascension.client.gui.SkillWheelOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 import net.zic.ascension.common.AscensionCreativeSections;
+import net.zic.ascension.common.particle.AscensionParticles;
+import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldParticleKind;
 
 
 @Mod(value = AscensionCraft.MOD_ID,dist = Dist.CLIENT)
@@ -58,7 +61,22 @@ public class AscensionCraftClient {
 
         @SubscribeEvent
         public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
-
+            event.registerSpriteSet(
+                    AscensionParticles.PARTICLE_FIELD_SPARK.get(),
+                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.SPARK, sprites)
+            );
+            event.registerSpriteSet(
+                    AscensionParticles.PARTICLE_FIELD_WISP.get(),
+                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.WISP, sprites)
+            );
+            event.registerSpriteSet(
+                    AscensionParticles.PARTICLE_FIELD_BLOB.get(),
+                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.BLOB, sprites)
+            );
+            event.registerSpriteSet(
+                    AscensionParticles.PARTICLE_FIELD_MOTE.get(),
+                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.MOTE, sprites)
+            );
         }
 
         @SubscribeEvent
@@ -107,6 +125,7 @@ public class AscensionCraftClient {
             TabletKeybindHandler.onClientTick(event);
             IntrospectionKeybindHandler.onClientTick(event);
             SkillWheelOverlay.onClientTick();
+            ParticleFieldController.tick();
         }
     }
 
