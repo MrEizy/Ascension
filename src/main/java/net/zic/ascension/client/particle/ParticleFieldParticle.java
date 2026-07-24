@@ -27,6 +27,7 @@ public class ParticleFieldParticle extends SingleQuadParticle {
     private final double flowSpeed;
     private final double orbitDirection;
     private final double initialRadius;
+    private final double initialAngle;
     private final boolean fullBright;
     private final float baseAlpha;
     private final float baseSize;
@@ -67,6 +68,7 @@ public class ParticleFieldParticle extends SingleQuadParticle {
         this.flowSpeed = flowSpeed;
         this.orbitDirection = orbitDirection;
         this.initialRadius = Math.max(0.1D, Math.sqrt((x - centerX) * (x - centerX) + (z - centerZ) * (z - centerZ)));
+        this.initialAngle = Math.atan2(z - centerZ, x - centerX);
         this.fullBright = fullBright;
         this.baseAlpha = 0.58F + random.nextFloat() * 0.24F;
         this.baseSize = size;
@@ -151,6 +153,8 @@ public class ParticleFieldParticle extends SingleQuadParticle {
             case RISING -> tickRising(center, progress);
             case INWARD_FLOW -> tickInwardFlow(center, progress);
             case SPIRAL -> tickSpiral(center, progress);
+            case MERIDIAN_FLOW -> tickMeridianFlow(center, progress);
+            case GATHERING_RING -> tickGatheringRing(center, progress);
         }
 
         this.oRoll = this.roll;
@@ -220,6 +224,68 @@ public class ParticleFieldParticle extends SingleQuadParticle {
         );
         steer(desiredX, desiredY, desiredZ, 0.24D);
         this.quadSize = this.baseSize * (0.92F - progress * 0.16F);
+    }
+
+    private void tickMeridianFlow(Center center, float progress) {
+        double dx = center.x() - this.x;
+        double dz = center.z() - this.z;
+        double horizontalLength = Math.max(0.001D, Math.sqrt(dx * dx + dz * dz));
+        double tangentX = -dz / horizontalLength * orbitDirection;
+        double tangentZ = dx / horizontalLength * orbitDirection;
+        double laneRadius = 0.12D + 0.08D * (0.5D + 0.5D * Math.sin(initialAngle * 2.0D + progress * Math.PI * 2.0D));
+        double radialPull = Mth.clamp(
+                (horizontalLength - laneRadius) * 0.18D,
+                -flowSpeed * 0.85D,
+                flowSpeed * 1.05D
+        );
+        double laneY = center.y() + Math.sin(initialAngle + progress * Math.PI) * 0.16D;
+        double verticalCorrection = Mth.clamp(
+                (laneY - this.y) * 0.12D,
+                -flowSpeed * 0.55D,
+                flowSpeed * 0.75D
+        );
+        double tangentStrength = flowSpeed * (0.32D - progress * 0.1D);
+        double desiredX = dx / horizontalLength * radialPull + tangentX * tangentStrength;
+        double desiredY = flowSpeed * 0.12D + verticalCorrection;
+        double desiredZ = dz / horizontalLength * radialPull + tangentZ * tangentStrength;
+        steer(desiredX, desiredY, desiredZ, 0.28D);
+        this.quadSize = this.baseSize * (0.96F - progress * 0.2F);
+
+        if (horizontalLength < 0.18D && Math.abs(laneY - this.y) < 0.2D && this.age < this.lifetime - 7) {
+            this.age = this.lifetime - 7;
+        }
+    }
+
+    private void tickGatheringRing(Center center, float progress) {
+        double dx = this.x - center.x();
+        double dz = this.z - center.z();
+        double horizontalLength = Math.max(0.001D, Math.sqrt(dx * dx + dz * dz));
+        double radialX = dx / horizontalLength;
+        double radialZ = dz / horizontalLength;
+        double tangentX = -radialZ * orbitDirection;
+        double tangentZ = radialX * orbitDirection;
+        double targetRadius = Math.max(0.26D, initialRadius * (1.0D - progress * 0.52D));
+        double inwardBias = progress > 0.58F ? (progress - 0.58F) / 0.42F : 0.0D;
+        double radialCorrection = Mth.clamp(
+                (horizontalLength - targetRadius) * 0.11D + inwardBias * flowSpeed * 0.95D,
+                -flowSpeed * 0.55D,
+                flowSpeed * 1.05D
+        );
+        double ringY = center.y() - targetYOffset * 0.52D + progress * targetYOffset * 0.38D;
+        double verticalCorrection = Mth.clamp(
+                (ringY - this.y) * 0.08D,
+                -flowSpeed * 0.42D,
+                flowSpeed * 0.65D
+        );
+        double desiredX = tangentX * flowSpeed * 0.92D - radialX * radialCorrection;
+        double desiredY = flowSpeed * 0.18D + verticalCorrection;
+        double desiredZ = tangentZ * flowSpeed * 0.92D - radialZ * radialCorrection;
+        steer(desiredX, desiredY, desiredZ, 0.23D);
+        this.quadSize = this.baseSize * (0.94F - progress * 0.14F);
+
+        if (horizontalLength < 0.18D && progress > 0.72F && this.age < this.lifetime - 5) {
+            this.age = this.lifetime - 5;
+        }
     }
 
     private void steer(double desiredX, double desiredY, double desiredZ, double blend) {

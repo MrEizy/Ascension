@@ -5,18 +5,22 @@
   "path": "ascension:foundation/essence",
   "rate": 2,
   "particle_field": {
-    "style": "inward_flow",
+    "style": "meridian_flow",
     "particles": [
       {
-        "type": "wisp",
+        "type": "thread",
         "weight": 7
       },
       {
-        "type": "mote",
+        "type": "wisp",
         "weight": 4
       },
       {
-        "type": "spark",
+        "type": "mote",
+        "weight": 3
+      },
+      {
+        "type": "rune",
         "weight": 1
       }
     ],
@@ -25,11 +29,11 @@
       "#E8F8FF"
     ],
     "density": 20,
-    "radius": {"min": 0.6, "max": 1.45},
-    "height": {"min": -0.05, "max": 1.85},
-    "speed": {"min": 0.05, "max": 0.08},
-    "size": {"min": 0.04, "max": 0.105},
-    "lifetime": {"min": 18, "max": 31},
+    "radius": {"min": 0.42, "max": 1.05},
+    "height": {"min": 0.08, "max": 1.72},
+    "speed": {"min": 0.045, "max": 0.072},
+    "size": {"min": 0.04, "max": 0.1},
+    "lifetime": {"min": 18, "max": 30},
     "full_bright": true
   }
 }

@@ -8,7 +8,9 @@ import java.util.Locale;
 public enum ParticleFieldStyle {
     RISING("rising"),
     INWARD_FLOW("inward_flow"),
-    SPIRAL("spiral");
+    SPIRAL("spiral"),
+    MERIDIAN_FLOW("meridian_flow"),
+    GATHERING_RING("gathering_ring");
 
     public static final Codec<ParticleFieldStyle> CODEC =
             Codec.STRING.comapFlatMap(ParticleFieldStyle::decode, ParticleFieldStyle::serializedName);

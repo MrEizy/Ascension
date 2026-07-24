@@ -54,6 +54,9 @@ public final class ParticleFieldSyncManager {
 
     private static void sendNearby(ServerPlayer caster, Identifier skillId) {
         MinecraftServer server = caster.level().getServer();
+        if (server == null) {
+            return;
+        }
 
         ParticleFieldStatePacket packet = new ParticleFieldStatePacket(caster.getUUID(), skillId);
         for (ServerPlayer viewer : server.getPlayerList().getPlayers()) {
@@ -68,6 +71,9 @@ public final class ParticleFieldSyncManager {
 
     private static void sendStop(ServerPlayer caster) {
         MinecraftServer server = caster.level().getServer();
+        if (server == null) {
+            return;
+        }
 
         ParticleFieldStatePacket packet = new ParticleFieldStatePacket(caster.getUUID(), null);
         for (ServerPlayer viewer : server.getPlayerList().getPlayers()) {

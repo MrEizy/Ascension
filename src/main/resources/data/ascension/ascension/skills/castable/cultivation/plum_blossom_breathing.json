@@ -13,22 +13,26 @@
   ],
   "rate": 2,
   "particle_field": {
-    "style": "spiral",
+    "style": "gathering_ring",
     "particles": [
       {
-        "type": "wisp",
+        "type": "petal",
         "weight": 6
       },
       {
-        "type": "mote",
-        "weight": 4
+        "type": "thread",
+        "weight": 3
       },
       {
-        "type": "spark",
+        "type": "wisp",
+        "weight": 3
+      },
+      {
+        "type": "mote",
         "weight": 2
       },
       {
-        "type": "blob",
+        "type": "rune",
         "weight": 1
       }
     ],
@@ -37,10 +41,10 @@
       "#FFD6E5",
       "#A7D98B"
     ],
-    "density": 22,
-    "radius": {"min": 0.55, "max": 1.55},
-    "height": {"min": -0.05, "max": 1.9},
-    "speed": {"min": 0.045, "max": 0.072},
+    "density": 20,
+    "radius": {"min": 0.7, "max": 1.35},
+    "height": {"min": -0.02, "max": 1.7},
+    "speed": {"min": 0.043, "max": 0.068},
     "size": {"min": 0.04, "max": 0.11},
     "lifetime": {"min": 20, "max": 34},
     "full_bright": true

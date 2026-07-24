@@ -77,6 +77,18 @@ public class AscensionCraftClient {
                     AscensionParticles.PARTICLE_FIELD_MOTE.get(),
                     sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.MOTE, sprites)
             );
+            event.registerSpriteSet(
+                    AscensionParticles.PARTICLE_FIELD_PETAL.get(),
+                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.PETAL, sprites)
+            );
+            event.registerSpriteSet(
+                    AscensionParticles.PARTICLE_FIELD_RUNE.get(),
+                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.RUNE, sprites)
+            );
+            event.registerSpriteSet(
+                    AscensionParticles.PARTICLE_FIELD_THREAD.get(),
+                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.THREAD, sprites)
+            );
         }
 
         @SubscribeEvent

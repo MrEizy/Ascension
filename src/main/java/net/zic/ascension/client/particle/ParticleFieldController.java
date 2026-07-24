@@ -167,7 +167,7 @@ public final class ParticleFieldController {
     ) {
         RandomSource random = level.getRandom();
         SpawnPoint spawnPoint = spawnPoint(player, definition, random, state);
-        double targetYOffset = player.getBbHeight() * (0.46D + random.nextDouble() * 0.22D);
+        double targetYOffset = targetYOffset(player, definition.style(), random);
         double targetX = player.getX();
         double targetY = player.getY() + targetYOffset;
         double targetZ = player.getZ();
@@ -180,6 +180,7 @@ public final class ParticleFieldController {
                 targetX,
                 targetY,
                 targetZ,
+                targetYOffset,
                 speed,
                 spawnPoint.orbitDirection(),
                 random
@@ -215,6 +216,15 @@ public final class ParticleFieldController {
         if (particle != null) {
             Minecraft.getInstance().particleEngine.add(particle);
         }
+    }
+
+    private static double targetYOffset(Player player, ParticleFieldStyle style, RandomSource random) {
+        double height = player.getBbHeight();
+        return switch (style) {
+            case RISING, INWARD_FLOW, SPIRAL -> height * (0.46D + random.nextDouble() * 0.22D);
+            case MERIDIAN_FLOW -> height * (0.28D + random.nextDouble() * 0.48D);
+            case GATHERING_RING -> height * (0.38D + random.nextDouble() * 0.18D);
+        };
     }
 
     private static SpawnPoint spawnPoint(
@@ -263,6 +273,33 @@ public final class ParticleFieldController {
                 height = Mth.lerp(heightPhase, minHeight, maxHeight);
                 orbitDirection = 1.0D;
             }
+            case MERIDIAN_FLOW -> {
+                int streamCount = 6;
+                int stream = state.emissionSequence % streamCount;
+                angle = stream * TAU / streamCount
+                        + state.activeTicks * 0.032D
+                        + (random.nextDouble() - 0.5D) * 0.1D;
+                radius = Mth.lerp(
+                        0.36D + random.nextDouble() * 0.28D,
+                        minRadius,
+                        Math.max(minRadius, minRadius + (maxRadius - minRadius) * 0.45D)
+                );
+                double[] lanes = {0.16D, 0.28D, 0.44D, 0.58D, 0.72D, 0.84D};
+                double lane = lanes[stream % lanes.length] + (random.nextDouble() - 0.5D) * 0.06D;
+                height = Mth.lerp(Mth.clamp(lane, 0.0D, 1.0D), minHeight, maxHeight);
+                orbitDirection = (stream & 1) == 0 ? 1.0D : -1.0D;
+            }
+            case GATHERING_RING -> {
+                int streamCount = 7;
+                int stream = state.emissionSequence % streamCount;
+                angle = state.activeTicks * 0.085D
+                        + stream * TAU / streamCount
+                        + (random.nextDouble() - 0.5D) * 0.1D;
+                radius = Mth.lerp(0.8D + random.nextDouble() * 0.2D, minRadius, maxRadius);
+                double lowBand = 0.08D + random.nextDouble() * 0.18D;
+                height = Mth.lerp(lowBand, minHeight, maxHeight);
+                orbitDirection = 1.0D;
+            }
             default -> throw new IllegalStateException("Unexpected particle field style: " + definition.style());
         }
 
@@ -283,6 +320,7 @@ public final class ParticleFieldController {
             double centerX,
             double centerY,
             double centerZ,
+            double targetYOffset,
             double speed,
             double orbitDirection,
             RandomSource random
@@ -310,6 +348,16 @@ public final class ParticleFieldController {
                     tangentX * speed * 1.05D + dx / horizontalLength * speed * 0.14D,
                     speed * (0.32D + random.nextDouble() * 0.14D),
                     tangentZ * speed * 1.05D + dz / horizontalLength * speed * 0.14D
+            };
+            case MERIDIAN_FLOW -> new double[]{
+                    dx / fullLength * speed * 0.82D + tangentX * speed * 0.18D,
+                    dy / fullLength * speed * 0.42D + speed * 0.08D,
+                    dz / fullLength * speed * 0.82D + tangentZ * speed * 0.18D
+            };
+            case GATHERING_RING -> new double[]{
+                    tangentX * speed * 0.92D + dx / horizontalLength * speed * 0.12D,
+                    Math.max(0.0D, dy / Math.max(0.1D, targetYOffset)) * speed * 0.2D + speed * 0.12D,
+                    tangentZ * speed * 0.92D + dz / horizontalLength * speed * 0.12D
             };
         };
     }
