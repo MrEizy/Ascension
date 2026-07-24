@@ -13,6 +13,9 @@
 • Added Attribute Suppression in GUI
 • Added Attribute scaling using Stats
 • Starter Bloodline and Physique Selection
+• Simple and Watered down Mob Cultivation
+•
+•
 •
 •
 

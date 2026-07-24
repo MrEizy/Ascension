@@ -18,6 +18,7 @@ import net.zic.ascension.api.core.entity.AscensionEntityData;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.ServerOriginSource;
 import net.zic.ascension.api.core.source.SourceChangesSnapshot;
+import net.zic.ascension.impl.core.source.SourceHandler;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.starter.StarterSelectionStage;
 import net.zic.ascension.common.util.AscensionAttributes;
@@ -73,7 +74,10 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         this.source.setRegistryAccess(entity.registryAccess());
 
         if (!attachedEntity.level().isClientSide()) {
-            AscensionCraft.getSourceHandler().addWatcher(attachedEntity, source);
+            SourceHandler sourceHandler = AscensionCraft.getSourceHandler();
+            if (sourceHandler != null && !sourceHandler.isWatcher(attachedEntity)) {
+                sourceHandler.addWatcher(attachedEntity, source);
+            }
         }
     }
 
@@ -164,7 +168,15 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         initializeAttributes();
         applyAllAttributeSuppressions();
 
-        AscensionCraft.getSourceHandler().applyToWatcher(attachedEntity);
+        SourceHandler sourceHandler = AscensionCraft.getSourceHandler();
+        if (!attachedEntity.level().isClientSide() && sourceHandler != null) {
+            if (!sourceHandler.isWatcher(attachedEntity)) {
+                sourceHandler.addWatcher(attachedEntity, source);
+            } else {
+                sourceHandler.changeWatcherState(attachedEntity, true);
+            }
+            sourceHandler.applyToWatcher(attachedEntity);
+        }
 
         if (!attachedEntity.level().isClientSide()) {
             snapshot = null;

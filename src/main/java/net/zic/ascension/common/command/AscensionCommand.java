@@ -5,6 +5,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
 import net.zic.ascension.common.command.commands.*;
+import net.zic.ascension.mob_cultivation.MobCultivationCommands;
 
 public class AscensionCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -33,6 +34,7 @@ public class AscensionCommand {
                 .then(ChunkCommand.build())
                 .then(AffinityCommand.build())
                 .then(AscensionGive.build())
+                .then(MobCultivationCommands.build())
 
 
         );

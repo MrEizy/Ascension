@@ -529,14 +529,19 @@ public class OriginSource {
 
 
         AscensionCraft.LOGGER.debug("Saving Physique");
-        try{
-            ValueOutput physiqueOutput = output.child("physique");
-            NbtHelpers.writeIdentifier(physiqueOutput,"id",getPhysique());
-            ValueOutput data = physiqueOutput.child("data");
-            if(getPhysiqueData() != null) getPhysiqueData().write(data);
-        }catch (Exception e){
-            AscensionCraft.LOGGER.error("error writing physique {}",getPhysique());
-            AscensionCraft.LOGGER.error("stacktrace: ",e);
+        Identifier physique = getPhysique();
+        if (physique != null) {
+            try {
+                ValueOutput physiqueOutput = output.child("physique");
+                NbtHelpers.writeIdentifier(physiqueOutput, "id", physique);
+                ValueOutput data = physiqueOutput.child("data");
+                if (getPhysiqueData() != null) {
+                    getPhysiqueData().write(data);
+                }
+            } catch (Exception e) {
+                AscensionCraft.LOGGER.error("error writing physique {}", physique);
+                AscensionCraft.LOGGER.error("stacktrace: ", e);
+            }
         }
         AscensionCraft.LOGGER.debug("Finished Saving Physique");
         AscensionCraft.LOGGER.debug("Saving Bloodlines");
@@ -694,21 +699,32 @@ public class OriginSource {
 
 
         AscensionCraft.LOGGER.debug("Reading Physique");
-        try{
-            ValueInput physiqueInput = input.child("physique").get();
-            Identifier id = NbtHelpers.readIdentifier(physiqueInput,"id");
+        Optional<ValueInput> physiqueInput = input.child("physique");
+        if (physiqueInput.isPresent()) {
+            String physiqueId = physiqueInput.get().getStringOr("id", "");
+            if (!physiqueId.isBlank()) {
+                try {
+                    Identifier id = Identifier.parse(physiqueId);
+                    Physique physique = CoreRegistries.safeAccess(
+                            CoreRegistries.PHYSIQUE_REGISTRY,
+                            id,
+                            getRegistryAccess()
+                    );
 
+                    if (physique != null) {
+                        Optional<ValueInput> data = physiqueInput.get().child("data");
+                        PhysiqueData physiqueData = data
+                                .map(valueInput -> physique.loadData(valueInput, getRegistryAccess()))
+                                .orElseGet(() -> physique.newData(getRegistryAccess()));
 
-            Optional<ValueInput> data = physiqueInput.child("data");
-            PhysiqueData physiqueData = data.map(valueInput -> CoreRegistries.PHYSIQUE_REGISTRY.get(getRegistryAccess()).getValue(id).loadData(valueInput,getRegistryAccess())).orElse(CoreRegistries.PHYSIQUE_REGISTRY.get(getRegistryAccess()).getValue(id).newData(getRegistryAccess()));
-
-            setPhysique(id,physiqueData);
-
-            AscensionCraft.LOGGER.info("Loaded physique {}",id);
-        }catch (Exception e){
-            AscensionCraft.LOGGER.error("error loading physique");
-            AscensionCraft.LOGGER.error("stacktrace : ",e);
-            //TODO set technique to default
+                        setPhysique(id, physiqueData);
+                        AscensionCraft.LOGGER.info("Loaded physique {}", id);
+                    }
+                } catch (Exception e) {
+                    AscensionCraft.LOGGER.error("error loading physique");
+                    AscensionCraft.LOGGER.error("stacktrace : ", e);
+                }
+            }
         }
         AscensionCraft.LOGGER.debug("Finished Reading Physique");
         AscensionCraft.LOGGER.debug("Reading Bloodlines");

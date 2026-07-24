@@ -15,6 +15,7 @@ import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.ServerOriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
+import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
 import java.util.function.Supplier;
@@ -43,6 +44,13 @@ public class AscensionAttachments {
     );
 
 
+    public static final Supplier<AttachmentType<MobCultivationData>> MOB_CULTIVATION_DATA = ATTACHMENT_TYPES.register(
+            "mob_cultivation_data", () -> AttachmentType.builder(holder -> new MobCultivationData())
+                    .serialize(new MobCultivationData.Provider())
+                    .build()
+    );
+
+
     public static final Supplier<AttachmentType<SkillCastHandler>> ASCENSION_SKILL_CAST_HANDLER = ATTACHMENT_TYPES.register(
             "ascension_skill_cast_handler",()->AttachmentType.builder(
                             (holder)->{
@@ -63,7 +71,6 @@ public class AscensionAttachments {
             "ascension_chunk_qi_container",()->AttachmentType.builder(
                 holder-> new ChunkQiContainer(0,0,0)
             )
-                    .sync(new ChunkQiContainer.SyncHandler())
                     .serialize(new ChunkQiContainer.Provider())
                     .build()
     );
