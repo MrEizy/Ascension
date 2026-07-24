@@ -16,6 +16,7 @@ import net.zic.ascension.api.core.skill.castable.PreCastData;
 import net.zic.ascension.api.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.core.skill.castable.data.CastType;
+import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
@@ -26,13 +27,15 @@ import net.zic.ascension.skill_casting.AscensionSkillListener;
 import net.zic.zenithlib.common.ZenithAttachments;
 
 import java.util.List;
+import java.util.Optional;
 
 public record SimpleCultivationSkill(
         Component name,
         Component description,
         Identifier primaryPath,
         List<Identifier> secondaryPaths,
-        double baseRate) implements CastableSkill {
+        double baseRate,
+        Optional<ParticleFieldDefinition> particleField) implements CastableSkill {
     @Override
     public CastType getCastType() {
         return CastType.LONG;

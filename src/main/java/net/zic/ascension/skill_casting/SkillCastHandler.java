@@ -35,6 +35,9 @@ public class SkillCastHandler {
         if (player.level().isClientSide()) {
             return;
         }
+        if (instance.isDirty() && player instanceof ServerPlayer serverPlayer) {
+            ParticleFieldSyncManager.syncNow(serverPlayer, instance.getSkill());
+        }
         if (hotBar.isDirty() || instance.isDirty()) {
             player.syncData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER);
         }
@@ -102,6 +105,9 @@ public class SkillCastHandler {
 
     public void tick() {
         instance.continueCasting(player);
+        if (player instanceof ServerPlayer serverPlayer) {
+            ParticleFieldSyncManager.heartbeat(serverPlayer, instance.getSkill());
+        }
         resolve();
     }
 
