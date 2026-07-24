@@ -9,6 +9,7 @@ import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.impl.datapack.skill.castable.DebugCastableType;
 import net.zic.ascension.impl.datapack.skill.castable.cultivation.SimpleCultivationSkillType;
 import net.zic.ascension.impl.datapack.skill.passive.SimplePassiveSkillType;
+import net.zic.ascension.impl.datapack.skill.passive.ToggleablePassiveSkillType;
 
 public class AscensionSkillTypes {
     public static final DeferredRegister<SkillType> SKILL_TYPES =
@@ -17,6 +18,10 @@ public class AscensionSkillTypes {
     public static final DeferredHolder<SkillType,SkillType> SIMPLE_PASSIVE_SKILL_TYPE = SKILL_TYPES.register(
             "simple_passive",
             SimplePassiveSkillType::new
+    );
+    public static final DeferredHolder<SkillType,SkillType> TOGGLEABLE_PASSIVE_SKILL_TYPE = SKILL_TYPES.register(
+            "toggleable_passive",
+            ToggleablePassiveSkillType::new
     );
 
 

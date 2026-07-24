@@ -85,6 +85,8 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.missing_registry_entry", "The synchronized identifier is not present in the client registry.");
         add("gui.ascension.introspection.empty_slot", "Empty");
         add("gui.ascension.introspection.castable_skill", "Castable skill. Select it, then click a hotbar slot below to assign or remove it.");
+        add("gui.ascension.introspection.toggle_passive.enable", "Enable passive");
+        add("gui.ascension.introspection.toggle_passive.disable", "Disable passive");
 
         add("gui.ascension.introspection.attribute.health", "Health");
         add("gui.ascension.introspection.attribute.damage", "Damage");

@@ -16,7 +16,9 @@ import net.zic.ascension.api.core.data_source.DataSourceInstance;
 import net.zic.ascension.api.core.path.PathData;
 import net.zic.ascension.api.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.core.physique.PhysiqueData;
+import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.api.core.technique.TechniqueData;
 import net.zic.ascension.api.event.EventReason;
 import net.zic.ascension.api.event.bloodline.BloodlineAddedEvent;
@@ -330,6 +332,56 @@ public class ServerOriginSource extends OriginSource {
 
         toRemoveSkills.add(skill);
         resolveProcess(ProcessType.REMOVE_SKILL);
+        return true;
+    }
+
+    /**
+     * Changes a toggleable skill state and synchronizes the state together with
+     * any source modifiers changed by the skill.
+     */
+    public boolean setSkillEnabled(
+            LivingEntity initiator,
+            Identifier skillId,
+            boolean enabled
+    ) {
+        if (initiator == null || skillId == null || !hasSkill(skillId)) {
+            return false;
+        }
+
+        Skill skill = CoreRegistries.safeAccess(
+                CoreRegistries.SKILL_REGISTRY,
+                skillId,
+                getRegistryAccess()
+        );
+        SkillData data = getSkillData(skillId);
+
+        if (!(skill instanceof ToggleableSkill toggleable) || data == null) {
+            return false;
+        }
+        if (toggleable.isEnabled(data) == enabled) {
+            return true;
+        }
+        if (enabled && !toggleable.canEnable(initiator, this, data)) {
+            return false;
+        }
+
+        startProcess(ProcessType.MODIFY_SKILL);
+
+        if (enabled) {
+            toggleable.setEnabled(data, true);
+            toggleable.onEnabled(this, data);
+            for (LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)) {
+                toggleable.applyEnabledToEntity(entity, data);
+            }
+        } else {
+            for (LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)) {
+                toggleable.removeEnabledFromEntity(entity, data);
+            }
+            toggleable.onDisabled(this, data);
+            toggleable.setEnabled(data, false);
+        }
+
+        markSkillDirty(skillId);
         return true;
     }
 

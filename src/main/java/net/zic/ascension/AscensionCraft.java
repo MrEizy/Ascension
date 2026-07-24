@@ -211,6 +211,11 @@ public class AscensionCraft {
                     SelectSkillSlotPacket.STREAM_CODEC,
                     SelectSkillSlotPacket::handle
             );
+            registrar.playToServer(
+                    TogglePassiveSkillPacket.TYPE,
+                    TogglePassiveSkillPacket.STREAM_CODEC,
+                    TogglePassiveSkillPacket::handle
+            );
 
             registrar.playToServer(
                     ToggleCultivationSuppressedPacket.TYPE,
