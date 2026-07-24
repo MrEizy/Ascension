@@ -1,8 +1,5 @@
-This is a temp package for an extremely simplified version of my planned mob cultivation system.
-
----
-
-# Current Implementation:
+<details>
+<summary>Mob Cultivation</summary>
 
 ## Added Classes:
 - `MobCultivationCategory`: The type of mob, as well as some multipliers for them
@@ -123,5 +120,13 @@ Exact values will depend on an eventual player stat rebalance
 * Sect guardian beasts
 * Wild high-realm spiritual beasts
 
+</details>
 
-•
+---
+
+<details>
+<summary>Other Things</summary>
+
+I got nothing lol...
+
+</details>
