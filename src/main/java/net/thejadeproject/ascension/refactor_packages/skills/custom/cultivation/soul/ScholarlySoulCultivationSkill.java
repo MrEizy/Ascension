@@ -20,15 +20,13 @@ import net.thejadeproject.ascension.refactor_packages.techniques.custom.soul.Sch
 
 public class ScholarlySoulCultivationSkill extends SimpleSoulCultivationSkill {
 
-    private static final double BASE_RATE = 2.0D;
-
     private static final int BOOKSHELF_RANGE = 4;
     private static final int MAX_BOOKSHELF_COUNT = 24;
     private static final double BOOKSHELF_BONUS_PER_BLOCK = 0.025D;
     private static final double MAX_BOOKSHELF_MULTIPLIER = 1.60D;
 
     public ScholarlySoulCultivationSkill() {
-        super(BASE_RATE);
+        super();
     }
 
     @Override
@@ -48,7 +46,7 @@ public class ScholarlySoulCultivationSkill extends SimpleSoulCultivationSkill {
 
     @Override
     protected double getEffectiveRate(Entity caster) {
-        return BASE_RATE * getBookshelfCultivationMultiplier(caster);
+        return super.getEffectiveRate(caster) * getBookshelfCultivationMultiplier(caster);
     }
 
     private static double getBookshelfCultivationMultiplier(Entity caster) {

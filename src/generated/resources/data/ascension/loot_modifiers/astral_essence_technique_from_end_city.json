@@ -3,12 +3,12 @@
   "conditions": [
     {
       "condition": "neoforge:loot_table_id",
-      "loot_table_id": "minecraft:chests/village/village_plains_house"
+      "loot_table_id": "minecraft:chests/end_city_treasure"
     },
     {
-      "chance": 0.15,
+      "chance": 0.14,
       "condition": "minecraft:random_chance"
     }
   ],
-  "techniqueId": "ascension:mortal_essence_scripture"
+  "techniqueId": "ascension:astral_essence_technique"
 }

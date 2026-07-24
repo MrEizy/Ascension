@@ -3,12 +3,12 @@
   "conditions": [
     {
       "condition": "neoforge:loot_table_id",
-      "loot_table_id": "minecraft:chests/village/village_plains_house"
+      "loot_table_id": "minecraft:chests/woodland_mansion"
     },
     {
-      "chance": 0.15,
+      "chance": 0.12,
       "condition": "minecraft:random_chance"
     }
   ],
-  "techniqueId": "ascension:mortal_essence_scripture"
+  "techniqueId": "ascension:wood_soul_technique"
 }

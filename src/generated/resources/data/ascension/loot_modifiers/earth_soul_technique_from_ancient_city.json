@@ -3,12 +3,12 @@
   "conditions": [
     {
       "condition": "neoforge:loot_table_id",
-      "loot_table_id": "minecraft:chests/village/village_plains_house"
+      "loot_table_id": "minecraft:chests/ancient_city"
     },
     {
-      "chance": 0.15,
+      "chance": 0.11,
       "condition": "minecraft:random_chance"
     }
   ],
-  "techniqueId": "ascension:mortal_essence_scripture"
+  "techniqueId": "ascension:earth_soul_technique"
 }

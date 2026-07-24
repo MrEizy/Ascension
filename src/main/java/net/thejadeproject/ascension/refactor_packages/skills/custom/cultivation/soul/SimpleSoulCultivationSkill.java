@@ -23,25 +23,17 @@ public class SimpleSoulCultivationSkill extends GenericCultivationSkill {
     protected static final ResourceLocation SOUL_PATH = ModPaths.SOUL.getId();
     protected static final double DEFAULT_BASE_RATE = 2.0D;
 
-    private final double baseRate;
-
     public SimpleSoulCultivationSkill() {
         this(DEFAULT_BASE_RATE);
     }
 
     protected SimpleSoulCultivationSkill(double baseRate) {
         super(baseRate, SOUL_PATH);
-        this.baseRate = baseRate;
     }
 
     @Override
     public CastResult canCast(Entity caster, IPreCastData preCastData) {
         return new CastResult(CastResult.Type.SUCCESS);
-    }
-
-    @Override
-    protected double getEffectiveRate(Entity caster) {
-        return baseRate;
     }
 
     protected boolean canUseCurrentSoulTechnique(
@@ -78,7 +70,7 @@ public class SimpleSoulCultivationSkill extends GenericCultivationSkill {
             CultivationUtil.tryCultivate(
                     caster,
                     SOUL_PATH,
-                    List.of(),
+                    getAttributedPaths(caster),
                     getSoulCultivationGain(caster, pathData)
             );
 
