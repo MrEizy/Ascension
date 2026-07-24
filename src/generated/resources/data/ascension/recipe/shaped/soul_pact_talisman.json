@@ -10,12 +10,15 @@
     },
     "T": {
       "item": "ascension:talisman_paper"
+    },
+    "W": {
+      "tag": "minecraft:wool"
     }
   },
   "pattern": [
-    "HEH",
-    "ETE",
-    "HEH"
+    "EHE",
+    "WTW",
+    "EHE"
   ],
   "result": {
     "count": 1,
