@@ -12,10 +12,8 @@ public record ParticleFieldParticleEntry(ParticleFieldParticleKind type, int wei
             ).apply(instance, ParticleFieldParticleEntry::new)
     );
 
-    public static final Codec<ParticleFieldParticleEntry> CODEC = Codec.either(
-            ParticleFieldParticleKind.CODEC,
-            OBJECT_CODEC
-    ).xmap(
+    public static final Codec<ParticleFieldParticleEntry> CODEC =
+            Codec.either(ParticleFieldParticleKind.CODEC, OBJECT_CODEC).xmap(
             either -> either.map(kind -> new ParticleFieldParticleEntry(kind, 1), entry -> entry),
             entry -> entry.weight == 1 ? Either.left(entry.type) : Either.right(entry)
     );

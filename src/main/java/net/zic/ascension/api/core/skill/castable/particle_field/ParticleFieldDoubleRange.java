@@ -13,10 +13,8 @@ public record ParticleFieldDoubleRange(double min, double max) {
             ).apply(instance, ParticleFieldDoubleRange::new)
     );
 
-    public static final Codec<ParticleFieldDoubleRange> CODEC = Codec.either(
-            Codec.DOUBLE,
-            OBJECT_CODEC
-    ).xmap(
+    public static final Codec<ParticleFieldDoubleRange> CODEC =
+            Codec.either(Codec.DOUBLE, OBJECT_CODEC).xmap(
             either -> either.map(ParticleFieldDoubleRange::fixed, range -> range),
             range -> range.min == range.max ? Either.left(range.min) : Either.right(range)
     );

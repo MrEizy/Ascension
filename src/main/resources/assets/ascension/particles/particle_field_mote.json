@@ -1,8 +1,8 @@
 {
   "textures": [
-    "ascension:particle/particle_field/mote_01",
-    "ascension:particle/particle_field/mote_02",
-    "ascension:particle/particle_field/mote_03",
-    "ascension:particle/particle_field/mote_04"
+    "ascension:particle_field/mote_01",
+    "ascension:particle_field/mote_02",
+    "ascension:particle_field/mote_03",
+    "ascension:particle_field/mote_04"
   ]
 }

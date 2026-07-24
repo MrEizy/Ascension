@@ -6,10 +6,8 @@ import com.mojang.serialization.DataResult;
 import java.util.Locale;
 
 public record ParticleFieldColour(int rgb) {
-    public static final Codec<ParticleFieldColour> CODEC = Codec.STRING.comapFlatMap(
-            ParticleFieldColour::decode,
-            ParticleFieldColour::encode
-    );
+    public static final Codec<ParticleFieldColour> CODEC =
+            Codec.STRING.comapFlatMap(ParticleFieldColour::decode, ParticleFieldColour::encode);
 
     public ParticleFieldColour {
         rgb &= 0xFFFFFF;

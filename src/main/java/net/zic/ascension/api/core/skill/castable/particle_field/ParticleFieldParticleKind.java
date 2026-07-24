@@ -11,10 +11,8 @@ public enum ParticleFieldParticleKind {
     BLOB("blob"),
     MOTE("mote");
 
-    public static final Codec<ParticleFieldParticleKind> CODEC = Codec.STRING.comapFlatMap(
-            ParticleFieldParticleKind::decode,
-            ParticleFieldParticleKind::serializedName
-    );
+    public static final Codec<ParticleFieldParticleKind> CODEC =
+            Codec.STRING.comapFlatMap(ParticleFieldParticleKind::decode, ParticleFieldParticleKind::serializedName);
 
     private final String serializedName;
 

@@ -22,10 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 public final class ParticleFieldController {
+    private static final double TAU = Math.PI * 2.0D;
     private static final Map<List<ParticleFieldColour>, int[]> PALETTE_CACHE = new HashMap<>();
 
     private static Identifier activeSkill;
     private static double emissionCarry;
+    private static long activeTicks;
+    private static int emissionSequence;
 
     private ParticleFieldController() {
     }
@@ -61,11 +64,14 @@ public final class ParticleFieldController {
         if (!skillId.equals(activeSkill)) {
             activeSkill = skillId;
             emissionCarry = 0.0D;
+            activeTicks = 0L;
+            emissionSequence = 0;
         }
 
+        activeTicks++;
         ParticleFieldDefinition definition = cultivationSkill.particleField().get();
         emissionCarry += definition.density() / 20.0D;
-        int spawnCount = Math.min(24, (int) emissionCarry);
+        int spawnCount = Math.min(8, (int) emissionCarry);
         emissionCarry -= spawnCount;
 
         for (int i = 0; i < spawnCount; i++) {
@@ -75,37 +81,47 @@ public final class ParticleFieldController {
 
     private static void spawn(ClientLevel level, Player player, ParticleFieldDefinition definition) {
         RandomSource random = level.getRandom();
-        double angle = random.nextDouble() * Math.PI * 2.0D;
-        double radius = definition.radius().random(random);
-        double x = player.getX() + Math.cos(angle) * radius;
-        double y = player.getY() + definition.height().random(random);
-        double z = player.getZ() + Math.sin(angle) * radius;
-        double centerX = player.getX();
-        double centerY = player.getY() + player.getBbHeight() * 0.56D;
-        double centerZ = player.getZ();
+        SpawnPoint spawnPoint = spawnPoint(player, definition, random);
+        double targetYOffset = player.getBbHeight() * (0.46D + random.nextDouble() * 0.22D);
+        double targetX = player.getX();
+        double targetY = player.getY() + targetYOffset;
+        double targetZ = player.getZ();
         double speed = definition.speed().random(random);
-        double[] velocity = initialVelocity(definition.style(), x, y, z, centerX, centerY, centerZ, speed, random);
+        double[] velocity = initialVelocity(
+                definition.style(),
+                spawnPoint.x(),
+                spawnPoint.y(),
+                spawnPoint.z(),
+                targetX,
+                targetY,
+                targetZ,
+                speed,
+                spawnPoint.orbitDirection(),
+                random
+        );
         ParticleFieldParticleKind kind = definition.randomParticle(random);
         int colour = randomPaletteColour(definition.colours(), random);
         float size = (float) definition.size().random(random);
         int lifetime = definition.lifetime().random(random);
-        double steeringStrength = 0.0015D + speed * 0.055D;
 
         ParticleFieldParticle particle = ParticleFieldParticle.create(
                 kind,
                 level,
-                x,
-                y,
-                z,
+                spawnPoint.x(),
+                spawnPoint.y(),
+                spawnPoint.z(),
                 velocity[0],
                 velocity[1],
                 velocity[2],
                 random,
                 definition.style(),
-                centerX,
-                centerY,
-                centerZ,
-                steeringStrength,
+                player.getId(),
+                targetX,
+                targetY,
+                targetZ,
+                targetYOffset,
+                speed,
+                spawnPoint.orbitDirection(),
                 size,
                 lifetime,
                 colour,
@@ -114,6 +130,53 @@ public final class ParticleFieldController {
         if (particle != null) {
             Minecraft.getInstance().particleEngine.add(particle);
         }
+    }
+
+    private static SpawnPoint spawnPoint(Player player, ParticleFieldDefinition definition, RandomSource random) {
+        double minRadius = definition.radius().min();
+        double maxRadius = definition.radius().max();
+        double minHeight = definition.height().min();
+        double maxHeight = definition.height().max();
+        double radius;
+        double height;
+        double angle;
+        double orbitDirection;
+
+        switch (definition.style()) {
+            case RISING -> {
+                angle = random.nextDouble() * TAU;
+                radius = Mth.lerp(Math.pow(random.nextDouble(), 1.7D), minRadius, maxRadius);
+                height = Mth.lerp(Math.pow(random.nextDouble(), 2.2D), minHeight, maxHeight);
+                orbitDirection = random.nextBoolean() ? 1.0D : -1.0D;
+            }
+            case INWARD_FLOW -> {
+                int streamCount = 5;
+                int stream = emissionSequence % streamCount;
+                angle = activeTicks * 0.075D + stream * TAU / streamCount + (random.nextDouble() - 0.5D) * 0.16D;
+                radius = Mth.lerp(0.72D + random.nextDouble() * 0.28D, minRadius, maxRadius);
+                double heightPhase = (activeTicks * 0.038D + stream / (double) streamCount + random.nextDouble() * 0.08D) % 1.0D;
+                height = Mth.lerp(Math.min(1.0D, heightPhase * 0.82D), minHeight, maxHeight);
+                orbitDirection = (stream & 1) == 0 ? 1.0D : -1.0D;
+            }
+            case SPIRAL -> {
+                int streamCount = 4;
+                int stream = emissionSequence % streamCount;
+                angle = activeTicks * 0.11D + stream * TAU / streamCount + (random.nextDouble() - 0.5D) * 0.12D;
+                radius = Mth.lerp(0.68D + random.nextDouble() * 0.32D, minRadius, maxRadius);
+                double heightPhase = (activeTicks * 0.045D + stream / (double) streamCount) % 1.0D;
+                height = Mth.lerp(heightPhase, minHeight, maxHeight);
+                orbitDirection = 1.0D;
+            }
+            default -> throw new IllegalStateException("Unexpected particle field style: " + definition.style());
+        }
+
+        emissionSequence++;
+        return new SpawnPoint(
+                player.getX() + Math.cos(angle) * radius,
+                player.getY() + height,
+                player.getZ() + Math.sin(angle) * radius,
+                orbitDirection
+        );
     }
 
     private static double[] initialVelocity(
@@ -125,6 +188,7 @@ public final class ParticleFieldController {
             double centerY,
             double centerZ,
             double speed,
+            double orbitDirection,
             RandomSource random
     ) {
         double dx = centerX - x;
@@ -132,22 +196,24 @@ public final class ParticleFieldController {
         double dz = centerZ - z;
         double horizontalLength = Math.max(0.001D, Math.sqrt(dx * dx + dz * dz));
         double fullLength = Math.max(0.001D, Math.sqrt(dx * dx + dy * dy + dz * dz));
+        double tangentX = -dz / horizontalLength * orbitDirection;
+        double tangentZ = dx / horizontalLength * orbitDirection;
 
         return switch (style) {
             case RISING -> new double[]{
-                    (random.nextDouble() - 0.5D) * speed * 0.5D,
-                    speed * (0.75D + random.nextDouble() * 0.5D),
-                    (random.nextDouble() - 0.5D) * speed * 0.5D
+                    dx / horizontalLength * speed * 0.16D + tangentX * speed * 0.08D,
+                    speed * (0.72D + random.nextDouble() * 0.22D),
+                    dz / horizontalLength * speed * 0.16D + tangentZ * speed * 0.08D
             };
             case INWARD_FLOW -> new double[]{
-                    dx / fullLength * speed,
-                    dy / fullLength * speed + speed * 0.24D,
-                    dz / fullLength * speed
+                    dx / fullLength * speed * 1.08D + tangentX * speed * 0.24D,
+                    dy / fullLength * speed * 0.52D + speed * 0.24D,
+                    dz / fullLength * speed * 1.08D + tangentZ * speed * 0.24D
             };
             case SPIRAL -> new double[]{
-                    -dz / horizontalLength * speed + dx / horizontalLength * speed * 0.18D,
-                    speed * (0.28D + random.nextDouble() * 0.28D),
-                    dx / horizontalLength * speed + dz / horizontalLength * speed * 0.18D
+                    tangentX * speed * 1.05D + dx / horizontalLength * speed * 0.14D,
+                    speed * (0.32D + random.nextDouble() * 0.14D),
+                    tangentZ * speed * 1.05D + dz / horizontalLength * speed * 0.14D
             };
         };
     }
@@ -158,15 +224,16 @@ public final class ParticleFieldController {
     }
 
     private static int[] buildPalette(List<ParticleFieldColour> colours) {
-        int[] palette = new int[colours.size() * 6];
+        int[] palette = new int[colours.size() * 7];
         int index = 0;
         for (ParticleFieldColour colour : colours) {
-            palette[index++] = adjustLightness(colour.rgb(), -0.28F);
-            palette[index++] = adjustLightness(colour.rgb(), -0.14F);
+            palette[index++] = adjustLightness(colour.rgb(), -0.12F);
+            palette[index++] = adjustLightness(colour.rgb(), -0.06F);
             palette[index++] = colour.rgb();
             palette[index++] = colour.rgb();
-            palette[index++] = adjustLightness(colour.rgb(), 0.14F);
-            palette[index++] = adjustLightness(colour.rgb(), 0.28F);
+            palette[index++] = colour.rgb();
+            palette[index++] = adjustLightness(colour.rgb(), 0.06F);
+            palette[index++] = adjustLightness(colour.rgb(), 0.12F);
         }
         return palette;
     }
@@ -235,5 +302,10 @@ public final class ParticleFieldController {
     private static void reset() {
         activeSkill = null;
         emissionCarry = 0.0D;
+        activeTicks = 0L;
+        emissionSequence = 0;
+    }
+
+    private record SpawnPoint(double x, double y, double z, double orbitDirection) {
     }
 }

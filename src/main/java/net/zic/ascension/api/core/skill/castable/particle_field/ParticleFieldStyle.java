@@ -10,10 +10,8 @@ public enum ParticleFieldStyle {
     INWARD_FLOW("inward_flow"),
     SPIRAL("spiral");
 
-    public static final Codec<ParticleFieldStyle> CODEC = Codec.STRING.comapFlatMap(
-            ParticleFieldStyle::decode,
-            ParticleFieldStyle::serializedName
-    );
+    public static final Codec<ParticleFieldStyle> CODEC =
+            Codec.STRING.comapFlatMap(ParticleFieldStyle::decode, ParticleFieldStyle::serializedName);
 
     private final String serializedName;
 

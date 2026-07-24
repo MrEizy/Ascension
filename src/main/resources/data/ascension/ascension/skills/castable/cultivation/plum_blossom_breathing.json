@@ -16,15 +16,15 @@
     "style": "spiral",
     "particles": [
       {
-        "type": "spark",
-        "weight": 4
+        "type": "wisp",
+        "weight": 6
       },
       {
         "type": "mote",
         "weight": 4
       },
       {
-        "type": "wisp",
+        "type": "spark",
         "weight": 2
       },
       {
@@ -37,12 +37,12 @@
       "#FFD6E5",
       "#A7D98B"
     ],
-    "density": 44,
-    "radius": {"min": 1.1, "max": 2.6},
-    "height": {"min": -0.15, "max": 2.3},
-    "speed": {"min": 0.032, "max": 0.066},
-    "size": {"min": 0.065, "max": 0.16},
-    "lifetime": {"min": 26, "max": 48},
+    "density": 22,
+    "radius": {"min": 0.55, "max": 1.55},
+    "height": {"min": -0.05, "max": 1.9},
+    "speed": {"min": 0.045, "max": 0.072},
+    "size": {"min": 0.04, "max": 0.11},
+    "lifetime": {"min": 20, "max": 34},
     "full_bright": true
   }
 }

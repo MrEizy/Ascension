@@ -1,8 +1,8 @@
 {
   "textures": [
-    "ascension:particle/particle_field/spark_01",
-    "ascension:particle/particle_field/spark_02",
-    "ascension:particle/particle_field/spark_03",
-    "ascension:particle/particle_field/spark_04"
+    "ascension:particle_field/spark_01",
+    "ascension:particle_field/spark_02",
+    "ascension:particle_field/spark_03",
+    "ascension:particle_field/spark_04"
   ]
 }

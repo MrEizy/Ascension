@@ -10,10 +10,8 @@ import net.zic.ascension.AscensionCraft;
 import java.util.function.Supplier;
 
 public final class AscensionParticles {
-    private static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(
-            BuiltInRegistries.PARTICLE_TYPE,
-            AscensionCraft.MOD_ID
-    );
+    private static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES =
+            DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, AscensionCraft.MOD_ID);
 
     public static final Supplier<SimpleParticleType> PARTICLE_FIELD_SPARK = register("particle_field_spark");
     public static final Supplier<SimpleParticleType> PARTICLE_FIELD_WISP = register("particle_field_wisp");
