@@ -230,6 +230,12 @@ public class AscensionCraft {
                     OpenStarterSelectionPacket::handle
             );
 
+            registrar.playToClient(
+                    ParticleFieldStatePacket.TYPE,
+                    ParticleFieldStatePacket.STREAM_CODEC,
+                    ParticleFieldStatePacket::handle
+            );
+
             registrar.playToServer(
                     ChooseStarterOptionPacket.TYPE,
                     ChooseStarterOptionPacket.STREAM_CODEC,
