@@ -22,35 +22,94 @@ import net.zic.zenithlib.common.ZenithAttachments;
 import java.util.Optional;
 
 public class CultivationProgressBar extends RenderableElement {
-    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(
-            AscensionCraft.MOD_ID,
-            "textures/gui/overlay/overlays_all.png"
-    );
+    private static final Identifier FRAME_TEXTURE =
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "textures/gui/main/overlays/progress_bar.png");
 
-    private static final ITextureData BACKGROUND = new TextureDataSubsection(
-            TEXTURE, 256, 256, 0, 21, 72, 28
-    );
-    private static final ITextureData DETAIL = new TextureDataSubsection(
-            TEXTURE, 256, 256, 67, 0, 135, 21
-    );
-    private static final ITextureData ESSENCE_CONTENT = new TextureDataSubsection(
-            TEXTURE, 256, 256, 0, 0, 67, 5
-    );
-    private static final ITextureData SOUL_CONTENT = new TextureDataSubsection(
-            TEXTURE, 256, 256, 0, 6, 67, 5
-    );
-    private static final ITextureData BODY_CONTENT = new TextureDataSubsection(
-            TEXTURE, 256, 256, 0, 12, 67, 5
-    );
+    private static final Identifier BARS_TEXTURE =
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "textures/gui/main/overlays/progress_bars.png");
+
+    private static final Identifier ESSENCE_PATH =
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "foundation/essence");
+
+    private static final Identifier SOUL_PATH =
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "foundation/soul");
+
+    private static final Identifier BODY_PATH =
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "foundation/body");
+
+    private static final int FRAME_WIDTH = 111;
+    private static final int FRAME_HEIGHT = 53;
+
+    private static final int CONTENT_X = 5;
+    private static final int CONTENT_Y = 30;
+    private static final int CONTENT_WIDTH = 101;
+    private static final int CONTENT_HEIGHT = 9;
+
+    private static final ITextureData BACKGROUND =
+            new TextureDataSubsection(
+                    FRAME_TEXTURE,
+                    FRAME_WIDTH,
+                    FRAME_HEIGHT,
+                    0,
+                    0,
+                    FRAME_WIDTH,
+                    FRAME_HEIGHT
+            );
+
+    private static final ITextureData SOUL_CONTENT =
+            new TextureDataSubsection(
+                    BARS_TEXTURE,
+                    111,
+                    52,
+                    0,
+                    0,
+                    CONTENT_WIDTH,
+                    CONTENT_HEIGHT
+            );
+
+    private static final ITextureData BODY_CONTENT =
+            new TextureDataSubsection(
+                    BARS_TEXTURE,
+                    111,
+                    52,
+                    0,
+                    11,
+                    CONTENT_WIDTH,
+                    CONTENT_HEIGHT
+            );
+
+    private static final ITextureData ESSENCE_CONTENT =
+            new TextureDataSubsection(
+                    BARS_TEXTURE,
+                    111,
+                    52,
+                    0,
+                    22,
+                    CONTENT_WIDTH,
+                    CONTENT_HEIGHT
+            );
+
+    private static final ITextureData OTHER_CONTENT =
+            new TextureDataSubsection(
+                    BARS_TEXTURE,
+                    111,
+                    52,
+                    0,
+                    33,
+                    CONTENT_WIDTH,
+                    CONTENT_HEIGHT
+            );
 
     public CultivationProgressBar(UIFrame frame) {
         super(frame);
-        setWidth(BACKGROUND.getWidth());
-        setHeight(BACKGROUND.getHeight());
+
+        setWidth(FRAME_WIDTH);
+        setHeight(FRAME_HEIGHT);
+
         getPositioning().setXPositioningRule(PositioningRules.CENTER);
         getPositioning().setYPositioningRule(PositioningRules.END);
-        getPositioning().setX(-BACKGROUND.getWidth() / 2);
-        getPositioning().setY(50);
+        getPositioning().setX(-FRAME_WIDTH / 2);
+        getPositioning().setY(86);
     }
 
     @Override
@@ -61,25 +120,37 @@ public class CultivationProgressBar extends RenderableElement {
         }
 
         CultivationState state = optionalState.get();
+
         BACKGROUND.render(graphics);
 
-        int width = (int) Math.round(state.content().getWidth() * state.progress());
-        if (width > 0) {
-            state.content().renderAt(graphics, 1, 1, width, state.content().getHeight());
-        }
+        int filledWidth = (int) Math.round(
+                CONTENT_WIDTH * state.progress()
+        );
 
-        DETAIL.renderAt(graphics, 4, -10);
+        filledWidth = Math.clamp(filledWidth, 0, CONTENT_WIDTH);
+
+        if (filledWidth > 0) {
+            state.content().renderAt(
+                    graphics,
+                    CONTENT_X,
+                    CONTENT_Y,
+                    filledWidth,
+                    CONTENT_HEIGHT
+            );
+        }
     }
 
     private Optional<CultivationState> getState() {
         return ClientAscensionData.getPlayer().flatMap(player -> {
             boolean castHeld = player.getData(ZenithAttachments.ACTION_MANAGER).isActive(AscensionSkillListener.skillCast);
+
             if (!castHeld) {
                 return Optional.empty();
             }
 
             return ClientAscensionData.getSkillCastHandler().flatMap(handler -> {
                 Identifier castingSkillId = handler.getCastingSkill();
+
                 Identifier activeSkillId = castingSkillId != null ? castingSkillId : handler.getSkill(handler.getSelectedSlot());
 
                 if (activeSkillId == null) {
@@ -87,66 +158,72 @@ public class CultivationProgressBar extends RenderableElement {
                 }
 
                 Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, activeSkillId, player.registryAccess());
+
                 if (!(skill instanceof SimpleCultivationSkill cultivationSkill)) {
                     return Optional.empty();
                 }
 
+                Identifier pathId = cultivationSkill.primaryPath();
+
                 return ClientAscensionData.getEntityData().flatMap(entityData -> {
-                    PathData pathData = entityData.getSource().getPathData(cultivationSkill.primaryPath());
+                    PathData pathData = entityData.getSource().getPathData(pathId);
+
                     if (pathData == null) {
                         return Optional.empty();
                     }
 
-                    double progress = resolveProgress(pathData, cultivationSkill.primaryPath(), entityData.isCultivationSuppressed(), player.registryAccess());
-                    return Optional.of(new CultivationState(progress, resolveContent(cultivationSkill.primaryPath())));
+                    double progress = resolveProgress(pathData, pathId, entityData.isCultivationSuppressed(), player.registryAccess());
+
+                    return Optional.of(new CultivationState(progress, resolveContent(pathId)));
                 });
             });
         });
     }
 
-    private static double resolveProgress(
-            PathData pathData,
-            Identifier pathId,
-            boolean cultivationSuppressed,
-            net.minecraft.core.RegistryAccess registryAccess
-    ) {
+    private static double resolveProgress(PathData pathData, Identifier pathId, boolean cultivationSuppressed, net.minecraft.core.RegistryAccess registryAccess) {
         if (cultivationSuppressed && pathData instanceof FoundationPathData foundationData) {
-            Path path = CoreRegistries.safeAccess(
-                    CoreRegistries.PATH_REGISTRY,
-                    pathId,
-                    registryAccess
-            );
+
+            Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, pathId, registryAccess);
+
             if (!(path instanceof FoundationPath foundationPath)) {
                 return 0.0D;
             }
 
             int majorRealm = foundationData.getMajorRealm();
             int foundationRealm = foundationData.getCurrentFoundationRealm();
+
             double maximum = foundationPath.getMaxFoundationProgress(majorRealm, foundationRealm);
-            return maximum <= 0.0D
-                    ? 0.0D
-                    : Math.clamp(foundationData.getCurrentFoundationProgress() / maximum, 0.0D, 1.0D);
+
+            if (maximum <= 0.0D) {
+                return 0.0D;
+            }
+
+            return Math.clamp(foundationData.getCurrentFoundationProgress() / maximum, 0.0D, 1.0D);
         }
 
-        double maximum = pathData.getMaxProgress(
-                pathData.getMajorRealm(),
-                pathData.getMinorRealm(),
-                registryAccess
-        );
-        return maximum <= 0.0D
-                ? 0.0D
-                : Math.clamp(pathData.getProgress() / maximum, 0.0D, 1.0D);
+        double maximum = pathData.getMaxProgress(pathData.getMajorRealm(), pathData.getMinorRealm(), registryAccess);
+
+        if (maximum <= 0.0D) {
+            return 0.0D;
+        }
+
+        return Math.clamp(pathData.getProgress() / maximum, 0.0D, 1.0D);
     }
 
     private static ITextureData resolveContent(Identifier pathId) {
-        String path = pathId.getPath();
-        if (path.endsWith("/soul") || path.equals("soul")) {
+        if (SOUL_PATH.equals(pathId)) {
             return SOUL_CONTENT;
         }
-        if (path.endsWith("/body") || path.equals("body")) {
+
+        if (BODY_PATH.equals(pathId)) {
             return BODY_CONTENT;
         }
-        return ESSENCE_CONTENT;
+
+        if (ESSENCE_PATH.equals(pathId)) {
+            return ESSENCE_CONTENT;
+        }
+
+        return OTHER_CONTENT;
     }
 
     private record CultivationState(double progress, ITextureData content) {
