@@ -14,6 +14,9 @@ import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldPar
 import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldStyle;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
+import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
+import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualPhase;
+import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.skill_casting.AscensionSkillListener;
 import net.zic.zenithlib.common.ZenithAttachments;
 
@@ -76,7 +79,27 @@ public final class ParticleFieldController {
         }
 
         RemoteFieldState state = REMOTE_FIELDS.computeIfAbsent(playerId, ignored -> new RemoteFieldState());
-        state.setSkill(skillId);
+        state.setSkill(skillId, 0, 1.0D, false);
+        state.lastSyncTick = clientTicks;
+    }
+
+    public static void updateRemoteHeld(
+            UUID playerId,
+            Identifier skillId,
+            HeldCastVisualPhase phase,
+            int stage,
+            double charge
+    ) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player != null && minecraft.player.getUUID().equals(playerId)) {
+            return;
+        }
+        if (skillId == null || phase == HeldCastVisualPhase.STOPPED) {
+            REMOTE_FIELDS.remove(playerId);
+            return;
+        }
+        RemoteFieldState state = REMOTE_FIELDS.computeIfAbsent(playerId, ignored -> new RemoteFieldState());
+        state.setSkill(skillId, stage, charge, true);
         state.lastSyncTick = clientTicks;
     }
 
@@ -87,9 +110,25 @@ public final class ParticleFieldController {
         }
 
         var handler = player.getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER);
+        HeldCastVisualState heldState = handler.getHeldCastVisualState();
+        if (heldState != null) {
+            if (!tickEmitter(
+                    level,
+                    player,
+                    heldState.skill(),
+                    heldState.stage(),
+                    heldState.charge(),
+                    1.0D,
+                    LOCAL_EMITTER
+            )) {
+                LOCAL_EMITTER.reset();
+            }
+            return;
+        }
+
         Identifier castingSkill = handler.getCastingSkill();
         Identifier skillId = castingSkill != null ? castingSkill : handler.getSkill(handler.getSelectedSlot());
-        if (skillId == null || !tickEmitter(level, player, skillId, 1.0D, LOCAL_EMITTER)) {
+        if (skillId == null || !tickEmitter(level, player, skillId, 0, 1.0D, 1.0D, LOCAL_EMITTER)) {
             LOCAL_EMITTER.reset();
         }
     }
@@ -114,7 +153,15 @@ public final class ParticleFieldController {
                 continue;
             }
 
-            if (!tickEmitter(level, remotePlayer, state.skillId, densityMultiplier, state.emitter)) {
+            if (!tickEmitter(
+                    level,
+                    remotePlayer,
+                    state.skillId,
+                    state.stage,
+                    state.charge,
+                    densityMultiplier,
+                    state.emitter
+            )) {
                 iterator.remove();
             }
         }
@@ -124,18 +171,23 @@ public final class ParticleFieldController {
             ClientLevel level,
             Player player,
             Identifier skillId,
+            int stage,
+            double charge,
             double densityMultiplier,
             EmitterState state
     ) {
         Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, player.registryAccess());
-        if (!(skill instanceof SimpleCultivationSkill cultivationSkill) || cultivationSkill.particleField().isEmpty()) {
+        ParticleFieldDefinition definition;
+        if (skill instanceof SimpleCultivationSkill cultivationSkill && cultivationSkill.particleField().isPresent()) {
+            definition = cultivationSkill.particleField().get();
+        } else if (skill instanceof HeldCastSkill heldSkill && heldSkill.particleField(stage).isPresent()) {
+            definition = heldSkill.particleField(stage).get();
+        } else {
             return false;
         }
 
-        state.activate(skillId);
+        state.activate(skillId, stage);
         state.activeTicks++;
-
-        ParticleFieldDefinition definition = cultivationSkill.particleField().get();
         state.emissionCarry += definition.density() * densityMultiplier / 20.0D;
         int spawnCount = Math.min(8, (int) state.emissionCarry);
         state.emissionCarry -= spawnCount;
@@ -471,19 +523,22 @@ public final class ParticleFieldController {
 
     private static final class EmitterState {
         private Identifier activeSkill;
+        private int activeStage = -1;
         private double emissionCarry;
         private long activeTicks;
         private int emissionSequence;
 
-        private void activate(Identifier skillId) {
-            if (!skillId.equals(activeSkill)) {
+        private void activate(Identifier skillId, int stage) {
+            if (!skillId.equals(activeSkill) || activeStage != stage) {
                 reset();
                 activeSkill = skillId;
+                activeStage = stage;
             }
         }
 
         private void reset() {
             activeSkill = null;
+            activeStage = -1;
             emissionCarry = 0.0D;
             activeTicks = 0L;
             emissionSequence = 0;
@@ -492,14 +547,20 @@ public final class ParticleFieldController {
 
     private static final class RemoteFieldState {
         private Identifier skillId;
+        private int stage;
+        private double charge = 1.0D;
+        private boolean held;
         private long lastSyncTick;
         private final EmitterState emitter = new EmitterState();
 
-        private void setSkill(Identifier newSkillId) {
-            if (!newSkillId.equals(skillId)) {
-                skillId = newSkillId;
+        private void setSkill(Identifier newSkillId, int newStage, double newCharge, boolean newHeld) {
+            if (!newSkillId.equals(skillId) || stage != newStage || held != newHeld) {
                 emitter.reset();
             }
+            skillId = newSkillId;
+            stage = Math.max(0, newStage);
+            charge = Double.isFinite(newCharge) ? Math.clamp(newCharge, 0.0D, 1.0D) : 0.0D;
+            held = newHeld;
         }
     }
 }

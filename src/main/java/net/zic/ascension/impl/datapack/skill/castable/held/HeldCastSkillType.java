@@ -1,0 +1,29 @@
+package net.zic.ascension.impl.datapack.skill.castable.held;
+
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.zic.ascension.api.core.skill.Skill;
+import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.core.skill.castable.held.HeldCastSpec;
+import net.zic.ascension.api.core.skill.castable.held.execution.HeldCastExecution;
+import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
+import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkillData;
+
+public final class HeldCastSkillType extends SkillType {
+    @Override
+    public MapCodec<? extends Skill> codec() {
+        return RecordCodecBuilder.<HeldCastSkill>mapCodec(instance -> instance.group(
+                ComponentSerialization.CODEC.fieldOf("name").forGetter(HeldCastSkill::name),
+                ComponentSerialization.CODEC.fieldOf("description").forGetter(HeldCastSkill::description),
+                HeldCastSpec.CODEC.fieldOf("cast").forGetter(HeldCastSkill::cast),
+                HeldCastExecution.CODEC.fieldOf("execution").forGetter(HeldCastSkill::execution)
+        ).apply(instance, HeldCastSkill::new));
+    }
+
+    @Override
+    public MapCodec<? extends SkillData> dataCodec() {
+        return MapCodec.unit(HeldCastSkillData::new);
+    }
+}

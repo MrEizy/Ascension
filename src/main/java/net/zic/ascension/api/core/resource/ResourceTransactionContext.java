@@ -26,12 +26,13 @@ public record ResourceTransactionContext(
                 resourceType.getMaximum(request.entity())
         );
         variables.put(AscensionCraft.prefix("resource/transaction_depth"), (double) depth);
+        double charge = variables.getOrDefault(AscensionCraft.prefix("cast/charge"), 0.0D);
         return new ScaledValueContext(
                 source,
                 skillId,
                 request.entity(),
                 request.target(),
-                0.0D,
+                charge,
                 variables
         );
     }

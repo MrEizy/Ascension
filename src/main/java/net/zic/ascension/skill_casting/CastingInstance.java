@@ -12,133 +12,206 @@ import net.zic.ascension.api.core.skill.castable.PreCastData;
 import net.zic.ascension.api.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.core.skill.castable.data.CastType;
+import net.zic.ascension.api.core.skill.castable.held.HeldCastData;
+import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualState;
+import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 public class CastingInstance {
-
     private Identifier skill;
     private final CastStatus status = new CastStatus();
     private CastData castData;
     private int ticksElapsed;
-
     private boolean dirty;
 
     public Identifier getSkill() {
         return skill;
     }
 
-    public void startCast(Player caster, Identifier skill, PreCastData preCastData){
-        if(skill != null && skill.equals(this.skill)) return; //same skill ignore
+    public int getTicksElapsed() {
+        return ticksElapsed;
+    }
 
-        endCast(caster); //clean up
+    public CastData getCastData() {
+        return castData;
+    }
 
-        if(skill == null) return;
+    public HeldCastVisualState getHeldVisualState(Player caster) {
+        if (skill == null || !(castData instanceof HeldCastData heldData)) {
+            return null;
+        }
+        if (!(CoreRegistries.safeAccess(
+                CoreRegistries.SKILL_REGISTRY,
+                skill,
+                caster.level().registryAccess()
+        ) instanceof HeldCastSkill heldSkill)) {
+            return null;
+        }
+        return heldSkill.visualState(caster, heldData);
+    }
 
-        if(!(CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,caster.level().registryAccess()) instanceof CastableSkill castableSkill)) return;
+    public void startCast(Player caster, Identifier skill, PreCastData preCastData) {
+        if (skill != null && skill.equals(this.skill)) {
+            return;
+        }
+
+        endCast(caster, CastStatus.Reason.CANCELLED);
+        status.resolve();
+        if (skill == null) {
+            return;
+        }
+
+        if (!(CoreRegistries.safeAccess(
+                CoreRegistries.SKILL_REGISTRY,
+                skill,
+                caster.level().registryAccess()
+        ) instanceof CastableSkill castableSkill)) {
+            return;
+        }
 
         this.skill = skill;
-
         CastResult result = castableSkill.tryCast(caster);
-        if(!result.isSuccess()){
-            caster.sendOverlayMessage(result.message);
+        if (!result.isSuccess()) {
+            if (result.message != null) {
+                caster.sendOverlayMessage(result.message);
+            }
+            this.skill = null;
             markDirty();
-            this.skill = null;
             return;
         }
 
-        CastData data = castableSkill.initialCast(
-                caster,
-                preCastData
-        );
-        NeoForge.EVENT_BUS.post(new SkillCastEvent(caster,skill,preCastData));
-        if(castableSkill.getCastType() == CastType.INSTANT){
+        castData = castableSkill.initialCast(caster, preCastData);
+        NeoForge.EVENT_BUS.post(new SkillCastEvent(caster, skill, preCastData));
+        if (castableSkill.getCastType() == CastType.INSTANT) {
             this.skill = null;
+            castData = null;
+            markDirty();
             return;
         }
 
-        castData = data;
+        ticksElapsed = 0;
         markDirty();
     }
 
-    public void endCast(Player caster, CastStatus.Reason reason){
-        if(skill == null) return;
-        if(!(CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,caster.level().registryAccess()) instanceof CastableSkill castableSkill)) return;
-
-        status.setReason(reason);
+    public void endCast(Player caster, CastStatus.Reason reason) {
+        if (skill == null) {
+            return;
+        }
+        status.setReason(reason == null ? CastStatus.Reason.CANCELLED : reason);
         endCast(caster);
     }
-    public void endCast(Player caster){
-        if(skill == null) return;
-        if(!(CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,caster.level().registryAccess()) instanceof CastableSkill castableSkill)) return;
 
+    public void endCast(Player caster) {
+        if (skill == null) {
+            return;
+        }
 
-        castableSkill.finalCast(caster,status,castData,ticksElapsed);
+        if (status.isCasting()) {
+            status.cancel();
+        }
+        if (CoreRegistries.safeAccess(
+                CoreRegistries.SKILL_REGISTRY,
+                skill,
+                caster.level().registryAccess()
+        ) instanceof CastableSkill castableSkill) {
+            castableSkill.finalCast(caster, status, castData, ticksElapsed);
+        }
 
         skill = null;
         castData = null;
         status.resolve();
         ticksElapsed = 0;
-
         markDirty();
     }
 
-    public void continueCasting(Player caster){
-        if(skill == null) return;
-        if(!(CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,caster.level().registryAccess()) instanceof CastableSkill castableSkill)) return;
-
-        castableSkill.continueCasting(caster,status,castData,ticksElapsed);
-        if(!status.isCasting()){
-            endCast(caster);
+    public void continueCasting(Player caster) {
+        if (skill == null) {
+            return;
+        }
+        if (!(CoreRegistries.safeAccess(
+                CoreRegistries.SKILL_REGISTRY,
+                skill,
+                caster.level().registryAccess()
+        ) instanceof CastableSkill castableSkill)) {
+            endCast(caster, CastStatus.Reason.INVALIDATED);
+            return;
         }
 
+        castableSkill.continueCasting(caster, status, castData, ticksElapsed);
+        if (castData != null && castData.isDirty()) {
+            markDirty();
+        }
+        if (!status.isCasting()) {
+            endCast(caster);
+            return;
+        }
         ticksElapsed++;
     }
 
-
-
-    public void markDirty(){
-        this.dirty = true;
-    }
-    public boolean isDirty(){
-        return dirty;
-    }
-    public void resolveDirty(){
-        this.dirty = false;
-    }
-
-    public void encode(ByteBuf buf){
-        buf.writeBoolean(skill != null);
-        if(skill == null) return;
-        ByteBufHelpers.encodeIdentifier(skill,buf);
-        buf.writeBoolean(castData != null);
-        if(castData != null){
-            castData.encode(buf);
-        }
-
-    }
-    public void decode(RegistryFriendlyByteBuf buf,Player player){
-        if(!buf.readBoolean()){
-            endCast(player, CastStatus.Reason.NATURAL); //this will always be the case for the client
+    public void recordDamage(Player caster, double damage) {
+        if (skill == null || !(castData instanceof HeldCastData heldData)) {
             return;
         }
-        Identifier skill = buf.readIdentifier();
-        if(!(CoreRegistries.safeAccess(
+        if (!(CoreRegistries.safeAccess(
                 CoreRegistries.SKILL_REGISTRY,
                 skill,
-                buf.registryAccess()
-        ) instanceof CastableSkill castableSkill)){
-            endCast(player, CastStatus.Reason.NATURAL);
+                caster.level().registryAccess()
+        ) instanceof HeldCastSkill heldSkill)) {
             return;
-        };
+        }
+        if (heldSkill.shouldInterrupt(caster, heldData, ticksElapsed, damage)) {
+            endCast(caster, CastStatus.Reason.INTERRUPTED);
+        }
+    }
 
-        if(!skill.equals(this.skill)) endCast(player, CastStatus.Reason.NATURAL);
-        this.skill = skill;
-        if (!buf.readBoolean()){
-            this.castData = null;
-        }else{
-            this.castData = castableSkill.loadCastData(buf);
+    public void markDirty() {
+        dirty = true;
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void resolveDirty() {
+        dirty = false;
+    }
+
+    public void encode(ByteBuf buf) {
+        buf.writeBoolean(skill != null);
+        if (skill == null) {
+            return;
+        }
+        ByteBufHelpers.encodeIdentifier(skill, buf);
+        buf.writeInt(Math.max(0, ticksElapsed));
+        buf.writeBoolean(castData != null);
+        if (castData != null) {
+            castData.encode(buf);
+            castData.resolveDirty();
+        }
+    }
+
+    public void decode(RegistryFriendlyByteBuf buf, Player player) {
+        if (!buf.readBoolean()) {
+            endCast(player, CastStatus.Reason.INVALIDATED);
+            return;
         }
 
+        Identifier decodedSkill = buf.readIdentifier();
+        if (!(CoreRegistries.safeAccess(
+                CoreRegistries.SKILL_REGISTRY,
+                decodedSkill,
+                buf.registryAccess()
+        ) instanceof CastableSkill castableSkill)) {
+            endCast(player, CastStatus.Reason.INVALIDATED);
+            return;
+        }
 
+        if (skill != null && !decodedSkill.equals(skill)) {
+            endCast(player, CastStatus.Reason.INVALIDATED);
+        }
+        skill = decodedSkill;
+        ticksElapsed = Math.max(0, buf.readVarInt());
+        castData = buf.readBoolean() ? castableSkill.loadCastData(buf) : null;
+        resolveDirty();
     }
 }

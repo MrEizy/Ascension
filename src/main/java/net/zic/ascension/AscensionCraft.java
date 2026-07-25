@@ -36,6 +36,8 @@ import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
 import net.zic.ascension.impl.value.source.AscensionScaledValueSourceTypes;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
+import net.zic.ascension.impl.datapack.skill.castable.held.AscensionHeldCastExecutionTypes;
+import net.zic.ascension.impl.datapack.skill.castable.held.AscensionHeldCastReleaseFeatureTypes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -102,6 +104,8 @@ public class AscensionCraft {
         AscensionDataSources.register(modEventBus);
         AscensionScaledValueSourceTypes.register(modEventBus);
         AscensionResourceTypes.register(modEventBus);
+        AscensionHeldCastExecutionTypes.register(modEventBus);
+        AscensionHeldCastReleaseFeatureTypes.register(modEventBus);
 
         AscensionAttributes.register(modEventBus);
 
@@ -255,6 +259,11 @@ public class AscensionCraft {
                     ParticleFieldStatePacket.TYPE,
                     ParticleFieldStatePacket.STREAM_CODEC,
                     ParticleFieldStatePacket::handle
+            );
+            registrar.playToClient(
+                    HeldCastVisualStatePacket.TYPE,
+                    HeldCastVisualStatePacket.STREAM_CODEC,
+                    HeldCastVisualStatePacket::handle
             );
 
             registrar.playToServer(

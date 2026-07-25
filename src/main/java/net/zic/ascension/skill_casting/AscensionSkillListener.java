@@ -50,4 +50,11 @@ public class AscensionSkillListener {
         skillCastHandler.castSelectedSkill();
         AscensionCraft.LOGGER.debug("Skill cast on side {}",(event.getPlayer().level().isClientSide()?"Client":"Server"));
     }
+
+    @SubscribeEvent
+    public static void onActionEnd(ActionEvent.End event) {
+        if (!event.getAction().equals(skillCast)) return;
+        SkillCastHandler skillCastHandler = event.getPlayer().getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER);
+        skillCastHandler.releaseCastInput();
+    }
 }

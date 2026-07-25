@@ -344,6 +344,125 @@ These should remain separate systems rather than all being stuffed into stamina.
 ---
 
 <details>
+<summary>Held Cast System</summary>
+
+## Added Classes:
+* `HeldCastSpec`: Contains the general settings for a held cast
+* `HeldCastData`: Stores the current charge, paid cost and interruption data
+* `HeldCastCostDefinition`: Defines the resource cost and cumulative cost curve
+* `HeldCastMovementDefinition`: Defines movement restrictions while charging
+* `HeldCastInterruptionDefinition`: Defines how damage can interrupt a cast
+* `HeldCastChargeStage`: Defines charge stages, particles and sounds
+* `HeldCastVisualState`: Stores the visual state sent to nearby players
+* `HeldCastVisualPhase`: The current phase of a held cast
+* `HeldCastExecution`: Base interface for different held cast results
+* `HeldCastExecutionContext`: Contains the information used when executing a held cast
+* `HeldCastExecutionType`: Codec type for held cast executions
+* `RadialTargetingDefinition`: Defines radial target filtering and selection
+* `HeldCastReleaseFeature`: Base interface for reusable release effects
+* `HeldCastReleaseContext`: Contains the caster, target, charge and release position
+* `HeldCastReleaseFeatureType`: Codec type for release features
+* `HeldCastSkill`: Handles the shared held cast lifecycle
+* `HeldCastSkillData`: Skill data used by held casts
+* `HeldCastInterruptionHandler`: Tracks damage and interrupts active casts
+* `HeldCastProjectileManager`: Handles lightweight server-side projectiles
+* `SelfReleaseExecution`: Executes features on the caster
+* `RadialReleaseExecution`: Executes features on nearby targets
+* `ProjectileReleaseExecution`: Executes features through a virtual projectile
+* `MessageReleaseFeature`: Sends a message when a held cast releases
+* `SoundReleaseFeature`: Plays a sound when a held cast releases
+* `ParticleBurstReleaseFeature`: Spawns particles when a held cast releases
+* `ResourceTransactionReleaseFeature`: Applies a resource transaction on release
+* `HeldCastSkillType`: Codec for the `held_cast` skill type
+* `AscensionHeldCastExecutionTypes`: Registers held cast execution types
+* `AscensionHeldCastReleaseFeatureTypes`: Registers held cast release features
+* `HeldCastVisualStatePacket`: Syncs held cast visuals to nearby players
+* `HeldCastVisualSyncManager`: Handles held cast visual updates
+
+## Other changed classes:
+* `AscensionCraft`: Registered held cast types and network payloads
+* `TypeRegistries`: Added registries for held cast executions and release features
+* `AscensionSkillTypes`: Registered the `held_cast` skill type
+* `CastData`: Added dirty state support for cast syncing
+* `CastStatus`: Added release, cancellation, interruption and resource failure reasons
+* `CastingInstance`: Added held cast transitions, interruption and syncing
+* `SkillCastHandler`: Added held cast syncing, input release handling and recast protection
+* `AscensionSkillListener`: Clears the held input latch when the cast key is released
+* `ResourceTransactionContext`: Added held charge values to resource scaling context
+* `ParticleFieldController`: Added held cast charge particle support
+
+---
+
+# Planned Implementation
+
+## Execution Types
+* Keep separate execution types for different delivery methods.
+* Current execution types:
+    * Self release
+    * Radial release
+    * Projectile release
+* Potential execution types:
+    * Beams
+    * Barriers
+    * Transformations
+    * Targeted releases
+    * Area channels
+    * Multiple projectiles
+
+## Release Features
+* Build held skills from reusable release features.
+* Current features:
+    * Messages
+    * Sounds
+    * Particle bursts
+    * Resource transactions
+* Add more features when needed, such as:
+    * Damage
+    * Buffs and debuffs
+    * Frozen buildup
+    * Teleportation
+    * Knockback
+    * Summoning
+    * Skill restrictions
+
+## Costs
+* Pay held cast costs gradually while charging.
+* Use cumulative costs so cancelling cannot avoid payment.
+* Support Qi, Stamina and more.
+* Use scaled values for linear, quadratic and stat-based costs.
+* Add clearer failure behaviour for different resource types later.
+
+## Targeting
+* Allow radial casts to configure:
+    * Radius
+    * Maximum targets
+    * Self
+    * Allies
+    * Neutral mobs
+    * Hostile mobs
+    * Players
+    * Line of sight
+* Keep allies excluded by default.
+* Add party and faction integration later via guildengine.
+
+## Projectiles
+* Add proper projectile entities
+* Add more collision and targeting options later.
+* Consider projectile speed, range and piercing scaling.
+
+
+## Networking
+* Sync charge stages and important state changes instead of sending updates every tick.
+* Use client interpolation for charge visuals.
+* Profile packet traffic before adding more frequent updates.
+* Keep resource changes and final cast results server-authoritative.
+
+</details>
+
+
+---
+
+<details>
 <summary>  </summary>
 
 </details>

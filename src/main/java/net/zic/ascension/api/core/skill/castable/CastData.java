@@ -1,9 +1,14 @@
 package net.zic.ascension.api.core.skill.castable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 
 public interface CastData {
-
     void encode(ByteBuf buf);
+
+    default boolean isDirty() {
+        return false;
+    }
+
+    default void resolveDirty() {
+    }
 }
