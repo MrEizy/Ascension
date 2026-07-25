@@ -10,6 +10,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolderProvider;
 import net.zic.ascension.api.ascension.core.path.PathHolderProvider;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolderProvider;
+import net.zic.ascension.api.ascension.core.skill.SkillHolderProvider;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
@@ -36,7 +37,10 @@ public class CoreHolderProviders {
             "path_holder_provider",
             PathHolderProvider::new
     );
-
+    public static final DeferredHolder<DataSource,DataSource> SKILL_HOLDER_PROVIDER = DATA_SOURCES.register(
+            "skill_holder_provider",
+            SkillHolderProvider::new
+    );
     public static void register(IEventBus eventBus){
 
         DATA_SOURCES.register(eventBus);

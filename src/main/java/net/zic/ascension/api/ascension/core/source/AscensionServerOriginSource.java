@@ -55,11 +55,8 @@ import java.util.*;
 //TODO go through and update EVERYTHING to not rely on a registry access stored inside OriginSource, if it needs it the method should accept registryaccess
 public class AscensionServerOriginSource extends AscensionOriginSource {
     //──Sync Data────────────────────────────────────────────────────────
-    private boolean physiqueDirty = true;
 
 
-    private final HashMap<Identifier,PathData> toAddPaths= new HashMap<>();
-    private final HashSet<Identifier> toRemovePaths = new HashSet<>();
     private final HashMap<Identifier, SkillData> toAddSkills= new HashMap<>();
     private final HashSet<Identifier> toRemoveSkills = new HashSet<>();
 
@@ -67,7 +64,6 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
     private final HashSet<ValueContainer> dirtyAffinity = new HashSet<>();
     private final HashMap<Identifier,HashSet<ValueContainer>> dirtyCategorizedAffinity = new HashMap<>();
 
-    private ProcessType currentProcess = null;
 
 
     public AscensionServerOriginSource(){}
@@ -168,6 +164,7 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
 
         BloodlineAddedEvent.Post post= new BloodlineAddedEvent.Post(bloodline,data,this);
         NeoForge.EVENT_BUS.post(post);
+        markDataSourceDirty(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
 
         resolveProcess("add_bloodline");
         return true;
@@ -205,57 +202,42 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
         BloodlineRemovedEvent.Post post= new BloodlineRemovedEvent.Post(bloodline,data,this);
         NeoForge.EVENT_BUS.post(post);
 
+        markDataSourceDirty(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
+
         resolveProcess("remove_bloodline");
         return true;
     }
 
 
     @Override
-    public boolean addPath(Identifier path, PathData existingData,Identifier owner, EventReason reason) {
+    public boolean addPath(Identifier path, PathData existingData,Identifier owner) {
+
         if(path == null || existingData == null) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(getRegistryAccess()).containsKey(path)) return false;
-        if(cachedPathData.containsKey(path)) existingData = cachedPathData.get(path);
+        if(getPathHolder().hasCachedPath(path)) existingData = getPathHolder().removeCachedPath(path);
         PathAddedEvent.Pre pre = new PathAddedEvent.Pre(path,existingData,this);
 
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = super.addPath(path, existingData,owner, reason);
+        boolean result = super.addPath(path, existingData,owner);
         if(!result) return false;
 
-        startProcess(ProcessType.ADD_PATH);
+        startProcess("add_path");
 
         existingData.simulateProgression(this);
         PathAddedEvent.Post post = new PathAddedEvent.Post(path,existingData,this);
         NeoForge.EVENT_BUS.post(post);
 
-        toAddPaths.put(path,existingData);
-        resolveProcess(ProcessType.ADD_PATH);
+        markDataSourceDirty(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
+
+        resolveProcess("add_path");
         return true;
     }
 
-    @Override
-    public boolean broadcastTechniqueAddedAttempt(Identifier technique, TechniqueData data) {
-        return super.broadcastTechniqueAddedAttempt(technique, data);
-    }
 
     @Override
-    public void broadcastTechniqueAdded(Identifier technique, TechniqueData data) {
-        super.broadcastTechniqueAdded(technique, data);
-    }
-
-    @Override
-    public boolean broadcastTechniqueRemovedAttempt(Identifier technique, TechniqueData data) {
-        return super.broadcastTechniqueRemovedAttempt(technique, data);
-    }
-
-    @Override
-    public void broadcastTechniqueRemoved(Identifier technique, TechniqueData data) {
-        super.broadcastTechniqueRemoved(technique, data);
-    }
-
-    @Override
-    public boolean removePath(Identifier path,Identifier owner, EventReason reason) {
+    public boolean removePath(Identifier path,Identifier owner) {
         if(path == null || !hasPath(path)) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(getRegistryAccess()).containsKey(path)) return false;
         PathData data = getPathData(path);
@@ -263,16 +245,18 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = super.removePath(path,owner, reason);
+        boolean result = super.removePath(path,owner);
         if(!result) return false;
 
-        startProcess(ProcessType.REMOVE_PATH);
+        startProcess("remove_path");
         data.removeFromSource(this);
         PathRemovedEvent.Post post = new PathRemovedEvent.Post(path,data,this);
         NeoForge.EVENT_BUS.post(post);
 
-        toRemovePaths.add(path);
-        resolveProcess(ProcessType.REMOVE_PATH);
+        markDataSourceDirty(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
+
+
+        resolveProcess("remove_path");
         return true;
     }
 
@@ -281,7 +265,7 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
     public boolean addSkill(Identifier skill, SkillData data,Identifier owner) {
         if(skill == null) return false;
         if(!CoreRegistries.SKILL_REGISTRY.get(getRegistryAccess()).containsKey(skill)) return false;
-        if(cachedSkillData.containsKey(skill))  data = cachedSkillData.get(skill);
+        if(getSkillHolder().hasCachedSkill(skill))  data = getSkillHolder().removeCachedSkill(skill);
         SkillAddedEvent.Pre pre = new SkillAddedEvent.Pre(this,skill,data,null);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
@@ -289,18 +273,20 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
         boolean result = super.addSkill(skill, data,owner);
         if(!result) return false;
 
-        startProcess(ProcessType.ADD_SKILL);
+        startProcess("add_skill");
         if(pre.getSkill(getRegistryAccess()) != null){
             for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
                 pre.getSkill(getRegistryAccess()).applyToEntity(entity,pre.getSkillData());
             }
         }
         pre.getSkill(getRegistryAccess()).onAdded(this,data);
+
         SkillAddedEvent.Post post = new SkillAddedEvent.Post(this,skill,data,null);
+
         NeoForge.EVENT_BUS.post(post);
 
-        toAddSkills.put(skill,data);
-        resolveProcess(ProcessType.ADD_SKILL);
+        markDataSourceDirty(CoreHolderProviders.SKILL_HOLDER_PROVIDER.getId());
+        resolveProcess("add_skill");
         return true;
     }
     //TODO updated to include EventReason
@@ -309,6 +295,8 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
         if(skill == null || !hasSkill(skill)) return false;
         if(!CoreRegistries.SKILL_REGISTRY.get(getRegistryAccess()).containsKey(skill)) return false;
         SkillData data = getSkillData(skill);
+
+
         SkillRemovedEvent.Pre pre = new SkillRemovedEvent.Pre(this,skill,data,null);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
@@ -316,7 +304,7 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
         boolean result = super.removeSkill(skill,owner);
         if(!result) return false;
 
-        startProcess(ProcessType.REMOVE_SKILL);
+        startProcess("remove_skill");
         pre.getSkill(getRegistryAccess()).onRemoved(this,data);
         if(pre.getSkill(getRegistryAccess()) != null){
             for(LivingEntity entity : AscensionCraft.getSourceHandler().getLoadedWatchers(this)){
@@ -326,8 +314,8 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
         SkillRemovedEvent.Post post = new SkillRemovedEvent.Post(this,skill,data,null);
         NeoForge.EVENT_BUS.post(post);
 
-        toRemoveSkills.add(skill);
-        resolveProcess(ProcessType.REMOVE_SKILL);
+        markDataSourceDirty(CoreHolderProviders.SKILL_HOLDER_PROVIDER.getId());
+        resolveProcess("remove_skill");
         return true;
     }
 
@@ -460,26 +448,6 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
         resolveProcess(ProcessType.AFFINITY);
     }
 
-    @Override
-    public void markPhysiqueDirty() {
-        physiqueDirty = true;
-        startProcess(ProcessType.MODIFY_PHYSIQUE);
-        resolveProcess(ProcessType.MODIFY_PHYSIQUE);
-    }
-
-    @Override
-    public void markBloodlineDirty(Identifier bloodline) {
-        toAddBloodlines.put(bloodline,getBloodlineData(bloodline));
-        startProcess(ProcessType.MODIFY_BLOODLINE);
-        resolveProcess(ProcessType.MODIFY_BLOODLINE);
-    }
-
-    @Override
-    public void markPathDirty(Identifier path) {
-        toAddPaths.put(path,getPathData(path));
-        startProcess(ProcessType.MODIFY_PATH);
-        resolveProcess(ProcessType.MODIFY_PATH);
-    }
 
     @Override
     public void markSkillDirty(Identifier skill) {
@@ -488,12 +456,6 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
         resolveProcess(ProcessType.MODIFY_SKILL);
     }
 
-    @Override
-    public void markDataSourceDirty(Identifier source) {
-        toAddDataSources.put(source,getDataSourceInstance(source));
-        startProcess(ProcessType.MODIFY_DATA_SOURCE);
-        resolveProcess(ProcessType.MODIFY_DATA_SOURCE);
-    }
 
 
     @Override
@@ -511,48 +473,5 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
         return true;
     }
 
-    //only resolve if the process matches the current one
-    public void resolveProcess(ProcessType processType){
-        if(processType != this.currentProcess) return;
-        currentProcess = null;
-        sync();
 
-    }
-    protected void sync(){
-        Collection<LivingEntity> entities = AscensionCraft.getSourceHandler().getLoadedWatchers(this);
-        SourceChangesSnapshot snapshot = new SourceChangesSnapshot(
-                physiqueDirty ? getPhysique() : null,
-                physiqueDirty ? getPhysiqueData() : null,
-                new HashMap<>(toAddBloodlines),
-                Set.copyOf(toRemoveBloodlines),
-                new HashMap<>(toAddPaths),
-                Set.copyOf(toRemovePaths),
-                new HashMap<>(toAddSkills),
-                Set.copyOf(toRemoveSkills),
-                new HashMap<>(toAddDataSources),
-                Set.copyOf(toRemoveDataSources),
-                Set.copyOf(dirtyStats),
-                Set.copyOf(dirtyAffinity),
-                new HashMap<>(dirtyCategorizedAffinity)
-        );
-        for(LivingEntity entity : entities){
-            AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-            if(holder == null) continue;
-            holder.getData(entity).markDirty(snapshot);
-        }
-        //clear sync caches
-
-        physiqueDirty = false;
-        toAddBloodlines.clear();
-        toRemoveBloodlines.clear();
-        toAddPaths.clear();
-        toRemovePaths.clear();
-        toAddSkills.clear();
-        toRemoveSkills.clear();
-        toAddDataSources.clear();
-        toRemoveDataSources.clear();
-        dirtyStats.clear();
-        dirtyAffinity.clear();
-        dirtyCategorizedAffinity.clear();
-    }
 }

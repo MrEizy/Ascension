@@ -9,6 +9,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 
 import javax.annotation.Nullable;
@@ -28,14 +29,14 @@ public interface Technique {
      * @param source the origin source it is being added to
      * @param data the data for this technique
      */
-    void onAdded(AscensionOriginSource source, TechniqueData data);
+    void onAdded(OriginSource source, TechniqueData data);
 
     /**
      * Called when the technique is removed from a source
      * @param source the source it is removed from
      * @param data the data of this technique
      */
-    void onRemoved(AscensionOriginSource source, TechniqueData data);
+    void onRemoved(OriginSource source, TechniqueData data);
 
 
 
@@ -72,11 +73,11 @@ public interface Technique {
 
     TribulationDefinition getTribulation(int majorRealm,int minorRealm,RegistryAccess access);
     //is used for both minor and major realm breakthroughs
-    boolean tryBreakthrough(LivingEntity entity, AscensionOriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData);
+    boolean tryBreakthrough(LivingEntity entity, OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData);
 
 
-    void onRealmUp(AscensionOriginSource source, TechniqueData techniqueData);
-    void onRealmDown(AscensionOriginSource source, TechniqueData techniqueData);
+    void onRealmUp(OriginSource source, TechniqueData techniqueData);
+    void onRealmDown(OriginSource source, TechniqueData techniqueData);
     TechniqueData newData();
     TechniqueData loadData(ValueInput input);
     TechniqueData loadData(ByteBuf buf);

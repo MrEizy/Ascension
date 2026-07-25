@@ -6,12 +6,16 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
+import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
+
+import java.util.Optional;
 
 public class PhysiqueHolder implements DataSourceInstance {
 
@@ -41,14 +45,36 @@ public class PhysiqueHolder implements DataSourceInstance {
     }
 
     public void write(ValueOutput output,RegistryAccess access){
-        output.putString("physique",physique.toString());
-        getData().write(output.child("data"));
+        try{
+            AscensionCraft.LOGGER.debug("Writing physique {}",getPhysique());
+            NbtHelpers.writeIdentifier(output,"physique",getPhysique());
+            ValueOutput data = output.child("data");
+            if(getData() != null) getData().write(data);
+            else throw new Exception("no physique data for physique "+physique);
+        }catch (Exception e){
+            AscensionCraft.LOGGER.error("Error writing physique {}",getPhysique());
+            AscensionCraft.LOGGER.error("stacktrace: ",e);
+        }
     }
     public void read(ValueInput input, RegistryAccess access){
-        Identifier physique = Identifier.parse(input.getStringOr("physique","none"));
-        PhysiqueData data = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,physique,access).loadData(input,access);
-        this.physique = physique;
-        this.data = data;
+        try{
+
+            Identifier id = NbtHelpers.readIdentifier(input,"physique");
+
+
+            Optional<ValueInput> data = input.child("data");
+            PhysiqueData physiqueData = data.map(valueInput ->
+                    CoreRegistries.PHYSIQUE_REGISTRY.get(access).getValue(id).loadData(valueInput,access))
+                    .orElse(CoreRegistries.PHYSIQUE_REGISTRY.get(access).getValue(id).newData(access));
+
+            setPhysique(id,physiqueData);
+
+            AscensionCraft.LOGGER.info("Loaded physique {}",id);
+        }catch (Exception e){
+            AscensionCraft.LOGGER.error("Error loading physique");
+            AscensionCraft.LOGGER.error("stacktrace : ",e);
+            //TODO set technique to default
+        }
     }
     public void encode(ByteBuf buf,RegistryAccess access){
         ByteBufHelpers.encodeIdentifier(physique,buf);

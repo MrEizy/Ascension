@@ -11,6 +11,7 @@ import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,26 +64,26 @@ public interface PathData extends RegistryObjectData {
     Collection<Realm> getCompletedTribulationRealms();
     UUID getBreakthroughTribulation();
     //──Setters────────────────────────────────────────────────────────
-    void setMajorRealm(int majorRealm, AscensionOriginSource source);
+    void setMajorRealm(int majorRealm, OriginSource source);
     void setMinorRealm(int minorRealm);
 
     void setProgress(double progress);
 
     //only call onRemoved/onAdded if the technique is added for the first time or removed for the final time
-    boolean setCurrentTechnique(Identifier technique, AscensionOriginSource source);
-    boolean setCurrentTechnique(Identifier technique, TechniqueData data, AscensionOriginSource source);
+    boolean setCurrentTechnique(Identifier technique, OriginSource source);
+    boolean setCurrentTechnique(Identifier technique, TechniqueData data, OriginSource source);
 
-    void setCompletedTribulation(AscensionOriginSource source, int majorRealm, int minorRealm, TribulationDefinition definition, TribulationData data);
-    void removeCompletedTribulation(AscensionOriginSource source, int majorRealm, int minorRealm);
+    void setCompletedTribulation(OriginSource source, int majorRealm, int minorRealm, TribulationDefinition definition, TribulationData data);
+    void removeCompletedTribulation(OriginSource source, int majorRealm, int minorRealm);
     void setBreakthroughTribulation(UUID tribulation,RegistryAccess access);
     //──Logic────────────────────────────────────────────────────────
-    default void onRealmUp(AscensionOriginSource source) {
+    default void onRealmUp(OriginSource source) {
         if(getCurrentTechnique() == null) return;
         Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,getCurrentTechnique(),source.getRegistryAccess());
         if(technique == null) return;//TODO add log here
         technique.onRealmUp(source,getCurrentTechniqueData());
     }
-    default void onRealmDown(AscensionOriginSource source){
+    default void onRealmDown(OriginSource source){
 
         int majorRealm = getMajorRealm();
         int minorRealm = getMinorRealm();
@@ -99,7 +100,7 @@ public interface PathData extends RegistryObjectData {
     }
 
     //takes in a potential realm change, and breaks it down into individual steps
-    default void handleRealmChange(AscensionOriginSource source, int newMajorRealm, int newMinorRealm){
+    default void handleRealmChange(OriginSource source, int newMajorRealm, int newMinorRealm){
         if(getCurrentTechnique() == null) return;
         int oldMajorRealm = getMajorRealm();
         int oldMinorRealm = getMinorRealm();
@@ -214,7 +215,7 @@ public interface PathData extends RegistryObjectData {
 
     //drops the current realm until either the technique before has the same family or majorRealm = 0
     //TODO needs more testing
-    default void dropToValidFamilyRealm(AscensionOriginSource source, Identifier targetTechnique){
+    default void dropToValidFamilyRealm(OriginSource source, Identifier targetTechnique){
         Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,targetTechnique,source.getRegistryAccess());
         if(technique == null) return;
         Collection<String> families = technique.getTechniqueFamilies();
@@ -240,10 +241,10 @@ public interface PathData extends RegistryObjectData {
         }
     }
     //caches the current state then simulates applying it
-    void simulateProgression(AscensionOriginSource source);
+    void simulateProgression(OriginSource source);
 
     //removes it from a specific source but should still save its data (mainly used when transferring path data)
-    void removeFromSource(AscensionOriginSource source);
+    void removeFromSource(OriginSource source);
 
 
 

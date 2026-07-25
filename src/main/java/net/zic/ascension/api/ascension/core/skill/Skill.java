@@ -7,6 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public interface Skill {
 
@@ -22,14 +23,14 @@ public interface Skill {
      * @param source the origin source it is being added to
      * @param data the data for this skill
      */
-    void onAdded(AscensionOriginSource source, SkillData data);
+    void onAdded(OriginSource source, SkillData data);
 
     /**
      * Called when the skill is removed from a source
      * @param source the source it is removed from
      * @param data the data of this skill
      */
-    void onRemoved(AscensionOriginSource source, SkillData data);
+    void onRemoved(OriginSource source, SkillData data);
 
     //called when an entity that owns an origin detects the skill was changed
     void applyToEntity(LivingEntity entity,SkillData data);

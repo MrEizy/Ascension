@@ -20,12 +20,14 @@ import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolder;
 import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.core.path.affinity.AffinityHolder;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.SkillHolder;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.event.EventReason;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
@@ -59,23 +61,13 @@ import java.util.*;
 public class AscensionOriginSource extends OriginSource {
 
 
-
-    private final HashMap<Identifier, PathData> paths = new HashMap<>();
-    private final HashMap<Identifier,HashSet<Identifier>> pathOwners = new HashMap<>();
-
-
-    private final HashMap<Identifier, SkillData> skills = new HashMap<>();
-    private final HashMap<Identifier,HashSet<Identifier>> skillOwners = new HashMap<>();
-
+    private final Random random = new Random();
 
 
     private final StatSheet statSheet = new StatSheet();
     private final AffinityHolder affinityHolder = new AffinityHolder();
 
     //──Cached data────────────────────────────────────────────────────────
-    protected HashMap<Identifier,PathData> cachedPathData = new HashMap<>();
-    protected HashMap<Identifier,SkillData> cachedSkillData = new HashMap<>();
-
 
     private RegistryAccess registryAccess;
     private long revision;
@@ -101,7 +93,6 @@ public class AscensionOriginSource extends OriginSource {
     /**
      * attempts to get a DataSource instance, creating a new one if it is not present
      * @param source the source we want to get the instance of
-     * @param access the registry access
      * @return either an existing instance or a fresh one
      */
     protected DataSourceInstance getOrCreate(Identifier source){
@@ -111,14 +102,17 @@ public class AscensionOriginSource extends OriginSource {
     }
 
     protected PhysiqueHolder getPhysiqueHolder(){
-        DataSourceInstance instance = getOrCreate(CoreHolderProviders.PHYSIQUE_HOLDER_PROVIDER.getId());
-        return (PhysiqueHolder) instance;
+        return (PhysiqueHolder) getOrCreate(CoreHolderProviders.PHYSIQUE_HOLDER_PROVIDER.getId());
     }
     protected BloodlineHolder getBloodlineHolder(){
-        DataSourceInstance instance = getOrCreate(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
-        return (BloodlineHolder) instance;
+        return (BloodlineHolder)  getOrCreate(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
     }
-
+    protected PathHolder getPathHolder(){
+        return (PathHolder) getOrCreate(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
+    }
+    protected SkillHolder getSkillHolder(){
+        return (SkillHolder) getOrCreate(CoreHolderProviders.SKILL_HOLDER_PROVIDER.getId());
+    }
     public boolean isLoaded(){ return cached != null;}
 
     public ValueInput getCached(){return cached;}
@@ -209,7 +203,11 @@ public class AscensionOriginSource extends OriginSource {
 
     //should be used if you modified a bloodlines data
     public void markBloodlineDirty(Identifier bloodline){
+        long id = random.nextLong();
+        startProcess("modified_bloodline"+id);
+        markDataSourceDirty(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
         getBloodlineHolder().markBloodlineDirty(bloodline);
+        resolveProcess("modified_bloodline"+id);
     }
     //──Path────────────────────────────────────────────────────────
 
@@ -234,28 +232,10 @@ public class AscensionOriginSource extends OriginSource {
      * @return true-> added, false -> not added
      */
     public boolean addPath(Identifier path,PathData existingData,Identifier owner){
-        return addPath(path,existingData,owner,null);
-    }
-
-    /**
-     * add a path to the source, along with a reason for the addition
-     * @param path the path to add
-     * @param existingData either a fresh data instance or existing one
-     * @param owner the source of this addition
-     * @param reason the reason for this addition (mostly null, see documentation for implementation details)
-     * @return  true-> added, false -> not added
-     */
-    public boolean addPath(Identifier path,PathData existingData,Identifier owner,EventReason reason){
         if(path == null || existingData == null) return false;
-
-        pathOwners.computeIfAbsent(path,key->new HashSet<>());
-        pathOwners.get(path).add(owner);
-
-        if(paths.containsKey(path)) return false;
-        paths.put(path,existingData);
-
-        return true;
+        return getPathHolder().addPath(path,existingData,owner);
     }
+
 
     /**
      * removes a path if there are no owners remaining
@@ -263,37 +243,33 @@ public class AscensionOriginSource extends OriginSource {
      * @param owner the source of the removal
      * @return true->removed, false-> not removed
      */
-    public boolean removePath(Identifier path,Identifier owner){return removePath(path,owner,null);}
-
-    /**
-     * removes a path if there are no owners remaining with a specific reason
-     * @param path the path to remove
-     * @param owner the source of the removal
-     * @param reason the reason for the removal
-     * @return true->removed, false-> not removed
-     */
-    public boolean removePath(Identifier path,Identifier owner,EventReason reason){
-        if(!paths.containsKey(path)) return false;
-        if(!pathOwners.containsKey(path)) return false;
-
-        pathOwners.get(path).remove(owner);
-
-        if(!pathOwners.get(path).isEmpty()) return false;
-
-        paths.remove(path);
-        pathOwners.remove(path);
-        return true;
+    public boolean removePath(Identifier path,Identifier owner){
+        return getPathHolder().removePath(path,owner);
     }
+
 
     public boolean hasPath(Identifier path){
-        return paths.containsKey(path);
+        return getPathHolder().hasPath(path);
     }
     public PathData getPathData(Identifier path){
-        return paths.get(path);
+        return getPathHolder().getPath(path);
     }
 
     public Collection<Identifier> getPaths(){
-        return paths.keySet();
+        return getPathHolder().getPaths();
+    }
+    public Collection<Identifier> getPathOwners(Identifier path){
+        return getPathHolder().getOwners(path);
+    }
+    //should be used if you changed a paths pathData
+    //does not auto start/resolve process
+    public void markPathDirty(Identifier path){
+        long id = random.nextLong();
+        startProcess("modified_path"+id);
+        markDataSourceDirty(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
+        getPathHolder().markPathDirty(path);
+        resolveProcess("modified_path"+id);
+
     }
 
     public boolean broadcastTechniqueAddedAttempt(Identifier technique, TechniqueData data){
@@ -308,7 +284,6 @@ public class AscensionOriginSource extends OriginSource {
     public void broadcastTechniqueRemoved(Identifier technique, TechniqueData data){
 
     }
-    public void markPathDirty(Identifier path){}//should be used if you changed a paths pathData
 
     //──Skill────────────────────────────────────────────────────────
 
@@ -333,11 +308,8 @@ public class AscensionOriginSource extends OriginSource {
      * @return true -> added, false -> not added
      */
     public boolean addSkill(Identifier skill,SkillData data,Identifier owner){
-        if(skill == null) return false;
-        skills.put(skill,data);
-        skillOwners.computeIfAbsent(skill,key->new HashSet<>());
-        skillOwners.get(skill).add(owner);
-        return true;
+        if(skill == null || data == null) return false;
+        return getSkillHolder().addSkill(skill,data,owner);
     }
 
     /**
@@ -347,30 +319,26 @@ public class AscensionOriginSource extends OriginSource {
      * @return true->removed, false -> not removed
      */
     public boolean removeSkill(Identifier skill,Identifier owner){
-        if(!skillOwners.containsKey(skill)) return false;
-
-        skillOwners.get(skill).remove(owner);
-
-        if(!skillOwners.get(skill).isEmpty()) return false;
-        skills.remove(skill);
-        skillOwners.remove(skill);
-        return true;
+        return getSkillHolder().removeSkill(skill,owner);
     }
 
-    public Collection<Identifier> getSkills(){return skills.keySet();}
+    public Collection<Identifier> getSkills(){return getSkillHolder().getSkills();}
 
     public boolean hasSkill(Identifier skill){
-        return skills.containsKey(skill);
+        return getSkillHolder().hasSkill(skill);
     }
     public SkillData getSkillData(Identifier skill){
-        return skills.get(skill);
-    }
-    protected Map<Identifier,SkillData> getAllSkills(){
-        return skills;
+        return getSkillHolder().getSkillData(skill);
     }
 
 
-    public void markSkillDirty(Identifier skill){}//should be used if you changed a skills skilLData
+    public void markSkillDirty(Identifier skill){
+        long id = random.nextLong();
+        startProcess("modified_skill"+id);
+        markDataSourceDirty(CoreHolderProviders.SKILL_HOLDER_PROVIDER.getId());
+        getSkillHolder().markSkillDirty(skill);
+        resolveProcess("modified_skill"+id);
+    }//should be used if you changed a skills skilLData
 
     //──Stat Sheet────────────────────────────────────────────────────────
 
@@ -526,68 +494,6 @@ public class AscensionOriginSource extends OriginSource {
     public void write(ValueOutput output){
 
 
-        AscensionCraft.LOGGER.debug("Saving Physique");
-        try{
-            ValueOutput physiqueOutput = output.child("physique");
-            NbtHelpers.writeIdentifier(physiqueOutput,"id",getPhysique());
-            ValueOutput data = physiqueOutput.child("data");
-            if(getPhysiqueData() != null) getPhysiqueData().write(data);
-        }catch (Exception e){
-            AscensionCraft.LOGGER.error("error writing physique {}",getPhysique());
-            AscensionCraft.LOGGER.error("stacktrace: ",e);
-        }
-        AscensionCraft.LOGGER.debug("Finished Saving Physique");
-        AscensionCraft.LOGGER.debug("Saving Bloodlines");
-
-        ValueOutput.ValueOutputList bloodlines = output.childrenList("bloodlines");
-        for(Identifier bloodline : getBloodlines()){
-            AscensionCraft.LOGGER.debug("Saving Bloodline {}",bloodline);
-           try{
-               ValueOutput bloodlineOutput = bloodlines.addChild();
-               NbtHelpers.writeIdentifier(bloodlineOutput,"id",bloodline);
-               ValueOutput dataOutput = bloodlineOutput.child("data");
-               getBloodlineData(bloodline).write(dataOutput);
-           } catch (Exception e){
-               AscensionCraft.LOGGER.error("error writing bloodline {}",bloodline);
-               AscensionCraft.LOGGER.error("stacktrace: ",e);
-           }
-
-        }
-
-        AscensionCraft.LOGGER.debug("Finished Saving Bloodlines");
-
-        AscensionCraft.LOGGER.debug("Saving Skill Data");
-
-        ValueOutput.ValueOutputList skills = output.childrenList("skills");
-        for(Identifier skill : getSkills()){
-            AscensionCraft.LOGGER.debug("Saving Skill {}",skill);
-            try {
-                ValueOutput skillOutput = skills.addChild();
-                NbtHelpers.writeIdentifier(skillOutput,"skill",skill);
-                ValueOutput skillData = skillOutput.child("data");
-                if(getSkillData(skill) != null) getSkillData(skill).write(skillData);
-            }catch (Exception e){
-                AscensionCraft.LOGGER.debug("error writing skill {}",skill);
-                AscensionCraft.LOGGER.debug("stacktrace",e);
-            }
-        }
-        AscensionCraft.LOGGER.debug("Finished Saving Skill Data");
-        AscensionCraft.LOGGER.debug("Saving Skill Path Data");
-
-        ValueOutput.ValueOutputList paths = output.childrenList("paths");
-        for(Identifier path : getPaths()){
-            AscensionCraft.LOGGER.debug("Saving Path {}",path);
-            try {
-                ValueOutput pathOutput = paths.addChild();
-                NbtHelpers.writeIdentifier(pathOutput,"path",path);
-                ValueOutput pathData = pathOutput.child("data");
-                if(getPathData(path) != null) getPathData(path).write(pathData);
-            }catch (Exception e){
-                AscensionCraft.LOGGER.debug("error writing path {}",path);
-                AscensionCraft.LOGGER.debug("stacktrace",e);
-            }
-        }
-
     }
 
 
@@ -616,98 +522,10 @@ public class AscensionOriginSource extends OriginSource {
 
 
 
-        AscensionCraft.LOGGER.debug("Reading Skill Data");
-        cachedSkillData.clear();
-        ValueInput.ValueInputList skillsInput = input.childrenListOrEmpty("skills");
-
-        for(ValueInput skillInput : skillsInput){
-
-            try {
-                Identifier skillId = NbtHelpers.readIdentifier(skillInput,"skill");
-                ValueInput skillData = skillInput.childOrEmpty("data");
-
-                Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skillId,getRegistryAccess());
-                if(skill == null) continue;
-
-                SkillData data = skill.loadData(skillData,getRegistryAccess());
-                cachedSkillData.put(skillId,data);
-
-            }catch (Exception e){
-                AscensionCraft.LOGGER.debug("Error loading skill");
-                AscensionCraft.LOGGER.debug("stacktrace: ",e);
-            }
-        }
-
-        AscensionCraft.LOGGER.debug("Reading Path Data");
-        cachedPathData.clear();
-        ValueInput.ValueInputList pathsInput = input.childrenListOrEmpty("paths");
-        for(ValueInput pathInput : pathsInput){
-            try {
-                Identifier pathId = NbtHelpers.readIdentifier(pathInput,"path");
-                ValueInput pathData = pathInput.childOrEmpty("data");
-
-                Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,getRegistryAccess());
-                if(path == null) continue;
-
-                PathData data = path.loadData(pathData,getRegistryAccess());
-                cachedPathData.put(pathId,data);
-            }catch (Exception e){
-                AscensionCraft.LOGGER.debug("Error loading path");
-                AscensionCraft.LOGGER.debug("stacktrace: ",e);
-            }
-        }
-
-
-
-        AscensionCraft.LOGGER.debug("Reading Physique");
-        try{
-            ValueInput physiqueInput = input.child("physique").get();
-            Identifier id = NbtHelpers.readIdentifier(physiqueInput,"id");
-
-
-            Optional<ValueInput> data = physiqueInput.child("data");
-            PhysiqueData physiqueData = data.map(valueInput -> CoreRegistries.PHYSIQUE_REGISTRY.get(getRegistryAccess()).getValue(id).loadData(valueInput,getRegistryAccess())).orElse(CoreRegistries.PHYSIQUE_REGISTRY.get(getRegistryAccess()).getValue(id).newData(getRegistryAccess()));
-
-            setPhysique(id,physiqueData);
-
-            AscensionCraft.LOGGER.info("Loaded physique {}",id);
-        }catch (Exception e){
-            AscensionCraft.LOGGER.error("error loading physique");
-            AscensionCraft.LOGGER.error("stacktrace : ",e);
-            //TODO set technique to default
-        }
-        AscensionCraft.LOGGER.debug("Finished Reading Physique");
-        AscensionCraft.LOGGER.debug("Reading Bloodlines");
-        try {
-            ValueInput.ValueInputList bloodlinesInput = input.childrenListOrEmpty("bloodlines");
-
-            for(ValueInput bloodlineInput : bloodlinesInput.stream().toList()){
-                try {
-                    Identifier id = NbtHelpers.readIdentifier(bloodlineInput,"id");
-                    AscensionCraft.LOGGER.debug("Reading Bloodline {}",id);
-                    Optional<ValueInput> data = bloodlineInput.child("data");
-                    Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,id,getRegistryAccess());
-                    if(data.isEmpty()) addBloodline(id);
-                    else addBloodline(id,bloodline.loadData(data.get(),getRegistryAccess()));
-
-                    AscensionCraft.LOGGER.info("Loaded bloodline {} with purity {}",id,getBloodlineData(id).getPurity());
-                } catch (Throwable throwable){
-                    AscensionCraft.LOGGER.error("error loading bloodline");
-                    AscensionCraft.LOGGER.error("stacktrace : ",throwable);
-                }
-                AscensionCraft.LOGGER.debug("Finished Reading Bloodline");
-            }
-        } catch (Exception e){
-            AscensionCraft.LOGGER.error("error loading all bloodlines");
-            AscensionCraft.LOGGER.error("stacktrace : ",e);
-        }
-        AscensionCraft.LOGGER.debug("Finished Reading Bloodlines");
 
 
 
 
-        cachedPathData.clear();
-        cachedSkillData.clear();
     }
 
     public void encode(RegistryFriendlyByteBuf buf) {
@@ -774,37 +592,6 @@ public class AscensionOriginSource extends OriginSource {
      * @param snapshot
      */
     public void apply(SourceChangesSnapshot snapshot){
-        AscensionCraft.LOGGER.debug("Applying source update");
-        if(snapshot.physique != null){
-            this.physique = snapshot.physique;
-            this.physiqueData = snapshot.physiqueData;
-        }
-
-        for(Pair<Identifier,BloodlineData> bloodline : snapshot.toAddBloodlines) bloodlines.put(bloodline.getFirst(),bloodline.getSecond());
-
-        for(Identifier toRemove : snapshot.toRemoveBloodline) bloodlines.remove(toRemove);
-
-        for(Pair<Identifier,PathData> path : snapshot.toAddPaths) paths.put(path.getFirst(),path.getSecond());
-
-        for(Identifier toRemove :snapshot.toRemovePaths) paths.remove(toRemove);
-
-        for(Pair<Identifier,SkillData> skill : snapshot.toAddSkills) skills.put(skill.getFirst(),skill.getSecond());
-
-        for(Identifier toRemove : snapshot.toRemoveSkills) skills.remove(toRemove);
-
-
-
-        for(StatInstance stat : snapshot.dirtyStats) statSheet.setStat(stat);
-
-        for(ValueContainer affinity : snapshot.dirtyAffinity) affinityHolder.setAffinity(affinity);
-        for(Identifier category : snapshot.dirtyCategorizedAffinity.keySet()){
-
-            for (ValueContainer container : snapshot.dirtyCategorizedAffinity.get(category)) affinityHolder.setAffinity(category,container);
-        }
-        revision++;
-        AscensionCraft.LOGGER.debug("Finished applying source update at revision {}", revision);
-
-
 
     }
 }
