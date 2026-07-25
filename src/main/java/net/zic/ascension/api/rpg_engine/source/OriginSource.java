@@ -73,7 +73,10 @@ public class OriginSource implements StatProvider {
         return patch;
     }
 
-    public void markDataSourceDirty(Identifier source){} //tells the snapshot to sync this data source instance
+    //tells the snapshot to sync this data source instance
+    public void markDataSourceDirty(Identifier source){
+        dirtyDataSources.add(source);
+    }
 
     public void attachToEntity(LivingEntity entity){
         attachedEntities.add(entity);
@@ -102,6 +105,7 @@ public class OriginSource implements StatProvider {
         if(dataSources.containsKey(dataSource)) return false;
         dataSources.put(dataSource,instance);
         instance.getDataSource().onAdded(this,instance);
+        markDataSourceDirty(dataSource);
         return true;
     }
 
@@ -116,6 +120,7 @@ public class OriginSource implements StatProvider {
     public DataSourceInstance removeDataSource(Identifier dataSource){
         if(!dataSources.containsKey(dataSource)) return null;
         dataSources.get(dataSource).getDataSource().onRemoved(this,dataSources.get(dataSource));
+        removedDataSources.add(dataSource);
         return dataSources.remove(dataSource);
     }
 

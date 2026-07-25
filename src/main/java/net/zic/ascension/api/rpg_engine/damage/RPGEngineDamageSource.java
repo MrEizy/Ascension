@@ -12,8 +12,8 @@ import java.util.HashMap;
 
 public class RPGEngineDamageSource extends DamageSource {
     private final HashMap<Identifier,RPGEngineDamageTypeHolder> damageTypeHolders = new HashMap<>();
-    public RPGEngineDamageSource(Holder<DamageType> type, @Nullable Entity directEntity, @Nullable Entity causingEntity, @Nullable Vec3 damageSourcePosition) {
-        super(type, directEntity, causingEntity, damageSourcePosition);
+    public RPGEngineDamageSource(DamageSource source) {
+        super(source.typeHolder(), source.getDirectEntity(), source.getEntity(), source.getSourcePosition());
     }
 
 
@@ -25,4 +25,7 @@ public class RPGEngineDamageSource extends DamageSource {
         return damageTypeHolders.get(id);
     }
 
+    public boolean hasDamageTypeHolder(Identifier id){
+        return damageTypeHolders.containsKey(id);
+    }
 }

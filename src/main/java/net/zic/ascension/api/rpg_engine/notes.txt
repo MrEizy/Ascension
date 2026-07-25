@@ -1,5 +1,7 @@
 TODO:
-
+    setup gather types and damage event
+    setup event triggers
+    start working on ascension implementation alongside it
 
 
 

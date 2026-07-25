@@ -33,6 +33,7 @@ import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.StatInstance;
+import net.zic.zenithlib.stats.StatProvider;
 import net.zic.zenithlib.stats.StatSheet;
 import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
 import net.zic.zenithlib.value_containers.ValueContainer;
@@ -441,10 +442,30 @@ public class OriginSource {
     }
     public void updateStatSheet(){
         Collection<LivingEntity> entities = AscensionCraft.getSourceHandler().getLoadedWatchers(this);
-        for(LivingEntity entity : entities) NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(entity,statSheet));
+        for(LivingEntity entity : entities) NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(entity,statSheet.getAllStats()));
     }
     public void updateAttributes(ZenithAttributeHolder holder){
-        holder.update(statSheet.asMap());
+        holder.update(new StatProvider() {
+            @Override
+            public Collection<Stat> getStats() {
+                return List.of();
+            }
+
+            @Override
+            public StatInstance getStatInstance(Stat stat) {
+                return null;
+            }
+
+            @Override
+            public double getStat(Stat stat) {
+                return 0;
+            }
+
+            @Override
+            public double getBaseStat(Stat stat) {
+                return 0;
+            }
+        });//TODO fix
     }
 
     //──Affinity Holder────────────────────────────────────────────────────────
