@@ -37,6 +37,23 @@
       "condition": {
         "type": "ascension:major_realms_in",
         "realms": [
+          0
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/cultivation/plum_blossom_breathing",
+            "ascension:passive/plum_blossom_sword_aura"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
           5
         ]
       },

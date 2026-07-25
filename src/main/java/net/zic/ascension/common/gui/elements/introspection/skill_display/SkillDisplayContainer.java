@@ -77,6 +77,7 @@ public class SkillDisplayContainer extends RenderableElement {
         addChild(skillBar);
 
         addChild(new OpenActiveSelection(frame, skillBar, 96, 141));
+        addChild(new TogglePassiveButton(frame, this, 128, 23));
         refreshSynchronizedState();
     }
 

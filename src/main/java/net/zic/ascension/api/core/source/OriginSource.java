@@ -27,6 +27,7 @@ import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.core.physique.PhysiqueData;
 import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.api.core.technique.TechniqueData;
 import net.zic.ascension.api.event.EventReason;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
@@ -358,6 +359,20 @@ public class OriginSource {
     }
     public SkillData getSkillData(Identifier skill){
         return skills.get(skill);
+    }
+    public boolean isSkillEnabled(Identifier skill) {
+        if (skill == null) {
+            return false;
+        }
+        Skill skillInstance = CoreRegistries.safeAccess(
+                CoreRegistries.SKILL_REGISTRY,
+                skill,
+                getRegistryAccess()
+        );
+        SkillData data = getSkillData(skill);
+        return skillInstance instanceof ToggleableSkill toggleable
+                && data != null
+                && toggleable.isEnabled(data);
     }
     protected Map<Identifier,SkillData> getAllSkills(){
         return skills;
