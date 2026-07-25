@@ -18,6 +18,8 @@ import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
+import net.zic.ascension.api.core.effect.SkillEffectContainer;
+import net.zic.ascension.api.core.effect.frozen.FrozenStateData;
 
 import java.util.function.Supplier;
 
@@ -105,6 +107,20 @@ public class AscensionAttachments {
     public static final Supplier<AttachmentType<Integer>> ENTITY_STAMINA_REGEN_DELAY = ATTACHMENT_TYPES.register(
             "entity_stamina_regen_delay", () -> AttachmentType.builder(holder -> 0)
                     .serialize(Codec.INT.fieldOf("ticks"))
+                    .copyOnDeath()
+                    .build()
+    );
+
+
+    public static final Supplier<AttachmentType<FrozenStateData>> FROZEN_STATE = ATTACHMENT_TYPES.register(
+            "frozen_state", () -> AttachmentType.builder(holder -> new FrozenStateData())
+                    .serialize(FrozenStateData.CODEC.fieldOf("data"))
+                    .copyOnDeath()
+                    .build()
+    );
+    public static final Supplier<AttachmentType<SkillEffectContainer>> ACTIVE_SKILL_EFFECTS = ATTACHMENT_TYPES.register(
+            "active_skill_effects", () -> AttachmentType.builder(holder -> new SkillEffectContainer())
+                    .serialize(SkillEffectContainer.CODEC.fieldOf("data"))
                     .copyOnDeath()
                     .build()
     );

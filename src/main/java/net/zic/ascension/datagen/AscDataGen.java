@@ -30,6 +30,7 @@ public class AscDataGen {
         generator.addProvider(true, new AscModelProvider(packOutput));
         generator.addProvider(true, new AscBlockTagProvider(packOutput, lookupProvider));
         generator.addProvider(true, new AscItemTagProvider(packOutput, lookupProvider));
+        generator.addProvider(true, new AscEntityTypeTagProvider(packOutput, lookupProvider));
         generator.addProvider(true, new AscTooltipDataProvider(packOutput, AscensionCraft.MOD_ID));
         generator.addProvider(true, new AscClassificationDataProvider(packOutput, AscensionCraft.MOD_ID));
         event.createDatapackRegistryObjects(

@@ -67,6 +67,12 @@
       },
       "actions": [
         {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/frostbound_stillness"
+          ]
+        },
+        {
           "type": "ascension:set_skill_level",
           "skill": "ascension:passive/sustained_spirit",
           "contribution": "ascension:sustained_spirit_art/realm_2",

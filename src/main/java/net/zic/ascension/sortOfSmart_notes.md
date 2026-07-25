@@ -196,6 +196,42 @@
 ---
 
 <details>
+<summary>Frozen State and Temporary Skill Effects</summary>
+
+## Added Classes:
+- `FrozenStateData`: Stores an entity's frozen buildup and decay delay
+- `FrozenStateService`: Handles frozen buildup, resistance, immunity, decay and vanilla frozen visuals
+- `SkillEffectDefinition`: Datapack definition for a temporary skill effect
+- `SkillEffectInstance`: Stores one active effect's source, duration, potency and stacks
+- `SkillEffectContainer`: Stores the active temporary effects on an entity
+- `SkillEffectService`: Handles applying, replacing, stacking and removing effects
+- `SkillEffectModule`: Base interface for reusable effect behaviour
+- `SkillEffectModuleType`: Codec type for effect modules
+- `SkillEffectStackingPolicy`: Defines how repeated applications behave
+- `SkillEffectTicker`: Ticks frozen state and active temporary effects
+- `FrozenFormEffectModule`: Adds the current Frozen Form movement and frozen-state behaviour
+- `AscensionSkillEffectModuleTypes`: Registers the current effect modules
+- `FrozenBuildupReleaseFeature`: Applies frozen buildup from a held cast
+- `SkillEffectReleaseFeature`: Applies a temporary skill effect from a held cast
+- `AscEntityTypeTagProvider`: Generates frozen immunity, resistance and boss profile tags
+
+## Other changed classes:
+- `AscensionCraft`: Registered the temporary effect module types
+- `CoreRegistries`: Added the datapack skill effect registry
+- `TypeRegistries`: Added the skill effect module type registry
+- `AscensionAttachments`: Added frozen state and active effect attachments
+- `AscensionHeldCastReleaseFeatureTypes`: Registered frozen buildup and skill effect release features
+- `AscDataGen`: Registered entity type tag datagen
+- `ModTags`: Added frozen immunity, resistance and boss profile entity tags
+- `SkillEffectReleaseFeature`: Uses the held execution's skill ID when applying an effect
+- `FrozenStateService`: Uses generated entity tags through registry holders
+- `AscLangProvider`: Added Frostbound Stillness translations
+
+</details>
+
+---
+
+<details>
 <summary>  </summary>
 
 </details>

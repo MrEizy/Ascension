@@ -20,6 +20,9 @@
 • Added a Skill Leveling system  
 • Added Skill Experience, Level Floors and Level Caps  
 • Added a registered Resource Transaction system  
+• Added a held cast system  
+• Added generic temporary effects (skills)
+• 
 
 ## Removed
 • Vanilla Health overlay  

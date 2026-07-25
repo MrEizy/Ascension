@@ -10,6 +10,8 @@ import net.zic.ascension.impl.core.skill.castable.held.feature.MessageReleaseFea
 import net.zic.ascension.impl.core.skill.castable.held.feature.ParticleBurstReleaseFeature;
 import net.zic.ascension.impl.core.skill.castable.held.feature.ResourceTransactionReleaseFeature;
 import net.zic.ascension.impl.core.skill.castable.held.feature.SoundReleaseFeature;
+import net.zic.ascension.impl.core.skill.castable.held.feature.FrozenBuildupReleaseFeature;
+import net.zic.ascension.impl.core.skill.castable.held.feature.SkillEffectReleaseFeature;
 
 public final class AscensionHeldCastReleaseFeatureTypes {
     public static final DeferredRegister<HeldCastReleaseFeatureType> TYPES = DeferredRegister.create(
@@ -32,6 +34,13 @@ public final class AscensionHeldCastReleaseFeatureTypes {
     public static final DeferredHolder<HeldCastReleaseFeatureType, HeldCastReleaseFeatureType> RESOURCE_TRANSACTION = TYPES.register(
             "resource_transaction",
             () -> new HeldCastReleaseFeatureType(ResourceTransactionReleaseFeature.CODEC)
+    );
+
+    public static final DeferredHolder<HeldCastReleaseFeatureType, HeldCastReleaseFeatureType> FROZEN_BUILDUP = TYPES.register(
+            "frozen_buildup", () -> new HeldCastReleaseFeatureType(FrozenBuildupReleaseFeature.CODEC)
+    );
+    public static final DeferredHolder<HeldCastReleaseFeatureType, HeldCastReleaseFeatureType> SKILL_EFFECT = TYPES.register(
+            "skill_effect", () -> new HeldCastReleaseFeatureType(SkillEffectReleaseFeature.CODEC)
     );
 
     private AscensionHeldCastReleaseFeatureTypes() {

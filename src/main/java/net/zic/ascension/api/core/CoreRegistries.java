@@ -7,17 +7,14 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.bloodline.Bloodline;
-import net.zic.ascension.api.core.bloodline.purity.PurityChangeAction;
-import net.zic.ascension.api.core.bloodline.purity.PurityChangeActionCondition;
 import net.zic.ascension.api.core.data_source.DataSource;
 import net.zic.ascension.api.core.path.Path;
 import net.zic.ascension.api.core.physique.Physique;
 import net.zic.ascension.api.core.progression.ProgressAction;
 import net.zic.ascension.api.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.core.skill.Skill;
+import net.zic.ascension.api.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.core.technique.Technique;
-import net.zic.ascension.api.core.technique.realm_change.RealmChangeAction;
-import net.zic.ascension.api.core.technique.realm_change.RealmChangeActionCondition;
 import net.zic.ascension.api.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.datapack.bloodline.BloodlineType;
 
@@ -59,6 +56,9 @@ public class CoreRegistries {
             AscensionCraft.MOD_ID,
             "skills",
             ()-> SkillType.SKILL_CODEC
+    );
+    public static final RegistryHelper.DataPackRegistry<SkillEffectDefinition> SKILL_EFFECT_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "skill_effects", () -> SkillEffectDefinition.CODEC
     );
     public static final RegistryHelper.DataPackRegistry<DataSource> DATA_SOURCE_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID,
@@ -116,6 +116,11 @@ public class CoreRegistries {
                 SKILL_REGISTRY.key(),
                 SKILL_REGISTRY.codec().get(),
                 SKILL_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(
+                SKILL_EFFECT_REGISTRY.key(),
+                SKILL_EFFECT_REGISTRY.codec().get(),
+                SKILL_EFFECT_REGISTRY.codec().get()
         );
         event.dataPackRegistry(
                 DATA_SOURCE_REGISTRY.key(),

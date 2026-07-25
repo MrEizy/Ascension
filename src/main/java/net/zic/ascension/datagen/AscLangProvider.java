@@ -309,6 +309,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.stillfrost_breathing.desc", "Breathe slowly and draw frost into the soul, cultivating inner stillness while refining Soul through Ice");
         add("ascension.skill.sustained_spirit.name", "Sustained Spirit");
         add("ascension.skill.sustained_spirit.desc", "Cold spiritual stillness suppresses wasteful movement, reducing exhaustion and stamina spent through travel");
+        add("ascension.skill.frostbound_stillness.name", "Frostbound Stillness");
+        add("ascension.skill.frostbound_stillness.desc", "Gather cold spiritual stillness before releasing it across nearby creatures, building frost and imposing Frozen Form.");
 
     }
 }

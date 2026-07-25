@@ -1,0 +1,30 @@
+{
+  "stacking": "stronger_replaces",
+  "modules": [
+    {
+      "type": "ascension:frozen_form",
+      "frozen_floor": {
+        "base": 0.18,
+        "terms": [
+          {
+            "source": { "type": "ascension:context", "key": "ascension:effect_potency" },
+            "operation": "add",
+            "scale": 0.22
+          }
+        ],
+        "maximum": 0.4
+      },
+      "movement_reduction": {
+        "base": 0.08,
+        "terms": [
+          {
+            "source": { "type": "ascension:context", "key": "ascension:effect_potency" },
+            "operation": "add",
+            "scale": 0.17
+          }
+        ],
+        "maximum": 0.25
+      }
+    }
+  ]
+}

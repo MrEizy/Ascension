@@ -19,6 +19,7 @@ import net.zic.ascension.api.datapack.tribulation.TribulationType;
 import net.zic.ascension.api.value.source.ScaledValueSourceType;
 import net.zic.ascension.api.core.skill.castable.held.execution.HeldCastExecutionType;
 import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseFeatureType;
+import net.zic.ascension.api.core.effect.SkillEffectModuleType;
 import net.zic.zenithlib.registry.RegistryHelper;
 
 /**
@@ -48,6 +49,7 @@ public class TypeRegistries {
 
     public static final Registry<ScaledValueSourceType> SCALED_VALUE_SOURCE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"scaled_value_source_type");
     public static final Registry<HeldCastExecutionType> HELD_CAST_EXECUTION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"held_cast_execution_type");
+    public static final Registry<SkillEffectModuleType> SKILL_EFFECT_MODULE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"skill_effect_module_type");
     public static final Registry<HeldCastReleaseFeatureType> HELD_CAST_RELEASE_FEATURE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"held_cast_release_feature_type");
 
 
@@ -67,6 +69,7 @@ public class TypeRegistries {
         event.register(PROGRESS_ACTION_CONDITION_TYPE_REGISTRY);
         event.register(SCALED_VALUE_SOURCE_TYPE_REGISTRY);
         event.register(HELD_CAST_EXECUTION_TYPE_REGISTRY);
+        event.register(SKILL_EFFECT_MODULE_TYPE_REGISTRY);
         event.register(HELD_CAST_RELEASE_FEATURE_TYPE_REGISTRY);
         AscensionCraft.LOGGER.info("Finished loading type registries");
     }
