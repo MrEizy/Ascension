@@ -128,94 +128,58 @@ Exact values will depend on an eventual player stat rebalance
 <summary>Skill Leveling and Scaled Values</summary>
 
 ## Added Classes:
+* `LevelledSkill`: Marks skills that can have levels and defines their maximum level
+* `LevelledSkillData`: Skill data that contains leveling information
+* `SkillProgressionData`: Stores skill levels, experience, level floors and level caps
+* `SkillProgressionService`: Handles changing skill levels and experience
+* `SkillLevelResolver`: Works out the actual level of a skill
+* `SkillLevelSnapshot`: Stores the result of a skill level calculation
+* `SkillLevelChangedEvent`: Event for when a skill level changes
+* `SkillLevelResolveEvent`: Allows other systems to temporarily modify skill levels
+* `SetSkillLevelAction`: Progression action for adding or removing skill level contributions
+* `SetSkillLevelActionType`: Codec for the `set_skill_level` action
+* `ScaledValue`: A reusable datapack value that can scale from different sources
+* `ScaledValueContext`: Contains the information used when calculating a scaled value
+* `ScaledValueTerm`: One part of a scaled value calculation
+* `ScaledValueOperation`: Determines how a value is added, multiplied or replaced
+* `ScaledValueSource`: Base interface for different scaling sources
+* `ScaledValueSourceType`: Codec type for scaling sources
+* `ConstantScaledValueSource`: Uses a fixed value
+* `SkillLevelScaledValueSource`: Scales from skill level
+* `ChargeScaledValueSource`: Scales from held-cast charge
+* `StatScaledValueSource`: Scales from stats
+* `AffinityScaledValueSource`: Scales from path affinities
+* `ContextScaledValueSource`: Uses a value provided by the system calculating it
+* `AscensionScaledValueSourceTypes`: Registers the default scaling sources
 
-### Skill Progression
-* `LevelledSkill`: Marks skills that support level-based behaviour and defines their maximum level.
-* `LevelledSkillData`: Base interface for skill data containing persistent progression information.
-* `SkillProgressionData`: Stores trained levels, experience, level floors, and accessible-level contributions.
-* `SkillProgressionService`: Provides the shared API for granting experience, changing trained levels, and managing level contributions.
-* `SkillLevelResolver`: Calculates a skill’s effective level from permanent progression, realm restrictions, and temporary modifiers.
-* `SkillLevelSnapshot`: Represents the resolved state of a skill’s current level.
-* `SkillLevelChangedEvent`: Fires when a skill’s effective level changes.
-* `SkillLevelResolveEvent`: Allows temporary modifiers and external systems to affect a skill’s resolved level.
-
-### Progression Actions
-* `SetSkillLevelAction`: Adds or removes level-floor and accessible-level contributions through progression handlers.
-* `SetSkillLevelActionType`: Provides the datapack codec for the `ascension:set_skill_level` progression action.
-
-### Scaled Values
-* `ScaledValue`: Resolves a datapack-defined value from a base value and an ordered collection of scaling terms.
-* `ScaledValueContext`: Supplies the player, skill, target, charge, and other contextual values used during scaling.
-* `ScaledValueTerm`: Defines a single contribution to a scaled value.
-* `ScaledValueOperation`: Determines whether a contribution adds, multiplies, or replaces the current value.
-* `ScaledValueSource`: Base interface for reusable scaling sources.
-* `ScaledValueSourceType`: Provides polymorphic codec registration for scaled-value sources.
-
-### Scaled Value Sources
-* `ConstantScaledValueSource`: Supplies a fixed value.
-* `SkillLevelScaledValueSource`: Scales using the effective level of a skill.
-* `ChargeScaledValueSource`: Scales using normalised held-cast charge.
-* `StatScaledValueSource`: Scales using an Ascension stat.
-* `AffinityScaledValueSource`: Scales using a path affinity.
-* `ContextScaledValueSource`: Reads arbitrary values supplied by the calling system.
-* `AscensionScaledValueSourceTypes`: Registers the built-in scaled-value source types.
-
-## Other Changed Classes:
-* `AscensionCraft`: Registers the new scaled-value source types.
-* `TypeRegistries`: Added the `scaled_value_source_type` registry.
-* `AscensionProgressActionTypes`: Registered the `ascension:set_skill_level` progression action.
+## Other changed classes:
+* `AscensionCraft`: Registered the scaled value source types
+* `TypeRegistries`: Added the scaled value source type registry
+* `AscensionProgressActionTypes`: Registered the `set_skill_level` action
 
 ---
 
 # Planned Implementation
 
-## Skill Manuals
-* Connect skill manuals to `SkillProgressionService`.
-* Allow manuals to:
-    * Unlock skills
-    * Grant skill experience
-    * Increase trained levels
-    * Apply progression requirements
-* Preserve trained progression when access is temporarily lost.
-* Avoid allowing item logic to directly modify stored skill data.
+## Skill Leveling
+* Connect skill manuals to the shared skill progression system.
+* Let skills gain levels through manuals, experience, realms and other sources.
+* Keep trained levels when a skill is temporarily restricted.
+* Correctly lower or restore skill levels during realm regression and technique swapping.
+* Add commands and proper tests for skill leveling.
 
-## Technique and Realm Integration
-* Use level-floor and accessible-level contributions for technique milestones.
-* Allow realm progression to upgrade skills without hardcoded realm checks inside the skills.
-* Correctly downgrade skills during realm regression.
-* Remove progression contributions when techniques are forgotten or replaced.
-* Restore previously trained levels when their requirements are regained.
-
-## Resource Modifiers
-* Allow levelled passive skills to provide different resource modifiers at each level.
-* Sustained Spirit will use:
-    * Level 1 movement-exhaustion reduction
-    * Level 1 movement-stamina reduction
-    * Improved versions of both modifiers at level 2
-
-## Held Skills
-* Use scaled values for:
-    * Charge cost
-    * Radius
-    * Duration
-    * Effect potency
-    * Frozen buildup
-    * Visual intensity
-* Use powered charge terms for quadratic or other configurable cost curves.
-
-## Future Scaling Sources
-* Current and maximum resources
-* Major and minor realms
-* Target health and attributes
-* Target classifications
-* Environmental conditions
-* Biome and dimension
-* Time of day
-* Active buffs and debuffs
-* Equipment and artefacts
+## Scaled Values
+* Use scaled values for damage, costs, radius, duration, cultivation rate, effects etc.
+* Add more scaling sources when they are actually needed, such as:
+    * Realms
+    * Resources
+    * Targets
+    * Biomes and dimensions
+    * Equipment
+    * Active effects
+* Add global scaling presets later if a lot of skills start repeating the same values.
 
 </details>
-
 
 ---
 
@@ -223,134 +187,82 @@ Exact values will depend on an eventual player stat rebalance
 <summary>Resource Transactions and Modifiers</summary>
 
 ## Added Classes:
+* `ResourceType`: Defines how a resource is stored and changed
+* `ResourceRegistries`: Registry for resource types
+* `ResourceOperation`: The type of resource change, such as consuming, restoring or accumulating
+* `ResourceTransactionRequest`: A requested resource change
+* `ResourceTransactionContext`: Extra information about the transaction
+* `ResourceTransactionResult`: The final result of a transaction
+* `ResourceTransactionStatus`: Whether a transaction succeeded, failed, was cancelled etc
+* `ResourceTransactionFlag`: Extra transaction rules and recursion protection
+* `ResourceTransactionSelector`: Selects transactions by resource, operation or source
+* `ResourceTransactionService`: Handles the full transaction process
+* `ResourceTransactions`: Helper methods for common resource changes
+* `ResourceApplicationResult`: The result returned by a resource type
+* `ResourceSourceIdentity`: Base interface for transaction sources
+* `SimpleResourceSourceIdentity`: Basic implementation of a resource source
+* `ResourceSourceSelector`: Selects exact sources or broader source tags
+* `ResourceModifier`: A modifier being applied to a transaction
+* `ResourceModifierDefinition`: Datapack definition for a resource modifier
+* `ResourceModifierCollector`: Collects and replaces modifiers
+* `ResourceModifierOperation`: The different ways a modifier can change a transaction
+* `ResourceModifierResolution`: Calculates the final modified value
+* `ResourceTransactionEvent`: Events for validating, modifying and reacting to transactions
+* `AbstractBoundedResourceType`: Shared code for resources with minimum and maximum values
+* `QiResourceType`: Connects Qi to the transaction system
+* `PlayerExhaustionResourceType`: Connects exhaustion to the transaction system
+* `PlayerHungerResourceType`: Connects hunger to the transaction system
+* `PlayerSaturationResourceType`: Connects saturation to the transaction system
+* `AscensionResourceTypes`: Registers Ascension resource types
+* `AscensionResourceSources`: Defines the current transaction sources
+* `AscensionResourceSourceTags`: Defines source categories such as movement and combat
+* `ResourceModifierPassiveSkill`: Generic passive skill that modifies resource transactions
+* `ResourceModifierPassiveSkillData`: Skill data for resource modifier passives
+* `ResourceModifierLevelDefinition`: Resource modifiers provided by each skill level
+* `ResourceModifierPassiveSkillType`: Codec for resource modifier passives
+* `ResourceModifierPassiveHandler`: Collects modifiers from owned passive skills
+* `PlayerTravelExhaustionMixin`: Routes movement exhaustion through the transaction system
+* `PlayerJumpExhaustionMixin`: Routes jump exhaustion through the transaction system
+* `PlayerAttackExhaustionMixin`: Routes attack exhaustion through the transaction system
+* `FoodDataRegenerationExhaustionMixin`: Routes regeneration exhaustion through the transaction system
+* `PlayerExhaustionFallbackMixin`: Handles exhaustion sources that are not classified yet
+* `FoodDataAccessor`: Provides access to vanilla exhaustion data
 
-### Resource Transaction API
-* `ResourceType`: Defines how a specific resource is read, validated, and modified.
-* `ResourceRegistries`: Contains the registry used for resource type adapters.
-* `ResourceOperation`: Defines supported transaction operations such as consumption, accumulation, restoration, generation, and draining.
-* `ResourceTransactionRequest`: Represents a requested resource transaction.
-* `ResourceTransactionContext`: Stores the entity, source, skill, target, flags, and scaled-value context associated with a transaction.
-* `ResourceTransactionResult`: Contains the requested, modified, and applied transaction values.
-* `ResourceTransactionStatus`: Represents the final outcome of a transaction.
-* `ResourceTransactionFlag`: Provides transaction behaviour flags and recursion protection.
-* `ResourceTransactionSelector`: Selects transactions by resource, operation, source ID, or source tag.
-* `ResourceTransactionService`: Validates, modifies, resolves, and applies resource transactions.
-* `ResourceTransactions`: Provides simplified helper methods for common transaction operations.
-* `ResourceApplicationResult`: Represents the result returned by a resource adapter after applying a transaction.
-
-### Resource Sources
-* `ResourceSourceIdentity`: Base interface for registered or adapted transaction sources.
-* `SimpleResourceSourceIdentity`: Provides the current lightweight source implementation.
-* `ResourceSourceSelector`: Matches exact source IDs, source tags, and excluded sources.
-
-### Resource Modifiers
-* `ResourceModifier`: Represents a resolved modifier applied to a transaction.
-* `ResourceModifierDefinition`: Defines a datapack-configured resource modifier.
-* `ResourceModifierCollector`: Collects and replaces modifiers using their IDs and priorities.
-* `ResourceModifierOperation`: Defines flat, multiplicative, cancellation, immunity, and limiting modifier operations.
-* `ResourceModifierResolution`: Resolves collected modifiers into a final transaction amount.
-
-### Resource Events
-* `ResourceTransactionEvent`: Provides pre-validation, modifier collection, and post-transaction events for compatibility and extension.
-
-### Built-in Resources
-* `AbstractBoundedResourceType`: Shared implementation support for bounded resources.
-* `QiResourceType`: Adapts Ascension Qi to the resource transaction system.
-* `PlayerExhaustionResourceType`: Adapts player exhaustion accumulation and removal.
-* `PlayerHungerResourceType`: Adapts discrete player hunger changes.
-* `PlayerSaturationResourceType`: Adapts player saturation changes.
-* `AscensionResourceTypes`: Registers the built-in resource types.
-
-### Built-in Sources
-* `AscensionResourceSources`: Defines the initial transaction sources and resolves movement-specific sources.
-* `AscensionResourceSourceTags`: Defines broad source categories such as movement, combat, survival, regeneration, skills, cultivation, and environmental effects.
-
-### Resource Modifier Passives
-* `ResourceModifierPassiveSkill`: Generic levelled passive skill that contributes resource modifiers.
-* `ResourceModifierPassiveSkillData`: Stores the passive’s skill progression data.
-* `ResourceModifierLevelDefinition`: Defines the modifiers provided by each skill level.
-* `ResourceModifierPassiveSkillType`: Provides the datapack codec for `ascension:resource_modifier_passive`.
-* `ResourceModifierPassiveHandler`: Collects matching modifiers from owned passive skills during transactions.
-
-### Vanilla Exhaustion Hooks
-* `PlayerTravelExhaustionMixin`: Routes walking, sprinting, swimming, and elytra exhaustion through registered movement sources.
-* `PlayerJumpExhaustionMixin`: Routes jumping exhaustion through the jumping source.
-* `PlayerAttackExhaustionMixin`: Routes attack exhaustion through the attacking source.
-* `FoodDataRegenerationExhaustionMixin`: Routes natural-regeneration exhaustion through the regeneration source.
-* `PlayerExhaustionFallbackMixin`: Routes otherwise unclassified exhaustion calls through a fallback source.
-* `FoodDataAccessor`: Provides controlled access to the private vanilla exhaustion value.
-
-## Other Changed Classes:
-* `AscensionCraft`: Registers built-in resource type adapters.
-* `AscensionSkillTypes`: Registers `ascension:resource_modifier_passive`.
-* `SimpleEntityQiProvider`: Routes Qi consumption and restoration through resource transactions while retaining the existing Qi capability API.
-* `ToggleablePassiveSkill`: Routes passive Qi upkeep through the `ascension:skill_casting` transaction source.
-* `ResourceModifierDefinition`: Updated optional scaled-value codec handling.
-* `ResourceTransactionSelector`: Updated optional source-selector codec handling.
-* `PlayerExhaustionResourceType`: Uses the `FoodDataAccessor` to read and modify vanilla exhaustion.
-* `ascension.mixins.json`: Registers the resource hooks and FoodData accessor.
+## Other changed classes:
+* `AscensionCraft`: Registered the resource types
+* `AscensionSkillTypes`: Registered resource modifier passives
+* `SimpleEntityQiProvider`: Routes Qi changes through resource transactions
+* `ToggleablePassiveSkill`: Routes passive Qi upkeep through resource transactions
+* `ResourceModifierDefinition`: Fixed optional scaled value decoding
+* `ResourceTransactionSelector`: Fixed optional source selector decoding
+* `PlayerExhaustionResourceType`: Uses the FoodData accessor
+* `ascension.mixins.json`: Registered the new resource mixins
 
 ---
 
 # Planned Implementation
 
-### Resource Operations
-* `consume`: Spends a resource from an available pool.
-* `accumulate`: Adds an accumulating burden such as exhaustion.
-* `restore`: Restores a resource or removes an accumulated burden.
-* `generate`: Produces additional resource.
-* `drain`: Removes a resource without treating it as an ordinary cost.
-Resources determine which operations they support.
+## Resource System
+* Keep Qi, stamina, exhaustion, hunger and saturation mechanically separate.
+* Let them share the same modifier and event pipeline.
+* Add more resource types and sources when they are needed.
+* Integrate the system with Olli's central source API once it is ready.
 
-### Resolution
-* Modifier values are resolved in the following order:
-    1. Flat additions
-    2. Base multipliers
-    3. Total multipliers
-    4. Minimum and maximum limits
-    5. Mechanical application
-* Transactions can also be cancelled or made immune.
-* Final negative costs are prevented.
-* Non-finite values are rejected.
-
-### Post-Transaction Events
-* Completed transactions produce a result containing:
-    * Original requested amount
-    * Modified amount
-    * Actual applied amount
-    * Resource values before and after
-    * Final status
-* External systems can react without replacing the core transaction implementation.
-
-## Passive Modifier Performance
-* Profile modifier collection during movement-heavy gameplay.
-* Cache or index active modifier providers if skill scanning becomes expensive.
-* Invalidate caches when:
-    * Skills are added or removed
-    * Skill levels change
-    * Passives are toggled
-    * Techniques are replaced
-    * Relevant effects begin or expire
+## Modifiers
+* Support exact source IDs and broader source tags.
+* Allow modifiers to increase, decrease, cancel or limit transactions.
+* Improve modifier caching later if checking every passive becomes expensive.
+* Add clearer datapack errors and documentation.
 
 ## Compatibility
-* Provide documented events for other mods to:
-    * Validate transactions
-    * Add modifiers
-    * Cancel transactions
-    * Grant immunity
-    * React after transactions
+* Let other mods add resource types, sources and modifiers.
+* Provide events for validating, modifying, cancelling and reacting to transactions.
+* Test compatibility with mods that change hunger, movement, regeneration or exhaustion.
 
-## Vanilla Exhaustion Integration
-* Movement, jumping, attacking, and natural regeneration are assigned distinct sources.
-* Walking, sprinting, swimming, and elytra movement share the broader movement tag.
-* Unknown exhaustion calls use the unclassified source.
-* A movement passive will not accidentally affect:
-    * Attacking
-    * Natural regeneration
-    * Skill casting
-    * Starvation
-    * Hostile hunger effects
-    * Unknown exhaustion sources
+## Vanilla Exhaustion
+* Keep movement, jumping, attacking and natural regeneration as separate sources.
+* Add more specific sources when needed.
+* Keep unknown exhaustion under an unclassified fallback source.
 
 </details>
 
@@ -360,69 +272,72 @@ Resources determine which operations they support.
 <summary>Stamina System</summary>
 
 ## Added Classes:
+* `StaminaService`: Shared API for reading, spending and restoring stamina
+* `StaminaResourceType`: Connects stamina to the resource transaction system
+* `StaminaTicker`: Handles stamina costs, regeneration and regeneration delay
+* `StaminaRegenerationPolicy`: Changes stamina regeneration based on hunger and saturation
+* `StaminaBar`: Displays stamina underneath the Qi bar
 
-### Stamina
-* `StaminaService`: Provides the shared API for reading, modifying, regenerating, and spending stamina.
-* `StaminaResourceType`: Adapts stamina to the resource transaction system.
-* `StaminaTicker`: Handles movement costs, physical-action costs, regeneration delays, regeneration, and maximum-stamina clamping.
-* `StaminaRegenerationPolicy`: Calculates hunger-sensitive stamina regeneration using the player’s current hunger and saturation.
-
-### HUD
-* `StaminaBar`: Displays the player’s current and maximum stamina beneath the Qi bar.
-
-## Other Changed Classes:
-* `AscensionCraft`: Adds the stamina attributes to players.
-* `AscensionAttachments`: Registers attachments for current stamina and the remaining regeneration delay.
-* `AscensionAttributes`: Registers maximum stamina, stamina regeneration rate, and stamina regeneration delay.
-* `SimpleAscensionEntityData`: Adds Vitality, Strength, and Agility scaling to stamina attributes.
-* `AscensionResourceTypes`: Registers `ascension:stamina`.
-* `AscensionResourceSources`: Adds climbing and crawling as movement expenditure sources.
-* `PlayerJumpExhaustionMixin`: Charges stamina when players jump.
-* `PlayerAttackExhaustionMixin`: Charges stamina when players attack.
-* `ClientAscensionData`: Exposes synced stamina values to the client HUD.
-* `HudContainer`: Adds the stamina bar beneath the Qi bar and expands the HUD frame.
-* `AscensionClientConfig`: Updates the exact-value HUD setting to include stamina.
-* `AscLangProvider`: Adds stamina attribute names and updates the Sustained Spirit description.
+## Other changed classes:
+* `AscensionCraft`: Added stamina attributes to players
+* `AscensionAttachments`: Added stamina and regeneration delay attachments
+* `AscensionAttributes`: Registered maximum stamina, regeneration rate and regeneration delay
+* `SimpleAscensionEntityData`: Added stat scaling for stamina
+* `AscensionResourceTypes`: Registered the stamina resource
+* `AscensionResourceSources`: Added climbing and crawling movement sources
+* `PlayerJumpExhaustionMixin`: Added jumping stamina costs
+* `PlayerAttackExhaustionMixin`: Added attacking stamina costs
+* `ClientAscensionData`: Syncs stamina values to the HUD
+* `HudContainer`: Added the stamina bar below Qi
+* `AscensionClientConfig`: Updated the exact HUD value option
+* `AscLangProvider`: Added stamina translations and updated Sustained Spirit
 
 ---
 
 # Planned Implementation
 
-## Datapack Configuration
-* Move stamina costs into datapack-configured action or movement profiles.
-* Allow packs to configure:
-    * Base cost
-    * Resource source
-    * Cost interval
-    * Minimum stamina requirement
-    * Behaviour when stamina is insufficient
-    * Stat and affinity scaling
+## Core System
+* Move stamina costs into datapack definitions.
+* Allow different actions to decide what happens when stamina is too low.
+* Add stamina costs for more actions and physical skills.
+* Keep stamina separate from exhaustion rather than replacing it.
 
-## Body-Path Integration
-* Allow Body-path progression to improve:
-    * Maximum stamina
-    * Stamina regeneration
-    * Regeneration delay
-    * Movement efficiency
-    * Physical skill efficiency
-* Use the same stamina resource for non-Qi Body skills.
+## Body Path
+* Use stamina for Body-path and other physical skills.
+* Let Body progression improve maximum stamina, regeneration and efficiency.
+* Rebalance stamina scaling when the main player stats are rebalanced.
+* Add a universal Body-path passive such as Sustained Body.
 
-## Stamina Regeneration
-* Add configurable regeneration conditions.
+## Hunger and Regeneration
+* Keep stamina spending separate from hunger consumption.
+* Let hunger and saturation affect stamina regeneration:
+    * Saturation gives slightly faster regeneration.
+    * Low hunger slows regeneration.
+    * Zero hunger stops regeneration.
+* Let Sustained Body reduce hunger use and eventually restore hunger and saturation using Qi.
+* Keep Qi nourishment as a passive skill rather than part of the base stamina system.
 
-## Networking
-* Profile attachment syncing during rapid stamina expenditure and regeneration.
-* Add update thresholds or packet throttling if stamina produces excessive network traffic.
-* Consider synchronizing:
-    * Current stamina
-    * Maximum stamina changes
-    * Regeneration state
+## HUD and Networking
+* Improve stamina syncing if frequent updates become expensive.
+* Add smoother bar animations and low-stamina warnings.
+* Add separate visibility and positioning options later.
+* Consider hiding the bar while it is full and inactive.
 
 ## Compatibility
-* Allow other mods to consume and restore stamina through the public resource transaction API.
-* Provide documented action-source IDs and tags.
-* Allow compatibility modules to register additional movement and physical-action sources.
-* Avoid requiring external mods to directly access stamina attachments.
+* Let other mods spend and restore stamina through resource transactions.
+* Allow new movement and physical-action source IDs.
+* Avoid requiring direct access to stamina attachments.
+
+## Possible Future Systems
+* Guard
+* Posture
+* Poise
+* Encumbrance
+* Equipment weight
+* Injuries
+* Overexertion
+* Mob stamina
+These should remain separate systems rather than all being stuffed into stamina.
 
 </details>
 
