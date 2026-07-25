@@ -12,11 +12,14 @@ import net.zic.ascension.api.core.technique.TechniqueData;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CultivationUtil {
     public static final Identifier CULTIVATION_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"cultivation");
     public static final Identifier FOUNDATION_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"foundation");
+    private static final double SECONDARY_AFFINITY_WEIGHT = 0.25D;
 
     /**
 
@@ -36,11 +39,7 @@ public class CultivationUtil {
         if(technique == null) return;
         TechniqueData data = pathData.getCurrentTechniqueData();
 
-        double cultivationAmount = baseRate*(1+source.getEffectiveAffinity(CULTIVATION_CATEGORY,pathData.getPath()));
-
-        for(Identifier secondaryPath : secondaryPaths){
-            cultivationAmount += baseRate*(1+source.getEffectiveAffinity(CULTIVATION_CATEGORY,secondaryPath));
-        }
+        double cultivationAmount = calculateCultivationRate(source, pathData.getPath(), secondaryPaths, baseRate);
         double maxProgress = pathData.getMaxProgress(pathData.getMajorRealm(),pathData.getMinorRealm(),source.getRegistryAccess());
 
         pathData.setProgress(Math.min(maxProgress,cultivationAmount+pathData.getProgress()));
@@ -63,24 +62,51 @@ public class CultivationUtil {
 
         if(!(path instanceof FoundationPath foundationPath)) return;
 
-        double rate  =baseRate*(1+source.getEffectiveAffinity(FOUNDATION_CATEGORY,foundationPathData.getPath()));
+        double affinity = finiteAffinity(source.getEffectiveAffinity(FOUNDATION_CATEGORY, foundationPathData.getPath()));
+        double rate = Math.max(0.0D, baseRate * Math.max(0.0D, 1.0D + affinity));
 
         int majorRealm = foundationPathData.getMajorRealm();
         int foundationRealm = foundationPathData.getFoundationRealm(majorRealm);
 
-        double maxProgress = foundationPath.getMaxFoundationProgress(majorRealm, foundationRealm);
-        foundationPathData.setFoundationRealmProgress(majorRealm, foundationPathData.getFoundationRealmProgress(majorRealm) + rate);
+        double currentProgress = foundationPathData.getFoundationRealmProgress(majorRealm);
+        double newProgress = currentProgress + rate;
+        foundationPathData.setFoundationRealmProgress(majorRealm, newProgress);
 
-        if(foundationPath.tryBreakthroughFoundation(
-                entity,
-                source,
-                majorRealm,
-                foundationRealm,
-                foundationPathData.getFoundationRealmProgress(majorRealm)+rate)){
+        if(foundationPath.tryBreakthroughFoundation(entity, source, majorRealm, foundationRealm, newProgress)) {
             foundationPathData.handleFoundationRealmChange(source, majorRealm,foundationRealm+1);
             foundationPathData.setFoundationRealmProgress(majorRealm,0);
         }
 
         source.markPathDirty(foundationPathData.getPath());
     }
+    public static double calculateCultivationRate(OriginSource source, Identifier primaryPath, List<Identifier> secondaryPaths, double baseRate) {
+        if (source == null || primaryPath == null || !Double.isFinite(baseRate) || baseRate <= 0.0D) {
+            return 0.0D;
+        }
+
+        double primaryAffinity = finiteAffinity(source.getEffectiveAffinity(CULTIVATION_CATEGORY, primaryPath));
+
+        Set<Identifier> uniqueSecondaryPaths = new LinkedHashSet<>();
+        if (secondaryPaths != null) {
+            for (Identifier secondaryPath : secondaryPaths) {
+                if (secondaryPath != null && !secondaryPath.equals(primaryPath)) {
+                    uniqueSecondaryPaths.add(secondaryPath);
+                }
+            }
+        }
+
+        double secondaryAffinityTotal = 0.0D;
+        for (Identifier secondaryPath : uniqueSecondaryPaths) {
+            secondaryAffinityTotal += finiteAffinity(source.getEffectiveAffinity(CULTIVATION_CATEGORY, secondaryPath));
+        }
+
+        double secondaryAffinity = uniqueSecondaryPaths.isEmpty() ? 0.0D : secondaryAffinityTotal / uniqueSecondaryPaths.size();
+        double affinityModifier = primaryAffinity + secondaryAffinity * SECONDARY_AFFINITY_WEIGHT;
+        return Math.max(0.0D, baseRate * Math.max(0.0D, 1.0D + affinityModifier));
+    }
+
+    private static double finiteAffinity(double affinity) {
+        return Double.isFinite(affinity) ? affinity : 0.0D;
+    }
+
 }

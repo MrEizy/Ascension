@@ -8,8 +8,10 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
+import net.zic.ascension.api.core.skill.castable.presentation.CastSoundDefinition;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
+import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkillData;
 
 import java.util.List;
 
@@ -23,13 +25,14 @@ public class SimpleCultivationSkillType extends SkillType {
                         Identifier.CODEC.fieldOf("path").forGetter(SimpleCultivationSkill::primaryPath),
                         Identifier.CODEC.listOf().optionalFieldOf("secondary_paths", List.of()).forGetter(SimpleCultivationSkill::secondaryPaths),
                         Codec.DOUBLE.fieldOf("rate").forGetter(SimpleCultivationSkill::baseRate),
-                        ParticleFieldDefinition.CODEC.optionalFieldOf("particle_field").forGetter(SimpleCultivationSkill::particleField)
+                        ParticleFieldDefinition.CODEC.optionalFieldOf("particle_field").forGetter(SimpleCultivationSkill::particleField),
+                        CastSoundDefinition.CODEC.listOf().optionalFieldOf("sounds", List.of()).forGetter(SimpleCultivationSkill::sounds)
                 ).apply(instance, SimpleCultivationSkill::new)
         );
     }
 
     @Override
     public MapCodec<? extends SkillData> dataCodec() {
-        return null;
+        return MapCodec.unit(SimpleCultivationSkillData::new);
     }
 }

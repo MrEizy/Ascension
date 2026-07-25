@@ -224,6 +224,7 @@ public final class ParticleFieldController {
             case RISING, INWARD_FLOW, SPIRAL -> height * (0.46D + random.nextDouble() * 0.22D);
             case MERIDIAN_FLOW -> height * (0.28D + random.nextDouble() * 0.48D);
             case GATHERING_RING -> height * (0.38D + random.nextDouble() * 0.18D);
+            case BREATH_FLOW -> player.getEyeHeight() - 0.12D + (random.nextDouble() - 0.5D) * 0.08D;
         };
     }
 
@@ -300,6 +301,17 @@ public final class ParticleFieldController {
                 height = Mth.lerp(lowBand, minHeight, maxHeight);
                 orbitDirection = 1.0D;
             }
+            case BREATH_FLOW -> {
+                double facingAngle = Math.toRadians(player.getYRot() + 90.0F);
+                int streamCount = 5;
+                int stream = state.emissionSequence % streamCount;
+                double spread = (stream - (streamCount - 1) * 0.5D) * 0.075D + (random.nextDouble() - 0.5D) * 0.06D;
+                angle = facingAngle + spread;
+                radius = Mth.lerp(0.7D + random.nextDouble() * 0.3D, minRadius, maxRadius);
+                double heightPhase = 0.5D + (stream - 2) * 0.08D + (random.nextDouble() - 0.5D) * 0.08D;
+                height = player.getEyeHeight() + Mth.lerp(heightPhase, minHeight, maxHeight);
+                orbitDirection = (stream & 1) == 0 ? 1.0D : -1.0D;
+            }
             default -> throw new IllegalStateException("Unexpected particle field style: " + definition.style());
         }
 
@@ -358,6 +370,11 @@ public final class ParticleFieldController {
                     tangentX * speed * 0.92D + dx / horizontalLength * speed * 0.12D,
                     Math.max(0.0D, dy / Math.max(0.1D, targetYOffset)) * speed * 0.2D + speed * 0.12D,
                     tangentZ * speed * 0.92D + dz / horizontalLength * speed * 0.12D
+            };
+            case BREATH_FLOW -> new double[]{
+                    dx / fullLength * speed * 1.18D + tangentX * speed * 0.08D,
+                    dy / fullLength * speed * 1.04D,
+                    dz / fullLength * speed * 1.18D + tangentZ * speed * 0.08D
             };
         };
     }

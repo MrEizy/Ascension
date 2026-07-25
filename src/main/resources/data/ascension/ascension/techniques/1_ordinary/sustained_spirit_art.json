@@ -1,0 +1,99 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.sustained_spirit_art.name"
+  },
+  "description": {
+    "translate": "ascension.technique.sustained_spirit_art.desc"
+  },
+  "path": "ascension:foundation/soul",
+  "milestone_realms": [
+    0,
+    1,
+    2
+  ],
+  "technique_families": [
+    "ice"
+  ],
+  "max_realm": 2,
+  "max_minor_realm": 2,
+  "realm_change_handler": [
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          0
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/cultivation/stillfrost_breathing"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          1
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:passive/sustained_spirit"
+          ]
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:passive/sustained_spirit",
+          "contribution": "ascension:sustained_spirit_art/realm_1",
+          "level": 1,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          2
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:passive/sustained_spirit",
+          "contribution": "ascension:sustained_spirit_art/realm_2",
+          "level": 2,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "theme_overrides": {
+      "colors": {
+        "accent": "#BDEFFFFF",
+        "border_top": "#E8FCFFFF",
+        "border_bottom": "#315A6FFF",
+        "background": "#07151DEB"
+      },
+      "background_style": {
+        "pattern": "stars",
+        "color": "accent",
+        "alpha": 7,
+        "spacing": 15
+      }
+    },
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:ordinary"
+  }
+}

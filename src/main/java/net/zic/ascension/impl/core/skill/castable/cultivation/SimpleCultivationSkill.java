@@ -17,11 +17,12 @@ import net.zic.ascension.api.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.core.skill.castable.data.CastType;
 import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
+import net.zic.ascension.api.core.skill.castable.presentation.CastSoundDefinition;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
-import net.zic.ascension.impl.core.skill.EmptySkillData;
 import net.zic.ascension.util.CultivationUtil;
+import net.zic.ascension.impl.core.skill.castable.presentation.CastSoundPlayer;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.skill_casting.AscensionSkillListener;
 import net.zic.zenithlib.common.ZenithAttachments;
@@ -35,7 +36,15 @@ public record SimpleCultivationSkill(
         Identifier primaryPath,
         List<Identifier> secondaryPaths,
         double baseRate,
-        Optional<ParticleFieldDefinition> particleField) implements CastableSkill {
+        Optional<ParticleFieldDefinition> particleField,
+        List<CastSoundDefinition> sounds) implements CastableSkill {
+    public SimpleCultivationSkill {
+        secondaryPaths = secondaryPaths == null ? List.of() : List.copyOf(secondaryPaths);
+        baseRate = Double.isFinite(baseRate) ? Math.max(0.0D, baseRate) : 0.0D;
+        particleField = particleField == null ? Optional.empty() : particleField;
+        sounds = sounds == null ? List.of() : List.copyOf(sounds);
+    }
+
     @Override
     public CastType getCastType() {
         return CastType.LONG;
@@ -87,6 +96,8 @@ public record SimpleCultivationSkill(
         PathData pathData = source.getPathData(primaryPath());
 
         if(pathData == null) return;
+        CastSoundPlayer.playPeriodic(caster, sounds, ticksElapsed);
+
         if(holder.getData(caster).isCultivationSuppressed() && pathData instanceof FoundationPathData foundationPathData){
             CultivationUtil.cultivateFoundation(
                     caster,
@@ -165,16 +176,16 @@ public record SimpleCultivationSkill(
 
     @Override
     public SkillData newData(RegistryAccess access) {
-        return new EmptySkillData();
+        return new SimpleCultivationSkillData();
     }
 
     @Override
     public SkillData loadData(ValueInput input,RegistryAccess access) {
-        return new EmptySkillData();
+        return new SimpleCultivationSkillData();
     }
 
     @Override
     public SkillData loadData(ByteBuf buf) {
-        return new EmptySkillData();
+        return new SimpleCultivationSkillData();
     }
 }

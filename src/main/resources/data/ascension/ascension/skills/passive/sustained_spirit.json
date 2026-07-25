@@ -1,0 +1,84 @@
+{
+  "type": "ascension:resource_modifier_passive",
+  "name": {
+    "translate": "ascension.skill.sustained_spirit.name"
+  },
+  "description": {
+    "translate": "ascension.skill.sustained_spirit.desc"
+  },
+  "default_accessible_level": 0,
+  "levels": [
+    {
+      "modifiers": [
+        {
+          "id": "ascension:movement_exhaustion",
+          "selector": {
+            "resources": [
+              "ascension:exhaustion"
+            ],
+            "operations": [
+              "accumulate"
+            ],
+            "source": {
+              "source_tags": [
+                "ascension:movement"
+              ],
+              "excluded_sources": [
+                "ascension:attacking",
+                "ascension:damage",
+                "ascension:natural_regeneration",
+                "ascension:skill_casting",
+                "ascension:cultivation",
+                "ascension:environmental",
+                "ascension:starvation",
+                "ascension:hostile_hunger",
+                "ascension:unclassified"
+              ]
+            }
+          },
+          "operation": "multiply_total",
+          "value": {
+            "base": -0.25
+          },
+          "priority": 100
+        }
+      ]
+    },
+    {
+      "modifiers": [
+        {
+          "id": "ascension:movement_exhaustion",
+          "selector": {
+            "resources": [
+              "ascension:exhaustion"
+            ],
+            "operations": [
+              "accumulate"
+            ],
+            "source": {
+              "source_tags": [
+                "ascension:movement"
+              ],
+              "excluded_sources": [
+                "ascension:attacking",
+                "ascension:damage",
+                "ascension:natural_regeneration",
+                "ascension:skill_casting",
+                "ascension:cultivation",
+                "ascension:environmental",
+                "ascension:starvation",
+                "ascension:hostile_hunger",
+                "ascension:unclassified"
+              ]
+            }
+          },
+          "operation": "multiply_total",
+          "value": {
+            "base": -0.4
+          },
+          "priority": 100
+        }
+      ]
+    }
+  ]
+}

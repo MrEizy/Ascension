@@ -10,7 +10,8 @@ public enum ParticleFieldStyle {
     INWARD_FLOW("inward_flow"),
     SPIRAL("spiral"),
     MERIDIAN_FLOW("meridian_flow"),
-    GATHERING_RING("gathering_ring");
+    GATHERING_RING("gathering_ring"),
+    BREATH_FLOW("breath_flow");
 
     public static final Codec<ParticleFieldStyle> CODEC =
             Codec.STRING.comapFlatMap(ParticleFieldStyle::decode, ParticleFieldStyle::serializedName);

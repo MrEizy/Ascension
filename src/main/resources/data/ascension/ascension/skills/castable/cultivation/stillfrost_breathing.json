@@ -1,0 +1,65 @@
+{
+  "type": "ascension:simple_cultivation_skill",
+  "name": {
+    "translate": "ascension.skill.stillfrost_breathing.name"
+  },
+  "description": {
+    "translate": "ascension.skill.stillfrost_breathing.desc"
+  },
+  "path": "ascension:foundation/soul",
+  "secondary_paths": [
+    "ascension:elemental/ice"
+  ],
+  "rate": 1.5,
+  "particle_field": {
+    "style": "breath_flow",
+    "particles": [
+      {
+        "type": "wisp",
+        "weight": 6
+      },
+      {
+        "type": "mote",
+        "weight": 4
+      },
+      {
+        "type": "thread",
+        "weight": 2
+      },
+      {
+        "type": "spark",
+        "weight": 1
+      }
+    ],
+    "colours": [
+      "#DDF8FF",
+      "#A9E8F5",
+      "#F5FDFF"
+    ],
+    "density": 11,
+    "radius": {"min": 0.55, "max": 1.05},
+    "height": {"min": -0.1, "max": 0.12},
+    "speed": {"min": 0.035, "max": 0.055},
+    "size": {"min": 0.025, "max": 0.07},
+    "lifetime": {"min": 12, "max": 22},
+    "full_bright": true
+  },
+  "sounds": [
+    {
+      "sound": "minecraft:entity.player.breath",
+      "interval": 48,
+      "initial_delay": 12,
+      "volume": 0.22,
+      "pitch": 1.18,
+      "pitch_variance": 0.08
+    },
+    {
+      "sound": "minecraft:block.powder_snow.step",
+      "interval": 32,
+      "initial_delay": 20,
+      "volume": 0.12,
+      "pitch": 1.35,
+      "pitch_variance": 0.12
+    }
+  ]
+}
