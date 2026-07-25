@@ -220,15 +220,161 @@ Exact values will depend on an eventual player stat rebalance
 ---
 
 <details>
-<summary>Exhaustion Resource Transaction System</summary>
+<summary>Resource Transactions and Modifiers</summary>
 
+## Added Classes:
+
+### Resource Transaction API
+* `ResourceType`: Defines how a specific resource is read, validated, and modified.
+* `ResourceRegistries`: Contains the registry used for resource type adapters.
+* `ResourceOperation`: Defines supported transaction operations such as consumption, accumulation, restoration, generation, and draining.
+* `ResourceTransactionRequest`: Represents a requested resource transaction.
+* `ResourceTransactionContext`: Stores the entity, source, skill, target, flags, and scaled-value context associated with a transaction.
+* `ResourceTransactionResult`: Contains the requested, modified, and applied transaction values.
+* `ResourceTransactionStatus`: Represents the final outcome of a transaction.
+* `ResourceTransactionFlag`: Provides transaction behaviour flags and recursion protection.
+* `ResourceTransactionSelector`: Selects transactions by resource, operation, source ID, or source tag.
+* `ResourceTransactionService`: Validates, modifies, resolves, and applies resource transactions.
+* `ResourceTransactions`: Provides simplified helper methods for common transaction operations.
+* `ResourceApplicationResult`: Represents the result returned by a resource adapter after applying a transaction.
+
+### Resource Sources
+* `ResourceSourceIdentity`: Base interface for registered or adapted transaction sources.
+* `SimpleResourceSourceIdentity`: Provides the current lightweight source implementation.
+* `ResourceSourceSelector`: Matches exact source IDs, source tags, and excluded sources.
+
+### Resource Modifiers
+* `ResourceModifier`: Represents a resolved modifier applied to a transaction.
+* `ResourceModifierDefinition`: Defines a datapack-configured resource modifier.
+* `ResourceModifierCollector`: Collects and replaces modifiers using their IDs and priorities.
+* `ResourceModifierOperation`: Defines flat, multiplicative, cancellation, immunity, and limiting modifier operations.
+* `ResourceModifierResolution`: Resolves collected modifiers into a final transaction amount.
+
+### Resource Events
+* `ResourceTransactionEvent`: Provides pre-validation, modifier collection, and post-transaction events for compatibility and extension.
+
+### Built-in Resources
+* `AbstractBoundedResourceType`: Shared implementation support for bounded resources.
+* `QiResourceType`: Adapts Ascension Qi to the resource transaction system.
+* `PlayerExhaustionResourceType`: Adapts player exhaustion accumulation and removal.
+* `PlayerHungerResourceType`: Adapts discrete player hunger changes.
+* `PlayerSaturationResourceType`: Adapts player saturation changes.
+* `AscensionResourceTypes`: Registers the built-in resource types.
+
+### Built-in Sources
+* `AscensionResourceSources`: Defines the initial transaction sources and resolves movement-specific sources.
+* `AscensionResourceSourceTags`: Defines broad source categories such as movement, combat, survival, regeneration, skills, cultivation, and environmental effects.
+
+### Resource Modifier Passives
+* `ResourceModifierPassiveSkill`: Generic levelled passive skill that contributes resource modifiers.
+* `ResourceModifierPassiveSkillData`: Stores the passive’s skill progression data.
+* `ResourceModifierLevelDefinition`: Defines the modifiers provided by each skill level.
+* `ResourceModifierPassiveSkillType`: Provides the datapack codec for `ascension:resource_modifier_passive`.
+* `ResourceModifierPassiveHandler`: Collects matching modifiers from owned passive skills during transactions.
+
+### Vanilla Exhaustion Hooks
+* `PlayerTravelExhaustionMixin`: Routes walking, sprinting, swimming, and elytra exhaustion through registered movement sources.
+* `PlayerJumpExhaustionMixin`: Routes jumping exhaustion through the jumping source.
+* `PlayerAttackExhaustionMixin`: Routes attack exhaustion through the attacking source.
+* `FoodDataRegenerationExhaustionMixin`: Routes natural-regeneration exhaustion through the regeneration source.
+* `PlayerExhaustionFallbackMixin`: Routes otherwise unclassified exhaustion calls through a fallback source.
+* `FoodDataAccessor`: Provides controlled access to the private vanilla exhaustion value.
+
+## Other Changed Classes:
+* `AscensionCraft`: Registers built-in resource type adapters.
+* `AscensionSkillTypes`: Registers `ascension:resource_modifier_passive`.
+* `SimpleEntityQiProvider`: Routes Qi consumption and restoration through resource transactions while retaining the existing Qi capability API.
+* `ToggleablePassiveSkill`: Routes passive Qi upkeep through the `ascension:skill_casting` transaction source.
+* `ResourceModifierDefinition`: Updated optional scaled-value codec handling.
+* `ResourceTransactionSelector`: Updated optional source-selector codec handling.
+* `PlayerExhaustionResourceType`: Uses the `FoodDataAccessor` to read and modify vanilla exhaustion.
+* `ascension.mixins.json`: Registers the resource hooks and FoodData accessor.
+
+---
+
+# Planned Implementation
+
+### Resource Operations
+* `consume`: Spends a resource from an available pool.
+* `accumulate`: Adds an accumulating burden such as exhaustion.
+* `restore`: Restores a resource or removes an accumulated burden.
+* `generate`: Produces additional resource.
+* `drain`: Removes a resource without treating it as an ordinary cost.
+Resources determine which operations they support.
+
+### Resolution
+* Modifier values are resolved in the following order:
+    1. Flat additions
+    2. Base multipliers
+    3. Total multipliers
+    4. Minimum and maximum limits
+    5. Mechanical application
+* Transactions can also be cancelled or made immune.
+* Final negative costs are prevented.
+* Non-finite values are rejected.
+
+
+### Post-Transaction Events
+* Completed transactions produce a result containing:
+    * Original requested amount
+    * Modified amount
+    * Actual applied amount
+    * Resource values before and after
+    * Final status
+* External systems can react without replacing the core transaction implementation.
+
+## Passive Modifier Performance
+* Profile modifier collection during movement-heavy gameplay.
+* Cache or index active modifier providers if skill scanning becomes expensive.
+* Invalidate caches when:
+    * Skills are added or removed
+    * Skill levels change
+    * Passives are toggled
+    * Techniques are replaced
+    * Relevant effects begin or expire
+
+## Compatibility
+* Provide documented events for other mods to:
+    * Validate transactions
+    * Add modifiers
+    * Cancel transactions
+    * Grant immunity
+    * React after transactions
+
+## Sustained Spirit
+* Use `ascension:resource_modifier_passive`.
+* Level 1 will reduce:
+    * Movement exhaustion accumulation
+    * Movement stamina consumption
+* Level 2 will provide stronger versions of both reductions.
+* It will not affect:
+    * Combat expenditure
+    * Damage
+    * Natural regeneration
+    * Starvation
+    * Hostile hunger effects
+    * Skill costs
+    * Cultivation costs
+    * Non-movement stamina expenditure
+
+## Vanilla Exhaustion Integration
+* Movement, jumping, attacking, and natural regeneration are assigned distinct sources.
+* Walking, sprinting, swimming, and elytra movement share the broader movement tag.
+* Unknown exhaustion calls use the unclassified source.
+* A movement passive will not accidentally affect:
+    * Attacking
+    * Natural regeneration
+    * Skill casting
+    * Starvation
+    * Hostile hunger effects
+    * Unknown exhaustion sources
 
 </details>
 
 ---
 
 <details>
-<summary>Stamina System</summary>
+<summary></summary>
 
 
 </details>

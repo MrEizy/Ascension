@@ -3,6 +3,12 @@
   "package": "net.zic.ascension.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "accessor.FoodDataAccessor",
+    "resource.FoodDataRegenerationExhaustionMixin",
+    "resource.PlayerAttackExhaustionMixin",
+    "resource.PlayerExhaustionFallbackMixin",
+    "resource.PlayerJumpExhaustionMixin",
+    "resource.PlayerTravelExhaustionMixin"
   ],
   "injectors": {
     "defaultRequire": 1
