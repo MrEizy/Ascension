@@ -16,6 +16,11 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.config.hud", "HUD Settings");
         add("ascension.config.showExactValues", "Show Values");
 
+        // Attributes
+        add("attributes.ascension.max_stamina", "Maximum Stamina");
+        add("attributes.ascension.stamina_regen_rate", "Stamina Regeneration");
+        add("attributes.ascension.stamina_regen_delay", "Stamina Regeneration Delay");
+
 
         // Creative Tabs
         add("creativetab.ascension.items", "Ascension Items");
@@ -295,7 +300,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.mount_hua_sword_manual.name", "Plum Blossom Sword Manual");
         add("ascension.technique.mount_hua_sword_manual.desc", "A sword manual of Mount Hua that binds breath and sword as one, its gentle, falling-petal forms hiding a killing edge just a heartbeat behind");
         add("ascension.technique.sustained_spirit_art.name", "Sustained Spirit Art");
-        add("ascension.technique.sustained_spirit_art.desc", "An practical soul art that draws cold spiritual energy inward, helping to preserve nourishment and endurance");
+        add("ascension.technique.sustained_spirit_art.desc", "An ordinary soul art that draws cold spiritual energy inward, quieting needless bodily activity to preserve nourishment and endurance");
 
         //Skills
         add("ascension.skill.plum_blossom_breathing.name", "Plum Blossom Breathing");
@@ -303,7 +308,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.stillfrost_breathing.name", "Stillfrost Breathing");
         add("ascension.skill.stillfrost_breathing.desc", "Breathe slowly and draw frost into the soul, cultivating inner stillness while refining Soul through Ice");
         add("ascension.skill.sustained_spirit.name", "Sustained Spirit");
-        add("ascension.skill.sustained_spirit.desc", "Cold spiritual stillness suppresses wasteful movement, reducing the exhaustion accumulated through travel");
+        add("ascension.skill.sustained_spirit.desc", "Cold spiritual stillness suppresses wasteful movement, reducing exhaustion and stamina spent through travel");
 
     }
 }

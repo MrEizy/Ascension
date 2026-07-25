@@ -7,6 +7,7 @@ import net.zic.ascension.api.capabilities.CoreCapabilities;
 import net.zic.ascension.api.capabilities.EntityQiProvider;
 import net.zic.ascension.api.core.entity.AscensionEntityData;
 import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.core.resource.stamina.StaminaService;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
@@ -64,6 +65,14 @@ public final class ClientAscensionData {
     }
 
 
+
+    public static double getStamina() {
+        return getPlayer().map(StaminaService::getStamina).orElse(0.0D);
+    }
+
+    public static double getMaximumStamina() {
+        return getPlayer().map(StaminaService::getMaximumStamina).orElse(0.0D);
+    }
 
     public static long getRevision() {
         return getSource().map(OriginSource::getRevision).orElse(-1L);

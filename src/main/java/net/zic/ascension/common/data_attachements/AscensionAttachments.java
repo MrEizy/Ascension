@@ -14,6 +14,7 @@ import net.zic.ascension.api.capabilities.EntityQiProvider;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.core.source.ServerOriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
+import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
@@ -87,6 +88,26 @@ public class AscensionAttachments {
     );
 
 
+    public static final Supplier<AttachmentType<Double>> ENTITY_STAMINA = ATTACHMENT_TYPES.register(
+            "entity_stamina", () -> AttachmentType.builder(holder -> {
+                        if (!(holder instanceof LivingEntity entity)) {
+                            return 0.0D;
+                        }
+                        return entity.getAttributes().hasAttribute(AscensionAttributes.MAX_STAMINA)
+                                ? entity.getAttributeValue(AscensionAttributes.MAX_STAMINA)
+                                : 0.0D;
+                    })
+                    .serialize(Codec.DOUBLE.fieldOf("value"))
+                    .sync(ByteBufCodecs.DOUBLE)
+                    .copyOnDeath()
+                    .build()
+    );
+    public static final Supplier<AttachmentType<Integer>> ENTITY_STAMINA_REGEN_DELAY = ATTACHMENT_TYPES.register(
+            "entity_stamina_regen_delay", () -> AttachmentType.builder(holder -> 0)
+                    .serialize(Codec.INT.fieldOf("ticks"))
+                    .copyOnDeath()
+                    .build()
+    );
 
     public static void register(IEventBus bus){
         ATTACHMENT_TYPES.register(bus);

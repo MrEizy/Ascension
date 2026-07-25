@@ -41,6 +41,39 @@
             "base": -0.25
           },
           "priority": 100
+        },
+        {
+          "id": "ascension:movement_stamina",
+          "selector": {
+            "resources": [
+              "ascension:stamina"
+            ],
+            "operations": [
+              "consume",
+              "drain"
+            ],
+            "source": {
+              "source_tags": [
+                "ascension:movement"
+              ],
+              "excluded_sources": [
+                "ascension:attacking",
+                "ascension:damage",
+                "ascension:natural_regeneration",
+                "ascension:skill_casting",
+                "ascension:cultivation",
+                "ascension:environmental",
+                "ascension:starvation",
+                "ascension:hostile_hunger",
+                "ascension:unclassified"
+              ]
+            }
+          },
+          "operation": "multiply_total",
+          "value": {
+            "base": -0.1
+          },
+          "priority": 100
         }
       ]
     },
@@ -75,6 +108,39 @@
           "operation": "multiply_total",
           "value": {
             "base": -0.4
+          },
+          "priority": 100
+        },
+        {
+          "id": "ascension:movement_stamina",
+          "selector": {
+            "resources": [
+              "ascension:stamina"
+            ],
+            "operations": [
+              "consume",
+              "drain"
+            ],
+            "source": {
+              "source_tags": [
+                "ascension:movement"
+              ],
+              "excluded_sources": [
+                "ascension:attacking",
+                "ascension:damage",
+                "ascension:natural_regeneration",
+                "ascension:skill_casting",
+                "ascension:cultivation",
+                "ascension:environmental",
+                "ascension:starvation",
+                "ascension:hostile_hunger",
+                "ascension:unclassified"
+              ]
+            }
+          },
+          "operation": "multiply_total",
+          "value": {
+            "base": -0.2
           },
           "priority": 100
         }

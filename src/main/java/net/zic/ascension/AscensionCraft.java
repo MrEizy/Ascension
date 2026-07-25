@@ -186,6 +186,18 @@ public class AscensionCraft {
                     EntityType.PLAYER,
                     AscensionAttributes.MAX_QI
             );
+            event.add(
+                    EntityType.PLAYER,
+                    AscensionAttributes.STAMINA_REGEN_RATE
+            );
+            event.add(
+                    EntityType.PLAYER,
+                    AscensionAttributes.STAMINA_REGEN_DELAY
+            );
+            event.add(
+                    EntityType.PLAYER,
+                    AscensionAttributes.MAX_STAMINA
+            );
         }
 
 

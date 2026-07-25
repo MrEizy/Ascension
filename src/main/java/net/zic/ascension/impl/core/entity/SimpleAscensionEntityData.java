@@ -125,6 +125,20 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         addStatScaling(attributeHolder, AscensionAttributes.MAX_QI,
                 AscensionStats.SPIRIT.get(), "spirit_max_qi_scaling", 10.0D);
 
+        addStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
+                AscensionStats.VITALITY.get(), "vitality_max_stamina_scaling", 5.0D);
+
+        addStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
+                AscensionStats.STRENGTH.get(), "strength_max_stamina_scaling", 2.0D);
+
+        addStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
+                AscensionStats.VITALITY.get(), "vitality_stamina_regen_scaling", 0.02D);
+
+        addStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
+                AscensionStats.AGILITY.get(), "agility_stamina_regen_scaling", 0.01D);
+
+        attributeHolder.addAttribute(AscensionAttributes.STAMINA_REGEN_DELAY);
+
         source.updateAttributes(attributeHolder);
         applyAllAttributeSuppressions();
     }

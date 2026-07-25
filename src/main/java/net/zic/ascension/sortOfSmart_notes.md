@@ -313,7 +313,6 @@ Resources determine which operations they support.
 * Final negative costs are prevented.
 * Non-finite values are rejected.
 
-
 ### Post-Transaction Events
 * Completed transactions produce a result containing:
     * Original requested amount
@@ -341,22 +340,6 @@ Resources determine which operations they support.
     * Grant immunity
     * React after transactions
 
-## Sustained Spirit
-* Use `ascension:resource_modifier_passive`.
-* Level 1 will reduce:
-    * Movement exhaustion accumulation
-    * Movement stamina consumption
-* Level 2 will provide stronger versions of both reductions.
-* It will not affect:
-    * Combat expenditure
-    * Damage
-    * Natural regeneration
-    * Starvation
-    * Hostile hunger effects
-    * Skill costs
-    * Cultivation costs
-    * Non-movement stamina expenditure
-
 ## Vanilla Exhaustion Integration
 * Movement, jumping, attacking, and natural regeneration are assigned distinct sources.
 * Walking, sprinting, swimming, and elytra movement share the broader movement tag.
@@ -374,7 +357,78 @@ Resources determine which operations they support.
 ---
 
 <details>
-<summary></summary>
+<summary>Stamina System</summary>
 
+## Added Classes:
+
+### Stamina
+* `StaminaService`: Provides the shared API for reading, modifying, regenerating, and spending stamina.
+* `StaminaResourceType`: Adapts stamina to the resource transaction system.
+* `StaminaTicker`: Handles movement costs, physical-action costs, regeneration delays, regeneration, and maximum-stamina clamping.
+* `StaminaRegenerationPolicy`: Calculates hunger-sensitive stamina regeneration using the player’s current hunger and saturation.
+
+### HUD
+* `StaminaBar`: Displays the player’s current and maximum stamina beneath the Qi bar.
+
+## Other Changed Classes:
+* `AscensionCraft`: Adds the stamina attributes to players.
+* `AscensionAttachments`: Registers attachments for current stamina and the remaining regeneration delay.
+* `AscensionAttributes`: Registers maximum stamina, stamina regeneration rate, and stamina regeneration delay.
+* `SimpleAscensionEntityData`: Adds Vitality, Strength, and Agility scaling to stamina attributes.
+* `AscensionResourceTypes`: Registers `ascension:stamina`.
+* `AscensionResourceSources`: Adds climbing and crawling as movement expenditure sources.
+* `PlayerJumpExhaustionMixin`: Charges stamina when players jump.
+* `PlayerAttackExhaustionMixin`: Charges stamina when players attack.
+* `ClientAscensionData`: Exposes synced stamina values to the client HUD.
+* `HudContainer`: Adds the stamina bar beneath the Qi bar and expands the HUD frame.
+* `AscensionClientConfig`: Updates the exact-value HUD setting to include stamina.
+* `AscLangProvider`: Adds stamina attribute names and updates the Sustained Spirit description.
+
+---
+
+# Planned Implementation
+
+## Datapack Configuration
+* Move stamina costs into datapack-configured action or movement profiles.
+* Allow packs to configure:
+    * Base cost
+    * Resource source
+    * Cost interval
+    * Minimum stamina requirement
+    * Behaviour when stamina is insufficient
+    * Stat and affinity scaling
+
+## Body-Path Integration
+* Allow Body-path progression to improve:
+    * Maximum stamina
+    * Stamina regeneration
+    * Regeneration delay
+    * Movement efficiency
+    * Physical skill efficiency
+* Use the same stamina resource for non-Qi Body skills.
+
+## Stamina Regeneration
+* Add configurable regeneration conditions.
+
+## Networking
+* Profile attachment syncing during rapid stamina expenditure and regeneration.
+* Add update thresholds or packet throttling if stamina produces excessive network traffic.
+* Consider synchronizing:
+    * Current stamina
+    * Maximum stamina changes
+    * Regeneration state
+
+## Compatibility
+* Allow other mods to consume and restore stamina through the public resource transaction API.
+* Provide documented action-source IDs and tags.
+* Allow compatibility modules to register additional movement and physical-action sources.
+* Avoid requiring external mods to directly access stamina attachments.
+
+</details>
+
+---
+
+<details>
+<summary>  </summary>
 
 </details>

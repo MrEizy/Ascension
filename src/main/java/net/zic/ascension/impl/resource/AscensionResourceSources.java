@@ -27,6 +27,14 @@ public final class AscensionResourceSources {
             AscensionCraft.prefix("elytra"),
             AscensionResourceSourceTags.MOVEMENT
     );
+    public static final ResourceSourceIdentity CLIMBING = SimpleResourceSourceIdentity.of(
+            AscensionCraft.prefix("climbing"),
+            AscensionResourceSourceTags.MOVEMENT
+    );
+    public static final ResourceSourceIdentity CRAWLING = SimpleResourceSourceIdentity.of(
+            AscensionCraft.prefix("crawling"),
+            AscensionResourceSourceTags.MOVEMENT
+    );
     public static final ResourceSourceIdentity ATTACKING = SimpleResourceSourceIdentity.of(
             AscensionCraft.prefix("attacking"),
             AscensionResourceSourceTags.COMBAT
