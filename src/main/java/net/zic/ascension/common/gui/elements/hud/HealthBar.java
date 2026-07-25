@@ -10,9 +10,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.Config;
+import net.zic.zenithlib.common.ZenithAttachments;
+import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 
 import java.text.DecimalFormat;
 
@@ -42,32 +45,46 @@ public class HealthBar extends RenderableElement {
             label.getPositioning().setX(-label.getWidth() / 2);
             label.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
             label.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
-            label.setTextColor(-1);
+            label.setTextColor(0xFFFFFFFF);
             label.setScaleToFit(true);
         }
 
         return (EasyLabel) getChildren().getFirst();
     }
 
-    private double getProgress(Player player) {
-        double maxHealth = player.getMaxHealth();
-        if (maxHealth <= 0.0D) {
+    private double getMaximumHealth(Player player) {
+        ZenithAttributeHolder holder = player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
+
+        var maxHealthAttribute = holder.getAttribute(Attributes.MAX_HEALTH);
+
+        if (maxHealthAttribute != null) {
+            return Math.max(0.0D, maxHealthAttribute.getValue());
+        }
+
+        if (player.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
+            return Math.max(0.0D, player.getAttributeValue(Attributes.MAX_HEALTH));
+        }
+
+        return Math.max(0.0D, player.getMaxHealth());
+    }
+
+    private double getProgress(Player player, double maximumHealth) {
+        if (maximumHealth <= 0.0D) {
             return 0.0D;
         }
 
-        return Math.clamp(player.getHealth() / maxHealth, 0.0D, 1.0D);
+        return Math.clamp(player.getHealth() / maximumHealth, 0.0D, 1.0D);
     }
 
-    private double getAbsorptionProgress(Player player) {
-        double maxHealth = player.getMaxHealth();
-        if (maxHealth <= 0.0D) {
+    private double getAbsorptionProgress(Player player, double maximumHealth) {
+        if (maximumHealth <= 0.0D) {
             return 0.0D;
         }
 
-        return Math.clamp(player.getAbsorptionAmount() / maxHealth, 0.0D, 1.0D);
+        return Math.clamp(player.getAbsorptionAmount() / maximumHealth, 0.0D, 1.0D);
     }
 
-    private void updateLabel(Player player) {
+    private void updateLabel(Player player, double maximumHealth) {
         if (!Config.CLIENT.SHOW_EXACT_HUD_VALUES.get()) {
             clearLabel();
             return;
@@ -75,18 +92,12 @@ public class HealthBar extends RenderableElement {
 
         EasyLabel label = getOrCreateLabel();
 
-        if (getAbsorptionProgress(player) > 0.0D) {
-            label.setText(Component.literal(
-                    FORMAT.format(player.getHealth())
-                            + "+(" + FORMAT.format(player.getAbsorptionAmount()) + ")/"
-                            + FORMAT.format(player.getMaxHealth())
-            ));
+        if (getAbsorptionProgress(player, maximumHealth) > 0.0D) {
+            label.setText(Component.literal(FORMAT.format(player.getHealth()) + "+(" + FORMAT.format(player.getAbsorptionAmount()) + ")/" + FORMAT.format(maximumHealth)));
             return;
         }
 
-        label.setText(Component.literal(
-                FORMAT.format(player.getHealth()) + "/" + FORMAT.format(player.getMaxHealth()))
-        );
+        label.setText(Component.literal(FORMAT.format(player.getHealth()) + "/" + FORMAT.format(maximumHealth)));
     }
 
     private void clearLabel() {
@@ -102,9 +113,14 @@ public class HealthBar extends RenderableElement {
             return;
         }
 
-        updateLabel(player);
+        double maximumHealth = getMaximumHealth(player);
 
-        int width = (int) Math.round(getWidth() * getProgress(player));
+        updateLabel(player, maximumHealth);
+
+        int width = (int) Math.round(getWidth() * getProgress(player, maximumHealth));
+
+        width = Math.clamp(width, 0, getWidth());
+
         if (width > 0) {
             BAR_TEXTURE.render(graphics, width, getHeight());
         }
