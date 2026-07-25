@@ -30,6 +30,7 @@ import net.zic.zenithlib.registry.RegistryHelper;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class CoreRegistries {
 
+
     public static final RegistryHelper.DataPackRegistry<Physique> PHYSIQUE_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID,
             "physiques",
