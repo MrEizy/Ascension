@@ -16,6 +16,7 @@ import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.api.datapack.technique.TechniqueType;
 
 import net.zic.ascension.api.datapack.tribulation.TribulationType;
+import net.zic.ascension.api.value.source.ScaledValueSourceType;
 import net.zic.zenithlib.registry.RegistryHelper;
 
 /**
@@ -43,6 +44,8 @@ public class TypeRegistries {
 
     public static final Registry<ProgressActionConditionType> PROGRESS_ACTION_CONDITION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"progression_action_condition_type");
 
+    public static final Registry<ScaledValueSourceType> SCALED_VALUE_SOURCE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"scaled_value_source_type");
+
 
 
 
@@ -58,6 +61,7 @@ public class TypeRegistries {
         event.register(TRIBULATION_TYPE_REGISTRY);
         event.register(PROGRESS_ACTION_TYPE_REGISTRY);
         event.register(PROGRESS_ACTION_CONDITION_TYPE_REGISTRY);
+        event.register(SCALED_VALUE_SOURCE_TYPE_REGISTRY);
         AscensionCraft.LOGGER.info("Finished loading type registries");
     }
 }

@@ -34,6 +34,7 @@ import net.zic.ascension.impl.datapack.progression.AscensionProgressActionCondit
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
+import net.zic.ascension.impl.value.source.AscensionScaledValueSourceTypes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -98,6 +99,7 @@ public class AscensionCraft {
         AscensionPathTypes.register(modEventBus);
         AscensionTribulationTypes.register(modEventBus);
         AscensionDataSources.register(modEventBus);
+        AscensionScaledValueSourceTypes.register(modEventBus);
 
         AscensionAttributes.register(modEventBus);
 

@@ -125,8 +125,110 @@ Exact values will depend on an eventual player stat rebalance
 ---
 
 <details>
-<summary>Other Things</summary>
+<summary>Skill Leveling and Scaled Values</summary>
 
-I got nothing lol...
+## Added Classes:
+
+### Skill Progression
+* `LevelledSkill`: Marks skills that support level-based behaviour and defines their maximum level.
+* `LevelledSkillData`: Base interface for skill data containing persistent progression information.
+* `SkillProgressionData`: Stores trained levels, experience, level floors, and accessible-level contributions.
+* `SkillProgressionService`: Provides the shared API for granting experience, changing trained levels, and managing level contributions.
+* `SkillLevelResolver`: Calculates a skill’s effective level from permanent progression, realm restrictions, and temporary modifiers.
+* `SkillLevelSnapshot`: Represents the resolved state of a skill’s current level.
+* `SkillLevelChangedEvent`: Fires when a skill’s effective level changes.
+* `SkillLevelResolveEvent`: Allows temporary modifiers and external systems to affect a skill’s resolved level.
+
+### Progression Actions
+* `SetSkillLevelAction`: Adds or removes level-floor and accessible-level contributions through progression handlers.
+* `SetSkillLevelActionType`: Provides the datapack codec for the `ascension:set_skill_level` progression action.
+
+### Scaled Values
+* `ScaledValue`: Resolves a datapack-defined value from a base value and an ordered collection of scaling terms.
+* `ScaledValueContext`: Supplies the player, skill, target, charge, and other contextual values used during scaling.
+* `ScaledValueTerm`: Defines a single contribution to a scaled value.
+* `ScaledValueOperation`: Determines whether a contribution adds, multiplies, or replaces the current value.
+* `ScaledValueSource`: Base interface for reusable scaling sources.
+* `ScaledValueSourceType`: Provides polymorphic codec registration for scaled-value sources.
+
+### Scaled Value Sources
+* `ConstantScaledValueSource`: Supplies a fixed value.
+* `SkillLevelScaledValueSource`: Scales using the effective level of a skill.
+* `ChargeScaledValueSource`: Scales using normalised held-cast charge.
+* `StatScaledValueSource`: Scales using an Ascension stat.
+* `AffinityScaledValueSource`: Scales using a path affinity.
+* `ContextScaledValueSource`: Reads arbitrary values supplied by the calling system.
+* `AscensionScaledValueSourceTypes`: Registers the built-in scaled-value source types.
+
+## Other Changed Classes:
+* `AscensionCraft`: Registers the new scaled-value source types.
+* `TypeRegistries`: Added the `scaled_value_source_type` registry.
+* `AscensionProgressActionTypes`: Registered the `ascension:set_skill_level` progression action.
+
+---
+
+# Planned Implementation
+
+## Skill Manuals
+* Connect skill manuals to `SkillProgressionService`.
+* Allow manuals to:
+    * Unlock skills
+    * Grant skill experience
+    * Increase trained levels
+    * Apply progression requirements
+* Preserve trained progression when access is temporarily lost.
+* Avoid allowing item logic to directly modify stored skill data.
+
+## Technique and Realm Integration
+* Use level-floor and accessible-level contributions for technique milestones.
+* Allow realm progression to upgrade skills without hardcoded realm checks inside the skills.
+* Correctly downgrade skills during realm regression.
+* Remove progression contributions when techniques are forgotten or replaced.
+* Restore previously trained levels when their requirements are regained.
+
+## Resource Modifiers
+* Allow levelled passive skills to provide different resource modifiers at each level.
+* Sustained Spirit will use:
+    * Level 1 movement-exhaustion reduction
+    * Level 1 movement-stamina reduction
+    * Improved versions of both modifiers at level 2
+
+## Held Skills
+* Use scaled values for:
+    * Charge cost
+    * Radius
+    * Duration
+    * Effect potency
+    * Frozen buildup
+    * Visual intensity
+* Use powered charge terms for quadratic or other configurable cost curves.
+
+## Future Scaling Sources
+* Current and maximum resources
+* Major and minor realms
+* Target health and attributes
+* Target classifications
+* Environmental conditions
+* Biome and dimension
+* Time of day
+* Active buffs and debuffs
+* Equipment and artefacts
+
+</details>
+
+
+---
+
+<details>
+<summary>Exhaustion Resource Transaction System</summary>
+
+
+</details>
+
+---
+
+<details>
+<summary>Stamina System</summary>
+
 
 </details>
