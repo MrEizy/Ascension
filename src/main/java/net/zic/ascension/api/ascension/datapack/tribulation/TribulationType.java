@@ -2,7 +2,7 @@ package net.zic.ascension.api.ascension.datapack.tribulation;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationInstance;
@@ -31,8 +31,8 @@ public abstract class TribulationType {
 
     public abstract TribulationData newData(TribulationDefinition definition);
 
-    public abstract void onAdded(OriginSource source,TribulationDefinition definition, TribulationData tribulationData);
-    public abstract void onRemoved(OriginSource source,TribulationDefinition definition,TribulationData tribulationData);
+    public abstract void onAdded(AscensionOriginSource source, TribulationDefinition definition, TribulationData tribulationData);
+    public abstract void onRemoved(AscensionOriginSource source, TribulationDefinition definition, TribulationData tribulationData);
 
 
     /**

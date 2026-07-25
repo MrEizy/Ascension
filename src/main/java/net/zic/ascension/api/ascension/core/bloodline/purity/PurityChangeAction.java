@@ -7,7 +7,7 @@ import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 
 
 import java.util.UUID;
@@ -18,7 +18,7 @@ import java.util.UUID;
 public interface PurityChangeAction extends ProgressAction {
 
     @Override
-    default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
+    default void run(UUID holderId, AscensionOriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
         //first test to make sure context is a bloodline
         Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,contextIdentifier,source.getRegistryAccess());
         if(bloodline == null) return;
@@ -30,6 +30,6 @@ public interface PurityChangeAction extends ProgressAction {
         run(holderId,source,bloodline,data,purity,direction);
     }
 
-    void run(UUID holderId,OriginSource source,Bloodline bloodline,BloodlineData data,int purity,ProgressDirection direction);
+    void run(UUID holderId, AscensionOriginSource source, Bloodline bloodline, BloodlineData data, int purity, ProgressDirection direction);
 
 }

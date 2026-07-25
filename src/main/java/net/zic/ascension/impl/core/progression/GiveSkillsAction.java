@@ -5,7 +5,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.RegistryObjectData;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;
 
@@ -32,7 +32,7 @@ public record GiveSkillsAction(UUID uuid,List<Identifier> skills)  implements Pr
     }
 
     @Override
-    public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction) {
+    public void run(UUID holderId, AscensionOriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction) {
         for(Identifier skill:skills){
             if(direction.equals(ProgressDirection.UP)) source.addSkill(skill,getOwnerId());
             else source.removeSkill(skill,getOwnerId());

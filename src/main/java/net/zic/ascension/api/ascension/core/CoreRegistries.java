@@ -7,7 +7,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
-import net.zic.ascension.api.ascension.core.data_source.DataSource;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
@@ -56,11 +55,6 @@ public class CoreRegistries {
             AscensionCraft.MOD_ID,
             "skills",
             ()-> SkillType.SKILL_CODEC
-    );
-    public static final RegistryHelper.DataPackRegistry<DataSource> DATA_SOURCE_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID,
-            "data_sources",
-            ()-> DataSourceType.DATA_SOURCE_CODEC
     );
 
     public static final RegistryHelper.DataPackRegistry<ProgressAction> PROGRESS_ACTION_REGISTRY = RegistryHelper.dataPackRegistry(
@@ -114,11 +108,7 @@ public class CoreRegistries {
                 SKILL_REGISTRY.codec().get(),
                 SKILL_REGISTRY.codec().get()
         );
-        event.dataPackRegistry(
-                DATA_SOURCE_REGISTRY.key(),
-                DATA_SOURCE_REGISTRY.codec().get(),
-                DATA_SOURCE_REGISTRY.codec().get()
-        );
+
         event.dataPackRegistry(
                 PROGRESS_ACTION_REGISTRY.key(),
                 PROGRESS_ACTION_REGISTRY.codec().get(),

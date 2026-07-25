@@ -8,7 +8,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.impl.core.path.simple.SimplePathData;
 import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
@@ -40,25 +40,25 @@ public class FoundationPathData extends SimplePathData {
     private final ArrayList<MajorRealmFoundation> foundations = new ArrayList<>(){{add(new MajorRealmFoundation());}};
     private ArrayList<MajorRealmFoundation> cachedFoundations = new ArrayList<>();
     @Override
-    public void onRealmUp(OriginSource source) {
+    public void onRealmUp(AscensionOriginSource source) {
         super.onRealmUp(source);
         if(getMinorRealm() == 0 && foundations.size() <=getMajorRealm()) addFoundation(source);
     }
 
     @Override
-    public void onRealmDown(OriginSource source) {
+    public void onRealmDown(AscensionOriginSource source) {
         super.onRealmDown(source);
         if(getMinorRealm() == getMaxMinorRealm(getMajorRealm(),source.getRegistryAccess())) removeFoundation(source);
     }
 
-    public void addFoundation(OriginSource source){
+    public void addFoundation(AscensionOriginSource source){
         MajorRealmFoundation foundation = cachedFoundations.isEmpty() ? new MajorRealmFoundation() : cachedFoundations.removeFirst();
         foundations.add(foundation);
         int foundationRealm = foundation.foundationRealm;
         foundation.setFoundationRealm(0);
         handleFoundationRealmChange(source,getMajorRealm(),foundationRealm);
     }
-    public void removeFoundation(OriginSource source){
+    public void removeFoundation(AscensionOriginSource source){
         //TODO handle foundation change
         MajorRealmFoundation foundation = foundations.getLast();
 
@@ -88,7 +88,7 @@ public class FoundationPathData extends SimplePathData {
         foundations.get(majorRealm).setProgress(progress);
     }
 
-    public void handleFoundationRealmChange(OriginSource source,int majorRealm,int foundationRealm){
+    public void handleFoundationRealmChange(AscensionOriginSource source, int majorRealm, int foundationRealm){
         if(foundations.size() <= majorRealm) return;
 
         Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,getPath(),source.getRegistryAccess());
@@ -128,7 +128,7 @@ public class FoundationPathData extends SimplePathData {
     }
 
     @Override
-    public void simulateProgression(OriginSource source) {
+    public void simulateProgression(AscensionOriginSource source) {
         cachedFoundations = new ArrayList<>(foundations);
         foundations.clear();
         addFoundation(source); //ensures we add the first foundation
@@ -139,7 +139,7 @@ public class FoundationPathData extends SimplePathData {
     }
 
     @Override
-    public void removeFromSource(OriginSource source) {
+    public void removeFromSource(AscensionOriginSource source) {
         cachedFoundations = new ArrayList<>(foundations);
         super.removeFromSource(source);
 

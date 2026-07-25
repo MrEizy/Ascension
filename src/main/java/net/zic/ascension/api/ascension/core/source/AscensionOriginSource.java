@@ -1,7 +1,6 @@
 package net.zic.ascension.api.ascension.core.source;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -13,22 +12,25 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
-import net.zic.ascension.api.ascension.core.data_source.DataSource;
-import net.zic.ascension.api.ascension.core.data_source.DataSourceInstance;
-import net.zic.ascension.api.ascension.core.data_source.LoadOrder;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolder;
 import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.path.affinity.AffinityHolder;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
+import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.event.EventReason;
+import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.stats.Stat;
@@ -54,12 +56,9 @@ import java.util.*;
  *
  * TODO for each trigger onAdded
  */
-public class OriginSource {
+public class AscensionOriginSource extends OriginSource {
 
-    private Identifier physique;
-    private PhysiqueData physiqueData;
 
-    private final HashMap<Identifier,BloodlineData> bloodlines = new HashMap<>();
 
     private final HashMap<Identifier, PathData> paths = new HashMap<>();
     private final HashMap<Identifier,HashSet<Identifier>> pathOwners = new HashMap<>();
@@ -69,8 +68,6 @@ public class OriginSource {
     private final HashMap<Identifier,HashSet<Identifier>> skillOwners = new HashMap<>();
 
 
-
-    private final HashMap<Identifier, DataSourceInstance> dataSources = new HashMap<>();
 
     private final StatSheet statSheet = new StatSheet();
     private final AffinityHolder affinityHolder = new AffinityHolder();
@@ -86,27 +83,47 @@ public class OriginSource {
     private ValueInput cached;
 
 
-    public OriginSource(){
+
+    public AscensionOriginSource(){
 
     }
 
-    public OriginSource(CompoundTag input){
+    public AscensionOriginSource(CompoundTag input){
         this.cachedCached = input;
     }
-    public OriginSource(ValueInput input){
+    public AscensionOriginSource(ValueInput input){
 
         this.cached = input;
     }
+
+    //──Holder Access────────────────────────────────────────────────────────
+
+    /**
+     * attempts to get a DataSource instance, creating a new one if it is not present
+     * @param source the source we want to get the instance of
+     * @param access the registry access
+     * @return either an existing instance or a fresh one
+     */
+    protected DataSourceInstance getOrCreate(Identifier source){
+        if(hasDataSource(source)) return getDataSource(source);
+        DataSourceInstance instance = RPGEngineRegistries.DATA_SOURCE_REGISTRY.getValue(source).newInstance(getRegistryAccess());
+        return addDataSource(source,instance)? instance:null;
+    }
+
+    protected PhysiqueHolder getPhysiqueHolder(){
+        DataSourceInstance instance = getOrCreate(CoreHolderProviders.PHYSIQUE_HOLDER_PROVIDER.getId());
+        return (PhysiqueHolder) instance;
+    }
+    protected BloodlineHolder getBloodlineHolder(){
+        DataSourceInstance instance = getOrCreate(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
+        return (BloodlineHolder) instance;
+    }
+
     public boolean isLoaded(){ return cached != null;}
 
     public ValueInput getCached(){return cached;}
 
-    public RegistryAccess getRegistryAccess(){
-        if (registryAccess != null) {
-            return registryAccess;
-        }
-        return Minecraft.getInstance().getConnection() == null ? null : Minecraft.getInstance().getConnection().registryAccess();
-    }
+
     public long getRevision() {
         return revision;
     }
@@ -128,29 +145,23 @@ public class OriginSource {
     }
     //Sets the current physique, cannot be null
     public boolean setPhysique(Identifier physique,PhysiqueData physiqueData){
-        return setPhysique(physique,physiqueData,null);
+        PhysiqueHolder holder = getPhysiqueHolder();
+        return holder.setPhysique(physique,physiqueData);
     }
-    public boolean setPhysique(Identifier physique, PhysiqueData physiqueData, EventReason reason){
-        if(physique == null) return false;
-        if(physique.equals(this.physique)) return false;
 
-        this.physique = physique;
-        this.physiqueData = physiqueData;
-
-        return true;
-    }
     public Identifier getPhysique(){
-        return physique;
-    }
-    public PhysiqueData getPhysiqueData(){
-        return physiqueData;
+        PhysiqueHolder holder = getPhysiqueHolder();
+        return holder.getPhysique();
     }
 
-    public void markPhysiqueDirty(){} //should be used if you modified physiqueData
+    public PhysiqueData getPhysiqueData(){
+        PhysiqueHolder holder = getPhysiqueHolder();
+        return holder.getData();
+    }
+
     //──Bloodline────────────────────────────────────────────────────────
 
-    //TODO add merge logic here?
-    //add a fresh instance of a bloodline
+
     public boolean addBloodline(Identifier bloodline){
         if(bloodline == null)return false;
         Bloodline bloodlineInstance = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodline,getRegistryAccess());
@@ -159,7 +170,7 @@ public class OriginSource {
     }
     public void mergeBloodline(Identifier bloodline,BloodlineData data){
 
-        if(this instanceof ServerOriginSource source) source.startProcess(ProcessType.MODIFY_BLOODLINE);
+        startProcess("merge_bloodline");
         CoreRegistries.BLOODLINE_REGISTRY.get(getRegistryAccess()).getValue(bloodline).handlePurityChange(
                 this,
                 getBloodlineData(bloodline),
@@ -167,45 +178,39 @@ public class OriginSource {
         );
 
         markBloodlineDirty(bloodline);
-
+        resolveProcess("merge_bloodline");
     }
     public boolean addBloodline(Identifier bloodline,BloodlineData data){
-        return addBloodline(bloodline,data,null);
-    }
-    public boolean addBloodline(Identifier bloodline,BloodlineData data,EventReason reason){
         if(bloodline == null) return false;
         if(hasBloodline(bloodline)){
             mergeBloodline(bloodline,data);
             return true;
         }
-        this.bloodlines.put(bloodline,data);
-
-        return true;
+        return getBloodlineHolder().addBloodline(bloodline,data);
     }
+
 
     public boolean removeBloodline(Identifier bloodline){
-        return removeBloodline(bloodline,null);
+        return getBloodlineHolder().removeBloodline(bloodline);
     }
-    public boolean removeBloodline(Identifier bloodline,EventReason reason){
 
-        return !(bloodlines.remove(bloodline) == null);
-    }
 
     public boolean hasBloodline(Identifier bloodline){
-        return bloodlines.containsKey(bloodline);
+        return getBloodlineHolder().hasBloodline(bloodline);
     }
 
     public Collection<Identifier> getBloodlines(){
-        return bloodlines.keySet();
-    }
-    protected Map<Identifier,BloodlineData> getAllBloodlines(){
-        return bloodlines;
-    }
-    public BloodlineData getBloodlineData(Identifier bloodline){
-        return bloodlines.get(bloodline);
+        return getBloodlineHolder().getBloodlines();
     }
 
-    public void markBloodlineDirty(Identifier bloodline){}//should be used if you modified a bloodlines data
+    public BloodlineData getBloodlineData(Identifier bloodline){
+        return getBloodlineHolder().getBloodline(bloodline);
+    }
+
+    //should be used if you modified a bloodlines data
+    public void markBloodlineDirty(Identifier bloodline){
+        getBloodlineHolder().markBloodlineDirty(bloodline);
+    }
     //──Path────────────────────────────────────────────────────────
 
     /**
@@ -366,34 +371,7 @@ public class OriginSource {
 
 
     public void markSkillDirty(Identifier skill){}//should be used if you changed a skills skilLData
-    //──Data Source────────────────────────────────────────────────────────
 
-    public boolean addDataSource(Identifier source){
-        if(source == null) return false;
-        DataSource dataSource = CoreRegistries.safeAccess(CoreRegistries.DATA_SOURCE_REGISTRY,source,getRegistryAccess());
-        if(dataSource == null) return false;
-        return addDataSource(source,dataSource.newInstance(getRegistryAccess()));
-    }
-    public boolean addDataSource(Identifier source,DataSourceInstance instance){
-        if(source == null) return false;
-        dataSources.put(source,instance);
-        return true;
-    }
-
-    public DataSourceInstance getDataSourceInstance(Identifier source){
-        return dataSources.get(source);
-    }
-
-    public boolean hasDataSource(Identifier source){
-        return dataSources.containsKey(source);
-    }
-
-    public DataSourceInstance removeDataSource(Identifier source){
-        return dataSources.remove(source);
-    }
-
-    public Collection<Identifier> getDataSources(){return dataSources.keySet();}
-    public void markDataSourceDirty(Identifier source){}//should be used if you changed a data sources instance
     //──Stat Sheet────────────────────────────────────────────────────────
 
     //NOTE im fully hiding the implementation here. i would do the same for pathData but i know i will have
@@ -433,9 +411,7 @@ public class OriginSource {
                 statSheet.getStatInstance(stat).getBaseValue() :
                 0;
     }
-    protected StatInstance getStatInstance(Stat stat){
-        return statSheet.getStatInstance(stat);
-    }
+
 
     public Collection<Stat> getAllStats(){
         return statSheet.asMap().keySet();
@@ -611,21 +587,7 @@ public class OriginSource {
                 AscensionCraft.LOGGER.debug("stacktrace",e);
             }
         }
-        AscensionCraft.LOGGER.debug("Finished Saving Skill Path Data");
 
-        ValueOutput.ValueOutputList dataSourcesOutput = output.childrenList("data_sources");
-        AscensionCraft.LOGGER.debug("Saving Data Sources");
-        for(Identifier dataSource : getDataSources()){
-            AscensionCraft.LOGGER.debug("Saving Data Source {}",dataSource);
-            try {
-                ValueOutput dataSourceOutput = dataSourcesOutput.addChild();
-                dataSourceOutput.putString("id",dataSource.toString());
-                getDataSourceInstance(dataSource).write(dataSourceOutput.child("data"));
-            }catch (Exception e){
-                AscensionCraft.LOGGER.debug("error writing data source {}",dataSource);
-                AscensionCraft.LOGGER.debug("stacktrace",e);
-            }
-        }
     }
 
 
@@ -651,26 +613,8 @@ public class OriginSource {
 
 
     public void load(ValueInput input){
-        ArrayList<ValueInput> loadAfterDataSources = new ArrayList<>();
-        AscensionCraft.LOGGER.debug("Reading Initial Data Sources");
 
-        ValueInput.ValueInputList dataSourcesInput = input.childrenListOrEmpty("data_sources");
-        for(ValueInput dataSourceInput : dataSourcesInput){
-            try {
-                Identifier id = Identifier.parse(dataSourceInput.getStringOr("id","ascension:none"));
-                DataSource source = CoreRegistries.DATA_SOURCE_REGISTRY.get(getRegistryAccess()).getValue(id);//done on purpose to throw error
-                if(source.getLoadOrder() == LoadOrder.FINAL){
-                    loadAfterDataSources.add(dataSourceInput);
-                    continue;
-                }
-                DataSourceInstance instance = source.loadInstance(dataSourceInput.childOrEmpty("data"),getRegistryAccess());
 
-                addDataSource(id,instance);
-            }catch (Exception e){
-                AscensionCraft.LOGGER.debug("Error loading data source");
-                AscensionCraft.LOGGER.debug("stacktrace: ",e);
-            }
-        }
 
         AscensionCraft.LOGGER.debug("Reading Skill Data");
         cachedSkillData.clear();
@@ -761,19 +705,7 @@ public class OriginSource {
 
 
 
-        for(ValueInput dataSourceInput : loadAfterDataSources){
-            try {
-                Identifier id = Identifier.parse(dataSourceInput.getStringOr("id","ascension:none"));
-                DataSource source = CoreRegistries.DATA_SOURCE_REGISTRY.get(getRegistryAccess()).getValue(id);//done on purpose to throw error
 
-                DataSourceInstance instance = source.loadInstance(dataSourceInput.childOrEmpty("data"),getRegistryAccess());
-
-                addDataSource(id,instance);
-            }catch (Exception e){
-                AscensionCraft.LOGGER.debug("Error loading final data source");
-                AscensionCraft.LOGGER.debug("stacktrace: ",e);
-            }
-        }
         cachedPathData.clear();
         cachedSkillData.clear();
     }
@@ -860,9 +792,6 @@ public class OriginSource {
 
         for(Identifier toRemove : snapshot.toRemoveSkills) skills.remove(toRemove);
 
-        for(Pair<Identifier,DataSourceInstance> dataSource : snapshot.toAddDataSources) dataSources.put(dataSource.getFirst(),dataSource.getSecond());
-
-        for(Identifier toRemove : snapshot.toRemoveDataSources) dataSources.remove(toRemove);
 
 
         for(StatInstance stat : snapshot.dirtyStats) statSheet.setStat(stat);

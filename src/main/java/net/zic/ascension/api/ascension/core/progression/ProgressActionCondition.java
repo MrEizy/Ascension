@@ -2,7 +2,7 @@ package net.zic.ascension.api.ascension.core.progression;
 
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.RegistryObjectData;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
 
 public interface ProgressActionCondition {
@@ -14,7 +14,7 @@ public interface ProgressActionCondition {
      * @param direction is the expected progression gained/up or lost/down
      * @return true -> run all actions, false -> do not run actins
      */
-    boolean test(OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction);
+    boolean test(AscensionOriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction);
 
 
     ProgressActionConditionType getType();

@@ -6,11 +6,11 @@ import com.mojang.serialization.Encoder;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.TagValueOutput;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 
-public class SourceEncoder implements Encoder<OriginSource> {
+public class SourceEncoder implements Encoder<AscensionOriginSource> {
     @Override
-    public <T> DataResult<T> encode(OriginSource input, DynamicOps<T> ops, T prefix) {
+    public <T> DataResult<T> encode(AscensionOriginSource input, DynamicOps<T> ops, T prefix) {
         TagValueOutput output = TagValueOutput.createWithoutContext(ProblemReporter.DISCARDING);
         input.write(output);
         return DataResult.success(NbtOps.INSTANCE.convertTo(ops,output.buildResult()));

@@ -6,7 +6,7 @@ import net.zic.ascension.api.ascension.core.RegistryObjectData;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 
@@ -23,7 +23,7 @@ public interface RealmChangeAction extends ProgressAction {
 
 
     @Override
-    default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
+    default void run(UUID holderId, AscensionOriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
         Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,contextIdentifier,source.getRegistryAccess());
         if(technique == null) return;
 
@@ -62,6 +62,6 @@ public interface RealmChangeAction extends ProgressAction {
      * @param minorRealm the minor realm we are entering/leaving
      * @param direction the direction
      */
-    void run(UUID holderId,OriginSource source,PathData pathData,Technique technique,TechniqueData techniqueData,int majorRealm,int minorRealm,ProgressDirection direction);
+    void run(UUID holderId, AscensionOriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction);
 
 }

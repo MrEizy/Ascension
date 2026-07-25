@@ -2,22 +2,22 @@ package net.zic.ascension.api.ascension.event.path;
 
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.ICancellableEvent;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.path.PathData;
 
 public class PathRemovedEvent extends PathEvent{
-    protected PathRemovedEvent(Identifier path, PathData data, OriginSource source) {
+    protected PathRemovedEvent(Identifier path, PathData data, AscensionOriginSource source) {
         super(path, data, source);
     }
     public static class Pre extends PathRemovedEvent implements ICancellableEvent {
 
-        public Pre(Identifier path, PathData data, OriginSource source) {
+        public Pre(Identifier path, PathData data, AscensionOriginSource source) {
             super(path, data, source);
         }
     }
     public static class Post extends PathRemovedEvent{
 
-        public Post(Identifier path, PathData data, OriginSource source) {
+        public Post(Identifier path, PathData data, AscensionOriginSource source) {
             super(path, data, source);
         }
     }

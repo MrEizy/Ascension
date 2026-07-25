@@ -12,7 +12,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.info.PathDataDisplayElement;
@@ -38,7 +38,7 @@ public class PathDisplayContainer extends RenderableElement {
     private final PathProgressBar progressBar;
     private final FoundationProgressBar foundationProgressBar;
 
-    private OriginSource observedSource;
+    private AscensionOriginSource observedSource;
     private long observedRevision = Long.MIN_VALUE;
     private List<Identifier> displayedPaths = List.of();
     private Identifier selectedPath;
@@ -111,7 +111,7 @@ public class PathDisplayContainer extends RenderableElement {
     }
 
     private void refreshSynchronizedState() {
-        OriginSource source = ClientAscensionData.getSource().orElse(null);
+        AscensionOriginSource source = ClientAscensionData.getSource().orElse(null);
         long revision = source == null ? -1L : source.getRevision();
         if (source == observedSource && revision == observedRevision) {
             return;

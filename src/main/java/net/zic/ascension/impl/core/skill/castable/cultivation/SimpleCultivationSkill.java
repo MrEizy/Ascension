@@ -17,7 +17,7 @@ import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 import net.zic.ascension.impl.core.skill.EmptySkillData;
@@ -77,7 +77,7 @@ public record SimpleCultivationSkill(
         AscensionEntityDataProvider holder = caster.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if(holder == null) return;
 
-        OriginSource source = holder.getData(caster).getSource();
+        AscensionOriginSource source = holder.getData(caster).getSource();
 
 
         PathData pathData = source.getPathData(primaryPath());
@@ -147,12 +147,12 @@ public record SimpleCultivationSkill(
     }
 
     @Override
-    public void onAdded(OriginSource source, SkillData data) {
+    public void onAdded(AscensionOriginSource source, SkillData data) {
 
     }
 
     @Override
-    public void onRemoved(OriginSource source, SkillData data) {
+    public void onRemoved(AscensionOriginSource source, SkillData data) {
 
     }
 

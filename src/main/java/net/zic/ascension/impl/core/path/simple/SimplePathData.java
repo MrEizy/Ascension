@@ -11,7 +11,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.path.Realm;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
@@ -204,7 +204,7 @@ public class SimplePathData implements PathData {
     }
 
     @Override
-    public void setMajorRealm(int majorRealm,OriginSource source) {
+    public void setMajorRealm(int majorRealm, AscensionOriginSource source) {
         if(majorRealm > techniqueHistory.size()-1){
             for(int i = techniqueHistory.size(); i <=majorRealm;i++){
                 techniqueHistory.add(null);
@@ -235,7 +235,7 @@ public class SimplePathData implements PathData {
     }
 
     @Override
-    public boolean setCurrentTechnique(Identifier technique, OriginSource source) {
+    public boolean setCurrentTechnique(Identifier technique, AscensionOriginSource source) {
         if(technique == null) return setCurrentTechnique(null,null,source);
         Technique techniqueInstance = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,technique,source.getRegistryAccess());
         return techniqueInstance != null && setCurrentTechnique(technique, techniqueInstance.newData(), source);
@@ -262,7 +262,7 @@ public class SimplePathData implements PathData {
     TODO have transfer items warn players about compatability issues
     */
     @Override
-    public boolean setCurrentTechnique(Identifier technique, TechniqueData data, OriginSource source) {
+    public boolean setCurrentTechnique(Identifier technique, TechniqueData data, AscensionOriginSource source) {
         if(getCurrentTechnique() == null && technique == null) return true;
         if(getCurrentTechnique() != null && technique != null && getCurrentTechnique().equals(technique))return true;
 
@@ -314,14 +314,14 @@ public class SimplePathData implements PathData {
     }
 
     @Override
-    public void setCompletedTribulation(OriginSource source, int majorRealm, int minorRealm, TribulationDefinition definition, TribulationData data) {
+    public void setCompletedTribulation(AscensionOriginSource source, int majorRealm, int minorRealm, TribulationDefinition definition, TribulationData data) {
         tribulationHistory.put(new Realm(majorRealm,minorRealm),new CompletedTribulation(definition,data));
         data.getType().onAdded(source,definition,data);
         source.markPathDirty(getPath());
     }
 
     @Override
-    public void removeCompletedTribulation(OriginSource source, int majorRealm, int minorRealm) {
+    public void removeCompletedTribulation(AscensionOriginSource source, int majorRealm, int minorRealm) {
         tribulationHistory.remove(new Realm(majorRealm,minorRealm));
     }
 
@@ -351,7 +351,7 @@ public class SimplePathData implements PathData {
     }
 
     @Override
-    public void onRealmUp(OriginSource source) {
+    public void onRealmUp(AscensionOriginSource source) {
         PathData.super.onRealmUp(source);
         //TODO
         CompletedTribulation completedTribulation = cachedTribulationHistory.remove(new Realm(getMajorRealm(),getMinorRealm()));
@@ -380,7 +380,7 @@ public class SimplePathData implements PathData {
     }
 
     @Override
-    public void simulateProgression(OriginSource source) {
+    public void simulateProgression(AscensionOriginSource source) {
         if(techniqueHistory.isEmpty()) return;
 
         ArrayList<Identifier> cachedTechniqueHistory = new ArrayList<>(techniqueHistory);
@@ -426,7 +426,7 @@ public class SimplePathData implements PathData {
     }
 
     @Override
-    public void removeFromSource(OriginSource source) {
+    public void removeFromSource(AscensionOriginSource source) {
         ArrayList<Identifier> cachedTechniqueHistory = new ArrayList<>(techniqueHistory);
         HashMap<Identifier,TechniqueData> cachedTechniqueData = new HashMap<>(techniqueData);
         cachedTribulationHistory.putAll(tribulationHistory);

@@ -15,7 +15,7 @@ import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
@@ -99,7 +99,7 @@ public class SlotSkillCommand {
             return 0;
         }
 
-        OriginSource source = holder.getData(player).getSource();
+        AscensionOriginSource source = holder.getData(player).getSource();
         SkillCastHandler handler = player.getData(
                 AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER
         );

@@ -10,6 +10,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.data_source.DataSourceInstance;
@@ -26,6 +27,7 @@ import net.zic.ascension.api.ascension.event.path.PathRemovedEvent;
 import net.zic.ascension.api.ascension.event.physique.PhysiqueChangedEvent;
 import net.zic.ascension.api.ascension.event.skill.SkillAddedEvent;
 import net.zic.ascension.api.ascension.event.skill.SkillRemovedEvent;
+import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.StatInstance;
 import net.zic.zenithlib.value_containers.ValueContainer;
@@ -51,18 +53,16 @@ import java.util.*;
  * TODO so lets say i add a physique, even though we add stats, modifers skills and paths, it will not sync until physique calls resolve
  */
 //TODO go through and update EVERYTHING to not rely on a registry access stored inside OriginSource, if it needs it the method should accept registryaccess
-public class ServerOriginSource extends OriginSource {
+public class AscensionServerOriginSource extends AscensionOriginSource {
     //──Sync Data────────────────────────────────────────────────────────
     private boolean physiqueDirty = true;
 
-    private final HashMap<Identifier,BloodlineData> toAddBloodlines = new HashMap<>();
-    private final HashSet<Identifier> toRemoveBloodlines = new HashSet<>();
+
     private final HashMap<Identifier,PathData> toAddPaths= new HashMap<>();
     private final HashSet<Identifier> toRemovePaths = new HashSet<>();
     private final HashMap<Identifier, SkillData> toAddSkills= new HashMap<>();
     private final HashSet<Identifier> toRemoveSkills = new HashSet<>();
-    private final HashMap<Identifier, DataSourceInstance> toAddDataSources = new HashMap<>();
-    private final HashSet<Identifier> toRemoveDataSources = new HashSet<>();
+
     private final HashSet<StatInstance> dirtyStats = new HashSet<>();
     private final HashSet<ValueContainer> dirtyAffinity = new HashSet<>();
     private final HashMap<Identifier,HashSet<ValueContainer>> dirtyCategorizedAffinity = new HashMap<>();
@@ -70,11 +70,11 @@ public class ServerOriginSource extends OriginSource {
     private ProcessType currentProcess = null;
 
 
-    public ServerOriginSource(){}
-    public ServerOriginSource(ValueInput input){
+    public AscensionServerOriginSource(){}
+    public AscensionServerOriginSource(ValueInput input){
         super(input);
     }
-    public ServerOriginSource(CompoundTag input){
+    public AscensionServerOriginSource(CompoundTag input){
         super(input);
     }
 
@@ -83,7 +83,7 @@ public class ServerOriginSource extends OriginSource {
 
 
     @Override
-    public boolean setPhysique(Identifier physique, PhysiqueData physiqueData, EventReason reason) {
+    public boolean setPhysique(Identifier physique, PhysiqueData physiqueData) {
         if(physique == null) return false;
         Identifier oldPhysique = getPhysique();
         PhysiqueData oldPhysiqueData = getPhysiqueData();
@@ -95,12 +95,12 @@ public class ServerOriginSource extends OriginSource {
 
 
 
-        boolean result = super.setPhysique(pre.getNewPhysiqueIdentifier(), pre.getPhysiqueData(),reason);
+        boolean result = super.setPhysique(pre.getNewPhysiqueIdentifier(), pre.getPhysiqueData());
         if(!result) return false;
 
-        physiqueDirty = true;
+        markDataSourceDirty(CoreHolderProviders.PHYSIQUE_HOLDER_PROVIDER.getId());
 
-        startProcess(ProcessType.PHYSIQUE);
+        startProcess("set_physique");
 
         Collection<Identifier> toRemove = oldPhysique == null ? List.of() : pre.getPhysique(getRegistryAccess()).onRemoved(this,oldPhysiqueData);
         if(pre.getPhysique(getRegistryAccess()) != null){
@@ -114,7 +114,7 @@ public class ServerOriginSource extends OriginSource {
                 pre.getNewPhysique(getRegistryAccess()).applyToEntity(entity,pre.getNewPhysiqueData());
             }
         }
-        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData(),this,reason);
+        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData(),this);
         NeoForge.EVENT_BUS.post(post);
 
 
@@ -128,27 +128,27 @@ public class ServerOriginSource extends OriginSource {
             if(toAdd.contains(path)) continue;
             removePath(path,oldPhysique);
         }
-        resolveProcess(ProcessType.PHYSIQUE);
+        resolveProcess("set_physique");
         return true;
     }
 
     //TODO consider creating a replace bloodline event as well
     @Override
-    public boolean addBloodline(Identifier bloodline, BloodlineData data , EventReason reason) {
+    public boolean addBloodline(Identifier bloodline, BloodlineData data ) {
         if(bloodline == null) return false;
         if(hasBloodline(bloodline)) {
             mergeBloodline(bloodline,data);
             return true;
         };
 
-        BloodlineAddedEvent.Pre pre = new BloodlineAddedEvent.Pre(bloodline,data,this,reason);
+        BloodlineAddedEvent.Pre pre = new BloodlineAddedEvent.Pre(bloodline,data,this);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = super.addBloodline(bloodline, data,reason);
+        boolean result = super.addBloodline(bloodline, data);
         if(!result) return false;
 
-        startProcess(ProcessType.ADD_BLOODLINE);
+        startProcess("add_bloodline");
         int purity = data.getPurity();
         data.setPurity(1);
         Collection<Identifier> toAdd = pre.getBloodline(getRegistryAccess()).onAdded(this,pre.getBloodlineData());
@@ -166,31 +166,30 @@ public class ServerOriginSource extends OriginSource {
 
 
 
-        BloodlineAddedEvent.Post post= new BloodlineAddedEvent.Post(bloodline,data,this,reason);
+        BloodlineAddedEvent.Post post= new BloodlineAddedEvent.Post(bloodline,data,this);
         NeoForge.EVENT_BUS.post(post);
 
-        toAddBloodlines.put(bloodline,data);
-        resolveProcess(ProcessType.ADD_BLOODLINE);
+        resolveProcess("add_bloodline");
         return true;
 
     }
     //TODO consider adding a replace bloodline event
     @Override
-    public boolean removeBloodline(Identifier bloodline, EventReason reason) {
+    public boolean removeBloodline(Identifier bloodline) {
         if(bloodline == null) return false;
         if(!hasBloodline(bloodline)) return false;
 
         BloodlineData data = getBloodlineData(bloodline);
-        BloodlineRemovedEvent.Pre pre = new BloodlineRemovedEvent.Pre(bloodline,data,this,reason);
+        BloodlineRemovedEvent.Pre pre = new BloodlineRemovedEvent.Pre(bloodline,data,this);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
 
 
-        boolean result =  super.removeBloodline(bloodline,reason);
+        boolean result =  super.removeBloodline(bloodline);
         if(!result) return false;
 
-        startProcess(ProcessType.REMOVE_BLOODLINE);
+        startProcess("remove_bloodline");
         pre.getBloodline(getRegistryAccess()).handlePurityChange(this,data,1);
 
         Collection<Identifier> toRemove = pre.getBloodline(getRegistryAccess()).onRemoved(this,pre.getBloodlineData());
@@ -203,11 +202,10 @@ public class ServerOriginSource extends OriginSource {
             removePath(path,pre.getBloodlineIdentifier());
         }
 
-        BloodlineRemovedEvent.Post post= new BloodlineRemovedEvent.Post(bloodline,data,this,reason);
+        BloodlineRemovedEvent.Post post= new BloodlineRemovedEvent.Post(bloodline,data,this);
         NeoForge.EVENT_BUS.post(post);
 
-        toRemoveBloodlines.add(bloodline);
-        resolveProcess(ProcessType.REMOVE_BLOODLINE);
+        resolveProcess("remove_bloodline");
         return true;
     }
 
@@ -498,11 +496,19 @@ public class ServerOriginSource extends OriginSource {
     }
 
 
+    @Override
+    public boolean resolveProcess(String processId) {
+        boolean result = super.resolveProcess(processId);
+        if(!result) return false;
 
-    public void startProcess(ProcessType processType){
-        if(currentProcess != null) return;
+        OriginSourcePatch patch = resolvePatch();
 
-        currentProcess = processType;
+        for(LivingEntity entity : getAttachedEntities()){
+            AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+            if(holder == null) continue;
+            holder.getData(entity).markDirty(patch);
+        }
+        return true;
     }
 
     //only resolve if the process matches the current one

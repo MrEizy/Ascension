@@ -6,7 +6,7 @@ import net.zic.ascension.api.ascension.core.RegistryObjectData;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 
@@ -16,7 +16,7 @@ import net.zic.ascension.api.ascension.core.technique.TechniqueData;
  */
 public interface RealmChangeActionCondition extends ProgressActionCondition {
     @Override
-    default boolean test(OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
+    default boolean test(AscensionOriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
         Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,contextIdentifier,source.getRegistryAccess());
         if(technique == null) return false;
 
@@ -52,7 +52,7 @@ public interface RealmChangeActionCondition extends ProgressActionCondition {
      * @param minorRealm the minor realm we are entering/leaving
      * @param direction the direction
      */
-    boolean test(OriginSource source,PathData pathData,Technique technique,TechniqueData techniqueData,int majorRealm,int minorRealm,ProgressDirection direction);
+    boolean test(AscensionOriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction);
 
 
 }

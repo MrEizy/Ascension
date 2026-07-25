@@ -29,6 +29,7 @@ public interface DataSource {
     void onRemoved(OriginSource source, DataSourceInstance instance);
 
     /**
+     * mainly used for cache clearing
      * Called when all data sources are finished being read
      * @param source the source it is loaded on
      * @param instance the instance of this data source
@@ -36,10 +37,10 @@ public interface DataSource {
     void finishedLoading(OriginSource source, DataSourceInstance instance);
 
     //called when the data source is added to the origin source, or a new entity holds the origin
-    void applyToEntity(LivingEntity entity, DataSourceInstance data);
+    void applyToEntity(LivingEntity entity, DataSourceInstance instance);
 
     //called when either an entity is detached from an origin or the data source is removed from the origin
-    void removeFromEntity(LivingEntity entity, DataSourceInstance data);
+    void removeFromEntity(LivingEntity entity, DataSourceInstance instance);
 
 
     DataSourceInstance newInstance(RegistryAccess access);

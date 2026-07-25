@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationInstance;
@@ -46,12 +46,12 @@ public class LightningTribulationType extends TribulationType {
     }
 
     @Override
-    public void onAdded(OriginSource source, TribulationDefinition definition, TribulationData tribulationData) {
+    public void onAdded(AscensionOriginSource source, TribulationDefinition definition, TribulationData tribulationData) {
 
     }
 
     @Override
-    public void onRemoved(OriginSource source, TribulationDefinition definition, TribulationData tribulationData) {
+    public void onRemoved(AscensionOriginSource source, TribulationDefinition definition, TribulationData tribulationData) {
 
     }
 

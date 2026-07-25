@@ -4,7 +4,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.event.EventReason;
@@ -19,12 +19,12 @@ import net.zic.ascension.api.ascension.event.EventReason;
 public abstract class PhysiqueChangedEvent extends PhysiqueEvent{
     private Identifier newPhysique;
     private PhysiqueData newPhysiqueData;
-    private final EventReason reason;
-    protected PhysiqueChangedEvent(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source, EventReason reason) {
+
+    protected PhysiqueChangedEvent(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, AscensionOriginSource source) {
         super(physique, data, source);
         this.newPhysique = newPhysique;
         this.newPhysiqueData = newPhysiqueData;
-        this.reason = reason;
+
     }
 
     protected void setNewPhysique(Identifier newPhysique){
@@ -44,14 +44,12 @@ public abstract class PhysiqueChangedEvent extends PhysiqueEvent{
     public PhysiqueData getNewPhysiqueData(){
         return newPhysiqueData;
     }
-    public EventReason getReason(){
-        return reason;
-    }
+
     public static class Pre extends PhysiqueChangedEvent implements ICancellableEvent {
 
 
-        public Pre(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source, EventReason reason) {
-            super(physique, data, newPhysique, newPhysiqueData, source, reason);
+        public Pre(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, AscensionOriginSource source) {
+            super(physique, data, newPhysique, newPhysiqueData, source);
         }
         @Override
         public void setNewPhysique(Identifier physique){
@@ -67,8 +65,8 @@ public abstract class PhysiqueChangedEvent extends PhysiqueEvent{
     public static class Post extends PhysiqueChangedEvent {
 
 
-        public Post(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source, EventReason reason) {
-            super(physique, data, newPhysique, newPhysiqueData, source, reason);
+        public Post(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, AscensionOriginSource source) {
+            super(physique, data, newPhysique, newPhysiqueData, source);
         }
     }
 }

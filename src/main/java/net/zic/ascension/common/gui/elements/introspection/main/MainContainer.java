@@ -13,7 +13,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.physique.Physique;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.info.DescriptionDisplayContainer;
 
@@ -41,7 +41,7 @@ public class MainContainer extends RenderableElement {
     private final BloodlineOpenButton bloodlineButton;
 
     private InformationPanel informationPanel = InformationPanel.DEFAULT;
-    private OriginSource observedSource;
+    private AscensionOriginSource observedSource;
     private long observedRevision = Long.MIN_VALUE;
     private String observedIdentitySignature;
 
@@ -91,7 +91,7 @@ public class MainContainer extends RenderableElement {
     }
 
     private void refreshSynchronizedState() {
-        OriginSource source = ClientAscensionData.getSource().orElse(null);
+        AscensionOriginSource source = ClientAscensionData.getSource().orElse(null);
         long revision = source == null ? -1L : source.getRevision();
         if (source == observedSource && revision == observedRevision) {
             return;
@@ -116,7 +116,7 @@ public class MainContainer extends RenderableElement {
         }
     }
 
-    private static String createIdentitySignature(OriginSource source) {
+    private static String createIdentitySignature(AscensionOriginSource source) {
         if (source == null) {
             return "unavailable";
         }

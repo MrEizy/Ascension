@@ -19,7 +19,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.common.starter.StarterSelectionManager;
 
 import java.util.*;
@@ -36,14 +36,14 @@ import java.util.*;
 @EventBusSubscriber
 public class  SourceHandler extends SavedData {
 
-    private final HashMap<UUID,OriginSource> remoteSources = new HashMap<>();
-    private final HashMap<OriginSource,UUID> sourceIdMap = new HashMap<>();
-    private final HashMap<OriginSource,HashSet<SourceWatcher>> sourceWatchers = new HashMap<>();
-    private final HashMap<SourceWatcher,OriginSource> watchers = new HashMap<>();
+    private final HashMap<UUID, AscensionOriginSource> remoteSources = new HashMap<>();
+    private final HashMap<AscensionOriginSource,UUID> sourceIdMap = new HashMap<>();
+    private final HashMap<AscensionOriginSource,HashSet<SourceWatcher>> sourceWatchers = new HashMap<>();
+    private final HashMap<SourceWatcher, AscensionOriginSource> watchers = new HashMap<>();
     private final HashMap<UUID,SourceWatcher> watchersIdMap = new HashMap<>();
 
 
-    public static final Codec<OriginSource> ORIGIN_CODEC = Codec.of(new SourceEncoder(),new SourceDecoder());
+    public static final Codec<AscensionOriginSource> ORIGIN_CODEC = Codec.of(new SourceEncoder(),new SourceDecoder());
     public static final SavedDataType<SourceHandler> ID = new SavedDataType<>(
 
             Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "source_handler"),
@@ -69,11 +69,11 @@ public class  SourceHandler extends SavedData {
     public SourceHandler(ServerLevel server){
 
     }
-    public SourceHandler(ServerLevel server, Map<UUID,OriginSource> remoteSources, Map<UUID,UUID> watchers){
+    public SourceHandler(ServerLevel server, Map<UUID, AscensionOriginSource> remoteSources, Map<UUID,UUID> watchers){
         //TODO implement and load
     }
 
-    public Map<UUID,OriginSource> getRemoteSources(){
+    public Map<UUID, AscensionOriginSource> getRemoteSources(){
         return Map.copyOf(remoteSources);
     }
     public Map<UUID,UUID> getWatchers(){
@@ -84,23 +84,23 @@ public class  SourceHandler extends SavedData {
         return map;
     }
 
-    public UUID getTrackedSourceUUID(OriginSource source){
+    public UUID getTrackedSourceUUID(AscensionOriginSource source){
         return sourceIdMap.get(source);
     }
 
-    public UUID addTrackedSource(OriginSource source){
+    public UUID addTrackedSource(AscensionOriginSource source){
         UUID uuid = UUID.randomUUID();
         remoteSources.put(uuid,source);
         sourceIdMap.put(source,uuid);
         return uuid;
     }
 
-    public OriginSource getTrackedSource(UUID uuid){
+    public AscensionOriginSource getTrackedSource(UUID uuid){
         return remoteSources.get(uuid);
     }
 
     public void removeTrackedSource(UUID uuid){
-        OriginSource source = remoteSources.remove(uuid);
+        AscensionOriginSource source = remoteSources.remove(uuid);
         sourceIdMap.remove(source);
         Set<SourceWatcher> watchers =  sourceWatchers.remove(source);
         for(SourceWatcher watcher : watchers) watchers.remove(watcher);
@@ -131,7 +131,7 @@ public class  SourceHandler extends SavedData {
         System.out.println(watchersIdMap.get(entity.getUUID()).isLoaded());
     }
 
-    public void addWatcher(LivingEntity entity,OriginSource source){
+    public void addWatcher(LivingEntity entity, AscensionOriginSource source){
 
         if(!sourceWatchers.containsKey(source)){
             sourceWatchers.put(source,new HashSet<>());
@@ -152,12 +152,12 @@ public class  SourceHandler extends SavedData {
         if(!watchersIdMap.containsKey(entity.getUUID())) return;
 
         SourceWatcher watcher = watchersIdMap.remove(entity.getUUID());
-        OriginSource source = watchers.remove(watcher);
+        AscensionOriginSource source = watchers.remove(watcher);
         sourceWatchers.get(source).remove(watcher);
         if(sourceWatchers.get(source).isEmpty()) sourceWatchers.remove(source);
     }
 
-    public Collection<LivingEntity> getLoadedWatchers(OriginSource source){
+    public Collection<LivingEntity> getLoadedWatchers(AscensionOriginSource source){
         if(!sourceWatchers.containsKey(source)) return List.of();
         ArrayList<LivingEntity> arrayList = new ArrayList<>();
         for(SourceWatcher watcher : sourceWatchers.get(source)){
@@ -168,7 +168,7 @@ public class  SourceHandler extends SavedData {
 
     public void applyToWatcher(LivingEntity watcher){
         if(!watchersIdMap.containsKey(watcher.getUUID())) return;
-        OriginSource source = watchers.get(watchersIdMap.get(watcher.getUUID()));
+        AscensionOriginSource source = watchers.get(watchersIdMap.get(watcher.getUUID()));
         Physique physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,source.getPhysique(),source.getRegistryAccess());
         if(physique != null){
             physique.applyToEntity(watcher,source.getPhysiqueData());
@@ -189,7 +189,7 @@ public class  SourceHandler extends SavedData {
     }
     public void removeFromWatcher(LivingEntity watcher){
         if(!watchersIdMap.containsKey(watcher.getUUID())) return;
-        OriginSource source = watchers.get(watchersIdMap.get(watcher.getUUID()));
+        AscensionOriginSource source = watchers.get(watchersIdMap.get(watcher.getUUID()));
         Physique physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,source.getPhysique(),source.getRegistryAccess());
         if(physique != null){
             physique.removeFromEntity(watcher,source.getPhysiqueData());

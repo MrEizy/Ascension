@@ -15,8 +15,8 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
-import net.zic.ascension.api.ascension.core.source.ServerOriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionServerOriginSource;
 import net.zic.ascension.api.ascension.core.source.SourceChangesSnapshot;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.starter.StarterSelectionStage;
@@ -52,7 +52,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             Attributes.MINING_EFFICIENCY
     );
 
-    private final OriginSource source;
+    private final AscensionOriginSource source;
     private final LivingEntity attachedEntity;
 
     private final Map<Identifier, Double> attributeSuppression = new HashMap<>();
@@ -67,7 +67,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private Identifier selectedStarterPhysique;
     private boolean starterSelectionComplete;
 
-    public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
+    public SimpleAscensionEntityData(AscensionOriginSource source, LivingEntity entity) {
         this.source = source;
         this.attachedEntity = entity;
         this.source.setRegistryAccess(entity.registryAccess());
@@ -154,7 +154,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     }
 
     @Override
-    public OriginSource getSource() {
+    public AscensionOriginSource getSource() {
         return source;
     }
 
@@ -495,7 +495,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
             if (previousValue == null) {
                 previousValue = new SimpleAscensionEntityData(
-                        new OriginSource(),
+                        new AscensionOriginSource(),
                         entity
                 );
             }
@@ -550,9 +550,9 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             }
 
 
-            OriginSource source = entity.level().isClientSide()
-                    ? new OriginSource(input.childOrEmpty("source_data"))
-                    : new ServerOriginSource(input.childOrEmpty("source_data"));
+            AscensionOriginSource source = entity.level().isClientSide()
+                    ? new AscensionOriginSource(input.childOrEmpty("source_data"))
+                    : new AscensionServerOriginSource(input.childOrEmpty("source_data"));
 
             SimpleAscensionEntityData data = new SimpleAscensionEntityData(source, entity);
 

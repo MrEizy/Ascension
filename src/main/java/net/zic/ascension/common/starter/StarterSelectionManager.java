@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.network.OpenStarterSelectionPacket;
@@ -152,7 +152,7 @@ public final class StarterSelectionManager {
             return;
         }
 
-        OriginSource source = data.getSource();
+        AscensionOriginSource source = data.getSource();
         source.setRegistryAccess(player.registryAccess());
 
         boolean bloodlineApplied = source.hasBloodline(data.getSelectedStarterBloodline())

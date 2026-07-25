@@ -12,7 +12,7 @@ import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionType;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.impl.core.path.PathRelationship;
@@ -60,7 +60,7 @@ public record FoundationPath(Component name, Component description, List<Foundat
         return realms.get(majorRealm).foundationActionHolder();
     }
 
-    public boolean tryBreakthroughFoundation(LivingEntity entity, OriginSource source, int majorRealm, int foundationRealm, double foundationProgress){
+    public boolean tryBreakthroughFoundation(LivingEntity entity, AscensionOriginSource source, int majorRealm, int foundationRealm, double foundationProgress){
         if(majorRealm > getMaxMajorRealm()) return false;
         if(foundationRealm >= getMaxFoundationRealm(majorRealm)) return false;
 

@@ -4,7 +4,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.Event;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 
@@ -12,9 +12,9 @@ public abstract class BloodlineEvent extends Event {
 
     private final Identifier bloodline;
     private final BloodlineData data;
-    private final OriginSource source;
+    private final AscensionOriginSource source;
 
-    protected BloodlineEvent(Identifier bloodline, BloodlineData data, OriginSource source) {
+    protected BloodlineEvent(Identifier bloodline, BloodlineData data, AscensionOriginSource source) {
         this.bloodline = bloodline;
         this.data = data;
         this.source = source;
@@ -30,7 +30,7 @@ public abstract class BloodlineEvent extends Event {
         return data;
     }
 
-    public OriginSource getSource(){
+    public AscensionOriginSource getSource(){
         return source;
     }
 

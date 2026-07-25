@@ -11,7 +11,7 @@ import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
@@ -138,13 +138,13 @@ public class SimpleTechnique implements Technique {
     }
 
     @Override
-    public void onAdded(OriginSource source, TechniqueData data) {
+    public void onAdded(AscensionOriginSource source, TechniqueData data) {
 
         holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data,ProgressDirection.UP);
     }
     //TODO UPDATE PROGRESSION TEST TO TAKE IN A TYPE CALLED REGISTRY_OBJECT_DATA AS CONTEXT DATA
     @Override
-    public void onRemoved(OriginSource source, TechniqueData data) {
+    public void onRemoved(AscensionOriginSource source, TechniqueData data) {
         holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data,ProgressDirection.DOWN);
     }
 
@@ -235,7 +235,7 @@ public class SimpleTechnique implements Technique {
     }
 
     @Override
-    public boolean tryBreakthrough(LivingEntity entity, OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData) {
+    public boolean tryBreakthrough(LivingEntity entity, AscensionOriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData) {
         if(source.getPathData(getPath()).isBreakingThrough()) return false;
         double maxProgress = getMaxProgress(majorRealm,minorRealm,techniqueData,source.getRegistryAccess());
         double maxMajorRealm = getMaxMajorRealm(techniqueData,source.getRegistryAccess());
@@ -270,12 +270,12 @@ public class SimpleTechnique implements Technique {
     }
 
     @Override
-    public void onRealmUp(OriginSource source, TechniqueData techniqueData) {
+    public void onRealmUp(AscensionOriginSource source, TechniqueData techniqueData) {
         holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),techniqueData,ProgressDirection.UP);
     }
 
     @Override
-    public void onRealmDown(OriginSource source, TechniqueData techniqueData) {
+    public void onRealmDown(AscensionOriginSource source, TechniqueData techniqueData) {
         holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),techniqueData,ProgressDirection.DOWN);
     }
 

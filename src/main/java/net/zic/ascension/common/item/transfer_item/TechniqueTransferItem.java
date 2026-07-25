@@ -12,7 +12,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
@@ -40,7 +40,7 @@ public class TechniqueTransferItem  extends Item {
         AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
 
         if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
-        OriginSource source = holder.getData(player).getSource();
+        AscensionOriginSource source = holder.getData(player).getSource();
         Identifier path = targetTechnique.getPath();
         if(source.getPathData(path) == null){
             player.sendSystemMessage(Component.literal("[You are do not have path : "+path+"]"));

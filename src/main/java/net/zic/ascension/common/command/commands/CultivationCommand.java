@@ -20,7 +20,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.path.Realm;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
@@ -90,7 +90,7 @@ public class CultivationCommand {
             if(holder == null) continue;
             player.sendSystemMessage(Component.literal("==="+target.getDisplayName().getString()+"==="));
 
-            OriginSource source = holder.getData(target).getSource();
+            AscensionOriginSource source = holder.getData(target).getSource();
             if(!source.hasPath(path)){
                 player.sendSystemMessage(Component.literal("no path data"));
                 continue;
@@ -162,7 +162,7 @@ public class CultivationCommand {
                 return false;
             }
 
-            OriginSource originSource = holder.getData(player).getSource();
+            AscensionOriginSource originSource = holder.getData(player).getSource();
 
             if(originSource == null){
                 source.sendFailure(Component.literal(

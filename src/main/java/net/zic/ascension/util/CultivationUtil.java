@@ -6,7 +6,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
@@ -28,7 +28,7 @@ public class CultivationUtil {
      * @param secondaryPaths
      * @param baseRate
      */
-    public static void cultivate(LivingEntity caster,OriginSource source, PathData pathData, List<Identifier> secondaryPaths,double baseRate){
+    public static void cultivate(LivingEntity caster, AscensionOriginSource source, PathData pathData, List<Identifier> secondaryPaths, double baseRate){
 
 
         if(pathData.getCurrentTechnique() == null) return;
@@ -58,7 +58,7 @@ public class CultivationUtil {
         source.markPathDirty(pathData.getPath());
     }
 
-    public static void cultivateFoundation(LivingEntity entity, OriginSource source, FoundationPathData foundationPathData, double baseRate){
+    public static void cultivateFoundation(LivingEntity entity, AscensionOriginSource source, FoundationPathData foundationPathData, double baseRate){
         Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,foundationPathData.getPath(),source.getRegistryAccess());
 
         if(!(path instanceof FoundationPath foundationPath)) return;

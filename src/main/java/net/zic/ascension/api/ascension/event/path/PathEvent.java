@@ -4,16 +4,16 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.Event;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
 
 public abstract class PathEvent extends Event {
     private final Identifier path;
     private final PathData data;
-    private final OriginSource source;
+    private final AscensionOriginSource source;
 
-    protected PathEvent(Identifier path, PathData data, OriginSource source) {
+    protected PathEvent(Identifier path, PathData data, AscensionOriginSource source) {
         this.path = path;
         this.data = data;
         this.source = source;
@@ -29,7 +29,7 @@ public abstract class PathEvent extends Event {
     public PathData getPathData(){
         return data;
     }
-    public OriginSource getSource(){
+    public AscensionOriginSource getSource(){
         return source;
     }
 }

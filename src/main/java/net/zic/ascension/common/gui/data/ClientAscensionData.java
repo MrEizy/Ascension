@@ -6,7 +6,7 @@ import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
@@ -32,7 +32,7 @@ public final class ClientAscensionData {
         });
     }
 
-    public static Optional<OriginSource> getSource() {
+    public static Optional<AscensionOriginSource> getSource() {
         return getEntityData().map(AscensionEntityData::getSource);
     }
 
@@ -66,6 +66,6 @@ public final class ClientAscensionData {
 
 
     public static long getRevision() {
-        return getSource().map(OriginSource::getRevision).orElse(-1L);
+        return getSource().map(AscensionOriginSource::getRevision).orElse(-1L);
     }
 }

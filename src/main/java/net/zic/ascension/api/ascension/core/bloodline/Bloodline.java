@@ -6,8 +6,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+
 import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 
 import java.util.Collection;
@@ -46,7 +47,7 @@ public interface Bloodline {
     void removeFromEntity(LivingEntity entity,BloodlineData data);
 
     //takes in a prospective purity change, clamps it and then breaks it down into percentage increments
-    default void handlePurityChange(OriginSource source,BloodlineData data, int newPurity){
+    default void handlePurityChange(OriginSource source, BloodlineData data, int newPurity){
 
         newPurity = Math.clamp(newPurity,1,100);
         int oldPurity = data.getPurity();
@@ -71,8 +72,8 @@ public interface Bloodline {
     //represents a single purity increment
     //for handler on down should actually use the previous value rather than the current one
 
-    void purityDown(OriginSource source,BloodlineData data);
-    void purityUp(OriginSource source,BloodlineData data);
+    void purityDown(OriginSource source, BloodlineData data);
+    void purityUp(OriginSource source, BloodlineData data);
 
     BloodlineData newData(RegistryAccess access);
     BloodlineData loadData(ValueInput input,RegistryAccess access);

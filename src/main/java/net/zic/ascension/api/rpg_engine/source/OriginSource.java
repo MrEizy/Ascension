@@ -52,25 +52,23 @@ public class OriginSource implements StatProvider {
         if(process != null) return;
         process = processId;
     }
-
-    public OriginSourcePatch resolveProcess(String processId){
-        if(!processId.equals(process)) return null;
-
+    protected OriginSourcePatch resolvePatch(){
         OriginSourcePatch patch =new OriginSourcePatch(
-            dataSources.entrySet().stream().filter(entry->dirtyDataSources.contains(entry.getKey()))
-                    .collect(Collectors.toMap(
-                            Map.Entry::getKey,
-                            Map.Entry::getValue
-            )),
-            Set.copyOf(removedDataSources),
-            statSheet.getAllInstances().stream().filter(instance->dirtyStats.contains(instance.getStat())).toList()
+                dataSources.entrySet().stream().filter(entry->dirtyDataSources.contains(entry.getKey()))
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue
+                        )),
+                Set.copyOf(removedDataSources),
+                statSheet.getAllInstances().stream().filter(instance->dirtyStats.contains(instance.getStat())).toList()
         );
-
         dirtyDataSources.clear();
         removedDataSources.clear();
         updateEntityStatHolder();
-        process = null;
-        return patch;
+    }
+    public boolean resolveProcess(String processId){
+        return processId.equals(process);
+
     }
 
     //tells the snapshot to sync this data source instance

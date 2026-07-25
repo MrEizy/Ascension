@@ -8,7 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
@@ -62,7 +62,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
     }
 
     @Override
-    public Collection<Identifier> onAdded(OriginSource source, PhysiqueData data) {
+    public Collection<Identifier> onAdded(AscensionOriginSource source, PhysiqueData data) {
 
         Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
 
@@ -90,7 +90,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
     }
 
     @Override
-    public Collection<Identifier> onRemoved(OriginSource source, PhysiqueData data) {
+    public Collection<Identifier> onRemoved(AscensionOriginSource source, PhysiqueData data) {
         Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
 
         for (ValueContainer.BaseModifier baseModifier : baseStats) {
