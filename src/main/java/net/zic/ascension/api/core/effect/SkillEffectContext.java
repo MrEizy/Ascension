@@ -1,4 +1,4 @@
-package net.zic.ascension.common.effect;
+package net.zic.ascension.api.core.effect;
 
 import net.minecraft.resources.Identifier;
 
