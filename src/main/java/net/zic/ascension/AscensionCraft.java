@@ -13,6 +13,7 @@ import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.item.ModItems;
@@ -76,7 +77,7 @@ public class AscensionCraft {
         RECIPES.register(modEventBus);
 
 
-
+        CoreAttachments.register(modEventBus);
 
         AscensionPhysiqueTypes.register(modEventBus);
         AscensionAttachments.register(modEventBus);

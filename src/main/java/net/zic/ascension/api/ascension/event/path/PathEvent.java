@@ -7,13 +7,14 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public abstract class PathEvent extends Event {
     private final Identifier path;
     private final PathData data;
-    private final AscensionOriginSource source;
+    private final OriginSource source;
 
-    protected PathEvent(Identifier path, PathData data, AscensionOriginSource source) {
+    protected PathEvent(Identifier path, PathData data, OriginSource source) {
         this.path = path;
         this.data = data;
         this.source = source;
@@ -29,7 +30,7 @@ public abstract class PathEvent extends Event {
     public PathData getPathData(){
         return data;
     }
-    public AscensionOriginSource getSource(){
+    public OriginSource getSource(){
         return source;
     }
 }

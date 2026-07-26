@@ -1,3 +1,11 @@
+TODO:
+    start rewriting the main code to work with the new code(and so i can test it)
+    finish the pathBonusHolder update code
+    finish ascensionEntityData stat and path bonus holder
+    make sure new path,bloodline,physique and skills have apply to entity called
+    have a look at how techniques should function(basically family and milestone realms) and if they should be updated
+    update attributes to use my Suppressed Attribute variant
+
 API remake notes.
 
 I will be splitting it into 2 sections:

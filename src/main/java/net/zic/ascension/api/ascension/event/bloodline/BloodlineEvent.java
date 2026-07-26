@@ -7,14 +7,15 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public abstract class BloodlineEvent extends Event {
 
     private final Identifier bloodline;
     private final BloodlineData data;
-    private final AscensionOriginSource source;
+    private final OriginSource source;
 
-    protected BloodlineEvent(Identifier bloodline, BloodlineData data, AscensionOriginSource source) {
+    protected BloodlineEvent(Identifier bloodline, BloodlineData data, OriginSource source) {
         this.bloodline = bloodline;
         this.data = data;
         this.source = source;
@@ -30,7 +31,7 @@ public abstract class BloodlineEvent extends Event {
         return data;
     }
 
-    public AscensionOriginSource getSource(){
+    public OriginSource getSource(){
         return source;
     }
 

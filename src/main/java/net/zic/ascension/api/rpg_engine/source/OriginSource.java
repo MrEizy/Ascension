@@ -25,7 +25,8 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+//TODO ensure that when adding new Data sources they properly have add to entity called
+//TODO then do the same for stuff like physique bloodline etc
 public class OriginSource implements StatProvider {
     private final HashMap<Identifier, DataSourceInstance> dataSources = new HashMap<>();
 

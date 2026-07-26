@@ -46,6 +46,7 @@ public class BloodlineHolder implements DataSourceInstance {
     public boolean hasBloodline(Identifier bloodline){
         return bloodlines.containsKey(bloodline);
     }
+
     public BloodlineData getBloodline(Identifier bloodline){
         return bloodlines.get(bloodline);
     }

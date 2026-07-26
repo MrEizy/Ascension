@@ -56,15 +56,6 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
     //──Sync Data────────────────────────────────────────────────────────
 
 
-    private final HashMap<Identifier, SkillData> toAddSkills= new HashMap<>();
-    private final HashSet<Identifier> toRemoveSkills = new HashSet<>();
-
-    private final HashSet<StatInstance> dirtyStats = new HashSet<>();
-    private final HashSet<ValueContainer> dirtyAffinity = new HashSet<>();
-    private final HashMap<Identifier,HashSet<ValueContainer>> dirtyCategorizedAffinity = new HashMap<>();
-
-
-
     public AscensionServerOriginSource(){}
     public AscensionServerOriginSource(ValueInput input){
         super(input);

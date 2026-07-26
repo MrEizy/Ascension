@@ -8,6 +8,7 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.event.EventReason;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 /**
  * An event that is called when the physique on an origin source is changed
@@ -20,7 +21,7 @@ public abstract class PhysiqueChangedEvent extends PhysiqueEvent{
     private Identifier newPhysique;
     private PhysiqueData newPhysiqueData;
 
-    protected PhysiqueChangedEvent(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, AscensionOriginSource source) {
+    protected PhysiqueChangedEvent(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source) {
         super(physique, data, source);
         this.newPhysique = newPhysique;
         this.newPhysiqueData = newPhysiqueData;
@@ -48,7 +49,7 @@ public abstract class PhysiqueChangedEvent extends PhysiqueEvent{
     public static class Pre extends PhysiqueChangedEvent implements ICancellableEvent {
 
 
-        public Pre(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, AscensionOriginSource source) {
+        public Pre(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source) {
             super(physique, data, newPhysique, newPhysiqueData, source);
         }
         @Override
@@ -65,7 +66,7 @@ public abstract class PhysiqueChangedEvent extends PhysiqueEvent{
     public static class Post extends PhysiqueChangedEvent {
 
 
-        public Post(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, AscensionOriginSource source) {
+        public Post(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source) {
             super(physique, data, newPhysique, newPhysiqueData, source);
         }
     }

@@ -6,8 +6,10 @@ import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.network.ByteBufHelpers;
+import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -50,8 +52,33 @@ public class PathBonusHolder implements DataSourceInstance {
         return categories.containsKey(category) ? getCategoryHolder(category).getBonus(path) : 0;
     }
 
+    public void setPathBonusContainer(Identifier category,Identifier path,ValueContainer container){
+        getCategoryHolder(category).setPathBonusContainer(path,container);
+    }
 
 
+    public ValueContainer getPathBonusContainer(Identifier category,Identifier path){
+        return getCategoryHolder(category).getPathBonusContainer(path);
+    }
+
+    public Collection<PathBonus> getAllPathBonuses(){
+        HashSet<PathBonus> pathBonuses = new HashSet<>();
+        for(Identifier category:categories.keySet()){
+            getCategoryHolder(category).getAllPaths().forEach(
+                    path->pathBonuses.add(new PathBonus(category,path))
+            );
+        }
+        return pathBonuses;
+    }
+    public Collection<PathBonus> getDirtyPathBonuses(){
+        HashSet<PathBonus> pathBonuses = new HashSet<>();
+        for(Identifier category:categories.keySet()){
+            getCategoryHolder(category).getDirtyPaths().forEach(
+                    path->pathBonuses.add(new PathBonus(category,path))
+            );
+        }
+        return pathBonuses;
+    }
     public void encode(ByteBuf buf){
 
         buf.writeInt(dirtyCategories.size());

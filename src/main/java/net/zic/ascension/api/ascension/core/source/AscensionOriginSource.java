@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
@@ -21,8 +22,10 @@ import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.path.PathHolder;
-import net.zic.ascension.api.ascension.core.path.affinity.AffinityHolder;
+
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
@@ -33,6 +36,7 @@ import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.event.EventReason;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.nbt.NbtHelpers;
@@ -58,15 +62,14 @@ import java.util.*;
  * does not trigger events, that will only be done by ServerOriginSource
  *
  * TODO for each trigger onAdded
+ *
  */
-public class AscensionOriginSource extends OriginSource {
+public class AscensionOriginSource extends OriginSource implements PathBonusProvider {
 
 
     private final Random random = new Random();
 
 
-    private final StatSheet statSheet = new StatSheet();
-    private final AffinityHolder affinityHolder = new AffinityHolder();
 
     //──Cached data────────────────────────────────────────────────────────
 
@@ -89,6 +92,29 @@ public class AscensionOriginSource extends OriginSource {
         this.cached = input;
     }
 
+    @Override
+    public void attachToEntity(LivingEntity entity) {
+        super.attachToEntity(entity);
+        entity.getData(CoreAttachments.PATH_BONUS_HOLDER).registerPathBonusProvider(this);
+    }
+
+    @Override
+    public void detachFromEntity(LivingEntity entity) {
+        super.detachFromEntity(entity);
+        entity.getData(CoreAttachments.PATH_BONUS_HOLDER).removePathBonusProvider(this);
+    }
+    public void updateEntityPathBonusHolder(){
+        Collection<PathBonus> dirtyBonus = getPathBonusHolder().getDirtyPathBonuses();
+        for(LivingEntity entity : getAttachedEntities()){
+            entity.getData(CoreAttachments.PATH_BONUS_HOLDER).updatePathBonuses(dirtyBonus);
+        }
+    }
+
+    @Override
+    protected OriginSourcePatch resolvePatch() {
+        updateEntityPathBonusHolder();
+        return super.resolvePatch();
+    }
     //──Holder Access────────────────────────────────────────────────────────
 
     /**
@@ -267,7 +293,6 @@ public class AscensionOriginSource extends OriginSource {
         return getPathHolder().getOwners(path);
     }
     //should be used if you changed a paths pathData
-    //does not auto start/resolve process
     public void markPathDirty(Identifier path){
         long id = random.nextLong();
         startProcess("modified_path"+id);
@@ -368,10 +393,22 @@ public class AscensionOriginSource extends OriginSource {
         markPathBonusHolderDirty();
     }
 
-    public double getBonus(Identifier category,Identifier path){
 
+    @Override
+    public ValueContainer getPathBonusContainer(Identifier category, Identifier path) {
+        return getPathBonusHolder().getPathBonusContainer(category,path);
+    }
+
+    @Override
+    public double getPathBonus(Identifier category, Identifier path) {
         return getPathBonusHolder().getBonus(category,path);
     }
+
+    @Override
+    public Collection<PathBonus> getAllPathBonuses() {
+        return getPathBonusHolder().getAllPathBonuses();
+    }
+
 
     protected void markPathBonusHolderDirty(){
         long id = random.nextLong();
@@ -397,7 +434,7 @@ public class AscensionOriginSource extends OriginSource {
     }
 
     public double getAffinity(Identifier path){
-        return getBonus(AFFINITY_CATEGORY,path);
+        return getPathBonus(AFFINITY_CATEGORY,path);
     }
 
 
