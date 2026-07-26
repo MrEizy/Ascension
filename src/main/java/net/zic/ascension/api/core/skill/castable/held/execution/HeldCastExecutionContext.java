@@ -4,9 +4,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
+import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastData;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.value.ScaledValueContext;
@@ -38,10 +40,26 @@ public record HeldCastExecutionContext(
                 caster,
                 target,
                 charge,
-                Map.of(
-                        CHARGE_TICKS, (double) chargeTicks,
-                        MAXIMUM_CHARGE_TICKS, (double) maximumChargeTicks
-                )
+                variables()
+        );
+    }
+
+    public SkillExecutionContext featureContext(LivingEntity target, Vec3 position) {
+        return new SkillExecutionContext(
+                level,
+                caster,
+                skill,
+                target,
+                position,
+                charge,
+                variables()
+        );
+    }
+
+    public Map<Identifier, Double> variables() {
+        return Map.of(
+                CHARGE_TICKS, (double) chargeTicks,
+                MAXIMUM_CHARGE_TICKS, (double) maximumChargeTicks
         );
     }
 

@@ -4,10 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.core.skill.castable.held.execution.HeldCastExecution;
 import net.zic.ascension.api.core.skill.castable.held.execution.HeldCastExecutionContext;
 import net.zic.ascension.api.core.skill.castable.held.execution.HeldCastExecutionType;
-import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseFeature;
 import net.zic.ascension.api.value.ScaledValue;
 import net.zic.ascension.impl.core.skill.castable.held.HeldCastProjectileManager;
 import net.zic.ascension.impl.datapack.skill.castable.held.AscensionHeldCastExecutionTypes;
@@ -22,7 +22,7 @@ public record ProjectileReleaseExecution(
         double hitRadius,
         int pierces,
         Optional<Identifier> flightParticle,
-        List<HeldCastReleaseFeature> features
+        List<SkillExecutionFeature> features
 ) implements HeldCastExecution {
     public static final MapCodec<ProjectileReleaseExecution> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ScaledValue.CODEC.codec().fieldOf("speed").forGetter(ProjectileReleaseExecution::speed),
@@ -31,7 +31,7 @@ public record ProjectileReleaseExecution(
             Codec.DOUBLE.optionalFieldOf("hit_radius", 0.3D).forGetter(ProjectileReleaseExecution::hitRadius),
             Codec.intRange(0, 64).optionalFieldOf("pierces", 0).forGetter(ProjectileReleaseExecution::pierces),
             Identifier.CODEC.optionalFieldOf("flight_particle").forGetter(ProjectileReleaseExecution::flightParticle),
-            HeldCastReleaseFeature.CODEC.listOf().optionalFieldOf("features", List.of())
+            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("features", List.of())
                     .forGetter(ProjectileReleaseExecution::features)
     ).apply(instance, ProjectileReleaseExecution::new));
 

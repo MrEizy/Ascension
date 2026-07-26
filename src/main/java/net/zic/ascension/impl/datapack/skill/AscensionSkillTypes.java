@@ -7,6 +7,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.datapack.TypeRegistries;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.impl.datapack.skill.castable.DebugCastableType;
+import net.zic.ascension.impl.datapack.skill.castable.active.ActiveSkillType;
 import net.zic.ascension.impl.datapack.skill.castable.cultivation.SimpleCultivationSkillType;
 import net.zic.ascension.impl.datapack.skill.castable.held.HeldCastSkillType;
 import net.zic.ascension.impl.datapack.skill.passive.SimplePassiveSkillType;
@@ -33,6 +34,10 @@ public class AscensionSkillTypes {
 
 
     //──Castable Skills────────────────────────────────────────────────────────
+    public static final DeferredHolder<SkillType,SkillType> ACTIVE_SKILL_TYPE = SKILL_TYPES.register(
+            "active_skill",
+            ActiveSkillType::new
+    );
     public static final DeferredHolder<SkillType,SkillType> HELD_CAST_SKILL_TYPE = SKILL_TYPES.register(
             "held_cast",
             HeldCastSkillType::new

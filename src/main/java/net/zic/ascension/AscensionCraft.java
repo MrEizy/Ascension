@@ -37,7 +37,8 @@ import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
 import net.zic.ascension.impl.value.source.AscensionScaledValueSourceTypes;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
 import net.zic.ascension.impl.datapack.skill.castable.held.AscensionHeldCastExecutionTypes;
-import net.zic.ascension.impl.datapack.skill.castable.held.AscensionHeldCastReleaseFeatureTypes;
+import net.zic.ascension.impl.datapack.skill.castable.feature.AscensionSkillExecutionFeatureTypes;
+import net.zic.ascension.impl.datapack.targeting.AscensionTargetingTypes;
 import net.zic.ascension.impl.datapack.effect.AscensionSkillEffectModuleTypes;
 import org.slf4j.Logger;
 
@@ -106,7 +107,8 @@ public class AscensionCraft {
         AscensionScaledValueSourceTypes.register(modEventBus);
         AscensionResourceTypes.register(modEventBus);
         AscensionHeldCastExecutionTypes.register(modEventBus);
-        AscensionHeldCastReleaseFeatureTypes.register(modEventBus);
+        AscensionSkillExecutionFeatureTypes.register(modEventBus);
+        AscensionTargetingTypes.register(modEventBus);
         AscensionSkillEffectModuleTypes.register(modEventBus);
 
         AscensionAttributes.register(modEventBus);

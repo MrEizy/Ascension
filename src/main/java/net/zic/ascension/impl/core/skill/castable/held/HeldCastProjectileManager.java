@@ -23,8 +23,8 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.CoreRegistries;
 import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.skill.castable.held.execution.HeldCastExecutionContext;
-import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseContext;
-import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseFeature;
+import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.impl.core.skill.castable.held.execution.ProjectileReleaseExecution;
 
 import java.util.ArrayList;
@@ -197,8 +197,8 @@ public final class HeldCastProjectileManager {
                 projectile.maximumChargeTicks,
                 projectile.charge
         );
-        HeldCastReleaseContext release = new HeldCastReleaseContext(executionContext, target, position);
-        for (HeldCastReleaseFeature feature : execution.features()) {
+        SkillExecutionContext release = executionContext.featureContext(target, position);
+        for (SkillExecutionFeature feature : execution.features()) {
             feature.apply(release);
         }
     }

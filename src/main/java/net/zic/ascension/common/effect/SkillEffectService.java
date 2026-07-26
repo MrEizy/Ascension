@@ -2,6 +2,7 @@ package net.zic.ascension.common.effect;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
+import net.zic.ascension.api.core.effect.SkillEffectRemovalReason;
 import net.zic.ascension.impl.effect.runtime.SkillEffectManager;
 
 import java.util.UUID;

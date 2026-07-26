@@ -4,9 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.player.Player;
+import net.zic.ascension.api.core.targeting.TargetFilterDefinition;
 import net.zic.ascension.api.value.ScaledValue;
 
 public record RadialTargetingDefinition(
@@ -31,20 +29,18 @@ public record RadialTargetingDefinition(
             Codec.BOOL.optionalFieldOf("require_line_of_sight", true).forGetter(RadialTargetingDefinition::requireLineOfSight)
     ).apply(instance, RadialTargetingDefinition::new));
 
+    public TargetFilterDefinition filter() {
+        return new TargetFilterDefinition(
+                includeSelf,
+                includeAllies,
+                includeNeutral,
+                includeHostile,
+                includePlayers,
+                requireLineOfSight
+        );
+    }
+
     public boolean matches(LivingEntity caster, LivingEntity target) {
-        if (target == caster) {
-            return includeSelf;
-        }
-        if (target instanceof Player && !includePlayers) {
-            return false;
-        }
-        if (caster.isAlliedTo(target)) {
-            return includeAllies;
-        }
-        boolean hostile = target instanceof Enemy
-                || target instanceof Mob mob && mob.getTarget() == caster
-                || caster.getLastHurtMob() == target
-                || caster.getLastHurtByMob() == target;
-        return hostile ? includeHostile : includeNeutral;
+        return filter().matches(caster, target);
     }
 }
