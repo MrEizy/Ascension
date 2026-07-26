@@ -3,7 +3,6 @@ package net.zic.ascension.api.ascension.core.entity;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
-import net.zic.ascension.api.ascension.core.source.SourceChangesSnapshot;
 import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import net.minecraft.core.Holder;

@@ -66,8 +66,10 @@ public class PathHolderProvider implements DataSource {
     }
 
     @Override
-    public DataSourceInstance loadInstance(ByteBuf buf, RegistryAccess access) {
-        PathHolder holder = new PathHolder();
+    public DataSourceInstance loadInstance(DataSourceInstance previous,ByteBuf buf, RegistryAccess access) {
+        PathHolder holder;
+        if(previous==null) holder = new PathHolder();
+        else holder = getHolder(previous);
         holder.decode(buf,access);
         return holder;
     }

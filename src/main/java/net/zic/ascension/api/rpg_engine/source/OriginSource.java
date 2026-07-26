@@ -1,5 +1,7 @@
 package net.zic.ascension.api.rpg_engine.source;
 
+import com.mojang.datafixers.util.Pair;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
@@ -12,6 +14,7 @@ import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
 import net.zic.zenithlib.common.ZenithAttachments;
+import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.StatInstance;
 import net.zic.zenithlib.stats.StatProvider;
@@ -65,6 +68,7 @@ public class OriginSource implements StatProvider {
         dirtyDataSources.clear();
         removedDataSources.clear();
         updateEntityStatHolder();
+        return patch;
     }
     public boolean resolveProcess(String processId){
         return processId.equals(process);
@@ -199,7 +203,7 @@ public class OriginSource implements StatProvider {
         instance.getDataSource().writeInstance(instance,output.child("data"),access);
     }
 
-    void loadOriginSourceData(ValueInput input){
+    public void loadOriginSourceData(ValueInput input){
         HashMap<LoadPriority,ArrayList<DataSourceInstance>> loadMap = new HashMap<>();
 
         ValueInput.ValueInputList inputList = input.childrenListOrEmpty("data_sources");
@@ -225,7 +229,7 @@ public class OriginSource implements StatProvider {
         for(DataSourceInstance instance : dataSources.values()) instance.getDataSource().finishedLoading(this,instance);
     }
 
-    void writeOriginSourceData(ValueOutput output){
+    public void writeOriginSourceData(ValueOutput output){
 
         ValueOutput.ValueOutputList outputList = output.childrenList("data_sources");
         for(Identifier dataSource : dataSources.keySet()){
@@ -233,5 +237,17 @@ public class OriginSource implements StatProvider {
         }
     }
 
+
+
+    public void applyPatch(ByteBuf buf){
+        ByteBufHelpers.decodeArray(buf, byteBuf -> {
+            Identifier identifier = ByteBufHelpers.decodeIdentifier(byteBuf);
+            DataSourceInstance data = DataSource.getInstance(identifier).loadInstance(getDataSource(identifier),byteBuf,getRegistryAccess());
+            return new Pair<>(identifier, data);
+        }).forEach(pair->dataSources.put(pair.getFirst(),pair.getSecond()));
+
+        ByteBufHelpers.decodeArray(buf, ByteBufHelpers::decodeIdentifier).forEach(dataSources::remove);
+        ByteBufHelpers.decodeArray(buf, StatInstance::decode).forEach(statSheet::setStat);
+    }
 
 }

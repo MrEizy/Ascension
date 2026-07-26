@@ -13,7 +13,6 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
-import net.zic.ascension.api.ascension.core.data_source.DataSourceInstance;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
@@ -84,7 +83,7 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
         Identifier oldPhysique = getPhysique();
         PhysiqueData oldPhysiqueData = getPhysiqueData();
 
-        PhysiqueChangedEvent.Pre pre = new PhysiqueChangedEvent.Pre(oldPhysique,oldPhysiqueData,physique,physiqueData,this,reason);
+        PhysiqueChangedEvent.Pre pre = new PhysiqueChangedEvent.Pre(oldPhysique,oldPhysiqueData,physique,physiqueData,this);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
         if(pre.getNewPhysiqueIdentifier() == null) return false;
@@ -323,139 +322,6 @@ public class AscensionServerOriginSource extends AscensionOriginSource {
     public RegistryAccess getRegistryAccess() {
         return ServerLifecycleHooks.getCurrentServer() != null ? ServerLifecycleHooks.getCurrentServer().registryAccess() : null;
     }
-
-    //──Network────────────────────────────────────────────────────────
-
-
-    @Override
-    public void addStat(Stat stat, double val) {
-        super.addStat(stat, val);
-        dirtyStats.add(getStatInstance(stat));
-        startProcess(ProcessType.STAT);
-        resolveProcess(ProcessType.STAT);
-    }
-
-    @Override
-    public void removeStat(Stat stat, double val) {
-        super.removeStat(stat, val);
-        dirtyStats.add(getStatInstance(stat));
-        startProcess(ProcessType.STAT);
-        resolveProcess(ProcessType.STAT);
-    }
-
-    @Override
-    public void addStatModifier(Stat stat, ValueContainerModifier modifier) {
-        super.addStatModifier(stat, modifier);
-        dirtyStats.add(getStatInstance(stat));
-        startProcess(ProcessType.STAT);
-        resolveProcess(ProcessType.STAT);
-    }
-
-    @Override
-    public void removeStatModifier(Stat stat, Identifier identifier) {
-        super.removeStatModifier(stat, identifier);
-        dirtyStats.add(getStatInstance(stat));
-        startProcess(ProcessType.STAT);
-        resolveProcess(ProcessType.STAT);
-    }
-
-    @Override
-    public void addAffinity(Identifier path, double val) {
-        super.addAffinity(path, val);
-        dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
-        startProcess(ProcessType.AFFINITY);
-        resolveProcess(ProcessType.AFFINITY);
-    }
-
-    @Override
-    public void addAffinity(Identifier category, Identifier path, double val) {
-        super.addAffinity(category, path, val);
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) {
-            dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
-        }else {
-            dirtyCategorizedAffinity.computeIfAbsent(category, key -> new HashSet<>());
-            dirtyCategorizedAffinity.get(path).add(getAffinityHolder().getAffinityContainer(category, path));
-        }
-        startProcess(ProcessType.AFFINITY);
-        resolveProcess(ProcessType.AFFINITY);
-    }
-
-    @Override
-    public void removeAffinity(Identifier path, double val) {
-        super.removeAffinity(path, val);
-        dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
-        startProcess(ProcessType.AFFINITY);
-        resolveProcess(ProcessType.AFFINITY);
-    }
-
-    @Override
-    public void removeAffinity(Identifier category, Identifier path, double val) {
-        super.removeAffinity(category, path, val);
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) {
-            dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
-        }else {
-            dirtyCategorizedAffinity.computeIfAbsent(category, key -> new HashSet<>());
-            dirtyCategorizedAffinity.get(path).add(getAffinityHolder().getAffinityContainer(category, path));
-        }
-        startProcess(ProcessType.AFFINITY);
-        resolveProcess(ProcessType.AFFINITY);
-    }
-
-    @Override
-    public void addAffinityModifier(Identifier path, ValueContainerModifier modifier) {
-        super.addAffinityModifier(path, modifier);
-
-        dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
-
-        startProcess(ProcessType.AFFINITY);
-        resolveProcess(ProcessType.AFFINITY);
-    }
-
-    @Override
-    public void addAffinityModifier(Identifier category, Identifier path, ValueContainerModifier modifier) {
-        super.addAffinityModifier(category, path, modifier);
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) {
-            dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
-        }else {
-            dirtyCategorizedAffinity.computeIfAbsent(category, key -> new HashSet<>());
-            dirtyCategorizedAffinity.get(path).add(getAffinityHolder().getAffinityContainer(category, path));
-        }
-        startProcess(ProcessType.AFFINITY);
-        resolveProcess(ProcessType.AFFINITY);
-    }
-
-    @Override
-    public void removeAffinityModifier(Identifier path, Identifier modifier) {
-        super.removeAffinityModifier(path, modifier);
-
-        dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
-
-        startProcess(ProcessType.AFFINITY);
-        resolveProcess(ProcessType.AFFINITY);
-    }
-
-    @Override
-    public void removeAffinityModifier(Identifier category, Identifier path, Identifier modifier) {
-        super.removeAffinityModifier(category, path, modifier);
-
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) {
-            dirtyAffinity.add(getAffinityHolder().getAffinityContainer(path));
-        }else {
-            dirtyCategorizedAffinity.computeIfAbsent(category, key -> new HashSet<>());
-            dirtyCategorizedAffinity.get(path).add(getAffinityHolder().getAffinityContainer(category, path));
-        }
-        startProcess(ProcessType.AFFINITY);
-        resolveProcess(ProcessType.AFFINITY);
-    }
-
-
-    @Override
-    public void markSkillDirty(Identifier skill) {
-        toAddSkills.put(skill,getSkillData(skill));
-        startProcess(ProcessType.MODIFY_SKILL);
-        resolveProcess(ProcessType.MODIFY_SKILL);
-    }
-
 
 
     @Override

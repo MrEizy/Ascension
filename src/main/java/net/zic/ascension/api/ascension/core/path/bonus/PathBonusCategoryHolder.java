@@ -2,11 +2,14 @@ package net.zic.ascension.api.ascension.core.path.bonus;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.ascension.core.path.affinity.AffinityCategoryHolder;
+import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class PathBonusCategoryHolder {
 
@@ -56,9 +59,20 @@ public class PathBonusCategoryHolder {
 
     public void encode(ByteBuf buf){
 
+        buf.writeInt(dirtyPathBonus.size());
+        for(Identifier dirtyPathBonus : dirtyPathBonus){
+            ValueContainer.encode(buf,pathBonus.get(dirtyPathBonus));
+        }
+        dirtyPathBonus.clear();
+
     }
     public void decode(ByteBuf buf){
 
+        int size = buf.readInt();
+        for(int i = 0;i<size; i++){
+            ValueContainer container = ValueContainer.decode(buf);
+            pathBonus.put(container.getIdentifier(),container);
+        }
     }
 
 }

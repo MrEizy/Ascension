@@ -2,12 +2,16 @@ package net.zic.ascension.api.ascension.core.path.bonus;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.ascension.core.CoreHolderProviders;
+import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
+import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
+import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class PathBonusHolder {
+public class PathBonusHolder implements DataSourceInstance {
 
 
     //maps a category -> category bonus holder
@@ -47,10 +51,29 @@ public class PathBonusHolder {
     }
 
 
+
     public void encode(ByteBuf buf){
+
+        buf.writeInt(dirtyCategories.size());
+        for(Identifier dirtyCategory : dirtyCategories){
+            ByteBufHelpers.encodeIdentifier(dirtyCategory,buf);
+            categories.get(dirtyCategory).encode(buf);
+        }
+        dirtyCategories.clear();
 
     }
     public void decode(ByteBuf buf){
 
+        int size = buf.readInt();
+        for(int i = 0;i<size; i++){
+            Identifier category = ByteBufHelpers.decodeIdentifier(buf);
+            PathBonusCategoryHolder holder = getCategoryHolder(category);
+            holder.decode(buf);
+        }
+    }
+
+    @Override
+    public DataSource getDataSource() {
+        return CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.get();
     }
 }

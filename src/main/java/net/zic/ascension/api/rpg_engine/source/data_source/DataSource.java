@@ -45,7 +45,7 @@ public interface DataSource {
 
     DataSourceInstance newInstance(RegistryAccess access);
     DataSourceInstance loadInstance(ValueInput input, RegistryAccess access);
-    DataSourceInstance loadInstance(ByteBuf buf, RegistryAccess access);
+    DataSourceInstance loadInstance(DataSourceInstance previousInstance,ByteBuf buf, RegistryAccess access);
 
     void writeInstance(DataSourceInstance instance,ValueOutput output, RegistryAccess access);
     void encodeInstance(DataSourceInstance instance,ByteBuf buf,RegistryAccess access);

@@ -71,8 +71,10 @@ public class SkillHolderProvider implements DataSource {
     }
 
     @Override
-    public DataSourceInstance loadInstance(ByteBuf buf, RegistryAccess access) {
-        SkillHolder holder = new SkillHolder();
+    public DataSourceInstance loadInstance(DataSourceInstance previous,ByteBuf buf, RegistryAccess access) {
+        SkillHolder holder;
+        if(previous==null) holder = new SkillHolder();
+        else holder = getHolder(previous);
         holder.decode(buf,access);
         return holder;
     }

@@ -22,6 +22,7 @@ import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.core.path.affinity.AffinityHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
@@ -113,6 +114,10 @@ public class AscensionOriginSource extends OriginSource {
     protected SkillHolder getSkillHolder(){
         return (SkillHolder) getOrCreate(CoreHolderProviders.SKILL_HOLDER_PROVIDER.getId());
     }
+    protected PathBonusHolder getPathBonusHolder(){
+        return (PathBonusHolder) getOrCreate(CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.getId());
+    }
+
     public boolean isLoaded(){ return cached != null;}
 
     public ValueInput getCached(){return cached;}
@@ -340,258 +345,66 @@ public class AscensionOriginSource extends OriginSource {
         resolveProcess("modified_skill"+id);
     }//should be used if you changed a skills skilLData
 
-    //──Stat Sheet────────────────────────────────────────────────────────
+    //TODO add something similar to stats and statProvider, but for bonuses
+    //TODO create a record for category+path, that is tracked and passed to an event or handler
+    //──Path Bonus Holder────────────────────────────────────────────────────────
 
-    //NOTE im fully hiding the implementation here. i would do the same for pathData but i know i will have
-    //implementation specific behaviour that i will want displayable on the client
-
-    public void addStat(Stat stat, double val){
-        statSheet.addStat(stat,val);
-        updateStatSheet();
+    public void addBonus(Identifier category,Identifier path,double val){
+        getPathBonusHolder().addBonus(category,path,val);
+        markPathBonusHolderDirty();
     }
-    public void addStat(StatInstance instance){
-        statSheet.addStat(instance);
-        updateStatSheet();
-    }
-
-    public void removeStat(Stat stat, double val){
-        addStat(stat,-val);
+    public void addBonusModifier(Identifier category, Identifier path, ValueContainerModifier modifier){
+        getPathBonusHolder().addBonusModifier(category,path,modifier);
+        markPathBonusHolderDirty();
     }
 
-    public void addStatModifier(Stat stat,ValueContainerModifier modifier){
-        statSheet.addStat(stat,0); //makes sure the stat is present
-        statSheet.getStatInstance(stat).addModifier(modifier);
-        updateStatSheet();
-    }
-    public void removeStatModifier(Stat stat,Identifier identifier){
-        if(statSheet.getStatInstance(stat) == null) return;
-        statSheet.getStatInstance(stat).removeModifier(identifier);
-        updateStatSheet();
+    public void removeBonus(Identifier category,Identifier path,double val){
+        getPathBonusHolder().removeBonus(category,path,val);
+        markPathBonusHolderDirty();
     }
 
-    public double getValue(Stat stat){
-        return statSheet.getStatInstance(stat) != null ?
-                statSheet.getStatInstance(stat).getValue() :
-                0;
-    }
-    public double getBaseValue(Stat stat){
-        return statSheet.getStatInstance(stat) != null ?
-                statSheet.getStatInstance(stat).getBaseValue() :
-                0;
+    public void removeBonusModifier(Identifier category,Identifier path,Identifier modifier){
+        getPathBonusHolder().removeBonusModifier(category,path,modifier);
+        markPathBonusHolderDirty();
     }
 
+    public double getBonus(Identifier category,Identifier path){
 
-    public Collection<Stat> getAllStats(){
-        return statSheet.asMap().keySet();
-    }
-    public void updateStatSheet(){
-        Collection<LivingEntity> entities = AscensionCraft.getSourceHandler().getLoadedWatchers(this);
-        for(LivingEntity entity : entities) NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(entity,statSheet.getAllStats()));
-    }
-    public void updateAttributes(ZenithAttributeHolder holder){
-        holder.update(new StatProvider() {
-            @Override
-            public Collection<Stat> getStats() {
-                return List.of();
-            }
-
-            @Override
-            public StatInstance getStatInstance(Stat stat) {
-                return null;
-            }
-
-            @Override
-            public double getStat(Stat stat) {
-                return 0;
-            }
-
-            @Override
-            public double getBaseStat(Stat stat) {
-                return 0;
-            }
-        });//TODO fix
+        return getPathBonusHolder().getBonus(category,path);
     }
 
-    //──Affinity Holder────────────────────────────────────────────────────────
-     //NOTES do smth similar to stat handler where i FULLY hide Implementation. then add a blank sync method
-    //that is overridden by server source to sync for all watchers on a change
-    //this will be done through a markDirty method that loops through all attached
-    protected AffinityHolder getAffinityHolder(){return affinityHolder;}
-
+    protected void markPathBonusHolderDirty(){
+        long id = random.nextLong();
+        startProcess("modified_path_bonus"+id);
+        markDataSourceDirty(CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.getId());
+        resolveProcess("modified_path_bonus"+id);
+    }
+    //──Affinity Bonus Holder────────────────────────────────────────────────────────
+    private static final Identifier AFFINITY_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"affinity");
     public void addAffinity(Identifier path,double val){
-        getAffinityHolder().addAffinity(path,val);
+        addBonus(AFFINITY_CATEGORY,path,val);
     }
-    public void removeAffinity(Identifier path,double val){
-        addAffinity(path,-val);
+    public void addAffinityModifier(Identifier path, ValueContainerModifier modifier){
+        addBonusModifier(AFFINITY_CATEGORY,path,modifier);
+    }
 
-    }
-    public void addAffinityModifier(Identifier path,ValueContainerModifier modifier){
-        getAffinityHolder().addAffinityModifier(path,modifier);
+    public void removeAffinity(Identifier path,double val){
+        removeBonus(AFFINITY_CATEGORY,path,val);
     }
 
     public void removeAffinityModifier(Identifier path,Identifier modifier){
-        getAffinityHolder().removeAffinityModifier(path,modifier);
+        removeBonusModifier(AFFINITY_CATEGORY,path,modifier);
     }
 
     public double getAffinity(Identifier path){
-        return getAffinityHolder().getAffinity(path);
-    }
-    public double getBaseAffinity(Identifier path){
-        return getAffinityHolder().getBaseAffinity(path);
+        return getBonus(AFFINITY_CATEGORY,path);
     }
 
-    public boolean hasAffinity(Identifier path){return affinityHolder.hasAffinity(path);}
-
-    public void addAffinity(Identifier category,Identifier path,double val){
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) addAffinity(path,val);
-        else affinityHolder.addAffinity(category,path,val);
-    }
-    public void removeAffinity(Identifier category,Identifier path,double val){
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) removeAffinity(path,val);
-        else affinityHolder.removeAffinity(category,path,val);
-
-    }
-    public void addAffinityModifier(Identifier category,Identifier path,ValueContainerModifier modifier){
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) addAffinityModifier(path,modifier);
-        affinityHolder.addAffinityModifier(category,path,modifier);
-    }
-
-    public void removeAffinityModifier(Identifier category,Identifier path,Identifier modifier){
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) removeAffinityModifier(path,modifier);
-        affinityHolder.removeAffinityModifier(category,path,modifier);
-    }
-
-    public double getAffinity(Identifier category,Identifier path){
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) getAffinity(path);
-        return affinityHolder.getAffinity(category,path);
-    }
-    public double getBaseAffinity(Identifier category,Identifier path){
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) getBaseAffinity(path);
-        return affinityHolder.getBaseAffinity(category,path);
-    }
-    public boolean hasAffinity(Identifier path,Identifier category){
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) hasAffinity(path);
-        return affinityHolder.hasAffinity(path,category);
-    }
-
-    public double getEffectiveAffinity(Identifier path){
-        return getEffectiveAffinity(null,path);
-    }
-    public double getEffectiveAffinity(Identifier category,Identifier path){
-        if(category.equals(PathEffectValueUtil.NO_CATEGORY)) return getEffectiveAffinity(path);
-        return PathEffectValueUtil.getEffectValue(getAffinity(path),getAffinityHolder(),path,category);
-    }
-    public Collection<Identifier> getAllAffinity(){
-        return affinityHolder.getPaths();
-    }
-    public Collection<Identifier> getAllAffinity(Identifier category){
-
-        return category.equals(PathEffectValueUtil.NO_CATEGORY)? getAllAffinity() : affinityHolder.getPaths(category);
-    }
 
     //──Data────────────────────────────────────────────────────────
 
-    public void write(ValueOutput output){
-
-
-    }
+    //TODO setup lazy loading
 
 
 
-    /**
-     * A lazy init method for SaveData, lets us hold the compoundTag to later be wrapped in TagValueInput
-     * if we already have a ValueInput cached run that
-     */
-    public void load(){
-
-        if(cachedCached != null) {
-
-            if(registryAccess != null) {
-                cached = TagValueInput.create(ProblemReporter.DISCARDING, registryAccess, cachedCached);
-                cachedCached = null;
-            }else return;
-        }
-        if(cached != null) {
-            load(cached);
-            cached = null;
-        }
-    }
-
-
-    public void load(ValueInput input){
-
-
-
-
-
-
-
-    }
-
-    public void encode(RegistryFriendlyByteBuf buf) {
-        /*
-        SourceChangesSnapshot fullSnapshot = new SourceChangesSnapshot(
-                physique,
-                physiqueData,
-                new HashMap<>(bloodlines),
-                Set.of(),
-                new HashMap<>(paths),
-                Set.of(),
-                new HashMap<>(skills),
-                Set.of(),
-                new HashMap<>(dataSources),
-                Set.of(),
-                getAllStatInstances(),
-                new HashSet<>(affinityHolder.getAllAffinityContainers())
-        );
-        fullSnapshot.encode(buf);
-
-         */
-    }
-
-/*
-    private Set<StatInstance> getAllStatInstances() {
-
-        Set<StatInstance> instances = new HashSet<>();
-        for (Stat stat : getAllStats()) {
-            StatInstance instance = getStatInstance(stat);
-            if (instance != null) {
-                instances.add(instance);
-            }
-        }
-        return instances;
-
-
-    }
-   */
-
-    public void decode(RegistryFriendlyByteBuf buf) {
-         /*
-        setRegistryAccess(buf.registryAccess());
-
-        physique = null;
-        physiqueData = null;
-        bloodlines.clear();
-        paths.clear();
-        skills.clear();
-        dataSources.clear();
-        statSheet.asMap().clear();
-        affinityHolder.clear();
-
-        apply(SourceChangesSnapshot.decode(buf, buf.registryAccess()));
-        */
-    }
-
-
-
-
-    /**
-     * takes a snapshot and applies the changes
-     *
-     * if physique == null it means it was not changed
-     * @param snapshot
-     */
-    public void apply(SourceChangesSnapshot snapshot){
-
-    }
 }

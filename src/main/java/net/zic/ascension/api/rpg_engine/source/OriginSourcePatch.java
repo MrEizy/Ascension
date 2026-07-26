@@ -28,19 +28,4 @@ public record OriginSourcePatch(
         ByteBufHelpers.encodeCollection(patch.dirtyStats(), buf, StatInstance::encode);
     }
 
-    public static OriginSourcePatch decode(ByteBuf buf, RegistryAccess access){
-
-        return new OriginSourcePatch(
-                ByteBufHelpers.decodeArray(buf, byteBuf -> {
-                    Identifier identifier = ByteBufHelpers.decodeIdentifier(byteBuf);
-                    DataSourceInstance data = DataSource.getInstance(identifier).loadInstance(byteBuf,access);
-                    return new Pair<>(identifier, data);
-                }).stream().collect(Collectors.toMap(
-                        Pair::getFirst,
-                        Pair::getSecond
-                )),
-                ByteBufHelpers.decodeArray(buf, ByteBufHelpers::decodeIdentifier),
-                ByteBufHelpers.decodeArray(buf, StatInstance::decode)
-        );
-    }
 }

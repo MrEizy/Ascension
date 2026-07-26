@@ -8,7 +8,12 @@ TODO:
 
 TODO:
     for ascension implementation work with an AscensionOriginSource, then do the Server ver as well
-figure out how i want to unify the damage system. especially considering that because of how different they are, the order is important
+
+TODO: !
+    modify decode/loadfrombytebuf to take in an existing DataSourceInstance(can be null), important for because otherwise patch
+    encoding breaks
+
+ figure out how i want to unify the damage system. especially considering that because of how different they are, the order is important
 
 so potentially create a custom damage pipeline? then add multiple ways for mods to access and modify it at different points
 

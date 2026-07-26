@@ -17,7 +17,6 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.source.AscensionServerOriginSource;
-import net.zic.ascension.api.ascension.core.source.SourceChangesSnapshot;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.starter.StarterSelectionStage;
 import net.zic.ascension.common.util.AscensionAttributes;

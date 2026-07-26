@@ -8,6 +8,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.event.EventReason;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
@@ -76,8 +77,10 @@ public class PhysiqueHolderProvider implements DataSource {
     }
 
     @Override
-    public DataSourceInstance loadInstance(ByteBuf buf, RegistryAccess access) {
-        PhysiqueHolder holder =  new PhysiqueHolder();
+    public DataSourceInstance loadInstance(DataSourceInstance previous,ByteBuf buf, RegistryAccess access) {
+        PhysiqueHolder holder;
+        if(previous==null) holder = new PhysiqueHolder();
+        else holder = getHolder(previous);
         holder.decode(buf,access);
         return holder;
     }
