@@ -12,12 +12,19 @@ public interface SkillEffectModule {
 
     SkillEffectModuleType getType();
 
-    default void onApply(LivingEntity entity, SkillEffectInstance instance) {
+    default void onApply(LivingEntity entity, SkillEffectContext context) {
     }
 
-    default void tick(LivingEntity entity, SkillEffectInstance instance) {
+    default void onUpdate(LivingEntity entity, SkillEffectContext context) {
     }
 
-    default void onRemove(LivingEntity entity, SkillEffectInstance instance) {
+    default void tick(LivingEntity entity, SkillEffectContext context) {
+    }
+
+    default boolean shouldRemove(LivingEntity entity, SkillEffectContext context) {
+        return false;
+    }
+
+    default void onRemove(LivingEntity entity, SkillEffectContext context) {
     }
 }

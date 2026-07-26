@@ -2,6 +2,7 @@ package net.zic.ascension.impl.resource;
 
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.core.resource.source.AscensionResourceSourceTags;
 import net.zic.ascension.api.core.resource.source.ResourceSourceIdentity;
 import net.zic.ascension.api.core.resource.source.SimpleResourceSourceIdentity;
 

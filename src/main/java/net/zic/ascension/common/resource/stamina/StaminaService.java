@@ -1,4 +1,4 @@
-package net.zic.ascension.api.core.resource.stamina;
+package net.zic.ascension.common.resource.stamina;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;

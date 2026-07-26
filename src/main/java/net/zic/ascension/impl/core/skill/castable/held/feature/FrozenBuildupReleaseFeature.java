@@ -2,7 +2,7 @@ package net.zic.ascension.impl.core.skill.castable.held.feature;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.zic.ascension.api.core.effect.frozen.FrozenStateService;
+import net.zic.ascension.common.effect.frozen.FrozenStateService;
 import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseContext;
 import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseFeature;
 import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseFeatureType;

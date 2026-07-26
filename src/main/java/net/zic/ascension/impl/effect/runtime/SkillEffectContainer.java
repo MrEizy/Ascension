@@ -1,7 +1,9 @@
-package net.zic.ascension.api.core.effect;
+package net.zic.ascension.impl.effect.runtime;
 
 import com.mojang.serialization.Codec;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class SkillEffectContainer {
@@ -17,10 +19,18 @@ public final class SkillEffectContainer {
     }
 
     private SkillEffectContainer(List<SkillEffectInstance> instances) {
-        this.instances = new ArrayList<>(instances);
+        this.instances = new ArrayList<>(instances == null ? List.of() : instances);
     }
 
     public List<SkillEffectInstance> instances() {
+        return Collections.unmodifiableList(instances);
+    }
+
+    List<SkillEffectInstance> mutableInstances() {
         return instances;
+    }
+
+    public boolean isEmpty() {
+        return instances.isEmpty();
     }
 }

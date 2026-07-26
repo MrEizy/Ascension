@@ -7,7 +7,7 @@ import net.zic.ascension.api.capabilities.CoreCapabilities;
 import net.zic.ascension.api.capabilities.EntityQiProvider;
 import net.zic.ascension.api.core.entity.AscensionEntityData;
 import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.resource.stamina.StaminaService;
+import net.zic.ascension.common.resource.stamina.StaminaService;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 

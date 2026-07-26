@@ -15,7 +15,7 @@ import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseFea
 import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseFeatureType;
 import net.zic.ascension.api.value.ScaledValue;
 import net.zic.ascension.impl.datapack.skill.castable.held.AscensionHeldCastReleaseFeatureTypes;
-import net.zic.ascension.impl.resource.AscensionResourceSourceTags;
+import net.zic.ascension.api.core.resource.source.AscensionResourceSourceTags;
 
 import java.util.Locale;
 import java.util.Map;

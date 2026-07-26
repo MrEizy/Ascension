@@ -14,7 +14,7 @@ import net.zic.ascension.api.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.core.resource.source.SimpleResourceSourceIdentity;
 import net.zic.ascension.api.value.ScaledValue;
 import net.zic.ascension.api.value.ScaledValueContext;
-import net.zic.ascension.impl.resource.AscensionResourceSourceTags;
+import net.zic.ascension.api.core.resource.source.AscensionResourceSourceTags;
 
 import java.util.Map;
 import java.util.Set;

@@ -5,7 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public record HeldCastSpec(
@@ -40,6 +42,11 @@ public record HeldCastSpec(
 
         List<HeldCastChargeStage> sorted = new ArrayList<>(stages == null ? List.of() : stages);
         sorted.sort(Comparator.comparingDouble(HeldCastChargeStage::threshold));
+        Map<Double, HeldCastChargeStage> unique = new LinkedHashMap<>();
+        for (HeldCastChargeStage stage : sorted) {
+            unique.put(stage.threshold(), stage);
+        }
+        sorted = new ArrayList<>(unique.values());
         if (sorted.isEmpty() || sorted.getFirst().threshold() > 0.0D) {
             sorted.addFirst(new HeldCastChargeStage(0.0D, Optional.empty(), List.of()));
         }

@@ -5,8 +5,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.effect.SkillEffectService;
-import net.zic.ascension.api.core.effect.frozen.FrozenStateService;
+import net.zic.ascension.common.effect.frozen.FrozenStateService;
+import net.zic.ascension.impl.effect.runtime.SkillEffectManager;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class SkillEffectTicker {
@@ -18,7 +18,12 @@ public final class SkillEffectTicker {
         if (!(event.getEntity() instanceof LivingEntity entity) || entity.level().isClientSide()) {
             return;
         }
-        FrozenStateService.tick(entity);
-        SkillEffectService.tick(entity);
+
+        if (FrozenStateService.isActive(entity)) {
+            FrozenStateService.tick(entity);
+        }
+        if (SkillEffectManager.hasActiveEffects(entity)) {
+            SkillEffectManager.tick(entity);
+        }
     }
 }

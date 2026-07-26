@@ -1,4 +1,4 @@
-package net.zic.ascension.impl.resource;
+package net.zic.ascension.api.core.resource.source;
 
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;

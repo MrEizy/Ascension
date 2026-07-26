@@ -2,7 +2,7 @@ package net.zic.ascension.impl.stamina;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.food.FoodData;
-import net.zic.ascension.api.core.resource.stamina.StaminaService;
+import net.zic.ascension.common.resource.stamina.StaminaService;
 
 public final class StaminaRegenerationPolicy {
     public static final double SATURATED_MULTIPLIER = 1.10D;

@@ -3,7 +3,7 @@ package net.zic.ascension.impl.core.skill.castable.held.feature;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.core.effect.SkillEffectService;
+import net.zic.ascension.common.effect.SkillEffectService;
 import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseContext;
 import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseFeature;
 import net.zic.ascension.api.core.skill.castable.held.feature.HeldCastReleaseFeatureType;

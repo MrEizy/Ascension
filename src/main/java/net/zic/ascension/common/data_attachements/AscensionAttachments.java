@@ -18,8 +18,8 @@ import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
-import net.zic.ascension.api.core.effect.SkillEffectContainer;
-import net.zic.ascension.api.core.effect.frozen.FrozenStateData;
+import net.zic.ascension.impl.effect.runtime.SkillEffectContainer;
+import net.zic.ascension.common.effect.frozen.FrozenStateData;
 
 import java.util.function.Supplier;
 

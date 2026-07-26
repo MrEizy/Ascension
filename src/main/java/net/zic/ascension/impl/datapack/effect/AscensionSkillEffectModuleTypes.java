@@ -7,12 +7,17 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.effect.SkillEffectModuleType;
 import net.zic.ascension.api.datapack.TypeRegistries;
 import net.zic.ascension.impl.effect.module.FrozenFormEffectModule;
+import net.zic.ascension.impl.effect.module.ResourceModifierEffectModule;
 
 public final class AscensionSkillEffectModuleTypes {
     public static final DeferredRegister<SkillEffectModuleType> TYPES = DeferredRegister.create(TypeRegistries.SKILL_EFFECT_MODULE_TYPE_REGISTRY, AscensionCraft.MOD_ID);
     public static final DeferredHolder<SkillEffectModuleType, SkillEffectModuleType> FROZEN_FORM = TYPES.register(
             "frozen_form",
             () -> new SkillEffectModuleType(FrozenFormEffectModule.CODEC)
+    );
+    public static final DeferredHolder<SkillEffectModuleType, SkillEffectModuleType> RESOURCE_MODIFIER = TYPES.register(
+            "resource_modifier",
+            () -> new SkillEffectModuleType(ResourceModifierEffectModule.CODEC)
     );
 
     private AscensionSkillEffectModuleTypes() {
