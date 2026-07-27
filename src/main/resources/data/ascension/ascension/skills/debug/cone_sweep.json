@@ -1,0 +1,53 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Cone Sweep",
+  "description": "Tests cone targeting, target sorting and target limits.",
+  "default_accessible_level": 1,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:cone",
+          "range": {
+            "base": 12
+          },
+          "angle": {
+            "base": 55
+          },
+          "maximum_targets": 8,
+          "sort": "closest_to_view",
+          "filter": {
+            "relations": [
+              "ally",
+              "neutral",
+              "hostile"
+            ],
+            "include_players": true,
+            "line_of_sight": true
+          }
+        },
+        "require_targets": true,
+        "caster_features": [],
+        "target_features": [
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:electric_spark",
+            "count": {
+              "base": 10
+            },
+            "spread": {
+              "base": 0.35
+            },
+            "speed": {
+              "base": 0.03
+            }
+          }
+        ]
+      },
+      "costs": [],
+      "cooldown": {
+        "base": 10
+      }
+    }
+  ]
+}

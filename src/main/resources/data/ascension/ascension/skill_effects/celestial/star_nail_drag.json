@@ -1,0 +1,41 @@
+{
+  "stacking": "refresh",
+  "stacking_scope": "source_entity",
+  "max_stacks": 1,
+  "modules": [
+    {
+      "type": "ascension:resource_modifier",
+      "id": "ascension:celestial/star_nail_drag",
+      "selector": {
+        "resources": [
+          "ascension:stamina"
+        ],
+        "operations": [
+          "consume",
+          "drain"
+        ],
+        "source": {
+          "source_tags": [
+            "ascension:movement"
+          ]
+        }
+      },
+      "operation": "multiply_total",
+      "value": {
+        "base": 0.1,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:context",
+              "key": "ascension:effect_potency"
+            },
+            "operation": "add",
+            "scale": 0.1
+          }
+        ],
+        "maximum": 0.3
+      },
+      "priority": 90
+    }
+  ]
+}

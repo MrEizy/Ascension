@@ -1,0 +1,25 @@
+{
+  "type": "ascension:simple_passive",
+  "name": {
+    "translate": "ascension.skill.orions_celestial_draw.name"
+  },
+  "description": {
+    "translate": "ascension.skill.orions_celestial_draw.desc"
+  },
+  "stat_modifiers": {
+    "ascension:agility": [
+      {
+        "value": 0.1,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:orions_celestial_draw_agility"
+      }
+    ],
+    "ascension:spirit": [
+      {
+        "value": 0.1,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:orions_celestial_draw_spirit"
+      }
+    ]
+  }
+}

@@ -1,15 +1,16 @@
 package net.zic.ascension.api.core.targeting;
 
+import net.zic.ascension.api.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import net.zic.ascension.api.datapack.TypeRegistries;
 
 public interface TargetingDefinition {
     Codec<TargetingDefinition> CODEC = TypeRegistries.TARGETING_TYPE_REGISTRY.byNameCodec().dispatch(
             TargetingDefinition::getType,
-            TargetingType::codec
+            CodecType<TargetingDefinition>::codec
     );
 
-    TargetingType getType();
+    CodecType<TargetingDefinition> getType();
 
     TargetingResult resolve(TargetingContext context);
 }

@@ -17,8 +17,6 @@ public final class VirtualProjectileInstance implements VirtualProjectileAccess 
     private final UUID ownerId;
     private final Identifier skillId;
     private final Identifier definitionId;
-    private final int chargeTicks;
-    private final int maximumChargeTicks;
     private final double charge;
     private final double maximumRange;
     private final Map<Identifier, Double> variables;
@@ -35,8 +33,6 @@ public final class VirtualProjectileInstance implements VirtualProjectileAccess 
             UUID ownerId,
             Identifier skillId,
             Identifier definitionId,
-            int chargeTicks,
-            int maximumChargeTicks,
             double charge,
             Vec3 position,
             Vec3 velocity,
@@ -49,8 +45,6 @@ public final class VirtualProjectileInstance implements VirtualProjectileAccess 
         this.ownerId = ownerId;
         this.skillId = skillId;
         this.definitionId = definitionId;
-        this.chargeTicks = chargeTicks;
-        this.maximumChargeTicks = maximumChargeTicks;
         this.charge = charge;
         this.position = position;
         this.velocity = velocity;
@@ -80,14 +74,6 @@ public final class VirtualProjectileInstance implements VirtualProjectileAccess 
 
     public Identifier definitionId() {
         return definitionId;
-    }
-
-    public int chargeTicks() {
-        return chargeTicks;
-    }
-
-    public int maximumChargeTicks() {
-        return maximumChargeTicks;
     }
 
     public double charge() {

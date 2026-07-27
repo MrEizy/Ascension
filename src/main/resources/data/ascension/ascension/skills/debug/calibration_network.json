@@ -1,0 +1,47 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Anchor Network",
+  "description": "Tests anchor nodes, links and a child area field.",
+  "default_accessible_level": 1,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:look_position",
+          "range": {
+            "base": 14
+          },
+          "include_fluids": false,
+          "fallback_to_maximum_range": true
+        },
+        "require_targets": true,
+        "caster_features": [],
+        "target_features": [
+          {
+            "type": "ascension:runtime_object",
+            "kind": "anchor_network",
+            "action": "spawn",
+            "definition": "ascension:debug/calibration_network"
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:end_rod",
+            "count": {
+              "base": 42
+            },
+            "spread": {
+              "base": 1.5
+            },
+            "speed": {
+              "base": 0.04
+            }
+          }
+        ]
+      },
+      "costs": [],
+      "cooldown": {
+        "base": 20
+      }
+    }
+  ]
+}

@@ -3,49 +3,81 @@ package net.zic.ascension.api.core.targeting;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 
+import java.util.List;
+import java.util.Set;
+
 public record TargetFilterDefinition(
-        boolean includeSelf,
-        boolean includeAllies,
-        boolean includeNeutral,
-        boolean includeHostile,
+        Set<Relation> relations,
         boolean includePlayers,
         boolean requireLineOfSight
 ) {
+    private static final Codec<Set<Relation>> RELATIONS_CODEC = Relation.CODEC.listOf().xmap(
+            Set::copyOf,
+            List::copyOf
+    );
+
     public static final MapCodec<TargetFilterDefinition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.BOOL.optionalFieldOf("include_self", false).forGetter(TargetFilterDefinition::includeSelf),
-            Codec.BOOL.optionalFieldOf("include_allies", false).forGetter(TargetFilterDefinition::includeAllies),
-            Codec.BOOL.optionalFieldOf("include_neutral", true).forGetter(TargetFilterDefinition::includeNeutral),
-            Codec.BOOL.optionalFieldOf("include_hostile", true).forGetter(TargetFilterDefinition::includeHostile),
+            RELATIONS_CODEC.optionalFieldOf("relations", Set.of(Relation.NEUTRAL, Relation.HOSTILE))
+                    .forGetter(TargetFilterDefinition::relations),
             Codec.BOOL.optionalFieldOf("include_players", true).forGetter(TargetFilterDefinition::includePlayers),
-            Codec.BOOL.optionalFieldOf("require_line_of_sight", true).forGetter(TargetFilterDefinition::requireLineOfSight)
+            Codec.BOOL.optionalFieldOf("line_of_sight", true).forGetter(TargetFilterDefinition::requireLineOfSight)
     ).apply(instance, TargetFilterDefinition::new));
 
+    public TargetFilterDefinition {
+        relations = relations == null ? Set.of() : Set.copyOf(relations);
+    }
+
     public static TargetFilterDefinition hostile() {
-        return new TargetFilterDefinition(false, false, false, true, true, true);
+        return new TargetFilterDefinition(Set.of(Relation.HOSTILE), true, true);
     }
 
     public boolean matches(LivingEntity caster, LivingEntity target) {
         if (target == null || target.isRemoved() || !target.isAlive()) {
             return false;
         }
-        if (target == caster) {
-            return includeSelf;
-        }
         if (target instanceof Player && !includePlayers) {
             return false;
         }
+        return relations.contains(relation(caster, target));
+    }
+
+    public Relation relation(LivingEntity caster, LivingEntity target) {
+        if (target == caster) {
+            return Relation.SELF;
+        }
         if (caster.isAlliedTo(target)) {
-            return includeAllies;
+            return Relation.ALLY;
         }
         boolean hostile = target instanceof Enemy
                 || target instanceof Mob mob && mob.getTarget() == caster
                 || caster.getLastHurtMob() == target
                 || caster.getLastHurtByMob() == target;
-        return hostile ? includeHostile : includeNeutral;
+        return hostile ? Relation.HOSTILE : Relation.NEUTRAL;
+    }
+
+    public enum Relation implements StringRepresentable {
+        SELF("self"),
+        ALLY("ally"),
+        NEUTRAL("neutral"),
+        HOSTILE("hostile");
+
+        public static final Codec<Relation> CODEC = StringRepresentable.fromEnum(Relation::values);
+
+        private final String name;
+
+        Relation(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return name;
+        }
     }
 }

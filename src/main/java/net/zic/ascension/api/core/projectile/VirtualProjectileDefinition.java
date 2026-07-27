@@ -19,9 +19,9 @@ public record VirtualProjectileDefinition(
         TargetFilterDefinition filter,
         Optional<Identifier> flightParticle,
         List<ProjectileBehavior> behaviors,
-        List<SkillExecutionFeature> entityHitFeatures,
-        List<SkillExecutionFeature> blockHitFeatures,
-        List<SkillExecutionFeature> expiryFeatures,
+        List<SkillExecutionFeature> onEntityHit,
+        List<SkillExecutionFeature> onBlockHit,
+        List<SkillExecutionFeature> onExpire,
         Optional<Identifier> visual
 ) {
     public static final Codec<VirtualProjectileDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -35,12 +35,12 @@ public record VirtualProjectileDefinition(
             Identifier.CODEC.optionalFieldOf("flight_particle").forGetter(VirtualProjectileDefinition::flightParticle),
             ProjectileBehavior.CODEC.listOf().optionalFieldOf("behaviors", List.of())
                     .forGetter(VirtualProjectileDefinition::behaviors),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("entity_hit_features", List.of())
-                    .forGetter(VirtualProjectileDefinition::entityHitFeatures),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("block_hit_features", List.of())
-                    .forGetter(VirtualProjectileDefinition::blockHitFeatures),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("expiry_features", List.of())
-                    .forGetter(VirtualProjectileDefinition::expiryFeatures),
+            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_entity_hit", List.of())
+                    .forGetter(VirtualProjectileDefinition::onEntityHit),
+            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_block_hit", List.of())
+                    .forGetter(VirtualProjectileDefinition::onBlockHit),
+            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_expire", List.of())
+                    .forGetter(VirtualProjectileDefinition::onExpire),
             Identifier.CODEC.optionalFieldOf("visual").forGetter(VirtualProjectileDefinition::visual)
     ).apply(instance, VirtualProjectileDefinition::new));
 
@@ -50,9 +50,9 @@ public record VirtualProjectileDefinition(
         filter = filter == null ? TargetFilterDefinition.hostile() : filter;
         flightParticle = flightParticle == null ? Optional.empty() : flightParticle;
         behaviors = behaviors == null ? List.of() : List.copyOf(behaviors);
-        entityHitFeatures = entityHitFeatures == null ? List.of() : List.copyOf(entityHitFeatures);
-        blockHitFeatures = blockHitFeatures == null ? List.of() : List.copyOf(blockHitFeatures);
-        expiryFeatures = expiryFeatures == null ? List.of() : List.copyOf(expiryFeatures);
+        onEntityHit = onEntityHit == null ? List.of() : List.copyOf(onEntityHit);
+        onBlockHit = onBlockHit == null ? List.of() : List.copyOf(onBlockHit);
+        onExpire = onExpire == null ? List.of() : List.copyOf(onExpire);
         visual = visual == null ? Optional.empty() : visual;
     }
 }

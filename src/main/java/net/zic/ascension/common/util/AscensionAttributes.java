@@ -20,6 +20,11 @@ public class AscensionAttributes {
             "attributes.ascension.qi_regen_rate",
             1,
             0,10000).setSyncable(true));
+    public static final Holder<Attribute> HEALTH_REGEN_RATE = ATTRIBUTES.register("health_regen_rate", () -> new RangedAttribute(
+            "attributes.ascension.health_regen_rate",
+            1.0D,
+            0.0D,
+            10000.0D).setSyncable(true));
     public static final Holder<Attribute> MAX_STAMINA = ATTRIBUTES.register("max_stamina", () -> new RangedAttribute(
             "attributes.ascension.max_stamina",
             100.0D,

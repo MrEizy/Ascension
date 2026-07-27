@@ -4,12 +4,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.api.core.construct.OwnerBoundConstructView;
+import net.zic.ascension.api.core.construct.OwnerBoundConstructDefinition;
 
 import java.util.Map;
 import java.util.UUID;
 
-public final class OwnerBoundConstructInstance implements OwnerBoundConstructView {
+public final class OwnerBoundConstructInstance implements OwnerBoundConstructDefinition.View {
     private final UUID runtimeId;
     private final ResourceKey<Level> dimension;
     private final UUID ownerId;

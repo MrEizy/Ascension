@@ -8,8 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
 import net.zic.ascension.api.core.CoreRegistries;
@@ -22,30 +20,22 @@ import net.zic.ascension.api.core.skill.castable.active.ActiveSkillLevelDefiniti
 import net.zic.ascension.api.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.core.skill.castable.data.CastType;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.core.skill.levelled.LevelledSkill;
 import net.zic.ascension.api.core.skill.levelled.SkillLevelResolver;
 import net.zic.ascension.api.core.skill.levelled.SkillLevelSnapshot;
 import net.zic.ascension.api.core.skill.levelled.SkillProgressionData;
 import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.targeting.SkillTarget;
-import net.zic.ascension.api.core.targeting.TargetingContext;
-import net.zic.ascension.api.core.targeting.TargetingResult;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.api.value.ScaledValueContext;
+import net.zic.ascension.common.skill.castable.SkillExecutions;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.cooldown.EntityCooldownHandler;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public final class ActiveSkill implements CastableSkill, LevelledSkill {
-    public static final Identifier TARGET_COUNT = AscensionCraft.prefix("active/target_count");
-    public static final Identifier TARGET_DISTANCE = AscensionCraft.prefix("active/target_distance");
-
     private final Component name;
     private final Component description;
     private final int defaultAccessibleLevel;
@@ -182,44 +172,26 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill {
         if (definition == null) {
             return ResolvedActiveCast.failure(Component.literal("Skill level is not accessible"));
         }
-
-        TargetingContext targetingContext = new TargetingContext(
+        SkillExecutions.Resolution execution = SkillExecutions.resolve(
                 level,
                 caster,
                 skillId,
                 snapshot.effectiveLevel(),
                 0.0D,
-                Map.of()
+                Map.of(),
+                definition.execution()
         );
-        TargetingResult targetingResult = definition.targeting().resolve(targetingContext);
-        if (!targetingResult.succeeded()) {
-            return ResolvedActiveCast.failure(targetingResult.failureMessage());
+        if (!execution.succeeded()) {
+            return ResolvedActiveCast.failure(execution.failureMessage());
         }
-        if (definition.requireTargets() && targetingResult.targets().isEmpty()) {
-            return ResolvedActiveCast.failure(Component.literal("No valid target"));
-        }
-
-        Map<Identifier, Double> variables = new HashMap<>();
-        variables.put(TargetingContext.EFFECTIVE_LEVEL, (double) snapshot.effectiveLevel());
-        variables.put(TARGET_COUNT, (double) targetingResult.targets().size());
-        SkillTarget primary = targetingResult.primaryTarget();
-        if (primary != null) {
-            variables.put(TARGET_DISTANCE, caster.getEyePosition().distanceTo(primary.position()));
-        }
-        return new ResolvedActiveCast(
-                snapshot.effectiveLevel(),
-                definition,
-                targetingResult.targets(),
-                Map.copyOf(variables),
-                null
-        );
+        return new ResolvedActiveCast(snapshot.effectiveLevel(), definition, execution, null);
     }
 
     private boolean canPayCosts(ServerPlayer caster, Identifier skillId, ResolvedActiveCast resolved) {
-        LivingEntity target = primaryEntity(resolved.targets());
-        ScaledValueContext context = scaledValueContext(caster, skillId, target, resolved.variables());
+        LivingEntity target = SkillExecutions.primaryEntity(resolved.execution());
+        ScaledValueContext context = scaledValueContext(caster, skillId, target, resolved.execution().variables());
         for (ActiveSkillCostDefinition cost : resolved.definition().costs()) {
-            if (!cost.canPay(caster, skillId, target, context, resolved.variables())) {
+            if (!cost.canPay(caster, skillId, target, context, resolved.execution().variables())) {
                 return false;
             }
         }
@@ -230,10 +202,10 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill {
         if (!canPayCosts(caster, skillId, resolved)) {
             return false;
         }
-        LivingEntity target = primaryEntity(resolved.targets());
-        ScaledValueContext context = scaledValueContext(caster, skillId, target, resolved.variables());
+        LivingEntity target = SkillExecutions.primaryEntity(resolved.execution());
+        ScaledValueContext context = scaledValueContext(caster, skillId, target, resolved.execution().variables());
         for (ActiveSkillCostDefinition cost : resolved.definition().costs()) {
-            if (!cost.pay(caster, skillId, target, context, resolved.variables())) {
+            if (!cost.pay(caster, skillId, target, context, resolved.execution().variables())) {
                 return false;
             }
         }
@@ -246,36 +218,14 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill {
             Identifier skillId,
             ResolvedActiveCast resolved
     ) {
-        Vec3 origin = caster.position().add(0.0D, caster.getBbHeight() * 0.5D, 0.0D);
-        SkillExecutionContext originContext = new SkillExecutionContext(
+        SkillExecutions.apply(
                 level,
                 caster,
                 skillId,
-                caster,
-                origin,
                 0.0D,
-                resolved.variables()
+                resolved.definition().execution(),
+                resolved.execution()
         );
-        for (SkillExecutionFeature feature : resolved.definition().originFeatures()) {
-            feature.apply(originContext);
-        }
-
-        for (SkillTarget target : resolved.targets()) {
-            Map<Identifier, Double> targetVariables = new HashMap<>(resolved.variables());
-            targetVariables.put(TARGET_DISTANCE, caster.getEyePosition().distanceTo(target.position()));
-            SkillExecutionContext targetContext = new SkillExecutionContext(
-                    level,
-                    caster,
-                    skillId,
-                    target.entity(),
-                    target.position(),
-                    0.0D,
-                    targetVariables
-            );
-            for (SkillExecutionFeature feature : resolved.definition().features()) {
-                feature.apply(targetContext);
-            }
-        }
     }
 
     private ScaledValueContext scaledValueContext(
@@ -295,9 +245,9 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill {
     }
 
     private int resolveCooldown(ServerPlayer caster, Identifier skillId, ResolvedActiveCast resolved) {
-        LivingEntity target = primaryEntity(resolved.targets());
+        LivingEntity target = SkillExecutions.primaryEntity(resolved.execution());
         double value = resolved.definition().cooldown().resolve(
-                scaledValueContext(caster, skillId, target, resolved.variables())
+                scaledValueContext(caster, skillId, target, resolved.execution().variables())
         );
         if (!Double.isFinite(value) || value <= 0.0D) {
             return 0;
@@ -306,9 +256,6 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill {
     }
 
 
-    private LivingEntity primaryEntity(List<SkillTarget> targets) {
-        return targets.isEmpty() ? null : targets.getFirst().entity();
-    }
 
     private OriginSource getOriginSource(LivingEntity caster) {
         AscensionEntityDataHolder holder = caster.getCapability(
@@ -408,12 +355,11 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill {
     private record ResolvedActiveCast(
             int effectiveLevel,
             ActiveSkillLevelDefinition definition,
-            List<SkillTarget> targets,
-            Map<Identifier, Double> variables,
+            SkillExecutions.Resolution execution,
             Component failureMessage
     ) {
         private static ResolvedActiveCast failure(Component message) {
-            return new ResolvedActiveCast(0, null, List.of(), Map.of(), message);
+            return new ResolvedActiveCast(0, null, null, message);
         }
     }
 }

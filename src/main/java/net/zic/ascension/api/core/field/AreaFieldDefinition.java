@@ -3,6 +3,7 @@ package net.zic.ascension.api.core.field;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.StringRepresentable;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.core.targeting.TargetFilterDefinition;
 import net.zic.ascension.api.value.ScaledValue;
@@ -11,20 +12,19 @@ import java.util.List;
 import java.util.Optional;
 
 public record AreaFieldDefinition(
-        AreaFieldShape shape,
+        Shape shape,
         ScaledValue radius,
         ScaledValue height,
         ScaledValue duration,
         int tickInterval,
         TargetFilterDefinition filter,
-        List<SkillExecutionFeature> enterFeatures,
-        List<SkillExecutionFeature> stayFeatures,
-        List<SkillExecutionFeature> exitFeatures,
+        List<SkillExecutionFeature> onEnter,
+        List<SkillExecutionFeature> onTick,
+        List<SkillExecutionFeature> onExit,
         Optional<Identifier> visual
 ) {
     public static final Codec<AreaFieldDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            AreaFieldShape.CODEC.optionalFieldOf("shape", AreaFieldShape.CYLINDER)
-                    .forGetter(AreaFieldDefinition::shape),
+            Shape.CODEC.optionalFieldOf("shape", Shape.CYLINDER).forGetter(AreaFieldDefinition::shape),
             ScaledValue.CODEC.codec().fieldOf("radius").forGetter(AreaFieldDefinition::radius),
             ScaledValue.CODEC.codec().optionalFieldOf("height", ScaledValue.constant(4.0D))
                     .forGetter(AreaFieldDefinition::height),
@@ -33,21 +33,39 @@ public record AreaFieldDefinition(
                     .forGetter(AreaFieldDefinition::tickInterval),
             TargetFilterDefinition.CODEC.codec().optionalFieldOf("filter", TargetFilterDefinition.hostile())
                     .forGetter(AreaFieldDefinition::filter),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("enter_features", List.of())
-                    .forGetter(AreaFieldDefinition::enterFeatures),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("stay_features", List.of())
-                    .forGetter(AreaFieldDefinition::stayFeatures),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("exit_features", List.of())
-                    .forGetter(AreaFieldDefinition::exitFeatures),
+            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_enter", List.of())
+                    .forGetter(AreaFieldDefinition::onEnter),
+            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_tick", List.of())
+                    .forGetter(AreaFieldDefinition::onTick),
+            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_exit", List.of())
+                    .forGetter(AreaFieldDefinition::onExit),
             Identifier.CODEC.optionalFieldOf("visual").forGetter(AreaFieldDefinition::visual)
     ).apply(instance, AreaFieldDefinition::new));
 
     public AreaFieldDefinition {
-        shape = shape == null ? AreaFieldShape.CYLINDER : shape;
+        shape = shape == null ? Shape.CYLINDER : shape;
         filter = filter == null ? TargetFilterDefinition.hostile() : filter;
-        enterFeatures = enterFeatures == null ? List.of() : List.copyOf(enterFeatures);
-        stayFeatures = stayFeatures == null ? List.of() : List.copyOf(stayFeatures);
-        exitFeatures = exitFeatures == null ? List.of() : List.copyOf(exitFeatures);
+        onEnter = onEnter == null ? List.of() : List.copyOf(onEnter);
+        onTick = onTick == null ? List.of() : List.copyOf(onTick);
+        onExit = onExit == null ? List.of() : List.copyOf(onExit);
         visual = visual == null ? Optional.empty() : visual;
+    }
+
+    public enum Shape implements StringRepresentable {
+        SPHERE("sphere"),
+        CYLINDER("cylinder");
+
+        public static final Codec<Shape> CODEC = StringRepresentable.fromEnum(Shape::values);
+
+        private final String name;
+
+        Shape(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return name;
+        }
     }
 }

@@ -1,13 +1,14 @@
 package net.zic.ascension.api.value.source;
 
+import net.zic.ascension.api.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import net.zic.ascension.api.datapack.TypeRegistries;
 import net.zic.ascension.api.value.ScaledValueContext;
 
 public interface ScaledValueSource {
-    Codec<ScaledValueSource> CODEC = TypeRegistries.SCALED_VALUE_SOURCE_TYPE_REGISTRY.byNameCodec().dispatch(ScaledValueSource::getType, ScaledValueSourceType::codec);
+    Codec<ScaledValueSource> CODEC = TypeRegistries.SCALED_VALUE_SOURCE_TYPE_REGISTRY.byNameCodec().dispatch(ScaledValueSource::getType, CodecType<ScaledValueSource>::codec);
 
-    ScaledValueSourceType getType();
+    CodecType<ScaledValueSource> getType();
 
     double resolve(ScaledValueContext context);
 }

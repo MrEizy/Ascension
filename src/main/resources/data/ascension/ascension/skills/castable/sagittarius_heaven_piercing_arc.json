@@ -1,0 +1,102 @@
+{
+  "type": "ascension:held_cast",
+  "name": {
+    "translate": "ascension.skill.sagittarius_heaven_piercing_arc.name"
+  },
+  "description": {
+    "translate": "ascension.skill.sagittarius_heaven_piercing_arc.desc"
+  },
+  "cast": {
+    "minimum_charge": 20,
+    "maximum_charge": 80,
+    "cooldown": 300,
+    "cost": {
+      "resource": "ascension:qi",
+      "source": "ascension:skill_casting",
+      "release_on_failure": true,
+      "cumulative_cost": {
+        "base": 8,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "operation": "add",
+            "scale": 24,
+            "power": 1.5
+          }
+        ],
+        "maximum": 32
+      }
+    },
+    "movement": {
+      "horizontal_drag": {
+        "base": 0.55
+      },
+      "vertical_drag": {
+        "base": 1.0
+      },
+      "disable_sprinting": true
+    },
+    "interruption": {
+      "damage_threshold": {
+        "base": 10
+      },
+      "accumulation_window": 20,
+      "release_after_minimum": false
+    },
+    "stages": []
+  },
+  "execution": {
+    "targeting": {
+      "type": "ascension:ray",
+      "range": {
+        "base": 42
+      },
+      "width": {
+        "base": 0.65
+      },
+      "filter": {
+        "relations": [
+          "neutral",
+          "hostile"
+        ],
+        "include_players": true,
+        "line_of_sight": true
+      }
+    },
+    "require_targets": true,
+    "caster_features": [
+      {
+        "type": "ascension:particle_burst",
+        "particle": "minecraft:enchant",
+        "count": {
+          "base": 28
+        },
+        "spread": {
+          "base": 0.8
+        },
+        "speed": {
+          "base": 0.04
+        }
+      },
+      {
+        "type": "ascension:sound",
+        "sound": "minecraft:entity.arrow.shoot",
+        "volume": {
+          "base": 1.0
+        },
+        "pitch": {
+          "base": 0.65
+        }
+      }
+    ],
+    "target_features": [
+      {
+        "type": "ascension:spawn_projectile",
+        "definition": "ascension:celestial/sagittarius_heaven_piercing_arc",
+        "direction": "target"
+      }
+    ]
+  }
+}

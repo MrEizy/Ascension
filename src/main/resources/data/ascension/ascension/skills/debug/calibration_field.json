@@ -1,0 +1,47 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Test Field",
+  "description": "Tests looked-position targeting, field entry, ticking, exit and expiry.",
+  "default_accessible_level": 1,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:look_position",
+          "range": {
+            "base": 14
+          },
+          "include_fluids": false,
+          "fallback_to_maximum_range": true
+        },
+        "require_targets": true,
+        "caster_features": [],
+        "target_features": [
+          {
+            "type": "ascension:runtime_object",
+            "kind": "area_field",
+            "action": "spawn",
+            "definition": "ascension:debug/calibration_field"
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:enchant",
+            "count": {
+              "base": 36
+            },
+            "spread": {
+              "base": 1.2
+            },
+            "speed": {
+              "base": 0.04
+            }
+          }
+        ]
+      },
+      "costs": [],
+      "cooldown": {
+        "base": 20
+      }
+    }
+  ]
+}

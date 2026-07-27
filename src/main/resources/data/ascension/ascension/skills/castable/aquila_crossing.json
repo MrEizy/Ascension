@@ -1,0 +1,188 @@
+{
+  "type": "ascension:active_skill",
+  "name": {
+    "translate": "ascension.skill.aquila_crossing.name"
+  },
+  "description": {
+    "translate": "ascension.skill.aquila_crossing.desc"
+  },
+  "default_accessible_level": 0,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:look_position",
+          "range": {
+            "base": 8
+          },
+          "include_fluids": false,
+          "fallback_to_maximum_range": true
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:cloud",
+            "count": {
+              "base": 14
+            },
+            "spread": {
+              "base": 0.4
+            },
+            "speed": {
+              "base": 0.05
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:entity.phantom.flap",
+            "volume": {
+              "base": 0.7
+            },
+            "pitch": {
+              "base": 1.5
+            }
+          }
+        ],
+        "target_features": [
+          {
+            "type": "ascension:movement",
+            "mode": "target_position",
+            "subject": "caster",
+            "maximum_distance": {
+              "base": 8
+            },
+            "stopping_distance": {
+              "base": 0.6
+            },
+            "vertical_offset": {
+              "base": 0
+            },
+            "collision": "stop_before_collision",
+            "preserve_velocity": false
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:end_rod",
+            "count": {
+              "base": 22
+            },
+            "spread": {
+              "base": 0.55
+            },
+            "speed": {
+              "base": 0.06
+            }
+          }
+        ]
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 12
+          }
+        },
+        {
+          "resource": "ascension:stamina",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 8
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 140
+      }
+    },
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:look_position",
+          "range": {
+            "base": 12
+          },
+          "include_fluids": false,
+          "fallback_to_maximum_range": true
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:cloud",
+            "count": {
+              "base": 18
+            },
+            "spread": {
+              "base": 0.5
+            },
+            "speed": {
+              "base": 0.06
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:entity.phantom.flap",
+            "volume": {
+              "base": 0.8
+            },
+            "pitch": {
+              "base": 1.65
+            }
+          }
+        ],
+        "target_features": [
+          {
+            "type": "ascension:movement",
+            "mode": "target_position",
+            "subject": "caster",
+            "maximum_distance": {
+              "base": 12
+            },
+            "stopping_distance": {
+              "base": 0.6
+            },
+            "vertical_offset": {
+              "base": 0
+            },
+            "collision": "stop_before_collision",
+            "preserve_velocity": false
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:end_rod",
+            "count": {
+              "base": 30
+            },
+            "spread": {
+              "base": 0.7
+            },
+            "speed": {
+              "base": 0.07
+            }
+          }
+        ]
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 14
+          }
+        },
+        {
+          "resource": "ascension:stamina",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 9
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 110
+      }
+    }
+  ]
+}

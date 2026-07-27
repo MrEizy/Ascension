@@ -1,12 +1,12 @@
 package net.zic.ascension.impl.value.source;
 
+import net.zic.ascension.api.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.value.ScaledValueContext;
 import net.zic.ascension.api.value.source.ScaledValueSource;
-import net.zic.ascension.api.value.source.ScaledValueSourceType;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
 
@@ -17,7 +17,7 @@ public record StatScaledValueSource(Identifier stat, boolean base) implements Sc
     ).apply(instance, StatScaledValueSource::new));
 
     @Override
-    public ScaledValueSourceType getType() {
+    public CodecType<ScaledValueSource> getType() {
         return AscensionScaledValueSourceTypes.STAT.get();
     }
 

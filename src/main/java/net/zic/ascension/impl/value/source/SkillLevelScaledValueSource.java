@@ -1,12 +1,12 @@
 package net.zic.ascension.impl.value.source;
 
+import net.zic.ascension.api.datapack.CodecType;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.skill.levelled.SkillLevelResolver;
 import net.zic.ascension.api.value.ScaledValueContext;
 import net.zic.ascension.api.value.source.ScaledValueSource;
-import net.zic.ascension.api.value.source.ScaledValueSourceType;
 
 import java.util.Optional;
 
@@ -16,7 +16,7 @@ public record SkillLevelScaledValueSource(Optional<Identifier> skill) implements
     ).apply(instance, SkillLevelScaledValueSource::new));
 
     @Override
-    public ScaledValueSourceType getType() {
+    public CodecType<ScaledValueSource> getType() {
         return AscensionScaledValueSourceTypes.SKILL_LEVEL.get();
     }
 

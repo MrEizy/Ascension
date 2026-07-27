@@ -1,0 +1,53 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Owner Construct",
+  "description": "Tests owner-bound construct creation and replacement.",
+  "default_accessible_level": 1,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:self"
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:runtime_object",
+            "kind": "construct",
+            "action": "remove",
+            "definition": "ascension:debug/calibration_construct"
+          },
+          {
+            "type": "ascension:runtime_object",
+            "kind": "construct",
+            "action": "spawn",
+            "definition": "ascension:debug/calibration_construct"
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:totem_of_undying",
+            "count": {
+              "base": 32
+            },
+            "spread": {
+              "base": 0.9
+            },
+            "speed": {
+              "base": 0.08
+            }
+          },
+          {
+            "type": "ascension:message",
+            "message": "Calibration construct spawned",
+            "overlay": true
+          }
+        ],
+        "target_features": []
+      },
+      "costs": [],
+      "cooldown": {
+        "base": 20
+      }
+    }
+  ]
+}

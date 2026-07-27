@@ -1,0 +1,79 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Vector Step",
+  "description": "Stores a return anchor and moves the caster toward the looked-at position.",
+  "default_accessible_level": 1,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:look_position",
+          "range": {
+            "base": 9
+          },
+          "include_fluids": false,
+          "fallback_to_maximum_range": true
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:movement_anchor",
+            "action": "set",
+            "anchor": "ascension:debug/calibration_return",
+            "duration": {
+              "base": 200
+            }
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:cloud",
+            "count": {
+              "base": 12
+            },
+            "spread": {
+              "base": 0.35
+            },
+            "speed": {
+              "base": 0.04
+            }
+          }
+        ],
+        "target_features": [
+          {
+            "type": "ascension:movement",
+            "mode": "target_position",
+            "subject": "caster",
+            "maximum_distance": {
+              "base": 9
+            },
+            "stopping_distance": {
+              "base": 0.5
+            },
+            "vertical_offset": {
+              "base": 0
+            },
+            "collision": "stop_before_collision",
+            "preserve_velocity": false
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:poof",
+            "count": {
+              "base": 18
+            },
+            "spread": {
+              "base": 0.45
+            },
+            "speed": {
+              "base": 0.05
+            }
+          }
+        ]
+      },
+      "costs": [],
+      "cooldown": {
+        "base": 20
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.value.source;
 
+import net.zic.ascension.api.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -7,7 +8,6 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.value.ScaledValueContext;
 import net.zic.ascension.api.value.source.ScaledValueSource;
-import net.zic.ascension.api.value.source.ScaledValueSourceType;
 
 import java.util.Optional;
 
@@ -19,7 +19,7 @@ public record AffinityScaledValueSource(Identifier path, Optional<Identifier> ca
     ).apply(instance, AffinityScaledValueSource::new));
 
     @Override
-    public ScaledValueSourceType getType() {
+    public CodecType<ScaledValueSource> getType() {
         return AscensionScaledValueSourceTypes.AFFINITY.get();
     }
 

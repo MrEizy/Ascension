@@ -14,6 +14,7 @@ import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.ascension.api.core.skill.castable.CastData;
 import net.zic.ascension.api.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.core.skill.castable.PreCastData;
+import net.zic.ascension.api.core.skill.castable.SkillExecutionDefinition;
 import net.zic.ascension.api.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.core.skill.castable.data.CastType;
@@ -22,11 +23,10 @@ import net.zic.ascension.api.core.skill.castable.held.HeldCastData;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastSpec;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualPhase;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualState;
-import net.zic.ascension.api.core.skill.castable.held.execution.HeldCastExecution;
-import net.zic.ascension.api.core.skill.castable.held.execution.HeldCastExecutionContext;
 import net.zic.ascension.api.core.source.OriginSource;
 import net.zic.ascension.api.datapack.skill.SkillType;
 import net.zic.ascension.api.value.ScaledValueContext;
+import net.zic.ascension.common.skill.castable.SkillExecutions;
 import net.zic.ascension.impl.core.skill.castable.presentation.CastSoundPlayer;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.skill_casting.AscensionSkillListener;
@@ -40,7 +40,7 @@ public record HeldCastSkill(
         Component name,
         Component description,
         HeldCastSpec cast,
-        HeldCastExecution execution
+        SkillExecutionDefinition execution
 ) implements CastableSkill {
     @Override
     public CastType getCastType() {
@@ -190,17 +190,27 @@ public record HeldCastSkill(
             return;
         }
 
-        execution.execute(new HeldCastExecutionContext(
+        double charge = cast.charge(data.getChargeTicks());
+        Map<Identifier, Double> variables = Map.of(
+                SkillExecutions.CHARGE_TICKS, (double) data.getChargeTicks(),
+                SkillExecutions.MAXIMUM_CHARGE_TICKS, (double) cast.maximumCharge()
+        );
+        SkillExecutions.Resolution resolved = SkillExecutions.resolve(
                 level,
                 player,
                 skillId,
-                data,
-                data.getChargeTicks(),
-                cast.maximumCharge(),
-                cast.charge(data.getChargeTicks())
-        ));
-        if (cast.cooldown() > 0) {
-            caster.getData(ZenithAttachments.COOLDOWN_HANDLER).addCooldown(skillId, cast.cooldown());
+                0,
+                charge,
+                variables,
+                execution
+        );
+        if (resolved.succeeded()) {
+            SkillExecutions.apply(level, player, skillId, charge, execution, resolved);
+            if (cast.cooldown() > 0) {
+                caster.getData(ZenithAttachments.COOLDOWN_HANDLER).addCooldown(skillId, cast.cooldown());
+            }
+        } else if (resolved.failureMessage() != null) {
+            player.sendOverlayMessage(resolved.failureMessage());
         }
     }
 

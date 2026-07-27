@@ -1,0 +1,71 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Ray Mark",
+  "description": "Tests ray targeting and owner-scoped temporary effect stacking.",
+  "default_accessible_level": 1,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:ray",
+          "range": {
+            "base": 24
+          },
+          "width": {
+            "base": 0.4
+          },
+          "filter": {
+            "relations": [
+              "ally",
+              "neutral",
+              "hostile"
+            ],
+            "include_players": true,
+            "line_of_sight": true
+          }
+        },
+        "require_targets": true,
+        "caster_features": [],
+        "target_features": [
+          {
+            "type": "ascension:skill_effect",
+            "effect": "ascension:debug/calibration_mark",
+            "duration": {
+              "base": 200
+            },
+            "potency": {
+              "base": 1
+            }
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:end_rod",
+            "count": {
+              "base": 18
+            },
+            "spread": {
+              "base": 0.45
+            },
+            "speed": {
+              "base": 0.03
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.amethyst_cluster.hit",
+            "volume": {
+              "base": 0.8
+            },
+            "pitch": {
+              "base": 1.4
+            }
+          }
+        ]
+      },
+      "costs": [],
+      "cooldown": {
+        "base": 10
+      }
+    }
+  ]
+}

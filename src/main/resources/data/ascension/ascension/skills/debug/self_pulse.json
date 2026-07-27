@@ -1,0 +1,61 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Self Pulse",
+  "description": "Tests self targeting, caster features, particles, sound, messages and Qi restoration.",
+  "default_accessible_level": 1,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:self"
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:happy_villager",
+            "count": {
+              "base": 20
+            },
+            "spread": {
+              "base": 0.7
+            },
+            "speed": {
+              "base": 0.03
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.amethyst_block.chime",
+            "volume": {
+              "base": 0.7
+            },
+            "pitch": {
+              "base": 1.2
+            }
+          },
+          {
+            "type": "ascension:resource_transaction",
+            "target": "caster",
+            "resource": "ascension:qi",
+            "operation": "restore",
+            "source": "ascension:direct",
+            "amount": {
+              "base": 10
+            }
+          },
+          {
+            "type": "ascension:message",
+            "message": "Self pulse executed",
+            "overlay": true
+          }
+        ],
+        "target_features": []
+      },
+      "costs": [],
+      "cooldown": {
+        "base": 10
+      }
+    }
+  ]
+}

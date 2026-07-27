@@ -25,7 +25,7 @@
 * `ScaledValueTerm`: One contribution to a scaled value
 * `ScaledValueOperation`: Determines whether a term adds, multiplies or replaces
 * `ScaledValueSource`: Base interface for scaling sources
-* `ScaledValueSourceType`: Codec type for scaling sources
+* `CodecType<ScaledValueSource>`: Shared codec holder used by the scaling-source registry
 * `ConstantScaledValueSource`: Uses a fixed value
 * `SkillLevelScaledValueSource`: Scales from skill level
 * `ChargeScaledValueSource`: Scales from held-cast charge
@@ -217,132 +217,125 @@ Spending stamina doesn't consume hunger.
 
 ## Relevant Classes
 
-### Held Cast Data
-
-* `HeldCastSpec`: Contains the shared settings for a held cast
+* `HeldCastSpec`: Contains charge, cost, movement, interruption, stage and cooldown settings
 * `HeldCastData`: Stores charge, paid cost and interruption data
-* `HeldCastCostDefinition`: Defines resource costs and cumulative cost curves
-* `HeldCastMovementDefinition`: Defines movement restrictions while charging
-* `HeldCastInterruptionDefinition`: Defines damage interruption behaviour
-* `HeldCastChargeStage`: Defines charge stages, particles and sounds
-* `HeldCastVisualState`: Stores the synced visual state
-* `HeldCastVisualPhase`: The current visual phase of a held cast
-
-### Executions
-
-* `HeldCastExecution`: Base interface for held cast delivery types
-* `HeldCastExecutionContext`: Information used when executing a held cast
-* `HeldCastExecutionType`: Codec type for held cast executions
-* `RadialTargetingDefinition`: Defines radial target filtering
-* `SelfReleaseExecution`: Executes features on the caster
-* `RadialReleaseExecution`: Executes features on nearby targets
-* `ProjectileReleaseExecution`: Executes features through a virtual projectile
-* `AscensionHeldCastExecutionTypes`: Registers held cast execution types
-
-### Execution Features
-
-* `SkillExecutionFeature`: Base interface for reusable execution effects
-* `SkillExecutionContext`: Contains caster, target, charge and execution position
-* `SkillExecutionFeatureType`: Codec type for execution features
-* `MessageFeature`: Sends a message
-* `SoundFeature`: Plays a sound
-* `ParticleBurstFeature`: Spawns particles
-* `ResourceTransactionFeature`: Applies a resource transaction
-* `FrozenBuildupFeature`: Applies frozen buildup
-* `SkillEffectFeature`: Applies a temporary skill effect
-* `AscensionSkillExecutionFeatureTypes`: Registers the built-in features
-
-### Runtime and Networking
-
-* `HeldCastSkill`: Handles the shared held cast lifecycle
-* `HeldCastSkillData`: Skill data used by held casts
-* `HeldCastInterruptionHandler`: Tracks damage and interrupts casts
-* `HeldCastProjectileManager`: Handles lightweight server-side projectiles
+* `HeldCastSkill`: Handles the held-cast lifecycle
 * `HeldCastSkillType`: Codec for the `held_cast` skill type
-* `HeldCastVisualStatePacket`: Syncs held cast visuals
+* `SkillExecutionDefinition`: Shared targeting and feature definition used on release
+* `SkillExecutions`: Resolves targets and applies shared execution features
+* `HeldCastVisualStatePacket`: Syncs held-cast presentation
 * `HeldCastVisualSyncManager`: Handles observer visual updates
 
 ---
 
-## How Responsibility Is Split
+## Held Casts
 
-Held casts are split into three layers, so no single class ends up doing everything.
+`ascension:held_cast` owns charging, cumulative costs, cancellation, interruption, movement restrictions, stages and cooldowns. Its release is a normal shared skill execution, so held and instant skills use the same targeting and feature system.
 
-`ascension:held_cast` is the skill type itself, and owns the actual charging mechanics -> min/max charge, incremental costs, manual vs. automatic release, cancellation, damage interruption, movement restrictions while charging, charge stages, cooldowns, and syncing all of that to the client and to nearby observers.
+Costs are cumulative. Each tick only pays the difference between the current cumulative cost and the amount already paid, so cancelling a nearly complete cast does not refund its preparation cost.
 
-Executions decide where the charge goes on release: at the caster (self), at nearby targets (radial), or through a virtual projectile. This layer is just about what gets hit.
-
-Execution features are the small, reusable effects applied by an execution, such as sounds, particles, resource transactions, frozen buildup or temporary skill effects. They are shared with active skills, so new effects only need to be implemented once.
-
-Charging, targeting, and execution features are mostly independent concerns, so keeping them separate means adding a new skill usually doesn't mean touching the charge/interruption/sync code again.
-
-## Input Behaviour
-
-Each key press or hold can only produce one release (no getting multiple casts out of a single hold). For casts that release automatically (hitting max charge, for instance), the input stays latched until the player actually releases the key, so letting go doesn't immediately kick off another cast. They have to press it again to start a new one.
-
-## Costs
-
-Costs are cumulative rather than paid up front. Each tick only pays the difference between the current cumulative cost and whatever's already been paid:
-
-```text
-cost_paid_this_tick = current_cumulative_cost − previously_paid_cumulative_cost
-```
-
-That's intentional, as it means cancelling a cast at, say, 90% charge doesn't refund anything, since 90% of the cost has already been paid tick by tick. Otherwise a player could charge a cast almost to completion and bail right before release to dodge the cost entirely.
-
-## Networking
-
-Same rule as everywhere else: the server decides charge time, resource payments, release timing, target selection, and execution results. Clients only get compact visual state updates so the charging animation and particles look right locally, but they never get a say in whether a cast actually lands or what it hits.
+The server decides charge, costs, release timing, targeting and execution. Clients receive compact presentation state only.
 
 </details>
 
 ---
 
 <details>
-<summary>Active Skills and Targeting</summary>
+<summary>Active Skills, Executions and Targeting</summary>
 
 ## Relevant Classes
 
 ### Active Skills
 
-* `ActiveSkill`: Handles instant skill targeting, costs, execution and cooldowns
-* `ActiveSkillData`: Runtime data for active skills
-* `ActiveSkillLevelDefinition`: Defines the complete behaviour at each effective level
-* `ActiveSkillCostDefinition`: Defines resource costs
+* `ActiveSkill`: Handles instant costs, execution and cooldowns
+* `ActiveSkillData`: Stores active-skill progression data
+* `ActiveSkillLevelDefinition`: Defines execution, costs and cooldown at one effective level
+* `ActiveSkillCostDefinition`: Defines an upfront resource cost
 * `ActiveSkillType`: Codec for the `active_skill` skill type
 
-### Execution Features
+### Shared Executions
 
-* `SkillExecutionFeature`: Base interface for reusable skill effects
-* `SkillExecutionContext`: Contains the caster, target, skill and execution position
-* `SkillExecutionFeatureType`: Codec type for execution features
-* `AscensionSkillExecutionFeatureTypes`: Registers the built-in features
+* `SkillExecutionDefinition`: Defines targeting, target requirements, caster features and target features
+* `SkillExecutionContext`: Contains caster, target, skill, charge, position and context values
+* `SkillExecutionFeature`: Base interface for reusable execution behaviour
+* `SkillExecutions`: Resolves and applies shared executions
+* `AscensionSkillExecutionFeatureTypes`: Registers built-in execution features
 
 ### Targeting
 
 * `TargetingDefinition`: Base interface for datapack targeting definitions
 * `TargetingContext`: Information used while resolving targets
 * `TargetingResult`: Stores resolved entity or position targets
-* `TargetFilterDefinition`: Defines relationship and line-of-sight filtering
+* `TargetFilterDefinition`: Filters targets by relation, player status and line of sight
 * `TargetSort`: Defines target ordering
-* `TargetingService`: Shared targeting helpers
-* `AscensionTargetingTypes`: Registers the built-in targeting types
+* `TargetingService`: Shared server-side targeting helpers
+* `AscensionTargetingTypes`: Registers self, ray, cone, radial and looked-at-position targeting
 
 ---
 
 ## Active Skills
 
-`ascension:active_skill` is the instant counterpart to held casts. Each effective level provides a complete definition containing its targeting, costs, cooldown, origin features and target features. 
-Costs are checked and paid before execution, while cooldowns are only applied after a successful cast.
+`ascension:active_skill` is the instant counterpart to held casts. Each effective level provides a complete execution, cost list and cooldown. Targeting is resolved before resources are spent, and cooldown is applied after a successful execution.
 
-## Execution Features
+## Shared Executions
 
-Active skills and held casts share the same execution features. Origin features run once at the caster, while target features run once for each selected entity or position.
-Built-in features currently cover messages, sounds, particles, resource transactions, frozen buildup and temporary skill effects.
+Caster features run once at the skill origin. Target features run once for every selected entity or position. Message, sound, particles, resource transactions, frozen buildup, temporary effects, movement, projectile spawning and runtime-object operations all use this feature layer.
 
 ## Targeting
 
-Targeting is resolved server-side before resources are spent. The built-in types support self, ray, cone, radial and looked-at-position targeting, with shared filtering, sorting, line-of-sight and target limits.
+Targeting is server-authoritative. Built-in definitions support self, ray, cone, radial and looked-at-position targeting. Shared filters use the explicit relations `self`, `ally`, `neutral` and `hostile` rather than separate inclusion flags.
+
+</details>
+
+---
+
+<details>
+<summary>Movement, Projectiles and Runtime Objects</summary>
+
+## Relevant Classes
+
+### Movement
+
+* `MovementFeature`: Handles directional, target-position and anchor movement
+* `MovementAnchorFeature`: Creates or clears saved movement anchors
+* `MovementService`: Validates destinations, collision and anchor access
+* `MovementAnchorContainer`: Stores persistent anchors on an entity
+
+### Virtual Projectiles
+
+* `VirtualProjectileDefinition`: Datapack projectile definition
+* `VirtualProjectileInstance`: Lightweight runtime projectile state
+* `VirtualProjectiles`: Handles spawning, ticking, collision and removal
+* `ProjectileBehavior`: Base interface for composable projectile behaviour
+* `HomingProjectileBehavior`: Handles steering and optional reacquisition
+
+### Runtime Objects
+
+* `AreaFieldDefinition`: Defines persistent target-filtered areas
+* `AreaFields`: Handles field lifecycles and enter, tick and exit features
+* `AnchorNetworkDefinition`: Defines linked nodes and optional child fields
+* `AnchorNetworks`: Handles linked-node runtime state
+* `OwnerBoundConstructDefinition`: Defines owner-relative constructs and visual stages
+* `OwnerBoundConstructs`: Handles construct duration, stability and syncing
+* `RuntimeObjectFeature`: Spawns, removes or restores shared runtime objects
+
+### Presentation
+
+* `RuntimeVisualState`: Compact shared visual state
+* `RuntimeVisualController`: Client renderer lifecycle
+* `ClientRuntimeVisuals`: Stores states, controllers and owner-relative transforms
+* `RuntimeVisualSync`: Sends state changes to nearby observers
+* `RuntimeVisualPacket`: Encodes shared runtime presentation
+
+---
+
+## Runtime Objects
+
+Area fields, anchor networks and owner-bound constructs are datapack registries. Runtime instances store registry IDs and re-resolve their definitions, so removed definitions end safely after reloads.
+
+Anchor networks are the technical linked-node system. Individual techniques may still describe them as formations, constellations, arrays or seals without conflicting with the separate formations mod.
+
+The server owns movement, collision, field membership, projectile hits and construct stability. Clients receive only compact visual state and render it through registered controllers.
 
 </details>
 
@@ -358,7 +351,7 @@ Targeting is resolved server-side before resources are spent. The built-in types
 * `SkillEffectDefinition`: Datapack definition for a temporary effect
 * `SkillEffectContext`: Read-only information passed to effect modules
 * `SkillEffectModule`: Base interface for reusable effect behaviour
-* `SkillEffectModuleType`: Codec type for effect modules
+* `CodecType<SkillEffectModule>`: Shared codec holder used by the effect-module registry
 * `SkillEffectStackingPolicy`: Defines repeated application behaviour
 * `SkillEffectRemovalReason`: The reason an effect was removed
 * `SkillEffectEvent`: Events for applying, updating and removing effects
@@ -460,8 +453,8 @@ Clients only receive synced attachment data, compact held-cast visual packets, v
 ## Registration and Registries
 
 * `AscensionCraft`: Registered scaled values, resources, held cast types, effect modules, stamina attributes and network payloads
-* `CoreRegistries`: Added the datapack skill effect registry
-* `TypeRegistries`: Added scaled value, held execution, execution feature, targeting and effect module registries
+* `CoreRegistries`: Registers skill effects, virtual projectiles, area fields, anchor networks and constructs
+* `TypeRegistries`: Registers shared codec families for scaled values, execution features, targeting, effect modules and projectile behaviours
 * `AscensionProgressActionTypes`: Registered the `set_skill_level` action
 * `AscensionSkillTypes`: Registered resource modifier passives, held casts and active skills
 * `AscensionSkillExecutionFeatureTypes`: Registered the shared execution features
@@ -510,7 +503,7 @@ Clients only receive synced attachment data, compact held-cast visual packets, v
 * `SkillEffectTicker`: Skips entities without active effect or frozen data
 * `FrozenFormEffectModule`: Added player, resistant and boss profiles
 * `FrozenStateService`: Avoids overwriting stronger vanilla or modded freezing
-* `SkillEffectFeature`: Uses the held execution's skill ID
+* `SkillEffectFeature`: Uses the shared execution context's skill ID
 * `FrozenBuildupFeature`: Uses the reorganised frozen-state service
 * `ResourceTransactionFeature`: Uses the public resource source tags
 

@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.effect.module;
 
+import net.zic.ascension.api.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,7 +10,6 @@ import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.effect.SkillEffectContext;
 import net.zic.ascension.api.core.effect.SkillEffectModule;
-import net.zic.ascension.api.core.effect.SkillEffectModuleType;
 import net.zic.ascension.api.value.ScaledValue;
 import net.zic.ascension.api.value.ScaledValueContext;
 import net.zic.ascension.common.effect.frozen.FrozenStateService;
@@ -43,7 +43,7 @@ public record FrozenFormEffectModule(
     }
 
     @Override
-    public SkillEffectModuleType getType() {
+    public CodecType<SkillEffectModule> getType() {
         return AscensionSkillEffectModuleTypes.FROZEN_FORM.get();
     }
 

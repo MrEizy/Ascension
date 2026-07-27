@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.projectile;
 
+import net.zic.ascension.api.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -7,7 +8,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.core.projectile.ProjectileBehavior;
 import net.zic.ascension.api.core.projectile.ProjectileBehaviorContext;
-import net.zic.ascension.api.core.projectile.ProjectileBehaviorType;
 import net.zic.ascension.api.core.targeting.SkillTarget;
 import net.zic.ascension.api.core.targeting.TargetingContext;
 import net.zic.ascension.api.core.targeting.TargetingDefinition;
@@ -33,7 +33,7 @@ public record HomingProjectileBehavior(
     }
 
     @Override
-    public ProjectileBehaviorType getType() {
+    public CodecType<ProjectileBehavior> getType() {
         return AscensionProjectileBehaviorTypes.HOMING.get();
     }
 

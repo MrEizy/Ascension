@@ -1,10 +1,11 @@
 package net.zic.ascension.impl.datapack.targeting;
 
+import net.zic.ascension.api.core.targeting.TargetingDefinition;
+import net.zic.ascension.api.datapack.CodecType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.targeting.TargetingType;
 import net.zic.ascension.api.datapack.TypeRegistries;
 import net.zic.ascension.impl.core.targeting.ConeTargeting;
 import net.zic.ascension.impl.core.targeting.LookPositionTargeting;
@@ -13,30 +14,30 @@ import net.zic.ascension.impl.core.targeting.RayTargeting;
 import net.zic.ascension.impl.core.targeting.SelfTargeting;
 
 public final class AscensionTargetingTypes {
-    public static final DeferredRegister<TargetingType> TARGETING_TYPES = DeferredRegister.create(
+    public static final DeferredRegister<CodecType<TargetingDefinition>> TARGETING_TYPES = DeferredRegister.create(
             TypeRegistries.TARGETING_TYPE_REGISTRY,
             AscensionCraft.MOD_ID
     );
 
-    public static final DeferredHolder<TargetingType, TargetingType> SELF = TARGETING_TYPES.register(
+    public static final DeferredHolder<CodecType<TargetingDefinition>, CodecType<TargetingDefinition>> SELF = TARGETING_TYPES.register(
             "self",
-            () -> new TargetingType(SelfTargeting.CODEC)
+            () -> new CodecType<>(SelfTargeting.CODEC)
     );
-    public static final DeferredHolder<TargetingType, TargetingType> RADIAL = TARGETING_TYPES.register(
+    public static final DeferredHolder<CodecType<TargetingDefinition>, CodecType<TargetingDefinition>> RADIAL = TARGETING_TYPES.register(
             "radial",
-            () -> new TargetingType(RadialTargeting.CODEC)
+            () -> new CodecType<>(RadialTargeting.CODEC)
     );
-    public static final DeferredHolder<TargetingType, TargetingType> RAY = TARGETING_TYPES.register(
+    public static final DeferredHolder<CodecType<TargetingDefinition>, CodecType<TargetingDefinition>> RAY = TARGETING_TYPES.register(
             "ray",
-            () -> new TargetingType(RayTargeting.CODEC)
+            () -> new CodecType<>(RayTargeting.CODEC)
     );
-    public static final DeferredHolder<TargetingType, TargetingType> CONE = TARGETING_TYPES.register(
+    public static final DeferredHolder<CodecType<TargetingDefinition>, CodecType<TargetingDefinition>> CONE = TARGETING_TYPES.register(
             "cone",
-            () -> new TargetingType(ConeTargeting.CODEC)
+            () -> new CodecType<>(ConeTargeting.CODEC)
     );
-    public static final DeferredHolder<TargetingType, TargetingType> LOOK_POSITION = TARGETING_TYPES.register(
+    public static final DeferredHolder<CodecType<TargetingDefinition>, CodecType<TargetingDefinition>> LOOK_POSITION = TARGETING_TYPES.register(
             "look_position",
-            () -> new TargetingType(LookPositionTargeting.CODEC)
+            () -> new CodecType<>(LookPositionTargeting.CODEC)
     );
 
     private AscensionTargetingTypes() {

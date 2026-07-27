@@ -16,7 +16,7 @@ import net.zic.ascension.api.core.skill.Skill;
 import net.zic.ascension.api.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.core.projectile.VirtualProjectileDefinition;
 import net.zic.ascension.api.core.field.AreaFieldDefinition;
-import net.zic.ascension.api.core.formation.FormationDefinition;
+import net.zic.ascension.api.core.anchor.AnchorNetworkDefinition;
 import net.zic.ascension.api.core.construct.OwnerBoundConstructDefinition;
 import net.zic.ascension.api.core.technique.Technique;
 import net.zic.ascension.api.core.tribulation.TribulationDefinition;
@@ -70,11 +70,11 @@ public class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<AreaFieldDefinition> AREA_FIELD_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "area_fields", () -> AreaFieldDefinition.CODEC
     );
-    public static final RegistryHelper.DataPackRegistry<FormationDefinition> FORMATION_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID, "formations", () -> FormationDefinition.CODEC
+    public static final RegistryHelper.DataPackRegistry<AnchorNetworkDefinition> ANCHOR_NETWORK_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "anchor_networks", () -> AnchorNetworkDefinition.CODEC
     );
-    public static final RegistryHelper.DataPackRegistry<OwnerBoundConstructDefinition> OWNER_BOUND_CONSTRUCT_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID, "owner_bound_constructs", () -> OwnerBoundConstructDefinition.CODEC
+    public static final RegistryHelper.DataPackRegistry<OwnerBoundConstructDefinition> CONSTRUCT_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "constructs", () -> OwnerBoundConstructDefinition.CODEC
     );
     public static final RegistryHelper.DataPackRegistry<DataSource> DATA_SOURCE_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID,
@@ -149,14 +149,14 @@ public class CoreRegistries {
                 AREA_FIELD_REGISTRY.codec().get()
         );
         event.dataPackRegistry(
-                FORMATION_REGISTRY.key(),
-                FORMATION_REGISTRY.codec().get(),
-                FORMATION_REGISTRY.codec().get()
+                ANCHOR_NETWORK_REGISTRY.key(),
+                ANCHOR_NETWORK_REGISTRY.codec().get(),
+                ANCHOR_NETWORK_REGISTRY.codec().get()
         );
         event.dataPackRegistry(
-                OWNER_BOUND_CONSTRUCT_REGISTRY.key(),
-                OWNER_BOUND_CONSTRUCT_REGISTRY.codec().get(),
-                OWNER_BOUND_CONSTRUCT_REGISTRY.codec().get()
+                CONSTRUCT_REGISTRY.key(),
+                CONSTRUCT_REGISTRY.codec().get(),
+                CONSTRUCT_REGISTRY.codec().get()
         );
         event.dataPackRegistry(
                 DATA_SOURCE_REGISTRY.key(),

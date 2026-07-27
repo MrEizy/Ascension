@@ -1,39 +1,40 @@
 package net.zic.ascension.impl.value.source;
 
+import net.zic.ascension.api.value.source.ScaledValueSource;
+import net.zic.ascension.api.datapack.CodecType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.datapack.TypeRegistries;
-import net.zic.ascension.api.value.source.ScaledValueSourceType;
 
 public final class AscensionScaledValueSourceTypes {
-    public static final DeferredRegister<ScaledValueSourceType> SOURCE_TYPES =
+    public static final DeferredRegister<CodecType<ScaledValueSource>> SOURCE_TYPES =
             DeferredRegister.create(TypeRegistries.SCALED_VALUE_SOURCE_TYPE_REGISTRY, AscensionCraft.MOD_ID);
 
-    public static final DeferredHolder<ScaledValueSourceType, ScaledValueSourceType> CONSTANT = SOURCE_TYPES.register(
+    public static final DeferredHolder<CodecType<ScaledValueSource>, CodecType<ScaledValueSource>> CONSTANT = SOURCE_TYPES.register(
             "constant",
-            () -> new ScaledValueSourceType(ConstantScaledValueSource.CODEC)
+            () -> new CodecType<>(ConstantScaledValueSource.CODEC)
     );
-    public static final DeferredHolder<ScaledValueSourceType, ScaledValueSourceType> SKILL_LEVEL = SOURCE_TYPES.register(
+    public static final DeferredHolder<CodecType<ScaledValueSource>, CodecType<ScaledValueSource>> SKILL_LEVEL = SOURCE_TYPES.register(
             "skill_level",
-            () -> new ScaledValueSourceType(SkillLevelScaledValueSource.CODEC)
+            () -> new CodecType<>(SkillLevelScaledValueSource.CODEC)
     );
-    public static final DeferredHolder<ScaledValueSourceType, ScaledValueSourceType> CHARGE = SOURCE_TYPES.register(
+    public static final DeferredHolder<CodecType<ScaledValueSource>, CodecType<ScaledValueSource>> CHARGE = SOURCE_TYPES.register(
             "charge",
-            () -> new ScaledValueSourceType(ChargeScaledValueSource.CODEC)
+            () -> new CodecType<>(ChargeScaledValueSource.CODEC)
     );
-    public static final DeferredHolder<ScaledValueSourceType, ScaledValueSourceType> STAT = SOURCE_TYPES.register(
+    public static final DeferredHolder<CodecType<ScaledValueSource>, CodecType<ScaledValueSource>> STAT = SOURCE_TYPES.register(
             "stat",
-            () -> new ScaledValueSourceType(StatScaledValueSource.CODEC)
+            () -> new CodecType<>(StatScaledValueSource.CODEC)
     );
-    public static final DeferredHolder<ScaledValueSourceType, ScaledValueSourceType> AFFINITY = SOURCE_TYPES.register(
+    public static final DeferredHolder<CodecType<ScaledValueSource>, CodecType<ScaledValueSource>> AFFINITY = SOURCE_TYPES.register(
             "affinity",
-            () -> new ScaledValueSourceType(AffinityScaledValueSource.CODEC)
+            () -> new CodecType<>(AffinityScaledValueSource.CODEC)
     );
-    public static final DeferredHolder<ScaledValueSourceType, ScaledValueSourceType> CONTEXT = SOURCE_TYPES.register(
+    public static final DeferredHolder<CodecType<ScaledValueSource>, CodecType<ScaledValueSource>> CONTEXT = SOURCE_TYPES.register(
             "context",
-            () -> new ScaledValueSourceType(ContextScaledValueSource.CODEC)
+            () -> new CodecType<>(ContextScaledValueSource.CODEC)
     );
 
     private AscensionScaledValueSourceTypes() {

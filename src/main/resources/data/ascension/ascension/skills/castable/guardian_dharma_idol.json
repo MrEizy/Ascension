@@ -1,0 +1,244 @@
+{
+  "type": "ascension:active_skill",
+  "name": {
+    "translate": "ascension.skill.guardian_dharma_idol.name"
+  },
+  "description": {
+    "translate": "ascension.skill.guardian_dharma_idol.desc"
+  },
+  "default_accessible_level": 0,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:self"
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:runtime_object",
+            "kind": "construct",
+            "action": "remove",
+            "definition": "ascension:guardian/guardian_dharma_idol"
+          },
+          {
+            "type": "ascension:runtime_object",
+            "kind": "construct",
+            "action": "spawn",
+            "definition": "ascension:guardian/guardian_dharma_idol"
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:totem_of_undying",
+            "count": {
+              "base": 48
+            },
+            "spread": {
+              "base": 1.25
+            },
+            "speed": {
+              "base": 0.09
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.beacon.activate",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 0.65
+            }
+          }
+        ],
+        "target_features": []
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 30
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 600
+      }
+    },
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:self"
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:runtime_object",
+            "kind": "construct",
+            "action": "remove",
+            "definition": "ascension:guardian/guardian_dharma_idol"
+          },
+          {
+            "type": "ascension:runtime_object",
+            "kind": "construct",
+            "action": "spawn",
+            "definition": "ascension:guardian/guardian_dharma_idol"
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:totem_of_undying",
+            "count": {
+              "base": 58
+            },
+            "spread": {
+              "base": 1.25
+            },
+            "speed": {
+              "base": 0.09
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.beacon.activate",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 0.65
+            }
+          }
+        ],
+        "target_features": []
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 34
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 560
+      }
+    },
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:self"
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:runtime_object",
+            "kind": "construct",
+            "action": "remove",
+            "definition": "ascension:guardian/guardian_dharma_idol"
+          },
+          {
+            "type": "ascension:runtime_object",
+            "kind": "construct",
+            "action": "spawn",
+            "definition": "ascension:guardian/guardian_dharma_idol"
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:totem_of_undying",
+            "count": {
+              "base": 70
+            },
+            "spread": {
+              "base": 1.25
+            },
+            "speed": {
+              "base": 0.09
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.beacon.activate",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 0.65
+            }
+          }
+        ],
+        "target_features": []
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 38
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 520
+      }
+    },
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:self"
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:runtime_object",
+            "kind": "construct",
+            "action": "remove",
+            "definition": "ascension:guardian/guardian_dharma_idol"
+          },
+          {
+            "type": "ascension:runtime_object",
+            "kind": "construct",
+            "action": "spawn",
+            "definition": "ascension:guardian/guardian_dharma_idol"
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:totem_of_undying",
+            "count": {
+              "base": 84
+            },
+            "spread": {
+              "base": 1.25
+            },
+            "speed": {
+              "base": 0.09
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.beacon.activate",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 0.65
+            }
+          }
+        ],
+        "target_features": []
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 42
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 480
+      }
+    }
+  ]
+}

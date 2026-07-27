@@ -1,0 +1,49 @@
+{
+  "stacking": "stack",
+  "stacking_scope": "source_entity",
+  "max_stacks": 3,
+  "modules": [
+    {
+      "type": "ascension:resource_modifier",
+      "id": "ascension:celestial/hound_star_evasion_pressure",
+      "selector": {
+        "resources": [
+          "ascension:stamina"
+        ],
+        "operations": [
+          "consume",
+          "drain"
+        ],
+        "source": {
+          "source_tags": [
+            "ascension:movement"
+          ]
+        }
+      },
+      "operation": "multiply_total",
+      "value": {
+        "base": 0.04,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:context",
+              "key": "ascension:effect_stacks"
+            },
+            "operation": "add",
+            "scale": 0.035
+          },
+          {
+            "source": {
+              "type": "ascension:context",
+              "key": "ascension:effect_potency"
+            },
+            "operation": "add",
+            "scale": 0.025
+          }
+        ],
+        "maximum": 0.18
+      },
+      "priority": 80
+    }
+  ]
+}

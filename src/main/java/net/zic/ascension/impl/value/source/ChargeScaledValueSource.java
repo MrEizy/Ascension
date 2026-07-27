@@ -1,15 +1,15 @@
 package net.zic.ascension.impl.value.source;
 
+import net.zic.ascension.api.datapack.CodecType;
 import com.mojang.serialization.MapCodec;
 import net.zic.ascension.api.value.ScaledValueContext;
 import net.zic.ascension.api.value.source.ScaledValueSource;
-import net.zic.ascension.api.value.source.ScaledValueSourceType;
 
 public final class ChargeScaledValueSource implements ScaledValueSource {
     public static final MapCodec<ChargeScaledValueSource> CODEC = MapCodec.unit(ChargeScaledValueSource::new);
 
     @Override
-    public ScaledValueSourceType getType() {
+    public CodecType<ScaledValueSource> getType() {
         return AscensionScaledValueSourceTypes.CHARGE.get();
     }
 

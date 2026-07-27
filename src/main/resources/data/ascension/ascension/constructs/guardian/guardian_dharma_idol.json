@@ -1,0 +1,34 @@
+{
+  "duration": {
+    "base": 160,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:skill_level"
+        },
+        "operation": "add",
+        "scale": 40
+      }
+    ],
+    "maximum": 340
+  },
+  "stability": {
+    "base": 50,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:skill_level"
+        },
+        "operation": "add",
+        "scale": 25
+      }
+    ],
+    "maximum": 175
+  },
+  "offset": [
+    0.0,
+    1.7,
+    -1.15
+  ],
+  "rotate_with_owner": true
+}

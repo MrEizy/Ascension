@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.skill.castable.feature;
 
+import net.zic.ascension.api.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
@@ -13,7 +14,6 @@ import net.zic.ascension.api.core.resource.source.AscensionResourceSourceTags;
 import net.zic.ascension.api.core.resource.source.SimpleResourceSourceIdentity;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeatureType;
 import net.zic.ascension.api.value.ScaledValue;
 import net.zic.ascension.impl.datapack.skill.castable.feature.AscensionSkillExecutionFeatureTypes;
 
@@ -52,7 +52,7 @@ public record ResourceTransactionFeature(
     ).apply(instance, ResourceTransactionFeature::new));
 
     @Override
-    public SkillExecutionFeatureType getType() {
+    public CodecType<SkillExecutionFeature> getType() {
         return AscensionSkillExecutionFeatureTypes.RESOURCE_TRANSACTION.get();
     }
 

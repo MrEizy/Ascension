@@ -1,0 +1,57 @@
+{
+  "duration": {
+    "base": 100,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:skill_level"
+        },
+        "operation": "add",
+        "scale": 40
+      }
+    ],
+    "maximum": 220
+  },
+  "nodes": [
+    {
+      "id": "ascension:celestial/scorpius_head",
+      "offset": [
+        0.0,
+        0.1,
+        -3.2
+      ]
+    },
+    {
+      "id": "ascension:celestial/scorpius_left_claw",
+      "offset": [
+        -2.8,
+        0.1,
+        1.8
+      ]
+    },
+    {
+      "id": "ascension:celestial/scorpius_right_claw",
+      "offset": [
+        2.8,
+        0.1,
+        1.8
+      ]
+    }
+  ],
+  "links": [
+    {
+      "from": "ascension:celestial/scorpius_head",
+      "to": "ascension:celestial/scorpius_left_claw"
+    },
+    {
+      "from": "ascension:celestial/scorpius_left_claw",
+      "to": "ascension:celestial/scorpius_right_claw"
+    },
+    {
+      "from": "ascension:celestial/scorpius_right_claw",
+      "to": "ascension:celestial/scorpius_head"
+    }
+  ],
+  "rotate_with_caster": true,
+  "field": "ascension:celestial/scorpius_star_nail_field"
+}

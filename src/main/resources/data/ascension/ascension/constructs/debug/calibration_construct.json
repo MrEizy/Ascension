@@ -1,0 +1,14 @@
+{
+  "duration": {
+    "base": 240
+  },
+  "stability": {
+    "base": 100
+  },
+  "offset": [
+    0.0,
+    1.8,
+    -1.0
+  ],
+  "rotate_with_owner": true
+}

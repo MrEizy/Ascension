@@ -1,0 +1,174 @@
+{
+  "type": "ascension:active_skill",
+  "name": {
+    "translate": "ascension.skill.hound_star_pursuit.name"
+  },
+  "description": {
+    "translate": "ascension.skill.hound_star_pursuit.desc"
+  },
+  "default_accessible_level": 0,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:ray",
+          "range": {
+            "base": 24
+          },
+          "width": {
+            "base": 0.45
+          },
+          "filter": {
+            "relations": [
+              "neutral",
+              "hostile"
+            ],
+            "include_players": true,
+            "line_of_sight": true
+          }
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.amethyst_block.chime",
+            "volume": {
+              "base": 0.8
+            },
+            "pitch": {
+              "base": 1.5
+            }
+          }
+        ],
+        "target_features": [
+          {
+            "type": "ascension:skill_effect",
+            "effect": "ascension:celestial/hound_star_mark",
+            "duration": {
+              "base": 240
+            },
+            "potency": {
+              "base": 1.0
+            }
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:end_rod",
+            "count": {
+              "base": 24
+            },
+            "spread": {
+              "base": 0.55
+            },
+            "speed": {
+              "base": 0.04
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:entity.wolf.ambient",
+            "volume": {
+              "base": 0.5
+            },
+            "pitch": {
+              "base": 1.4
+            }
+          }
+        ]
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 10
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 80
+      }
+    },
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:ray",
+          "range": {
+            "base": 30
+          },
+          "width": {
+            "base": 0.55
+          },
+          "filter": {
+            "relations": [
+              "neutral",
+              "hostile"
+            ],
+            "include_players": true,
+            "line_of_sight": true
+          }
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.amethyst_block.chime",
+            "volume": {
+              "base": 0.9
+            },
+            "pitch": {
+              "base": 1.6
+            }
+          }
+        ],
+        "target_features": [
+          {
+            "type": "ascension:skill_effect",
+            "effect": "ascension:celestial/hound_star_mark",
+            "duration": {
+              "base": 320
+            },
+            "potency": {
+              "base": 1.2
+            }
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:end_rod",
+            "count": {
+              "base": 32
+            },
+            "spread": {
+              "base": 0.65
+            },
+            "speed": {
+              "base": 0.05
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:entity.wolf.ambient",
+            "volume": {
+              "base": 0.6
+            },
+            "pitch": {
+              "base": 1.5
+            }
+          }
+        ]
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 12
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 60
+      }
+    }
+  ]
+}

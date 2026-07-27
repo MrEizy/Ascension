@@ -1,0 +1,41 @@
+{
+  "stacking": "stack",
+  "stacking_scope": "source_entity",
+  "max_stacks": 3,
+  "modules": [
+    {
+      "type": "ascension:resource_modifier",
+      "id": "ascension:debug/calibration_mark_movement",
+      "selector": {
+        "resources": [
+          "ascension:stamina"
+        ],
+        "operations": [
+          "consume",
+          "drain"
+        ],
+        "source": {
+          "source_tags": [
+            "ascension:movement"
+          ]
+        }
+      },
+      "operation": "multiply_total",
+      "value": {
+        "base": 0.02,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:context",
+              "key": "ascension:effect_stacks"
+            },
+            "operation": "add",
+            "scale": 0.03
+          }
+        ],
+        "maximum": 0.12
+      },
+      "priority": 50
+    }
+  ]
+}

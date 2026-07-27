@@ -125,6 +125,11 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         addStatScaling(attributeHolder, AscensionAttributes.MAX_QI,
                 AscensionStats.SPIRIT.get(), "spirit_max_qi_scaling", 10.0D);
 
+        addStatScaling(attributeHolder, AscensionAttributes.QI_REGEN_RATE,
+                AscensionStats.SPIRIT.get(), "spirit_qi_regen_scaling", 0.25D);
+
+        attributeHolder.addAttribute(AscensionAttributes.HEALTH_REGEN_RATE);
+
         addStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
                 AscensionStats.VITALITY.get(), "vitality_max_stamina_scaling", 5.0D);
 
@@ -556,10 +561,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                 data.source.decode(buf);
             }
 
-            data.source.updateAttributes(
-                    entity.getData(ZenithAttachments.ATTRIBUTE_HOLDER)
-            );
-            data.applyAllAttributeSuppressions();
+            data.initializeAttributes();
 
             return data;
         }

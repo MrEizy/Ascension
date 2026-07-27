@@ -1,0 +1,180 @@
+{
+  "type": "ascension:active_skill",
+  "name": {
+    "translate": "ascension.skill.golden_bell_of_living_law.name"
+  },
+  "description": {
+    "translate": "ascension.skill.golden_bell_of_living_law.desc"
+  },
+  "default_accessible_level": 0,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:self"
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:skill_effect",
+            "effect": "ascension:guardian/golden_bell_discipline",
+            "duration": {
+              "base": 160
+            },
+            "potency": {
+              "base": 1.0
+            }
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:totem_of_undying",
+            "count": {
+              "base": 42
+            },
+            "spread": {
+              "base": 1.0
+            },
+            "speed": {
+              "base": 0.08
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.bell.resonate",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 0.85
+            }
+          }
+        ],
+        "target_features": []
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 20
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 400
+      }
+    },
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:self"
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:skill_effect",
+            "effect": "ascension:guardian/golden_bell_discipline",
+            "duration": {
+              "base": 200
+            },
+            "potency": {
+              "base": 1.25
+            }
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:totem_of_undying",
+            "count": {
+              "base": 54
+            },
+            "spread": {
+              "base": 1.0
+            },
+            "speed": {
+              "base": 0.08
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.bell.resonate",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 0.85
+            }
+          }
+        ],
+        "target_features": []
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 24
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 360
+      }
+    },
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:self"
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:skill_effect",
+            "effect": "ascension:guardian/golden_bell_discipline",
+            "duration": {
+              "base": 240
+            },
+            "potency": {
+              "base": 1.5
+            }
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:totem_of_undying",
+            "count": {
+              "base": 68
+            },
+            "spread": {
+              "base": 1.0
+            },
+            "speed": {
+              "base": 0.08
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.bell.resonate",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 0.85
+            }
+          }
+        ],
+        "target_features": []
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 28
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 320
+      }
+    }
+  ]
+}

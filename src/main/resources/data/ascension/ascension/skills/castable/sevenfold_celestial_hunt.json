@@ -1,0 +1,69 @@
+{
+  "type": "ascension:active_skill",
+  "name": {
+    "translate": "ascension.skill.sevenfold_celestial_hunt.name"
+  },
+  "description": {
+    "translate": "ascension.skill.sevenfold_celestial_hunt.desc"
+  },
+  "default_accessible_level": 0,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:look_position",
+          "range": {
+            "base": 24
+          },
+          "include_fluids": false,
+          "fallback_to_maximum_range": true
+        },
+        "require_targets": true,
+        "caster_features": [],
+        "target_features": [
+          {
+            "type": "ascension:runtime_object",
+            "kind": "anchor_network",
+            "action": "spawn",
+            "definition": "ascension:celestial/ursa_major_network"
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:enchant",
+            "count": {
+              "base": 96
+            },
+            "spread": {
+              "base": 3.0
+            },
+            "speed": {
+              "base": 0.08
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.beacon.activate",
+            "volume": {
+              "base": 1.2
+            },
+            "pitch": {
+              "base": 0.7
+            }
+          }
+        ]
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 50
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 1200
+      }
+    }
+  ]
+}

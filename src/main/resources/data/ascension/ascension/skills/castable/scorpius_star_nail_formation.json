@@ -1,0 +1,126 @@
+{
+  "type": "ascension:active_skill",
+  "name": {
+    "translate": "ascension.skill.scorpius_star_nail_formation.name"
+  },
+  "description": {
+    "translate": "ascension.skill.scorpius_star_nail_formation.desc"
+  },
+  "default_accessible_level": 0,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:look_position",
+          "range": {
+            "base": 18
+          },
+          "include_fluids": false,
+          "fallback_to_maximum_range": true
+        },
+        "require_targets": true,
+        "caster_features": [],
+        "target_features": [
+          {
+            "type": "ascension:runtime_object",
+            "kind": "anchor_network",
+            "action": "spawn",
+            "definition": "ascension:celestial/scorpius_star_nail_network"
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:end_rod",
+            "count": {
+              "base": 42
+            },
+            "spread": {
+              "base": 1.5
+            },
+            "speed": {
+              "base": 0.04
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.amethyst_cluster.place",
+            "volume": {
+              "base": 0.9
+            },
+            "pitch": {
+              "base": 0.9
+            }
+          }
+        ]
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 24
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 360
+      }
+    },
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:look_position",
+          "range": {
+            "base": 24
+          },
+          "include_fluids": false,
+          "fallback_to_maximum_range": true
+        },
+        "require_targets": true,
+        "caster_features": [],
+        "target_features": [
+          {
+            "type": "ascension:runtime_object",
+            "kind": "anchor_network",
+            "action": "spawn",
+            "definition": "ascension:celestial/scorpius_star_nail_network"
+          },
+          {
+            "type": "ascension:particle_burst",
+            "particle": "minecraft:end_rod",
+            "count": {
+              "base": 56
+            },
+            "spread": {
+              "base": 1.9
+            },
+            "speed": {
+              "base": 0.05
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.amethyst_cluster.place",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 0.8
+            }
+          }
+        ]
+      },
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 28
+          }
+        }
+      ],
+      "cooldown": {
+        "base": 300
+      }
+    }
+  ]
+}

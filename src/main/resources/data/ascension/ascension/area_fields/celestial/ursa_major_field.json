@@ -1,0 +1,86 @@
+{
+  "shape": "cylinder",
+  "radius": {
+    "base": 7.0
+  },
+  "height": {
+    "base": 6.0
+  },
+  "duration": {
+    "base": 240
+  },
+  "tick_interval": 10,
+  "filter": {
+    "relations": [
+      "neutral",
+      "hostile"
+    ],
+    "include_players": true,
+    "line_of_sight": false
+  },
+  "on_enter": [
+    {
+      "type": "ascension:particle_burst",
+      "particle": "minecraft:enchant",
+      "count": {
+        "base": 18
+      },
+      "spread": {
+        "base": 0.7
+      },
+      "speed": {
+        "base": 0.05
+      }
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.beacon.ambient",
+      "volume": {
+        "base": 0.6
+      },
+      "pitch": {
+        "base": 1.4
+      }
+    }
+  ],
+  "on_tick": [
+    {
+      "type": "ascension:skill_effect",
+      "effect": "ascension:celestial/star_nail_drag",
+      "duration": {
+        "base": 30
+      },
+      "potency": {
+        "base": 1.5
+      }
+    },
+    {
+      "type": "ascension:particle_burst",
+      "particle": "minecraft:end_rod",
+      "count": {
+        "base": 6
+      },
+      "spread": {
+        "base": 0.35
+      },
+      "speed": {
+        "base": 0.02
+      }
+    }
+  ],
+  "on_exit": [
+    {
+      "type": "ascension:particle_burst",
+      "particle": "minecraft:reverse_portal",
+      "count": {
+        "base": 10
+      },
+      "spread": {
+        "base": 0.4
+      },
+      "speed": {
+        "base": 0.03
+      }
+    }
+  ]
+}

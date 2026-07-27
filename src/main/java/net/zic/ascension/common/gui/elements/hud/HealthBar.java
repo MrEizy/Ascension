@@ -14,8 +14,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.Config;
-import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 
 import java.text.DecimalFormat;
 
@@ -53,14 +51,6 @@ public class HealthBar extends RenderableElement {
     }
 
     private double getMaximumHealth(Player player) {
-        ZenithAttributeHolder holder = player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
-
-        var maxHealthAttribute = holder.getAttribute(Attributes.MAX_HEALTH);
-
-        if (maxHealthAttribute != null) {
-            return Math.max(0.0D, maxHealthAttribute.getValue());
-        }
-
         if (player.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
             return Math.max(0.0D, player.getAttributeValue(Attributes.MAX_HEALTH));
         }

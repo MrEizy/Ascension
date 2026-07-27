@@ -1,11 +1,11 @@
 package net.zic.ascension.impl.core.skill.castable.feature;
 
+import net.zic.ascension.api.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeatureType;
 import net.zic.ascension.api.value.ScaledValue;
 import net.zic.ascension.common.effect.frozen.FrozenStateService;
 import net.zic.ascension.impl.datapack.skill.castable.feature.AscensionSkillExecutionFeatureTypes;
@@ -17,7 +17,7 @@ public record FrozenBuildupFeature(ScaledValue amount, int decayDelay) implement
     ).apply(instance, FrozenBuildupFeature::new));
 
     @Override
-    public SkillExecutionFeatureType getType() {
+    public CodecType<SkillExecutionFeature> getType() {
         return AscensionSkillExecutionFeatureTypes.FROZEN_BUILDUP.get();
     }
 
