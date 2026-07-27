@@ -105,6 +105,11 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.attribute.jump", "Jump");
         add("gui.ascension.introspection.attribute.step_height", "Step Height");
         add("gui.ascension.introspection.attribute.mining", "Mining");
+        add("gui.ascension.introspection.recovery", "Recovery");
+        add("gui.ascension.introspection.recovery.health", "Health");
+        add("gui.ascension.introspection.recovery.qi", "Qi");
+        add("gui.ascension.introspection.recovery.stamina", "Stamina");
+        add("gui.ascension.introspection.recovery.per_second", "%s/s");
 
 
         // Starter Screen Lang
