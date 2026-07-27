@@ -77,12 +77,19 @@ public class PhysiqueHolder implements DataSourceInstance {
         }
     }
     public void encode(ByteBuf buf,RegistryAccess access){
+        buf.writeBoolean( physique != null);
+        if(physique == null) return;
         ByteBufHelpers.encodeIdentifier(physique,buf);
         getData().encode(buf);
     }
     public void decode(ByteBuf buf,RegistryAccess access){
+        if(!buf.readBoolean()){
+            physique = null;
+            data = null;
+            return;
+        }
         Identifier id = ByteBufHelpers.decodeIdentifier(buf);
-        PhysiqueData data = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,physique,access).loadData(buf);
+        PhysiqueData data = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,id,access).loadData(buf);
         this.physique = id;
         this.data = data;
     }

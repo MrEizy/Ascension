@@ -16,6 +16,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.network.UpdateAttributeSuppressionPacket;
@@ -139,17 +140,15 @@ public class SuppressedAttribute extends RenderableElement {
     }
 
     private double getPercentage() {
-        return ((SuppressedZenithAttribute)Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).getAttribute(attribute))
-                .getSuppression();
+        return ClientAscensionData.getSuppression(attribute);
     }
 
     private double getActualAttributeValue() {
-        return ((SuppressedZenithAttribute)Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).getAttribute(attribute))
-                .getUnsuppressedValue();
+        return ClientAscensionData.getUnsuppressedAttributeValue(attribute);
     }
 
     private double getSuppressedAttributeValue() {
-        return Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).getAttribute(attribute).getValue();
+        return ClientAscensionData.getAttributeValue(attribute);
     }
 
     private void updatePercentage() {
