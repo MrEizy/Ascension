@@ -38,9 +38,21 @@
 
 ## Skill Levels
 
-`SkillProgressionData` holds the trained level, skill experience, and both the level floor and level cap contributions for a skill.
-The usable level a player currently has isn't just read off that data directly. `SkillLevelResolver` calculates it, firing `SkillLevelResolveEvent` along the way so buffs, debuffs, or anything else that needs to temporarily nudge a skill's effective level can hook in without touching the stored progression.
-If you're adding anything that changes a skill's level, e.g. a new manual, a command, a future training system, go through `SkillProgressionService` rather than writing to `SkillProgressionData` directly. That's also what keeps a trained level intact even when a player's current realm temporarily locks them out of using the skill: the realm restricts access, not progression.
+`SkillProgressionData` holds the trained level, skill experience, and independent level-floor and level-cap contributions for a skill.
+
+The permanent usable level is calculated as:
+
+```text
+min(max(trained level, level floor), accessible level cap)
+```
+
+`SkillLevelResolver` then fires `SkillLevelResolveEvent`, allowing temporary modifiers to adjust the final effective level without mutating stored progression.
+
+For active skills, `default_accessible_level` is only the fallback **cap**. It does not grant a trained level or a level floor. A newly granted active skill still resolves to level `0` unless it has been trained or receives a floor contribution. Techniques that should unlock an immediately usable level normally use `SetSkillLevelAction` with both `set_floor` and `set_cap`.
+
+Floor and cap contributions are keyed by identifier and use the highest applicable contribution. Removing one contribution does not erase unrelated progression sources.
+
+Anything that permanently changes skill level, experience, floors, or caps should go through `SkillProgressionService` rather than writing to `SkillProgressionData` directly. This preserves trained progression when a realm or technique temporarily restricts access.
 
 ## Scaled Values
 
@@ -95,6 +107,7 @@ This backs damage, radius, duration, resource costs and modifiers, cultivation r
 * `PlayerExhaustionResourceType`: Connects exhaustion to resource transactions
 * `PlayerHungerResourceType`: Connects hunger to resource transactions
 * `PlayerSaturationResourceType`: Connects saturation to resource transactions
+* `StaminaResourceType`: Connects stamina to resource transactions
 * `AscensionResourceTypes`: Registers Ascension resource types
 
 ### Resource Modifier Passives
@@ -199,14 +212,43 @@ Right now stamina gets consumed by sprinting, swimming, elytra travel, climbing,
 
 ## Regeneration
 
-Regeneration kicks back in after a short delay following any stamina spend. The rate then depends on hunger and saturation:
+Regeneration starts again after the configured delay following a stamina spend. The rate then depends on hunger and saturation:
 
 * Saturation gives slightly faster regeneration
 * High hunger gives normal regeneration
 * Low hunger slows regeneration
 * Zero hunger stops regeneration
 
-Spending stamina doesn't consume hunger.
+Spending stamina does not consume hunger.
+
+</details>
+
+---
+
+<details>
+<summary>Recovery Attributes and Display</summary>
+
+## Relevant Classes
+
+* `QiTicker`: Restores Qi once every twenty ticks
+* `HealthTicker`: Restores large-scale health once every twenty ticks
+* `AscensionAttributes`: Defines maximum-resource and regeneration attributes
+* `SimpleAscensionEntityData`: Adds stat scaling to Qi and stamina attributes
+
+---
+
+## Qi Regeneration
+
+`QI_REGEN_RATE` is measured in Qi per second. `QiTicker` runs every twenty ticks, clamps stored Qi to the current maximum, and restores the resolved rate through the natural-regeneration resource source.
+
+The base attribute value is currently `1.0` Qi per second before stat scaling and modifiers.
+
+## Health Regeneration
+
+`HEALTH_REGEN_RATE` is measured in health points per second. `HealthTicker` currently handles regeneration only while current health is at least the vanilla twenty-health threshold, leaving ordinary low-health recovery to vanilla mechanics.
+
+The base attribute value is currently `1.0` health per second. This is a transitional large-health solution rather than a complete replacement for vanilla hunger and saturation regeneration.
+
 
 </details>
 
@@ -337,6 +379,7 @@ Anchor networks are the technical linked-node system. Individual techniques may 
 
 The server owns movement, collision, field membership, projectile hits and construct stability. Clients receive only compact visual state and render it through registered controllers.
 
+
 </details>
 
 ---
@@ -353,6 +396,7 @@ The server owns movement, collision, field membership, projectile hits and const
 * `SkillEffectModule`: Base interface for reusable effect behaviour
 * `CodecType<SkillEffectModule>`: Shared codec holder used by the effect-module registry
 * `SkillEffectStackingPolicy`: Defines repeated application behaviour
+* `SkillEffectStackingScope`: Defines which source information separates effect instances
 * `SkillEffectRemovalReason`: The reason an effect was removed
 * `SkillEffectEvent`: Events for applying, updating and removing effects
 
@@ -396,6 +440,7 @@ At runtime, an active instance tracks:
 * Potency
 * Stack count
 
+`SkillEffectStackingScope` decides whether otherwise identical applications share one runtime instance by definition, source entity, source skill, both source entity and skill, or remain fully independent.
 If you're writing a new effect module, you only get read access to this through `SkillEffectContext`. The actual mutable instances and containers stay internal, so a module can't reach in and mutate state it doesn't own.
 
 ## Stacking Policies
@@ -452,65 +497,42 @@ Clients only receive synced attachment data, compact held-cast visual packets, v
 
 ## Registration and Registries
 
-* `AscensionCraft`: Registered scaled values, resources, held cast types, effect modules, stamina attributes and network payloads
-* `CoreRegistries`: Registers skill effects, virtual projectiles, area fields, anchor networks and constructs
-* `TypeRegistries`: Registers shared codec families for scaled values, execution features, targeting, effect modules and projectile behaviours
-* `AscensionProgressActionTypes`: Registered the `set_skill_level` action
-* `AscensionSkillTypes`: Registered resource modifier passives, held casts and active skills
-* `AscensionSkillExecutionFeatureTypes`: Registered the shared execution features
-* `AscensionTargetingTypes`: Registered self, ray, cone, radial and looked-at-position targeting
-* `AscensionSkillEffectModuleTypes`: Registered Frozen Form and resource modifier effect modules
+* `AscensionCraft`: Registers the new codec families, resource types, attributes and presentation packets
+* `CoreRegistries`: Adds datapack registries for skill effects, virtual projectiles, area fields, anchor networks and constructs
+* `TypeRegistries`: Adds shared codec-family registries for scaled values, execution features, targeting, effect modules and projectile behaviours
+* `AscensionProgressActionTypes`: Registers the `set_skill_level` progression action
+* `AscensionSkillTypes`: Registers resource-modifier passives, held casts and active skills
 
 ## Casting
 
-* `CastData`: Added dirty state support for cast syncing
-* `CastStatus`: Added release, cancellation, interruption and resource failure reasons
-* `CastingInstance`: Added held cast transitions, interruption and syncing
-* `SkillCastHandler`: Added held cast syncing, release handling and recast protection
-* `AscensionSkillListener`: Clears the held input latch when the cast key is released
-* `ParticleFieldController`: Added held cast charge particle support
-* `ResourceTransactionContext`: Added held charge values to scaled value contexts
-* `HeldCastSpec`: Removes duplicate charge stages during loading
-* `HeldCastCostDefinition`: Uses the public resource source tags
+* `CastData`: Adds dirty-state support used by cast synchronization
+* `CastStatus`: Adds release, cancellation, interruption and resource-failure outcomes
+* `CastingInstance`: Supports held-cast transitions, interruption and synchronization
+* `SkillCastHandler`: Adds held-input release handling, held visual synchronization and recast protection
+* `AscensionSkillListener`: Clears the held-input latch when the cast key is released
+* `ParticleFieldController`: Supports held-cast charge particle presentation
 
 ## Resources and Qi
 
 * `SimpleEntityQiProvider`: Routes Qi changes through resource transactions
 * `ToggleablePassiveSkill`: Routes passive Qi upkeep through resource transactions
-* `ResourceModifierDefinition`: Fixed optional scaled value decoding
-* `ResourceTransactionSelector`: Fixed optional source selector decoding
-* `PlayerExhaustionResourceType`: Uses the FoodData accessor
-* `AscensionResourceSources`: Added climbing and crawling movement sources
-* `AscensionResourceTypes`: Registered the stamina resource
-* `ascension.mixins.json`: Registered the resource mixins and FoodData accessor
+* `ascension.mixins.json`: Registers the resource-related mixins and `FoodData` accessor
 
-## Stamina and HUD
+## Entity Data, Attributes and HUD
 
-* `AscensionAttachments`: Added stamina, regeneration delay, frozen state and active effect attachments
-* `AscensionAttributes`: Registered maximum stamina, regeneration rate and regeneration delay
-* `SimpleAscensionEntityData`: Added stat scaling for stamina
-* `PlayerJumpExhaustionMixin`: Added jumping stamina costs
-* `PlayerAttackExhaustionMixin`: Added attacking stamina costs
-* `ClientAscensionData`: Exposes stamina values to the HUD
-* `HudContainer`: Added the stamina bar beneath Qi
-* `AscensionClientConfig`: Updated the exact HUD value option
-* `StaminaTicker`: Uses the reorganised stamina service
-
-## Temporary Effects and Frozen State
-
-* `SkillEffectDefinition`: Added maximum stack limits
-* `SkillEffectModule`: Added update and conditional removal hooks
-* `SkillEffectTicker`: Skips entities without active effect or frozen data
-* `FrozenFormEffectModule`: Added player, resistant and boss profiles
-* `FrozenStateService`: Avoids overwriting stronger vanilla or modded freezing
-* `SkillEffectFeature`: Uses the shared execution context's skill ID
-* `FrozenBuildupFeature`: Uses the reorganised frozen-state service
-* `ResourceTransactionFeature`: Uses the public resource source tags
+* `AscensionAttachments`: Adds stamina, stamina-regeneration delay, frozen state, movement anchors and active-effect attachments
+* `AscensionAttributes`: Adds Qi regeneration, health regeneration, maximum stamina, stamina regeneration and stamina-regeneration delay attributes
+* `SimpleAscensionEntityData`: Adds stat scaling for maximum Qi, Qi regeneration, maximum stamina and stamina regeneration, and initializes synchronized client attributes
+* `ClientAscensionData`: Exposes synchronized stamina and player data to GUI code
+* `HudContainer`: Adds the stamina bar beneath Qi
+* `AscensionClientConfig`: Updates the exact HUD-value option
+* `StatHolder`: Adds the Recovery section to the stats panel
+* `HealthBar`: Reads the live effective maximum-health attribute for HUD display
 
 ## Datagen and Content
 
-* `AscDataGen`: Registered entity type tag datagen
-* `ModTags`: Added frozen immune, resistant and boss-profile tags
-* `AscLangProvider`: Added stamina, Sustained Spirit and Frostbound Stillness translations
+* `AscDataGen`: Registers entity-type tag datagen
+* `ModTags`: Adds frozen immune, resistant and boss-profile tags
+* `AscLangProvider`: Adds translations for stamina, recovery attributes, Sustained Spirit and Frostbound Stillness
 
 </details>
