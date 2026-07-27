@@ -15,8 +15,8 @@ import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.skill.EmptySkillData;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.zenithlib.common.ZenithAttachments;
@@ -122,12 +122,12 @@ public record DebugCastable(String message,int cooldown,UUID uuid) implements Ca
     }
 
     @Override
-    public void onAdded(AscensionOriginSource source, SkillData data) {
+    public void onAdded(OriginSource source, SkillData data) {
 
     }
 
     @Override
-    public void onRemoved(AscensionOriginSource source, SkillData data) {
+    public void onRemoved(OriginSource source, SkillData data) {
 
     }
 

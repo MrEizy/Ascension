@@ -9,23 +9,21 @@ public class AscensionDamageUtil {
     public static final Identifier DAMAGE_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"damage");
     public static final Identifier RESISTANCE_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"resistance");
     public static double getEffectiveAttackerAffinity(double baseAffinity, LivingEntity attacker,Identifier path){
-        return PathEffectValueUtil.getEffectValue(baseAffinity,attacker,path,DAMAGE_CATEGORY);
+        return PathEffectValueUtil.getEffectiveAffinity(attacker,baseAffinity,path);
     }
     //apply the defending entities affinities against the attacking entity affinity
     public static double getFinalAttackerAffinity(double affinity,LivingEntity target,Identifier path){
-        return PathEffectValueUtil.getEffectValue(affinity,target,path,PathEffectValueUtil.NO_CATEGORY);
+        return PathEffectValueUtil.getEffectiveAffinity(target,affinity,path,true);
     }
 
 
     public static double getEffectiveDefenderAffinity(double baseAffinity,LivingEntity defender,Identifier path){
-        return PathEffectValueUtil.getEffectValue(baseAffinity,defender,path,RESISTANCE_CATEGORY);
+        return PathEffectValueUtil.getEffectiveAffinity(defender,baseAffinity,path);
     }
 
     public static double getFinalAffinity(double effectiveAttackerAffinityMultiplier, double effectiveDefenderAffinityMultiplier) {
         return Math.clamp(effectiveAttackerAffinityMultiplier-effectiveDefenderAffinityMultiplier,0,effectiveAttackerAffinityMultiplier);
     }
 
-    public static double getDamage(double damage,double effectiveAttackerAffinityMultiplier, double effectiveDefenderAffinityMultiplier){
-        return damage * (1+getFinalAffinity(effectiveAttackerAffinityMultiplier,effectiveDefenderAffinityMultiplier));
-    }
+
 }

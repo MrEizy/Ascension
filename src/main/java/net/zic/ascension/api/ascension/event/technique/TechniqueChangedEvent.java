@@ -5,9 +5,9 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 
 public abstract class TechniqueChangedEvent extends Event {
@@ -16,9 +16,9 @@ public abstract class TechniqueChangedEvent extends Event {
     private final TechniqueData techniqueData;
     private Identifier newTechnique;
     private TechniqueData newTechniqueData;
-    private final AscensionOriginSource source;
+    private final OriginSource source;
 
-    protected TechniqueChangedEvent(Identifier technique, TechniqueData techniqueData,Identifier newTechnique,TechniqueData newTechniqueData, AscensionOriginSource source) {
+    protected TechniqueChangedEvent(Identifier technique, TechniqueData techniqueData,Identifier newTechnique,TechniqueData newTechniqueData, OriginSource source) {
         this.technique = technique;
         this.techniqueData = techniqueData;
         this.source = source;
@@ -58,11 +58,11 @@ public abstract class TechniqueChangedEvent extends Event {
         this.newTechniqueData = techniqueData;
     }
 
-    public AscensionOriginSource getSource(){return source;}
+    public OriginSource getSource(){return source;}
 
     public static class Pre extends TechniqueChangedEvent implements ICancellableEvent{
 
-        public Pre(Identifier technique, TechniqueData techniqueData, Identifier newTechnique, TechniqueData newTechniqueData, AscensionOriginSource source) {
+        public Pre(Identifier technique, TechniqueData techniqueData, Identifier newTechnique, TechniqueData newTechniqueData, OriginSource source) {
             super(technique, techniqueData, newTechnique, newTechniqueData, source);
         }
 
@@ -79,7 +79,7 @@ public abstract class TechniqueChangedEvent extends Event {
 
     public static class Post extends TechniqueChangedEvent{
 
-        public Post(Identifier technique, TechniqueData techniqueData, Identifier newTechnique, TechniqueData newTechniqueData, AscensionOriginSource source) {
+        public Post(Identifier technique, TechniqueData techniqueData, Identifier newTechnique, TechniqueData newTechniqueData, OriginSource source) {
             super(technique, techniqueData, newTechnique, newTechniqueData, source);
         }
     }

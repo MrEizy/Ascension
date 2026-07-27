@@ -8,8 +8,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.value_containers.ValueContainer;
@@ -72,7 +72,7 @@ public class SimplePassiveSkill implements Skill {
     }
 
     @Override
-    public void onAdded(AscensionOriginSource source, SkillData data) {
+    public void onAdded(OriginSource source, SkillData data) {
         for(ValueContainer.BaseModifier baseModifier : baseStats){
             source.addStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()),baseModifier.val());
         }
@@ -84,7 +84,7 @@ public class SimplePassiveSkill implements Skill {
     }
 
     @Override
-    public void onRemoved(AscensionOriginSource source, SkillData data) {
+    public void onRemoved(OriginSource source, SkillData data) {
         for(ValueContainer.BaseModifier baseModifier : baseStats){
             source.removeStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()),baseModifier.val());
         }

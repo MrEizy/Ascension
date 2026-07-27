@@ -6,9 +6,10 @@ import net.zic.ascension.api.ascension.core.RegistryObjectData;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 import java.util.UUID;
 
@@ -23,14 +24,14 @@ public interface RealmChangeAction extends ProgressAction {
 
 
     @Override
-    default void run(UUID holderId, AscensionOriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
+    default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
         Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,contextIdentifier,source.getRegistryAccess());
         if(technique == null) return;
 
         TechniqueData data = null;
         if(contextData instanceof TechniqueData) data = (TechniqueData) contextData;
 
-        PathData pathData = source.getPathData(technique.getPath());
+        PathData pathData = AscensionOriginSourceHelper.getPathData(source,technique.getPath());
         if(pathData == null) return;
 
         if(pathData.getCultivatedRealms(contextIdentifier).isEmpty() || pathData.getCultivatedRealms(contextIdentifier).size() == 1){
@@ -62,6 +63,6 @@ public interface RealmChangeAction extends ProgressAction {
      * @param minorRealm the minor realm we are entering/leaving
      * @param direction the direction
      */
-    void run(UUID holderId, AscensionOriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction);
+    void run(UUID holderId, OriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction);
 
 }

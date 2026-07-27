@@ -9,27 +9,32 @@ import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.path.affinity.AffinityCategoryHolder;
+
+import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Holds the qi of a chunk.
  * Qi is either pure or typed
  *
  */
-public class ChunkQiContainer {
+public class ChunkQiContainer implements PathBonusProvider {
     private double energy;
     final ValueContainer energyRegenRate;
     final ValueContainer energyCap;
 
     private boolean loaded;
 
-    private final AffinityCategoryHolder affinities = new AffinityCategoryHolder();
+    private final PathBonusHolder affinities = new PathBonusHolder();
     public ChunkQiContainer(double energy, double baseEnergyCap,double baseEnergyRegenRate) {
         this(energy,baseEnergyCap,baseEnergyRegenRate,false);
     }
@@ -46,10 +51,14 @@ public class ChunkQiContainer {
     }
 
     public void addAffinity(Identifier path, double val) {
-        affinities.addAffinity(path, val);
+        affinities.addBonus(PathEffectValueUtil.AFFINITY_CATEGORY,path,val);
     }
-    public void addAffinityModifier(Identifier path, ValueContainerModifier modifier) {}
-    public void removeAffinityModifier(Identifier path,Identifier modifier) {}
+    public void addAffinityModifier(Identifier path, ValueContainerModifier modifier) {
+        affinities.addBonusModifier(PathEffectValueUtil.AFFINITY_CATEGORY,path,modifier);
+    }
+    public void removeAffinityModifier(Identifier path,Identifier modifier) {
+        affinities.removeBonusModifier(PathEffectValueUtil.AFFINITY_CATEGORY,path,modifier);
+    }
 
     public void addEnergyCapModifier(ValueContainerModifier modifier) {}
     public void removeEnergyCapModifier(Identifier modifier) {}
@@ -63,14 +72,28 @@ public class ChunkQiContainer {
     public double getEnergyCap(){return energyCap.getValue();}
     public double getEnergyRegenRate(){return energyRegenRate.getValue();}
 
-    public Collection<Identifier> getAllAffinities(){
-        return affinities.getPaths();
-    }
-    public double getAffinity(Identifier path){
-        return affinities.getAffinity(path);
-    }
     public void regenEnergy(){
         energy = Math.min(energyCap.getValue(), energyRegenRate.getValue()+energy);
+    }
+
+    @Override
+    public ValueContainer getPathBonusContainer(Identifier category, Identifier path) {
+        return affinities.getPathBonusContainer(category,path);
+    }
+
+    @Override
+    public double getPathBonus(Identifier category, Identifier path) {
+        return affinities.getBonus(category,path);
+    }
+
+    @Override
+    public Collection<PathBonus> getAllPathBonuses() {
+        return affinities.getAllPathBonuses();
+    }
+
+    @Override
+    public Collection<Identifier> getAllPathBonusesInCategory(Identifier category) {
+        return affinities.getAllPathBonusesInCategory(category);
     }
 
 

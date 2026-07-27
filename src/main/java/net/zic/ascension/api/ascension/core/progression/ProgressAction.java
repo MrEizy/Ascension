@@ -2,8 +2,8 @@ package net.zic.ascension.api.ascension.core.progression;
 
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.RegistryObjectData;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ public interface ProgressAction {
      * @param  contextData the data for the contextIdentifier RegistryObject (e.g technique data or bloodline data)
      * @param direction is the expected progression gained/up or lost/down
      */
-    void run(UUID holderId, AscensionOriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction);
+    void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction);
 
     ProgressActionType getType();
 }

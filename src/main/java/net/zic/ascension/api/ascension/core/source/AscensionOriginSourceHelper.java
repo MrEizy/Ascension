@@ -4,6 +4,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
@@ -20,6 +22,7 @@ import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillHolder;
+import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.event.bloodline.BloodlineAddedEvent;
 import net.zic.ascension.api.ascension.event.bloodline.BloodlineRemovedEvent;
 import net.zic.ascension.api.ascension.event.path.PathAddedEvent;
@@ -29,6 +32,7 @@ import net.zic.ascension.api.ascension.event.skill.SkillAddedEvent;
 import net.zic.ascension.api.ascension.event.skill.SkillRemovedEvent;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
@@ -278,17 +282,17 @@ public class AscensionOriginSourceHelper {
     //──Path Access────────────────────────────────────────────────────────
 
     //TODO add accessor methods
-    public boolean hasPath(OriginSource source,Identifier path){
+    public static boolean hasPath(OriginSource source,Identifier path){
         return getPathHolder(source).hasPath(path);
     }
-    public PathData getPathData(OriginSource source,Identifier path){
+    public static PathData getPathData(OriginSource source,Identifier path){
         return getPathHolder(source).getPath(path);
     }
 
-    public Collection<Identifier> getPaths(OriginSource source){
+    public static Collection<Identifier> getPaths(OriginSource source){
         return getPathHolder(source).getPaths();
     }
-    public Collection<Identifier> getPathOwners(OriginSource source,Identifier path){
+    public static Collection<Identifier> getPathOwners(OriginSource source,Identifier path){
         return getPathHolder(source).getOwners(path);
     }
 
@@ -491,6 +495,20 @@ public class AscensionOriginSourceHelper {
         return getPathBonusHolder(source).getAllPathBonuses();
     }
 
+    //TODO handle technique methods
+
+    public static boolean broadcastTechniqueAddedAttempt(OriginSource source,Identifier technique, TechniqueData data){
+        return true;
+    }
+    public static void broadcastTechniqueAdded(OriginSource source,Identifier technique, TechniqueData data){
+
+    }
+    public static boolean broadcastTechniqueRemovedAttempt(OriginSource source,Identifier technique, TechniqueData data){
+        return true;
+    }
+    public static void broadcastTechniqueRemoved(OriginSource source,Identifier technique, TechniqueData data){
+
+    }
 
     public static void markPathBonusHolderDirty(OriginSource source){
         long id = random.nextLong();
@@ -529,6 +547,13 @@ public class AscensionOriginSourceHelper {
         if(source.resolveProcess("set_physique")) initializeSync(source);
     }
     public static void initializeSync(OriginSource source){
+        OriginSourcePatch patch = source.resolvePatch();
+
+        for(LivingEntity entity : source.getAttachedEntities()){
+            AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+            if(holder == null) continue;
+            holder.getData(entity).markDirty(patch);
+        }
 
     }
 }

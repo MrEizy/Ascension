@@ -83,7 +83,7 @@ public class PathInteractionHolder {
      * @param paths a set of potential source paths
      * @return all valid interactions between target path and source in paths
      */
-    public Collection<PathInteraction> getTargetInteractionsFrom(Identifier path,Set<Identifier> paths){
+    public Collection<PathInteraction> getTargetInteractionsFrom(Identifier path,Collection<Identifier> paths){
         Map<Identifier, PathInteraction> map = targetPathInteractions.get(path);
         if (map == null) return List.of();
 

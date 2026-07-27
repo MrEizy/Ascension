@@ -14,6 +14,8 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
 public class BloodlineTransferItem extends Item {
@@ -40,14 +42,14 @@ public class BloodlineTransferItem extends Item {
         AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
 
         if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
-
-        if(!holder.getData(player).getSource().addBloodline(targetBloodline,data)){
+        OriginSource source = holder.getData(player).getSource();
+        if(!AscensionOriginSourceHelper.addBloodline(source,targetBloodline,data)){
             //TODO return error message to player here
             return InteractionResult.FAIL;
         }
         stack.shrink(1);
         AscensionCraft.LOGGER.info("Player {} has transferred their bloodline",player.getName().getString());
-        player.sendSystemMessage(Component.literal("Purity: "+holder.getData(player).getSource().getBloodlineData(targetBloodline).getPurity()));
+        player.sendSystemMessage(Component.literal("Purity: "+AscensionOriginSourceHelper.getBloodlineData(source,targetBloodline).getPurity()));
         return InteractionResult.SUCCESS;
     }
 }

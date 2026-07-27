@@ -1,6 +1,6 @@
 TODO:
     start rewriting the main code to work with the new code(and so i can test it)
-    finish the pathBonusHolder update code
+    finish the pathBonusHolder update code, and make it easy to trigger an update
     finish ascensionEntityData stat and path bonus holder
     make sure new path,bloodline,physique and skills have apply to entity called
     have a look at how techniques should function(basically family and milestone realms) and if they should be updated

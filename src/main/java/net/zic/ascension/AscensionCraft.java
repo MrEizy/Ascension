@@ -14,6 +14,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
+import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.item.ModItems;
@@ -22,11 +23,10 @@ import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.AscensionAttributes;
-import net.zic.ascension.impl.datapack.data_source.AscensionDataSources;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 import net.zic.ascension.network.*;
 import net.zic.ascension.impl.core.entity.AscensionStats;
-import net.zic.ascension.impl.core.source.SourceHandler;
+
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
 import net.zic.ascension.impl.datapack.path.AscensionPathTypes;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
@@ -59,8 +59,7 @@ public class AscensionCraft {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final Map<String, String> SECT_DATA = new HashMap<>();
 
-    private static SourceHandler sourceHandler;
-    private static final PathInteractionHolder pathInteractionHolder = new PathInteractionHolder();
+ private static final PathInteractionHolder pathInteractionHolder = new PathInteractionHolder();
     public static Identifier prefix(String name){
         return Identifier.fromNamespaceAndPath(MOD_ID, name);
     }
@@ -76,7 +75,7 @@ public class AscensionCraft {
         COMPONENTS.register(modEventBus);
         RECIPES.register(modEventBus);
 
-
+        CoreHolderProviders.register(modEventBus);
         CoreAttachments.register(modEventBus);
 
         AscensionPhysiqueTypes.register(modEventBus);
@@ -96,7 +95,7 @@ public class AscensionCraft {
         AscensionTechniqueTypes.register(modEventBus);
         AscensionPathTypes.register(modEventBus);
         AscensionTribulationTypes.register(modEventBus);
-        AscensionDataSources.register(modEventBus);
+
 
         AscensionAttributes.register(modEventBus);
 
@@ -156,9 +155,7 @@ public class AscensionCraft {
     @SubscribeEvent
     public static void onServerLaunch(ServerStartedEvent event){
 
-        event.getServer().overworld().getDataStorage().computeIfAbsent(SourceHandler.ID);
 
-        sourceHandler = event.getServer().overworld().getDataStorage().get(SourceHandler.ID);
 
 
 
@@ -168,7 +165,7 @@ public class AscensionCraft {
 
 
 
-    public static SourceHandler getSourceHandler(){return sourceHandler;}
+
     public static PathInteractionHolder getPathInteractionHolder(){return pathInteractionHolder;}
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
     public static class ModEvents {

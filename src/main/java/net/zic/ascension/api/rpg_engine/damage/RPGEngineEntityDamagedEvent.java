@@ -18,17 +18,19 @@ import java.util.ArrayList;
 
 public abstract class RPGEngineEntityDamagedEvent extends LivingEvent {
     protected final DamageContainer container;
+    protected final RPGEngineDamageSource source;
     protected ValueContainer damageContainer;
     protected static final Identifier CONTAINER_ID = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"rpg_engine_damage_instance");
 
-    public RPGEngineEntityDamagedEvent(LivingEntity entity, DamageContainer container) {
+    public RPGEngineEntityDamagedEvent(LivingEntity entity, DamageContainer container, RPGEngineDamageSource source) {
         super(entity);
         this.container = container;
         damageContainer = new ValueContainer(CONTAINER_ID,container.getNewDamage());
+        this.source = source;
     }
     public static class Pre extends RPGEngineEntityDamagedEvent  {
-        public Pre(LivingEntity entity, DamageContainer container) {
-            super(entity, container);
+        public Pre(LivingEntity entity, DamageContainer container, RPGEngineDamageSource source) {
+            super(entity, container,source);
 
         }
         public void addDamageModifier(ValueContainerModifier modifier){
@@ -48,10 +50,10 @@ public abstract class RPGEngineEntityDamagedEvent extends LivingEvent {
     }
     public static class Post extends RPGEngineEntityDamagedEvent {
         public Post(Pre event){
-            this(event.getEntity(),event.container,event.damageContainer);
+            this(event.getEntity(),event.container,event.damageContainer,event.source);
         }
-        public Post(LivingEntity entity, DamageContainer container,ValueContainer valueContainer) {
-            super(entity, container);
+        public Post(LivingEntity entity, DamageContainer container,ValueContainer valueContainer, RPGEngineDamageSource source) {
+            super(entity, container,source);
             this.damageContainer = valueContainer;
         }
     }
@@ -64,10 +66,9 @@ public abstract class RPGEngineEntityDamagedEvent extends LivingEvent {
         return damageContainer.getBaseValue();
     }
 
-    public DamageSource getSource() {
-        return container.getSource();
+    public RPGEngineDamageSource getSource() {
+        return source;
     }
-
 
 
     public int getPostAttackInvulnerabilityTicks() {

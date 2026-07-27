@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 
 public class PathProgressBar extends RenderableElement {
@@ -39,7 +40,7 @@ public class PathProgressBar extends RenderableElement {
 
         return ClientAscensionData.getPlayer().flatMap(player ->
                 ClientAscensionData.getSource().map(source -> {
-                    PathData pathData = source.getPathData(selectedPath);
+                    PathData pathData = AscensionOriginSourceHelper.getPathData(source,selectedPath);
                     if (pathData == null) {
                         return 0.0D;
                     }

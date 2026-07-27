@@ -13,7 +13,8 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.physique.Physique;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.info.DescriptionDisplayContainer;
 
@@ -41,7 +42,7 @@ public class MainContainer extends RenderableElement {
     private final BloodlineOpenButton bloodlineButton;
 
     private InformationPanel informationPanel = InformationPanel.DEFAULT;
-    private AscensionOriginSource observedSource;
+    private OriginSource observedSource;
     private long observedRevision = Long.MIN_VALUE;
     private String observedIdentitySignature;
 
@@ -91,14 +92,9 @@ public class MainContainer extends RenderableElement {
     }
 
     private void refreshSynchronizedState() {
-        AscensionOriginSource source = ClientAscensionData.getSource().orElse(null);
-        long revision = source == null ? -1L : source.getRevision();
-        if (source == observedSource && revision == observedRevision) {
-            return;
-        }
+        OriginSource source = ClientAscensionData.getSource().orElse(null);
 
         observedSource = source;
-        observedRevision = revision;
 
         String identitySignature = createIdentitySignature(source);
         if (identitySignature.equals(observedIdentitySignature)) {
@@ -116,17 +112,17 @@ public class MainContainer extends RenderableElement {
         }
     }
 
-    private static String createIdentitySignature(AscensionOriginSource source) {
+    private static String createIdentitySignature(OriginSource source) {
         if (source == null) {
             return "unavailable";
         }
 
         StringBuilder signature = new StringBuilder();
-        signature.append(source.getPhysique()).append('|');
-        source.getBloodlines().stream()
+        signature.append(AscensionOriginSourceHelper.getPhysique(source)).append('|');
+        AscensionOriginSourceHelper.getBloodlines(source).stream()
                 .sorted(Comparator.comparing(Identifier::toString))
                 .forEach(id -> {
-                    BloodlineData data = source.getBloodlineData(id);
+                    BloodlineData data = AscensionOriginSourceHelper.getBloodlineData(source,id);
                     signature.append(id)
                             .append(':')
                             .append(data == null ? "null" : data.getPurity())
@@ -141,7 +137,7 @@ public class MainContainer extends RenderableElement {
 
     private void showPhysiqueInformation() {
         ClientAscensionData.getSource().ifPresentOrElse(source -> {
-            Identifier physiqueId = source.getPhysique();
+            Identifier physiqueId = AscensionOriginSourceHelper.getPhysiqueId(source);
             if (physiqueId == null) {
                 showInformation(
                         Component.translatable("gui.ascension.introspection.physique"),
@@ -182,7 +178,7 @@ public class MainContainer extends RenderableElement {
 
     private void showBloodlineInformation() {
         ClientAscensionData.getSource().ifPresentOrElse(source -> {
-            List<Identifier> ids = source.getBloodlines().stream()
+            List<Identifier> ids = AscensionOriginSourceHelper.getBloodlines(source).stream()
                     .sorted(Comparator.comparing(Identifier::toString))
                     .toList();
             if (ids.isEmpty()) {
@@ -212,7 +208,7 @@ public class MainContainer extends RenderableElement {
                     }
 
                     MutableComponent description = Component.empty();
-                    BloodlineData data = source.getBloodlineData(id);
+                    BloodlineData data = AscensionOriginSourceHelper.getBloodlineData(source,id);
                     if (data != null) {
                         description.append(Component.translatable(
                                 "gui.ascension.introspection.bloodline_purity",
@@ -238,7 +234,7 @@ public class MainContainer extends RenderableElement {
                             id,
                             player.registryAccess()
                     );
-                    BloodlineData data = source.getBloodlineData(id);
+                    BloodlineData data = AscensionOriginSourceHelper.getBloodlineData(source,id);
 
                     if (index > 0) {
                         description.append("\n\n");

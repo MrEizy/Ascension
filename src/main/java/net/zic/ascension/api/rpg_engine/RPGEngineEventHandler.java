@@ -22,7 +22,7 @@ public class RPGEngineEventHandler {
         RPGEngineGatherDamageTypesEvent damageTypesEvent = new RPGEngineGatherDamageTypesEvent(event.getEntity(),newSource);
         NeoForge.EVENT_BUS.post(damageTypesEvent);
 
-        RPGEngineEntityDamagedEvent.Pre rpgEngineEntityDamagedEvent = new RPGEngineEntityDamagedEvent.Pre(event.getEntity(),event.getContainer());
+        RPGEngineEntityDamagedEvent.Pre rpgEngineEntityDamagedEvent = new RPGEngineEntityDamagedEvent.Pre(event.getEntity(),event.getContainer(),newSource);
 
         NeoForge.EVENT_BUS.post(rpgEngineEntityDamagedEvent);
 

@@ -6,9 +6,11 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
+import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 
@@ -28,7 +30,7 @@ public class CultivationUtil {
      * @param secondaryPaths
      * @param baseRate
      */
-    public static void cultivate(LivingEntity caster, AscensionOriginSource source, PathData pathData, List<Identifier> secondaryPaths, double baseRate){
+    public static void cultivate(LivingEntity caster, OriginSource source, PathData pathData, List<Identifier> secondaryPaths, double baseRate){
 
 
         if(pathData.getCurrentTechnique() == null) return;
@@ -36,10 +38,10 @@ public class CultivationUtil {
         if(technique == null) return;
         TechniqueData data = pathData.getCurrentTechniqueData();
 
-        double cultivationAmount = baseRate*(1+source.getEffectiveAffinity(CULTIVATION_CATEGORY,pathData.getPath()));
+        double cultivationAmount = baseRate*(1+PathEffectValueUtil.getEffectiveAffinity(caster,pathData.getPath()));
 
         for(Identifier secondaryPath : secondaryPaths){
-            cultivationAmount += baseRate*(1+source.getEffectiveAffinity(CULTIVATION_CATEGORY,secondaryPath));
+            cultivationAmount += baseRate*(1+PathEffectValueUtil.getEffectiveAffinity(caster,secondaryPath));
         }
         double maxProgress = pathData.getMaxProgress(pathData.getMajorRealm(),pathData.getMinorRealm(),source.getRegistryAccess());
 
@@ -55,15 +57,15 @@ public class CultivationUtil {
             pathData.setProgress(0);
         }
 
-        source.markPathDirty(pathData.getPath());
+        AscensionOriginSourceHelper.markPathDirty(source,pathData.getPath());
     }
 
-    public static void cultivateFoundation(LivingEntity entity, AscensionOriginSource source, FoundationPathData foundationPathData, double baseRate){
+    public static void cultivateFoundation(LivingEntity entity, OriginSource source, FoundationPathData foundationPathData, double baseRate){
         Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,foundationPathData.getPath(),source.getRegistryAccess());
 
         if(!(path instanceof FoundationPath foundationPath)) return;
 
-        double rate  =baseRate*(1+source.getEffectiveAffinity(FOUNDATION_CATEGORY,foundationPathData.getPath()));
+        double rate  =baseRate*(1+ PathEffectValueUtil.getEffectiveAffinity(entity,foundationPathData.getPath()));
 
         int majorRealm = foundationPathData.getMajorRealm();
         int foundationRealm = foundationPathData.getFoundationRealm(majorRealm);
@@ -81,6 +83,6 @@ public class CultivationUtil {
             foundationPathData.setFoundationRealmProgress(majorRealm,0);
         }
 
-        source.markPathDirty(foundationPathData.getPath());
+        AscensionOriginSourceHelper.markPathDirty(source,foundationPathData.getPath());
     }
 }

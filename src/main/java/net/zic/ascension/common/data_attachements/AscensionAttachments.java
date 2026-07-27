@@ -11,8 +11,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
-import net.zic.ascension.api.ascension.core.source.AscensionServerOriginSource;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
@@ -27,9 +26,7 @@ public class AscensionAttachments {
                     (holder)->{
                         if(holder instanceof LivingEntity entity){
                             return new SimpleAscensionEntityData(
-                                    entity.level().isClientSide() ?
-                                            new AscensionOriginSource() :
-                                            new AscensionServerOriginSource(),
+                                    new OriginSource(),
                                     entity
                             );
                         }

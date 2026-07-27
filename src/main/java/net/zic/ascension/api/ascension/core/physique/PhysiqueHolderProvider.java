@@ -2,14 +2,9 @@ package net.zic.ascension.api.ascension.core.physique;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.ascension.core.CoreHolderProviders;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.PathHolder;
-import net.zic.ascension.api.ascension.event.EventReason;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
@@ -32,7 +27,8 @@ public class PhysiqueHolderProvider implements DataSource {
     public void onAdded(OriginSource source, DataSourceInstance instance) {
         PhysiqueHolder holder = getHolder(instance);
 
-        //TODO update to use new source
+
+        if(holder.getPhysique() == null) return;
         holder.getPhysique(source.getRegistryAccess()).onAdded(source,holder.getData());
     }
 
@@ -40,7 +36,7 @@ public class PhysiqueHolderProvider implements DataSource {
     public void onRemoved(OriginSource source, DataSourceInstance instance) {
         PhysiqueHolder holder = getHolder(instance);
 
-        //TODO update to use new source
+        if(holder.getPhysique() == null) return;
         holder.getPhysique(source.getRegistryAccess()).onRemoved(source,holder.getData());
     }
 

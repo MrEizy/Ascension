@@ -12,7 +12,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 
 public class AffinityCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> build() {
@@ -20,40 +23,20 @@ public class AffinityCommand {
                 .then(Commands.literal("view")
                         .then(Commands.argument("target", EntityArgument.players())
                                 .executes(AffinityCommand::viewAffinity)
-                                .then(Commands.argument("category",IdentifierArgument.id())
-                                        .executes(AffinityCommand::viewAffinityCategory)
-                                )
                         )
 
                 );
     }
 
-    private static int viewAffinityCategory(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 
-        var players = EntityArgument.getPlayers(context, "target");
-        Identifier category = IdentifierArgument.getId(context, "category");
-        for(ServerPlayer player : players){
-            AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-            if(holder == null) continue;
-            AscensionEntityData data = holder.getData(player);
-            player.sendSystemMessage(Component.literal("===Affinities ("+category+") (").append(player.getName()).append(Component.literal(")===")));
-            for(Identifier path : data.getAllAffinities()){
-                player.sendSystemMessage(Component.literal(path+": "+data.getAffinity(category,path)));
-            }
-        }
-        return 1;
-    }
 
     private static int viewAffinity(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var players = EntityArgument.getPlayers(context, "target");
-
         for(ServerPlayer player : players){
-            AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-            if(holder == null) continue;
-            AscensionEntityData data = holder.getData(player);
+            AscensionEntityPathBonusHolder pathBonusHolder = player.getData(CoreAttachments.PATH_BONUS_HOLDER);
             player.sendSystemMessage(Component.literal("===Affinities (").append(player.getName()).append(Component.literal(")===")));
-            for(Identifier path : data.getAllAffinities()){
-                player.sendSystemMessage(Component.literal(path+": "+data.getAffinity(path)));
+            for(Identifier path : pathBonusHolder.getAllPathBonusesInCategory(PathEffectValueUtil.AFFINITY_CATEGORY)){
+                player.sendSystemMessage(Component.literal(path+": "+pathBonusHolder.getPathBonus(PathEffectValueUtil.AFFINITY_CATEGORY,path)));
             }
         }
         return 1;

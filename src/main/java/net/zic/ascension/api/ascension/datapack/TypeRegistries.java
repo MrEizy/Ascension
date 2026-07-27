@@ -7,7 +7,6 @@ import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
 
-import net.zic.ascension.api.ascension.datapack.data_source.DataSourceType;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
@@ -34,8 +33,6 @@ public class TypeRegistries {
 
     public static final Registry<PathType> PATH_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"path_type");
 
-    public static final Registry<DataSourceType> DATA_SOURCE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"data_source_type");
-
     public static final Registry<TribulationType> TRIBULATION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"tribulation_type");
 
 
@@ -54,7 +51,6 @@ public class TypeRegistries {
         event.register(SKILL_TYPE_REGISTRY);
         event.register(TECHNIQUE_TYPE_REGISTRY);
         event.register(PATH_TYPE_REGISTRY);
-        event.register(DATA_SOURCE_TYPE_REGISTRY);
         event.register(TRIBULATION_TYPE_REGISTRY);
         event.register(PROGRESS_ACTION_TYPE_REGISTRY);
         event.register(PROGRESS_ACTION_CONDITION_TYPE_REGISTRY);

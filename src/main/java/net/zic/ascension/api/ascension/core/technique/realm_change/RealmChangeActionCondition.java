@@ -6,9 +6,10 @@ import net.zic.ascension.api.ascension.core.RegistryObjectData;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 /**
  * this is ran to determine if the Listener should be run
@@ -16,14 +17,14 @@ import net.zic.ascension.api.ascension.core.technique.TechniqueData;
  */
 public interface RealmChangeActionCondition extends ProgressActionCondition {
     @Override
-    default boolean test(AscensionOriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
+    default boolean test(OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
         Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,contextIdentifier,source.getRegistryAccess());
         if(technique == null) return false;
 
         TechniqueData data = null;
         if(contextData instanceof TechniqueData) data = (TechniqueData) contextData;
 
-        PathData pathData = source.getPathData(technique.getPath());
+        PathData pathData = AscensionOriginSourceHelper.getPathData(source,technique.getPath());
         if(pathData == null) return false;
         if((pathData.getCultivatedRealms(contextIdentifier).isEmpty()) ||
                 (pathData.getCultivatedRealms(contextIdentifier).size() == 1 && direction == ProgressDirection.UP )){
@@ -52,7 +53,7 @@ public interface RealmChangeActionCondition extends ProgressActionCondition {
      * @param minorRealm the minor realm we are entering/leaving
      * @param direction the direction
      */
-    boolean test(AscensionOriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction);
+    boolean test(OriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction);
 
 
 }

@@ -5,8 +5,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
-import net.zic.ascension.api.ascension.core.path.affinity.AffinityHolder;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
 import net.zic.ascension.api.ascension.core.path.interactions.PathInteraction;
 import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionType;
 
@@ -19,7 +22,7 @@ import java.util.HashSet;
  */
 public class PathEffectValueUtil {
     public static final Identifier NO_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"none");
-
+    public static final Identifier AFFINITY_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"affinity");
     /*
         TODO consider making categories a registry, and then each category would have a name/description
         +mask for if it applies to generative, destructive or related path
@@ -46,45 +49,43 @@ public class PathEffectValueUtil {
         TODO therefore path interatcions only affect the path DIRECTLY being used/referenced
      */
 
-
-
-    public static double getEffectValue(double initialAffinity,AffinityHolder holder,Identifier path, Identifier category){
+    public static double getEffectiveAffinity(PathBonusProvider provider,double initialAffinity,Identifier path,boolean ignoreRelated){
         double affinity = initialAffinity;
-        HashSet<Identifier> paths = new HashSet<>(holder.getPaths());
-        if(category != null) paths.addAll(holder.getPaths(category));
-
-        if(affinity == 0) return 0;
-
+        Collection<Identifier> availablePaths = provider.getAllPathBonusesInCategory(AFFINITY_CATEGORY);
 
         Collection<PathInteraction> pathInteractions = AscensionCraft.getPathInteractionHolder().getTargetInteractionsFrom(
                 path,
-                paths
+                availablePaths
         );
-        for(PathInteraction interaction :pathInteractions){
-            Identifier sourcePath = interaction.pathA();
 
-            if(!holder.hasAffinity(sourcePath) && !holder.hasAffinity(category,sourcePath)) continue;
+        if(!ignoreRelated) {
+            for (PathInteraction interaction : pathInteractions) {
+                Identifier sourcePath = interaction.pathA();
 
-            double sourceAffinity = holder.getAffinity(sourcePath)+
-                    (holder.hasAffinity(category,sourcePath) ? holder.getAffinity(category,sourcePath) :0);
+                double sourceAffinity = provider.getPathBonus(AFFINITY_CATEGORY, sourcePath);
 
-            if(interaction.type() == PathInteractionType.RELATED){
-                affinity += sourceAffinity*interaction.value();
+
+                if (interaction.type() == PathInteractionType.RELATED) {
+                    affinity += sourceAffinity * interaction.value();
+                }
             }
         }
+        if(affinity == 0) return 0;
+
+        double finalAffinity = affinity;
         for(PathInteraction interaction :pathInteractions){
+
+            if (interaction.value() == 0) continue;
+
             Identifier sourcePath = interaction.pathA();
+            double sourceAffinity = provider.getPathBonus(AFFINITY_CATEGORY,sourcePath);
 
-            if(!holder.hasAffinity(sourcePath) && !holder.hasAffinity(category,sourcePath)) continue;
-
-            double sourceAffinity = holder.getAffinity(sourcePath)+
-                    (holder.hasAffinity(category,sourcePath) ? holder.getAffinity(category,sourcePath) :0);
 
             double x = (1+sourceAffinity/affinity*interaction.value());
             if(interaction.type() == PathInteractionType.DESTRUCTIVE) {
-                affinity *= (1/x);
-            }else{
-                affinity *= x;
+                finalAffinity *= (1/x);
+            }else if(interaction.type() == PathInteractionType.GENERATIVE){
+                finalAffinity *= x;
             }
         }
 
@@ -92,61 +93,16 @@ public class PathEffectValueUtil {
 
         return affinity;
     }
-
-
-    public static double getEffectValue(double initialAffinity,LivingEntity affinitySource,Identifier path,Identifier category){
-        double affinity = initialAffinity;
-        AscensionEntityDataProvider holder = affinitySource.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-        if(holder == null) return initialAffinity;
-
-        AscensionEntityData entityData = holder.getData(affinitySource);
-        if(entityData == null) return initialAffinity;
-
-        HashSet<Identifier> paths = new HashSet<>(entityData.getAllAffinities());
-        HashSet<Identifier> categorizedPaths = new HashSet<>(entityData.getAllAffinities(category));
-        if(category != null) paths.addAll(categorizedPaths);
-
-
-
-
-        Collection<PathInteraction> pathInteractions = AscensionCraft.getPathInteractionHolder().getTargetInteractionsFrom(
-                path,
-                paths
-        );
-
-        //We apply related first, then handel destructive and geneartive since their multipler depends on the final base affinity
-
-        for(PathInteraction interaction :pathInteractions){
-            Identifier sourcePath = interaction.pathA();
-
-            if(!entityData.hasAffinity(sourcePath) && !entityData.hasAffinity(category,sourcePath)) continue;
-
-            double sourceAffinity = entityData.getAffinity(sourcePath)+
-                    (entityData.hasAffinity(category,sourcePath) ? entityData.getAffinity(category,sourcePath) :0);
-
-            if(interaction.type() == PathInteractionType.RELATED){
-                affinity += sourceAffinity*interaction.value();
-            }
-        }
-        for(PathInteraction interaction :pathInteractions){
-            Identifier sourcePath = interaction.pathA();
-
-            if(!entityData.hasAffinity(sourcePath) && !entityData.hasAffinity(category,sourcePath)) continue;
-
-            double sourceAffinity = entityData.getAffinity(sourcePath)+
-                    (entityData.hasAffinity(category,sourcePath) ? entityData.getAffinity(category,sourcePath) :0);
-
-            double x = (1+sourceAffinity/affinity*interaction.value());
-            if(interaction.type() == PathInteractionType.DESTRUCTIVE) {
-                affinity *= (1/x);
-            }else if (interaction.type() == PathInteractionType.GENERATIVE){
-                affinity *= x;
-            }
-        }
-
-
-
-        return affinity;
-
+    public static double getEffectiveAffinity(LivingEntity affinitySource,double initialAffinity,Identifier path,boolean ignoreRelated){
+        AscensionEntityPathBonusHolder holder = affinitySource.getData(CoreAttachments.PATH_BONUS_HOLDER);
+        return getEffectiveAffinity(holder,initialAffinity,path,false);
+    }
+    public static double getEffectiveAffinity(LivingEntity affinitySource,double initialAffinity,Identifier path){
+        AscensionEntityPathBonusHolder holder = affinitySource.getData(CoreAttachments.PATH_BONUS_HOLDER);
+        return getEffectiveAffinity(holder,initialAffinity,path,false);
+    }
+    public static double getEffectiveAffinity(LivingEntity affinitySource,Identifier path){
+        AscensionEntityPathBonusHolder holder = affinitySource.getData(CoreAttachments.PATH_BONUS_HOLDER);
+        return getEffectiveAffinity(holder,holder.getPathBonus(AFFINITY_CATEGORY,path),path,false);
     }
 }

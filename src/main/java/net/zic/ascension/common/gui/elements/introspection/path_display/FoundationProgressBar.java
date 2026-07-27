@@ -10,6 +10,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
@@ -52,7 +53,7 @@ public class FoundationProgressBar extends RenderableElement {
 
         return ClientAscensionData.getPlayer().flatMap(player ->
                 ClientAscensionData.getSource().flatMap(source -> {
-                    PathData pathData = source.getPathData(selectedPath);
+                    PathData pathData = AscensionOriginSourceHelper.getPathData(source,selectedPath);
                     if (!(pathData instanceof FoundationPathData foundationData)) {
                         return Optional.empty();
                     }

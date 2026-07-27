@@ -4,10 +4,8 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
-import net.zic.ascension.api.ascension.event.EventReason;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 /**

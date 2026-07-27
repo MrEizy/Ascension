@@ -8,10 +8,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
 import net.zic.ascension.impl.datapack.util.AffinityModifier;
@@ -62,7 +63,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
     }
 
     @Override
-    public Collection<Identifier> onAdded(AscensionOriginSource source, PhysiqueData data) {
+    public Collection<Identifier> onAdded(OriginSource source, PhysiqueData data) {
 
         Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
 
@@ -74,23 +75,27 @@ public record SimplePhysique(Component name, Component description, List<Identif
                 source.addStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat), modifier);
             }
         }
+        //TODO change to be path bonus not just affinity
+        /**
         for(BaseAffinity baseAffinity : baseAffinities){
             source.addAffinity(baseAffinity.category(),baseAffinity.path(),baseAffinity.value());
         }
+
         for(Identifier path : affinityModifiers.keySet()){
             for (AffinityModifier modifier : affinityModifiers.get(path)){
                 source.addAffinityModifier(modifier.category(),path,modifier.modifier());
             }
         }
+         */
         for (Identifier skill : skills) {
-            source.addSkill(skill,physiqueId);
+            AscensionOriginSourceHelper.addSkill(source,skill,physiqueId);
         }
 
         return unlockedPaths;
     }
 
     @Override
-    public Collection<Identifier> onRemoved(AscensionOriginSource source, PhysiqueData data) {
+    public Collection<Identifier> onRemoved(OriginSource source, PhysiqueData data) {
         Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
 
         for (ValueContainer.BaseModifier baseModifier : baseStats) {
@@ -102,6 +107,8 @@ public record SimplePhysique(Component name, Component description, List<Identif
                 source.removeStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat), modifier.getIdentifier());
             }
         }
+        //TODO change to be path bonus not just affinity
+        /**
         for(BaseAffinity baseAffinity : baseAffinities){
             source.removeAffinity(baseAffinity.category(),baseAffinity.path(),baseAffinity.value());
         }
@@ -110,10 +117,9 @@ public record SimplePhysique(Component name, Component description, List<Identif
                 source.removeAffinityModifier(modifier.category(),path,modifier.modifier().getIdentifier());
             }
         }
-        //TODO update to more properly handle the try remove to more efficiently check by directly calling skillRemovalAttempt on bloodline,technique, physique and data source
-
+         */
         for (Identifier skill : skills) {
-            source.removeSkill(skill,physiqueId);
+            AscensionOriginSourceHelper.removeSkill(source,skill,physiqueId);
         }
 
         return unlockedPaths;

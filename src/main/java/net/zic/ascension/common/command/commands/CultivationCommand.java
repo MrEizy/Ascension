@@ -20,8 +20,9 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.path.Realm;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 
@@ -90,12 +91,12 @@ public class CultivationCommand {
             if(holder == null) continue;
             player.sendSystemMessage(Component.literal("==="+target.getDisplayName().getString()+"==="));
 
-            AscensionOriginSource source = holder.getData(target).getSource();
-            if(!source.hasPath(path)){
+            OriginSource source = holder.getData(target).getSource();
+            if(!AscensionOriginSourceHelper.hasPath(source,path)){
                 player.sendSystemMessage(Component.literal("no path data"));
                 continue;
             }
-            PathData pathData = source.getPathData(path);
+            PathData pathData = AscensionOriginSourceHelper.getPathData(source,path);
             player.sendSystemMessage(Component.literal("realm : ").append(pathData.getRealmName(pathData.getMajorRealm(),pathData.getMinorRealm(),source.getRegistryAccess())));
             player.sendSystemMessage(Component.literal("progress : "+pathData.getProgress()));
             player.sendSystemMessage(Component.literal("technique : "+pathData.getCurrentTechnique()));
@@ -162,7 +163,7 @@ public class CultivationCommand {
                 return false;
             }
 
-            AscensionOriginSource originSource = holder.getData(player).getSource();
+            OriginSource originSource = holder.getData(player).getSource();
 
             if(originSource == null){
                 source.sendFailure(Component.literal(
@@ -170,7 +171,7 @@ public class CultivationCommand {
                 ));
                 return false;
             }
-            PathData data = originSource.getPathData(pathId);
+            PathData data = AscensionOriginSourceHelper.getPathData(originSource,pathId);
 
             if(data == null){
                 source.sendFailure(Component.literal(
@@ -195,7 +196,7 @@ public class CultivationCommand {
             }else{
                 data.setProgress(0);
             }
-            originSource.markPathDirty(pathId);
+            AscensionOriginSourceHelper.markPathDirty(originSource,pathId);
 
             String progressStr = (progressPercent >= 0)
                     ? String.format(" with %d%% progress", progressPercent) : "";

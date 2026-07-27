@@ -15,7 +15,8 @@ import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
@@ -40,9 +41,8 @@ public class SlotSkillCommand {
                                     }
 
                                     Set<Identifier> validSkills = new HashSet<>();
-                                    for (Identifier skill : holder.getData(player)
-                                            .getSource()
-                                            .getSkills()) {
+                                    for (Identifier skill : AscensionOriginSourceHelper.getSkills(holder.getData(player)
+                                            .getSource())) {
                                         if (CoreRegistries.safeAccess(
                                                 CoreRegistries.SKILL_REGISTRY,
                                                 skill,
@@ -99,12 +99,12 @@ public class SlotSkillCommand {
             return 0;
         }
 
-        AscensionOriginSource source = holder.getData(player).getSource();
+        OriginSource source = holder.getData(player).getSource();
         SkillCastHandler handler = player.getData(
                 AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER
         );
 
-        if (!source.hasSkill(skill)) {
+        if (!AscensionOriginSourceHelper.hasSkill(source,skill)) {
             context.getSource().sendFailure(Component.literal(
                     "you do not have skill " + skill
             ));

@@ -11,8 +11,8 @@ import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
 
@@ -62,14 +62,14 @@ public class SimpleBloodline implements Bloodline {
     }
 
     @Override
-    public Collection<Identifier> onAdded(AscensionOriginSource source, BloodlineData data) {
+    public Collection<Identifier> onAdded(OriginSource source, BloodlineData data) {
 
         holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), data,ProgressDirection.UP);
         return List.of();
     }
 
     @Override
-    public Collection<Identifier> onRemoved(AscensionOriginSource source, BloodlineData data) {
+    public Collection<Identifier> onRemoved(OriginSource source, BloodlineData data) {
 
         data.setPurity(0);
         holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.DOWN);
@@ -87,12 +87,12 @@ public class SimpleBloodline implements Bloodline {
     }
 
     @Override
-    public void purityDown(AscensionOriginSource source, BloodlineData data) {
+    public void purityDown(OriginSource source, BloodlineData data) {
         holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.DOWN);
     }
 
     @Override
-    public void purityUp(AscensionOriginSource source, BloodlineData data) {
+    public void purityUp(OriginSource source, BloodlineData data) {
         holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.UP);
 
     }

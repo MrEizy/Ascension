@@ -14,6 +14,7 @@ import net.zic.zenithlib.stats.StatInstance;
 import net.zic.zenithlib.stats.StatProvider;
 import net.zic.zenithlib.stats.ZenithStatHolder;
 import net.zic.zenithlib.value_containers.ValueContainer;
+import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -46,20 +47,37 @@ public class AscensionEntityPathBonusHolder implements PathBonusProvider {
         return cachedHolder.getAllPathBonuses();
     }
 
+    @Override
+    public Collection<Identifier> getAllPathBonusesInCategory(Identifier category) {
+        return cachedHolder.getAllPathBonusesInCategory(category);
+    }
+
     public void updatePathBonus(PathBonus bonus){
-        //TODO
+        ValueContainer container = new ValueContainer(bonus.path(),0);
+        for(PathBonusProvider provider : providers){
+            ValueContainer providerContainer = provider.getPathBonusContainer(bonus.category(),bonus.path());
+            if(providerContainer == null) continue;
+            container.setBaseValue(container.getBaseValue()+providerContainer.getBaseValue());
+            for(ValueContainerModifier modifier : providerContainer.getAllModifiers()){
+                container.addModifierNoCacheUpdate(modifier);
+            }
+        }
+        container.calculateCachedVal();
+        cachedHolder.setPathBonusContainer(bonus.category(),bonus.path(),container);
     }
     public void updatePathBonuses(Collection<PathBonus> bonuses){
         for(PathBonus bonus : bonuses) updatePathBonus(bonus);
     }
 
     public void registerPathBonusProvider(PathBonusProvider provider){
+        if(providers.contains(provider)) return;
         providers.add(provider);
         for(PathBonus bonus : provider.getAllPathBonuses()){
             updatePathBonus(bonus);
         }
     }
     public void removePathBonusProvider(PathBonusProvider provider){
+        if(!providers.contains(provider)) return;
         providers.remove(provider);
         for(PathBonus bonus : provider.getAllPathBonuses()){
             updatePathBonus(bonus);

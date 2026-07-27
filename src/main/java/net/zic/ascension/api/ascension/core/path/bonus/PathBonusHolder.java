@@ -70,6 +70,9 @@ public class PathBonusHolder implements DataSourceInstance {
         }
         return pathBonuses;
     }
+    public Collection<Identifier> getAllPathBonusesInCategory(Identifier category){
+        return getCategoryHolder(category).getAllPaths();
+    }
     public Collection<PathBonus> getDirtyPathBonuses(){
         HashSet<PathBonus> pathBonuses = new HashSet<>();
         for(Identifier category:categories.keySet()){

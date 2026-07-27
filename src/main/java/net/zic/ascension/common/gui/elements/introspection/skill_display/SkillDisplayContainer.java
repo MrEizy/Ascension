@@ -12,7 +12,8 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.info.DescriptionDisplayContainer;
 import net.zic.ascension.common.gui.elements.introspection.BackButton;
@@ -37,7 +38,7 @@ public class SkillDisplayContainer extends RenderableElement {
     private final DescriptionDisplayContainer selectedSkillInformation;
     private final SkillBarContainer skillBar;
 
-    private AscensionOriginSource observedSource;
+    private OriginSource observedSource;
     private long observedRevision = Long.MIN_VALUE;
     private List<Identifier> displayedSkills = List.of();
     private Identifier selectedSkill;
@@ -128,14 +129,10 @@ public class SkillDisplayContainer extends RenderableElement {
     }
 
     private void refreshSynchronizedState() {
-        AscensionOriginSource source = ClientAscensionData.getSource().orElse(null);
-        long revision = source == null ? -1L : source.getRevision();
-        if (source == observedSource && revision == observedRevision) {
-            return;
-        }
+        OriginSource source = ClientAscensionData.getSource().orElse(null);
+
 
         observedSource = source;
-        observedRevision = revision;
 
         if (source == null) {
             displayedSkills = List.of();
@@ -148,7 +145,7 @@ public class SkillDisplayContainer extends RenderableElement {
             return;
         }
 
-        List<Identifier> skills = source.getSkills().stream()
+        List<Identifier> skills = AscensionOriginSourceHelper.getSkills(source).stream()
                 .sorted(Comparator.comparing(Identifier::toString))
                 .toList();
 

@@ -5,7 +5,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.network.OpenStarterSelectionPacket;
@@ -152,13 +153,12 @@ public final class StarterSelectionManager {
             return;
         }
 
-        AscensionOriginSource source = data.getSource();
-        source.setRegistryAccess(player.registryAccess());
+        OriginSource source = data.getSource();
 
-        boolean bloodlineApplied = source.hasBloodline(data.getSelectedStarterBloodline())
-                || source.addBloodline(data.getSelectedStarterBloodline());
-        boolean physiqueApplied = selectedId.equals(source.getPhysique())
-                || source.setPhysique(selectedId);
+        boolean bloodlineApplied = AscensionOriginSourceHelper.hasBloodline(source,data.getSelectedStarterBloodline())
+                || AscensionOriginSourceHelper.addBloodline(source,data.getSelectedStarterBloodline());
+        boolean physiqueApplied = selectedId.equals(AscensionOriginSourceHelper.getPhysiqueId(source))
+                || AscensionOriginSourceHelper.setPhysique(source,selectedId);
 
         if (!bloodlineApplied || !physiqueApplied) {
             openCurrentScreen(player, data);
@@ -169,8 +169,7 @@ public final class StarterSelectionManager {
         data.setStarterSelectionComplete(true);
         data.setStarterSelectionStage(StarterSelectionStage.COMPLETE);
 
-        source.updateAttributes(player.getData(ZenithAttachments.ATTRIBUTE_HOLDER));
-        data.applyAllAttributeSuppressions();
+
 
         player.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
         PacketDistributor.sendToPlayer(player, new OpenStarterSelectionPacket(

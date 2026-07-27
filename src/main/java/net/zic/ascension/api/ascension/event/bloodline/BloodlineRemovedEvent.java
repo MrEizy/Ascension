@@ -2,9 +2,7 @@ package net.zic.ascension.api.ascension.event.bloodline;
 
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.ICancellableEvent;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
-import net.zic.ascension.api.ascension.event.EventReason;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public abstract class BloodlineRemovedEvent extends BloodlineAddedEvent{

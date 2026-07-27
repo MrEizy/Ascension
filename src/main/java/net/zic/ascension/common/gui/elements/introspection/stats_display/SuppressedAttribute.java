@@ -7,6 +7,7 @@ import net.lucent.easygui.gui.events.EasyEvents;
 import net.lucent.easygui.gui.events.type.EasyEvent;
 import net.lucent.easygui.gui.events.type.EasyMouseEvent;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.core.Holder;
@@ -15,17 +16,16 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.network.UpdateAttributeSuppressionPacket;
 import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
+import net.zic.zenithlib.custom_attributes.SuppressedZenithAttribute;
 import org.lwjgl.glfw.GLFW;
 
 import java.text.DecimalFormat;
 
-public class SuppressedStat extends RenderableElement {
+public class SuppressedAttribute extends RenderableElement {
     private static final DecimalFormat VALUE_FORMAT = new DecimalFormat("0.##");
     private static final DecimalFormat PERCENT_FORMAT = new DecimalFormat("0.##");
 
@@ -39,7 +39,7 @@ public class SuppressedStat extends RenderableElement {
     private final BetterButton plusButton;
     private final EasyLabel label;
 
-    public SuppressedStat(UIFrame frame, Holder<Attribute> attribute) {
+    public SuppressedAttribute(UIFrame frame, Holder<Attribute> attribute) {
         super(frame);
         this.attribute = attribute;
 
@@ -134,46 +134,22 @@ public class SuppressedStat extends RenderableElement {
                 new UpdateAttributeSuppressionPacket(attributeId, next)
         );
 
-        ClientAscensionData.getEntityData().ifPresent(data ->
-                data.setAttributeSuppression(attribute, next)
-        );
+        Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).setSuppression(attribute,next);
+
     }
 
     private double getPercentage() {
-        return ClientAscensionData.getEntityData()
-                .map(data -> data.getAttributeSuppression(attribute))
-                .orElse(1.0D);
+        return ((SuppressedZenithAttribute)Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).getAttribute(attribute))
+                .getSuppression();
     }
 
     private double getActualAttributeValue() {
-        return ClientAscensionData.getPlayer()
-                .map(player -> {
-                    ZenithAttributeHolder holder = player.getData(
-                            ZenithAttachments.ATTRIBUTE_HOLDER
-                    );
-
-                    var zenithAttribute = holder.getAttribute(attribute);
-                    if (zenithAttribute != null) {
-                        return zenithAttribute.getValue();
-                    }
-
-                    if (player.getAttributes().hasAttribute(attribute)) {
-                        return player.getAttributeValue(attribute);
-                    }
-
-                    return Double.NaN;
-                })
-                .orElse(Double.NaN);
+        return ((SuppressedZenithAttribute)Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).getAttribute(attribute))
+                .getUnsuppressedValue();
     }
 
     private double getSuppressedAttributeValue() {
-        double actualValue = getActualAttributeValue();
-
-        if (Double.isNaN(actualValue)) {
-            return Double.NaN;
-        }
-
-        return actualValue * getPercentage();
+        return Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).getAttribute(attribute).getValue();
     }
 
     private void updatePercentage() {

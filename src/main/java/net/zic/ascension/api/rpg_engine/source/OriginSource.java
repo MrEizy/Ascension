@@ -4,11 +4,13 @@ import com.mojang.datafixers.util.Pair;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
@@ -45,9 +47,11 @@ public class OriginSource implements StatProvider {
 
     //cheating a bit here
     public RegistryAccess getRegistryAccess(){
-        return Minecraft.getInstance().getConnection() == null ? null : Minecraft.getInstance().getConnection().registryAccess();
+        return Minecraft.getInstance().getConnection() == null ?
+                (ServerLifecycleHooks.getCurrentServer() != null ? ServerLifecycleHooks.getCurrentServer().registryAccess() : null)
+        : Minecraft.getInstance().getConnection().registryAccess();
     }
-
+    public void setCachedData(ValueInput cachedData){this.cachedData =cachedData;}
 
     //──Source State────────────────────────────────────────────────────────
     //used to handle snapshot syncing, a snapshot will be created when a process is started
@@ -56,7 +60,7 @@ public class OriginSource implements StatProvider {
         if(process != null) return;
         process = processId;
     }
-    protected OriginSourcePatch resolvePatch(){
+    public OriginSourcePatch resolvePatch(){
         OriginSourcePatch patch =new OriginSourcePatch(
                 dataSources.entrySet().stream().filter(entry->dirtyDataSources.contains(entry.getKey()))
                         .collect(Collectors.toMap(
@@ -82,6 +86,7 @@ public class OriginSource implements StatProvider {
     }
 
     public void attachToEntity(LivingEntity entity){
+        if(attachedEntities.contains(entity)) return;
         attachedEntities.add(entity);
 
         for (DataSourceInstance instance : dataSources.values()) instance.getDataSource().applyToEntity(entity,instance);
@@ -89,6 +94,7 @@ public class OriginSource implements StatProvider {
         entity.getData(ZenithAttachments.STAT_HOLDER).registerStatProvider(this);
     }
     public void detachFromEntity(LivingEntity entity){
+        if(!attachedEntities.contains(entity)) return;
         attachedEntities.remove(entity);
 
         for (DataSourceInstance instance : dataSources.values()) instance.getDataSource().removeFromEntity(entity,instance);
@@ -202,6 +208,13 @@ public class OriginSource implements StatProvider {
         if(instance == null) return;
         output.putString("source_id",dataSource.toString());
         instance.getDataSource().writeInstance(instance,output.child("data"),access);
+    }
+
+    public OriginSourcePatch load(){
+        if(cachedData == null) return null;
+        loadOriginSourceData(cachedData);
+        cachedData = null;
+        return resolvePatch();
     }
 
     public void loadOriginSourceData(ValueInput input){

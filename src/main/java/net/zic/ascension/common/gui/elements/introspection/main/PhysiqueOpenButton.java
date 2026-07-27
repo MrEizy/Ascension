@@ -10,6 +10,7 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.physique.Physique;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 
@@ -56,7 +57,7 @@ public class PhysiqueOpenButton extends BetterButton {
 
     private static Component resolveTitle() {
         return ClientAscensionData.getSource().flatMap(source -> {
-            Identifier physiqueId = source.getPhysique();
+            Identifier physiqueId = AscensionOriginSourceHelper.getPhysiqueId(source);
             if (physiqueId == null) {
                 return java.util.Optional.empty();
             }

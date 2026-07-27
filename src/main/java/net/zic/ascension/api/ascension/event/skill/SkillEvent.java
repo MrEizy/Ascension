@@ -6,7 +6,6 @@ import net.neoforged.bus.api.Event;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSource;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public abstract class SkillEvent extends Event {
