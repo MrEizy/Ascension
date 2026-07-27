@@ -6,12 +6,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeatureType;
 import net.zic.ascension.api.datapack.TypeRegistries;
-import net.zic.ascension.impl.core.skill.castable.feature.FrozenBuildupFeature;
-import net.zic.ascension.impl.core.skill.castable.feature.MessageFeature;
-import net.zic.ascension.impl.core.skill.castable.feature.ParticleBurstFeature;
-import net.zic.ascension.impl.core.skill.castable.feature.ResourceTransactionFeature;
-import net.zic.ascension.impl.core.skill.castable.feature.SkillEffectFeature;
-import net.zic.ascension.impl.core.skill.castable.feature.SoundFeature;
+import net.zic.ascension.impl.core.skill.castable.feature.*;
 
 public final class AscensionSkillExecutionFeatureTypes {
     public static final DeferredRegister<SkillExecutionFeatureType> FEATURE_TYPES = DeferredRegister.create(
@@ -42,6 +37,51 @@ public final class AscensionSkillExecutionFeatureTypes {
     public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> SKILL_EFFECT = FEATURE_TYPES.register(
             "skill_effect",
             () -> new SkillExecutionFeatureType(SkillEffectFeature.CODEC)
+    );
+
+    public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> MOVEMENT = FEATURE_TYPES.register(
+            "movement",
+            () -> new SkillExecutionFeatureType(MovementFeature.CODEC)
+    );
+    public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> SET_MOVEMENT_ANCHOR = FEATURE_TYPES.register(
+            "set_movement_anchor",
+            () -> new SkillExecutionFeatureType(SetMovementAnchorFeature.CODEC)
+    );
+    public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> CLEAR_MOVEMENT_ANCHOR = FEATURE_TYPES.register(
+            "clear_movement_anchor",
+            () -> new SkillExecutionFeatureType(ClearMovementAnchorFeature.CODEC)
+    );
+    public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> VIRTUAL_PROJECTILE = FEATURE_TYPES.register(
+            "virtual_projectile",
+            () -> new SkillExecutionFeatureType(VirtualProjectileFeature.CODEC)
+    );
+    public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> SPAWN_AREA_FIELD = FEATURE_TYPES.register(
+            "spawn_area_field",
+            () -> new SkillExecutionFeatureType(SpawnAreaFieldFeature.CODEC)
+    );
+    public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> REMOVE_AREA_FIELD = FEATURE_TYPES.register(
+            "remove_area_field",
+            () -> new SkillExecutionFeatureType(RemoveAreaFieldFeature.CODEC)
+    );
+    public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> SPAWN_FORMATION = FEATURE_TYPES.register(
+            "spawn_formation",
+            () -> new SkillExecutionFeatureType(SpawnFormationFeature.CODEC)
+    );
+    public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> REMOVE_FORMATION = FEATURE_TYPES.register(
+            "remove_formation",
+            () -> new SkillExecutionFeatureType(RemoveFormationFeature.CODEC)
+    );
+    public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> SPAWN_CONSTRUCT = FEATURE_TYPES.register(
+            "spawn_construct",
+            () -> new SkillExecutionFeatureType(SpawnConstructFeature.CODEC)
+    );
+    public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> REMOVE_CONSTRUCT = FEATURE_TYPES.register(
+            "remove_construct",
+            () -> new SkillExecutionFeatureType(RemoveConstructFeature.CODEC)
+    );
+    public static final DeferredHolder<SkillExecutionFeatureType, SkillExecutionFeatureType> RESTORE_CONSTRUCT = FEATURE_TYPES.register(
+            "restore_construct",
+            () -> new SkillExecutionFeatureType(RestoreConstructFeature.CODEC)
     );
 
     private AscensionSkillExecutionFeatureTypes() {

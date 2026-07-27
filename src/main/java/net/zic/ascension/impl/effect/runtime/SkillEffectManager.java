@@ -4,13 +4,18 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.core.effect.SkillEffectContext;
 import net.zic.ascension.api.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.core.effect.SkillEffectModule;
 import net.zic.ascension.api.core.effect.SkillEffectRemovalReason;
+import net.zic.ascension.api.core.effect.SkillEffectStackingScope;
 import net.zic.ascension.api.event.effect.SkillEffectEvent;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public final class SkillEffectManager {
@@ -53,11 +58,14 @@ public final class SkillEffectManager {
         }
 
         SkillEffectContainer container = target.getData(AscensionAttachments.ACTIVE_SKILL_EFFECTS);
-        for (SkillEffectInstance existing : container.mutableInstances()) {
-            if (!existing.definition().equals(definitionId)) {
-                continue;
-            }
-
+        SkillEffectInstance existing = findMatching(
+                container,
+                definitionId,
+                definition.stackingScope(),
+                sourceEntity,
+                sourceSkill
+        );
+        if (existing != null) {
             updateExisting(existing, definition, duration, potency);
             for (SkillEffectModule module : definition.modules()) {
                 module.onUpdate(target, existing);
@@ -85,23 +93,120 @@ public final class SkillEffectManager {
             Identifier definitionId,
             SkillEffectRemovalReason reason
     ) {
-        if (entity == null || definitionId == null || entity.level().isClientSide()) {
+        return removeMatching(entity, definitionId, null, null, null, reason) > 0;
+    }
+
+    public static boolean removeInstance(
+            LivingEntity entity,
+            UUID instanceId,
+            SkillEffectRemovalReason reason
+    ) {
+        if (entity == null || instanceId == null || entity.level().isClientSide()) {
             return false;
         }
 
         SkillEffectContainer container = entity.getData(AscensionAttachments.ACTIVE_SKILL_EFFECTS);
         Iterator<SkillEffectInstance> iterator = container.mutableInstances().iterator();
-        boolean removed = false;
         while (iterator.hasNext()) {
             SkillEffectInstance active = iterator.next();
-            if (!active.definition().equals(definitionId)) {
+            if (!active.instanceId().equals(instanceId)) {
                 continue;
             }
             removeInstance(entity, active, resolve(entity, active.definition()), reason);
             iterator.remove();
-            removed = true;
+            return true;
+        }
+        return false;
+    }
+
+    public static int removeMatching(
+            LivingEntity entity,
+            Identifier definitionId,
+            UUID sourceEntity,
+            Identifier sourceSkill,
+            SkillEffectStackingScope scope,
+            SkillEffectRemovalReason reason
+    ) {
+        if (entity == null || entity.level().isClientSide()) {
+            return 0;
+        }
+
+        SkillEffectContainer container = entity.getData(AscensionAttachments.ACTIVE_SKILL_EFFECTS);
+        Iterator<SkillEffectInstance> iterator = container.mutableInstances().iterator();
+        int removed = 0;
+        while (iterator.hasNext()) {
+            SkillEffectInstance active = iterator.next();
+            if (!matchesQuery(active, definitionId, sourceEntity, sourceSkill, scope)) {
+                continue;
+            }
+            removeInstance(entity, active, resolve(entity, active.definition()), reason);
+            iterator.remove();
+            removed++;
         }
         return removed;
+    }
+
+    public static int consumeStacks(
+            LivingEntity entity,
+            UUID instanceId,
+            int amount,
+            SkillEffectRemovalReason removalReason
+    ) {
+        if (entity == null || instanceId == null || amount <= 0 || entity.level().isClientSide()) {
+            return 0;
+        }
+
+        SkillEffectContainer container = entity.getData(AscensionAttachments.ACTIVE_SKILL_EFFECTS);
+        Iterator<SkillEffectInstance> iterator = container.mutableInstances().iterator();
+        while (iterator.hasNext()) {
+            SkillEffectInstance active = iterator.next();
+            if (!active.instanceId().equals(instanceId)) {
+                continue;
+            }
+
+            int consumed = Math.min(amount, active.stacks());
+            int remaining = active.stacks() - consumed;
+            if (remaining <= 0) {
+                removeInstance(entity, active, resolve(entity, active.definition()), removalReason);
+                iterator.remove();
+            } else {
+                active.setStacks(remaining);
+                NeoForge.EVENT_BUS.post(new SkillEffectEvent.Updated(entity, active));
+            }
+            return consumed;
+        }
+        return 0;
+    }
+
+    public static List<SkillEffectContext> find(
+            LivingEntity entity,
+            Identifier definitionId,
+            UUID sourceEntity,
+            Identifier sourceSkill
+    ) {
+        if (entity == null) {
+            return List.of();
+        }
+
+        List<SkillEffectContext> result = new ArrayList<>();
+        for (SkillEffectInstance active : entity.getData(AscensionAttachments.ACTIVE_SKILL_EFFECTS).instances()) {
+            if (matchesQuery(active, definitionId, sourceEntity, sourceSkill, null)) {
+                result.add(active);
+            }
+        }
+        return List.copyOf(result);
+    }
+
+    public static SkillEffectContext findInstance(LivingEntity entity, UUID instanceId) {
+        if (entity == null || instanceId == null) {
+            return null;
+        }
+        for (SkillEffectInstance active : entity.getData(AscensionAttachments.ACTIVE_SKILL_EFFECTS).instances()) {
+            if (active.instanceId().equals(instanceId)) {
+                return active;
+            }
+        }
+        return null;
     }
 
     public static int clear(LivingEntity entity, SkillEffectRemovalReason reason) {
@@ -164,6 +269,65 @@ public final class SkillEffectManager {
                 definitionId,
                 entity.registryAccess()
         );
+    }
+
+    private static SkillEffectInstance findMatching(
+            SkillEffectContainer container,
+            Identifier definitionId,
+            SkillEffectStackingScope scope,
+            UUID sourceEntity,
+            Identifier sourceSkill
+    ) {
+        if (scope == SkillEffectStackingScope.INDEPENDENT) {
+            return null;
+        }
+        for (SkillEffectInstance active : container.mutableInstances()) {
+            if (!active.definition().equals(definitionId)) {
+                continue;
+            }
+            if (scope == SkillEffectStackingScope.DEFINITION
+                    || scope == SkillEffectStackingScope.SOURCE_ENTITY
+                    && Objects.equals(active.sourceEntity(), sourceEntity)
+                    || scope == SkillEffectStackingScope.SOURCE_SKILL
+                    && Objects.equals(active.sourceSkill(), sourceSkill)
+                    || scope == SkillEffectStackingScope.SOURCE_ENTITY_AND_SKILL
+                    && Objects.equals(active.sourceEntity(), sourceEntity)
+                    && Objects.equals(active.sourceSkill(), sourceSkill)) {
+                return active;
+            }
+        }
+        return null;
+    }
+
+    private static boolean matchesQuery(
+            SkillEffectInstance active,
+            Identifier definitionId,
+            UUID sourceEntity,
+            Identifier sourceSkill,
+            SkillEffectStackingScope scope
+    ) {
+        if (definitionId != null && !active.definition().equals(definitionId)) {
+            return false;
+        }
+        if (sourceEntity != null && !sourceEntity.equals(active.sourceEntity())) {
+            return false;
+        }
+        if (sourceSkill != null && !sourceSkill.equals(active.sourceSkill())) {
+            return false;
+        }
+        if (scope == null || scope == SkillEffectStackingScope.INDEPENDENT) {
+            return true;
+        }
+        return switch (scope) {
+            case DEFINITION -> true;
+            case SOURCE_ENTITY -> sourceEntity != null && sourceEntity.equals(active.sourceEntity());
+            case SOURCE_SKILL -> sourceSkill != null && sourceSkill.equals(active.sourceSkill());
+            case SOURCE_ENTITY_AND_SKILL -> sourceEntity != null
+                    && sourceSkill != null
+                    && sourceEntity.equals(active.sourceEntity())
+                    && sourceSkill.equals(active.sourceSkill());
+            case INDEPENDENT -> true;
+        };
     }
 
     private static void updateExisting(

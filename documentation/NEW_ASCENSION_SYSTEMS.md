@@ -239,18 +239,18 @@ Spending stamina doesn't consume hunger.
 * `ProjectileReleaseExecution`: Executes features through a virtual projectile
 * `AscensionHeldCastExecutionTypes`: Registers held cast execution types
 
-### Release Features
+### Execution Features
 
-* `HeldCastReleaseFeature`: Base interface for reusable release effects
-* `HeldCastReleaseContext`: Contains caster, target, charge and release position
-* `HeldCastReleaseFeatureType`: Codec type for release features
-* `MessageReleaseFeature`: Sends a message on release
-* `SoundReleaseFeature`: Plays a sound on release
-* `ParticleBurstReleaseFeature`: Spawns particles on release
-* `ResourceTransactionReleaseFeature`: Applies a resource transaction on release
-* `FrozenBuildupReleaseFeature`: Applies frozen buildup on release
-* `SkillEffectReleaseFeature`: Applies a temporary skill effect on release
-* `AscensionHeldCastReleaseFeatureTypes`: Registers release feature types
+* `SkillExecutionFeature`: Base interface for reusable execution effects
+* `SkillExecutionContext`: Contains caster, target, charge and execution position
+* `SkillExecutionFeatureType`: Codec type for execution features
+* `MessageFeature`: Sends a message
+* `SoundFeature`: Plays a sound
+* `ParticleBurstFeature`: Spawns particles
+* `ResourceTransactionFeature`: Applies a resource transaction
+* `FrozenBuildupFeature`: Applies frozen buildup
+* `SkillEffectFeature`: Applies a temporary skill effect
+* `AscensionSkillExecutionFeatureTypes`: Registers the built-in features
 
 ### Runtime and Networking
 
@@ -272,9 +272,9 @@ Held casts are split into three layers, so no single class ends up doing everyth
 
 Executions decide where the charge goes on release: at the caster (self), at nearby targets (radial), or through a virtual projectile. This layer is just about what gets hit.
 
-Release features are the small, individual effects that fire when a cast releases, and can be a sound, a particle burst, a chat message, a resource transaction, frozen buildup or a temporary skill effect. These are meant to be composable: most new held cast skills should be buildable by combining existing release features rather than writing new ones.
+Execution features are the small, reusable effects applied by an execution, such as sounds, particles, resource transactions, frozen buildup or temporary skill effects. They are shared with active skills, so new effects only need to be implemented once.
 
-Charging, targeting, and "what happens" are mostly independent concerns, so keeping them separate means adding a new skill usually doesn't mean touching the charge/interruption/sync code again.
+Charging, targeting, and execution features are mostly independent concerns, so keeping them separate means adding a new skill usually doesn't mean touching the charge/interruption/sync code again.
 
 ## Input Behaviour
 
@@ -293,6 +293,56 @@ That's intentional, as it means cancelling a cast at, say, 90% charge doesn't re
 ## Networking
 
 Same rule as everywhere else: the server decides charge time, resource payments, release timing, target selection, and execution results. Clients only get compact visual state updates so the charging animation and particles look right locally, but they never get a say in whether a cast actually lands or what it hits.
+
+</details>
+
+---
+
+<details>
+<summary>Active Skills and Targeting</summary>
+
+## Relevant Classes
+
+### Active Skills
+
+* `ActiveSkill`: Handles instant skill targeting, costs, execution and cooldowns
+* `ActiveSkillData`: Runtime data for active skills
+* `ActiveSkillLevelDefinition`: Defines the complete behaviour at each effective level
+* `ActiveSkillCostDefinition`: Defines resource costs
+* `ActiveSkillType`: Codec for the `active_skill` skill type
+
+### Execution Features
+
+* `SkillExecutionFeature`: Base interface for reusable skill effects
+* `SkillExecutionContext`: Contains the caster, target, skill and execution position
+* `SkillExecutionFeatureType`: Codec type for execution features
+* `AscensionSkillExecutionFeatureTypes`: Registers the built-in features
+
+### Targeting
+
+* `TargetingDefinition`: Base interface for datapack targeting definitions
+* `TargetingContext`: Information used while resolving targets
+* `TargetingResult`: Stores resolved entity or position targets
+* `TargetFilterDefinition`: Defines relationship and line-of-sight filtering
+* `TargetSort`: Defines target ordering
+* `TargetingService`: Shared targeting helpers
+* `AscensionTargetingTypes`: Registers the built-in targeting types
+
+---
+
+## Active Skills
+
+`ascension:active_skill` is the instant counterpart to held casts. Each effective level provides a complete definition containing its targeting, costs, cooldown, origin features and target features. 
+Costs are checked and paid before execution, while cooldowns are only applied after a successful cast.
+
+## Execution Features
+
+Active skills and held casts share the same execution features. Origin features run once at the caster, while target features run once for each selected entity or position.
+Built-in features currently cover messages, sounds, particles, resource transactions, frozen buildup and temporary skill effects.
+
+## Targeting
+
+Targeting is resolved server-side before resources are spent. The built-in types support self, ray, cone, radial and looked-at-position targeting, with shared filtering, sorting, line-of-sight and target limits.
 
 </details>
 
@@ -411,10 +461,11 @@ Clients only receive synced attachment data, compact held-cast visual packets, v
 
 * `AscensionCraft`: Registered scaled values, resources, held cast types, effect modules, stamina attributes and network payloads
 * `CoreRegistries`: Added the datapack skill effect registry
-* `TypeRegistries`: Added scaled value, held execution, release feature and effect module registries
+* `TypeRegistries`: Added scaled value, held execution, execution feature, targeting and effect module registries
 * `AscensionProgressActionTypes`: Registered the `set_skill_level` action
-* `AscensionSkillTypes`: Registered resource modifier passives and held cast skills
-* `AscensionHeldCastReleaseFeatureTypes`: Registered frozen buildup and temporary effect features
+* `AscensionSkillTypes`: Registered resource modifier passives, held casts and active skills
+* `AscensionSkillExecutionFeatureTypes`: Registered the shared execution features
+* `AscensionTargetingTypes`: Registered self, ray, cone, radial and looked-at-position targeting
 * `AscensionSkillEffectModuleTypes`: Registered Frozen Form and resource modifier effect modules
 
 ## Casting
@@ -459,9 +510,9 @@ Clients only receive synced attachment data, compact held-cast visual packets, v
 * `SkillEffectTicker`: Skips entities without active effect or frozen data
 * `FrozenFormEffectModule`: Added player, resistant and boss profiles
 * `FrozenStateService`: Avoids overwriting stronger vanilla or modded freezing
-* `SkillEffectReleaseFeature`: Uses the held execution's skill ID
-* `FrozenBuildupReleaseFeature`: Uses the reorganised frozen-state service
-* `ResourceTransactionReleaseFeature`: Uses the public resource source tags
+* `SkillEffectFeature`: Uses the held execution's skill ID
+* `FrozenBuildupFeature`: Uses the reorganised frozen-state service
+* `ResourceTransactionFeature`: Uses the public resource source tags
 
 ## Datagen and Content
 

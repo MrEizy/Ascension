@@ -40,6 +40,8 @@ import net.zic.ascension.impl.datapack.skill.castable.held.AscensionHeldCastExec
 import net.zic.ascension.impl.datapack.skill.castable.feature.AscensionSkillExecutionFeatureTypes;
 import net.zic.ascension.impl.datapack.targeting.AscensionTargetingTypes;
 import net.zic.ascension.impl.datapack.effect.AscensionSkillEffectModuleTypes;
+import net.zic.ascension.impl.datapack.movement.AscensionMovementTypes;
+import net.zic.ascension.impl.datapack.projectile.AscensionProjectileBehaviorTypes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -110,6 +112,8 @@ public class AscensionCraft {
         AscensionSkillExecutionFeatureTypes.register(modEventBus);
         AscensionTargetingTypes.register(modEventBus);
         AscensionSkillEffectModuleTypes.register(modEventBus);
+        AscensionMovementTypes.register(modEventBus);
+        AscensionProjectileBehaviorTypes.register(modEventBus);
 
         AscensionAttributes.register(modEventBus);
 
@@ -268,6 +272,11 @@ public class AscensionCraft {
                     HeldCastVisualStatePacket.TYPE,
                     HeldCastVisualStatePacket.STREAM_CODEC,
                     HeldCastVisualStatePacket::handle
+            );
+            registrar.playToClient(
+                    RuntimeVisualPacket.TYPE,
+                    RuntimeVisualPacket.STREAM_CODEC,
+                    RuntimeVisualPacket::handle
             );
 
             registrar.playToServer(

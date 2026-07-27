@@ -20,6 +20,7 @@ import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 import net.zic.ascension.impl.effect.runtime.SkillEffectContainer;
 import net.zic.ascension.common.effect.frozen.FrozenStateData;
+import net.zic.ascension.impl.core.movement.MovementAnchorContainer;
 
 import java.util.function.Supplier;
 
@@ -115,6 +116,12 @@ public class AscensionAttachments {
     public static final Supplier<AttachmentType<FrozenStateData>> FROZEN_STATE = ATTACHMENT_TYPES.register(
             "frozen_state", () -> AttachmentType.builder(holder -> new FrozenStateData())
                     .serialize(FrozenStateData.CODEC.fieldOf("data"))
+                    .copyOnDeath()
+                    .build()
+    );
+    public static final Supplier<AttachmentType<MovementAnchorContainer>> MOVEMENT_ANCHORS = ATTACHMENT_TYPES.register(
+            "movement_anchors", () -> AttachmentType.builder(holder -> new MovementAnchorContainer())
+                    .serialize(MovementAnchorContainer.CODEC.fieldOf("data"))
                     .copyOnDeath()
                     .build()
     );

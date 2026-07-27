@@ -21,6 +21,8 @@ import net.zic.ascension.api.core.skill.castable.held.execution.HeldCastExecutio
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeatureType;
 import net.zic.ascension.api.core.targeting.TargetingType;
 import net.zic.ascension.api.core.effect.SkillEffectModuleType;
+import net.zic.ascension.api.core.movement.MovementType;
+import net.zic.ascension.api.core.projectile.ProjectileBehaviorType;
 import net.zic.zenithlib.registry.RegistryHelper;
 
 /**
@@ -53,6 +55,8 @@ public class TypeRegistries {
     public static final Registry<SkillEffectModuleType> SKILL_EFFECT_MODULE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"skill_effect_module_type");
     public static final Registry<SkillExecutionFeatureType> SKILL_EXECUTION_FEATURE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"skill_execution_feature_type");
     public static final Registry<TargetingType> TARGETING_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"targeting_type");
+    public static final Registry<MovementType> MOVEMENT_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"movement_type");
+    public static final Registry<ProjectileBehaviorType> PROJECTILE_BEHAVIOR_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"projectile_behavior_type");
 
 
 
@@ -74,6 +78,8 @@ public class TypeRegistries {
         event.register(SKILL_EFFECT_MODULE_TYPE_REGISTRY);
         event.register(SKILL_EXECUTION_FEATURE_TYPE_REGISTRY);
         event.register(TARGETING_TYPE_REGISTRY);
+        event.register(MOVEMENT_TYPE_REGISTRY);
+        event.register(PROJECTILE_BEHAVIOR_TYPE_REGISTRY);
         AscensionCraft.LOGGER.info("Finished loading type registries");
     }
 }
