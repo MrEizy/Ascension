@@ -48,8 +48,8 @@ public interface DataSource {
     DataSourceInstance loadInstance(DataSourceInstance previousInstance,ByteBuf buf, RegistryAccess access);
 
     void writeInstance(DataSourceInstance instance,ValueOutput output, RegistryAccess access);
-    void encodeInstance(DataSourceInstance instance,ByteBuf buf,RegistryAccess access);
 
+    void encodeInstance(DataSourceInstance instance,ByteBuf buf,RegistryAccess access,boolean fullPatch);
 
     static DataSource getInstance(Identifier identifier){
         return RPGEngineRegistries.DATA_SOURCE_REGISTRY.getValue(identifier);

@@ -86,8 +86,8 @@ public class BloodlineHolderProvider implements DataSource {
     }
 
     @Override
-    public void encodeInstance(DataSourceInstance instance, ByteBuf buf, RegistryAccess access) {
+    public void encodeInstance(DataSourceInstance instance, ByteBuf buf, RegistryAccess access,boolean fullPatch) {
         BloodlineHolder holder = getHolder(instance);
-        holder.encode(buf,access);
+        holder.encode(buf,access,fullPatch);
     }
 }

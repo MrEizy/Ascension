@@ -72,22 +72,36 @@ public class PathBonusCategoryHolder {
         return pathBonus.get(path);
     }
 
-    public void encode(ByteBuf buf){
+    public void encode(ByteBuf buf,boolean fullPatch){
 
+        buf.writeBoolean(fullPatch);
+        if(fullPatch) encodeFullPatch(buf);
+        else encodePartialPatch(buf);
+
+        dirtyPathBonus.clear();
+
+    }
+    protected void encodeFullPatch(ByteBuf buf){
+        buf.writeInt(pathBonus.size());
+        for(Identifier path : pathBonus.keySet()){
+            ValueContainer.encode(buf,pathBonus.get(path));
+        }
+    }
+    protected void encodePartialPatch(ByteBuf buf){
         buf.writeInt(dirtyPathBonus.size());
         for(Identifier dirtyPathBonus : dirtyPathBonus){
             ValueContainer.encode(buf,pathBonus.get(dirtyPathBonus));
         }
-        dirtyPathBonus.clear();
-
     }
     public void decode(ByteBuf buf){
 
+        if(buf.readBoolean()) pathBonus.clear();
         int size = buf.readInt();
         for(int i = 0;i<size; i++){
             ValueContainer container = ValueContainer.decode(buf);
             pathBonus.put(container.getIdentifier(),container);
         }
-    }
 
+        dirtyPathBonus.clear();
+    }
 }

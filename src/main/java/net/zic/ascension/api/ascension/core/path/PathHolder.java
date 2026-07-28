@@ -137,17 +137,52 @@ public class PathHolder implements DataSourceInstance {
             }
         }
     }
-    public void encode(ByteBuf buf, RegistryAccess access){
+    public void encode(ByteBuf buf, RegistryAccess access,boolean fullPatch){
+        buf.writeBoolean(fullPatch);
+        if(fullPatch) encodeFullPatch(buf,access);
+        else encodePartialPatch(buf,access);
+
+        dirtyPaths.clear();
+        toRemovePaths.clear();
+    }
+
+    protected void encodeFullPatch(ByteBuf buf, RegistryAccess access){
+        buf.writeInt(paths.size());
+        for(Identifier path : paths.keySet()){
+            ByteBufHelpers.encodeIdentifier(path,buf);
+            getPath(path).encode(buf);
+        }
+    }
+    protected void encodePartialPatch(ByteBuf buf, RegistryAccess access){
         buf.writeInt(dirtyPaths.size());
         for(Identifier dirtyPath : dirtyPaths){
             ByteBufHelpers.encodeIdentifier(dirtyPath,buf);
             getPath(dirtyPath).encode(buf);
         }
         ByteBufHelpers.encodeCollection(toRemovePaths,buf,ByteBufHelpers::encodeIdentifier);
+    }
+    public void decode(ByteBuf buf,RegistryAccess access){
+
+
+        if(buf.readBoolean()) decodeFullPatch(buf,access);
+        else decodePartialPatch(buf,access);
+
         dirtyPaths.clear();
         toRemovePaths.clear();
     }
-    public void decode(ByteBuf buf,RegistryAccess access){
+
+    private void decodeFullPatch(ByteBuf buf,RegistryAccess access){
+        paths.clear();
+        int size = buf.readInt();
+        for(int i = 0;i<size;i++){
+            Identifier pathId = ByteBufHelpers.decodeIdentifier(buf);
+            Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,access);
+            PathData data = path.loadData(buf,access);
+            paths.put(pathId,data);
+        }
+    }
+
+    protected void decodePartialPatch(ByteBuf buf,RegistryAccess access){
         int size = buf.readInt();
         for(int i = 0;i<size;i++){
             Identifier pathId = ByteBufHelpers.decodeIdentifier(buf);
@@ -157,7 +192,5 @@ public class PathHolder implements DataSourceInstance {
         }
         ByteBufHelpers.decodeArray(buf,ByteBufHelpers::decodeIdentifier).forEach(paths::remove);
 
-        dirtyPaths.clear();
-        toRemovePaths.clear();
     }
 }

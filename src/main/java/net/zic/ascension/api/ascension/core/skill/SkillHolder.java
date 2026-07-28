@@ -157,17 +157,50 @@ public class SkillHolder implements DataSourceInstance {
         }
     }
 
-    public void encode(ByteBuf buf, RegistryAccess access){
+    public void encode(ByteBuf buf, RegistryAccess access,boolean fullPatch){
+
+        buf.writeBoolean(fullPatch);
+        if(fullPatch) encodeFullPatch(buf,access);
+        else encodePartialPatch(buf,access);
+
+        dirtySkills.clear();
+        toRemoveSkills.clear();
+    }
+    protected void encodeFullPatch(ByteBuf buf, RegistryAccess access){
+        buf.writeInt(skills.size());
+        for(Identifier skill : skills.keySet()){
+            ByteBufHelpers.encodeIdentifier(skill,buf);
+            getSkillData(skill).encode(buf);
+        }
+    }
+    protected void encodePartialPatch(ByteBuf buf, RegistryAccess access){
         buf.writeInt(dirtySkills.size());
         for(Identifier dirtySkill : dirtySkills){
             ByteBufHelpers.encodeIdentifier(dirtySkill,buf);
             getSkillData(dirtySkill).encode(buf);
         }
         ByteBufHelpers.encodeCollection(toRemoveSkills,buf,ByteBufHelpers::encodeIdentifier);
+    }
+    public void decode(ByteBuf buf,RegistryAccess access){
+
+        if(buf.readBoolean()) decodeFullPatch(buf,access);
+        else decodePartialPatch(buf,access);
+
         dirtySkills.clear();
         toRemoveSkills.clear();
     }
-    public void decode(ByteBuf buf,RegistryAccess access){
+    private void decodeFullPatch(ByteBuf buf,RegistryAccess access){
+        skills.clear();
+        int size = buf.readInt();
+        for(int i = 0;i<size;i++){
+            Identifier skillId = ByteBufHelpers.decodeIdentifier(buf);
+            Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skillId,access);
+            SkillData data = skill.loadData(buf);
+            skills.put(skillId,data);
+        }
+    }
+
+    protected void decodePartialPatch(ByteBuf buf,RegistryAccess access){
         int size = buf.readInt();
         for(int i = 0;i<size;i++){
             Identifier skillId = ByteBufHelpers.decodeIdentifier(buf);
@@ -177,7 +210,6 @@ public class SkillHolder implements DataSourceInstance {
         }
         ByteBufHelpers.decodeArray(buf,ByteBufHelpers::decodeIdentifier).forEach(skills::remove);
 
-        dirtySkills.clear();
-        toRemoveSkills.clear();
+
     }
 }

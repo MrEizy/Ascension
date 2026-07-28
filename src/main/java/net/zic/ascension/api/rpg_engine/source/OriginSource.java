@@ -75,6 +75,13 @@ public class OriginSource implements StatProvider {
         updateEntityStatHolder();
         return patch;
     }
+    public OriginSourcePatch resolveFullPatch(){
+        return new OriginSourcePatch(
+                Map.copyOf(dataSources),
+                List.of(),
+                statSheet.getAllInstances()
+        );
+    }
     public boolean resolveProcess(String processId){
         return processId.equals(process);
 
@@ -214,7 +221,7 @@ public class OriginSource implements StatProvider {
         if(cachedData == null) return null;
         loadOriginSourceData(cachedData);
         cachedData = null;
-        return resolvePatch();
+        return resolveFullPatch();
     }
 
     public void loadOriginSourceData(ValueInput input){

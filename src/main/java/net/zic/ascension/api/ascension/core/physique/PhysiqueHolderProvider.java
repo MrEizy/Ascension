@@ -88,7 +88,7 @@ public class PhysiqueHolderProvider implements DataSource {
     }
 
     @Override
-    public void encodeInstance(DataSourceInstance instance, ByteBuf buf, RegistryAccess access) {
+    public void encodeInstance(DataSourceInstance instance, ByteBuf buf, RegistryAccess access,boolean fullPatch) {
         PhysiqueHolder holder = getHolder(instance);
         holder.encode(buf,access);
     }

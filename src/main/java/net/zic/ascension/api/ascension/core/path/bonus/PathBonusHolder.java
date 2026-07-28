@@ -1,8 +1,12 @@
 package net.zic.ascension.api.ascension.core.path.bonus;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.network.ByteBufHelpers;
@@ -82,24 +86,40 @@ public class PathBonusHolder implements DataSourceInstance {
         }
         return pathBonuses;
     }
-    public void encode(ByteBuf buf){
+    public void encode(ByteBuf buf,boolean fullPatch){
 
-        buf.writeInt(dirtyCategories.size());
-        for(Identifier dirtyCategory : dirtyCategories){
-            ByteBufHelpers.encodeIdentifier(dirtyCategory,buf);
-            categories.get(dirtyCategory).encode(buf);
-        }
+        buf.writeBoolean(fullPatch);
+        if(fullPatch) encodeFullPatch(buf);
+        else encodePartialPatch(buf);
+
         dirtyCategories.clear();
 
     }
+    protected void encodeFullPatch(ByteBuf buf){
+        buf.writeInt(categories.size());
+        for(Identifier category : categories.keySet()){
+            ByteBufHelpers.encodeIdentifier(category,buf);
+            categories.get(category).encode(buf,true);
+        }
+    }
+    protected void encodePartialPatch(ByteBuf buf){
+        buf.writeInt(dirtyCategories.size());
+        for(Identifier dirtyCategory : dirtyCategories){
+            ByteBufHelpers.encodeIdentifier(dirtyCategory,buf);
+            categories.get(dirtyCategory).encode(buf,false);
+        }
+    }
     public void decode(ByteBuf buf){
 
+        if(buf.readBoolean()) categories.clear();
         int size = buf.readInt();
         for(int i = 0;i<size; i++){
             Identifier category = ByteBufHelpers.decodeIdentifier(buf);
             PathBonusCategoryHolder holder = getCategoryHolder(category);
             holder.decode(buf);
         }
+        dirtyCategories.clear();
+
     }
 
     @Override

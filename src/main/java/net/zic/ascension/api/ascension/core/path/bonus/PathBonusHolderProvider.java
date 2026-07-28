@@ -72,7 +72,7 @@ public class PathBonusHolderProvider implements DataSource {
     }
 
     @Override
-    public void encodeInstance(DataSourceInstance instance, ByteBuf buf, RegistryAccess access) {
-
+    public void encodeInstance(DataSourceInstance instance, ByteBuf buf, RegistryAccess access,boolean fullPatch) {
+        getHolder(instance).encode(buf,fullPatch);
     }
 }

@@ -45,7 +45,7 @@ public interface AscensionEntityData extends StatProvider, PathBonusProvider {
 
 
 
-    void markDirty(OriginSourcePatch patch);
+    void markDirty(OriginSourcePatch patch,boolean fullPatch);
     boolean isCultivationSuppressed();
     void setCultivationSuppressed(boolean state);
 

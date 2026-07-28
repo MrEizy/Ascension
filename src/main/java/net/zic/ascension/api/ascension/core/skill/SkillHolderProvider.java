@@ -85,7 +85,7 @@ public class SkillHolderProvider implements DataSource {
     }
 
     @Override
-    public void encodeInstance(DataSourceInstance instance, ByteBuf buf, RegistryAccess access) {
-        getHolder(instance).encode(buf,access);
+    public void encodeInstance(DataSourceInstance instance, ByteBuf buf, RegistryAccess access,boolean fullPatch) {
+        getHolder(instance).encode(buf,access,fullPatch);
     }
 }

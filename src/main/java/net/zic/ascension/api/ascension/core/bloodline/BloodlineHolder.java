@@ -109,17 +109,51 @@ public class BloodlineHolder implements DataSourceInstance {
         }
 
     }
-    public void encode(ByteBuf buf, RegistryAccess access){
+
+    public void encode(ByteBuf buf, RegistryAccess access,boolean fullPatch){
+
+        buf.writeBoolean(fullPatch);
+        if(fullPatch) encodeFullPatch(buf,access);
+        else encodePartialPatch(buf,access);
+
+        dirtyBloodlines.clear();
+        toRemoveBloodlines.clear();
+    }
+    protected void encodeFullPatch(ByteBuf buf,RegistryAccess registryAccess){
+        buf.writeInt(bloodlines.size());
+        for(Identifier bloodline : bloodlines.keySet()){
+            ByteBufHelpers.encodeIdentifier(bloodline,buf);
+            getBloodline(bloodline).encode(buf);
+        }
+    }
+    protected void encodePartialPatch(ByteBuf buf,RegistryAccess registryAccess){
         buf.writeInt(dirtyBloodlines.size());
         for(Identifier dirtyBloodline : dirtyBloodlines){
             ByteBufHelpers.encodeIdentifier(dirtyBloodline,buf);
             getBloodline(dirtyBloodline).encode(buf);
         }
         ByteBufHelpers.encodeCollection(toRemoveBloodlines,buf,ByteBufHelpers::encodeIdentifier);
+
+    }
+
+    public void decode(ByteBuf buf,RegistryAccess access){
+        if(buf.readBoolean()) decodeFullPatch(buf,access);
+        else decodePartialPatch(buf,access);
+
         dirtyBloodlines.clear();
         toRemoveBloodlines.clear();
     }
-    public void decode(ByteBuf buf,RegistryAccess access){
+    protected void decodeFullPatch(ByteBuf buf,RegistryAccess access){
+        bloodlines.clear();
+        int size = buf.readInt();
+        for(int i = 0;i<size;i++){
+            Identifier bloodlineId = ByteBufHelpers.decodeIdentifier(buf);
+            Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodlineId,access);
+            BloodlineData data = bloodline.loadData(buf);
+            bloodlines.put(bloodlineId,data);
+        }
+    }
+    protected void decodePartialPatch(ByteBuf buf,RegistryAccess access){
         int size = buf.readInt();
         for(int i = 0;i<size;i++){
             Identifier bloodlineId = ByteBufHelpers.decodeIdentifier(buf);
@@ -129,7 +163,6 @@ public class BloodlineHolder implements DataSourceInstance {
         }
         ByteBufHelpers.decodeArray(buf,ByteBufHelpers::decodeIdentifier).forEach(this::removeBloodline);
 
-        dirtyBloodlines.clear();
-        toRemoveBloodlines.clear();
+
     }
 }

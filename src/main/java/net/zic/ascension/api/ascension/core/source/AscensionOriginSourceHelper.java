@@ -552,7 +552,7 @@ public class AscensionOriginSourceHelper {
         for(LivingEntity entity : source.getAttachedEntities()){
             AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(holder == null) continue;
-            holder.getData(entity).markDirty(patch);
+            holder.getData(entity).markDirty(patch,false);
         }
 
     }

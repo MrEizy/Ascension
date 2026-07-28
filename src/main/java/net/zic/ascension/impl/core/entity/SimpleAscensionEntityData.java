@@ -52,7 +52,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private final OriginSource source;
     private final LivingEntity attachedEntity;
 
-
+    private boolean fullPatch;
     private OriginSourcePatch patch;
 
     private boolean cultivationSuppressed;
@@ -179,7 +179,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         initializeAttributes();
 
 
-        markDirty(getSource().load());
+        markDirty(getSource().load(),true);
 
         getSource().attachToEntity(getEntity());
 
@@ -296,7 +296,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
 
     @Override
-    public void markDirty(OriginSourcePatch patch) {
+    public void markDirty(OriginSourcePatch patch,boolean fullPatch) {
         //TODO ensure up to date
         if (attachedEntity.level().isClientSide()) {
             return;
@@ -304,8 +304,10 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
         this.patch = patch;
         if(patch == null) return;
+        this.fullPatch = fullPatch;
         attachedEntity.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
     }
+
 
     @Override
     public boolean isCultivationSuppressed() {
@@ -487,7 +489,8 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
             buf.writeBoolean(attachment.patch != null);
             if(attachment.patch != null){
-                OriginSourcePatch.encode(attachment.patch,buf,attachment.getEntity().level().registryAccess());
+                if(attachment.fullPatch) OriginSourcePatch.fullEncode(attachment.patch,buf,attachment.getEntity().registryAccess());
+                else OriginSourcePatch.encodePatch(attachment.patch,buf,attachment.getEntity().registryAccess());
                 attachment.patch = null;
             }
         }
