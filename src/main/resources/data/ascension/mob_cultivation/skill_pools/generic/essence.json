@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "skill": "ascension:mob_skill/qi_projectile",
+      "weight": 1.0,
+      "minimum_realm_score": 3
+    },
+    {
+      "skill": "ascension:mob_skill/elemental_pulse",
+      "weight": 1.0,
+      "minimum_realm_score": 4
+    },
+    {
+      "skill": "ascension:mob_skill/essence_empowerment",
+      "weight": 0.7,
+      "minimum_realm_score": 6
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "entries": [
+    {
+      "item": "ascension:spiritual_blood",
+      "weight": 7,
+      "minimum_count": 1,
+      "maximum_count": 3
+    },
+    {
+      "item": "ascension:beast_core",
+      "weight": 4,
+      "minimum_realm_score": 4
+    },
+    {
+      "item": "ascension:rare_mob_part",
+      "weight": 1.5,
+      "minimum_realm_score": 5
+    },
+    {
+      "item": "ascension:cultivation_remnant",
+      "weight": 3,
+      "minimum_count": 1,
+      "maximum_count": 2
+    },
+    {
+      "item": "ascension:jade",
+      "weight": 1.0,
+      "minimum_realm_score": 4,
+      "minimum_count": 1,
+      "maximum_count": 2
+    }
+  ]
+}

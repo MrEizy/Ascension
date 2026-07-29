@@ -2,20 +2,40 @@
 <summary>Mob Cultivation</summary>
 
 ## Added Classes:
-- `MobCultivationCategory`: The type of mob, as well as some multipliers for them
-- `MobCultivationCommands`: A bunch of commands for things relating to mob cultivation
-- `MobCultivationData`: Additional Data for mob cultivation outside of OriginSource
-- `MobCultivationEvents`: Events that utilize MobCultivationManager for various outcomes
-- `MobCultivationManager`: The core of this implementation (will be split into multiple classes
-  in the proper implementation) which handles mob cultivation growth, loot drops, ai events etc
+* `MobCultivationCategory`: Defines passive, hostile, and boss mob categories and their default multipliers.
+* `MobCultivationClassifier`: Determines a mob’s category using entity tags and automatic classification.
+* `MobCultivationData`: Stores mob-specific cultivation data that does not belong inside `OriginSource`.
+* `MobCultivationEvents`: Connects NeoForge entity events to the mob cultivation systems.
+* `MobCultivationManager`: Coordinates mob cultivation initialization and the smaller supporting systems.
+* `MobCultivationCommands`: Contains commands for inspecting, modifying, rerolling, copying, and summoning cultivated mobs.
+* `MobCultivationGenerator`: Generates foundation paths, starting realms, and stats for mobs.
+* `MobCultivationSubPathGenerator`: Generates elemental, weapon, and other sub-paths using profiles and environmental conditions.
+* `MobCultivationEliteGenerator`: Determines whether a mob becomes an elite variant and applies its bonuses.
+* `MobCultivationEliteTier`: Defines the normal, elite, and ancient mob tiers.
+* `MobCultivationGrowth`: Handles atmospheric-qi-based cultivation growth and realm advancement.
+* `MobCultivationAi`: Handles retaliation, intimidation, retreating, pack behaviour, and high-qi area seeking.
+* `MobCultivationVisuals`: Handles cultivation particles, breakthrough effects, elite visuals, and temporary debug nameplates.
+* `MobCultivationProfile`: Represents a datapack-defined mob cultivation profile.
+* `MobCultivationProfileTarget`: Defines which mobs a profile applies to.
+* `ResolvedMobCultivationProfile`: Stores the final combined profile values for a mob.
+* `MobCultivationProfileManager`: Loads, layers, caches, and resolves mob cultivation profiles.
+* `MobCultivationEliteSettings`: Defines elite generation settings inside mob cultivation profiles.
+* `MobCultivationTraitDefinition`: Represents a reusable datapack-defined mob trait.
+* `MobCultivationTraitManager`: Loads and manages mob cultivation traits.
+* `MobCultivationSkillPool`: Represents a datapack-defined pool of skills available to cultivated mobs.
+* `MobCultivationSkillPoolManager`: Loads and manages mob skill pools.
+* `MobCultivationLoot`: Handles cultivation-based loot selection.
+* `MobCultivationLootProfile`: Represents a datapack-defined loot profile.
+* `MobCultivationLootProfileManager`: Loads and manages mob cultivation loot profiles.
+* `AscEntityTypeTagProvider`: Generates the passive, hostile, and boss mob cultivation entity tags.
 
 ## Other changed classes:
-- `AscensionCommands`: Registered the mob cultivation commands
-- `AscensionAttachments`: Added a mob cultivation data attachment for MobCultivationData
-- `SimpleAscensionEntityData`: Updated Origin Source watcher registration so it safely 
-supports non-player living entities
-- `OriginSource`: Updated physique serialization so sources without a physique can save and load 
-without producing null-related errors
+* `AscensionCommands`: Registered the mob cultivation commands.
+* `AscensionAttachments`: Added the `MobCultivationData` attachment.
+* `AscDataGen`: Registered the Entity Type Tag Provider.
+* `ModTags`: Added the mob cultivation category tags.
+* `SimpleAscensionEntityData`: Updated Origin Source watcher registration so it safely supports non-player living entities.
+* `OriginSource`: Updated physique serialization so sources without a physique can save and load without producing null-related errors.
 
 ---
 

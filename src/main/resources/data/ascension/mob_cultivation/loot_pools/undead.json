@@ -1,0 +1,34 @@
+{
+  "entries": [
+    {
+      "item": "ascension:cultivation_remnant",
+      "weight": 9,
+      "minimum_count": 1,
+      "maximum_count": 3
+    },
+    {
+      "item": "ascension:spiritual_blood",
+      "weight": 2,
+      "minimum_realm_score": 4
+    },
+    {
+      "item": "minecraft:amethyst_shard",
+      "weight": 3,
+      "minimum_realm_score": 2,
+      "minimum_count": 1,
+      "maximum_count": 3
+    },
+    {
+      "item": "ascension:technique_fragment",
+      "weight": 0.8,
+      "minimum_realm_score": 7
+    },
+    {
+      "item": "ascension:jade",
+      "weight": 1.2,
+      "minimum_realm_score": 4,
+      "minimum_count": 1,
+      "maximum_count": 2
+    }
+  ]
+}

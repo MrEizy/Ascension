@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "skill": "ascension:mob_skill/fear_pulse",
+      "weight": 1.0,
+      "minimum_realm_score": 3
+    },
+    {
+      "skill": "ascension:mob_skill/spirit_barrier",
+      "weight": 1.0,
+      "minimum_realm_score": 4
+    },
+    {
+      "skill": "ascension:mob_skill/target_disruption",
+      "weight": 0.7,
+      "minimum_realm_score": 6
+    }
+  ]
+}

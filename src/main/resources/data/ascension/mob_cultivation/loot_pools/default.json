@@ -1,0 +1,66 @@
+{
+  "entries": [
+    {
+      "item": "ascension:cultivation_remnant",
+      "weight": 8,
+      "minimum_count": 1,
+      "maximum_count": 2
+    },
+    {
+      "item": "ascension:spiritual_blood",
+      "weight": 3,
+      "minimum_realm_score": 3,
+      "minimum_count": 1,
+      "maximum_count": 2
+    },
+    {
+      "item": "ascension:elemental_essence",
+      "weight": 3,
+      "minimum_realm_score": 3,
+      "minimum_count": 1,
+      "maximum_count": 2
+    },
+    {
+      "item": "ascension:beast_core",
+      "weight": 2,
+      "minimum_realm_score": 5,
+      "minimum_count": 1,
+      "maximum_count": 1
+    },
+    {
+      "item": "ascension:rare_mob_part",
+      "weight": 1,
+      "minimum_realm_score": 6,
+      "minimum_count": 1,
+      "maximum_count": 1
+    },
+    {
+      "item": "ascension:technique_fragment",
+      "weight": 0.8,
+      "minimum_realm_score": 7,
+      "minimum_count": 1,
+      "maximum_count": 1
+    },
+    {
+      "item": "ascension:jade",
+      "weight": 1.5,
+      "minimum_realm_score": 4,
+      "minimum_count": 1,
+      "maximum_count": 2
+    },
+    {
+      "item": "minecraft:gold_ingot",
+      "weight": 0.9,
+      "minimum_realm_score": 5,
+      "minimum_count": 1,
+      "maximum_count": 2
+    },
+    {
+      "item": "minecraft:diamond",
+      "weight": 0.35,
+      "minimum_realm_score": 8,
+      "minimum_count": 1,
+      "maximum_count": 1
+    }
+  ]
+}

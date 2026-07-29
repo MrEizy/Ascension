@@ -1,0 +1,52 @@
+{
+  "priority": 10,
+  "target": {
+    "entity": "minecraft:wolf"
+  },
+  "foundation_path_weights": {
+    "ascension:foundation/body": 6,
+    "ascension:foundation/essence": 1,
+    "ascension:foundation/soul": 2
+  },
+  "sub_path_weights": {
+    "ascension:elemental/wind": 4,
+    "ascension:weapon/fist": 4,
+    "ascension:elemental/wood": 1
+  },
+  "sub_path_count": {
+    "min": 1,
+    "max": 2
+  },
+  "traits": [
+    "ascension:pack_creature"
+  ],
+  "skill_pools": [
+    "ascension:generic/body",
+    "ascension:species/wolf"
+  ],
+  "loot_profile": "ascension:beast",
+  "stat_multiplier": 1.0,
+  "stat_biases": {
+    "vitality": 1.0,
+    "strength": 1.15,
+    "agility": 1.25,
+    "spirit": 1.0
+  },
+  "growth_multiplier": 1.05,
+  "atmospheric_qi_sensitivity": 1.0,
+  "loot_multiplier": 1.0,
+  "show_particles": true,
+  "elite": {
+    "enabled": true,
+    "chance": 0.025,
+    "ancient_chance": 0.08,
+    "extra_trait_rolls": 1,
+    "trait_weights": {
+      "ascension:regenerating": 1.0,
+      "ascension:armoured_body": 1.0,
+      "ascension:spiritual_body": 0.7,
+      "ascension:elemental_body": 0.7,
+      "ascension:pack_creature": 0.35
+    }
+  }
+}

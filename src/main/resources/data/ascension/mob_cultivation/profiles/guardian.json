@@ -1,0 +1,52 @@
+{
+  "priority": 10,
+  "target": {
+    "entity": "minecraft:guardian"
+  },
+  "foundation_path_weights": {
+    "ascension:foundation/body": 3,
+    "ascension:foundation/essence": 5,
+    "ascension:foundation/soul": 1
+  },
+  "sub_path_weights": {
+    "ascension:elemental/water": 8,
+    "ascension:elemental/lightning": 3,
+    "ascension:weapon/spear": 2
+  },
+  "sub_path_count": {
+    "min": 1,
+    "max": 2
+  },
+  "traits": [
+    "ascension:armoured_body",
+    "ascension:elemental_body"
+  ],
+  "skill_pools": [
+    "ascension:generic/essence"
+  ],
+  "loot_profile": "ascension:elemental",
+  "stat_multiplier": 1.0,
+  "stat_biases": {
+    "vitality": 1.25,
+    "strength": 1.0,
+    "agility": 0.9,
+    "spirit": 1.2
+  },
+  "growth_multiplier": 1.0,
+  "atmospheric_qi_sensitivity": 1.15,
+  "loot_multiplier": 1.0,
+  "show_particles": true,
+  "elite": {
+    "enabled": true,
+    "chance": 0.025,
+    "ancient_chance": 0.08,
+    "extra_trait_rolls": 1,
+    "trait_weights": {
+      "ascension:regenerating": 1.0,
+      "ascension:armoured_body": 1.0,
+      "ascension:spiritual_body": 0.7,
+      "ascension:elemental_body": 0.7,
+      "ascension:pack_creature": 0.35
+    }
+  }
+}

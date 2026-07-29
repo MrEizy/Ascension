@@ -49,17 +49,17 @@ public final class MobCultivationEvents {
             return;
         }
 
-        ItemStack bonusLoot = MobCultivationManager.rollBonusLoot(mob);
-        if (bonusLoot.isEmpty()) {
-            return;
+        for (ItemStack bonusLoot : MobCultivationManager.rollBonusLoot(mob)) {
+            if (bonusLoot.isEmpty()) {
+                continue;
+            }
+            event.getDrops().add(new ItemEntity(
+                    level,
+                    mob.getX(),
+                    mob.getY(),
+                    mob.getZ(),
+                    bonusLoot
+            ));
         }
-
-        event.getDrops().add(new ItemEntity(
-                level,
-                mob.getX(),
-                mob.getY(),
-                mob.getZ(),
-                bonusLoot
-        ));
     }
 }

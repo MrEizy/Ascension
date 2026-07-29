@@ -5,7 +5,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
 import net.zic.ascension.common.command.commands.*;
-import net.zic.ascension.mob_cultivation.MobCultivationCommands;
+import net.zic.ascension.mob_cultivation.command.MobCultivationCommands;
 
 public class AscensionCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {

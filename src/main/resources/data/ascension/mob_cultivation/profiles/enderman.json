@@ -1,0 +1,58 @@
+{
+  "priority": 10,
+  "target": {
+    "entity": "minecraft:enderman"
+  },
+  "foundation_path_weights": {
+    "ascension:foundation/body": 1,
+    "ascension:foundation/essence": 3,
+    "ascension:foundation/soul": 6
+  },
+  "sub_path_weights": {
+    "ascension:elemental/space": 7,
+    "ascension:elemental/dark": 3,
+    "ascension:elemental/illusion": 2
+  },
+  "sub_path_count": {
+    "min": 1,
+    "max": 2
+  },
+  "traits": [
+    "ascension:spiritual_body"
+  ],
+  "skill_pools": [
+    "ascension:generic/soul",
+    "ascension:species/enderman"
+  ],
+  "loot_profile": "ascension:default",
+  "stat_multiplier": 1.0,
+  "stat_biases": {
+    "vitality": 0.85,
+    "strength": 0.95,
+    "agility": 1.25,
+    "spirit": 1.35
+  },
+  "growth_multiplier": 1.15,
+  "atmospheric_qi_sensitivity": 1.25,
+  "loot_multiplier": 1.0,
+  "show_particles": true,
+  "elite": {
+    "enabled": true,
+    "chance": 0.025,
+    "ancient_chance": 0.08,
+    "extra_trait_rolls": 1,
+    "trait_weights": {
+      "ascension:regenerating": 1.0,
+      "ascension:armoured_body": 1.0,
+      "ascension:spiritual_body": 0.7,
+      "ascension:elemental_body": 0.7,
+      "ascension:pack_creature": 0.35
+    }
+  },
+  "initial_realm": {
+    "major_min": 0,
+    "major_max": 1,
+    "minor_min": 1,
+    "minor_max": 2
+  }
+}

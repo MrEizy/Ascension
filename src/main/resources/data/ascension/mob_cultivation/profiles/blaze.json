@@ -1,0 +1,59 @@
+{
+  "priority": 10,
+  "target": {
+    "entity": "minecraft:blaze"
+  },
+  "foundation_path_weights": {
+    "ascension:foundation/body": 0.5,
+    "ascension:foundation/essence": 4,
+    "ascension:foundation/soul": 6
+  },
+  "sub_path_weights": {
+    "ascension:elemental/fire": 10,
+    "ascension:elemental/yang": 2
+  },
+  "sub_path_count": {
+    "min": 1,
+    "max": 2
+  },
+  "traits": [
+    "ascension:elemental_body",
+    "ascension:spiritual_body"
+  ],
+  "skill_pools": [
+    "ascension:generic/essence",
+    "ascension:generic/soul",
+    "ascension:species/blaze"
+  ],
+  "loot_profile": "ascension:elemental",
+  "stat_multiplier": 1.05,
+  "stat_biases": {
+    "vitality": 0.8,
+    "strength": 0.75,
+    "agility": 1.1,
+    "spirit": 1.6
+  },
+  "growth_multiplier": 1.2,
+  "atmospheric_qi_sensitivity": 1.35,
+  "loot_multiplier": 1.0,
+  "show_particles": true,
+  "elite": {
+    "enabled": true,
+    "chance": 0.04,
+    "ancient_chance": 0.08,
+    "extra_trait_rolls": 1,
+    "trait_weights": {
+      "ascension:regenerating": 1.0,
+      "ascension:armoured_body": 1.0,
+      "ascension:spiritual_body": 0.7,
+      "ascension:elemental_body": 0.7,
+      "ascension:pack_creature": 0.35
+    }
+  },
+  "initial_realm": {
+    "major_min": 0,
+    "major_max": 1,
+    "minor_min": 1,
+    "minor_max": 2
+  }
+}
