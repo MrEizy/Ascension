@@ -24,7 +24,7 @@ public abstract class PhysiqueEvent extends Event {
         return physique;
     }
     public Physique getPhysique(RegistryAccess access){
-        return CoreRegistries.PHYSIQUE_REGISTRY.get(access).getValue(physique);
+        return  CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,physique,access);
     }
     public PhysiqueData getPhysiqueData(){
         return data;

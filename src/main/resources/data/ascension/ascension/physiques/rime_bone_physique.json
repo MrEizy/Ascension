@@ -21,11 +21,6 @@
     "ascension:strength": 1,
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:body": 1,
-    "ascension:ice": 1,
-    "ascension:hammer": 2
-  },
   "stat_modifiers": {
     "ascension:strength": [
       {
@@ -35,13 +30,22 @@
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:hammer": [
-      {
-        "value": 0.2,
-        "operation": "ADD_BASE",
-        "id": "ascension:rime_bone_body_hammer_modifier"
-      }
-    ]
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:body": 1,
+      "ascension:ice": 1,
+      "ascension:hammer": 2
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:hammer": [
+        {
+          "value": 0.2,
+          "operation": "ADD_BASE",
+          "id": "ascension:rime_bone_body_hammer_modifier"
+        }
+      ]
+    }
   }
 }

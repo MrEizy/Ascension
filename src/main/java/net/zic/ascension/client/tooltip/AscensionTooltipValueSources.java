@@ -8,12 +8,16 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionConditionReference;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionReference;
 import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
+import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.bloodline.purity.condition.OnPurityInRangeCondition;
@@ -26,8 +30,7 @@ import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMinorRe
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMinorRealmInCondition;
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryRealmCondition;
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryRealmInCondition;
-import net.zic.ascension.impl.datapack.util.AffinityModifier;
-import net.zic.ascension.impl.datapack.util.BaseAffinity;
+
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
@@ -50,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 /**
  * Registers Ascension-owned runtime values referenced by registry item tooltips.
@@ -190,6 +194,8 @@ public final class AscensionTooltipValueSources {
         });
     }
 
+
+
     private static Optional<ZenithTooltipValue> physiqueAffinities(
             ZenithTooltipContext context
     ) {
@@ -199,11 +205,11 @@ public final class AscensionTooltipValueSources {
             return ZenithTooltipValue.rows(
                     combineRows(
                             baseAffinityRows(
-                                    physique.baseAffinities(),
+                                    physique.basePathBonuses().stream().filter(val->val.category().equals(PathEffectValueUtil.AFFINITY_CATEGORY)).collect(Collectors.toCollection(ArrayList::new)),
                                     access
                             ),
                             affinityModifierRows(
-                                    physique.affinityModifiers(),
+                                    physique.pathBonusModifiers().stream().filter(val->val.category().equals(PathEffectValueUtil.AFFINITY_CATEGORY)).collect(Collectors.toCollection(ArrayList::new)),
                                     access
                             )
                     )
@@ -334,8 +340,9 @@ public final class AscensionTooltipValueSources {
         return List.copyOf(rows);
     }
 
+
     private static List<ZenithTooltipValue.Row> baseAffinityRows(
-            Collection<BaseAffinity> baseAffinities,
+            Collection<PathBonusBase> baseAffinities,
             RegistryAccess access
     ){
         return baseAffinities.stream()
@@ -379,41 +386,27 @@ public final class AscensionTooltipValueSources {
                 .toList();
     }
     private static List<ZenithTooltipValue.Row> affinityModifierRows(
-            Map<Identifier, List<AffinityModifier>> affinityModifiers,
+            List<PathBonusModifier> modifiers,
             RegistryAccess access
     ){
         List<ZenithTooltipValue.Row> rows = new ArrayList<>();
-
-        affinityModifiers.entrySet()
-                .stream()
-                .sorted(
-                        Comparator.comparing(
-                                entry -> entry.getKey().toString()
-                        )
+        modifiers.stream().sorted(
+                Comparator.comparing(
+                        val->val.path().toString()+val.modifier().getIdentifier().toString()
                 )
-                .forEach(entry -> entry.getValue()
-                        .stream()
-                        .sorted(
-                                Comparator.comparing(
-                                        modifier ->
-                                                modifier.modifier().getIdentifier().toString()
-                                )
-                        )
-                        .forEach(modifier -> rows.add(
-                                ZenithTooltipValue.row(
-                                        pathName(
-                                                entry.getKey(),
-                                                access
-                                        ),
-                                        Component.literal(
-                                                formatModifier(modifier.modifier())
-                                        ),
-                                        tone(modifier.modifier().getVal())
-                                )
-                        )));
-
-        return List.copyOf(rows);
+        ).forEach(modifier ->rows.add(
+                ZenithTooltipValue.row(
+                        pathName(modifier.path(),access),
+                        Component.literal(
+                                formatModifier(modifier.modifier())
+                        ),
+                        tone(modifier.modifier().getVal())
+                )
+            )
+        );
+        return rows;
     }
+    
     private static List<ZenithTooltipValue.Row> modifierRows(
             Map<Identifier, List<ValueContainerModifier>> modifiers,
             boolean affinity,

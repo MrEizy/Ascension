@@ -16,7 +16,9 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-
+//TODO:
+// set up such that on changes we notify attached entities
+// then those entities trigger an update, and use a combined value container
 public class PathBonusHolder implements DataSourceInstance {
 
 

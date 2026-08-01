@@ -5,5 +5,6 @@ public enum LoadPriority {
     HIGH,
     NORMAL,
     LOW,
-    LOWEST;
+    LOWEST,
+    NO_LOAD; //special state, just means onAdded is not called
 }

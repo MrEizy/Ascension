@@ -92,15 +92,12 @@ public class AscensionOriginSourceHelper {
         return getPhysiqueHolder(source).getData();
     }
     public static boolean setPhysique(OriginSource source,Identifier physique){
-        if(physique == null){
-            return false;
-        }
+        if(physique == null) setPhysique(source,null,null);
         Physique physiqueInstance = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,physique,source.getRegistryAccess());
         if(physiqueInstance == null) return false;
         return setPhysique(source,physique, physiqueInstance.newData(source.getRegistryAccess()));
     }
     public static boolean setPhysique(OriginSource source, Identifier physique, PhysiqueData physiqueData) {
-        if(physique == null) return false;
 
         PhysiqueHolder holder = getPhysiqueHolder(source);
 
@@ -122,12 +119,13 @@ public class AscensionOriginSourceHelper {
         source.startProcess("set_physique");
 
         Collection<Identifier> toRemove = oldPhysique == null ? List.of() : pre.getPhysique(source.getRegistryAccess()).onRemoved(source,oldPhysiqueData);
+
         if(pre.getPhysique(source.getRegistryAccess()) != null){
             for(LivingEntity entity : source.getAttachedEntities()){
                 pre.getPhysique(source.getRegistryAccess()).removeFromEntity(entity,oldPhysiqueData);
             }
         }
-        Collection<Identifier> toAdd = pre.getNewPhysique(source.getRegistryAccess()).onAdded(source, pre.getNewPhysiqueData());
+        Collection<Identifier> toAdd = pre.getNewPhysiqueIdentifier() == null ? List.of() : pre.getNewPhysique(source.getRegistryAccess()).onAdded(source, pre.getNewPhysiqueData());
         if(pre.getNewPhysique(source.getRegistryAccess()) != null){
             for(LivingEntity entity : source.getAttachedEntities()){
                 pre.getNewPhysique(source.getRegistryAccess()).applyToEntity(entity,pre.getNewPhysiqueData());
@@ -140,11 +138,9 @@ public class AscensionOriginSourceHelper {
         //first add all new paths with the new physique as owner, this ensures that if there is path overlap there is owners >1
 
         for(Identifier path : toAdd){
-            if(toRemove.contains(path)) continue;
             addPath(source,path,post.getNewPhysiqueIdentifier());
         }
         for(Identifier path : toRemove){
-            if(toAdd.contains(path)) continue;
             removePath(source,path,oldPhysique);
         }
         resolveProcess(source,"set_physique");
@@ -314,6 +310,8 @@ public class AscensionOriginSourceHelper {
         if(path == null || existingData == null) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
         if(getPathHolder(source).hasCachedPath(path)) existingData = getPathHolder(source).removeCachedPath(path);
+
+
         PathAddedEvent.Pre pre = new PathAddedEvent.Pre(path,existingData,source);
 
         NeoForge.EVENT_BUS.post(pre);
@@ -457,26 +455,43 @@ public class AscensionOriginSourceHelper {
         getSkillHolder(source).markSkillDirty(skill);
         resolveProcess(source,"modified_skill"+id);
     }//should be used if you changed a skills skilLData
+    //TODO handle technique methods
 
+    public static boolean broadcastTechniqueAddedAttempt(OriginSource source,Identifier technique, TechniqueData data){
+        return true;
+    }
+    public static void broadcastTechniqueAdded(OriginSource source,Identifier technique, TechniqueData data){
+
+    }
+    public static boolean broadcastTechniqueRemovedAttempt(OriginSource source,Identifier technique, TechniqueData data){
+        return true;
+    }
+    public static void broadcastTechniqueRemoved(OriginSource source,Identifier technique, TechniqueData data){
+
+    }
     //──Path Bonus Access────────────────────────────────────────────────────────
 
     public static void addBonus(OriginSource source,Identifier category,Identifier path,double val){
         getPathBonusHolder(source).addBonus(category,path,val);
         markPathBonusHolderDirty(source);
+        updateEntityPathBonus(source,category,path);
     }
     public static void addBonusModifier(OriginSource source,Identifier category, Identifier path, ValueContainerModifier modifier){
         getPathBonusHolder(source).addBonusModifier(category,path,modifier);
         markPathBonusHolderDirty(source);
+        updateEntityPathBonus(source,category,path);
     }
 
     public static void removeBonus(OriginSource source,Identifier category,Identifier path,double val){
         getPathBonusHolder(source).removeBonus(category,path,val);
         markPathBonusHolderDirty(source);
+        updateEntityPathBonus(source,category,path);
     }
 
     public static void removeBonusModifier(OriginSource source,Identifier category,Identifier path,Identifier modifier){
         getPathBonusHolder(source).removeBonusModifier(category,path,modifier);
         markPathBonusHolderDirty(source);
+        updateEntityPathBonus(source,category,path);
     }
 
 
@@ -495,20 +510,7 @@ public class AscensionOriginSourceHelper {
         return getPathBonusHolder(source).getAllPathBonuses();
     }
 
-    //TODO handle technique methods
 
-    public static boolean broadcastTechniqueAddedAttempt(OriginSource source,Identifier technique, TechniqueData data){
-        return true;
-    }
-    public static void broadcastTechniqueAdded(OriginSource source,Identifier technique, TechniqueData data){
-
-    }
-    public static boolean broadcastTechniqueRemovedAttempt(OriginSource source,Identifier technique, TechniqueData data){
-        return true;
-    }
-    public static void broadcastTechniqueRemoved(OriginSource source,Identifier technique, TechniqueData data){
-
-    }
 
     public static void markPathBonusHolderDirty(OriginSource source){
         long id = random.nextLong();
@@ -516,7 +518,13 @@ public class AscensionOriginSourceHelper {
         source.markDataSourceDirty(CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.getId());
         resolveProcess(source,"modified_path_bonus"+id);
     }
-
+    public static void updateEntityPathBonus(OriginSource source,Identifier category,Identifier path){
+        for(LivingEntity entity : source.getAttachedEntities()){
+            AscensionEntityDataProvider provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+            if(provider == null) continue;
+            provider.getData(entity).updatePathBonus(category,path);
+        }
+    }
     //──Affinity Quick Access────────────────────────────────────────────────────────
     public static final Identifier AFFINITY_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"affinity");
 

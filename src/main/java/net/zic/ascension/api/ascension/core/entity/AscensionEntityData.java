@@ -21,7 +21,7 @@ public interface AscensionEntityData extends StatProvider, PathBonusProvider {
 
     default void registerProviders(){
         getEntity().getData(ZenithAttachments.STAT_HOLDER).registerStatProvider(this);
-        getEntity().getData(CoreAttachments.PATH_BONUS_HOLDER).removePathBonusProvider(this);
+        getEntity().getData(CoreAttachments.PATH_BONUS_HOLDER).registerPathBonusProvider(this);
     }
 
     OriginSource getSource();
@@ -35,6 +35,9 @@ public interface AscensionEntityData extends StatProvider, PathBonusProvider {
     void addBonusModifier(Identifier category, Identifier path, ValueContainerModifier modifier);
     void removeBonus(Identifier category,Identifier path,double val);
     void removeBonusModifier(Identifier category,Identifier path,Identifier modifier);
+
+    void updatePathBonus(Identifier category, Identifier path);
+
 
     void addStat(Stat stat, double val);
     void removeStat(Stat stat, double val);

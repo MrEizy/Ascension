@@ -19,6 +19,7 @@ import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
@@ -39,15 +40,13 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SimpleAscensionEntityData implements AscensionEntityData {
 
     private final StatSheet statSheet = new StatSheet();
     private final PathBonusHolder pathBonusHolder = new PathBonusHolder();
-
+    private final PathBonusHolder cachedPathBonusHolder = new PathBonusHolder();
 
     private final OriginSource source;
     private final LivingEntity attachedEntity;
@@ -67,7 +66,6 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
         this.source = source;
         this.attachedEntity = entity;
-
     }
 
     public void initializeAttributes() {
@@ -175,12 +173,13 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
     @Override
     public void initialize() {
+
         AscensionEntityData.super.initialize();
         initializeAttributes();
 
 
         markDirty(getSource().load(),true);
-
+        initializePathBonuses();
         getSource().attachToEntity(getEntity());
 
     }
@@ -190,53 +189,70 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     //TODO trigger path bonus update
     @Override
     public ValueContainer getPathBonusContainer(Identifier category, Identifier path) {
-        return pathBonusHolder.getPathBonusContainer(category,path);
+        return cachedPathBonusHolder.getPathBonusContainer(category,path);
     }
 
     @Override
     public double getPathBonus(Identifier category, Identifier path) {
-        return pathBonusHolder.getBonus(category,path);
+        return cachedPathBonusHolder.getBonus(category,path);
     }
 
     @Override
     public Collection<PathBonus> getAllPathBonuses() {
-        return pathBonusHolder.getAllPathBonuses();
+        return cachedPathBonusHolder.getAllPathBonuses();
     }
 
     @Override
     public Collection<Identifier> getAllPathBonusesInCategory(Identifier category) {
-        return pathBonusHolder.getAllPathBonusesInCategory(category);
+        return cachedPathBonusHolder.getAllPathBonusesInCategory(category);
     }
 
     @Override
     public void addBonus(Identifier category, Identifier path, double val) {
         pathBonusHolder.addBonus(category,path,val);
-        updatePathBonusHolder(category,path);
+        updatePathBonus(category,path);
     }
 
     @Override
     public void addBonusModifier(Identifier category, Identifier path, ValueContainerModifier modifier) {
         pathBonusHolder.addBonusModifier(category,path,modifier);
-        updatePathBonusHolder(category,path);
+        updatePathBonus(category,path);
     }
 
     @Override
     public void removeBonus(Identifier category, Identifier path, double val) {
         pathBonusHolder.removeBonus(category,path,val);
-        updatePathBonusHolder(category,path);
+        updatePathBonus(category,path);
     }
 
     @Override
     public void removeBonusModifier(Identifier category, Identifier path, Identifier modifier) {
         pathBonusHolder.removeBonusModifier(category,path,modifier);
-        updatePathBonusHolder(category,path);
+        updatePathBonus(category,path);
     }
 
-    //TODO add a process system like patching for bulk updates
-    public void updatePathBonusHolder(Identifier category,Identifier path){
-        if(getEntity() == null) return;
+    @Override
+    public void updatePathBonus(Identifier category, Identifier path) {
+        ValueContainer local = pathBonusHolder.getPathBonusContainer(category,path);
+        ValueContainer sourceContainer = AscensionOriginSourceHelper.getPathBonusContainer(source,category,path);
+        double baseValue = (local == null ? 0 : local.getBaseValue())+(sourceContainer == null ? 0: sourceContainer.getBaseValue());
+
+        ValueContainer newContainer = new ValueContainer(path,baseValue);
+        if(local != null) for(ValueContainerModifier modifier : local.getAllModifiers()) newContainer.addModifierNoCacheUpdate(modifier);
+        if(sourceContainer != null) for(ValueContainerModifier modifier : sourceContainer.getAllModifiers()) newContainer.addModifierNoCacheUpdate(modifier);
+
+        if(attachedEntity == null) return;
+        cachedPathBonusHolder.setPathBonusContainer(category,path,newContainer);
         getEntity().getData(CoreAttachments.PATH_BONUS_HOLDER).updatePathBonus(new PathBonus(category,path));
         getEntity().syncData(CoreAttachments.PATH_BONUS_HOLDER);
+    }
+
+    public void initializePathBonuses(){
+        Collection<PathBonus> bonuses = AscensionOriginSourceHelper.getAllPathBonuses(source);
+        Collection<PathBonus> selfBonuses = pathBonusHolder.getAllPathBonuses();
+
+        for(PathBonus bonus : bonuses) updatePathBonus(bonus.category(),bonus.path());
+        for(PathBonus bonus : selfBonuses) updatePathBonus(bonus.category(),bonus.path());
     }
 
     //──Stats────────────────────────────────────────────────────────

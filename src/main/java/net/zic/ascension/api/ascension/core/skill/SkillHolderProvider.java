@@ -6,16 +6,21 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.path.PathHolder;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
 
+import java.util.HashSet;
+import java.util.Map;
+
 public class SkillHolderProvider implements DataSource {
     @Override
     public LoadPriority loadPriority() {
-        return LoadPriority.NORMAL;
+        return LoadPriority.NO_LOAD;
     }
     protected SkillHolder getHolder(DataSourceInstance instance){
         return (SkillHolder) instance;
@@ -24,17 +29,30 @@ public class SkillHolderProvider implements DataSource {
     @Override
     public void onAdded(OriginSource source, DataSourceInstance instance) {
         SkillHolder holder = getHolder(instance);
-        for(Identifier skill : holder.getSkills()){
-            holder.getSkill(skill,source.getRegistryAccess()).onAdded(source,holder.getSkillData(skill));
+        Map<Identifier, SkillData> rawSkillData = holder.getRawSkillData();
+        Map<Identifier, HashSet<Identifier>> rawOwners = holder.getRawSkillOwnerData();
+
+        holder.clearContainer();
+        for(Identifier path : rawSkillData.keySet()){
+            for(Identifier owner : rawOwners.get(path)){
+                AscensionOriginSourceHelper.addSkill(source,path,rawSkillData.get(path),owner);
+            }
         }
     }
 
     @Override
     public void onRemoved(OriginSource source, DataSourceInstance instance) {
         SkillHolder holder = getHolder(instance);
-        for(Identifier skill : holder.getSkills()){
-            holder.getSkill(skill,source.getRegistryAccess()).onRemoved(source,holder.getSkillData(skill));
+        Map<Identifier, SkillData> rawSkillData = holder.getRawSkillData();
+        Map<Identifier, HashSet<Identifier>> rawOwners = holder.getRawSkillOwnerData();
+
+        holder.clearContainer();
+        for(Identifier path : rawSkillData.keySet()){
+            for(Identifier owner : rawOwners.get(path)){
+                AscensionOriginSourceHelper.removeSkill(source,path,owner);
+            }
         }
+        holder.setRawData(rawSkillData,rawOwners);
     }
 
     @Override

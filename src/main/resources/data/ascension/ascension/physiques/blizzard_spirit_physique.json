@@ -21,19 +21,23 @@
   "base_stats": {
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:essence": 1,
-    "ascension:ice": 1,
-    "ascension:wind": 0.5,
-    "ascension:yin": 0.5
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:essence": 1,
+      "ascension:ice": 1,
+      "ascension:wind": 0.5,
+      "ascension:yin": 0.5
+    }
   },
-  "affinity_modifiers": {
-    "ascension:ice": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:blizzard_spirit_body_ice_modifier"
-      }
-    ]
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:ice": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:blizzard_spirit_body_ice_modifier"
+        }
+      ]
+    }
   }
 }

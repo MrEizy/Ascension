@@ -34,20 +34,23 @@
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:knife": [
-      {
-        "value": 0.2,
-        "operation": "ADD_BASE",
-        "id": "ascension:berserkers_fang_knife_modifier"
-      }
-    ],
-    "ascension:blood": [
-      {
-        "value": 0.1,
-        "operation": "ADD_BASE",
-        "id": "ascension:berserkers_fang_blood_modifier"
-      }
-    ]
+
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:knife": [
+        {
+          "value": 0.2,
+          "operation": "ADD_BASE",
+          "id": "ascension:berserkers_fang_knife_modifier"
+        }
+      ],
+      "ascension:blood": [
+        {
+          "value": 0.1,
+          "operation": "ADD_BASE",
+          "id": "ascension:berserkers_fang_blood_modifier"
+        }
+      ]
+    }
   }
 }

@@ -21,26 +21,30 @@
   "base_stats": {
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:essence": 1,
-    "ascension:wind": 1,
-    "ascension:water": 1,
-    "ascension:fan": 2
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:essence": 1,
+      "ascension:wind": 1,
+      "ascension:water": 1,
+      "ascension:fan": 2
+    }
   },
-  "affinity_modifiers": {
-    "ascension:fan": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:drifting_cloud_body_fan_modifier"
-      }
-    ],
-    "ascension:wind": [
-      {
-        "value": 0.1,
-        "operation": "ADD_BASE",
-        "id": "ascension:drifting_cloud_body_wind_modifier"
-      }
-    ]
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:fan": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:drifting_cloud_body_fan_modifier"
+        }
+      ],
+      "ascension:wind": [
+        {
+          "value": 0.1,
+          "operation": "ADD_BASE",
+          "id": "ascension:drifting_cloud_body_wind_modifier"
+        }
+      ]
+    }
   }
 }

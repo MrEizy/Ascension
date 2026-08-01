@@ -21,19 +21,23 @@
   "base_stats": {
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:essence": 1,
-    "ascension:water": 0.5,
-    "ascension:dark": 1,
-    "ascension:yin": 1
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:essence": 1,
+      "ascension:water": 0.5,
+      "ascension:dark": 1,
+      "ascension:yin": 1
+    }
   },
-  "affinity_modifiers": {
-    "ascension:dark": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:abyss_drifter_body_dark_modifier"
-      }
-    ]
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:dark": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:abyss_drifter_body_dark_modifier"
+        }
+      ]
+    }
   }
 }

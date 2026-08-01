@@ -4,6 +4,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
@@ -53,6 +54,8 @@ public class AscensionEntityPathBonusHolder implements PathBonusProvider {
     }
 
     public void updatePathBonus(PathBonus bonus){
+        //temp
+        if(! (attachedEntity instanceof Player)) return;
         ValueContainer container = new ValueContainer(bonus.path(),0);
         for(PathBonusProvider provider : providers){
             ValueContainer providerContainer = provider.getPathBonusContainer(bonus.category(),bonus.path());

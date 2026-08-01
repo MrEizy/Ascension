@@ -7,10 +7,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BloodlineHolderProvider implements DataSource {
     @Override
@@ -24,17 +30,26 @@ public class BloodlineHolderProvider implements DataSource {
     @Override
     public void onAdded(OriginSource source, DataSourceInstance instance) {
         BloodlineHolder holder = getHolder(instance);
-        for(Identifier bloodline : holder.getBloodlines()){
-            holder.getBloodline(bloodline,source.getRegistryAccess()).onAdded(source, holder.getBloodline(bloodline));
+
+        Map<Identifier,BloodlineData> bloodlines = holder.getRawData();
+
+        holder.clearContainer();
+
+        for(Identifier bloodline : bloodlines.keySet()){
+            AscensionOriginSourceHelper.addBloodline(source,bloodline,bloodlines.get(bloodline));
         }
     }
 
     @Override
     public void onRemoved(OriginSource source, DataSourceInstance instance) {
         BloodlineHolder holder = getHolder(instance);
-        for(Identifier bloodline : holder.getBloodlines()){
-            holder.getBloodline(bloodline,source.getRegistryAccess()).onRemoved(source, holder.getBloodline(bloodline));
+        Map<Identifier,BloodlineData> bloodlines = holder.getRawData();
+
+        for(Identifier bloodline : bloodlines.keySet()){
+            AscensionOriginSourceHelper.removeBloodline(source,bloodline);
         }
+
+        holder.setRawData(bloodlines);
     }
 
     @Override

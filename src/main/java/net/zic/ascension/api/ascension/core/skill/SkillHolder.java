@@ -112,7 +112,27 @@ public class SkillHolder implements DataSourceInstance {
     public void clearCache(){
         cachedSkills.clear();
     }
+    //──Raw Manipulation────────────────────────────────────────────────────────
+    public Map<Identifier,SkillData> getRawSkillData(){
+        return Map.copyOf(skills);
+    }
+    public Map<Identifier,HashSet<Identifier>> getRawSkillOwnerData(){
+        return Map.copyOf(skillOwners);
+    }
 
+    public void setRawData(Map<Identifier,SkillData> rawSkills,Map<Identifier,HashSet<Identifier>> rawOwnerData){
+        skills.clear();
+        skillOwners.clear();
+        skills.putAll(rawSkills);
+        skillOwners.putAll(rawOwnerData);
+        dirtySkills.addAll(rawSkills.keySet());
+    }
+    public void clearContainer(){
+        skills.clear();
+        skillOwners.clear();
+        dirtySkills.clear();
+        toRemoveSkills.clear();
+    }
     //──Data────────────────────────────────────────────────────────
 
 

@@ -22,12 +22,6 @@
     "ascension:vitality": 1,
     "ascension:strength": 1
   },
-  "base_affinity": {
-    "ascension:body": 1,
-    "ascension:essence": 1,
-    "ascension:blood": 1.5,
-    "ascension:fist": 1.5
-  },
   "stat_modifiers": {
     "ascension:strength": [
       {
@@ -37,13 +31,23 @@
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:blood": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:primal_fang_body_blood_modifier"
-      }
-    ]
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:body": 1,
+      "ascension:essence": 1,
+      "ascension:blood": 1.5,
+      "ascension:fist": 1.5
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:blood": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:primal_fang_body_blood_modifier"
+        }
+      ]
+    }
   }
 }

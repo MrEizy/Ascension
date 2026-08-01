@@ -21,12 +21,6 @@
   "base_stats": {
     "ascension:vitality": 2
   },
-  "base_affinity": {
-    "ascension:body": 1,
-    "ascension:water": 1,
-    "ascension:ice": 1,
-    "ascension:spear": 2
-  },
   "stat_modifiers": {
     "ascension:vitality": [
       {
@@ -36,13 +30,23 @@
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:water": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:jiao_scale_body_water_modifier"
-      }
-    ]
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:body": 1,
+      "ascension:water": 1,
+      "ascension:ice": 1,
+      "ascension:spear": 2
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:water": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:jiao_scale_body_water_modifier"
+        }
+      ]
+    }
   }
 }

@@ -19,6 +19,7 @@ import net.zic.zenithlib.network.ByteBufHelpers;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class PathHolder implements DataSourceInstance {
 
@@ -64,7 +65,7 @@ public class PathHolder implements DataSourceInstance {
         if (!pathOwners.containsKey(path)) return false;
         pathOwners.get(path).remove(owner);
         if(!pathOwners.get(path).isEmpty()) return false;
-
+        paths.remove(path);
         pathOwners.remove(path);
         toRemovePaths.add(path);
         dirtyPaths.remove(path);
@@ -96,6 +97,28 @@ public class PathHolder implements DataSourceInstance {
         cachedPaths.clear();
     }
 
+
+    //──Raw Manipulation────────────────────────────────────────────────────────
+    public Map<Identifier,PathData> getRawPathData(){
+        return Map.copyOf(paths);
+    }
+    public Map<Identifier,HashSet<Identifier>> getRawPathOwnerData(){
+        return Map.copyOf(pathOwners);
+    }
+
+    public void setRawData(Map<Identifier,PathData> rawPaths,Map<Identifier,HashSet<Identifier>> rawOwnerData){
+        paths.clear();
+        pathOwners.clear();
+        paths.putAll(rawPaths);
+        pathOwners.putAll(rawOwnerData);
+        dirtyPaths.addAll(rawPaths.keySet());
+    }
+    public void clearContainer(){
+        paths.clear();
+        pathOwners.clear();
+        dirtyPaths.clear();
+        toRemovePaths.clear();
+    }
 
     //──Data────────────────────────────────────────────────────────
 

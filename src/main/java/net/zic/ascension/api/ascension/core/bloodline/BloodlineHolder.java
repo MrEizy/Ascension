@@ -16,10 +16,7 @@ import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
 import oshi.util.tuples.Pair;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 
 //TODO add logic to handle a max number of bloodlines
 public class BloodlineHolder implements DataSourceInstance {
@@ -63,6 +60,19 @@ public class BloodlineHolder implements DataSourceInstance {
     @Override
     public DataSource getDataSource() {
         return CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.get();
+    }
+
+    public Map<Identifier,BloodlineData> getRawData(){
+        return Map.copyOf(bloodlines);
+    }
+    public void setRawData(Map<Identifier,BloodlineData> rawData){
+        bloodlines.clear();
+        for(Map.Entry<Identifier,BloodlineData> entry : rawData.entrySet()) addBloodline(entry.getKey(),entry.getValue());
+    }
+    public void clearContainer(){
+        bloodlines.clear();;
+        dirtyBloodlines.clear();
+        toRemoveBloodlines.clear();
     }
 
     public void write(ValueOutput output, RegistryAccess access){

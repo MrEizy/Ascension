@@ -21,10 +21,15 @@
   "base_stats": {
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:essence": 1,
-    "ascension:wood": 0.5,
-    "ascension:blood": 0.5,
-    "ascension:wind": 0.5
+
+
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:essence": 1,
+      "ascension:wood": 0.5,
+      "ascension:blood": 0.5,
+      "ascension:wind": 0.5
+    }
   }
+
 }

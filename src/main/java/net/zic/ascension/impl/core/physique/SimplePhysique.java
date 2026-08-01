@@ -11,12 +11,13 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
+import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
-import net.zic.ascension.impl.datapack.util.AffinityModifier;
-import net.zic.ascension.impl.datapack.util.BaseAffinity;
+
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
@@ -29,8 +30,8 @@ import java.util.Optional;
 public record SimplePhysique(Component name, Component description, List<Identifier> unlockedPaths,
                              List<Identifier> skills, List<ValueContainer.BaseModifier> baseStats,
                              Map<Identifier, List<ValueContainerModifier>> statModifiers,
-                             List<BaseAffinity> baseAffinities,
-                             Map<Identifier, List<AffinityModifier>> affinityModifiers,
+                             List<PathBonusBase> basePathBonuses,
+                             List<PathBonusModifier> pathBonusModifiers,
                              Optional<AscensionItemTooltipDefinition> itemTooltip) implements Physique {
 
 
@@ -41,8 +42,8 @@ public record SimplePhysique(Component name, Component description, List<Identif
             List<Identifier> skills,
             List<ValueContainer.BaseModifier> baseStats,
             Map<Identifier, List<ValueContainerModifier>> statModifiers,
-            List<BaseAffinity> baseAffinities,
-            Map<Identifier, List<AffinityModifier>> affinityModifiers,
+            List<PathBonusBase> basePathBonuses,
+            List<PathBonusModifier> pathBonusModifiers,
             Optional<AscensionItemTooltipDefinition> itemTooltip
     ) {
         this.name = name;
@@ -50,9 +51,9 @@ public record SimplePhysique(Component name, Component description, List<Identif
         this.unlockedPaths = unlockedPaths;
         this.skills = skills;
         this.baseStats = baseStats;
-        this.baseAffinities = baseAffinities;
+        this.basePathBonuses = basePathBonuses;
         this.statModifiers = statModifiers;
-        this.affinityModifiers = affinityModifiers;
+        this.pathBonusModifiers = pathBonusModifiers;
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
         AscensionCraft.LOGGER.info("created Simple Physique {}", name);
     }
@@ -75,18 +76,11 @@ public record SimplePhysique(Component name, Component description, List<Identif
                 source.addStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat), modifier);
             }
         }
-        //TODO change to be path bonus not just affinity
-        /**
-        for(BaseAffinity baseAffinity : baseAffinities){
-            source.addAffinity(baseAffinity.category(),baseAffinity.path(),baseAffinity.value());
-        }
 
-        for(Identifier path : affinityModifiers.keySet()){
-            for (AffinityModifier modifier : affinityModifiers.get(path)){
-                source.addAffinityModifier(modifier.category(),path,modifier.modifier());
-            }
-        }
-         */
+        for(PathBonusBase base : basePathBonuses) AscensionOriginSourceHelper.addBonus(source,base.category(),base.path(), base.value());
+        for(PathBonusModifier modifier : pathBonusModifiers) AscensionOriginSourceHelper.addBonusModifier(source,modifier.category(),modifier.path(),modifier.modifier());
+
+
         for (Identifier skill : skills) {
             AscensionOriginSourceHelper.addSkill(source,skill,physiqueId);
         }
@@ -107,17 +101,10 @@ public record SimplePhysique(Component name, Component description, List<Identif
                 source.removeStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat), modifier.getIdentifier());
             }
         }
-        //TODO change to be path bonus not just affinity
-        /**
-        for(BaseAffinity baseAffinity : baseAffinities){
-            source.removeAffinity(baseAffinity.category(),baseAffinity.path(),baseAffinity.value());
-        }
-        for(Identifier path : affinityModifiers.keySet()){
-            for (AffinityModifier modifier : affinityModifiers.get(path)){
-                source.removeAffinityModifier(modifier.category(),path,modifier.modifier().getIdentifier());
-            }
-        }
-         */
+
+        for(PathBonusBase base : basePathBonuses) AscensionOriginSourceHelper.removeBonus(source,base.category(),base.path(), base.value());
+        for(PathBonusModifier modifier : pathBonusModifiers) AscensionOriginSourceHelper.removeBonusModifier(source,modifier.category(),modifier.path(),modifier.modifier().getIdentifier());
+
         for (Identifier skill : skills) {
             AscensionOriginSourceHelper.removeSkill(source,skill,physiqueId);
         }

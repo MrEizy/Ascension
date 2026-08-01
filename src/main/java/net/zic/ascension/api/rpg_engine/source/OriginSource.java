@@ -232,9 +232,13 @@ public class OriginSource implements StatProvider {
             DataSourceInstance instance = loadDataSource(dataSourceInput,getRegistryAccess());
             if(instance == null) continue;
 
+            dataSources.put(DataSource.getId(instance.getDataSource()),instance);
+            if(instance.getDataSource().loadPriority() == LoadPriority.NO_LOAD) continue;
+
             loadMap.computeIfAbsent(instance.getDataSource().loadPriority(),key->new ArrayList<>());
 
             loadMap.get(instance.getDataSource().loadPriority()).add(instance);
+
         }
 
         for(LoadPriority priority : LoadPriority.values()){
@@ -242,9 +246,7 @@ public class OriginSource implements StatProvider {
             List<DataSourceInstance> instances = loadMap.get(priority);
 
             for(DataSourceInstance instance : instances){
-                if(!addDataSource(DataSource.getId(instance.getDataSource()),instance)) AscensionCraft.LOGGER.debug(
-                        "unable to add data source {}",DataSource.getId(instance.getDataSource())
-                );
+                instance.getDataSource().onAdded(this,instance);
             }
         }
         for(DataSourceInstance instance : dataSources.values()) instance.getDataSource().finishedLoading(this,instance);

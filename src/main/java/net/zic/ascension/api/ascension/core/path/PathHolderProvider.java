@@ -8,15 +8,19 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolder;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
 
+import java.util.HashSet;
+import java.util.Map;
+
 public class PathHolderProvider implements DataSource {
     @Override
     public LoadPriority loadPriority() {
-        return LoadPriority.NORMAL;
+        return LoadPriority.NO_LOAD;
     }
     protected PathHolder getHolder(DataSourceInstance instance){
         return (PathHolder) instance;
@@ -25,17 +29,29 @@ public class PathHolderProvider implements DataSource {
     @Override
     public void onAdded(OriginSource source, DataSourceInstance instance) {
         PathHolder holder = getHolder(instance);
-        for(Identifier path : holder.getPaths()){
-            holder.getPath(path).simulateProgression(source);
+        Map<Identifier,PathData> rawPaths = holder.getRawPathData();
+        Map<Identifier, HashSet<Identifier>> rawOwners = holder.getRawPathOwnerData();
+
+        holder.clearContainer();
+        for(Identifier path : rawPaths.keySet()){
+            for(Identifier owner : rawOwners.get(path)){
+                AscensionOriginSourceHelper.addPath(source,path,rawPaths.get(path),owner);
+            }
         }
     }
 
     @Override
     public void onRemoved(OriginSource source, DataSourceInstance instance) {
         PathHolder holder = getHolder(instance);
-        for(Identifier path : holder.getPaths()){
-            holder.getPath(path).removeFromSource(source);
+        Map<Identifier,PathData> rawPaths = holder.getRawPathData();
+        Map<Identifier, HashSet<Identifier>> rawOwners = holder.getRawPathOwnerData();
+
+        for(Identifier path : rawPaths.keySet()){
+            for(Identifier owner : rawOwners.get(path)){
+                AscensionOriginSourceHelper.removePath(source,path,owner);
+            }
         }
+        holder.setRawData(rawPaths,rawOwners);
     }
 
     @Override

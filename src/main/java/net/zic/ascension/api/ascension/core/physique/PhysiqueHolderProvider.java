@@ -2,13 +2,16 @@ package net.zic.ascension.api.ascension.core.physique;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
+import net.zic.zenithlib.network.ByteBufHelpers;
 
 public class PhysiqueHolderProvider implements DataSource {
 
@@ -29,15 +32,25 @@ public class PhysiqueHolderProvider implements DataSource {
 
 
         if(holder.getPhysique() == null) return;
-        holder.getPhysique(source.getRegistryAccess()).onAdded(source,holder.getData());
+        Identifier physique = holder.getPhysique();
+        PhysiqueData data = holder.getData();
+        holder.setPhysique(null,null);
+        AscensionOriginSourceHelper.setPhysique(source,physique,data);
+        //TODO fix other holders to do this
     }
 
     @Override
     public void onRemoved(OriginSource source, DataSourceInstance instance) {
+        //TODOD update to allow setPhysique to take in a null value
         PhysiqueHolder holder = getHolder(instance);
 
         if(holder.getPhysique() == null) return;
-        holder.getPhysique(source.getRegistryAccess()).onRemoved(source,holder.getData());
+        Identifier oldPhysique = holder.getPhysique();
+        PhysiqueData oldPhysiqueData = holder.getData();
+
+        AscensionOriginSourceHelper.setPhysique(source,null);
+
+        holder.setPhysique(oldPhysique,oldPhysiqueData);
     }
 
     @Override

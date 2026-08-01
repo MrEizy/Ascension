@@ -21,12 +21,6 @@
   "base_stats": {
     "ascension:strength": 2
   },
-  "base_affinity": {
-    "ascension:body": 1,
-    "ascension:essence": 1,
-    "ascension:earth": 1,
-    "ascension:mace": 2
-  },
   "stat_modifiers": {
     "ascension:strength": [
       {
@@ -36,13 +30,24 @@
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:mace": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:mountain_breaker_body_mace_modifier"
-      }
-    ]
+
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:body": 1,
+      "ascension:essence": 1,
+      "ascension:earth": 1,
+      "ascension:mace": 2
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:mace": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:mountain_breaker_body_mace_modifier"
+        }
+      ]
+    }
   }
 }
