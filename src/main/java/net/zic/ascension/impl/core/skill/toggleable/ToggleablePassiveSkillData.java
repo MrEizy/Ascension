@@ -3,8 +3,8 @@ package net.zic.ascension.impl.core.skill.toggleable;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.core.skill.SkillData;
-import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 
 public class ToggleablePassiveSkillData implements SkillData {

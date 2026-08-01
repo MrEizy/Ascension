@@ -8,10 +8,11 @@ import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.core.path.PathData;
-import net.zic.ascension.api.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
@@ -166,7 +167,7 @@ public class CultivationProgressBar extends RenderableElement {
                 Identifier pathId = cultivationSkill.primaryPath();
 
                 return ClientAscensionData.getEntityData().flatMap(entityData -> {
-                    PathData pathData = entityData.getSource().getPathData(pathId);
+                    PathData pathData = AscensionOriginSourceHelper.getPathData(entityData.getSource(),pathId);
 
                     if (pathData == null) {
                         return Optional.empty();

@@ -1,9 +1,10 @@
 package net.zic.ascension.api.core.skill.toggleable;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.zic.ascension.api.core.skill.Skill;
-import net.zic.ascension.api.core.skill.SkillData;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
+
 
 /**
  * A skill whose active state is stored in its {@link SkillData} and controlled
