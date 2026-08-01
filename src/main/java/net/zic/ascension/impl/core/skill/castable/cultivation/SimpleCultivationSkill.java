@@ -5,17 +5,21 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.path.PathData;
-import net.zic.ascension.api.core.skill.SkillData;
-import net.zic.ascension.api.core.skill.castable.CastData;
-import net.zic.ascension.api.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.core.skill.castable.PreCastData;
-import net.zic.ascension.api.core.skill.castable.data.CastResult;
-import net.zic.ascension.api.core.skill.castable.data.CastStatus;
-import net.zic.ascension.api.core.skill.castable.data.CastType;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.castable.CastData;
+import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
+import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
 import net.zic.ascension.api.core.skill.castable.presentation.CastSoundDefinition;
 import net.zic.ascension.api.core.source.OriginSource;
@@ -87,13 +91,13 @@ public record SimpleCultivationSkill(
             return;
         }
 
-        AscensionEntityDataHolder holder = caster.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        AscensionEntityDataProvider holder = caster.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if(holder == null) return;
 
         OriginSource source = holder.getData(caster).getSource();
 
 
-        PathData pathData = source.getPathData(primaryPath());
+        PathData pathData = AscensionOriginSourceHelper.getPathData(source,primaryPath());
 
         if(pathData == null) return;
         CastSoundPlayer.playPeriodic(caster, sounds, ticksElapsed);

@@ -2,10 +2,13 @@ package net.zic.ascension.common.gui.elements.introspection.stats_display;
 
 import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.textures.ITextureData;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
+import net.zic.zenithlib.common.ZenithAttachments;
+import net.zic.zenithlib.custom_attributes.SuppressedZenithAttribute;
 
 public class SuppressibleAttributeDisplayContainer extends AttributeDisplayContainer {
     private final Holder<Attribute> attribute;
@@ -18,7 +21,7 @@ public class SuppressibleAttributeDisplayContainer extends AttributeDisplayConta
         super(frame, attribute, textureData);
         this.attribute = attribute;
 
-        SuppressedStat suppressedStat = new SuppressedStat(frame, attribute);
+        SuppressedAttribute suppressedStat = new SuppressedAttribute(frame, attribute);
         suppressedStat.getPositioning().setY(18);
         addChild(suppressedStat);
 
@@ -26,9 +29,10 @@ public class SuppressibleAttributeDisplayContainer extends AttributeDisplayConta
     }
 
     private boolean isSuppressed() {
-        return ClientAscensionData.getEntityData()
-                .map(data -> data.getAttributeSuppression(attribute) < 1.0D)
-                .orElse(false);
+        if(!Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).isSuppressable(attribute)) return false;
+
+        return  ((SuppressedZenithAttribute)Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).getAttribute(attribute))
+                .getSuppression() < 1;
     }
 
     @Override

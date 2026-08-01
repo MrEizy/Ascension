@@ -1,0 +1,15 @@
+I want to be able to handle a variable number of path bonuses, with each bonus category having a generic attribute, as well as a typed variant
+
+having an attribute for generic is easy, but then needing to set up a new attribute for every "type" will be cumbersome and diffuclt
+since paths are defined in datapacks
+
+if id do some sort of typed category holder, i could then do something similar to how i handled stats, creating a PathBonusProvider interface
+
+I would also remove affinity categories, since it does not fully align with the idea of affinity in the first place
+(ok it still kind of does, since someones affinity might lean more towards "peace" rather than "aggressive")
+i might explore it further in the future, i will keep categories temporarily
+
+from that standpoint affinity itself would be a path bonus
+
+
+for now i will keep them separate, since in general im not sure how i want to handle things

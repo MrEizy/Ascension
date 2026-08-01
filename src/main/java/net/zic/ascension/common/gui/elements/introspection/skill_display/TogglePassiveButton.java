@@ -8,11 +8,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.skill.Skill;
-import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.core.skill.toggleable.ToggleableSkill;
-import net.zic.ascension.api.core.source.OriginSource;
+
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.AscensionTooltip;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
@@ -91,7 +93,7 @@ public class TogglePassiveButton extends BetterButton {
                 skillId,
                 registryAccess
         );
-        SkillData data = source.getSkillData(skillId);
+        SkillData data = AscensionOriginSourceHelper.getSkillData(source,skillId);
 
         if (skill instanceof ToggleableSkill toggleableSkill && data != null) {
             toggleable = true;

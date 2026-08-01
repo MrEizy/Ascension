@@ -33,25 +33,9 @@ public class AscDataGen {
         generator.addProvider(true, new AscEntityTypeTagProvider(packOutput, lookupProvider));
         generator.addProvider(true, new AscTooltipDataProvider(packOutput, AscensionCraft.MOD_ID));
         generator.addProvider(true, new AscClassificationDataProvider(packOutput, AscensionCraft.MOD_ID));
-        event.createDatapackRegistryObjects(
-                buildDamageTypes()
 
-        );
     }
 
 
-    public static RegistrySetBuilder buildDamageTypes(){
-        return new RegistrySetBuilder()
-                .add(Registries.DAMAGE_TYPE, bootstrap->{
 
-                    bootstrap.register(AscensionDamageHandler.PATH_TYPE,
-                            new DamageType(
-                                    AscensionDamageHandler.PATH_TYPE.identifier().toString(),
-                                    DamageScaling.NEVER,
-                                    0.1f,
-                                    DamageEffects.HURT,
-                                    DeathMessageType.DEFAULT)
-                    );
-                });
-    }
 }

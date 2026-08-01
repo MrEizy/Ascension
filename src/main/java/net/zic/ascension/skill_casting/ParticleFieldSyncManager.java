@@ -4,7 +4,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
 import net.zic.ascension.network.ParticleFieldStatePacket;
 

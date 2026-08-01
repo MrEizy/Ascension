@@ -1,8 +1,8 @@
 package net.zic.ascension.impl.core.path.foundation.foundation_change.condition;
 
-import net.zic.ascension.api.core.progression.ProgressDirection;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.datapack.progresison.ProgressActionConditionType;
+import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 import net.zic.ascension.impl.core.path.foundation.foundation_change.FoundationChangeCondition;

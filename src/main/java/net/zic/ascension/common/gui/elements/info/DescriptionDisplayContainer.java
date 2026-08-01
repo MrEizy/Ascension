@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.zic.ascension.common.gui.elements.general.ScrollBox;
 
 public class DescriptionDisplayContainer extends ScrollBox implements IInformationContainer {
-    private static final float DESCRIPTION_SCALE = 0.8F;
+    private static final float DESCRIPTION_SCALE = 1F;
 
     private final EasyLabel titleLabel;
     private final EasyLabel descriptionLabel;

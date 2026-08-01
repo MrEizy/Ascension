@@ -3,6 +3,7 @@ package net.zic.ascension.capabilities.qi_provider;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.capabilities.EntityQiProvider;
 import net.zic.ascension.api.core.resource.ResourceTransactions;
+import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.resource.AscensionResourceSources;

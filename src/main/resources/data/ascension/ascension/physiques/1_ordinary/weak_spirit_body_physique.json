@@ -1,17 +1,16 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.weak_spirit_body_physique.name"
+    "translate": "ascension.physique.feral_moon_body.name"
   },
   "description": {
-    "translate": "ascension.physique.weak_spirit_body_physique.desc"
+    "translate": "ascension.physique.feral_moon_body.desc"
   },
   "paths": [
     "ascension:foundation/essence",
-    "ascension:foundation/body",
     "ascension:elemental/wind",
-    "ascension:elemental/metal",
-    "ascension:weapon/staff"
+    "ascension:elemental/moon",
+    "ascension:weapon/knife"
   ],
   "skills": [],
   "item_tooltip": {
@@ -22,20 +21,23 @@
   "base_stats": {
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:essence": 0.8,
-    "ascension:body": 3,
-    "ascension:wind": 1.75,
-    "ascension:metal": 1.8,
-    "ascension:staff": 3.2
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:essence": 1,
+      "ascension:wind": 1,
+      "ascension:moon": 1,
+      "ascension:knife": 2
+    }
   },
-  "affinity_modifiers": {
-    "ascension:wind": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:weak_spirit_body_physique_wind_modifier"
-      }
-    ]
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:knife": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:feral_moon_body_knife_modifier"
+        }
+      ]
+    }
   }
 }

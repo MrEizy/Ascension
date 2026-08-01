@@ -1,13 +1,13 @@
 package net.zic.ascension.impl.core.bloodline.purity.condition;
 
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.progression.ProgressDirection;
-import net.zic.ascension.api.core.bloodline.Bloodline;
-import net.zic.ascension.api.core.bloodline.BloodlineData;
-import net.zic.ascension.api.core.bloodline.purity.PurityChangeActionCondition;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
+import net.zic.ascension.api.ascension.core.bloodline.purity.PurityChangeActionCondition;
 
-import net.zic.ascension.api.datapack.progresison.ProgressActionConditionType;
+import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionConditionTypes;
 
 public record OnPurityInRangeCondition(int start,int end) implements PurityChangeActionCondition {

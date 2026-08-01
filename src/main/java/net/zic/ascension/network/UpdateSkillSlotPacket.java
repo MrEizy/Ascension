@@ -7,11 +7,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 import net.zic.zenithlib.network.ByteBufHelpers;
@@ -67,15 +68,15 @@ public record UpdateSkillSlotPacket(int slot, Identifier skill) implements Custo
                 return;
             }
 
-            AscensionEntityDataHolder dataHolder = player.getCapability(
-                    CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+            AscensionEntityDataProvider dataHolder = player.getCapability(
+                    CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
             );
             if (dataHolder == null) {
                 return;
             }
 
             OriginSource source = dataHolder.getData(player).getSource();
-            if (!source.hasSkill(skillId)) {
+            if (!AscensionOriginSourceHelper.hasSkill(source,skillId)) {
                 return;
             }
             if (!(CoreRegistries.safeAccess(

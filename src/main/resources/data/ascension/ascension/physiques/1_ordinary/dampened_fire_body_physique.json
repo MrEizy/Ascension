@@ -1,17 +1,16 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.dampened_fire_body_physique.name"
+    "translate": "ascension.physique.mountain_breaker_body.name"
   },
   "description": {
-    "translate": "ascension.physique.dampened_fire_body_physique.desc"
+    "translate": "ascension.physique.mountain_breaker_body.desc"
   },
   "paths": [
     "ascension:foundation/body",
     "ascension:foundation/essence",
-    "ascension:elemental/water",
-    "ascension:elemental/wood",
-    "ascension:weapon/fan"
+    "ascension:elemental/earth",
+    "ascension:weapon/mace"
   ],
   "skills": [],
   "item_tooltip": {
@@ -22,29 +21,33 @@
   "base_stats": {
     "ascension:strength": 2
   },
-  "base_affinity": {
-    "ascension:body": 1,
-    "ascension:essence": 1.5,
-    "ascension:water": 1,
-    "ascension:wood": 1,
-    "ascension:fan": 2
-  },
   "stat_modifiers": {
     "ascension:strength": [
       {
         "value": 0.2,
         "operation": "MULTIPLY_FINAL",
-        "id": "ascension:dampened_fire_body_physique_strength_modifier"
+        "id": "ascension:mountain_breaker_body_strength_modifier"
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:fan": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:dampened_fire_body_physique_fan_modifier"
-      }
-    ]
+
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:body": 1,
+      "ascension:essence": 1,
+      "ascension:earth": 1,
+      "ascension:mace": 2
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:mace": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:mountain_breaker_body_mace_modifier"
+        }
+      ]
+    }
   }
 }

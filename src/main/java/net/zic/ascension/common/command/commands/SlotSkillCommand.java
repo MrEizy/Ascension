@@ -11,11 +11,12 @@ import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
@@ -29,8 +30,8 @@ public class SlotSkillCommand {
                         .then(Commands.argument("skill", IdentifierArgument.id())
                                 .suggests((context, builder) -> {
                                     Player player = context.getSource().getPlayer();
-                                    AscensionEntityDataHolder holder = player.getCapability(
-                                            CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+                                    AscensionEntityDataProvider holder = player.getCapability(
+                                            CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
                                     );
                                     if (holder == null) {
                                         return SharedSuggestionProvider.suggestResource(
@@ -40,9 +41,8 @@ public class SlotSkillCommand {
                                     }
 
                                     Set<Identifier> validSkills = new HashSet<>();
-                                    for (Identifier skill : holder.getData(player)
-                                            .getSource()
-                                            .getSkills()) {
+                                    for (Identifier skill : AscensionOriginSourceHelper.getSkills(holder.getData(player)
+                                            .getSource())) {
                                         if (CoreRegistries.safeAccess(
                                                 CoreRegistries.SKILL_REGISTRY,
                                                 skill,
@@ -91,8 +91,8 @@ public class SlotSkillCommand {
         int slot = IntegerArgumentType.getInteger(context, "slot");
         Player player = context.getSource().getPlayer();
 
-        AscensionEntityDataHolder holder = player.getCapability(
-                CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+        AscensionEntityDataProvider holder = player.getCapability(
+                CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
         );
         if (holder == null) {
             context.getSource().sendFailure(Component.literal("missing entity data"));
@@ -104,7 +104,7 @@ public class SlotSkillCommand {
                 AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER
         );
 
-        if (!source.hasSkill(skill)) {
+        if (!AscensionOriginSourceHelper.hasSkill(source,skill)) {
             context.getSource().sendFailure(Component.literal(
                     "you do not have skill " + skill
             ));

@@ -3,8 +3,8 @@ package net.zic.ascension.impl.core.bloodline;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.core.bloodline.BloodlineData;
-import net.zic.ascension.api.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
+import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
 
 public class SimpleBloodlineData implements BloodlineData {

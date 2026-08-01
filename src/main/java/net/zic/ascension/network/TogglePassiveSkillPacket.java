@@ -7,10 +7,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.source.ServerOriginSource;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 public record TogglePassiveSkillPacket(
@@ -49,17 +49,15 @@ public record TogglePassiveSkillPacket(
                 return;
             }
 
-            AscensionEntityDataHolder holder = player.getCapability(
-                    CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+            AscensionEntityDataProvider holder = player.getCapability(
+                    CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
             );
             if (holder == null) {
                 return;
             }
 
             OriginSource source = holder.getData(player).getSource();
-            if (source instanceof ServerOriginSource serverSource) {
-                serverSource.setSkillEnabled(player, packet.skill(), packet.enabled());
-            }
+            //TODO need to add skill enable @SortOfSmart?
         });
     }
 }

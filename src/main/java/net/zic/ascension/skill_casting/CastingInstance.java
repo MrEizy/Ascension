@@ -15,6 +15,13 @@ import net.zic.ascension.api.core.skill.castable.data.CastType;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastData;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.skill.castable.CastData;
+import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
+import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 public class CastingInstance {

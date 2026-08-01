@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.zic.ascension.api.core.tribulation.TribulationDefinitionReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;

@@ -1,25 +1,23 @@
 package net.zic.ascension.impl.core.technique;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.core.path.PathData;
-import net.zic.ascension.api.core.progression.ProgressActionHolder;
-import net.zic.ascension.api.core.progression.ProgressDirection;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.technique.Technique;
-import net.zic.ascension.api.core.technique.TechniqueData;
-import net.zic.ascension.api.core.tribulation.TribulationDefinition;
-import net.zic.ascension.api.core.tribulation.TribulationManager;
-import net.zic.ascension.api.datapack.technique.TechniqueType;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
+import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.api.ascension.core.technique.TechniqueData;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationManager;
+import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.core.technique.realm.MajorRealmDefinitionOverride;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
@@ -239,7 +237,7 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public boolean tryBreakthrough(LivingEntity entity, OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData) {
-        if(source.getPathData(getPath()).isBreakingThrough()) return false;
+        if(AscensionOriginSourceHelper.getPathData(source,getPath()).isBreakingThrough()) return false;
         double maxProgress = getMaxProgress(majorRealm,minorRealm,techniqueData,source.getRegistryAccess());
         double maxMajorRealm = getMaxMajorRealm(techniqueData,source.getRegistryAccess());
         double maxMinorRealm = getMaxMinorRealm(majorRealm,techniqueData,source.getRegistryAccess());
@@ -255,13 +253,13 @@ public class SimpleTechnique implements Technique {
         TribulationDefinition definition = getTribulation(majorRealm,minorRealm,source.getRegistryAccess());
         if(definition == null) return true;
         UUID id =   TribulationManager.getInstance().triggerTribulation(definition,entity);
-        source.getPathData(getPath()).setBreakthroughTribulation(
+        AscensionOriginSourceHelper.getPathData(source,getPath()).setBreakthroughTribulation(
                 id,
                 source.getRegistryAccess()
         );
 
         TribulationManager.getInstance().setTribulationConsumer(id,(tribulationDefinition,data)->{
-            PathData pathData = source.getPathData(getPath());
+            PathData pathData = AscensionOriginSourceHelper.getPathData(source,getPath());
 
             pathData.handleRealmChange(
                 source,pathData.getMajorRealm()+1,0);

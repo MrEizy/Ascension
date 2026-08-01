@@ -8,8 +8,9 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 
@@ -59,7 +60,7 @@ public class BloodlineOpenButton extends BetterButton {
 
     private static Component resolveTitle() {
         List<Identifier> bloodlines = ClientAscensionData.getSource()
-                .map(source -> source.getBloodlines().stream()
+                .map(source -> AscensionOriginSourceHelper.getBloodlines(source).stream()
                         .sorted(Comparator.comparing(Identifier::toString))
                         .toList())
                 .orElse(List.of());

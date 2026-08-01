@@ -9,11 +9,12 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.core.path.PathData;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.technique.Technique;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.info.PathDataDisplayElement;
 import net.zic.ascension.common.gui.elements.introspection.BackButton;
@@ -112,13 +113,9 @@ public class PathDisplayContainer extends RenderableElement {
 
     private void refreshSynchronizedState() {
         OriginSource source = ClientAscensionData.getSource().orElse(null);
-        long revision = source == null ? -1L : source.getRevision();
-        if (source == observedSource && revision == observedRevision) {
-            return;
-        }
+
 
         observedSource = source;
-        observedRevision = revision;
 
         if (source == null) {
             displayedPaths = List.of();
@@ -130,7 +127,7 @@ public class PathDisplayContainer extends RenderableElement {
             return;
         }
 
-        List<Identifier> paths = source.getPaths().stream()
+        List<Identifier> paths = AscensionOriginSourceHelper.getPaths(source).stream()
                 .sorted(Comparator.comparing(Identifier::toString))
                 .toList();
 
@@ -162,7 +159,7 @@ public class PathDisplayContainer extends RenderableElement {
         }
 
         ClientAscensionData.getSource().ifPresentOrElse(source -> {
-            PathData pathData = source.getPathData(selectedPath);
+            PathData pathData = AscensionOriginSourceHelper.getPathData(source,selectedPath);
             if (pathData == null) {
                 showMissingPath(selectedPath);
                 return;

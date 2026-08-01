@@ -3,9 +3,11 @@ package net.zic.ascension.common.gui.elements.introspection.stats_display;
 import net.lucent.easygui.gui.RenderableElement;
 import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.elements.built_in.EasyLabel;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
+import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.Stat;
 
 import java.text.DecimalFormat;
@@ -43,9 +45,7 @@ public class StatsDisplay extends RenderableElement {
     }
 
     private void updateValue() {
-        double value = ClientAscensionData.getSource()
-                .map(source -> source.getValue(stat))
-                .orElse(0.0D);
+        double value = Minecraft.getInstance().player.getData(ZenithAttachments.STAT_HOLDER).getStat(stat);
         valueLabel.setText(Component.literal(FORMAT.format(value)));
         valueLabel.setTextScale(1.0F);
     }

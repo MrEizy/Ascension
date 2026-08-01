@@ -13,52 +13,47 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
+import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.source.ServerOriginSource;
-import net.zic.ascension.api.core.source.SourceChangesSnapshot;
-import net.zic.ascension.impl.core.source.SourceHandler;
+import net.zic.ascension.api.ascension.core.CoreAttachments;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.starter.StarterSelectionStage;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.ZenithAttribute;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
-import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.stats.Stat;
-import net.zic.zenithlib.value_containers.ModifierOperation;
+import net.zic.zenithlib.stats.StatInstance;
+import net.zic.zenithlib.stats.StatSheet;
+import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
+import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public class SimpleAscensionEntityData implements AscensionEntityData {
-    private static final double MIN_SUPPRESSION_PERCENTAGE = 0.001D;
-    private static final double MAX_SUPPRESSION_PERCENTAGE = 1.0D;
 
-    private static final List<Holder<Attribute>> SUPPRESSIBLE_ATTRIBUTES = List.of(
-            Attributes.ATTACK_DAMAGE,
-            Attributes.ATTACK_SPEED,
-            Attributes.MOVEMENT_SPEED,
-            Attributes.JUMP_STRENGTH,
-            Attributes.STEP_HEIGHT,
-            Attributes.MINING_EFFICIENCY
-    );
+    private final StatSheet statSheet = new StatSheet();
+    private final PathBonusHolder pathBonusHolder = new PathBonusHolder();
+    private final PathBonusHolder cachedPathBonusHolder = new PathBonusHolder();
 
     private final OriginSource source;
     private final LivingEntity attachedEntity;
 
-    private final Map<Identifier, Double> attributeSuppression = new HashMap<>();
+    private boolean fullPatch;
+    private OriginSourcePatch patch;
 
-    private SourceChangesSnapshot snapshot;
     private boolean cultivationSuppressed;
 
     private StarterSelectionStage starterSelectionStage = StarterSelectionStage.BLOODLINE;
@@ -71,14 +66,6 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
         this.source = source;
         this.attachedEntity = entity;
-        this.source.setRegistryAccess(entity.registryAccess());
-
-        if (!attachedEntity.level().isClientSide()) {
-            SourceHandler sourceHandler = AscensionCraft.getSourceHandler();
-            if (sourceHandler != null && !sourceHandler.isWatcher(attachedEntity)) {
-                sourceHandler.addWatcher(attachedEntity, source);
-            }
-        }
     }
 
     public void initializeAttributes() {
@@ -87,43 +74,46 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         );
 
         // WIll BE BALANCED OVER TIME HOPEFULLY
-        addStatScaling(attributeHolder, Attributes.MAX_HEALTH,
+        addAttributeWithStatScaling(attributeHolder, Attributes.MAX_HEALTH,
                 AscensionStats.VITALITY.get(), "base_scaling", 2.0D);
 
-        addStatScaling(attributeHolder, Attributes.ATTACK_DAMAGE,
+
+        addSuppressedAttributeWithStatScaling(attributeHolder,Attributes.ATTACK_DAMAGE,
                 AscensionStats.STRENGTH.get(), "strength_damage_scaling", 1.0D);
 
-        addStatScaling(attributeHolder, Attributes.JUMP_STRENGTH,
+        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.JUMP_STRENGTH,
                 AscensionStats.STRENGTH.get(), "strength_jump_scaling", 0.005D);
 
-        addStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
+        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
                 AscensionStats.STRENGTH.get(), "strength_movement_scaling", 0.00005D);
 
-        addStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
+        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
                 AscensionStats.AGILITY.get(), "agility_movement_scaling", 0.002D);
 
-        addStatScaling(attributeHolder, Attributes.STEP_HEIGHT,
+        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.STEP_HEIGHT,
                 AscensionStats.AGILITY.get(), "agility_step_height_scaling", 0.05D);
 
         attributeHolder.addAttribute(Attributes.ARMOR);
         attributeHolder.addAttribute(Attributes.ARMOR_TOUGHNESS);
 
-        addStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
+        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
                 AscensionStats.STRENGTH.get(), "strength_attack_speed_scaling", 0.001D);
 
-        addStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
+        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
                 AscensionStats.AGILITY.get(), "agility_attack_speed_scaling", 0.001D);
 
         attributeHolder.addAttribute(Attributes.LUCK);
 
-        addStatScaling(attributeHolder, Attributes.MINING_EFFICIENCY,
+        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.MINING_EFFICIENCY,
                 AscensionStats.STRENGTH.get(), "strength_mining_scaling", 0.001D);
 
-        addStatScaling(attributeHolder, Attributes.SAFE_FALL_DISTANCE,
+        addAttributeWithStatScaling(attributeHolder, Attributes.SAFE_FALL_DISTANCE,
                 AscensionStats.STRENGTH.get(), "strength_safe_fall_scaling", 0.1D);
 
-        addStatScaling(attributeHolder, AscensionAttributes.MAX_QI,
+        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.MAX_QI,
                 AscensionStats.SPIRIT.get(), "spirit_max_qi_scaling", 10.0D);
+
+
 
         addStatScaling(attributeHolder, AscensionAttributes.QI_REGEN_RATE,
                 AscensionStats.SPIRIT.get(), "spirit_qi_regen_scaling", 0.25D);
@@ -148,21 +138,20 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         applyAllAttributeSuppressions();
     }
 
-    private void addStatScaling(
-            ZenithAttributeHolder attributeHolder,
-            Holder<Attribute> attribute,
+    private void addSuppressedAttributeWithStatScaling(
+            ZenithAttributeHolder holder,
+            Holder<Attribute> attributeHolder,
             Stat stat,
             String scalingName,
-            double value
-    ) {
+            double value){
         Identifier scalingId = Identifier.fromNamespaceAndPath(
                 AscensionCraft.MOD_ID,
                 scalingName
         );
 
-        attributeHolder.addAttribute(attribute);
+        holder.addSuppressedAttribute(attributeHolder);
 
-        ZenithAttribute zenithAttribute = attributeHolder.getAttribute(attribute);
+        ZenithAttribute zenithAttribute = holder.getAttribute(attributeHolder);
         if (zenithAttribute == null) {
             return;
         }
@@ -170,6 +159,28 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         zenithAttribute.removeScaling(stat, scalingId);
         zenithAttribute.addStatScaling(stat, scalingId, value);
     }
+    private void addAttributeWithStatScaling(
+            ZenithAttributeHolder holder,
+            Holder<Attribute> attributeHolder,
+            Stat stat,
+            String scalingName,
+            double value){
+        Identifier scalingId = Identifier.fromNamespaceAndPath(
+                AscensionCraft.MOD_ID,
+                scalingName
+        );
+
+        holder.addAttribute(attributeHolder);
+
+        ZenithAttribute zenithAttribute = holder.getAttribute(attributeHolder);
+        if (zenithAttribute == null) {
+            return;
+        }
+
+        zenithAttribute.removeScaling(stat, scalingId);
+        zenithAttribute.addStatScaling(stat, scalingId, value);
+    }
+
 
     @Override
     public LivingEntity getEntity() {
@@ -183,35 +194,157 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
     @Override
     public void initialize() {
-        source.load();
+
+        AscensionEntityData.super.initialize();
         initializeAttributes();
-        applyAllAttributeSuppressions();
 
-        SourceHandler sourceHandler = AscensionCraft.getSourceHandler();
-        if (!attachedEntity.level().isClientSide() && sourceHandler != null) {
-            if (!sourceHandler.isWatcher(attachedEntity)) {
-                sourceHandler.addWatcher(attachedEntity, source);
-            } else {
-                sourceHandler.changeWatcherState(attachedEntity, true);
-            }
-            sourceHandler.applyToWatcher(attachedEntity);
-        }
 
-        if (!attachedEntity.level().isClientSide()) {
-            snapshot = null;
-            attachedEntity.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
-        }
+        markDirty(getSource().load(),true);
+        initializePathBonuses();
+        getSource().attachToEntity(getEntity());
+
+    }
+
+
+    //──Path Bonus────────────────────────────────────────────────────────
+    //TODO trigger path bonus update
+    @Override
+    public ValueContainer getPathBonusContainer(Identifier category, Identifier path) {
+        return cachedPathBonusHolder.getPathBonusContainer(category,path);
     }
 
     @Override
-    public void markDirty(SourceChangesSnapshot snapshot) {
+    public double getPathBonus(Identifier category, Identifier path) {
+        return cachedPathBonusHolder.getBonus(category,path);
+    }
+
+    @Override
+    public Collection<PathBonus> getAllPathBonuses() {
+        return cachedPathBonusHolder.getAllPathBonuses();
+    }
+
+    @Override
+    public Collection<Identifier> getAllPathBonusesInCategory(Identifier category) {
+        return cachedPathBonusHolder.getAllPathBonusesInCategory(category);
+    }
+
+    @Override
+    public void addBonus(Identifier category, Identifier path, double val) {
+        pathBonusHolder.addBonus(category,path,val);
+        updatePathBonus(category,path);
+    }
+
+    @Override
+    public void addBonusModifier(Identifier category, Identifier path, ValueContainerModifier modifier) {
+        pathBonusHolder.addBonusModifier(category,path,modifier);
+        updatePathBonus(category,path);
+    }
+
+    @Override
+    public void removeBonus(Identifier category, Identifier path, double val) {
+        pathBonusHolder.removeBonus(category,path,val);
+        updatePathBonus(category,path);
+    }
+
+    @Override
+    public void removeBonusModifier(Identifier category, Identifier path, Identifier modifier) {
+        pathBonusHolder.removeBonusModifier(category,path,modifier);
+        updatePathBonus(category,path);
+    }
+
+    @Override
+    public void updatePathBonus(Identifier category, Identifier path) {
+        ValueContainer local = pathBonusHolder.getPathBonusContainer(category,path);
+        ValueContainer sourceContainer = AscensionOriginSourceHelper.getPathBonusContainer(source,category,path);
+        double baseValue = (local == null ? 0 : local.getBaseValue())+(sourceContainer == null ? 0: sourceContainer.getBaseValue());
+
+        ValueContainer newContainer = new ValueContainer(path,baseValue);
+        if(local != null) for(ValueContainerModifier modifier : local.getAllModifiers()) newContainer.addModifierNoCacheUpdate(modifier);
+        if(sourceContainer != null) for(ValueContainerModifier modifier : sourceContainer.getAllModifiers()) newContainer.addModifierNoCacheUpdate(modifier);
+
+        if(attachedEntity == null) return;
+        cachedPathBonusHolder.setPathBonusContainer(category,path,newContainer);
+        getEntity().getData(CoreAttachments.PATH_BONUS_HOLDER).updatePathBonus(new PathBonus(category,path));
+        getEntity().syncData(CoreAttachments.PATH_BONUS_HOLDER);
+    }
+
+    public void initializePathBonuses(){
+        Collection<PathBonus> bonuses = AscensionOriginSourceHelper.getAllPathBonuses(source);
+        Collection<PathBonus> selfBonuses = pathBonusHolder.getAllPathBonuses();
+
+        for(PathBonus bonus : bonuses) updatePathBonus(bonus.category(),bonus.path());
+        for(PathBonus bonus : selfBonuses) updatePathBonus(bonus.category(),bonus.path());
+    }
+
+    //──Stats────────────────────────────────────────────────────────
+    //TODO trigger stat update
+
+    @Override
+    public Collection<Stat> getStats() {
+        return statSheet.getAllStats();
+    }
+
+    @Override
+    public StatInstance getStatInstance(Stat stat) {
+        return statSheet.getStatInstance(stat);
+    }
+
+    @Override
+    public double getStat(Stat stat) {
+        return statSheet.getStatInstance(stat) == null ? 0 : statSheet.getStatInstance(stat).getValue();
+    }
+
+    @Override
+    public double getBaseStat(Stat stat) {
+        return statSheet.getStatInstance(stat) == null ? 0 : statSheet.getStatInstance(stat).getBaseValue();
+    }
+
+    @Override
+    public void addStat(Stat stat, double val) {
+        statSheet.addStat(stat,val);
+        updateStatHolder(stat);
+    }
+
+    @Override
+    public void removeStat(Stat stat, double val) {
+        statSheet.removeStat(stat,val);
+        updateStatHolder(stat);
+    }
+
+    @Override
+    public void addStatModifier(Stat stat, ValueContainerModifier modifier) {
+        if(statSheet.getStatInstance(stat) == null) return;
+        statSheet.getStatInstance(stat).addModifier(modifier);
+        updateStatHolder(stat);
+    }
+
+    @Override
+    public void removeStatModifier(Stat stat, Identifier modifier) {
+        if(statSheet.getStatInstance(stat) == null) return;
+        statSheet.getStatInstance(stat).removeModifier(modifier);
+        updateStatHolder(stat);
+    }
+    //TODO add a process system like patching for bulk updates
+    public void updateStatHolder(Stat stat){
+        if(getEntity() == null) return;
+        NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(getEntity(),List.of(stat)));
+
+    }
+
+
+    @Override
+    public void markDirty(OriginSourcePatch patch,boolean fullPatch) {
+        //TODO ensure up to date
         if (attachedEntity.level().isClientSide()) {
             return;
         }
 
-        this.snapshot = snapshot;
+        this.patch = patch;
+        if(patch == null) return;
+        this.fullPatch = fullPatch;
         attachedEntity.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
     }
+
 
     @Override
     public boolean isCultivationSuppressed() {
@@ -289,113 +422,6 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     public static Identifier getAttributeId(Holder<Attribute> attribute) {
         return BuiltInRegistries.ATTRIBUTE.getKey(attribute.value());
     }
-
-    public static Optional<Holder<Attribute>> getSuppressibleAttribute(Identifier attributeId) {
-        if (attributeId == null) {
-            return Optional.empty();
-        }
-
-        return SUPPRESSIBLE_ATTRIBUTES.stream()
-                .filter(attribute -> attributeId.equals(getAttributeId(attribute)))
-                .findFirst();
-    }
-
-    public static boolean isSuppressibleAttribute(Identifier attributeId) {
-        return getSuppressibleAttribute(attributeId).isPresent();
-    }
-
-    public static boolean isSuppressibleAttribute(Holder<Attribute> attribute) {
-        return isSuppressibleAttribute(getAttributeId(attribute));
-    }
-
-    private static Identifier getSuppressionModifierId(Identifier attributeId) {
-        return Identifier.fromNamespaceAndPath(
-                AscensionCraft.MOD_ID,
-                "suppression/" + attributeId.getNamespace() + "/" + attributeId.getPath()
-        );
-    }
-
-    @Override
-    public double getAttributeSuppression(Holder<Attribute> attribute) {
-        if (!isSuppressibleAttribute(attribute)) {
-            return 1.0D;
-        }
-
-        Identifier attributeId = getAttributeId(attribute);
-        if (attributeId == null) {
-            return 1.0D;
-        }
-
-        return attributeSuppression.getOrDefault(attributeId, 1.0D);
-    }
-
-    @Override
-    public void setAttributeSuppression(Holder<Attribute> attribute, double percentage) {
-        if (!isSuppressibleAttribute(attribute)) {
-            return;
-        }
-
-        Identifier attributeId = getAttributeId(attribute);
-        if (attributeId == null) {
-            return;
-        }
-
-        percentage = Math.clamp(
-                percentage,
-                MIN_SUPPRESSION_PERCENTAGE,
-                MAX_SUPPRESSION_PERCENTAGE
-        );
-
-        if (percentage >= 1.0D) {
-            attributeSuppression.remove(attributeId);
-        } else {
-            attributeSuppression.put(attributeId, percentage);
-        }
-    }
-
-    @Override
-    public void applyAttributeSuppression(Holder<Attribute> attribute) {
-        Identifier attributeId = getAttributeId(attribute);
-
-        if (!isSuppressibleAttribute(attribute)) {
-            return;
-        }
-
-        if (attributeId == null) {
-            return;
-        }
-
-        ZenithAttributeHolder attributeHolder = attachedEntity.getData(
-                ZenithAttachments.ATTRIBUTE_HOLDER
-        );
-
-        ZenithAttribute zenithAttribute = attributeHolder.getAttribute(attribute);
-        if (zenithAttribute == null) {
-            return;
-        }
-
-        Identifier modifierId = getSuppressionModifierId(attributeId);
-
-        zenithAttribute.removeModifier(modifierId);
-
-        double percentage = getAttributeSuppression(attribute);
-
-        if (percentage < 1.0D) {
-            zenithAttribute.addModifier(new ValueContainerModifier(
-                    percentage - 1.0D,
-                    ModifierOperation.MULTIPLY_FINAL,
-                    modifierId
-            ));
-        }
-    }
-
-    @Override
-    public void applyAllAttributeSuppressions() {
-        for (Holder<Attribute> attribute : SUPPRESSIBLE_ATTRIBUTES) {
-            applyAttributeSuppression(attribute);
-        }
-    }
-
     private static void encodeIdentifierList(RegistryFriendlyByteBuf buf, Collection<Identifier> identifiers) {
         buf.writeVarInt(identifiers.size());
         for (Identifier identifier : identifiers) {
@@ -489,11 +515,6 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         ) {
             buf.writeBoolean(attachment.cultivationSuppressed);
 
-            buf.writeVarInt(attachment.attributeSuppression.size());
-            for (Map.Entry<Identifier, Double> entry : attachment.attributeSuppression.entrySet()) {
-                ByteBufHelpers.encodeIdentifier(entry.getKey(), buf);
-                buf.writeDouble(entry.getValue());
-            }
 
             buf.writeEnum(attachment.starterSelectionStage);
             buf.writeBoolean(attachment.starterSelectionComplete);
@@ -502,16 +523,13 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             encodeOptionalIdentifier(buf, attachment.selectedStarterBloodline);
             encodeOptionalIdentifier(buf, attachment.selectedStarterPhysique);
 
-            boolean encodePatch = !initialSync && attachment.snapshot != null;
-            buf.writeBoolean(encodePatch);
 
-            if (encodePatch) {
-                attachment.snapshot.encode(buf);
-            } else {
-                attachment.source.encode(buf);
+            buf.writeBoolean(attachment.patch != null);
+            if(attachment.patch != null){
+                if(attachment.fullPatch) OriginSourcePatch.fullEncode(attachment.patch,buf,attachment.getEntity().registryAccess());
+                else OriginSourcePatch.encodePatch(attachment.patch,buf,attachment.getEntity().registryAccess());
+                attachment.patch = null;
             }
-
-            attachment.snapshot = null;
         }
 
         @Override
@@ -534,17 +552,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             SimpleAscensionEntityData data = previousValue;
 
             data.setCultivationSuppressed(buf.readBoolean());
-            data.attributeSuppression.clear();
 
-            int suppressionCount = buf.readVarInt();
-            for (int i = 0; i < suppressionCount; i++) {
-                Identifier attributeId = ByteBufHelpers.decodeIdentifier(buf);
-                double percentage = buf.readDouble();
-
-                getSuppressibleAttribute(attributeId).ifPresent(attribute ->
-                        data.setAttributeSuppression(attribute, percentage)
-                );
-            }
 
             data.setStarterSelectionStage(buf.readEnum(StarterSelectionStage.class));
             data.setStarterSelectionComplete(buf.readBoolean());
@@ -554,11 +562,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             data.setSelectedStarterPhysique(decodeOptionalIdentifier(buf));
 
             if (buf.readBoolean()) {
-                data.source.apply(
-                        SourceChangesSnapshot.decode(buf, buf.registryAccess())
-                );
-            } else {
-                data.source.decode(buf);
+                data.source.applyPatch(buf);
             }
 
             data.initializeAttributes();
@@ -577,27 +581,17 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                 return null;
             }
 
+            OriginSource originSource = new OriginSource();
+            originSource.setCachedData(input.childOrEmpty("source_data"));
 
-            OriginSource source = entity.level().isClientSide()
-                    ? new OriginSource(input.childOrEmpty("source_data"))
-                    : new ServerOriginSource(input.childOrEmpty("source_data"));
 
-            SimpleAscensionEntityData data = new SimpleAscensionEntityData(source, entity);
+            SimpleAscensionEntityData data = new SimpleAscensionEntityData(originSource, entity);
 
             data.setCultivationSuppressed(
                     input.getBooleanOr("cultivation_suppressed", false)
             );
 
-            NbtHelpers.readList(input, "attribute_suppression", (elementInput, id) -> {
-                Identifier attributeId = NbtHelpers.readIdentifier(elementInput, "attribute");
-                double percentage = elementInput.getDoubleOr("percentage", 1.0D);
 
-                getSuppressibleAttribute(attributeId).ifPresent(attribute ->
-                        data.setAttributeSuppression(attribute, percentage)
-                );
-
-                return attributeId;
-            });
 
             data.setStarterSelectionStage(readStarterSelectionStage(
                     input.getStringOr("starter_selection_stage", StarterSelectionStage.BLOODLINE.name())
@@ -615,7 +609,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
         @Override
         public boolean write(SimpleAscensionEntityData attachment, ValueOutput output) {
-            attachment.source.write(output.child("source_data"));
+            attachment.source.writeOriginSourceData(output.child("source_data"));
 
             output.putBoolean(
                     "cultivation_suppressed",

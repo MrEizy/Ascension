@@ -5,10 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.zic.ascension.api.core.tribulation.TribulationDefinition;
-import net.zic.ascension.api.core.tribulation.TribulationDefinitionReference;
-import net.zic.ascension.api.datapack.tribulation.TribulationType;
-import net.zic.ascension.impl.core.path.RealmDefinition;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinitionReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;

@@ -18,18 +18,19 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.core.path.PathData;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathData;
+
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.entity.AscensionStats;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
-import net.zic.ascension.impl.core.source.SourceHandler;
 
 import java.util.List;
 import java.util.Locale;
@@ -63,10 +64,6 @@ public final class MobCultivationManager {
             return;
         }
 
-        SourceHandler sourceHandler = AscensionCraft.getSourceHandler();
-        if (sourceHandler == null) {
-            return;
-        }
 
         MobCultivationData cultivationData = getCultivationData(mob);
         cultivationData.setCategory(getCategory(mob));
@@ -87,12 +84,7 @@ public final class MobCultivationManager {
         SimpleAscensionEntityData entityData = getEntityData(mob);
         OriginSource source = entityData.getSource();
 
-        if (!sourceHandler.isWatcher(mob)) {
-            sourceHandler.addWatcher(mob, source);
-        } else {
-            sourceHandler.changeWatcherState(mob, true);
-        }
-
+        source.attachToEntity(mob);
         entityData.initialize();
 
         if (cultivationData.getFoundationPath() == null) {
@@ -145,10 +137,14 @@ public final class MobCultivationManager {
         clearDebugName(mob);
         getCultivationData(mob).endRuntimeSession();
 
-        SourceHandler sourceHandler = AscensionCraft.getSourceHandler();
-        if (sourceHandler != null && sourceHandler.isWatcher(mob)) {
-            sourceHandler.changeWatcherState(mob, false);
-        }
+        AscensionEntityDataProvider holder = mob.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+        if(holder == null) return;
+
+        if(holder.getData(mob) == null) return;
+
+        if(holder.getData(mob).getSource() == null) return;
+
+        holder.getData(mob).getSource().detachFromEntity(mob);
     }
 
     public static MobCultivationData getCultivationData(Mob mob) {
@@ -204,15 +200,15 @@ public final class MobCultivationManager {
         data.setCategory(getCategory(mob));
         data.setFoundationPath(pathId);
 
-        if (!source.addPath(pathId, MOB_CULTIVATION_OWNER) && !source.hasPath(pathId)) {
+        if (!AscensionOriginSourceHelper.addPath(source,pathId, MOB_CULTIVATION_OWNER) && !AscensionOriginSourceHelper.hasPath(source,pathId)) {
             data.setCultivated(false);
             data.clearGeneratedState();
             return false;
         }
 
-        PathData pathData = source.getPathData(pathId);
+        PathData pathData = AscensionOriginSourceHelper.getPathData(source,pathId);
         if (pathData == null) {
-            source.removePath(pathId, MOB_CULTIVATION_OWNER);
+            AscensionOriginSourceHelper.removePath(source,pathId, MOB_CULTIVATION_OWNER);
             data.setCultivated(false);
             data.clearGeneratedState();
             return false;
@@ -232,7 +228,7 @@ public final class MobCultivationManager {
         double clampedPercentage = Math.clamp(progressPercentage, 0.0D, 100.0D);
         pathData.setProgress(maximumProgress * clampedPercentage / 100.0D);
         capturePathState(data, pathData);
-        source.markPathDirty(pathId);
+        AscensionOriginSourceHelper.markPathDirty(source,pathId);
 
         rebuildGeneratedStats(mob, data, source, pathData);
         refreshAttributesAndHealth(mob, true);
@@ -246,7 +242,8 @@ public final class MobCultivationManager {
         if (!data.isCultivated() || data.getFoundationPath() == null) {
             return null;
         }
-        return getEntityData(mob).getSource().getPathData(data.getFoundationPath());
+
+        return AscensionOriginSourceHelper.getPathData(getEntityData(mob).getSource(),data.getFoundationPath());
     }
 
     public static int getRealmScore(Mob mob) {
@@ -255,8 +252,8 @@ public final class MobCultivationManager {
     }
 
     public static int getHighestPlayerRealmScore(ServerPlayer player) {
-        AscensionEntityDataHolder holder = player.getCapability(
-                CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+        AscensionEntityDataProvider holder = player.getCapability(
+                CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
         );
         if (holder == null) {
             return -1;
@@ -265,13 +262,13 @@ public final class MobCultivationManager {
         OriginSource source = holder.getData(player).getSource();
         int highest = -1;
 
-        for (Identifier pathId : source.getPaths()) {
+        for (Identifier pathId : AscensionOriginSourceHelper.getPaths(source)) {
             Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, pathId, player.registryAccess());
             if (!(path instanceof FoundationPath)) {
                 continue;
             }
 
-            PathData pathData = source.getPathData(pathId);
+            PathData pathData = AscensionOriginSourceHelper.getPathData(source,pathId);
             if (pathData != null) {
                 highest = Math.max(highest, pathData.getMajorRealm() * 3 + pathData.getMinorRealm());
             }
@@ -460,10 +457,10 @@ public final class MobCultivationManager {
                 .append(String.format(
                         Locale.ROOT,
                         "\nEffective stats: vitality %.2f, strength %.2f, agility %.2f, spirit %.2f",
-                        source.getValue(AscensionStats.VITALITY.get()),
-                        source.getValue(AscensionStats.STRENGTH.get()),
-                        source.getValue(AscensionStats.AGILITY.get()),
-                        source.getValue(AscensionStats.SPIRIT.get())
+                        source.getStat(AscensionStats.VITALITY.get()),
+                        source.getStat(AscensionStats.STRENGTH.get()),
+                        source.getStat(AscensionStats.AGILITY.get()),
+                        source.getStat(AscensionStats.SPIRIT.get())
                 ))
                 .append(String.format(
                         Locale.ROOT,
@@ -491,15 +488,15 @@ public final class MobCultivationManager {
         Identifier pathId = chooseFoundationPath(mob, data.getCategory());
         data.setFoundationPath(pathId);
 
-        if (!source.addPath(pathId, MOB_CULTIVATION_OWNER) && !source.hasPath(pathId)) {
+        if (!AscensionOriginSourceHelper.addPath(source,pathId, MOB_CULTIVATION_OWNER) && !AscensionOriginSourceHelper.hasPath(source,pathId)) {
             data.setCultivated(false);
             data.clearGeneratedState();
             return;
         }
 
-        PathData pathData = source.getPathData(pathId);
+        PathData pathData = AscensionOriginSourceHelper.getPathData(source,pathId);
         if (pathData == null) {
-            source.removePath(pathId, MOB_CULTIVATION_OWNER);
+            AscensionOriginSourceHelper.removePath(source,pathId, MOB_CULTIVATION_OWNER);
             data.setCultivated(false);
             data.clearGeneratedState();
             return;
@@ -510,7 +507,7 @@ public final class MobCultivationManager {
         pathData.setMinorRealm(realm[1]);
         pathData.setProgress(0.0D);
         capturePathState(data, pathData);
-        source.markPathDirty(pathId);
+        AscensionOriginSourceHelper.markPathDirty(source,pathId);
 
         rebuildGeneratedStats(mob, data, source, pathData);
         refreshAttributesAndHealth(mob, true);
@@ -525,11 +522,11 @@ public final class MobCultivationManager {
             return;
         }
 
-        if (!source.hasPath(pathId)) {
-            source.addPath(pathId, MOB_CULTIVATION_OWNER);
+        if (!AscensionOriginSourceHelper.hasPath(source,pathId)) {
+            AscensionOriginSourceHelper.addPath(source,pathId, MOB_CULTIVATION_OWNER);
         }
 
-        PathData pathData = source.getPathData(pathId);
+        PathData pathData = AscensionOriginSourceHelper.getPathData(source,pathId);
         if (pathData == null) {
             generateFreshCultivation(mob, data, source, true);
             return;
@@ -550,7 +547,7 @@ public final class MobCultivationManager {
         double maximumProgress = pathData.getMaxProgress(majorRealm, minorRealm, source.getRegistryAccess());
         pathData.setProgress(Math.clamp(data.getProgress(), 0.0D, Math.max(0.0D, maximumProgress)));
         capturePathState(data, pathData);
-        source.markPathDirty(pathId);
+        AscensionOriginSourceHelper.markPathDirty(source,pathId);
 
         boolean missingGeneratedStats = Math.abs(data.getGeneratedVitality()) < EPSILON
                 && Math.abs(data.getGeneratedStrength()) < EPSILON
@@ -566,7 +563,7 @@ public final class MobCultivationManager {
 
     private static void clearGeneratedCultivation(MobCultivationData data, OriginSource source) {
         if (data.getFoundationPath() != null) {
-            source.removePath(data.getFoundationPath(), MOB_CULTIVATION_OWNER);
+            AscensionOriginSourceHelper.removePath(source,data.getFoundationPath(), MOB_CULTIVATION_OWNER);
         }
 
         if (data.areGeneratedStatsApplied()) {
@@ -579,16 +576,6 @@ public final class MobCultivationManager {
     }
 
     private static void ensureEntityDataInitialized(Mob mob, SimpleAscensionEntityData entityData) {
-        SourceHandler sourceHandler = AscensionCraft.getSourceHandler();
-        if (sourceHandler == null) {
-            return;
-        }
-
-        if (!sourceHandler.isWatcher(mob)) {
-            sourceHandler.addWatcher(mob, entityData.getSource());
-        } else {
-            sourceHandler.changeWatcherState(mob, true);
-        }
         entityData.initialize();
     }
 
@@ -668,7 +655,7 @@ public final class MobCultivationManager {
         if (Math.abs(amount) <= EPSILON) {
             return;
         }
-        if (Math.abs(source.getBaseValue(stat)) <= EPSILON) {
+        if (Math.abs(source.getBaseStat(stat)) <= EPSILON) {
             source.addStat(stat, amount);
         }
     }
@@ -806,7 +793,7 @@ public final class MobCultivationManager {
         }
 
         capturePathState(data, pathData);
-        source.markPathDirty(data.getFoundationPath());
+        AscensionOriginSourceHelper.markPathDirty(source,data.getFoundationPath());
 
         boolean realmChanged = originalMajor != pathData.getMajorRealm()
                 || originalMinor != pathData.getMinorRealm();
@@ -861,7 +848,7 @@ public final class MobCultivationManager {
         int hurtTimestamp = mob.getLastHurtByMobTimestamp();
         LivingEntity attacker = mob.getLastHurtByMob();
         int realmScore = Math.max(0, getRealmScore(mob));
-        double spirit = getEntityData(mob).getSource().getValue(AscensionStats.SPIRIT.get());
+        double spirit = getEntityData(mob).getSource().getStat(AscensionStats.SPIRIT.get());
 
         if (attacker != null
                 && attacker.isAlive()
@@ -928,7 +915,7 @@ public final class MobCultivationManager {
 
             int playerScore = getHighestPlayerRealmScore(player);
             int mobScore = getRealmScore(mob);
-            double spirit = getEntityData(mob).getSource().getValue(AscensionStats.SPIRIT.get());
+            double spirit = getEntityData(mob).getSource().getStat(AscensionStats.SPIRIT.get());
             double sensingChance = Math.min(0.90D, 0.25D + spirit * 0.02D);
 
             if (playerScore - mobScore >= FLEE_REALM_GAP && mob.getRandom().nextDouble() < sensingChance) {

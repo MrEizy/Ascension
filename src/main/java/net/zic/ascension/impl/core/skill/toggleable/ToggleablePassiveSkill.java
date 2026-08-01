@@ -6,6 +6,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.capabilities.CoreCapabilities;
 import net.zic.ascension.api.capabilities.EntityQiProvider;
 import net.zic.ascension.api.core.resource.ResourceOperation;
@@ -14,8 +18,8 @@ import net.zic.ascension.api.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.core.skill.SkillData;
 import net.zic.ascension.api.core.skill.toggleable.ToggleableSkill;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
@@ -239,12 +243,12 @@ public class ToggleablePassiveSkill implements ToggleableSkill {
         });
 
         for (ValueContainer.BaseModifier baseModifier : baseAffinities) {
-            source.addAffinity(baseModifier.container(), baseModifier.val());
+            AscensionOriginSourceHelper.addAffinity(source,baseModifier.container(), baseModifier.val());
         }
 
         affinityModifiers.forEach((path, modifiers) -> {
             for (ValueContainerModifier modifier : modifiers) {
-                source.addAffinityModifier(path, modifier);
+                AscensionOriginSourceHelper.addAffinityModifier(source,path, modifier);
             }
         });
     }
@@ -268,12 +272,12 @@ public class ToggleablePassiveSkill implements ToggleableSkill {
         });
 
         for (ValueContainer.BaseModifier baseModifier : baseAffinities) {
-            source.removeAffinity(baseModifier.container(), baseModifier.val());
+            AscensionOriginSourceHelper.removeAffinity(source,baseModifier.container(), baseModifier.val());
         }
 
         affinityModifiers.forEach((path, modifiers) -> {
             for (ValueContainerModifier modifier : modifiers) {
-                source.removeAffinityModifier(path, modifier.getIdentifier());
+                AscensionOriginSourceHelper.removeAffinityModifier(source,path, modifier.getIdentifier());
             }
         });
     }
