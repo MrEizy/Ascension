@@ -9,11 +9,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.core.technique.Technique;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
 public class TechniqueTransferItem  extends Item {
@@ -37,23 +38,23 @@ public class TechniqueTransferItem  extends Item {
             return InteractionResult.FAIL;
         }
 
-        AscensionEntityDataHolder holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY);
+        AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
 
         if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData(player).getSource();
         Identifier path = targetTechnique.getPath();
-        if(source.getPathData(path) == null){
+        if(AscensionOriginSourceHelper.getPathData(source,path) == null){
             player.sendSystemMessage(Component.literal("[You are do not have path : "+path+"]"));
             return InteractionResult.FAIL;
         }
-        if(!source.getPathData(path).setCurrentTechnique(
+        if(!AscensionOriginSourceHelper.getPathData(source,path).setCurrentTechnique(
                 stack.get(AscensionComponents.REGISTRY_ID_HOLDER),
                 source
         )){
             player.sendSystemMessage(Component.literal("[Learned technique :" +stack.get(AscensionComponents.REGISTRY_ID_HOLDER)+"]"));
             return InteractionResult.FAIL;
         }
-        source.markPathDirty(path);
+        AscensionOriginSourceHelper.markPathDirty(source,path);
         stack.shrink(1);
         AscensionCraft.LOGGER.info("Player {} has transferred their technique",player.getName().getString());
         return InteractionResult.SUCCESS;

@@ -4,8 +4,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.datapack.TypeRegistries;
-import net.zic.ascension.api.datapack.tribulation.TribulationType;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 
 public class AscensionTribulationTypes {
     public static final DeferredRegister<TribulationType> TRIBULATION_TYPES =

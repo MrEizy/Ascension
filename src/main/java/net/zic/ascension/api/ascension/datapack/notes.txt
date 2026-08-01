@@ -1,0 +1,4 @@
+update to move everything out of their respective packages?
+
+TODO:
+    update attribute suppression to use my new system

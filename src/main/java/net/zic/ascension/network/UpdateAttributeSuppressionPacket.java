@@ -1,6 +1,7 @@
 package net.zic.ascension.network;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -9,11 +10,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
+import net.zic.zenithlib.common.ZenithAttachments;
+import net.zic.zenithlib.custom_attributes.SuppressedZenithAttribute;
+import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 public record UpdateAttributeSuppressionPacket(
@@ -52,30 +56,15 @@ public record UpdateAttributeSuppressionPacket(
             if (!(context.player() instanceof ServerPlayer player)) {
                 return;
             }
+            System.out.println("setting suppression : "+packet.percentage);
+            ZenithAttributeHolder holder = player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
 
-            AscensionEntityDataHolder holder = player.getCapability(
-                    CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
-            );
+            Holder<Attribute> attributeHolder = BuiltInRegistries.ATTRIBUTE.get(packet.attribute).get();
 
-            if (holder == null) {
-                return;
-            }
+            holder.setSuppression(attributeHolder,packet.percentage);
 
-            Holder<Attribute> attribute = SimpleAscensionEntityData
-                    .getSuppressibleAttribute(packet.attribute())
-                    .orElse(null);
-
-            if (attribute == null) {
-                return;
-            }
-
-            AscensionEntityData data = holder.getData(player);
-
-
-            data.setAttributeSuppression(attribute, packet.percentage());
-            data.applyAttributeSuppression(attribute);
-
-            player.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
+            System.out.println(((SuppressedZenithAttribute)holder.getAttribute(attributeHolder)).getSuppression());
+            player.syncData(ZenithAttachments.ATTRIBUTE_HOLDER);
 
         });
     }

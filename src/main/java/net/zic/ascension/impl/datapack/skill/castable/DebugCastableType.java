@@ -3,18 +3,11 @@ package net.zic.ascension.impl.datapack.skill.castable;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.chat.ComponentSerialization;
-import net.zic.ascension.api.core.skill.Skill;
-import net.zic.ascension.api.core.skill.SkillData;
-import net.zic.ascension.api.datapack.skill.SkillType;
-import net.zic.ascension.impl.core.skill.EmptySkillData;
-import net.zic.ascension.impl.core.skill.SimplePassiveSkill;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.core.skill.castable.DebugCastable;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class DebugCastableType extends SkillType {

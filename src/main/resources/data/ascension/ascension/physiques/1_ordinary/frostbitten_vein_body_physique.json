@@ -1,16 +1,15 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.frostbitten_vein_body_physique.name"
+    "translate": "ascension.physique.rime_bone_body.name"
   },
   "description": {
-    "translate": "ascension.physique.frostbitten_vein_body_physique.desc"
+    "translate": "ascension.physique.rime_bone_body.desc"
   },
   "paths": [
     "ascension:foundation/body",
     "ascension:elemental/ice",
-    "ascension:elemental/yin",
-    "ascension:weapon/fan"
+    "ascension:weapon/hammer"
   ],
   "skills": [],
   "item_tooltip": {
@@ -22,28 +21,31 @@
     "ascension:strength": 1,
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:body": 3,
-    "ascension:ice": 2.5,
-    "ascension:yin": 2,
-    "ascension:fan": 2.3
-  },
   "stat_modifiers": {
     "ascension:strength": [
       {
         "value": 0.15,
         "operation": "MULTIPLY_FINAL",
-        "id": "ascension:frostbitten_vein_body_physique_strength_modifier"
+        "id": "ascension:rime_bone_body_strength_modifier"
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:fan": [
-      {
-        "value": 0.2,
-        "operation": "ADD_BASE",
-        "id": "ascension:frostbitten_vein_body_physique_fan_modifier"
-      }
-    ]
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:body": 1,
+      "ascension:ice": 1,
+      "ascension:hammer": 2
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:hammer": [
+        {
+          "value": 0.2,
+          "operation": "ADD_BASE",
+          "id": "ascension:rime_bone_body_hammer_modifier"
+        }
+      ]
+    }
   }
 }

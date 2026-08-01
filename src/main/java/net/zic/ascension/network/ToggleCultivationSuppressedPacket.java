@@ -7,8 +7,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 
 public record ToggleCultivationSuppressedPacket(boolean suppressed) implements CustomPacketPayload {
@@ -40,8 +40,8 @@ public record ToggleCultivationSuppressedPacket(boolean suppressed) implements C
                 return;
             }
 
-            AscensionEntityDataHolder holder = player.getCapability(
-                    CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+            AscensionEntityDataProvider holder = player.getCapability(
+                    CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
             );
 
             if (holder == null) {

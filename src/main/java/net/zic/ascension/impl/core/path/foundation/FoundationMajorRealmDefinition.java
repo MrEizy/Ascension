@@ -4,8 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.zic.ascension.api.core.progression.ProgressActionHolder;
-import net.zic.ascension.impl.core.path.MajorRealmDefinition;
+import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.impl.core.path.RealmDefinition;
 
 import java.util.List;

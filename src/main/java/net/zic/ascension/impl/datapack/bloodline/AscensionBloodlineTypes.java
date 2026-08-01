@@ -4,8 +4,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.datapack.TypeRegistries;
-import net.zic.ascension.api.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
 
 public class AscensionBloodlineTypes {
     public static final DeferredRegister<BloodlineType> BLOODLINE_TYPES =

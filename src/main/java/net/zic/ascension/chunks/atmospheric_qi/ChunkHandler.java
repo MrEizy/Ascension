@@ -21,9 +21,11 @@ import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreAttachments;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
 import net.zic.ascension.configuration.biome.BiomeConfiguration;
 import net.zic.ascension.configuration.biome.BiomeConfigurations;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
@@ -86,32 +88,16 @@ public class ChunkHandler {
         if(!event.didChunkChange()) return;
         if(!(event.getEntity() instanceof LivingEntity entity)) return;
 
-        AscensionEntityDataHolder holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY, null);
-        if(holder == null) return;
 
-        AscensionEntityData data = holder.getData(entity);
+        AscensionEntityPathBonusHolder bonusHolder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
 
+        ChunkPos oldPos = event.getOldPos().chunk();
         ChunkPos pos = event.getNewPos().chunk();
         LevelChunk chunk = entity.level().getChunk(pos.x(),pos.z());
+        LevelChunk oldChunk = entity.level().getChunk(oldPos.x(),oldPos.z());
 
-        ChunkQiContainer qiContainer = chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
-
-
-        //remove ALL previous modifiers
-         for(Identifier path : data.getAllAffinities()){
-            data.removeAffinityModifier(path,chunkModifierId);
-        }
-
-        //add all affinities as an ADD_FINAL modifier
-        for (Identifier path : qiContainer.getAllAffinities()){
-            data.addAffinityModifier(path, new ValueContainerModifier(
-                    qiContainer.getAffinity(path),
-                    ModifierOperation.ADD_FINAL,
-                    chunkModifierId
-            ));
-        }
-
-
+        bonusHolder.removePathBonusProvider(oldChunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
+        bonusHolder.registerPathBonusProvider(chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
 
     }
 
@@ -122,22 +108,12 @@ public class ChunkHandler {
         if(!(event.getEntity() instanceof LivingEntity entity)) return;
 
 
-        AscensionEntityDataHolder holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY, null);
-        if(holder == null) return;
 
-        AscensionEntityData data = holder.getData(entity);
+        AscensionEntityPathBonusHolder bonusHolder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
 
         ChunkAccess chunk = entity.level().getChunk(entity.blockPosition());
-        ChunkQiContainer qiContainer = chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
 
-        //add all affinities as an ADD_FINAL modifier
-        for (Identifier path : qiContainer.getAllAffinities()){
-            data.addAffinityModifier(path, new ValueContainerModifier(
-                    qiContainer.getAffinity(path),
-                    ModifierOperation.ADD_FINAL,
-                    chunkModifierId
-            ));
-        }
+        bonusHolder.registerPathBonusProvider(chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
 
 
 
@@ -145,18 +121,14 @@ public class ChunkHandler {
     @SubscribeEvent
     public static void onLeaveLevel(EntityLeaveLevelEvent event){
         if(!(event.getEntity() instanceof LivingEntity entity)) return;
-        AscensionEntityDataHolder holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY, null);
+        AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY, null);
         if(holder == null) return;
-
-        AscensionEntityData data = holder.getData(entity);
+        AscensionEntityPathBonusHolder bonusHolder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
 
         ChunkAccess chunk = entity.level().getChunk(entity.blockPosition());
-        ChunkQiContainer qiContainer = chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
 
-        //remove ALL previous modifiers
-        for(Identifier path : data.getAllAffinities()){
-            data.removeAffinityModifier(path,chunkModifierId);
-        }
+        bonusHolder.removePathBonusProvider(chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
+
     }
 
 

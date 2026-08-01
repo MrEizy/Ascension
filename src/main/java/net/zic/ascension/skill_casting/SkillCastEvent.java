@@ -3,8 +3,7 @@ package net.zic.ascension.skill_casting;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.Event;
-import net.zic.ascension.api.core.skill.castable.CastData;
-import net.zic.ascension.api.core.skill.castable.PreCastData;
+import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
 
 public class SkillCastEvent extends Event {
     private final LivingEntity entity;

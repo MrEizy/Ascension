@@ -1,12 +1,12 @@
 package net.zic.ascension.impl.core.path.foundation.foundation_change;
 
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.RegistryObjectData;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.core.progression.ProgressAction;
-import net.zic.ascension.api.core.progression.ProgressDirection;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.RegistryObjectData;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.progression.ProgressAction;
+import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 
@@ -30,6 +30,6 @@ public interface FoundationChangeAction extends ProgressAction {
                 direction == ProgressDirection.DOWN ? foundationRealm+1: foundationRealm,
                 direction);
     }
-    void run(UUID holderId,OriginSource source, FoundationPath path, FoundationPathData foundationPathData, int majorRealm, int foundationRealm, ProgressDirection direction);
+    void run(UUID holderId, OriginSource source, FoundationPath path, FoundationPathData foundationPathData, int majorRealm, int foundationRealm, ProgressDirection direction);
 
 }

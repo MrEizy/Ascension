@@ -1,11 +1,11 @@
 package net.zic.ascension.capabilities.entity_holder;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 
-public class PlayerDataHolder implements AscensionEntityDataHolder {
+public class PlayerDataHolder implements AscensionEntityDataProvider {
     @Override
     public AscensionEntityData getData(LivingEntity entity) {
         //all other things should go ABOVE here. if it reaches this point always return it

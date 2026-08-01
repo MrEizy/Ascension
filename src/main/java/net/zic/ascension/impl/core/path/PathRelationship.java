@@ -2,11 +2,10 @@ package net.zic.ascension.impl.core.path;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.RecordBuilder;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.core.path.interactions.PathInteraction;
-import net.zic.ascension.api.core.path.interactions.PathInteractionType;
+import net.zic.ascension.api.ascension.core.path.interactions.PathInteraction;
+import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionType;
 
 public record PathRelationship(Identifier path, String target, PathInteractionType type,double value){
     public static final Codec<PathRelationship> CODEC = RecordCodecBuilder.create(
