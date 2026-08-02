@@ -49,6 +49,19 @@ public class ModItems {
                     () -> new TabletOfDestructionAscendant(new Item.Properties()
                             .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "tablet_of_destruction_ascendant"))));
 
+
+
+
+    public static final DeferredItem<Item> JADE = ITEMS.registerSimpleItem("jade");
+
+    public static final DeferredItem<Item> RAW_BLACK_IRON = ITEMS.registerSimpleItem("raw_black_iron");
+    public static final DeferredItem<Item> BLACK_IRON_NUGGET = ITEMS.registerSimpleItem("black_iron_nugget");
+    public static final DeferredItem<Item> BLACK_IRON_INGOT = ITEMS.registerSimpleItem("black_iron_ingot");
+
+    public static final DeferredItem<Item> RAW_FROST_SILVER = ITEMS.registerSimpleItem("raw_frost_silver");
+    public static final DeferredItem<Item> FROST_SILVER_NUGGET = ITEMS.registerSimpleItem("frost_silver_nugget");
+    public static final DeferredItem<Item> FROST_SILVER_INGOT = ITEMS.registerSimpleItem("frost_silver_ingot");
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
