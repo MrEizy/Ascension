@@ -30,6 +30,10 @@ public class AscBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.BLACK_IRON_ORE.get());
 
 
+        tag(BlockTags.MINEABLE_WITH_HOE)
+                .add(ModBlocks.LINGZHI_MUSHROOM_B.get());
+
+
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.JADE_BLOCK.get())
                 .add(ModBlocks.JADE_ORE.get())

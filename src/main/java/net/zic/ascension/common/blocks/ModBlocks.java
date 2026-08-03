@@ -55,7 +55,6 @@ public class ModBlocks {
     //Herb Blocks
     public static final DeferredBlock<Block> LINGZHI_MUSHROOM_B = registerBlock("lingzhi_mushroom_b",
             properties -> new LingzhiMushroomBlock(properties
-                    .noCollision()
                     .strength(0.2f)
                     .sound(SoundType.STEM)
                     .pushReaction(PushReaction.DESTROY)));

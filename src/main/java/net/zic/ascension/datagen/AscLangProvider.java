@@ -167,6 +167,8 @@ public class AscLangProvider extends LanguageProvider {
         add("zenith.ascension.category.bloodline", "Bloodline");
         add("zenith.ascension.category.physique", "Physique");
         add("zenith.ascension.category.technique", "Technique");
+        add("zenith.ascension.category.artifacts", "Artifacts");
+        add("zenith.ascension.category.herbs", "Herbs");
 
         add("zenith.ascension.tier.ordinary", "Ordinary");
         add("zenith.ascension.tier.profound", "Profound");
