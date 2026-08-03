@@ -1,15 +1,8 @@
 package net.zic.ascension.api.ascension.core.path;
 
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
-import net.zic.ascension.api.ascension.core.technique.Technique;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-
-import java.util.Collection;
-import java.util.UUID;
 
 public interface PathInstance {
 
@@ -38,6 +31,8 @@ public interface PathInstance {
     void onRealmUp(OriginSource source);
     void onRealmDown(OriginSource source);
 
+
+    void handleRealmChange(Realm newRealm,OriginSource source);
     //──Data Simulation────────────────────────────────────────────────────────
     //caches the current state then simulates applying it
     void simulateProgression(OriginSource source);

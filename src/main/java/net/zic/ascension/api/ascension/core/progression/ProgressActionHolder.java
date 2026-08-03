@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.RegistryObjectData;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -21,7 +20,7 @@ public record ProgressActionHolder(UUID holderId, List<Pair<ProgressActionCondit
         return new ProgressActionHolder(UUID.randomUUID(),listeners);
     }
 
-    public void run(OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction){
+    public void run(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction){
         for(Pair<ProgressActionConditionReference, List<ProgressActionReference>> listener : listeners){
             ProgressActionConditionReference condition = listener.getFirst();
             if(condition.resolve(source.getRegistryAccess()) == null) continue;

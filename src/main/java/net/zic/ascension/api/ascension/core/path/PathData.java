@@ -5,7 +5,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.RegistryObjectData;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
@@ -18,7 +17,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 //TODO ensure proper cleanup of any active tribulations on technique or path removal
-public interface PathData extends RegistryObjectData {
+public interface PathData {
     //──Getters────────────────────────────────────────────────────────
     Identifier getPath();
 
