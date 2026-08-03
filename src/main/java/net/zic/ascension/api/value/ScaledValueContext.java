@@ -2,7 +2,7 @@ package net.zic.ascension.api.value;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 import java.util.HashMap;
 import java.util.Map;

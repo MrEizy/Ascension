@@ -1,6 +1,6 @@
 package net.zic.ascension.impl.value.source;
 
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;

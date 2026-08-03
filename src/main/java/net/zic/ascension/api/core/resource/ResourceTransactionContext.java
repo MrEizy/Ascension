@@ -2,7 +2,7 @@ package net.zic.ascension.api.core.resource;
 
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.value.ScaledValueContext;
 
 import java.util.HashMap;

@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.SuppressedZenithAttribute;
 

@@ -12,7 +12,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.client.visual.RuntimeVisualState;
 import net.zic.ascension.api.core.field.AreaFieldDefinition;
 

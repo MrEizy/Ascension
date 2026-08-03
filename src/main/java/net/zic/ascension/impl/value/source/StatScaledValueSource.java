@@ -1,6 +1,6 @@
 package net.zic.ascension.impl.value.source;
 
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -30,6 +30,6 @@ public record StatScaledValueSource(Identifier stat, boolean base) implements Sc
         if (statDefinition == null) {
             return 0.0D;
         }
-        return base ? context.source().getBaseValue(statDefinition) : context.source().getValue(statDefinition);
+        return base ? context.source().getBaseStat(statDefinition) : context.source().getStat(statDefinition);
     }
 }

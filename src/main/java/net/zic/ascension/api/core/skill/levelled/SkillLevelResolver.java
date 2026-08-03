@@ -2,11 +2,12 @@ package net.zic.ascension.api.core.skill.levelled;
 
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.NeoForge;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.skill.Skill;
-import net.zic.ascension.api.core.skill.SkillData;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.event.skill.SkillLevelResolveEvent;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.ascension.event.skill.SkillLevelResolveEvent;
 
 public final class SkillLevelResolver {
     private SkillLevelResolver() {
@@ -22,7 +23,7 @@ public final class SkillLevelResolver {
                 skillId,
                 source.getRegistryAccess()
         );
-        SkillData data = source.getSkillData(skillId);
+        SkillData data = AscensionOriginSourceHelper.getSkillData(source, skillId);
         if (!(skill instanceof LevelledSkill levelledSkill)
                 || !(data instanceof LevelledSkillData levelledData)) {
             return emptySnapshot();

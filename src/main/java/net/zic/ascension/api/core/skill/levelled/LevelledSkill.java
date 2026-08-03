@@ -1,7 +1,7 @@
 package net.zic.ascension.api.core.skill.levelled;
 
-import net.zic.ascension.api.core.skill.Skill;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public interface LevelledSkill extends Skill {
     int getMaximumLevel();

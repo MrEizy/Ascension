@@ -24,15 +24,12 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
-import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
 import net.zic.ascension.configuration.biome.BiomeConfiguration;
 import net.zic.ascension.configuration.biome.BiomeConfigurations;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.configuration.dimension.DimensionConfiguration;
 import net.zic.ascension.configuration.dimension.DimensionConfigurations;
-import net.zic.zenithlib.value_containers.ModifierOperation;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
 import java.util.stream.Stream;
 

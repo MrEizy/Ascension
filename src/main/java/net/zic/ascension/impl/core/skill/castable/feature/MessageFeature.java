@@ -1,6 +1,6 @@
 package net.zic.ascension.impl.core.skill.castable.feature;
 
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

@@ -1,8 +1,8 @@
 package net.zic.ascension.impl.resource.type;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.capabilities.EntityQiProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 
 public final class QiResourceType extends AbstractBoundedResourceType {
     @Override

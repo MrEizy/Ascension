@@ -7,7 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.api.value.ScaledValue;
 import net.zic.ascension.common.movement.MovementService;
 import net.zic.ascension.impl.datapack.skill.castable.feature.AscensionSkillExecutionFeatureTypes;

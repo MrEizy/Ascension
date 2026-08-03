@@ -2,9 +2,7 @@ package net.zic.ascension.api.rpg_engine.source;
 
 import com.mojang.datafixers.util.Pair;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
@@ -36,6 +34,7 @@ public class OriginSource implements StatProvider {
     private final HashSet<Identifier> removedDataSources = new HashSet<>();
 
     private ValueInput cachedData; //used in situations where we cannot easily have registry access
+    private RegistryAccess registryAccess;
 
     private final StatSheet statSheet = new StatSheet();
 
@@ -45,11 +44,19 @@ public class OriginSource implements StatProvider {
 
     private String process;
 
-    //cheating a bit here
     public RegistryAccess getRegistryAccess(){
-        return Minecraft.getInstance().getConnection() == null ?
-                (ServerLifecycleHooks.getCurrentServer() != null ? ServerLifecycleHooks.getCurrentServer().registryAccess() : null)
-        : Minecraft.getInstance().getConnection().registryAccess();
+        if (registryAccess != null) {
+            return registryAccess;
+        }
+        if (!attachedEntities.isEmpty()) {
+            return attachedEntities.iterator().next().registryAccess();
+        }
+        return ServerLifecycleHooks.getCurrentServer() == null
+                ? null
+                : ServerLifecycleHooks.getCurrentServer().registryAccess();
+    }
+    public void setRegistryAccess(RegistryAccess registryAccess){
+        this.registryAccess = registryAccess;
     }
     public void setCachedData(ValueInput cachedData){this.cachedData =cachedData;}
 
@@ -83,8 +90,11 @@ public class OriginSource implements StatProvider {
         );
     }
     public boolean resolveProcess(String processId){
-        return processId.equals(process);
-
+        if (!processId.equals(process)) {
+            return false;
+        }
+        process = null;
+        return true;
     }
 
     //tells the snapshot to sync this data source instance
@@ -94,6 +104,7 @@ public class OriginSource implements StatProvider {
 
     public void attachToEntity(LivingEntity entity){
         if(attachedEntities.contains(entity)) return;
+        setRegistryAccess(entity.registryAccess());
         attachedEntities.add(entity);
 
         for (DataSourceInstance instance : dataSources.values()) instance.getDataSource().applyToEntity(entity,instance);

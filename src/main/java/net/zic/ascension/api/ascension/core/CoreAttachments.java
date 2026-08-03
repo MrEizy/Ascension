@@ -7,7 +7,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
-import net.zic.zenithlib.stats.ZenithStatHolder;
 
 import java.util.function.Supplier;
 

@@ -3,11 +3,11 @@ package net.zic.ascension.impl.datapack.skill.castable.held;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.zic.ascension.api.core.skill.Skill;
-import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.core.skill.castable.SkillExecutionDefinition;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastSpec;
-import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
 import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkillData;
 

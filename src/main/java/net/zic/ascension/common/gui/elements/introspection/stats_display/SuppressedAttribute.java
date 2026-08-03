@@ -21,7 +21,6 @@ import net.zic.ascension.common.gui.elements.general.BetterButton;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.network.UpdateAttributeSuppressionPacket;
 import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.custom_attributes.SuppressedZenithAttribute;
 import org.lwjgl.glfw.GLFW;
 
 import java.text.DecimalFormat;

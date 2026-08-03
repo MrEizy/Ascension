@@ -92,7 +92,7 @@ public class AscensionOriginSourceHelper {
         return getPhysiqueHolder(source).getData();
     }
     public static boolean setPhysique(OriginSource source,Identifier physique){
-        if(physique == null) setPhysique(source,null,null);
+        if (physique == null) setPhysique(source,null,null);
         Physique physiqueInstance = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,physique,source.getRegistryAccess());
         if(physiqueInstance == null) return false;
         return setPhysique(source,physique, physiqueInstance.newData(source.getRegistryAccess()));
@@ -107,31 +107,39 @@ public class AscensionOriginSourceHelper {
         PhysiqueChangedEvent.Pre pre = new PhysiqueChangedEvent.Pre(oldPhysique,oldPhysiqueData,physique,physiqueData,source);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
-        if(pre.getNewPhysiqueIdentifier() == null) return false;
 
+        Identifier newPhysique = pre.getNewPhysiqueIdentifier();
+        PhysiqueData newPhysiqueData = pre.getNewPhysiqueData();
+        Physique oldPhysiqueDefinition = pre.getPhysique(source.getRegistryAccess());
+        Physique newPhysiqueDefinition = pre.getNewPhysique(source.getRegistryAccess());
 
+        if (newPhysique != null && (newPhysiqueDefinition == null || newPhysiqueData == null)) {
+            return false;
+        }
 
-        boolean result = holder.setPhysique(pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData());
+        boolean result = holder.setPhysique(newPhysique,newPhysiqueData);
         if(!result) return false;
 
         source.markDataSourceDirty(CoreHolderProviders.PHYSIQUE_HOLDER_PROVIDER.getId());
 
         source.startProcess("set_physique");
 
-        Collection<Identifier> toRemove = oldPhysique == null ? List.of() : pre.getPhysique(source.getRegistryAccess()).onRemoved(source,oldPhysiqueData);
+        Collection<Identifier> toRemove = oldPhysiqueDefinition == null
+                ? List.of() : oldPhysiqueDefinition.onRemoved(source,oldPhysiqueData);
 
-        if(pre.getPhysique(source.getRegistryAccess()) != null){
+        if(oldPhysiqueDefinition != null){
             for(LivingEntity entity : source.getAttachedEntities()){
-                pre.getPhysique(source.getRegistryAccess()).removeFromEntity(entity,oldPhysiqueData);
+                oldPhysiqueDefinition.removeFromEntity(entity,oldPhysiqueData);
             }
         }
-        Collection<Identifier> toAdd = pre.getNewPhysiqueIdentifier() == null ? List.of() : pre.getNewPhysique(source.getRegistryAccess()).onAdded(source, pre.getNewPhysiqueData());
-        if(pre.getNewPhysique(source.getRegistryAccess()) != null){
+        Collection<Identifier> toAdd = newPhysiqueDefinition == null
+                ? List.of() : newPhysiqueDefinition.onAdded(source, newPhysiqueData);
+        if(newPhysiqueDefinition != null){
             for(LivingEntity entity : source.getAttachedEntities()){
-                pre.getNewPhysique(source.getRegistryAccess()).applyToEntity(entity,pre.getNewPhysiqueData());
+                newPhysiqueDefinition.applyToEntity(entity,newPhysiqueData);
             }
         }
-        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData(),source);
+        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,newPhysique,newPhysiqueData,source);
         NeoForge.EVENT_BUS.post(post);
 
 
@@ -152,7 +160,7 @@ public class AscensionOriginSourceHelper {
         long id = random.nextLong();
         source.startProcess("modified_physique"+id);
         source.markDataSourceDirty(CoreHolderProviders.PHYSIQUE_HOLDER_PROVIDER.getId());
-        resolveProcess(source,"modified_bloodline"+id);
+        resolveProcess(source,"modified_physique"+id);
     }
     //──Bloodline Access────────────────────────────────────────────────────────
 
@@ -552,7 +560,7 @@ public class AscensionOriginSourceHelper {
 
 
     public static void resolveProcess(OriginSource source,String process){
-        if(source.resolveProcess("set_physique")) initializeSync(source);
+        if(source.resolveProcess(process)) initializeSync(source);
     }
     public static void initializeSync(OriginSource source){
         OriginSourcePatch patch = source.resolvePatch();

@@ -66,6 +66,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
         this.source = source;
         this.attachedEntity = entity;
+        this.source.setRegistryAccess(entity.registryAccess());
     }
 
     public void initializeAttributes() {
@@ -113,29 +114,24 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         addAttributeWithStatScaling(attributeHolder, AscensionAttributes.MAX_QI,
                 AscensionStats.SPIRIT.get(), "spirit_max_qi_scaling", 10.0D);
 
-
-
-        addStatScaling(attributeHolder, AscensionAttributes.QI_REGEN_RATE,
+        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.QI_REGEN_RATE,
                 AscensionStats.SPIRIT.get(), "spirit_qi_regen_scaling", 0.25D);
 
         attributeHolder.addAttribute(AscensionAttributes.HEALTH_REGEN_RATE);
 
-        addStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
+        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
                 AscensionStats.VITALITY.get(), "vitality_max_stamina_scaling", 5.0D);
 
-        addStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
+        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
                 AscensionStats.STRENGTH.get(), "strength_max_stamina_scaling", 2.0D);
 
-        addStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
+        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
                 AscensionStats.VITALITY.get(), "vitality_stamina_regen_scaling", 0.02D);
 
-        addStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
+        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
                 AscensionStats.AGILITY.get(), "agility_stamina_regen_scaling", 0.01D);
 
         attributeHolder.addAttribute(AscensionAttributes.STAMINA_REGEN_DELAY);
-
-        source.updateAttributes(attributeHolder);
-        applyAllAttributeSuppressions();
     }
 
     private void addSuppressedAttributeWithStatScaling(
@@ -566,7 +562,6 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             }
 
             data.initializeAttributes();
-
             return data;
         }
     }
@@ -616,15 +611,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                     attachment.isCultivationSuppressed()
             );
 
-            NbtHelpers.writeCollection(
-                    output,
-                    "attribute_suppression",
-                    attachment.attributeSuppression.entrySet(),
-                    (elementOutput, id, entry) -> {
-                        NbtHelpers.writeIdentifier(elementOutput, "attribute", entry.getKey());
-                        elementOutput.putDouble("percentage", entry.getValue());
-                    }
-            );
+
 
             output.putString("starter_selection_stage", attachment.starterSelectionStage.name());
             output.putBoolean("starter_selection_complete", attachment.starterSelectionComplete);

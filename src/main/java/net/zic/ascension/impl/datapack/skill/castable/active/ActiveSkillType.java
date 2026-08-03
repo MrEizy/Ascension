@@ -4,11 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.zic.ascension.api.core.skill.Skill;
-import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.core.skill.castable.active.ActiveSkillLevelDefinition;
 import net.zic.ascension.api.core.skill.levelled.SkillProgressionData;
-import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.core.skill.castable.active.ActiveSkill;
 import net.zic.ascension.impl.core.skill.castable.active.ActiveSkillData;
 

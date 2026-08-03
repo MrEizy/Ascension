@@ -20,7 +20,6 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Holds the qi of a chunk.

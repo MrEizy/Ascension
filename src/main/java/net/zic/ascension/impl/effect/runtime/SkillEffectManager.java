@@ -3,7 +3,7 @@ package net.zic.ascension.impl.effect.runtime;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.common.NeoForge;
-import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.core.effect.SkillEffectContext;
 import net.zic.ascension.api.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.core.effect.SkillEffectModule;

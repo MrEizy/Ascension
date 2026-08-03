@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.core.RegistryObjectData;
+import net.zic.ascension.api.ascension.core.RegistryObjectData;
 import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
 

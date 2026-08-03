@@ -2,8 +2,8 @@ package net.zic.ascension.impl.core.skill.castable.held;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.core.skill.SkillData;
-import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 
 public final class HeldCastSkillData implements SkillData {

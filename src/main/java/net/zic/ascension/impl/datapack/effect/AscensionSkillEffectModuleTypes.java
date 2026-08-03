@@ -1,12 +1,12 @@
 package net.zic.ascension.impl.datapack.effect;
 
 import net.zic.ascension.api.core.effect.SkillEffectModule;
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.impl.effect.module.FrozenFormEffectModule;
 import net.zic.ascension.impl.effect.module.ResourceModifierEffectModule;
 

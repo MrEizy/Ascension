@@ -1,7 +1,7 @@
 package net.zic.ascension.api.core.skill.castable.held;
 
 import io.netty.buffer.ByteBuf;
-import net.zic.ascension.api.core.skill.castable.CastData;
+import net.zic.ascension.api.ascension.core.skill.castable.CastData;
 
 public final class HeldCastData implements CastData {
     private int chargeTicks;

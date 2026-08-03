@@ -1,8 +1,8 @@
 package net.zic.ascension.api.value.source;
 
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import com.mojang.serialization.Codec;
-import net.zic.ascension.api.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.api.value.ScaledValueContext;
 
 public interface ScaledValueSource {

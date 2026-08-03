@@ -1,12 +1,12 @@
 package net.zic.ascension.impl.datapack.targeting;
 
 import net.zic.ascension.api.core.targeting.TargetingDefinition;
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.impl.core.targeting.ConeTargeting;
 import net.zic.ascension.impl.core.targeting.LookPositionTargeting;
 import net.zic.ascension.impl.core.targeting.RadialTargeting;

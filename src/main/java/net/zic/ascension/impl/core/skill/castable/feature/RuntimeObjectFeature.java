@@ -8,7 +8,7 @@ import net.minecraft.util.StringRepresentable;
 import net.zic.ascension.api.core.construct.OwnerBoundConstructDefinition;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.api.value.ScaledValue;
 import net.zic.ascension.common.anchor.AnchorNetworks;
 import net.zic.ascension.common.construct.OwnerBoundConstructs;

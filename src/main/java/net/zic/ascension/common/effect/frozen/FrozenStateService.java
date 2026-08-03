@@ -4,7 +4,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
-import net.zic.ascension.common.effect.frozen.FrozenStateData;
 import net.zic.ascension.common.util.ModTags;
 
 public final class FrozenStateService {

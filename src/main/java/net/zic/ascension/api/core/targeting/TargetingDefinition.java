@@ -1,8 +1,8 @@
 package net.zic.ascension.api.core.targeting;
 
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import com.mojang.serialization.Codec;
-import net.zic.ascension.api.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 
 public interface TargetingDefinition {
     Codec<TargetingDefinition> CODEC = TypeRegistries.TARGETING_TYPE_REGISTRY.byNameCodec().dispatch(

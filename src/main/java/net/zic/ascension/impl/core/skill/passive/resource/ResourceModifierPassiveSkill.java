@@ -5,12 +5,12 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.core.skill.levelled.LevelledSkill;
 import net.zic.ascension.api.core.skill.levelled.SkillProgressionData;
 import net.zic.ascension.api.core.resource.modifier.ResourceModifierDefinition;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 
 import java.util.List;

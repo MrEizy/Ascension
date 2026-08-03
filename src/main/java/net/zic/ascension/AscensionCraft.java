@@ -104,7 +104,6 @@ public class AscensionCraft {
         AscensionPathTypes.register(modEventBus);
         AscensionTribulationTypes.register(modEventBus);
 
-        AscensionDataSources.register(modEventBus);
         AscensionScaledValueSourceTypes.register(modEventBus);
         AscensionResourceTypes.register(modEventBus);
         AscensionSkillExecutionFeatureTypes.register(modEventBus);

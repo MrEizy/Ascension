@@ -3,7 +3,7 @@ package net.zic.ascension.impl.effect;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.event.resource.ResourceTransactionEvent;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;

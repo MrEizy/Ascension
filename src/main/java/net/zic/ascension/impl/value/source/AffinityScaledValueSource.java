@@ -1,11 +1,13 @@
 package net.zic.ascension.impl.value.source;
 
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.core.path.PathEffectValueUtil;
+import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.ascension.api.value.ScaledValueContext;
 import net.zic.ascension.api.value.source.ScaledValueSource;
 
@@ -28,9 +30,17 @@ public record AffinityScaledValueSource(Identifier path, Optional<Identifier> ca
         if (context.source() == null) {
             return 0.0D;
         }
-        if (category.isEmpty() || category.get().equals(PathEffectValueUtil.NO_CATEGORY)) {
-            return base ? context.source().getBaseAffinity(path) : context.source().getAffinity(path);
+        Identifier resolvedCategory = category
+                .filter(value -> !value.equals(PathEffectValueUtil.NO_CATEGORY))
+                .orElse(AscensionOriginSourceHelper.AFFINITY_CATEGORY);
+        ValueContainer container = AscensionOriginSourceHelper.getPathBonusContainer(
+                context.source(),
+                resolvedCategory,
+                path
+        );
+        if (container == null) {
+            return 0.0D;
         }
-        return base ? context.source().getBaseAffinity(category.get(), path) : context.source().getAffinity(category.get(), path);
+        return base ? container.getBaseValue() : container.getValue();
     }
 }

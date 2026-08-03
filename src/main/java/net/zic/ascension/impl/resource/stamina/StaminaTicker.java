@@ -20,8 +20,6 @@ public final class StaminaTicker {
     public static final double JUMPING_COST = 4.0D;
     public static final double ATTACKING_COST = 6.0D;
 
-    private static final double MOVEMENT_EPSILON = 1.0E-4D;
-
     private StaminaTicker() {
     }
 
@@ -105,7 +103,7 @@ public final class StaminaTicker {
     private static MovementCost resolveMovementCost(ServerPlayer player) {
         Vec3 movement = player.getDeltaMovement();
 
-        if (movement.lengthSqr() <= MOVEMENT_EPSILON) {
+        if (movement.lengthSqr() <= 1.0E-4D) {
             return null;
         }
 

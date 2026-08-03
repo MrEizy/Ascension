@@ -1,20 +1,13 @@
 package net.zic.ascension.api.rpg_engine.damage;
 
-import com.google.common.base.Preconditions;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.bus.api.Event;
-import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.common.damagesource.IReductionFunction;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
-
-import java.util.ArrayList;
 
 public abstract class RPGEngineEntityDamagedEvent extends LivingEvent {
     protected final DamageContainer container;

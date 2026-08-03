@@ -5,7 +5,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.core.skill.levelled.LevelledSkillData;
 import net.zic.ascension.api.core.skill.levelled.SkillProgressionData;
-import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 
 public final class ResourceModifierPassiveSkillData implements LevelledSkillData {

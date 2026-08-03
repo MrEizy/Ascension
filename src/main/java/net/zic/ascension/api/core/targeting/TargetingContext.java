@@ -5,9 +5,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.value.ScaledValueContext;
 
 import java.util.HashMap;
@@ -43,9 +43,9 @@ public record TargetingContext(
     }
 
     public OriginSource originSource() {
-        AscensionEntityDataHolder holder = caster.getCapability(
-                CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+        AscensionEntityDataProvider provider = caster.getCapability(
+                CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
         );
-        return holder == null ? null : holder.getData(caster).getSource();
+        return provider == null ? null : provider.getData(caster).getSource();
     }
 }

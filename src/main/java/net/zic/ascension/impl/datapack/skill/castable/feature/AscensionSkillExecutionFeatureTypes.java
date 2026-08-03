@@ -5,8 +5,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.datapack.CodecType;
-import net.zic.ascension.api.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.impl.core.skill.castable.feature.*;
 
 public final class AscensionSkillExecutionFeatureTypes {

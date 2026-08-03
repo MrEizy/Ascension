@@ -2,11 +2,12 @@ package net.zic.ascension.api.core.skill.levelled;
 
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.NeoForge;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.skill.Skill;
-import net.zic.ascension.api.core.skill.SkillData;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.event.skill.SkillLevelChangedEvent;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.ascension.event.skill.SkillLevelChangedEvent;
 
 public final class SkillProgressionService {
     private SkillProgressionService() {
@@ -230,7 +231,7 @@ public final class SkillProgressionService {
             );
         }
 
-        source.markSkillDirty(skillId);
+        AscensionOriginSourceHelper.markSkillDirty(source, skillId);
         NeoForge.EVENT_BUS.post(new SkillLevelChangedEvent(
                 source,
                 skillId,
@@ -252,7 +253,7 @@ public final class SkillProgressionService {
                 skillId,
                 source.getRegistryAccess()
         );
-        SkillData data = source.getSkillData(skillId);
+        SkillData data = AscensionOriginSourceHelper.getSkillData(source, skillId);
         if (!(skill instanceof LevelledSkill levelledSkill)
                 || !(data instanceof LevelledSkillData levelledData)) {
             return null;

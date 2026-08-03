@@ -6,7 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.projectile.ProjectileLaunchDirection;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.common.projectile.VirtualProjectiles;
 import net.zic.ascension.impl.datapack.skill.castable.feature.AscensionSkillExecutionFeatureTypes;
 

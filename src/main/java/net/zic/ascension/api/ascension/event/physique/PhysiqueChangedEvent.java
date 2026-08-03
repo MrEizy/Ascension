@@ -37,7 +37,7 @@ public abstract class PhysiqueChangedEvent extends PhysiqueEvent{
         return newPhysique;
     }
     public Physique getNewPhysique(RegistryAccess access){
-        return CoreRegistries.PHYSIQUE_REGISTRY.get(access).getValue(newPhysique);
+        return CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, newPhysique, access);
     }
 
     public PhysiqueData getNewPhysiqueData(){

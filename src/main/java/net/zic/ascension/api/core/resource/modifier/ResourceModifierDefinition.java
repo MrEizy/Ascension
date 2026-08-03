@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.core.resource.ResourceTransactionContext;
 import net.zic.ascension.api.core.resource.ResourceTransactionSelector;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.value.ScaledValue;
 
 public record ResourceModifierDefinition(

@@ -4,15 +4,16 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.core.resource.modifier.ResourceModifierDefinition;
-import net.zic.ascension.api.core.skill.Skill;
-import net.zic.ascension.api.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.core.skill.levelled.SkillLevelResolver;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.event.resource.ResourceTransactionEvent;
 import net.zic.ascension.impl.core.skill.passive.resource.ResourceModifierPassiveSkill;
 import net.zic.ascension.impl.core.skill.passive.resource.ResourceModifierPassiveSkillData;
@@ -24,26 +25,26 @@ public final class ResourceModifierPassiveHandler {
 
     @SubscribeEvent
     public static void collectModifiers(ResourceTransactionEvent.Modify event) {
-        AscensionEntityDataHolder holder = event.getContext().request().entity().getCapability(
-                CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+        AscensionEntityDataProvider provider = event.getContext().request().entity().getCapability(
+                CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
         );
-        if (holder == null) {
+        if (provider == null) {
             return;
         }
 
-        AscensionEntityData entityData = holder.getData(event.getContext().request().entity());
+        AscensionEntityData entityData = provider.getData(event.getContext().request().entity());
         if (entityData == null || entityData.getSource() == null) {
             return;
         }
 
         OriginSource source = entityData.getSource();
-        for (Identifier skillId : source.getSkills()) {
+        for (Identifier skillId : AscensionOriginSourceHelper.getSkills(source)) {
             Skill skill = CoreRegistries.safeAccess(
                     CoreRegistries.SKILL_REGISTRY,
                     skillId,
                     source.getRegistryAccess()
             );
-            SkillData skillData = source.getSkillData(skillId);
+            SkillData skillData = AscensionOriginSourceHelper.getSkillData(source, skillId);
             if (!(skill instanceof ResourceModifierPassiveSkill passive)
                     || !(skillData instanceof ResourceModifierPassiveSkillData)) {
                 continue;

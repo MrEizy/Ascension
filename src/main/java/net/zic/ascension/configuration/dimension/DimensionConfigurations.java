@@ -1,21 +1,13 @@
 package net.zic.ascension.configuration.dimension;
 
-import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.configuration.biome.BiomeConfiguration;
-import net.zic.ascension.configuration.biome.BiomeConfigurations;
-import net.zic.ascension.configuration.biome.RawBiomeConfiguration;
 import net.zic.zenithlib.registry.RegistryHelper;
 
 import java.util.HashMap;

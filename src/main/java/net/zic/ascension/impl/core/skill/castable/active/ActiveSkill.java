@@ -8,24 +8,24 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.capabilities.AscensionEntityDataHolder;
-import net.zic.ascension.api.capabilities.CoreCapabilities;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.skill.SkillData;
-import net.zic.ascension.api.core.skill.castable.CastData;
-import net.zic.ascension.api.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.core.skill.castable.PreCastData;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.castable.CastData;
+import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
+import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
 import net.zic.ascension.api.core.skill.castable.active.ActiveSkillCostDefinition;
 import net.zic.ascension.api.core.skill.castable.active.ActiveSkillLevelDefinition;
-import net.zic.ascension.api.core.skill.castable.data.CastResult;
-import net.zic.ascension.api.core.skill.castable.data.CastStatus;
-import net.zic.ascension.api.core.skill.castable.data.CastType;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.ascension.api.core.skill.levelled.LevelledSkill;
 import net.zic.ascension.api.core.skill.levelled.SkillLevelResolver;
 import net.zic.ascension.api.core.skill.levelled.SkillLevelSnapshot;
 import net.zic.ascension.api.core.skill.levelled.SkillProgressionData;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.value.ScaledValueContext;
 import net.zic.ascension.common.skill.castable.SkillExecutions;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
@@ -258,10 +258,10 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill {
 
 
     private OriginSource getOriginSource(LivingEntity caster) {
-        AscensionEntityDataHolder holder = caster.getCapability(
-                CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+        AscensionEntityDataProvider provider = caster.getCapability(
+                CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
         );
-        return holder == null ? null : holder.getData(caster).getSource();
+        return provider == null ? null : provider.getData(caster).getSource();
     }
 
     private Identifier getSkillId(LivingEntity caster) {

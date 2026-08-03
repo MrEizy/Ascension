@@ -8,23 +8,23 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.core.resource.ResourceTransactionResult;
-import net.zic.ascension.api.core.skill.SkillData;
-import net.zic.ascension.api.core.skill.castable.CastData;
-import net.zic.ascension.api.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.core.skill.castable.PreCastData;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.castable.CastData;
+import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
+import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
 import net.zic.ascension.api.core.skill.castable.SkillExecutionDefinition;
-import net.zic.ascension.api.core.skill.castable.data.CastResult;
-import net.zic.ascension.api.core.skill.castable.data.CastStatus;
-import net.zic.ascension.api.core.skill.castable.data.CastType;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastChargeStage;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastData;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastSpec;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualPhase;
 import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualState;
-import net.zic.ascension.api.core.source.OriginSource;
-import net.zic.ascension.api.datapack.skill.SkillType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.value.ScaledValueContext;
 import net.zic.ascension.common.skill.castable.SkillExecutions;
 import net.zic.ascension.impl.core.skill.castable.presentation.CastSoundPlayer;
@@ -251,7 +251,7 @@ public record HeldCastSkill(
     private ScaledValueContext scaledValueContext(LivingEntity caster, Identifier skillId, double charge) {
         OriginSource source = null;
         var holder = caster.getCapability(
-                net.zic.ascension.api.capabilities.CoreCapabilities.ASCENSION_ENTITY_DATA_HOLDER_CAPABILITY
+                net.zic.ascension.api.ascension.capabilities.CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
         );
         if (holder != null) {
             source = holder.getData(caster).getSource();

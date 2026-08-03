@@ -10,7 +10,6 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.network.OpenStarterSelectionPacket;
-import net.zic.zenithlib.common.ZenithAttachments;
 
 import java.util.List;
 import java.util.Map;

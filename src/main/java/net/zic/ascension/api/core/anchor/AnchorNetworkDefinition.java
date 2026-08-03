@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.api.datapack.CodecHelpers;
+import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.value.ScaledValue;
 
 import java.util.List;

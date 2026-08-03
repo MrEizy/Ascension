@@ -1,12 +1,12 @@
 package net.zic.ascension.impl.value.source;
 
 import net.zic.ascension.api.value.source.ScaledValueSource;
-import net.zic.ascension.api.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 
 public final class AscensionScaledValueSourceTypes {
     public static final DeferredRegister<CodecType<ScaledValueSource>> SOURCE_TYPES =

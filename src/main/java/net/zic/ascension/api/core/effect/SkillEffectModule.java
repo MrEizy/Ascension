@@ -1,9 +1,9 @@
 package net.zic.ascension.api.core.effect;
 
-import net.zic.ascension.api.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import net.minecraft.world.entity.LivingEntity;
-import net.zic.ascension.api.datapack.TypeRegistries;
+import net.zic.ascension.api.ascension.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 
 public interface SkillEffectModule {
     Codec<SkillEffectModule> CODEC = TypeRegistries.SKILL_EFFECT_MODULE_TYPE_REGISTRY.byNameCodec().dispatch(

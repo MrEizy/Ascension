@@ -10,12 +10,11 @@ import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
+import net.zic.ascension.common.resource.stamina.StaminaService;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.SuppressedZenithAttribute;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
-import net.zic.zenithlib.stats.ZenithStatHandler;
-import net.zic.zenithlib.stats.ZenithStatHolder;
 
 import java.util.Optional;
 
@@ -87,6 +86,7 @@ public final class ClientAscensionData {
         return holder.hasAttribute(attributeHolder) ?
                 (holder.isSuppressable(attributeHolder)?((SuppressedZenithAttribute) holder.getAttribute(attributeHolder)).getSuppression():1)
                 : 1;
+    }
 
     public static double getStamina() {
         return getPlayer().map(StaminaService::getStamina).orElse(0.0D);
@@ -96,8 +96,5 @@ public final class ClientAscensionData {
         return getPlayer().map(StaminaService::getMaximumStamina).orElse(0.0D);
     }
 
-    public static long getRevision() {
-        return getSource().map(OriginSource::getRevision).orElse(-1L);
-    }
 
 }
