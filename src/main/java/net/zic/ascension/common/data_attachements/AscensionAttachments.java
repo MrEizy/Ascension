@@ -14,11 +14,11 @@ import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.common.util.AscensionAttributes;
+import net.zic.ascension.impl.core.effect.FrozenStateData;
+import net.zic.ascension.impl.core.effect.SkillEffectContainer;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
-import net.zic.ascension.impl.core.effect.SkillEffectContainer;
-import net.zic.ascension.impl.core.effect.FrozenStateData;
 import net.zic.ascension.impl.core.movement.MovementAnchorContainer;
 
 import java.util.function.Supplier;

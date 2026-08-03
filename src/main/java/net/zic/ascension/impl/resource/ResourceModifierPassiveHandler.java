@@ -8,13 +8,13 @@ import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.core.resource.modifier.ResourceModifierDefinition;
+import net.zic.ascension.api.ascension.core.skill.levelled.SkillLevelResolver;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.core.resource.modifier.ResourceModifierDefinition;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
-import net.zic.ascension.api.core.skill.levelled.SkillLevelResolver;
+import net.zic.ascension.api.ascension.event.resource.ResourceTransactionEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.api.event.resource.ResourceTransactionEvent;
 import net.zic.ascension.impl.core.skill.passive.resource.ResourceModifierPassiveSkill;
 import net.zic.ascension.impl.core.skill.passive.resource.ResourceModifierPassiveSkillData;
 

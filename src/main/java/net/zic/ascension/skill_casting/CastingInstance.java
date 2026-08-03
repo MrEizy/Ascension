@@ -182,7 +182,7 @@ public class CastingInstance {
             return;
         }
         ByteBufHelpers.encodeIdentifier(skill, buf);
-        buf.writeVarInt(Math.max(0, ticksElapsed));
+        buf.writeInt(Math.max(0, ticksElapsed));
         buf.writeBoolean(castData != null);
         if (castData != null) {
             castData.encode(buf);
@@ -210,7 +210,7 @@ public class CastingInstance {
             endCast(player, CastStatus.Reason.INVALIDATED);
         }
         skill = decodedSkill;
-        ticksElapsed = Math.max(0, buf.readVarInt());
+        ticksElapsed = Math.max(0, buf.readInt());
         castData = buf.readBoolean() ? castableSkill.loadCastData(buf) : null;
         resolveDirty();
     }

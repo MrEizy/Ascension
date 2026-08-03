@@ -6,8 +6,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.resource.source.ResourceSourceIdentity;
-import net.zic.ascension.common.resource.stamina.StaminaService;
+import net.zic.ascension.api.ascension.core.resource.source.ResourceSourceIdentity;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
