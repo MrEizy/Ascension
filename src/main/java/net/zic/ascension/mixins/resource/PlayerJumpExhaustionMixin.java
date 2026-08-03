@@ -1,10 +1,10 @@
 package net.zic.ascension.mixins.resource;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.zic.ascension.api.core.resource.ResourceTransactions;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactions;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
-import net.zic.ascension.impl.resource.stamina.StaminaTicker;
+import net.zic.ascension.handler.StaminaTicker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

@@ -22,11 +22,11 @@ import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
-import net.zic.ascension.api.core.anchor.AnchorNetworkDefinition;
-import net.zic.ascension.api.core.construct.OwnerBoundConstructDefinition;
-import net.zic.ascension.api.core.effect.SkillEffectDefinition;
-import net.zic.ascension.api.core.field.AreaFieldDefinition;
-import net.zic.ascension.api.core.projectile.VirtualProjectileDefinition;
+import net.zic.ascension.api.ascension.core.runtime.AnchorNetworkDefinition;
+import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
+import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
+import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
+import net.zic.ascension.api.ascension.core.projectile.VirtualProjectileDefinition;
 import net.zic.zenithlib.registry.RegistryHelper;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
@@ -47,19 +47,19 @@ public final class CoreRegistries {
             AscensionCraft.MOD_ID, "skills", () -> SkillType.SKILL_CODEC
     );
     public static final RegistryHelper.DataPackRegistry<SkillEffectDefinition> SKILL_EFFECT_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID, "skill_effects", () -> SkillEffectDefinition.CODEC
+            AscensionCraft.MOD_ID, "skill_system/effects", () -> SkillEffectDefinition.CODEC
     );
     public static final RegistryHelper.DataPackRegistry<VirtualProjectileDefinition> VIRTUAL_PROJECTILE_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID, "virtual_projectiles", () -> VirtualProjectileDefinition.CODEC
+            AscensionCraft.MOD_ID, "skill_system/runtime/projectiles", () -> VirtualProjectileDefinition.CODEC
     );
     public static final RegistryHelper.DataPackRegistry<AreaFieldDefinition> AREA_FIELD_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID, "area_fields", () -> AreaFieldDefinition.CODEC
+            AscensionCraft.MOD_ID, "skill_system/runtime/fields", () -> AreaFieldDefinition.CODEC
     );
     public static final RegistryHelper.DataPackRegistry<AnchorNetworkDefinition> ANCHOR_NETWORK_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID, "anchor_networks", () -> AnchorNetworkDefinition.CODEC
+            AscensionCraft.MOD_ID, "skill_system/runtime/anchor_networks", () -> AnchorNetworkDefinition.CODEC
     );
     public static final RegistryHelper.DataPackRegistry<OwnerBoundConstructDefinition> CONSTRUCT_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID, "constructs", () -> OwnerBoundConstructDefinition.CODEC
+            AscensionCraft.MOD_ID, "skill_system/runtime/constructs", () -> OwnerBoundConstructDefinition.CODEC
     );
     public static final RegistryHelper.DataPackRegistry<ProgressAction> PROGRESS_ACTION_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "progress_actions", () -> ProgressActionType.PROGRESS_ACTION_CODEC

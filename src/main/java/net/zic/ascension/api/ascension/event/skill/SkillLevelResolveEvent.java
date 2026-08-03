@@ -1,7 +1,7 @@
 package net.zic.ascension.api.ascension.event.skill;
 
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.core.skill.levelled.LevelledSkillData;
+import net.zic.ascension.api.ascension.core.skill.levelled.LevelledSkillData;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public final class SkillLevelResolveEvent extends SkillEvent {

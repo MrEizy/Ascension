@@ -7,8 +7,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.client.visual.RuntimeVisualState;
-import net.zic.ascension.client.visual.ClientRuntimeVisuals;
+import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
+import net.zic.ascension.client.visual.runtime.ClientRuntimeVisuals;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.ArrayList;

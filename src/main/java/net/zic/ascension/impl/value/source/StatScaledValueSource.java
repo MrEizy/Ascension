@@ -5,8 +5,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.value.ScaledValueContext;
-import net.zic.ascension.api.value.source.ScaledValueSource;
+import net.zic.ascension.api.ascension.value.ScaledValueContext;
+import net.zic.ascension.api.ascension.value.ScaledValueSource;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
 

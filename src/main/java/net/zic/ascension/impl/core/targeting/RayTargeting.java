@@ -3,13 +3,12 @@ package net.zic.ascension.impl.core.targeting;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.zic.ascension.api.core.targeting.SkillTarget;
-import net.zic.ascension.api.core.targeting.TargetFilterDefinition;
-import net.zic.ascension.api.core.targeting.TargetingContext;
-import net.zic.ascension.api.core.targeting.TargetingDefinition;
-import net.zic.ascension.api.core.targeting.TargetingResult;
-import net.zic.ascension.api.value.ScaledValue;
-import net.zic.ascension.common.targeting.TargetingService;
+import net.zic.ascension.api.ascension.core.targeting.SkillTarget;
+import net.zic.ascension.api.ascension.core.targeting.TargetFilterDefinition;
+import net.zic.ascension.api.ascension.core.targeting.TargetingContext;
+import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
+import net.zic.ascension.api.ascension.core.targeting.TargetingResult;
+import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.impl.datapack.targeting.AscensionTargetingTypes;
 
 public record RayTargeting(

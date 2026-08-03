@@ -1,6 +1,6 @@
 package net.zic.ascension.impl.datapack.targeting;
 
-import net.zic.ascension.api.core.targeting.TargetingDefinition;
+import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;

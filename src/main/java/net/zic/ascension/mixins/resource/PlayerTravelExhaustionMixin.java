@@ -1,7 +1,7 @@
 package net.zic.ascension.mixins.resource;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.zic.ascension.api.core.resource.ResourceTransactions;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactions;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
 import org.spongepowered.asm.mixin.Mixin;

@@ -13,11 +13,11 @@ import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
-import net.zic.ascension.api.core.effect.SkillEffectModule;
-import net.zic.ascension.api.core.projectile.ProjectileBehavior;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.core.targeting.TargetingDefinition;
-import net.zic.ascension.api.value.source.ScaledValueSource;
+import net.zic.ascension.api.ascension.core.effect.SkillEffectModule;
+import net.zic.ascension.api.ascension.core.projectile.ProjectileBehavior;
+import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
+import net.zic.ascension.api.ascension.value.ScaledValueSource;
 import net.zic.zenithlib.registry.RegistryHelper;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)

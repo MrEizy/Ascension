@@ -92,7 +92,9 @@ public class AscensionOriginSourceHelper {
         return getPhysiqueHolder(source).getData();
     }
     public static boolean setPhysique(OriginSource source,Identifier physique){
-        if (physique == null) setPhysique(source,null,null);
+        if (physique == null) {
+            return setPhysique(source, null, null);
+        }
         Physique physiqueInstance = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,physique,source.getRegistryAccess());
         if(physiqueInstance == null) return false;
         return setPhysique(source,physique, physiqueInstance.newData(source.getRegistryAccess()));

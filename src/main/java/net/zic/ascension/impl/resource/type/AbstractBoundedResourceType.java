@@ -1,10 +1,10 @@
 package net.zic.ascension.impl.resource.type;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.zic.ascension.api.core.resource.ResourceApplicationResult;
-import net.zic.ascension.api.core.resource.ResourceOperation;
-import net.zic.ascension.api.core.resource.ResourceTransactionStatus;
-import net.zic.ascension.api.core.resource.ResourceType;
+import net.zic.ascension.api.ascension.core.resource.ResourceApplicationResult;
+import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactionStatus;
+import net.zic.ascension.api.ascension.core.resource.ResourceType;
 
 public abstract class AbstractBoundedResourceType implements ResourceType {
     @Override

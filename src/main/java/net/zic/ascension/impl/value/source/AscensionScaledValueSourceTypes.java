@@ -1,6 +1,6 @@
 package net.zic.ascension.impl.value.source;
 
-import net.zic.ascension.api.value.source.ScaledValueSource;
+import net.zic.ascension.api.ascension.value.ScaledValueSource;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;

@@ -5,15 +5,15 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
-import net.zic.ascension.api.core.construct.OwnerBoundConstructDefinition;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
+import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.ascension.datapack.CodecType;
-import net.zic.ascension.api.value.ScaledValue;
-import net.zic.ascension.common.anchor.AnchorNetworks;
-import net.zic.ascension.common.construct.OwnerBoundConstructs;
-import net.zic.ascension.common.field.AreaFields;
-import net.zic.ascension.impl.datapack.skill.castable.feature.AscensionSkillExecutionFeatureTypes;
+import net.zic.ascension.api.ascension.value.ScaledValue;
+import net.zic.ascension.impl.runtime.object.AnchorNetworks;
+import net.zic.ascension.impl.runtime.object.OwnerBoundConstructs;
+import net.zic.ascension.impl.runtime.object.AreaFields;
+import net.zic.ascension.impl.datapack.skill.AscensionSkillExecutionFeatureTypes;
 
 public record RuntimeObjectFeature(
         Kind kind,

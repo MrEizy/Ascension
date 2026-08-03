@@ -3,8 +3,8 @@ package net.zic.ascension.impl.core.skill.passive.resource;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.core.skill.levelled.LevelledSkillData;
-import net.zic.ascension.api.core.skill.levelled.SkillProgressionData;
+import net.zic.ascension.api.ascension.core.skill.levelled.LevelledSkillData;
+import net.zic.ascension.api.ascension.core.skill.levelled.SkillProgressionData;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 

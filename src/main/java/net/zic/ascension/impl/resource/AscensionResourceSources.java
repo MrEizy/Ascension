@@ -2,9 +2,9 @@ package net.zic.ascension.impl.resource;
 
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.resource.source.AscensionResourceSourceTags;
-import net.zic.ascension.api.core.resource.source.ResourceSourceIdentity;
-import net.zic.ascension.api.core.resource.source.SimpleResourceSourceIdentity;
+import net.zic.ascension.api.ascension.core.resource.source.AscensionResourceSourceTags;
+import net.zic.ascension.api.ascension.core.resource.source.ResourceSourceIdentity;
+import net.zic.ascension.api.ascension.core.resource.source.SimpleResourceSourceIdentity;
 
 public final class AscensionResourceSources {
     public static final ResourceSourceIdentity DIRECT = SimpleResourceSourceIdentity.of(AscensionCraft.prefix("direct"));

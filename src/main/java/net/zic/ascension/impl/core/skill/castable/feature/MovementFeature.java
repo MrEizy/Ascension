@@ -7,13 +7,13 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.ascension.datapack.CodecType;
-import net.zic.ascension.api.value.ScaledValue;
-import net.zic.ascension.common.movement.MovementService;
+import net.zic.ascension.api.ascension.value.ScaledValue;
+import net.zic.ascension.impl.core.movement.MovementService;
 import net.zic.ascension.impl.core.movement.MovementAnchorContainer;
-import net.zic.ascension.impl.datapack.skill.castable.feature.AscensionSkillExecutionFeatureTypes;
+import net.zic.ascension.impl.datapack.skill.AscensionSkillExecutionFeatureTypes;
 
 import java.util.Optional;
 

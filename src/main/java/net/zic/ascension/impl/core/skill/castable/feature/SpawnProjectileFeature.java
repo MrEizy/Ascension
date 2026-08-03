@@ -3,12 +3,12 @@ package net.zic.ascension.impl.core.skill.castable.feature;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.core.projectile.ProjectileLaunchDirection;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.projectile.ProjectileLaunchDirection;
+import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.ascension.datapack.CodecType;
-import net.zic.ascension.common.projectile.VirtualProjectiles;
-import net.zic.ascension.impl.datapack.skill.castable.feature.AscensionSkillExecutionFeatureTypes;
+import net.zic.ascension.impl.runtime.projectile.VirtualProjectiles;
+import net.zic.ascension.impl.datapack.skill.AscensionSkillExecutionFeatureTypes;
 
 public record SpawnProjectileFeature(
         Identifier definition,

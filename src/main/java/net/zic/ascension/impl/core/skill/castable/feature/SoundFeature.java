@@ -7,10 +7,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.value.ScaledValue;
-import net.zic.ascension.impl.datapack.skill.castable.feature.AscensionSkillExecutionFeatureTypes;
+import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.value.ScaledValue;
+import net.zic.ascension.impl.datapack.skill.AscensionSkillExecutionFeatureTypes;
 
 public record SoundFeature(
         Identifier sound,

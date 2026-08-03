@@ -12,8 +12,8 @@ import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
-import net.zic.ascension.api.core.skill.castable.held.HeldCastData;
-import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualState;
+import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastData;
+import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
@@ -182,7 +182,7 @@ public class CastingInstance {
             return;
         }
         ByteBufHelpers.encodeIdentifier(skill, buf);
-        buf.writeInt(Math.max(0, ticksElapsed));
+        buf.writeVarInt(Math.max(0, ticksElapsed));
         buf.writeBoolean(castData != null);
         if (castData != null) {
             castData.encode(buf);

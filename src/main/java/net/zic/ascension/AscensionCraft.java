@@ -37,7 +37,7 @@ import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
 import net.zic.ascension.impl.value.source.AscensionScaledValueSourceTypes;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
-import net.zic.ascension.impl.datapack.skill.castable.feature.AscensionSkillExecutionFeatureTypes;
+import net.zic.ascension.impl.datapack.skill.AscensionSkillExecutionFeatureTypes;
 import net.zic.ascension.impl.datapack.targeting.AscensionTargetingTypes;
 import net.zic.ascension.impl.datapack.effect.AscensionSkillEffectModuleTypes;
 import net.zic.ascension.impl.datapack.projectile.AscensionProjectileBehaviorTypes;

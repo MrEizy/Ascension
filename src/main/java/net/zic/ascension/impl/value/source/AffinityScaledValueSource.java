@@ -8,8 +8,8 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.ascension.api.value.ScaledValueContext;
-import net.zic.ascension.api.value.source.ScaledValueSource;
+import net.zic.ascension.api.ascension.value.ScaledValueContext;
+import net.zic.ascension.api.ascension.value.ScaledValueSource;
 
 import java.util.Optional;
 

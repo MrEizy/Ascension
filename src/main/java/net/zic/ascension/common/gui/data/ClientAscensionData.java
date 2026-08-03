@@ -10,7 +10,7 @@ import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
-import net.zic.ascension.common.resource.stamina.StaminaService;
+import net.zic.ascension.impl.resource.stamina.StaminaService;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.SuppressedZenithAttribute;

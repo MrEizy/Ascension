@@ -20,7 +20,7 @@ import net.zic.ascension.client.keybind.TabletScrollHandler;
 import net.zic.ascension.client.gui.AscensionHudOverlay;
 import net.zic.ascension.client.gui.SkillWheelOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
-import net.zic.ascension.client.visual.ClientRuntimeVisuals;
+import net.zic.ascension.client.visual.runtime.ClientRuntimeVisuals;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 import net.zic.ascension.common.AscensionCreativeSections;
 import net.zic.ascension.common.particle.AscensionParticles;

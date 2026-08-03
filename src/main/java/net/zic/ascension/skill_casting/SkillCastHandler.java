@@ -12,7 +12,7 @@ import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
-import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualState;
+import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.hotbar.SkillHotBar;
 import net.zic.zenithlib.common.ZenithAttachments;

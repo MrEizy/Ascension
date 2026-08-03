@@ -6,7 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualPhase;
+import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualPhase;
 import net.zic.ascension.client.particle.ParticleFieldController;
 import net.zic.zenithlib.network.ByteBufHelpers;
 

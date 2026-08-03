@@ -2,9 +2,9 @@ package net.zic.ascension.impl.resource.type;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.zic.ascension.api.core.resource.ResourceApplicationResult;
-import net.zic.ascension.api.core.resource.ResourceOperation;
-import net.zic.ascension.common.resource.stamina.StaminaService;
+import net.zic.ascension.api.ascension.core.resource.ResourceApplicationResult;
+import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
+import net.zic.ascension.impl.resource.stamina.StaminaService;
 
 public final class StaminaResourceType extends AbstractBoundedResourceType {
     @Override

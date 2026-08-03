@@ -4,7 +4,7 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.RegistryObjectData;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
-import net.zic.ascension.api.core.skill.levelled.SkillProgressionService;
+import net.zic.ascension.api.ascension.core.skill.levelled.SkillProgressionService;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;

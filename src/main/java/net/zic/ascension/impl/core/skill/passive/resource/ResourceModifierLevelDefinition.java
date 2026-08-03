@@ -2,7 +2,7 @@ package net.zic.ascension.impl.core.skill.passive.resource;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.zic.ascension.api.core.resource.modifier.ResourceModifierDefinition;
+import net.zic.ascension.api.ascension.core.resource.modifier.ResourceModifierDefinition;
 
 import java.util.List;
 

@@ -15,8 +15,8 @@ import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldSty
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
 import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
-import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualPhase;
-import net.zic.ascension.api.core.skill.castable.held.HeldCastVisualState;
+import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualPhase;
+import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.skill_casting.AscensionSkillListener;
 import net.zic.zenithlib.common.ZenithAttachments;
 

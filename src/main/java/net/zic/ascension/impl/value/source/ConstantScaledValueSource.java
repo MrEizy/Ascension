@@ -4,8 +4,8 @@ import net.zic.ascension.api.ascension.datapack.CodecType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.zic.ascension.api.value.ScaledValueContext;
-import net.zic.ascension.api.value.source.ScaledValueSource;
+import net.zic.ascension.api.ascension.value.ScaledValueContext;
+import net.zic.ascension.api.ascension.value.ScaledValueSource;
 
 public record ConstantScaledValueSource(double value) implements ScaledValueSource {
     public static final MapCodec<ConstantScaledValueSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
