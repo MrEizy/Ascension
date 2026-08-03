@@ -19,6 +19,9 @@ public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(AscensionCraft.MOD_ID);
 
 
+
+
+    //Key Items
     public static final DeferredItem<Item> PHYSIQUE_ESSENCE = ITEMS.register("physique_essence",
             () -> new PhysiqueTransferItem(new Item.Properties()
                     .setId(RegistryHelper.key(Registries.ITEM,AscensionCraft.MOD_ID,"physique_essence"))
@@ -35,6 +38,8 @@ public class ModItems {
             ));
 
 
+
+    //Artifacts
     public static final DeferredItem<Item> TABLET_OF_DESTRUCTION_HUMAN = ITEMS.register("tablet_of_destruction_human",
             () -> new TabletOfDestructionHuman(new Item.Properties()
                     .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "tablet_of_destruction_human"))));
@@ -52,6 +57,7 @@ public class ModItems {
 
 
 
+    //Ores
     public static final DeferredItem<Item> JADE = ITEMS.registerSimpleItem("jade");
 
     public static final DeferredItem<Item> RAW_BLACK_IRON = ITEMS.registerSimpleItem("raw_black_iron");
@@ -61,6 +67,10 @@ public class ModItems {
     public static final DeferredItem<Item> RAW_FROST_SILVER = ITEMS.registerSimpleItem("raw_frost_silver");
     public static final DeferredItem<Item> FROST_SILVER_NUGGET = ITEMS.registerSimpleItem("frost_silver_nugget");
     public static final DeferredItem<Item> FROST_SILVER_INGOT = ITEMS.registerSimpleItem("frost_silver_ingot");
+
+
+    //Herbs Items
+    public static final DeferredItem<Item> LINGZHI_MUSHROOM = ITEMS.registerSimpleItem("lingzhi_mushroom");
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

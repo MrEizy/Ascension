@@ -1,8 +1,6 @@
 package net.zic.ascension.common.blocks;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -13,10 +11,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.blocks.crops.mushrooms.LingzhiMushroomBlock;
 import net.zic.ascension.common.item.ModItems;
 
 import java.util.function.Consumer;
@@ -52,10 +52,15 @@ public class ModBlocks {
 
 
 
+    //Herb Blocks
+    public static final DeferredBlock<Block> LINGZHI_MUSHROOM_B = registerBlock("lingzhi_mushroom_b",
+            properties -> new LingzhiMushroomBlock(properties
+                    .noCollision()
+                    .strength(0.2f)
+                    .sound(SoundType.STEM)
+                    .pushReaction(PushReaction.DESTROY)));
 
-    public static ResourceKey<Block> getRK(Block block) {
-        return BuiltInRegistries.BLOCK.getResourceKey(block).get();
-    }
+
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> function, Component... components) {
         DeferredBlock<T> toReturn = BLOCKS.registerBlock(name, function);

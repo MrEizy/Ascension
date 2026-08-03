@@ -1,0 +1,70 @@
+{
+  "animation_presets": [
+    "zenithlib:kinetic"
+  ],
+  "pages": [
+    {
+      "elements": [
+        {
+          "type": "zenithlib:title_icon",
+          "title": {
+            "literal": "Tablet of Destruction"
+          }
+        },
+        {
+          "type": "zenithlib:classification",
+          "show_category": false,
+          "style": "badge"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:header",
+          "color": "positive",
+          "text": {
+            "literal": "Excavation"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "literal": "Tunnel Profile"
+          },
+          "right": {
+            "literal": "3 × 5 × 18"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "literal": "Cooldown"
+          },
+          "right": {
+            "literal": "10 seconds"
+          },
+          "right_color": "warning"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "literal": "Controls"
+          }
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "muted",
+          "text": {
+            "translate": "ascension.tablet.cycle_mode_info"
+          }
+        }
+      ],
+      "title": {
+        "literal": "Tablet of Destruction: Profound"
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "black_iron_ingot",
+  "key": {
+    "A": "ascension:black_iron_nugget"
+  },
+  "pattern": [
+    "AAA",
+    "AAA",
+    "AAA"
+  ],
+  "result": {
+    "id": "ascension:black_iron_ingot"
+  }
+}

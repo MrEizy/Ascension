@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.25,
+  "group": "frost_silver",
+  "ingredient": "ascension:raw_frost_silver",
+  "result": {
+    "id": "ascension:frost_silver_ingot"
+  }
+}

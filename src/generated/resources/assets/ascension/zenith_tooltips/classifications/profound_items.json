@@ -1,0 +1,10 @@
+{
+  "category": "ascension:artifact",
+  "priority": 220,
+  "rank": "ascension:profound",
+  "selector": {
+    "tags": [
+      "ascension:profound_items"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "black_iron_nugget",
+  "ingredients": [
+    "ascension:black_iron_ingot"
+  ],
+  "result": {
+    "count": 9,
+    "id": "ascension:black_iron_nugget"
+  }
+}

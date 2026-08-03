@@ -1,0 +1,84 @@
+{
+  "animation_presets": [
+    "zenithlib:runic",
+    "zenithlib:mechanical"
+  ],
+  "pages": [
+    {
+      "elements": [
+        {
+          "type": "zenithlib:title_icon",
+          "on_all_pages": true,
+          "subtitle": {
+            "literal": "Technique Manual"
+          },
+          "title": {
+            "source": "zenithlib:subject_name"
+          }
+        },
+        {
+          "type": "zenithlib:classification",
+          "show_category": false,
+          "style": "badge"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:badge",
+          "background_color": "accent",
+          "text": {
+            "source": "ascension:technique_path"
+          },
+          "text_color": "background"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:text",
+          "effect": {
+            "type": "zenithlib:typewriter",
+            "delay": 80,
+            "duration": 760
+          },
+          "text": {
+            "source": "zenithlib:subject_description"
+          }
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "literal": "Max Realm"
+          },
+          "right": {
+            "source": "ascension:technique_max_realm"
+          }
+        }
+      ],
+      "title": {
+        "source": "zenithlib:subject_name"
+      }
+    },
+    {
+      "elements": [
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "literal": "Realm Growth"
+          }
+        },
+        {
+          "type": "zenithlib:dynamic",
+          "source": "ascension:technique_progression_gains"
+        }
+      ],
+      "title": {
+        "literal": "Realm Growth"
+      }
+    }
+  ]
+}

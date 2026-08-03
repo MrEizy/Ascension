@@ -27,17 +27,23 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
 
+
+        //Drop Self Blocks
         dropSelf(ModBlocks.JADE_BLOCK.get());
         dropSelf(ModBlocks.FROST_SILVER_BLOCK.get());
         dropSelf(ModBlocks.BLACK_IRON_BLOCK.get());
 
-        //Ores
+        //Ore Drop Blocks
         add(ModBlocks.BLACK_IRON_ORE.get(),
-                createMultipleOreDrops(ModBlocks.BLACK_IRON_ORE.get(), ModItems.RAW_BLACK_IRON.get(), 1, 4));
+                createOreDrop(ModBlocks.BLACK_IRON_ORE.get(), ModItems.RAW_BLACK_IRON.get()));
         add(ModBlocks.FROST_SILVER_ORE.get(),
-                createMultipleOreDrops(ModBlocks.FROST_SILVER_ORE.get(), ModItems.RAW_FROST_SILVER.get(), 1, 4));
+                createOreDrop(ModBlocks.FROST_SILVER_ORE.get(), ModItems.RAW_FROST_SILVER.get()));
         add(ModBlocks.JADE_ORE.get(),
-                createMultipleOreDrops(ModBlocks.JADE_ORE.get(), ModItems.JADE.get(), 1, 6));
+                createMultipleOreDrops(ModBlocks.JADE_ORE.get(), ModItems.JADE.get(), 1, 4));
+
+        //Silk Touch Drop Blocks
+        add(ModBlocks.LINGZHI_MUSHROOM_B.get(),
+                createSingleItemTableWithSilkTouch(ModBlocks.LINGZHI_MUSHROOM_B.get(), ModItems.LINGZHI_MUSHROOM.get()));
 
     }
 

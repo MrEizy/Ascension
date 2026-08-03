@@ -34,7 +34,5 @@ docs/superpowers
 ### Minecraft Modding ###
 run/
 !**/src/**/run/
-!**/src/generated/
-generated/
 repo/
 !**/src/**/repo/

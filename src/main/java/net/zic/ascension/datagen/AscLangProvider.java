@@ -20,6 +20,7 @@ public class AscLangProvider extends LanguageProvider {
         // Creative Tabs
         add("creativetab.ascension.items", "Ascension Items");
         add("creativetab.ascension.blocks", "Ascension Blocks");
+        add("creativetab.ascension.alchemy", "Ascension Alchemy");
         add("creativetab.ascension.physique_transfers", "Physiques");
         add("creativetab.ascension.bloodline_transfers", "Bloodlines");
         add("creativetab.ascension.technique_transfers", "Techniques");
@@ -27,6 +28,10 @@ public class AscLangProvider extends LanguageProvider {
 
         // Creative Tab Sections
         add("creative_section.ascension.artifacts", "Ascension Artifacts");
+
+
+
+
 
 
         // Items
@@ -80,6 +85,13 @@ public class AscLangProvider extends LanguageProvider {
 
         add("block.ascension.jade_ore", "Jade Ore");
         add("block.ascension.jade_block", "Jade Block");
+
+
+        //Herb Items
+        add("item.ascension.lingzhi_mushroom", "Lingzhi Mushroom");
+
+        //Herb Blocks
+        add("block.ascension.lingzhi_mushroom_b", "Lingzhi Mushroom");
 
 
 
@@ -137,8 +149,10 @@ public class AscLangProvider extends LanguageProvider {
 
 
 
-        //Physiques
-        add("ascension.physique.sword_bone","Sword Bone");
+        //Key Items
+        add("item.ascension.physique_essence", "Physique Essence");
+        add("item.ascension.bloodline_essence", "Bloodline Essence");
+        add("item.ascension.technique_manual", "Technique Manual");
 
 
         //Keybinds

@@ -1,0 +1,64 @@
+{
+  "pages": [
+    {
+      "elements": [
+        {
+          "type": "zenithlib:title_icon",
+          "title": {
+            "literal": "Tablet of Destruction"
+          }
+        },
+        {
+          "type": "zenithlib:classification",
+          "show_category": false,
+          "style": "badge"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "literal": "Excavation"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "literal": "Tunnel Profile"
+          },
+          "right": {
+            "literal": "2 × 3 × 15"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "literal": "Cooldown"
+          },
+          "right": {
+            "literal": "20 seconds"
+          },
+          "right_color": "warning"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "muted",
+          "effect": {
+            "type": "zenithlib:typewriter",
+            "delay": 80
+          },
+          "text": {
+            "literal": "Aim upward or downward to excavate vertically."
+          }
+        }
+      ],
+      "title": {
+        "literal": "Tablet of Destruction: Ordinary"
+      }
+    }
+  ]
+}

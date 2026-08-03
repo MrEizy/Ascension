@@ -2,9 +2,11 @@ package net.zic.ascension.datagen;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.util.ModTags;
 
 import java.util.concurrent.CompletableFuture;
@@ -16,6 +18,25 @@ public class AscBlockTagProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+
+
+
+        tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(ModBlocks.JADE_BLOCK.get())
+                .add(ModBlocks.JADE_ORE.get())
+                .add(ModBlocks.FROST_SILVER_BLOCK.get())
+                .add(ModBlocks.FROST_SILVER_ORE.get())
+                .add(ModBlocks.BLACK_IRON_BLOCK.get())
+                .add(ModBlocks.BLACK_IRON_ORE.get());
+
+
+        tag(BlockTags.NEEDS_IRON_TOOL)
+                .add(ModBlocks.JADE_BLOCK.get())
+                .add(ModBlocks.JADE_ORE.get())
+                .add(ModBlocks.FROST_SILVER_BLOCK.get())
+                .add(ModBlocks.FROST_SILVER_ORE.get())
+                .add(ModBlocks.BLACK_IRON_BLOCK.get())
+                .add(ModBlocks.BLACK_IRON_ORE.get());
 
 
 

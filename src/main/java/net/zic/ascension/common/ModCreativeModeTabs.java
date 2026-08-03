@@ -54,6 +54,16 @@ public class ModCreativeModeTabs {
 
                     }).build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ASCENSION_ALCHEMY_TAB = CREATIVE_MODE_TABS.register("ascension_alchemy_tab",
+            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.LINGZHI_MUSHROOM.get()))
+                    .title(Component.translatable("creativetab.ascension.alchemy"))
+                    .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModBlocks.LINGZHI_MUSHROOM_B);
+                        output.accept(ModItems.LINGZHI_MUSHROOM);
+
+
+                    }).build());
+
 
 
 
