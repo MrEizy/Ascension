@@ -47,6 +47,41 @@
   ],
   "on_entity_hit": [
     {
+      "type": "ascension:damage",
+      "amount": {
+        "base": 4.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:skill_level"
+            },
+            "operation": "add",
+            "scale": 1.0
+          },
+          {
+            "source": {
+              "type": "ascension:context",
+              "key": "ascension:execution/projectile_travelled",
+              "fallback": 0.0
+            },
+            "operation": "add",
+            "scale": 0.05
+          }
+        ],
+        "minimum": 1.0,
+        "maximum": 12.0
+      },
+      "damage_type": "minecraft:indirect_magic",
+      "classifications": [
+        "ascension:skill",
+        "ascension:projectile",
+        "ascension:ranged",
+        "ascension:debug"
+      ],
+      "path": "ascension:foundation/soul",
+      "technique": "ascension:bug_tester_manual"
+    },
+    {
       "type": "ascension:skill_effect",
       "effect": "ascension:debug/calibration_mark",
       "duration": {

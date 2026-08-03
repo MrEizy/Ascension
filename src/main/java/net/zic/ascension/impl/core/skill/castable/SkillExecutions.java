@@ -23,6 +23,11 @@ public final class SkillExecutions {
     public static final Identifier TARGET_DISTANCE = AscensionCraft.prefix("execution/target_distance");
     public static final Identifier CHARGE_TICKS = AscensionCraft.prefix("execution/charge_ticks");
     public static final Identifier MAXIMUM_CHARGE_TICKS = AscensionCraft.prefix("execution/maximum_charge_ticks");
+    public static final Identifier PROJECTILE_TRAVELLED = AscensionCraft.prefix("execution/projectile_travelled");
+    public static final Identifier PROJECTILE_SPEED = AscensionCraft.prefix("execution/projectile_speed");
+    public static final Identifier PROJECTILE_PIERCE_INDEX = AscensionCraft.prefix("execution/projectile_pierce_index");
+    public static final Identifier PROJECTILE_RANGE_FRACTION = AscensionCraft.prefix("execution/projectile_range_fraction");
+    public static final Identifier PROJECTILE_TICKS_LIVED = AscensionCraft.prefix("execution/projectile_ticks_lived");
 
     private SkillExecutions() {
     }

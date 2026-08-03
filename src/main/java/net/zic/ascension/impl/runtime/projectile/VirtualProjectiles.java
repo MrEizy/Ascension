@@ -24,13 +24,17 @@ import net.zic.ascension.api.ascension.core.projectile.ProjectileBehavior;
 import net.zic.ascension.api.ascension.core.projectile.ProjectileBehaviorContext;
 import net.zic.ascension.api.ascension.core.projectile.ProjectileLaunchDirection;
 import net.zic.ascension.api.ascension.core.projectile.VirtualProjectileDefinition;
+import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionAttribution;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.ascension.core.targeting.TargetFilterDefinition;
+import net.zic.ascension.impl.core.skill.castable.SkillExecutions;
 import net.zic.ascension.impl.runtime.visual.RuntimeVisualSync;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -362,6 +366,14 @@ public final class VirtualProjectiles {
             LivingEntity target,
             Vec3 position
     ) {
+        Map<Identifier, Double> variables = new HashMap<>(projectile.variables());
+        variables.put(SkillExecutions.PROJECTILE_TRAVELLED, projectile.travelled());
+        variables.put(SkillExecutions.PROJECTILE_SPEED, projectile.velocity().length());
+        variables.put(SkillExecutions.PROJECTILE_PIERCE_INDEX, (double) projectile.pierces());
+        variables.put(SkillExecutions.PROJECTILE_RANGE_FRACTION, projectile.maximumRange() <= 0.0D
+                ? 0.0D
+                : Math.clamp(projectile.travelled() / projectile.maximumRange(), 0.0D, 1.0D));
+        variables.put(SkillExecutions.PROJECTILE_TICKS_LIVED, (double) projectile.ticksLived());
         return new SkillExecutionContext(
                 level,
                 owner,
@@ -369,7 +381,12 @@ public final class VirtualProjectiles {
                 target,
                 position,
                 projectile.charge(),
-                projectile.variables()
+                variables,
+                SkillExecutionAttribution.virtualProjectile(
+                        owner,
+                        projectile.definitionId(),
+                        projectile.runtimeId()
+                )
         );
     }
 

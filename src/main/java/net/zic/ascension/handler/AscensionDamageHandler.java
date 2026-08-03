@@ -9,9 +9,9 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.damage_provider.AscensionDamageSourceProvider;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
+import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
-import net.zic.ascension.api.rpg_engine.damage.RPGEngineDamageTypeHolder;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineGatherDamageTypesEvent;
 import net.zic.ascension.util.AscensionDamageUtil;
@@ -21,15 +21,10 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class AscensionDamageHandler {
 
-    private static final Identifier ID = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"damage_container");
-
-    public static record AscensionDamageTypeHolder(Identifier path) implements RPGEngineDamageTypeHolder{
-
-    }
 
     @SubscribeEvent
     public static void gatherDamageType(RPGEngineGatherDamageTypesEvent event){
-        if(event.hasTypeHolder(ID)) return;
+        if(event.hasTypeHolder(AscensionDamageTypeHolders.PATH)) return;
 
 
         if(event.getSource().getEntity()!= null && event.getSource().getEntity() == event.getSource().getDirectEntity()){
@@ -39,14 +34,14 @@ public class AscensionDamageHandler {
                 ItemStack item = livingEntity.getActiveItem();
 
                 AscensionDamageSourceProvider provider = item.getCapability(CoreCapabilities.ASCENSION_ITEM_STACK_DAMAGE_SOURCE_PROVIDER);
-                if(provider != null) event.addTypeHolder(ID,new AscensionDamageTypeHolder(provider.getPath()));
+                if(provider != null) event.addTypeHolder(AscensionDamageTypeHolders.PATH, new AscensionDamageTypeHolders.Path(provider.getPath()));
             }
 
         }else if(event.getSource().getDirectEntity() != null && event.getSource().getEntity() != null && event.getSource().getEntity() != event.getSource().getDirectEntity()){
             //occurs with things like arrows or charges, and there is no custom damageSource present
 
             AscensionDamageSourceProvider provider = event.getSource().getDirectEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DAMAGE_SOURCE_PROVIDER);
-            if(provider != null) event.addTypeHolder(ID,new AscensionDamageTypeHolder(provider.getPath()));
+            if(provider != null) event.addTypeHolder(AscensionDamageTypeHolders.PATH, new AscensionDamageTypeHolders.Path(provider.getPath()));
 
         }else if(event.getSource().getEntity() == null && event.getSource().getDirectEntity() != null){
             //TODO I have no idea what scenario this is triggered
@@ -63,8 +58,8 @@ public class AscensionDamageHandler {
         AscensionEntityPathBonusHolder attackerBonusHolder = event.getSource().getEntity().getData(CoreAttachments.PATH_BONUS_HOLDER);
         AscensionEntityPathBonusHolder defenderBonusHolder = event.getEntity().getData(CoreAttachments.PATH_BONUS_HOLDER);
 
-        if(!event.getSource().hasDamageTypeHolder(ID)) return;
-        if(!(event.getSource().getDamageTypeHolder(ID) instanceof AscensionDamageTypeHolder(Identifier path))) return;
+        if(!event.getSource().hasDamageTypeHolder(AscensionDamageTypeHolders.PATH)) return;
+        if(!(event.getSource().getDamageTypeHolder(AscensionDamageTypeHolders.PATH) instanceof AscensionDamageTypeHolders.Path(Identifier path))) return;
 
 
         double attackerAffinity = AscensionDamageUtil.getEffectiveAttackerAffinity(

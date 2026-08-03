@@ -36,6 +36,10 @@ public final class AscensionScaledValueSourceTypes {
             "context",
             () -> new CodecType<>(ContextScaledValueSource.CODEC)
     );
+    public static final DeferredHolder<CodecType<ScaledValueSource>, CodecType<ScaledValueSource>> SKILL_EFFECT = SOURCE_TYPES.register(
+            "skill_effect",
+            () -> new CodecType<>(SkillEffectScaledValueSource.CODEC)
+    );
 
     private AscensionScaledValueSourceTypes() {
     }
