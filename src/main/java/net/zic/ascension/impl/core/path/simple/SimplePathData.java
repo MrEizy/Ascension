@@ -2,15 +2,17 @@ package net.zic.ascension.impl.core.path.simple;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
-import net.zic.ascension.api.ascension.core.path.Realm;
+import net.zic.ascension.api.ascension.core.path.realm.Realm;
 
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
@@ -234,6 +236,7 @@ public class SimplePathData implements PathData {
     @Override
     public void setProgress(double progress) {
         this.progress =progress;
+
     }
 
     @Override

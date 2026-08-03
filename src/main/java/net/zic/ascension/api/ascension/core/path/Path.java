@@ -9,6 +9,7 @@ import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionHol
 import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionType;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 import java.util.Collection;
 
@@ -49,4 +50,5 @@ public interface Path {
     PathData newData(RegistryAccess access);
     PathData loadData(ValueInput input,RegistryAccess access);
     PathData loadData(ByteBuf buf,RegistryAccess access);
+
 }
