@@ -33,26 +33,6 @@ make sure to remember to add foundation to write + load
 FINISHED (TODO TESTING NEEDED)
 setting up atmospheric(chunk) qi
 
-TODO
-figure out how to handle the event reason shit.
-It is only there for when i handle soul and body splitting, since I want users to be able to say hey during split
-these things should go to the body instead of the soul.
-some problems.
-with things like path data, i need to ensure the host source has a source for that path data
-(or accept it as a gameplay feature? where they are now unstable and need to find a way to stabilize before logging of?)
-but users may want to use it for other things so im not sure
-
-TODO
-create a combat tracker, tracks things like
--when combat started
--when combat ended
--combo count (how many melee hits? or add some flag to damage types that let them count towards combo?)
--add events for enter/leave combat and combo change
-
-TODO
-add a cache for path effect values,
-the cached categorized includes the default affinity category
-should not be too annoying to implement
 
 TODO
 Battle styles
@@ -64,20 +44,10 @@ fully flesh out a plan for how it should function
 "a seat has fallen" if they do not log in for an amount of time
 
 TODO
-consider
+    when in combat cap speed
 
-TODO
-when in combat cap speed
-
-TODO
-update affinity modifier either codec and flatten it. use a temp record with an optional category
-
-TODO
-on entities add damage and resistance containers for modifiers (this is different than categorized affinity)
-
-
-TODO
-Request for Olli
-Can you add Requirement to Techniques, Skills, Bloodlines, Physiques etc?
-in case we want to make a Bloodline, Physique and Technique match
+    TODO
+    Request for Olli
+    Can you add Requirement to Techniques, Skills, Bloodlines, Physiques etc?
+    in case we want to make a Bloodline, Physique and Technique match
 so you have to have the bloodline to get the physique and you have to have the physique to get the technique=?
