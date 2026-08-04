@@ -1,0 +1,34 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Calibration Barrier",
+  "description": "Applies a 20 durability barrier for testing absorption, overflow, break, expiry and visual stages.",
+  "default_accessible_level": 1,
+  "levels": [
+    {
+      "execution": {
+        "targeting": {
+          "type": "ascension:self"
+        },
+        "require_targets": true,
+        "caster_features": [
+          {
+            "type": "ascension:barrier",
+            "action": "apply",
+            "target": "caster",
+            "definition": "ascension:debug/calibration_barrier"
+          },
+          {
+            "type": "ascension:message",
+            "message": "Calibration barrier applied with 20 durability",
+            "overlay": true
+          }
+        ],
+        "target_features": []
+      },
+      "costs": [],
+      "cooldown": {
+        "base": 10
+      }
+    }
+  ]
+}

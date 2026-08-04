@@ -39,6 +39,9 @@ public abstract class RPGEngineEntityDamagedEvent extends LivingEvent {
         public void setPostAttackInvulnerabilityTicks(int ticks) {
             container.setPostAttackInvulnerabilityTicks(ticks);
         }
+        public void setDamage(double damage) {
+            damageContainer = new ValueContainer(CONTAINER_ID, Math.max(0.0D, damage));
+        }
 
     }
     public static class Post extends RPGEngineEntityDamagedEvent {

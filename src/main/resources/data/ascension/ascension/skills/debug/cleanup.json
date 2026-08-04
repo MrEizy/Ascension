@@ -1,7 +1,7 @@
 {
   "type": "ascension:active_skill",
   "name": "Cleanup",
-  "description": "Removes calibration fields, anchor networks, constructs and movement anchors owned by the caster.",
+  "description": "Removes calibration fields, anchor networks, constructs, barriers and movement anchors owned by the caster.",
   "default_accessible_level": 1,
   "levels": [
     {
@@ -30,6 +30,12 @@
             "definition": "ascension:debug/calibration_construct"
           },
           {
+            "type": "ascension:barrier",
+            "action": "remove",
+            "target": "caster",
+            "definition": "ascension:debug/calibration_barrier"
+          },
+          {
             "type": "ascension:movement_anchor",
             "action": "clear",
             "anchor": "ascension:debug/calibration_return"
@@ -49,7 +55,7 @@
           },
           {
             "type": "ascension:message",
-            "message": "Calibration runtime objects cleared",
+            "message": "Calibration runtime objects and barriers cleared",
             "overlay": true
           }
         ],

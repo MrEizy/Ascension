@@ -8,6 +8,19 @@ import static net.minecraft.client.renderer.rendertype.OutputTarget.MAIN_TARGET;
 public class ModRenderTypes {
 
     private static RenderType linesNoDepth;
+    private static RenderType energyLines;
+
+    public static RenderType energyLines() {
+        if (energyLines == null) {
+            energyLines = RenderType.create(
+                    "ascension_energy_lines",
+                    RenderSetup.builder(ModRenderPipelines.ENERGY_LINES)
+                            .setOutputTarget(MAIN_TARGET)
+                            .createRenderSetup()
+            );
+        }
+        return energyLines;
+    }
 
     public static RenderType linesNoDepth() {
         if (linesNoDepth == null) {

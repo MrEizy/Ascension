@@ -23,6 +23,7 @@ import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 import net.zic.ascension.api.ascension.core.runtime.AnchorNetworkDefinition;
+import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
 import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
@@ -61,6 +62,9 @@ public final class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<OwnerBoundConstructDefinition> CONSTRUCT_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/runtime/constructs", () -> OwnerBoundConstructDefinition.CODEC
     );
+    public static final RegistryHelper.DataPackRegistry<BarrierDefinition> BARRIER_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "skill_system/runtime/barriers", () -> BarrierDefinition.CODEC
+    );
     public static final RegistryHelper.DataPackRegistry<ProgressAction> PROGRESS_ACTION_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "progress_actions", () -> ProgressActionType.PROGRESS_ACTION_CODEC
     );
@@ -94,6 +98,7 @@ public final class CoreRegistries {
         register(event, AREA_FIELD_REGISTRY);
         register(event, ANCHOR_NETWORK_REGISTRY);
         register(event, CONSTRUCT_REGISTRY);
+        register(event, BARRIER_REGISTRY);
         register(event, PROGRESS_ACTION_REGISTRY);
         register(event, PROGRESS_ACTION_CONDITION_REGISTRY);
         register(event, TRIBULATION_DEFINITION_REGISTRY);

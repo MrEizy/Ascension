@@ -26,6 +26,12 @@
             }
           },
           {
+            "type": "ascension:barrier",
+            "action": "apply",
+            "target": "caster",
+            "definition": "ascension:guardian/golden_bell"
+          },
+          {
             "type": "ascension:particle_burst",
             "particle": "minecraft:totem_of_undying",
             "count": {
@@ -82,6 +88,12 @@
             }
           },
           {
+            "type": "ascension:barrier",
+            "action": "apply",
+            "target": "caster",
+            "definition": "ascension:guardian/golden_bell"
+          },
+          {
             "type": "ascension:particle_burst",
             "particle": "minecraft:totem_of_undying",
             "count": {
@@ -136,6 +148,12 @@
             "potency": {
               "base": 1.5
             }
+          },
+          {
+            "type": "ascension:barrier",
+            "action": "apply",
+            "target": "caster",
+            "definition": "ascension:guardian/golden_bell"
           },
           {
             "type": "ascension:particle_burst",

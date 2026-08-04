@@ -1,0 +1,98 @@
+{
+  "duration": {
+    "base": 120,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:skill_level"
+        },
+        "operation": "add",
+        "scale": 40
+      }
+    ]
+  },
+  "durability": {
+    "base": 18,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:stat",
+          "stat": "ascension:vitality"
+        },
+        "operation": "add",
+        "scale": 5
+      },
+      {
+        "source": {
+          "type": "ascension:stat",
+          "stat": "ascension:spirit"
+        },
+        "operation": "add",
+        "scale": 3
+      },
+      {
+        "source": {
+          "type": "ascension:skill_level"
+        },
+        "operation": "add",
+        "scale": 14
+      }
+    ],
+    "minimum": 20
+  },
+  "absorption": {
+    "base": 1.0
+  },
+  "overflow": true,
+  "priority": 200,
+  "replace_existing": true,
+  "on_break": [
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.bell.use",
+      "volume": {
+        "base": 1.2
+      },
+      "pitch": {
+        "base": 0.55
+      }
+    }
+  ],
+  "visual": {
+    "id": "ascension:golden_bell_barrier",
+    "radius": {
+      "base": 1.15,
+      "terms": [
+        {
+          "source": {
+            "type": "ascension:skill_level"
+          },
+          "operation": "add",
+          "scale": 0.05
+        }
+      ]
+    },
+    "height": {
+      "base": 2.35,
+      "terms": [
+        {
+          "source": {
+            "type": "ascension:skill_level"
+          },
+          "operation": "add",
+          "scale": 0.08
+        }
+      ]
+    },
+    "stages": [
+      {
+        "maximum_durability_fraction": 0.2,
+        "visual": "ascension:golden_bell_barrier_critical"
+      },
+      {
+        "maximum_durability_fraction": 0.5,
+        "visual": "ascension:golden_bell_barrier_fractured"
+      }
+    ]
+  }
+}
