@@ -58,6 +58,87 @@
   ],
   "on_entity_hit": [
     {
+      "type": "ascension:damage",
+      "amount": {
+        "base": 6.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "operation": "add",
+            "scale": 0.35
+          },
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:agility"
+            },
+            "operation": "add",
+            "scale": 0.2
+          },
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "operation": "add",
+            "scale": 14.0
+          },
+          {
+            "source": {
+              "type": "ascension:context",
+              "key": "ascension:execution/projectile_travelled",
+              "fallback": 0.0
+            },
+            "operation": "add",
+            "scale": 0.1
+          },
+          {
+            "source": {
+              "type": "ascension:context",
+              "key": "ascension:execution/projectile_speed",
+              "fallback": 0.0
+            },
+            "operation": "add",
+            "scale": 1.25
+          },
+          {
+            "source": {
+              "type": "ascension:skill_effect",
+              "effect": "ascension:celestial/hound_star_mark",
+              "owner_scoped": true,
+              "metric": "stacks",
+              "aggregation": "sum"
+            },
+            "operation": "add",
+            "scale": 1.75
+          },
+          {
+            "source": {
+              "type": "ascension:context",
+              "key": "ascension:execution/projectile_pierce_index",
+              "fallback": 0.0
+            },
+            "operation": "multiply",
+            "scale": -0.12,
+            "offset": 1.0
+          }
+        ],
+        "minimum": 1.0,
+        "maximum": 100.0
+      },
+      "damage_type": "minecraft:indirect_magic",
+      "classifications": [
+        "ascension:skill",
+        "ascension:formation",
+        "ascension:soul",
+        "ascension:star"
+      ],
+      "path": "ascension:foundation/soul",
+      "technique": "ascension:3_heaven/celestial_constellation_circulation"
+    },
+    {
       "type": "ascension:resource_transaction",
       "target": "target",
       "resource": "ascension:stamina",
