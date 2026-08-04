@@ -126,10 +126,10 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                 AscensionStats.STRENGTH.get(), "strength_max_stamina_scaling", 2.0D);
 
         addAttributeWithStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
-                AscensionStats.VITALITY.get(), "vitality_stamina_regen_scaling", 0.02D);
+                AscensionStats.VITALITY.get(), "vitality_stamina_regen_scaling", 0.4D);
 
         addAttributeWithStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
-                AscensionStats.AGILITY.get(), "agility_stamina_regen_scaling", 0.01D);
+                AscensionStats.AGILITY.get(), "agility_stamina_regen_scaling", 0.2D);
 
         attributeHolder.addAttribute(AscensionAttributes.STAMINA_REGEN_DELAY);
     }
@@ -324,6 +324,9 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     public void updateStatHolder(Stat stat){
         if(getEntity() == null) return;
         NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(getEntity(),List.of(stat)));
+        if (!getEntity().level().isClientSide()) {
+            getEntity().syncData(ZenithAttachments.ATTRIBUTE_HOLDER);
+        }
 
     }
 
@@ -337,6 +340,14 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
         this.patch = patch;
         if(patch == null) return;
+        if (!patch.dirtyStats().isEmpty()) {
+            initializeAttributes();
+            NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(
+                    attachedEntity,
+                    patch.dirtyStats().stream().map(StatInstance::getStat).toList()
+            ));
+            attachedEntity.syncData(ZenithAttachments.ATTRIBUTE_HOLDER);
+        }
         this.fullPatch = fullPatch;
         attachedEntity.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
     }

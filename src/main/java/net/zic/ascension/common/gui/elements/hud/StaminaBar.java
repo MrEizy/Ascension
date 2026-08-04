@@ -51,11 +51,14 @@ public class StaminaBar extends RenderableElement {
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         double currentStamina = ClientAscensionData.getStamina();
         double maximumStamina = ClientAscensionData.getMaximumStamina();
+        double displayedStamina = maximumStamina <= 0.0D
+                ? Math.max(0.0D, currentStamina)
+                : Math.clamp(currentStamina, 0.0D, maximumStamina);
         double progress = maximumStamina <= 0.0D
                 ? 0.0D
-                : Math.clamp(currentStamina / maximumStamina, 0.0D, 1.0D);
+                : displayedStamina / maximumStamina;
 
-        updateLabel(currentStamina, maximumStamina);
+        updateLabel(displayedStamina, maximumStamina);
 
         int width = (int) Math.round(getWidth() * progress);
         if (width > 0) {

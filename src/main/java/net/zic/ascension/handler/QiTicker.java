@@ -14,14 +14,14 @@ import net.zic.ascension.impl.resource.AscensionResourceTypes;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class QiTicker {
-    private static final int REGENERATION_INTERVAL = 20;
+    private static final double TICKS_PER_SECOND = 20.0D;
 
     private QiTicker() {
     }
 
     @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Pre event) {
-        if (!(event.getEntity() instanceof ServerPlayer player) || player.tickCount % REGENERATION_INTERVAL != 0) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
 
@@ -51,7 +51,7 @@ public final class QiTicker {
                 player,
                 AscensionResourceTypes.QI.getId(),
                 AscensionResourceSources.NATURAL_REGENERATION,
-                rate
+                rate / TICKS_PER_SECOND
         );
     }
 }

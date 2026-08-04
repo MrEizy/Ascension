@@ -13,6 +13,7 @@ import net.zic.ascension.impl.resource.AscensionResourceSources;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class StaminaTicker {
+    private static final double TICKS_PER_SECOND = 20.0D;
     public static final double SPRINTING_COST = 0.10D;
     public static final double SWIMMING_COST = 0.14D;
     public static final double ELYTRA_COST = 0.08D;
@@ -97,7 +98,7 @@ public final class StaminaTicker {
         double rate = StaminaRegenerationPolicy.getRegenerationRate(player);
 
         if (rate > 0.0D) {
-            StaminaService.restore(player, AscensionResourceSources.NATURAL_REGENERATION, rate);
+            StaminaService.restore(player, AscensionResourceSources.NATURAL_REGENERATION, rate / TICKS_PER_SECOND);
         }
     }
 

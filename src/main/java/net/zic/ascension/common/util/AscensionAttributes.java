@@ -32,7 +32,7 @@ public class AscensionAttributes {
             Double.MAX_VALUE).setSyncable(true));
     public static final Holder<Attribute> STAMINA_REGEN_RATE = ATTRIBUTES.register("stamina_regen_rate", () -> new RangedAttribute(
             "attributes.ascension.stamina_regen_rate",
-            0.5D,
+            10.0D,
             0.0D,
             10000.0D).setSyncable(true));
     public static final Holder<Attribute> STAMINA_REGEN_DELAY = ATTRIBUTES.register("stamina_regen_delay", () -> new RangedAttribute(

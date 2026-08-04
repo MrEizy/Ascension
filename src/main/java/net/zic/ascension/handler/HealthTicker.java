@@ -9,7 +9,7 @@ import net.zic.ascension.common.util.AscensionAttributes;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class HealthTicker {
-    private static final int REGENERATION_INTERVAL = 20;
+    private static final double TICKS_PER_SECOND = 20.0D;
     private static final float VANILLA_HEALTH_THRESHOLD = 20.0F;
 
     private HealthTicker() {
@@ -18,7 +18,6 @@ public final class HealthTicker {
     @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Pre event) {
         if (!(event.getEntity() instanceof ServerPlayer player)
-                || player.tickCount % REGENERATION_INTERVAL != 0
                 || player.isSpectator()
                 || !player.isAlive()
                 || !player.getAttributes().hasAttribute(AscensionAttributes.HEALTH_REGEN_RATE)) {
@@ -37,6 +36,6 @@ public final class HealthTicker {
             return;
         }
 
-        player.heal((float) Math.min(rate, maximum - current));
+        player.heal((float) Math.min(rate / TICKS_PER_SECOND, maximum - current));
     }
 }

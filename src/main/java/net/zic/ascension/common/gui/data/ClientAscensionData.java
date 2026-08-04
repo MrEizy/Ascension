@@ -10,6 +10,7 @@ import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
+import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.resource.stamina.StaminaService;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 import net.zic.zenithlib.common.ZenithAttachments;
@@ -28,12 +29,12 @@ public final class ClientAscensionData {
 
     public static Optional<AscensionEntityData> getEntityData() {
         return getPlayer().flatMap(player -> {
-            AscensionEntityDataProvider holder = player.getCapability(
-                    CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
-            );
+            AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+
             if (holder == null) {
                 return Optional.empty();
             }
+
             return Optional.ofNullable(holder.getData(player));
         });
     }
@@ -43,49 +44,59 @@ public final class ClientAscensionData {
     }
 
     public static Optional<SkillCastHandler> getSkillCastHandler() {
-        return getPlayer().map(player -> player.getData(
-                AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER
-        ));
-    }
-    public static double getQi(){
-
-        if(getPlayer().isEmpty()) return 0;
-
-        Player player = getPlayer().get();
-
-        EntityQiProvider provider = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
-        if(provider == null) return 0;
-        return provider.getQi();
-
-    }
-    public static double getMaxQi(){
-
-        if(getPlayer().isEmpty()) return 0;
-
-        Player player = getPlayer().get();
-
-        EntityQiProvider provider = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
-        if(provider == null) return 0;
-        return provider.getMaxQi();
+        return getPlayer().map(player -> player.getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER));
     }
 
-
-    public static double getAttributeValue(Holder<Attribute> attributeHolder){
-        ZenithAttributeHolder holder = Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
-        return holder.hasAttribute(attributeHolder) ? holder.getAttribute(attributeHolder).getValue() : 0;
-
+    public static double getQi() {
+        return getPlayer().map(player -> {
+            EntityQiProvider provider = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
+            return provider == null ? 0.0D : provider.getQi();
+        }).orElse(0.0D);
     }
-    public static double getUnsuppressedAttributeValue(Holder<Attribute> attributeHolder){
-        ZenithAttributeHolder holder = Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
-        return holder.hasAttribute(attributeHolder) ?
-                (holder.isSuppressable(attributeHolder)?((SuppressedZenithAttribute) holder.getAttribute(attributeHolder)).getUnsuppressedValue():0)
-        : 0;
+
+    public static double getMaxQi() {
+        return Math.max(0.0D, getAttributeValue(AscensionAttributes.MAX_QI));
     }
-    public static double getSuppression(Holder<Attribute> attributeHolder){
-        ZenithAttributeHolder holder = Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
-        return holder.hasAttribute(attributeHolder) ?
-                (holder.isSuppressable(attributeHolder)?((SuppressedZenithAttribute) holder.getAttribute(attributeHolder)).getSuppression():1)
-                : 1;
+
+    public static double getAttributeValue(Holder<Attribute> attributeHolder) {
+        return getPlayer().map(player -> {
+            if (player.getAttributes().hasAttribute(attributeHolder)) {
+                return player.getAttributeValue(attributeHolder);
+            }
+
+            ZenithAttributeHolder holder = player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
+
+            if (holder.hasAttribute(attributeHolder)) {
+                return holder.getAttribute(attributeHolder).getValue();
+            }
+
+            return 0.0D;
+        }).orElse(0.0D);
+    }
+
+    public static double getUnsuppressedAttributeValue(Holder<Attribute> attributeHolder) {
+        return getPlayer().map(player -> {
+            ZenithAttributeHolder holder = player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
+
+            if (!holder.hasAttribute(attributeHolder) || !holder.isSuppressable(attributeHolder)) {
+                return 0.0D;
+            }
+
+            return ((SuppressedZenithAttribute) holder.getAttribute(attributeHolder)).getUnsuppressedValue();
+        }).orElse(0.0D);
+    }
+
+    public static double getSuppression(Holder<Attribute> attributeHolder) {
+        return getPlayer().map(player -> {
+            ZenithAttributeHolder holder = player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
+
+            if (!holder.hasAttribute(attributeHolder)
+                    || !holder.isSuppressable(attributeHolder)) {
+                return 1.0D;
+            }
+
+            return ((SuppressedZenithAttribute) holder.getAttribute(attributeHolder)).getSuppression();
+        }).orElse(1.0D);
     }
 
     public static double getStamina() {
@@ -93,8 +104,6 @@ public final class ClientAscensionData {
     }
 
     public static double getMaximumStamina() {
-        return getPlayer().map(StaminaService::getMaximumStamina).orElse(0.0D);
+        return Math.max(0.0D, getAttributeValue(AscensionAttributes.MAX_STAMINA));
     }
-
-
 }

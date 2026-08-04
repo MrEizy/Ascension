@@ -16,7 +16,6 @@ import java.text.DecimalFormat;
 
 public class StatHolder extends RenderableElement {
     private static final DecimalFormat FORMAT = new DecimalFormat("0.##");
-    private static final double TICKS_PER_SECOND = 20.0D;
 
     private final EasyLabel healthRegenerationValue;
     private final EasyLabel qiRegenerationValue;
@@ -97,16 +96,15 @@ public class StatHolder extends RenderableElement {
     }
 
     private void updateRecoveryRates() {
-        healthRegenerationValue.setText(formatRate(AscensionAttributes.HEALTH_REGEN_RATE, 1.0D));
-        qiRegenerationValue.setText(formatRate(AscensionAttributes.QI_REGEN_RATE, 1.0D));
-        staminaRegenerationValue.setText(formatRate(AscensionAttributes.STAMINA_REGEN_RATE, TICKS_PER_SECOND));
+        healthRegenerationValue.setText(formatRate(AscensionAttributes.HEALTH_REGEN_RATE));
+        qiRegenerationValue.setText(formatRate(AscensionAttributes.QI_REGEN_RATE));
+        staminaRegenerationValue.setText(formatRate(AscensionAttributes.STAMINA_REGEN_RATE));
     }
 
-    private Component formatRate(Holder<Attribute> attribute, double displayMultiplier) {
+    private Component formatRate(Holder<Attribute> attribute) {
         String value = ClientAscensionData.getPlayer()
-                .filter(player -> player.getAttributes().hasAttribute(attribute))
                 .map(player -> FORMAT.format(
-                        Math.max(0.0D, player.getAttributeValue(attribute) * displayMultiplier)
+                        Math.max(0.0D, ClientAscensionData.getAttributeValue(attribute))
                 ))
                 .orElse("-");
 
