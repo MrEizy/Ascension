@@ -7,6 +7,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.control.StaggerDefinition;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
@@ -65,6 +66,9 @@ public final class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<BarrierDefinition> BARRIER_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/runtime/barriers", () -> BarrierDefinition.CODEC
     );
+    public static final RegistryHelper.DataPackRegistry<StaggerDefinition> STAGGER_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "skill_system/stagger", () -> StaggerDefinition.CODEC
+    );
     public static final RegistryHelper.DataPackRegistry<ProgressAction> PROGRESS_ACTION_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "progress_actions", () -> ProgressActionType.PROGRESS_ACTION_CODEC
     );
@@ -99,6 +103,7 @@ public final class CoreRegistries {
         register(event, ANCHOR_NETWORK_REGISTRY);
         register(event, CONSTRUCT_REGISTRY);
         register(event, BARRIER_REGISTRY);
+        register(event, STAGGER_REGISTRY);
         register(event, PROGRESS_ACTION_REGISTRY);
         register(event, PROGRESS_ACTION_CONDITION_REGISTRY);
         register(event, TRIBULATION_DEFINITION_REGISTRY);

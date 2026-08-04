@@ -75,6 +75,11 @@ public class SkillCastHandler {
         waitingForCastRelease = true;
     }
 
+    public void interruptCast() {
+        instance.interrupt(player);
+        resolve();
+    }
+
     public void recordDamage(double damage) {
         instance.recordDamage(player, damage);
         resolve();

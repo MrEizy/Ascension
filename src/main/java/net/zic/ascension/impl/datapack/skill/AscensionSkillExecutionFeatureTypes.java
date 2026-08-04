@@ -22,6 +22,7 @@ public final class AscensionSkillExecutionFeatureTypes {
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> FROZEN_BUILDUP = register("frozen_buildup", FrozenBuildupFeature.CODEC);
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> DAMAGE = register("damage", DamageFeature.CODEC);
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> BARRIER = register("barrier", BarrierFeature.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> STAGGER = register("stagger", StaggerFeature.CODEC);
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> SKILL_EFFECT = register("skill_effect", SkillEffectFeature.CODEC);
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> MOVEMENT = register("movement", MovementFeature.CODEC);
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> MOVEMENT_ANCHOR = register("movement_anchor", MovementAnchorFeature.CODEC);

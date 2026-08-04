@@ -15,6 +15,7 @@ import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastData;
 import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
+import net.zic.ascension.impl.core.control.StaggerService;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 public class CastingInstance {
@@ -58,6 +59,11 @@ public class CastingInstance {
         endCast(caster, CastStatus.Reason.CANCELLED);
         status.resolve();
         if (skill == null) {
+            return;
+        }
+        if (StaggerService.isGuardBroken(caster)) {
+            caster.sendOverlayMessage(net.minecraft.network.chat.Component.literal("Guard broken"));
+            markDirty();
             return;
         }
 
@@ -146,6 +152,12 @@ public class CastingInstance {
             return;
         }
         ticksElapsed++;
+    }
+
+    public void interrupt(Player caster) {
+        if (skill != null) {
+            endCast(caster, CastStatus.Reason.INTERRUPTED);
+        }
     }
 
     public void recordDamage(Player caster, double damage) {

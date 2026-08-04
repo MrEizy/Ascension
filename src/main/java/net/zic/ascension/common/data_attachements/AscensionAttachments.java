@@ -16,6 +16,7 @@ import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.core.effect.FrozenStateData;
 import net.zic.ascension.impl.core.effect.SkillEffectContainer;
+import net.zic.ascension.impl.core.control.StaggerStateData;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
@@ -114,6 +115,11 @@ public class AscensionAttachments {
             "frozen_state", () -> AttachmentType.builder(holder -> new FrozenStateData())
                     .serialize(FrozenStateData.CODEC.fieldOf("data"))
                     .copyOnDeath()
+                    .build()
+    );
+    public static final Supplier<AttachmentType<StaggerStateData>> STAGGER_STATE = ATTACHMENT_TYPES.register(
+            "stagger_state", () -> AttachmentType.builder(holder -> new StaggerStateData())
+                    .serialize(StaggerStateData.CODEC.fieldOf("data"))
                     .build()
     );
     public static final Supplier<AttachmentType<MovementAnchorContainer>> MOVEMENT_ANCHORS = ATTACHMENT_TYPES.register(

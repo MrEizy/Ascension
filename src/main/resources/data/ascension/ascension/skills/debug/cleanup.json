@@ -1,7 +1,7 @@
 {
   "type": "ascension:active_skill",
   "name": "Cleanup",
-  "description": "Removes calibration fields, anchor networks, constructs, barriers and movement anchors owned by the caster.",
+  "description": "Removes calibration fields, anchor networks, constructs, barriers, movement anchors and stagger state owned by or applied to the caster.",
   "default_accessible_level": 1,
   "levels": [
     {
@@ -41,6 +41,11 @@
             "anchor": "ascension:debug/calibration_return"
           },
           {
+            "type": "ascension:stagger",
+            "action": "clear",
+            "target": "caster"
+          },
+          {
             "type": "ascension:particle_burst",
             "particle": "minecraft:smoke",
             "count": {
@@ -55,7 +60,7 @@
           },
           {
             "type": "ascension:message",
-            "message": "Calibration runtime objects and barriers cleared",
+            "message": "Calibration runtime objects, barriers and stagger cleared",
             "overlay": true
           }
         ],

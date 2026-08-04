@@ -31,6 +31,9 @@
             "ascension:debug/repair_construct",
             "ascension:debug/calibration_barrier",
             "ascension:debug/repair_barrier",
+            "ascension:debug/calibration_stagger",
+            "ascension:debug/stagger_immunity",
+            "ascension:debug/calibration_channel",
             "ascension:debug/cleanup"
           ]
         },
@@ -134,6 +137,22 @@
           "type": "ascension:set_skill_level",
           "skill": "ascension:debug/repair_barrier",
           "contribution": "ascension:bug_tester/repair_barrier",
+          "level": 1,
+          "set_floor": true,
+          "set_cap": true
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:debug/calibration_stagger",
+          "contribution": "ascension:bug_tester/calibration_stagger",
+          "level": 1,
+          "set_floor": true,
+          "set_cap": true
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:debug/stagger_immunity",
+          "contribution": "ascension:bug_tester/stagger_immunity",
           "level": 1,
           "set_floor": true,
           "set_cap": true
