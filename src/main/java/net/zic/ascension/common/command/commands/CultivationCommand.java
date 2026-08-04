@@ -17,14 +17,11 @@ import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.impl.core.path.foundation.FoundationPath;
-import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
+import net.zic.ascension.impl.core.path.foundation.FoundationPathInstance;
 
 public class CultivationCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> build() {
@@ -96,25 +93,25 @@ public class CultivationCommand {
                 player.sendSystemMessage(Component.literal("no path data"));
                 continue;
             }
-            PathData pathData = AscensionOriginSourceHelper.getPathData(source,path);
-            player.sendSystemMessage(Component.literal("realm : ").append(pathData.getRealmName(pathData.getMajorRealm(),pathData.getMinorRealm(),source.getRegistryAccess())));
-            player.sendSystemMessage(Component.literal("progress : "+pathData.getProgress()));
-            player.sendSystemMessage(Component.literal("technique : "+pathData.getCurrentTechnique()));
-            if(pathData instanceof FoundationPathData foundationPathData && pathInstance instanceof FoundationPath foundationPath){
+            PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(source,path);
+            player.sendSystemMessage(Component.literal("realm : ").append(PathInstance.getRealmName(PathInstance.getMajorRealm(),PathInstance.getMinorRealm(),source.getRegistryAccess())));
+            player.sendSystemMessage(Component.literal("progress : "+PathInstance.getProgress()));
+            player.sendSystemMessage(Component.literal("technique : "+PathInstance.getCurrentTechnique()));
+            if(PathInstance instanceof FoundationPathInstance foundationPathInstance && pathInstance instanceof FoundationPath foundationPath){
                 player.sendSystemMessage(Component.literal("Foundation : ").append(
                         foundationPath.getFoundationRealmName(
-                                foundationPathData.getMajorRealm(),
-                                foundationPathData.getFoundationRealm(foundationPathData.getMajorRealm())
+                                foundationPathInstance.getMajorRealm(),
+                                foundationPathInstance.getFoundationRealm(foundationPathInstance.getMajorRealm())
                         )));
-                System.out.println(foundationPathData.getFoundationRealm(foundationPathData.getMajorRealm()));
+                System.out.println(foundationPathInstance.getFoundationRealm(foundationPathInstance.getMajorRealm()));
                 player.sendSystemMessage(Component.literal(
                         "Foundation Progress : "+
-                                foundationPathData.getFoundationRealmProgress(foundationPathData.getMajorRealm())
+                                foundationPathInstance.getFoundationRealmProgress(foundationPathInstance.getMajorRealm())
                 ));
             }
             player.sendSystemMessage(Component.literal("Tribulations:"));
-            for(Realm realm : pathData.getCompletedTribulationRealms()){
-                Identifier id = TypeRegistries.TRIBULATION_TYPE_REGISTRY.getKey(pathData.getCompletedTribulationData(realm.majorRealm(),realm.minorRealm()).getType());
+            for(Realm realm : PathInstance.getCompletedTribulationRealms()){
+                Identifier id = TypeRegistries.TRIBULATION_TYPE_REGISTRY.getKey(PathInstance.getCompletedTribulationData(realm.majorRealm(),realm.minorRealm()).getType());
 
                 player.sendSystemMessage(Component.literal(realm.toString()).append(" "+id));
             }
@@ -171,7 +168,7 @@ public class CultivationCommand {
                 ));
                 return false;
             }
-            PathData data = AscensionOriginSourceHelper.getPathData(originSource,pathId);
+            PathInstance data = AscensionOriginSourceHelper.getPathInstance(originSource,pathId);
 
             if(data == null){
                 source.sendFailure(Component.literal(

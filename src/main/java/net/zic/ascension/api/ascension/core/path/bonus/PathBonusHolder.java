@@ -1,12 +1,8 @@
 package net.zic.ascension.api.ascension.core.path.bonus;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.network.ByteBufHelpers;

@@ -8,8 +8,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.nbt.NbtHelpers;

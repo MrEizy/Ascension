@@ -23,7 +23,6 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 
 import java.util.Collection;
 

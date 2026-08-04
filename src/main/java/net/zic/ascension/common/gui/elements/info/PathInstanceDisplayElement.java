@@ -7,7 +7,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.zic.ascension.common.gui.elements.general.ScrollBox;
 
-public class PathDataDisplayElement extends ScrollBox implements IInformationContainer {
+public class PathInstanceDisplayElement extends ScrollBox implements IInformationContainer {
     private static final float DESCRIPTION_SCALE = 0.65F;
 
     private final EasyLabel realmLabel;
@@ -17,12 +17,12 @@ public class PathDataDisplayElement extends ScrollBox implements IInformationCon
     private int observedParentHeight = -1;
     private boolean sizeFromParent;
 
-    public PathDataDisplayElement(UIFrame frame, Component realmName, Component description) {
+    public PathInstanceDisplayElement(UIFrame frame, Component realmName, Component description) {
         this(frame, 0, 0, realmName, description);
         sizeFromParent = true;
     }
 
-    public PathDataDisplayElement(
+    public PathInstanceDisplayElement(
             UIFrame frame,
             int width,
             int height,

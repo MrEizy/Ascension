@@ -11,9 +11,8 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolder;
-import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.path.PathHolder;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
 import net.zic.ascension.api.ascension.core.physique.Physique;
@@ -281,7 +280,7 @@ public class AscensionOriginSourceHelper {
     public static boolean hasPath(OriginSource source,Identifier path){
         return getPathHolder(source).hasPath(path);
     }
-    public static PathData getPathData(OriginSource source,Identifier path){
+    public static PathInstance getPathInstance(OriginSource source, Identifier path){
         return getPathHolder(source).getPath(path);
     }
 
@@ -293,7 +292,7 @@ public class AscensionOriginSourceHelper {
     }
 
     /**
-     * Adds a path, creating a fresh pathData instance
+     * Adds a path, creating a fresh PathInstance instance
      * @param path the path to add
      * @param owner the source of this addition
      * @return true-> added, false -> not added
@@ -305,7 +304,7 @@ public class AscensionOriginSourceHelper {
         return addPath(source,path,pathInstance.newData(source.getRegistryAccess()),owner);
     }
 
-    public static boolean addPath(OriginSource source,Identifier path, PathData existingData, Identifier owner) {
+    public static boolean addPath(OriginSource source,Identifier path, PathInstance existingData, Identifier owner) {
 
         if(path == null || existingData == null) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
@@ -336,7 +335,7 @@ public class AscensionOriginSourceHelper {
     public static boolean removePath(OriginSource source,Identifier path,Identifier owner) {
         if(path == null || !getPathHolder(source).hasPath(path)) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
-        PathData data = getPathHolder(source).getPath(path);
+        PathInstance data = getPathHolder(source).getPath(path);
         PathRemovedEvent.Pre pre = new PathRemovedEvent.Pre(path,data,source);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
@@ -356,7 +355,7 @@ public class AscensionOriginSourceHelper {
         return true;
     }
 
-    //should be used if you changed a paths pathData
+    //should be used if you changed a paths PathInstance
     public static void markPathDirty(OriginSource source,Identifier path){
         long id = random.nextLong();
         source.startProcess("modified_path"+id);

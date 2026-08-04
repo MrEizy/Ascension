@@ -10,13 +10,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
-import net.zic.ascension.common.gui.elements.info.PathDataDisplayElement;
+import net.zic.ascension.common.gui.elements.info.PathInstanceDisplayElement;
 import net.zic.ascension.common.gui.elements.introspection.BackButton;
 import net.zic.ascension.common.gui.elements.introspection.IntrospectionContainer;
 
@@ -35,7 +33,7 @@ public class PathDisplayContainer extends RenderableElement {
 
     private final PathOptionsScrollBox pathOptions;
     private final EasyLabel selectedTechniqueLabel;
-    private final PathDataDisplayElement pathInformation;
+    private final PathInstanceDisplayElement pathInformation;
     private final PathProgressBar progressBar;
     private final FoundationProgressBar foundationProgressBar;
 
@@ -73,7 +71,7 @@ public class PathDisplayContainer extends RenderableElement {
         selectedTechniqueLabel.setText(Component.translatable("gui.ascension.introspection.none"));
         addChild(selectedTechniqueLabel);
 
-        pathInformation = new PathDataDisplayElement(
+        pathInformation = new PathInstanceDisplayElement(
                 frame,
                 94,
                 85,
@@ -159,8 +157,8 @@ public class PathDisplayContainer extends RenderableElement {
         }
 
         ClientAscensionData.getSource().ifPresentOrElse(source -> {
-            PathData pathData = AscensionOriginSourceHelper.getPathData(source,selectedPath);
-            if (pathData == null) {
+            PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(source,selectedPath);
+            if (PathInstance == null) {
                 showMissingPath(selectedPath);
                 return;
             }
@@ -176,7 +174,7 @@ public class PathDisplayContainer extends RenderableElement {
                     return;
                 }
 
-                Identifier techniqueId = pathData.getCurrentTechnique();
+                Identifier techniqueId = PathInstance.getCurrentTechnique();
                 Technique technique = techniqueId == null ? null : CoreRegistries.safeAccess(
                         CoreRegistries.TECHNIQUE_REGISTRY,
                         techniqueId,
@@ -185,7 +183,7 @@ public class PathDisplayContainer extends RenderableElement {
                 setTechniqueTitle(
                         technique == null
                                 ? Component.translatable("gui.ascension.introspection.none")
-                                : technique.getName(pathData.getCurrentTechniqueData())
+                                : technique.getName(PathInstance.getCurrentTechniqueData())
                 );
 
                 Component description = path.description() == null
@@ -193,9 +191,9 @@ public class PathDisplayContainer extends RenderableElement {
                         : path.description();
 
                 pathInformation.setInformation(
-                        pathData.getRealmName(
-                                pathData.getMajorRealm(),
-                                pathData.getMinorRealm(),
+                        PathInstance.getRealmName(
+                                PathInstance.getMajorRealm(),
+                                PathInstance.getMinorRealm(),
                                 player.registryAccess()
                         ),
                         description

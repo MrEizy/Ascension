@@ -7,8 +7,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
@@ -237,7 +235,7 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public boolean tryBreakthrough(LivingEntity entity, OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData) {
-        if(AscensionOriginSourceHelper.getPathData(source,getPath()).isBreakingThrough()) return false;
+        if(AscensionOriginSourceHelper.getPathInstance(source,getPath()).isBreakingThrough()) return false;
         double maxProgress = getMaxProgress(majorRealm,minorRealm,techniqueData,source.getRegistryAccess());
         double maxMajorRealm = getMaxMajorRealm(techniqueData,source.getRegistryAccess());
         double maxMinorRealm = getMaxMinorRealm(majorRealm,techniqueData,source.getRegistryAccess());
@@ -253,18 +251,18 @@ public class SimpleTechnique implements Technique {
         TribulationDefinition definition = getTribulation(majorRealm,minorRealm,source.getRegistryAccess());
         if(definition == null) return true;
         UUID id =   TribulationManager.getInstance().triggerTribulation(definition,entity);
-        AscensionOriginSourceHelper.getPathData(source,getPath()).setBreakthroughTribulation(
+        AscensionOriginSourceHelper.getPathInstance(source,getPath()).setBreakthroughTribulation(
                 id,
                 source.getRegistryAccess()
         );
 
         TribulationManager.getInstance().setTribulationConsumer(id,(tribulationDefinition,data)->{
-            PathData pathData = AscensionOriginSourceHelper.getPathData(source,getPath());
+            PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(source,getPath());
 
-            pathData.handleRealmChange(
-                source,pathData.getMajorRealm()+1,0);
-            pathData.setProgress(0);
-            pathData.setCompletedTribulation(source,pathData.getMajorRealm(),pathData.getMinorRealm(),tribulationDefinition,data);
+            PathInstance.handleRealmChange(
+                source,PathInstance.getMajorRealm()+1,0);
+            PathInstance.setProgress(0);
+            PathInstance.setCompletedTribulation(source,PathInstance.getMajorRealm(),PathInstance.getMinorRealm(),tribulationDefinition,data);
         });
         return false;
 

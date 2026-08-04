@@ -12,8 +12,7 @@ public interface RealmDefinition {
     Component getName();
     @Nullable
     TribulationDefinitionReference getTribulation();
-    //holds all the actions for this realm
-    Collection<RealmChangeAction> actions();
+
     double getMaxProgression();
 
 }

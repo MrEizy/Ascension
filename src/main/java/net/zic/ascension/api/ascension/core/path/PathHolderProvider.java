@@ -29,7 +29,7 @@ public class PathHolderProvider implements DataSource {
     @Override
     public void onAdded(OriginSource source, DataSourceInstance instance) {
         PathHolder holder = getHolder(instance);
-        Map<Identifier,PathData> rawPaths = holder.getRawPathData();
+        Map<Identifier,PathInstance> rawPaths = holder.getRawPathInstance();
         Map<Identifier, HashSet<Identifier>> rawOwners = holder.getRawPathOwnerData();
 
         holder.clearContainer();
@@ -43,7 +43,7 @@ public class PathHolderProvider implements DataSource {
     @Override
     public void onRemoved(OriginSource source, DataSourceInstance instance) {
         PathHolder holder = getHolder(instance);
-        Map<Identifier,PathData> rawPaths = holder.getRawPathData();
+        Map<Identifier,PathInstance> rawPaths = holder.getRawPathInstance();
         Map<Identifier, HashSet<Identifier>> rawOwners = holder.getRawPathOwnerData();
 
         for(Identifier path : rawPaths.keySet()){

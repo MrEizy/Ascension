@@ -23,10 +23,10 @@ import java.util.Map;
 
 public class PathHolder implements DataSourceInstance {
 
-    private final HashMap<Identifier, PathData> paths = new HashMap<>();
+    private final HashMap<Identifier, PathInstance> paths = new HashMap<>();
     private final HashMap<Identifier, HashSet<Identifier>> pathOwners = new HashMap<>();
 
-    private final HashMap<Identifier,PathData>  cachedPaths = new HashMap<>();
+    private final HashMap<Identifier,PathInstance>  cachedPaths = new HashMap<>();
 
     private final HashSet<Identifier> dirtyPaths = new HashSet<>();
     private final HashSet<Identifier> toRemovePaths = new HashSet<>();
@@ -39,20 +39,20 @@ public class PathHolder implements DataSourceInstance {
 
     //──Path Data────────────────────────────────────────────────────────
 
-    public boolean addPath(Identifier path,PathData pathData,Identifier owner){
-        return addPath(path,pathData,owner,false);
+    public boolean addPath(Identifier path,PathInstance PathInstance,Identifier owner){
+        return addPath(path,PathInstance,owner,false);
     }
-    public boolean addPath(Identifier path,PathData pathData,Identifier owner,boolean overwrite){
+    public boolean addPath(Identifier path,PathInstance PathInstance,Identifier owner,boolean overwrite){
 
         if((hasPath(path) && overwrite) || !hasPath(path)) {
-            if(hasCachedPath(path)) pathData = removeCachedPath(path);
-            paths.put(path,pathData);
+            if(hasCachedPath(path)) PathInstance = removeCachedPath(path);
+            paths.put(path,PathInstance);
             pathOwners.computeIfAbsent(path,key->new HashSet<>());
         }
         pathOwners.get(path).add(owner);
         return true;
     }
-    public PathData getPath(Identifier path){
+    public PathInstance getPath(Identifier path){
         return paths.get(path);
     }
     public Path getPath(Identifier path,RegistryAccess access){
@@ -84,13 +84,13 @@ public class PathHolder implements DataSourceInstance {
     }
 
     //──Cached Data────────────────────────────────────────────────────────
-    public void addCachedPath(Identifier path,PathData pathData){
-        cachedPaths.put(path,pathData);
+    public void addCachedPath(Identifier path,PathInstance PathInstance){
+        cachedPaths.put(path,PathInstance);
     }
     public boolean hasCachedPath(Identifier path){
         return cachedPaths.containsKey(path);
     }
-    public PathData removeCachedPath(Identifier path){
+    public PathInstance removeCachedPath(Identifier path){
         return cachedPaths.remove(path);
     }
     public void clearCache(){
@@ -99,14 +99,14 @@ public class PathHolder implements DataSourceInstance {
 
 
     //──Raw Manipulation────────────────────────────────────────────────────────
-    public Map<Identifier,PathData> getRawPathData(){
+    public Map<Identifier,PathInstance> getRawPathInstance(){
         return Map.copyOf(paths);
     }
     public Map<Identifier,HashSet<Identifier>> getRawPathOwnerData(){
         return Map.copyOf(pathOwners);
     }
 
-    public void setRawData(Map<Identifier,PathData> rawPaths,Map<Identifier,HashSet<Identifier>> rawOwnerData){
+    public void setRawData(Map<Identifier,PathInstance> rawPaths,Map<Identifier,HashSet<Identifier>> rawOwnerData){
         paths.clear();
         pathOwners.clear();
         paths.putAll(rawPaths);
@@ -130,8 +130,8 @@ public class PathHolder implements DataSourceInstance {
             try {
                 ValueOutput pathOutput = paths.addChild();
                 NbtHelpers.writeIdentifier(pathOutput,"path",path);
-                ValueOutput pathData = pathOutput.child("data");
-                if(getPath(path) != null) getPath(path).write(pathData);
+                ValueOutput PathInstance = pathOutput.child("data");
+                if(getPath(path) != null) getPath(path).write(PathInstance);
                 else throw new Exception("no path data for path "+path);
             }catch (Exception e){
                 AscensionCraft.LOGGER.debug("Error writing path {}",path);
@@ -147,12 +147,12 @@ public class PathHolder implements DataSourceInstance {
             try {
                 Identifier pathId = NbtHelpers.readIdentifier(pathInput,"path");
                 AscensionCraft.LOGGER.debug("Reading Path {}",pathId);
-                ValueInput pathData = pathInput.childOrEmpty("data");
+                ValueInput PathInstance = pathInput.childOrEmpty("data");
 
                 Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,access);
                 if(path == null) continue;
 
-                PathData data = path.loadData(pathData,access);
+                PathInstance data = path.loadData(PathInstance,access);
                 addCachedPath(pathId,data);
             }catch (Exception e){
                 AscensionCraft.LOGGER.debug("Error loading path");
@@ -200,7 +200,7 @@ public class PathHolder implements DataSourceInstance {
         for(int i = 0;i<size;i++){
             Identifier pathId = ByteBufHelpers.decodeIdentifier(buf);
             Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,access);
-            PathData data = path.loadData(buf,access);
+            PathInstance data = path.loadData(buf,access);
             paths.put(pathId,data);
         }
     }
@@ -210,7 +210,7 @@ public class PathHolder implements DataSourceInstance {
         for(int i = 0;i<size;i++){
             Identifier pathId = ByteBufHelpers.decodeIdentifier(buf);
             Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,access);
-            PathData data = path.loadData(buf,access);
+            PathInstance data = path.loadData(buf,access);
             paths.put(pathId,data);
         }
         ByteBufHelpers.decodeArray(buf,ByteBufHelpers::decodeIdentifier).forEach(paths::remove);

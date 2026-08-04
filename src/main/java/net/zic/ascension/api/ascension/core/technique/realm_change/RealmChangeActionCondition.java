@@ -3,7 +3,6 @@ package net.zic.ascension.api.ascension.core.technique.realm_change;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
@@ -23,36 +22,36 @@ public interface RealmChangeActionCondition extends ProgressActionCondition {
         TechniqueData data = null;
         if(contextData instanceof TechniqueData) data = (TechniqueData) contextData;
 
-        PathData pathData = AscensionOriginSourceHelper.getPathData(source,technique.getPath());
-        if(pathData == null) return false;
-        if((pathData.getCultivatedRealms(contextIdentifier).isEmpty()) ||
-                (pathData.getCultivatedRealms(contextIdentifier).size() == 1 && direction == ProgressDirection.UP )){
-             return test(source,pathData,technique,data,0,0,direction);
+        PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(source,technique.getPath());
+        if(PathInstance == null) return false;
+        if((PathInstance.getCultivatedRealms(contextIdentifier).isEmpty()) ||
+                (PathInstance.getCultivatedRealms(contextIdentifier).size() == 1 && direction == ProgressDirection.UP )){
+             return test(source,PathInstance,technique,data,0,0,direction);
         }
         if(direction == ProgressDirection.UP){
-            return test(source,pathData,technique,data,pathData.getMajorRealm(),pathData.getMinorRealm(),direction);
+            return test(source,PathInstance,technique,data,PathInstance.getMajorRealm(),PathInstance.getMinorRealm(),direction);
         }
 
-        if(pathData.getMinorRealm() == pathData.getMaxMinorRealm(pathData.getMajorRealm(),source.getRegistryAccess())){
+        if(PathInstance.getMinorRealm() == PathInstance.getMaxMinorRealm(PathInstance.getMajorRealm(),source.getRegistryAccess())){
             //we fell down a major realm
-            return test(source,pathData,technique, data, pathData.getMajorRealm()+1,0,direction);
+            return test(source,PathInstance,technique, data, PathInstance.getMajorRealm()+1,0,direction);
         }
 
-        return test(source,pathData,technique,data,pathData.getMajorRealm(),pathData.getMinorRealm()+1,direction);
+        return test(source,PathInstance,technique,data,PathInstance.getMajorRealm(),PathInstance.getMinorRealm()+1,direction);
     }
 
     /**
      *
      * @param holderId the id of the holder, used for unique identifiers
      * @param source the source the path data is attached to
-     * @param pathData the path data
+     * @param PathInstance the path data
      * @param technique the current technique
      * @param techniqueData the current technique data
      * @param majorRealm the major realm we are entering/leaving
      * @param minorRealm the minor realm we are entering/leaving
      * @param direction the direction
      */
-    boolean test(OriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction);
+    boolean test(OriginSource source, PathInstance PathInstance, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction);
 
 
 }

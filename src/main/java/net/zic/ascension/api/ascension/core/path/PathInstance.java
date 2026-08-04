@@ -15,12 +15,19 @@ public interface PathInstance {
      */
     void progressPath(Identifier path, double amount, OriginSource source);
     double getProgress();
+    double getMaxProgress();
+
+    //while they may be "opposite" that is only in our implementation, and there could be scenarios
+    //where progress is blocked but they cannot progress
 
     boolean canProgress();
+    boolean canBreakthrough();
+
 
     int getCurrentMajorRealm();
     int getCurrentMinorRealm();
 
+    int getMaxMinorRealm(int realm);
     //──Tribulation────────────────────────────────────────────────────────
     //TODO:
     // for now I have not included tribulations. this is because they might not actually be needed?

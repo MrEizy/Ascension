@@ -9,13 +9,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.AscensionTooltip;
-import net.zic.ascension.impl.core.path.foundation.FoundationPath;
-import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
+import net.zic.ascension.impl.core.path.foundation.FoundationPathInstance;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -62,8 +59,8 @@ public class FoundationProgressBar extends RenderableElement {
 
         return ClientAscensionData.getPlayer().flatMap(player ->
                 ClientAscensionData.getSource().flatMap(source -> {
-                    PathData pathData = AscensionOriginSourceHelper.getPathData(source,selectedPath);
-                    if (!(pathData instanceof FoundationPathData foundationData)) {
+                    PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(source,selectedPath);
+                    if (!(PathInstance instanceof FoundationPathInstance foundationData)) {
                         return Optional.empty();
                     }
 

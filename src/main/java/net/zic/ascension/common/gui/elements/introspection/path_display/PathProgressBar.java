@@ -7,7 +7,6 @@ import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 
@@ -40,19 +39,19 @@ public class PathProgressBar extends RenderableElement {
 
         return ClientAscensionData.getPlayer().flatMap(player ->
                 ClientAscensionData.getSource().map(source -> {
-                    PathData pathData = AscensionOriginSourceHelper.getPathData(source,selectedPath);
-                    if (pathData == null) {
+                    PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(source,selectedPath);
+                    if (PathInstance == null) {
                         return 0.0D;
                     }
-                    double maximum = pathData.getMaxProgress(
-                            pathData.getMajorRealm(),
-                            pathData.getMinorRealm(),
+                    double maximum = PathInstance.getMaxProgress(
+                            PathInstance.getMajorRealm(),
+                            PathInstance.getMinorRealm(),
                             player.registryAccess()
                     );
                     if (maximum <= 0.0D) {
                         return 0.0D;
                     }
-                    return Math.clamp(pathData.getProgress() / maximum, 0.0D, 1.0D);
+                    return Math.clamp(PathInstance.getProgress() / maximum, 0.0D, 1.0D);
                 })
         ).orElse(0.0D);
     }

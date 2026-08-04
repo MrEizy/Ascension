@@ -43,11 +43,11 @@ public class TechniqueTransferItem  extends Item {
         if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData(player).getSource();
         Identifier path = targetTechnique.getPath();
-        if(AscensionOriginSourceHelper.getPathData(source,path) == null){
+        if(AscensionOriginSourceHelper.getPathInstance(source,path) == null){
             player.sendSystemMessage(Component.literal("[You are do not have path : "+path+"]"));
             return InteractionResult.FAIL;
         }
-        if(!AscensionOriginSourceHelper.getPathData(source,path).setCurrentTechnique(
+        if(!AscensionOriginSourceHelper.getPathInstance(source,path).setCurrentTechnique(
                 stack.get(AscensionComponents.REGISTRY_ID_HOLDER),
                 source
         )){

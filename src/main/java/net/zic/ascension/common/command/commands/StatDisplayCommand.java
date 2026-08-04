@@ -10,12 +10,9 @@ import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
-import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.impl.core.path.foundation.FoundationPath;
-import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
+import net.zic.ascension.impl.core.path.foundation.FoundationPathInstance;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.ZenithStatHolder;
@@ -54,22 +51,22 @@ public class StatDisplayCommand {
                             for(Identifier path : AscensionOriginSourceHelper.getPaths(originSource)){
                                 Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,data.getSource().getRegistryAccess());
                                 player.sendSystemMessage(pathInstance.name());
-                                PathData pathData = AscensionOriginSourceHelper.getPathData(originSource,path);
+                                PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(originSource,path);
 
-                                player.sendSystemMessage(Component.literal("realm : ").append(pathData.getRealmName(pathData.getMajorRealm(),pathData.getMinorRealm(),data.getSource().getRegistryAccess())));
-                                player.sendSystemMessage(Component.literal("progress : "+pathData.getProgress()));
-                                player.sendSystemMessage(Component.literal("technique : "+pathData.getCurrentTechnique()));
+                                player.sendSystemMessage(Component.literal("realm : ").append(PathInstance.getRealmName(PathInstance.getMajorRealm(),PathInstance.getMinorRealm(),data.getSource().getRegistryAccess())));
+                                player.sendSystemMessage(Component.literal("progress : "+PathInstance.getProgress()));
+                                player.sendSystemMessage(Component.literal("technique : "+PathInstance.getCurrentTechnique()));
 
-                                if(pathData instanceof FoundationPathData foundationPathData && pathInstance instanceof FoundationPath foundationPath){
+                                if(PathInstance instanceof FoundationPathInstance foundationPathInstance && pathInstance instanceof FoundationPath foundationPath){
                                     player.sendSystemMessage(Component.literal("Foundation : ").append(
                                             foundationPath.getFoundationRealmName(
-                                                    foundationPathData.getMajorRealm(),
-                                                    foundationPathData.getFoundationRealm(foundationPathData.getMajorRealm())
+                                                    foundationPathInstance.getMajorRealm(),
+                                                    foundationPathInstance.getFoundationRealm(foundationPathInstance.getMajorRealm())
                                             )));
-                                    System.out.println(foundationPathData.getFoundationRealm(foundationPathData.getMajorRealm()));
+                                    System.out.println(foundationPathInstance.getFoundationRealm(foundationPathInstance.getMajorRealm()));
                                     player.sendSystemMessage(Component.literal(
                                             "Foundation Progress : "+
-                                                    foundationPathData.getFoundationRealmProgress(foundationPathData.getMajorRealm())
+                                                    foundationPathInstance.getFoundationRealmProgress(foundationPathInstance.getMajorRealm())
                                     ));
                                 }
                             }
