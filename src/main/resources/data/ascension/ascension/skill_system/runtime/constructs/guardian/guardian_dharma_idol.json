@@ -30,5 +30,74 @@
     1.7,
     -1.15
   ],
-  "rotate_with_owner": true
+  "rotate_with_owner": true,
+  "interception": {
+    "absorption": {
+      "base": 0.65,
+      "terms": [
+        {
+          "source": {
+            "type": "ascension:skill_level"
+          },
+          "operation": "add",
+          "scale": 0.08
+        }
+      ],
+      "maximum": 0.95
+    },
+    "stability_cost": {
+      "base": 1.0
+    },
+    "overflow": true,
+    "priority": 100,
+    "on_intercept": [
+      {
+        "type": "ascension:sound",
+        "sound": "minecraft:block.amethyst_block.hit",
+        "volume": {
+          "base": 0.55
+        },
+        "pitch": {
+          "base": 0.7
+        }
+      }
+    ]
+  },
+  "on_break": [
+    {
+      "type": "ascension:particle_burst",
+      "particle": "minecraft:totem_of_undying",
+      "count": {
+        "base": 42
+      },
+      "spread": {
+        "base": 1.1
+      },
+      "speed": {
+        "base": 0.08
+      }
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.beacon.deactivate",
+      "volume": {
+        "base": 1.0
+      },
+      "pitch": {
+        "base": 0.65
+      }
+    }
+  ],
+  "on_expire": [
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.amethyst_block.chime",
+      "volume": {
+        "base": 0.35
+      },
+      "pitch": {
+        "base": 0.6
+      }
+    }
+  ]
 }

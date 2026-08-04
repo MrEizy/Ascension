@@ -19,6 +19,11 @@ public final class OwnerBoundConstructInstance implements OwnerBoundConstructDef
     private final Map<Identifier, Double> variables;
     private final double maximumStability;
     private final long expiresAt;
+    private final boolean interceptsDamage;
+    private final double interceptionAbsorption;
+    private final double interceptionStabilityCost;
+    private final boolean interceptionOverflow;
+    private final int interceptionPriority;
     private double stability;
     private Vec3 position;
     private Identifier visualId;
@@ -34,7 +39,12 @@ public final class OwnerBoundConstructInstance implements OwnerBoundConstructDef
             Map<Identifier, Double> variables,
             double stability,
             long expiresAt,
-            Vec3 position
+            Vec3 position,
+            boolean interceptsDamage,
+            double interceptionAbsorption,
+            double interceptionStabilityCost,
+            boolean interceptionOverflow,
+            int interceptionPriority
     ) {
         this.runtimeId = UUID.randomUUID();
         this.dimension = dimension;
@@ -47,6 +57,11 @@ public final class OwnerBoundConstructInstance implements OwnerBoundConstructDef
         this.stability = this.maximumStability;
         this.expiresAt = expiresAt;
         this.position = position;
+        this.interceptsDamage = interceptsDamage;
+        this.interceptionAbsorption = Math.clamp(interceptionAbsorption, 0.0D, 1.0D);
+        this.interceptionStabilityCost = Math.max(0.000001D, interceptionStabilityCost);
+        this.interceptionOverflow = interceptionOverflow;
+        this.interceptionPriority = interceptionPriority;
     }
 
     @Override
@@ -94,6 +109,26 @@ public final class OwnerBoundConstructInstance implements OwnerBoundConstructDef
         double previous = stability;
         stability = Math.clamp(stability + amount, 0.0D, maximumStability);
         return stability - previous;
+    }
+
+    public boolean interceptsDamage() {
+        return interceptsDamage;
+    }
+
+    public double interceptionAbsorption() {
+        return interceptionAbsorption;
+    }
+
+    public double interceptionStabilityCost() {
+        return interceptionStabilityCost;
+    }
+
+    public boolean interceptionOverflow() {
+        return interceptionOverflow;
+    }
+
+    public int interceptionPriority() {
+        return interceptionPriority;
     }
 
     @Override

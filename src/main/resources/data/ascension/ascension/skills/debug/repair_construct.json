@@ -1,7 +1,7 @@
 {
   "type": "ascension:active_skill",
   "name": "Repair Construct",
-  "description": "Tests owner-bound construct stability restoration.",
+  "description": "Restores stability to the owner-bound calibration construct after it intercepts damage.",
   "default_accessible_level": 1,
   "levels": [
     {

@@ -10,5 +10,56 @@
     1.8,
     -1.0
   ],
-  "rotate_with_owner": true
+  "rotate_with_owner": true,
+  "interception": {
+    "absorption": {
+      "base": 1.0
+    },
+    "stability_cost": {
+      "base": 1.0
+    },
+    "overflow": true,
+    "priority": 1000,
+    "on_intercept": [
+      {
+        "type": "ascension:message",
+        "message": "Calibration construct intercepted damage",
+        "overlay": true
+      },
+      {
+        "type": "ascension:sound",
+        "sound": "minecraft:block.amethyst_block.hit",
+        "volume": {
+          "base": 0.7
+        },
+        "pitch": {
+          "base": 1.0
+        }
+      }
+    ]
+  },
+  "on_break": [
+    {
+      "type": "ascension:message",
+      "message": "Calibration construct broken",
+      "overlay": true
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.glass.break",
+      "volume": {
+        "base": 0.8
+      },
+      "pitch": {
+        "base": 0.8
+      }
+    }
+  ],
+  "on_expire": [
+    {
+      "type": "ascension:message",
+      "message": "Calibration construct expired",
+      "overlay": true
+    }
+  ]
 }

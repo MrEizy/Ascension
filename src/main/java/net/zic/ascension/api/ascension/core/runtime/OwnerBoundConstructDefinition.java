@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
+import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 
@@ -18,7 +19,10 @@ public record OwnerBoundConstructDefinition(
         Vec3 offset,
         boolean rotateWithOwner,
         Optional<Identifier> visual,
-        List<VisualStage> visualStages
+        List<VisualStage> visualStages,
+        Optional<Interception> interception,
+        List<SkillExecutionFeature> onBreak,
+        List<SkillExecutionFeature> onExpire
 ) {
     public static final Codec<OwnerBoundConstructDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ScaledValue.CODEC.codec().fieldOf("duration").forGetter(OwnerBoundConstructDefinition::duration),
@@ -28,7 +32,12 @@ public record OwnerBoundConstructDefinition(
                     .forGetter(OwnerBoundConstructDefinition::rotateWithOwner),
             Identifier.CODEC.optionalFieldOf("visual").forGetter(OwnerBoundConstructDefinition::visual),
             VisualStage.CODEC.listOf().optionalFieldOf("visual_stages", List.of())
-                    .forGetter(OwnerBoundConstructDefinition::visualStages)
+                    .forGetter(OwnerBoundConstructDefinition::visualStages),
+            Interception.CODEC.optionalFieldOf("interception").forGetter(OwnerBoundConstructDefinition::interception),
+            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_break", List.of())
+                    .forGetter(OwnerBoundConstructDefinition::onBreak),
+            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_expire", List.of())
+                    .forGetter(OwnerBoundConstructDefinition::onExpire)
     ).apply(instance, OwnerBoundConstructDefinition::new));
 
     public OwnerBoundConstructDefinition {
@@ -38,6 +47,9 @@ public record OwnerBoundConstructDefinition(
                 : visualStages.stream()
                 .sorted(Comparator.comparingDouble(VisualStage::maximumStabilityFraction))
                 .toList();
+        interception = interception == null ? Optional.empty() : interception;
+        onBreak = onBreak == null ? List.of() : List.copyOf(onBreak);
+        onExpire = onExpire == null ? List.of() : List.copyOf(onExpire);
     }
 
     public record VisualStage(double maximumStabilityFraction, Identifier visual) {
@@ -46,6 +58,33 @@ public record OwnerBoundConstructDefinition(
                         .forGetter(VisualStage::maximumStabilityFraction),
                 Identifier.CODEC.fieldOf("visual").forGetter(VisualStage::visual)
         ).apply(instance, VisualStage::new));
+    }
+
+    public record Interception(
+            ScaledValue absorption,
+            ScaledValue stabilityCost,
+            boolean overflow,
+            int priority,
+            BarrierDefinition.DamageFilter filter,
+            List<SkillExecutionFeature> onIntercept
+    ) {
+        public static final Codec<Interception> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                ScaledValue.CODEC.codec().optionalFieldOf("absorption", ScaledValue.constant(1.0D))
+                        .forGetter(Interception::absorption),
+                ScaledValue.CODEC.codec().optionalFieldOf("stability_cost", ScaledValue.constant(1.0D))
+                        .forGetter(Interception::stabilityCost),
+                Codec.BOOL.optionalFieldOf("overflow", true).forGetter(Interception::overflow),
+                Codec.INT.optionalFieldOf("priority", 0).forGetter(Interception::priority),
+                BarrierDefinition.DamageFilter.CODEC.optionalFieldOf("filter", BarrierDefinition.DamageFilter.EMPTY)
+                        .forGetter(Interception::filter),
+                SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_intercept", List.of())
+                        .forGetter(Interception::onIntercept)
+        ).apply(instance, Interception::new));
+
+        public Interception {
+            filter = filter == null ? BarrierDefinition.DamageFilter.EMPTY : filter;
+            onIntercept = onIntercept == null ? List.of() : List.copyOf(onIntercept);
+        }
     }
 
     public interface View {
