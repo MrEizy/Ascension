@@ -365,7 +365,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.celestial_constellation_circulation.name", "Draco's Coiling Star Circulation");
         add("ascension.skill.celestial_constellation_circulation.desc", "Circulate Soul through Star and Bow, drawing seven points of the inner night sky into a single spiritual map");
         add("ascension.skill.orions_celestial_draw.name", "Orion's Celestial Draw");
-        add("ascension.skill.orions_celestial_draw.desc", "Align body and spirit into a disciplined celestial draw, increasing Agility and Spirit");
+        add("ascension.skill.orions_celestial_draw.desc", "Strengthen ranged projectiles with Agility and Spirit, guiding them toward targets marked by Hound-Star Pursuit");
         add("ascension.skill.hound_star_pursuit.name", "Canis Major: Hound-Star Pursuit");
         add("ascension.skill.hound_star_pursuit.desc", "Fix a Hound-Star mark upon a quarry; repeated marks make evasive movement increasingly demanding");
         add("ascension.skill.aquila_crossing.name", "Aquila Crossing");

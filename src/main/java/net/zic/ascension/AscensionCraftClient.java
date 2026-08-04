@@ -22,6 +22,7 @@ import net.zic.ascension.client.gui.SkillWheelOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.visual.runtime.BarrierShellVisualController;
 import net.zic.ascension.client.visual.runtime.ClientRuntimeVisuals;
+import net.zic.ascension.client.visual.runtime.GuardianDharmaVisualController;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 import net.zic.ascension.common.AscensionCreativeSections;
 import net.zic.ascension.common.particle.AscensionParticles;
@@ -112,6 +113,7 @@ public class AscensionCraftClient {
             event.enqueueWork(() -> {
                 AscensionClientTooltipProviders.registerAll();
                 BarrierShellVisualController.registerDefaults();
+                GuardianDharmaVisualController.registerDefault();
                 AscensionCreativeSections.register();
             });
         }

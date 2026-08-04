@@ -61,7 +61,8 @@
           "base": 0.7
         }
       }
-    ]
+    ],
+    "projectile_response": "deflect"
   },
   "on_break": [
     {
@@ -99,5 +100,6 @@
         "base": 0.6
       }
     }
-  ]
+  ],
+  "visual": "ascension:guardian_dharma_idol"
 }

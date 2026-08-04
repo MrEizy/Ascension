@@ -173,6 +173,20 @@
           "set_cap": true
         }
       ]
+    },
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 3.0
+            }
+          ]
+        }
+      ]
     }
   ],
   "item_tooltip": {

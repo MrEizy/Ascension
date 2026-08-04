@@ -18,6 +18,7 @@ import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutio
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
+import net.zic.ascension.impl.runtime.projectile.ProjectileImpactResponses;
 import net.zic.ascension.impl.runtime.visual.RuntimeVisualSync;
 
 import java.util.ArrayList;
@@ -218,6 +219,9 @@ public final class OwnerBoundConstructs {
 
             construct.modifyStability(-stabilityLoss);
             remaining = Math.max(0.0D, remaining - prevented);
+            if (remaining <= 0.0D) {
+                ProjectileImpactResponses.apply(event.getSource(), event.getEntity(), interception.projectileResponse());
+            }
             execute(
                     level,
                     construct,

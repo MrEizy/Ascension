@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
+import net.zic.ascension.api.ascension.core.projectile.ProjectileImpactResponse;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineDamageSource;
@@ -20,6 +21,7 @@ public record BarrierDefinition(
         int priority,
         boolean replaceExisting,
         DamageFilter filter,
+        ProjectileImpactResponse projectileResponse,
         List<SkillExecutionFeature> onAbsorb,
         List<SkillExecutionFeature> onBreak,
         List<SkillExecutionFeature> onExpire,
@@ -34,6 +36,8 @@ public record BarrierDefinition(
             Codec.INT.optionalFieldOf("priority", 0).forGetter(BarrierDefinition::priority),
             Codec.BOOL.optionalFieldOf("replace_existing", true).forGetter(BarrierDefinition::replaceExisting),
             DamageFilter.CODEC.optionalFieldOf("filter", DamageFilter.EMPTY).forGetter(BarrierDefinition::filter),
+            ProjectileImpactResponse.CODEC.optionalFieldOf("projectile_response", ProjectileImpactResponse.DISCARD)
+                    .forGetter(BarrierDefinition::projectileResponse),
             SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_absorb", List.of())
                     .forGetter(BarrierDefinition::onAbsorb),
             SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_break", List.of())
@@ -45,6 +49,7 @@ public record BarrierDefinition(
 
     public BarrierDefinition {
         filter = filter == null ? DamageFilter.EMPTY : filter;
+        projectileResponse = projectileResponse == null ? ProjectileImpactResponse.DISCARD : projectileResponse;
         onAbsorb = onAbsorb == null ? List.of() : List.copyOf(onAbsorb);
         onBreak = onBreak == null ? List.of() : List.copyOf(onBreak);
         onExpire = onExpire == null ? List.of() : List.copyOf(onExpire);

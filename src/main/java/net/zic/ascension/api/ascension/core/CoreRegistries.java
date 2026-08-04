@@ -28,6 +28,7 @@ import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
 import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
+import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
 import net.zic.ascension.api.ascension.core.projectile.VirtualProjectileDefinition;
 import net.zic.zenithlib.registry.RegistryHelper;
 
@@ -53,6 +54,9 @@ public final class CoreRegistries {
     );
     public static final RegistryHelper.DataPackRegistry<VirtualProjectileDefinition> VIRTUAL_PROJECTILE_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/runtime/projectiles", () -> VirtualProjectileDefinition.CODEC
+    );
+    public static final RegistryHelper.DataPackRegistry<NormalProjectileDefinition> NORMAL_PROJECTILE_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "skill_system/projectile_integrations", () -> NormalProjectileDefinition.CODEC
     );
     public static final RegistryHelper.DataPackRegistry<AreaFieldDefinition> AREA_FIELD_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/runtime/fields", () -> AreaFieldDefinition.CODEC
@@ -99,6 +103,7 @@ public final class CoreRegistries {
         register(event, SKILL_REGISTRY);
         register(event, SKILL_EFFECT_REGISTRY);
         register(event, VIRTUAL_PROJECTILE_REGISTRY);
+        register(event, NORMAL_PROJECTILE_REGISTRY);
         register(event, AREA_FIELD_REGISTRY);
         register(event, ANCHOR_NETWORK_REGISTRY);
         register(event, CONSTRUCT_REGISTRY);

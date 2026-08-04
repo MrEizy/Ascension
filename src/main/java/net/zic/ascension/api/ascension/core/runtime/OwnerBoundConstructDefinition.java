@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
+import net.zic.ascension.api.ascension.core.projectile.ProjectileImpactResponse;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.value.ScaledValue;
@@ -66,6 +67,7 @@ public record OwnerBoundConstructDefinition(
             boolean overflow,
             int priority,
             BarrierDefinition.DamageFilter filter,
+            ProjectileImpactResponse projectileResponse,
             List<SkillExecutionFeature> onIntercept
     ) {
         public static final Codec<Interception> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -77,12 +79,15 @@ public record OwnerBoundConstructDefinition(
                 Codec.INT.optionalFieldOf("priority", 0).forGetter(Interception::priority),
                 BarrierDefinition.DamageFilter.CODEC.optionalFieldOf("filter", BarrierDefinition.DamageFilter.EMPTY)
                         .forGetter(Interception::filter),
+                ProjectileImpactResponse.CODEC.optionalFieldOf("projectile_response", ProjectileImpactResponse.DEFLECT)
+                        .forGetter(Interception::projectileResponse),
                 SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_intercept", List.of())
                         .forGetter(Interception::onIntercept)
         ).apply(instance, Interception::new));
 
         public Interception {
             filter = filter == null ? BarrierDefinition.DamageFilter.EMPTY : filter;
+            projectileResponse = projectileResponse == null ? ProjectileImpactResponse.DEFLECT : projectileResponse;
             onIntercept = onIntercept == null ? List.of() : List.copyOf(onIntercept);
         }
     }

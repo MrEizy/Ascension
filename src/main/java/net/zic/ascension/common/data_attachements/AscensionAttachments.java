@@ -21,6 +21,7 @@ import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 import net.zic.ascension.impl.core.movement.MovementAnchorContainer;
+import net.zic.ascension.impl.runtime.projectile.NormalProjectileData;
 
 import java.util.function.Supplier;
 
@@ -132,6 +133,11 @@ public class AscensionAttachments {
             "active_skill_effects", () -> AttachmentType.builder(holder -> new SkillEffectContainer())
                     .serialize(SkillEffectContainer.CODEC.fieldOf("data"))
                     .copyOnDeath()
+                    .build()
+    );
+    public static final Supplier<AttachmentType<NormalProjectileData>> NORMAL_PROJECTILE_DATA = ATTACHMENT_TYPES.register(
+            "normal_projectile_data", () -> AttachmentType.builder(holder -> new NormalProjectileData())
+                    .serialize(NormalProjectileData.CODEC.fieldOf("data"))
                     .build()
     );
 

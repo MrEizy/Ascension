@@ -94,5 +94,6 @@
         "visual": "ascension:golden_bell_barrier_fractured"
       }
     ]
-  }
+  },
+  "projectile_response": "discard"
 }

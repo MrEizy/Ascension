@@ -36,7 +36,8 @@
           "base": 1.0
         }
       }
-    ]
+    ],
+    "projectile_response": "deflect"
   },
   "on_break": [
     {
