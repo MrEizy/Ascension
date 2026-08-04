@@ -1,0 +1,112 @@
+{
+  "animation_presets": [
+    "zenithlib:kinetic",
+    "zenithlib:nebula"
+  ],
+  "pages": [
+    {
+      "elements": [
+        {
+          "type": "zenithlib:title_icon",
+          "title": {
+            "literal": "Tablet of Destruction"
+          }
+        },
+        {
+          "type": "zenithlib:classification",
+          "show_category": false,
+          "style": "badge"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "literal": "Excavation"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "literal": "Tunnel Profile"
+          },
+          "right": {
+            "literal": "4 × 7 × 22"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "literal": "Cooldown"
+          },
+          "right": {
+            "literal": "5 seconds"
+          },
+          "right_color": "positive"
+        }
+      ],
+      "title": {
+        "literal": "Tablet of Destruction: Heaven"
+      }
+    },
+    {
+      "elements": [
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "literal": "Linked Storage"
+          }
+        },
+        {
+          "type": "zenithlib:text",
+          "effect": {
+            "type": "zenithlib:shimmer",
+            "brightness": 0.45,
+            "width": 0.15
+          },
+          "text": {
+            "translate": "item.ascension.tablet_of_destruction_heaven.link_info"
+          }
+        },
+        {
+          "type": "zenithlib:spacer",
+          "height": 3
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "muted",
+          "text": {
+            "literal": "When collection is enabled, excavated materials may be routed to a linked container."
+          }
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "literal": "Controls"
+          }
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "muted",
+          "text": {
+            "translate": "ascension.tablet.cycle_mode_info"
+          }
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "muted",
+          "text": {
+            "literal": "Aim upward or downward to excavate vertically."
+          }
+        }
+      ],
+      "title": {
+        "literal": "Heavenly Functions"
+      }
+    }
+  ]
+}

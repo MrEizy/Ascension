@@ -1,0 +1,10 @@
+{
+  "category": "ascension:artifact",
+  "priority": 240,
+  "rank": "ascension:saint",
+  "selector": {
+    "tags": [
+      "ascension:saint_items"
+    ]
+  }
+}

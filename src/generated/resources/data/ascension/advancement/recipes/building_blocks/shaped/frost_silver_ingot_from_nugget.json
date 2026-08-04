@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_frost_silver_nugget": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:frost_silver_nugget"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:shaped/frost_silver_ingot_from_nugget"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_frost_silver_nugget"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:shaped/frost_silver_ingot_from_nugget"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "frost_silver_block",
+  "key": {
+    "A": "ascension:frost_silver_ingot"
+  },
+  "pattern": [
+    "AAA",
+    "AAA",
+    "AAA"
+  ],
+  "result": {
+    "id": "ascension:frost_silver_block"
+  }
+}

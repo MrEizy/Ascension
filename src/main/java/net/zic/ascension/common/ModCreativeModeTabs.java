@@ -9,7 +9,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.core.CoreRegistries;
+import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
@@ -27,6 +28,38 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_EARTH);
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_HEAVEN);
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_ASCENDANT);
+
+                        output.accept(ModItems.JADE);
+                        output.accept(ModItems.RAW_FROST_SILVER);
+                        output.accept(ModItems.FROST_SILVER_INGOT);
+                        output.accept(ModItems.FROST_SILVER_NUGGET);
+                        output.accept(ModItems.RAW_BLACK_IRON);
+                        output.accept(ModItems.BLACK_IRON_INGOT);
+                        output.accept(ModItems.BLACK_IRON_NUGGET);
+
+
+                    }).build());
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ASCENSION_BLOCKS_TAB = CREATIVE_MODE_TABS.register("ascension_blocks_tab",
+            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.BLACK_IRON_BLOCK.get()))
+                    .title(Component.translatable("creativetab.ascension.blocks"))
+                    .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModBlocks.JADE_BLOCK);
+                        output.accept(ModBlocks.JADE_ORE);
+                        output.accept(ModBlocks.BLACK_IRON_BLOCK);
+                        output.accept(ModBlocks.BLACK_IRON_ORE);
+                        output.accept(ModBlocks.FROST_SILVER_BLOCK);
+                        output.accept(ModBlocks.FROST_SILVER_ORE);
+
+
+                    }).build());
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ASCENSION_ALCHEMY_TAB = CREATIVE_MODE_TABS.register("ascension_alchemy_tab",
+            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.LINGZHI_MUSHROOM.get()))
+                    .title(Component.translatable("creativetab.ascension.alchemy"))
+                    .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModBlocks.LINGZHI_MUSHROOM_B);
+                        output.accept(ModItems.LINGZHI_MUSHROOM);
 
 
                     }).build());

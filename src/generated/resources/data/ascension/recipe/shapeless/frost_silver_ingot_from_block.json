@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "frost_silver_ingot",
+  "ingredients": [
+    "ascension:frost_silver_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "ascension:frost_silver_ingot"
+  }
+}

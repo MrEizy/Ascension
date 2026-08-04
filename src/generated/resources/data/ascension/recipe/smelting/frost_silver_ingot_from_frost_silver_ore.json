@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.25,
+  "group": "frost_silver",
+  "ingredient": "ascension:frost_silver_ore",
+  "result": {
+    "id": "ascension:frost_silver_ingot"
+  }
+}

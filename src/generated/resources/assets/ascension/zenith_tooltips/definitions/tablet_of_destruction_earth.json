@@ -1,0 +1,10 @@
+{
+  "priority": 200,
+  "selector": {
+    "items": [
+      "ascension:tablet_of_destruction_earth"
+    ]
+  },
+  "template": "ascension:tablet_of_destruction_earth",
+  "theme": "ascension:tablet_of_destruction"
+}
