@@ -1,0 +1,10 @@
+{
+  "category": "ascension:artifact",
+  "priority": 230,
+  "rank": "ascension:heaven",
+  "selector": {
+    "tags": [
+      "ascension:heaven_items"
+    ]
+  }
+}

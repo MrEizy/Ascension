@@ -1,0 +1,162 @@
+{
+  "animation_presets": [
+    "zenithlib:celestial",
+    "zenithlib:corrupted"
+  ],
+  "pages": [
+    {
+      "elements": [
+        {
+          "type": "zenithlib:title_icon",
+          "title": {
+            "literal": "Tablet of Destruction"
+          }
+        },
+        {
+          "type": "zenithlib:classification",
+          "show_category": false,
+          "style": "badge"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "literal": "Excavation"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "literal": "Cooldown"
+          },
+          "right": {
+            "literal": "3 seconds"
+          },
+          "right_color": "positive"
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "literal": "Shapeless / Dome Max"
+          },
+          "right": {
+            "literal": "128 blocks"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "literal": "Tunnel / Escape Max"
+          },
+          "right": {
+            "literal": "256 blocks"
+          }
+        }
+      ],
+      "title": {
+        "literal": "Tablet of Destruction: Saint"
+      }
+    },
+    {
+      "elements": [
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "literal": "Shapes"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "translate": "ascension.tablet.ascendant.shape.shapeless"
+          },
+          "right": {
+            "literal": "Sphere shell around target"
+          },
+          "right_color": "muted"
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "translate": "ascension.tablet.ascendant.shape.tunnel"
+          },
+          "right": {
+            "literal": "3×4 descending staircase"
+          },
+          "right_color": "muted"
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "translate": "ascension.tablet.ascendant.shape.escape"
+          },
+          "right": {
+            "literal": "3×4 ascending staircase"
+          },
+          "right_color": "muted"
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "translate": "ascension.tablet.ascendant.shape.dome"
+          },
+          "right": {
+            "literal": "Hemisphere around target"
+          },
+          "right_color": "muted"
+        }
+      ],
+      "title": {
+        "literal": "Mining Shapes"
+      }
+    },
+    {
+      "elements": [
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "literal": "Controls"
+          }
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "muted",
+          "text": {
+            "translate": "ascension.tablet.cycle_mode_info"
+          }
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "muted",
+          "effect": {
+            "type": "zenithlib:shimmer",
+            "brightness": 0.45,
+            "width": 0.15
+          },
+          "text": {
+            "translate": "ascension.tablet.ascendant.shape_info"
+          }
+        },
+        {
+          "type": "zenithlib:spacer",
+          "height": 3
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "muted",
+          "text": {
+            "literal": "Tunnels and Escape tunnels place torches every 5 steps along the staircase wall."
+          }
+        }
+      ],
+      "title": {
+        "literal": "Controls"
+      }
+    }
+  ]
+}

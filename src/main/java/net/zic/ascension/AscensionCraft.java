@@ -17,6 +17,7 @@ import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.common.ModCreativeModeTabs;
+import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.particle.AscensionParticles;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
@@ -83,7 +84,11 @@ public class AscensionCraft {
         AscensionAttachments.register(modEventBus);
         AscensionComponents.register(modEventBus);
         AscensionParticles.register(modEventBus);
+
+
+
         ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
 
         ModCreativeModeTabs.register(modEventBus);
 

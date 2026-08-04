@@ -1,0 +1,51 @@
+{
+  "background_style": {
+    "alpha": 16,
+    "pattern": "runes",
+    "spacing": 12
+  },
+  "badge_style": {
+    "fill_alpha": 224,
+    "horizontal_padding": 6,
+    "vertical_padding": 1
+  },
+  "bar_style": {
+    "border": "accent",
+    "border_width": 1,
+    "fill_alpha": 238,
+    "track": "border_bottom",
+    "track_alpha": 74
+  },
+  "colors": {
+    "accent": "#E8B85FFF",
+    "background": "#0F0907E6",
+    "border_bottom": "#5B1B18FF",
+    "border_top": "#F0B85BFF",
+    "muted": "#A8937BFF",
+    "negative": "#F06B5FFF",
+    "positive": "#7EE08EFF",
+    "text": "#F7E9D2FF",
+    "warning": "#F2C15DFF"
+  },
+  "divider_style": {
+    "decoration": "center_rune"
+  },
+  "frame_style": {
+    "corner_decoration": "rune",
+    "inner_border": true,
+    "inner_border_alpha": 118,
+    "inner_border_color": "border_bottom"
+  },
+  "header_style": {
+    "ornament": "small_diamonds"
+  },
+  "icon_holder": {
+    "fill_alpha": 96,
+    "shape": "gem"
+  },
+  "layout": {
+    "max_height": 226,
+    "max_width": 258,
+    "padding": 7
+  }
+}

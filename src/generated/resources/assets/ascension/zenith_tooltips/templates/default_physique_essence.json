@@ -1,0 +1,76 @@
+{
+  "animation_presets": [
+    "zenithlib:living"
+  ],
+  "pages": [
+    {
+      "elements": [
+        {
+          "type": "zenithlib:title_icon",
+          "on_all_pages": true,
+          "subtitle": {
+            "literal": "Physique Essence"
+          },
+          "title": {
+            "source": "zenithlib:subject_name"
+          }
+        },
+        {
+          "type": "zenithlib:classification",
+          "show_category": false,
+          "style": "badge"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:dynamic",
+          "source": "ascension:physique_paths"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:text",
+          "text": {
+            "source": "zenithlib:subject_description"
+          }
+        }
+      ],
+      "title": {
+        "source": "zenithlib:subject_name"
+      }
+    },
+    {
+      "elements": [
+        {
+          "type": "zenithlib:header",
+          "color": "positive",
+          "text": {
+            "literal": "Statistics"
+          }
+        },
+        {
+          "type": "zenithlib:dynamic",
+          "source": "ascension:physique_stats"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "literal": "Affinities"
+          }
+        },
+        {
+          "type": "zenithlib:dynamic",
+          "source": "ascension:physique_affinities"
+        }
+      ],
+      "title": {
+        "literal": "Attributes"
+      }
+    }
+  ]
+}

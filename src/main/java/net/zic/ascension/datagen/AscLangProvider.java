@@ -19,6 +19,8 @@ public class AscLangProvider extends LanguageProvider {
 
         // Creative Tabs
         add("creativetab.ascension.items", "Ascension Items");
+        add("creativetab.ascension.blocks", "Ascension Blocks");
+        add("creativetab.ascension.alchemy", "Ascension Alchemy");
         add("creativetab.ascension.physique_transfers", "Physiques");
         add("creativetab.ascension.bloodline_transfers", "Bloodlines");
         add("creativetab.ascension.technique_transfers", "Techniques");
@@ -26,6 +28,10 @@ public class AscLangProvider extends LanguageProvider {
 
         // Creative Tab Sections
         add("creative_section.ascension.artifacts", "Ascension Artifacts");
+
+
+
+
 
 
         // Items
@@ -59,6 +65,34 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tablet.drop_mode.off", "Off");
         add("ascension.tablet.drop_mode.on", "On");
         add("ascension.tablet.cycle_mode_info", "Press [V] to cycle drop mode.");
+
+
+        //Item Ores
+        add("item.ascension.raw_black_iron", "Raw Black Iron");
+        add("item.ascension.black_iron_ingot", "Black Iron Ingot");
+        add("item.ascension.black_iron_nugget", "Black Iron Nugget");
+        add("item.ascension.raw_frost_silver", "Raw Frost Silver");
+        add("item.ascension.frost_silver_ingot", "Frost Silver Ingot");
+        add("item.ascension.frost_silver_nugget", "Frost Silver Nugget");
+        add("item.ascension.jade", "Jade");
+
+
+        //Block Ores
+        add("block.ascension.black_iron_ore", "Black Iron Ore");
+        add("block.ascension.black_iron_block", "Black Iron Block");
+        add("block.ascension.frost_silver_ore", "Frost Silver Ore");
+        add("block.ascension.frost_silver_block", "Frost Silver Block");
+
+        add("block.ascension.jade_ore", "Jade Ore");
+        add("block.ascension.jade_block", "Jade Block");
+
+
+        //Herb Items
+        add("item.ascension.lingzhi_mushroom", "Lingzhi Mushroom");
+
+        //Herb Blocks
+        add("block.ascension.lingzhi_mushroom_b", "Lingzhi Mushroom");
+
 
 
         // GUI
@@ -115,8 +149,10 @@ public class AscLangProvider extends LanguageProvider {
 
 
 
-        //Physiques
-        add("ascension.physique.sword_bone","Sword Bone");
+        //Key Items
+        add("item.ascension.physique_essence", "Physique Essence");
+        add("item.ascension.bloodline_essence", "Bloodline Essence");
+        add("item.ascension.technique_manual", "Technique Manual");
 
 
         //Keybinds
@@ -131,6 +167,8 @@ public class AscLangProvider extends LanguageProvider {
         add("zenith.ascension.category.bloodline", "Bloodline");
         add("zenith.ascension.category.physique", "Physique");
         add("zenith.ascension.category.technique", "Technique");
+        add("zenith.ascension.category.artifacts", "Artifacts");
+        add("zenith.ascension.category.herbs", "Herbs");
 
         add("zenith.ascension.tier.ordinary", "Ordinary");
         add("zenith.ascension.tier.profound", "Profound");

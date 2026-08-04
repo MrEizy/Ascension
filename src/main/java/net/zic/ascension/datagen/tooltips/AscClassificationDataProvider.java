@@ -31,8 +31,12 @@ public final class AscClassificationDataProvider extends ZenithClassificationDat
                 .color(ZenithTooltipColor.ACCENT);
 
         category("artifact")
-                .literalLabel("Artifact")
+                .label("zenith.ascension.category.artifact")
                 .color("#E8B85FFF");
+
+        category("herbs")
+                .label("zenith.ascension.category.herbs")
+                .color("#AAFF00");
     }
 
     private void addRanks() {

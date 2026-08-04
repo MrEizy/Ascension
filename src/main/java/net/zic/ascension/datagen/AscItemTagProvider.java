@@ -36,6 +36,10 @@ public class AscItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.HEAVENS_PATH_ITEMS);
 
 
+        tag(ModTags.Items.HERBS)
+                .add(ModItems.LINGZHI_MUSHROOM.get());
+
+
         tag(ModTags.Items.ARTIFACTS)
                 .add(
                         ModItems.TABLET_OF_DESTRUCTION_HUMAN.get(),

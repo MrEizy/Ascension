@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.25,
+  "group": "black_iron",
+  "ingredient": "ascension:raw_black_iron",
+  "result": {
+    "id": "ascension:black_iron_ingot"
+  }
+}

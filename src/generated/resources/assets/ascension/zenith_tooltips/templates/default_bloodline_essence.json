@@ -1,0 +1,72 @@
+{
+  "animation_presets": [
+    "zenithlib:corrupted"
+  ],
+  "pages": [
+    {
+      "elements": [
+        {
+          "type": "zenithlib:title_icon",
+          "on_all_pages": true,
+          "subtitle": {
+            "literal": "Bloodline Essence"
+          },
+          "title": {
+            "source": "zenithlib:subject_name"
+          }
+        },
+        {
+          "type": "zenithlib:classification",
+          "show_category": false,
+          "style": "badge"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:bar",
+          "color": "negative",
+          "label": {
+            "literal": "Purity"
+          },
+          "source": "ascension:bloodline_purity"
+        },
+        {
+          "type": "zenithlib:text",
+          "effect": {
+            "type": "zenithlib:shimmer",
+            "brightness": 0.45,
+            "period": 2400,
+            "width": 0.14
+          },
+          "text": {
+            "source": "zenithlib:subject_description"
+          }
+        }
+      ],
+      "title": {
+        "source": "zenithlib:subject_name"
+      }
+    },
+    {
+      "elements": [
+        {
+          "type": "zenithlib:header",
+          "effect": {
+            "type": "zenithlib:shimmer"
+          },
+          "text": {
+            "literal": "Purity Growth"
+          }
+        },
+        {
+          "type": "zenithlib:dynamic",
+          "source": "ascension:bloodline_purity_gains"
+        }
+      ],
+      "title": {
+        "literal": "Purity Growth"
+      }
+    }
+  ]
+}

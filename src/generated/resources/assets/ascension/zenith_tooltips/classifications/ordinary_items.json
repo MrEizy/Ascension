@@ -1,0 +1,10 @@
+{
+  "category": "ascension:artifact",
+  "priority": 210,
+  "rank": "ascension:ordinary",
+  "selector": {
+    "tags": [
+      "ascension:ordinary_items"
+    ]
+  }
+}
