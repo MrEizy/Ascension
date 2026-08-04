@@ -20,6 +20,7 @@ import net.zic.ascension.api.ascension.value.ScaledValueContext;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.util.ModTags;
+import net.zic.ascension.impl.core.skill.passive.PassiveDefenseService;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -83,6 +84,8 @@ public final class StaggerService {
         } else if (is(target, RESISTANT)) {
             resistance = Math.max(resistance, 0.5D);
         }
+        double passiveResistance = PassiveDefenseService.staggerResistance(target, context);
+        resistance = 1.0D - (1.0D - resistance) * (1.0D - passiveResistance);
         resistance = Math.clamp(resistance, 0.0D, 0.95D);
 
         double applied = amount * (1.0D - resistance);
@@ -159,6 +162,8 @@ public final class StaggerService {
         } else if (is(target, RESISTANT)) {
             resistance = Math.max(resistance, 0.5D);
         }
+        double passiveResistance = PassiveDefenseService.staggerResistance(target, context);
+        resistance = 1.0D - (1.0D - resistance) * (1.0D - passiveResistance);
         resistance = Math.clamp(resistance, 0.0D, 0.95D);
         guardBreak(context, target, profileId, definition, targetContext, 0.0D, threshold, resistance);
         return true;

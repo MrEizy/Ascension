@@ -21,6 +21,7 @@ public record AreaFieldDefinition(
         List<SkillExecutionFeature> onEnter,
         List<SkillExecutionFeature> onTick,
         List<SkillExecutionFeature> onExit,
+        List<SkillExecutionFeature> onExpire,
         Optional<Identifier> visual
 ) {
     public static final Codec<AreaFieldDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -39,6 +40,8 @@ public record AreaFieldDefinition(
                     .forGetter(AreaFieldDefinition::onTick),
             SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_exit", List.of())
                     .forGetter(AreaFieldDefinition::onExit),
+            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_expire", List.of())
+                    .forGetter(AreaFieldDefinition::onExpire),
             Identifier.CODEC.optionalFieldOf("visual").forGetter(AreaFieldDefinition::visual)
     ).apply(instance, AreaFieldDefinition::new));
 
@@ -48,6 +51,7 @@ public record AreaFieldDefinition(
         onEnter = onEnter == null ? List.of() : List.copyOf(onEnter);
         onTick = onTick == null ? List.of() : List.copyOf(onTick);
         onExit = onExit == null ? List.of() : List.copyOf(onExit);
+        onExpire = onExpire == null ? List.of() : List.copyOf(onExpire);
         visual = visual == null ? Optional.empty() : visual;
     }
 

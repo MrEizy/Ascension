@@ -1,0 +1,78 @@
+{
+  "layers": [
+    {
+      "type": "beam",
+      "appearance": {
+        "color": [
+          80,
+          145,
+          255,
+          90
+        ],
+        "secondary_color": [
+          255,
+          225,
+          130,
+          230
+        ],
+        "line_width": 3.0,
+        "no_depth": true
+      }
+    },
+    {
+      "type": "beam",
+      "appearance": {
+        "color": [
+          220,
+          240,
+          255,
+          185
+        ],
+        "secondary_color": [
+          255,
+          250,
+          205,
+          250
+        ],
+        "line_width": 1.1,
+        "no_depth": true
+      }
+    },
+    {
+      "type": "ring",
+      "position": "each_point",
+      "transform": {
+        "rotation": [
+          90,
+          0,
+          0
+        ]
+      },
+      "appearance": {
+        "color": [
+          100,
+          175,
+          255,
+          150
+        ],
+        "secondary_color": [
+          255,
+          230,
+          145,
+          235
+        ],
+        "line_width": 1.8,
+        "no_depth": true
+      },
+      "geometry": {
+        "radius": 0.34,
+        "segments": 20
+      },
+      "motion": {
+        "spin": 2.2,
+        "pulse": 0.08,
+        "pulse_speed": 0.3
+      }
+    }
+  ]
+}

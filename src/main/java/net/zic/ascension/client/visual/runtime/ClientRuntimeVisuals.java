@@ -15,6 +15,7 @@ import java.util.UUID;
 public final class ClientRuntimeVisuals {
     private static final Map<UUID, RuntimeVisualState> STATES = new HashMap<>();
     private static final Map<Identifier, RuntimeVisualController> CONTROLLERS = new HashMap<>();
+    private static final RuntimeVisualController DATAPACK_CONTROLLER = new DatapackRuntimeVisualController();
 
     private ClientRuntimeVisuals() {
     }
@@ -123,8 +124,16 @@ public final class ClientRuntimeVisuals {
         CONTROLLERS.clear();
     }
 
+    static RuntimeVisualController registeredController(Identifier id) {
+        return id == null ? null : CONTROLLERS.get(id);
+    }
+
     private static RuntimeVisualController controller(RuntimeVisualState state) {
-        return state.visual() == null ? null : CONTROLLERS.get(state.visual());
+        if (state.visual() == null) {
+            return null;
+        }
+        RuntimeVisualController controller = CONTROLLERS.get(state.visual());
+        return controller == null ? DATAPACK_CONTROLLER : controller;
     }
 
     private static void clearStates() {

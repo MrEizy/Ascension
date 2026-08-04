@@ -118,6 +118,32 @@
       "technique": "ascension:3_heaven/celestial_constellation_circulation"
     },
     {
+      "type": "ascension:stagger",
+      "profile": "ascension:celestial/formation_pressure",
+      "amount": {
+        "base": 5.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "operation": "add",
+            "scale": 0.04
+          },
+          {
+            "source": {
+              "type": "ascension:skill_level"
+            },
+            "operation": "add",
+            "scale": 2.0
+          }
+        ],
+        "minimum": 1.0,
+        "maximum": 20.0
+      }
+    },
+    {
       "type": "ascension:skill_effect",
       "effect": "ascension:celestial/star_nail_drag",
       "duration": {
@@ -155,5 +181,6 @@
         "base": 0.02
       }
     }
-  ]
+  ],
+  "visual": "ascension:celestial/scorpius_field"
 }

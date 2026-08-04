@@ -1,0 +1,77 @@
+{
+  "layers": [
+    {
+      "type": "beam",
+      "appearance": {
+        "color": [
+          135,
+          80,
+          225,
+          190
+        ],
+        "secondary_color": [
+          235,
+          165,
+          255,
+          245
+        ],
+        "line_width": 3.1,
+        "no_depth": true
+      }
+    },
+    {
+      "type": "ground_glyph",
+      "position": "each_point",
+      "transform": {
+        "offset": [
+          0,
+          0.03,
+          0
+        ]
+      },
+      "appearance": {
+        "color": [
+          100,
+          55,
+          190,
+          165
+        ],
+        "secondary_color": [
+          225,
+          150,
+          255,
+          230
+        ],
+        "line_width": 2.1,
+        "no_depth": true
+      },
+      "geometry": {
+        "radius": 0.48,
+        "inner_radius": 0.22,
+        "segments": 28,
+        "count": 8
+      },
+      "motion": {
+        "spin": 0.9,
+        "pulse": 0.07,
+        "pulse_speed": 0.14
+      }
+    },
+    {
+      "type": "particle_emitter",
+      "position": "each_point",
+      "geometry": {
+        "radius": 0.22,
+        "height": 0.45,
+        "length": 0.018,
+        "count": 1
+      },
+      "motion": {
+        "interval": 3
+      },
+      "resources": {
+        "particle": "minecraft:end_rod"
+      }
+    }
+  ]
+}

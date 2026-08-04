@@ -91,7 +91,7 @@ public final class AnchorNetworks {
             if (!network.runtimeId().equals(runtimeId)) {
                 continue;
             }
-            removeChildField(null, network);
+            removeChildField(null, network, false);
             iterator.remove();
             return true;
         }
@@ -108,7 +108,7 @@ public final class AnchorNetworks {
             if (!network.runtimeId().equals(runtimeId)) {
                 continue;
             }
-            removeRuntime(level, network);
+            removeRuntime(level, network, false);
             iterator.remove();
             return true;
         }
@@ -124,7 +124,7 @@ public final class AnchorNetworks {
                     || definitionId != null && !network.definitionId().equals(definitionId)) {
                 continue;
             }
-            removeChildField(null, network);
+            removeChildField(null, network, false);
             iterator.remove();
             removed++;
         }
@@ -143,7 +143,7 @@ public final class AnchorNetworks {
                     || definitionId != null && !network.definitionId().equals(definitionId)) {
                 continue;
             }
-            removeRuntime(level, network);
+            removeRuntime(level, network, false);
             iterator.remove();
             removed++;
         }
@@ -166,9 +166,9 @@ public final class AnchorNetworks {
             ServerLevel level = event.getServer().getLevel(network.dimension());
             if (level == null || !tick(level, network)) {
                 if (level != null) {
-                    removeRuntime(level, network);
+                    removeRuntime(level, network, level.getGameTime() >= network.expiresAt());
                 } else {
-                    removeChildField(null, network);
+                    removeChildField(null, network, false);
                 }
                 iterator.remove();
             }
@@ -263,7 +263,7 @@ public final class AnchorNetworks {
         return Map.copyOf(nodes);
     }
 
-    private static void removeRuntime(ServerLevel level, AnchorNetworkInstance network) {
+    private static void removeRuntime(ServerLevel level, AnchorNetworkInstance network, boolean expired) {
         AnchorNetworkDefinition definition = CoreRegistries.safeAccess(
                 CoreRegistries.ANCHOR_NETWORK_REGISTRY,
                 network.definitionId(),
@@ -275,15 +275,17 @@ public final class AnchorNetworks {
                     visualState(network, definition, visual, 0L)
             ));
         }
-        removeChildField(level, network);
+        removeChildField(level, network, expired);
     }
 
-    private static void removeChildField(ServerLevel level, AnchorNetworkInstance network) {
+    private static void removeChildField(ServerLevel level, AnchorNetworkInstance network, boolean expired) {
         if (network.childField() == null) {
             return;
         }
         if (level == null) {
             AreaFields.remove(network.childField());
+        } else if (expired) {
+            AreaFields.expire(level, network.childField());
         } else {
             AreaFields.remove(level, network.childField());
         }

@@ -24,5 +24,8 @@ public class AscEntityTypeTagProvider extends EntityTypeTagsProvider {
 
         tag(ModTags.EntityTypes.FROZEN_BOSS_PROFILE)
                 .add(EntityType.ENDER_DRAGON, EntityType.WITHER, EntityType.WARDEN);
+
+        tag(ModTags.EntityTypes.RANGED_PROJECTILE)
+                .add(EntityType.ARROW, EntityType.SPECTRAL_ARROW, EntityType.TRIDENT);
     }
 }

@@ -43,5 +43,6 @@
     }
   ],
   "rotate_with_caster": true,
-  "field": "ascension:debug/calibration_field"
+  "field": "ascension:debug/calibration_field",
+  "visual": "ascension:debug/calibration_network"
 }

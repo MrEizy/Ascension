@@ -1,0 +1,82 @@
+{
+  "layers": [
+    {
+      "type": "shell",
+      "appearance": {
+        "color": [
+          255,
+          80,
+          55,
+          18
+        ],
+        "secondary_color": [
+          80,
+          225,
+          255,
+          52
+        ],
+        "line_width": 1.3,
+        "filled": true
+      },
+      "geometry": {
+        "radius": {
+          "source": "primary",
+          "scale": 1.0,
+          "minimum": 0.3
+        },
+        "height": {
+          "source": "secondary",
+          "scale": 1.0,
+          "minimum": 0.6
+        },
+        "segments": 28
+      },
+      "motion": {
+        "spin": 0.25,
+        "pulse": 0.02,
+        "pulse_speed": 0.1
+      }
+    },
+    {
+      "type": "ground_glyph",
+      "transform": {
+        "offset": [
+          0,
+          0.03,
+          0
+        ]
+      },
+      "appearance": {
+        "color": [
+          255,
+          90,
+          45,
+          110
+        ],
+        "secondary_color": [
+          100,
+          235,
+          255,
+          205
+        ],
+        "line_width": 2.0,
+        "no_depth": true
+      },
+      "geometry": {
+        "radius": {
+          "source": "primary",
+          "scale": 0.95
+        },
+        "inner_radius": {
+          "source": "primary",
+          "scale": 0.65
+        },
+        "segments": 36,
+        "count": 8
+      },
+      "motion": {
+        "spin": -0.4
+      }
+    }
+  ]
+}

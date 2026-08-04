@@ -98,6 +98,40 @@
       "technique": "ascension:3_heaven/celestial_constellation_circulation"
     },
     {
+      "type": "ascension:stagger",
+      "profile": "ascension:celestial/formation_pressure",
+      "amount": {
+        "base": 8.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "operation": "add",
+            "scale": 0.06
+          },
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:agility"
+            },
+            "operation": "add",
+            "scale": 0.03
+          },
+          {
+            "source": {
+              "type": "ascension:skill_level"
+            },
+            "operation": "add",
+            "scale": 3.0
+          }
+        ],
+        "minimum": 2.0,
+        "maximum": 32.0
+      }
+    },
+    {
       "type": "ascension:skill_effect",
       "effect": "ascension:celestial/star_nail_drag",
       "duration": {
@@ -133,6 +167,120 @@
       },
       "speed": {
         "base": 0.03
+      }
+    }
+  ],
+  "visual": "ascension:celestial/ursa_major_field",
+  "on_expire": [
+    {
+      "type": "ascension:damage",
+      "amount": {
+        "base": 8.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "operation": "add",
+            "scale": 0.3
+          },
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:agility"
+            },
+            "operation": "add",
+            "scale": 0.16
+          },
+          {
+            "source": {
+              "type": "ascension:skill_effect",
+              "effect": "ascension:celestial/hound_star_mark",
+              "owner_scoped": true,
+              "metric": "stacks",
+              "aggregation": "sum"
+            },
+            "operation": "add",
+            "scale": 2.0
+          }
+        ],
+        "minimum": 8.0,
+        "maximum": 70.0
+      },
+      "damage_type": "minecraft:magic",
+      "classifications": [
+        "ascension:skill",
+        "ascension:formation",
+        "ascension:soul",
+        "ascension:star"
+      ],
+      "path": "ascension:foundation/soul",
+      "technique": "ascension:3_heaven/celestial_constellation_circulation"
+    },
+    {
+      "type": "ascension:stagger",
+      "profile": "ascension:celestial/heaven_piercing",
+      "amount": {
+        "base": 35.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "operation": "add",
+            "scale": 0.18
+          },
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:agility"
+            },
+            "operation": "add",
+            "scale": 0.1
+          }
+        ],
+        "minimum": 20.0,
+        "maximum": 90.0
+      }
+    },
+    {
+      "type": "ascension:runtime_visual",
+      "visual": "ascension:celestial/sevenfold_collapse",
+      "duration": {
+        "base": 24
+      },
+      "position": "target"
+    },
+    {
+      "type": "ascension:particle_burst",
+      "particle": "minecraft:flash",
+      "count": {
+        "base": 1.0
+      }
+    },
+    {
+      "type": "ascension:particle_burst",
+      "particle": "minecraft:end_rod",
+      "count": {
+        "base": 34.0
+      },
+      "spread": {
+        "base": 1.1
+      },
+      "speed": {
+        "base": 0.12
+      }
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.lightning_bolt.impact",
+      "volume": {
+        "base": 0.8
+      },
+      "pitch": {
+        "base": 1.35
       }
     }
   ]

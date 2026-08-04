@@ -49,21 +49,12 @@
   },
   "execution": {
     "targeting": {
-      "type": "ascension:ray",
+      "type": "ascension:look_position",
       "range": {
         "base": 42
       },
-      "width": {
-        "base": 0.65
-      },
-      "filter": {
-        "relations": [
-          "neutral",
-          "hostile"
-        ],
-        "include_players": true,
-        "line_of_sight": true
-      }
+      "include_fluids": false,
+      "fallback_to_maximum_range": true
     },
     "require_targets": true,
     "caster_features": [
@@ -92,6 +83,15 @@
       }
     ],
     "target_features": [
+      {
+        "type": "ascension:runtime_visual",
+        "visual": "ascension:celestial/sagittarius_release",
+        "duration": {
+          "base": 14
+        },
+        "position": "target",
+        "points": "caster_to_target"
+      },
       {
         "type": "ascension:spawn_projectile",
         "definition": "ascension:celestial/sagittarius_heaven_piercing_arc",

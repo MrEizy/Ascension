@@ -83,20 +83,11 @@ public final class AreaFields {
     }
 
     public static boolean remove(ServerLevel level, UUID runtimeId) {
-        if (level == null || runtimeId == null) {
-            return false;
-        }
-        Iterator<AreaFieldInstance> iterator = FIELDS.iterator();
-        while (iterator.hasNext()) {
-            AreaFieldInstance field = iterator.next();
-            if (!field.runtimeId().equals(runtimeId)) {
-                continue;
-            }
-            removeVisual(level, field);
-            iterator.remove();
-            return true;
-        }
-        return false;
+        return finish(level, runtimeId, false);
+    }
+
+    public static boolean expire(ServerLevel level, UUID runtimeId) {
+        return finish(level, runtimeId, true);
     }
 
     public static int removeOwned(UUID ownerId, Identifier definitionId) {
@@ -227,11 +218,55 @@ public final class AreaFields {
                 Entity entity = level.getEntity(id);
                 if (entity instanceof LivingEntity target) {
                     applyFeatures(level, owner, field, target, definition.onExit());
+                    applyFeatures(level, owner, field, target, definition.onExpire());
                 }
             }
             return false;
         }
         return true;
+    }
+
+
+    private static boolean finish(ServerLevel level, UUID runtimeId, boolean expire) {
+        if (level == null || runtimeId == null) {
+            return false;
+        }
+        Iterator<AreaFieldInstance> iterator = FIELDS.iterator();
+        while (iterator.hasNext()) {
+            AreaFieldInstance field = iterator.next();
+            if (!field.runtimeId().equals(runtimeId)) {
+                continue;
+            }
+            if (expire) {
+                applyExpiry(level, field);
+            }
+            removeVisual(level, field);
+            iterator.remove();
+            return true;
+        }
+        return false;
+    }
+
+    private static void applyExpiry(ServerLevel level, AreaFieldInstance field) {
+        Entity ownerEntity = level.getEntity(field.ownerId());
+        if (!(ownerEntity instanceof ServerPlayer owner)) {
+            return;
+        }
+        AreaFieldDefinition definition = CoreRegistries.safeAccess(
+                CoreRegistries.AREA_FIELD_REGISTRY,
+                field.definitionId(),
+                level.registryAccess()
+        );
+        if (definition == null) {
+            return;
+        }
+        for (UUID id : Set.copyOf(field.inside())) {
+            Entity entity = level.getEntity(id);
+            if (entity instanceof LivingEntity target) {
+                applyFeatures(level, owner, field, target, definition.onExit());
+                applyFeatures(level, owner, field, target, definition.onExpire());
+            }
+        }
     }
 
     private static void removeVisual(ServerLevel level, AreaFieldInstance field) {

@@ -26,6 +26,7 @@ import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 import net.zic.ascension.api.ascension.core.runtime.AnchorNetworkDefinition;
 import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
 import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
+import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
 import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
@@ -70,6 +71,9 @@ public final class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<BarrierDefinition> BARRIER_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/runtime/barriers", () -> BarrierDefinition.CODEC
     );
+    public static final RegistryHelper.DataPackRegistry<RuntimeVisualDefinition> RUNTIME_VISUAL_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "skill_system/visuals", () -> RuntimeVisualDefinition.CODEC
+    );
     public static final RegistryHelper.DataPackRegistry<StaggerDefinition> STAGGER_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/stagger", () -> StaggerDefinition.CODEC
     );
@@ -108,6 +112,7 @@ public final class CoreRegistries {
         register(event, ANCHOR_NETWORK_REGISTRY);
         register(event, CONSTRUCT_REGISTRY);
         register(event, BARRIER_REGISTRY);
+        register(event, RUNTIME_VISUAL_REGISTRY);
         register(event, STAGGER_REGISTRY);
         register(event, PROGRESS_ACTION_REGISTRY);
         register(event, PROGRESS_ACTION_CONDITION_REGISTRY);

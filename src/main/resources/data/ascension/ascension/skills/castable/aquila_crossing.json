@@ -21,6 +21,15 @@
         "require_targets": true,
         "caster_features": [
           {
+            "type": "ascension:runtime_visual",
+            "visual": "ascension:celestial/aquila_crossing",
+            "duration": {
+              "base": 18
+            },
+            "position": "caster",
+            "follow": true
+          },
+          {
             "type": "ascension:particle_burst",
             "particle": "minecraft:cloud",
             "count": {
@@ -73,6 +82,14 @@
             "speed": {
               "base": 0.06
             }
+          },
+          {
+            "type": "ascension:runtime_visual",
+            "visual": "ascension:celestial/aquila_arrival",
+            "duration": {
+              "base": 18
+            },
+            "position": "execution"
           }
         ]
       },
@@ -108,6 +125,15 @@
         },
         "require_targets": true,
         "caster_features": [
+          {
+            "type": "ascension:runtime_visual",
+            "visual": "ascension:celestial/aquila_crossing",
+            "duration": {
+              "base": 24
+            },
+            "position": "caster",
+            "follow": true
+          },
           {
             "type": "ascension:particle_burst",
             "particle": "minecraft:cloud",
@@ -161,6 +187,14 @@
             "speed": {
               "base": 0.07
             }
+          },
+          {
+            "type": "ascension:runtime_visual",
+            "visual": "ascension:celestial/aquila_arrival",
+            "duration": {
+              "base": 18
+            },
+            "position": "execution"
           }
         ]
       },

@@ -123,5 +123,52 @@
     },
     "reacquire_interval": 2,
     "owner_scoped": true
+  },
+  "stagger": {
+    "profile": "ascension:celestial/heaven_piercing",
+    "amount": {
+      "base": 4.0,
+      "terms": [
+        {
+          "source": {
+            "type": "ascension:context",
+            "key": "ascension:projectile_charge",
+            "fallback": 0.0
+          },
+          "operation": "add",
+          "scale": 8.0
+        },
+        {
+          "source": {
+            "type": "ascension:stat",
+            "stat": "ascension:agility"
+          },
+          "operation": "add",
+          "scale": 0.025
+        },
+        {
+          "source": {
+            "type": "ascension:stat",
+            "stat": "ascension:spirit"
+          },
+          "operation": "add",
+          "scale": 0.02
+        },
+        {
+          "source": {
+            "type": "ascension:skill_effect",
+            "effect": "ascension:celestial/hound_star_mark",
+            "owner_scoped": true,
+            "metric": "stacks",
+            "aggregation": "sum"
+          },
+          "operation": "add",
+          "scale": 2.0
+        }
+      ],
+      "minimum": 0.0,
+      "maximum": 60.0
+    },
+    "scale_with_damage": false
   }
 }

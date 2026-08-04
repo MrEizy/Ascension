@@ -4,6 +4,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -222,11 +223,16 @@ public final class OwnerBoundConstructs {
             if (remaining <= 0.0D) {
                 ProjectileImpactResponses.apply(event.getSource(), event.getEntity(), interception.projectileResponse());
             }
+            LivingEntity responseTarget = event.getSource().getEntity() instanceof LivingEntity attacker
+                    && attacker != event.getEntity()
+                    ? attacker
+                    : null;
             execute(
                     level,
                     construct,
                     interception.onIntercept(),
                     event.getEntity() instanceof ServerPlayer owner ? owner : null,
+                    responseTarget,
                     prevented,
                     remaining,
                     stabilityLoss
@@ -316,9 +322,9 @@ public final class OwnerBoundConstructs {
             return;
         }
         if (removal == Removal.BROKEN) {
-            execute(level, construct, definition.onBreak(), owner, 0.0D, 0.0D, 0.0D);
+            execute(level, construct, definition.onBreak(), owner, owner, 0.0D, 0.0D, 0.0D);
         } else if (removal == Removal.EXPIRED) {
-            execute(level, construct, definition.onExpire(), owner, 0.0D, 0.0D, 0.0D);
+            execute(level, construct, definition.onExpire(), owner, owner, 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -327,6 +333,7 @@ public final class OwnerBoundConstructs {
             OwnerBoundConstructInstance construct,
             List<SkillExecutionFeature> features,
             ServerPlayer owner,
+            LivingEntity target,
             double intercepted,
             double remaining,
             double stabilityLoss
@@ -344,7 +351,7 @@ public final class OwnerBoundConstructs {
                 level,
                 owner,
                 construct.skillId(),
-                owner,
+                target,
                 construct.position(),
                 construct.charge(),
                 variables,

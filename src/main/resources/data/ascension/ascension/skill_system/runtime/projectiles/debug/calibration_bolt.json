@@ -144,5 +144,6 @@
         "base": 0.01
       }
     }
-  ]
+  ],
+  "visual": "ascension:debug/calibration_bolt"
 }

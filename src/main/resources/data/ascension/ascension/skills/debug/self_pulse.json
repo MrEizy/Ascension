@@ -12,6 +12,23 @@
         "require_targets": true,
         "caster_features": [
           {
+            "type": "ascension:runtime_visual",
+            "visual": "ascension:debug/self_pulse",
+            "duration": {
+              "base": 36
+            },
+            "position": "caster",
+            "follow": true,
+            "offset": [
+              0,
+              1.0,
+              0
+            ],
+            "progress": {
+              "base": 1.0
+            }
+          },
+          {
             "type": "ascension:particle_burst",
             "particle": "minecraft:happy_villager",
             "count": {

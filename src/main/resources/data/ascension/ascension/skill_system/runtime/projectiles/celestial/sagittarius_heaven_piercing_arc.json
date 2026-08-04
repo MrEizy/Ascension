@@ -53,7 +53,34 @@
         ],
         "maximum": 0.045
       },
-      "reacquire": false
+      "reacquire": true,
+      "acquisition": {
+        "type": "ascension:radial",
+        "radius": {
+          "base": 14.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:charge"
+              },
+              "operation": "add",
+              "scale": 10.0
+            }
+          ],
+          "minimum": 10.0,
+          "maximum": 24.0
+        },
+        "maximum_targets": 1,
+        "sort": "closest_to_view",
+        "filter": {
+          "relations": [
+            "neutral",
+            "hostile"
+          ],
+          "include_players": true,
+          "line_of_sight": false
+        }
+      }
     }
   ],
   "on_entity_hit": [
@@ -131,12 +158,47 @@
       "damage_type": "minecraft:indirect_magic",
       "classifications": [
         "ascension:skill",
-        "ascension:formation",
+        "ascension:projectile",
+        "ascension:ranged",
         "ascension:soul",
         "ascension:star"
       ],
       "path": "ascension:foundation/soul",
       "technique": "ascension:3_heaven/celestial_constellation_circulation"
+    },
+    {
+      "type": "ascension:stagger",
+      "profile": "ascension:celestial/heaven_piercing",
+      "amount": {
+        "base": 18.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "operation": "add",
+            "scale": 0.12
+          },
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:agility"
+            },
+            "operation": "add",
+            "scale": 0.08
+          },
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "operation": "add",
+            "scale": 24.0
+          }
+        ],
+        "minimum": 8.0,
+        "maximum": 60.0
+      }
     },
     {
       "type": "ascension:resource_transaction",
@@ -221,5 +283,6 @@
         "base": 0.02
       }
     }
-  ]
+  ],
+  "visual": "ascension:celestial/sagittarius_arc"
 }

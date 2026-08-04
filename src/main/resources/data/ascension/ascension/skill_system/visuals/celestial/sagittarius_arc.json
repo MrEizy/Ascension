@@ -1,0 +1,100 @@
+{
+  "layers": [
+    {
+      "type": "ribbon",
+      "appearance": {
+        "color": [
+          90,
+          155,
+          255,
+          12
+        ],
+        "secondary_color": [
+          255,
+          225,
+          125,
+          235
+        ],
+        "line_width": 4.0,
+        "no_depth": true
+      },
+      "motion": {
+        "history": 28
+      }
+    },
+    {
+      "type": "afterimage",
+      "appearance": {
+        "color": [
+          110,
+          170,
+          255,
+          8
+        ],
+        "secondary_color": [
+          255,
+          235,
+          165,
+          130
+        ]
+      },
+      "geometry": {
+        "width": 0.55,
+        "height": 0.55
+      },
+      "motion": {
+        "history": 22
+      }
+    },
+    {
+      "type": "ring",
+      "transform": {
+        "rotation": [
+          90,
+          0,
+          0
+        ]
+      },
+      "appearance": {
+        "color": [
+          165,
+          210,
+          255,
+          190
+        ],
+        "secondary_color": [
+          255,
+          240,
+          150,
+          245
+        ],
+        "line_width": 2.0,
+        "no_depth": true
+      },
+      "geometry": {
+        "radius": 0.36,
+        "segments": 20
+      },
+      "motion": {
+        "spin": 5.0,
+        "pulse": 0.1,
+        "pulse_speed": 0.35
+      }
+    },
+    {
+      "type": "particle_emitter",
+      "geometry": {
+        "radius": 0.12,
+        "height": 0.12,
+        "length": 0.035,
+        "count": 2
+      },
+      "motion": {
+        "interval": 2
+      },
+      "resources": {
+        "particle": "minecraft:end_rod"
+      }
+    }
+  ]
+}

@@ -28,6 +28,18 @@
         "caster_features": [],
         "target_features": [
           {
+            "type": "ascension:runtime_visual",
+            "visual": "ascension:debug/ray_link",
+            "duration": {
+              "base": 18
+            },
+            "position": "target",
+            "points": "caster_to_target",
+            "progress": {
+              "base": 1.0
+            }
+          },
+          {
             "type": "ascension:skill_effect",
             "effect": "ascension:debug/calibration_mark",
             "duration": {

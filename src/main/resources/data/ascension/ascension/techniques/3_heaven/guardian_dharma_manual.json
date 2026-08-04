@@ -182,7 +182,15 @@
           "stats": [
             {
               "id": "ascension:spirit",
+              "value": 2.0
+            },
+            {
+              "id": "ascension:vitality",
               "value": 3.0
+            },
+            {
+              "id": "ascension:strength",
+              "value": 1.0
             }
           ]
         }

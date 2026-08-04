@@ -91,5 +91,6 @@
     }
   ],
   "rotate_with_caster": true,
-  "field": "ascension:celestial/ursa_major_field"
+  "field": "ascension:celestial/ursa_major_field",
+  "visual": "ascension:celestial/ursa_major_network"
 }

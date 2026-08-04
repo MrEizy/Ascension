@@ -43,23 +43,13 @@
     }
   ],
   "visual": {
-    "id": "ascension:barrier_shell",
+    "id": "ascension:debug/calibration_barrier",
     "radius": {
       "base": 1.1
     },
     "height": {
       "base": 2.25
-    },
-    "stages": [
-      {
-        "maximum_durability_fraction": 0.25,
-        "visual": "ascension:barrier_shell_critical"
-      },
-      {
-        "maximum_durability_fraction": 0.6,
-        "visual": "ascension:barrier_shell_fractured"
-      }
-    ]
+    }
   },
   "projectile_response": "discard"
 }

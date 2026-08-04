@@ -28,6 +28,7 @@ public final class AscensionSkillExecutionFeatureTypes {
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> MOVEMENT_ANCHOR = register("movement_anchor", MovementAnchorFeature.CODEC);
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> SPAWN_PROJECTILE = register("spawn_projectile", SpawnProjectileFeature.CODEC);
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> RUNTIME_OBJECT = register("runtime_object", RuntimeObjectFeature.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> RUNTIME_VISUAL = register("runtime_visual", RuntimeVisualFeature.CODEC);
 
     private AscensionSkillExecutionFeatureTypes() {
     }

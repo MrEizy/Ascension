@@ -52,6 +52,7 @@ public class ModTags {
         public static final TagKey<EntityType<?>> FROZEN_IMMUNE = createTag("frozen_immune");
         public static final TagKey<EntityType<?>> FROZEN_RESISTANT = createTag("frozen_resistant");
         public static final TagKey<EntityType<?>> FROZEN_BOSS_PROFILE = createTag("frozen_boss_profile");
+        public static final TagKey<EntityType<?>> RANGED_PROJECTILE = createTag("ranged_projectiles");
         public static final TagKey<EntityType<?>> STAGGER_IMMUNE = createTag("stagger_immune");
         public static final TagKey<EntityType<?>> STAGGER_RESISTANT = createTag("stagger_resistant");
         public static final TagKey<EntityType<?>> STAGGER_BOSS_PROFILE = createTag("stagger_boss_profile");

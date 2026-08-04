@@ -371,19 +371,19 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.aquila_crossing.name", "Aquila Crossing");
         add("ascension.skill.aquila_crossing.desc", "Follow a projected celestial line and cross rapidly toward the point held in your sight");
         add("ascension.skill.scorpius_star_nail_formation.name", "Scorpius Star-Nail Formation");
-        add("ascension.skill.scorpius_star_nail_formation.desc", "Plant three stellar anchors around a chosen point, creating a field that burdens hostile movement");
+        add("ascension.skill.scorpius_star_nail_formation.desc", "Plant three stellar anchors around a chosen point.");
         add("ascension.skill.sagittarius_heaven_piercing_arc.name", "Sagittarius Heaven-Piercing Arc");
-        add("ascension.skill.sagittarius_heaven_piercing_arc.desc", "Condense and release a piercing spectral arrow that drains stamina and leaves Star Severance in its wake");
+        add("ascension.skill.sagittarius_heaven_piercing_arc.desc", "Condense a homing spectral arrow who grows with charge.");
         add("ascension.skill.sevenfold_celestial_hunt.name", "Ursa Major: Sevenfold Celestial Hunt");
-        add("ascension.skill.sevenfold_celestial_hunt.desc", "Project the seven stars of Ursa Major into the battlefield, forming a celestial domain that suppresses hostile movement");
+        add("ascension.skill.sevenfold_celestial_hunt.desc", "Project Ursa Major into the battlefield, creating a seven-node domain.");
         add("ascension.skill.fourfold_dharma_circulation.name", "Fourfold Dharma Circulation");
         add("ascension.skill.fourfold_dharma_circulation.desc", "Cycle Soul, Life, Order, and Fist through one disciplined circuit, strengthening the foundation of the guardian path");
         add("ascension.skill.ordered_vajra_body.name", "Ordered Vajra Body");
-        add("ascension.skill.ordered_vajra_body.desc", "Forge body and spirit into an Vajra, increasing Vitality, Spirit, and Strength");
+        add("ascension.skill.ordered_vajra_body.desc", "Forge body and spirit into a disciplined Vajra, increasing Vitality, Spirit, and Strength");
         add("ascension.skill.golden_bell_of_living_law.name", "Golden Bell of Living Law");
-        add("ascension.skill.golden_bell_of_living_law.desc", "Wrap the body in living breath, reducing stamina and exhaustion spent through movement and combat");
+        add("ascension.skill.golden_bell_of_living_law.desc", "Manifest a durable Golden Bell that absorbs incoming damage.");
         add("ascension.skill.guardian_dharma_idol.name", "Guardian Dharma Idol");
-        add("ascension.skill.guardian_dharma_idol.desc", "Manifest an Dharma projection.");
+        add("ascension.skill.guardian_dharma_idol.desc", "Manifest a guardian Dharma.");
 
 
     }

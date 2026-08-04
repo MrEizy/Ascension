@@ -173,24 +173,13 @@ public final class GuardianDharmaVisualController implements RuntimeVisualContro
         buffers.endLastBatch();
     }
 
-    private static Vec3 transformPoint(
-            Vec3 point,
-            Vec3 rotationOrigin,
-            Vec3 rotation,
-            double yaw,
-            double pulse
-    ) {
-        Vec3 rotated = rotate(point.subtract(rotationOrigin), rotation).add(rotationOrigin);
-        Vec3 local = new Vec3(
-                (rotated.x - 8.0D) / 16.0D,
-                rotated.y / 16.0D,
-                (rotated.z - 8.0D) / 16.0D
-        ).scale(MODEL_SCALE * pulse);
+    private static Vec3 transformPoint(Vec3 point, Vec3 rotationOrigin, Vec3 rotation, double yaw, double pulse) {
+        Vec3 local = new Vec3((point.x - 8.0D) / 16.0D, point.y / 16.0D, (point.z - 8.0D) / 16.0D).scale(MODEL_SCALE * pulse);
         return rotateY(local, yaw);
     }
 
     private static Vec3 transformDirection(Vec3 direction, Vec3 rotation, double yaw) {
-        return rotateY(rotate(direction, rotation), yaw).normalize();
+        return rotateY(direction, yaw).normalize();
     }
 
     private static Vec3 rotate(Vec3 value, Vec3 degrees) {

@@ -1,0 +1,82 @@
+{
+  "threshold": {
+    "base": 90.0,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:stat",
+          "stat": "ascension:vitality"
+        },
+        "operation": "add",
+        "scale": 1.8
+      },
+      {
+        "source": {
+          "type": "ascension:stat",
+          "stat": "ascension:strength"
+        },
+        "operation": "add",
+        "scale": 0.8
+      }
+    ],
+    "minimum": 40.0
+  },
+  "resistance": {
+    "base": 0.0,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:stat",
+          "stat": "ascension:vitality"
+        },
+        "operation": "add",
+        "scale": 0.004
+      }
+    ],
+    "minimum": 0.0,
+    "maximum": 0.55
+  },
+  "decay_per_second": {
+    "base": 9.0,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:stat",
+          "stat": "ascension:vitality"
+        },
+        "operation": "add",
+        "scale": 0.12
+      }
+    ],
+    "minimum": 1.0
+  },
+  "decay_delay": 36,
+  "guard_break_duration": {
+    "base": 32.0
+  },
+  "immunity_duration": {
+    "base": 55.0
+  },
+  "movement_multiplier": 0.12,
+  "interrupt_held_casts": true,
+  "on_guard_break": [
+    {
+      "type": "ascension:runtime_visual",
+      "visual": "ascension:celestial/sevenfold_collapse",
+      "duration": {
+        "base": 18
+      },
+      "position": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.chain.break",
+      "volume": {
+        "base": 0.8
+      },
+      "pitch": {
+        "base": 1.2
+      }
+    }
+  ]
+}

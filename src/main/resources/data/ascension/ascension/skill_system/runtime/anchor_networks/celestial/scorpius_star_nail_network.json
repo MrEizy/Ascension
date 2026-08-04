@@ -53,5 +53,6 @@
     }
   ],
   "rotate_with_caster": true,
-  "field": "ascension:celestial/scorpius_star_nail_field"
+  "field": "ascension:celestial/scorpius_star_nail_field",
+  "visual": "ascension:celestial/scorpius_network"
 }
