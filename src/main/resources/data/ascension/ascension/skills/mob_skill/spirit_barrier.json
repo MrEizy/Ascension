@@ -1,0 +1,60 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Spirit Barrier",
+  "description": "Wraps the caster in a brief barrier of spiritual force.",
+  "default_accessible_level": 1,
+  "definitions": {
+    "barriers": {
+      "guard": {
+        "duration": 120,
+        "durability": {
+          "base": 7.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "operation": "add",
+              "scale": 0.5
+            }
+          ],
+          "minimum": 0.0,
+          "maximum": 34.0
+        },
+        "absorption": 0.75,
+        "overflow": true,
+        "priority": 100,
+        "replace_existing": true,
+        "projectile_response": "none"
+      }
+    }
+  },
+  "targeting": "self",
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:barrier",
+      "action": "apply",
+      "definition": "#guard",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:end_rod",
+      "count": 3,
+      "spread": 0.3,
+      "speed": 0.02,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.amethyst_block.chime",
+      "volume": 0.55,
+      "pitch": 0.9,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": 200
+}

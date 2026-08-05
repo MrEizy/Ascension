@@ -1,0 +1,95 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Qi-Infused Shot",
+  "description": "A Skeleton releases a narrow projectile reinforced with qi.",
+  "default_accessible_level": 1,
+  "definitions": {
+    "projectiles": {
+      "shot": {
+        "speed": 2.1,
+        "range": 26,
+        "gravity": 0.01,
+        "hit_radius": 0.3,
+        "pierces": 0,
+        "filter": {
+          "relations": [
+            "hostile"
+          ],
+          "include_players": true,
+          "line_of_sight": true
+        },
+        "on_entity_hit": [
+          {
+            "type": "ascension:damage",
+            "amount": {
+              "base": 5.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:stat",
+                    "stat": "ascension:spirit"
+                  },
+                  "operation": "add",
+                  "scale": 0.23
+                }
+              ],
+              "minimum": 0.0,
+              "maximum": 20.0
+            },
+            "damage_type": "minecraft:indirect_magic",
+            "classifications": [
+              "ascension:skill",
+              "ascension:projectile",
+              "ascension:ranged",
+              "ascension:essence"
+            ],
+            "path": "ascension:foundation/essence",
+            "subject": "target"
+          },
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:crit",
+            "count": 3,
+            "spread": 0.25,
+            "speed": 0.07,
+            "subject": "target"
+          }
+        ],
+        "on_block_hit": [],
+        "on_expire": [],
+        "flight_particle": "minecraft:crit"
+      }
+    }
+  },
+  "targeting": {
+    "type": "ascension:radial",
+    "radius": 24,
+    "maximum_targets": 1,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.skeleton.shoot",
+      "volume": 0.55,
+      "pitch": 1.15,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:projectile",
+      "definition": "#shot",
+      "direction": "target",
+      "subject": "target"
+    }
+  ],
+  "costs": [],
+  "cooldown": 80
+}

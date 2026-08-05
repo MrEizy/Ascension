@@ -2,8 +2,11 @@
   "entries": [
     {
       "skill": "ascension:mob_skill/flame_body_transformation",
-      "weight": 1.0,
-      "minimum_realm_score": 3
+      "weight": 2.0,
+      "minimum_realm_score": 3,
+      "priority": 110,
+      "requires_target": true,
+      "maximum_health_fraction": 0.65
     }
   ]
 }

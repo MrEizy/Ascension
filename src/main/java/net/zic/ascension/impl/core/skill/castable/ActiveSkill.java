@@ -10,8 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
-import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.LevelledSkillData;
@@ -29,6 +27,7 @@ import net.zic.ascension.api.ascension.core.skill.SkillLevelSnapshot;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Owner;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
@@ -179,15 +178,15 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
         if (caster.level().isClientSide()) {
             return CastResult.success();
         }
-        if (!(caster instanceof ServerPlayer player) || !(player.level() instanceof ServerLevel level)) {
+        if (!(caster.level() instanceof ServerLevel level)) {
             return CastResult.fail();
         }
 
-        ResolvedActiveCast resolved = resolve(level, player, skillId);
+        ResolvedActiveCast resolved = resolve(level, caster, skillId);
         if (resolved.failureMessage() != null) {
             return CastResult.fail(resolved.failureMessage());
         }
-        if (!canPayCosts(player, skillId, resolved)) {
+        if (!canPayCosts(caster, skillId, resolved)) {
             return CastResult.fail(Component.literal("Not enough resources"));
         }
         return CastResult.success();
@@ -195,7 +194,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
 
     @Override
     public CastData initialCast(LivingEntity caster, PreCastData preCastData) {
-        if (!(caster instanceof ServerPlayer player) || !(player.level() instanceof ServerLevel level)) {
+        if (!(caster.level() instanceof ServerLevel level)) {
             return null;
         }
         Identifier skillId = getSkillId(caster);
@@ -203,20 +202,20 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
             return null;
         }
 
-        ResolvedActiveCast resolved = resolve(level, player, skillId);
+        ResolvedActiveCast resolved = resolve(level, caster, skillId);
         if (resolved.failureMessage() != null) {
-            player.sendOverlayMessage(resolved.failureMessage());
+            sendFailure(caster, resolved.failureMessage());
             return null;
         }
-        int cooldown = resolveCooldown(player, skillId, resolved);
-        if (!payCosts(player, skillId, resolved)) {
-            player.sendOverlayMessage(Component.literal("Not enough resources"));
+        int cooldown = resolveCooldown(caster, skillId, resolved);
+        if (!payCosts(caster, skillId, resolved)) {
+            sendFailure(caster, Component.literal("Not enough resources"));
             return null;
         }
 
-        applyFeatures(level, player, skillId, resolved);
+        applyFeatures(level, caster, skillId, resolved);
         if (cooldown > 0) {
-            player.getData(ZenithAttachments.COOLDOWN_HANDLER).addCooldown(skillId, cooldown);
+            caster.getData(ZenithAttachments.COOLDOWN_HANDLER).addCooldown(skillId, cooldown);
         }
         return null;
     }
@@ -229,7 +228,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
     public void finalCast(LivingEntity caster, CastStatus status, CastData castData, int ticksElapsed) {
     }
 
-    private ResolvedActiveCast resolve(ServerLevel level, ServerPlayer caster, Identifier skillId) {
+    private ResolvedActiveCast resolve(ServerLevel level, LivingEntity caster, Identifier skillId) {
         OriginSource source = getOriginSource(caster);
         SkillLevelSnapshot snapshot = SkillLevelResolver.resolve(source, skillId);
         ActiveSkillLevelDefinition definition = getLevelDefinition(snapshot.effectiveLevel());
@@ -251,7 +250,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
         return new ResolvedActiveCast(snapshot.effectiveLevel(), definition, execution, null);
     }
 
-    private boolean canPayCosts(ServerPlayer caster, Identifier skillId, ResolvedActiveCast resolved) {
+    private boolean canPayCosts(LivingEntity caster, Identifier skillId, ResolvedActiveCast resolved) {
         LivingEntity target = SkillExecutions.primaryEntity(resolved.execution());
         ScaledValue.Context context = scaledValueContext(caster, skillId, target, resolved.execution().variables());
         for (ActiveSkillCostDefinition cost : resolved.definition().costs()) {
@@ -262,7 +261,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
         return true;
     }
 
-    private boolean payCosts(ServerPlayer caster, Identifier skillId, ResolvedActiveCast resolved) {
+    private boolean payCosts(LivingEntity caster, Identifier skillId, ResolvedActiveCast resolved) {
         if (!canPayCosts(caster, skillId, resolved)) {
             return false;
         }
@@ -278,7 +277,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
 
     private void applyFeatures(
             ServerLevel level,
-            ServerPlayer caster,
+            LivingEntity caster,
             Identifier skillId,
             ResolvedActiveCast resolved
     ) {
@@ -293,7 +292,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
     }
 
     private ScaledValue.Context scaledValueContext(
-            ServerPlayer caster,
+            LivingEntity caster,
             Identifier skillId,
             LivingEntity target,
             Map<Identifier, Double> variables
@@ -308,7 +307,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
         );
     }
 
-    private int resolveCooldown(ServerPlayer caster, Identifier skillId, ResolvedActiveCast resolved) {
+    private int resolveCooldown(LivingEntity caster, Identifier skillId, ResolvedActiveCast resolved) {
         LivingEntity target = SkillExecutions.primaryEntity(resolved.execution());
         double value = resolved.definition().cooldown().resolve(
                 scaledValueContext(caster, skillId, target, resolved.execution().variables())
@@ -320,12 +319,15 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
     }
 
 
+    private static void sendFailure(LivingEntity caster, Component message) {
+        if (caster instanceof ServerPlayer player && message != null) {
+            player.sendOverlayMessage(message);
+        }
+    }
+
 
     private OriginSource getOriginSource(LivingEntity caster) {
-        AscensionEntityDataProvider provider = caster.getCapability(
-                CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
-        );
-        return provider == null ? null : provider.getData(caster).getSource();
+        return AscensionOriginSourceHelper.getEntitySource(caster);
     }
 
     private Identifier getSkillId(LivingEntity caster) {

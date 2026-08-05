@@ -2,8 +2,12 @@
   "entries": [
     {
       "skill": "ascension:mob_skill/qi_infused_shot",
-      "weight": 1.0,
-      "minimum_realm_score": 3
+      "weight": 2.0,
+      "minimum_realm_score": 3,
+      "priority": 35,
+      "requires_target": true,
+      "minimum_target_distance": 4.0,
+      "maximum_target_distance": 24.0
     }
   ]
 }

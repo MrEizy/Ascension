@@ -4,7 +4,6 @@ import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
@@ -32,7 +31,7 @@ public final class SkillExecutions {
 
     public static Resolution resolve(
             ServerLevel level,
-            ServerPlayer caster,
+            LivingEntity caster,
             Identifier skill,
             int effectiveLevel,
             double charge,
@@ -65,7 +64,7 @@ public final class SkillExecutions {
 
     public static void apply(
             ServerLevel level,
-            ServerPlayer caster,
+            LivingEntity caster,
             Identifier skill,
             double charge,
             SkillExecutionDefinition definition,

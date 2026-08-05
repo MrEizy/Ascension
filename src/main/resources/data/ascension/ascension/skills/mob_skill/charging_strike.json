@@ -1,0 +1,83 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Charging Strike",
+  "description": "Closes the distance and delivers a cultivated body strike.",
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:radial",
+    "radius": 7,
+    "maximum_targets": 1,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:cloud",
+      "count": 3,
+      "spread": 0.25,
+      "speed": 0.02,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:move",
+      "mode": "target_position",
+      "subject": "caster",
+      "maximum_distance": 5.5,
+      "stopping_distance": 1.4,
+      "vertical_offset": 0,
+      "collision": "stop_before_collision",
+      "preserve_velocity": false
+    },
+    {
+      "type": "ascension:damage",
+      "amount": {
+        "base": 4.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:strength"
+            },
+            "operation": "add",
+            "scale": 0.28
+          }
+        ],
+        "minimum": 0.0,
+        "maximum": 18.0
+      },
+      "damage_type": "minecraft:mob_attack",
+      "classifications": [
+        "ascension:skill",
+        "ascension:body",
+        "ascension:melee"
+      ],
+      "path": "ascension:foundation/body",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:crit",
+      "count": 4,
+      "spread": 0.3,
+      "speed": 0.08,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.player.attack.strong",
+      "volume": 0.65,
+      "pitch": 0.9,
+      "subject": "target"
+    }
+  ],
+  "costs": [],
+  "cooldown": 70
+}

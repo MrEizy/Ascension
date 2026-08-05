@@ -1,0 +1,66 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Body Reinforcement",
+  "description": "Briefly braces the body against incoming attacks.",
+  "default_accessible_level": 1,
+  "definitions": {
+    "barriers": {
+      "guard": {
+        "duration": 90,
+        "durability": {
+          "base": 6.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 0.45
+            }
+          ],
+          "minimum": 0.0,
+          "maximum": 30.0
+        },
+        "absorption": 0.6,
+        "overflow": true,
+        "priority": 100,
+        "replace_existing": true,
+        "projectile_response": "none"
+      }
+    }
+  },
+  "targeting": "self",
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:barrier",
+      "action": "apply",
+      "definition": "#guard",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:stagger",
+      "action": "immunity",
+      "duration": 50,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:poof",
+      "count": 3,
+      "spread": 0.25,
+      "speed": 0.01,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:item.shield.block",
+      "volume": 0.55,
+      "pitch": 0.85,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": 180
+}

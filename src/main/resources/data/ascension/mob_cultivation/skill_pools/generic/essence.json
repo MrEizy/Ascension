@@ -3,17 +3,27 @@
     {
       "skill": "ascension:mob_skill/qi_projectile",
       "weight": 1.0,
-      "minimum_realm_score": 3
+      "minimum_realm_score": 3,
+      "priority": 20,
+      "requires_target": true,
+      "minimum_target_distance": 4.0,
+      "maximum_target_distance": 16.0
     },
     {
       "skill": "ascension:mob_skill/elemental_pulse",
-      "weight": 1.0,
-      "minimum_realm_score": 4
+      "weight": 0.9,
+      "minimum_realm_score": 4,
+      "priority": 30,
+      "requires_target": true,
+      "maximum_target_distance": 5.0
     },
     {
-      "skill": "ascension:mob_skill/essence_empowerment",
+      "skill": "ascension:mob_skill/essence_guard",
       "weight": 0.7,
-      "minimum_realm_score": 6
+      "minimum_realm_score": 6,
+      "priority": 100,
+      "requires_target": true,
+      "maximum_health_fraction": 0.5
     }
   ]
 }

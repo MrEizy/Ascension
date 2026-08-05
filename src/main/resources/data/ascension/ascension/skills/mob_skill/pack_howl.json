@@ -1,0 +1,73 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Pack Howl",
+  "description": "A Wolf fortifies itself and nearby allies with a brief shared ward.",
+  "default_accessible_level": 1,
+  "definitions": {
+    "barriers": {
+      "pack_guard": {
+        "duration": 80,
+        "durability": {
+          "base": 4.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "operation": "add",
+              "scale": 0.22
+            }
+          ],
+          "minimum": 0.0,
+          "maximum": 16.0
+        },
+        "absorption": 0.45,
+        "overflow": true,
+        "priority": 80,
+        "replace_existing": true,
+        "projectile_response": "none"
+      }
+    }
+  },
+  "targeting": {
+    "type": "ascension:radial",
+    "radius": 6,
+    "maximum_targets": 5,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "self",
+        "ally"
+      ],
+      "include_players": true,
+      "line_of_sight": false
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:barrier",
+      "action": "apply",
+      "definition": "#pack_guard",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:poof",
+      "count": 2,
+      "spread": 0.25,
+      "speed": 0.01,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.wolf.growl",
+      "volume": 0.65,
+      "pitch": 1.0,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": 220
+}

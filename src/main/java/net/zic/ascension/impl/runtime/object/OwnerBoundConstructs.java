@@ -523,7 +523,7 @@ public final class OwnerBoundConstructs {
     }
 
     private static Vec3 resolvePosition(
-            ServerPlayer owner,
+            LivingEntity owner,
             OwnerBoundConstructDefinition definition
     ) {
         Vec3 offset = definition.offset();

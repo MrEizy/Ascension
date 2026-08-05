@@ -1,0 +1,60 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Essence Guard",
+  "description": "Condenses essence into a short-lived defensive veil.",
+  "default_accessible_level": 1,
+  "definitions": {
+    "barriers": {
+      "guard": {
+        "duration": 100,
+        "durability": {
+          "base": 5.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "operation": "add",
+              "scale": 0.4
+            }
+          ],
+          "minimum": 0.0,
+          "maximum": 26.0
+        },
+        "absorption": 0.65,
+        "overflow": true,
+        "priority": 100,
+        "replace_existing": true,
+        "projectile_response": "none"
+      }
+    }
+  },
+  "targeting": "self",
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:barrier",
+      "action": "apply",
+      "definition": "#guard",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:enchant",
+      "count": 3,
+      "spread": 0.3,
+      "speed": 0.02,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.amethyst_block.chime",
+      "volume": 0.5,
+      "pitch": 1.15,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": 190
+}

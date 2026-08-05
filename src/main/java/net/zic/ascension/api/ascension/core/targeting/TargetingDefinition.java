@@ -8,7 +8,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -16,9 +15,8 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
-import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.datapack.CodecType;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -116,7 +114,7 @@ public interface TargetingDefinition {
 
     record Context(
             ServerLevel level,
-            ServerPlayer caster,
+            LivingEntity caster,
             Identifier skill,
             int effectiveLevel,
             double charge,
@@ -137,10 +135,7 @@ public interface TargetingDefinition {
         }
 
         public OriginSource originSource() {
-            AscensionEntityDataProvider provider = caster.getCapability(
-                    CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
-            );
-            return provider == null ? null : provider.getData(caster).getSource();
+            return AscensionOriginSourceHelper.getEntitySource(caster);
         }
     }
 
@@ -175,10 +170,15 @@ public interface TargetingDefinition {
             if (caster.isAlliedTo(target)) {
                 return Relation.ALLY;
             }
-            boolean hostile = target instanceof Enemy
-                    || target instanceof Mob mob && mob.getTarget() == caster
-                    || caster.getLastHurtMob() == target
-                    || caster.getLastHurtByMob() == target;
+            boolean hostile = caster instanceof Mob casterMob
+                    ? casterMob.getTarget() == target
+                            || target instanceof Mob targetMob && targetMob.getTarget() == caster
+                            || caster.getLastHurtMob() == target
+                            || caster.getLastHurtByMob() == target
+                    : target instanceof Enemy
+                            || target instanceof Mob targetMob && targetMob.getTarget() == caster
+                            || caster.getLastHurtMob() == target
+                            || caster.getLastHurtByMob() == target;
             return hostile ? Relation.HOSTILE : Relation.NEUTRAL;
         }
 

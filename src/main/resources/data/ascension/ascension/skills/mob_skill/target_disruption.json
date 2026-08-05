@@ -1,0 +1,69 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Target Disruption",
+  "description": "Strikes an opponent's focus with concentrated soul pressure.",
+  "default_accessible_level": 1,
+  "definitions": {
+    "stagger": {
+      "disruption": {
+        "threshold": 100,
+        "resistance": 0,
+        "decay_per_second": 12,
+        "decay_delay": 30,
+        "guard_break_duration": 25,
+        "immunity_duration": 35,
+        "movement_multiplier": 0.15,
+        "interrupt_held_casts": true,
+        "on_guard_break": []
+      }
+    }
+  },
+  "targeting": {
+    "type": "ascension:radial",
+    "radius": 8,
+    "maximum_targets": 1,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:stagger",
+      "action": "apply",
+      "amount": 30,
+      "definition": "#disruption",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:resource",
+      "resource": "ascension:stamina",
+      "operation": "ascension:drain",
+      "source": "ascension:skill_casting",
+      "amount": 5,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:reverse_portal",
+      "count": 3,
+      "spread": 0.3,
+      "speed": 0.01,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.allay.hurt",
+      "volume": 0.45,
+      "pitch": 0.65,
+      "subject": "target"
+    }
+  ],
+  "costs": [],
+  "cooldown": 150
+}

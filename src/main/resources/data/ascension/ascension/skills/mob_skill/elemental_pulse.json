@@ -1,0 +1,65 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Elemental Pulse",
+  "description": "Releases a restrained pulse of essence around the caster.",
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:radial",
+    "radius": 5,
+    "maximum_targets": 4,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:damage",
+      "amount": {
+        "base": 3.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "operation": "add",
+            "scale": 0.18
+          }
+        ],
+        "minimum": 0.0,
+        "maximum": 14.0
+      },
+      "damage_type": "minecraft:magic",
+      "classifications": [
+        "ascension:skill",
+        "ascension:essence",
+        "ascension:area"
+      ],
+      "path": "ascension:foundation/essence",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:electric_spark",
+      "count": 3,
+      "spread": 0.35,
+      "speed": 0.04,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.respawn_anchor.charge",
+      "volume": 0.35,
+      "pitch": 1.35,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": 130
+}

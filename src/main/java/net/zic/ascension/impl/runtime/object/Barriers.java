@@ -3,7 +3,6 @@ package net.zic.ascension.impl.runtime.object;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -300,7 +299,7 @@ public final class Barriers {
             return;
         }
         Entity owner = level.getEntity(barrier.ownerId);
-        if (!(owner instanceof ServerPlayer caster)) {
+        if (!(owner instanceof LivingEntity caster)) {
             return;
         }
         Map<Identifier, Double> variables = new LinkedHashMap<>(barrier.variables);
@@ -407,7 +406,7 @@ public final class Barriers {
     private static SkillExecutionContext context(ServerLevel level, BarrierInstance barrier) {
         Entity owner = level.getEntity(barrier.ownerId);
         Entity protectedEntity = level.getEntity(barrier.protectedEntityId);
-        if (!(owner instanceof ServerPlayer caster) || !(protectedEntity instanceof LivingEntity target)) {
+        if (!(owner instanceof LivingEntity caster) || !(protectedEntity instanceof LivingEntity target)) {
             return null;
         }
         return new SkillExecutionContext(

@@ -1,0 +1,83 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Spatial Crossing",
+  "description": "An Enderman folds a short distance and strikes its target.",
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:radial",
+    "radius": 12,
+    "maximum_targets": 1,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:portal",
+      "count": 3,
+      "spread": 0.3,
+      "speed": 0.01,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:move",
+      "mode": "target_position",
+      "subject": "caster",
+      "maximum_distance": 10,
+      "stopping_distance": 1.8,
+      "vertical_offset": 0,
+      "collision": "stop_before_collision",
+      "preserve_velocity": false
+    },
+    {
+      "type": "ascension:damage",
+      "amount": {
+        "base": 3.5,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "operation": "add",
+            "scale": 0.22
+          }
+        ],
+        "minimum": 0.0,
+        "maximum": 16.0
+      },
+      "damage_type": "minecraft:magic",
+      "classifications": [
+        "ascension:skill",
+        "ascension:soul",
+        "ascension:movement"
+      ],
+      "path": "ascension:foundation/soul",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:reverse_portal",
+      "count": 4,
+      "spread": 0.35,
+      "speed": 0.02,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.enderman.teleport",
+      "volume": 0.55,
+      "pitch": 1.15,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": 120
+}

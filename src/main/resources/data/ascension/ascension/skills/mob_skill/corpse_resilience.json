@@ -1,0 +1,66 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Corpse Resilience",
+  "description": "A cultivated Zombie hardens its dead flesh when badly injured.",
+  "default_accessible_level": 1,
+  "definitions": {
+    "barriers": {
+      "corpse_guard": {
+        "duration": 120,
+        "durability": {
+          "base": 8.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 0.5
+            }
+          ],
+          "minimum": 0.0,
+          "maximum": 38.0
+        },
+        "absorption": 0.7,
+        "overflow": true,
+        "priority": 100,
+        "replace_existing": true,
+        "projectile_response": "none"
+      }
+    }
+  },
+  "targeting": "self",
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:barrier",
+      "action": "apply",
+      "definition": "#corpse_guard",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:stagger",
+      "action": "immunity",
+      "duration": 60,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:ash",
+      "count": 3,
+      "spread": 0.3,
+      "speed": 0.01,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.zombie.hurt",
+      "volume": 0.4,
+      "pitch": 0.7,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": 240
+}

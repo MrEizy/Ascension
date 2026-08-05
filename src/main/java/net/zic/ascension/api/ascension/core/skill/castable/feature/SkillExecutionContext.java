@@ -3,18 +3,16 @@ package net.zic.ascension.api.ascension.core.skill.castable.feature;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
-import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 
 import java.util.Map;
 
 public record SkillExecutionContext(
         ServerLevel level,
-        ServerPlayer caster,
+        LivingEntity caster,
         Identifier skill,
         LivingEntity target,
         Vec3 position,
@@ -22,7 +20,7 @@ public record SkillExecutionContext(
         Map<Identifier, Double> variables,
         SkillExecutionAttribution attribution
 ) {
-    public SkillExecutionContext(ServerLevel level, ServerPlayer caster, Identifier skill, LivingEntity target, Vec3 position, double charge, Map<Identifier, Double> variables) {
+    public SkillExecutionContext(ServerLevel level, LivingEntity caster, Identifier skill, LivingEntity target, Vec3 position, double charge, Map<Identifier, Double> variables) {
         this(level, caster, skill, target, position, charge, variables, SkillExecutionAttribution.direct(caster));
     }
 
@@ -65,9 +63,6 @@ public record SkillExecutionContext(
     }
 
     public OriginSource originSource() {
-        AscensionEntityDataProvider provider = caster.getCapability(
-                CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
-        );
-        return provider == null ? null : provider.getData(caster).getSource();
+        return AscensionOriginSourceHelper.getEntitySource(caster);
     }
 }

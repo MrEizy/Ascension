@@ -6,7 +6,6 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.ClipContext;
@@ -124,7 +123,7 @@ public final class VirtualProjectiles {
 
     private static boolean tick(ServerLevel level, Instance projectile) {
         Entity ownerEntity = level.getEntity(projectile.ownerId());
-        if (!(ownerEntity instanceof ServerPlayer owner) || owner.isRemoved()) {
+        if (!(ownerEntity instanceof LivingEntity owner) || owner.isRemoved()) {
             return false;
         }
 
@@ -319,7 +318,7 @@ public final class VirtualProjectiles {
 
     private static EntityHitCandidate findEntityHit(
             ServerLevel level,
-            ServerPlayer owner,
+            LivingEntity owner,
             Instance projectile,
             Vec3 start,
             Vec3 end,
@@ -351,7 +350,7 @@ public final class VirtualProjectiles {
 
     private static void expire(
             ServerLevel level,
-            ServerPlayer owner,
+            LivingEntity owner,
             Instance projectile,
             RuntimeDefinition definition
     ) {
@@ -377,7 +376,7 @@ public final class VirtualProjectiles {
 
     private static void applyFeatures(
             ServerLevel level,
-            ServerPlayer owner,
+            LivingEntity owner,
             Instance projectile,
             List<SkillExecutionFeature> features,
             LivingEntity target,
@@ -391,7 +390,7 @@ public final class VirtualProjectiles {
 
     private static SkillExecutionContext executionContext(
             ServerLevel level,
-            ServerPlayer owner,
+            LivingEntity owner,
             Instance projectile,
             LivingEntity target,
             Vec3 position
@@ -505,7 +504,7 @@ public final class VirtualProjectiles {
             RuntimeDefinition definition
     ) {
         Entity ownerEntity = level.getEntity(projectile.ownerId());
-        if (!(ownerEntity instanceof ServerPlayer owner)) {
+        if (!(ownerEntity instanceof LivingEntity owner)) {
             return;
         }
         Resolved<RuntimeVisualDefinition> visual = visual(

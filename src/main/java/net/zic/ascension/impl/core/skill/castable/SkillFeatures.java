@@ -9,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
@@ -84,10 +85,13 @@ public final class SkillFeatures {
 
         @Override
         public void apply(SkillExecutionContext context) {
+            if (!(context.caster() instanceof ServerPlayer player)) {
+                return;
+            }
             if (overlay) {
-                context.caster().sendOverlayMessage(message);
+                player.sendOverlayMessage(message);
             } else {
-                context.caster().sendSystemMessage(message);
+                player.sendSystemMessage(message);
             }
         }
     }

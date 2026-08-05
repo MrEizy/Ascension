@@ -1,7 +1,7 @@
 package net.zic.ascension.api.ascension.core.skill.castable.feature;
 
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Entity;
 
 import java.util.Optional;
@@ -19,7 +19,7 @@ public record SkillExecutionAttribution(
         projectileRuntime = projectileRuntime == null ? Optional.empty() : projectileRuntime;
     }
 
-    public static SkillExecutionAttribution direct(ServerPlayer caster) {
+    public static SkillExecutionAttribution direct(LivingEntity caster) {
         return new SkillExecutionAttribution(
                 caster.getUUID(),
                 caster.getUUID(),
@@ -30,7 +30,7 @@ public record SkillExecutionAttribution(
     }
 
     public static SkillExecutionAttribution virtualProjectile(
-            ServerPlayer owner,
+            LivingEntity owner,
             Identifier definition,
             UUID runtimeId
     ) {

@@ -2,7 +2,6 @@ package net.zic.ascension.impl.core.targeting;
 
 import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.AABB;
@@ -22,7 +21,7 @@ public final class TargetingService {
 
     public static List<TargetingDefinition.Target> radial(
             ServerLevel level,
-            ServerPlayer caster,
+            LivingEntity caster,
             Vec3 center,
             double radius,
             TargetingDefinition.Filter filter,
@@ -51,7 +50,7 @@ public final class TargetingService {
 
     public static List<TargetingDefinition.Target> cone(
             ServerLevel level,
-            ServerPlayer caster,
+            LivingEntity caster,
             double range,
             double angleDegrees,
             TargetingDefinition.Filter filter,
@@ -86,7 +85,7 @@ public final class TargetingService {
 
     public static TargetingDefinition.Target ray(
             ServerLevel level,
-            ServerPlayer caster,
+            LivingEntity caster,
             double range,
             double width,
             TargetingDefinition.Filter filter
@@ -130,7 +129,7 @@ public final class TargetingService {
 
     public static TargetingDefinition.Target lookPosition(
             ServerLevel level,
-            ServerPlayer caster,
+            LivingEntity caster,
             double range,
             boolean includeFluids,
             boolean fallbackToMaximumRange
@@ -154,7 +153,7 @@ public final class TargetingService {
     }
 
     public static List<TargetingDefinition.Target> select(
-            ServerPlayer caster,
+            LivingEntity caster,
             List<LivingEntity> candidates,
             TargetingDefinition.Filter filter,
             TargetingDefinition.Sort sort,
@@ -179,7 +178,7 @@ public final class TargetingService {
     }
 
     public static boolean matches(
-            ServerPlayer caster,
+            LivingEntity caster,
             LivingEntity target,
             TargetingDefinition.Filter filter
     ) {
@@ -187,7 +186,7 @@ public final class TargetingService {
                 && (!filter.requireLineOfSight() || caster.hasLineOfSight(target));
     }
 
-    private static Comparator<LivingEntity> comparator(ServerPlayer caster, TargetingDefinition.Sort sort) {
+    private static Comparator<LivingEntity> comparator(LivingEntity caster, TargetingDefinition.Sort sort) {
         return switch (sort) {
             case FURTHEST -> Comparator.<LivingEntity>comparingDouble(caster::distanceToSqr).reversed();
             case LOWEST_HEALTH -> Comparator.<LivingEntity>comparingDouble(LivingEntity::getHealth)
@@ -202,7 +201,7 @@ public final class TargetingService {
         };
     }
 
-    private static double viewAlignment(ServerPlayer caster, LivingEntity target) {
+    private static double viewAlignment(LivingEntity caster, LivingEntity target) {
         Vec3 direction = target.position()
                 .add(0.0D, target.getBbHeight() * 0.5D, 0.0D)
                 .subtract(caster.getEyePosition());

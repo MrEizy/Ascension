@@ -1,0 +1,60 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Flame Body Transformation",
+  "description": "A Blaze condenses its spiritual fire into a temporary ward.",
+  "default_accessible_level": 1,
+  "definitions": {
+    "barriers": {
+      "flame_guard": {
+        "duration": 120,
+        "durability": {
+          "base": 8.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "operation": "add",
+              "scale": 0.5
+            }
+          ],
+          "minimum": 0.0,
+          "maximum": 36.0
+        },
+        "absorption": 0.7,
+        "overflow": true,
+        "priority": 100,
+        "replace_existing": true,
+        "projectile_response": "none"
+      }
+    }
+  },
+  "targeting": "self",
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:barrier",
+      "action": "apply",
+      "definition": "#flame_guard",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:flame",
+      "count": 4,
+      "spread": 0.35,
+      "speed": 0.025,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.blaze.shoot",
+      "volume": 0.45,
+      "pitch": 0.8,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": 220
+}

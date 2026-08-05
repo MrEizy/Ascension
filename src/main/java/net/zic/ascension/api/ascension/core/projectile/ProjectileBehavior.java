@@ -3,7 +3,6 @@ package net.zic.ascension.api.ascension.core.projectile;
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
@@ -35,7 +34,7 @@ public interface ProjectileBehavior {
     }
     record Context(
             ServerLevel level,
-            ServerPlayer owner,
+            LivingEntity owner,
             LivingEntity target,
             Access projectile,
             SkillExecutionContext execution

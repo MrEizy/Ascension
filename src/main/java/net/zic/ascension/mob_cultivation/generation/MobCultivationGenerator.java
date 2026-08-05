@@ -16,6 +16,7 @@ import net.zic.ascension.mob_cultivation.MobCultivationManager;
 import net.zic.ascension.mob_cultivation.profile.MobCultivationProfileManager;
 import net.zic.ascension.mob_cultivation.profile.ResolvedMobCultivationProfile;
 import net.zic.ascension.mob_cultivation.runtime.MobCultivationVisuals;
+import net.zic.ascension.mob_cultivation.skill.MobCultivationSkillService;
 import net.zic.zenithlib.stats.Stat;
 
 import java.util.ArrayList;
@@ -150,6 +151,7 @@ public final class MobCultivationGenerator {
     }
 
     public static void clearGeneratedCultivation(MobCultivationData data, OriginSource source) {
+        MobCultivationSkillService.clear(data, source);
         if (data.getFoundationPath() != null) {
             AscensionOriginSourceHelper.removePath(source, data.getFoundationPath(), MobCultivationManager.MOB_CULTIVATION_OWNER);
         }

@@ -28,13 +28,14 @@ import net.zic.ascension.mob_cultivation.profile.ResolvedMobCultivationProfile;
 import net.zic.ascension.mob_cultivation.runtime.MobCultivationAi;
 import net.zic.ascension.mob_cultivation.runtime.MobCultivationGrowth;
 import net.zic.ascension.mob_cultivation.runtime.MobCultivationVisuals;
+import net.zic.ascension.mob_cultivation.skill.MobCultivationCastingController;
 import net.zic.ascension.mob_cultivation.skill.MobCultivationSkillPoolManager;
 import net.zic.ascension.mob_cultivation.skill.MobCultivationSkillService;
 import net.zic.ascension.mob_cultivation.trait.MobCultivationTraitManager;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class MobCultivationManager {
@@ -85,6 +86,7 @@ public final class MobCultivationManager {
         MobCultivationGrowth.tick(mob, gameTime);
         MobCultivationVisuals.tick(mob, gameTime);
         MobCultivationAi.tick(mob, gameTime);
+        MobCultivationCastingController.tick(mob, gameTime);
     }
 
     public static void onLeaveLevel(Mob mob) {
@@ -113,6 +115,7 @@ public final class MobCultivationManager {
         SimpleAscensionEntityData entityData = getEntityData(mob);
         ensureEntityDataInitialized(mob, entityData);
         MobCultivationGenerator.generateFreshCultivation(mob, data, entityData.getSource());
+        MobCultivationSkillService.synchronize(mob);
     }
 
     public static boolean setCultivation(
@@ -188,6 +191,7 @@ public final class MobCultivationManager {
         OriginSource source = getEntityData(mob).getSource();
         MobCultivationGenerator.rebuildGeneratedStats(mob, data, source, pathData);
         refreshAttributesAndHealth(mob, false);
+        MobCultivationSkillService.synchronize(mob);
         MobCultivationVisuals.spawnAura(mob, 20);
         MobCultivationVisuals.applyDebugName(mob);
         return true;
@@ -209,7 +213,10 @@ public final class MobCultivationManager {
         MobCultivationData data = getCultivationData(mob);
         java.util.LinkedHashSet<Identifier> pools = new java.util.LinkedHashSet<>(data.getSkillPools());
         boolean changed = pools.add(pool);
-        if (changed) data.setSkillPools(pools);
+        if (changed) {
+            data.setSkillPools(pools);
+            MobCultivationSkillService.synchronize(mob);
+        }
         return changed;
     }
 
@@ -218,7 +225,10 @@ public final class MobCultivationManager {
         MobCultivationData data = getCultivationData(mob);
         java.util.LinkedHashSet<Identifier> pools = new java.util.LinkedHashSet<>(data.getSkillPools());
         boolean changed = pools.remove(pool);
-        if (changed) data.setSkillPools(pools);
+        if (changed) {
+            data.setSkillPools(pools);
+            MobCultivationSkillService.synchronize(mob);
+        }
         return changed;
     }
 
@@ -277,6 +287,7 @@ public final class MobCultivationManager {
             MobCultivationGenerator.rebuildGeneratedStats(targetMob, targetData, targetOrigin, targetPath);
             refreshAttributesAndHealth(targetMob, true);
         }
+        MobCultivationSkillService.synchronize(targetMob);
         return true;
     }
 
@@ -325,6 +336,7 @@ public final class MobCultivationManager {
         String subPaths = joinIds(data.getSubPaths());
         String traits = joinIds(data.getTraits());
         String skillPools = joinIds(data.getSkillPools());
+        String ownedSkills = joinIds(data.getAssignedSkills());
         String description = String.format(
                 Locale.ROOT,
                 "Cultivated %s [%s, %s]\n" +
@@ -332,6 +344,7 @@ public final class MobCultivationManager {
                         "Sub-paths: %s\n" +
                         "Traits: %s\n" +
                         "Skill pools: %s\n" +
+                        "Owned mob skills: %s\n" +
                         "Loot profile: %s\n" +
                         "Realm: %s\n" +
                         "Progress: %.2f / %.2f (%.1f%%)\n" +
@@ -339,6 +352,7 @@ public final class MobCultivationManager {
                         "Generated stats: vitality %.2f, strength %.2f, agility %.2f, spirit %.2f\n" +
                         "Effective stats: vitality %.2f, strength %.2f, agility %.2f, spirit %.2f\n" +
                         "Atmospheric qi: %.1f%%\n" +
+                        "Distance growth: x%.2f\n" +
                         "Growth frozen: %s",
                 mob.getType().getDescription().getString(),
                 data.getCategory().name().toLowerCase(Locale.ROOT),
@@ -347,6 +361,7 @@ public final class MobCultivationManager {
                 subPaths,
                 traits,
                 skillPools,
+                ownedSkills,
                 data.getLootProfile(),
                 pathData.getRealmName(
                         pathData.getMajorRealm(),
@@ -366,12 +381,13 @@ public final class MobCultivationManager {
                 source.getStat(AscensionStats.AGILITY.get()),
                 source.getStat(AscensionStats.SPIRIT.get()),
                 getAtmosphericQiRatio(mob) * 100.0D,
+                MobCultivationGrowth.getDistanceGrowthMultiplier(mob),
                 data.isGrowthFrozen()
         );
         return Component.literal(description);
     }
 
-    private static String joinIds(Set<Identifier> ids) {
+    private static String joinIds(Collection<Identifier> ids) {
         return ids.isEmpty() ? "none" : ids.stream().map(Identifier::toString).collect(Collectors.joining(", "));
     }
 

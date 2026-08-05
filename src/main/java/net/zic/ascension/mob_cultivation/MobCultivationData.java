@@ -22,6 +22,7 @@ public final class MobCultivationData {
     private final Set<Identifier> subPaths = new LinkedHashSet<>();
     private final Set<Identifier> traits = new LinkedHashSet<>();
     private final Set<Identifier> skillPools = new LinkedHashSet<>();
+    private final Set<Identifier> assignedSkills = new LinkedHashSet<>();
     private Identifier lootProfile;
     private boolean growthFrozen;
     private int majorRealm;
@@ -83,6 +84,11 @@ public final class MobCultivationData {
         skillPools.clear();
         if (values != null) values.stream().filter(java.util.Objects::nonNull).forEach(skillPools::add);
     }
+    public Set<Identifier> getAssignedSkills() { return Set.copyOf(assignedSkills); }
+    public void setAssignedSkills(Collection<Identifier> values) {
+        assignedSkills.clear();
+        if (values != null) values.stream().filter(java.util.Objects::nonNull).forEach(assignedSkills::add);
+    }
     public Identifier getLootProfile() { return lootProfile; }
     public void setLootProfile(Identifier lootProfile) { this.lootProfile = lootProfile; }
     public boolean isGrowthFrozen() { return growthFrozen; }
@@ -117,6 +123,7 @@ public final class MobCultivationData {
         subPaths.clear();
         traits.clear();
         skillPools.clear();
+        assignedSkills.clear();
         lootProfile = null;
         eliteTier = MobCultivationEliteTier.NORMAL;
         setPathState(0, 0, 0.0D);
@@ -228,6 +235,7 @@ public final class MobCultivationData {
             data.subPaths.addAll(readIdentifierSet(input, "sub_paths"));
             data.traits.addAll(readIdentifierSet(input, "traits"));
             data.skillPools.addAll(readIdentifierSet(input, "skill_pools"));
+            data.assignedSkills.addAll(readIdentifierSet(input, "assigned_skills"));
             data.lootProfile = readIdentifier(input, "loot_profile");
             data.growthFrozen = input.getBooleanOr("growth_frozen", false);
             data.majorRealm = input.getIntOr("major_realm", 0);
@@ -253,6 +261,7 @@ public final class MobCultivationData {
             writeIdentifierSet(output, "sub_paths", data.subPaths);
             writeIdentifierSet(output, "traits", data.traits);
             writeIdentifierSet(output, "skill_pools", data.skillPools);
+            writeIdentifierSet(output, "assigned_skills", data.assignedSkills);
             if (data.lootProfile != null) output.putString("loot_profile", data.lootProfile.toString());
             output.putBoolean("growth_frozen", data.growthFrozen);
             output.putInt("major_realm", data.majorRealm);

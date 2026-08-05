@@ -1,0 +1,109 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Qi Projectile",
+  "description": "Launches a compact bolt of cultivated essence.",
+  "default_accessible_level": 1,
+  "definitions": {
+    "projectiles": {
+      "bolt": {
+        "speed": 1.65,
+        "range": 20,
+        "gravity": 0,
+        "hit_radius": 0.35,
+        "pierces": 0,
+        "filter": {
+          "relations": [
+            "hostile"
+          ],
+          "include_players": true,
+          "line_of_sight": true
+        },
+        "on_entity_hit": [
+          {
+            "type": "ascension:damage",
+            "amount": {
+              "base": 4.5,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:stat",
+                    "stat": "ascension:spirit"
+                  },
+                  "operation": "add",
+                  "scale": 0.28
+                }
+              ],
+              "minimum": 0.0,
+              "maximum": 20.0
+            },
+            "damage_type": "minecraft:indirect_magic",
+            "classifications": [
+              "ascension:skill",
+              "ascension:projectile",
+              "ascension:essence"
+            ],
+            "path": "ascension:foundation/essence",
+            "subject": "target"
+          },
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:electric_spark",
+            "count": 4,
+            "spread": 0.3,
+            "speed": 0.05,
+            "subject": "target"
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.amethyst_cluster.hit",
+            "volume": 0.55,
+            "pitch": 1.25,
+            "subject": "target"
+          }
+        ],
+        "on_block_hit": [],
+        "on_expire": [],
+        "flight_particle": "minecraft:electric_spark"
+      }
+    }
+  },
+  "targeting": {
+    "type": "ascension:radial",
+    "radius": 16,
+    "maximum_targets": 1,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.arrow.shoot",
+      "volume": 0.45,
+      "pitch": 1.25,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:enchant",
+      "count": 2,
+      "spread": 0.2,
+      "speed": 0.03,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:projectile",
+      "definition": "#bolt",
+      "direction": "target",
+      "subject": "target"
+    }
+  ],
+  "costs": [],
+  "cooldown": 90
+}

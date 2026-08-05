@@ -1,11 +1,13 @@
 package net.zic.ascension.mob_cultivation.runtime;
 
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -16,6 +18,7 @@ import net.zic.ascension.mob_cultivation.MobCultivationManager;
 import net.zic.ascension.mob_cultivation.generation.MobCultivationGenerator;
 import net.zic.ascension.mob_cultivation.profile.MobCultivationProfileManager;
 import net.zic.ascension.mob_cultivation.profile.ResolvedMobCultivationProfile;
+import net.zic.ascension.mob_cultivation.skill.MobCultivationSkillService;
 
 public final class MobCultivationGrowth {
     private static final int GROWTH_INTERVAL = 200;
@@ -69,8 +72,33 @@ public final class MobCultivationGrowth {
                 * intervals
                 * qiMultiplier
                 * profile.growthMultiplier()
-                * data.getEliteTier().growthMultiplier();
+                * data.getEliteTier().growthMultiplier()
+                * getDistanceGrowthMultiplier(mob);
         addProgressWithoutTribulation(mob, progress);
+    }
+
+    public static double getDistanceGrowthMultiplier(Mob mob) {
+        if (!(mob.level() instanceof ServerLevel level) || !Config.MOB_CULTIVATION.DISTANCE_GROWTH_ENABLED.get()) {
+            return 1.0D;
+        }
+
+        boolean overworld = level.dimension().equals(Level.OVERWORLD);
+        if (!overworld && !Config.MOB_CULTIVATION.DISTANCE_GROWTH_OTHER_DIMENSIONS.get()) {
+            return 1.0D;
+        }
+
+        BlockPos origin = overworld ? level.getRespawnData().pos() : BlockPos.ZERO;
+        double deltaX = mob.getX() - (origin.getX() + 0.5D);
+        double deltaZ = mob.getZ() - (origin.getZ() + 0.5D);
+        double distance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+        double start = Config.MOB_CULTIVATION.DISTANCE_GROWTH_START.get();
+        if (distance <= start) {
+            return 1.0D;
+        }
+
+        double blocksPerMultiplier = Config.MOB_CULTIVATION.DISTANCE_BLOCKS_PER_MULTIPLIER.get();
+        double maximum = Config.MOB_CULTIVATION.MAXIMUM_DISTANCE_GROWTH_MULTIPLIER.get();
+        return Math.clamp(1.0D + (distance - start) / blocksPerMultiplier, 1.0D, maximum);
     }
 
     public static void addProgressWithoutTribulation(Mob mob, double amount) {
@@ -128,6 +156,7 @@ public final class MobCultivationGrowth {
 
         MobCultivationGenerator.rebuildGeneratedStats(mob, data, source, pathData);
         MobCultivationManager.refreshAttributesAndHealth(mob, false);
+        MobCultivationSkillService.synchronize(mob);
         boolean majorBreakthrough = originalMajor != pathData.getMajorRealm();
         MobCultivationVisuals.onBreakthrough(mob, majorBreakthrough);
         MobCultivationVisuals.applyDebugName(mob);

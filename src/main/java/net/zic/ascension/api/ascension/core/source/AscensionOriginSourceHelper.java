@@ -31,6 +31,7 @@ import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
+import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
@@ -46,6 +47,21 @@ import java.util.Random;
 public class AscensionOriginSourceHelper {
 
     private static Random random=  new Random();
+
+    /**
+     * Resolves the Ascension source used by any living entity. Players normally expose
+     * the source through their capability, while cultivated mobs use the shared entity
+     * data attachment directly.
+     */
+    public static OriginSource getEntitySource(LivingEntity entity) {
+        AscensionEntityDataProvider provider = entity.getCapability(
+                CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
+        );
+        if (provider != null) {
+            return provider.getData(entity).getSource();
+        }
+        return entity.getData(AscensionAttachments.SIMPLE_ENTITY_DATA).getSource();
+    }
 
     //──Holder Access────────────────────────────────────────────────────────
 
