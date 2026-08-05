@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:tools/blade",
+      "required": false
+    },
+    {
+      "id": "#c:weapons/blade",
+      "required": false
+    }
+  ]
+}

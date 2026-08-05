@@ -25,6 +25,9 @@ public class AscensionCommonConfig {
     public final ModConfigSpec.BooleanValue STARTER_KIT_ENABLED;
     public final ModConfigSpec.ConfigValue<List<? extends String>> STARTER_KIT_ITEMS;
 
+    // Weapon Projections
+    public final ModConfigSpec.BooleanValue WEAPON_PROJECTION_BLOCK_BREAKING;
+
 
     public AscensionCommonConfig(ModConfigSpec.Builder builder) {
         builder.push("PillCauldron");
@@ -110,6 +113,15 @@ public class AscensionCommonConfig {
                 )),
                 this::validateStarterKitEntry
         );
+        builder.pop();
+
+        builder.push("WeaponProjections");
+        WEAPON_PROJECTION_BLOCK_BREAKING = builder
+                .comment(
+                        "Allow weapon projections to break blocks when their block_impact mode is 'break'.",
+                        "Disable this to keep projection entity damage and collision while preventing terrain damage. [Default: true]"
+                )
+                .define("blockBreakingEnabled", true);
         builder.pop();
 
 

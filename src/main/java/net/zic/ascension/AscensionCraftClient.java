@@ -1,6 +1,7 @@
 package net.zic.ascension;
 
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -11,6 +12,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.client.keybind.IntrospectionKeybindHandler;
 import net.zic.ascension.client.particle.ParticleFieldController;
 import net.zic.ascension.client.particle.ParticleFieldParticle;
@@ -23,10 +25,12 @@ import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.visual.runtime.BarrierShellVisualController;
 import net.zic.ascension.client.visual.runtime.ClientRuntimeVisuals;
 import net.zic.ascension.client.visual.runtime.GuardianDharmaVisualController;
+import net.zic.ascension.client.visual.runtime.WeaponSwingVisualController;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 import net.zic.ascension.common.AscensionCreativeSections;
 import net.zic.ascension.common.particle.AscensionParticles;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
+import net.zic.ascension.network.WeaponSwingRequestPacket;
 
 
 @Mod(value = AscensionCraft.MOD_ID,dist = Dist.CLIENT)
@@ -114,6 +118,7 @@ public class AscensionCraftClient {
                 AscensionClientTooltipProviders.registerAll();
                 BarrierShellVisualController.registerDefaults();
                 GuardianDharmaVisualController.registerDefault();
+                WeaponSwingVisualController.registerDefault();
                 AscensionCreativeSections.register();
             });
         }
@@ -131,6 +136,15 @@ public class AscensionCraftClient {
     // ── GAME bus events (in-game ticks, rendering) ────────────────────────────
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID, value = Dist.CLIENT)
     static class ClientGameEvents {
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public static void onInteractionKeyMapping(InputEvent.InteractionKeyMappingTriggered event) {
+            if (!event.isCanceled()
+                    && event.isAttack()
+                    && net.minecraft.client.Minecraft.getInstance().player != null) {
+                ClientPacketDistributor.sendToServer(new WeaponSwingRequestPacket());
+            }
+        }
 
         @SubscribeEvent
         public static void onRenderLevelStage(net.neoforged.neoforge.client.event.RenderLevelStageEvent.AfterTranslucentFeatures event) {

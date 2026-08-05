@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:tools/gauntlet",
+      "required": false
+    },
+    {
+      "id": "#c:weapons/gauntlet",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Mace Projection",
+  "description": "Launches a crushing mace wave",
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:weapon_swing",
+      "subject": "caster",
+      "vfx_type": "mace_particle",
+      "color": "blue",
+      "radius": [
+        3.2,
+        2.6,
+        3.2
+      ],
+      "damage": {
+        "base": 16.0
+      },
+      "knockback": {
+        "base": 1.8
+      },
+      "duration": {
+        "base": 35.0
+      },
+      "rotation_z": 90.0,
+      "movement": [
+        0.0,
+        0.0,
+        0.65
+      ],
+      "path": "ascension:weapon/mace",
+      "hit_shape": "area",
+      "block_impact": {
+        "mode": "break",
+        "radius": 2.0,
+        "depth": 2,
+        "max_blocks": 12,
+        "max_hardness": 4.0,
+        "blocked_tag": "ascension:projection_unbreakable",
+        "consume_projection": true
+      },
+      "classifications": [
+        "ascension:skill",
+        "ascension:weapon",
+        "ascension:mace",
+        "ascension:projection"
+      ],
+      "weapon_tag": "ascension:weapon/maces",
+      "hit_effect": {
+        "definition": "#crushing_slow",
+        "duration": {
+          "base": 80.0
+        },
+        "potency": {
+          "base": 1.0
+        }
+      }
+    }
+  ],
+  "costs": [
+    {
+      "resource": "ascension:qi",
+      "operation": "ascension:consume",
+      "source": "ascension:skill_casting",
+      "amount": {
+        "base": 120.0
+      }
+    }
+  ],
+  "cooldown": {
+    "base": 280.0
+  },
+  "definitions": {
+    "effects": {
+      "crushing_slow": {
+        "stacking": "refresh",
+        "stacking_scope": "source_skill",
+        "max_stacks": 1,
+        "modules": [
+          {
+            "type": "ascension:frozen_form",
+            "frozen_floor": {
+              "base": 0.0
+            },
+            "movement_reduction": {
+              "base": 0.25
+            },
+            "player_multiplier": 0.7,
+            "resistant_multiplier": 0.5,
+            "boss_multiplier": 0.25,
+            "remove_when_burning": false
+          }
+        ]
+      }
+    }
+  }
+}

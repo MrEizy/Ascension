@@ -33,6 +33,7 @@ public final class AscensionSkillExecutionFeatureTypes {
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> MOVE = TYPES.add("move", SkillFeatures.Move.CODEC);
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> ANCHOR = TYPES.add("anchor", SkillFeatures.Anchor.CODEC);
     public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> VISUAL = TYPES.add("visual", SkillFeatures.Visual.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> WEAPON_SWING = TYPES.add("weapon_swing", SkillFeatures.WeaponSwing.CODEC);
 
     private AscensionSkillExecutionFeatureTypes() {
     }

@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:tools/spear",
+      "required": false
+    },
+    {
+      "id": "#c:weapons/spear",
+      "required": false
+    }
+  ]
+}

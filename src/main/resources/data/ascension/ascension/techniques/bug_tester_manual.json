@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple_technique",
   "name": "Bug Tester Manual",
-  "description": "A technique for bug testers to test things that don't have actual skills or implementations yet.",
+  "description": "A technique for bug testers to test things.",
   "path": "ascension:foundation/soul",
   "milestone_realms": [
     0
@@ -34,7 +34,9 @@
             "ascension:debug/calibration_stagger",
             "ascension:debug/stagger_immunity",
             "ascension:debug/calibration_channel",
-            "ascension:debug/cleanup"
+            "ascension:debug/cleanup",
+            "ascension:passive/sword_mastery",
+            "ascension:castable/sword_projection"
           ]
         },
         {
@@ -161,6 +163,22 @@
           "type": "ascension:set_skill_level",
           "skill": "ascension:debug/cleanup",
           "contribution": "ascension:bug_tester/cleanup",
+          "level": 1,
+          "set_floor": true,
+          "set_cap": true
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:passive/sword_mastery",
+          "contribution": "ascension:bug_tester/sword_mastery",
+          "level": 1,
+          "set_floor": true,
+          "set_cap": true
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/sword_projection",
+          "contribution": "ascension:bug_tester/sword_projection",
           "level": 1,
           "set_floor": true,
           "set_cap": true

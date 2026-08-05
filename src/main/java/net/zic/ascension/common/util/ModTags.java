@@ -14,6 +14,7 @@ public class ModTags {
     public static class Blocks {
         public static final TagKey<Block> DESTRUCTIBLE_BLOCKS = createTag("blocks_destruction");
         public static final TagKey<Block> LINKABLE_CONTAINERS = createTag("linkable_containers");
+        public static final TagKey<Block> PROJECTION_UNBREAKABLE = createTag("projection_unbreakable");
 
 
 
@@ -35,6 +36,18 @@ public class ModTags {
         public static final TagKey<Item> TOOLS = createItemTag("tools");
         public static final TagKey<Item> TALISMANS = createItemTag("talismans");
 
+        public static final TagKey<Item> WEAPON_BLADES = createItemTag("weapon/blades");
+        public static final TagKey<Item> WEAPON_BOWS = createItemTag("weapon/bows");
+        public static final TagKey<Item> WEAPON_FISTS = createItemTag("weapon/fists");
+        public static final TagKey<Item> WEAPON_MACES = createItemTag("weapon/maces");
+        public static final TagKey<Item> WEAPON_SPEARS = createItemTag("weapon/spears");
+
+        public static final TagKey<Item> C_TOOLS_BLADE = createCommonItemTag("tools/blade");
+        public static final TagKey<Item> C_WEAPONS_BLADE = createCommonItemTag("weapons/blade");
+        public static final TagKey<Item> C_TOOLS_GAUNTLET = createCommonItemTag("tools/gauntlet");
+        public static final TagKey<Item> C_WEAPONS_GAUNTLET = createCommonItemTag("weapons/gauntlet");
+        public static final TagKey<Item> C_TOOLS_SPEAR = createCommonItemTag("tools/spear");
+        public static final TagKey<Item> C_WEAPONS_SPEAR = createCommonItemTag("weapons/spear");
 
         public static final TagKey<Item> ORDINARY_ITEMS = createItemTag("ordinary_items");
         public static final TagKey<Item> PROFOUND_ITEMS = createItemTag("profound_items");
@@ -42,6 +55,10 @@ public class ModTags {
         public static final TagKey<Item> SAINT_ITEMS = createItemTag("saint_items");
         public static final TagKey<Item> GOD_ITEMS = createItemTag("god_items");
         public static final TagKey<Item> HEAVENS_PATH_ITEMS = createItemTag("heavens_path_items");
+
+        private static TagKey<Item> createCommonItemTag(String path) {
+            return ItemTags.create(Identifier.fromNamespaceAndPath("c", path));
+        }
 
         private static TagKey<Item> createItemTag(String name) {
             return ItemTags.create(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));

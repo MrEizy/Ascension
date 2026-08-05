@@ -1,9 +1,11 @@
 package net.zic.ascension.impl.core.skill.passive;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.StringRepresentable;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -16,7 +18,10 @@ import net.zic.ascension.api.ascension.core.resource.ResourceModifiers;
 import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
 import net.zic.ascension.api.ascension.core.skill.PassiveModule;
 import net.zic.ascension.api.ascension.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.value.ScaledValue;
+import net.zic.ascension.impl.runtime.weapon.WeaponSwingSpec;
+import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.zenithlib.common.ZenithRegistries;
@@ -27,6 +32,7 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class PassiveModules {
@@ -47,6 +53,10 @@ public final class PassiveModules {
             register("resources", Resources.CODEC);
     public static final DeferredHolder<CodecType<PassiveModule>, CodecType<PassiveModule>> PROJECTILES =
             register("projectiles", Projectiles.CODEC);
+    public static final DeferredHolder<CodecType<PassiveModule>, CodecType<PassiveModule>> WEAPON_SWING =
+            register("weapon_swing", WeaponSwing.CODEC);
+    public static final DeferredHolder<CodecType<PassiveModule>, CodecType<PassiveModule>> WEAPON_DAMAGE =
+            register("weapon_damage", WeaponDamage.CODEC);
 
     private PassiveModules() {
     }
@@ -183,6 +193,191 @@ public final class PassiveModules {
         @Override
         public CodecType<PassiveModule> getType() {
             return PROJECTILES.get();
+        }
+    }
+
+
+    /**
+     * Datapack-configurable normal-attack projection. The runtime event service
+     * reads this module when the client reports an attack input.
+     */
+    public record WeaponSwing(
+            Identifier path,
+            Identifier weaponTag,
+            String vfxType,
+            String fallbackColor,
+            Map<Identifier, String> techniqueColors,
+            Vec3 radius,
+            double baseDamage,
+            double knockback,
+            int duration,
+            float rotationZ,
+            Vec3 movement,
+            double qiCost,
+            int minimumInterval,
+            RealmScaling realmScaling,
+            List<Identifier> classifications,
+            Extras extras
+    ) implements PassiveModule {
+        public static final MapCodec<WeaponSwing> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Identifier.CODEC.fieldOf("path").forGetter(WeaponSwing::path),
+                Identifier.CODEC.optionalFieldOf("weapon_tag", Identifier.fromNamespaceAndPath("minecraft", "swords"))
+                        .forGetter(WeaponSwing::weaponTag),
+                Codec.STRING.optionalFieldOf("vfx_type", "sword_swing").forGetter(WeaponSwing::vfxType),
+                Codec.STRING.optionalFieldOf("fallback_color", "blue").forGetter(WeaponSwing::fallbackColor),
+                Codec.unboundedMap(Identifier.CODEC, Codec.STRING).optionalFieldOf("technique_colors", Map.of())
+                        .forGetter(WeaponSwing::techniqueColors),
+                CodecHelpers.VEC3.optionalFieldOf("radius", new Vec3(2.0D, 2.0D, 2.0D)).forGetter(WeaponSwing::radius),
+                Codec.DOUBLE.optionalFieldOf("base_damage", 4.0D).forGetter(WeaponSwing::baseDamage),
+                Codec.DOUBLE.optionalFieldOf("knockback", 1.0D).forGetter(WeaponSwing::knockback),
+                Codec.intRange(1, 1200).optionalFieldOf("duration", 10).forGetter(WeaponSwing::duration),
+                Codec.FLOAT.optionalFieldOf("rotation_z", 0.0F).forGetter(WeaponSwing::rotationZ),
+                CodecHelpers.VEC3.optionalFieldOf("movement", Vec3.ZERO).forGetter(WeaponSwing::movement),
+                Codec.DOUBLE.optionalFieldOf("qi_cost", 2.0D).forGetter(WeaponSwing::qiCost),
+                Codec.intRange(1, 1200).optionalFieldOf("minimum_interval", 1).forGetter(WeaponSwing::minimumInterval),
+                RealmScaling.CODEC.optionalFieldOf("realm_scaling", RealmScaling.DEFAULT).forGetter(WeaponSwing::realmScaling),
+                Identifier.CODEC.listOf().optionalFieldOf("classifications", List.of()).forGetter(WeaponSwing::classifications),
+                Extras.CODEC.forGetter(WeaponSwing::extras)
+        ).apply(instance, WeaponSwing::new));
+
+        public WeaponSwing {
+            vfxType = vfxType == null || vfxType.isBlank() ? "sword_swing" : vfxType;
+            fallbackColor = fallbackColor == null || fallbackColor.isBlank() ? "blue" : fallbackColor;
+            techniqueColors = techniqueColors == null ? Map.of() : Map.copyOf(techniqueColors);
+            radius = radius == null ? new Vec3(2.0D, 2.0D, 2.0D) : radius;
+            baseDamage = Double.isFinite(baseDamage) ? Math.max(0.0D, baseDamage) : 0.0D;
+            knockback = Double.isFinite(knockback) ? Math.max(0.0D, knockback) : 0.0D;
+            duration = Math.clamp(duration, 1, 1200);
+            movement = movement == null ? Vec3.ZERO : movement;
+            qiCost = Double.isFinite(qiCost) ? Math.max(0.0D, qiCost) : 0.0D;
+            minimumInterval = Math.clamp(minimumInterval, 1, 1200);
+            realmScaling = realmScaling == null ? RealmScaling.DEFAULT : realmScaling;
+            classifications = classifications == null ? List.of() : List.copyOf(classifications);
+            extras = extras == null ? Extras.DEFAULT : extras;
+        }
+
+        @Override
+        public CodecType<PassiveModule> getType() {
+            return WEAPON_SWING.get();
+        }
+
+        public record RealmScaling(
+                double baseBonus,
+                double bonusPerMajorRealm,
+                double bonusPerMinorRealm,
+                double maximumBonus
+        ) {
+            public static final RealmScaling DEFAULT = new RealmScaling(0.10D, 0.22D, 0.025D, 5.0D);
+            public static final Codec<RealmScaling> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    Codec.DOUBLE.optionalFieldOf("base_bonus", DEFAULT.baseBonus).forGetter(RealmScaling::baseBonus),
+                    Codec.DOUBLE.optionalFieldOf("bonus_per_major_realm", DEFAULT.bonusPerMajorRealm)
+                            .forGetter(RealmScaling::bonusPerMajorRealm),
+                    Codec.DOUBLE.optionalFieldOf("bonus_per_minor_realm", DEFAULT.bonusPerMinorRealm)
+                            .forGetter(RealmScaling::bonusPerMinorRealm),
+                    Codec.DOUBLE.optionalFieldOf("maximum_bonus", DEFAULT.maximumBonus).forGetter(RealmScaling::maximumBonus)
+            ).apply(instance, RealmScaling::new));
+
+            public RealmScaling {
+                baseBonus = Double.isFinite(baseBonus) ? baseBonus : DEFAULT.baseBonus;
+                bonusPerMajorRealm = Double.isFinite(bonusPerMajorRealm)
+                        ? bonusPerMajorRealm : DEFAULT.bonusPerMajorRealm;
+                bonusPerMinorRealm = Double.isFinite(bonusPerMinorRealm)
+                        ? bonusPerMinorRealm : DEFAULT.bonusPerMinorRealm;
+                maximumBonus = Double.isFinite(maximumBonus) ? Math.max(0.0D, maximumBonus) : DEFAULT.maximumBonus;
+            }
+        }
+
+        public record Extras(
+                boolean allowEmptyHand,
+                WeaponSwingSpec.HitShape hitShape,
+                WeaponSwingSpec.BlockImpact blockImpact,
+                Optional<PassiveHitEffect> hitEffect,
+                int priority
+        ) {
+            public static final Extras DEFAULT = new Extras(
+                    false,
+                    WeaponSwingSpec.HitShape.AUTO,
+                    WeaponSwingSpec.BlockImpact.NONE,
+                    Optional.empty(),
+                    0
+            );
+            public static final MapCodec<Extras> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    Codec.BOOL.optionalFieldOf("allow_empty_hand", false).forGetter(Extras::allowEmptyHand),
+                    WeaponSwingSpec.HitShape.CODEC.optionalFieldOf("hit_shape", WeaponSwingSpec.HitShape.AUTO)
+                            .forGetter(Extras::hitShape),
+                    WeaponSwingSpec.BlockImpact.CODEC.optionalFieldOf("block_impact", WeaponSwingSpec.BlockImpact.NONE)
+                            .forGetter(Extras::blockImpact),
+                    PassiveHitEffect.CODEC.optionalFieldOf("hit_effect").forGetter(Extras::hitEffect),
+                    Codec.INT.optionalFieldOf("priority", 0).forGetter(Extras::priority)
+            ).apply(instance, Extras::new));
+
+            public Extras {
+                hitShape = hitShape == null ? WeaponSwingSpec.HitShape.AUTO : hitShape;
+                blockImpact = blockImpact == null ? WeaponSwingSpec.BlockImpact.NONE : blockImpact;
+                hitEffect = hitEffect == null ? Optional.empty() : hitEffect;
+            }
+        }
+
+        public record PassiveHitEffect(String definition, int duration, double potency) {
+            public static final Codec<PassiveHitEffect> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    Codec.STRING.fieldOf("definition").forGetter(PassiveHitEffect::definition),
+                    Codec.intRange(1, 72000).optionalFieldOf("duration", 20).forGetter(PassiveHitEffect::duration),
+                    Codec.DOUBLE.optionalFieldOf("potency", 1.0D).forGetter(PassiveHitEffect::potency)
+            ).apply(instance, PassiveHitEffect::new));
+
+            public PassiveHitEffect {
+                definition = definition == null ? "" : definition;
+                duration = Math.clamp(duration, 1, 72000);
+                potency = Double.isFinite(potency) ? Math.max(0.0D, potency) : 0.0D;
+            }
+        }
+    }
+
+    /** Realm-scaled bonus for the underlying weapon hit, arrow, or trident. */
+    public record WeaponDamage(
+            Identifier path,
+            Optional<Identifier> weaponTag,
+            Match match,
+            WeaponSwing.RealmScaling realmScaling
+    ) implements PassiveModule {
+        public static final MapCodec<WeaponDamage> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Identifier.CODEC.fieldOf("path").forGetter(WeaponDamage::path),
+                Identifier.CODEC.optionalFieldOf("weapon_tag").forGetter(WeaponDamage::weaponTag),
+                Match.CODEC.optionalFieldOf("match", Match.HELD_WEAPON).forGetter(WeaponDamage::match),
+                WeaponSwing.RealmScaling.CODEC.optionalFieldOf(
+                        "realm_scaling",
+                        WeaponSwing.RealmScaling.DEFAULT
+                ).forGetter(WeaponDamage::realmScaling)
+        ).apply(instance, WeaponDamage::new));
+
+        public WeaponDamage {
+            weaponTag = weaponTag == null ? Optional.empty() : weaponTag;
+            match = match == null ? Match.HELD_WEAPON : match;
+            realmScaling = realmScaling == null ? WeaponSwing.RealmScaling.DEFAULT : realmScaling;
+        }
+
+        @Override
+        public CodecType<PassiveModule> getType() {
+            return WEAPON_DAMAGE.get();
+        }
+
+        public enum Match implements StringRepresentable {
+            HELD_WEAPON("held_weapon"),
+            EMPTY_HAND_OR_TAG("empty_hand_or_tag"),
+            ARROW("arrow"),
+            TRIDENT("trident");
+
+            public static final Codec<Match> CODEC = StringRepresentable.fromEnum(Match::values);
+            private final String name;
+
+            Match(String name) {
+                this.name = name;
+            }
+
+            @Override
+            public String getSerializedName() {
+                return name;
+            }
         }
     }
 }

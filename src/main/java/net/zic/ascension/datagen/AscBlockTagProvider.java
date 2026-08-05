@@ -60,8 +60,23 @@ public class AscBlockTagProvider extends BlockTagsProvider {
 
         tag(ModTags.Blocks.LINKABLE_CONTAINERS)
                 .add(Blocks.CHEST)
-
                 .add(Blocks.BARREL);
+
+        tag(ModTags.Blocks.PROJECTION_UNBREAKABLE)
+                .addOptionalTag(BlockTags.DRAGON_IMMUNE)
+                .addOptionalTag(BlockTags.WITHER_IMMUNE)
+                .add(
+                        Blocks.BEDROCK,
+                        Blocks.BARRIER,
+                        Blocks.END_PORTAL,
+                        Blocks.END_PORTAL_FRAME,
+                        Blocks.NETHER_PORTAL,
+                        Blocks.COMMAND_BLOCK,
+                        Blocks.CHAIN_COMMAND_BLOCK,
+                        Blocks.REPEATING_COMMAND_BLOCK,
+                        Blocks.STRUCTURE_BLOCK,
+                        Blocks.JIGSAW
+                );
 
     }
 }

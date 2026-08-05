@@ -1,0 +1,22 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:dragon_immune",
+      "required": false
+    },
+    {
+      "id": "#minecraft:wither_immune",
+      "required": false
+    },
+    "minecraft:bedrock",
+    "minecraft:barrier",
+    "minecraft:end_portal",
+    "minecraft:end_portal_frame",
+    "minecraft:nether_portal",
+    "minecraft:command_block",
+    "minecraft:chain_command_block",
+    "minecraft:repeating_command_block",
+    "minecraft:structure_block",
+    "minecraft:jigsaw"
+  ]
+}

@@ -106,7 +106,7 @@ public final class MobCultivationSubPathGenerator {
         String held = heldId == null ? "" : heldId.getPath();
         if (held.contains("bow")) add(weights, BOW, 4.0D);
         if (held.contains("sword")) add(weights, SWORD, 4.0D);
-        if (held.contains("spear") || held.contains("trident")) add(weights, SPEAR, 4.0D);
+        if (held.contains("spear")) add(weights, SPEAR, 4.0D);
         if (held.contains("axe")) add(weights, AXE, 4.0D);
         if (held.contains("mace") || held.contains("hammer")) add(weights, MACE, 4.0D);
     }

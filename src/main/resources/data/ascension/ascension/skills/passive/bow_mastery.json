@@ -1,0 +1,20 @@
+{
+  "type": "ascension:resource_modifier_passive",
+  "name": "Bow Mastery",
+  "description": "Strengthens arrow damage.",
+  "default_accessible_level": 1,
+  "modules": [
+    {
+      "type": "ascension:weapon_damage",
+      "path": "ascension:weapon/bow",
+      "weapon_tag": "ascension:weapon/bows",
+      "match": "arrow",
+      "realm_scaling": {
+        "base_bonus": 0.04,
+        "bonus_per_major_realm": 0.1,
+        "bonus_per_minor_realm": 0.0125,
+        "maximum_bonus": 1.75
+      }
+    }
+  ]
+}

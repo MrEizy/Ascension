@@ -1,0 +1,65 @@
+{
+  "type": "ascension:resource_modifier_passive",
+  "name": "Blade Mastery",
+  "description": "Shapes saber and blade intent.",
+  "default_accessible_level": 1,
+  "modules": [
+    {
+      "type": "ascension:weapon_swing",
+      "path": "ascension:weapon/blade",
+      "weapon_tag": "ascension:weapon/blades",
+      "vfx_type": "sword_swing",
+      "fallback_color": "red",
+      "technique_colors": {
+        "ascension:2_profound/mount_hua_sword_manual": "red",
+        "ascension:1_ordinary/sustained_spirit_art": "purple",
+        "ascension:3_heaven/celestial_constellation_circulation": "holy",
+        "ascension:3_heaven/guardian_dharma_manual": "gold",
+        "ascension:bug_tester_manual": "blue",
+        "ascension:example_technique": "green"
+      },
+      "radius": [
+        2.0,
+        1.5,
+        3.0
+      ],
+      "base_damage": 5.5,
+      "knockback": 1.0,
+      "duration": 8,
+      "rotation_z": 30.0,
+      "movement": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "qi_cost": 2.0,
+      "minimum_interval": 1,
+      "realm_scaling": {
+        "base_bonus": 0.1,
+        "bonus_per_major_realm": 0.22,
+        "bonus_per_minor_realm": 0.025,
+        "maximum_bonus": 5.0
+      },
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:weapon",
+        "ascension:blade"
+      ],
+      "hit_shape": "area",
+      "priority": 10
+    },
+    {
+      "type": "ascension:weapon_damage",
+      "path": "ascension:weapon/blade",
+      "weapon_tag": "ascension:weapon/blades",
+      "match": "held_weapon",
+      "realm_scaling": {
+        "base_bonus": 0.1,
+        "bonus_per_major_realm": 0.22,
+        "bonus_per_minor_realm": 0.025,
+        "maximum_bonus": 5.0
+      }
+    }
+  ]
+}

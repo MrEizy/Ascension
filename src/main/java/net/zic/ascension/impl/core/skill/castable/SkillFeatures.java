@@ -6,11 +6,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagKey;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
@@ -34,6 +36,7 @@ import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutio
 import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
@@ -49,6 +52,9 @@ import net.zic.ascension.impl.runtime.object.AreaFields;
 import net.zic.ascension.impl.runtime.object.OwnerBoundConstructs;
 import net.zic.ascension.impl.runtime.projectile.VirtualProjectiles;
 import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
+import net.zic.ascension.impl.runtime.weapon.WeaponSwingSpec;
+import net.zic.ascension.impl.runtime.weapon.WeaponTechniqueResolver;
+import net.zic.ascension.impl.runtime.weapon.WeaponVfxUtils;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -704,6 +710,157 @@ public final class SkillFeatures {
             } else {
                 double value = duration.resolve(context.scaledValueContext());
                 MovementService.setAnchor(context.caster(), anchor, !Double.isFinite(value) || value <= 0.0D ? 0L : Math.round(value));
+            }
+        }
+    }
+
+    public record WeaponSwing(
+            ExecutionSubject subject,
+            String vfxType,
+            String color,
+            Vec3 radius,
+            ScaledValue damage,
+            ScaledValue knockback,
+            ScaledValue duration,
+            float rotationZ,
+            Vec3 movement,
+            Optional<Identifier> path,
+            Optional<Identifier> weaponTag,
+            List<Identifier> classifications,
+            Extras extras
+    ) implements SkillExecutionFeature {
+        public static final MapCodec<WeaponSwing> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.CASTER).forGetter(WeaponSwing::subject),
+                Codec.STRING.optionalFieldOf("vfx_type", "sword_swing").forGetter(WeaponSwing::vfxType),
+                Codec.STRING.optionalFieldOf("color", "blue").forGetter(WeaponSwing::color),
+                CodecHelpers.VEC3.optionalFieldOf("radius", new Vec3(2.0D, 2.0D, 2.0D)).forGetter(WeaponSwing::radius),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("damage", ScaledValue.constant(4.0D)).forGetter(WeaponSwing::damage),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("knockback", ScaledValue.constant(1.0D)).forGetter(WeaponSwing::knockback),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("duration", ScaledValue.constant(10.0D)).forGetter(WeaponSwing::duration),
+                Codec.FLOAT.optionalFieldOf("rotation_z", 0.0F).forGetter(WeaponSwing::rotationZ),
+                CodecHelpers.VEC3.optionalFieldOf("movement", Vec3.ZERO).forGetter(WeaponSwing::movement),
+                Identifier.CODEC.optionalFieldOf("path").forGetter(WeaponSwing::path),
+                Identifier.CODEC.optionalFieldOf("weapon_tag").forGetter(WeaponSwing::weaponTag),
+                Identifier.CODEC.listOf().optionalFieldOf("classifications", List.of()).forGetter(WeaponSwing::classifications),
+                Extras.CODEC.forGetter(WeaponSwing::extras)
+        ).apply(instance, WeaponSwing::new));
+
+        public WeaponSwing {
+            vfxType = vfxType == null || vfxType.isBlank() ? "sword_swing" : vfxType;
+            color = color == null || color.isBlank() ? "blue" : color;
+            radius = radius == null ? new Vec3(2.0D, 2.0D, 2.0D) : radius;
+            damage = damage == null ? ScaledValue.constant(4.0D) : damage;
+            knockback = knockback == null ? ScaledValue.constant(1.0D) : knockback;
+            duration = duration == null ? ScaledValue.constant(10.0D) : duration;
+            movement = movement == null ? Vec3.ZERO : movement;
+            path = path == null ? Optional.empty() : path;
+            weaponTag = weaponTag == null ? Optional.empty() : weaponTag;
+            classifications = classifications == null ? List.of() : List.copyOf(classifications);
+            extras = extras == null ? Extras.DEFAULT : extras;
+        }
+
+        @Override
+        public CodecType<SkillExecutionFeature> getType() {
+            return AscensionSkillExecutionFeatureTypes.WEAPON_SWING.get();
+        }
+
+        @Override
+        public void apply(SkillExecutionContext context) {
+            LivingEntity owner = context.entity(subject);
+            if (owner == null) {
+                owner = context.caster();
+            }
+            if (!WeaponVfxUtils.matchesWeapon(owner, weaponTag, extras.allowEmptyHand())) {
+                return;
+            }
+
+            Identifier pathId = path.orElse(null);
+            var source = AscensionOriginSourceHelper.getEntitySource(owner);
+            WeaponTechniqueResolver.Resolution style = WeaponTechniqueResolver.resolve(
+                    source,
+                    pathId,
+                    vfxType,
+                    color,
+                    java.util.Map.of()
+            );
+            Optional<WeaponSwingSpec.HitEffect> hitEffect = extras.hitEffect().flatMap(effect -> {
+                Resolved<SkillEffectDefinition> resolved = SkillDefinitions.effect(context, effect.definition());
+                if (resolved == null) {
+                    return Optional.empty();
+                }
+                return Optional.of(new WeaponSwingSpec.HitEffect(
+                        resolved.id(),
+                        Math.max(1, (int) Math.round(effect.duration().resolve(context.scaledValueContext()))),
+                        Math.max(0.0D, effect.potency().resolve(context.scaledValueContext()))
+                ));
+            });
+
+            WeaponVfxUtils.spawnSwingVfxAhead(
+                    context.level(),
+                    owner,
+                    rotationZ,
+                    radius,
+                    Math.max(0.0D, damage.resolve(context.scaledValueContext())),
+                    Math.max(0.0D, knockback.resolve(context.scaledValueContext())),
+                    Math.clamp((int) Math.round(duration.resolve(context.scaledValueContext())), 1, 1200),
+                    vfxType,
+                    context.skill(),
+                    pathId,
+                    style.technique(),
+                    style.colorFolder(),
+                    movement,
+                    extras.hitShape(),
+                    extras.blockImpact(),
+                    hitEffect,
+                    classifications
+            );
+        }
+
+        public record Extras(
+                boolean allowEmptyHand,
+                WeaponSwingSpec.HitShape hitShape,
+                WeaponSwingSpec.BlockImpact blockImpact,
+                Optional<ActiveHitEffect> hitEffect
+        ) {
+            public static final Extras DEFAULT = new Extras(
+                    false,
+                    WeaponSwingSpec.HitShape.AUTO,
+                    WeaponSwingSpec.BlockImpact.NONE,
+                    Optional.empty()
+            );
+            public static final MapCodec<Extras> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    Codec.BOOL.optionalFieldOf("allow_empty_hand", false).forGetter(Extras::allowEmptyHand),
+                    WeaponSwingSpec.HitShape.CODEC.optionalFieldOf("hit_shape", WeaponSwingSpec.HitShape.AUTO)
+                            .forGetter(Extras::hitShape),
+                    WeaponSwingSpec.BlockImpact.CODEC.optionalFieldOf("block_impact", WeaponSwingSpec.BlockImpact.NONE)
+                            .forGetter(Extras::blockImpact),
+                    ActiveHitEffect.CODEC.optionalFieldOf("hit_effect").forGetter(Extras::hitEffect)
+            ).apply(instance, Extras::new));
+
+            public Extras {
+                hitShape = hitShape == null ? WeaponSwingSpec.HitShape.AUTO : hitShape;
+                blockImpact = blockImpact == null ? WeaponSwingSpec.BlockImpact.NONE : blockImpact;
+                hitEffect = hitEffect == null ? Optional.empty() : hitEffect;
+            }
+        }
+
+        public record ActiveHitEffect(
+                DefinitionRef<SkillEffectDefinition> definition,
+                ScaledValue duration,
+                ScaledValue potency
+        ) {
+            public static final Codec<ActiveHitEffect> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    DefinitionRef.codec(SkillEffectDefinition.CODEC).fieldOf("definition")
+                            .forGetter(ActiveHitEffect::definition),
+                    ScaledValue.COMPACT_CODEC.optionalFieldOf("duration", ScaledValue.constant(20.0D))
+                            .forGetter(ActiveHitEffect::duration),
+                    ScaledValue.COMPACT_CODEC.optionalFieldOf("potency", ScaledValue.constant(1.0D))
+                            .forGetter(ActiveHitEffect::potency)
+            ).apply(instance, ActiveHitEffect::new));
+
+            public ActiveHitEffect {
+                duration = duration == null ? ScaledValue.constant(20.0D) : duration;
+                potency = potency == null ? ScaledValue.constant(1.0D) : potency;
             }
         }
     }

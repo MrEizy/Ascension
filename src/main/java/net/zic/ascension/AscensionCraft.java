@@ -252,6 +252,11 @@ public class AscensionCraft {
                     TogglePassiveSkillPacket.STREAM_CODEC,
                     TogglePassiveSkillPacket::handle
             );
+            registrar.playToServer(
+                    WeaponSwingRequestPacket.TYPE,
+                    WeaponSwingRequestPacket.STREAM_CODEC,
+                    WeaponSwingRequestPacket::handle
+            );
 
             registrar.playToServer(
                     ToggleCultivationSuppressedPacket.TYPE,
