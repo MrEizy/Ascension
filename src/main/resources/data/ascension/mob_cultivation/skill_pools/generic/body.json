@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "skill": "ascension:mob_skill/charging_strike",
+      "weight": 1.0,
+      "minimum_realm_score": 3
+    },
+    {
+      "skill": "ascension:mob_skill/body_reinforcement",
+      "weight": 1.0,
+      "minimum_realm_score": 4
+    },
+    {
+      "skill": "ascension:mob_skill/regeneration_burst",
+      "weight": 0.7,
+      "minimum_realm_score": 6
+    }
+  ]
+}

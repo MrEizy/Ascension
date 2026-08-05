@@ -1,0 +1,6 @@
+{
+  "display_name": "Regenerating",
+  "regeneration_interval": 100,
+  "regeneration_fraction": 0.0125,
+  "seek_high_qi": true
+}

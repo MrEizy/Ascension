@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "skill": "ascension:mob_skill/spatial_crossing",
+      "weight": 1.0,
+      "minimum_realm_score": 3
+    }
+  ]
+}

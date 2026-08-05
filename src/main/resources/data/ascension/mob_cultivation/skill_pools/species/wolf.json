@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "skill": "ascension:mob_skill/pack_howl",
+      "weight": 1.0,
+      "minimum_realm_score": 3
+    }
+  ]
+}

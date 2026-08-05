@@ -1,0 +1,5 @@
+{
+  "display_name": "Pack Creature",
+  "pack_alert_radius": 16.0,
+  "retreat_health_threshold": 0.22
+}
