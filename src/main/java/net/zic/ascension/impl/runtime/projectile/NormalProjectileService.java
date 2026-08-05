@@ -19,11 +19,21 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
+import net.zic.ascension.api.ascension.core.control.StaggerDefinition;
+import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
+import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
+import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
+import net.zic.ascension.impl.core.skill.passive.ResourceModifierPassiveSkill;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionAttribution;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.ascension.value.ScaledValueContext;
+import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineDamageSource;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineGatherDamageTypesEvent;
@@ -39,6 +49,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class NormalProjectileService {
@@ -48,6 +61,7 @@ public final class NormalProjectileService {
     public static final Identifier AGE = AscensionCraft.prefix("projectile_age");
     public static final Identifier CHARGE = AscensionCraft.prefix("projectile_charge");
     public static final Identifier IMPACT_DAMAGE = AscensionCraft.prefix("projectile_impact_damage");
+    private static final Identifier BASE_PROFILE = AscensionCraft.prefix("normal_projectile/base");
 
     private NormalProjectileService() {
     }
@@ -67,7 +81,7 @@ public final class NormalProjectileService {
                 || !(projectile.level() instanceof ServerLevel level)) {
             return;
         }
-        NormalProjectileData data = projectile.getData(AscensionAttachments.NORMAL_PROJECTILE_DATA);
+        Data data = projectile.getData(AscensionAttachments.NORMAL_PROJECTILE_DATA);
         if (!data.initialized()) {
             initialize(level, projectile);
         }
@@ -84,7 +98,7 @@ public final class NormalProjectileService {
                 || !(source.getDirectEntity() instanceof Projectile projectile)) {
             return;
         }
-        NormalProjectileData data = projectile.getData(AscensionAttachments.NORMAL_PROJECTILE_DATA);
+        Data data = projectile.getData(AscensionAttachments.NORMAL_PROJECTILE_DATA);
         if (!data.active()) {
             return;
         }
@@ -138,7 +152,7 @@ public final class NormalProjectileService {
                 || !(projectile.getOwner() instanceof LivingEntity owner)) {
             return;
         }
-        NormalProjectileData data = projectile.getData(AscensionAttachments.NORMAL_PROJECTILE_DATA);
+        Data data = projectile.getData(AscensionAttachments.NORMAL_PROJECTILE_DATA);
         if (!data.active()) {
             return;
         }
@@ -149,7 +163,7 @@ public final class NormalProjectileService {
             if (definition == null) {
                 continue;
             }
-            ScaledValueContext context = valueContext(
+            ScaledValue.Context context = valueContext(
                     projectile,
                     data,
                     owner,
@@ -179,7 +193,7 @@ public final class NormalProjectileService {
                 || !(projectile.getOwner() instanceof ServerPlayer owner)) {
             return;
         }
-        NormalProjectileData data = projectile.getData(AscensionAttachments.NORMAL_PROJECTILE_DATA);
+        Data data = projectile.getData(AscensionAttachments.NORMAL_PROJECTILE_DATA);
         if (!data.active()) {
             return;
         }
@@ -190,7 +204,7 @@ public final class NormalProjectileService {
                 continue;
             }
             NormalProjectileDefinition.Stagger stagger = definition.stagger().get();
-            ScaledValueContext valueContext = valueContext(
+            ScaledValue.Context valueContext = valueContext(
                     projectile,
                     data,
                     owner,
@@ -224,12 +238,15 @@ public final class NormalProjectileService {
                             Optional.of(projectile.getUUID())
                     )
             );
-            StaggerService.apply(context, event.getEntity(), stagger.profile(), amount);
+            Resolved<StaggerDefinition> profile = SkillDefinitions.stagger(context, stagger.profile());
+            if (profile != null) {
+                StaggerService.apply(context, event.getEntity(), profile.id(), amount);
+            }
         }
     }
 
     private static void initialize(ServerLevel level, Projectile projectile) {
-        NormalProjectileData data = projectile.getData(AscensionAttachments.NORMAL_PROJECTILE_DATA);
+        Data data = projectile.getData(AscensionAttachments.NORMAL_PROJECTILE_DATA);
         if (data.initialized()) {
             return;
         }
@@ -239,6 +256,14 @@ public final class NormalProjectileService {
         }
         OriginSource source = originSource(owner);
         List<Identifier> profiles = new ArrayList<>();
+        NormalProjectileDefinition base = baseProfile();
+        if (matches(projectile, base)) {
+            SkillDefinitions.remember(
+                    NormalProjectileDefinition.class,
+                    new Resolved<>(BASE_PROFILE, base)
+            );
+            profiles.add(BASE_PROFILE);
+        }
         for (Map.Entry<net.minecraft.resources.ResourceKey<NormalProjectileDefinition>, NormalProjectileDefinition> entry
                 : CoreRegistries.NORMAL_PROJECTILE_REGISTRY.get(level.registryAccess()).entrySet()) {
             Identifier profileId = entry.getKey().identifier();
@@ -249,7 +274,31 @@ public final class NormalProjectileService {
                 profiles.add(profileId);
             }
         }
-        data.initialize(profiles, projectile.position(), projectile.getDeltaMovement().length());
+        if (source != null) {
+            for (Identifier skillId : AscensionOriginSourceHelper.getSkills(source)) {
+                Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, level.registryAccess());
+                SkillData skillData = AscensionOriginSourceHelper.getSkillData(source, skillId);
+                if (!(skill instanceof ResourceModifierPassiveSkill passive) || !(skillData instanceof ResourceModifierPassiveSkill.Data passiveData) || passive instanceof ToggleableSkill && !passiveData.isEnabled()) {
+                    continue;
+                }
+                List<NormalProjectileDefinition> localProfiles = passive.projectileProfiles(
+                        SkillLevelResolver.resolve(source, skillId).effectiveLevel()
+                );
+                for (int index = 0; index < localProfiles.size(); index++) {
+                    NormalProjectileDefinition definition = localProfiles.get(index);
+                    if (!matches(projectile, definition)) {
+                        continue;
+                    }
+                    Identifier profileId = SkillDefinitions.localId(skillId, "normal_projectile", "profile_" + index);
+                    SkillDefinitions.remember(
+                            NormalProjectileDefinition.class,
+                            new Resolved<>(profileId, definition)
+                    );
+                    profiles.add(profileId);
+                }
+            }
+        }
+        data.initialize(List.copyOf(new LinkedHashSet<>(profiles)), projectile.position(), projectile.getDeltaMovement().length());
     }
 
     private static boolean matches(Projectile projectile, NormalProjectileDefinition definition) {
@@ -266,7 +315,7 @@ public final class NormalProjectileService {
                 .orElse(false);
     }
 
-    private static void steer(ServerLevel level, Projectile projectile, NormalProjectileData data) {
+    private static void steer(ServerLevel level, Projectile projectile, Data data) {
         if (projectile.getDeltaMovement().lengthSqr() < 0.0025D
                 || !(projectile.getOwner() instanceof LivingEntity owner)) {
             return;
@@ -277,7 +326,11 @@ public final class NormalProjectileService {
                 continue;
             }
             NormalProjectileDefinition.Steering steering = definition.steering().get();
-            ScaledValueContext context = valueContext(
+            Identifier effectId = resolveEffect(level, projectile, owner, profileId, definition, steering.effect());
+            if (effectId == null) {
+                continue;
+            }
+            ScaledValue.Context context = valueContext(
                     projectile,
                     data,
                     owner,
@@ -291,7 +344,7 @@ public final class NormalProjectileService {
             if (!Double.isFinite(range) || range <= 0.0D || !Double.isFinite(turnRate) || turnRate <= 0.0D) {
                 continue;
             }
-            LivingEntity target = resolveTarget(level, projectile, data, owner, steering, range);
+            LivingEntity target = resolveTarget(level, projectile, data, owner, steering, effectId, range);
             if (target == null) {
                 return;
             }
@@ -322,16 +375,17 @@ public final class NormalProjectileService {
     private static LivingEntity resolveTarget(
             ServerLevel level,
             Projectile projectile,
-            NormalProjectileData data,
+            Data data,
             LivingEntity owner,
             NormalProjectileDefinition.Steering steering,
+            Identifier effectId,
             double range
     ) {
         UUID targetId = data.steeringTarget();
         if (targetId != null) {
             Entity entity = level.getEntity(targetId);
             if (entity instanceof LivingEntity living
-                    && validTarget(projectile, owner, living, steering, range)) {
+                    && validTarget(projectile, owner, living, steering, effectId, range)) {
                 return living;
             }
             data.setSteeringTarget(null);
@@ -345,7 +399,7 @@ public final class NormalProjectileService {
         for (LivingEntity candidate : level.getEntitiesOfClass(
                 LivingEntity.class,
                 projectile.getBoundingBox().inflate(range),
-                entity -> validTarget(projectile, owner, entity, steering, range)
+                entity -> validTarget(projectile, owner, entity, steering, effectId, range)
         )) {
             Vec3 toTarget = candidate.position()
                     .add(0.0D, candidate.getBbHeight() * 0.5D, 0.0D)
@@ -368,6 +422,7 @@ public final class NormalProjectileService {
             LivingEntity owner,
             LivingEntity target,
             NormalProjectileDefinition.Steering steering,
+            Identifier effectId,
             double range
     ) {
         if (target == owner
@@ -379,25 +434,56 @@ public final class NormalProjectileService {
         UUID sourceEntity = steering.ownerScoped() ? owner.getUUID() : null;
         return SkillEffectService.has(
                 target,
-                steering.effect(),
+                effectId,
                 sourceEntity,
                 steering.sourceSkill().orElse(null)
         );
     }
 
-    private static NormalProjectileDefinition definition(Projectile projectile, Identifier profileId) {
-        return projectile.level() instanceof ServerLevel level
-                ? CoreRegistries.safeAccess(
-                CoreRegistries.NORMAL_PROJECTILE_REGISTRY,
-                profileId,
-                level.registryAccess()
-        )
-                : null;
+    private static Identifier resolveEffect(
+            ServerLevel level,
+            Projectile projectile,
+            LivingEntity owner,
+            Identifier profileId,
+            NormalProjectileDefinition definition,
+            DefinitionRef<SkillEffectDefinition> reference
+    ) {
+        if (owner instanceof ServerPlayer player) {
+            Identifier skill = definition.requiredSkill().orElse(profileId);
+            SkillExecutionContext context = new SkillExecutionContext(
+                    level,
+                    player,
+                    skill,
+                    null,
+                    projectile.position(),
+                    0.0D,
+                    Map.of(),
+                    SkillExecutionAttribution.direct(player)
+            );
+            Resolved<SkillEffectDefinition> resolved = SkillDefinitions.effect(context, reference);
+            return resolved == null ? null : resolved.id();
+        }
+        return reference.global().orElse(null);
     }
 
-    private static ScaledValueContext valueContext(
+    private static NormalProjectileDefinition definition(Projectile projectile, Identifier profileId) {
+        if (!(projectile.level() instanceof ServerLevel level)) {
+            return null;
+        }
+        return SkillDefinitions.cached(
+                NormalProjectileDefinition.class,
+                profileId,
+                () -> CoreRegistries.safeAccess(
+                        CoreRegistries.NORMAL_PROJECTILE_REGISTRY,
+                        profileId,
+                        level.registryAccess()
+                )
+        );
+    }
+
+    private static ScaledValue.Context valueContext(
             Projectile projectile,
-            NormalProjectileData data,
+            Data data,
             LivingEntity owner,
             LivingEntity target,
             Identifier profileId,
@@ -405,7 +491,7 @@ public final class NormalProjectileService {
             double impactDamage
     ) {
         Identifier skill = definition.requiredSkill().orElse(profileId);
-        return new ScaledValueContext(
+        return new ScaledValue.Context(
                 originSource(owner),
                 skill,
                 owner,
@@ -417,7 +503,7 @@ public final class NormalProjectileService {
 
     private static Map<Identifier, Double> variables(
             Projectile projectile,
-            NormalProjectileData data,
+            Data data,
             NormalProjectileDefinition definition,
             double impactDamage
     ) {
@@ -431,12 +517,112 @@ public final class NormalProjectileService {
         return variables;
     }
 
-    private static double charge(NormalProjectileData data, NormalProjectileDefinition definition) {
+    private static double charge(Data data, NormalProjectileDefinition definition) {
         return Math.clamp(data.initialSpeed() / definition.fullChargeSpeed(), 0.0D, 1.0D);
+    }
+
+    private static NormalProjectileDefinition baseProfile() {
+        return new NormalProjectileDefinition(
+                Optional.empty(),
+                Optional.of(AscensionCraft.prefix("ranged_projectiles")),
+                List.of(),
+                ScaledValue.constant(1.0D),
+                ScaledValue.constant(0.0D),
+                List.of(AscensionCraft.prefix("projectile"), AscensionCraft.prefix("ranged")),
+                Optional.empty(),
+                Optional.empty(),
+                3.0D,
+                Optional.empty(),
+                Optional.empty()
+        );
     }
 
     private static OriginSource originSource(LivingEntity entity) {
         var provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         return provider == null ? null : provider.getData(entity).getSource();
+    }
+
+    public static final class Data {
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Identifier.CODEC.listOf().optionalFieldOf("profiles", List.of()).forGetter(Data::profiles),
+                CodecHelpers.VEC3.optionalFieldOf("launch_position", Vec3.ZERO).forGetter(Data::launchPosition),
+                Codec.DOUBLE.optionalFieldOf("initial_speed", 0.0D).forGetter(Data::initialSpeed),
+                Codec.INT.optionalFieldOf("age", 0).forGetter(Data::age),
+                Codec.BOOL.optionalFieldOf("initialized", false).forGetter(Data::initialized),
+                Codec.STRING.xmap(UUID::fromString, UUID::toString).optionalFieldOf("steering_target").forGetter(value -> Optional.ofNullable(value.steeringTarget))
+        ).apply(instance, (profiles, launchPosition, initialSpeed, age, initialized, steeringTarget) ->
+                new Data(profiles, launchPosition, initialSpeed, age, initialized, steeringTarget.orElse(null))));
+
+        private List<Identifier> profiles;
+        private Vec3 launchPosition;
+        private double initialSpeed;
+        private int age;
+        private boolean initialized;
+        private UUID steeringTarget;
+
+        public Data() {
+            this(List.of(), Vec3.ZERO, 0.0D, 0, false, null);
+        }
+
+        private Data(
+                List<Identifier> profiles,
+                Vec3 launchPosition,
+                double initialSpeed,
+                int age,
+                boolean initialized,
+                UUID steeringTarget
+        ) {
+            this.profiles = profiles == null ? List.of() : List.copyOf(profiles);
+            this.launchPosition = launchPosition == null ? Vec3.ZERO : launchPosition;
+            this.initialSpeed = Math.max(0.0D, initialSpeed);
+            this.age = Math.max(0, age);
+            this.initialized = initialized;
+            this.steeringTarget = steeringTarget;
+        }
+
+        public void initialize(List<Identifier> profiles, Vec3 launchPosition, double initialSpeed) {
+            this.profiles = profiles == null ? List.of() : List.copyOf(profiles);
+            this.launchPosition = launchPosition == null ? Vec3.ZERO : launchPosition;
+            this.initialSpeed = Math.max(0.0D, initialSpeed);
+            this.age = 0;
+            this.initialized = true;
+            this.steeringTarget = null;
+        }
+
+        public boolean initialized() {
+            return initialized;
+        }
+
+        public boolean active() {
+            return !profiles.isEmpty();
+        }
+
+        public List<Identifier> profiles() {
+            return profiles;
+        }
+
+        public Vec3 launchPosition() {
+            return launchPosition;
+        }
+
+        public double initialSpeed() {
+            return initialSpeed;
+        }
+
+        public int age() {
+            return age;
+        }
+
+        public void tick() {
+            age++;
+        }
+
+        public UUID steeringTarget() {
+            return steeringTarget;
+        }
+
+        public void setSteeringTarget(UUID steeringTarget) {
+            this.steeringTarget = steeringTarget;
+        }
     }
 }

@@ -3,81 +3,199 @@
   "name": "Ray Mark",
   "description": "Tests ray targeting and owner-scoped temporary effect stacking.",
   "default_accessible_level": 1,
-  "levels": [
-    {
-      "execution": {
-        "targeting": {
-          "type": "ascension:ray",
-          "range": {
-            "base": 24
-          },
-          "width": {
-            "base": 0.4
-          },
-          "filter": {
-            "relations": [
-              "ally",
-              "neutral",
-              "hostile"
-            ],
-            "include_players": true,
-            "line_of_sight": true
+  "definitions": {
+    "effects": {
+      "calibration_mark": {
+        "stacking": "stack",
+        "stacking_scope": "source_entity",
+        "max_stacks": 3,
+        "modules": [
+          {
+            "type": "ascension:resource_modifier",
+            "id": "ascension:debug/calibration_mark_movement",
+            "selector": {
+              "resources": [
+                "ascension:stamina"
+              ],
+              "operations": [
+                "ascension:consume",
+                "ascension:drain"
+              ],
+              "source": {
+                "source_tags": [
+                  "ascension:movement"
+                ]
+              }
+            },
+            "operation": "multiply_total",
+            "value": {
+              "base": 0.02,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:effect_stacks"
+                  },
+                  "operation": "add",
+                  "scale": 0.03
+                }
+              ],
+              "maximum": 0.12
+            },
+            "priority": 50
           }
-        },
-        "require_targets": true,
-        "caster_features": [],
-        "target_features": [
+        ]
+      }
+    },
+    "visuals": {
+      "link": {
+        "layers": [
           {
-            "type": "ascension:runtime_visual",
-            "visual": "ascension:debug/ray_link",
-            "duration": {
-              "base": 18
-            },
-            "position": "target",
-            "points": "caster_to_target",
-            "progress": {
-              "base": 1.0
+            "type": "ascension:beam",
+            "appearance": {
+              "color": [
+                80,
+                175,
+                255,
+                75
+              ],
+              "secondary_color": [
+                225,
+                255,
+                205,
+                240
+              ],
+              "line_width": 3.0,
+              "no_depth": true
             }
           },
           {
-            "type": "ascension:skill_effect",
-            "effect": "ascension:debug/calibration_mark",
-            "duration": {
-              "base": 200
+            "type": "ascension:ring",
+            "position": "each_point",
+            "transform": {
+              "rotation": [
+                90,
+                0,
+                0
+              ]
             },
-            "potency": {
-              "base": 1
+            "appearance": {
+              "color": [
+                95,
+                185,
+                255,
+                130
+              ],
+              "secondary_color": [
+                230,
+                255,
+                205,
+                235
+              ],
+              "line_width": 1.7,
+              "no_depth": true
+            },
+            "geometry": {
+              "radius": 0.32,
+              "segments": 20
+            },
+            "motion": {
+              "spin": 3.0,
+              "pulse": 0.12,
+              "pulse_speed": 0.25
             }
           },
           {
-            "type": "ascension:particle_burst",
-            "particle": "minecraft:end_rod",
-            "count": {
-              "base": 18
+            "type": "ascension:particle_emitter",
+            "position": "each_point",
+            "geometry": {
+              "radius": 0.16,
+              "height": 0.3,
+              "length": 0.02,
+              "count": 1
             },
-            "spread": {
-              "base": 0.45
+            "motion": {
+              "interval": 2
             },
-            "speed": {
-              "base": 0.03
-            }
-          },
-          {
-            "type": "ascension:sound",
-            "sound": "minecraft:block.amethyst_cluster.hit",
-            "volume": {
-              "base": 0.8
-            },
-            "pitch": {
-              "base": 1.4
+            "resources": {
+              "particle": "minecraft:end_rod"
             }
           }
         ]
-      },
-      "costs": [],
-      "cooldown": {
-        "base": 10
       }
     }
-  ]
+  },
+  "targeting": {
+    "type": "ascension:ray",
+    "range": {
+      "base": 24
+    },
+    "width": {
+      "base": 0.4
+    },
+    "filter": {
+      "relations": [
+        "ally",
+        "neutral",
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:visual",
+      "duration": {
+        "base": 18
+      },
+      "points": "caster_to_target",
+      "progress": {
+        "base": 1.0
+      },
+      "definition": "#link",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:effect",
+      "duration": {
+        "base": 200
+      },
+      "potency": {
+        "base": 1
+      },
+      "definition": "#calibration_mark",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:end_rod",
+      "count": {
+        "base": 18
+      },
+      "spread": {
+        "base": 0.45
+      },
+      "speed": {
+        "base": 0.03
+      },
+      "subject": "position"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.amethyst_cluster.hit",
+      "volume": {
+        "base": 0.8
+      },
+      "pitch": {
+        "base": 1.4
+      },
+      "subject": "target"
+    }
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 10
+  }
 }

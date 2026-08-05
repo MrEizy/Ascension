@@ -26,7 +26,8 @@
             "scale": 18.0
           }
         ]
-      }
+      },
+      "operation": "ascension:consume"
     },
     "movement": {
       "horizontal_drag": {
@@ -46,125 +47,205 @@
     },
     "stages": []
   },
-  "execution": {
-    "targeting": {
-      "type": "ascension:radial",
-      "radius": {
-        "base": 3.5,
+  "definitions": {
+    "effects": {
+      "frozen_form": {
+        "stacking": "stronger_replaces",
+        "modules": [
+          {
+            "type": "ascension:frozen_form",
+            "frozen_floor": {
+              "base": 0.18,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:effect_potency"
+                  },
+                  "operation": "add",
+                  "scale": 0.22
+                }
+              ],
+              "maximum": 0.4
+            },
+            "movement_reduction": {
+              "base": 0.08,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:effect_potency"
+                  },
+                  "operation": "add",
+                  "scale": 0.17
+                }
+              ],
+              "maximum": 0.25
+            },
+            "player_multiplier": 0.6,
+            "resistant_multiplier": 0.5,
+            "boss_multiplier": 0.3,
+            "remove_when_burning": true
+          },
+          {
+            "type": "ascension:resource_modifier",
+            "id": "ascension:frozen_form_physical_cost",
+            "selector": {
+              "resources": [
+                "ascension:stamina"
+              ],
+              "operations": [
+                "ascension:consume",
+                "ascension:drain"
+              ],
+              "source": {
+                "source_tags": [
+                  "ascension:movement",
+                  "ascension:combat"
+                ]
+              }
+            },
+            "operation": "multiply_total",
+            "value": {
+              "base": 0.05,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:effect_potency"
+                  },
+                  "operation": "add",
+                  "scale": 0.15
+                }
+              ],
+              "maximum": 0.2
+            }
+          }
+        ],
+        "max_stacks": 1
+      }
+    }
+  },
+  "targeting": {
+    "type": "ascension:radial",
+    "radius": {
+      "base": 3.5,
+      "terms": [
+        {
+          "source": {
+            "type": "ascension:charge"
+          },
+          "operation": "add",
+          "scale": 3.5
+        }
+      ],
+      "maximum": 7.0
+    },
+    "maximum_targets": 0,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": false,
+  "features": [
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:snowflake",
+      "count": {
+        "base": 30.0,
         "terms": [
           {
             "source": {
               "type": "ascension:charge"
             },
             "operation": "add",
-            "scale": 3.5
+            "scale": 50.0
+          }
+        ]
+      },
+      "spread": {
+        "base": 1.5,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "operation": "add",
+            "scale": 2.0
+          }
+        ]
+      },
+      "speed": {
+        "base": 0.08
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.glass.break",
+      "volume": {
+        "base": 0.6
+      },
+      "pitch": {
+        "base": 0.75
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:buildup",
+      "amount": {
+        "base": 0.25,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "operation": "add",
+            "scale": 0.4
           }
         ],
-        "maximum": 7.0
+        "maximum": 0.65
       },
-      "maximum_targets": 0,
-      "sort": "nearest",
-      "filter": {
-        "relations": [
-          "neutral",
-          "hostile"
-        ],
-        "include_players": true,
-        "line_of_sight": true
-      }
+      "decay_delay": 50,
+      "channel": "ascension:frozen",
+      "subject": "target"
     },
-    "require_targets": false,
-    "caster_features": [
-      {
-        "type": "ascension:particle_burst",
-        "particle": "minecraft:snowflake",
-        "count": {
-          "base": 30.0,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:charge"
-              },
-              "operation": "add",
-              "scale": 50.0
-            }
-          ]
-        },
-        "spread": {
-          "base": 1.5,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:charge"
-              },
-              "operation": "add",
-              "scale": 2.0
-            }
-          ]
-        },
-        "speed": {
-          "base": 0.08
-        }
+    {
+      "type": "ascension:effect",
+      "duration": {
+        "base": 60.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "operation": "add",
+            "scale": 80.0
+          }
+        ],
+        "maximum": 140.0
       },
-      {
-        "type": "ascension:sound",
-        "sound": "minecraft:block.glass.break",
-        "volume": {
-          "base": 0.6
-        },
-        "pitch": {
-          "base": 0.75
-        }
-      }
-    ],
-    "target_features": [
-      {
-        "type": "ascension:frozen_buildup",
-        "amount": {
-          "base": 0.25,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:charge"
-              },
-              "operation": "add",
-              "scale": 0.4
-            }
-          ],
-          "maximum": 0.65
-        },
-        "decay_delay": 50
+      "potency": {
+        "base": 0.55,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "operation": "add",
+            "scale": 0.45
+          }
+        ],
+        "maximum": 1.0
       },
-      {
-        "type": "ascension:skill_effect",
-        "effect": "ascension:frozen_form",
-        "duration": {
-          "base": 60.0,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:charge"
-              },
-              "operation": "add",
-              "scale": 80.0
-            }
-          ],
-          "maximum": 140.0
-        },
-        "potency": {
-          "base": 0.55,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:charge"
-              },
-              "operation": "add",
-              "scale": 0.45
-            }
-          ],
-          "maximum": 1.0
-        }
-      }
-    ]
-  }
+      "definition": "#frozen_form",
+      "subject": "target"
+    }
+  ]
 }

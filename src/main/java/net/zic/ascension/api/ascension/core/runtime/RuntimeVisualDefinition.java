@@ -21,7 +21,7 @@ public record RuntimeVisualDefinition(List<Layer> layers) {
     }
 
     public record Layer(
-            Primitive primitive,
+            Identifier primitive,
             PositionMode position,
             Transform transform,
             Appearance appearance,
@@ -30,7 +30,7 @@ public record RuntimeVisualDefinition(List<Layer> layers) {
             Resources resources
     ) {
         public static final Codec<Layer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Primitive.CODEC.fieldOf("type").forGetter(Layer::primitive),
+                Identifier.CODEC.fieldOf("type").forGetter(Layer::primitive),
                 PositionMode.CODEC.optionalFieldOf("position", PositionMode.ORIGIN).forGetter(Layer::position),
                 Transform.CODEC.optionalFieldOf("transform", Transform.DEFAULT).forGetter(Layer::transform),
                 Appearance.CODEC.optionalFieldOf("appearance", Appearance.DEFAULT).forGetter(Layer::appearance),
@@ -40,7 +40,7 @@ public record RuntimeVisualDefinition(List<Layer> layers) {
         ).apply(instance, Layer::new));
 
         public Layer {
-            primitive = primitive == null ? Primitive.RING : primitive;
+            primitive = primitive == null ? Primitives.RING : primitive;
             position = position == null ? PositionMode.ORIGIN : position;
             transform = transform == null ? Transform.DEFAULT : transform;
             appearance = appearance == null ? Appearance.DEFAULT : appearance;
@@ -272,29 +272,24 @@ public record RuntimeVisualDefinition(List<Layer> layers) {
         }
     }
 
-    public enum Primitive implements StringRepresentable {
-        PARTICLE_EMITTER("particle_emitter"),
-        BILLBOARD("billboard"),
-        RING("ring"),
-        SHELL("shell"),
-        BEAM("beam"),
-        GROUND_GLYPH("ground_glyph"),
-        RIBBON("ribbon"),
-        AFTERIMAGE("afterimage"),
-        MODEL_LAYER("model_layer"),
-        LIVING_ENTITY_OVERLAY("living_entity_overlay"),
-        COMPOSITE("composite");
+    public static final class Primitives {
+        public static final Identifier PARTICLE_EMITTER = id("particle_emitter");
+        public static final Identifier BILLBOARD = id("billboard");
+        public static final Identifier RING = id("ring");
+        public static final Identifier SHELL = id("shell");
+        public static final Identifier BEAM = id("beam");
+        public static final Identifier GROUND_GLYPH = id("ground_glyph");
+        public static final Identifier RIBBON = id("ribbon");
+        public static final Identifier AFTERIMAGE = id("afterimage");
+        public static final Identifier MODEL_LAYER = id("model_layer");
+        public static final Identifier LIVING_ENTITY_OVERLAY = id("living_entity_overlay");
+        public static final Identifier COMPOSITE = id("composite");
 
-        public static final Codec<Primitive> CODEC = StringRepresentable.fromEnum(Primitive::values);
-        private final String name;
-
-        Primitive(String name) {
-            this.name = name;
+        private Primitives() {
         }
 
-        @Override
-        public String getSerializedName() {
-            return name;
+        private static Identifier id(String path) {
+            return Identifier.fromNamespaceAndPath("ascension", path);
         }
     }
 

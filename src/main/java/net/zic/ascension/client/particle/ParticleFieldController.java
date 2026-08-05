@@ -8,14 +8,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldColour;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldParticleKind;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldStyle;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldColour;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldStyle;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
 import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualPhase;
 import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.skill_casting.AscensionSkillListener;
 import net.zic.zenithlib.common.ZenithAttachments;
@@ -86,7 +85,7 @@ public final class ParticleFieldController {
     public static void updateRemoteHeld(
             UUID playerId,
             Identifier skillId,
-            HeldCastVisualPhase phase,
+            HeldCastVisualState.Phase phase,
             int stage,
             double charge
     ) {
@@ -94,7 +93,7 @@ public final class ParticleFieldController {
         if (minecraft.player != null && minecraft.player.getUUID().equals(playerId)) {
             return;
         }
-        if (skillId == null || phase == HeldCastVisualPhase.STOPPED) {
+        if (skillId == null || phase == HeldCastVisualState.Phase.STOPPED) {
             REMOTE_FIELDS.remove(playerId);
             return;
         }

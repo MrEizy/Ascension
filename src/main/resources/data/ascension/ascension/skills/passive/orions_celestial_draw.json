@@ -1,25 +1,300 @@
 {
-  "type": "ascension:simple_passive",
+  "type": "ascension:resource_modifier_passive",
   "name": {
     "translate": "ascension.skill.orions_celestial_draw.name"
   },
   "description": {
     "translate": "ascension.skill.orions_celestial_draw.desc"
   },
-  "stat_modifiers": {
-    "ascension:agility": [
-      {
-        "value": 0.1,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:orions_celestial_draw_agility"
+  "modules": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:agility": [
+          {
+            "value": 0.1,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:orions_celestial_draw_agility"
+          }
+        ],
+        "ascension:spirit": [
+          {
+            "value": 0.1,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:orions_celestial_draw_spirit"
+          }
+        ]
       }
-    ],
-    "ascension:spirit": [
-      {
-        "value": 0.1,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:orions_celestial_draw_spirit"
+    },
+    {
+      "type": "ascension:projectiles",
+      "profiles": [
+        {
+          "required_skill": "ascension:passive/orions_celestial_draw",
+          "projectile_tag": "ascension:ranged_projectiles",
+          "damage_multiplier": {
+            "base": 1.0,
+            "terms": [
+              {
+                "source": {
+                  "type": "ascension:stat",
+                  "stat": "ascension:agility"
+                },
+                "operation": "add",
+                "scale": 0.002
+              },
+              {
+                "source": {
+                  "type": "ascension:stat",
+                  "stat": "ascension:spirit"
+                },
+                "operation": "add",
+                "scale": 0.0015
+              },
+              {
+                "source": {
+                  "type": "ascension:context",
+                  "key": "ascension:projectile_charge",
+                  "fallback": 0.0
+                },
+                "operation": "add",
+                "scale": 0.2
+              },
+              {
+                "source": {
+                  "type": "ascension:skill_effect",
+                  "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+                  "owner_scoped": true,
+                  "metric": "stacks",
+                  "aggregation": "sum"
+                },
+                "operation": "add",
+                "scale": 0.05
+              }
+            ],
+            "minimum": 1.0,
+            "maximum": 2.5
+          },
+          "bonus_damage": {
+            "base": 0.0,
+            "terms": [
+              {
+                "source": {
+                  "type": "ascension:stat",
+                  "stat": "ascension:spirit"
+                },
+                "operation": "add",
+                "scale": 0.08
+              },
+              {
+                "source": {
+                  "type": "ascension:stat",
+                  "stat": "ascension:agility"
+                },
+                "operation": "add",
+                "scale": 0.06
+              },
+              {
+                "source": {
+                  "type": "ascension:skill_effect",
+                  "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+                  "owner_scoped": true,
+                  "metric": "stacks",
+                  "aggregation": "sum"
+                },
+                "operation": "add",
+                "scale": 1.0
+              }
+            ],
+            "minimum": 0.0,
+            "maximum": 50.0
+          },
+          "classifications": [
+            "ascension:skill",
+            "ascension:projectile",
+            "ascension:ranged",
+            "ascension:soul",
+            "ascension:star"
+          ],
+          "path": "ascension:foundation/soul",
+          "technique": "ascension:3_heaven/celestial_constellation_circulation",
+          "full_charge_speed": 3.0,
+          "steering": {
+            "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+            "source_skill": "ascension:castable/hound_star_pursuit",
+            "range": {
+              "base": 24.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:stat",
+                    "stat": "ascension:spirit"
+                  },
+                  "operation": "add",
+                  "scale": 0.05
+                }
+              ],
+              "minimum": 12.0,
+              "maximum": 48.0
+            },
+            "turn_rate": {
+              "base": 0.035,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:stat",
+                    "stat": "ascension:agility"
+                  },
+                  "operation": "add",
+                  "scale": 0.0005
+                }
+              ],
+              "minimum": 0.02,
+              "maximum": 0.16
+            },
+            "reacquire_interval": 2,
+            "owner_scoped": true
+          },
+          "stagger": {
+            "profile": "#heaven_piercing",
+            "amount": {
+              "base": 4.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:projectile_charge",
+                    "fallback": 0.0
+                  },
+                  "operation": "add",
+                  "scale": 8.0
+                },
+                {
+                  "source": {
+                    "type": "ascension:stat",
+                    "stat": "ascension:agility"
+                  },
+                  "operation": "add",
+                  "scale": 0.025
+                },
+                {
+                  "source": {
+                    "type": "ascension:stat",
+                    "stat": "ascension:spirit"
+                  },
+                  "operation": "add",
+                  "scale": 0.02
+                },
+                {
+                  "source": {
+                    "type": "ascension:skill_effect",
+                    "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+                    "owner_scoped": true,
+                    "metric": "stacks",
+                    "aggregation": "sum"
+                  },
+                  "operation": "add",
+                  "scale": 2.0
+                }
+              ],
+              "minimum": 0.0,
+              "maximum": 60.0
+            },
+            "scale_with_damage": false
+          }
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "stagger": {
+      "heaven_piercing": {
+        "threshold": {
+          "base": 105.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 2.0
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:strength"
+              },
+              "operation": "add",
+              "scale": 1.0
+            }
+          ],
+          "minimum": 50.0
+        },
+        "resistance": {
+          "base": 0.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 0.0045
+            }
+          ],
+          "minimum": 0.0,
+          "maximum": 0.6
+        },
+        "decay_per_second": {
+          "base": 12.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 0.15
+            }
+          ],
+          "minimum": 1.0
+        },
+        "decay_delay": 42,
+        "guard_break_duration": {
+          "base": 38.0
+        },
+        "immunity_duration": {
+          "base": 65.0
+        },
+        "movement_multiplier": 0.18,
+        "interrupt_held_casts": true,
+        "on_guard_break": [
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:crit",
+            "count": {
+              "base": 30.0
+            },
+            "spread": {
+              "base": 0.8
+            },
+            "speed": {
+              "base": 0.13
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:item.shield.break",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 1.1
+            }
+          }
+        ]
       }
-    ]
+    }
   }
 }

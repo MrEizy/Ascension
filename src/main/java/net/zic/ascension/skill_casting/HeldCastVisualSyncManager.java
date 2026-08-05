@@ -3,7 +3,6 @@ package net.zic.ascension.skill_casting;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualPhase;
 import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.network.HeldCastVisualStatePacket;
 
@@ -64,7 +63,7 @@ public final class HeldCastVisualSyncManager {
         HeldCastVisualStatePacket packet = new HeldCastVisualStatePacket(
                 caster.getUUID(),
                 null,
-                HeldCastVisualPhase.STOPPED,
+                HeldCastVisualState.Phase.STOPPED,
                 0,
                 0.0F
         );

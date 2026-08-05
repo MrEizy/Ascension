@@ -2,11 +2,11 @@ package net.zic.ascension.impl.resource.stamina;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactionResult;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactionStatus;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactions;
-import net.zic.ascension.api.ascension.core.resource.source.ResourceSourceIdentity;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
+import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.util.AscensionAttributes;
 
@@ -31,21 +31,44 @@ public final class StaminaService {
     }
 
     public static double getMaximumStamina(LivingEntity entity) {
-        if (entity == null || !entity.getAttributes().hasAttribute(AscensionAttributes.MAX_STAMINA)) {
+        if (entity == null) {
             return 0.0D;
         }
+
         return Math.max(0.0D, entity.getAttributeValue(AscensionAttributes.MAX_STAMINA));
     }
 
+
     public static double getRegenerationRate(LivingEntity entity) {
-        if (entity == null || !entity.getAttributes().hasAttribute(AscensionAttributes.STAMINA_REGEN_RATE)) {
+        if (entity == null) {
             return 0.0D;
         }
         return Math.max(0.0D, entity.getAttributeValue(AscensionAttributes.STAMINA_REGEN_RATE));
     }
 
+
+    public static double getEffectiveRegenerationRate(LivingEntity entity) {
+        if (!(entity instanceof Player player)) {
+            return 0.0D;
+        }
+        FoodData food = player.getFoodData();
+        double multiplier;
+        if (food.getSaturationLevel() > 0.0F) {
+            multiplier = 1.10D;
+        } else if (food.getFoodLevel() >= 12) {
+            multiplier = 1.00D;
+        } else if (food.getFoodLevel() >= 6) {
+            multiplier = 0.70D;
+        } else if (food.getFoodLevel() > 0) {
+            multiplier = 0.35D;
+        } else {
+            multiplier = 0.0D;
+        }
+        return getRegenerationRate(entity) * multiplier;
+    }
+
     public static int getRegenerationDelay(LivingEntity entity) {
-        if (entity == null || !entity.getAttributes().hasAttribute(AscensionAttributes.STAMINA_REGEN_DELAY)) {
+        if (entity == null) {
             return 0;
         }
         return Math.max(0, (int) Math.round(entity.getAttributeValue(AscensionAttributes.STAMINA_REGEN_DELAY)));
@@ -79,31 +102,31 @@ public final class StaminaService {
         );
     }
 
-    public static ResourceTransactionResult spend(
+    public static ResourceTransactionService.Result spend(
             LivingEntity entity,
             ResourceSourceIdentity source,
             double amount
     ) {
-        return ResourceTransactions.consume(entity, RESOURCE_ID, source, amount);
+        return ResourceTransactionService.consume(entity, RESOURCE_ID, source, amount);
     }
 
-    public static ResourceTransactionResult spendOrDrain(
+    public static ResourceTransactionService.Result spendOrDrain(
             LivingEntity entity,
             ResourceSourceIdentity source,
             double amount
     ) {
-        ResourceTransactionResult result = spend(entity, source, amount);
-        if (result.status() != ResourceTransactionStatus.REJECTED || getStamina(entity) <= 0.0D) {
+        ResourceTransactionService.Result result = spend(entity, source, amount);
+        if (result.status() != ResourceTransactionService.Status.REJECTED || getStamina(entity) <= 0.0D) {
             return result;
         }
-        return ResourceTransactions.drain(entity, RESOURCE_ID, source, amount);
+        return ResourceTransactionService.drain(entity, RESOURCE_ID, source, amount);
     }
 
-    public static ResourceTransactionResult restore(
+    public static ResourceTransactionService.Result restore(
             LivingEntity entity,
             ResourceSourceIdentity source,
             double amount
     ) {
-        return ResourceTransactions.restore(entity, RESOURCE_ID, source, amount);
+        return ResourceTransactionService.restore(entity, RESOURCE_ID, source, amount);
     }
 }

@@ -17,7 +17,7 @@ import net.zic.ascension.api.ascension.core.effect.SkillEffectModule;
 import net.zic.ascension.api.ascension.core.projectile.ProjectileBehavior;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
-import net.zic.ascension.api.ascension.value.ScaledValueSource;
+import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.zenithlib.registry.RegistryHelper;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
@@ -30,7 +30,7 @@ public final class TypeRegistries {
     public static final Registry<TribulationType> TRIBULATION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "tribulation_type");
     public static final Registry<ProgressActionType> PROGRESS_ACTION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "progression_action_type");
     public static final Registry<ProgressActionConditionType> PROGRESS_ACTION_CONDITION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "progression_action_condition_type");
-    public static final Registry<CodecType<ScaledValueSource>> SCALED_VALUE_SOURCE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "scaled_value_source_type");
+    public static final Registry<CodecType<ScaledValue.Source>> SCALED_VALUE_SOURCE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "scaled_value_source_type");
     public static final Registry<CodecType<SkillEffectModule>> SKILL_EFFECT_MODULE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "skill_effect_module_type");
     public static final Registry<CodecType<SkillExecutionFeature>> SKILL_EXECUTION_FEATURE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "skill_execution_feature_type");
     public static final Registry<CodecType<TargetingDefinition>> TARGETING_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "targeting_type");

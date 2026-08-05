@@ -14,13 +14,17 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
+import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionAttribution;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.impl.runtime.projectile.ProjectileImpactResponses;
-import net.zic.ascension.impl.runtime.visual.RuntimeVisualSync;
+import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,6 +33,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
+import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class OwnerBoundConstructs {
@@ -37,7 +44,7 @@ public final class OwnerBoundConstructs {
     public static final Identifier STABILITY_LOSS = AscensionCraft.prefix("construct_stability_loss");
     public static final Identifier STABILITY = AscensionCraft.prefix("construct_stability");
     public static final Identifier MAXIMUM_STABILITY = AscensionCraft.prefix("construct_maximum_stability");
-    private static final List<OwnerBoundConstructInstance> CONSTRUCTS = new ArrayList<>();
+    private static final List<Instance> CONSTRUCTS = new ArrayList<>();
 
     private OwnerBoundConstructs() {
     }
@@ -46,9 +53,11 @@ public final class OwnerBoundConstructs {
             SkillExecutionContext context,
             Identifier definitionId
     ) {
-        OwnerBoundConstructDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.CONSTRUCT_REGISTRY,
+        OwnerBoundConstructDefinition definition = SkillDefinitions.resolveStored(
+                OwnerBoundConstructDefinition.class,
+                context.skill(),
                 definitionId,
+                CoreRegistries.CONSTRUCT_REGISTRY,
                 context.level().registryAccess()
         );
         if (definition == null) {
@@ -81,7 +90,7 @@ public final class OwnerBoundConstructs {
             interceptionPriority = interception.priority();
         }
 
-        OwnerBoundConstructInstance construct = new OwnerBoundConstructInstance(
+        Instance construct = new Instance(
                 context.level().dimension(),
                 context.caster().getUUID(),
                 context.skill(),
@@ -110,9 +119,9 @@ public final class OwnerBoundConstructs {
         if (level == null || runtimeId == null) {
             return false;
         }
-        Iterator<OwnerBoundConstructInstance> iterator = CONSTRUCTS.iterator();
+        Iterator<Instance> iterator = CONSTRUCTS.iterator();
         while (iterator.hasNext()) {
-            OwnerBoundConstructInstance construct = iterator.next();
+            Instance construct = iterator.next();
             if (!construct.runtimeId().equals(runtimeId)) {
                 continue;
             }
@@ -135,9 +144,9 @@ public final class OwnerBoundConstructs {
             return 0;
         }
         int removed = 0;
-        Iterator<OwnerBoundConstructInstance> iterator = CONSTRUCTS.iterator();
+        Iterator<Instance> iterator = CONSTRUCTS.iterator();
         while (iterator.hasNext()) {
-            OwnerBoundConstructInstance construct = iterator.next();
+            Instance construct = iterator.next();
             if (!construct.ownerId().equals(ownerId)
                     || definitionId != null && !construct.definitionId().equals(definitionId)) {
                 continue;
@@ -153,7 +162,7 @@ public final class OwnerBoundConstructs {
         if (runtimeId == null || !Double.isFinite(amount)) {
             return 0.0D;
         }
-        for (OwnerBoundConstructInstance construct : CONSTRUCTS) {
+        for (Instance construct : CONSTRUCTS) {
             if (construct.runtimeId().equals(runtimeId)) {
                 return construct.modifyStability(amount);
             }
@@ -169,8 +178,7 @@ public final class OwnerBoundConstructs {
                 .toList();
     }
 
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onDamage(RPGEngineEntityDamagedEvent.Pre event) {
+    public static void applyDamage(RPGEngineEntityDamagedEvent.Pre event) {
         if (!(event.getEntity().level() instanceof ServerLevel level)) {
             return;
         }
@@ -179,25 +187,21 @@ public final class OwnerBoundConstructs {
             return;
         }
 
-        List<OwnerBoundConstructInstance> candidates = CONSTRUCTS.stream()
+        List<Instance> candidates = CONSTRUCTS.stream()
                 .filter(construct -> construct.dimension().equals(level.dimension()))
                 .filter(construct -> construct.ownerId().equals(event.getEntity().getUUID()))
-                .filter(OwnerBoundConstructInstance::interceptsDamage)
-                .sorted(Comparator.comparingInt(OwnerBoundConstructInstance::interceptionPriority).reversed())
+                .filter(Instance::interceptsDamage)
+                .sorted(Comparator.comparingInt(Instance::interceptionPriority).reversed())
                 .toList();
 
-        for (OwnerBoundConstructInstance construct : candidates) {
+        for (Instance construct : candidates) {
             if (remaining <= 0.0D) {
                 break;
             }
             if (!CONSTRUCTS.contains(construct)) {
                 continue;
             }
-            OwnerBoundConstructDefinition definition = CoreRegistries.safeAccess(
-                    CoreRegistries.CONSTRUCT_REGISTRY,
-                    construct.definitionId(),
-                    level.registryAccess()
-            );
+            OwnerBoundConstructDefinition definition = SkillDefinitions.resolveStored(OwnerBoundConstructDefinition.class, construct.skillId(), construct.definitionId(), CoreRegistries.CONSTRUCT_REGISTRY, level.registryAccess());
             if (definition == null || definition.interception().isEmpty()) {
                 continue;
             }
@@ -254,20 +258,16 @@ public final class OwnerBoundConstructs {
 
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Pre event) {
-        Iterator<OwnerBoundConstructInstance> iterator = CONSTRUCTS.iterator();
+        Iterator<Instance> iterator = CONSTRUCTS.iterator();
         while (iterator.hasNext()) {
-            OwnerBoundConstructInstance construct = iterator.next();
+            Instance construct = iterator.next();
             ServerLevel level = event.getServer().getLevel(construct.dimension());
             if (level == null) {
                 iterator.remove();
                 continue;
             }
             Entity entity = level.getEntity(construct.ownerId());
-            OwnerBoundConstructDefinition definition = CoreRegistries.safeAccess(
-                    CoreRegistries.CONSTRUCT_REGISTRY,
-                    construct.definitionId(),
-                    level.registryAccess()
-            );
+            OwnerBoundConstructDefinition definition = SkillDefinitions.resolveStored(OwnerBoundConstructDefinition.class, construct.skillId(), construct.definitionId(), CoreRegistries.CONSTRUCT_REGISTRY, level.registryAccess());
             Removal removal = null;
             if (!(entity instanceof ServerPlayer owner) || owner.isRemoved()) {
                 removal = Removal.EXPLICIT;
@@ -296,7 +296,7 @@ public final class OwnerBoundConstructs {
     private static void tick(
             ServerLevel level,
             ServerPlayer owner,
-            OwnerBoundConstructInstance construct,
+            Instance construct,
             OwnerBoundConstructDefinition definition
     ) {
         construct.setPosition(resolvePosition(owner, definition));
@@ -305,14 +305,10 @@ public final class OwnerBoundConstructs {
 
     private static void finish(
             ServerLevel level,
-            OwnerBoundConstructInstance construct,
+            Instance construct,
             Removal removal
     ) {
-        OwnerBoundConstructDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.CONSTRUCT_REGISTRY,
-                construct.definitionId(),
-                level.registryAccess()
-        );
+        OwnerBoundConstructDefinition definition = SkillDefinitions.resolveStored(OwnerBoundConstructDefinition.class, construct.skillId(), construct.definitionId(), CoreRegistries.CONSTRUCT_REGISTRY, level.registryAccess());
         removeRuntime(level, construct, definition);
         if (definition == null) {
             return;
@@ -330,7 +326,7 @@ public final class OwnerBoundConstructs {
 
     private static void execute(
             ServerLevel level,
-            OwnerBoundConstructInstance construct,
+            Instance construct,
             List<SkillExecutionFeature> features,
             ServerPlayer owner,
             LivingEntity target,
@@ -364,12 +360,17 @@ public final class OwnerBoundConstructs {
 
     private static void syncVisual(
             ServerLevel level,
-            OwnerBoundConstructInstance construct,
+            Instance construct,
             OwnerBoundConstructDefinition definition,
             boolean force
     ) {
-        VisualSelection visual = resolveVisual(definition, construct);
-        if (visual.visual() == null && construct.visualId() != null) {
+        Entity entity = level.getEntity(construct.ownerId());
+        if (!(entity instanceof ServerPlayer owner)) {
+            return;
+        }
+        SkillExecutionContext context = constructContext(level, owner, construct);
+        VisualSelection visual = resolveVisual(context, definition, construct);
+        if (visual == null && construct.visualId() != null) {
             RuntimeVisualSync.remove(
                     level,
                     visualState(
@@ -377,18 +378,19 @@ public final class OwnerBoundConstructs {
                             definition,
                             construct.visualId(),
                             construct.visualStage(),
-                            0L
+                            0L,
+                            SkillDefinitions.cached(RuntimeVisualDefinition.class, construct.visualId(), null)
                     )
             );
             construct.setVisualState(null, 0);
             return;
         }
-        if (visual.visual() == null) {
+        if (visual == null) {
             return;
         }
 
         boolean visualChanged = construct.visualId() == null
-                || !visual.visual().equals(construct.visualId())
+                || !visual.id().equals(construct.visualId())
                 || visual.stage() != construct.visualStage();
         boolean stabilityChanged = Math.abs(construct.stability() - construct.syncedStability())
                 >= Math.max(1.0D, construct.maximumStability() * 0.05D);
@@ -399,13 +401,14 @@ public final class OwnerBoundConstructs {
         RuntimeVisualState state = visualState(
                 construct,
                 definition,
-                visual.visual(),
+                visual.id(),
                 visual.stage(),
-                construct.expiresAt()
+                construct.expiresAt(),
+                visual.definition()
         );
         if (construct.visualId() == null) {
             RuntimeVisualSync.spawn(level, state);
-        } else if (!construct.visualId().equals(visual.visual())) {
+        } else if (!construct.visualId().equals(visual.id())) {
             RuntimeVisualSync.remove(
                     level,
                     visualState(
@@ -413,20 +416,21 @@ public final class OwnerBoundConstructs {
                             definition,
                             construct.visualId(),
                             construct.visualStage(),
-                            0L
+                            0L,
+                            SkillDefinitions.cached(RuntimeVisualDefinition.class, construct.visualId(), null)
                     )
             );
             RuntimeVisualSync.spawn(level, state);
         } else {
             RuntimeVisualSync.update(level, state);
         }
-        construct.setVisualState(visual.visual(), visual.stage());
+        construct.setVisualState(visual.id(), visual.stage());
         construct.markStabilitySynced();
     }
 
     private static void removeRuntime(
             ServerLevel level,
-            OwnerBoundConstructInstance construct,
+            Instance construct,
             OwnerBoundConstructDefinition definition
     ) {
         if (construct.visualId() == null || definition == null) {
@@ -439,14 +443,16 @@ public final class OwnerBoundConstructs {
                         definition,
                         construct.visualId(),
                         construct.visualStage(),
-                        0L
+                        0L,
+                        SkillDefinitions.cached(RuntimeVisualDefinition.class, construct.visualId(), null)
                 )
         );
     }
 
     private static VisualSelection resolveVisual(
+            SkillExecutionContext context,
             OwnerBoundConstructDefinition definition,
-            OwnerBoundConstructInstance construct
+            Instance construct
     ) {
         double fraction = construct.maximumStability() <= 0.0D
                 ? 0.0D
@@ -454,18 +460,40 @@ public final class OwnerBoundConstructs {
         for (int index = 0; index < definition.visualStages().size(); index++) {
             OwnerBoundConstructDefinition.VisualStage stage = definition.visualStages().get(index);
             if (fraction <= stage.maximumStabilityFraction()) {
-                return new VisualSelection(stage.visual(), index + 1);
+                Resolved<RuntimeVisualDefinition> resolved = SkillDefinitions.visual(context, stage.visual());
+                return resolved == null ? null : new VisualSelection(resolved.id(), resolved.value(), index + 1);
             }
         }
-        return new VisualSelection(definition.visual().orElse(null), 0);
+        Resolved<RuntimeVisualDefinition> resolved = definition.visual()
+                .map(reference -> SkillDefinitions.visual(context, reference))
+                .orElse(null);
+        return resolved == null ? null : new VisualSelection(resolved.id(), resolved.value(), 0);
+    }
+
+    private static SkillExecutionContext constructContext(
+            ServerLevel level,
+            ServerPlayer owner,
+            Instance construct
+    ) {
+        return new SkillExecutionContext(
+                level,
+                owner,
+                construct.skillId(),
+                null,
+                construct.position(),
+                construct.charge(),
+                construct.variables(),
+                SkillExecutionAttribution.direct(owner)
+        );
     }
 
     private static RuntimeVisualState visualState(
-            OwnerBoundConstructInstance construct,
+            Instance construct,
             OwnerBoundConstructDefinition definition,
             Identifier visual,
             int stage,
-            long expiresAt
+            long expiresAt,
+            RuntimeVisualDefinition visualDefinition
     ) {
         float progress = construct.maximumStability() <= 0.0D
                 ? 0.0F
@@ -489,7 +517,8 @@ public final class OwnerBoundConstructs {
                 progress,
                 construct.runtimeId().getMostSignificantBits(),
                 construct.stability(),
-                construct.maximumStability()
+                construct.maximumStability(),
+                visualDefinition
         );
     }
 
@@ -517,6 +546,165 @@ public final class OwnerBoundConstructs {
         EXPIRED
     }
 
-    private record VisualSelection(Identifier visual, int stage) {
+    private record VisualSelection(Identifier id, RuntimeVisualDefinition definition, int stage) {
+    }
+
+    private static final class Instance implements OwnerBoundConstructDefinition.View {
+        private final UUID runtimeId;
+        private final ResourceKey<Level> dimension;
+        private final UUID ownerId;
+        private final Identifier skillId;
+        private final Identifier definitionId;
+        private final double charge;
+        private final Map<Identifier, Double> variables;
+        private final double maximumStability;
+        private final long expiresAt;
+        private final boolean interceptsDamage;
+        private final double interceptionAbsorption;
+        private final double interceptionStabilityCost;
+        private final boolean interceptionOverflow;
+        private final int interceptionPriority;
+        private double stability;
+        private Vec3 position;
+        private Identifier visualId;
+        private int visualStage;
+        private double syncedStability;
+
+        private Instance(
+                ResourceKey<Level> dimension,
+                UUID ownerId,
+                Identifier skillId,
+                Identifier definitionId,
+                double charge,
+                Map<Identifier, Double> variables,
+                double stability,
+                long expiresAt,
+                Vec3 position,
+                boolean interceptsDamage,
+                double interceptionAbsorption,
+                double interceptionStabilityCost,
+                boolean interceptionOverflow,
+                int interceptionPriority
+        ) {
+            this.runtimeId = UUID.randomUUID();
+            this.dimension = dimension;
+            this.ownerId = ownerId;
+            this.skillId = skillId;
+            this.definitionId = definitionId;
+            this.charge = charge;
+            this.variables = variables == null ? Map.of() : Map.copyOf(variables);
+            this.maximumStability = Math.max(0.0D, stability);
+            this.stability = this.maximumStability;
+            this.expiresAt = expiresAt;
+            this.position = position;
+            this.interceptsDamage = interceptsDamage;
+            this.interceptionAbsorption = Math.clamp(interceptionAbsorption, 0.0D, 1.0D);
+            this.interceptionStabilityCost = Math.max(0.000001D, interceptionStabilityCost);
+            this.interceptionOverflow = interceptionOverflow;
+            this.interceptionPriority = interceptionPriority;
+        }
+
+        @Override
+        public UUID runtimeId() {
+            return runtimeId;
+        }
+
+        public ResourceKey<Level> dimension() {
+            return dimension;
+        }
+
+        @Override
+        public UUID ownerId() {
+            return ownerId;
+        }
+
+        public Identifier skillId() {
+            return skillId;
+        }
+
+        @Override
+        public Identifier definitionId() {
+            return definitionId;
+        }
+
+        public double charge() {
+            return charge;
+        }
+
+        public Map<Identifier, Double> variables() {
+            return variables;
+        }
+
+        @Override
+        public double stability() {
+            return stability;
+        }
+
+        @Override
+        public double maximumStability() {
+            return maximumStability;
+        }
+
+        public double modifyStability(double amount) {
+            double previous = stability;
+            stability = Math.clamp(stability + amount, 0.0D, maximumStability);
+            return stability - previous;
+        }
+
+        public boolean interceptsDamage() {
+            return interceptsDamage;
+        }
+
+        public double interceptionAbsorption() {
+            return interceptionAbsorption;
+        }
+
+        public double interceptionStabilityCost() {
+            return interceptionStabilityCost;
+        }
+
+        public boolean interceptionOverflow() {
+            return interceptionOverflow;
+        }
+
+        public int interceptionPriority() {
+            return interceptionPriority;
+        }
+
+        @Override
+        public Vec3 position() {
+            return position;
+        }
+
+        public void setPosition(Vec3 position) {
+            this.position = position;
+        }
+
+        public Identifier visualId() {
+            return visualId;
+        }
+
+        public int visualStage() {
+            return visualStage;
+        }
+
+        public void setVisualState(Identifier visualId, int visualStage) {
+            this.visualId = visualId;
+            this.visualStage = Math.max(0, visualStage);
+            this.syncedStability = stability;
+        }
+
+        public double syncedStability() {
+            return syncedStability;
+        }
+
+        public void markStabilitySynced() {
+            syncedStability = stability;
+        }
+
+        @Override
+        public long expiresAt() {
+            return expiresAt;
+        }
     }
 }

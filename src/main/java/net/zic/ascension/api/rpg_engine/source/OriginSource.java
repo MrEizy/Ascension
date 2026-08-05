@@ -102,14 +102,12 @@ public class OriginSource implements StatProvider {
         dirtyDataSources.add(source);
     }
 
-    public void attachToEntity(LivingEntity entity){
-        if(attachedEntities.contains(entity)) return;
+    public void attachToEntity(LivingEntity entity) {
+        if (entity == null || attachedEntities.contains(entity)) { return; }
         setRegistryAccess(entity.registryAccess());
         attachedEntities.add(entity);
-
-        for (DataSourceInstance instance : dataSources.values()) instance.getDataSource().applyToEntity(entity,instance);
-
         entity.getData(ZenithAttachments.STAT_HOLDER).registerStatProvider(this);
+        for (DataSourceInstance instance : dataSources.values()) { instance.getDataSource().applyToEntity(entity, instance); }
     }
     public void detachFromEntity(LivingEntity entity){
         if(!attachedEntities.contains(entity)) return;

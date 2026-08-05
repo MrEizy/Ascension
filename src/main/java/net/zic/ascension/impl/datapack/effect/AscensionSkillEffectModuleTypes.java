@@ -1,25 +1,24 @@
 package net.zic.ascension.impl.datapack.effect;
 
-import net.zic.ascension.api.ascension.core.effect.SkillEffectModule;
-import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.effect.SkillEffectModule;
+import net.zic.ascension.api.ascension.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.ExtensionTypeRegistry;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
-import net.zic.ascension.impl.core.effect.module.FrozenFormEffectModule;
-import net.zic.ascension.impl.core.effect.module.ResourceModifierEffectModule;
+import net.zic.ascension.impl.core.effect.SkillEffectModules;
 
 public final class AscensionSkillEffectModuleTypes {
-    public static final DeferredRegister<CodecType<SkillEffectModule>> TYPES = DeferredRegister.create(TypeRegistries.SKILL_EFFECT_MODULE_TYPE_REGISTRY, AscensionCraft.MOD_ID);
-    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> FROZEN_FORM = TYPES.register(
-            "frozen_form",
-            () -> new CodecType<>(FrozenFormEffectModule.CODEC)
+    private static final ExtensionTypeRegistry<SkillEffectModule> TYPES = new ExtensionTypeRegistry<>(
+            TypeRegistries.SKILL_EFFECT_MODULE_TYPE_REGISTRY,
+            AscensionCraft.MOD_ID
     );
-    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> RESOURCE_MODIFIER = TYPES.register(
-            "resource_modifier",
-            () -> new CodecType<>(ResourceModifierEffectModule.CODEC)
-    );
+
+    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> FROZEN_FORM =
+            TYPES.add("frozen_form", SkillEffectModules.FrozenForm.CODEC);
+    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> RESOURCE_MODIFIER =
+            TYPES.add("resource_modifier", SkillEffectModules.ResourceModifierModule.CODEC);
 
     private AscensionSkillEffectModuleTypes() {
     }

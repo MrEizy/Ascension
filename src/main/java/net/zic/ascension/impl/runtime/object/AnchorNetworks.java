@@ -11,12 +11,17 @@ import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
+import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.runtime.AnchorNetworkDefinition;
 
 
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.impl.runtime.visual.RuntimeVisualSync;
+import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
+import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,10 +29,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class AnchorNetworks {
-    private static final List<AnchorNetworkInstance> NETWORKS = new ArrayList<>();
+    private static final List<Instance> NETWORKS = new ArrayList<>();
 
     private AnchorNetworks() {
     }
@@ -37,9 +44,11 @@ public final class AnchorNetworks {
             Identifier definitionId,
             Vec3 center
     ) {
-        AnchorNetworkDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.ANCHOR_NETWORK_REGISTRY,
+        AnchorNetworkDefinition definition = SkillDefinitions.resolveStored(
+                AnchorNetworkDefinition.class,
+                context.skill(),
                 definitionId,
+                CoreRegistries.ANCHOR_NETWORK_REGISTRY,
                 context.level().registryAccess()
         );
         if (definition == null || definition.nodes().isEmpty()) {
@@ -57,7 +66,7 @@ public final class AnchorNetworks {
                 context.caster().getYRot(),
                 definition
         );
-        AnchorNetworkInstance network = new AnchorNetworkInstance(
+        Instance network = new Instance(
                 context.level().dimension(),
                 context.caster().getUUID(),
                 context.skill(),
@@ -70,14 +79,20 @@ public final class AnchorNetworks {
         );
         NETWORKS.add(network);
 
-        if (definition.field().isPresent()) {
-            UUID field = AreaFields.spawn(context, definition.field().get(), resolvedCenter);
-            network.setChildField(field);
+        Resolved<AreaFieldDefinition> field = definition.field()
+                .map(reference -> SkillDefinitions.field(context, reference))
+                .orElse(null);
+        if (field != null) {
+            UUID child = AreaFields.spawn(context, field.id(), resolvedCenter);
+            network.setChildField(child);
         }
-        definition.visual().ifPresent(visual -> RuntimeVisualSync.spawn(
-                context.level(),
-                visualState(network, definition, visual, network.expiresAt())
-        ));
+        Resolved<RuntimeVisualDefinition> visual = visual(context, definition.visual());
+        if (visual != null) {
+            RuntimeVisualSync.spawn(
+                    context.level(),
+                    visualState(network, definition, visual.id(), network.expiresAt(), visual.value())
+            );
+        }
         return network.runtimeId();
     }
 
@@ -85,9 +100,9 @@ public final class AnchorNetworks {
         if (runtimeId == null) {
             return false;
         }
-        Iterator<AnchorNetworkInstance> iterator = NETWORKS.iterator();
+        Iterator<Instance> iterator = NETWORKS.iterator();
         while (iterator.hasNext()) {
-            AnchorNetworkInstance network = iterator.next();
+            Instance network = iterator.next();
             if (!network.runtimeId().equals(runtimeId)) {
                 continue;
             }
@@ -102,9 +117,9 @@ public final class AnchorNetworks {
         if (level == null || runtimeId == null) {
             return false;
         }
-        Iterator<AnchorNetworkInstance> iterator = NETWORKS.iterator();
+        Iterator<Instance> iterator = NETWORKS.iterator();
         while (iterator.hasNext()) {
-            AnchorNetworkInstance network = iterator.next();
+            Instance network = iterator.next();
             if (!network.runtimeId().equals(runtimeId)) {
                 continue;
             }
@@ -117,9 +132,9 @@ public final class AnchorNetworks {
 
     public static int removeOwned(UUID ownerId, Identifier definitionId) {
         int removed = 0;
-        Iterator<AnchorNetworkInstance> iterator = NETWORKS.iterator();
+        Iterator<Instance> iterator = NETWORKS.iterator();
         while (iterator.hasNext()) {
-            AnchorNetworkInstance network = iterator.next();
+            Instance network = iterator.next();
             if (!network.ownerId().equals(ownerId)
                     || definitionId != null && !network.definitionId().equals(definitionId)) {
                 continue;
@@ -136,9 +151,9 @@ public final class AnchorNetworks {
             return 0;
         }
         int removed = 0;
-        Iterator<AnchorNetworkInstance> iterator = NETWORKS.iterator();
+        Iterator<Instance> iterator = NETWORKS.iterator();
         while (iterator.hasNext()) {
-            AnchorNetworkInstance network = iterator.next();
+            Instance network = iterator.next();
             if (!network.ownerId().equals(ownerId)
                     || definitionId != null && !network.definitionId().equals(definitionId)) {
                 continue;
@@ -160,9 +175,9 @@ public final class AnchorNetworks {
 
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Pre event) {
-        Iterator<AnchorNetworkInstance> iterator = NETWORKS.iterator();
+        Iterator<Instance> iterator = NETWORKS.iterator();
         while (iterator.hasNext()) {
-            AnchorNetworkInstance network = iterator.next();
+            Instance network = iterator.next();
             ServerLevel level = event.getServer().getLevel(network.dimension());
             if (level == null || !tick(level, network)) {
                 if (level != null) {
@@ -180,14 +195,16 @@ public final class AnchorNetworks {
         NETWORKS.clear();
     }
 
-    private static boolean tick(ServerLevel level, AnchorNetworkInstance network) {
+    private static boolean tick(ServerLevel level, Instance network) {
         Entity entity = level.getEntity(network.ownerId());
         if (!(entity instanceof ServerPlayer) || entity.isRemoved()) {
             return false;
         }
-        AnchorNetworkDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.ANCHOR_NETWORK_REGISTRY,
+        AnchorNetworkDefinition definition = SkillDefinitions.resolveStored(
+                AnchorNetworkDefinition.class,
+                network.skillId(),
                 network.definitionId(),
+                CoreRegistries.ANCHOR_NETWORK_REGISTRY,
                 level.registryAccess()
         );
         if (definition == null) {
@@ -197,10 +214,11 @@ public final class AnchorNetworks {
     }
 
     private static RuntimeVisualState visualState(
-            AnchorNetworkInstance network,
+            Instance network,
             AnchorNetworkDefinition definition,
             Identifier visual,
-            long expiresAt
+            long expiresAt,
+            RuntimeVisualDefinition visualDefinition
     ) {
         List<Vec3> points = new ArrayList<>();
         Map<Identifier, Integer> indices = new HashMap<>();
@@ -236,8 +254,16 @@ public final class AnchorNetworks {
                 0.0F,
                 network.runtimeId().getMostSignificantBits(),
                 points.size(),
-                links.size()
+                links.size(),
+                visualDefinition
         );
+    }
+
+    private static Resolved<RuntimeVisualDefinition> visual(
+            SkillExecutionContext context,
+            java.util.Optional<DefinitionRef<RuntimeVisualDefinition>> reference
+    ) {
+        return reference.map(value -> SkillDefinitions.visual(context, value)).orElse(null);
     }
 
     private static Map<Identifier, Vec3> resolveNodes(
@@ -263,22 +289,37 @@ public final class AnchorNetworks {
         return Map.copyOf(nodes);
     }
 
-    private static void removeRuntime(ServerLevel level, AnchorNetworkInstance network, boolean expired) {
-        AnchorNetworkDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.ANCHOR_NETWORK_REGISTRY,
+    private static void removeRuntime(ServerLevel level, Instance network, boolean expired) {
+        AnchorNetworkDefinition definition = SkillDefinitions.resolveStored(
+                AnchorNetworkDefinition.class,
+                network.skillId(),
                 network.definitionId(),
+                CoreRegistries.ANCHOR_NETWORK_REGISTRY,
                 level.registryAccess()
         );
-        if (definition != null) {
-            definition.visual().ifPresent(visual -> RuntimeVisualSync.remove(
+        Entity ownerEntity = level.getEntity(network.ownerId());
+        if (definition != null && ownerEntity instanceof ServerPlayer owner) {
+            SkillExecutionContext context = new SkillExecutionContext(
                     level,
-                    visualState(network, definition, visual, 0L)
-            ));
+                    owner,
+                    network.skillId(),
+                    null,
+                    network.center(),
+                    network.charge(),
+                    network.variables()
+            );
+            Resolved<RuntimeVisualDefinition> visual = visual(context, definition.visual());
+            if (visual != null) {
+                RuntimeVisualSync.remove(
+                        level,
+                        visualState(network, definition, visual.id(), 0L, visual.value())
+                );
+            }
         }
         removeChildField(level, network, expired);
     }
 
-    private static void removeChildField(ServerLevel level, AnchorNetworkInstance network, boolean expired) {
+    private static void removeChildField(ServerLevel level, Instance network, boolean expired) {
         if (network.childField() == null) {
             return;
         }
@@ -288,6 +329,96 @@ public final class AnchorNetworks {
             AreaFields.expire(level, network.childField());
         } else {
             AreaFields.remove(level, network.childField());
+        }
+    }
+
+    private static final class Instance implements AnchorNetworkDefinition.View {
+        private final UUID runtimeId = UUID.randomUUID();
+        private final ResourceKey<Level> dimension;
+        private final UUID ownerId;
+        private final Identifier skillId;
+        private final Identifier definitionId;
+        private final Vec3 center;
+        private final Map<Identifier, Vec3> nodes;
+        private final double charge;
+        private final Map<Identifier, Double> variables;
+        private final long expiresAt;
+        private UUID childField;
+
+        private Instance(
+                ResourceKey<Level> dimension,
+                UUID ownerId,
+                Identifier skillId,
+                Identifier definitionId,
+                Vec3 center,
+                Map<Identifier, Vec3> nodes,
+                double charge,
+                Map<Identifier, Double> variables,
+                long expiresAt
+        ) {
+            this.dimension = dimension;
+            this.ownerId = ownerId;
+            this.skillId = skillId;
+            this.definitionId = definitionId;
+            this.center = center;
+            this.nodes = Map.copyOf(nodes);
+            this.charge = charge;
+            this.variables = variables == null ? Map.of() : Map.copyOf(variables);
+            this.expiresAt = expiresAt;
+        }
+
+        @Override
+        public UUID runtimeId() {
+            return runtimeId;
+        }
+
+        public ResourceKey<Level> dimension() {
+            return dimension;
+        }
+
+        @Override
+        public UUID ownerId() {
+            return ownerId;
+        }
+
+        public Identifier skillId() {
+            return skillId;
+        }
+
+        @Override
+        public Identifier definitionId() {
+            return definitionId;
+        }
+
+        @Override
+        public Vec3 center() {
+            return center;
+        }
+
+        @Override
+        public Map<Identifier, Vec3> nodes() {
+            return nodes;
+        }
+
+        public double charge() {
+            return charge;
+        }
+
+        public Map<Identifier, Double> variables() {
+            return variables;
+        }
+
+        @Override
+        public long expiresAt() {
+            return expiresAt;
+        }
+
+        public UUID childField() {
+            return childField;
+        }
+
+        public void setChildField(UUID childField) {
+            this.childField = childField;
         }
     }
 }

@@ -2,11 +2,11 @@ package net.zic.ascension.capabilities.qi_provider;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactions;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 
 public class SimpleEntityQiProvider implements EntityQiProvider {
     private final LivingEntity attachedEntity;
@@ -27,7 +27,7 @@ public class SimpleEntityQiProvider implements EntityQiProvider {
 
     @Override
     public void regenQi(double amount) {
-        ResourceTransactions.restore(
+        ResourceTransactionService.restore(
                 attachedEntity,
                 AscensionResourceTypes.QI.getId(),
                 AscensionResourceSources.DIRECT,
@@ -37,7 +37,7 @@ public class SimpleEntityQiProvider implements EntityQiProvider {
 
     @Override
     public boolean reduceQi(double amount) {
-        return ResourceTransactions.consume(
+        return ResourceTransactionService.consume(
                 attachedEntity,
                 AscensionResourceTypes.QI.getId(),
                 AscensionResourceSources.DIRECT,

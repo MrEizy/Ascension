@@ -1,8 +1,0 @@
-{
-  "projectile_tag": "ascension:ranged_projectiles",
-  "classifications": [
-    "ascension:projectile",
-    "ascension:ranged"
-  ],
-  "full_charge_speed": 3.0
-}

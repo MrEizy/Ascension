@@ -3,76 +3,190 @@
   "name": "Self Pulse",
   "description": "Tests self targeting, caster features, particles, sound, messages and Qi restoration.",
   "default_accessible_level": 1,
-  "levels": [
-    {
-      "execution": {
-        "targeting": {
-          "type": "ascension:self"
-        },
-        "require_targets": true,
-        "caster_features": [
+  "definitions": {
+    "visuals": {
+      "pulse": {
+        "layers": [
           {
-            "type": "ascension:runtime_visual",
-            "visual": "ascension:debug/self_pulse",
-            "duration": {
-              "base": 36
+            "type": "ascension:shell",
+            "appearance": {
+              "color": [
+                70,
+                155,
+                255,
+                12
+              ],
+              "secondary_color": [
+                120,
+                255,
+                220,
+                58
+              ],
+              "line_width": 1.5,
+              "filled": true,
+              "no_depth": true
             },
-            "position": "caster",
-            "follow": true,
-            "offset": [
-              0,
-              1.0,
-              0
-            ],
-            "progress": {
-              "base": 1.0
+            "geometry": {
+              "radius": 1.45,
+              "height": 2.9,
+              "segments": 24
+            },
+            "motion": {
+              "pulse": 0.09,
+              "pulse_speed": 0.2
             }
           },
           {
-            "type": "ascension:particle_burst",
-            "particle": "minecraft:happy_villager",
-            "count": {
-              "base": 20
+            "type": "ascension:ring",
+            "transform": {
+              "rotation": [
+                90,
+                0,
+                0
+              ]
             },
-            "spread": {
-              "base": 0.7
+            "appearance": {
+              "color": [
+                100,
+                205,
+                255,
+                170
+              ],
+              "secondary_color": [
+                180,
+                255,
+                215,
+                235
+              ],
+              "line_width": 2.2,
+              "no_depth": true
             },
-            "speed": {
-              "base": 0.03
+            "geometry": {
+              "radius": 1.2,
+              "segments": 30
+            },
+            "motion": {
+              "spin": 2.0,
+              "pulse": 0.08,
+              "pulse_speed": 0.18
             }
           },
           {
-            "type": "ascension:sound",
-            "sound": "minecraft:block.amethyst_block.chime",
-            "volume": {
-              "base": 0.7
+            "type": "ascension:billboard",
+            "transform": {
+              "offset": [
+                0,
+                0.65,
+                0
+              ]
             },
-            "pitch": {
-              "base": 1.2
+            "appearance": {
+              "color": [
+                120,
+                225,
+                255,
+                80
+              ],
+              "secondary_color": [
+                205,
+                255,
+                225,
+                165
+              ]
+            },
+            "geometry": {
+              "width": 0.45,
+              "height": 0.45
+            },
+            "motion": {
+              "spin": 1.0
             }
           },
           {
-            "type": "ascension:resource_transaction",
-            "target": "caster",
-            "resource": "ascension:qi",
-            "operation": "restore",
-            "source": "ascension:direct",
-            "amount": {
-              "base": 10
+            "type": "ascension:particle_emitter",
+            "geometry": {
+              "radius": 0.9,
+              "height": 1.8,
+              "length": 0.02,
+              "count": 2
+            },
+            "motion": {
+              "interval": 3
+            },
+            "resources": {
+              "particle": "minecraft:happy_villager"
             }
-          },
-          {
-            "type": "ascension:message",
-            "message": "Self pulse executed",
-            "overlay": true
           }
-        ],
-        "target_features": []
-      },
-      "costs": [],
-      "cooldown": {
-        "base": 10
+        ]
       }
     }
-  ]
+  },
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:visual",
+      "duration": {
+        "base": 36
+      },
+      "follow": true,
+      "offset": [
+        0,
+        1.0,
+        0
+      ],
+      "progress": {
+        "base": 1.0
+      },
+      "definition": "#pulse",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:happy_villager",
+      "count": {
+        "base": 20
+      },
+      "spread": {
+        "base": 0.7
+      },
+      "speed": {
+        "base": 0.03
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.amethyst_block.chime",
+      "volume": {
+        "base": 0.7
+      },
+      "pitch": {
+        "base": 1.2
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:resource",
+      "resource": "ascension:qi",
+      "operation": "ascension:restore",
+      "source": "ascension:direct",
+      "amount": {
+        "base": 10
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:message",
+      "message": "Self pulse executed",
+      "overlay": true,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 10
+  }
 }

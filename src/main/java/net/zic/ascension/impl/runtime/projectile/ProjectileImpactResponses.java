@@ -3,8 +3,8 @@ package net.zic.ascension.impl.runtime.projectile;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.api.ascension.core.projectile.ProjectileImpactResponse;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineDamageSource;
+import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
 
 public final class ProjectileImpactResponses {
     private ProjectileImpactResponses() {
@@ -13,12 +13,12 @@ public final class ProjectileImpactResponses {
     public static void apply(
             RPGEngineDamageSource source,
             LivingEntity protectedEntity,
-            ProjectileImpactResponse response
+            NormalProjectileDefinition.ImpactResponse response
     ) {
         if (source == null
                 || protectedEntity == null
                 || response == null
-                || response == ProjectileImpactResponse.NONE
+                || response == NormalProjectileDefinition.ImpactResponse.NONE
                 || !(source.getDirectEntity() instanceof Projectile projectile)
                 || projectile.isRemoved()) {
             return;

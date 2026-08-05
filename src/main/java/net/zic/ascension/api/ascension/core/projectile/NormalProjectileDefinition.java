@@ -3,7 +3,11 @@ package net.zic.ascension.api.ascension.core.projectile;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.StringRepresentable;
 import net.zic.ascension.api.ascension.value.ScaledValue;
+import net.zic.ascension.api.ascension.core.control.StaggerDefinition;
+import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
+import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,9 +30,9 @@ public record NormalProjectileDefinition(
             Identifier.CODEC.optionalFieldOf("projectile_tag").forGetter(NormalProjectileDefinition::projectileTag),
             Identifier.CODEC.listOf().optionalFieldOf("projectile_types", List.of())
                     .forGetter(NormalProjectileDefinition::projectileTypes),
-            ScaledValue.CODEC.codec().optionalFieldOf("damage_multiplier", ScaledValue.constant(1.0D))
+            ScaledValue.COMPACT_CODEC.optionalFieldOf("damage_multiplier", ScaledValue.constant(1.0D))
                     .forGetter(NormalProjectileDefinition::damageMultiplier),
-            ScaledValue.CODEC.codec().optionalFieldOf("bonus_damage", ScaledValue.constant(0.0D))
+            ScaledValue.COMPACT_CODEC.optionalFieldOf("bonus_damage", ScaledValue.constant(0.0D))
                     .forGetter(NormalProjectileDefinition::bonusDamage),
             Identifier.CODEC.listOf().optionalFieldOf("classifications", List.of())
                     .forGetter(NormalProjectileDefinition::classifications),
@@ -52,7 +56,7 @@ public record NormalProjectileDefinition(
     }
 
     public record Steering(
-            Identifier effect,
+            DefinitionRef<SkillEffectDefinition> effect,
             Optional<Identifier> sourceSkill,
             ScaledValue range,
             ScaledValue turnRate,
@@ -60,11 +64,11 @@ public record NormalProjectileDefinition(
             boolean ownerScoped
     ) {
         public static final Codec<Steering> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Identifier.CODEC.fieldOf("effect").forGetter(Steering::effect),
+                DefinitionRef.codec(SkillEffectDefinition.CODEC).fieldOf("effect").forGetter(Steering::effect),
                 Identifier.CODEC.optionalFieldOf("source_skill").forGetter(Steering::sourceSkill),
-                ScaledValue.CODEC.codec().optionalFieldOf("range", ScaledValue.constant(24.0D))
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("range", ScaledValue.constant(24.0D))
                         .forGetter(Steering::range),
-                ScaledValue.CODEC.codec().optionalFieldOf("turn_rate", ScaledValue.constant(0.12D))
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("turn_rate", ScaledValue.constant(0.12D))
                         .forGetter(Steering::turnRate),
                 Codec.intRange(1, 200).optionalFieldOf("reacquire_interval", 4)
                         .forGetter(Steering::reacquireInterval),
@@ -77,14 +81,33 @@ public record NormalProjectileDefinition(
     }
 
     public record Stagger(
-            Identifier profile,
+            DefinitionRef<StaggerDefinition> profile,
             ScaledValue amount,
             boolean scaleWithDamage
     ) {
         public static final Codec<Stagger> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Identifier.CODEC.fieldOf("profile").forGetter(Stagger::profile),
-                ScaledValue.CODEC.codec().fieldOf("amount").forGetter(Stagger::amount),
+                DefinitionRef.codec(StaggerDefinition.CODEC).fieldOf("profile").forGetter(Stagger::profile),
+                ScaledValue.COMPACT_CODEC.fieldOf("amount").forGetter(Stagger::amount),
                 Codec.BOOL.optionalFieldOf("scale_with_damage", false).forGetter(Stagger::scaleWithDamage)
         ).apply(instance, Stagger::new));
     }
+    public enum ImpactResponse implements StringRepresentable {
+        NONE("none"),
+        STOP("stop"),
+        DISCARD("discard"),
+        DEFLECT("deflect");
+
+        public static final Codec<ImpactResponse> CODEC = StringRepresentable.fromEnum(ImpactResponse::values);
+        private final String name;
+
+        ImpactResponse(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return name;
+        }
+    }
+
 }

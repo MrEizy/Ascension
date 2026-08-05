@@ -6,7 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualPhase;
+import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.client.particle.ParticleFieldController;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
@@ -15,7 +15,7 @@ import java.util.UUID;
 public record HeldCastVisualStatePacket(
         UUID playerId,
         Identifier skillId,
-        HeldCastVisualPhase phase,
+        HeldCastVisualState.Phase phase,
         int stage,
         float charge
 ) implements CustomPacketPayload {
@@ -28,7 +28,7 @@ public record HeldCastVisualStatePacket(
         public HeldCastVisualStatePacket decode(FriendlyByteBuf buf) {
             UUID playerId = buf.readUUID();
             Identifier skillId = buf.readBoolean() ? ByteBufHelpers.decodeIdentifier(buf) : null;
-            HeldCastVisualPhase phase = buf.readEnum(HeldCastVisualPhase.class);
+            HeldCastVisualState.Phase phase = buf.readEnum(HeldCastVisualState.Phase.class);
             int stage = buf.readVarInt();
             float charge = buf.readFloat();
             return new HeldCastVisualStatePacket(playerId, skillId, phase, stage, charge);

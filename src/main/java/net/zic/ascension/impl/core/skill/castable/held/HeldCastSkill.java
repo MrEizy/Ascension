@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.skill.castable.held;
 
+import net.zic.ascension.api.ascension.value.ScaledValue;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
@@ -9,23 +10,22 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactionResult;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillExecutionDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Owner;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastChargeStage;
 import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastData;
 import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastSpec;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualPhase;
 import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
-import net.zic.ascension.api.ascension.value.ScaledValueContext;
 import net.zic.ascension.impl.core.skill.castable.SkillExecutions;
 import net.zic.ascension.impl.core.skill.castable.CastSoundPlayer;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
@@ -40,8 +40,17 @@ public record HeldCastSkill(
         Component name,
         Component description,
         HeldCastSpec cast,
+        SkillDefinitions definitions,
         SkillExecutionDefinition execution
-) implements CastableSkill {
+) implements CastableSkill, Owner {
+    public HeldCastSkill {
+        definitions = definitions == null ? SkillDefinitions.EMPTY : definitions;
+    }
+    @Override
+    public SkillDefinitions definitions() {
+        return definitions;
+    }
+
     @Override
     public CastType getCastType() {
         return CastType.LONG;
@@ -78,7 +87,7 @@ public record HeldCastSkill(
         }
 
         if (cast.cost().isPresent()) {
-            ScaledValueContext context = scaledValueContext(caster, skillId, cast.charge(1));
+            ScaledValue.Context context = scaledValueContext(caster, skillId, cast.charge(1));
             if (!cast.cost().get().canStart(caster, skillId, context, cast.maximumCharge())) {
                 return CastResult.fail(Component.literal("Not enough resources"));
             }
@@ -132,14 +141,14 @@ public record HeldCastSkill(
             return;
         }
 
-        ScaledValueContext scaledContext = scaledValueContext(caster, skillId, charge);
+        ScaledValue.Context scaledContext = scaledValueContext(caster, skillId, charge);
         cast.movement().apply(caster, scaledContext);
 
-        HeldCastChargeStage stage = cast.stages().get(data.getStageIndex());
+        HeldCastSpec.Stage stage = cast.stages().get(data.getStageIndex());
         CastSoundPlayer.playPeriodic(caster, stage.sounds(), ticksElapsed);
 
         if (!caster.level().isClientSide() && cast.cost().isPresent()) {
-            ResourceTransactionResult result = cast.cost().get().payIncrement(
+            ResourceTransactionService.Result result = cast.cost().get().payIncrement(
                     caster,
                     skillId,
                     data,
@@ -235,20 +244,20 @@ public record HeldCastSkill(
         Identifier skillId = getSkillId(caster);
         return skillId == null ? null : new HeldCastVisualState(
                 skillId,
-                HeldCastVisualPhase.CHARGING,
+                HeldCastVisualState.Phase.CHARGING,
                 data.getStageIndex(),
                 cast.charge(data.getChargeTicks())
         );
     }
 
-    public Optional<net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition> particleField(int stage) {
+    public Optional<net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition> particleField(int stage) {
         if (stage < 0 || stage >= cast.stages().size()) {
             return Optional.empty();
         }
         return cast.stages().get(stage).particleField();
     }
 
-    private ScaledValueContext scaledValueContext(LivingEntity caster, Identifier skillId, double charge) {
+    private ScaledValue.Context scaledValueContext(LivingEntity caster, Identifier skillId, double charge) {
         OriginSource source = null;
         var holder = caster.getCapability(
                 net.zic.ascension.api.ascension.capabilities.CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
@@ -256,7 +265,7 @@ public record HeldCastSkill(
         if (holder != null) {
             source = holder.getData(caster).getSource();
         }
-        return new ScaledValueContext(source, skillId, caster, null, charge, Map.of());
+        return new ScaledValue.Context(source, skillId, caster, null, charge, Map.of());
     }
 
     private Identifier getSkillId(LivingEntity caster) {
@@ -316,16 +325,32 @@ public record HeldCastSkill(
 
     @Override
     public SkillData newData(RegistryAccess access) {
-        return new HeldCastSkillData();
+        return new Data();
     }
 
     @Override
     public SkillData loadData(ValueInput input, RegistryAccess access) {
-        return new HeldCastSkillData();
+        return new Data();
     }
 
     @Override
     public SkillData loadData(ByteBuf buf) {
-        return new HeldCastSkillData();
+        return new Data();
     }
+
+    public static final class Data implements SkillData {
+        @Override
+        public void write(net.minecraft.world.level.storage.ValueOutput output) {
+        }
+
+        @Override
+        public void encode(ByteBuf buf) {
+        }
+
+        @Override
+        public SkillType getType() {
+            return AscensionSkillTypes.HELD_CAST_SKILL_TYPE.get();
+        }
+    }
+
 }

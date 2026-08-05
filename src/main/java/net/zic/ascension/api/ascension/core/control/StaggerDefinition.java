@@ -19,17 +19,17 @@ public record StaggerDefinition(
         List<SkillExecutionFeature> onGuardBreak
 ) {
     public static final Codec<StaggerDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ScaledValue.CODEC.codec().optionalFieldOf("threshold", ScaledValue.constant(100.0D))
+            ScaledValue.COMPACT_CODEC.optionalFieldOf("threshold", ScaledValue.constant(100.0D))
                     .forGetter(StaggerDefinition::threshold),
-            ScaledValue.CODEC.codec().optionalFieldOf("resistance", ScaledValue.constant(0.0D))
+            ScaledValue.COMPACT_CODEC.optionalFieldOf("resistance", ScaledValue.constant(0.0D))
                     .forGetter(StaggerDefinition::resistance),
-            ScaledValue.CODEC.codec().optionalFieldOf("decay_per_second", ScaledValue.constant(10.0D))
+            ScaledValue.COMPACT_CODEC.optionalFieldOf("decay_per_second", ScaledValue.constant(10.0D))
                     .forGetter(StaggerDefinition::decayPerSecond),
             Codec.intRange(0, 12000).optionalFieldOf("decay_delay", 40)
                     .forGetter(StaggerDefinition::decayDelay),
-            ScaledValue.CODEC.codec().optionalFieldOf("guard_break_duration", ScaledValue.constant(30.0D))
+            ScaledValue.COMPACT_CODEC.optionalFieldOf("guard_break_duration", ScaledValue.constant(30.0D))
                     .forGetter(StaggerDefinition::guardBreakDuration),
-            ScaledValue.CODEC.codec().optionalFieldOf("immunity_duration", ScaledValue.constant(40.0D))
+            ScaledValue.COMPACT_CODEC.optionalFieldOf("immunity_duration", ScaledValue.constant(40.0D))
                     .forGetter(StaggerDefinition::immunityDuration),
             Codec.doubleRange(0.0D, 1.0D).optionalFieldOf("movement_multiplier", 0.2D)
                     .forGetter(StaggerDefinition::movementMultiplier),

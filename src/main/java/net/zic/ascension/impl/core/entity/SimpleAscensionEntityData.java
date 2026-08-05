@@ -190,15 +190,12 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
     @Override
     public void initialize() {
-
         AscensionEntityData.super.initialize();
+        OriginSourcePatch loadedPatch = getSource().load();
         initializeAttributes();
-
-
-        markDirty(getSource().load(),true);
-        initializePathBonuses();
         getSource().attachToEntity(getEntity());
-
+        initializePathBonuses();
+        markDirty(loadedPatch, true);
     }
 
 
@@ -321,34 +318,34 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         updateStatHolder(stat);
     }
     //TODO add a process system like patching for bulk updates
-    public void updateStatHolder(Stat stat){
-        if(getEntity() == null) return;
-        NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(getEntity(),List.of(stat)));
-        if (!getEntity().level().isClientSide()) {
-            getEntity().syncData(ZenithAttachments.ATTRIBUTE_HOLDER);
+    public void updateStatHolder(Stat stat) {
+        if (getEntity() == null || stat == null) {
+            return;
         }
-
+        NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(getEntity(), List.of(stat)));
     }
 
-
     @Override
-    public void markDirty(OriginSourcePatch patch,boolean fullPatch) {
-        //TODO ensure up to date
-        if (attachedEntity.level().isClientSide()) {
+    public void markDirty(OriginSourcePatch patch, boolean fullPatch) {
+        if (attachedEntity == null || attachedEntity.level().isClientSide()) {
             return;
         }
 
         this.patch = patch;
-        if(patch == null) return;
-        if (!patch.dirtyStats().isEmpty()) {
-            initializeAttributes();
-            NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(
-                    attachedEntity,
-                    patch.dirtyStats().stream().map(StatInstance::getStat).toList()
-            ));
-            attachedEntity.syncData(ZenithAttachments.ATTRIBUTE_HOLDER);
-        }
         this.fullPatch = fullPatch;
+
+        if (patch == null) {
+            return;
+        }
+
+        if (!patch.dirtyStats().isEmpty()) {NeoForge.EVENT_BUS.post(
+                new StatsUpdatedEvent(attachedEntity, patch.dirtyStats()
+                        .stream()
+                        .map(StatInstance::getStat)
+                        .toList()
+                ));
+        }
+
         attachedEntity.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
     }
 

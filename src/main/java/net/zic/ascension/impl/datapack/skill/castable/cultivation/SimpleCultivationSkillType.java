@@ -8,7 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.CastSoundDefinition;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkillData;

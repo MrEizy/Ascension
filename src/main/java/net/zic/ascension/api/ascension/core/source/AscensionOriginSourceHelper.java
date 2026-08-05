@@ -23,13 +23,10 @@ import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillHolder;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
-import net.zic.ascension.api.ascension.event.bloodline.BloodlineAddedEvent;
-import net.zic.ascension.api.ascension.event.bloodline.BloodlineRemovedEvent;
-import net.zic.ascension.api.ascension.event.path.PathAddedEvent;
-import net.zic.ascension.api.ascension.event.path.PathRemovedEvent;
+import net.zic.ascension.api.ascension.event.bloodline.BloodlineEvent;
+import net.zic.ascension.api.ascension.event.path.PathEvent;
 import net.zic.ascension.api.ascension.event.physique.PhysiqueChangedEvent;
-import net.zic.ascension.api.ascension.event.skill.SkillAddedEvent;
-import net.zic.ascension.api.ascension.event.skill.SkillRemovedEvent;
+import net.zic.ascension.api.ascension.event.skill.SkillEvent;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
@@ -208,7 +205,7 @@ public class AscensionOriginSourceHelper {
             return true;
         };
 
-        BloodlineAddedEvent.Pre pre = new BloodlineAddedEvent.Pre(bloodline,data,source);
+        BloodlineEvent.Added.Pre pre = new BloodlineEvent.Added.Pre(bloodline,data,source);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
@@ -233,7 +230,7 @@ public class AscensionOriginSourceHelper {
 
 
 
-        BloodlineAddedEvent.Post post= new BloodlineAddedEvent.Post(bloodline,data,source);
+        BloodlineEvent.Added.Post post= new BloodlineEvent.Added.Post(bloodline,data,source);
         NeoForge.EVENT_BUS.post(post);
         source.markDataSourceDirty(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
 
@@ -246,7 +243,7 @@ public class AscensionOriginSourceHelper {
         if(!getBloodlineHolder(source).hasBloodline(bloodline)) return false;
 
         BloodlineData data = getBloodlineHolder(source).getBloodline(bloodline);
-        BloodlineRemovedEvent.Pre pre = new BloodlineRemovedEvent.Pre(bloodline,data,source);
+        BloodlineEvent.Removed.Pre pre = new BloodlineEvent.Removed.Pre(bloodline,data,source);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
@@ -268,7 +265,7 @@ public class AscensionOriginSourceHelper {
             removePath(source,path,pre.getBloodlineIdentifier());
         }
 
-        BloodlineRemovedEvent.Post post= new BloodlineRemovedEvent.Post(bloodline,data,source);
+        BloodlineEvent.Removed.Post post= new BloodlineEvent.Removed.Post(bloodline,data,source);
         NeoForge.EVENT_BUS.post(post);
 
         source.markDataSourceDirty(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
@@ -322,7 +319,7 @@ public class AscensionOriginSourceHelper {
         if(getPathHolder(source).hasCachedPath(path)) existingData = getPathHolder(source).removeCachedPath(path);
 
 
-        PathAddedEvent.Pre pre = new PathAddedEvent.Pre(path,existingData,source);
+        PathEvent.Added.Pre pre = new PathEvent.Added.Pre(path,existingData,source);
 
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
@@ -333,7 +330,7 @@ public class AscensionOriginSourceHelper {
         source.startProcess("add_path");
 
         existingData.simulateProgression(source);
-        PathAddedEvent.Post post = new PathAddedEvent.Post(path,existingData,source);
+        PathEvent.Added.Post post = new PathEvent.Added.Post(path,existingData,source);
         NeoForge.EVENT_BUS.post(post);
 
         source.markDataSourceDirty(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
@@ -347,7 +344,7 @@ public class AscensionOriginSourceHelper {
         if(path == null || !getPathHolder(source).hasPath(path)) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
         PathData data = getPathHolder(source).getPath(path);
-        PathRemovedEvent.Pre pre = new PathRemovedEvent.Pre(path,data,source);
+        PathEvent.Removed.Pre pre = new PathEvent.Removed.Pre(path,data,source);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
@@ -356,7 +353,7 @@ public class AscensionOriginSourceHelper {
 
         source.startProcess("remove_path");
         data.removeFromSource(source);
-        PathRemovedEvent.Post post = new PathRemovedEvent.Post(path,data,source);
+        PathEvent.Removed.Post post = new PathEvent.Removed.Post(path,data,source);
         NeoForge.EVENT_BUS.post(post);
 
         source.markDataSourceDirty(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
@@ -406,7 +403,7 @@ public class AscensionOriginSourceHelper {
         if(!CoreRegistries.SKILL_REGISTRY.get(source.getRegistryAccess()).containsKey(skill)) return false;
         if(getSkillHolder(source).hasCachedSkill(skill))  data = getSkillHolder(source).removeCachedSkill(skill);
 
-        SkillAddedEvent.Pre pre = new SkillAddedEvent.Pre(source,skill,data);
+        SkillEvent.Added.Pre pre = new SkillEvent.Added.Pre(source,skill,data);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
@@ -421,7 +418,7 @@ public class AscensionOriginSourceHelper {
         }
         pre.getSkill(source.getRegistryAccess()).onAdded(source,data);
 
-        SkillAddedEvent.Post post = new SkillAddedEvent.Post(source,skill,data);
+        SkillEvent.Added.Post post = new SkillEvent.Added.Post(source,skill,data);
 
         NeoForge.EVENT_BUS.post(post);
 
@@ -436,7 +433,7 @@ public class AscensionOriginSourceHelper {
         SkillData data = getSkillHolder(source).getSkillData(skill);
 
 
-        SkillRemovedEvent.Pre pre = new SkillRemovedEvent.Pre(source,skill,data);
+        SkillEvent.Removed.Pre pre = new SkillEvent.Removed.Pre(source,skill,data);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
@@ -450,7 +447,7 @@ public class AscensionOriginSourceHelper {
                 pre.getSkill(source.getRegistryAccess()).removeFromEntity(entity,pre.getSkillData());
             }
         }
-        SkillRemovedEvent.Post post = new SkillRemovedEvent.Post(source,skill,data);
+        SkillEvent.Removed.Post post = new SkillEvent.Removed.Post(source,skill,data);
         NeoForge.EVENT_BUS.post(post);
 
         source.markDataSourceDirty(CoreHolderProviders.SKILL_HOLDER_PROVIDER.getId());

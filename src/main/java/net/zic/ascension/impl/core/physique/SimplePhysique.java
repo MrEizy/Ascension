@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.physique.Physique;
@@ -124,16 +125,31 @@ public record SimplePhysique(Component name, Component description, List<Identif
 
     @Override
     public PhysiqueData newData(RegistryAccess access) {
-        return new EmptyPhysiqueData();
+        return new EmptyData();
     }
 
     @Override
     public PhysiqueData loadData(ValueInput input,RegistryAccess access) {
-        return new EmptyPhysiqueData();
+        return new EmptyData();
     }
 
     @Override
     public PhysiqueData loadData(ByteBuf buf) {
-        return new EmptyPhysiqueData();
+        return new EmptyData();
+    }
+
+    public static final class EmptyData implements PhysiqueData {
+        @Override
+        public PhysiqueType getType() {
+            return AscensionPhysiqueTypes.SIMPLE_PHYSIQUE_TYPE.get();
+        }
+
+        @Override
+        public void write(ValueOutput output) {
+        }
+
+        @Override
+        public void encode(ByteBuf buf) {
+        }
     }
 }

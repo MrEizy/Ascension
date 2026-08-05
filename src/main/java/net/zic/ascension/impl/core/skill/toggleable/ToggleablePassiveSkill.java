@@ -11,10 +11,9 @@ import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactionFlag;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
-import net.zic.ascension.api.core.skill.toggleable.ToggleableSkill;
+import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
@@ -174,7 +173,7 @@ public class ToggleablePassiveSkill implements ToggleableSkill {
                         ResourceOperation.CONSUME,
                         qiUpkeep.get().cost(qiProvider.getMaxQi()),
                         AscensionResourceSources.SKILL_CASTING
-                ).withFlags(Set.of(ResourceTransactionFlag.SIMULATE))
+                ).withFlags(Set.of(ResourceTransactionRequest.Flag.SIMULATE))
         ).succeeded();
     }
 

@@ -13,13 +13,17 @@ import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
 
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.impl.core.targeting.TargetingService;
-import net.zic.ascension.impl.runtime.visual.RuntimeVisualSync;
+import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,10 +31,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
+import java.util.Map;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class AreaFields {
-    private static final List<AreaFieldInstance> FIELDS = new ArrayList<>();
+    private static final List<Instance> FIELDS = new ArrayList<>();
 
     private AreaFields() {
     }
@@ -40,9 +47,11 @@ public final class AreaFields {
             Identifier definitionId,
             Vec3 center
     ) {
-        AreaFieldDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.AREA_FIELD_REGISTRY,
+        AreaFieldDefinition definition = SkillDefinitions.resolveStored(
+                AreaFieldDefinition.class,
+                context.skill(),
                 definitionId,
+                CoreRegistries.AREA_FIELD_REGISTRY,
                 context.level().registryAccess()
         );
         if (definition == null) {
@@ -55,7 +64,7 @@ public final class AreaFields {
         }
 
         long createdAt = context.level().getGameTime();
-        AreaFieldInstance field = new AreaFieldInstance(
+        Instance field = new Instance(
                 context.level().dimension(),
                 context.caster().getUUID(),
                 context.skill(),
@@ -67,14 +76,15 @@ public final class AreaFields {
                 createdAt + Math.max(1L, Math.round(durationValue))
         );
         FIELDS.add(field);
-        definition.visual().ifPresent(visual -> {
+        Resolved<RuntimeVisualDefinition> visual = visual(context, definition.visual());
+        if (visual != null) {
             double radius = definition.radius().resolve(context.scaledValueContext());
             double height = definition.height().resolve(context.scaledValueContext());
             RuntimeVisualSync.spawn(
                     context.level(),
-                    visualState(field, visual, field.expiresAt(), radius, height)
+                    visualState(field, visual.id(), field.expiresAt(), radius, height, visual.value())
             );
-        });
+        }
         return field.runtimeId();
     }
 
@@ -102,9 +112,9 @@ public final class AreaFields {
             return 0;
         }
         int removed = 0;
-        Iterator<AreaFieldInstance> iterator = FIELDS.iterator();
+        Iterator<Instance> iterator = FIELDS.iterator();
         while (iterator.hasNext()) {
-            AreaFieldInstance field = iterator.next();
+            Instance field = iterator.next();
             if (!field.ownerId().equals(ownerId)
                     || definitionId != null && !field.definitionId().equals(definitionId)) {
                 continue;
@@ -118,7 +128,7 @@ public final class AreaFields {
 
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Pre event) {
-        for (AreaFieldInstance field : List.copyOf(FIELDS)) {
+        for (Instance field : List.copyOf(FIELDS)) {
             if (!FIELDS.contains(field)) {
                 continue;
             }
@@ -137,17 +147,13 @@ public final class AreaFields {
         FIELDS.clear();
     }
 
-    private static boolean tick(ServerLevel level, AreaFieldInstance field) {
+    private static boolean tick(ServerLevel level, Instance field) {
         Entity ownerEntity = level.getEntity(field.ownerId());
         if (!(ownerEntity instanceof ServerPlayer owner) || owner.isRemoved()) {
             return false;
         }
 
-        AreaFieldDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.AREA_FIELD_REGISTRY,
-                field.definitionId(),
-                level.registryAccess()
-        );
+        AreaFieldDefinition definition = SkillDefinitions.resolveStored(AreaFieldDefinition.class, field.skillId(), field.definitionId(), CoreRegistries.AREA_FIELD_REGISTRY, level.registryAccess());
         if (definition == null) {
             return false;
         }
@@ -231,9 +237,9 @@ public final class AreaFields {
         if (level == null || runtimeId == null) {
             return false;
         }
-        Iterator<AreaFieldInstance> iterator = FIELDS.iterator();
+        Iterator<Instance> iterator = FIELDS.iterator();
         while (iterator.hasNext()) {
-            AreaFieldInstance field = iterator.next();
+            Instance field = iterator.next();
             if (!field.runtimeId().equals(runtimeId)) {
                 continue;
             }
@@ -247,16 +253,12 @@ public final class AreaFields {
         return false;
     }
 
-    private static void applyExpiry(ServerLevel level, AreaFieldInstance field) {
+    private static void applyExpiry(ServerLevel level, Instance field) {
         Entity ownerEntity = level.getEntity(field.ownerId());
         if (!(ownerEntity instanceof ServerPlayer owner)) {
             return;
         }
-        AreaFieldDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.AREA_FIELD_REGISTRY,
-                field.definitionId(),
-                level.registryAccess()
-        );
+        AreaFieldDefinition definition = SkillDefinitions.resolveStored(AreaFieldDefinition.class, field.skillId(), field.definitionId(), CoreRegistries.AREA_FIELD_REGISTRY, level.registryAccess());
         if (definition == null) {
             return;
         }
@@ -269,12 +271,8 @@ public final class AreaFields {
         }
     }
 
-    private static void removeVisual(ServerLevel level, AreaFieldInstance field) {
-        AreaFieldDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.AREA_FIELD_REGISTRY,
-                field.definitionId(),
-                level.registryAccess()
-        );
+    private static void removeVisual(ServerLevel level, Instance field) {
+        AreaFieldDefinition definition = SkillDefinitions.resolveStored(AreaFieldDefinition.class, field.skillId(), field.definitionId(), CoreRegistries.AREA_FIELD_REGISTRY, level.registryAccess());
         if (definition == null || definition.visual().isEmpty()) {
             return;
         }
@@ -293,18 +291,24 @@ public final class AreaFields {
                 : null;
         double radius = context == null ? 0.0D : definition.radius().resolve(context.scaledValueContext());
         double height = context == null ? 0.0D : definition.height().resolve(context.scaledValueContext());
-        RuntimeVisualSync.remove(
-                level,
-                visualState(field, definition.visual().get(), 0L, radius, height)
-        );
+        Resolved<RuntimeVisualDefinition> visual = context == null
+                ? null
+                : visual(context, definition.visual());
+        if (visual != null) {
+            RuntimeVisualSync.remove(
+                    level,
+                    visualState(field, visual.id(), 0L, radius, height, visual.value())
+            );
+        }
     }
 
     private static RuntimeVisualState visualState(
-            AreaFieldInstance field,
+            Instance field,
             Identifier visual,
             long expiresAt,
             double radius,
-            double height
+            double height,
+            RuntimeVisualDefinition definition
     ) {
         return new RuntimeVisualState(
                 field.runtimeId(),
@@ -320,8 +324,16 @@ public final class AreaFields {
                 0.0F,
                 field.runtimeId().getMostSignificantBits(),
                 radius,
-                height
+                height,
+                definition
         );
+    }
+
+    private static Resolved<RuntimeVisualDefinition> visual(
+            SkillExecutionContext context,
+            java.util.Optional<DefinitionRef<RuntimeVisualDefinition>> reference
+    ) {
+        return reference.map(value -> SkillDefinitions.visual(context, value)).orElse(null);
     }
 
     private static boolean contains(
@@ -342,7 +354,7 @@ public final class AreaFields {
     private static void applyFeatures(
             ServerLevel level,
             ServerPlayer owner,
-            AreaFieldInstance field,
+            Instance field,
             LivingEntity target,
             List<SkillExecutionFeature> features
     ) {
@@ -357,6 +369,87 @@ public final class AreaFields {
         );
         for (SkillExecutionFeature feature : features) {
             feature.apply(context);
+        }
+    }
+
+    private static final class Instance {
+        private final UUID runtimeId;
+        private final ResourceKey<Level> dimension;
+        private final UUID ownerId;
+        private final Identifier skillId;
+        private final Identifier definitionId;
+        private final Vec3 center;
+        private final double charge;
+        private final Map<Identifier, Double> variables;
+        private final long createdAt;
+        private final long expiresAt;
+        private final Set<UUID> inside = new HashSet<>();
+
+        private Instance(
+                ResourceKey<Level> dimension,
+                UUID ownerId,
+                Identifier skillId,
+                Identifier definitionId,
+                Vec3 center,
+                double charge,
+                Map<Identifier, Double> variables,
+                long createdAt,
+                long expiresAt
+        ) {
+            this.runtimeId = UUID.randomUUID();
+            this.dimension = dimension;
+            this.ownerId = ownerId;
+            this.skillId = skillId;
+            this.definitionId = definitionId;
+            this.center = center;
+            this.charge = charge;
+            this.variables = variables == null ? Map.of() : Map.copyOf(variables);
+            this.createdAt = createdAt;
+            this.expiresAt = expiresAt;
+        }
+
+        public UUID runtimeId() {
+            return runtimeId;
+        }
+
+        public ResourceKey<Level> dimension() {
+            return dimension;
+        }
+
+        public UUID ownerId() {
+            return ownerId;
+        }
+
+        public Identifier skillId() {
+            return skillId;
+        }
+
+        public Identifier definitionId() {
+            return definitionId;
+        }
+
+        public Vec3 center() {
+            return center;
+        }
+
+        public double charge() {
+            return charge;
+        }
+
+        public Map<Identifier, Double> variables() {
+            return variables;
+        }
+
+        public long createdAt() {
+            return createdAt;
+        }
+
+        public long expiresAt() {
+            return expiresAt;
+        }
+
+        public Set<UUID> inside() {
+            return inside;
         }
     }
 }

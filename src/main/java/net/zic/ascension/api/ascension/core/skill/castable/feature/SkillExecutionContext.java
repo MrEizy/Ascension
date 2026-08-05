@@ -1,5 +1,6 @@
 package net.zic.ascension.api.ascension.core.skill.castable.feature;
 
+import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -7,7 +8,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
-import net.zic.ascension.api.ascension.value.ScaledValueContext;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 import java.util.Map;
@@ -35,8 +35,26 @@ public record SkillExecutionContext(
         attribution = attribution == null ? SkillExecutionAttribution.direct(caster) : attribution;
     }
 
-    public ScaledValueContext scaledValueContext() {
-        return new ScaledValueContext(
+
+    public LivingEntity entity(ExecutionSubject subject) {
+        return subject == ExecutionSubject.CASTER || subject == ExecutionSubject.ORIGIN ? caster : target;
+    }
+
+    public SkillExecutionContext retarget(LivingEntity entity, Vec3 resolvedPosition) {
+        return new SkillExecutionContext(
+                level,
+                caster,
+                skill,
+                entity,
+                resolvedPosition,
+                charge,
+                variables,
+                attribution
+        );
+    }
+
+    public ScaledValue.Context scaledValueContext() {
+        return new ScaledValue.Context(
                 originSource(),
                 skill,
                 caster,

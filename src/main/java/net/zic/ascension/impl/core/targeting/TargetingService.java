@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.targeting;
 
+import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -8,9 +9,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.api.ascension.core.targeting.SkillTarget;
-import net.zic.ascension.api.ascension.core.targeting.TargetFilterDefinition;
-import net.zic.ascension.api.ascension.core.targeting.TargetSort;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,13 +20,13 @@ public final class TargetingService {
     private TargetingService() {
     }
 
-    public static List<SkillTarget> radial(
+    public static List<TargetingDefinition.Target> radial(
             ServerLevel level,
             ServerPlayer caster,
             Vec3 center,
             double radius,
-            TargetFilterDefinition filter,
-            TargetSort sort,
+            TargetingDefinition.Filter filter,
+            TargetingDefinition.Sort sort,
             int maximumTargets
     ) {
         if (!Double.isFinite(radius) || radius <= 0.0D) {
@@ -51,13 +49,13 @@ public final class TargetingService {
         );
     }
 
-    public static List<SkillTarget> cone(
+    public static List<TargetingDefinition.Target> cone(
             ServerLevel level,
             ServerPlayer caster,
             double range,
             double angleDegrees,
-            TargetFilterDefinition filter,
-            TargetSort sort,
+            TargetingDefinition.Filter filter,
+            TargetingDefinition.Sort sort,
             int maximumTargets
     ) {
         if (!Double.isFinite(range) || range <= 0.0D || !Double.isFinite(angleDegrees) || angleDegrees <= 0.0D) {
@@ -86,12 +84,12 @@ public final class TargetingService {
         );
     }
 
-    public static SkillTarget ray(
+    public static TargetingDefinition.Target ray(
             ServerLevel level,
             ServerPlayer caster,
             double range,
             double width,
-            TargetFilterDefinition filter
+            TargetingDefinition.Filter filter
     ) {
         if (!Double.isFinite(range) || range <= 0.0D) {
             return null;
@@ -110,7 +108,7 @@ public final class TargetingService {
                 ? Double.POSITIVE_INFINITY
                 : start.distanceToSqr(blockHit.getLocation());
         AABB search = new AABB(start, end).inflate(resolvedWidth);
-        SkillTarget closest = null;
+        TargetingDefinition.Target closest = null;
         double closestDistance = Double.POSITIVE_INFINITY;
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, search)) {
             if (!matches(caster, target, filter)) {
@@ -123,14 +121,14 @@ public final class TargetingService {
             }
             double distance = start.distanceToSqr(hit.get());
             if (distance <= blockDistance && distance < closestDistance) {
-                closest = new SkillTarget(target, hit.get());
+                closest = new TargetingDefinition.Target(target, hit.get());
                 closestDistance = distance;
             }
         }
         return closest;
     }
 
-    public static SkillTarget lookPosition(
+    public static TargetingDefinition.Target lookPosition(
             ServerLevel level,
             ServerPlayer caster,
             double range,
@@ -150,16 +148,16 @@ public final class TargetingService {
                 caster
         ));
         if (hit.getType() == HitResult.Type.MISS) {
-            return fallbackToMaximumRange ? SkillTarget.position(end) : null;
+            return fallbackToMaximumRange ? TargetingDefinition.Target.position(end) : null;
         }
-        return SkillTarget.position(hit.getLocation());
+        return TargetingDefinition.Target.position(hit.getLocation());
     }
 
-    public static List<SkillTarget> select(
+    public static List<TargetingDefinition.Target> select(
             ServerPlayer caster,
             List<LivingEntity> candidates,
-            TargetFilterDefinition filter,
-            TargetSort sort,
+            TargetingDefinition.Filter filter,
+            TargetingDefinition.Sort sort,
             int maximumTargets,
             Predicate<LivingEntity> extraFilter
     ) {
@@ -173,9 +171,9 @@ public final class TargetingService {
         int limit = maximumTargets <= 0
                 ? filtered.size()
                 : Math.min(maximumTargets, filtered.size());
-        List<SkillTarget> targets = new ArrayList<>(limit);
+        List<TargetingDefinition.Target> targets = new ArrayList<>(limit);
         for (int index = 0; index < limit; index++) {
-            targets.add(SkillTarget.entity(filtered.get(index)));
+            targets.add(TargetingDefinition.Target.entity(filtered.get(index)));
         }
         return List.copyOf(targets);
     }
@@ -183,13 +181,13 @@ public final class TargetingService {
     public static boolean matches(
             ServerPlayer caster,
             LivingEntity target,
-            TargetFilterDefinition filter
+            TargetingDefinition.Filter filter
     ) {
         return filter.matches(caster, target)
                 && (!filter.requireLineOfSight() || caster.hasLineOfSight(target));
     }
 
-    private static Comparator<LivingEntity> comparator(ServerPlayer caster, TargetSort sort) {
+    private static Comparator<LivingEntity> comparator(ServerPlayer caster, TargetingDefinition.Sort sort) {
         return switch (sort) {
             case FURTHEST -> Comparator.<LivingEntity>comparingDouble(caster::distanceToSqr).reversed();
             case LOWEST_HEALTH -> Comparator.<LivingEntity>comparingDouble(LivingEntity::getHealth)

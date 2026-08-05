@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.control;
 
+import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -16,7 +17,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.control.StaggerDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.ascension.value.ScaledValueContext;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.util.ModTags;
@@ -24,6 +25,9 @@ import net.zic.ascension.impl.core.skill.passive.PassiveDefenseService;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.Optional;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class StaggerService {
@@ -56,21 +60,17 @@ public final class StaggerService {
             return 0.0D;
         }
 
-        StaggerDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.STAGGER_REGISTRY,
-                profileId,
-                target.registryAccess()
-        );
+        StaggerDefinition definition = SkillDefinitions.resolveStored(StaggerDefinition.class, context.skill(), profileId, CoreRegistries.STAGGER_REGISTRY, target.registryAccess());
         if (definition == null) {
             return 0.0D;
         }
 
-        StaggerStateData state = data(target);
+        State state = data(target);
         if (state.isImmune()) {
             return 0.0D;
         }
 
-        ScaledValueContext targetContext = targetContext(context, target);
+        ScaledValue.Context targetContext = targetContext(context, target);
         double threshold = definition.threshold().resolve(targetContext);
         double resistance = definition.resistance().resolve(targetContext);
         if (!Double.isFinite(threshold) || threshold <= 0.0D) {
@@ -93,7 +93,7 @@ public final class StaggerService {
             return 0.0D;
         }
 
-        state.setProfile(profileId);
+        state.setProfile(profileId, context.skill());
         state.setBuildup(state.buildup() + applied);
         state.setDecayDelay(Math.max(state.decayDelay(), definition.decayDelay()));
 
@@ -107,7 +107,7 @@ public final class StaggerService {
         if (target == null || target.level().isClientSide() || !Double.isFinite(amount) || amount <= 0.0D) {
             return 0.0D;
         }
-        StaggerStateData state = data(target);
+        State state = data(target);
         double previous = state.buildup();
         state.setBuildup(previous - amount);
         return previous - state.buildup();
@@ -140,15 +140,11 @@ public final class StaggerService {
                 || is(target, IMMUNE)) {
             return false;
         }
-        StaggerDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.STAGGER_REGISTRY,
-                profileId,
-                target.registryAccess()
-        );
+        StaggerDefinition definition = SkillDefinitions.resolveStored(StaggerDefinition.class, context.skill(), profileId, CoreRegistries.STAGGER_REGISTRY, target.registryAccess());
         if (definition == null || data(target).isImmune()) {
             return false;
         }
-        ScaledValueContext targetContext = targetContext(context, target);
+        ScaledValue.Context targetContext = targetContext(context, target);
         double threshold = definition.threshold().resolve(targetContext);
         double resistance = definition.resistance().resolve(targetContext);
         if (!Double.isFinite(threshold) || threshold <= 0.0D) {
@@ -190,16 +186,12 @@ public final class StaggerService {
     }
 
     private static void tick(LivingEntity entity) {
-        StaggerStateData state = data(entity);
+        State state = data(entity);
         if (!state.isActive()) {
             return;
         }
 
-        StaggerDefinition definition = state.profile() == null ? null : CoreRegistries.safeAccess(
-                CoreRegistries.STAGGER_REGISTRY,
-                state.profile(),
-                entity.registryAccess()
-        );
+        StaggerDefinition definition = state.profile() == null ? null : SkillDefinitions.resolveStored(StaggerDefinition.class, state.sourceSkill(), state.profile(), CoreRegistries.STAGGER_REGISTRY, entity.registryAccess());
         if (state.profile() != null && definition == null) {
             state.clear();
             return;
@@ -250,15 +242,15 @@ public final class StaggerService {
             LivingEntity target,
             Identifier profileId,
             StaggerDefinition definition,
-            ScaledValueContext targetContext,
+            ScaledValue.Context targetContext,
             double applied,
             double threshold,
             double resistance
     ) {
         int duration = resolveTicks(definition.guardBreakDuration().resolve(targetContext));
         int immunityDuration = resolveTicks(definition.immunityDuration().resolve(targetContext));
-        StaggerStateData state = data(target);
-        state.setProfile(profileId);
+        State state = data(target);
+        state.setProfile(profileId, context.skill());
         state.beginGuardBreak(duration, immunityDuration);
 
         if (definition.interruptHeldCasts() && target instanceof Player player) {
@@ -289,8 +281,8 @@ public final class StaggerService {
         }
     }
 
-    private static ScaledValueContext targetContext(SkillExecutionContext context, LivingEntity target) {
-        return new ScaledValueContext(
+    private static ScaledValue.Context targetContext(SkillExecutionContext context, LivingEntity target) {
+        return new ScaledValue.Context(
                 originSource(target),
                 context.skill(),
                 target,
@@ -300,8 +292,8 @@ public final class StaggerService {
         );
     }
 
-    private static ScaledValueContext targetContext(LivingEntity target, Identifier profileId) {
-        return new ScaledValueContext(
+    private static ScaledValue.Context targetContext(LivingEntity target, Identifier profileId) {
+        return new ScaledValue.Context(
                 originSource(target),
                 profileId,
                 target,
@@ -316,7 +308,7 @@ public final class StaggerService {
         return provider == null ? null : provider.getData(entity).getSource();
     }
 
-    private static StaggerStateData data(LivingEntity entity) {
+    private static State data(LivingEntity entity) {
         return entity.getData(AscensionAttachments.STAGGER_STATE);
     }
 
@@ -326,5 +318,162 @@ public final class StaggerService {
 
     private static boolean is(LivingEntity entity, TagKey<EntityType<?>> tag) {
         return entity.getType().builtInRegistryHolder().is(tag);
+    }
+
+    public static final class State {
+        public static final Codec<State> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Identifier.CODEC.optionalFieldOf("profile").forGetter(data -> Optional.ofNullable(data.profile)),
+                Identifier.CODEC.optionalFieldOf("source_skill").forGetter(data -> Optional.ofNullable(data.sourceSkill)),
+                Codec.DOUBLE.optionalFieldOf("buildup", 0.0D).forGetter(State::buildup),
+                Codec.INT.optionalFieldOf("decay_delay", 0).forGetter(State::decayDelay),
+                Codec.INT.optionalFieldOf("guard_break_ticks", 0).forGetter(State::guardBreakTicks),
+                Codec.INT.optionalFieldOf("immunity_ticks", 0).forGetter(State::immunityTicks),
+                Codec.INT.optionalFieldOf("pending_immunity_ticks", 0).forGetter(State::pendingImmunityTicks)
+        ).apply(instance, (profile, sourceSkill, buildup, decayDelay, guardBreakTicks, immunityTicks, pendingImmunityTicks) ->
+                new State(
+                        profile.orElse(null),
+                        sourceSkill.orElse(null),
+                        buildup,
+                        decayDelay,
+                        guardBreakTicks,
+                        immunityTicks,
+                        pendingImmunityTicks
+                )));
+
+        private Identifier profile;
+        private Identifier sourceSkill;
+        private double buildup;
+        private int decayDelay;
+        private int guardBreakTicks;
+        private int immunityTicks;
+        private int pendingImmunityTicks;
+
+        public State() {
+            this(null, null, 0.0D, 0, 0, 0, 0);
+        }
+
+        private State(
+                Identifier profile,
+                Identifier sourceSkill,
+                double buildup,
+                int decayDelay,
+                int guardBreakTicks,
+                int immunityTicks,
+                int pendingImmunityTicks
+        ) {
+            this.profile = profile;
+            this.sourceSkill = sourceSkill;
+            this.buildup = Math.max(0.0D, buildup);
+            this.decayDelay = Math.max(0, decayDelay);
+            this.guardBreakTicks = Math.max(0, guardBreakTicks);
+            this.immunityTicks = Math.max(0, immunityTicks);
+            this.pendingImmunityTicks = Math.max(0, pendingImmunityTicks);
+        }
+
+        public Identifier profile() {
+            return profile;
+        }
+
+        public Identifier sourceSkill() {
+            return sourceSkill;
+        }
+
+        public double buildup() {
+            return buildup;
+        }
+
+        public int decayDelay() {
+            return decayDelay;
+        }
+
+        public int guardBreakTicks() {
+            return guardBreakTicks;
+        }
+
+        public int immunityTicks() {
+            return immunityTicks;
+        }
+
+        public int pendingImmunityTicks() {
+            return pendingImmunityTicks;
+        }
+
+        public void setProfile(Identifier profile, Identifier sourceSkill) {
+            this.profile = profile;
+            this.sourceSkill = sourceSkill;
+        }
+
+        public void setBuildup(double buildup) {
+            this.buildup = Math.max(0.0D, buildup);
+        }
+
+        public void setDecayDelay(int decayDelay) {
+            this.decayDelay = Math.max(0, decayDelay);
+        }
+
+        public void beginGuardBreak(int duration, int immunityDuration) {
+            buildup = 0.0D;
+            decayDelay = 0;
+            guardBreakTicks = Math.max(0, duration);
+            immunityTicks = 0;
+            pendingImmunityTicks = Math.max(0, immunityDuration);
+            if (guardBreakTicks == 0) {
+                immunityTicks = pendingImmunityTicks;
+                pendingImmunityTicks = 0;
+            }
+        }
+
+        public void grantImmunity(int duration) {
+            buildup = 0.0D;
+            decayDelay = 0;
+            guardBreakTicks = 0;
+            pendingImmunityTicks = 0;
+            immunityTicks = Math.max(immunityTicks, Math.max(0, duration));
+        }
+
+        public void tickGuardBreak() {
+            if (guardBreakTicks <= 0) {
+                return;
+            }
+            guardBreakTicks--;
+            if (guardBreakTicks == 0) {
+                immunityTicks = Math.max(immunityTicks, pendingImmunityTicks);
+                pendingImmunityTicks = 0;
+            }
+        }
+
+        public void tickImmunity() {
+            if (immunityTicks > 0) {
+                immunityTicks--;
+            }
+        }
+
+        public void tickDecayDelay() {
+            if (decayDelay > 0) {
+                decayDelay--;
+            }
+        }
+
+        public void clear() {
+            profile = null;
+            sourceSkill = null;
+            buildup = 0.0D;
+            decayDelay = 0;
+            guardBreakTicks = 0;
+            immunityTicks = 0;
+            pendingImmunityTicks = 0;
+        }
+
+        public boolean isGuardBroken() {
+            return guardBreakTicks > 0;
+        }
+
+        public boolean isImmune() {
+            return guardBreakTicks > 0 || immunityTicks > 0;
+        }
+
+        public boolean isActive() {
+            return profile != null || buildup > 0.0D || decayDelay > 0 || guardBreakTicks > 0 || immunityTicks > 0;
+        }
     }
 }

@@ -1,24 +1,22 @@
 package net.zic.ascension.impl.datapack.projectile;
 
-import net.zic.ascension.api.ascension.core.projectile.ProjectileBehavior;
-import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.projectile.ProjectileBehavior;
+import net.zic.ascension.api.ascension.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.ExtensionTypeRegistry;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
-import net.zic.ascension.impl.runtime.projectile.HomingProjectileBehavior;
+import net.zic.ascension.impl.runtime.projectile.ProjectileBehaviors;
 
 public final class AscensionProjectileBehaviorTypes {
-    public static final DeferredRegister<CodecType<ProjectileBehavior>> TYPES = DeferredRegister.create(
+    private static final ExtensionTypeRegistry<ProjectileBehavior> TYPES = new ExtensionTypeRegistry<>(
             TypeRegistries.PROJECTILE_BEHAVIOR_TYPE_REGISTRY,
             AscensionCraft.MOD_ID
     );
 
-    public static final DeferredHolder<CodecType<ProjectileBehavior>, CodecType<ProjectileBehavior>> HOMING = TYPES.register(
-            "homing",
-            () -> new CodecType<>(HomingProjectileBehavior.CODEC)
-    );
+    public static final DeferredHolder<CodecType<ProjectileBehavior>, CodecType<ProjectileBehavior>> HOMING =
+            TYPES.add("homing", ProjectileBehaviors.Homing.CODEC);
 
     private AscensionProjectileBehaviorTypes() {
     }

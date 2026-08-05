@@ -27,7 +27,8 @@
           }
         ],
         "maximum": 32
-      }
+      },
+      "operation": "ascension:consume"
     },
     "movement": {
       "horizontal_drag": {
@@ -47,56 +48,659 @@
     },
     "stages": []
   },
-  "execution": {
-    "targeting": {
-      "type": "ascension:look_position",
-      "range": {
-        "base": 42
-      },
-      "include_fluids": false,
-      "fallback_to_maximum_range": true
+  "definitions": {
+    "effects": {
+      "star_severance": {
+        "stacking": "stronger_replaces",
+        "stacking_scope": "source_entity",
+        "max_stacks": 1,
+        "modules": [
+          {
+            "type": "ascension:resource_modifier",
+            "id": "ascension:celestial/star_severance_combat",
+            "selector": {
+              "resources": [
+                "ascension:stamina"
+              ],
+              "operations": [
+                "ascension:consume",
+                "ascension:drain"
+              ],
+              "source": {
+                "source_tags": [
+                  "ascension:combat"
+                ]
+              }
+            },
+            "operation": "multiply_total",
+            "value": {
+              "base": 0.08,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:effect_potency"
+                  },
+                  "operation": "add",
+                  "scale": 0.12
+                }
+              ],
+              "maximum": 0.24
+            },
+            "priority": 100
+          }
+        ]
+      }
     },
-    "require_targets": true,
-    "caster_features": [
-      {
-        "type": "ascension:particle_burst",
-        "particle": "minecraft:enchant",
-        "count": {
-          "base": 28
-        },
-        "spread": {
-          "base": 0.8
-        },
+    "projectiles": {
+      "main": {
         "speed": {
-          "base": 0.04
-        }
-      },
-      {
-        "type": "ascension:sound",
-        "sound": "minecraft:entity.arrow.shoot",
-        "volume": {
-          "base": 1.0
+          "base": 1.6,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:charge"
+              },
+              "operation": "add",
+              "scale": 0.9
+            }
+          ],
+          "maximum": 2.5
         },
-        "pitch": {
-          "base": 0.65
-        }
-      }
-    ],
-    "target_features": [
-      {
-        "type": "ascension:runtime_visual",
-        "visual": "ascension:celestial/sagittarius_release",
-        "duration": {
-          "base": 14
+        "range": {
+          "base": 28,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:charge"
+              },
+              "operation": "add",
+              "scale": 24
+            }
+          ],
+          "maximum": 52
         },
-        "position": "target",
-        "points": "caster_to_target"
-      },
-      {
-        "type": "ascension:spawn_projectile",
-        "definition": "ascension:celestial/sagittarius_heaven_piercing_arc",
-        "direction": "target"
+        "gravity": 0.0,
+        "hit_radius": 0.45,
+        "pierces": 3,
+        "filter": {
+          "relations": [
+            "neutral",
+            "hostile"
+          ],
+          "include_players": true,
+          "line_of_sight": true
+        },
+        "flight_particle": "minecraft:end_rod",
+        "behaviors": [
+          {
+            "type": "ascension:homing",
+            "turn_rate": {
+              "base": 0.015,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:charge"
+                  },
+                  "operation": "add",
+                  "scale": 0.03
+                }
+              ],
+              "maximum": 0.045
+            },
+            "reacquire": true,
+            "acquisition": {
+              "type": "ascension:radial",
+              "radius": {
+                "base": 14.0,
+                "terms": [
+                  {
+                    "source": {
+                      "type": "ascension:charge"
+                    },
+                    "operation": "add",
+                    "scale": 10.0
+                  }
+                ],
+                "minimum": 10.0,
+                "maximum": 24.0
+              },
+              "maximum_targets": 1,
+              "sort": "closest_to_view",
+              "filter": {
+                "relations": [
+                  "neutral",
+                  "hostile"
+                ],
+                "include_players": true,
+                "line_of_sight": false
+              }
+            }
+          }
+        ],
+        "on_entity_hit": [
+          {
+            "type": "ascension:damage",
+            "amount": {
+              "base": 6.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:stat",
+                    "stat": "ascension:spirit"
+                  },
+                  "operation": "add",
+                  "scale": 0.35
+                },
+                {
+                  "source": {
+                    "type": "ascension:stat",
+                    "stat": "ascension:agility"
+                  },
+                  "operation": "add",
+                  "scale": 0.2
+                },
+                {
+                  "source": {
+                    "type": "ascension:charge"
+                  },
+                  "operation": "add",
+                  "scale": 14.0
+                },
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:execution/projectile_travelled",
+                    "fallback": 0.0
+                  },
+                  "operation": "add",
+                  "scale": 0.1
+                },
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:execution/projectile_speed",
+                    "fallback": 0.0
+                  },
+                  "operation": "add",
+                  "scale": 1.25
+                },
+                {
+                  "source": {
+                    "type": "ascension:skill_effect",
+                    "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+                    "owner_scoped": true,
+                    "metric": "stacks",
+                    "aggregation": "sum"
+                  },
+                  "operation": "add",
+                  "scale": 1.75
+                },
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:execution/projectile_pierce_index",
+                    "fallback": 0.0
+                  },
+                  "operation": "multiply",
+                  "scale": -0.12,
+                  "offset": 1.0
+                }
+              ],
+              "minimum": 1.0,
+              "maximum": 100.0
+            },
+            "damage_type": "minecraft:indirect_magic",
+            "classifications": [
+              "ascension:skill",
+              "ascension:projectile",
+              "ascension:ranged",
+              "ascension:soul",
+              "ascension:star"
+            ],
+            "path": "ascension:foundation/soul",
+            "technique": "ascension:3_heaven/celestial_constellation_circulation"
+          },
+          {
+            "type": "ascension:stagger",
+            "amount": {
+              "base": 18.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:stat",
+                    "stat": "ascension:spirit"
+                  },
+                  "operation": "add",
+                  "scale": 0.12
+                },
+                {
+                  "source": {
+                    "type": "ascension:stat",
+                    "stat": "ascension:agility"
+                  },
+                  "operation": "add",
+                  "scale": 0.08
+                },
+                {
+                  "source": {
+                    "type": "ascension:charge"
+                  },
+                  "operation": "add",
+                  "scale": 24.0
+                }
+              ],
+              "minimum": 8.0,
+              "maximum": 60.0
+            },
+            "definition": "#heaven_piercing"
+          },
+          {
+            "type": "ascension:resource",
+            "resource": "ascension:stamina",
+            "operation": "ascension:drain",
+            "source": "ascension:skill_casting",
+            "amount": {
+              "base": 16
+            },
+            "subject": "target"
+          },
+          {
+            "type": "ascension:effect",
+            "duration": {
+              "base": 80
+            },
+            "potency": {
+              "base": 1
+            },
+            "definition": "#star_severance"
+          },
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:crit",
+            "count": {
+              "base": 28
+            },
+            "spread": {
+              "base": 0.6
+            },
+            "speed": {
+              "base": 0.08
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.glass.break",
+            "volume": {
+              "base": 0.9
+            },
+            "pitch": {
+              "base": 0.7
+            }
+          }
+        ],
+        "on_block_hit": [
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:poof",
+            "count": {
+              "base": 24
+            },
+            "spread": {
+              "base": 0.55
+            },
+            "speed": {
+              "base": 0.07
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.amethyst_block.break",
+            "volume": {
+              "base": 0.8
+            },
+            "pitch": {
+              "base": 0.8
+            }
+          }
+        ],
+        "on_expire": [
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:end_rod",
+            "count": {
+              "base": 12
+            },
+            "spread": {
+              "base": 0.3
+            },
+            "speed": {
+              "base": 0.02
+            }
+          }
+        ],
+        "visual": "#arc"
       }
-    ]
-  }
+    },
+    "stagger": {
+      "heaven_piercing": {
+        "threshold": {
+          "base": 105.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 2.0
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:strength"
+              },
+              "operation": "add",
+              "scale": 1.0
+            }
+          ],
+          "minimum": 50.0
+        },
+        "resistance": {
+          "base": 0.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 0.0045
+            }
+          ],
+          "minimum": 0.0,
+          "maximum": 0.6
+        },
+        "decay_per_second": {
+          "base": 12.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 0.15
+            }
+          ],
+          "minimum": 1.0
+        },
+        "decay_delay": 42,
+        "guard_break_duration": {
+          "base": 38.0
+        },
+        "immunity_duration": {
+          "base": 65.0
+        },
+        "movement_multiplier": 0.18,
+        "interrupt_held_casts": true,
+        "on_guard_break": [
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:crit",
+            "count": {
+              "base": 30.0
+            },
+            "spread": {
+              "base": 0.8
+            },
+            "speed": {
+              "base": 0.13
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:item.shield.break",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 1.1
+            }
+          }
+        ]
+      }
+    },
+    "visuals": {
+      "release": {
+        "layers": [
+          {
+            "type": "ascension:beam",
+            "appearance": {
+              "color": [
+                90,
+                155,
+                255,
+                100
+              ],
+              "secondary_color": [
+                255,
+                230,
+                125,
+                245
+              ],
+              "line_width": 4.5,
+              "no_depth": true
+            }
+          },
+          {
+            "type": "ascension:beam",
+            "appearance": {
+              "color": [
+                230,
+                245,
+                255,
+                220
+              ],
+              "secondary_color": [
+                255,
+                255,
+                220,
+                255
+              ],
+              "line_width": 1.4,
+              "no_depth": true
+            }
+          },
+          {
+            "type": "ascension:ring",
+            "position": "each_point",
+            "transform": {
+              "rotation": [
+                90,
+                0,
+                0
+              ]
+            },
+            "appearance": {
+              "color": [
+                130,
+                200,
+                255,
+                170
+              ],
+              "secondary_color": [
+                255,
+                235,
+                145,
+                240
+              ],
+              "line_width": 2.2,
+              "no_depth": true
+            },
+            "geometry": {
+              "radius": 0.48,
+              "segments": 24
+            },
+            "motion": {
+              "spin": 4.0,
+              "pulse": 0.12,
+              "pulse_speed": 0.4
+            }
+          }
+        ]
+      },
+      "arc": {
+        "layers": [
+          {
+            "type": "ascension:ribbon",
+            "appearance": {
+              "color": [
+                90,
+                155,
+                255,
+                12
+              ],
+              "secondary_color": [
+                255,
+                225,
+                125,
+                235
+              ],
+              "line_width": 4.0,
+              "no_depth": true
+            },
+            "motion": {
+              "history": 28
+            }
+          },
+          {
+            "type": "ascension:afterimage",
+            "appearance": {
+              "color": [
+                110,
+                170,
+                255,
+                8
+              ],
+              "secondary_color": [
+                255,
+                235,
+                165,
+                130
+              ]
+            },
+            "geometry": {
+              "width": 0.55,
+              "height": 0.55
+            },
+            "motion": {
+              "history": 22
+            }
+          },
+          {
+            "type": "ascension:ring",
+            "transform": {
+              "rotation": [
+                90,
+                0,
+                0
+              ]
+            },
+            "appearance": {
+              "color": [
+                165,
+                210,
+                255,
+                190
+              ],
+              "secondary_color": [
+                255,
+                240,
+                150,
+                245
+              ],
+              "line_width": 2.0,
+              "no_depth": true
+            },
+            "geometry": {
+              "radius": 0.36,
+              "segments": 20
+            },
+            "motion": {
+              "spin": 5.0,
+              "pulse": 0.1,
+              "pulse_speed": 0.35
+            }
+          },
+          {
+            "type": "ascension:particle_emitter",
+            "geometry": {
+              "radius": 0.12,
+              "height": 0.12,
+              "length": 0.035,
+              "count": 2
+            },
+            "motion": {
+              "interval": 2
+            },
+            "resources": {
+              "particle": "minecraft:end_rod"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "targeting": {
+    "type": "ascension:look_position",
+    "range": {
+      "base": 42
+    },
+    "include_fluids": false,
+    "fallback_to_maximum_range": true
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:enchant",
+      "count": {
+        "base": 28
+      },
+      "spread": {
+        "base": 0.8
+      },
+      "speed": {
+        "base": 0.04
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.arrow.shoot",
+      "volume": {
+        "base": 1.0
+      },
+      "pitch": {
+        "base": 0.65
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:visual",
+      "duration": {
+        "base": 14
+      },
+      "points": "caster_to_target",
+      "definition": "#release",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:projectile",
+      "definition": "#main",
+      "direction": "target",
+      "subject": "target"
+    }
+  ]
 }

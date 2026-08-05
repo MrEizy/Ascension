@@ -3,48 +3,43 @@
   "name": "Repair Construct",
   "description": "Restores stability to the owner-bound calibration construct after it intercepts damage.",
   "default_accessible_level": 1,
-  "levels": [
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": true,
+  "features": [
     {
-      "execution": {
-        "targeting": {
-          "type": "ascension:self"
-        },
-        "require_targets": true,
-        "caster_features": [
-          {
-            "type": "ascension:runtime_object",
-            "kind": "construct",
-            "action": "restore",
-            "definition": "ascension:debug/calibration_construct",
-            "amount": {
-              "base": 25
-            }
-          },
-          {
-            "type": "ascension:particle_burst",
-            "particle": "minecraft:happy_villager",
-            "count": {
-              "base": 20
-            },
-            "spread": {
-              "base": 0.6
-            },
-            "speed": {
-              "base": 0.04
-            }
-          },
-          {
-            "type": "ascension:message",
-            "message": "Construct restoration requested",
-            "overlay": true
-          }
-        ],
-        "target_features": []
+      "type": "ascension:construct",
+      "action": "repair",
+      "definition": "ascension:skill/debug/calibration_construct/construct/main",
+      "amount": {
+        "base": 25
       },
-      "costs": [],
-      "cooldown": {
-        "base": 10
-      }
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:happy_villager",
+      "count": {
+        "base": 20
+      },
+      "spread": {
+        "base": 0.6
+      },
+      "speed": {
+        "base": 0.04
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:message",
+      "message": "Construct restoration requested",
+      "overlay": true,
+      "subject": "caster"
     }
-  ]
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 10
+  }
 }

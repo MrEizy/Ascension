@@ -11,20 +11,15 @@ import java.util.List;
 public record SkillExecutionDefinition(
         TargetingDefinition targeting,
         boolean requireTargets,
-        List<SkillExecutionFeature> casterFeatures,
-        List<SkillExecutionFeature> targetFeatures
+        List<SkillExecutionFeature> features
 ) {
     public static final MapCodec<SkillExecutionDefinition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             TargetingDefinition.CODEC.fieldOf("targeting").forGetter(SkillExecutionDefinition::targeting),
             Codec.BOOL.optionalFieldOf("require_targets", true).forGetter(SkillExecutionDefinition::requireTargets),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("caster_features", List.of())
-                    .forGetter(SkillExecutionDefinition::casterFeatures),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("target_features", List.of())
-                    .forGetter(SkillExecutionDefinition::targetFeatures)
+            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("features", List.of()).forGetter(SkillExecutionDefinition::features)
     ).apply(instance, SkillExecutionDefinition::new));
 
     public SkillExecutionDefinition {
-        casterFeatures = casterFeatures == null ? List.of() : List.copyOf(casterFeatures);
-        targetFeatures = targetFeatures == null ? List.of() : List.copyOf(targetFeatures);
+        features = features == null ? List.of() : List.copyOf(features);
     }
 }

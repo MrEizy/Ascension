@@ -4,14 +4,15 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
-import net.zic.ascension.api.ascension.core.projectile.ProjectileImpactResponse;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineDamageSource;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
 
 public record BarrierDefinition(
         ScaledValue duration,
@@ -21,22 +22,22 @@ public record BarrierDefinition(
         int priority,
         boolean replaceExisting,
         DamageFilter filter,
-        ProjectileImpactResponse projectileResponse,
+        NormalProjectileDefinition.ImpactResponse projectileResponse,
         List<SkillExecutionFeature> onAbsorb,
         List<SkillExecutionFeature> onBreak,
         List<SkillExecutionFeature> onExpire,
         Optional<Visual> visual
 ) {
     public static final Codec<BarrierDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ScaledValue.CODEC.codec().fieldOf("duration").forGetter(BarrierDefinition::duration),
-            ScaledValue.CODEC.codec().fieldOf("durability").forGetter(BarrierDefinition::durability),
-            ScaledValue.CODEC.codec().optionalFieldOf("absorption", ScaledValue.constant(1.0D))
+            ScaledValue.COMPACT_CODEC.fieldOf("duration").forGetter(BarrierDefinition::duration),
+            ScaledValue.COMPACT_CODEC.fieldOf("durability").forGetter(BarrierDefinition::durability),
+            ScaledValue.COMPACT_CODEC.optionalFieldOf("absorption", ScaledValue.constant(1.0D))
                     .forGetter(BarrierDefinition::absorption),
             Codec.BOOL.optionalFieldOf("overflow", true).forGetter(BarrierDefinition::overflow),
             Codec.INT.optionalFieldOf("priority", 0).forGetter(BarrierDefinition::priority),
             Codec.BOOL.optionalFieldOf("replace_existing", true).forGetter(BarrierDefinition::replaceExisting),
             DamageFilter.CODEC.optionalFieldOf("filter", DamageFilter.EMPTY).forGetter(BarrierDefinition::filter),
-            ProjectileImpactResponse.CODEC.optionalFieldOf("projectile_response", ProjectileImpactResponse.DISCARD)
+            NormalProjectileDefinition.ImpactResponse.CODEC.optionalFieldOf("projectile_response", NormalProjectileDefinition.ImpactResponse.DISCARD)
                     .forGetter(BarrierDefinition::projectileResponse),
             SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_absorb", List.of())
                     .forGetter(BarrierDefinition::onAbsorb),
@@ -49,7 +50,7 @@ public record BarrierDefinition(
 
     public BarrierDefinition {
         filter = filter == null ? DamageFilter.EMPTY : filter;
-        projectileResponse = projectileResponse == null ? ProjectileImpactResponse.DISCARD : projectileResponse;
+        projectileResponse = projectileResponse == null ? NormalProjectileDefinition.ImpactResponse.DISCARD : projectileResponse;
         onAbsorb = onAbsorb == null ? List.of() : List.copyOf(onAbsorb);
         onBreak = onBreak == null ? List.of() : List.copyOf(onBreak);
         onExpire = onExpire == null ? List.of() : List.copyOf(onExpire);
@@ -103,16 +104,16 @@ public record BarrierDefinition(
     }
 
     public record Visual(
-            Identifier id,
+            DefinitionRef<RuntimeVisualDefinition> id,
             ScaledValue radius,
             ScaledValue height,
             List<VisualStage> stages
     ) {
         public static final Codec<Visual> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Identifier.CODEC.fieldOf("id").forGetter(Visual::id),
-                ScaledValue.CODEC.codec().optionalFieldOf("radius", ScaledValue.constant(1.15D))
+                DefinitionRef.codec(RuntimeVisualDefinition.CODEC).fieldOf("id").forGetter(Visual::id),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("radius", ScaledValue.constant(1.15D))
                         .forGetter(Visual::radius),
-                ScaledValue.CODEC.codec().optionalFieldOf("height", ScaledValue.constant(2.3D))
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("height", ScaledValue.constant(2.3D))
                         .forGetter(Visual::height),
                 VisualStage.CODEC.listOf().optionalFieldOf("stages", List.of()).forGetter(Visual::stages)
         ).apply(instance, Visual::new));
@@ -124,11 +125,11 @@ public record BarrierDefinition(
         }
     }
 
-    public record VisualStage(double maximumDurabilityFraction, Identifier visual) {
+    public record VisualStage(double maximumDurabilityFraction, DefinitionRef<RuntimeVisualDefinition> visual) {
         public static final Codec<VisualStage> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.doubleRange(0.0D, 1.0D).fieldOf("maximum_durability_fraction")
                         .forGetter(VisualStage::maximumDurabilityFraction),
-                Identifier.CODEC.fieldOf("visual").forGetter(VisualStage::visual)
+                DefinitionRef.codec(RuntimeVisualDefinition.CODEC).fieldOf("visual").forGetter(VisualStage::visual)
         ).apply(instance, VisualStage::new));
     }
 }

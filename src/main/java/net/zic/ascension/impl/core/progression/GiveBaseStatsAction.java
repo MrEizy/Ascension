@@ -27,7 +27,7 @@ public record GiveBaseStatsAction(UUID uuid,List<ValueContainer.BaseModifier> ba
     @Override
     public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction) {
         for(ValueContainer.BaseModifier modifier : baseStats){
-            System.out.println("trying to give stats");
+            //System.out.println("trying to give stats");
             if(direction == ProgressDirection.UP) source.addStat(ZenithRegistries.STAT_REGISTRY.getValue(modifier.container()), modifier.val());
             else source.removeStat(ZenithRegistries.STAT_REGISTRY.getValue(modifier.container()),modifier.val());
         }

@@ -26,7 +26,7 @@ import net.zic.ascension.client.visual.runtime.GuardianDharmaVisualController;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 import net.zic.ascension.common.AscensionCreativeSections;
 import net.zic.ascension.common.particle.AscensionParticles;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldParticleKind;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
 
 
 @Mod(value = AscensionCraft.MOD_ID,dist = Dist.CLIENT)

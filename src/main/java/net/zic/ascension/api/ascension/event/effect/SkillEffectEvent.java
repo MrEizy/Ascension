@@ -5,9 +5,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectContext;
-import net.zic.ascension.api.ascension.core.effect.SkillEffectRemovalReason;
 
 import java.util.UUID;
+import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
 
 public abstract class SkillEffectEvent extends Event {
     private final LivingEntity entity;
@@ -79,9 +79,9 @@ public abstract class SkillEffectEvent extends Event {
 
     public static final class Removed extends SkillEffectEvent {
         private final SkillEffectContext context;
-        private final SkillEffectRemovalReason reason;
+        private final SkillEffectDefinition.RemovalReason reason;
 
-        public Removed(LivingEntity entity, SkillEffectContext context, SkillEffectRemovalReason reason) {
+        public Removed(LivingEntity entity, SkillEffectContext context, SkillEffectDefinition.RemovalReason reason) {
             super(entity, context.definition());
             this.context = context;
             this.reason = reason;
@@ -91,7 +91,7 @@ public abstract class SkillEffectEvent extends Event {
             return context;
         }
 
-        public SkillEffectRemovalReason getReason() {
+        public SkillEffectDefinition.RemovalReason getReason() {
             return reason;
         }
     }

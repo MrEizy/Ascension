@@ -60,28 +60,49 @@ public final class BarrierShellVisualController implements RuntimeVisualControll
             return;
         }
 
+        float partialTick = ClientRuntimeVisuals.partialTick();
         double radius = Math.max(0.1D, state.primaryValue());
         double height = Math.max(0.2D, state.secondaryValue());
-        double time = minecraft.level.getGameTime() + (state.seed() & 31L);
+        double time = minecraft.level.getGameTime() + partialTick + (state.seed() & 31L);
         double pulse = 1.0D + Math.sin(time * 0.12D) * 0.018D;
         double rotation = time * 0.008D;
         float durability = Math.clamp(state.progress(), 0.0F, 1.0F);
         int surfaceAlpha = Math.clamp(20 + Math.round(durability * 28.0F), 16, 48);
         int patternAlpha = Math.clamp(105 + Math.round(durability * 90.0F), 90, 195);
+
         Vec3 camera = minecraft.gameRenderer.getMainCamera().position();
-        Vec3 center = ClientRuntimeVisuals.position(state).add(0.0D, height * 0.5D, 0.0D).subtract(camera);
+        Vec3 center = ClientRuntimeVisuals.position(state, partialTick)
+                .add(0.0D, height * 0.5D, 0.0D)
+                .subtract(camera);
+
         PoseStack.Pose pose = event.getPoseStack().last();
         MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
 
         VertexConsumer surface = buffers.getBuffer(RenderTypes.debugQuads());
         drawSurface(surface, pose, center, radius * pulse, height * 0.5D * pulse, rotation, surfaceAlpha, state.seed());
-        drawSurface(surface, pose, center, radius * pulse * 0.965D, height * 0.5D * pulse * 0.965D,
-                -rotation * 0.7D, Math.max(6, surfaceAlpha / 3), state.seed() + 17L);
+        drawSurface(
+                surface,
+                pose,
+                center,
+                radius * pulse * 0.965D,
+                height * 0.5D * pulse * 0.965D,
+                -rotation * 0.7D,
+                Math.max(6, surfaceAlpha / 3),
+                state.seed() + 17L
+        );
         buffers.endLastBatch();
 
         VertexConsumer lines = buffers.getBuffer(ModRenderTypes.energyLines());
-        drawPattern(lines, pose, center, radius * pulse * 1.006D, height * 0.5D * pulse * 1.006D,
-                rotation, patternAlpha, state.seed());
+        drawPattern(
+                lines,
+                pose,
+                center,
+                radius * pulse * 1.006D,
+                height * 0.5D * pulse * 1.006D,
+                rotation,
+                patternAlpha,
+                state.seed()
+        );
         buffers.endLastBatch();
     }
 
@@ -171,8 +192,17 @@ public final class BarrierShellVisualController implements RuntimeVisualControll
             drawSurfaceRing(lines, pose, center, radius, halfHeight, ring / 8.0D, rotation, 40, alpha, ring == 4 ? 2.1F : 1.25F);
         }
         for (int rib = 0; rib < 10; rib++) {
-            drawRib(lines, pose, center, radius, halfHeight, rotation + Math.PI * 2.0D * rib / 10.0D,
-                    36, alpha, 1.15F);
+            drawRib(
+                    lines,
+                    pose,
+                    center,
+                    radius,
+                    halfHeight,
+                    rotation + Math.PI * 2.0D * rib / 10.0D,
+                    36,
+                    alpha,
+                    1.15F
+            );
         }
         drawSpiral(lines, pose, center, radius, halfHeight, rotation, 1.8D, 70, alpha / 2, 1.0F);
         drawSpiral(lines, pose, center, radius, halfHeight, rotation + Math.PI, -1.8D, 70, alpha / 2, 1.0F);
@@ -194,14 +224,32 @@ public final class BarrierShellVisualController implements RuntimeVisualControll
             drawSurfaceRing(lines, pose, center, radius, halfHeight, rings[index], rotation, 40, alpha, width);
         }
         for (int rib = 0; rib < 8; rib++) {
-            drawRib(lines, pose, center, radius, halfHeight, rotation + Math.PI * 2.0D * rib / 8.0D,
-                    34, alpha, 1.25F);
+            drawRib(
+                    lines,
+                    pose,
+                    center,
+                    radius,
+                    halfHeight,
+                    rotation + Math.PI * 2.0D * rib / 8.0D,
+                    34,
+                    alpha,
+                    1.25F
+            );
         }
         drawSpiral(lines, pose, center, radius, halfHeight, rotation, 1.25D, 68, alpha / 2, 1.05F);
         drawSpiral(lines, pose, center, radius, halfHeight, rotation + Math.PI, -1.25D, 68, alpha / 2, 1.05F);
         for (int face = 0; face < 4; face++) {
-            drawSeal(lines, pose, center, radius, halfHeight,
-                    rotation + Math.PI * 2.0D * face / 4.0D, 0.49D, alpha, 1.65F);
+            drawSeal(
+                    lines,
+                    pose,
+                    center,
+                    radius,
+                    halfHeight,
+                    rotation + Math.PI * 2.0D * face / 4.0D,
+                    0.49D,
+                    alpha,
+                    1.65F
+            );
         }
     }
 
@@ -220,10 +268,14 @@ public final class BarrierShellVisualController implements RuntimeVisualControll
         for (int index = 0; index < segments; index++) {
             double first = rotation + Math.PI * 2.0D * index / segments;
             double second = rotation + Math.PI * 2.0D * (index + 1) / segments;
-            line(lines, pose,
+            line(
+                    lines,
+                    pose,
                     point(center, radius, halfHeight, vertical, first),
                     point(center, radius, halfHeight, vertical, second),
-                    alpha, width);
+                    alpha,
+                    width
+            );
         }
     }
 
@@ -241,10 +293,14 @@ public final class BarrierShellVisualController implements RuntimeVisualControll
         for (int index = 0; index < segments; index++) {
             double lower = index / (double) segments;
             double upper = (index + 1) / (double) segments;
-            line(lines, pose,
+            line(
+                    lines,
+                    pose,
                     point(center, radius, halfHeight, lower, longitude),
                     point(center, radius, halfHeight, upper, longitude),
-                    alpha, width);
+                    alpha,
+                    width
+            );
         }
     }
 
@@ -265,10 +321,14 @@ public final class BarrierShellVisualController implements RuntimeVisualControll
             double upper = 0.06D + 0.88D * (index + 1) / segments;
             double first = rotation + turns * Math.PI * 2.0D * lower;
             double second = rotation + turns * Math.PI * 2.0D * upper;
-            line(lines, pose,
+            line(
+                    lines,
+                    pose,
                     point(center, radius, halfHeight, lower, first),
                     point(center, radius, halfHeight, upper, second),
-                    alpha, width);
+                    alpha,
+                    width
+            );
         }
     }
 
@@ -406,14 +466,7 @@ public final class BarrierShellVisualController implements RuntimeVisualControll
                 .setColor(red, green, blue, alpha);
     }
 
-    private void line(
-            VertexConsumer lines,
-            PoseStack.Pose pose,
-            Vec3 first,
-            Vec3 second,
-            int alpha,
-            float width
-    ) {
+    private void line(VertexConsumer lines, PoseStack.Pose pose, Vec3 first, Vec3 second, int alpha, float width) {
         float nx = (float) (second.x - first.x);
         float ny = (float) (second.y - first.y);
         float nz = (float) (second.z - first.z);

@@ -9,8 +9,8 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldParticleKind;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldStyle;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldStyle;
 import org.jspecify.annotations.Nullable;
 
 import java.util.EnumMap;

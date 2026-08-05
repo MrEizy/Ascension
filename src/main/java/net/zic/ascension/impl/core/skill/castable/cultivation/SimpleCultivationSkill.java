@@ -19,7 +19,7 @@ import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.CastSoundDefinition;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
 import net.zic.ascension.util.CultivationUtil;

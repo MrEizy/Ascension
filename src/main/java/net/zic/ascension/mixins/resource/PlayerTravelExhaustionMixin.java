@@ -1,12 +1,12 @@
 package net.zic.ascension.mixins.resource;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactions;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 
 @Mixin(ServerPlayer.class)
 public abstract class PlayerTravelExhaustionMixin {
@@ -18,7 +18,7 @@ public abstract class PlayerTravelExhaustionMixin {
             )
     )
     private void ascension$applyMovementExhaustion(ServerPlayer player, float amount) {
-        ResourceTransactions.accumulate(
+        ResourceTransactionService.accumulate(
                 player,
                 AscensionResourceTypes.EXHAUSTION.getId(),
                 AscensionResourceSources.movementSource(player),

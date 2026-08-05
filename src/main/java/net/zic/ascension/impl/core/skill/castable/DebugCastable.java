@@ -17,7 +17,7 @@ import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.impl.core.skill.EmptySkillData;
+import net.zic.ascension.impl.core.skill.SimplePassiveSkill;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.cooldown.EntityCooldownHandler;
@@ -143,16 +143,16 @@ public record DebugCastable(String message,int cooldown,UUID uuid) implements Ca
 
     @Override
     public SkillData newData(RegistryAccess access) {
-        return new EmptySkillData();
+        return new SimplePassiveSkill.EmptyData();
     }
 
     @Override
     public SkillData loadData(ValueInput input,RegistryAccess access) {
-        return new EmptySkillData();
+        return new SimplePassiveSkill.EmptyData();
     }
 
     @Override
     public SkillData loadData(ByteBuf buf) {
-        return new EmptySkillData();
+        return new SimplePassiveSkill.EmptyData();
     }
 }

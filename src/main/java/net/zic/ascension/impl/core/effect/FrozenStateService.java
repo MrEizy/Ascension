@@ -5,6 +5,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.util.ModTags;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public final class FrozenStateService {
     public static final TagKey<EntityType<?>> IMMUNE = ModTags.EntityTypes.FROZEN_IMMUNE;
@@ -29,11 +31,42 @@ public final class FrozenStateService {
             return get(entity);
         }
 
-        FrozenStateData data = data(entity);
+        State data = data(entity);
         data.setBuildup(data.buildup() + amount * resistanceMultiplier(entity));
         data.setDecayDelay(Math.max(data.decayDelay(), decayDelay));
         syncVanillaVisual(entity, data);
         return data.buildup();
+    }
+
+    public static double reduce(LivingEntity entity, double amount) {
+        if (entity == null
+                || entity.level().isClientSide()
+                || !Double.isFinite(amount)
+                || amount <= 0.0D) {
+            return get(entity);
+        }
+
+        State data = data(entity);
+        data.setBuildup(data.buildup() - amount);
+
+        if (data.buildup() <= 0.0D) {
+            data.setDecayDelay(0);
+        }
+
+        syncVanillaVisual(entity, data);
+        return data.buildup();
+    }
+
+    public static void clear(LivingEntity entity) {
+        if (entity == null || entity.level().isClientSide()) {
+            return;
+        }
+
+        State data = data(entity);
+        data.setBuildup(0.0D);
+        data.setDecayDelay(0);
+
+        syncVanillaVisual(entity, data);
     }
 
     public static void maintainMinimum(LivingEntity entity, double minimum) {
@@ -41,7 +74,7 @@ public final class FrozenStateService {
             return;
         }
 
-        FrozenStateData data = data(entity);
+        State data = data(entity);
         if (data.buildup() < minimum) {
             data.setBuildup(minimum);
             syncVanillaVisual(entity, data);
@@ -69,7 +102,7 @@ public final class FrozenStateService {
             return;
         }
 
-        FrozenStateData data = data(entity);
+        State data = data(entity);
         if (!data.isActive()) {
             return;
         }
@@ -86,7 +119,7 @@ public final class FrozenStateService {
         syncVanillaVisual(entity, data);
     }
 
-    private static FrozenStateData data(LivingEntity entity) {
+    private static State data(LivingEntity entity) {
         return entity.getData(AscensionAttachments.FROZEN_STATE);
     }
 
@@ -104,7 +137,7 @@ public final class FrozenStateService {
         return entity.getType().builtInRegistryHolder().is(tag);
     }
 
-    private static void syncVanillaVisual(LivingEntity entity, FrozenStateData data) {
+    private static void syncVanillaVisual(LivingEntity entity, State data) {
         int desired = (int) Math.round(
                 entity.getTicksRequiredToFreeze() * Math.clamp(data.buildup(), 0.0D, 1.0D)
         );
@@ -115,5 +148,55 @@ public final class FrozenStateService {
             entity.setTicksFrozen(desired);
         }
         data.setVisualTicks(desired);
+    }
+
+    public static final class State {
+        public static final Codec<State> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Codec.DOUBLE.optionalFieldOf("buildup", 0.0D).forGetter(State::buildup),
+                Codec.INT.optionalFieldOf("decay_delay", 0).forGetter(State::decayDelay),
+                Codec.INT.optionalFieldOf("visual_ticks", 0).forGetter(State::visualTicks)
+        ).apply(instance, State::new));
+
+        private double buildup;
+        private int decayDelay;
+        private int visualTicks;
+
+        public State() {
+            this(0.0D, 0, 0);
+        }
+
+        private State(double buildup, int decayDelay, int visualTicks) {
+            this.buildup = Math.clamp(buildup, 0.0D, 1.0D);
+            this.decayDelay = Math.max(0, decayDelay);
+            this.visualTicks = Math.max(0, visualTicks);
+        }
+
+        public double buildup() {
+            return buildup;
+        }
+
+        public int decayDelay() {
+            return decayDelay;
+        }
+
+        public int visualTicks() {
+            return visualTicks;
+        }
+
+        public void setBuildup(double value) {
+            buildup = Math.clamp(value, 0.0D, 1.0D);
+        }
+
+        public void setDecayDelay(int value) {
+            decayDelay = Math.max(0, value);
+        }
+
+        public void setVisualTicks(int value) {
+            visualTicks = Math.max(0, value);
+        }
+
+        public boolean isActive() {
+            return buildup > 0.0D || decayDelay > 0 || visualTicks > 0;
+        }
     }
 }

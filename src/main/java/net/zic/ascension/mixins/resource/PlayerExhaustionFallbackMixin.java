@@ -1,9 +1,7 @@
 package net.zic.ascension.mixins.resource;
 
 import net.minecraft.world.entity.player.Player;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactionResult;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactionStatus;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactions;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,14 +17,14 @@ public abstract class PlayerExhaustionFallbackMixin {
         if (player.level().isClientSide()) {
             return;
         }
-        ResourceTransactionResult result = ResourceTransactions.accumulate(
+        ResourceTransactionService.Result result = ResourceTransactionService.accumulate(
                 player,
                 AscensionResourceTypes.EXHAUSTION.getId(),
                 AscensionResourceSources.UNCLASSIFIED,
                 amount
         );
-        if (result.status() != ResourceTransactionStatus.UNSUPPORTED
-                && result.status() != ResourceTransactionStatus.INVALID) {
+        if (result.status() != ResourceTransactionService.Status.UNSUPPORTED
+                && result.status() != ResourceTransactionService.Status.INVALID) {
             callback.cancel();
         }
     }

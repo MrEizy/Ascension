@@ -1,7 +1,7 @@
 package net.zic.ascension.api.ascension.core.skill.castable.feature;
 
-import net.zic.ascension.api.ascension.datapack.CodecType;
 import com.mojang.serialization.Codec;
+import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 
 public interface SkillExecutionFeature {
@@ -11,6 +11,8 @@ public interface SkillExecutionFeature {
     );
 
     CodecType<SkillExecutionFeature> getType();
+
+    ExecutionSubject subject();
 
     void apply(SkillExecutionContext context);
 }

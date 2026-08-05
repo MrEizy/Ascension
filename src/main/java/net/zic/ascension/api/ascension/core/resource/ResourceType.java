@@ -5,16 +5,20 @@ import net.minecraft.world.entity.LivingEntity;
 public interface ResourceType {
     boolean supports(LivingEntity entity);
 
-    boolean supports(ResourceOperation operation);
-
     double getAmount(LivingEntity entity);
 
     double getMaximum(LivingEntity entity);
 
-    ResourceApplicationResult apply(
+    void setAmount(LivingEntity entity, double amount);
+
+    default double normalizeAmount(double amount) {
+        return Math.max(0.0D, amount);
+    }
+
+    default void afterApply(
             LivingEntity entity,
             ResourceOperation operation,
-            double amount,
-            boolean simulate
-    );
+            ResourceOperation.Application result
+    ) {
+    }
 }

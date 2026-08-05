@@ -3,39 +3,33 @@
   "name": "Stagger Immunity",
   "description": "Clears current stagger and grants five seconds of stagger immunity for resistance testing.",
   "default_accessible_level": 1,
-  "levels": [
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": true,
+  "features": [
     {
-      "execution": {
-        "targeting": {
-          "type": "ascension:self"
-        },
-        "require_targets": true,
-        "caster_features": [
-          {
-            "type": "ascension:stagger",
-            "action": "clear",
-            "target": "caster"
-          },
-          {
-            "type": "ascension:stagger",
-            "action": "immunity",
-            "target": "caster",
-            "duration": {
-              "base": 100.0
-            }
-          },
-          {
-            "type": "ascension:message",
-            "message": "Stagger cleared; immune for five seconds",
-            "overlay": true
-          }
-        ],
-        "target_features": []
+      "type": "ascension:stagger",
+      "action": "clear",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:stagger",
+      "action": "immunity",
+      "duration": {
+        "base": 100.0
       },
-      "costs": [],
-      "cooldown": {
-        "base": 10.0
-      }
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:message",
+      "message": "Stagger cleared; immune for five seconds",
+      "overlay": true,
+      "subject": "caster"
     }
-  ]
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 10.0
+  }
 }

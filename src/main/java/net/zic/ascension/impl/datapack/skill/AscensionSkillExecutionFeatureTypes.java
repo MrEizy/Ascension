@@ -2,45 +2,44 @@ package net.zic.ascension.impl.datapack.skill;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.ascension.datapack.CodecType;
+import net.zic.ascension.api.ascension.datapack.ExtensionTypeRegistry;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
-import net.zic.ascension.impl.core.skill.castable.feature.*;
+import net.zic.ascension.impl.core.skill.castable.SkillFeatures;
+import net.zic.ascension.impl.core.skill.passive.PassiveModules;
+import net.zic.ascension.impl.core.effect.AscensionBuildupChannels;
 
 public final class AscensionSkillExecutionFeatureTypes {
-    public static final DeferredRegister<CodecType<SkillExecutionFeature>> FEATURE_TYPES = DeferredRegister.create(
+    private static final ExtensionTypeRegistry<SkillExecutionFeature> TYPES = new ExtensionTypeRegistry<>(
             TypeRegistries.SKILL_EXECUTION_FEATURE_TYPE_REGISTRY,
             AscensionCraft.MOD_ID
     );
 
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> MESSAGE = register("message", MessageFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> SOUND = register("sound", SoundFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> PARTICLE_BURST = register("particle_burst", ParticleBurstFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> RESOURCE_TRANSACTION = register("resource_transaction", ResourceTransactionFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> FROZEN_BUILDUP = register("frozen_buildup", FrozenBuildupFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> DAMAGE = register("damage", DamageFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> BARRIER = register("barrier", BarrierFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> STAGGER = register("stagger", StaggerFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> SKILL_EFFECT = register("skill_effect", SkillEffectFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> MOVEMENT = register("movement", MovementFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> MOVEMENT_ANCHOR = register("movement_anchor", MovementAnchorFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> SPAWN_PROJECTILE = register("spawn_projectile", SpawnProjectileFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> RUNTIME_OBJECT = register("runtime_object", RuntimeObjectFeature.CODEC);
-    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> RUNTIME_VISUAL = register("runtime_visual", RuntimeVisualFeature.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> MESSAGE = TYPES.add("message", SkillFeatures.Message.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> SOUND = TYPES.add("sound", SkillFeatures.Sound.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> PARTICLES = TYPES.add("particles", SkillFeatures.Particles.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> RESOURCE = TYPES.add("resource", SkillFeatures.Resource.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> DAMAGE = TYPES.add("damage", SkillFeatures.Damage.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> EFFECT = TYPES.add("effect", SkillFeatures.Effect.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> BUILDUP = TYPES.add("buildup", SkillFeatures.Buildup.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> STAGGER = TYPES.add("stagger", SkillFeatures.Stagger.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> BARRIER = TYPES.add("barrier", SkillFeatures.Barrier.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> PROJECTILE = TYPES.add("projectile", SkillFeatures.Projectile.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> FIELD = TYPES.add("field", SkillFeatures.Field.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> NETWORK = TYPES.add("network", SkillFeatures.Network.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> CONSTRUCT = TYPES.add("construct", SkillFeatures.Construct.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> MOVE = TYPES.add("move", SkillFeatures.Move.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> ANCHOR = TYPES.add("anchor", SkillFeatures.Anchor.CODEC);
+    public static final DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> VISUAL = TYPES.add("visual", SkillFeatures.Visual.CODEC);
 
     private AscensionSkillExecutionFeatureTypes() {
     }
 
-    private static <T extends SkillExecutionFeature> DeferredHolder<CodecType<SkillExecutionFeature>, CodecType<SkillExecutionFeature>> register(
-            String id,
-            com.mojang.serialization.MapCodec<T> codec
-    ) {
-        return FEATURE_TYPES.register(id, () -> new CodecType<>(codec));
-    }
-
     public static void register(IEventBus eventBus) {
-        FEATURE_TYPES.register(eventBus);
+        TYPES.register(eventBus);
+        PassiveModules.register(eventBus);
+        AscensionBuildupChannels.register(eventBus);
     }
 }

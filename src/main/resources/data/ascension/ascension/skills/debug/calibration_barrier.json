@@ -3,32 +3,169 @@
   "name": "Calibration Barrier",
   "description": "Applies a 20 durability barrier for testing absorption, overflow, break, expiry and visual stages.",
   "default_accessible_level": 1,
-  "levels": [
-    {
-      "execution": {
-        "targeting": {
-          "type": "ascension:self"
+  "definitions": {
+    "barriers": {
+      "main": {
+        "duration": {
+          "base": 240
         },
-        "require_targets": true,
-        "caster_features": [
-          {
-            "type": "ascension:barrier",
-            "action": "apply",
-            "target": "caster",
-            "definition": "ascension:debug/calibration_barrier"
-          },
+        "durability": {
+          "base": 20
+        },
+        "absorption": {
+          "base": 1.0
+        },
+        "overflow": true,
+        "priority": 100,
+        "replace_existing": true,
+        "on_absorb": [
           {
             "type": "ascension:message",
-            "message": "Calibration barrier applied with 20 durability",
+            "message": "Calibration barrier absorbed damage",
             "overlay": true
           }
         ],
-        "target_features": []
-      },
-      "costs": [],
-      "cooldown": {
-        "base": 10
+        "on_break": [
+          {
+            "type": "ascension:message",
+            "message": "Calibration barrier broken",
+            "overlay": true
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.glass.break",
+            "volume": {
+              "base": 0.8
+            },
+            "pitch": {
+              "base": 0.75
+            }
+          }
+        ],
+        "on_expire": [
+          {
+            "type": "ascension:message",
+            "message": "Calibration barrier expired",
+            "overlay": true
+          }
+        ],
+        "visual": {
+          "id": "#barrier_visual",
+          "radius": {
+            "base": 1.1
+          },
+          "height": {
+            "base": 2.25
+          }
+        },
+        "projectile_response": "discard"
+      }
+    },
+    "visuals": {
+      "barrier_visual": {
+        "layers": [
+          {
+            "type": "ascension:shell",
+            "appearance": {
+              "color": [
+                255,
+                80,
+                55,
+                18
+              ],
+              "secondary_color": [
+                80,
+                225,
+                255,
+                52
+              ],
+              "line_width": 1.3,
+              "filled": true
+            },
+            "geometry": {
+              "radius": {
+                "source": "primary",
+                "scale": 1.0,
+                "minimum": 0.3
+              },
+              "height": {
+                "source": "secondary",
+                "scale": 1.0,
+                "minimum": 0.6
+              },
+              "segments": 28
+            },
+            "motion": {
+              "spin": 0.25,
+              "pulse": 0.02,
+              "pulse_speed": 0.1
+            }
+          },
+          {
+            "type": "ascension:ground_glyph",
+            "transform": {
+              "offset": [
+                0,
+                0.03,
+                0
+              ]
+            },
+            "appearance": {
+              "color": [
+                255,
+                90,
+                45,
+                110
+              ],
+              "secondary_color": [
+                100,
+                235,
+                255,
+                205
+              ],
+              "line_width": 2.0,
+              "no_depth": true
+            },
+            "geometry": {
+              "radius": {
+                "source": "primary",
+                "scale": 0.95
+              },
+              "inner_radius": {
+                "source": "primary",
+                "scale": 0.65
+              },
+              "segments": 36,
+              "count": 8
+            },
+            "motion": {
+              "spin": -0.4
+            }
+          }
+        ]
       }
     }
-  ]
+  },
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:barrier",
+      "action": "apply",
+      "definition": "#main",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:message",
+      "message": "Calibration barrier applied with 20 durability",
+      "overlay": true,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 10
+  }
 }

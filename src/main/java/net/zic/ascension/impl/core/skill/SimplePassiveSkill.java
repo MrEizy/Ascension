@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
@@ -123,17 +124,17 @@ public class SimplePassiveSkill implements Skill {
 
     @Override
     public SkillData newData(RegistryAccess access) {
-        return new EmptySkillData();
+        return new EmptyData();
     }
 
     @Override
     public SkillData loadData(ValueInput input, RegistryAccess access) {
-        return new EmptySkillData();
+        return new EmptyData();
     }
 
     @Override
     public SkillData loadData(ByteBuf buf) {
-        return new EmptySkillData();
+        return new EmptyData();
     }
 
     public record Defense(
@@ -164,6 +165,21 @@ public class SimplePassiveSkill implements Skill {
                     ? ScaledValue.constant(0.0D)
                     : staggerResistance;
             filter = filter == null ? BarrierDefinition.DamageFilter.EMPTY : filter;
+        }
+    }
+
+    public static final class EmptyData implements SkillData {
+        @Override
+        public void write(ValueOutput output) {
+        }
+
+        @Override
+        public void encode(ByteBuf buf) {
+        }
+
+        @Override
+        public SkillType getType() {
+            return AscensionSkillTypes.SIMPLE_PASSIVE_SKILL_TYPE.get();
         }
     }
 }

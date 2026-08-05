@@ -3,11 +3,10 @@ package net.zic.ascension.impl.core.effect;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectContext;
-import net.zic.ascension.api.ascension.core.effect.SkillEffectRemovalReason;
-import net.zic.ascension.api.ascension.core.effect.SkillEffectStackingScope;
 
 import java.util.List;
 import java.util.UUID;
+import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
 
 public final class SkillEffectService {
     private SkillEffectService() {
@@ -32,11 +31,11 @@ public final class SkillEffectService {
     }
 
     public static boolean remove(LivingEntity target, Identifier definitionId) {
-        return SkillEffectManager.remove(target, definitionId, SkillEffectRemovalReason.MANUAL);
+        return SkillEffectManager.remove(target, definitionId, SkillEffectDefinition.RemovalReason.MANUAL);
     }
 
     public static boolean removeInstance(LivingEntity target, UUID instanceId) {
-        return SkillEffectManager.removeInstance(target, instanceId, SkillEffectRemovalReason.MANUAL);
+        return SkillEffectManager.removeInstance(target, instanceId, SkillEffectDefinition.RemovalReason.MANUAL);
     }
 
     public static int removeFromSource(
@@ -50,8 +49,8 @@ public final class SkillEffectService {
                 definitionId,
                 sourceEntity,
                 sourceSkill,
-                SkillEffectStackingScope.SOURCE_ENTITY_AND_SKILL,
-                SkillEffectRemovalReason.MANUAL
+                SkillEffectDefinition.Scope.SOURCE_ENTITY_AND_SKILL,
+                SkillEffectDefinition.RemovalReason.MANUAL
         );
     }
 
@@ -60,7 +59,7 @@ public final class SkillEffectService {
                 target,
                 instanceId,
                 amount,
-                SkillEffectRemovalReason.MANUAL
+                SkillEffectDefinition.RemovalReason.MANUAL
         );
     }
 
@@ -87,7 +86,7 @@ public final class SkillEffectService {
     }
 
     public static int clear(LivingEntity target) {
-        return SkillEffectManager.clear(target, SkillEffectRemovalReason.CLEARED);
+        return SkillEffectManager.clear(target, SkillEffectDefinition.RemovalReason.CLEARED);
     }
 
     public static boolean hasActiveEffects(LivingEntity target) {

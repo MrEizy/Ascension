@@ -24,18 +24,16 @@
     },
     "stages": []
   },
-  "execution": {
-    "targeting": {
-      "type": "ascension:self"
-    },
-    "require_targets": true,
-    "caster_features": [
-      {
-        "type": "ascension:message",
-        "message": "Calibration channel completed",
-        "overlay": true
-      }
-    ],
-    "target_features": []
-  }
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:message",
+      "message": "Calibration channel completed",
+      "overlay": true,
+      "subject": "caster"
+    }
+  ]
 }

@@ -3,45 +3,170 @@
   "name": "Anchor Network",
   "description": "Tests anchor nodes, links and a child area field.",
   "default_accessible_level": 1,
-  "levels": [
-    {
-      "execution": {
-        "targeting": {
-          "type": "ascension:look_position",
-          "range": {
-            "base": 14
-          },
-          "include_fluids": false,
-          "fallback_to_maximum_range": true
+  "definitions": {
+    "networks": {
+      "main": {
+        "duration": {
+          "base": 200
         },
-        "require_targets": true,
-        "caster_features": [],
-        "target_features": [
+        "nodes": [
           {
-            "type": "ascension:runtime_object",
-            "kind": "anchor_network",
-            "action": "spawn",
-            "definition": "ascension:debug/calibration_network"
+            "id": "ascension:debug/north",
+            "offset": [
+              0.0,
+              0.1,
+              -3.0
+            ]
           },
           {
-            "type": "ascension:particle_burst",
-            "particle": "minecraft:end_rod",
-            "count": {
-              "base": 42
+            "id": "ascension:debug/east",
+            "offset": [
+              2.6,
+              0.1,
+              1.5
+            ]
+          },
+          {
+            "id": "ascension:debug/west",
+            "offset": [
+              -2.6,
+              0.1,
+              1.5
+            ]
+          }
+        ],
+        "links": [
+          {
+            "from": "ascension:debug/north",
+            "to": "ascension:debug/east"
+          },
+          {
+            "from": "ascension:debug/east",
+            "to": "ascension:debug/west"
+          },
+          {
+            "from": "ascension:debug/west",
+            "to": "ascension:debug/north"
+          }
+        ],
+        "rotate_with_caster": true,
+        "field": "ascension:skill/debug/calibration_field/visual/field_visual",
+        "visual": "#network_visual"
+      }
+    },
+    "visuals": {
+      "network_visual": {
+        "layers": [
+          {
+            "type": "ascension:beam",
+            "appearance": {
+              "color": [
+                100,
+                225,
+                255,
+                205
+              ],
+              "secondary_color": [
+                165,
+                255,
+                205,
+                235
+              ],
+              "line_width": 2.6,
+              "no_depth": true
+            }
+          },
+          {
+            "type": "ascension:ground_glyph",
+            "position": "each_point",
+            "transform": {
+              "offset": [
+                0,
+                0.025,
+                0
+              ]
             },
-            "spread": {
-              "base": 1.5
+            "appearance": {
+              "color": [
+                80,
+                205,
+                255,
+                185
+              ],
+              "secondary_color": [
+                150,
+                255,
+                210,
+                220
+              ],
+              "line_width": 1.8,
+              "no_depth": true
             },
-            "speed": {
-              "base": 0.04
+            "geometry": {
+              "radius": 0.38,
+              "inner_radius": 0.17,
+              "segments": 24,
+              "count": 6
+            },
+            "motion": {
+              "spin": 1.1,
+              "pulse": 0.08,
+              "pulse_speed": 0.16
+            }
+          },
+          {
+            "type": "ascension:particle_emitter",
+            "position": "each_point",
+            "geometry": {
+              "radius": 0.18,
+              "height": 0.35,
+              "length": 0.018,
+              "count": 1
+            },
+            "motion": {
+              "interval": 4
+            },
+            "resources": {
+              "particle": "minecraft:end_rod"
             }
           }
         ]
-      },
-      "costs": [],
-      "cooldown": {
-        "base": 20
       }
     }
-  ]
+  },
+  "targeting": {
+    "type": "ascension:look_position",
+    "range": {
+      "base": 14
+    },
+    "include_fluids": false,
+    "fallback_to_maximum_range": true
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:network",
+      "action": "apply",
+      "definition": "#main",
+      "subject": "position"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:end_rod",
+      "count": {
+        "base": 42
+      },
+      "spread": {
+        "base": 1.5
+      },
+      "speed": {
+        "base": 0.04
+      },
+      "subject": "position"
+    }
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 20
+  }
 }

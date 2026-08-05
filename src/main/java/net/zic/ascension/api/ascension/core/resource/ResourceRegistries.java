@@ -13,6 +13,10 @@ public final class ResourceRegistries {
             AscensionCraft.MOD_ID,
             "resource_type"
     );
+    public static final Registry<ResourceOperation> RESOURCE_OPERATION_REGISTRY = RegistryHelper.registry(
+            AscensionCraft.MOD_ID,
+            "resource_operation"
+    );
 
     private ResourceRegistries() {
     }
@@ -20,5 +24,6 @@ public final class ResourceRegistries {
     @SubscribeEvent
     public static void registerRegistries(NewRegistryEvent event) {
         event.register(RESOURCE_TYPE_REGISTRY);
+        event.register(RESOURCE_OPERATION_REGISTRY);
     }
 }

@@ -20,7 +20,8 @@ public record RuntimeVisualState(
         float progress,
         long seed,
         double primaryValue,
-        double secondaryValue
+        double secondaryValue,
+        RuntimeVisualDefinition definition
 ) {
     public static final int OWNER_RELATIVE = 1;
     public static final int ROTATE_WITH_OWNER = 1 << 1;
@@ -32,6 +33,26 @@ public record RuntimeVisualState(
         links = links == null ? List.of() : List.copyOf(links);
         stage = Math.max(0, stage);
         progress = Math.clamp(progress, 0.0F, 1.0F);
+    }
+
+
+    public RuntimeVisualState(
+            UUID runtimeId,
+            Identifier visual,
+            UUID ownerId,
+            Vec3 position,
+            Vec3 offset,
+            List<Vec3> points,
+            List<Link> links,
+            long expiresAt,
+            int stage,
+            int flags,
+            float progress,
+            long seed,
+            double primaryValue,
+            double secondaryValue
+    ) {
+        this(runtimeId, visual, ownerId, position, offset, points, links, expiresAt, stage, flags, progress, seed, primaryValue, secondaryValue, null);
     }
 
     public boolean hasFlag(int flag) {

@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.runtime.projectile;
 
+import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -21,15 +22,16 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.projectile.ProjectileBehavior;
-import net.zic.ascension.api.ascension.core.projectile.ProjectileBehaviorContext;
-import net.zic.ascension.api.ascension.core.projectile.ProjectileLaunchDirection;
 import net.zic.ascension.api.ascension.core.projectile.VirtualProjectileDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionAttribution;
+import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
+import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
+import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.ascension.core.targeting.TargetFilterDefinition;
 import net.zic.ascension.impl.core.skill.castable.SkillExecutions;
-import net.zic.ascension.impl.runtime.visual.RuntimeVisualSync;
+import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,10 +39,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
+import java.util.HashSet;
+import java.util.Set;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class VirtualProjectiles {
-    private static final List<VirtualProjectileInstance> PROJECTILES = new ArrayList<>();
+    private static final List<Instance> PROJECTILES = new ArrayList<>();
 
     private VirtualProjectiles() {
     }
@@ -48,13 +54,9 @@ public final class VirtualProjectiles {
     public static UUID spawn(
             SkillExecutionContext context,
             Identifier definitionId,
-            ProjectileLaunchDirection launchDirection
+            VirtualProjectileDefinition.Direction launchDirection
     ) {
-        VirtualProjectileDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.VIRTUAL_PROJECTILE_REGISTRY,
-                definitionId,
-                context.level().registryAccess()
-        );
+        VirtualProjectileDefinition definition = definition(context.level(), context.skill(), definitionId);
         if (definition == null) {
             return null;
         }
@@ -68,7 +70,7 @@ public final class VirtualProjectiles {
 
         Vec3 position = context.caster().getEyePosition().add(direction.scale(0.45D));
         UUID targetId = context.target() == null ? null : context.target().getUUID();
-        VirtualProjectileInstance projectile = new VirtualProjectileInstance(
+        Instance projectile = new Instance(
                 context.level().dimension(),
                 context.caster().getUUID(),
                 context.skill(),
@@ -81,16 +83,20 @@ public final class VirtualProjectiles {
                 context.variables()
         );
         PROJECTILES.add(projectile);
-        definition.visual().ifPresent(visual -> RuntimeVisualSync.spawn(
-                context.level(),
-                visualState(
-                        projectile,
-                        visual,
-                        context.level().getGameTime() + Math.max(1L, (long) Math.ceil(range / speed) + 20L),
-                        range,
-                        definition.hitRadius()
-                )
-        ));
+        Resolved<RuntimeVisualDefinition> visual = visual(context, definition.visual());
+        if (visual != null) {
+            RuntimeVisualSync.spawn(
+                    context.level(),
+                    visualState(
+                            projectile,
+                            visual.id(),
+                            context.level().getGameTime() + Math.max(1L, (long) Math.ceil(range / speed) + 20L),
+                            range,
+                            definition.hitRadius(),
+                            visual.value()
+                    )
+            );
+        }
         return projectile.runtimeId();
     }
 
@@ -100,7 +106,7 @@ public final class VirtualProjectiles {
 
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Pre event) {
-        for (VirtualProjectileInstance projectile : List.copyOf(PROJECTILES)) {
+        for (Instance projectile : List.copyOf(PROJECTILES)) {
             if (!PROJECTILES.contains(projectile)) {
                 continue;
             }
@@ -116,7 +122,7 @@ public final class VirtualProjectiles {
         PROJECTILES.clear();
     }
 
-    private static boolean tick(ServerLevel level, VirtualProjectileInstance projectile) {
+    private static boolean tick(ServerLevel level, Instance projectile) {
         Entity ownerEntity = level.getEntity(projectile.ownerId());
         if (!(ownerEntity instanceof ServerPlayer owner) || owner.isRemoved()) {
             return false;
@@ -137,7 +143,7 @@ public final class VirtualProjectiles {
                     target,
                     projectile.position()
             );
-            ProjectileBehaviorContext behaviorContext = new ProjectileBehaviorContext(
+            ProjectileBehavior.Context behaviorContext = new ProjectileBehavior.Context(
                     level,
                     owner,
                     target,
@@ -186,7 +192,7 @@ public final class VirtualProjectiles {
                     entityHit.target(),
                     entityHit.position()
             );
-            ProjectileBehaviorContext hitContext = new ProjectileBehaviorContext(
+            ProjectileBehavior.Context hitContext = new ProjectileBehavior.Context(
                     level,
                     owner,
                     entityHit.target(),
@@ -211,7 +217,7 @@ public final class VirtualProjectiles {
                     null,
                     blockHit.getLocation()
             );
-            ProjectileBehaviorContext hitContext = new ProjectileBehaviorContext(
+            ProjectileBehavior.Context hitContext = new ProjectileBehavior.Context(
                     level,
                     owner,
                     null,
@@ -233,16 +239,23 @@ public final class VirtualProjectiles {
             double remainingRange = Math.max(0.0D, projectile.maximumRange() - projectile.travelled());
             double speed = Math.max(1.0E-6D, projectile.velocity().length());
             long expiresAt = level.getGameTime() + Math.max(1L, (long) Math.ceil(remainingRange / speed) + 8L);
-            RuntimeVisualSync.update(
-                    level,
-                    visualState(
-                            projectile,
-                            definition.visual().get(),
-                            expiresAt,
-                            projectile.maximumRange(),
-                            definition.hitRadius()
-                    )
+            Resolved<RuntimeVisualDefinition> visual = visual(
+                    executionContext(level, owner, projectile, null, projectile.position()),
+                    definition.visual()
             );
+            if (visual != null) {
+                RuntimeVisualSync.update(
+                        level,
+                        visualState(
+                                projectile,
+                                visual.id(),
+                                expiresAt,
+                                projectile.maximumRange(),
+                                definition.hitRadius(),
+                                visual.value()
+                        )
+                );
+            }
         }
 
         if (projectile.travelled() >= projectile.maximumRange()) {
@@ -255,13 +268,9 @@ public final class VirtualProjectiles {
 
     private static RuntimeDefinition resolveDefinition(
             ServerLevel level,
-            VirtualProjectileInstance projectile
+            Instance projectile
     ) {
-        VirtualProjectileDefinition definition = CoreRegistries.safeAccess(
-                CoreRegistries.VIRTUAL_PROJECTILE_REGISTRY,
-                projectile.definitionId(),
-                level.registryAccess()
-        );
+        VirtualProjectileDefinition definition = definition(level, projectile.skillId(), projectile.definitionId());
         if (definition == null) {
             return null;
         }
@@ -279,6 +288,27 @@ public final class VirtualProjectiles {
         );
     }
 
+    private static Resolved<RuntimeVisualDefinition> visual(
+            SkillExecutionContext context,
+            Optional<DefinitionRef<RuntimeVisualDefinition>> reference
+    ) {
+        return reference.map(value -> SkillDefinitions.visual(context, value)).orElse(null);
+    }
+
+    private static VirtualProjectileDefinition definition(
+            ServerLevel level,
+            Identifier skillId,
+            Identifier definitionId
+    ) {
+        return SkillDefinitions.resolveStored(
+                VirtualProjectileDefinition.class,
+                skillId,
+                definitionId,
+                CoreRegistries.VIRTUAL_PROJECTILE_REGISTRY,
+                level.registryAccess()
+        );
+    }
+
     private static LivingEntity resolveTarget(ServerLevel level, UUID targetId) {
         if (targetId == null) {
             return null;
@@ -290,11 +320,11 @@ public final class VirtualProjectiles {
     private static EntityHitCandidate findEntityHit(
             ServerLevel level,
             ServerPlayer owner,
-            VirtualProjectileInstance projectile,
+            Instance projectile,
             Vec3 start,
             Vec3 end,
             double radius,
-            TargetFilterDefinition filter
+            TargetingDefinition.Filter filter
     ) {
         AABB search = new AABB(start, end).inflate(Math.max(0.0D, radius));
         EntityHitCandidate closest = null;
@@ -322,7 +352,7 @@ public final class VirtualProjectiles {
     private static void expire(
             ServerLevel level,
             ServerPlayer owner,
-            VirtualProjectileInstance projectile,
+            Instance projectile,
             RuntimeDefinition definition
     ) {
         applyFeatures(
@@ -333,7 +363,7 @@ public final class VirtualProjectiles {
                 null,
                 projectile.position()
         );
-        ProjectileBehaviorContext context = new ProjectileBehaviorContext(
+        ProjectileBehavior.Context context = new ProjectileBehavior.Context(
                 level,
                 owner,
                 resolveTarget(level, projectile.targetId()),
@@ -348,7 +378,7 @@ public final class VirtualProjectiles {
     private static void applyFeatures(
             ServerLevel level,
             ServerPlayer owner,
-            VirtualProjectileInstance projectile,
+            Instance projectile,
             List<SkillExecutionFeature> features,
             LivingEntity target,
             Vec3 position
@@ -362,7 +392,7 @@ public final class VirtualProjectiles {
     private static SkillExecutionContext executionContext(
             ServerLevel level,
             ServerPlayer owner,
-            VirtualProjectileInstance projectile,
+            Instance projectile,
             LivingEntity target,
             Vec3 position
     ) {
@@ -392,9 +422,9 @@ public final class VirtualProjectiles {
 
     private static Vec3 resolveDirection(
             SkillExecutionContext context,
-            ProjectileLaunchDirection direction
+            VirtualProjectileDefinition.Direction direction
     ) {
-        if (direction == ProjectileLaunchDirection.TARGET && context.target() != null) {
+        if (direction == VirtualProjectileDefinition.Direction.TARGET && context.target() != null) {
             Vec3 delta = context.target().getBoundingBox().getCenter().subtract(context.caster().getEyePosition());
             if (delta.lengthSqr() > 1.0E-8D) {
                 return delta.normalize();
@@ -437,11 +467,12 @@ public final class VirtualProjectiles {
     }
 
     private static RuntimeVisualState visualState(
-            VirtualProjectileInstance projectile,
+            Instance projectile,
             Identifier visual,
             long expiresAt,
             double range,
-            double hitRadius
+            double hitRadius,
+            RuntimeVisualDefinition definition
     ) {
         return new RuntimeVisualState(
                 projectile.runtimeId(),
@@ -463,19 +494,30 @@ public final class VirtualProjectiles {
                         ),
                 projectile.runtimeId().getMostSignificantBits(),
                 range,
-                hitRadius
+                hitRadius,
+                definition
         );
     }
 
     private static void removeVisual(
             ServerLevel level,
-            VirtualProjectileInstance projectile,
+            Instance projectile,
             RuntimeDefinition definition
     ) {
-        definition.visual().ifPresent(visual -> RuntimeVisualSync.remove(
-                level,
-                visualState(projectile, visual, 0L, projectile.maximumRange(), definition.hitRadius())
-        ));
+        Entity ownerEntity = level.getEntity(projectile.ownerId());
+        if (!(ownerEntity instanceof ServerPlayer owner)) {
+            return;
+        }
+        Resolved<RuntimeVisualDefinition> visual = visual(
+                executionContext(level, owner, projectile, null, projectile.position()),
+                definition.visual()
+        );
+        if (visual != null) {
+            RuntimeVisualSync.remove(
+                    level,
+                    visualState(projectile, visual.id(), 0L, projectile.maximumRange(), definition.hitRadius(), visual.value())
+            );
+        }
     }
 
     private record EntityHitCandidate(LivingEntity target, Vec3 position) {
@@ -485,13 +527,152 @@ public final class VirtualProjectiles {
             double gravity,
             double hitRadius,
             int pierces,
-            TargetFilterDefinition filter,
+            TargetingDefinition.Filter filter,
             Optional<Identifier> flightParticle,
             List<ProjectileBehavior> behaviors,
             List<SkillExecutionFeature> entityHitFeatures,
             List<SkillExecutionFeature> blockHitFeatures,
             List<SkillExecutionFeature> expiryFeatures,
-            Optional<Identifier> visual
+            Optional<DefinitionRef<RuntimeVisualDefinition>> visual
     ) {
+    }
+
+    private static final class Instance implements ProjectileBehavior.Access {
+        private final UUID runtimeId;
+        private final ResourceKey<Level> dimension;
+        private final UUID ownerId;
+        private final Identifier skillId;
+        private final Identifier definitionId;
+        private final double charge;
+        private final double maximumRange;
+        private final Map<Identifier, Double> variables;
+        private final Set<UUID> hitEntities = new HashSet<>();
+        private Vec3 position;
+        private Vec3 velocity;
+        private UUID targetId;
+        private double travelled;
+        private int pierces;
+        private int ticksLived;
+
+        private Instance(
+                ResourceKey<Level> dimension,
+                UUID ownerId,
+                Identifier skillId,
+                Identifier definitionId,
+                double charge,
+                Vec3 position,
+                Vec3 velocity,
+                double maximumRange,
+                UUID targetId,
+                Map<Identifier, Double> variables
+        ) {
+            this.runtimeId = UUID.randomUUID();
+            this.dimension = dimension;
+            this.ownerId = ownerId;
+            this.skillId = skillId;
+            this.definitionId = definitionId;
+            this.charge = charge;
+            this.position = position;
+            this.velocity = velocity;
+            this.maximumRange = maximumRange;
+            this.targetId = targetId;
+            this.variables = variables == null ? Map.of() : Map.copyOf(variables);
+        }
+
+        @Override
+        public UUID runtimeId() {
+            return runtimeId;
+        }
+
+        public ResourceKey<Level> dimension() {
+            return dimension;
+        }
+
+        @Override
+        public UUID ownerId() {
+            return ownerId;
+        }
+
+        @Override
+        public Identifier skillId() {
+            return skillId;
+        }
+
+        public Identifier definitionId() {
+            return definitionId;
+        }
+
+        public double charge() {
+            return charge;
+        }
+
+        public double maximumRange() {
+            return maximumRange;
+        }
+
+        public Map<Identifier, Double> variables() {
+            return variables;
+        }
+
+        @Override
+        public Vec3 position() {
+            return position;
+        }
+
+        @Override
+        public void setPosition(Vec3 position) {
+            this.position = position;
+        }
+
+        @Override
+        public Vec3 velocity() {
+            return velocity;
+        }
+
+        @Override
+        public void setVelocity(Vec3 velocity) {
+            this.velocity = velocity;
+        }
+
+        @Override
+        public UUID targetId() {
+            return targetId;
+        }
+
+        @Override
+        public void setTargetId(UUID targetId) {
+            this.targetId = targetId;
+        }
+
+        @Override
+        public double travelled() {
+            return travelled;
+        }
+
+        public void addTravelled(double value) {
+            travelled += Math.max(0.0D, value);
+        }
+
+        @Override
+        public int pierces() {
+            return pierces;
+        }
+
+        public void addPierce() {
+            pierces++;
+        }
+
+        public int ticksLived() {
+            return ticksLived;
+        }
+
+        public void incrementTicksLived() {
+            ticksLived++;
+        }
+
+        @Override
+        public Set<UUID> hitEntities() {
+            return hitEntities;
+        }
     }
 }

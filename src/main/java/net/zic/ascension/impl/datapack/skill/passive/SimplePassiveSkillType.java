@@ -6,7 +6,6 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
-import net.zic.ascension.impl.core.skill.EmptySkillData;
 import net.zic.ascension.impl.core.skill.SimplePassiveSkill;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
@@ -37,6 +36,6 @@ public class SimplePassiveSkillType extends SkillType {
 
     @Override
     public MapCodec<? extends SkillData> dataCodec() {
-        return MapCodec.unit(EmptySkillData::new);
+        return MapCodec.unit(SimplePassiveSkill.EmptyData::new);
     }
 }

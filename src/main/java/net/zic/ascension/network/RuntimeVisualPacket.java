@@ -1,5 +1,7 @@
 package net.zic.ascension.network;
 
+import com.google.gson.JsonParser;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -7,6 +9,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.client.visual.runtime.ClientRuntimeVisuals;
 import net.zic.zenithlib.network.ByteBufHelpers;
@@ -56,7 +59,8 @@ public record RuntimeVisualPacket(
                     buf.readFloat(),
                     buf.readLong(),
                     buf.readDouble(),
-                    buf.readDouble()
+                    buf.readDouble(),
+                    readDefinition(buf)
             );
             return new RuntimeVisualPacket(action, state);
         }
@@ -95,6 +99,27 @@ public record RuntimeVisualPacket(
             buf.writeLong(state.seed());
             buf.writeDouble(state.primaryValue());
             buf.writeDouble(state.secondaryValue());
+            writeDefinition(buf, state.definition());
+        }
+
+        private RuntimeVisualDefinition readDefinition(FriendlyByteBuf buf) {
+            if (!buf.readBoolean()) {
+                return null;
+            }
+            String json = buf.readUtf(262144);
+            return RuntimeVisualDefinition.CODEC.parse(JsonOps.INSTANCE, JsonParser.parseString(json)).result().orElse(null);
+        }
+
+        private void writeDefinition(FriendlyByteBuf buf, RuntimeVisualDefinition definition) {
+            buf.writeBoolean(definition != null);
+            if (definition == null) {
+                return;
+            }
+            String json = RuntimeVisualDefinition.CODEC.encodeStart(JsonOps.INSTANCE, definition)
+                    .result()
+                    .map(Object::toString)
+                    .orElse("{}");
+            buf.writeUtf(json, 262144);
         }
 
         private Vec3 readVec3(FriendlyByteBuf buf) {

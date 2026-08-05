@@ -14,16 +14,16 @@ import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.common.util.AscensionAttributes;
-import net.zic.ascension.impl.core.effect.FrozenStateData;
-import net.zic.ascension.impl.core.effect.SkillEffectContainer;
-import net.zic.ascension.impl.core.control.StaggerStateData;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.skill_casting.SkillCastHandler;
-import net.zic.ascension.impl.core.movement.MovementAnchorContainer;
-import net.zic.ascension.impl.runtime.projectile.NormalProjectileData;
 
 import java.util.function.Supplier;
+import net.zic.ascension.impl.core.control.StaggerService;
+import net.zic.ascension.impl.core.effect.FrozenStateService;
+import net.zic.ascension.impl.core.movement.MovementService;
+import net.zic.ascension.impl.runtime.projectile.NormalProjectileService;
+import net.zic.ascension.impl.core.effect.SkillEffectManager;
 
 public class AscensionAttachments {
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, AscensionCraft.MOD_ID);
@@ -112,32 +112,32 @@ public class AscensionAttachments {
     );
 
 
-    public static final Supplier<AttachmentType<FrozenStateData>> FROZEN_STATE = ATTACHMENT_TYPES.register(
-            "frozen_state", () -> AttachmentType.builder(holder -> new FrozenStateData())
-                    .serialize(FrozenStateData.CODEC.fieldOf("data"))
+    public static final Supplier<AttachmentType<FrozenStateService.State>> FROZEN_STATE = ATTACHMENT_TYPES.register(
+            "frozen_state", () -> AttachmentType.builder(holder -> new FrozenStateService.State())
+                    .serialize(FrozenStateService.State.CODEC.fieldOf("data"))
                     .copyOnDeath()
                     .build()
     );
-    public static final Supplier<AttachmentType<StaggerStateData>> STAGGER_STATE = ATTACHMENT_TYPES.register(
-            "stagger_state", () -> AttachmentType.builder(holder -> new StaggerStateData())
-                    .serialize(StaggerStateData.CODEC.fieldOf("data"))
+    public static final Supplier<AttachmentType<StaggerService.State>> STAGGER_STATE = ATTACHMENT_TYPES.register(
+            "stagger_state", () -> AttachmentType.builder(holder -> new StaggerService.State())
+                    .serialize(StaggerService.State.CODEC.fieldOf("data"))
                     .build()
     );
-    public static final Supplier<AttachmentType<MovementAnchorContainer>> MOVEMENT_ANCHORS = ATTACHMENT_TYPES.register(
-            "movement_anchors", () -> AttachmentType.builder(holder -> new MovementAnchorContainer())
-                    .serialize(MovementAnchorContainer.CODEC.fieldOf("data"))
+    public static final Supplier<AttachmentType<MovementService.Anchors>> MOVEMENT_ANCHORS = ATTACHMENT_TYPES.register(
+            "movement_anchors", () -> AttachmentType.builder(holder -> new MovementService.Anchors())
+                    .serialize(MovementService.Anchors.CODEC.fieldOf("data"))
                     .copyOnDeath()
                     .build()
     );
-    public static final Supplier<AttachmentType<SkillEffectContainer>> ACTIVE_SKILL_EFFECTS = ATTACHMENT_TYPES.register(
-            "active_skill_effects", () -> AttachmentType.builder(holder -> new SkillEffectContainer())
-                    .serialize(SkillEffectContainer.CODEC.fieldOf("data"))
+    public static final Supplier<AttachmentType<SkillEffectManager.Container>> ACTIVE_SKILL_EFFECTS = ATTACHMENT_TYPES.register(
+            "active_skill_effects", () -> AttachmentType.builder(holder -> new SkillEffectManager.Container())
+                    .serialize(SkillEffectManager.Container.CODEC.fieldOf("data"))
                     .copyOnDeath()
                     .build()
     );
-    public static final Supplier<AttachmentType<NormalProjectileData>> NORMAL_PROJECTILE_DATA = ATTACHMENT_TYPES.register(
-            "normal_projectile_data", () -> AttachmentType.builder(holder -> new NormalProjectileData())
-                    .serialize(NormalProjectileData.CODEC.fieldOf("data"))
+    public static final Supplier<AttachmentType<NormalProjectileService.Data>> NORMAL_PROJECTILE_DATA = ATTACHMENT_TYPES.register(
+            "normal_projectile_data", () -> AttachmentType.builder(holder -> new NormalProjectileService.Data())
+                    .serialize(NormalProjectileService.Data.CODEC.fieldOf("data"))
                     .build()
     );
 

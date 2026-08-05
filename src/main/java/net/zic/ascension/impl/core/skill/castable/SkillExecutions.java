@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.skill.castable;
 
+import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -10,9 +11,6 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillExecutionDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.ascension.core.targeting.SkillTarget;
-import net.zic.ascension.api.ascension.core.targeting.TargetingContext;
-import net.zic.ascension.api.ascension.core.targeting.TargetingResult;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,8 +40,8 @@ public final class SkillExecutions {
             SkillExecutionDefinition definition
     ) {
         Map<Identifier, Double> resolvedVariables = new HashMap<>(variables == null ? Map.of() : variables);
-        resolvedVariables.put(TargetingContext.EFFECTIVE_LEVEL, (double) effectiveLevel);
-        TargetingResult targeting = definition.targeting().resolve(new TargetingContext(
+        resolvedVariables.put(TargetingDefinition.Context.EFFECTIVE_LEVEL, (double) effectiveLevel);
+        TargetingDefinition.Result targeting = definition.targeting().resolve(new TargetingDefinition.Context(
                 level,
                 caster,
                 skill,
@@ -58,7 +56,7 @@ public final class SkillExecutions {
             return Resolution.failure(Component.literal("No valid target"));
         }
         resolvedVariables.put(TARGET_COUNT, (double) targeting.targets().size());
-        SkillTarget primary = targeting.primaryTarget();
+        TargetingDefinition.Target primary = targeting.primaryTarget();
         if (primary != null) {
             resolvedVariables.put(TARGET_DISTANCE, caster.getEyePosition().distanceTo(primary.position()));
         }
@@ -74,32 +72,33 @@ public final class SkillExecutions {
             Resolution resolution
     ) {
         Vec3 origin = caster.position().add(0.0D, caster.getBbHeight() * 0.5D, 0.0D);
-        SkillExecutionContext casterContext = new SkillExecutionContext(
-                level,
-                caster,
-                skill,
-                caster,
-                origin,
-                charge,
-                resolution.variables()
-        );
-        for (SkillExecutionFeature feature : definition.casterFeatures()) {
-            feature.apply(casterContext);
-        }
-        for (SkillTarget target : resolution.targets()) {
-            Map<Identifier, Double> targetVariables = new HashMap<>(resolution.variables());
-            targetVariables.put(TARGET_DISTANCE, caster.getEyePosition().distanceTo(target.position()));
-            SkillExecutionContext targetContext = new SkillExecutionContext(
-                    level,
-                    caster,
-                    skill,
-                    target.entity(),
-                    target.position(),
-                    charge,
-                    targetVariables
-            );
-            for (SkillExecutionFeature feature : definition.targetFeatures()) {
-                feature.apply(targetContext);
+        LivingEntity primary = primaryEntity(resolution);
+        for (SkillExecutionFeature feature : definition.features()) {
+            switch (feature.subject()) {
+                case CASTER, ORIGIN -> feature.apply(new SkillExecutionContext(
+                        level,
+                        caster,
+                        skill,
+                        primary,
+                        origin,
+                        charge,
+                        resolution.variables()
+                ));
+                case TARGET, POSITION -> {
+                    for (TargetingDefinition.Target target : resolution.targets()) {
+                        Map<Identifier, Double> targetVariables = new HashMap<>(resolution.variables());
+                        targetVariables.put(TARGET_DISTANCE, caster.getEyePosition().distanceTo(target.position()));
+                        feature.apply(new SkillExecutionContext(
+                                level,
+                                caster,
+                                skill,
+                                target.entity(),
+                                target.position(),
+                                charge,
+                                targetVariables
+                        ));
+                    }
+                }
             }
         }
     }
@@ -109,7 +108,7 @@ public final class SkillExecutions {
     }
 
     public record Resolution(
-            List<SkillTarget> targets,
+            List<TargetingDefinition.Target> targets,
             Map<Identifier, Double> variables,
             Component failureMessage
     ) {

@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.ascension.datapack.CodecHelpers;
+import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 
 import java.util.List;
@@ -17,17 +18,17 @@ public record AnchorNetworkDefinition(
         List<Node> nodes,
         List<Link> links,
         boolean rotateWithCaster,
-        Optional<Identifier> field,
-        Optional<Identifier> visual
+        Optional<DefinitionRef<AreaFieldDefinition>> field,
+        Optional<DefinitionRef<RuntimeVisualDefinition>> visual
 ) {
     public static final Codec<AnchorNetworkDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ScaledValue.CODEC.codec().fieldOf("duration").forGetter(AnchorNetworkDefinition::duration),
+            ScaledValue.COMPACT_CODEC.fieldOf("duration").forGetter(AnchorNetworkDefinition::duration),
             Node.CODEC.listOf().fieldOf("nodes").forGetter(AnchorNetworkDefinition::nodes),
             Link.CODEC.listOf().optionalFieldOf("links", List.of()).forGetter(AnchorNetworkDefinition::links),
             Codec.BOOL.optionalFieldOf("rotate_with_caster", true)
                     .forGetter(AnchorNetworkDefinition::rotateWithCaster),
-            Identifier.CODEC.optionalFieldOf("field").forGetter(AnchorNetworkDefinition::field),
-            Identifier.CODEC.optionalFieldOf("visual").forGetter(AnchorNetworkDefinition::visual)
+            DefinitionRef.codec(AreaFieldDefinition.CODEC).optionalFieldOf("field").forGetter(AnchorNetworkDefinition::field),
+            DefinitionRef.codec(RuntimeVisualDefinition.CODEC).optionalFieldOf("visual").forGetter(AnchorNetworkDefinition::visual)
     ).apply(instance, AnchorNetworkDefinition::new));
 
     public AnchorNetworkDefinition {

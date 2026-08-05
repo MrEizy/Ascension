@@ -1,11 +1,12 @@
 package net.zic.ascension.api.ascension.core.runtime;
 
+import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.ascension.core.targeting.TargetFilterDefinition;
+import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 
 import java.util.List;
@@ -17,22 +18,22 @@ public record AreaFieldDefinition(
         ScaledValue height,
         ScaledValue duration,
         int tickInterval,
-        TargetFilterDefinition filter,
+        TargetingDefinition.Filter filter,
         List<SkillExecutionFeature> onEnter,
         List<SkillExecutionFeature> onTick,
         List<SkillExecutionFeature> onExit,
         List<SkillExecutionFeature> onExpire,
-        Optional<Identifier> visual
+        Optional<DefinitionRef<RuntimeVisualDefinition>> visual
 ) {
     public static final Codec<AreaFieldDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Shape.CODEC.optionalFieldOf("shape", Shape.CYLINDER).forGetter(AreaFieldDefinition::shape),
-            ScaledValue.CODEC.codec().fieldOf("radius").forGetter(AreaFieldDefinition::radius),
-            ScaledValue.CODEC.codec().optionalFieldOf("height", ScaledValue.constant(4.0D))
+            ScaledValue.COMPACT_CODEC.fieldOf("radius").forGetter(AreaFieldDefinition::radius),
+            ScaledValue.COMPACT_CODEC.optionalFieldOf("height", ScaledValue.constant(4.0D))
                     .forGetter(AreaFieldDefinition::height),
-            ScaledValue.CODEC.codec().fieldOf("duration").forGetter(AreaFieldDefinition::duration),
+            ScaledValue.COMPACT_CODEC.fieldOf("duration").forGetter(AreaFieldDefinition::duration),
             Codec.intRange(1, 1200).optionalFieldOf("tick_interval", 20)
                     .forGetter(AreaFieldDefinition::tickInterval),
-            TargetFilterDefinition.CODEC.codec().optionalFieldOf("filter", TargetFilterDefinition.hostile())
+            TargetingDefinition.Filter.CODEC.codec().optionalFieldOf("filter", TargetingDefinition.Filter.hostile())
                     .forGetter(AreaFieldDefinition::filter),
             SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_enter", List.of())
                     .forGetter(AreaFieldDefinition::onEnter),
@@ -42,12 +43,12 @@ public record AreaFieldDefinition(
                     .forGetter(AreaFieldDefinition::onExit),
             SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_expire", List.of())
                     .forGetter(AreaFieldDefinition::onExpire),
-            Identifier.CODEC.optionalFieldOf("visual").forGetter(AreaFieldDefinition::visual)
+            DefinitionRef.codec(RuntimeVisualDefinition.CODEC).optionalFieldOf("visual").forGetter(AreaFieldDefinition::visual)
     ).apply(instance, AreaFieldDefinition::new));
 
     public AreaFieldDefinition {
         shape = shape == null ? Shape.CYLINDER : shape;
-        filter = filter == null ? TargetFilterDefinition.hostile() : filter;
+        filter = filter == null ? TargetingDefinition.Filter.hostile() : filter;
         onEnter = onEnter == null ? List.of() : List.copyOf(onEnter);
         onTick = onTick == null ? List.of() : List.copyOf(onTick);
         onExit = onExit == null ? List.of() : List.copyOf(onExit);

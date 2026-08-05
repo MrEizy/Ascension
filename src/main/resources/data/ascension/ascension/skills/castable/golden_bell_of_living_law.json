@@ -7,63 +7,276 @@
     "translate": "ascension.skill.golden_bell_of_living_law.desc"
   },
   "default_accessible_level": 0,
-  "levels": [
-    {
-      "execution": {
-        "targeting": {
-          "type": "ascension:self"
-        },
-        "require_targets": true,
-        "caster_features": [
+  "definitions": {
+    "effects": {
+      "golden_bell_discipline": {
+        "stacking": "stronger_replaces",
+        "stacking_scope": "source_entity",
+        "max_stacks": 1,
+        "modules": [
           {
-            "type": "ascension:skill_effect",
-            "effect": "ascension:guardian/golden_bell_discipline",
-            "duration": {
-              "base": 160
+            "type": "ascension:resource_modifier",
+            "id": "ascension:guardian/golden_bell_stamina",
+            "selector": {
+              "resources": [
+                "ascension:stamina"
+              ],
+              "operations": [
+                "ascension:consume",
+                "ascension:drain"
+              ],
+              "source": {
+                "source_tags": [
+                  "ascension:movement",
+                  "ascension:combat"
+                ]
+              }
             },
-            "potency": {
-              "base": 1.0
+            "operation": "multiply_total",
+            "value": {
+              "base": -0.08,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:effect_potency"
+                  },
+                  "operation": "add",
+                  "scale": -0.1
+                }
+              ],
+              "minimum": -0.3,
+              "maximum": 0.0
+            },
+            "priority": 100
+          },
+          {
+            "type": "ascension:resource_modifier",
+            "id": "ascension:guardian/golden_bell_exhaustion",
+            "selector": {
+              "resources": [
+                "ascension:exhaustion"
+              ],
+              "operations": [
+                "ascension:accumulate"
+              ],
+              "source": {
+                "source_tags": [
+                  "ascension:movement",
+                  "ascension:combat"
+                ]
+              }
+            },
+            "operation": "multiply_total",
+            "value": {
+              "base": -0.04,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:effect_potency"
+                  },
+                  "operation": "add",
+                  "scale": -0.06
+                }
+              ],
+              "minimum": -0.2,
+              "maximum": 0.0
+            },
+            "priority": 100
+          }
+        ]
+      }
+    },
+    "barriers": {
+      "bell": {
+        "duration": {
+          "base": 120,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:skill_level",
+                "skill": "ascension:castable/golden_bell_of_living_law"
+              },
+              "operation": "add",
+              "scale": 40
             }
-          },
+          ]
+        },
+        "durability": {
+          "base": 18,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 5
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "operation": "add",
+              "scale": 3
+            },
+            {
+              "source": {
+                "type": "ascension:skill_level",
+                "skill": "ascension:castable/golden_bell_of_living_law"
+              },
+              "operation": "add",
+              "scale": 14
+            }
+          ],
+          "minimum": 20
+        },
+        "absorption": {
+          "base": 1.0
+        },
+        "overflow": true,
+        "priority": 200,
+        "replace_existing": true,
+        "on_break": [
           {
-            "type": "ascension:barrier",
-            "action": "apply",
-            "target": "caster",
-            "definition": "ascension:guardian/golden_bell"
+            "type": "ascension:sound",
+            "sound": "minecraft:block.bell.use",
+            "volume": {
+              "base": 1.2
+            },
+            "pitch": {
+              "base": 0.55
+            }
+          }
+        ],
+        "visual": {
+          "id": "ascension:golden_bell_barrier",
+          "radius": {
+            "base": 1.15,
+            "terms": [
+              {
+                "source": {
+                  "type": "ascension:skill_level",
+                  "skill": "ascension:castable/golden_bell_of_living_law"
+                },
+                "operation": "add",
+                "scale": 0.05
+              }
+            ]
           },
+          "height": {
+            "base": 2.35,
+            "terms": [
+              {
+                "source": {
+                  "type": "ascension:skill_level",
+                  "skill": "ascension:castable/golden_bell_of_living_law"
+                },
+                "operation": "add",
+                "scale": 0.08
+              }
+            ]
+          },
+          "stages": [
+            {
+              "maximum_durability_fraction": 0.2,
+              "visual": "ascension:golden_bell_barrier_critical"
+            },
+            {
+              "maximum_durability_fraction": 0.5,
+              "visual": "ascension:golden_bell_barrier_fractured"
+            }
+          ]
+        },
+        "projectile_response": "discard",
+        "on_absorb": [
           {
-            "type": "ascension:particle_burst",
-            "particle": "minecraft:totem_of_undying",
+            "type": "ascension:particles",
+            "particle": "minecraft:enchanted_hit",
             "count": {
-              "base": 42
+              "base": 7.0
             },
             "spread": {
-              "base": 1.0
+              "base": 0.45
             },
             "speed": {
-              "base": 0.08
+              "base": 0.04
             }
           },
           {
             "type": "ascension:sound",
-            "sound": "minecraft:block.bell.resonate",
+            "sound": "minecraft:block.bell.use",
             "volume": {
-              "base": 1.0
+              "base": 0.3
             },
             "pitch": {
-              "base": 0.85
+              "base": 1.45
             }
           }
-        ],
-        "target_features": []
+        ]
+      }
+    }
+  },
+  "levels": [
+    {
+      "targeting": {
+        "type": "ascension:self"
       },
+      "require_targets": true,
+      "features": [
+        {
+          "type": "ascension:effect",
+          "duration": {
+            "base": 160
+          },
+          "potency": {
+            "base": 1.0
+          },
+          "definition": "#golden_bell_discipline",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:barrier",
+          "action": "apply",
+          "definition": "#bell",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:totem_of_undying",
+          "count": {
+            "base": 42
+          },
+          "spread": {
+            "base": 1.0
+          },
+          "speed": {
+            "base": 0.08
+          },
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:block.bell.resonate",
+          "volume": {
+            "base": 1.0
+          },
+          "pitch": {
+            "base": 0.85
+          },
+          "subject": "caster"
+        }
+      ],
       "costs": [
         {
           "resource": "ascension:qi",
           "source": "ascension:skill_casting",
           "amount": {
             "base": 20
-          }
+          },
+          "operation": "ascension:consume"
         }
       ],
       "cooldown": {
@@ -71,61 +284,62 @@
       }
     },
     {
-      "execution": {
-        "targeting": {
-          "type": "ascension:self"
-        },
-        "require_targets": true,
-        "caster_features": [
-          {
-            "type": "ascension:skill_effect",
-            "effect": "ascension:guardian/golden_bell_discipline",
-            "duration": {
-              "base": 200
-            },
-            "potency": {
-              "base": 1.25
-            }
-          },
-          {
-            "type": "ascension:barrier",
-            "action": "apply",
-            "target": "caster",
-            "definition": "ascension:guardian/golden_bell"
-          },
-          {
-            "type": "ascension:particle_burst",
-            "particle": "minecraft:totem_of_undying",
-            "count": {
-              "base": 54
-            },
-            "spread": {
-              "base": 1.0
-            },
-            "speed": {
-              "base": 0.08
-            }
-          },
-          {
-            "type": "ascension:sound",
-            "sound": "minecraft:block.bell.resonate",
-            "volume": {
-              "base": 1.0
-            },
-            "pitch": {
-              "base": 0.85
-            }
-          }
-        ],
-        "target_features": []
+      "targeting": {
+        "type": "ascension:self"
       },
+      "require_targets": true,
+      "features": [
+        {
+          "type": "ascension:effect",
+          "duration": {
+            "base": 200
+          },
+          "potency": {
+            "base": 1.25
+          },
+          "definition": "#golden_bell_discipline",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:barrier",
+          "action": "apply",
+          "definition": "#bell",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:totem_of_undying",
+          "count": {
+            "base": 54
+          },
+          "spread": {
+            "base": 1.0
+          },
+          "speed": {
+            "base": 0.08
+          },
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:block.bell.resonate",
+          "volume": {
+            "base": 1.0
+          },
+          "pitch": {
+            "base": 0.85
+          },
+          "subject": "caster"
+        }
+      ],
       "costs": [
         {
           "resource": "ascension:qi",
           "source": "ascension:skill_casting",
           "amount": {
             "base": 24
-          }
+          },
+          "operation": "ascension:consume"
         }
       ],
       "cooldown": {
@@ -133,61 +347,62 @@
       }
     },
     {
-      "execution": {
-        "targeting": {
-          "type": "ascension:self"
-        },
-        "require_targets": true,
-        "caster_features": [
-          {
-            "type": "ascension:skill_effect",
-            "effect": "ascension:guardian/golden_bell_discipline",
-            "duration": {
-              "base": 240
-            },
-            "potency": {
-              "base": 1.5
-            }
-          },
-          {
-            "type": "ascension:barrier",
-            "action": "apply",
-            "target": "caster",
-            "definition": "ascension:guardian/golden_bell"
-          },
-          {
-            "type": "ascension:particle_burst",
-            "particle": "minecraft:totem_of_undying",
-            "count": {
-              "base": 68
-            },
-            "spread": {
-              "base": 1.0
-            },
-            "speed": {
-              "base": 0.08
-            }
-          },
-          {
-            "type": "ascension:sound",
-            "sound": "minecraft:block.bell.resonate",
-            "volume": {
-              "base": 1.0
-            },
-            "pitch": {
-              "base": 0.85
-            }
-          }
-        ],
-        "target_features": []
+      "targeting": {
+        "type": "ascension:self"
       },
+      "require_targets": true,
+      "features": [
+        {
+          "type": "ascension:effect",
+          "duration": {
+            "base": 240
+          },
+          "potency": {
+            "base": 1.5
+          },
+          "definition": "#golden_bell_discipline",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:barrier",
+          "action": "apply",
+          "definition": "#bell",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:totem_of_undying",
+          "count": {
+            "base": 68
+          },
+          "spread": {
+            "base": 1.0
+          },
+          "speed": {
+            "base": 0.08
+          },
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:block.bell.resonate",
+          "volume": {
+            "base": 1.0
+          },
+          "pitch": {
+            "base": 0.85
+          },
+          "subject": "caster"
+        }
+      ],
       "costs": [
         {
           "resource": "ascension:qi",
           "source": "ascension:skill_casting",
           "amount": {
             "base": 28
-          }
+          },
+          "operation": "ascension:consume"
         }
       ],
       "cooldown": {
