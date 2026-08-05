@@ -6,6 +6,8 @@
 • Added 47 new Paths - Foundation Paths (3) Elemental Paths (29) Weapon Paths (15)  
 • Added 16 new Physiques  
 • Added 5 new bloodlines  
+• Added 1 new Herb
+• Ported Most blocks from 1.21.1
 • Added back the Tablets of Destruction. 4 Tiers  
 • Added Datapack support for Bloodlines, Physiques, Techniques, Skills, Tribulations and Qi Density in biomes.  
 • Health and Qi Hud  
@@ -25,9 +27,9 @@
 • 
 
 ## Removed
-• Vanilla Health overlay  
-•  
-•  
+• Vanilla Health overlay
+•
+•
 
 ## Changes
 • Expanded Main Paths to 12 major realms.  
@@ -41,9 +43,9 @@
 
 
 ## Fixes
-•  
-•  
+•
+•
 
 ## Technical Changes
-•  
-•   
+•
+• 

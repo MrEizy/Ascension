@@ -1,56 +1,55 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.berserkers_fang.name"
+    "translate": "ascension.physique.sword_body_flawed_physique.name"
   },
   "description": {
-    "translate": "ascension.physique.berserkers_fang.desc"
+    "translate": "ascension.physique.sword_body_flawed_physique.desc"
   },
   "paths": [
+    "ascension:foundation/essence",
     "ascension:foundation/body",
-    "ascension:elemental/blood",
-    "ascension:weapon/knife"
+    "ascension:elemental/metal",
+    "ascension:weapon/sword"
   ],
   "skills": [],
   "item_tooltip": {
     "theme": "ascension:physique_essence",
     "template": "ascension:default_physique_essence",
-    "rank": "ascension:ordinary"
+    "rank": "ascension:profound"
   },
   "base_stats": {
     "ascension:strength": 2
   },
   "base_affinity": {
-    "ascension:body": 1,
-    "ascension:blood": 1,
-    "ascension:fist": 2
+    "ascension:body": 0.1,
+    "ascension:essence": 1.5,
+    "ascension:sword": 3,
+    "ascension:metal": 2
   },
   "stat_modifiers": {
     "ascension:strength": [
       {
         "value": 0.2,
         "operation": "MULTIPLY_FINAL",
-        "id": "ascension:berserkers_fang_strength_modifier"
+        "id": "ascension:sword_body_flawed_strength_modifier"
       }
     ]
   },
-
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:knife": [
-        {
-          "value": 0.2,
-          "operation": "ADD_BASE",
-          "id": "ascension:berserkers_fang_knife_modifier"
-        }
-      ],
-      "ascension:blood": [
-        {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:berserkers_fang_blood_modifier"
-        }
-      ]
-    }
+  "affinity_modifiers": {
+    "ascension:sword": [
+      {
+        "value": 0.2,
+        "operation": "ADD_BASE",
+        "id": "ascension:sword_body_flawed_sword_modifier"
+      }
+    ],
+    "ascension:metal": [
+      {
+        "value": 0.1,
+        "operation": "ADD_BASE",
+        "id": "ascension:sword_body_flawed_metal_modifier"
+      }
+    ]
   }
 }

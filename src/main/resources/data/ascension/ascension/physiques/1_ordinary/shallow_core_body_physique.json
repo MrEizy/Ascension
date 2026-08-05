@@ -1,15 +1,16 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.tidecaller_root.name"
+    "translate": "ascension.physique.shallow_core_body_physique.name"
   },
   "description": {
-    "translate": "ascension.physique.tidecaller_root.desc"
+    "translate": "ascension.physique.shallow_core_body_physique.desc"
   },
   "paths": [
     "ascension:foundation/essence",
     "ascension:foundation/soul",
-    "ascension:elemental/water"
+    "ascension:elemental/wood",
+    "ascension:elemental/sound"
   ],
   "skills": [],
   "item_tooltip": {
@@ -20,22 +21,19 @@
   "base_stats": {
     "ascension:vitality": 1
   },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:essence": 1,
-      "ascension:soul": 1,
-      "ascension:water": 1.5
-    }
+  "base_affinity": {
+    "ascension:essence": 1.5,
+    "ascension:soul": 2,
+    "ascension:wood": 2.5,
+    "ascension:sound": 2.5
   },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:water": [
-        {
-          "value": 0.2,
-          "operation": "ADD_BASE",
-          "id": "ascension:tidecaller_root_water_modifier"
-        }
-      ]
-    }
+  "affinity_modifiers": {
+    "ascension:water": [
+      {
+        "value": 0.2,
+        "operation": "ADD_BASE",
+        "id": "ascension:tidecaller_root_water_modifier"
+      }
+    ]
   }
 }

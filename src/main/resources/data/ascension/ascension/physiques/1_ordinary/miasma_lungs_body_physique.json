@@ -21,6 +21,12 @@
   "base_stats": {
     "ascension:vitality": 1
   },
+  "base_affinity": {
+    "ascension:essence": 1,
+    "ascension:body": 1,
+    "ascension:ice": 1,
+    "ascension:sword": 1.5
+  },
   "stat_modifiers": {
     "ascension:vitality": [
       {
@@ -30,23 +36,13 @@
       }
     ]
   },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:essence": 1,
-      "ascension:body": 1,
-      "ascension:ice": 1,
-      "ascension:sword": 1.5
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:ice": [
-        {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:winter_root_ice_modifier"
-        }
-      ]
-    }
+  "affinity_modifiers": {
+    "ascension:ice": [
+      {
+        "value": 0.15,
+        "operation": "ADD_BASE",
+        "id": "ascension:winter_root_ice_modifier"
+      }
+    ]
   }
 }

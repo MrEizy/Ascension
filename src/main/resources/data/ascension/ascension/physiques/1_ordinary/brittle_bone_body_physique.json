@@ -1,14 +1,13 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.twin_root_body.name"
+    "translate": "ascension.physique.brittle_bone_body.name"
   },
   "description": {
-    "translate": "ascension.physique.twin_root_body.desc"
+    "translate": "ascension.physique.brittle_bone_body.desc"
   },
   "paths": [
-    "ascension:foundation/essence",
-    "ascension:foundation/body",
+    "ascension:foundation/soul",
     "ascension:elemental/wood",
     "ascension:weapon/staff"
   ],
@@ -22,32 +21,27 @@
     "ascension:vitality": 1,
     "ascension:strength": 0.5
   },
+  "base_affinity": {
+    "ascension:soul": 3,
+    "ascension:wood": 1,
+    "ascension:staff": 2
+  },
   "stat_modifiers": {
     "ascension:vitality": [
       {
         "value": 0.1,
         "operation": "MULTIPLY_FINAL",
-        "id": "ascension:twin_root_body_vitality_modifier"
+        "id": "ascension:brittle_bone_body_vitality_modifier"
       }
     ]
   },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:essence": 1,
-      "ascension:body": 1,
-      "ascension:wood": 1,
-      "ascension:staff": 2
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:staff": [
-        {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:twin_root_body_staff_modifier"
-        }
-      ]
-    }
+  "affinity_modifiers": {
+    "ascension:staff": [
+      {
+        "value": 0.15,
+        "operation": "ADD_BASE",
+        "id": "ascension:brittle_bone_body_staff_modifier"
+      }
+    ]
   }
 }

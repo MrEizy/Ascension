@@ -29,29 +29,24 @@
       }
     ]
   },
-
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:essence": 1,
-      "ascension:sword": 2
-    }
+  "base_affinity": {
+    "ascension:essence": 1,
+    "ascension:sword": 2
   },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:essence": [
-        {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:physique_affinity_modifier"
-        }
-      ],
-      "ascension:sword": [
-        {
-          "value": 0.2,
-          "operation": "ADD_BASE",
-          "id": "ascension:physique_sword_modifier"
-        }
-      ]
-    }
+  "affinity_modifiers": {
+    "ascension:essence": [
+      {
+        "value": 0.1,
+        "operation": "ADD_BASE",
+        "id": "ascension:physique_affinity_modifier"
+      }
+    ],
+    "ascension:sword": [
+      {
+        "value": 0.2,
+        "operation": "ADD_BASE",
+        "id": "ascension:physique_sword_modifier"
+      }
+    ]
   }
 }

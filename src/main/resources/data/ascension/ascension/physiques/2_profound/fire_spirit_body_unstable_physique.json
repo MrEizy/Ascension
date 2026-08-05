@@ -1,53 +1,49 @@
 {
   "type": "ascension:simple",
   "name": {
-    "translate": "ascension.physique.primal_fang_body.name"
+    "translate": "ascension.physique.fire_spirit_body_unstable_physique.name"
   },
   "description": {
-    "translate": "ascension.physique.primal_fang_body.desc"
+    "translate": "ascension.physique.fire_spirit_body_unstable_physique.desc"
   },
   "paths": [
-    "ascension:foundation/body",
-    "ascension:foundation/essence",
-    "ascension:elemental/blood",
+    "ascension:foundation/soul",
+    "ascension:elemental/fire",
+    "ascension:elemental/yang",
     "ascension:weapon/fist"
   ],
   "skills": [],
   "item_tooltip": {
     "theme": "ascension:physique_essence",
     "template": "ascension:default_physique_essence",
-    "rank": "ascension:ordinary"
+    "rank": "ascension:profound"
   },
   "base_stats": {
     "ascension:vitality": 1,
     "ascension:strength": 1
+  },
+  "base_affinity": {
+    "ascension:soul": 3,
+    "ascension:fire": 2,
+    "ascension:yang": 2.5,
+    "ascension:fist": 2
   },
   "stat_modifiers": {
     "ascension:strength": [
       {
         "value": 0.1,
         "operation": "MULTIPLY_FINAL",
-        "id": "ascension:primal_fang_body_strength_modifier"
+        "id": "ascension:fire_spirit_body_unstable_physique_strength_modifier"
       }
     ]
   },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:body": 1,
-      "ascension:essence": 1,
-      "ascension:blood": 1.5,
-      "ascension:fist": 1.5
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:blood": [
-        {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:primal_fang_body_blood_modifier"
-        }
-      ]
-    }
+  "affinity_modifiers": {
+    "ascension:blood": [
+      {
+        "value": 0.15,
+        "operation": "ADD_BASE",
+        "id": "ascension:fire_spirit_body_unstable_physique_yang_modifier"
+      }
+    ]
   }
 }
