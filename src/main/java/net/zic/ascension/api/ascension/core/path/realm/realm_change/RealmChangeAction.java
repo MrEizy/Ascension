@@ -1,4 +1,4 @@
-package net.zic.ascension.api.ascension.core.technique.realm_change;
+package net.zic.ascension.api.ascension.core.path.realm.realm_change;
 
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
@@ -24,27 +24,23 @@ public interface RealmChangeAction extends ProgressAction {
 
     @Override
     default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction){
-        Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,contextIdentifier,source.getRegistryAccess());
-        if(technique == null) return;
 
-        TechniqueData data = null;
-        if(contextData instanceof TechniqueData) data = (TechniqueData) contextData;
+        if(!(contextData instanceof PathInstance pathInstance)) return;
 
-        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,technique.getPath());
-        if(pathInstance == null) return;
+
 
         if((pathInstance.getCurrentMajorRealm() == -1 && direction == ProgressDirection.DOWN) || (pathInstance.getCurrentMajorRealm() == 0 && pathInstance.getCurrentMinorRealm() == 0 && direction == ProgressDirection.UP)){
-            run(holderId,source,pathInstance,technique,data,0,0,direction);
+            run(holderId,source,contextIdentifier,pathInstance,0,0,direction);
         }else{
 
             if(direction == ProgressDirection.UP){
-                run(holderId,source,pathInstance,technique,data,pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm(),direction);
+                run(holderId,source,contextIdentifier,pathInstance,pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm(),direction);
             }else{
-                if(pathInstance.getCurrentMajorRealm() == pathInstance.getMaxMinorRealm(pathInstance.getCurrentMajorRealm())){
+                if(pathInstance.getCurrentMinorRealm() == pathInstance.getMaxMinorRealm(pathInstance.getCurrentMajorRealm())){
                     //we fell down a major realm
-                    run(holderId,source,pathInstance,technique, data, pathInstance.getCurrentMajorRealm()+1,0,direction);
+                    run(holderId,source,contextIdentifier,pathInstance,pathInstance.getCurrentMajorRealm()+1,0,direction);
                 }else{
-                    run(holderId,source,pathInstance,technique,data,pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm()+1,direction);
+                    run(holderId,source,contextIdentifier,pathInstance,pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm()+1,direction);
                 }
             }
         }
@@ -55,13 +51,12 @@ public interface RealmChangeAction extends ProgressAction {
      *
      * @param holderId the id of the holder, used for unique identifiers
      * @param source the source the path data is attached to
+     * @param path the path
      * @param PathInstance the path data
-     * @param technique the current technique
-     * @param techniqueData the current technique data
      * @param majorRealm the major realm we are entering/leaving
      * @param minorRealm the minor realm we are entering/leaving
      * @param direction the direction
      */
-    void run(UUID holderId, OriginSource source, PathInstance PathInstance, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction);
+    void run(UUID holderId, OriginSource source,Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction);
 
 }

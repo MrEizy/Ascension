@@ -243,10 +243,6 @@ public final class MobCultivationCommands {
     }
 
     private static boolean isFoundationPath(Identifier pathId, RegistryAccess registryAccess) {
-        return CoreRegistries.safeAccess(
-                CoreRegistries.PATH_REGISTRY,
-                pathId,
-                registryAccess
-        ) instanceof FoundationPath;
+        return false; //TODO update
     }
 }

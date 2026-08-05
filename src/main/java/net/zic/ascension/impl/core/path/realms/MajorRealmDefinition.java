@@ -1,9 +1,12 @@
 package net.zic.ascension.impl.core.path.realms;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealmDefinition;
-import net.zic.ascension.api.ascension.core.path.realm.RealmDefinition;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinitionReference;
+import net.zic.ascension.impl.core.path.RealmDefinition;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -59,4 +62,12 @@ public record MajorRealmDefinition(
     public double getMaxProgression() {
         return 0;
     }
+    public static Codec<MajorRealmDefinition> CODEC =
+            RecordCodecBuilder.create(instance -> instance.group(
+                    ComponentSerialization.CODEC.fieldOf("name").forGetter(MajorRealmDefinition::name),
+                    MinorRealmDefinition.CODEC
+                            .listOf()
+                            .fieldOf("minor_realms")
+                            .forGetter(MajorRealmDefinition::minorRealms)
+            ).apply(instance,MajorRealmDefinition::new));
 }

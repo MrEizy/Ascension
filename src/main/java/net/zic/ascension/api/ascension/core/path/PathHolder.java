@@ -84,8 +84,9 @@ public class PathHolder implements DataSourceInstance {
     }
 
     //──Cached Data────────────────────────────────────────────────────────
-    public void addCachedPath(Identifier path,PathInstance PathInstance){
-        cachedPaths.put(path,PathInstance);
+    public void addCachedPath(Identifier path,PathInstance pathInstance){
+        if(pathInstance == null || path == null) return;
+        cachedPaths.put(path,pathInstance);
     }
     public boolean hasCachedPath(Identifier path){
         return cachedPaths.containsKey(path);
@@ -130,8 +131,8 @@ public class PathHolder implements DataSourceInstance {
             try {
                 ValueOutput pathOutput = paths.addChild();
                 NbtHelpers.writeIdentifier(pathOutput,"path",path);
-                ValueOutput PathInstance = pathOutput.child("data");
-                if(getPath(path) != null) getPath(path).write(PathInstance);
+                ValueOutput pathInstance = pathOutput.child("data");
+                if(getPath(path) != null) getPath(path).write(pathInstance,access);
                 else throw new Exception("no path data for path "+path);
             }catch (Exception e){
                 AscensionCraft.LOGGER.debug("Error writing path {}",path);
@@ -152,7 +153,7 @@ public class PathHolder implements DataSourceInstance {
                 Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,access);
                 if(path == null) continue;
 
-                PathInstance data = path.loadData(PathInstance,access);
+                PathInstance data = path.loadInstance(PathInstance,access);
                 addCachedPath(pathId,data);
             }catch (Exception e){
                 AscensionCraft.LOGGER.debug("Error loading path");
@@ -173,14 +174,14 @@ public class PathHolder implements DataSourceInstance {
         buf.writeInt(paths.size());
         for(Identifier path : paths.keySet()){
             ByteBufHelpers.encodeIdentifier(path,buf);
-            getPath(path).encode(buf);
+            getPath(path).encode(buf,access);
         }
     }
     protected void encodePartialPatch(ByteBuf buf, RegistryAccess access){
         buf.writeInt(dirtyPaths.size());
         for(Identifier dirtyPath : dirtyPaths){
             ByteBufHelpers.encodeIdentifier(dirtyPath,buf);
-            getPath(dirtyPath).encode(buf);
+            getPath(dirtyPath).encode(buf,access);
         }
         ByteBufHelpers.encodeCollection(toRemovePaths,buf,ByteBufHelpers::encodeIdentifier);
     }
@@ -200,7 +201,7 @@ public class PathHolder implements DataSourceInstance {
         for(int i = 0;i<size;i++){
             Identifier pathId = ByteBufHelpers.decodeIdentifier(buf);
             Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,access);
-            PathInstance data = path.loadData(buf,access);
+            PathInstance data = path.loadInstance(buf,access);
             paths.put(pathId,data);
         }
     }
@@ -210,7 +211,7 @@ public class PathHolder implements DataSourceInstance {
         for(int i = 0;i<size;i++){
             Identifier pathId = ByteBufHelpers.decodeIdentifier(buf);
             Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,access);
-            PathInstance data = path.loadData(buf,access);
+            PathInstance data = path.loadInstance(buf,access);
             paths.put(pathId,data);
         }
         ByteBufHelpers.decodeArray(buf,ByteBufHelpers::decodeIdentifier).forEach(paths::remove);

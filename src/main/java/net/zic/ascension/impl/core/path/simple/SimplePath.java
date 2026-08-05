@@ -8,6 +8,7 @@ import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealmDefinition;
+import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.impl.core.path.realms.MajorRealmDefinition;
@@ -19,13 +20,20 @@ public class SimplePath implements Path {
     private final Component name;
     private final Component description;
     private final List<MajorRealmDefinition> realmDefinitions;
+    private final ProgressActionHolder actions;
 
-    public SimplePath(Component name, Component description, List<MajorRealmDefinition> realmDefinitions) {
+    public SimplePath(Component name, Component description, List<MajorRealmDefinition> realmDefinitions, ProgressActionHolder actions) {
         this.name = name;
         this.description = description;
         this.realmDefinitions = realmDefinitions;
+        this.actions = actions;
     }
-
+    public List<MajorRealmDefinition> getMajorRealmDefinitions(){
+        return realmDefinitions;
+    }
+    public ProgressActionHolder getProgressActionHolder(){
+        return actions;
+    }
     @Override
     public PathType getType() {
         return null; //TODO
@@ -63,7 +71,7 @@ public class SimplePath implements Path {
 
     @Override
     public Component getRealmName(int majorRealm, int minorRealm) {
-        return getRealmDefinition(majorRealm).getCompositeRealmName(minorRealm);
+        return majorRealm < 0 ? Component.literal("Mortal") :getRealmDefinition(majorRealm).getCompositeRealmName(minorRealm);
     }
 
     @Override

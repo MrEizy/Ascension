@@ -1,6 +1,9 @@
 package net.zic.ascension.impl.core.path.simple;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealm;
@@ -11,7 +14,9 @@ import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.path.CompletedTribulation;
+import net.zic.ascension.impl.core.path.realms.BreakthroughBehaviour;
 import net.zic.ascension.impl.core.path.realms.MajorRealm;
+import net.zic.ascension.impl.core.path.realms.MinorRealmDefinition;
 
 import java.util.*;
 
@@ -25,8 +30,7 @@ public class SimplePathInstance implements PathInstance {
 
     private UUID activeTribulationId;
 
-    private ProgressActionHolder actions;
-    double progress; //TODO consider updating this to be a resource that handles multiple "elements"
+     double progress; //TODO consider updating this to be a resource that handles multiple "elements"
 
 
     public SimplePathInstance(SimplePath path){
@@ -43,15 +47,17 @@ public class SimplePathInstance implements PathInstance {
     //not sure tbh
     @Override
     public void progressPath(Identifier path, double amount, OriginSource source) {
-        progress = Math.min(progress+amount,getMaxProgress());
-        //TODO not sure yet how I want to handle breakthroughs.
-        /*
-            TODO:
-                what i will do is add an option to realms, this option determines HOW we breakhtrough between the realms
-                it will simply be a field called "instant breakthrough" if the field is TRUE then we move on or trigger breakthrough when we hit max.
-                otherwise we just freeze path progression till something happens
-                in the future i might add more conditions like delayed(after an amount of time trigger)
-         */
+        progress = Math.min(progress + amount, getMaxProgress());
+        if (!canBreakthrough()) return;
+
+        BreakthroughBehaviour behaviour = getCurrentRealm().definition().getBreakthroughBehaviour(getCurrentMinorRealm());
+
+        if (behaviour == BreakthroughBehaviour.INSTANT) {
+            tryBreakthrough(source);
+        } else if (behaviour != BreakthroughBehaviour.NONE) {
+            //TODO add timer
+        }
+
     }
 
     //──GETTERS────────────────────────────────────────────────────────
@@ -72,7 +78,10 @@ public class SimplePathInstance implements PathInstance {
         int minorRealm = currentRealm.getCurrentRealm();
 
         boolean isProgressFull = currentRealm.definition().getMaxProgress(minorRealm) <= progress;
-        return !isProgressFull && !isBreakingThrough();
+        boolean maxMajorRealm = path.getMaxMajorRealm() == getCurrentMajorRealm();
+        boolean maxMinorRealm = getMaxMinorRealm(getCurrentMajorRealm()) == getCurrentMinorRealm();
+
+        return !isProgressFull && !isBreakingThrough()  && !(maxMinorRealm && maxMajorRealm);
     }
 
     @Override
@@ -81,7 +90,10 @@ public class SimplePathInstance implements PathInstance {
         int minorRealm = currentRealm.getCurrentRealm();
 
         boolean isProgressFull = currentRealm.definition().getMaxProgress(minorRealm) <= progress;
-        return isProgressFull && !isBreakingThrough();
+        boolean maxMajorRealm = path.getMaxMajorRealm() == getCurrentMajorRealm();
+        boolean maxMinorRealm = getMaxMinorRealm(getCurrentMajorRealm()) == getCurrentMinorRealm();
+
+        return isProgressFull && !isBreakingThrough() && !(maxMinorRealm && maxMajorRealm);
     }
 
 
@@ -124,15 +136,27 @@ public class SimplePathInstance implements PathInstance {
         //TODO
     }
 
+
     //──Realm Change Logic────────────────────────────────────────────────────────
+
+    public void tryBreakthrough(OriginSource source){
+        MinorRealmDefinition definition = getCurrentRealm().definition().realmDefinition(getCurrentMinorRealm());
+
+        if(definition.getTribulation() == null){
+            handleRealmChange(Realm.of(getCurrentMajorRealm()+1,0),source);
+        }else{
+            //TODO start tribulation
+        }
+    }
+
     @Override
     public void onRealmUp(OriginSource source) {
-        actions.run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.UP);
+        path.getProgressActionHolder().run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.UP);
     }
 
     @Override
     public void onRealmDown(OriginSource source) {
-        actions.run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.DOWN);
+        path.getProgressActionHolder().run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.DOWN);
     }
 
     @Override
@@ -150,7 +174,15 @@ public class SimplePathInstance implements PathInstance {
 
     }
 
+    @Override
+    public void write(ValueOutput output, RegistryAccess access) {
 
+    }
+
+    @Override
+    public void encode(ByteBuf buf, RegistryAccess access) {
+
+    }
 
 
 }

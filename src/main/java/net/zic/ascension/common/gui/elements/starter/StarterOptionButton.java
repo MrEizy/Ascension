@@ -15,6 +15,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 import net.zic.ascension.common.item.ModItems;

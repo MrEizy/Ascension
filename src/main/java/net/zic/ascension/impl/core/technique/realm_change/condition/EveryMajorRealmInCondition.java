@@ -1,9 +1,11 @@
 package net.zic.ascension.impl.core.technique.realm_change.condition;
 
+import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
-import net.zic.ascension.api.ascension.core.technique.realm_change.RealmChangeActionCondition;
+import net.zic.ascension.api.ascension.core.path.realm.realm_change.RealmChangeActionCondition;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionConditionTypes;
@@ -12,7 +14,7 @@ import java.util.List;
 
 public record EveryMajorRealmInCondition(List<Integer> majorRealms) implements RealmChangeActionCondition {
     @Override
-    public boolean test(OriginSource source, PathInstance PathInstance, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction) {
+    public boolean test(OriginSource source, Identifier path, PathInstance PathInstance,  int majorRealm, int minorRealm, ProgressDirection direction) {
 
         System.out.println(minorRealm);
         System.out.println(majorRealm);

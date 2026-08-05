@@ -12,6 +12,7 @@ import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDef
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
 
 import java.util.List;
+import java.util.Optional;
 
 public class SimpleCultivationSkillType extends SkillType {
     @Override
@@ -21,10 +22,11 @@ public class SimpleCultivationSkillType extends SkillType {
                         ComponentSerialization.CODEC.fieldOf("name").forGetter(SimpleCultivationSkill::name),
                         ComponentSerialization.CODEC.fieldOf("description").forGetter(SimpleCultivationSkill::description),
                         Identifier.CODEC.fieldOf("path").forGetter(SimpleCultivationSkill::primaryPath),
-                        Identifier.CODEC.listOf().optionalFieldOf("secondary_paths", List.of()).forGetter(SimpleCultivationSkill::secondaryPaths),
+                        Identifier.CODEC.optionalFieldOf("secondary_paths").forGetter((obj)-> Optional.of(obj.secondaryPath())),
                         Codec.DOUBLE.fieldOf("rate").forGetter(SimpleCultivationSkill::baseRate),
                         ParticleFieldDefinition.CODEC.optionalFieldOf("particle_field").forGetter(SimpleCultivationSkill::particleField)
-                ).apply(instance, SimpleCultivationSkill::new)
+                ).apply(instance, (name,description,path,secondaryPath,rate,particleField)->
+                        new SimpleCultivationSkill(name,description,path,secondaryPath.orElse(path),rate,particleField))
         );
     }
 

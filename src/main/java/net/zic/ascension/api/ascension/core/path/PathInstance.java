@@ -1,10 +1,16 @@
 package net.zic.ascension.api.ascension.core.path;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public interface PathInstance {
+
+
 
 
     /**
@@ -47,5 +53,8 @@ public interface PathInstance {
     //removes it from a specific source while maintaining data
     void removeFromSource(OriginSource source);
 
+
+    void write(ValueOutput output, RegistryAccess access);
+    void encode(ByteBuf buf, RegistryAccess access);
 
 }

@@ -1,8 +1,12 @@
 package net.zic.ascension.impl.core.path.realms;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealm;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealmDefinition;
+import net.zic.ascension.impl.core.path.RealmDefinition;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,12 +35,16 @@ public class MajorRealm implements CompositeRealm {
         this.currentRealm = isLimitBroken() ? newRealm : Math.min(newRealm,definition().getMaxRealm());
     }
 
-    @Override
+    //only used internally during loading and such
     public boolean isLimitBroken() {
         return !limitBrokenSources.isEmpty();
     }
-
-    @Override
+    /**
+     * sets if it is limit broken, and the source that tried to do this action
+     * @param state the new state
+     * @param source the source setting the new state
+     * @return the state of limit break after the action
+     */
     public boolean setLimitBroken(boolean state, Identifier source) {
         if(state) limitBrokenSources.add(source);
         else limitBrokenSources.remove(source);
@@ -45,4 +53,6 @@ public class MajorRealm implements CompositeRealm {
     public static MajorRealm of(MajorRealmDefinition definition){
         return new MajorRealm(definition);
     }
+
+
 }

@@ -11,6 +11,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolder;
+import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
@@ -301,7 +302,7 @@ public class AscensionOriginSourceHelper {
         if(path == null) return false;
         Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,source.getRegistryAccess());
         if(pathInstance == null) return false;
-        return addPath(source,path,pathInstance.newData(source.getRegistryAccess()),owner);
+        return addPath(source,path,pathInstance.newInstance(source.getRegistryAccess()),owner);
     }
 
     public static boolean addPath(OriginSource source,Identifier path, PathInstance existingData, Identifier owner) {
@@ -310,6 +311,7 @@ public class AscensionOriginSourceHelper {
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
         if(getPathHolder(source).hasCachedPath(path)) existingData = getPathHolder(source).removeCachedPath(path);
 
+        if(existingData == null) return false;
 
         PathAddedEvent.Pre pre = new PathAddedEvent.Pre(path,existingData,source);
 

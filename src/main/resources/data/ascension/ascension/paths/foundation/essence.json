@@ -1,5 +1,5 @@
 {
-  "type": "ascension:foundation_path",
+  "type": "ascension:simple_path",
   "name": {
     "translate": "ascension.path.foundation.essence.name"
   },
@@ -28,30 +28,7 @@
             "tick_delay": 10
           }
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Foundation Building",
@@ -68,30 +45,7 @@
           "name": "high",
           "progress": 10000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Core Formation",
@@ -108,30 +62,7 @@
           "name": "high",
           "progress": 1000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Core Tempering",
@@ -148,30 +79,7 @@
           "name": "high",
           "progress": 100000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Core Perfection",
@@ -188,30 +96,7 @@
           "name": "high",
           "progress": 10000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Nascent Core",
@@ -228,30 +113,7 @@
           "name": "high",
           "progress": 1000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Dao Foundation",
@@ -268,30 +130,7 @@
           "name": "high",
           "progress": 100000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Dao Formation",
@@ -308,30 +147,7 @@
           "name": "high",
           "progress": 10000000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Dao Ascension",
@@ -348,30 +164,7 @@
           "name": "high",
           "progress": 1000000000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Heavenly Dao",
@@ -388,30 +181,7 @@
           "name": "high",
           "progress": 100000000000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Immortal Foundation",
@@ -428,30 +198,7 @@
           "name": "high",
           "progress": 10000000000000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Immortal Ascension",
@@ -468,30 +215,7 @@
           "name": "high",
           "progress": 1000000000000000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     }
   ]
 }

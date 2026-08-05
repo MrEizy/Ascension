@@ -10,6 +10,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -35,7 +37,6 @@ public class PathDisplayContainer extends RenderableElement {
     private final EasyLabel selectedTechniqueLabel;
     private final PathInstanceDisplayElement pathInformation;
     private final PathProgressBar progressBar;
-    private final FoundationProgressBar foundationProgressBar;
 
     private OriginSource observedSource;
     private long observedRevision = Long.MIN_VALUE;
@@ -54,10 +55,6 @@ public class PathDisplayContainer extends RenderableElement {
         pathOptions.getPositioning().setY(43);
         addChild(pathOptions);
 
-        foundationProgressBar = new FoundationProgressBar(frame);
-        foundationProgressBar.getPositioning().setX(219);
-        foundationProgressBar.getPositioning().setY(46);
-        addChild(foundationProgressBar);
 
         selectedTechniqueLabel = new EasyLabel(frame);
         selectedTechniqueLabel.setTextColor(0xFFFFFFFF);
@@ -105,7 +102,7 @@ public class PathDisplayContainer extends RenderableElement {
         }
         selectedPath = pathId;
         progressBar.setPath(pathId);
-        foundationProgressBar.setPath(pathId);
+
         refreshSelectedPath();
     }
 
@@ -120,7 +117,7 @@ public class PathDisplayContainer extends RenderableElement {
             selectedPath = null;
             pathOptions.setPaths(this, displayedPaths);
             progressBar.setPath(null);
-            foundationProgressBar.setPath(null);
+
             showUnavailableState();
             return;
         }
@@ -137,7 +134,7 @@ public class PathDisplayContainer extends RenderableElement {
         if (paths.isEmpty()) {
             selectedPath = null;
             progressBar.setPath(null);
-            foundationProgressBar.setPath(null);
+
             showEmptyState();
             return;
         }
@@ -146,7 +143,7 @@ public class PathDisplayContainer extends RenderableElement {
             selectedPath = paths.getFirst();
         }
         progressBar.setPath(selectedPath);
-        foundationProgressBar.setPath(selectedPath);
+
         refreshSelectedPath();
     }
 
@@ -157,8 +154,8 @@ public class PathDisplayContainer extends RenderableElement {
         }
 
         ClientAscensionData.getSource().ifPresentOrElse(source -> {
-            PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(source,selectedPath);
-            if (PathInstance == null) {
+            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,selectedPath);
+            if (pathInstance == null) {
                 showMissingPath(selectedPath);
                 return;
             }
@@ -174,27 +171,16 @@ public class PathDisplayContainer extends RenderableElement {
                     return;
                 }
 
-                Identifier techniqueId = PathInstance.getCurrentTechnique();
-                Technique technique = techniqueId == null ? null : CoreRegistries.safeAccess(
-                        CoreRegistries.TECHNIQUE_REGISTRY,
-                        techniqueId,
-                        player.registryAccess()
-                );
-                setTechniqueTitle(
-                        technique == null
-                                ? Component.translatable("gui.ascension.introspection.none")
-                                : technique.getName(PathInstance.getCurrentTechniqueData())
-                );
 
                 Component description = path.description() == null
                         ? Component.empty()
                         : path.description();
 
                 pathInformation.setInformation(
-                        PathInstance.getRealmName(
-                                PathInstance.getMajorRealm(),
-                                PathInstance.getMinorRealm(),
-                                player.registryAccess()
+                        path.getRealmName(
+                                pathInstance.getCurrentMajorRealm(),
+                                pathInstance.getCurrentMinorRealm()
+
                         ),
                         description
                 );

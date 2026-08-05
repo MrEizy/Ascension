@@ -9,10 +9,11 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
-import net.zic.ascension.impl.core.path.foundation.FoundationPathInstance;
+
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
 import net.zic.ascension.skill_casting.AscensionSkillListener;
 import net.zic.zenithlib.common.ZenithAttachments;
@@ -178,8 +179,9 @@ public class CultivationProgressBar extends RenderableElement {
         });
     }
 
-    private static double resolveProgress(PathInstance PathInstance, Identifier pathId, boolean cultivationSuppressed, net.minecraft.core.RegistryAccess registryAccess) {
-        if (cultivationSuppressed && PathInstance instanceof FoundationPathInstance foundationData) {
+    private static double resolveProgress(PathInstance pathInstance, Identifier pathId, boolean cultivationSuppressed, net.minecraft.core.RegistryAccess registryAccess) {
+        /*
+        if (cultivationSuppressed && pathInstance instanceof FoundationPathInstance foundationData) {
 
             Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, pathId, registryAccess);
 
@@ -198,14 +200,15 @@ public class CultivationProgressBar extends RenderableElement {
 
             return Math.clamp(foundationData.getCurrentFoundationProgress() / maximum, 0.0D, 1.0D);
         }
+         */
 
-        double maximum = PathInstance.getMaxProgress(PathInstance.getMajorRealm(), PathInstance.getMinorRealm(), registryAccess);
+        double maximum = pathInstance.getMaxProgress();
 
         if (maximum <= 0.0D) {
             return 0.0D;
         }
 
-        return Math.clamp(PathInstance.getProgress() / maximum, 0.0D, 1.0D);
+        return Math.clamp(pathInstance.getProgress() / maximum, 0.0D, 1.0D);
     }
 
     private static ITextureData resolveContent(Identifier pathId) {

@@ -14,16 +14,5 @@ import net.minecraft.resources.Identifier;
 public interface CompositeRealm {
     CompositeRealmDefinition definition();
     int getCurrentRealm();
-    //just says that this realm can have more realms than its max realm.
-    //only used internally during loading and such
-    boolean isLimitBroken();
-
-    /**
-     * sets if it is limit broken, and the source that tried to do this action
-     * @param state the new state
-     * @param source the source setting the new state
-     * @return the state of limit break after the action
-     */
-    boolean setLimitBroken(boolean state,Identifier source);
 
 }

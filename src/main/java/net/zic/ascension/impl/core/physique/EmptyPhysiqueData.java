@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.core.physique;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
@@ -13,12 +14,12 @@ public class EmptyPhysiqueData implements PhysiqueData {
     }
 
     @Override
-    public void write(ValueOutput output) {
+    public void write(ValueOutput output, RegistryAccess access) {
 
     }
 
     @Override
-    public void encode(ByteBuf buf) {
+    public void encode(ByteBuf buf, RegistryAccess access) {
 
     }
 }

@@ -10,9 +10,11 @@ import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.impl.core.path.foundation.FoundationPathInstance;
+
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.ZenithStatHolder;
@@ -48,27 +50,15 @@ public class StatDisplayCommand {
                             }
                             player.sendSystemMessage(Component.literal("Suppressed : "+data.isCultivationSuppressed()));
                             player.sendSystemMessage(Component.literal("===Paths==="));
-                            for(Identifier path : AscensionOriginSourceHelper.getPaths(originSource)){
-                                Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,data.getSource().getRegistryAccess());
-                                player.sendSystemMessage(pathInstance.name());
-                                PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(originSource,path);
+                            for(Identifier pathId : AscensionOriginSourceHelper.getPaths(originSource)){
+                                Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,data.getSource().getRegistryAccess());
+                                player.sendSystemMessage(path.name());
+                                PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(originSource,pathId);
 
-                                player.sendSystemMessage(Component.literal("realm : ").append(PathInstance.getRealmName(PathInstance.getMajorRealm(),PathInstance.getMinorRealm(),data.getSource().getRegistryAccess())));
-                                player.sendSystemMessage(Component.literal("progress : "+PathInstance.getProgress()));
-                                player.sendSystemMessage(Component.literal("technique : "+PathInstance.getCurrentTechnique()));
+                                player.sendSystemMessage(Component.literal("realm : ").append(path.getRealmName(pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm())));
+                                player.sendSystemMessage(Component.literal("progress : "+pathInstance.getProgress()));
 
-                                if(PathInstance instanceof FoundationPathInstance foundationPathInstance && pathInstance instanceof FoundationPath foundationPath){
-                                    player.sendSystemMessage(Component.literal("Foundation : ").append(
-                                            foundationPath.getFoundationRealmName(
-                                                    foundationPathInstance.getMajorRealm(),
-                                                    foundationPathInstance.getFoundationRealm(foundationPathInstance.getMajorRealm())
-                                            )));
-                                    System.out.println(foundationPathInstance.getFoundationRealm(foundationPathInstance.getMajorRealm()));
-                                    player.sendSystemMessage(Component.literal(
-                                            "Foundation Progress : "+
-                                                    foundationPathInstance.getFoundationRealmProgress(foundationPathInstance.getMajorRealm())
-                                    ));
-                                }
+
                             }
                             return 1;
                         })

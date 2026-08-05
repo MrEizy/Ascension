@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.core.bloodline;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
@@ -42,12 +43,12 @@ public class SimpleBloodlineData implements BloodlineData {
     }
 
     @Override
-    public void write(ValueOutput output) {
+    public void write(ValueOutput output, RegistryAccess access) {
         output.putInt("purity",purity);
     }
 
     @Override
-    public void encode(ByteBuf buf) {
+    public void encode(ByteBuf buf,RegistryAccess access) {
         buf.writeInt(purity);
     }
 }

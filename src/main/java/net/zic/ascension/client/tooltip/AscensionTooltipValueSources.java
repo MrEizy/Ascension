@@ -7,6 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;

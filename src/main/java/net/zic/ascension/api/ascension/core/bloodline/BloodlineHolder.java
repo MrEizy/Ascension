@@ -84,7 +84,7 @@ public class BloodlineHolder implements DataSourceInstance {
                 ValueOutput bloodlineOutput = bloodlineOutputList.addChild();
                 NbtHelpers.writeIdentifier(bloodlineOutput,"id",bloodline);
                 ValueOutput dataOutput = bloodlineOutput.child("data");
-                getBloodline(bloodline).write(dataOutput);
+                getBloodline(bloodline).write(dataOutput,access);
             } catch (Exception e){
                 AscensionCraft.LOGGER.error("Error writing bloodline {}",bloodline);
                 AscensionCraft.LOGGER.error("stacktrace: ",e);
@@ -133,14 +133,14 @@ public class BloodlineHolder implements DataSourceInstance {
         buf.writeInt(bloodlines.size());
         for(Identifier bloodline : bloodlines.keySet()){
             ByteBufHelpers.encodeIdentifier(bloodline,buf);
-            getBloodline(bloodline).encode(buf);
+            getBloodline(bloodline).encode(buf,registryAccess);
         }
     }
     protected void encodePartialPatch(ByteBuf buf,RegistryAccess registryAccess){
         buf.writeInt(dirtyBloodlines.size());
         for(Identifier dirtyBloodline : dirtyBloodlines){
             ByteBufHelpers.encodeIdentifier(dirtyBloodline,buf);
-            getBloodline(dirtyBloodline).encode(buf);
+            getBloodline(dirtyBloodline).encode(buf,registryAccess);
         }
         ByteBufHelpers.encodeCollection(toRemoveBloodlines,buf,ByteBufHelpers::encodeIdentifier);
 

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
@@ -19,7 +20,7 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
-import net.zic.ascension.impl.core.path.foundation.FoundationPathInstance;
+
 import net.zic.ascension.impl.core.skill.EmptySkillData;
 import net.zic.ascension.util.CultivationUtil;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
@@ -33,7 +34,7 @@ public record SimpleCultivationSkill(
         Component name,
         Component description,
         Identifier primaryPath,
-        List<Identifier> secondaryPaths,
+        Identifier secondaryPath,
         double baseRate,
         Optional<ParticleFieldDefinition> particleField) implements CastableSkill {
     @Override
@@ -84,16 +85,10 @@ public record SimpleCultivationSkill(
         OriginSource source = holder.getData(caster).getSource();
 
 
-        PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(source,primaryPath());
+        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,primaryPath());
 
-        if(PathInstance == null) return;
-        if(holder.getData(caster).isCultivationSuppressed() && PathInstance instanceof FoundationPathInstance foundationPathInstance){
-            CultivationUtil.cultivateFoundation(
-                    caster,
-                    source,
-                    foundationPathInstance,
-                    baseRate);
-        }else CultivationUtil.cultivate(caster,source,PathInstance,secondaryPaths(),baseRate);
+        if(pathInstance == null) return;
+        CultivationUtil.cultivate(caster,source,primaryPath,pathInstance,secondaryPath,baseRate);
 
 
     }

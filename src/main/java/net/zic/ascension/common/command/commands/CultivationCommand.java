@@ -17,11 +17,13 @@ import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.impl.core.path.foundation.FoundationPathInstance;
+
 
 public class CultivationCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> build() {
@@ -75,10 +77,10 @@ public class CultivationCommand {
     }
     private static int showPath(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var players = EntityArgument.getPlayers(context, "target");
-        Identifier path = IdentifierArgument.getId(context, "path");
-        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,context.getSource().registryAccess());
-        if(pathInstance == null){
-            context.getSource().sendFailure(Component.literal("no path :"+path));
+        Identifier id = IdentifierArgument.getId(context, "path");
+        Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,id,context.getSource().registryAccess());
+        if(path == null){
+            context.getSource().sendFailure(Component.literal("no path :"+id));
             return 0;
         }
         Player player = context.getSource().getPlayer();
@@ -89,32 +91,15 @@ public class CultivationCommand {
             player.sendSystemMessage(Component.literal("==="+target.getDisplayName().getString()+"==="));
 
             OriginSource source = holder.getData(target).getSource();
-            if(!AscensionOriginSourceHelper.hasPath(source,path)){
+            if(!AscensionOriginSourceHelper.hasPath(source,id)){
                 player.sendSystemMessage(Component.literal("no path data"));
                 continue;
             }
-            PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(source,path);
-            player.sendSystemMessage(Component.literal("realm : ").append(PathInstance.getRealmName(PathInstance.getMajorRealm(),PathInstance.getMinorRealm(),source.getRegistryAccess())));
-            player.sendSystemMessage(Component.literal("progress : "+PathInstance.getProgress()));
-            player.sendSystemMessage(Component.literal("technique : "+PathInstance.getCurrentTechnique()));
-            if(PathInstance instanceof FoundationPathInstance foundationPathInstance && pathInstance instanceof FoundationPath foundationPath){
-                player.sendSystemMessage(Component.literal("Foundation : ").append(
-                        foundationPath.getFoundationRealmName(
-                                foundationPathInstance.getMajorRealm(),
-                                foundationPathInstance.getFoundationRealm(foundationPathInstance.getMajorRealm())
-                        )));
-                System.out.println(foundationPathInstance.getFoundationRealm(foundationPathInstance.getMajorRealm()));
-                player.sendSystemMessage(Component.literal(
-                        "Foundation Progress : "+
-                                foundationPathInstance.getFoundationRealmProgress(foundationPathInstance.getMajorRealm())
-                ));
-            }
-            player.sendSystemMessage(Component.literal("Tribulations:"));
-            for(Realm realm : PathInstance.getCompletedTribulationRealms()){
-                Identifier id = TypeRegistries.TRIBULATION_TYPE_REGISTRY.getKey(PathInstance.getCompletedTribulationData(realm.majorRealm(),realm.minorRealm()).getType());
+            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,id);
+            player.sendSystemMessage(Component.literal("realm : ").append(path.getRealmName(pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm())));
+            player.sendSystemMessage(Component.literal("progress : "+pathInstance.getProgress()));
 
-                player.sendSystemMessage(Component.literal(realm.toString()).append(" "+id));
-            }
+
         }
         return 1;
     }
@@ -177,21 +162,14 @@ public class CultivationCommand {
                 return false;
             }
 
-            if(data.getCurrentTechnique() == null){
-                source.sendFailure(Component.literal(
-                        player.getName().getString() + " has no technique"
-                ));
-                return false;
-            }
-            int oldMajor = data.getMajorRealm();
-            int oldMinor = data.getMinorRealm();
-            data.handleRealmChange(originSource,newMajorRealm,newMinorRealm);
+
+            int oldMajor = data.getCurrentMajorRealm();
+            int oldMinor = data.getCurrentMinorRealm();
+            data.handleRealmChange(Realm.of(newMajorRealm,newMinorRealm),originSource);
 
             if(progressPercent > 0){
                 progressPercent = Math.clamp(progressPercent,0,100);
-                data.setProgress(data.getMaxProgress(data.getMajorRealm(),data.getMinorRealm(),originSource.getRegistryAccess())*progressPercent/100.0);
-            }else{
-                data.setProgress(0);
+                data.progressPath(pathId,data.getMaxProgress()*progressPercent/100.0,originSource);
             }
             AscensionOriginSourceHelper.markPathDirty(originSource,pathId);
 
@@ -202,7 +180,7 @@ public class CultivationCommand {
                     "Set %s's %s cultivation to realm %d.%d (was %d.%d)%s",
                     player.getName().getString(),
                     pathId,
-                    data.getMajorRealm(), data.getMinorRealm(),
+                    data.getCurrentMajorRealm(), data.getCurrentMinorRealm(),
                     oldMajor, oldMinor,
                     progressStr
             );

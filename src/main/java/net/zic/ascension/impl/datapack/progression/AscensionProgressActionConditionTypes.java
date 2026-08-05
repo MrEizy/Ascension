@@ -7,7 +7,6 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
-import net.zic.ascension.impl.core.path.foundation.foundation_change.condition.EveryFoundationRealmCondition;
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMajorRealmCondition;
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMinorRealmCondition;
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryRealmCondition;
@@ -27,11 +26,7 @@ public class AscensionProgressActionConditionTypes {
             "on_purity_in_range",
             OnPurityInRangeConditionType::new
     );
-    //──Foundation Change────────────────────────────────────────────────────────
-    public static final DeferredHolder<ProgressActionConditionType,ProgressActionConditionType> EVERY_FOUNDATION_REALM = PROGRESS_ACTION_CONDITION_TYPES.register(
-            "foundation/every_realm",
-            ()->new UnitConditionType<>(EveryFoundationRealmCondition::new)
-    );
+
     //──Realm Change────────────────────────────────────────────────────────
     public static final DeferredHolder<ProgressActionConditionType,ProgressActionConditionType> EVERY_REALM = PROGRESS_ACTION_CONDITION_TYPES.register(
             "every_realm",

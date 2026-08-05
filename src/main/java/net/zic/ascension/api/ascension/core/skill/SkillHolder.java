@@ -145,7 +145,7 @@ public class SkillHolder implements DataSourceInstance {
                 NbtHelpers.writeIdentifier(skillOutput,"skill",skill);
 
                 ValueOutput skillData = skillOutput.child("data");
-                if(getSkillData(skill) != null) getSkillData(skill).write(skillData);
+                if(getSkillData(skill) != null) getSkillData(skill).write(skillData,access);
                 else throw new Exception("no skill data for skill "+skillData);
             }catch (Exception e){
                 AscensionCraft.LOGGER.debug("Error writing Skill {}",skill);
@@ -188,14 +188,14 @@ public class SkillHolder implements DataSourceInstance {
         buf.writeInt(skills.size());
         for(Identifier skill : skills.keySet()){
             ByteBufHelpers.encodeIdentifier(skill,buf);
-            getSkillData(skill).encode(buf);
+            getSkillData(skill).encode(buf,access);
         }
     }
     protected void encodePartialPatch(ByteBuf buf, RegistryAccess access){
         buf.writeInt(dirtySkills.size());
         for(Identifier dirtySkill : dirtySkills){
             ByteBufHelpers.encodeIdentifier(dirtySkill,buf);
-            getSkillData(dirtySkill).encode(buf);
+            getSkillData(dirtySkill).encode(buf,access);
         }
         ByteBufHelpers.encodeCollection(toRemoveSkills,buf,ByteBufHelpers::encodeIdentifier);
     }

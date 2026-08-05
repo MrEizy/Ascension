@@ -42,21 +42,9 @@ public class TechniqueTransferItem  extends Item {
 
         if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData(player).getSource();
-        Identifier path = targetTechnique.getPath();
-        if(AscensionOriginSourceHelper.getPathInstance(source,path) == null){
-            player.sendSystemMessage(Component.literal("[You are do not have path : "+path+"]"));
-            return InteractionResult.FAIL;
-        }
-        if(!AscensionOriginSourceHelper.getPathInstance(source,path).setCurrentTechnique(
-                stack.get(AscensionComponents.REGISTRY_ID_HOLDER),
-                source
-        )){
-            player.sendSystemMessage(Component.literal("[Learned technique :" +stack.get(AscensionComponents.REGISTRY_ID_HOLDER)+"]"));
-            return InteractionResult.FAIL;
-        }
-        AscensionOriginSourceHelper.markPathDirty(source,path);
-        stack.shrink(1);
-        AscensionCraft.LOGGER.info("Player {} has transferred their technique",player.getName().getString());
+
+        //TODO update to use new technique
+
         return InteractionResult.SUCCESS;
     }
 }

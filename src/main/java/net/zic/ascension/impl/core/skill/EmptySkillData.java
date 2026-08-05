@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.core.skill;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
@@ -8,12 +9,12 @@ import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 
 public class EmptySkillData implements SkillData {
     @Override
-    public void write(ValueOutput output) {
+    public void write(ValueOutput output, RegistryAccess access) {
 
     }
 
     @Override
-    public void encode(ByteBuf buf) {
+    public void encode(ByteBuf buf, RegistryAccess access) {
 
     }
 
