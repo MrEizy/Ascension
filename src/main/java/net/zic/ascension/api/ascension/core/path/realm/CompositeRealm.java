@@ -15,4 +15,5 @@ public interface CompositeRealm {
     CompositeRealmDefinition definition();
     int getCurrentRealm();
 
+
 }

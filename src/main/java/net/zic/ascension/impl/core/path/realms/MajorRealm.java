@@ -17,6 +17,7 @@ public class MajorRealm implements CompositeRealm {
     private int currentRealm;
 
     private final Set<Identifier> limitBrokenSources = new HashSet<>();
+
     public MajorRealm(MajorRealmDefinition definition) {
         this.definition = definition;
     }
@@ -53,6 +54,13 @@ public class MajorRealm implements CompositeRealm {
     public static MajorRealm of(MajorRealmDefinition definition){
         return new MajorRealm(definition);
     }
-
+    public static MajorRealm of(MajorRealm realm){
+        MajorRealm majorRealm = new MajorRealm(realm.definition);
+        majorRealm.currentRealm = realm.currentRealm;
+        for(Identifier limitBrokenSource : realm.limitBrokenSources){
+            majorRealm.setLimitBroken(true,limitBrokenSource);
+        }
+        return majorRealm;
+    }
 
 }

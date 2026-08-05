@@ -86,7 +86,7 @@ public class SimplePath implements Path {
 
     @Override
     public TribulationDefinition getTribulation(int majorRealm, int minorRealm, RegistryAccess access) {
-        return getRealmDefinition(majorRealm).getRealmTribulation(minorRealm).resolve(access);
+        return hasTribulation(majorRealm,minorRealm) ? getRealmDefinition(majorRealm).getRealmTribulation(minorRealm).resolve(access) : null;
     }
 
     @Override

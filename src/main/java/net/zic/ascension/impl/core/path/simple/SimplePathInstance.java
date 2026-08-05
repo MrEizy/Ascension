@@ -23,14 +23,15 @@ import java.util.*;
 public class SimplePathInstance implements PathInstance {
 
     private final SimplePath path;
-    private UUID pathInstanceId = UUID.randomUUID();
 
     private final List<MajorRealm> realms = new ArrayList<>();
-    private final Map<Identifier, CompletedTribulation> completedTribulations = new HashMap<>();
+    private final List<MajorRealm> cachedRealms = new ArrayList<>();
+
+    private final Map<Realm, CompletedTribulation> completedTribulations = new HashMap<>();
 
     private UUID activeTribulationId;
 
-     double progress; //TODO consider updating this to be a resource that handles multiple "elements"
+    double progress; //TODO consider updating this to be a resource that handles multiple "elements"
 
 
     public SimplePathInstance(SimplePath path){
@@ -132,8 +133,32 @@ public class SimplePathInstance implements PathInstance {
     }
 
 
-    public void removeCompletedTribulation(OriginSource source, int majorRealm, int minorRealm) {
-        //TODO
+
+
+    public void completeTribulationForRealm(Realm realm,OriginSource source){
+        CompletedTribulation completedTribulation = completedTribulations.get(realm);
+        TribulationDefinition definition = path.getTribulation(realm.majorRealm(),realm.minorRealm(),source.getRegistryAccess());
+        if(completedTribulation == null && definition == null) return;
+        if(definition == null){
+            completedTribulations.remove(realm);
+            return;
+        }
+        if(completedTribulation == null){
+            //no data present, create new data
+            completedTribulation = new CompletedTribulation(definition,definition.getType().newData(definition));
+            completedTribulations.put(realm, completedTribulation);
+        }else{
+            //data already present, try convert
+            TribulationData data = definition.getType().validateAndCovert(definition,completedTribulation.definition(), completedTribulation.data());
+            completedTribulation = new CompletedTribulation(definition,data);
+            completedTribulations.put(realm, completedTribulation);
+        }
+
+        definition.getType().onAdded(source,definition,completedTribulation.data());
+    }
+    public void removeTribulationForRealm(Realm realm,OriginSource source){
+        CompletedTribulation completedTribulation = completedTribulations.remove(realm);
+        completedTribulation.definition().getType().onRemoved(source,completedTribulation.definition(),completedTribulation.data());
     }
 
 
@@ -159,18 +184,118 @@ public class SimplePathInstance implements PathInstance {
         path.getProgressActionHolder().run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.DOWN);
     }
 
+    public void addNewMajorRealm(){
+        if(cachedRealms.isEmpty()){
+            realms.add(MajorRealm.of(path.getRealmDefinition(getCurrentMajorRealm()+1)));
+        }else{
+            realms.add(cachedRealms.removeFirst());
+        }
+    }
+
     @Override
     public void handleRealmChange(Realm newRealm, OriginSource source) {
+        Realm oldRealm = Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm());
+        List<Realm> traversedRealms = Realm.getRange(oldRealm,newRealm,path);
+
+        if(oldRealm.equals(newRealm)) return;
+        ProgressDirection direction= ProgressDirection.UP;
+        if(oldRealm.compareTo(newRealm) >0){
+            direction = ProgressDirection.DOWN;
+            traversedRealms = traversedRealms.reversed();
+        }
+
+        //we do not traverse the start realm
+        traversedRealms.removeFirst();
+        while(!traversedRealms.isEmpty()){
+            Realm realm = traversedRealms.removeFirst();
+            Realm previousRealm = Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm());
+            if(direction == ProgressDirection.UP){
+                if(realm.majorRealm() == getCurrentMajorRealm()){
+                    completeTribulationForRealm(previousRealm,source);
+                    getCurrentRealm().setCurrentRealm(realm.minorRealm());
+                    onRealmUp(source);
+                }else{
+                    completeTribulationForRealm(previousRealm,source);
+                    addNewMajorRealm();
+                    if(getCurrentRealm().isLimitBroken()){
+
+                        //this only happens when simulating from a cached majorRealm
+                        //we are basically telling it to simulate extra realms
+
+                        int index = 0;
+                        for(int i = 0;i<traversedRealms.size();i++){
+                            index = i;
+                            if(traversedRealms.get(i).majorRealm() != getCurrentMajorRealm())break;
+                        }
+
+                        for(int minorRealm = getCurrentRealm().definition().getMaxRealm()+1;
+                            minorRealm <= getCurrentRealm().getCurrentRealm();
+                            minorRealm ++){
+                            traversedRealms.add(index,Realm.of(getCurrentMajorRealm(),minorRealm));
+                            index++;
+                        }
+                    }
+                    onRealmUp(source);
+                }
+            }else{
+                if(realm.majorRealm() == getCurrentMajorRealm()) {
+                    removeTribulationForRealm(previousRealm,source);
+                    getCurrentRealm().setCurrentRealm(realm.minorRealm());
+                    onRealmDown(source);
+                }else{
+                    removeTribulationForRealm(previousRealm,source);
+                    realms.removeLast();
+                    if(getCurrentRealm().isLimitBroken() && getCurrentRealm().getCurrentRealm() > getCurrentRealm().definition().getMaxRealm()){
+                        //the realm we have loaded has extra realms we need to include
+                        for(int minorRealm = getCurrentRealm().definition().getMaxRealm()+1;
+                            minorRealm <= getCurrentRealm().getCurrentRealm();
+                            minorRealm ++){
+                            traversedRealms.addFirst(Realm.of(getCurrentMajorRealm(),minorRealm));
+                        }
+                    }
+                    onRealmDown(source);
+                }
+            }
+            progress = 0;
+        }
 
     }
 
     @Override
     public void simulateProgression(OriginSource source) {
+        cachedRealms.addAll(realms);
+        realms.clear();
+        double cachedProgress = progress;
+        if(cachedRealms.isEmpty()) return;
 
+        MajorRealm finalRealm = cachedRealms.getLast();
+        //logic is already in place to handle limit broken from cached inside handleRealm change
+        //so we just need to tell it to go to the max of the realm and ensure it is limit broken
+        int minorRealm = finalRealm.definition().getMaxRealm() < finalRealm.getCurrentRealm() ? finalRealm.definition().getMaxRealm() : finalRealm.getCurrentRealm();
+        handleRealmChange(Realm.of(cachedRealms.size()-1,minorRealm),source);
+
+        progress = cachedProgress;
     }
 
     @Override
     public void removeFromSource(OriginSource source) {
+        //create a deep cached copy, this way we can properly maintain limit broken info
+        for(MajorRealm realm : realms){
+            cachedRealms.add(MajorRealm.of(realm));
+        }
+        Map<Realm, CompletedTribulation> cachedTribulations = new HashMap<>(completedTribulations);
+        double cachedProgress = progress;
+
+        handleRealmChange(Realm.of(0,0),source);
+        realms.removeFirst();
+        path.getProgressActionHolder().run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.DOWN);
+
+        realms.clear();
+        realms.addAll(cachedRealms);
+        cachedRealms.clear();
+
+        completedTribulations.clear();
+        completedTribulations.putAll(cachedTribulations);
 
     }
 
