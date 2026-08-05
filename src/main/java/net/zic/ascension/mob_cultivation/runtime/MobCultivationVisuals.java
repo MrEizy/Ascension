@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Mob;
-import net.zic.ascension.api.core.path.PathData;
+import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.mob_cultivation.MobCultivationManager;
 import net.zic.ascension.mob_cultivation.generation.MobCultivationEliteTier;

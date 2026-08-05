@@ -1,13 +1,14 @@
 package net.zic.ascension.mob_cultivation.runtime;
 
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.zic.ascension.api.core.path.PathData;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.mob_cultivation.MobCultivationData;
@@ -119,7 +120,7 @@ public final class MobCultivationGrowth {
         }
 
         MobCultivationManager.capturePathState(data, pathData);
-        source.markPathDirty(data.getFoundationPath());
+        AscensionOriginSourceHelper.markPathDirty(source, data.getFoundationPath());
         boolean realmChanged = originalMajor != pathData.getMajorRealm() || originalMinor != pathData.getMinorRealm();
         if (!realmChanged) {
             return;

@@ -1,5 +1,10 @@
 {
   "display_name": "Spiritual Body",
   "seek_high_qi": true,
-  "retreat_health_threshold": 0.12
+  "retreat_health_threshold": 0.12,
+  "mundane_physical_reduction": 0.35,
+  "spirit_reduction_scale": 0.0025,
+  "mundane_nullification_realm_score": 15,
+  "path_infused_reduction": 0.05,
+  "magic_damage_multiplier": 0.85
 }

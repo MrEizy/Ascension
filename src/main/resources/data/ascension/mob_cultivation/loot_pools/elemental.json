@@ -1,33 +1,35 @@
 {
   "entries": [
     {
-      "item": "ascension:elemental_essence",
-      "weight": 9,
+      "item": "minecraft:blaze_powder",
+      "weight": 7,
       "minimum_count": 1,
       "maximum_count": 3
     },
     {
-      "item": "ascension:cultivation_remnant",
-      "weight": 3,
+      "item": "minecraft:glowstone_dust",
+      "weight": 5,
       "minimum_count": 1,
-      "maximum_count": 2
+      "maximum_count": 3
     },
     {
-      "item": "ascension:beast_core",
+      "item": "minecraft:amethyst_shard",
+      "weight": 3,
+      "minimum_realm_score": 3,
+      "minimum_count": 1,
+      "maximum_count": 3
+    },
+    {
+      "item": "minecraft:prismarine_crystals",
       "weight": 2,
-      "minimum_realm_score": 5
-    },
-    {
-      "item": "ascension:rare_mob_part",
-      "weight": 1,
-      "minimum_realm_score": 6
-    },
-    {
-      "item": "ascension:jade",
-      "weight": 1.2,
       "minimum_realm_score": 4,
       "minimum_count": 1,
       "maximum_count": 2
+    },
+    {
+      "item": "minecraft:diamond",
+      "weight": 0.4,
+      "minimum_realm_score": 8
     }
   ]
 }

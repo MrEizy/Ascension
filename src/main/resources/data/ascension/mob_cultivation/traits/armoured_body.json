@@ -1,4 +1,9 @@
 {
   "display_name": "Armoured Body",
-  "retreat_health_threshold": 0.1
+  "retreat_health_threshold": 0.1,
+  "mundane_physical_reduction": 0.25,
+  "spirit_reduction_scale": 0.0,
+  "mundane_nullification_realm_score": -1,
+  "path_infused_reduction": 0.1,
+  "magic_damage_multiplier": 1.1
 }

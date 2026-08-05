@@ -1,38 +1,36 @@
 {
   "entries": [
     {
-      "item": "ascension:beast_core",
-      "weight": 5,
-      "minimum_count": 1,
-      "maximum_count": 2
-    },
-    {
-      "item": "ascension:rare_mob_part",
-      "weight": 4,
-      "minimum_count": 1,
-      "maximum_count": 2
-    },
-    {
-      "item": "ascension:technique_fragment",
-      "weight": 3,
-      "minimum_count": 1,
-      "maximum_count": 2
-    },
-    {
-      "item": "ascension:jade",
-      "weight": 3,
+      "item": "minecraft:gold_ingot",
+      "weight": 6,
       "minimum_count": 2,
       "maximum_count": 5
     },
     {
+      "item": "minecraft:emerald",
+      "weight": 5,
+      "minimum_count": 1,
+      "maximum_count": 3
+    },
+    {
       "item": "minecraft:diamond",
-      "weight": 2,
+      "weight": 3,
       "minimum_count": 1,
       "maximum_count": 2
     },
     {
+      "item": "minecraft:enchanted_book",
+      "weight": 1.5,
+      "minimum_realm_score": 5
+    },
+    {
+      "item": "minecraft:golden_apple",
+      "weight": 0.8,
+      "minimum_realm_score": 6
+    },
+    {
       "item": "minecraft:netherite_scrap",
-      "weight": 0.6,
+      "weight": 0.5,
       "minimum_realm_score": 8
     }
   ]

@@ -27,16 +27,6 @@ public class ModTags {
         }
     }
 
-    public static class EntityTypes {
-        public static final TagKey<EntityType<?>> MOB_CULTIVATION_PASSIVE = createTag("mob_cultivation/passive");
-        public static final TagKey<EntityType<?>> MOB_CULTIVATION_HOSTILE = createTag("mob_cultivation/hostile");
-        public static final TagKey<EntityType<?>> MOB_CULTIVATION_BOSSES = createTag("mob_cultivation/bosses");
-
-        private static TagKey<EntityType<?>> createTag(String name) {
-            return TagKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
-        }
-    }
-
     public static class Items {
         public static final TagKey<Item> ARTIFACTS = createItemTag("artifacts");
         public static final TagKey<Item> HERBS = createItemTag("herbs");
@@ -66,6 +56,9 @@ public class ModTags {
         public static final TagKey<EntityType<?>> STAGGER_IMMUNE = createTag("stagger_immune");
         public static final TagKey<EntityType<?>> STAGGER_RESISTANT = createTag("stagger_resistant");
         public static final TagKey<EntityType<?>> STAGGER_BOSS_PROFILE = createTag("stagger_boss_profile");
+        public static final TagKey<EntityType<?>> MOB_CULTIVATION_PASSIVE = createTag("mob_cultivation/passive");
+        public static final TagKey<EntityType<?>> MOB_CULTIVATION_HOSTILE = createTag("mob_cultivation/hostile");
+        public static final TagKey<EntityType<?>> MOB_CULTIVATION_BOSSES = createTag("mob_cultivation/bosses");
 
 
         private static TagKey<EntityType<?>> createTag(String name) {

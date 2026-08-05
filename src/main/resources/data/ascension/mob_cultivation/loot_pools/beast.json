@@ -1,33 +1,34 @@
 {
   "entries": [
     {
-      "item": "ascension:spiritual_blood",
+      "item": "minecraft:leather",
       "weight": 7,
       "minimum_count": 1,
       "maximum_count": 3
     },
     {
-      "item": "ascension:beast_core",
+      "item": "minecraft:rabbit_hide",
       "weight": 4,
-      "minimum_realm_score": 4
+      "minimum_count": 1,
+      "maximum_count": 2
     },
     {
-      "item": "ascension:rare_mob_part",
-      "weight": 1.5,
-      "minimum_realm_score": 5
-    },
-    {
-      "item": "ascension:cultivation_remnant",
+      "item": "minecraft:bone",
       "weight": 3,
       "minimum_count": 1,
       "maximum_count": 2
     },
     {
-      "item": "ascension:jade",
-      "weight": 1.0,
+      "item": "minecraft:gold_nugget",
+      "weight": 1.5,
       "minimum_realm_score": 4,
       "minimum_count": 1,
       "maximum_count": 2
+    },
+    {
+      "item": "minecraft:emerald",
+      "weight": 0.7,
+      "minimum_realm_score": 6
     }
   ]
 }

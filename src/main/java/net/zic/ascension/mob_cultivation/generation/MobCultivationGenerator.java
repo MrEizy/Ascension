@@ -1,12 +1,13 @@
 package net.zic.ascension.mob_cultivation.generation;
 
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
-import net.zic.ascension.api.core.CoreRegistries;
-import net.zic.ascension.api.core.path.Path;
-import net.zic.ascension.api.core.path.PathData;
-import net.zic.ascension.api.core.source.OriginSource;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.entity.AscensionStats;
 import net.zic.ascension.impl.core.path.foundation.FoundationPath;
 import net.zic.ascension.mob_cultivation.MobCultivationClassifier;
@@ -44,14 +45,14 @@ public final class MobCultivationGenerator {
         assignSkillPools(data, profile, pathId);
         MobCultivationSubPathGenerator.generate(mob, data, profile);
 
-        if (!source.addPath(pathId, MobCultivationManager.MOB_CULTIVATION_OWNER) && !source.hasPath(pathId)) {
+        if (!AscensionOriginSourceHelper.addPath(source, pathId, MobCultivationManager.MOB_CULTIVATION_OWNER) && !AscensionOriginSourceHelper.hasPath(source, pathId)) {
             data.clearGeneratedState();
             return;
         }
 
-        PathData pathData = source.getPathData(pathId);
+        PathData pathData = AscensionOriginSourceHelper.getPathData(source, pathId);
         if (pathData == null) {
-            source.removePath(pathId, MobCultivationManager.MOB_CULTIVATION_OWNER);
+            AscensionOriginSourceHelper.removePath(source, pathId, MobCultivationManager.MOB_CULTIVATION_OWNER);
             data.clearGeneratedState();
             return;
         }
@@ -61,7 +62,7 @@ public final class MobCultivationGenerator {
         pathData.setMinorRealm(realm[1]);
         pathData.setProgress(0.0D);
         MobCultivationManager.capturePathState(data, pathData);
-        source.markPathDirty(pathId);
+        AscensionOriginSourceHelper.markPathDirty(source, pathId);
 
         rebuildGeneratedStats(mob, data, source, pathData);
         MobCultivationManager.refreshAttributesAndHealth(mob, true);
@@ -78,8 +79,8 @@ public final class MobCultivationGenerator {
             return;
         }
 
-        if (!source.hasPath(pathId)) source.addPath(pathId, MobCultivationManager.MOB_CULTIVATION_OWNER);
-        PathData pathData = source.getPathData(pathId);
+        if (!AscensionOriginSourceHelper.hasPath(source, pathId)) AscensionOriginSourceHelper.addPath(source, pathId, MobCultivationManager.MOB_CULTIVATION_OWNER);
+        PathData pathData = AscensionOriginSourceHelper.getPathData(source, pathId);
         if (pathData == null) {
             generateFreshCultivation(mob, data, source);
             return;
@@ -92,7 +93,7 @@ public final class MobCultivationGenerator {
         double maximumProgress = pathData.getMaxProgress(majorRealm, minorRealm, source.getRegistryAccess());
         pathData.setProgress(Math.clamp(data.getProgress(), 0.0D, Math.max(0.0D, maximumProgress)));
         MobCultivationManager.capturePathState(data, pathData);
-        source.markPathDirty(pathId);
+        AscensionOriginSourceHelper.markPathDirty(source, pathId);
 
         ResolvedMobCultivationProfile profile = MobCultivationProfileManager.resolve(mob, data.getCategory());
         if (data.getSubPaths().isEmpty()) MobCultivationSubPathGenerator.generate(mob, data, profile);
@@ -150,7 +151,7 @@ public final class MobCultivationGenerator {
 
     public static void clearGeneratedCultivation(MobCultivationData data, OriginSource source) {
         if (data.getFoundationPath() != null) {
-            source.removePath(data.getFoundationPath(), MobCultivationManager.MOB_CULTIVATION_OWNER);
+            AscensionOriginSourceHelper.removePath(source, data.getFoundationPath(), MobCultivationManager.MOB_CULTIVATION_OWNER);
         }
         if (data.areGeneratedStatsApplied()) {
             removeGeneratedStat(source, AscensionStats.VITALITY.get(), data.getGeneratedVitality());
@@ -279,7 +280,7 @@ public final class MobCultivationGenerator {
 
     private static void restoreGeneratedStat(OriginSource source, Stat stat, double amount) {
         if (Math.abs(amount) <= EPSILON) return;
-        if (Math.abs(source.getBaseValue(stat)) <= EPSILON) source.addStat(stat, amount);
+        if (Math.abs(source.getBaseStat(stat)) <= EPSILON) source.addStat(stat, amount);
     }
     private static void removeGeneratedStat(OriginSource source, Stat stat, double amount) {
         if (Math.abs(amount) > EPSILON) source.removeStat(stat, amount);

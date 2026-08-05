@@ -88,7 +88,7 @@ public final class MobCultivationAi {
         int hurtTimestamp = mob.getLastHurtByMobTimestamp();
         LivingEntity attacker = mob.getLastHurtByMob();
         int realmScore = Math.max(0, MobCultivationManager.getRealmScore(mob));
-        double spirit = MobCultivationManager.getEntityData(mob).getSource().getValue(AscensionStats.SPIRIT.get());
+        double spirit = MobCultivationManager.getEntityData(mob).getSource().getStat(AscensionStats.SPIRIT.get());
 
         if (attacker != null && attacker.isAlive() && hurtTimestamp != data.getLastProcessedHurtTimestamp()) {
             data.setLastProcessedHurtTimestamp(hurtTimestamp);
@@ -138,7 +138,7 @@ public final class MobCultivationAi {
             if (currentTarget == null) return;
 
             int mobScore = MobCultivationManager.getRealmScore(mob);
-            double spirit = MobCultivationManager.getEntityData(mob).getSource().getValue(AscensionStats.SPIRIT.get());
+            double spirit = MobCultivationManager.getEntityData(mob).getSource().getStat(AscensionStats.SPIRIT.get());
             double retreatThreshold = defaultRetreatThreshold(data, mobScore);
             boolean injured = mob.getHealth() / Math.max(1.0F, mob.getMaxHealth()) <= retreatThreshold;
             boolean overwhelmed = false;
@@ -202,7 +202,7 @@ public final class MobCultivationAi {
                 break;
             }
         }
-        double spirit = MobCultivationManager.getEntityData(mob).getSource().getValue(AscensionStats.SPIRIT.get());
+        double spirit = MobCultivationManager.getEntityData(mob).getSource().getStat(AscensionStats.SPIRIT.get());
         if (!traitAllows && spirit < 8.0D) {
             data.setNextQiSeekGameTime(gameTime + QI_SEARCH_INTERVAL);
             return;

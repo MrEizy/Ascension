@@ -1,4 +1,6 @@
 {
   "display_name": "Undead",
-  "seek_high_qi": false
+  "seek_high_qi": false,
+  "mundane_physical_reduction": 0.05,
+  "magic_damage_multiplier": 1.15
 }

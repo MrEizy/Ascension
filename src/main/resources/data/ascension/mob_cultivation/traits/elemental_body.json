@@ -1,5 +1,10 @@
 {
   "display_name": "Elemental Body",
   "seek_high_qi": true,
-  "retreat_health_threshold": 0.08
+  "retreat_health_threshold": 0.08,
+  "mundane_physical_reduction": 0.2,
+  "spirit_reduction_scale": 0.0015,
+  "mundane_nullification_realm_score": 18,
+  "path_infused_reduction": 0.0,
+  "fire_damage_multiplier": 0.5
 }
