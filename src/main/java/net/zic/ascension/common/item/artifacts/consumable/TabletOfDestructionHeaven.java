@@ -8,7 +8,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.zic.ascension.common.item.artifacts.base_templates.BaseTabletOfDestruction;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 /**

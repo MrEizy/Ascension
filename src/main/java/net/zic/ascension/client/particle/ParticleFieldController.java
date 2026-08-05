@@ -8,12 +8,14 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldColour;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldParticleKind;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldStyle;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldColour;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldStyle;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
+import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
+import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.skill_casting.AscensionSkillListener;
 import net.zic.zenithlib.common.ZenithAttachments;
 
@@ -76,7 +78,27 @@ public final class ParticleFieldController {
         }
 
         RemoteFieldState state = REMOTE_FIELDS.computeIfAbsent(playerId, ignored -> new RemoteFieldState());
-        state.setSkill(skillId);
+        state.setSkill(skillId, 0, 1.0D, false);
+        state.lastSyncTick = clientTicks;
+    }
+
+    public static void updateRemoteHeld(
+            UUID playerId,
+            Identifier skillId,
+            HeldCastVisualState.Phase phase,
+            int stage,
+            double charge
+    ) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player != null && minecraft.player.getUUID().equals(playerId)) {
+            return;
+        }
+        if (skillId == null || phase == HeldCastVisualState.Phase.STOPPED) {
+            REMOTE_FIELDS.remove(playerId);
+            return;
+        }
+        RemoteFieldState state = REMOTE_FIELDS.computeIfAbsent(playerId, ignored -> new RemoteFieldState());
+        state.setSkill(skillId, stage, charge, true);
         state.lastSyncTick = clientTicks;
     }
 
@@ -87,9 +109,25 @@ public final class ParticleFieldController {
         }
 
         var handler = player.getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER);
+        HeldCastVisualState heldState = handler.getHeldCastVisualState();
+        if (heldState != null) {
+            if (!tickEmitter(
+                    level,
+                    player,
+                    heldState.skill(),
+                    heldState.stage(),
+                    heldState.charge(),
+                    1.0D,
+                    LOCAL_EMITTER
+            )) {
+                LOCAL_EMITTER.reset();
+            }
+            return;
+        }
+
         Identifier castingSkill = handler.getCastingSkill();
         Identifier skillId = castingSkill != null ? castingSkill : handler.getSkill(handler.getSelectedSlot());
-        if (skillId == null || !tickEmitter(level, player, skillId, 1.0D, LOCAL_EMITTER)) {
+        if (skillId == null || !tickEmitter(level, player, skillId, 0, 1.0D, 1.0D, LOCAL_EMITTER)) {
             LOCAL_EMITTER.reset();
         }
     }
@@ -114,7 +152,15 @@ public final class ParticleFieldController {
                 continue;
             }
 
-            if (!tickEmitter(level, remotePlayer, state.skillId, densityMultiplier, state.emitter)) {
+            if (!tickEmitter(
+                    level,
+                    remotePlayer,
+                    state.skillId,
+                    state.stage,
+                    state.charge,
+                    densityMultiplier,
+                    state.emitter
+            )) {
                 iterator.remove();
             }
         }
@@ -124,18 +170,23 @@ public final class ParticleFieldController {
             ClientLevel level,
             Player player,
             Identifier skillId,
+            int stage,
+            double charge,
             double densityMultiplier,
             EmitterState state
     ) {
         Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, player.registryAccess());
-        if (!(skill instanceof SimpleCultivationSkill cultivationSkill) || cultivationSkill.particleField().isEmpty()) {
+        ParticleFieldDefinition definition;
+        if (skill instanceof SimpleCultivationSkill cultivationSkill && cultivationSkill.particleField().isPresent()) {
+            definition = cultivationSkill.particleField().get();
+        } else if (skill instanceof HeldCastSkill heldSkill && heldSkill.particleField(stage).isPresent()) {
+            definition = heldSkill.particleField(stage).get();
+        } else {
             return false;
         }
 
-        state.activate(skillId);
+        state.activate(skillId, stage);
         state.activeTicks++;
-
-        ParticleFieldDefinition definition = cultivationSkill.particleField().get();
         state.emissionCarry += definition.density() * densityMultiplier / 20.0D;
         int spawnCount = Math.min(8, (int) state.emissionCarry);
         state.emissionCarry -= spawnCount;
@@ -224,6 +275,7 @@ public final class ParticleFieldController {
             case RISING, INWARD_FLOW, SPIRAL -> height * (0.46D + random.nextDouble() * 0.22D);
             case MERIDIAN_FLOW -> height * (0.28D + random.nextDouble() * 0.48D);
             case GATHERING_RING -> height * (0.38D + random.nextDouble() * 0.18D);
+            case BREATH_FLOW -> player.getEyeHeight() - 0.12D + (random.nextDouble() - 0.5D) * 0.08D;
         };
     }
 
@@ -300,6 +352,17 @@ public final class ParticleFieldController {
                 height = Mth.lerp(lowBand, minHeight, maxHeight);
                 orbitDirection = 1.0D;
             }
+            case BREATH_FLOW -> {
+                double facingAngle = Math.toRadians(player.getYRot() + 90.0F);
+                int streamCount = 5;
+                int stream = state.emissionSequence % streamCount;
+                double spread = (stream - (streamCount - 1) * 0.5D) * 0.075D + (random.nextDouble() - 0.5D) * 0.06D;
+                angle = facingAngle + spread;
+                radius = Mth.lerp(0.7D + random.nextDouble() * 0.3D, minRadius, maxRadius);
+                double heightPhase = 0.5D + (stream - 2) * 0.08D + (random.nextDouble() - 0.5D) * 0.08D;
+                height = player.getEyeHeight() + Mth.lerp(heightPhase, minHeight, maxHeight);
+                orbitDirection = (stream & 1) == 0 ? 1.0D : -1.0D;
+            }
             default -> throw new IllegalStateException("Unexpected particle field style: " + definition.style());
         }
 
@@ -358,6 +421,11 @@ public final class ParticleFieldController {
                     tangentX * speed * 0.92D + dx / horizontalLength * speed * 0.12D,
                     Math.max(0.0D, dy / Math.max(0.1D, targetYOffset)) * speed * 0.2D + speed * 0.12D,
                     tangentZ * speed * 0.92D + dz / horizontalLength * speed * 0.12D
+            };
+            case BREATH_FLOW -> new double[]{
+                    dx / fullLength * speed * 1.18D + tangentX * speed * 0.08D,
+                    dy / fullLength * speed * 1.04D,
+                    dz / fullLength * speed * 1.18D + tangentZ * speed * 0.08D
             };
         };
     }
@@ -454,19 +522,22 @@ public final class ParticleFieldController {
 
     private static final class EmitterState {
         private Identifier activeSkill;
+        private int activeStage = -1;
         private double emissionCarry;
         private long activeTicks;
         private int emissionSequence;
 
-        private void activate(Identifier skillId) {
-            if (!skillId.equals(activeSkill)) {
+        private void activate(Identifier skillId, int stage) {
+            if (!skillId.equals(activeSkill) || activeStage != stage) {
                 reset();
                 activeSkill = skillId;
+                activeStage = stage;
             }
         }
 
         private void reset() {
             activeSkill = null;
+            activeStage = -1;
             emissionCarry = 0.0D;
             activeTicks = 0L;
             emissionSequence = 0;
@@ -475,14 +546,20 @@ public final class ParticleFieldController {
 
     private static final class RemoteFieldState {
         private Identifier skillId;
+        private int stage;
+        private double charge = 1.0D;
+        private boolean held;
         private long lastSyncTick;
         private final EmitterState emitter = new EmitterState();
 
-        private void setSkill(Identifier newSkillId) {
-            if (!newSkillId.equals(skillId)) {
-                skillId = newSkillId;
+        private void setSkill(Identifier newSkillId, int newStage, double newCharge, boolean newHeld) {
+            if (!newSkillId.equals(skillId) || stage != newStage || held != newHeld) {
                 emitter.reset();
             }
+            skillId = newSkillId;
+            stage = Math.max(0, newStage);
+            charge = Double.isFinite(newCharge) ? Math.clamp(newCharge, 0.0D, 1.0D) : 0.0D;
+            held = newHeld;
         }
     }
 }

@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
@@ -282,16 +283,26 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public TechniqueData newData() {
-        return new EmptyTechniqueData();
+        return new EmptyData();
     }
 
     @Override
     public TechniqueData loadData(ValueInput input) {
-        return new EmptyTechniqueData();
+        return new EmptyData();
     }
 
     @Override
     public TechniqueData loadData(ByteBuf buf) {
-        return new EmptyTechniqueData();
+        return new EmptyData();
+    }
+
+    public static final class EmptyData implements TechniqueData {
+        @Override
+        public void write(ValueOutput output) {
+        }
+
+        @Override
+        public void encode(ByteBuf buf) {
+        }
     }
 }

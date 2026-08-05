@@ -1,0 +1,118 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Owner Construct",
+  "description": "Tests construct replacement, owner damage interception, stability loss, overflow, break and expiry.",
+  "default_accessible_level": 1,
+  "definitions": {
+    "constructs": {
+      "main": {
+        "duration": {
+          "base": 240
+        },
+        "stability": {
+          "base": 100
+        },
+        "offset": [
+          0.0,
+          1.8,
+          -1.0
+        ],
+        "rotate_with_owner": true,
+        "interception": {
+          "absorption": {
+            "base": 1.0
+          },
+          "stability_cost": {
+            "base": 1.0
+          },
+          "overflow": true,
+          "priority": 1000,
+          "on_intercept": [
+            {
+              "type": "ascension:message",
+              "message": "Calibration construct intercepted damage",
+              "overlay": true
+            },
+            {
+              "type": "ascension:sound",
+              "sound": "minecraft:block.amethyst_block.hit",
+              "volume": {
+                "base": 0.7
+              },
+              "pitch": {
+                "base": 1.0
+              }
+            }
+          ],
+          "projectile_response": "deflect"
+        },
+        "on_break": [
+          {
+            "type": "ascension:message",
+            "message": "Calibration construct broken",
+            "overlay": true
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.glass.break",
+            "volume": {
+              "base": 0.8
+            },
+            "pitch": {
+              "base": 0.8
+            }
+          }
+        ],
+        "on_expire": [
+          {
+            "type": "ascension:message",
+            "message": "Calibration construct expired",
+            "overlay": true
+          }
+        ]
+      }
+    }
+  },
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:construct",
+      "action": "remove",
+      "definition": "#main",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:construct",
+      "action": "apply",
+      "definition": "#main",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:totem_of_undying",
+      "count": {
+        "base": 32
+      },
+      "spread": {
+        "base": 0.9
+      },
+      "speed": {
+        "base": 0.08
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:message",
+      "message": "Calibration construct spawned",
+      "overlay": true,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 20
+  }
+}

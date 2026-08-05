@@ -14,8 +14,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.Config;
-import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
+import net.zic.ascension.common.gui.data.ClientAscensionData;
 
 import java.text.DecimalFormat;
 
@@ -53,19 +52,18 @@ public class HealthBar extends RenderableElement {
     }
 
     private double getMaximumHealth(Player player) {
-        ZenithAttributeHolder holder = player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
-
-        var maxHealthAttribute = holder.getAttribute(Attributes.MAX_HEALTH);
-
-        if (maxHealthAttribute != null) {
-            return Math.max(0.0D, maxHealthAttribute.getValue());
+        double synchronizedMaximum = ClientAscensionData.getAttributeValue(Attributes.MAX_HEALTH);
+        if (synchronizedMaximum > 0.0D) {
+            return synchronizedMaximum;
         }
-
-        if (player.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
-            return Math.max(0.0D, player.getAttributeValue(Attributes.MAX_HEALTH));
-        }
-
         return Math.max(0.0D, player.getMaxHealth());
+    }
+
+    private double getDisplayedHealth(Player player, double maximumHealth) {
+        if (maximumHealth <= 0.0D) {
+            return Math.max(0.0D, player.getHealth());
+        }
+        return Math.clamp(player.getHealth(), 0.0D, maximumHealth);
     }
 
     private double getProgress(Player player, double maximumHealth) {
@@ -73,7 +71,7 @@ public class HealthBar extends RenderableElement {
             return 0.0D;
         }
 
-        return Math.clamp(player.getHealth() / maximumHealth, 0.0D, 1.0D);
+        return getDisplayedHealth(player, maximumHealth) / maximumHealth;
     }
 
     private double getAbsorptionProgress(Player player, double maximumHealth) {
@@ -91,13 +89,14 @@ public class HealthBar extends RenderableElement {
         }
 
         EasyLabel label = getOrCreateLabel();
+        double displayedHealth = getDisplayedHealth(player, maximumHealth);
 
         if (getAbsorptionProgress(player, maximumHealth) > 0.0D) {
-            label.setText(Component.literal(FORMAT.format(player.getHealth()) + "+(" + FORMAT.format(player.getAbsorptionAmount()) + ")/" + FORMAT.format(maximumHealth)));
+            label.setText(Component.literal(FORMAT.format(displayedHealth) + "+(" + FORMAT.format(player.getAbsorptionAmount()) + ")/" + FORMAT.format(maximumHealth)));
             return;
         }
 
-        label.setText(Component.literal(FORMAT.format(player.getHealth()) + "/" + FORMAT.format(maximumHealth)));
+        label.setText(Component.literal(FORMAT.format(displayedHealth) + "/" + FORMAT.format(maximumHealth)));
     }
 
     private void clearLabel() {

@@ -3,7 +3,6 @@ package net.zic.ascension.configuration.dimension;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.configuration.biome.BiomeConfiguration;
 
 /**
  * Holds configuration details for a dimension,

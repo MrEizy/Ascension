@@ -4,10 +4,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.Event;
-import net.neoforged.neoforge.common.damagesource.DamageContainer;
-
-import java.util.Collection;
-import java.util.HashMap;
 
 public class RPGEngineGatherDamageTypesEvent extends Event {
 

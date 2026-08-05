@@ -20,10 +20,13 @@ import net.zic.ascension.client.keybind.TabletScrollHandler;
 import net.zic.ascension.client.gui.AscensionHudOverlay;
 import net.zic.ascension.client.gui.SkillWheelOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
+import net.zic.ascension.client.visual.runtime.BarrierShellVisualController;
+import net.zic.ascension.client.visual.runtime.ClientRuntimeVisuals;
+import net.zic.ascension.client.visual.runtime.GuardianDharmaVisualController;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 import net.zic.ascension.common.AscensionCreativeSections;
 import net.zic.ascension.common.particle.AscensionParticles;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldParticleKind;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
 
 
 @Mod(value = AscensionCraft.MOD_ID,dist = Dist.CLIENT)
@@ -109,6 +112,8 @@ public class AscensionCraftClient {
         public static void onClientSetup(FMLClientSetupEvent event) {
             event.enqueueWork(() -> {
                 AscensionClientTooltipProviders.registerAll();
+                BarrierShellVisualController.registerDefaults();
+                GuardianDharmaVisualController.registerDefault();
                 AscensionCreativeSections.register();
             });
         }
@@ -130,6 +135,7 @@ public class AscensionCraftClient {
         @SubscribeEvent
         public static void onRenderLevelStage(net.neoforged.neoforge.client.event.RenderLevelStageEvent.AfterTranslucentFeatures event) {
             TABLET_OUTLINE.onRenderLevelStage(event);
+            ClientRuntimeVisuals.render(event);
         }
 
         @SubscribeEvent
@@ -138,6 +144,7 @@ public class AscensionCraftClient {
             IntrospectionKeybindHandler.onClientTick(event);
             SkillWheelOverlay.onClientTick();
             ParticleFieldController.tick();
+            ClientRuntimeVisuals.tick();
         }
     }
 

@@ -12,14 +12,17 @@ import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
+import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.hotbar.SkillHotBar;
+import net.zic.zenithlib.common.ZenithAttachments;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 // TODO listen too skillCastEnd and call resolve.
 public class SkillCastHandler {
     private final Player player;
+    private boolean waitingForCastRelease;
     private final CastingInstance instance = new CastingInstance();
     private final SkillHotBar hotBar = new SkillHotBar();
 
@@ -37,6 +40,7 @@ public class SkillCastHandler {
         }
         if (instance.isDirty() && player instanceof ServerPlayer serverPlayer) {
             ParticleFieldSyncManager.syncNow(serverPlayer, instance.getSkill());
+            HeldCastVisualSyncManager.syncNow(serverPlayer, instance.getHeldVisualState(player));
         }
         if (hotBar.isDirty() || instance.isDirty()) {
             player.syncData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER);
@@ -53,6 +57,32 @@ public class SkillCastHandler {
 
     public Identifier getCastingSkill() {
         return instance.getSkill();
+    }
+
+    public HeldCastVisualState getHeldCastVisualState() {
+        return instance.getHeldVisualState(player);
+    }
+
+    public boolean isWaitingForCastRelease() {
+        return waitingForCastRelease;
+    }
+
+    public void releaseCastInput() {
+        waitingForCastRelease = false;
+    }
+
+    public void requireCastInputRelease() {
+        waitingForCastRelease = true;
+    }
+
+    public void interruptCast() {
+        instance.interrupt(player);
+        resolve();
+    }
+
+    public void recordDamage(double damage) {
+        instance.recordDamage(player, damage);
+        resolve();
     }
 
     public Identifier getSkill(int slot) {
@@ -88,15 +118,16 @@ public class SkillCastHandler {
     }
 
     public void castSelectedSkill() {
+        if (waitingForCastRelease) {
+            return;
+        }
+
         Identifier skill = hotBar.getSkill(hotBar.getSelectedSlot());
         if (skill == null) {
             return;
         }
-        if (!(CoreRegistries.safeAccess(
-                CoreRegistries.SKILL_REGISTRY,
-                skill,
-                player.registryAccess()
-        ) instanceof CastableSkill)) {
+
+        if (!(CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skill, player.registryAccess()) instanceof CastableSkill)) {
             return;
         }
 
@@ -104,10 +135,20 @@ public class SkillCastHandler {
     }
 
     public void tick() {
+        Identifier previousSkill = instance.getSkill();
+        boolean previousHeldCast = instance.getHeldVisualState(player) != null;
+
         instance.continueCasting(player);
+
+        if (previousHeldCast && previousSkill != null && instance.getSkill() == null && player.getData(ZenithAttachments.ACTION_MANAGER).isActive(AscensionSkillListener.skillCast)) {
+            requireCastInputRelease();
+        }
+
         if (player instanceof ServerPlayer serverPlayer) {
             ParticleFieldSyncManager.heartbeat(serverPlayer, instance.getSkill());
+            HeldCastVisualSyncManager.heartbeat(serverPlayer, instance.getHeldVisualState(player));
         }
+
         resolve();
     }
 

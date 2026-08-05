@@ -16,9 +16,9 @@ public class HudContainer extends RenderableElement {
 
     private static final ITextureData HUD_TEXTURE = new TextureDataSubsection(
             TEXTURE,
-            150, 44,
+            150, 58,
             0, 0,
-            111, 33
+            111, 47
     );
 
     public HudContainer(UIFrame frame) {
@@ -35,6 +35,11 @@ public class HudContainer extends RenderableElement {
         qiBar.getPositioning().setX(5);
         qiBar.getPositioning().setY(19);
         addChild(qiBar);
+
+        StaminaBar staminaBar = new StaminaBar(frame);
+        staminaBar.getPositioning().setX(5);
+        staminaBar.getPositioning().setY(33);
+        addChild(staminaBar);
     }
 
     @Override

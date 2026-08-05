@@ -1,0 +1,45 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Repair Construct",
+  "description": "Restores stability to the owner-bound calibration construct after it intercepts damage.",
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:construct",
+      "action": "repair",
+      "definition": "ascension:skill/debug/calibration_construct/construct/main",
+      "amount": {
+        "base": 25
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:happy_villager",
+      "count": {
+        "base": 20
+      },
+      "spread": {
+        "base": 0.6
+      },
+      "speed": {
+        "base": 0.04
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:message",
+      "message": "Construct restoration requested",
+      "overlay": true,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 10
+  }
+}

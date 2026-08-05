@@ -10,8 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
-import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 
 import java.text.DecimalFormat;
 
@@ -24,11 +22,7 @@ public class AttributeDisplayContainer extends RenderableElement {
 
     private String displayedValue;
 
-    public AttributeDisplayContainer(
-            UIFrame frame,
-            Holder<Attribute> attribute,
-            ITextureData icon
-    ) {
+    public AttributeDisplayContainer(UIFrame frame, Holder<Attribute> attribute, ITextureData icon) {
         super(frame);
 
         this.attribute = attribute;
@@ -67,20 +61,11 @@ public class AttributeDisplayContainer extends RenderableElement {
     private void updateValue() {
         String value = ClientAscensionData.getPlayer()
                 .map(player -> {
-                    ZenithAttributeHolder holder = player.getData(
-                            ZenithAttachments.ATTRIBUTE_HOLDER
-                    );
-
-                    var zenithAttribute = holder.getAttribute(attribute);
-                    if (zenithAttribute != null) {
-                        return FORMAT.format(zenithAttribute.getValue());
+                    if (!player.getAttributes().hasAttribute(attribute)) {
+                        return "-";
                     }
 
-                    if (player.getAttributes().hasAttribute(attribute)) {
-                        return FORMAT.format(player.getAttributeValue(attribute));
-                    }
-
-                    return "-";
+                    return FORMAT.format(ClientAscensionData.getAttributeValue(attribute));
                 })
                 .orElse("-");
 
@@ -154,22 +139,12 @@ public class AttributeDisplayContainer extends RenderableElement {
     }
 
     @Override
-    public void renderTick(
-            GuiGraphicsExtractor graphics,
-            int mouseX,
-            int mouseY,
-            float partialTick
-    ) {
+    public void renderTick(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         updateValue();
     }
 
     @Override
-    public void render(
-            GuiGraphicsExtractor graphics,
-            int mouseX,
-            int mouseY,
-            float partialTick
-    ) {
+    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         if (icon != null) {
             icon.render(graphics);
         }

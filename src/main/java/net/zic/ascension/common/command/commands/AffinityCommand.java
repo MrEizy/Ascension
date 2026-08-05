@@ -6,14 +6,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
-import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
-import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 

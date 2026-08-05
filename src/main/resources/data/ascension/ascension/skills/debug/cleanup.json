@@ -1,0 +1,71 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Cleanup",
+  "description": "Removes calibration fields, anchor networks, constructs, barriers, movement anchors and stagger state owned by or applied to the caster.",
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:field",
+      "action": "remove",
+      "definition": "ascension:skill/debug/calibration_field/visual/field_visual",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:network",
+      "action": "remove",
+      "definition": "ascension:skill/debug/calibration_network/visual/network_visual",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:construct",
+      "action": "remove",
+      "definition": "ascension:skill/debug/calibration_construct/construct/main",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:barrier",
+      "action": "remove",
+      "definition": "ascension:skill/debug/calibration_barrier/visual/barrier_visual",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:anchor",
+      "action": "clear",
+      "anchor": "ascension:debug/calibration_return",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:stagger",
+      "action": "clear",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:smoke",
+      "count": {
+        "base": 20
+      },
+      "spread": {
+        "base": 0.8
+      },
+      "speed": {
+        "base": 0.02
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:message",
+      "message": "Calibration runtime objects, barriers and stagger cleared",
+      "overlay": true,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 5
+  }
+}

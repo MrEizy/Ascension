@@ -9,7 +9,7 @@ public class AscensionClientConfig {
         builder.push("HUD");
 
         SHOW_EXACT_HUD_VALUES = builder
-                .comment("Show current and maximum values on the health and qi bars. [Default: true]")
+                .comment("Show current and maximum values on the health, qi, and stamina bars. [Default: true]")
                 .define("showExactValues", true);
 
         builder.pop();

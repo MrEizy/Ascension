@@ -17,6 +17,7 @@ import java.util.Optional;
 public class ModRenderPipelines {
 
     public static RenderPipeline LINES_NO_DEPTH;
+    public static RenderPipeline ENERGY_LINES;
 
     @SubscribeEvent
     public static void onRegisterRenderPipelines(RegisterRenderPipelinesEvent event) {
@@ -26,6 +27,12 @@ public class ModRenderPipelines {
                 .withDepthStencilState(Optional.empty())
                 .build();
 
+        ENERGY_LINES = RenderPipeline.builder(RenderPipelines.LINES_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/energy_lines"))
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                .build();
+
         event.registerPipeline(LINES_NO_DEPTH);
+        event.registerPipeline(ENERGY_LINES);
     }
 }

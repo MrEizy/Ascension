@@ -1,0 +1,45 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Radial Sweep",
+  "description": "Tests radial targeting and unlimited target selection.",
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:radial",
+    "radius": {
+      "base": 8
+    },
+    "maximum_targets": 0,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "self",
+        "ally",
+        "neutral",
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": false
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:enchant",
+      "count": {
+        "base": 12
+      },
+      "spread": {
+        "base": 0.5
+      },
+      "speed": {
+        "base": 0.04
+      },
+      "subject": "position"
+    }
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 10
+  }
+}

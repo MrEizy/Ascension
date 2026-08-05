@@ -9,7 +9,6 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
-import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionConditionReference;
@@ -19,17 +18,12 @@ import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.impl.core.technique.realm_change.condition.RealmChangeConditions;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.bloodline.purity.condition.OnPurityInRangeCondition;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
 import net.zic.ascension.impl.core.progression.GiveBaseStatsAction;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
-import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMajorRealmCondition;
-import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMajorRealmInCondition;
-import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMinorRealmCondition;
-import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMinorRealmInCondition;
-import net.zic.ascension.impl.core.technique.realm_change.condition.EveryRealmCondition;
-import net.zic.ascension.impl.core.technique.realm_change.condition.EveryRealmInCondition;
 
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
@@ -406,7 +400,7 @@ public final class AscensionTooltipValueSources {
         );
         return rows;
     }
-    
+
     private static List<ZenithTooltipValue.Row> modifierRows(
             Map<Identifier, List<ValueContainerModifier>> modifiers,
             boolean affinity,
@@ -500,19 +494,19 @@ public final class AscensionTooltipValueSources {
     private static String techniqueCadence(
             ProgressActionCondition condition
     ) {
-        if (condition instanceof EveryMajorRealmCondition) {
+        if (condition instanceof RealmChangeConditions.EveryMajorRealm) {
             return "Each Major Realm";
         }
 
-        if (condition instanceof EveryMinorRealmCondition) {
+        if (condition instanceof RealmChangeConditions.EveryMinorRealm) {
             return "Each Minor Realm";
         }
 
-        if (condition instanceof EveryRealmCondition) {
+        if (condition instanceof RealmChangeConditions.EveryRealm) {
             return "On Learn + Each Realm";
         }
 
-        if (condition instanceof EveryMajorRealmInCondition selected) {
+        if (condition instanceof RealmChangeConditions.MajorRealmsIn selected) {
             if (selected.majorRealms().size() == 1
                     && selected.majorRealms().contains(0)) {
                 return "On Learn";
@@ -521,11 +515,11 @@ public final class AscensionTooltipValueSources {
             return "Major Realms " + joinInts(selected.majorRealms());
         }
 
-        if (condition instanceof EveryMinorRealmInCondition selected) {
+        if (condition instanceof RealmChangeConditions.MinorRealmsIn selected) {
             return "Minor Realms " + joinInts(selected.minorRealms());
         }
 
-        if (condition instanceof EveryRealmInCondition) {
+        if (condition instanceof RealmChangeConditions.RealmsIn) {
             return "Selected Realms";
         }
 

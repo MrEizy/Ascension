@@ -1,0 +1,302 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Guided Bolt",
+  "description": "Tests target-bound virtual projectiles, homing, impact features and expiry.",
+  "default_accessible_level": 1,
+  "definitions": {
+    "projectiles": {
+      "main": {
+        "speed": {
+          "base": 1.4
+        },
+        "range": {
+          "base": 32
+        },
+        "gravity": 0.0,
+        "hit_radius": 0.35,
+        "pierces": 1,
+        "filter": {
+          "relations": [
+            "neutral",
+            "hostile"
+          ],
+          "include_players": true,
+          "line_of_sight": true
+        },
+        "flight_particle": "minecraft:end_rod",
+        "behaviors": [
+          {
+            "type": "ascension:homing",
+            "turn_rate": {
+              "base": 0.12
+            },
+            "acquisition": {
+              "type": "ascension:cone",
+              "range": {
+                "base": 18
+              },
+              "angle": {
+                "base": 80
+              },
+              "maximum_targets": 1,
+              "sort": "closest_to_view",
+              "filter": {
+                "relations": [
+                  "neutral",
+                  "hostile"
+                ],
+                "include_players": true,
+                "line_of_sight": true
+              }
+            },
+            "reacquire": true
+          }
+        ],
+        "on_entity_hit": [
+          {
+            "type": "ascension:damage",
+            "amount": {
+              "base": 4.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:skill_level"
+                  },
+                  "operation": "add",
+                  "scale": 1.0
+                },
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:execution/projectile_travelled",
+                    "fallback": 0.0
+                  },
+                  "operation": "add",
+                  "scale": 0.05
+                }
+              ],
+              "minimum": 1.0,
+              "maximum": 12.0
+            },
+            "damage_type": "minecraft:indirect_magic",
+            "classifications": [
+              "ascension:skill",
+              "ascension:projectile",
+              "ascension:ranged",
+              "ascension:debug"
+            ],
+            "path": "ascension:foundation/soul",
+            "technique": "ascension:bug_tester_manual"
+          },
+          {
+            "type": "ascension:effect",
+            "duration": {
+              "base": 160
+            },
+            "potency": {
+              "base": 1
+            },
+            "definition": "ascension:skill/debug/ray_mark/effect/calibration_mark"
+          },
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:electric_spark",
+            "count": {
+              "base": 20
+            },
+            "spread": {
+              "base": 0.45
+            },
+            "speed": {
+              "base": 0.08
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.amethyst_cluster.break",
+            "volume": {
+              "base": 0.8
+            },
+            "pitch": {
+              "base": 1.3
+            }
+          }
+        ],
+        "on_block_hit": [
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:poof",
+            "count": {
+              "base": 16
+            },
+            "spread": {
+              "base": 0.4
+            },
+            "speed": {
+              "base": 0.05
+            }
+          }
+        ],
+        "on_expire": [
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:smoke",
+            "count": {
+              "base": 8
+            },
+            "spread": {
+              "base": 0.2
+            },
+            "speed": {
+              "base": 0.01
+            }
+          }
+        ],
+        "visual": "#bolt_visual"
+      }
+    },
+    "visuals": {
+      "bolt_visual": {
+        "layers": [
+          {
+            "type": "ascension:ribbon",
+            "appearance": {
+              "color": [
+                75,
+                205,
+                255,
+                20
+              ],
+              "secondary_color": [
+                170,
+                255,
+                220,
+                220
+              ],
+              "line_width": 3.0,
+              "no_depth": true
+            },
+            "motion": {
+              "history": 22
+            }
+          },
+          {
+            "type": "ascension:afterimage",
+            "appearance": {
+              "color": [
+                75,
+                190,
+                255,
+                10
+              ],
+              "secondary_color": [
+                180,
+                255,
+                225,
+                125
+              ]
+            },
+            "geometry": {
+              "width": 0.42,
+              "height": 0.42
+            },
+            "motion": {
+              "history": 18
+            }
+          },
+          {
+            "type": "ascension:ring",
+            "transform": {
+              "rotation": [
+                90,
+                0,
+                0
+              ]
+            },
+            "appearance": {
+              "color": [
+                150,
+                245,
+                255,
+                210
+              ],
+              "secondary_color": [
+                220,
+                255,
+                230,
+                245
+              ],
+              "line_width": 1.8,
+              "no_depth": true
+            },
+            "geometry": {
+              "radius": 0.28,
+              "segments": 18
+            },
+            "motion": {
+              "spin": 3.0,
+              "pulse": 0.12,
+              "pulse_speed": 0.3
+            }
+          },
+          {
+            "type": "ascension:particle_emitter",
+            "geometry": {
+              "radius": 0.08,
+              "height": 0.08,
+              "length": 0.025,
+              "count": 1
+            },
+            "motion": {
+              "interval": 2
+            },
+            "resources": {
+              "particle": "minecraft:electric_spark"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "targeting": {
+    "type": "ascension:ray",
+    "range": {
+      "base": 28
+    },
+    "width": {
+      "base": 0.5
+    },
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.arrow.shoot",
+      "volume": {
+        "base": 0.8
+      },
+      "pitch": {
+        "base": 1.3
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:projectile",
+      "definition": "#main",
+      "direction": "target",
+      "subject": "target"
+    }
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 20
+  }
+}

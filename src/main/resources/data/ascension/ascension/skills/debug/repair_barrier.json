@@ -1,0 +1,31 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Repair Barrier",
+  "description": "Repairs 10 durability on the caster's calibration barrier.",
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:barrier",
+      "action": "repair",
+      "definition": "ascension:skill/debug/calibration_barrier/visual/barrier_visual",
+      "amount": {
+        "base": 10
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:message",
+      "message": "Calibration barrier repair attempted",
+      "overlay": true,
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 5
+  }
+}

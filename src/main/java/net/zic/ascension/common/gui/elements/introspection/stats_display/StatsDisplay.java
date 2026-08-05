@@ -6,7 +6,6 @@ import net.lucent.easygui.gui.elements.built_in.EasyLabel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.Stat;
 

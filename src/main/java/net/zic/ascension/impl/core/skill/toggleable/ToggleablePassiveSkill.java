@@ -10,10 +10,15 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.core.skill.toggleable.ToggleableSkill;
+import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
+import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
+import net.zic.ascension.impl.resource.AscensionResourceSources;
+import net.zic.ascension.impl.resource.AscensionResourceTypes;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.value_containers.ValueContainer;
@@ -22,6 +27,7 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class ToggleablePassiveSkill implements ToggleableSkill {
     private final Component name;
@@ -160,7 +166,15 @@ public class ToggleablePassiveSkill implements ToggleableSkill {
             return false;
         }
 
-        return qiProvider.getQi() >= qiUpkeep.get().cost(qiProvider.getMaxQi());
+        return ResourceTransactionService.transact(
+                ResourceTransactionRequest.of(
+                        entity,
+                        AscensionResourceTypes.QI.getId(),
+                        ResourceOperation.CONSUME,
+                        qiUpkeep.get().cost(qiProvider.getMaxQi()),
+                        AscensionResourceSources.SKILL_CASTING
+                ).withFlags(Set.of(ResourceTransactionRequest.Flag.SIMULATE))
+        ).succeeded();
     }
 
     @Override
@@ -195,7 +209,15 @@ public class ToggleablePassiveSkill implements ToggleableSkill {
             return false;
         }
 
-        return qiProvider.reduceQi(upkeep.cost(qiProvider.getMaxQi()));
+        return ResourceTransactionService.transact(
+                ResourceTransactionRequest.of(
+                        entity,
+                        AscensionResourceTypes.QI.getId(),
+                        ResourceOperation.CONSUME,
+                        upkeep.cost(qiProvider.getMaxQi()),
+                        AscensionResourceSources.SKILL_CASTING
+                )
+        ).succeeded();
     }
 
     private void applyModifiers(OriginSource source) {

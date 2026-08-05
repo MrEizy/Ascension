@@ -1,0 +1,661 @@
+{
+  "type": "ascension:active_skill",
+  "name": {
+    "translate": "ascension.skill.guardian_dharma_idol.name"
+  },
+  "description": {
+    "translate": "ascension.skill.guardian_dharma_idol.desc"
+  },
+  "default_accessible_level": 0,
+  "definitions": {
+    "constructs": {
+      "idol": {
+        "duration": {
+          "base": 160,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:skill_level"
+              },
+              "operation": "add",
+              "scale": 40
+            }
+          ],
+          "maximum": 340
+        },
+        "stability": {
+          "base": 50.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:skill_level"
+              },
+              "operation": "add",
+              "scale": 25.0
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 2.0
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "operation": "add",
+              "scale": 1.25
+            }
+          ],
+          "minimum": 50.0,
+          "maximum": 320.0
+        },
+        "offset": [
+          0.0,
+          0.8,
+          -1.15
+        ],
+        "rotate_with_owner": true,
+        "interception": {
+          "absorption": {
+            "base": 0.65,
+            "terms": [
+              {
+                "source": {
+                  "type": "ascension:skill_level"
+                },
+                "operation": "add",
+                "scale": 0.08
+              }
+            ],
+            "maximum": 0.95
+          },
+          "stability_cost": {
+            "base": 1.0
+          },
+          "overflow": true,
+          "priority": 100,
+          "on_intercept": [
+            {
+              "type": "ascension:damage",
+              "amount": {
+                "base": 1.0,
+                "terms": [
+                  {
+                    "source": {
+                      "type": "ascension:context",
+                      "key": "ascension:construct_intercepted",
+                      "fallback": 0.0
+                    },
+                    "operation": "add",
+                    "scale": 0.35
+                  },
+                  {
+                    "source": {
+                      "type": "ascension:stat",
+                      "stat": "ascension:spirit"
+                    },
+                    "operation": "add",
+                    "scale": 0.08
+                  },
+                  {
+                    "source": {
+                      "type": "ascension:stat",
+                      "stat": "ascension:strength"
+                    },
+                    "operation": "add",
+                    "scale": 0.12
+                  },
+                  {
+                    "source": {
+                      "type": "ascension:skill_level"
+                    },
+                    "operation": "add",
+                    "scale": 1.5
+                  }
+                ],
+                "minimum": 1.0,
+                "maximum": 45.0
+              },
+              "damage_type": "minecraft:magic",
+              "classifications": [
+                "ascension:skill",
+                "ascension:construct",
+                "ascension:soul",
+                "ascension:dharma"
+              ],
+              "path": "ascension:foundation/soul",
+              "technique": "ascension:3_heaven/guardian_dharma_manual"
+            },
+            {
+              "type": "ascension:stagger",
+              "amount": {
+                "base": 8.0,
+                "terms": [
+                  {
+                    "source": {
+                      "type": "ascension:context",
+                      "key": "ascension:construct_intercepted",
+                      "fallback": 0.0
+                    },
+                    "operation": "add",
+                    "scale": 0.4
+                  },
+                  {
+                    "source": {
+                      "type": "ascension:stat",
+                      "stat": "ascension:strength"
+                    },
+                    "operation": "add",
+                    "scale": 0.15
+                  },
+                  {
+                    "source": {
+                      "type": "ascension:skill_level"
+                    },
+                    "operation": "add",
+                    "scale": 2.0
+                  }
+                ],
+                "minimum": 4.0,
+                "maximum": 50.0
+              },
+              "definition": "#dharma_impact"
+            },
+            {
+              "type": "ascension:visual",
+              "duration": {
+                "base": 12
+              },
+              "definition": "#strike",
+              "subject": "target"
+            },
+            {
+              "type": "ascension:particles",
+              "particle": "minecraft:enchanted_hit",
+              "count": {
+                "base": 12.0
+              },
+              "spread": {
+                "base": 0.55
+              },
+              "speed": {
+                "base": 0.08
+              }
+            },
+            {
+              "type": "ascension:sound",
+              "sound": "minecraft:block.amethyst_block.hit",
+              "volume": {
+                "base": 0.55
+              },
+              "pitch": {
+                "base": 0.7
+              }
+            }
+          ],
+          "projectile_response": "deflect",
+          "filter": {
+            "exclude_classifications": [
+              "ascension:construct"
+            ]
+          }
+        },
+        "on_break": [
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:totem_of_undying",
+            "count": {
+              "base": 42
+            },
+            "spread": {
+              "base": 1.1
+            },
+            "speed": {
+              "base": 0.08
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.beacon.deactivate",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 0.65
+            }
+          }
+        ],
+        "on_expire": [
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.amethyst_block.chime",
+            "volume": {
+              "base": 0.35
+            },
+            "pitch": {
+              "base": 0.6
+            }
+          }
+        ],
+        "visual": {
+          "layers": [
+            {
+              "type": "ascension:model_layer",
+              "resources": {
+                "visual": "ascension:guardian_dharma_idol"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "stagger": {
+      "dharma_impact": {
+        "threshold": {
+          "base": 100.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 2.2
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:strength"
+              },
+              "operation": "add",
+              "scale": 0.9
+            }
+          ],
+          "minimum": 50.0
+        },
+        "resistance": {
+          "base": 0.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 0.005
+            }
+          ],
+          "minimum": 0.0,
+          "maximum": 0.62
+        },
+        "decay_per_second": {
+          "base": 10.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 0.14
+            }
+          ],
+          "minimum": 1.0
+        },
+        "decay_delay": 40,
+        "guard_break_duration": {
+          "base": 42.0
+        },
+        "immunity_duration": {
+          "base": 70.0
+        },
+        "movement_multiplier": 0.1,
+        "interrupt_held_casts": true,
+        "on_guard_break": [
+          {
+            "type": "ascension:visual",
+            "duration": {
+              "base": 20
+            },
+            "definition": "#strike",
+            "subject": "target"
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.anvil.land",
+            "volume": {
+              "base": 0.7
+            },
+            "pitch": {
+              "base": 1.35
+            }
+          }
+        ]
+      }
+    },
+    "visuals": {
+      "strike": {
+        "layers": [
+          {
+            "type": "ascension:shell",
+            "appearance": {
+              "color": [
+                255,
+                115,
+                35,
+                18
+              ],
+              "secondary_color": [
+                255,
+                235,
+                120,
+                125
+              ],
+              "line_width": 2.0,
+              "filled": true,
+              "no_depth": true
+            },
+            "geometry": {
+              "radius": 0.9,
+              "height": 1.8,
+              "segments": 18
+            },
+            "motion": {
+              "pulse": 0.22,
+              "pulse_speed": 0.5,
+              "spin": 2.0
+            }
+          },
+          {
+            "type": "ascension:ring",
+            "transform": {
+              "rotation": [
+                90,
+                0,
+                0
+              ]
+            },
+            "appearance": {
+              "color": [
+                255,
+                145,
+                45,
+                150
+              ],
+              "secondary_color": [
+                255,
+                245,
+                170,
+                245
+              ],
+              "line_width": 2.6,
+              "no_depth": true
+            },
+            "geometry": {
+              "radius": 1.05,
+              "segments": 24
+            },
+            "motion": {
+              "spin": 4.0,
+              "pulse": 0.18,
+              "pulse_speed": 0.45
+            }
+          },
+          {
+            "type": "ascension:particle_emitter",
+            "geometry": {
+              "radius": 0.65,
+              "height": 1.4,
+              "length": 0.07,
+              "count": 4
+            },
+            "motion": {
+              "interval": 1
+            },
+            "resources": {
+              "particle": "minecraft:enchanted_hit"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "levels": [
+    {
+      "targeting": {
+        "type": "ascension:self"
+      },
+      "require_targets": true,
+      "features": [
+        {
+          "type": "ascension:construct",
+          "action": "remove",
+          "definition": "#idol",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:construct",
+          "action": "apply",
+          "definition": "#idol",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:totem_of_undying",
+          "count": {
+            "base": 48
+          },
+          "spread": {
+            "base": 1.25
+          },
+          "speed": {
+            "base": 0.09
+          },
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:block.beacon.activate",
+          "volume": {
+            "base": 1.0
+          },
+          "pitch": {
+            "base": 0.65
+          },
+          "subject": "caster"
+        }
+      ],
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 30
+          },
+          "operation": "ascension:consume"
+        }
+      ],
+      "cooldown": {
+        "base": 600
+      }
+    },
+    {
+      "targeting": {
+        "type": "ascension:self"
+      },
+      "require_targets": true,
+      "features": [
+        {
+          "type": "ascension:construct",
+          "action": "remove",
+          "definition": "#idol",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:construct",
+          "action": "apply",
+          "definition": "#idol",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:totem_of_undying",
+          "count": {
+            "base": 58
+          },
+          "spread": {
+            "base": 1.25
+          },
+          "speed": {
+            "base": 0.09
+          },
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:block.beacon.activate",
+          "volume": {
+            "base": 1.0
+          },
+          "pitch": {
+            "base": 0.65
+          },
+          "subject": "caster"
+        }
+      ],
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 34
+          },
+          "operation": "ascension:consume"
+        }
+      ],
+      "cooldown": {
+        "base": 560
+      }
+    },
+    {
+      "targeting": {
+        "type": "ascension:self"
+      },
+      "require_targets": true,
+      "features": [
+        {
+          "type": "ascension:construct",
+          "action": "remove",
+          "definition": "#idol",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:construct",
+          "action": "apply",
+          "definition": "#idol",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:totem_of_undying",
+          "count": {
+            "base": 70
+          },
+          "spread": {
+            "base": 1.25
+          },
+          "speed": {
+            "base": 0.09
+          },
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:block.beacon.activate",
+          "volume": {
+            "base": 1.0
+          },
+          "pitch": {
+            "base": 0.65
+          },
+          "subject": "caster"
+        }
+      ],
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 38
+          },
+          "operation": "ascension:consume"
+        }
+      ],
+      "cooldown": {
+        "base": 520
+      }
+    },
+    {
+      "targeting": {
+        "type": "ascension:self"
+      },
+      "require_targets": true,
+      "features": [
+        {
+          "type": "ascension:construct",
+          "action": "remove",
+          "definition": "#idol",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:construct",
+          "action": "apply",
+          "definition": "#idol",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:totem_of_undying",
+          "count": {
+            "base": 84
+          },
+          "spread": {
+            "base": 1.25
+          },
+          "speed": {
+            "base": 0.09
+          },
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:block.beacon.activate",
+          "volume": {
+            "base": 1.0
+          },
+          "pitch": {
+            "base": 0.65
+          },
+          "subject": "caster"
+        }
+      ],
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 42
+          },
+          "operation": "ascension:consume"
+        }
+      ],
+      "cooldown": {
+        "base": 480
+      }
+    }
+  ]
+}

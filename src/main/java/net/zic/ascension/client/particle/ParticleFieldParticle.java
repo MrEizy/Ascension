@@ -9,8 +9,8 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldParticleKind;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldStyle;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
+import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldStyle;
 import org.jspecify.annotations.Nullable;
 
 import java.util.EnumMap;
@@ -155,6 +155,7 @@ public class ParticleFieldParticle extends SingleQuadParticle {
             case SPIRAL -> tickSpiral(center, progress);
             case MERIDIAN_FLOW -> tickMeridianFlow(center, progress);
             case GATHERING_RING -> tickGatheringRing(center, progress);
+            case BREATH_FLOW -> tickBreathFlow(center, progress);
         }
 
         this.oRoll = this.roll;
@@ -284,6 +285,29 @@ public class ParticleFieldParticle extends SingleQuadParticle {
         this.quadSize = this.baseSize * (0.94F - progress * 0.14F);
 
         if (horizontalLength < 0.18D && progress > 0.72F && this.age < this.lifetime - 5) {
+            this.age = this.lifetime - 5;
+        }
+    }
+
+    private void tickBreathFlow(Center center, float progress) {
+        double dx = center.x() - this.x;
+        double dy = center.y() - this.y;
+        double dz = center.z() - this.z;
+        double horizontalLength = Math.max(0.001D, Math.sqrt(dx * dx + dz * dz));
+        double fullLength = Math.max(0.001D, Math.sqrt(dx * dx + dy * dy + dz * dz));
+        double tangentX = -dz / horizontalLength * orbitDirection;
+        double tangentZ = dx / horizontalLength * orbitDirection;
+        double inwardSpeed = flowSpeed * (1.12D + progress * 0.58D);
+        double curl = flowSpeed * 0.08D * (1.0D - progress);
+        steer(
+                dx / fullLength * inwardSpeed + tangentX * curl,
+                dy / fullLength * inwardSpeed,
+                dz / fullLength * inwardSpeed + tangentZ * curl,
+                0.36D
+        );
+        this.quadSize = this.baseSize * (1.0F - progress * 0.48F);
+
+        if (fullLength < 0.12D && this.age < this.lifetime - 5) {
             this.age = this.lifetime - 5;
         }
     }

@@ -17,9 +17,29 @@ public class AscensionAttributes {
             100,
             0,Double.MAX_VALUE).setSyncable(true));
     public static final Holder<Attribute> QI_REGEN_RATE = ATTRIBUTES.register("qi_regen_rate",()->new RangedAttribute(
-            "attributes.ascensoin.qi_regen_rate",
+            "attributes.ascension.qi_regen_rate",
             1,
             0,10000).setSyncable(true));
+    public static final Holder<Attribute> HEALTH_REGEN_RATE = ATTRIBUTES.register("health_regen_rate", () -> new RangedAttribute(
+            "attributes.ascension.health_regen_rate",
+            1.0D,
+            0.0D,
+            10000.0D).setSyncable(true));
+    public static final Holder<Attribute> MAX_STAMINA = ATTRIBUTES.register("max_stamina", () -> new RangedAttribute(
+            "attributes.ascension.max_stamina",
+            100.0D,
+            0.0D,
+            Double.MAX_VALUE).setSyncable(true));
+    public static final Holder<Attribute> STAMINA_REGEN_RATE = ATTRIBUTES.register("stamina_regen_rate", () -> new RangedAttribute(
+            "attributes.ascension.stamina_regen_rate",
+            10.0D,
+            0.0D,
+            10000.0D).setSyncable(true));
+    public static final Holder<Attribute> STAMINA_REGEN_DELAY = ATTRIBUTES.register("stamina_regen_delay", () -> new RangedAttribute(
+            "attributes.ascension.stamina_regen_delay",
+            40.0D,
+            0.0D,
+            12000.0D).setSyncable(true));
 
     public Holder<Attribute> PROGRESS_RATE = ATTRIBUTES.register("progress_rate",()->new RangedAttribute(
             "attributes.ascensoin.progress_rate", 0,

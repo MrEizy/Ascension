@@ -66,6 +66,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
         this.source = source;
         this.attachedEntity = entity;
+        this.source.setRegistryAccess(entity.registryAccess());
     }
 
     public void initializeAttributes() {
@@ -113,8 +114,24 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         addAttributeWithStatScaling(attributeHolder, AscensionAttributes.MAX_QI,
                 AscensionStats.SPIRIT.get(), "spirit_max_qi_scaling", 10.0D);
 
+        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.QI_REGEN_RATE,
+                AscensionStats.SPIRIT.get(), "spirit_qi_regen_scaling", 0.25D);
 
+        attributeHolder.addAttribute(AscensionAttributes.HEALTH_REGEN_RATE);
 
+        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
+                AscensionStats.VITALITY.get(), "vitality_max_stamina_scaling", 5.0D);
+
+        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
+                AscensionStats.STRENGTH.get(), "strength_max_stamina_scaling", 2.0D);
+
+        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
+                AscensionStats.VITALITY.get(), "vitality_stamina_regen_scaling", 0.4D);
+
+        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
+                AscensionStats.AGILITY.get(), "agility_stamina_regen_scaling", 0.2D);
+
+        attributeHolder.addAttribute(AscensionAttributes.STAMINA_REGEN_DELAY);
     }
 
     private void addSuppressedAttributeWithStatScaling(
@@ -173,15 +190,12 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
     @Override
     public void initialize() {
-
         AscensionEntityData.super.initialize();
+        OriginSourcePatch loadedPatch = getSource().load();
         initializeAttributes();
-
-
-        markDirty(getSource().load(),true);
-        initializePathBonuses();
         getSource().attachToEntity(getEntity());
-
+        initializePathBonuses();
+        markDirty(loadedPatch, true);
     }
 
 
@@ -304,23 +318,34 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         updateStatHolder(stat);
     }
     //TODO add a process system like patching for bulk updates
-    public void updateStatHolder(Stat stat){
-        if(getEntity() == null) return;
-        NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(getEntity(),List.of(stat)));
-
+    public void updateStatHolder(Stat stat) {
+        if (getEntity() == null || stat == null) {
+            return;
+        }
+        NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(getEntity(), List.of(stat)));
     }
 
-
     @Override
-    public void markDirty(OriginSourcePatch patch,boolean fullPatch) {
-        //TODO ensure up to date
-        if (attachedEntity.level().isClientSide()) {
+    public void markDirty(OriginSourcePatch patch, boolean fullPatch) {
+        if (attachedEntity == null || attachedEntity.level().isClientSide()) {
             return;
         }
 
         this.patch = patch;
-        if(patch == null) return;
         this.fullPatch = fullPatch;
+
+        if (patch == null) {
+            return;
+        }
+
+        if (!patch.dirtyStats().isEmpty()) {NeoForge.EVENT_BUS.post(
+                new StatsUpdatedEvent(attachedEntity, patch.dirtyStats()
+                        .stream()
+                        .map(StatInstance::getStat)
+                        .toList()
+                ));
+        }
+
         attachedEntity.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
     }
 
@@ -543,6 +568,8 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             if (buf.readBoolean()) {
                 data.source.applyPatch(buf);
             }
+
+            data.initializeAttributes();
             return data;
         }
     }

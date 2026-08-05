@@ -52,9 +52,12 @@ public class QiBar extends RenderableElement {
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         double currentQi = ClientAscensionData.getQi();
         double maxQi = ClientAscensionData.getMaxQi();
-        double progress = maxQi <= 0.0D ? 0.0D : Math.clamp(currentQi / maxQi, 0.0D, 1.0D);
+        double displayedQi = maxQi <= 0.0D
+                ? Math.max(0.0D, currentQi)
+                : Math.clamp(currentQi, 0.0D, maxQi);
+        double progress = maxQi <= 0.0D ? 0.0D : displayedQi / maxQi;
 
-        updateLabel(currentQi, maxQi);
+        updateLabel(displayedQi, maxQi);
 
         int width = (int) Math.round(getWidth() * progress);
 

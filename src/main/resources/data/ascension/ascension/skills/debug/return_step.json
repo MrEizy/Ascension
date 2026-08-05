@@ -1,0 +1,51 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Return Step",
+  "description": "Returns the caster to the stored calibration anchor.",
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:move",
+      "mode": "anchor",
+      "subject": "caster",
+      "anchor": "ascension:debug/calibration_return",
+      "consume_anchor": true,
+      "restore_rotation": true,
+      "collision": "stop_before_collision",
+      "preserve_velocity": false
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:reverse_portal",
+      "count": {
+        "base": 18
+      },
+      "spread": {
+        "base": 0.5
+      },
+      "speed": {
+        "base": 0.05
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.enderman.teleport",
+      "volume": {
+        "base": 0.7
+      },
+      "pitch": {
+        "base": 1.3
+      },
+      "subject": "caster"
+    }
+  ],
+  "costs": [],
+  "cooldown": {
+    "base": 20
+  }
+}

@@ -36,6 +36,12 @@ import net.zic.ascension.impl.datapack.progression.AscensionProgressActionCondit
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
+import net.zic.ascension.impl.value.source.AscensionScaledValueSourceTypes;
+import net.zic.ascension.impl.resource.AscensionResourceTypes;
+import net.zic.ascension.impl.datapack.skill.AscensionSkillExecutionFeatureTypes;
+import net.zic.ascension.impl.datapack.targeting.AscensionTargetingTypes;
+import net.zic.ascension.impl.datapack.effect.AscensionSkillEffectModuleTypes;
+import net.zic.ascension.impl.datapack.projectile.AscensionProjectileBehaviorTypes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -103,6 +109,12 @@ public class AscensionCraft {
         AscensionPathTypes.register(modEventBus);
         AscensionTribulationTypes.register(modEventBus);
 
+        AscensionScaledValueSourceTypes.register(modEventBus);
+        AscensionResourceTypes.register(modEventBus);
+        AscensionSkillExecutionFeatureTypes.register(modEventBus);
+        AscensionTargetingTypes.register(modEventBus);
+        AscensionSkillEffectModuleTypes.register(modEventBus);
+        AscensionProjectileBehaviorTypes.register(modEventBus);
 
         AscensionAttributes.register(modEventBus);
 
@@ -185,6 +197,26 @@ public class AscensionCraft {
                     EntityType.PLAYER,
                     AscensionAttributes.MAX_QI
             );
+            event.add(
+                    EntityType.PLAYER,
+                    AscensionAttributes.QI_REGEN_RATE
+            );
+            event.add(
+                    EntityType.PLAYER,
+                    AscensionAttributes.HEALTH_REGEN_RATE
+            );
+            event.add(
+                    EntityType.PLAYER,
+                    AscensionAttributes.STAMINA_REGEN_RATE
+            );
+            event.add(
+                    EntityType.PLAYER,
+                    AscensionAttributes.STAMINA_REGEN_DELAY
+            );
+            event.add(
+                    EntityType.PLAYER,
+                    AscensionAttributes.MAX_STAMINA
+            );
         }
 
 
@@ -242,6 +274,16 @@ public class AscensionCraft {
                     ParticleFieldStatePacket.TYPE,
                     ParticleFieldStatePacket.STREAM_CODEC,
                     ParticleFieldStatePacket::handle
+            );
+            registrar.playToClient(
+                    HeldCastVisualStatePacket.TYPE,
+                    HeldCastVisualStatePacket.STREAM_CODEC,
+                    HeldCastVisualStatePacket::handle
+            );
+            registrar.playToClient(
+                    RuntimeVisualPacket.TYPE,
+                    RuntimeVisualPacket.STREAM_CODEC,
+                    RuntimeVisualPacket::handle
             );
 
             registrar.playToServer(

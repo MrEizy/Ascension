@@ -8,8 +8,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
-import net.zic.ascension.capabilities.damage_provider.SimpleEntityDamageSourceProvider;
-import net.zic.ascension.capabilities.damage_provider.SimpleItemDamageSourceProvider;
+import net.zic.ascension.api.ascension.capabilities.damage_provider.AscensionDamageSourceProvider;
 import net.zic.ascension.capabilities.entity_holder.PlayerDataHolder;
 import net.zic.ascension.capabilities.qi_provider.SimpleEntityQiProvider;
 
@@ -26,13 +25,13 @@ public class AscensionCapabilities {
         event.registerEntity(
                 CoreCapabilities.ASCENSION_ENTITY_DAMAGE_SOURCE_PROVIDER,
                 EntityType.ARROW,
-                (entity,nul)->new SimpleEntityDamageSourceProvider(entity,
+                (entity,nul)->new AscensionDamageSourceProvider.EntitySource(entity,
                         Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"bow")
                 )
         );
         event.registerItem(
                 CoreCapabilities.ASCENSION_ITEM_STACK_DAMAGE_SOURCE_PROVIDER,
-                (item,nul)->new SimpleItemDamageSourceProvider(item,
+                (item,nul)->new AscensionDamageSourceProvider.ItemSource(item,
                         Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"sword")),
                 Items.DIAMOND_SWORD
         );

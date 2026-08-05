@@ -23,10 +23,22 @@ public class AscensionSkillTypes {
             "toggleable_passive",
             ToggleablePassiveSkillType::new
     );
+    public static final DeferredHolder<SkillType,SkillType> RESOURCE_MODIFIER_PASSIVE_SKILL_TYPE = SKILL_TYPES.register(
+            "resource_modifier_passive",
+            ResourceModifierPassiveSkillType::new
+    );
 
 
 
     //──Castable Skills────────────────────────────────────────────────────────
+    public static final DeferredHolder<SkillType,SkillType> ACTIVE_SKILL_TYPE = SKILL_TYPES.register(
+            "active_skill",
+            ActiveSkillType::new
+    );
+    public static final DeferredHolder<SkillType,SkillType> HELD_CAST_SKILL_TYPE = SKILL_TYPES.register(
+            "held_cast",
+            HeldCastSkillType::new
+    );
     public static final DeferredHolder<SkillType,SkillType> DEBUG_CASTABLE_TYPE = SKILL_TYPES.register(
             "debug_castable",
             DebugCastableType::new

@@ -1,0 +1,219 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.guardian_dharma_manual.name"
+  },
+  "description": {
+    "translate": "ascension.technique.guardian_dharma_manual.desc"
+  },
+  "path": "ascension:foundation/soul",
+  "milestone_realms": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "technique_families": [
+    "life",
+    "order",
+    "fist"
+  ],
+  "max_realm": 6,
+  "max_minor_realm": 2,
+  "realm_change_handler": [
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          0
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/cultivation/fourfold_dharma_circulation"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          1
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:passive/ordered_vajra_body"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          2
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/golden_bell_of_living_law"
+          ]
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/golden_bell_of_living_law",
+          "contribution": "ascension:guardian_dharma/realm_2",
+          "level": 1,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          3
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/guardian_dharma_idol"
+          ]
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/guardian_dharma_idol",
+          "contribution": "ascension:guardian_dharma/realm_3",
+          "level": 1,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          4
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/golden_bell_of_living_law",
+          "contribution": "ascension:guardian_dharma/realm_4_bell",
+          "level": 2,
+          "set_floor": true,
+          "set_cap": true
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/guardian_dharma_idol",
+          "contribution": "ascension:guardian_dharma/realm_4_idol",
+          "level": 2,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          5
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/guardian_dharma_idol",
+          "contribution": "ascension:guardian_dharma/realm_5_idol",
+          "level": 3,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          6
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/golden_bell_of_living_law",
+          "contribution": "ascension:guardian_dharma/realm_6_bell",
+          "level": 3,
+          "set_floor": true,
+          "set_cap": true
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/guardian_dharma_idol",
+          "contribution": "ascension:guardian_dharma/realm_6_idol",
+          "level": 4,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 2.0
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 3.0
+            },
+            {
+              "id": "ascension:strength",
+              "value": 1.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "theme_overrides": {
+      "colors": {
+        "accent": "#F4D06FFF",
+        "border_top": "#FFF4C7FF",
+        "border_bottom": "#72501EFF",
+        "background": "#171006EE"
+      },
+      "background_style": {
+        "pattern": "stars",
+        "color": "accent",
+        "alpha": 8,
+        "spacing": 14
+      }
+    },
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:heaven"
+  }
+}
