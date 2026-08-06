@@ -9,6 +9,7 @@ import net.zic.ascension.api.ascension.core.path.PathHolderProvider;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolderProvider;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolderProvider;
 import net.zic.ascension.api.ascension.core.skill.SkillHolderProvider;
+import net.zic.ascension.api.ascension.core.technique.TechniqueHolderProvider;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 
@@ -24,6 +25,10 @@ public class CoreHolderProviders {
     public static final DeferredHolder<DataSource,DataSource> BLOODLINE_HOLDER_PROVIDER = DATA_SOURCES.register(
             "bloodline_holder_provider",
             BloodlineHolderProvider::new
+    );
+    public static final DeferredHolder<DataSource,DataSource> TECHNIQUE_HOLDER_PROVIDER = DATA_SOURCES.register(
+            "technique_holder_provider",
+            TechniqueHolderProvider::new
     );
     public static final DeferredHolder<DataSource,DataSource> PATH_HOLDER_PROVIDER = DATA_SOURCES.register(
             "path_holder_provider",

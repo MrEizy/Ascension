@@ -22,11 +22,14 @@ import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillHolder;
+import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
+import net.zic.ascension.api.ascension.core.technique.TechniqueHolder;
 import net.zic.ascension.api.ascension.event.bloodline.BloodlineEvent;
 import net.zic.ascension.api.ascension.event.path.PathEvent;
 import net.zic.ascension.api.ascension.event.physique.PhysiqueChangedEvent;
 import net.zic.ascension.api.ascension.event.skill.SkillEvent;
+import net.zic.ascension.api.ascension.event.technique.TechniqueEvent;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
@@ -86,6 +89,9 @@ public class AscensionOriginSourceHelper {
     }
     protected static SkillHolder getSkillHolder(OriginSource source){
         return (SkillHolder) getOrCreate(source,CoreHolderProviders.SKILL_HOLDER_PROVIDER.getId());
+    }
+    protected static TechniqueHolder getTechniqueHolder(OriginSource source){
+        return (TechniqueHolder) getOrCreate(source,CoreHolderProviders.TECHNIQUE_HOLDER_PROVIDER.getId());
     }
     protected static PathBonusHolder getPathBonusHolder(OriginSource source){
         return (PathBonusHolder) getOrCreate(source,CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.getId());
@@ -478,19 +484,124 @@ public class AscensionOriginSourceHelper {
         getSkillHolder(source).markSkillDirty(skill);
         resolveProcess(source,"modified_skill"+id);
     }//should be used if you changed a skills skilLData
-    //TODO handle technique methods
 
-    public static boolean broadcastTechniqueAddedAttempt(OriginSource source,Identifier technique, TechniqueData data){
+    //──Technique Access────────────────────────────────────────────────────────
+
+    public static Collection<Identifier> getTechniques(OriginSource source) {
+        return getTechniqueHolder(source).getTechniques();
+    }
+
+    public static boolean hasTechnique(OriginSource source, Identifier technique) {
+        return getTechniqueHolder(source).hasTechnique(technique);
+    }
+
+    public static Technique getTechnique(OriginSource source, Identifier technique) {
+        return getTechniqueHolder(source).getTechnique(technique, source.getRegistryAccess());
+    }
+
+    public static TechniqueData getTechniqueData(OriginSource source, Identifier technique) {
+        return getTechniqueHolder(source).getTechniqueData(technique);
+    }
+
+    public static boolean addTechnique(OriginSource source, Identifier technique) {
+        if (technique == null) {
+            return false;
+        }
+        Technique techniqueInstance = CoreRegistries.safeAccess(
+                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
+        );
+        return techniqueInstance != null && addTechnique(source, technique, techniqueInstance.newData());
+    }
+
+    public static boolean addTechnique(OriginSource source, Identifier technique, TechniqueData data) {
+        if (technique == null || data == null || hasTechnique(source, technique)) {
+            return false;
+        }
+        Technique techniqueInstance = CoreRegistries.safeAccess(
+                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
+        );
+        if (techniqueInstance == null || !broadcastTechniqueAddedAttempt(source, technique, data)) {
+            return false;
+        }
+        if (!getTechniqueHolder(source).addTechnique(technique, data)) {
+            return false;
+        }
+
+        source.startProcess("add_technique");
+        techniqueInstance.onAdded(source, data);
+        broadcastTechniqueAdded(source, technique, data);
+        source.markDataSourceDirty(CoreHolderProviders.TECHNIQUE_HOLDER_PROVIDER.getId());
+        resolveProcess(source, "add_technique");
         return true;
     }
-    public static void broadcastTechniqueAdded(OriginSource source,Identifier technique, TechniqueData data){
 
-    }
-    public static boolean broadcastTechniqueRemovedAttempt(OriginSource source,Identifier technique, TechniqueData data){
+    public static boolean removeTechnique(OriginSource source, Identifier technique) {
+        if (technique == null || !hasTechnique(source, technique)) {
+            return false;
+        }
+        Technique techniqueInstance = CoreRegistries.safeAccess(
+                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
+        );
+        TechniqueData data = getTechniqueData(source, technique);
+        if (techniqueInstance == null || !broadcastTechniqueRemovedAttempt(source, technique, data)) {
+            return false;
+        }
+        if (!getTechniqueHolder(source).removeTechnique(technique)) {
+            return false;
+        }
+
+        source.startProcess("remove_technique");
+        techniqueInstance.onRemoved(source, data);
+        broadcastTechniqueRemoved(source, technique, data);
+        source.markDataSourceDirty(CoreHolderProviders.TECHNIQUE_HOLDER_PROVIDER.getId());
+        resolveProcess(source, "remove_technique");
         return true;
     }
-    public static void broadcastTechniqueRemoved(OriginSource source,Identifier technique, TechniqueData data){
 
+    public static void markTechniqueDirty(OriginSource source, Identifier technique) {
+        long id = random.nextLong();
+        source.startProcess("modified_technique" + id);
+        getTechniqueHolder(source).markTechniqueDirty(technique);
+        source.markDataSourceDirty(CoreHolderProviders.TECHNIQUE_HOLDER_PROVIDER.getId());
+        resolveProcess(source, "modified_technique" + id);
+    }
+
+
+    public static boolean broadcastTechniqueAddedAttempt(OriginSource source, Identifier technique, TechniqueData data) {
+        TechniqueEvent.Added.Pre pre = new TechniqueEvent.Added.Pre(technique, data, source);
+        NeoForge.EVENT_BUS.post(pre);
+        return !pre.isCanceled();
+    }
+
+
+    public static void broadcastTechniqueAdded(OriginSource source, Identifier technique, TechniqueData data) {
+        Technique techniqueInstance = CoreRegistries.safeAccess(
+                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
+        );
+        if (techniqueInstance != null) {
+            for (LivingEntity entity : source.getAttachedEntities()) {
+                techniqueInstance.applyToEntity(entity, data);
+            }
+        }
+        NeoForge.EVENT_BUS.post(new TechniqueEvent.Added.Post(technique, data, source));
+    }
+
+    public static boolean broadcastTechniqueRemovedAttempt(OriginSource source, Identifier technique, TechniqueData data) {
+        TechniqueEvent.Removed.Pre pre = new TechniqueEvent.Removed.Pre(technique, data, source);
+        NeoForge.EVENT_BUS.post(pre);
+        return !pre.isCanceled();
+    }
+
+    public static void broadcastTechniqueRemoved(OriginSource source, Identifier technique, TechniqueData data) {
+        Technique techniqueInstance = CoreRegistries.safeAccess(
+                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
+        );
+        if (techniqueInstance != null) {
+            for (LivingEntity entity : source.getAttachedEntities()) {
+                techniqueInstance.removeFromEntity(entity, data);
+            }
+        }
+        NeoForge.EVENT_BUS.post(new TechniqueEvent.Removed.Post(technique, data, source));
     }
     //──Path Bonus Access────────────────────────────────────────────────────────
 

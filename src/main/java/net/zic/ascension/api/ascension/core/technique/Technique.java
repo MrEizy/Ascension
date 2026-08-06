@@ -45,6 +45,13 @@ public interface Technique {
     void onRemoved(OriginSource source, TechniqueData data);
 
 
+    default void applyToEntity(LivingEntity entity, TechniqueData data) {
+    }
+
+    default void removeFromEntity(LivingEntity entity, TechniqueData data) {
+    }
+
+
 
     /**
      * a milestone realm is used when removing a technique,
