@@ -41,7 +41,7 @@ public final class CultivationUtil {
                 pathData.getCurrentTechnique(),
                 source.getRegistryAccess()
         );
-        if (technique == null) {
+        if (technique == null || !technique.allowsCultivationProgress()) {
             return;
         }
 

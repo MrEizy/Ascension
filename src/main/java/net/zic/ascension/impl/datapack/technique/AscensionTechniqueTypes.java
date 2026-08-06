@@ -14,6 +14,10 @@ public class AscensionTechniqueTypes {
             "simple_technique",
             SimpleTechniqueType::new
     );
+    public static final DeferredHolder<TechniqueType,TechniqueType> KILL_PROGRESSION_TECHNIQUE_TYPE = TECHNIQUE_TYPES.register(
+            "kill_progression_technique",
+            KillProgressionTechniqueType::new
+    );
 
     public static void register(IEventBus eventBus){
 

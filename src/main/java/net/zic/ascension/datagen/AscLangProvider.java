@@ -352,6 +352,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.celestial_constellation_circulation.desc", "A soul inheritance that maps the night sky within the spirit and expresses its constellations through celestial archery");
         add("ascension.technique.guardian_dharma_manual.name", "Guardian Dharma Manual");
         add("ascension.technique.guardian_dharma_manual.desc", "A guardian manual that orders soul, life, and fist into endurance and a projected Dharma");
+        add("ascension.technique.reapers_calling.name", "Reaper's Calling");
+        add("ascension.technique.reapers_calling.desc", "Walk beside death, understand the burdens of the fallen, and guide each departing soul toward the turning river of samsara");
 
         //Skills
         add("ascension.skill.plum_blossom_breathing.name", "Plum Blossom Breathing");
@@ -384,13 +386,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.golden_bell_of_living_law.desc", "Manifest a durable Golden Bell that absorbs incoming damage.");
         add("ascension.skill.guardian_dharma_idol.name", "Guardian Dharma Idol");
         add("ascension.skill.guardian_dharma_idol.desc", "Manifest a guardian Dharma.");
-
-
-
-
-
-        //Mob Cultivation
-        add("ascension.mob_cultivation.presence", "A powerful presence has appeared nearby");
+        add("ascension.skill.samsaras_witness.name", "Samsara's Witness");
+        add("ascension.skill.samsaras_witness.desc", "The burdens witnessed along the six roads settle into an clarity of soul and body");
 
 
     }

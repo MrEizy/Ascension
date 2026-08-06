@@ -1,0 +1,110 @@
+{
+  "type": "ascension:kill_progression_technique",
+  "name": {
+    "translate": "ascension.technique.reapers_calling.name"
+  },
+  "description": {
+    "translate": "ascension.technique.reapers_calling.desc"
+  },
+  "path": "ascension:foundation/soul",
+  "milestone_realms": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "technique_families": [
+    "death",
+    "reincarnation"
+  ],
+  "max_realm": 6,
+  "max_minor_realm": 2,
+  "base_progress": 25.0,
+  "max_health_multiplier": 5.0,
+  "player_multiplier": 5.0,
+  "realm_change_handler": [
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          2
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:passive/samsaras_witness"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 2.5
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.75
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "realm_overrides": {
+    "0": {
+      "name": "Hell's Entryway"
+    },
+    "1": {
+      "name": "Hungry Ghost Road"
+    },
+    "2": {
+      "name": "Beast Road"
+    },
+    "3": {
+      "name": "Human Road"
+    },
+    "4": {
+      "name": "Asura Road"
+    },
+    "5": {
+      "name": "Heavenly Road"
+    },
+    "6": {
+      "name": "Revolved Samsara"
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "theme_overrides": {
+      "colors": {
+        "accent": "#A68BD4FF",
+        "border_top": "#DED5F2FF",
+        "border_bottom": "#30223FFF",
+        "background": "#09070DEE"
+      },
+      "background_style": {
+        "pattern": "stars",
+        "color": "accent",
+        "alpha": 6,
+        "spacing": 15
+      }
+    },
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:heaven"
+  }
+}

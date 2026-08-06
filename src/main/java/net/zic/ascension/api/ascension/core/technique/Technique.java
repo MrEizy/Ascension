@@ -23,6 +23,13 @@ public interface Technique {
     Component getDescription(@Nullable TechniqueData techniqueData);
 
     Identifier getPath();
+
+    /**
+     * A toggle for techniques to opt out of cultivation from the cultivation util pretty much
+     */
+    default boolean allowsCultivationProgress() {
+        return true;
+    }
     /**
      * called when the technique is added to an origin source
      * @param source the origin source it is being added to

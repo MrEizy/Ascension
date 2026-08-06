@@ -1,0 +1,28 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.locust_bleeding_manual.name"
+  },
+  "description": {
+    "translate": "ascension.technique.locust_bleeding_manual.desc"
+  },
+  "path": "ascension:foundation/essence",
+  "milestone_realms": [
+    0,
+    1,
+    4
+  ],
+  "technique_families": [
+    "poison",
+    "staff"
+  ],
+  "max_realm": 5,
+  "realm_change_handler" : [
+
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:profound"
+  }
+}
