@@ -347,6 +347,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.mount_hua_sword_manual.desc", "A sword manual of Mount Hua that binds breath and sword as one, its gentle, falling-petal forms hiding a killing edge just a heartbeat behind");
         add("ascension.technique.sustained_spirit_art.name", "Sustained Spirit Art");
         add("ascension.technique.sustained_spirit_art.desc", "An ordinary soul art that draws cold spiritual energy inward, quieting needless bodily activity to preserve nourishment and endurance");
+        add("ascension.technique.imperial_seven_stances.name", "Seven Stance Imperial Army Art");
+        add("ascension.technique.imperial_seven_stances.desc", "Seven Stances Practiced by the mortal armies of the Yonmeng Empire");
 
         add("ascension.technique.celestial_constellation_circulation.name", "Celestial Constellation Circulation");
         add("ascension.technique.celestial_constellation_circulation.desc", "A soul inheritance that maps the night sky within the spirit and expresses its constellations through celestial archery");
@@ -354,6 +356,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.guardian_dharma_manual.desc", "A guardian manual that orders soul, life, and fist into endurance and a projected Dharma");
         add("ascension.technique.reapers_calling.name", "Reaper's Calling");
         add("ascension.technique.reapers_calling.desc", "Walk beside death, understand the burdens of the fallen, and guide each departing soul toward the turning river of samsara");
+        add("ascension.technique.locust_bleeding_manual.name", "Locust Bleeding Manual");
+        add("ascension.technique.locust_bleeding_manual.desc", "Bleed Locust Swarms");
 
         //Skills
         add("ascension.skill.plum_blossom_breathing.name", "Plum Blossom Breathing");
