@@ -386,5 +386,12 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.guardian_dharma_idol.desc", "Manifest a guardian Dharma.");
 
 
+
+
+
+        //Mob Cultivation
+        add("ascension.mob_cultivation.presence", "A powerful presence has appeared nearby");
+
+
     }
 }

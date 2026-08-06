@@ -117,10 +117,10 @@ public final class MobCultivationVisuals {
         MobCultivationData data = MobCultivationManager.getCultivationData(mob);
         if (!data.getEliteTier().isElite() || !(mob.level() instanceof ServerLevel level)) return;
         spawnAura(mob, data.getEliteTier() == MobCultivationEliteTier.ANCIENT ? 12 : 9);
-        Component message = Component.literal("A powerful presence has appeared nearby.");
+        Component message = Component.translatable("ascension.mob_cultivation.presence");
         double radius = data.getEliteTier() == MobCultivationEliteTier.ANCIENT ? 96.0D : 56.0D;
         for (ServerPlayer player : level.getPlayers(candidate -> candidate.distanceToSqr(mob) <= radius * radius)) {
-            player.sendSystemMessage(message);
+            player.sendOverlayMessage(message);
         }
     }
 

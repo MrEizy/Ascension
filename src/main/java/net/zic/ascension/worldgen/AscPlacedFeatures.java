@@ -14,13 +14,20 @@ import java.util.List;
 
 public class AscPlacedFeatures {
 
+
+    //Ores
     public static final ResourceKey<PlacedFeature> JADE_ORE_PLACED_KEY = registerKey("jade_ore");
     public static final ResourceKey<PlacedFeature> BLACK_IRON_ORE_PLACED_KEY = registerKey("black_iron_ore_placed");
     public static final ResourceKey<PlacedFeature> FROST_SILVER_ORE_PLACED_KEY = registerKey("frost_silver_ore_placed");
 
 
+    //Herbs
+    public static final ResourceKey<PlacedFeature> LINGZHI_MUSHROOM_PLACED_KEY = registerKey("lingzhi_mushroom_placed");
+
     public static void bootstrap(BootstrapContext<PlacedFeature> context) {
         var configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+
+        //Ores
 
         register(context, JADE_ORE_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.OVERWORLD_JADE_ORE_KEY),
@@ -43,6 +50,22 @@ public class AscPlacedFeatures {
                                 VerticalAnchor.absolute(-64),
                                 VerticalAnchor.absolute(0)
                         )));
+
+
+
+
+        //Herbs
+        register(context, LINGZHI_MUSHROOM_PLACED_KEY,
+                configuredFeatures.getOrThrow(AscConfiguredFeatures.LINGZHI_MUSHROOM),
+                List.of(
+                        CountPlacement.of(8),              // Only 2 scan-attempts per chunk
+                        InSquarePlacement.spread(),
+                        HeightRangePlacement.uniform(
+                                VerticalAnchor.absolute(58),
+                                VerticalAnchor.absolute(95)
+                        ),
+                        BiomeFilter.biome()
+                ));
     }
 
     public static List<PlacementModifier> commonOrePlacement(int count, PlacementModifier heightRange) {
