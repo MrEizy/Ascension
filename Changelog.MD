@@ -1,7 +1,10 @@
 **ZIC Team**
-# Ascension Version 1.0.0 Snapshot 26.2-0.2.0
 
-## Added
+# Ascension Changelog
+
+## Ascension Version 1.0.0 Snapshot 26.2-0.2.0
+
+### Added
 • Added 47 new Paths - Foundation Paths (3) Elemental Paths (29) Weapon Paths (15)  
 • Added 16 new Physiques  
 • Added 5 new bloodlines  
@@ -21,29 +24,22 @@
 • Added a Skill Leveling system framework
 • Added Skill Experience, Level Floors and Level Caps  
 • Added a registered Resource Transaction system  
-• Added a held cast system  
-• 
+• Added a held cast system
 
-## Removed
+### Removed
 • Vanilla Health overlay
-•
-•
 
-## Changes
+### Changes
 • Expanded Main Paths to 12 major realms.  
 • Elemental paths (Daos) have 9 major realms.  
 • Weapon paths (Daos) have 6 major realms.  
 • Functional GUI Port  
 • Updated cultivation rates so secondary Path affinities provide a smaller bonus instead of another full base cultivation rate  
 • Sprinting, swimming, climbing, crawling, jumping, attacking and elytra movement can now consume Stamina  
-• Stamina regeneration is slower while hungry and stops at zero hunger  
-•   
+• Stamina regeneration is slower while hungry and stops at zero hunger
 
+### Fixes
 
-## Fixes
-•
-•
+### Technical Changes
 
-## Technical Changes
-•
-• 
+---
