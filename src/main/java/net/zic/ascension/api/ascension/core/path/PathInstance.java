@@ -3,6 +3,7 @@ package net.zic.ascension.api.ascension.core.path;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
@@ -18,8 +19,10 @@ public interface PathInstance {
      * @param path the path used to progress this path(can be different from this path)
      * @param amount the amount we are progressing by
      * @param source the origin source this path is attached too
+     * @param entitySource the entity that caused the path to progress
      */
-    void progressPath(Identifier path, double amount, OriginSource source);
+    void progressPath(Identifier path, double amount, OriginSource source, LivingEntity entitySource);
+
     double getProgress();
     double getMaxProgress();
 

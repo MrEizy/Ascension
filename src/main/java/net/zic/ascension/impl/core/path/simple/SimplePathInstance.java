@@ -3,6 +3,7 @@ package net.zic.ascension.impl.core.path.simple;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
@@ -12,6 +13,7 @@ import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationManager;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.path.CompletedTribulation;
 import net.zic.ascension.impl.core.path.realms.BreakthroughBehaviour;
@@ -47,14 +49,16 @@ public class SimplePathInstance implements PathInstance {
     //but not for too long, as we keep track of every bit of progress they make, and if it breaches a certain point it auto trigger?
     //not sure tbh
     @Override
-    public void progressPath(Identifier path, double amount, OriginSource source) {
+    public void progressPath(Identifier path, double amount, OriginSource source,LivingEntity entitySource) {
+
         progress = Math.min(progress + amount, getMaxProgress());
+
         if (!canBreakthrough()) return;
 
         BreakthroughBehaviour behaviour = getCurrentRealm().definition().getBreakthroughBehaviour(getCurrentMinorRealm());
 
         if (behaviour == BreakthroughBehaviour.INSTANT) {
-            tryBreakthrough(source);
+            tryBreakthrough(source,entitySource);
         } else if (behaviour != BreakthroughBehaviour.NONE) {
             //TODO add timer
         }
@@ -131,11 +135,38 @@ public class SimplePathInstance implements PathInstance {
     public void setCompletedTribulation(OriginSource source, int majorRealm, int minorRealm, TribulationDefinition definition, TribulationData data) {
         //TODO
     }
+    public void continueTribulation(UUID tribulationUUID, OriginSource source){
+        if(TribulationManager.getInstance().hasTribulation(tribulationUUID)) return;
+        TribulationDefinition definition = TribulationManager.getInstance().getTribulation(tribulationUUID);
+        Realm realm = new Realm(getCurrentMajorRealm(),getCurrentMinorRealm());
 
 
+        TribulationDefinition expected = path.getTribulation(getCurrentMajorRealm(),getCurrentMinorRealm(),source.getRegistryAccess());
+        if(!definition.equals(expected)){
+            TribulationManager.getInstance().finishTribulation(tribulationUUID);
+            return;
+        }
+
+
+        this.activeTribulationId = tribulationUUID;
+    }
+    public void startTribulation(OriginSource source, TribulationDefinition definition, LivingEntity target){
+        if(activeTribulationId != null) return;
+        activeTribulationId = TribulationManager.getInstance().triggerTribulation(definition,target);
+        TribulationManager.getInstance().setTribulationConsumer(activeTribulationId,(finishedDefinition,data)->{
+            SimplePathInstance pathInstance = this;
+
+            pathInstance.setCompletedTribulation(source,pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm(),finishedDefinition,data);
+
+            pathInstance.handleRealmChange(Realm.of(pathInstance.getCurrentMajorRealm()+1,0),source);
+            pathInstance.progress = 0;
+
+        });
+    }
 
 
     public void completeTribulationForRealm(Realm realm,OriginSource source){
+        if(realm.majorRealm() < 0) return;
         CompletedTribulation completedTribulation = completedTribulations.get(realm);
         TribulationDefinition definition = path.getTribulation(realm.majorRealm(),realm.minorRealm(),source.getRegistryAccess());
         if(completedTribulation == null && definition == null) return;
@@ -158,19 +189,22 @@ public class SimplePathInstance implements PathInstance {
     }
     public void removeTribulationForRealm(Realm realm,OriginSource source){
         CompletedTribulation completedTribulation = completedTribulations.remove(realm);
+        if(completedTribulation == null) return;
         completedTribulation.definition().getType().onRemoved(source,completedTribulation.definition(),completedTribulation.data());
     }
 
 
     //──Realm Change Logic────────────────────────────────────────────────────────
 
-    public void tryBreakthrough(OriginSource source){
+    public void tryBreakthrough(OriginSource source,LivingEntity entitySource){
         MinorRealmDefinition definition = getCurrentRealm().definition().realmDefinition(getCurrentMinorRealm());
 
         if(definition.getTribulation() == null){
-            handleRealmChange(Realm.of(getCurrentMajorRealm()+1,0),source);
+            if(getCurrentRealm().isLimitBroken()){
+                handleRealmChange(Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()+1),source);
+            }else  handleRealmChange(Realm.getNext(Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()),path),source);
         }else{
-            //TODO start tribulation
+            startTribulation(source,path.getTribulation(getCurrentMajorRealm(),getCurrentMinorRealm(),source.getRegistryAccess()),entitySource);
         }
     }
 
@@ -194,7 +228,8 @@ public class SimplePathInstance implements PathInstance {
 
     @Override
     public void handleRealmChange(Realm newRealm, OriginSource source) {
-        Realm oldRealm = Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm());
+        boolean fromStart = getCurrentMajorRealm() < 0;
+        Realm oldRealm = fromStart ? Realm.of(0,0) :  Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm());
         List<Realm> traversedRealms = Realm.getRange(oldRealm,newRealm,path);
 
         if(oldRealm.equals(newRealm)) return;
@@ -205,7 +240,7 @@ public class SimplePathInstance implements PathInstance {
         }
 
         //we do not traverse the start realm
-        traversedRealms.removeFirst();
+        if(!fromStart) traversedRealms.removeFirst();
         while(!traversedRealms.isEmpty()){
             Realm realm = traversedRealms.removeFirst();
             Realm previousRealm = Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm());
@@ -279,6 +314,7 @@ public class SimplePathInstance implements PathInstance {
 
     @Override
     public void removeFromSource(OriginSource source) {
+        if(getCurrentMajorRealm() < 0) return;
         //create a deep cached copy, this way we can properly maintain limit broken info
         for(MajorRealm realm : realms){
             cachedRealms.add(MajorRealm.of(realm));

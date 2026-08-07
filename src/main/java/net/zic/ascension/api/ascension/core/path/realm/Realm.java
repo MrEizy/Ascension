@@ -43,7 +43,11 @@ public record Realm(int majorRealm, int minorRealm) implements Comparable<Realm>
 
         return result;
     }
-
+    public static Realm getNext(Realm realm,Path path){
+         return realm.minorRealm == path.getMaxMinorRealm(realm.majorRealm()) ?
+                 Realm.of(realm.majorRealm+1,0):
+                 Realm.of(realm.majorRealm(), realm.minorRealm()+1);
+    }
     @Override
     public int compareTo(@NonNull Realm other) {
         if(this.equals(other)) return 0;

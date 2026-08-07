@@ -34,10 +34,10 @@ public class CultivationUtil {
 
         double cultivationAmount = baseRate*(1+PathEffectValueUtil.getEffectiveAffinity(caster,path));
 
-        cultivationAmount += baseRate*(1+PathEffectValueUtil.getEffectiveAffinity(caster,secondaryPath));
+        if(!path.equals(secondaryPath) && secondaryPath != null)cultivationAmount += baseRate*(1+PathEffectValueUtil.getEffectiveAffinity(caster,secondaryPath));
 
 
-        pathInstance.progressPath(secondaryPath,cultivationAmount,source);
+        pathInstance.progressPath(secondaryPath,cultivationAmount,source,caster);
 
         AscensionOriginSourceHelper.markPathDirty(source,path);
     }

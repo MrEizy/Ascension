@@ -12,6 +12,7 @@ import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.impl.core.path.realms.MajorRealmDefinition;
+import net.zic.ascension.impl.datapack.path.AscensionPathTypes;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class SimplePath implements Path {
     }
     @Override
     public PathType getType() {
-        return null; //TODO
+        return AscensionPathTypes.SIMPLE_PATH_TYPE.get();
     }
 
     @Override
@@ -76,7 +77,8 @@ public class SimplePath implements Path {
 
     @Override
     public MajorRealmDefinition getRealmDefinition(int majorRealm) {
-        return realmDefinitions.get(majorRealm);
+
+        return realmDefinitions.isEmpty() ? null : realmDefinitions.get(majorRealm);
     }
 
     @Override

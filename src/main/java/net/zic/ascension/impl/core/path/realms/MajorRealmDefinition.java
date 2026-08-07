@@ -35,7 +35,7 @@ public record MajorRealmDefinition(
     }
     @Override
     public double getMaxProgress(int realm) {
-        return 0;
+        return realmDefinition(realm).getMaxProgression();
     }
 
     @Override

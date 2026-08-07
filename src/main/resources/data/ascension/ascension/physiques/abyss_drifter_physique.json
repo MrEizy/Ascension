@@ -12,7 +12,9 @@
     "ascension:elemental/dark",
     "ascension:elemental/yin"
   ],
-  "skills": [],
+  "skills": [
+    "ascension:castable/cultivation/true_breath"
+  ],
   "item_tooltip": {
     "theme": "ascension:physique_essence",
     "template": "ascension:default_physique_essence",

@@ -222,7 +222,7 @@ public final class MobCultivationManager {
 
         double maximumProgress = pathInstance.getMaxProgress();
         double clampedPercentage = Math.clamp(progressPercentage, 0.0D, 100.0D);
-        pathInstance.progressPath(pathId,maximumProgress * clampedPercentage / 100.0D,source);
+        pathInstance.progressPath(pathId,maximumProgress * clampedPercentage / 100.0D,source,mob);
         capturePathState(data, pathInstance);
         AscensionOriginSourceHelper.markPathDirty(source,pathId);
 
@@ -517,7 +517,7 @@ public final class MobCultivationManager {
         );
         pathInstance.handleRealmChange(Realm.of(majorRealm,minorRealm),source);
         double maximumProgress = pathInstance.getMaxProgress();
-        pathInstance.progressPath(pathId,Math.clamp(data.getProgress(), 0.0D, Math.max(0.0D, maximumProgress)),source);
+        pathInstance.progressPath(pathId,Math.clamp(data.getProgress(), 0.0D, Math.max(0.0D, maximumProgress)),source,mob);
         capturePathState(data, pathInstance);
         AscensionOriginSourceHelper.markPathDirty(source,pathId);
 

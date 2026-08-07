@@ -169,7 +169,7 @@ public class CultivationCommand {
 
             if(progressPercent > 0){
                 progressPercent = Math.clamp(progressPercent,0,100);
-                data.progressPath(pathId,data.getMaxProgress()*progressPercent/100.0,originSource);
+                data.progressPath(pathId,data.getMaxProgress()*progressPercent/100.0,originSource,player);
             }
             AscensionOriginSourceHelper.markPathDirty(originSource,pathId);
 
