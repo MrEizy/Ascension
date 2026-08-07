@@ -1,7 +1,7 @@
 {
   "type": "ascension:held_cast",
-  "name": "Calibration Channel",
-  "description": "A long channel used to verify that guard break interrupts held casts.",
+  "name": "Channel",
+  "description": "A long channel",
   "cast": {
     "minimum_charge": 20,
     "maximum_charge": 200,

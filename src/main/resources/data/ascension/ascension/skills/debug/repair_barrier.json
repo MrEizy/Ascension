@@ -1,7 +1,7 @@
 {
   "type": "ascension:active_skill",
   "name": "Repair Barrier",
-  "description": "Repairs 10 durability on the caster's calibration barrier.",
+  "description": "Repairs 10 durability on the caster's barrier.",
   "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:self"

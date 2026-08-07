@@ -1,7 +1,7 @@
 {
   "type": "ascension:active_skill",
   "name": "Return Step",
-  "description": "Returns the caster to the stored calibration anchor.",
+  "description": "Returns the caster to the stored anchor.",
   "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:self"

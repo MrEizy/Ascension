@@ -30,7 +30,7 @@
       "type": "ascension:projectiles",
       "profiles": [
         {
-          "required_skill": "ascension:passive/orions_celestial_draw",
+          "required_skill": "ascension:passive/celestial_constellation_circulation/orions_celestial_draw",
           "projectile_tag": "ascension:ranged_projectiles",
           "damage_multiplier": {
             "base": 1.0,
@@ -63,7 +63,7 @@
               {
                 "source": {
                   "type": "ascension:skill_effect",
-                  "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+                  "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
                   "owner_scoped": true,
                   "metric": "stacks",
                   "aggregation": "sum"
@@ -97,7 +97,7 @@
               {
                 "source": {
                   "type": "ascension:skill_effect",
-                  "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+                  "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
                   "owner_scoped": true,
                   "metric": "stacks",
                   "aggregation": "sum"
@@ -120,7 +120,7 @@
           "technique": "ascension:3_heaven/celestial_constellation_circulation",
           "full_charge_speed": 3.0,
           "steering": {
-            "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+            "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
             "source_skill": "ascension:castable/hound_star_pursuit",
             "range": {
               "base": 24.0,
@@ -188,7 +188,7 @@
                 {
                   "source": {
                     "type": "ascension:skill_effect",
-                    "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
                     "owner_scoped": true,
                     "metric": "stacks",
                     "aggregation": "sum"

@@ -50,7 +50,7 @@
         {
           "type": "ascension:give_skills",
           "skills": [
-            "ascension:passive/orions_celestial_draw"
+            "ascension:passive/celestial_constellation_circulation/orions_celestial_draw"
           ]
         }
       ]
@@ -66,12 +66,12 @@
         {
           "type": "ascension:give_skills",
           "skills": [
-            "ascension:castable/hound_star_pursuit"
+            "ascension:castable/celestial_constellation_circulation/hound_star_pursuit"
           ]
         },
         {
           "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/hound_star_pursuit",
+          "skill": "ascension:castable/celestial_constellation_circulation/hound_star_pursuit",
           "contribution": "ascension:celestial_constellation/realm_2",
           "level": 1,
           "set_floor": true,
@@ -90,12 +90,12 @@
         {
           "type": "ascension:give_skills",
           "skills": [
-            "ascension:castable/aquila_crossing"
+            "ascension:castable/celestial_constellation_circulation/aquila_crossing"
           ]
         },
         {
           "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/aquila_crossing",
+          "skill": "ascension:castable/celestial_constellation_circulation/aquila_crossing",
           "contribution": "ascension:celestial_constellation/realm_3",
           "level": 1,
           "set_floor": true,
@@ -114,12 +114,12 @@
         {
           "type": "ascension:give_skills",
           "skills": [
-            "ascension:castable/scorpius_star_nail_formation"
+            "ascension:castable/celestial_constellation_circulation/scorpius_star_nail_formation"
           ]
         },
         {
           "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/scorpius_star_nail_formation",
+          "skill": "ascension:castable/celestial_constellation_circulation/scorpius_star_nail_formation",
           "contribution": "ascension:celestial_constellation/realm_4",
           "level": 1,
           "set_floor": true,
@@ -127,7 +127,7 @@
         },
         {
           "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/hound_star_pursuit",
+          "skill": "ascension:castable/celestial_constellation_circulation/hound_star_pursuit",
           "contribution": "ascension:celestial_constellation/realm_4_hound",
           "level": 2,
           "set_floor": true,
@@ -146,7 +146,7 @@
         {
           "type": "ascension:give_skills",
           "skills": [
-            "ascension:castable/sagittarius_heaven_piercing_arc"
+            "ascension:castable/celestial_constellation_circulation/sagittarius_heaven_piercing_arc"
           ]
         }
       ]
@@ -162,12 +162,12 @@
         {
           "type": "ascension:give_skills",
           "skills": [
-            "ascension:castable/sevenfold_celestial_hunt"
+            "ascension:castable/celestial_constellation_circulation/sevenfold_celestial_hunt"
           ]
         },
         {
           "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/sevenfold_celestial_hunt",
+          "skill": "ascension:castable/celestial_constellation_circulation/sevenfold_celestial_hunt",
           "contribution": "ascension:celestial_constellation/realm_6",
           "level": 1,
           "set_floor": true,
@@ -175,7 +175,7 @@
         },
         {
           "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/aquila_crossing",
+          "skill": "ascension:castable/celestial_constellation_circulation/aquila_crossing",
           "contribution": "ascension:celestial_constellation/realm_6_aquila",
           "level": 2,
           "set_floor": true,
@@ -183,7 +183,7 @@
         },
         {
           "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/scorpius_star_nail_formation",
+          "skill": "ascension:castable/celestial_constellation_circulation/scorpius_star_nail_formation",
           "contribution": "ascension:celestial_constellation/realm_6_scorpius",
           "level": 2,
           "set_floor": true,

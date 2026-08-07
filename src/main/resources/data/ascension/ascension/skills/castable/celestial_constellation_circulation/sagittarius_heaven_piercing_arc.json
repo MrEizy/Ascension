@@ -228,7 +228,7 @@
                 {
                   "source": {
                     "type": "ascension:skill_effect",
-                    "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
                     "owner_scoped": true,
                     "metric": "stacks",
                     "aggregation": "sum"

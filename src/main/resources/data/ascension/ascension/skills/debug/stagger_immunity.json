@@ -1,7 +1,7 @@
 {
   "type": "ascension:active_skill",
   "name": "Stagger Immunity",
-  "description": "Clears current stagger and grants five seconds of stagger immunity for resistance testing.",
+  "description": "Clears current stagger and grants five seconds of stagger immunity ",
   "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:self"

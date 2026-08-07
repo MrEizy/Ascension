@@ -86,7 +86,7 @@
                 {
                   "source": {
                     "type": "ascension:skill_effect",
-                    "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
                     "owner_scoped": true,
                     "metric": "stacks",
                     "aggregation": "sum"
@@ -140,7 +140,7 @@
               "minimum": 2.0,
               "maximum": 32.0
             },
-            "definition": "ascension:skill/castable/scorpius_star_nail_formation/stagger/formation_pressure"
+            "definition": "ascension:skill/castable/celestial_constellation_circulation/scorpius_star_nail_formation/stagger/formation_pressure"
           },
           {
             "type": "ascension:effect",
@@ -150,7 +150,7 @@
             "potency": {
               "base": 1.5
             },
-            "definition": "ascension:skill/castable/scorpius_star_nail_formation/effect/star_nail_drag"
+            "definition": "ascension:skill/castable/celestial_constellation_circulation/scorpius_star_nail_formation/effect/star_nail_drag"
           },
           {
             "type": "ascension:particles",
@@ -207,7 +207,7 @@
                 {
                   "source": {
                     "type": "ascension:skill_effect",
-                    "effect": "ascension:skill/castable/hound_star_pursuit/effect/hound_star_mark",
+                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
                     "owner_scoped": true,
                     "metric": "stacks",
                     "aggregation": "sum"
@@ -254,7 +254,7 @@
               "minimum": 20.0,
               "maximum": 90.0
             },
-            "definition": "ascension:skill/castable/sagittarius_heaven_piercing_arc/stagger/heaven_piercing"
+            "definition": "ascension:skill/castable/celestial_constellation_circulation/sagittarius_heaven_piercing_arc/stagger/heaven_piercing"
           },
           {
             "type": "ascension:visual",
