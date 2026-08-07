@@ -348,7 +348,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.sustained_spirit_art.name", "Sustained Spirit Art");
         add("ascension.technique.sustained_spirit_art.desc", "An ordinary soul art that draws cold spiritual energy inward, quieting needless bodily activity to preserve nourishment and endurance");
         add("ascension.technique.imperial_seven_stances.name", "Seven Stance Imperial Army Art");
-        add("ascension.technique.imperial_seven_stances.desc", "Seven Stances Practiced by the mortal armies of the Yonmeng Empire");
+        add("ascension.technique.imperial_seven_stances.desc", "Seven practical sword stances drilled into the mortal armies of the Yonmeng Empire; modest alone, dependable in formation.");
 
         add("ascension.technique.celestial_constellation_circulation.name", "Celestial Constellation Circulation");
         add("ascension.technique.celestial_constellation_circulation.desc", "A soul inheritance that maps the night sky within the spirit and expresses its constellations through celestial archery");
@@ -357,7 +357,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.reapers_calling.name", "Reaper's Calling");
         add("ascension.technique.reapers_calling.desc", "Walk beside death, understand the burdens of the fallen, and guide each departing soul toward the turning river of samsara");
         add("ascension.technique.locust_bleeding_manual.name", "Locust Bleeding Manual");
-        add("ascension.technique.locust_bleeding_manual.desc", "Bleed Locust Swarms");
+        add("ascension.technique.locust_bleeding_manual.desc", "A cruel essence manual that nests blood-feeding locust qi inside a victim and lets the weakening swarm seek nearby flesh.");
         add("ascension.technique.nine_revolutions_slaughter_wheel.name", "Nine Revolutions Slaughter Wheel Technique");
         add("ascension.technique.nine_revolutions_slaughter_wheel.desc", "Carve nine interlocking revolutions into the essence sea, condensing a slaughter wheel that grows with each cycle.");
         add("ascension.technique.slaughter_wheel_battle_manual.name", "Slaughter Wheel Battle Manual");
@@ -373,6 +373,22 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.sustained_spirit.desc", "Cold spiritual stillness suppresses wasteful movement, reducing exhaustion and stamina spent through travel");
         add("ascension.skill.frostbound_stillness.name", "Frostbound Stillness");
         add("ascension.skill.frostbound_stillness.desc", "Gather cold spiritual stillness before releasing it across nearby creatures, building frost and imposing Frozen Form.");
+        add("ascension.skill.imperial_first_stance.name", "First Stance: Measured Draw");
+        add("ascension.skill.imperial_first_stance.desc", "A disciplined opening cut taught to every recruit; quick, cheap, and deliberately unremarkable.");
+        add("ascension.skill.imperial_second_stance.name", "Second Stance: Guarded Advance");
+        add("ascension.skill.imperial_second_stance.desc", "Advance behind the blade before releasing a short, cautious cut.");
+        add("ascension.skill.imperial_third_stance.name", "Third Stance: Banner Sweep");
+        add("ascension.skill.imperial_third_stance.desc", "A broad waist-high sweep intended to clear space around a marching standard.");
+        add("ascension.skill.imperial_fourth_stance.name", "Fourth Stance: Spearhead Thrust");
+        add("ascension.skill.imperial_fourth_stance.desc", "Compress the sword line into a narrow thrust patterned after an infantry spearhead.");
+        add("ascension.skill.imperial_fifth_stance.name", "Fifth Stance: Formation Guard");
+        add("ascension.skill.imperial_fifth_stance.desc", "Brace for a moment and form a thin defensive screen barely strong enough to blunt a clean hit.");
+        add("ascension.skill.imperial_sixth_stance.name", "Sixth Stance: Encircling Cut");
+        add("ascension.skill.imperial_sixth_stance.desc", "Turn through a compact circular cut designed for enemies pressing from several sides.");
+        add("ascension.skill.imperial_seventh_stance.name", "Seventh Stance: Imperial Execution");
+        add("ascension.skill.imperial_seventh_stance.desc", "Commit to the art's strongest finishing thrust, formidable only by ordinary mortal standards.");
+        add("ascension.skill.bleeding_locust_swarm.name", "Bleeding Locust Swarm");
+        add("ascension.skill.bleeding_locust_swarm.desc", "Seed a victim with short-lived locust qi that deals light damage and rarely leaps to nearby creatures.");
         add("ascension.skill.celestial_constellation_circulation.name", "Draco's Coiling Star Circulation");
         add("ascension.skill.celestial_constellation_circulation.desc", "Circulate Soul through Star and Bow, drawing seven points of the inner night sky into a single spiritual map");
         add("ascension.skill.orions_celestial_draw.name", "Orion's Celestial Draw");

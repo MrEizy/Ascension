@@ -17,6 +17,14 @@ public final class AscensionSkillEffectModuleTypes {
 
     public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> FROZEN_FORM =
             TYPES.add("frozen_form", SkillEffectModules.FrozenForm.CODEC);
+    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> MOVEMENT_RESTRICTION =
+            TYPES.add("movement_restriction", SkillEffectModules.MovementRestriction.CODEC);
+    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> PERIODIC_DAMAGE =
+            TYPES.add("periodic_damage", SkillEffectModules.PeriodicDamage.CODEC);
+    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> SPREAD =
+            TYPES.add("spread", SkillEffectModules.Spread.CODEC);
+    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> PARTICLE_AURA =
+            TYPES.add("particle_aura", SkillEffectModules.ParticleAura.CODEC);
     public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> RESOURCE_MODIFIER =
             TYPES.add("resource_modifier", SkillEffectModules.ResourceModifierModule.CODEC);
 

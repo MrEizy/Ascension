@@ -1,0 +1,271 @@
+{
+  "type": "ascension:active_skill",
+  "name": {
+    "translate": "ascension.skill.bleeding_locust_swarm.name"
+  },
+  "description": {
+    "translate": "ascension.skill.bleeding_locust_swarm.desc"
+  },
+  "default_accessible_level": 1,
+  "definitions": {
+    "effects": {
+      "swarm": {
+        "stacking": "stronger_replaces",
+        "stacking_scope": "definition",
+        "max_stacks": 1,
+        "modules": [
+          {
+            "type": "ascension:periodic_damage",
+            "amount": {
+              "base": 0.3,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:effect_potency"
+                  },
+                  "operation": "add",
+                  "scale": 0.25
+                },
+                {
+                  "source": {
+                    "type": "ascension:stat",
+                    "stat": "ascension:spirit"
+                  },
+                  "operation": "add",
+                  "scale": 0.008
+                }
+              ],
+              "minimum": 0.25,
+              "maximum": 1.75
+            },
+            "interval": 20,
+            "damage_type": "minecraft:magic",
+            "classifications": [
+              "ascension:skill",
+              "ascension:damage_over_time",
+              "ascension:bleeding",
+              "ascension:poison",
+              "ascension:swarm",
+              "ascension:essence"
+            ],
+            "path": "ascension:foundation/essence",
+            "technique": "ascension:2_profound/locust_bleeding_manual"
+          },
+          {
+            "type": "ascension:spread",
+            "radius": {
+              "base": 3.25,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:context",
+                    "key": "ascension:effect_potency"
+                  },
+                  "operation": "add",
+                  "scale": 0.35
+                }
+              ],
+              "minimum": 3.0,
+              "maximum": 4.0
+            },
+            "chance": 0.02,
+            "interval": 10,
+            "maximum_targets": 1,
+            "minimum_remaining_duration": 30,
+            "duration_multiplier": 0.55,
+            "potency_multiplier": 0.8,
+            "only_if_absent": true
+          },
+          {
+            "type": "ascension:particle_aura",
+            "particle": "minecraft:spore_blossom_air",
+            "count": 2,
+            "spread": 0.42,
+            "speed": 0.01,
+            "interval": 5
+          }
+        ]
+      }
+    }
+  },
+  "targeting": {
+    "type": "ascension:ray",
+    "range": {
+      "base": 14.0
+    },
+    "width": {
+      "base": 0.5
+    },
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "levels": [
+    {
+      "features": [
+        {
+          "type": "ascension:effect",
+          "duration": {
+            "base": 80
+          },
+          "potency": {
+            "base": 1.0
+          },
+          "definition": "#swarm",
+          "subject": "target"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:spore_blossom_air",
+          "count": {
+            "base": 18
+          },
+          "spread": {
+            "base": 0.55
+          },
+          "speed": {
+            "base": 0.025
+          },
+          "subject": "target"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:entity.silverfish.ambient",
+          "volume": {
+            "base": 0.7
+          },
+          "pitch": {
+            "base": 0.75
+          },
+          "subject": "target"
+        }
+      ],
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 5.0
+          },
+          "operation": "ascension:consume"
+        }
+      ],
+      "cooldown": {
+        "base": 100
+      }
+    },
+    {
+      "features": [
+        {
+          "type": "ascension:effect",
+          "duration": {
+            "base": 95
+          },
+          "potency": {
+            "base": 1.2
+          },
+          "definition": "#swarm",
+          "subject": "target"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:spore_blossom_air",
+          "count": {
+            "base": 22
+          },
+          "spread": {
+            "base": 0.65
+          },
+          "speed": {
+            "base": 0.03
+          },
+          "subject": "target"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:entity.silverfish.ambient",
+          "volume": {
+            "base": 0.75
+          },
+          "pitch": {
+            "base": 0.68
+          },
+          "subject": "target"
+        }
+      ],
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 6.5
+          },
+          "operation": "ascension:consume"
+        }
+      ],
+      "cooldown": {
+        "base": 90
+      }
+    },
+    {
+      "features": [
+        {
+          "type": "ascension:effect",
+          "duration": {
+            "base": 110
+          },
+          "potency": {
+            "base": 1.4
+          },
+          "definition": "#swarm",
+          "subject": "target"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:spore_blossom_air",
+          "count": {
+            "base": 26
+          },
+          "spread": {
+            "base": 0.75
+          },
+          "speed": {
+            "base": 0.035
+          },
+          "subject": "target"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:entity.silverfish.ambient",
+          "volume": {
+            "base": 0.8
+          },
+          "pitch": {
+            "base": 0.62
+          },
+          "subject": "target"
+        }
+      ],
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 8.0
+          },
+          "operation": "ascension:consume"
+        }
+      ],
+      "cooldown": {
+        "base": 80
+      }
+    }
+  ]
+}
