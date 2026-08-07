@@ -12,6 +12,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.zic.ascension.AscensionCraft;
 
@@ -48,51 +49,72 @@ public class TribulationManager extends SavedData {
 
 
     }
-    @SubscribeEvent
-    public static void onLeaveLevel(EntityLeaveLevelEvent event){
-        if(!getInstance().entityTribulations.containsKey(event.getEntity().getUUID())) return;
 
-        for(UUID tribulationId : getInstance().entityTribulations.get(event.getEntity().getUUID())){
-            getInstance().tribulations.get(tribulationId).setEntityReference(null);
+    @SubscribeEvent
+    public static void onLeaveLevel(EntityLeaveLevelEvent event) {
+        if (event.getLevel().isClientSide()) {
+            return;
+        }
+        TribulationManager manager = getInstance();
+        if (manager == null) {
+            return;
+        }
+        UUID entityId = event.getEntity().getUUID();
+        HashSet<UUID> entityTribulations = manager.entityTribulations.get(entityId);
+        if (entityTribulations == null) {
+            return;
+        }
+        for (UUID tribulationId : entityTribulations) {
+            TribulationInstance instance = manager.tribulations.get(tribulationId);
+            if (instance != null) {
+                instance.setEntityReference(null);
+            }
         }
     }
-    @SubscribeEvent
-    public static void onJoinLevel(EntityJoinLevelEvent event){
-        if(!(event.getEntity() instanceof LivingEntity entity)) return;
-        if(getInstance() == null) return;//very rare, if this occurs try relog
-        if(!getInstance().entityTribulations.containsKey(entity.getUUID())) return;
 
-        for(UUID tribulationId : getInstance().entityTribulations.get(entity.getUUID())){
-            getInstance().tribulations.get(tribulationId).setEntityReference(entity);
+    @SubscribeEvent
+    public static void onJoinLevel(EntityJoinLevelEvent event) {
+        if (event.getLevel().isClientSide() || !(event.getEntity() instanceof LivingEntity entity)) {
+            return;
+        }
+        TribulationManager manager = getInstance();
+        if (manager == null) {
+            return;
+        }
+        HashSet<UUID> entityTribulations = manager.entityTribulations.get(entity.getUUID());
+        if (entityTribulations == null) {
+            return;
+        }
+        for (UUID tribulationId : entityTribulations) {
+            TribulationInstance instance = manager.tribulations.get(tribulationId);
+            if (instance != null) {
+                instance.setEntityReference(entity);
+            }
         }
     }
+
     @SubscribeEvent
-    public static void onServerTick(ServerTickEvent.Pre  event){
-        for (UUID tribulationId : getInstance().tribulations.keySet()) {
-            getInstance().tribulations.get(tribulationId).getTribulation().getType().tick(
-                    getInstance(),
-                    tribulationId,
-                    getInstance().tribulations.get(tribulationId)
-            );
+    public static void onEntityDeath(LivingDeathEvent event) {
+        if (event.getEntity().level().isClientSide()) {
+            return;
         }
-
-        getInstance().resolveFinishedTribulations();
-    }
-    @SubscribeEvent
-    public static void onEntityDeath(LivingDeathEvent event){
-        if(!getInstance().entityTribulations.containsKey(event.getEntity().getUUID())) return;
-
-        HashSet<UUID> tribulations = getInstance().entityTribulations.remove(event.getEntity().getUUID());
-
-        for(UUID tribulationId : tribulations) {
-            getInstance().tribulations.get(tribulationId).getTribulation().getType().
-                    onTargetDeath(
-                            getInstance(),
-                            tribulationId,
-                            getInstance().tribulations.get(tribulationId)
-                    );
-            getInstance().tribulations.remove(tribulationId);
+        TribulationManager manager = getInstance();
+        if (manager == null) {
+            return;
         }
+        HashSet<UUID> entityTribulations = manager.entityTribulations.remove(event.getEntity().getUUID());
+        if (entityTribulations == null) {
+            return;
+        }
+        for (UUID tribulationId : entityTribulations) {
+            TribulationInstance instance = manager.tribulations.get(tribulationId);
+            if (instance == null) {
+                continue;
+            }
+            instance.getTribulation().getType().onTargetDeath(manager, tribulationId, instance);
+            manager.tribulations.remove(tribulationId);
+        }
+        manager.setDirty();
     }
 
     private final HashMap<UUID,TribulationInstance> tribulations = new HashMap<>();
@@ -165,5 +187,10 @@ public class TribulationManager extends SavedData {
     public void setTribulationConsumer(UUID tribulation, BiConsumer<TribulationDefinition,TribulationData> consumer){
         if(!hasTribulation(tribulation)) return;
         getTribulations().get(tribulation).setFinalizationConsumer(consumer);
+    }
+
+    @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        instance = null;
     }
 }

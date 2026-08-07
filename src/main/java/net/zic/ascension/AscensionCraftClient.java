@@ -13,12 +13,9 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import net.zic.ascension.client.keybind.IntrospectionKeybindHandler;
+import net.zic.ascension.client.keybind.*;
 import net.zic.ascension.client.particle.ParticleFieldController;
 import net.zic.ascension.client.particle.ParticleFieldParticle;
-import net.zic.ascension.client.keybind.ModKeybinds;
-import net.zic.ascension.client.keybind.TabletKeybindHandler;
-import net.zic.ascension.client.keybind.TabletScrollHandler;
 import net.zic.ascension.client.gui.AscensionHudOverlay;
 import net.zic.ascension.client.gui.SkillWheelOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
@@ -43,7 +40,7 @@ public class AscensionCraftClient {
     public AscensionCraftClient(IEventBus modEventBus, ModContainer modContainer)
     {
 
-
+        ClientSkillCastKeybind.register();
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         modEventBus.addListener(AscensionCraftClient::registerKeyBindings);
         modEventBus.addListener(ClientEvents::onClientSetup);
