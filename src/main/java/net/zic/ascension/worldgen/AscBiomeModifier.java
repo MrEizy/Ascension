@@ -23,6 +23,7 @@ public class AscBiomeModifier {
 
     //Herbs
     public static final ResourceKey<BiomeModifier> ADD_LINGZHI_MUSHROOM = registerKey("add_lingzhi_mushroom");
+    public static final ResourceKey<BiomeModifier> ADD_BLOOD_LINGZHI_MUSHROOM = registerKey("add_blood_lingzhi_mushroom");
 
 
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
@@ -51,6 +52,11 @@ public class AscBiomeModifier {
         context.register(ADD_LINGZHI_MUSHROOM, new BiomeModifiers.AddFeaturesBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_FOREST),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.LINGZHI_MUSHROOM_PLACED_KEY)),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
+
+        context.register(ADD_BLOOD_LINGZHI_MUSHROOM, new BiomeModifiers.AddFeaturesBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(Biomes.SOUL_SAND_VALLEY)),
+                HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.BLOOD_LINGZHI_MUSHROOM_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
 

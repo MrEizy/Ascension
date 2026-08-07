@@ -39,7 +39,8 @@ public class AscItemTagProvider extends ItemTagsProvider {
 
 
         tag(ModTags.Items.HERBS)
-                .add(ModItems.LINGZHI_MUSHROOM.get());
+                .add(ModItems.LINGZHI_MUSHROOM.get())
+                .add(ModItems.BLOOD_LINGZHI_MUSHROOM.get());
 
 
         tag(ModTags.Items.ARTIFACTS)

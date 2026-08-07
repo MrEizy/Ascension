@@ -23,6 +23,8 @@ public class AscPlacedFeatures {
 
     //Herbs
     public static final ResourceKey<PlacedFeature> LINGZHI_MUSHROOM_PLACED_KEY = registerKey("lingzhi_mushroom_placed");
+    public static final ResourceKey<PlacedFeature> BLOOD_LINGZHI_MUSHROOM_PLACED_KEY = registerKey("blood_lingzhi_mushroom_placed");
+
 
     public static void bootstrap(BootstrapContext<PlacedFeature> context) {
         var configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
@@ -40,15 +42,15 @@ public class AscPlacedFeatures {
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.OVERWORLD_FROST_SILVER_ORE_KEY),
                 commonOrePlacement(5,
                         HeightRangePlacement.triangle(
-                                VerticalAnchor.absolute(10),
-                                VerticalAnchor.absolute(120)
+                                VerticalAnchor.absolute(-64),
+                                VerticalAnchor.absolute(0)
                         )));
         register(context, BLACK_IRON_ORE_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.OVERWORLD_BLACK_IRON_ORE_KEY),
                 commonOrePlacement(5,
                         HeightRangePlacement.triangle(
-                                VerticalAnchor.absolute(-64),
-                                VerticalAnchor.absolute(0)
+                                VerticalAnchor.absolute(10),
+                                VerticalAnchor.absolute(120)
                         )));
 
 
@@ -63,6 +65,19 @@ public class AscPlacedFeatures {
                         HeightRangePlacement.uniform(
                                 VerticalAnchor.absolute(58),
                                 VerticalAnchor.absolute(95)
+                        ),
+                        BiomeFilter.biome()
+                ));
+
+
+        register(context, BLOOD_LINGZHI_MUSHROOM_PLACED_KEY,
+                configuredFeatures.getOrThrow(AscConfiguredFeatures.BLOOD_LINGZHI_MUSHROOM),
+                List.of(
+                        CountPlacement.of(10),
+                        InSquarePlacement.spread(),
+                        HeightRangePlacement.uniform(
+                                VerticalAnchor.absolute(0),
+                                VerticalAnchor.absolute(200)
                         ),
                         BiomeFilter.biome()
                 ));

@@ -49,10 +49,12 @@ public class AscModelProvider extends ModelProvider {
 
         //Herb Items
         herbItemModel(itemModels, ModItems.LINGZHI_MUSHROOM.get());
+        herbItemModel(itemModels, ModItems.BLOOD_LINGZHI_MUSHROOM.get());
 
 
         //Herb Blocks
         herbBlockModelRotated(blockModels, ModBlocks.LINGZHI_MUSHROOM_B.get());
+        herbBlockModelRotated(blockModels, ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get());
 
 
         //Ore Models

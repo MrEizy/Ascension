@@ -44,6 +44,9 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         //Silk Touch Drop Blocks
         add(ModBlocks.LINGZHI_MUSHROOM_B.get(),
                 createSingleItemTableWithSilkTouch(ModBlocks.LINGZHI_MUSHROOM_B.get(), ModItems.LINGZHI_MUSHROOM.get()));
+        //Silk Touch Drop Blocks
+        add(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get(),
+                createSingleItemTableWithSilkTouch(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get(), ModItems.BLOOD_LINGZHI_MUSHROOM.get()));
 
     }
 

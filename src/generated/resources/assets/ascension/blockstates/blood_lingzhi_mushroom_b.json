@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "ascension:block/herbs/blood_lingzhi_mushroom_b",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "ascension:block/herbs/blood_lingzhi_mushroom_b"
+    },
+    "facing=south": {
+      "model": "ascension:block/herbs/blood_lingzhi_mushroom_b",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ascension:block/herbs/blood_lingzhi_mushroom_b",
+      "y": 270
+    }
+  }
+}
