@@ -1,0 +1,30 @@
+{
+  "stacking": "stronger_replaces",
+  "stacking_scope": "definition",
+  "max_stacks": 1,
+  "modules": [
+    {
+      "type": "ascension:movement_restriction",
+      "horizontal_reduction": {
+        "base": 0.9
+      },
+      "vertical_reduction": {
+        "base": 0.65
+      },
+      "stop_sprinting": true,
+      "profile": {
+        "player_multiplier": 0.8,
+        "resistant_multiplier": 0.5,
+        "boss_multiplier": 0.25
+      }
+    },
+    {
+      "type": "ascension:particle_aura",
+      "particle": "minecraft:electric_spark",
+      "count": 2,
+      "spread": 0.3,
+      "speed": 0.01,
+      "interval": 4
+    }
+  ]
+}

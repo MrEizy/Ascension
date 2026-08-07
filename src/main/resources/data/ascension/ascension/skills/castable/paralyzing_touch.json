@@ -1,0 +1,75 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Paralyzing Touch",
+  "description": "Disrupts a target's movement for a brief moment using paralysis.",
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:ray",
+    "range": {
+      "base": 8.0
+    },
+    "width": {
+      "base": 0.45
+    },
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:effect",
+      "duration": {
+        "base": 30.0
+      },
+      "potency": {
+        "base": 1.0
+      },
+      "definition": "ascension:paralysis",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:electric_spark",
+      "count": {
+        "base": 10.0
+      },
+      "spread": {
+        "base": 0.35
+      },
+      "speed": {
+        "base": 0.03
+      },
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.amethyst_block.resonate",
+      "volume": {
+        "base": 0.5
+      },
+      "pitch": {
+        "base": 1.6
+      },
+      "subject": "target"
+    }
+  ],
+  "costs": [
+    {
+      "resource": "ascension:qi",
+      "operation": "ascension:consume",
+      "source": "ascension:skill_casting",
+      "amount": {
+        "base": 8.0
+      }
+    }
+  ],
+  "cooldown": {
+    "base": 70.0
+  }
+}

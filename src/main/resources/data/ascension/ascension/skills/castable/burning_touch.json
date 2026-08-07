@@ -1,0 +1,75 @@
+{
+  "type": "ascension:active_skill",
+  "name": "Burning Touch",
+  "description": "Ignites a target with an flame that deals burns them well.",
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:ray",
+    "range": {
+      "base": 10.0
+    },
+    "width": {
+      "base": 0.45
+    },
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "features": [
+    {
+      "type": "ascension:effect",
+      "duration": {
+        "base": 100.0
+      },
+      "potency": {
+        "base": 3.0
+      },
+      "definition": "ascension:burning",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:flame",
+      "count": {
+        "base": 12.0
+      },
+      "spread": {
+        "base": 0.3
+      },
+      "speed": {
+        "base": 0.04
+      },
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:item.firecharge.use",
+      "volume": {
+        "base": 0.55
+      },
+      "pitch": {
+        "base": 1.15
+      },
+      "subject": "target"
+    }
+  ],
+  "costs": [
+    {
+      "resource": "ascension:qi",
+      "operation": "ascension:consume",
+      "source": "ascension:skill_casting",
+      "amount": {
+        "base": 6.0
+      }
+    }
+  ],
+  "cooldown": {
+    "base": 30.0
+  }
+}

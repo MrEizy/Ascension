@@ -1,0 +1,38 @@
+{
+  "stacking": "stronger_replaces",
+  "stacking_scope": "definition",
+  "max_stacks": 1,
+  "modules": [
+    {
+      "type": "ascension:periodic_damage",
+      "amount": {
+        "base": 2.5,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:context",
+              "key": "ascension:effect_potency"
+            },
+            "operation": "add",
+            "scale": 1.5
+          }
+        ]
+      },
+      "interval": 20,
+      "damage_type": "minecraft:on_fire",
+      "classifications": [
+        "ascension:skill",
+        "ascension:damage_over_time",
+        "ascension:fire"
+      ]
+    },
+    {
+      "type": "ascension:particle_aura",
+      "particle": "minecraft:flame",
+      "count": 3,
+      "spread": 0.3,
+      "speed": 0.015,
+      "interval": 5
+    }
+  ]
+}

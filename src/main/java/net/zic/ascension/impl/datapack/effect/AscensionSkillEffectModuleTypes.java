@@ -23,6 +23,8 @@ public final class AscensionSkillEffectModuleTypes {
             TYPES.add("periodic_damage", SkillEffectModules.PeriodicDamage.CODEC);
     public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> SPREAD =
             TYPES.add("spread", SkillEffectModules.Spread.CODEC);
+    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> AIR_DRAIN =
+            TYPES.add("air_drain", SkillEffectModules.AirDrain.CODEC);
     public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> PARTICLE_AURA =
             TYPES.add("particle_aura", SkillEffectModules.ParticleAura.CODEC);
     public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> RESOURCE_MODIFIER =

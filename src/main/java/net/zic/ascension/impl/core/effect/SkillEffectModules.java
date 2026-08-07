@@ -440,6 +440,69 @@ public final class SkillEffectModules {
         }
     }
 
+    public record AirDrain(
+            ScaledValue amount,
+            int interval,
+            ScaledValue emptyDamage,
+            int damageInterval,
+            EntityProfile profile
+    ) implements SkillEffectModule {
+        private static final Identifier DROWN_DAMAGE = Identifier.fromNamespaceAndPath("minecraft", "drown");
+
+        public static final MapCodec<AirDrain> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("amount", ScaledValue.constant(4.0D)).forGetter(AirDrain::amount),
+                Codec.INT.optionalFieldOf("interval", 1).forGetter(AirDrain::interval),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("empty_damage", ScaledValue.constant(2.0D)).forGetter(AirDrain::emptyDamage),
+                Codec.INT.optionalFieldOf("damage_interval", 20).forGetter(AirDrain::damageInterval),
+                EntityProfile.CODEC.optionalFieldOf("profile", EntityProfile.DEFAULT).forGetter(AirDrain::profile)
+        ).apply(instance, AirDrain::new));
+
+        public AirDrain {
+            interval = Math.max(1, interval);
+            damageInterval = Math.max(1, damageInterval);
+            profile = profile == null ? EntityProfile.DEFAULT : profile;
+        }
+
+        @Override
+        public CodecType<SkillEffectModule> getType() {
+            return AscensionSkillEffectModuleTypes.AIR_DRAIN.get();
+        }
+
+        @Override
+        public void tick(LivingEntity entity, SkillEffectContext effect) {
+            if (profile.immune(entity)) {
+                return;
+            }
+
+            double profileMultiplier = profile.sanitizeMultiplier(entity);
+
+            if (effect.remainingDuration() % interval == 0) {
+                double resolved = amount.resolve(effectContext(entity, effect)) * profileMultiplier;
+                int drain = Math.max(0, (int) Math.ceil(resolved));
+                if (drain > 0) {
+                    entity.setAirSupply(Math.max(0, entity.getAirSupply() - drain));
+                }
+            }
+
+            if (entity.getAirSupply() > 0 || effect.remainingDuration() % damageInterval != 0) {
+                return;
+            }
+
+            SkillExecutionContext context = executionContext(entity, effect);
+            if (context == null) {
+                return;
+            }
+
+            double damage = emptyDamage.resolve(effectContext(entity, effect)) * profileMultiplier;
+            if (damage <= 0.0D) {
+                return;
+            }
+
+            AscensionDamageService.apply(context, damage, DROWN_DAMAGE, new LinkedHashSet<>(), Optional.empty(), Optional.empty());
+        }
+    }
+
+
     private static ScaledValue.Context effectContext(LivingEntity entity, SkillEffectContext effect) {
         LivingEntity caster = sourceLivingEntity(entity, effect);
         return new ScaledValue.Context(
