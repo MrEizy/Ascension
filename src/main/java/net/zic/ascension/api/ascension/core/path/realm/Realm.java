@@ -18,15 +18,21 @@ public record Realm(int majorRealm, int minorRealm) implements Comparable<Realm>
      * @return an ordered list of realms between realm 1 and 2, with 0 being smallest. includes both start and end
      */
     public static List<Realm> getRange(Realm realm1, Realm realm2, Path path){
-        if(realm1.equals(realm2)) return List.of(realm1);
-        Realm start = realm1;
-        Realm end = realm2;
-        if(realm1.compareTo(realm2) > 0){
-            start = realm2;
-            end = realm1;
-        }
+        if(realm1.equals(realm2)) return new ArrayList<>(){{
+            add(realm1);
+        }};
+        Realm start = realm1.compareTo(realm2) <= 0 ? realm1 : realm2;
+        Realm end = realm1.compareTo(realm2) <= 0 ? realm2 : realm1;
 
         List<Realm> result = new ArrayList<>();
+
+        if(start.majorRealm == end.majorRealm()){
+            for(int minorRealm = start.minorRealm();minorRealm<=end.minorRealm();minorRealm++){
+                result.add(Realm.of(start.majorRealm,minorRealm));
+            }
+            return result;
+        }
+
 
         for(int minorRealm = start.minorRealm;minorRealm<=path.getMaxMinorRealm(start.majorRealm);minorRealm++){
             result.add(Realm.of(start.majorRealm,minorRealm));
@@ -48,6 +54,15 @@ public record Realm(int majorRealm, int minorRealm) implements Comparable<Realm>
                  Realm.of(realm.majorRealm+1,0):
                  Realm.of(realm.majorRealm(), realm.minorRealm()+1);
     }
+
+    //returns if given ream is in between 2 realms inclusive
+    public boolean isInRange(Realm realm1,Realm realm2){
+
+        Realm start = realm1.compareTo(realm2) <= 0 ? realm1 : realm2;
+        Realm end = realm1.compareTo(realm2) <= 0 ? realm2 : realm1;
+        return compareTo(start) >= 0 && compareTo(end) <= 0;
+    }
+
     @Override
     public int compareTo(@NonNull Realm other) {
         if(this.equals(other)) return 0;

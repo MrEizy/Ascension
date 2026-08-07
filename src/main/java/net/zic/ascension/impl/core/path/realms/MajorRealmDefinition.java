@@ -22,25 +22,28 @@ public record MajorRealmDefinition(
 
     @Override
     public Component getMinorRealmName(int realm) {
+        if(realm>=minorRealms.size()){
+            return Component.empty().append(minorRealms.getLast().name()).append("+"+(realm-(minorRealms.size()-1)));
+        }
         return minorRealms.get(realm).name();
     }
 
     @Override
     public TribulationDefinitionReference getRealmTribulation(int realm) {
-        return realmDefinition(realm).getTribulation();
+        return realm >= minorRealms.size() ? null : minorRealms.get(realm).getTribulation();
     }
 
     public BreakthroughBehaviour getBreakthroughBehaviour(int realm){
-        return realmDefinition(realm).breakthroughBehaviour();
+        return realm >= minorRealms.size() ? BreakthroughBehaviour.INSTANT : minorRealms.get(realm).breakthroughBehaviour();
     }
     @Override
     public double getMaxProgress(int realm) {
-        return realmDefinition(realm).getMaxProgression();
+        return realm >= minorRealms.size() ? minorRealms.getLast().getMaxProgression()*(realm-(minorRealms.size()-2)) : minorRealms.get(realm).getMaxProgression();
     }
 
     @Override
     public MinorRealmDefinition realmDefinition(int realm) {
-        return minorRealms.get(realm);
+        return realm >= minorRealms.size() ?  null : minorRealms.get(realm);
     }
 
     @Override

@@ -32,8 +32,9 @@ public class MajorRealm implements CompositeRealm {
         return currentRealm;
     }
 
+    //does not apply limit broken limits, that is the job of the path
     public void setCurrentRealm(int newRealm){
-        this.currentRealm = isLimitBroken() ? newRealm : Math.min(newRealm,definition().getMaxRealm());
+        this.currentRealm = newRealm;
     }
 
     //only used internally during loading and such

@@ -15,6 +15,7 @@ import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
+import net.zic.ascension.impl.core.path.simple.SimplePathInstance;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.ZenithStatHolder;
@@ -57,7 +58,9 @@ public class StatDisplayCommand {
 
                                 player.sendSystemMessage(Component.literal("realm : ").append(path.getRealmName(pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm())));
                                 player.sendSystemMessage(Component.literal("progress : "+pathInstance.getProgress()));
-
+                                if(pathInstance instanceof SimplePathInstance simplePathInstance){
+                                    player.sendSystemMessage(Component.literal("limitBroken: "+simplePathInstance.isLimitBroken()));
+                                }
 
                             }
                             return 1;

@@ -73,7 +73,6 @@ public class PhysiqueHolder implements DataSourceInstance {
             AscensionCraft.LOGGER.info("Loaded physique {}",id);
         }catch (Exception e){
             AscensionCraft.LOGGER.error("Error loading physique");
-            AscensionCraft.LOGGER.error("stacktrace : ",e);
             //TODO set technique to default or keep null
         }
     }

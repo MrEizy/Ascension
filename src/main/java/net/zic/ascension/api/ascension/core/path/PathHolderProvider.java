@@ -56,6 +56,10 @@ public class PathHolderProvider implements DataSource {
 
     @Override
     public void finishedLoading(OriginSource source, DataSourceInstance instance) {
+
+        for(Identifier path : getHolder(instance).getPaths()){
+            getHolder(instance).getPath(path).simulateProgression(source);
+        }
         getHolder(instance).clearCache();
     }
 

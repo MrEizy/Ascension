@@ -131,18 +131,19 @@ public class AscensionOriginSourceHelper {
                 pre.getNewPhysique(source.getRegistryAccess()).applyToEntity(entity,pre.getNewPhysiqueData());
             }
         }
-        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData(),source);
-        NeoForge.EVENT_BUS.post(post);
 
 
         //first add all new paths with the new physique as owner, this ensures that if there is path overlap there is owners >1
 
         for(Identifier path : toAdd){
-            addPath(source,path,post.getNewPhysiqueIdentifier());
+            addPath(source,path,pre.getNewPhysiqueIdentifier());
         }
         for(Identifier path : toRemove){
             removePath(source,path,oldPhysique);
         }
+        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData(),source);
+        NeoForge.EVENT_BUS.post(post);
+
         resolveProcess(source,"set_physique");
         return true;
     }
@@ -306,10 +307,15 @@ public class AscensionOriginSourceHelper {
     }
 
     public static boolean addPath(OriginSource source,Identifier path, PathInstance existingData, Identifier owner) {
+        boolean usedCachedResult = false;
+
 
         if(path == null || existingData == null) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
-        if(getPathHolder(source).hasCachedPath(path)) existingData = getPathHolder(source).removeCachedPath(path);
+        if(getPathHolder(source).hasCachedPath(path)) {
+            existingData = getPathHolder(source).removeCachedPath(path);
+            usedCachedResult = true;
+        }
 
         if(existingData == null) return false;
 
@@ -323,7 +329,7 @@ public class AscensionOriginSourceHelper {
 
         source.startProcess("add_path");
 
-        existingData.simulateProgression(source);
+        if(!usedCachedResult) existingData.simulateProgression(source);
         PathAddedEvent.Post post = new PathAddedEvent.Post(path,existingData,source);
         NeoForge.EVENT_BUS.post(post);
 

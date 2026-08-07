@@ -35,6 +35,7 @@ public interface PathInstance {
 
     int getCurrentMajorRealm();
     int getCurrentMinorRealm();
+    Realm getCurrentRealm();
 
     int getMaxMinorRealm(int realm);
     //──Tribulation────────────────────────────────────────────────────────

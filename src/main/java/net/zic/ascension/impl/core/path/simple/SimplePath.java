@@ -102,17 +102,19 @@ public class SimplePath implements Path {
     }
 
     @Override
-    public PathInstance newInstance(RegistryAccess access) {
+    public SimplePathInstance newInstance(RegistryAccess access) {
         return new SimplePathInstance(this);
     }
 
     @Override
-    public PathInstance loadInstance(ValueInput input, RegistryAccess access) {
-        return null; //TODO
+    public SimplePathInstance loadInstance(ValueInput input, RegistryAccess access) {
+        SimplePathInstance pathInstance = newInstance(access);
+        pathInstance.read(input,access);
+        return pathInstance; //TODO
     }
 
     @Override
-    public PathInstance loadInstance(ByteBuf buf, RegistryAccess access) {
+    public SimplePathInstance loadInstance(ByteBuf buf, RegistryAccess access) {
         return null; //TODO
     }
 }

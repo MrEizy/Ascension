@@ -249,6 +249,7 @@ public class OriginSource implements StatProvider {
                 instance.getDataSource().onAdded(this,instance);
             }
         }
+        NeoForge.EVENT_BUS.post(new OriginSourceEvent.OriginSourceFinishedLoadingEvent(this));
         for(DataSourceInstance instance : dataSources.values()) instance.getDataSource().finishedLoading(this,instance);
     }
 
