@@ -266,7 +266,7 @@
                   240
                 ],
                 "line_width": 3.0,
-                "no_depth": true
+                "no_depth": false
               },
               "geometry": {
                 "radius": 1.0,
@@ -301,7 +301,7 @@
                   235
                 ],
                 "line_width": 2.0,
-                "no_depth": true
+                "no_depth": false
               },
               "geometry": {
                 "radius": 0.68,
@@ -330,7 +330,7 @@
                 ],
                 "line_width": 1.7,
                 "filled": true,
-                "no_depth": true
+                "no_depth": false
               },
               "geometry": {
                 "radius": 0.8,
@@ -477,7 +477,7 @@
                 225
               ],
               "line_width": 3.2,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": 1.3,
@@ -506,7 +506,7 @@
               ],
               "line_width": 1.7,
               "filled": true,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": 0.95,

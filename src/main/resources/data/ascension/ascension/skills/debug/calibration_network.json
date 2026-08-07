@@ -73,7 +73,7 @@
                 235
               ],
               "line_width": 2.6,
-              "no_depth": true
+              "no_depth": false
             }
           },
           {
@@ -100,7 +100,7 @@
                 220
               ],
               "line_width": 1.8,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": 0.38,

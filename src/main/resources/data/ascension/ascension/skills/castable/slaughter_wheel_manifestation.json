@@ -312,7 +312,7 @@
                 190
               ],
               "line_width": 4.0,
-              "no_depth": true
+              "no_depth": false
             },
             "motion": {
               "history": 18
@@ -341,7 +341,7 @@
                 245
               ],
               "line_width": 2.8,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": 0.72,
@@ -376,7 +376,7 @@
                 240
               ],
               "line_width": 1.8,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": 0.42,
@@ -430,7 +430,7 @@
                 235
               ],
               "line_width": 2.4,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": 1.15,
@@ -459,7 +459,7 @@
               ],
               "line_width": 1.7,
               "filled": true,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": 0.8,

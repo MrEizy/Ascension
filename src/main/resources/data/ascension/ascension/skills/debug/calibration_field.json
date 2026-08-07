@@ -101,7 +101,7 @@
                 220
               ],
               "line_width": 2.0,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": {

@@ -346,7 +346,7 @@
                 245
               ],
               "line_width": 4.2,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": 3.2,
@@ -381,7 +381,7 @@
                 240
               ],
               "line_width": 2.6,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": 2.35,
@@ -416,7 +416,7 @@
                 245
               ],
               "line_width": 3.0,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": 1.35,
@@ -445,7 +445,7 @@
               ],
               "line_width": 1.7,
               "filled": true,
-              "no_depth": true
+              "no_depth": false
             },
             "geometry": {
               "radius": 2.6,
