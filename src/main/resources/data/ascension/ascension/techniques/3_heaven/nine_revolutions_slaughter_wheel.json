@@ -1,0 +1,293 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.nine_revolutions_slaughter_wheel.name"
+  },
+  "description": {
+    "translate": "ascension.technique.nine_revolutions_slaughter_wheel.desc"
+  },
+  "path": "ascension:foundation/essence",
+  "milestone_realms": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "technique_families": [
+    "blood",
+    "chaos"
+  ],
+  "max_realm": 8,
+  "max_minor_realm": 2,
+  "realm_change_handler": [
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          0
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/cultivation/nine_revolutions_circulation"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          1
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:passive/unending_revolution"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          2
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/slaughter_wheel_manifestation"
+          ]
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/slaughter_wheel_manifestation",
+          "contribution": "ascension:nine_revolutions/realm_2_manifestation",
+          "level": 1,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          3
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/slaughter_wheel_manifestation",
+          "contribution": "ascension:nine_revolutions/realm_3_manifestation",
+          "level": 2,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          4
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/revolving_butchers_guard"
+          ]
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/revolving_butchers_guard",
+          "contribution": "ascension:nine_revolutions/realm_4_guard",
+          "level": 1,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          5
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/slaughter_wheel_manifestation",
+          "contribution": "ascension:nine_revolutions/realm_5_manifestation",
+          "level": 3,
+          "set_floor": true,
+          "set_cap": true
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/revolving_butchers_guard",
+          "contribution": "ascension:nine_revolutions/realm_5_guard",
+          "level": 2,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          6
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/ninefold_carnage_circuit"
+          ]
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/ninefold_carnage_circuit",
+          "contribution": "ascension:nine_revolutions/realm_6_circuit",
+          "level": 1,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          7
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/revolving_butchers_guard",
+          "contribution": "ascension:nine_revolutions/realm_7_guard",
+          "level": 3,
+          "set_floor": true,
+          "set_cap": true
+        },
+        {
+          "type": "ascension:set_skill_level",
+          "skill": "ascension:castable/ninefold_carnage_circuit",
+          "contribution": "ascension:nine_revolutions/realm_7_circuit",
+          "level": 2,
+          "set_floor": true,
+          "set_cap": true
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:major_realms_in",
+        "realms": [
+          8
+        ]
+      },
+      "actions": [
+        {
+          "type": "ascension:give_skills",
+          "skills": [
+            "ascension:castable/heaven_grinding_slaughter_wheel"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 2.25
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 2.0
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 1.25
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "realm_overrides": {
+    "0": {
+      "name": "First Revolution: Seeded Wheel"
+    },
+    "1": {
+      "name": "Second Revolution: Blood-Iron Circuits"
+    },
+    "2": {
+      "name": "Third Revolution: Butcher Orbiting"
+    },
+    "3": {
+      "name": "Fourth Revolution: Crimson Mandala"
+    },
+    "4": {
+      "name": "Fifth Revolution: Corpse-Grinding Rotation"
+    },
+    "5": {
+      "name": "Sixth Revolution: Slaughterers Domain"
+    },
+    "6": {
+      "name": "Seventh Revolution: Heaven-Rending Cycle"
+    },
+    "7": {
+      "name": "Eighth Revolution: Calamity Wheel"
+    },
+    "8": {
+      "name": "Ninth Revolution: Slaughter Wheel Incarnate"
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "theme_overrides": {
+      "colors": {
+        "accent": "#D5482CFF",
+        "border_top": "#F2B05DFF",
+        "border_bottom": "#290307FF",
+        "background": "#090304EE"
+      },
+      "background_style": {
+        "pattern": "stars",
+        "color": "accent",
+        "alpha": 7,
+        "spacing": 13
+      }
+    },
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:heaven"
+  }
+}

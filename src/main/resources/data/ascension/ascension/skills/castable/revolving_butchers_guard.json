@@ -1,0 +1,753 @@
+{
+  "type": "ascension:active_skill",
+  "name": {
+    "translate": "ascension.skill.revolving_butchers_guard.name"
+  },
+  "description": {
+    "translate": "ascension.skill.revolving_butchers_guard.desc"
+  },
+  "default_accessible_level": 1,
+  "definitions": {
+    "constructs": {
+      "guard": {
+        "duration": {
+          "base": 120,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:skill_level",
+                "skill": "ascension:castable/revolving_butchers_guard"
+              },
+              "operation": "add",
+              "scale": 45
+            }
+          ],
+          "maximum": 280
+        },
+        "stability": {
+          "base": 38.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:skill_level",
+                "skill": "ascension:castable/revolving_butchers_guard"
+              },
+              "operation": "add",
+              "scale": 28.0
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:strength"
+              },
+              "operation": "add",
+              "scale": 1.6
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "operation": "add",
+              "scale": 1.2
+            }
+          ],
+          "minimum": 38.0,
+          "maximum": 260.0
+        },
+        "offset": [
+          0.0,
+          0.9,
+          -0.25
+        ],
+        "rotate_with_owner": true,
+        "interception": {
+          "absorption": {
+            "base": 0.5,
+            "terms": [
+              {
+                "source": {
+                  "type": "ascension:skill_level",
+                  "skill": "ascension:castable/revolving_butchers_guard"
+                },
+                "operation": "add",
+                "scale": 0.11
+              }
+            ],
+            "minimum": 0.5,
+            "maximum": 0.84
+          },
+          "stability_cost": {
+            "base": 1.0
+          },
+          "overflow": true,
+          "priority": 125,
+          "on_intercept": [
+            {
+              "type": "ascension:damage",
+              "amount": {
+                "base": 2.0,
+                "terms": [
+                  {
+                    "source": {
+                      "type": "ascension:context",
+                      "key": "ascension:construct_intercepted",
+                      "fallback": 0.0
+                    },
+                    "operation": "add",
+                    "scale": 0.28
+                  },
+                  {
+                    "source": {
+                      "type": "ascension:stat",
+                      "stat": "ascension:strength"
+                    },
+                    "operation": "add",
+                    "scale": 0.16
+                  },
+                  {
+                    "source": {
+                      "type": "ascension:stat",
+                      "stat": "ascension:spirit"
+                    },
+                    "operation": "add",
+                    "scale": 0.1
+                  },
+                  {
+                    "source": {
+                      "type": "ascension:skill_level"
+                    },
+                    "operation": "add",
+                    "scale": 1.75
+                  }
+                ],
+                "minimum": 1.0,
+                "maximum": 42.0
+              },
+              "damage_type": "minecraft:magic",
+              "classifications": [
+                "ascension:skill",
+                "ascension:construct",
+                "ascension:essence",
+                "ascension:slaughter",
+                "ascension:wheel"
+              ],
+              "path": "ascension:foundation/essence"
+            },
+            {
+              "type": "ascension:stagger",
+              "amount": {
+                "base": 7.0,
+                "terms": [
+                  {
+                    "source": {
+                      "type": "ascension:stat",
+                      "stat": "ascension:strength"
+                    },
+                    "operation": "add",
+                    "scale": 0.1
+                  },
+                  {
+                    "source": {
+                      "type": "ascension:skill_level"
+                    },
+                    "operation": "add",
+                    "scale": 2.5
+                  }
+                ],
+                "minimum": 3.0,
+                "maximum": 34.0
+              },
+              "definition": "#guard_impact"
+            },
+            {
+              "type": "ascension:particles",
+              "particle": "minecraft:enchanted_hit",
+              "count": {
+                "base": 10
+              },
+              "spread": {
+                "base": 0.45
+              },
+              "speed": {
+                "base": 0.07
+              }
+            },
+            {
+              "type": "ascension:sound",
+              "sound": "minecraft:block.grindstone.use",
+              "volume": {
+                "base": 0.48
+              },
+              "pitch": {
+                "base": 0.82
+              }
+            }
+          ],
+          "projectile_response": "deflect",
+          "filter": {
+            "exclude_classifications": [
+              "ascension:construct"
+            ]
+          }
+        },
+        "on_break": [
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:flash",
+            "count": {
+              "base": 1
+            },
+            "spread": {
+              "base": 0.0
+            },
+            "speed": {
+              "base": 0.0
+            }
+          },
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:crit",
+            "count": {
+              "base": 36
+            },
+            "spread": {
+              "base": 1.0
+            },
+            "speed": {
+              "base": 0.11
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:item.shield.break",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 0.62
+            }
+          }
+        ],
+        "on_expire": [
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:block.amethyst_block.chime",
+            "volume": {
+              "base": 0.3
+            },
+            "pitch": {
+              "base": 0.55
+            }
+          }
+        ],
+        "visual": {
+          "layers": [
+            {
+              "type": "ascension:ring",
+              "transform": {
+                "rotation": [
+                  90,
+                  0,
+                  0
+                ]
+              },
+              "appearance": {
+                "color": [
+                  70,
+                  3,
+                  7,
+                  140
+                ],
+                "secondary_color": [
+                  230,
+                  50,
+                  28,
+                  240
+                ],
+                "line_width": 3.0,
+                "no_depth": true
+              },
+              "geometry": {
+                "radius": 1.0,
+                "segments": 28
+              },
+              "motion": {
+                "spin": 6.0,
+                "pulse": 0.12,
+                "pulse_speed": 0.35
+              }
+            },
+            {
+              "type": "ascension:ring",
+              "transform": {
+                "rotation": [
+                  90,
+                  0,
+                  0
+                ]
+              },
+              "appearance": {
+                "color": [
+                  235,
+                  135,
+                  55,
+                  150
+                ],
+                "secondary_color": [
+                  255,
+                  230,
+                  160,
+                  235
+                ],
+                "line_width": 2.0,
+                "no_depth": true
+              },
+              "geometry": {
+                "radius": 0.68,
+                "segments": 28
+              },
+              "motion": {
+                "spin": -8.0,
+                "pulse": 0.08,
+                "pulse_speed": 0.35
+              }
+            },
+            {
+              "type": "ascension:shell",
+              "appearance": {
+                "color": [
+                  65,
+                  0,
+                  5,
+                  10
+                ],
+                "secondary_color": [
+                  225,
+                  45,
+                  25,
+                  80
+                ],
+                "line_width": 1.7,
+                "filled": true,
+                "no_depth": true
+              },
+              "geometry": {
+                "radius": 0.8,
+                "height": 1.75,
+                "segments": 24
+              },
+              "motion": {
+                "spin": 2.8,
+                "pulse": 0.08,
+                "pulse_speed": 0.4
+              }
+            },
+            {
+              "type": "ascension:particle_emitter",
+              "geometry": {
+                "radius": 0.65,
+                "height": 1.4,
+                "length": 0.04,
+                "count": 2
+              },
+              "motion": {
+                "interval": 2
+              },
+              "resources": {
+                "particle": "minecraft:enchanted_hit"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "stagger": {
+      "guard_impact": {
+        "threshold": {
+          "base": 100.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 2.0
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:strength"
+              },
+              "operation": "add",
+              "scale": 1.1
+            }
+          ],
+          "minimum": 50.0
+        },
+        "resistance": {
+          "base": 0.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 0.0045
+            }
+          ],
+          "minimum": 0.0,
+          "maximum": 0.6
+        },
+        "decay_per_second": {
+          "base": 11.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "operation": "add",
+              "scale": 0.14
+            }
+          ],
+          "minimum": 1.0
+        },
+        "decay_delay": 40,
+        "guard_break_duration": {
+          "base": 42.0
+        },
+        "immunity_duration": {
+          "base": 68.0
+        },
+        "movement_multiplier": 0.14,
+        "interrupt_held_casts": true,
+        "on_guard_break": [
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:crit",
+            "count": {
+              "base": 28
+            },
+            "spread": {
+              "base": 0.75
+            },
+            "speed": {
+              "base": 0.12
+            }
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:item.shield.break",
+            "volume": {
+              "base": 1.0
+            },
+            "pitch": {
+              "base": 0.72
+            }
+          }
+        ]
+      }
+    },
+    "visuals": {
+      "summon": {
+        "layers": [
+          {
+            "type": "ascension:ring",
+            "transform": {
+              "rotation": [
+                90,
+                0,
+                0
+              ]
+            },
+            "appearance": {
+              "color": [
+                80,
+                3,
+                8,
+                80
+              ],
+              "secondary_color": [
+                245,
+                70,
+                30,
+                225
+              ],
+              "line_width": 3.2,
+              "no_depth": true
+            },
+            "geometry": {
+              "radius": 1.3,
+              "segments": 28
+            },
+            "motion": {
+              "spin": 7.0,
+              "pulse": 0.1,
+              "pulse_speed": 0.35
+            }
+          },
+          {
+            "type": "ascension:shell",
+            "appearance": {
+              "color": [
+                60,
+                0,
+                5,
+                8
+              ],
+              "secondary_color": [
+                230,
+                50,
+                25,
+                70
+              ],
+              "line_width": 1.7,
+              "filled": true,
+              "no_depth": true
+            },
+            "geometry": {
+              "radius": 0.95,
+              "height": 2.0,
+              "segments": 24
+            },
+            "motion": {
+              "spin": 2.5,
+              "pulse": 0.08,
+              "pulse_speed": 0.4
+            }
+          }
+        ]
+      }
+    }
+  },
+  "levels": [
+    {
+      "targeting": {
+        "type": "ascension:self"
+      },
+      "require_targets": true,
+      "features": [
+        {
+          "type": "ascension:construct",
+          "action": "remove",
+          "definition": "#guard",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:construct",
+          "action": "apply",
+          "definition": "#guard",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:visual",
+          "duration": {
+            "base": 20
+          },
+          "follow": true,
+          "definition": "#summon",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:crit",
+          "count": {
+            "base": 28
+          },
+          "spread": {
+            "base": 0.9
+          },
+          "speed": {
+            "base": 0.09
+          },
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:block.netherite_block.place",
+          "volume": {
+            "base": 0.85
+          },
+          "pitch": {
+            "base": 0.72
+          },
+          "subject": "caster"
+        }
+      ],
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 18
+          },
+          "operation": "ascension:consume"
+        },
+        {
+          "resource": "ascension:stamina",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 6
+          },
+          "operation": "ascension:consume"
+        }
+      ],
+      "cooldown": {
+        "base": 260
+      }
+    },
+    {
+      "targeting": {
+        "type": "ascension:self"
+      },
+      "require_targets": true,
+      "features": [
+        {
+          "type": "ascension:construct",
+          "action": "remove",
+          "definition": "#guard",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:construct",
+          "action": "apply",
+          "definition": "#guard",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:visual",
+          "duration": {
+            "base": 20
+          },
+          "follow": true,
+          "definition": "#summon",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:crit",
+          "count": {
+            "base": 28
+          },
+          "spread": {
+            "base": 0.9
+          },
+          "speed": {
+            "base": 0.09
+          },
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:block.netherite_block.place",
+          "volume": {
+            "base": 0.85
+          },
+          "pitch": {
+            "base": 0.72
+          },
+          "subject": "caster"
+        }
+      ],
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 22
+          },
+          "operation": "ascension:consume"
+        },
+        {
+          "resource": "ascension:stamina",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 6
+          },
+          "operation": "ascension:consume"
+        }
+      ],
+      "cooldown": {
+        "base": 220
+      }
+    },
+    {
+      "targeting": {
+        "type": "ascension:self"
+      },
+      "require_targets": true,
+      "features": [
+        {
+          "type": "ascension:construct",
+          "action": "remove",
+          "definition": "#guard",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:construct",
+          "action": "apply",
+          "definition": "#guard",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:visual",
+          "duration": {
+            "base": 20
+          },
+          "follow": true,
+          "definition": "#summon",
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:crit",
+          "count": {
+            "base": 28
+          },
+          "spread": {
+            "base": 0.9
+          },
+          "speed": {
+            "base": 0.09
+          },
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:block.netherite_block.place",
+          "volume": {
+            "base": 0.85
+          },
+          "pitch": {
+            "base": 0.72
+          },
+          "subject": "caster"
+        }
+      ],
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 26
+          },
+          "operation": "ascension:consume"
+        },
+        {
+          "resource": "ascension:stamina",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 6
+          },
+          "operation": "ascension:consume"
+        }
+      ],
+      "cooldown": {
+        "base": 180
+      }
+    }
+  ]
+}

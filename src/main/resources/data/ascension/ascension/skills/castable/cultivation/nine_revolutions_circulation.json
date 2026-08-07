@@ -1,0 +1,82 @@
+{
+  "type": "ascension:simple_cultivation_skill",
+  "name": {
+    "translate": "ascension.skill.nine_revolutions_circulation.name"
+  },
+  "description": {
+    "translate": "ascension.skill.nine_revolutions_circulation.desc"
+  },
+  "path": "ascension:foundation/essence",
+  "secondary_paths": [
+    "ascension:elemental/blood",
+    "ascension:elemental/chaos"
+  ],
+  "rate": 2.75,
+  "particle_field": {
+    "style": "gathering_ring",
+    "particles": [
+      {
+        "type": "rune",
+        "weight": 5
+      },
+      {
+        "type": "thread",
+        "weight": 4
+      },
+      {
+        "type": "spark",
+        "weight": 4
+      },
+      {
+        "type": "mote",
+        "weight": 2
+      }
+    ],
+    "colours": [
+      "#2A0507",
+      "#7D1118",
+      "#D33A27",
+      "#F1B15B"
+    ],
+    "density": 22,
+    "radius": {
+      "min": 0.65,
+      "max": 1.55
+    },
+    "height": {
+      "min": 0.02,
+      "max": 1.82
+    },
+    "speed": {
+      "min": 0.045,
+      "max": 0.078
+    },
+    "size": {
+      "min": 0.04,
+      "max": 0.11
+    },
+    "lifetime": {
+      "min": 18,
+      "max": 34
+    },
+    "full_bright": true
+  },
+  "sounds": [
+    {
+      "sound": "minecraft:block.respawn_anchor.ambient",
+      "interval": 70,
+      "initial_delay": 14,
+      "volume": 0.1,
+      "pitch": 0.72,
+      "pitch_variance": 0.05
+    },
+    {
+      "sound": "minecraft:block.amethyst_block.chime",
+      "interval": 46,
+      "initial_delay": 8,
+      "volume": 0.12,
+      "pitch": 0.62,
+      "pitch_variance": 0.08
+    }
+  ]
+}

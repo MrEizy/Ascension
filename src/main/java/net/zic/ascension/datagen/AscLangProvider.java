@@ -358,6 +358,11 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.reapers_calling.desc", "Walk beside death, understand the burdens of the fallen, and guide each departing soul toward the turning river of samsara");
         add("ascension.technique.locust_bleeding_manual.name", "Locust Bleeding Manual");
         add("ascension.technique.locust_bleeding_manual.desc", "Bleed Locust Swarms");
+        add("ascension.technique.nine_revolutions_slaughter_wheel.name", "Nine Revolutions Slaughter Wheel Technique");
+        add("ascension.technique.nine_revolutions_slaughter_wheel.desc", "Carve nine interlocking revolutions into the essence sea, condensing a slaughter wheel that grows with each cycle.");
+        add("ascension.technique.slaughter_wheel_battle_manual.name", "Slaughter Wheel Battle Manual");
+        add("ascension.technique.slaughter_wheel_battle_manual.desc", "A combat scripture that teaches applications of the Slaughter Wheel.");
+
 
         //Skills
         add("ascension.skill.plum_blossom_breathing.name", "Plum Blossom Breathing");
@@ -392,7 +397,17 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.guardian_dharma_idol.desc", "Manifest a guardian Dharma.");
         add("ascension.skill.samsaras_witness.name", "Samsara's Witness");
         add("ascension.skill.samsaras_witness.desc", "The burdens witnessed along the six roads settle into an clarity of soul and body");
-
-
+        add("ascension.skill.nine_revolutions_circulation.name", "Nine Revolutions Circulation");
+        add("ascension.skill.nine_revolutions_circulation.desc", "Circulates essence through nine meridian routes, grinding into fuel for the forming Slaughter Wheel.");
+        add("ascension.skill.unending_revolution.name", "Unending Revolution");
+        add("ascension.skill.unending_revolution.desc", "The internal wheel never truly stills.");
+        add("ascension.skill.slaughter_wheel_manifestation.name", "Slaughter Wheel Manifestation");
+        add("ascension.skill.slaughter_wheel_manifestation.desc", "Launches a spinning essence wheel that bores through multiple enemies.");
+        add("ascension.skill.revolving_butchers_guard.name", "Revolving Butcher's Guard");
+        add("ascension.skill.revolving_butchers_guard.desc", "Manifests a rotating wheel around the cultivator that protects the cultivator.");
+        add("ascension.skill.ninefold_carnage_circuit.name", "Ninefold Carnage Circuit");
+        add("ascension.skill.ninefold_carnage_circuit.desc", "Pins a revolving slaughter circuit to the ground, grinding any enemies caught within it.");
+        add("ascension.skill.heaven_grinding_slaughter_wheel.name", "Heaven-Grinding Slaughter Wheel");
+        add("ascension.skill.heaven_grinding_slaughter_wheel.desc", "Charge the completed wheel and release it through the surrounding space, crushing nearby enemies beneath your revolutions.");
     }
 }

@@ -1,0 +1,114 @@
+{
+  "type": "ascension:resource_modifier_passive",
+  "name": {
+    "translate": "ascension.skill.unending_revolution.name"
+  },
+  "description": {
+    "translate": "ascension.skill.unending_revolution.desc"
+  },
+  "modules": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:strength": [
+          {
+            "value": 0.12,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:unending_revolution_strength"
+          }
+        ],
+        "ascension:spirit": [
+          {
+            "value": 0.12,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:unending_revolution_spirit"
+          }
+        ],
+        "ascension:vitality": [
+          {
+            "value": 0.08,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:unending_revolution_vitality"
+          }
+        ]
+      }
+    },
+    {
+      "type": "ascension:defense",
+      "flat_reduction": {
+        "base": 0.25,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:strength"
+            },
+            "operation": "add",
+            "scale": 0.012
+          },
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "operation": "add",
+            "scale": 0.008
+          }
+        ],
+        "minimum": 0.0,
+        "maximum": 4.0
+      },
+      "percentage_reduction": {
+        "base": 0.025,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:vitality"
+            },
+            "operation": "add",
+            "scale": 0.0006
+          },
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "operation": "add",
+            "scale": 0.00035
+          }
+        ],
+        "minimum": 0.0,
+        "maximum": 0.18
+      },
+      "stagger_resistance": {
+        "base": 0.08,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:strength"
+            },
+            "operation": "add",
+            "scale": 0.0008
+          },
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:vitality"
+            },
+            "operation": "add",
+            "scale": 0.001
+          }
+        ],
+        "minimum": 0.0,
+        "maximum": 0.4
+      },
+      "filter": {
+        "exclude_damage_types": [
+          "minecraft:generic_kill"
+        ]
+      }
+    }
+  ]
+}
