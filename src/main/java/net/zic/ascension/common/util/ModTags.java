@@ -35,6 +35,7 @@ public class ModTags {
         public static final TagKey<Item> ARMOR = createItemTag("armor");
         public static final TagKey<Item> TOOLS = createItemTag("tools");
         public static final TagKey<Item> TALISMANS = createItemTag("talismans");
+        public static final TagKey<Item> MATERIALS = createItemTag("materials");
 
         public static final TagKey<Item> WEAPON_BLADES = createItemTag("weapon/blades");
         public static final TagKey<Item> WEAPON_BOWS = createItemTag("weapon/bows");

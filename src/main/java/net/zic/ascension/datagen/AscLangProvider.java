@@ -36,8 +36,7 @@ public class AscLangProvider extends LanguageProvider {
 
         // Creative Tab Sections
         add("creative_section.ascension.artifacts", "Ascension Artifacts");
-
-
+        add("creative_section.ascension.materials", "Ascension Materials");
 
 
 

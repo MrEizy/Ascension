@@ -3,6 +3,7 @@ package net.zic.ascension.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.item.ModItems;
@@ -47,6 +48,17 @@ public class AscItemTagProvider extends ItemTagsProvider {
                         ModItems.TABLET_OF_DESTRUCTION_EARTH.get(),
                         ModItems.TABLET_OF_DESTRUCTION_HEAVEN.get(),
                         ModItems.TABLET_OF_DESTRUCTION_ASCENDANT.get()
+                );
+
+        tag(ModTags.Items.MATERIALS)
+                .add(
+                        ModItems.JADE.get(),
+                        ModItems.RAW_BLACK_IRON.get(),
+                        ModItems.BLACK_IRON_INGOT.get(),
+                        ModItems.BLACK_IRON_NUGGET.get(),
+                        ModItems.RAW_FROST_SILVER.get(),
+                        ModItems.FROST_SILVER_INGOT.get(),
+                        ModItems.FROST_SILVER_NUGGET.get()
                 );
 
         tag(ModTags.Items.WEAPON_BLADES)
