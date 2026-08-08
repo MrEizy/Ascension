@@ -157,6 +157,7 @@ public final class MobCultivationGrowth {
         MobCultivationGenerator.rebuildGeneratedStats(mob, data, source, pathData);
         MobCultivationManager.refreshAttributesAndHealth(mob, false);
         MobCultivationSkillService.synchronize(mob);
+        MobCultivationPersistence.refresh(mob);
         boolean majorBreakthrough = originalMajor != pathData.getMajorRealm();
         MobCultivationVisuals.onBreakthrough(mob, majorBreakthrough);
         MobCultivationVisuals.applyDebugName(mob);

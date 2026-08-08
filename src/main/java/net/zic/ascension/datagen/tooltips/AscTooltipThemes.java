@@ -1,4 +1,4 @@
-package net.zic.ascension.datagen;
+package net.zic.ascension.datagen.tooltips;
 
 import net.zic.zenithlib.tooltip.api.ZenithTooltipTheme;
 import net.zic.zenithlib.tooltip.api.builder.ZenithTooltipThemeBuilder;

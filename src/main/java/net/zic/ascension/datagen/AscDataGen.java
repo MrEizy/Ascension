@@ -8,12 +8,13 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.datagen.mob_cultivation.MobCultivationLootDataProvider;
+import net.zic.ascension.datagen.mob_cultivation.MobCultivationProfileDataProvider;
 import net.zic.ascension.datagen.tooltips.AscClassificationDataProvider;
 import net.zic.ascension.datagen.tooltips.AscTooltipDataProvider;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class AscDataGen {
@@ -35,6 +36,8 @@ public class AscDataGen {
         generator.addProvider(true, new AscBlockTagProvider(packOutput, lookupProvider));
         generator.addProvider(true, new AscItemTagProvider(packOutput, lookupProvider));
         generator.addProvider(true, new AscEntityTypeTagProvider(packOutput, lookupProvider));
+        generator.addProvider(true, new MobCultivationProfileDataProvider(packOutput));
+        generator.addProvider(true, new MobCultivationLootDataProvider(packOutput));
         generator.addProvider(true, new AscTooltipDataProvider(packOutput, AscensionCraft.MOD_ID));
         generator.addProvider(true, new AscClassificationDataProvider(packOutput, AscensionCraft.MOD_ID));
     }

@@ -2,34 +2,30 @@
   "entries": [
     {
       "item": "minecraft:blaze_powder",
-      "weight": 7,
-      "minimum_count": 1,
-      "maximum_count": 3
+      "maximum_count": 3,
+      "weight": 7.0
     },
     {
       "item": "minecraft:glowstone_dust",
-      "weight": 5,
-      "minimum_count": 1,
-      "maximum_count": 3
+      "maximum_count": 3,
+      "weight": 5.0
     },
     {
       "item": "minecraft:amethyst_shard",
-      "weight": 3,
+      "maximum_count": 3,
       "minimum_realm_score": 3,
-      "minimum_count": 1,
-      "maximum_count": 3
+      "weight": 3.0
     },
     {
       "item": "minecraft:prismarine_crystals",
-      "weight": 2,
+      "maximum_count": 2,
       "minimum_realm_score": 4,
-      "minimum_count": 1,
-      "maximum_count": 2
+      "weight": 2.0
     },
     {
       "item": "minecraft:diamond",
-      "weight": 0.4,
-      "minimum_realm_score": 8
+      "minimum_realm_score": 8,
+      "weight": 0.4
     }
   ]
 }

@@ -27,6 +27,7 @@ import net.zic.ascension.mob_cultivation.profile.MobCultivationProfileManager;
 import net.zic.ascension.mob_cultivation.profile.ResolvedMobCultivationProfile;
 import net.zic.ascension.mob_cultivation.runtime.MobCultivationAi;
 import net.zic.ascension.mob_cultivation.runtime.MobCultivationGrowth;
+import net.zic.ascension.mob_cultivation.runtime.MobCultivationPersistence;
 import net.zic.ascension.mob_cultivation.runtime.MobCultivationVisuals;
 import net.zic.ascension.mob_cultivation.skill.MobCultivationCastingController;
 import net.zic.ascension.mob_cultivation.skill.MobCultivationSkillPoolManager;
@@ -69,6 +70,7 @@ public final class MobCultivationManager {
             entityData.initializeAttributes();
         }
         MobCultivationSkillService.synchronize(mob);
+        MobCultivationPersistence.refresh(mob);
         MobCultivationVisuals.applyDebugName(mob);
     }
 
@@ -116,6 +118,7 @@ public final class MobCultivationManager {
         ensureEntityDataInitialized(mob, entityData);
         MobCultivationGenerator.generateFreshCultivation(mob, data, entityData.getSource());
         MobCultivationSkillService.synchronize(mob);
+        MobCultivationPersistence.refresh(mob);
     }
 
     public static boolean setCultivation(
@@ -174,6 +177,7 @@ public final class MobCultivationManager {
         MobCultivationGenerator.rebuildGeneratedStats(mob, data, source, pathData);
         refreshAttributesAndHealth(mob, true);
         MobCultivationSkillService.synchronize(mob);
+        MobCultivationPersistence.refresh(mob);
         MobCultivationVisuals.spawnAura(mob, 18);
         MobCultivationVisuals.applyDebugName(mob);
         return true;
@@ -192,6 +196,7 @@ public final class MobCultivationManager {
         MobCultivationGenerator.rebuildGeneratedStats(mob, data, source, pathData);
         refreshAttributesAndHealth(mob, false);
         MobCultivationSkillService.synchronize(mob);
+        MobCultivationPersistence.refresh(mob);
         MobCultivationVisuals.spawnAura(mob, 20);
         MobCultivationVisuals.applyDebugName(mob);
         return true;
@@ -288,6 +293,7 @@ public final class MobCultivationManager {
             refreshAttributesAndHealth(targetMob, true);
         }
         MobCultivationSkillService.synchronize(targetMob);
+        MobCultivationPersistence.refresh(targetMob);
         return true;
     }
 
@@ -353,7 +359,8 @@ public final class MobCultivationManager {
                         "Effective stats: vitality %.2f, strength %.2f, agility %.2f, spirit %.2f\n" +
                         "Atmospheric qi: %.1f%%\n" +
                         "Distance growth: x%.2f\n" +
-                        "Growth frozen: %s",
+                        "Growth frozen: %s\n" +
+                        "Cultivation persistence granted: %s",
                 mob.getType().getDescription().getString(),
                 data.getCategory().name().toLowerCase(Locale.ROOT),
                 data.getEliteTier().name().toLowerCase(Locale.ROOT),
@@ -382,7 +389,8 @@ public final class MobCultivationManager {
                 source.getStat(AscensionStats.SPIRIT.get()),
                 getAtmosphericQiRatio(mob) * 100.0D,
                 MobCultivationGrowth.getDistanceGrowthMultiplier(mob),
-                data.isGrowthFrozen()
+                data.isGrowthFrozen(),
+                data.isCultivationPersistenceGranted()
         );
         return Component.literal(description);
     }
@@ -405,6 +413,7 @@ public final class MobCultivationManager {
         MobCultivationGenerator.rebuildGeneratedStats(mob, data, source, pathData);
         MobCultivationSkillService.synchronize(mob);
         refreshAttributesAndHealth(mob, false);
+        MobCultivationPersistence.refresh(mob);
     }
 
     static void ensureEntityDataInitialized(Mob mob, SimpleAscensionEntityData entityData) {

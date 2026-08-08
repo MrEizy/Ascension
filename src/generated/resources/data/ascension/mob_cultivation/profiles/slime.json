@@ -1,0 +1,51 @@
+{
+  "atmospheric_qi_sensitivity": 1.1,
+  "elite": {
+    "ancient_chance": 0.08,
+    "chance": 0.025,
+    "enabled": true,
+    "extra_trait_rolls": 1,
+    "trait_weights": {
+      "ascension:armoured_body": 1.0,
+      "ascension:elemental_body": 0.7,
+      "ascension:pack_creature": 0.35,
+      "ascension:regenerating": 1.0,
+      "ascension:spiritual_body": 0.7
+    }
+  },
+  "foundation_path_weights": {
+    "ascension:foundation/body": 6.0,
+    "ascension:foundation/essence": 2.0,
+    "ascension:foundation/soul": 0.5
+  },
+  "growth_multiplier": 1.0,
+  "loot_multiplier": 1.0,
+  "loot_profile": "ascension:beast",
+  "priority": 10,
+  "show_particles": true,
+  "skill_pools": [
+    "ascension:generic/body"
+  ],
+  "stat_biases": {
+    "agility": 0.85,
+    "spirit": 0.75,
+    "strength": 1.0,
+    "vitality": 1.3
+  },
+  "stat_multiplier": 1.0,
+  "sub_path_count": {
+    "max": 2,
+    "min": 1
+  },
+  "sub_path_weights": {
+    "ascension:elemental/earth": 2.0,
+    "ascension:elemental/water": 4.0,
+    "ascension:weapon/fist": 2.0
+  },
+  "target": {
+    "entity": "minecraft:slime"
+  },
+  "traits": [
+    "ascension:regenerating"
+  ]
+}

@@ -49,6 +49,7 @@ public final class MobCultivationData {
     private transient long nextRegenerationGameTime;
     private boolean debugNameApplied;
     private String lastDebugName;
+    private boolean cultivationPersistenceGranted;
 
     public boolean isInitialized() { return initialized; }
     public void setInitialized(boolean initialized) { this.initialized = initialized; }
@@ -172,6 +173,8 @@ public final class MobCultivationData {
     public String getLastDebugName() { return lastDebugName; }
     public void setDebugName(String debugName) { debugNameApplied = true; lastDebugName = debugName; }
     public void clearDebugNameState() { debugNameApplied = false; lastDebugName = null; }
+    public boolean isCultivationPersistenceGranted() { return cultivationPersistenceGranted; }
+    public void setCultivationPersistenceGranted(boolean value) { cultivationPersistenceGranted = value; }
 
     public void beginRuntimeSession(long gameTime) {
         if (runtimeSessionInitialized) return;
@@ -247,6 +250,7 @@ public final class MobCultivationData {
             data.generatedSpirit = input.getDoubleOr("generated_spirit", 0.0D);
             data.debugNameApplied = input.getBooleanOr("debug_name_applied", false);
             data.lastDebugName = input.getStringOr("last_debug_name", "");
+            data.cultivationPersistenceGranted = input.getBooleanOr("cultivation_persistence_granted", false);
             if (data.lastDebugName.isBlank()) data.lastDebugName = null;
             return data;
         }
@@ -273,6 +277,7 @@ public final class MobCultivationData {
             output.putDouble("generated_spirit", data.generatedSpirit);
             output.putBoolean("debug_name_applied", data.debugNameApplied);
             if (data.lastDebugName != null) output.putString("last_debug_name", data.lastDebugName);
+            output.putBoolean("cultivation_persistence_granted", data.cultivationPersistenceGranted);
             return true;
         }
     }

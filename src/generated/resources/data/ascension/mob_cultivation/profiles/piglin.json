@@ -1,0 +1,53 @@
+{
+  "atmospheric_qi_sensitivity": 1.1,
+  "elite": {
+    "ancient_chance": 0.08,
+    "chance": 0.025,
+    "enabled": true,
+    "extra_trait_rolls": 1,
+    "trait_weights": {
+      "ascension:armoured_body": 1.0,
+      "ascension:elemental_body": 0.7,
+      "ascension:pack_creature": 0.35,
+      "ascension:regenerating": 1.0,
+      "ascension:spiritual_body": 0.7
+    }
+  },
+  "foundation_path_weights": {
+    "ascension:foundation/body": 3.0,
+    "ascension:foundation/essence": 3.0,
+    "ascension:foundation/soul": 1.0
+  },
+  "growth_multiplier": 1.05,
+  "loot_multiplier": 1.0,
+  "loot_profile": "ascension:default",
+  "priority": 10,
+  "show_particles": true,
+  "skill_pools": [
+    "ascension:generic/body",
+    "ascension:generic/essence"
+  ],
+  "stat_biases": {
+    "agility": 1.0,
+    "spirit": 0.9,
+    "strength": 1.15,
+    "vitality": 1.05
+  },
+  "stat_multiplier": 1.0,
+  "sub_path_count": {
+    "max": 2,
+    "min": 1
+  },
+  "sub_path_weights": {
+    "ascension:elemental/fire": 5.0,
+    "ascension:elemental/metal": 4.0,
+    "ascension:weapon/axe": 3.0,
+    "ascension:weapon/sword": 3.0
+  },
+  "target": {
+    "entity": "minecraft:piglin"
+  },
+  "traits": [
+    "ascension:pack_creature"
+  ]
+}

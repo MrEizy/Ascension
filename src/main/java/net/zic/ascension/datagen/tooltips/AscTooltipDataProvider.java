@@ -1,7 +1,6 @@
 package net.zic.ascension.datagen.tooltips;
 
 import net.minecraft.data.PackOutput;
-import net.zic.ascension.datagen.AscTooltipThemes;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
 import net.zic.zenithlib.tooltip.api.animation.ZenithTooltipPresets;
 import net.zic.zenithlib.tooltip.api.element.ClassificationElement;

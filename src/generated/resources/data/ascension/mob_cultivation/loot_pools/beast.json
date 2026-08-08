@@ -1,0 +1,30 @@
+{
+  "entries": [
+    {
+      "item": "minecraft:leather",
+      "maximum_count": 3,
+      "weight": 7.0
+    },
+    {
+      "item": "minecraft:rabbit_hide",
+      "maximum_count": 2,
+      "weight": 4.0
+    },
+    {
+      "item": "minecraft:bone",
+      "maximum_count": 2,
+      "weight": 3.0
+    },
+    {
+      "item": "minecraft:gold_nugget",
+      "maximum_count": 2,
+      "minimum_realm_score": 4,
+      "weight": 1.5
+    },
+    {
+      "item": "minecraft:emerald",
+      "minimum_realm_score": 6,
+      "weight": 0.7
+    }
+  ]
+}

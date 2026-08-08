@@ -1,0 +1,36 @@
+{
+  "atmospheric_qi_sensitivity": 1.1,
+  "foundation_path_weights": {
+    "ascension:foundation/body": 1.0,
+    "ascension:foundation/essence": 4.0,
+    "ascension:foundation/soul": 2.0
+  },
+  "growth_multiplier": 0.95,
+  "loot_multiplier": 1.0,
+  "loot_profile": "ascension:beast",
+  "priority": 10,
+  "show_particles": true,
+  "skill_pools": [
+    "ascension:generic/essence"
+  ],
+  "stat_biases": {
+    "agility": 1.0,
+    "spirit": 1.1,
+    "strength": 0.7,
+    "vitality": 0.85
+  },
+  "stat_multiplier": 0.95,
+  "sub_path_count": {
+    "max": 1,
+    "min": 1
+  },
+  "sub_path_weights": {
+    "ascension:elemental/water": 6.0
+  },
+  "target": {
+    "entity": "minecraft:squid"
+  },
+  "traits": [
+    "ascension:pack_creature"
+  ]
+}

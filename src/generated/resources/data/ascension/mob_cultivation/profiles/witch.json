@@ -1,0 +1,50 @@
+{
+  "atmospheric_qi_sensitivity": 1.2,
+  "elite": {
+    "ancient_chance": 0.08,
+    "chance": 0.025,
+    "enabled": true,
+    "extra_trait_rolls": 1,
+    "trait_weights": {
+      "ascension:armoured_body": 1.0,
+      "ascension:elemental_body": 0.7,
+      "ascension:pack_creature": 0.35,
+      "ascension:regenerating": 1.0,
+      "ascension:spiritual_body": 0.7
+    }
+  },
+  "foundation_path_weights": {
+    "ascension:foundation/body": 0.5,
+    "ascension:foundation/essence": 4.0,
+    "ascension:foundation/soul": 5.0
+  },
+  "growth_multiplier": 1.1,
+  "loot_multiplier": 1.0,
+  "loot_profile": "ascension:default",
+  "priority": 10,
+  "show_particles": true,
+  "skill_pools": [
+    "ascension:generic/essence",
+    "ascension:generic/soul"
+  ],
+  "stat_biases": {
+    "agility": 0.95,
+    "spirit": 1.45,
+    "strength": 0.7,
+    "vitality": 0.9
+  },
+  "stat_multiplier": 1.0,
+  "sub_path_count": {
+    "max": 2,
+    "min": 1
+  },
+  "sub_path_weights": {
+    "ascension:elemental/poison": 6.0,
+    "ascension:elemental/water": 3.0,
+    "ascension:elemental/wood": 3.0
+  },
+  "target": {
+    "entity": "minecraft:witch"
+  },
+  "traits": []
+}

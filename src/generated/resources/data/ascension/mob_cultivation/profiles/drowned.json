@@ -1,0 +1,52 @@
+{
+  "atmospheric_qi_sensitivity": 1.05,
+  "elite": {
+    "ancient_chance": 0.08,
+    "chance": 0.025,
+    "enabled": true,
+    "extra_trait_rolls": 1,
+    "trait_weights": {
+      "ascension:armoured_body": 1.0,
+      "ascension:elemental_body": 0.7,
+      "ascension:pack_creature": 0.35,
+      "ascension:regenerating": 1.0,
+      "ascension:spiritual_body": 0.7
+    }
+  },
+  "foundation_path_weights": {
+    "ascension:foundation/body": 4.0,
+    "ascension:foundation/essence": 1.0,
+    "ascension:foundation/soul": 3.0
+  },
+  "growth_multiplier": 0.95,
+  "loot_multiplier": 1.05,
+  "loot_profile": "ascension:undead",
+  "priority": 10,
+  "show_particles": true,
+  "skill_pools": [
+    "ascension:generic/body",
+    "ascension:generic/soul"
+  ],
+  "stat_biases": {
+    "agility": 0.9,
+    "spirit": 1.0,
+    "strength": 1.15,
+    "vitality": 1.15
+  },
+  "stat_multiplier": 1.05,
+  "sub_path_count": {
+    "max": 2,
+    "min": 1
+  },
+  "sub_path_weights": {
+    "ascension:elemental/death": 3.0,
+    "ascension:elemental/water": 5.0,
+    "ascension:weapon/spear": 5.0
+  },
+  "target": {
+    "entity": "minecraft:drowned"
+  },
+  "traits": [
+    "ascension:undead"
+  ]
+}

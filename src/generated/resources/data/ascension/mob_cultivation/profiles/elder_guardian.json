@@ -1,0 +1,59 @@
+{
+  "atmospheric_qi_sensitivity": 1.15,
+  "elite": {
+    "ancient_chance": 0.2,
+    "chance": 1.0,
+    "enabled": true,
+    "extra_trait_rolls": 2,
+    "trait_weights": {
+      "ascension:armoured_body": 1.0,
+      "ascension:elemental_body": 0.7,
+      "ascension:pack_creature": 0.35,
+      "ascension:regenerating": 1.0,
+      "ascension:spiritual_body": 0.7
+    }
+  },
+  "foundation_path_weights": {
+    "ascension:foundation/body": 1.0,
+    "ascension:foundation/essence": 4.0,
+    "ascension:foundation/soul": 3.0
+  },
+  "growth_multiplier": 1.1,
+  "initial_realm": {
+    "major_max": 3,
+    "major_min": 2,
+    "minor_max": 2,
+    "minor_min": 1
+  },
+  "loot_multiplier": 1.15,
+  "loot_profile": "ascension:boss",
+  "priority": 10,
+  "show_particles": true,
+  "skill_pools": [
+    "ascension:generic/essence",
+    "ascension:generic/soul"
+  ],
+  "stat_biases": {
+    "agility": 1.0,
+    "spirit": 1.4,
+    "strength": 0.85,
+    "vitality": 1.35
+  },
+  "stat_multiplier": 1.2,
+  "sub_path_count": {
+    "max": 2,
+    "min": 1
+  },
+  "sub_path_weights": {
+    "ascension:elemental/metal": 2.5,
+    "ascension:elemental/water": 6.0,
+    "ascension:space": 1.0
+  },
+  "target": {
+    "entity": "minecraft:elder_guardian"
+  },
+  "traits": [
+    "ascension:armoured_body",
+    "ascension:spiritual_body"
+  ]
+}

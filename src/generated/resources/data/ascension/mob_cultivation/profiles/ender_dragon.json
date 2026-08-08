@@ -1,0 +1,62 @@
+{
+  "atmospheric_qi_sensitivity": 1.3,
+  "elite": {
+    "ancient_chance": 0.35,
+    "chance": 1.0,
+    "enabled": true,
+    "extra_trait_rolls": 2,
+    "trait_weights": {
+      "ascension:armoured_body": 1.0,
+      "ascension:elemental_body": 0.7,
+      "ascension:pack_creature": 0.35,
+      "ascension:regenerating": 1.0,
+      "ascension:spiritual_body": 0.7
+    }
+  },
+  "foundation_path_weights": {
+    "ascension:foundation/body": 3.0,
+    "ascension:foundation/essence": 4.0,
+    "ascension:foundation/soul": 6.0
+  },
+  "growth_multiplier": 1.25,
+  "initial_realm": {
+    "major_max": 4,
+    "major_min": 3,
+    "minor_max": 2,
+    "minor_min": 1
+  },
+  "loot_multiplier": 1.0,
+  "loot_profile": "ascension:boss",
+  "priority": 10,
+  "show_particles": true,
+  "skill_pools": [
+    "ascension:generic/body",
+    "ascension:generic/essence",
+    "ascension:generic/soul"
+  ],
+  "stat_biases": {
+    "agility": 1.1,
+    "spirit": 1.6,
+    "strength": 1.45,
+    "vitality": 1.6
+  },
+  "stat_multiplier": 1.3,
+  "sub_path_count": {
+    "max": 3,
+    "min": 2
+  },
+  "sub_path_weights": {
+    "ascension:elemental/dark": 4.0,
+    "ascension:elemental/fire": 3.0,
+    "ascension:elemental/lightning": 2.0,
+    "ascension:elemental/space": 9.0
+  },
+  "target": {
+    "entity": "minecraft:ender_dragon"
+  },
+  "traits": [
+    "ascension:elemental_body",
+    "ascension:spiritual_body",
+    "ascension:armoured_body"
+  ]
+}

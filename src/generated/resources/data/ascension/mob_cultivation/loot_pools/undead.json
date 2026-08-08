@@ -1,0 +1,30 @@
+{
+  "entries": [
+    {
+      "item": "minecraft:bone",
+      "maximum_count": 3,
+      "weight": 8.0
+    },
+    {
+      "item": "minecraft:rotten_flesh",
+      "maximum_count": 3,
+      "weight": 6.0
+    },
+    {
+      "item": "minecraft:amethyst_shard",
+      "maximum_count": 3,
+      "minimum_realm_score": 2,
+      "weight": 3.0
+    },
+    {
+      "item": "minecraft:echo_shard",
+      "minimum_realm_score": 6,
+      "weight": 0.7
+    },
+    {
+      "item": "minecraft:gold_ingot",
+      "minimum_realm_score": 5,
+      "weight": 0.8
+    }
+  ]
+}
