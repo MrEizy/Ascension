@@ -36,6 +36,7 @@ import net.zic.ascension.impl.datapack.progression.AscensionProgressActionCondit
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
+import net.zic.zenithlib.stats.ZenithStatHolder;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -56,6 +57,7 @@ import java.util.Map;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 @Mod(AscensionCraft.MOD_ID)
 public class AscensionCraft {
+
     public static float hue;
     public static final String MOD_ID = "ascension";
     public static final Logger LOGGER = LogUtils.getLogger();

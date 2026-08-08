@@ -45,6 +45,8 @@ import java.util.Random;
  * Contains methods to interact with an origin source.
  * These methods are specific to Ascension DataSources
  * includes a combination of getters and setters
+ * TODO:
+ *  currently have an attribute bug where on removal of stuff stats and attributes are not proerly adjusted
  */
 public class AscensionOriginSourceHelper {
 
@@ -301,6 +303,10 @@ public class AscensionOriginSourceHelper {
      */
     public static boolean addPath(OriginSource source,Identifier path,Identifier owner){
         if(path == null) return false;
+        if(getPathHolder(source).hasPath(path)){
+            getPathHolder(source).addPath(path,getPathHolder(source).getPath(path),owner);
+            return true;
+        }
         Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,source.getRegistryAccess());
         if(pathInstance == null) return false;
         return addPath(source,path,pathInstance.newInstance(source.getRegistryAccess()),owner);
@@ -308,14 +314,20 @@ public class AscensionOriginSourceHelper {
 
     public static boolean addPath(OriginSource source,Identifier path, PathInstance existingData, Identifier owner) {
         boolean usedCachedResult = false;
+        if(path == null) return false;
+        if(getPathHolder(source).hasPath(path)){
+            getPathHolder(source).addPath(path,existingData,owner);
 
+            return true;
+        }
+        if(existingData == null) return false;
 
-        if(path == null || existingData == null) return false;
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
         if(getPathHolder(source).hasCachedPath(path)) {
             existingData = getPathHolder(source).removeCachedPath(path);
             usedCachedResult = true;
         }
+
 
         if(existingData == null) return false;
 
@@ -342,6 +354,7 @@ public class AscensionOriginSourceHelper {
 
     public static boolean removePath(OriginSource source,Identifier path,Identifier owner) {
         if(path == null || !getPathHolder(source).hasPath(path)) return false;
+
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
         PathInstance data = getPathHolder(source).getPath(path);
         PathRemovedEvent.Pre pre = new PathRemovedEvent.Pre(path,data,source);
@@ -392,6 +405,10 @@ public class AscensionOriginSourceHelper {
      */
     public static boolean addSkill(OriginSource source,Identifier skill,Identifier owner){
         if(skill == null) return false;
+        if(getSkillHolder(source).hasSkill(skill)){
+            getSkillHolder(source).addSkill(skill,getSkillHolder(source).getSkillData(skill),owner);
+            return true;
+        }
         Skill skillInstance = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,source.getRegistryAccess());
         if(skillInstance == null) return false;
         return addSkill(source,skill,skillInstance.newData(source.getRegistryAccess()),owner);
@@ -400,6 +417,10 @@ public class AscensionOriginSourceHelper {
     public static boolean addSkill(OriginSource source,Identifier skill, SkillData data, Identifier owner) {
 
         if(skill == null) return false;
+        if(getSkillHolder(source).hasSkill(skill)){
+            getSkillHolder(source).addSkill(skill,data,owner);
+            return true;
+        }
         if(!CoreRegistries.SKILL_REGISTRY.get(source.getRegistryAccess()).containsKey(skill)) return false;
         if(getSkillHolder(source).hasCachedSkill(skill))  data = getSkillHolder(source).removeCachedSkill(skill);
 

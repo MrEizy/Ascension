@@ -22,17 +22,15 @@ import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public record SimplePhysique(Component name, Component description, List<Identifier> unlockedPaths,
                              List<Identifier> skills, List<ValueContainer.BaseModifier> baseStats,
                              Map<Identifier, List<ValueContainerModifier>> statModifiers,
                              List<PathBonusBase> basePathBonuses,
                              List<PathBonusModifier> pathBonusModifiers,
-                             Optional<AscensionItemTooltipDefinition> itemTooltip) implements Physique {
+                             Optional<AscensionItemTooltipDefinition> itemTooltip
+                            ) implements Physique {
 
 
     public SimplePhysique(
@@ -56,6 +54,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
         this.pathBonusModifiers = pathBonusModifiers;
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
         AscensionCraft.LOGGER.info("created Simple Physique {}", name);
+
     }
 
     @Override

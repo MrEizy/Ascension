@@ -42,6 +42,9 @@ public class SimplePathInstance implements PathInstance {
 
     public SimplePathInstance(SimplePath path){
         this.path = path;
+
+        //ensure we have realms
+        getCurrentRealmInstance();
     }
 
 

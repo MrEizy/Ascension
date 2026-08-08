@@ -42,11 +42,11 @@ public class PathHolder implements DataSourceInstance {
     public boolean addPath(Identifier path,PathInstance PathInstance,Identifier owner){
         return addPath(path,PathInstance,owner,false);
     }
-    public boolean addPath(Identifier path,PathInstance PathInstance,Identifier owner,boolean overwrite){
+    public boolean addPath(Identifier path,PathInstance pathInstance,Identifier owner,boolean overwrite){
 
         if((hasPath(path) && overwrite) || !hasPath(path)) {
-            if(hasCachedPath(path)) PathInstance = removeCachedPath(path);
-            paths.put(path,PathInstance);
+            if(hasCachedPath(path)) pathInstance = removeCachedPath(path);
+            paths.put(path,pathInstance);
             pathOwners.computeIfAbsent(path,key->new HashSet<>());
         }
         pathOwners.get(path).add(owner);

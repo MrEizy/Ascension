@@ -29,24 +29,22 @@ import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.ZenithAttribute;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.network.ByteBufHelpers;
-import net.zic.zenithlib.stats.Stat;
-import net.zic.zenithlib.stats.StatInstance;
-import net.zic.zenithlib.stats.StatSheet;
-import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
+import net.zic.zenithlib.stats.*;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class SimpleAscensionEntityData implements AscensionEntityData {
 
     private final StatSheet statSheet = new StatSheet();
+    private final Set<Stat> dirtyStats = new HashSet<>();
+
     private final PathBonusHolder pathBonusHolder = new PathBonusHolder();
     private final PathBonusHolder cachedPathBonusHolder = new PathBonusHolder();
+
 
     private final OriginSource source;
     private final LivingEntity attachedEntity;
@@ -63,9 +61,31 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private Identifier selectedStarterPhysique;
     private boolean starterSelectionComplete;
 
+    private float cachedHealth = 0;
+
+    private final Random random = new Random();
+
+    private String process = null;
     public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
         this.source = source;
         this.attachedEntity = entity;
+    }
+    public void startProcess(String process){
+        if(this.process == null) this.process = process;
+    }
+    public boolean resolveProcess(String process){
+
+        if(this.process == null) return false;
+        if(!this.process.equals(process)) return false;
+        this.process = null;
+        resolve();
+        return true;
+    }
+
+    protected void resolve(){
+        if(!dirtyStats.isEmpty()) attachedEntity.getData(ZenithAttachments.STAT_HOLDER).updateStats(dirtyStats);
+        dirtyStats.clear();
+        //TODO add path bonus values here as well
     }
 
     public void initializeAttributes() {
@@ -175,12 +195,19 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     public void initialize() {
 
         AscensionEntityData.super.initialize();
+        ZenithAttributeHolder attributeHolder = attachedEntity.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
+        ZenithStatHolder statHolder = attachedEntity.getData(ZenithAttachments.STAT_HOLDER);
+        statHolder.startProcess("initialize_on_entity");
+        attributeHolder.startProcess("initialize_on_entity");
         initializeAttributes();
 
 
         markDirty(getSource().load(),true);
         initializePathBonuses();
         getSource().attachToEntity(getEntity());
+        statHolder.resolveProcess("initialize_on_entity");
+        attributeHolder.resolveProcess("initialize_on_entity");
+        attachedEntity.setHealth(cachedHealth);
 
     }
 
@@ -247,6 +274,11 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         getEntity().syncData(CoreAttachments.PATH_BONUS_HOLDER);
     }
 
+    @Override
+    public void updatePathBonuses(Collection<PathBonus> bonuses) {
+        //TODO
+    }
+
     public void initializePathBonuses(){
         Collection<PathBonus> bonuses = AscensionOriginSourceHelper.getAllPathBonuses(source);
         Collection<PathBonus> selfBonuses = pathBonusHolder.getAllPathBonuses();
@@ -303,11 +335,17 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         statSheet.getStatInstance(stat).removeModifier(modifier);
         updateStatHolder(stat);
     }
-    //TODO add a process system like patching for bulk updates
+
+
+
+
+
     public void updateStatHolder(Stat stat){
         if(getEntity() == null) return;
-        NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(getEntity(),List.of(stat)));
-
+        String processId = "singel_stat_update"+random.nextLong();
+        startProcess(processId);
+        dirtyStats.add(stat);
+        resolveProcess(process);
     }
 
 
@@ -561,8 +599,10 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             originSource.setCachedData(input.childOrEmpty("source_data"));
 
 
+
             SimpleAscensionEntityData data = new SimpleAscensionEntityData(originSource, entity);
 
+            data.cachedHealth = input.getFloatOr("cached_health",entity.getMaxHealth());
             data.setCultivationSuppressed(
                     input.getBooleanOr("cultivation_suppressed", false)
             );
@@ -586,7 +626,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         @Override
         public boolean write(SimpleAscensionEntityData attachment, ValueOutput output) {
             attachment.source.writeOriginSourceData(output.child("source_data"));
-
+            output.putFloat("cached_health",attachment.getEntity().getHealth());
             output.putBoolean(
                     "cultivation_suppressed",
                     attachment.isCultivationSuppressed()

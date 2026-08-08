@@ -108,6 +108,7 @@ public class HealthBar extends RenderableElement {
 
     @Override
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+
         Player player = Minecraft.getInstance().player;
         if (player == null) {
             return;

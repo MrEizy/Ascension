@@ -3,7 +3,7 @@
   "name": "dev_cultivate",
   "description": "breath in the essence, let it settle",
   "path": "ascension:foundation/essence",
-  "rate": 10000,
+  "rate": 100000000,
   "particle_field": {
     "style": "meridian_flow",
     "particles": [

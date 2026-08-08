@@ -14,7 +14,6 @@ import net.zic.ascension.skill_casting.SkillCastHandler;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.SuppressedZenithAttribute;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
-import net.zic.zenithlib.stats.ZenithStatHandler;
 import net.zic.zenithlib.stats.ZenithStatHolder;
 
 import java.util.Optional;

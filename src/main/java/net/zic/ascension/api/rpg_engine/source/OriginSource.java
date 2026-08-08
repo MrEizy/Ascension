@@ -12,6 +12,8 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
@@ -21,7 +23,6 @@ import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.StatInstance;
 import net.zic.zenithlib.stats.StatProvider;
 import net.zic.zenithlib.stats.StatSheet;
-import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
 import java.util.*;
@@ -76,11 +77,16 @@ public class OriginSource implements StatProvider {
         return patch;
     }
     public OriginSourcePatch resolveFullPatch(){
-        return new OriginSourcePatch(
+        OriginSourcePatch patch = new OriginSourcePatch(
                 Map.copyOf(dataSources),
                 List.of(),
                 statSheet.getAllInstances()
         );
+
+        dirtyDataSources.clear();
+        removedDataSources.clear();
+        updateEntityStatHolder();
+        return patch;
     }
     public boolean resolveProcess(String processId){
         return processId.equals(process);
@@ -167,7 +173,10 @@ public class OriginSource implements StatProvider {
     public void updateEntityStatHolder(){
         if(dirtyStats.isEmpty()) return;
         for(LivingEntity entity : getAttachedEntities()){
-            NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(entity,dirtyStats));
+            AscensionEntityDataProvider provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+            if(provider == null) continue;
+            if(provider.getData(entity) == null) continue;
+            entity.getData(ZenithAttachments.STAT_HOLDER).updateStats(dirtyStats);
         }
         dirtyStats.clear();
     }

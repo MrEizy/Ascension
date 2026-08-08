@@ -49,7 +49,15 @@ public class SkillHolder implements DataSourceInstance {
 
         return true;
     }
-
+    public boolean addSkill(Identifier skill,SkillData data,Identifier owner, boolean overwrite){
+        if((hasSkill(skill) && overwrite) || !hasSkill(skill)) {
+            if(hasCachedSkill(skill)) data = removeCachedSkill(skill);
+            skills.put(skill,data);
+            skillOwners.computeIfAbsent(skill,key->new HashSet<>());
+        }
+        skillOwners.get(skill).add(owner);
+        return true;
+    }
     /**
      * removes a skill only if the ownerIdMap is empty
      * @param skill the skill we want to remove
