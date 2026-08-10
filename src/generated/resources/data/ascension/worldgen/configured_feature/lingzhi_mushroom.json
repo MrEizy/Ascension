@@ -1,4 +1,7 @@
 {
   "type": "ascension:lingzhi_mushroom",
-  "config": {}
+  "config": {
+    "mushroom_block": "ascension:lingzhi_mushroom_b",
+    "support_blocks": "#minecraft:logs"
+  }
 }

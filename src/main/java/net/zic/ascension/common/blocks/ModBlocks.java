@@ -1,6 +1,7 @@
 package net.zic.ascension.common.blocks;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -8,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -57,7 +59,14 @@ public class ModBlocks {
             properties -> new LingzhiMushroomBlock(properties
                     .strength(0.2f)
                     .sound(SoundType.STEM)
-                    .pushReaction(PushReaction.DESTROY)));
+                    .pushReaction(PushReaction.DESTROY),
+                    BlockTags.LOGS));
+    public static final DeferredBlock<Block> BLOOD_LINGZHI_MUSHROOM_B = registerBlock("blood_lingzhi_mushroom_b",
+            properties -> new LingzhiMushroomBlock(properties
+                    .strength(0.2f)
+                    .sound(SoundType.STEM)
+                    .pushReaction(PushReaction.DESTROY),
+                    Blocks.BONE_BLOCK));
 
 
 

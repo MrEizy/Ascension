@@ -84,6 +84,12 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.jade", "Jade");
 
 
+
+        //Herb Items
+        add("item.ascension.lingzhi_mushroom", "Lingzhi");
+        add("item.ascension.blood_lingzhi_mushroom", "Blood Lingzhi");
+
+
         //Block Ores
         add("block.ascension.black_iron_ore", "Black Iron Ore");
         add("block.ascension.black_iron_block", "Black Iron Block");
@@ -94,11 +100,9 @@ public class AscLangProvider extends LanguageProvider {
         add("block.ascension.jade_block", "Jade Block");
 
 
-        //Herb Items
-        add("item.ascension.lingzhi_mushroom", "Lingzhi Mushroom");
-
         //Herb Blocks
         add("block.ascension.lingzhi_mushroom_b", "Lingzhi Mushroom");
+        add("block.ascension.blood_lingzhi_mushroom_b", "Blood Lingzhi Mushroom");
 
 
 
@@ -424,5 +428,11 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.ninefold_carnage_circuit.desc", "Pins a revolving slaughter circuit to the ground, grinding any enemies caught within it.");
         add("ascension.skill.heaven_grinding_slaughter_wheel.name", "Heaven-Grinding Slaughter Wheel");
         add("ascension.skill.heaven_grinding_slaughter_wheel.desc", "Charge the completed wheel and release it through the surrounding space, crushing nearby enemies beneath your revolutions.");
+
+
+
+
+
+        add("ascension.mob_cultivation.presence", "Spiritual Qi shifts through the air Something unnerving is nearby");
     }
 }

@@ -60,6 +60,8 @@ public class ModCreativeModeTabs {
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.LINGZHI_MUSHROOM_B);
                         output.accept(ModItems.LINGZHI_MUSHROOM);
+                        output.accept(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B);
+                        output.accept(ModItems.BLOOD_LINGZHI_MUSHROOM);
 
 
                     }).build());

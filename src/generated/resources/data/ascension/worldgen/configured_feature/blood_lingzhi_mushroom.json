@@ -1,0 +1,7 @@
+{
+  "type": "ascension:lingzhi_mushroom",
+  "config": {
+    "mushroom_block": "ascension:blood_lingzhi_mushroom_b",
+    "support_blocks": "minecraft:bone_block"
+  }
+}

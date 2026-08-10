@@ -1,6 +1,7 @@
 package net.zic.ascension.common.blocks.crops.mushrooms;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,6 +20,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.function.Predicate;
 
 public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
 
@@ -29,9 +33,25 @@ public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
 
     private static final Map<Direction, VoxelShape> SHAPES_BY_FACING = buildShapes();
 
-    public LingzhiMushroomBlock(Properties properties) {
+    private final Predicate<BlockState> surviveOn;
+
+    public LingzhiMushroomBlock(Properties properties, TagKey<Block> surviveTag) {
+        this(properties, state -> state.is(surviveTag));
+    }
+
+    public LingzhiMushroomBlock(Properties properties, Block... surviveBlocks) {
+        this(properties, blockSetPredicate(surviveBlocks));
+    }
+
+    public LingzhiMushroomBlock(Properties properties, Predicate<BlockState> surviveOn) {
         super(properties);
+        this.surviveOn = surviveOn;
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    private static Predicate<BlockState> blockSetPredicate(Block... blocks) {
+        Set<Block> set = Set.of(blocks);
+        return state -> set.contains(state.getBlock());
     }
 
     @Override
@@ -56,12 +76,12 @@ public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
         BlockPos pos = context.getClickedPos();
 
         Direction clicked = context.getClickedFace();
-        if (clicked.getAxis().isHorizontal() && isLog(level, pos.relative(clicked.getOpposite()))) {
+        if (clicked.getAxis().isHorizontal() && isValidSupport(level, pos.relative(clicked.getOpposite()))) {
             return this.defaultBlockState().setValue(FACING, clicked);
         }
 
         for (Direction direction : Direction.Plane.HORIZONTAL) {
-            if (isLog(level, pos.relative(direction.getOpposite()))) {
+            if (isValidSupport(level, pos.relative(direction.getOpposite()))) {
                 return this.defaultBlockState().setValue(FACING, direction);
             }
         }
@@ -71,7 +91,7 @@ public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         Direction facing = state.getValue(FACING);
-        return isLog(level, pos.relative(facing.getOpposite()));
+        return isValidSupport(level, pos.relative(facing.getOpposite()));
     }
 
     @Override
@@ -83,8 +103,8 @@ public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
         return super.updateShape(state, level, scheduledTickAccess, pos, direction, neighborPos, neighborState, random);
     }
 
-    private static boolean isLog(LevelReader level, BlockPos pos) {
-        return level.getBlockState(pos).is(BlockTags.LOGS);
+    private boolean isValidSupport(LevelReader level, BlockPos pos) {
+        return surviveOn.test(level.getBlockState(pos));
     }
 
     private static Map<Direction, VoxelShape> buildShapes() {

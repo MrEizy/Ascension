@@ -71,6 +71,7 @@ public class ModItems {
 
     //Herbs Items
     public static final DeferredItem<Item> LINGZHI_MUSHROOM = ITEMS.registerSimpleItem("lingzhi_mushroom");
+    public static final DeferredItem<Item> BLOOD_LINGZHI_MUSHROOM = ITEMS.registerSimpleItem("blood_lingzhi_mushroom");
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

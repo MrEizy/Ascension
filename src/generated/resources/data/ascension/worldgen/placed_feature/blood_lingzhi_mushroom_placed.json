@@ -1,9 +1,9 @@
 {
-  "feature": "ascension:black_iron_ore",
+  "feature": "ascension:blood_lingzhi_mushroom",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 5
+      "count": 10
     },
     {
       "type": "minecraft:in_square"
@@ -11,12 +11,12 @@
     {
       "type": "minecraft:height_range",
       "height": {
-        "type": "minecraft:trapezoid",
+        "type": "minecraft:uniform",
         "max_inclusive": {
-          "absolute": 120
+          "absolute": 200
         },
         "min_inclusive": {
-          "absolute": 10
+          "absolute": 0
         }
       }
     },
