@@ -84,15 +84,16 @@ public class HerbItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    /**
-     * Seed item for herbs that won't replant from the harvested item itself
-     */
     public static class Seed extends Item {
         private final Supplier<? extends Block> crop;
 
         public Seed(Properties properties, Supplier<? extends Block> crop) {
             super(properties);
             this.crop = crop;
+        }
+
+        public Block cropBlock() {
+            return crop.get();
         }
 
         @Override

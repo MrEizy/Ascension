@@ -62,6 +62,10 @@ public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
         return definition;
     }
 
+    public Item harvestItem() {
+        return harvestItem.get();
+    }
+
     public int ageTier(BlockState state) {
         return Mth.clamp(state.getValue(AGE_TIER), 0, definition.maxAgeTier());
     }

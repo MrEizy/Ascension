@@ -61,6 +61,10 @@ public class HerbCropBlock extends Block {
         return definition;
     }
 
+    public Item harvestItem() {
+        return harvestItem.get();
+    }
+
     public int growthStage(BlockState state) {
         return Math.min(state.getValue(STAGE), definition.maxGrowthStage());
     }
@@ -190,7 +194,11 @@ public class HerbCropBlock extends Block {
         BlockPos pos = origin == null ? BlockPos.ZERO : BlockPos.containing(origin);
         HerbDefinition.Quality quality = definition.resolveQuality(params.getLevel(), pos, state, wild);
 
-        AscensionComponents.HerbData herbData = new AscensionComponents.HerbData(ageTier, quality.ordinal(), wild);
+        AscensionComponents.HerbData herbData = new AscensionComponents.HerbData(
+                ageTier,
+                quality.ordinal(),
+                wild
+        );
 
         for (ItemStack drop : drops) {
             if (drop.getItem() == harvestItem.get()) {

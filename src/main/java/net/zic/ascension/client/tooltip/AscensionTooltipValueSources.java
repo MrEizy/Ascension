@@ -20,6 +20,7 @@ import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.item.herbs.HerbItem;
+import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipProvider;
 import net.zic.ascension.impl.core.technique.realm_change.condition.RealmChangeConditions;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.bloodline.purity.condition.OnPurityInRangeCondition;
@@ -70,6 +71,8 @@ public final class AscensionTooltipValueSources {
     public static final Identifier HERB_QUALITY = AscensionCraft.prefix("herb_quality");
     public static final Identifier HERB_QUALITY_BADGE = AscensionCraft.prefix("herb_quality_badge");
     public static final Identifier HERB_ORIGIN = AscensionCraft.prefix("herb_origin");
+    public static final Identifier HERB_RELATED_TYPE_BADGE = AscensionCraft.prefix("herb_related_type_badge");
+    public static final Identifier HERB_RELATED_TARGET_ROW = AscensionCraft.prefix("herb_related_target_row");
 
     private static boolean registered;
 
@@ -103,6 +106,8 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerElement(TECHNIQUE_PROGRESSION_GAINS, context -> rows(TECHNIQUE_PROGRESSION_GAINS, context));
         ZenithTooltipSources.registerElement(BLOODLINE_PURITY_GAINS, context -> rows(BLOODLINE_PURITY_GAINS, context));
         ZenithTooltipSources.registerElement(HERB_QUALITY_BADGE, AscensionTooltipValueSources::herbQualityBadge);
+        ZenithTooltipSources.registerElement(HERB_RELATED_TYPE_BADGE, AscensionTooltipValueSources::herbRelatedTypeBadge);
+        ZenithTooltipSources.registerElement(HERB_RELATED_TARGET_ROW, AscensionTooltipValueSources::herbRelatedTargetRow);
     }
 
     private static List<ZenithTooltipElement> badges(
@@ -613,6 +618,36 @@ public final class AscensionTooltipValueSources {
             case SUPERIOR -> ZenithTooltipColor.ACCENT;
             case PERFECT -> ZenithTooltipColor.WARNING;
         };
+    }
+
+    private static List<ZenithTooltipElement> herbRelatedTypeBadge(ZenithTooltipContext context) {
+        return AscensionHerbRelatedTooltipProvider.resolve(context.stack())
+                .map(info -> {
+                    BadgeElement badge = new BadgeElement(
+                            ZenithTooltipText.resolved(Component.translatable(info.kind().typeKey())),
+                            ZenithTooltipColor.ACCENT,
+                            ZenithTooltipColor.BACKGROUND,
+                            ZenithTooltipColor.ACCENT
+                    ).withBackgroundGradient(
+                            BadgeElement.GradientDirection.HORIZONTAL,
+                            ZenithTooltipColor.BACKGROUND,
+                            ZenithTooltipColor.BORDER_BOTTOM
+                    );
+
+                    return List.<ZenithTooltipElement>of(new BadgeRowElement(List.of(badge)));
+                })
+                .orElseGet(List::of);
+    }
+
+    private static List<ZenithTooltipElement> herbRelatedTargetRow(ZenithTooltipContext context) {
+        return AscensionHerbRelatedTooltipProvider.resolve(context.stack())
+                .map(info -> List.<ZenithTooltipElement>of(new RowElement(
+                        ZenithTooltipText.resolved(Component.translatable(info.kind().targetLabelKey())),
+                        ZenithTooltipText.resolved(new net.minecraft.world.item.ItemStack(info.targetItem()).getHoverName()),
+                        ZenithTooltipColor.TEXT,
+                        ZenithTooltipColor.ACCENT
+                )))
+                .orElseGet(List::of);
     }
 
     private static Optional<ZenithTooltipValue> herbOrigin(ZenithTooltipContext context) {

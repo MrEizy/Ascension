@@ -27,6 +27,24 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
         addArtifactsTooltips();
         addArtifactsRules();
         addDefaultHerbTooltip();
+        addDefaultHerbRelatedTooltip();
+    }
+
+    private void addDefaultHerbRelatedTooltip() {
+        template(id("default_herb_related"))
+                .animationPreset(ZenithTooltipPresets.LIVING)
+                .page(page(sourced("zenithlib:subject_name"))
+                        .add(titleIcon(
+                                sourced("zenithlib:subject_name")
+                        ).withOnAllPages(true))
+                        .add(dynamic(id("herb_related_type_badge")))
+                        .add(divider())
+                        .add(text(
+                                sourced("zenithlib:subject_description"),
+                                ZenithTooltipColor.TEXT
+                        ))
+                        .add(divider())
+                        .add(dynamic(id("herb_related_target_row"))));
     }
 
     private void addDefaultHerbTooltip() {

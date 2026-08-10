@@ -113,6 +113,12 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.herb.quality.good", "Good");
         add("ascension.herb.quality.superior", "Superior");
         add("ascension.herb.quality.perfect", "Perfect");
+        add("ascension.herb.related.type.seed", "Herb Seed");
+        add("ascension.herb.related.type.plant", "Herb Plant");
+        add("ascension.herb.related.seed.description", "Used to grow %s.");
+        add("ascension.herb.related.plant.description", "A placeable specimen of %s.");
+        add("ascension.herb.related.seed.target", "Grows Into");
+        add("ascension.herb.related.plant.target", "Produces");
 
 
         // Herb descriptions for Tooltips
