@@ -100,7 +100,7 @@ public class BloodlineHolder implements DataSourceInstance {
             for(ValueInput bloodlineInput : bloodlinesInput.stream().toList()){
                 try {
                     Identifier id = NbtHelpers.readIdentifier(bloodlineInput,"id");
-                    AscensionCraft.LOGGER.debug("Reading Bloodline {}",id);
+                    //AscensionCraft.LOGGER.debug("Reading Bloodline {}",id);
 
                     Optional<ValueInput> data = bloodlineInput.child("data");
                     Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,id,access);

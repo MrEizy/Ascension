@@ -91,8 +91,25 @@ public class AscLangProvider extends LanguageProvider {
 
 
         //Herb Items
+        add("item.ascension.jade_dew_grass", "Jade Dew Grass");
+        add("item.ascension.jade_dew_grass_seeds", "Jade Dew Grass Seed");
+        add("item.ascension.ginseng", "Ginseng");
         add("item.ascension.lingzhi_mushroom", "Lingzhi");
         add("item.ascension.blood_lingzhi_mushroom", "Blood Lingzhi");
+
+        // Herb Tooltips
+        add("ascension.herb.tooltip.aged_name", "%s-Year %s");
+        add("ascension.herb.tooltip.age", "Age");
+        add("ascension.herb.tooltip.age_value", "%s Years");
+        add("ascension.herb.tooltip.quality", "Quality");
+        add("ascension.herb.tooltip.origin", "Origin");
+        add("ascension.herb.origin.wild", "Wild");
+        add("ascension.herb.origin.cultivated", "Cultivated");
+        add("ascension.herb.quality.poor", "Poor");
+        add("ascension.herb.quality.common", "Common");
+        add("ascension.herb.quality.good", "Good");
+        add("ascension.herb.quality.superior", "Superior");
+        add("ascension.herb.quality.perfect", "Perfect");
 
 
         //Block Ores
@@ -106,6 +123,9 @@ public class AscLangProvider extends LanguageProvider {
 
 
         //Herb Blocks
+        add("block.ascension.cultivation_soil", "Cultivation Soil");
+        add("block.ascension.jade_dew_grass_crop", "Jade Dew Grass");
+        add("block.ascension.ginseng_crop", "Ginseng");
         add("block.ascension.lingzhi_mushroom_b", "Lingzhi Mushroom");
         add("block.ascension.blood_lingzhi_mushroom_b", "Blood Lingzhi Mushroom");
 

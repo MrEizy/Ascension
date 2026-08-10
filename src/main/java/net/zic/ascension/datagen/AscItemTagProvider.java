@@ -3,7 +3,6 @@ package net.zic.ascension.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.item.ModItems;
@@ -40,6 +39,8 @@ public class AscItemTagProvider extends ItemTagsProvider {
 
 
         tag(ModTags.Items.HERBS)
+                .add(ModItems.JADE_DEW_GRASS.get())
+                .add(ModItems.GINSENG.get())
                 .add(ModItems.LINGZHI_MUSHROOM.get())
                 .add(ModItems.BLOOD_LINGZHI_MUSHROOM.get());
 

@@ -31,7 +31,11 @@ public class AscBlockTagProvider extends BlockTagsProvider {
 
 
         tag(BlockTags.MINEABLE_WITH_HOE)
-                .add(ModBlocks.LINGZHI_MUSHROOM_B.get());
+                .add(ModBlocks.LINGZHI_MUSHROOM_B.get())
+                .add(ModBlocks.CULTIVATION_SOIL.get());
+
+        tag(ModTags.Blocks.HERB_SOILS)
+                .add(ModBlocks.CULTIVATION_SOIL.get());
 
 
         tag(BlockTags.NEEDS_IRON_TOOL)

@@ -10,12 +10,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
+import net.zic.ascension.worldgen.features.HerbFeature;
 import net.zic.ascension.worldgen.features.LingzhiMushroomConfiguration;
 
 import java.util.List;
@@ -30,6 +30,8 @@ public class AscConfiguredFeatures {
 
 
     //Herbs
+    public static final ResourceKey<ConfiguredFeature<?, ?>> JADE_DEW_GRASS = registerKey("jade_dew_grass");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GINSENG = registerKey("ginseng");
     public static final ResourceKey<ConfiguredFeature<?, ?>> LINGZHI_MUSHROOM = registerKey("lingzhi_mushroom");
     public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOD_LINGZHI_MUSHROOM = registerKey("blood_lingzhi_mushroom");
 
@@ -61,6 +63,12 @@ public class AscConfiguredFeatures {
         register(context, OVERWORLD_FROST_SILVER_ORE_KEY, Feature.ORE, new OreConfiguration(overworldFrostSilverOres, 4));
 
         //Herbs
+        register(context, JADE_DEW_GRASS, AscFeatures.HERB.get(),
+                new HerbFeature.Configuration(ModBlocks.JADE_DEW_GRASS_CROP.get(), 6, 3));
+
+        register(context, GINSENG, AscFeatures.HERB.get(),
+                new HerbFeature.Configuration(ModBlocks.GINSENG_CROP.get(), 4, 3));
+
         register(context, LINGZHI_MUSHROOM, AscFeatures.LINGZHI_MUSHROOM.get(),
                 new LingzhiMushroomConfiguration(ModBlocks.LINGZHI_MUSHROOM_B.get(), blocks.getOrThrow(BlockTags.LOGS)));
 

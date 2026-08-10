@@ -26,8 +26,37 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
         addDefaultTransferItemTooltips();
         addArtifactsTooltips();
         addArtifactsRules();
+        addDefaultHerbTooltip();
     }
 
+    private void addDefaultHerbTooltip() {
+        template(id("default_herb"))
+                .animationPreset(ZenithTooltipPresets.LIVING)
+                .page(page(sourced("zenithlib:subject_name"))
+                        .add(titleIcon(
+                                sourced("zenithlib:subject_name"),
+                                literal("Herb")
+                        ).withOnAllPages(true))
+                        .add(divider())
+                        .add(row(
+                                translated("ascension.herb.tooltip.age"),
+                                sourced("ascension:herb_age"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(row(
+                                translated("ascension.herb.tooltip.quality"),
+                                sourced("ascension:herb_quality"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.POSITIVE
+                        ))
+                        .add(row(
+                                translated("ascension.herb.tooltip.origin"),
+                                sourced("ascension:herb_origin"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.MUTED
+                        )));
+    }
 
     private void addDefaultTransferItemTooltips() {
         addDefaultBloodlineEssenceTooltip();
@@ -124,6 +153,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
         AscTooltipThemes.physiqueEssence(theme("physique_essence"));
         AscTooltipThemes.bloodlineEssence(theme("bloodline_essence"));
         AscTooltipThemes.techniqueManual(theme("technique_manual"));
+        AscTooltipThemes.herb(theme("herb"));
     }
 
     private void addArtifactsTooltips() {

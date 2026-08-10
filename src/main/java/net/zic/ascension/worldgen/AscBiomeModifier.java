@@ -22,6 +22,8 @@ public class AscBiomeModifier {
 
 
     //Herbs
+    public static final ResourceKey<BiomeModifier> ADD_JADE_DEW_GRASS = registerKey("add_jade_dew_grass");
+    public static final ResourceKey<BiomeModifier> ADD_GINSENG = registerKey("add_ginseng");
     public static final ResourceKey<BiomeModifier> ADD_LINGZHI_MUSHROOM = registerKey("add_lingzhi_mushroom");
     public static final ResourceKey<BiomeModifier> ADD_BLOOD_LINGZHI_MUSHROOM = registerKey("add_blood_lingzhi_mushroom");
 
@@ -49,6 +51,16 @@ public class AscBiomeModifier {
 
 
         //Herbs
+        context.register(ADD_JADE_DEW_GRASS, new BiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(BiomeTags.IS_FOREST),
+                HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.JADE_DEW_GRASS_PLACED_KEY)),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
+
+        context.register(ADD_GINSENG, new BiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(BiomeTags.IS_FOREST),
+                HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.GINSENG_PLACED_KEY)),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
+
         context.register(ADD_LINGZHI_MUSHROOM, new BiomeModifiers.AddFeaturesBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_FOREST),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.LINGZHI_MUSHROOM_PLACED_KEY)),

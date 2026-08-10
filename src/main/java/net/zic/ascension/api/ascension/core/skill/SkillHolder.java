@@ -140,7 +140,7 @@ public class SkillHolder implements DataSourceInstance {
 
         ValueOutput.ValueOutputList skillOutputList = output.childrenList("skills");
         for(Identifier skill : getSkills()){
-            AscensionCraft.LOGGER.debug("Saving Skill {}",skill);
+            //AscensionCraft.LOGGER.debug("Saving Skill {}",skill);
             try {
                 ValueOutput skillOutput = skillOutputList.addChild();
 

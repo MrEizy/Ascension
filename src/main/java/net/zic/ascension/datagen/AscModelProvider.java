@@ -4,6 +4,7 @@ import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.ItemModelUtils;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
+import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.item.ModItems;
 
 public class AscModelProvider extends ModelProvider {
@@ -50,6 +52,9 @@ public class AscModelProvider extends ModelProvider {
 
 
         //Herb Items
+        herbItemModel(itemModels, ModItems.JADE_DEW_GRASS.get());
+        itemModels.generateFlatItem(ModItems.JADE_DEW_GRASS_SEEDS.get(), ModelTemplates.FLAT_ITEM);
+        herbItemModel(itemModels, ModItems.GINSENG.get(), "hundred_year_ginseng");
         herbItemModel(itemModels, ModItems.LINGZHI_MUSHROOM.get());
         herbItemModel(itemModels, ModItems.BLOOD_LINGZHI_MUSHROOM.get());
 
@@ -57,6 +62,9 @@ public class AscModelProvider extends ModelProvider {
         //Herb Blocks
         herbBlockModelRotated(blockModels, ModBlocks.LINGZHI_MUSHROOM_B.get());
         herbBlockModelRotated(blockModels, ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get());
+        cultivationSoilModel(blockModels);
+        herbCropModel(blockModels, ModBlocks.JADE_DEW_GRASS_CROP.get());
+        herbCropModel(blockModels, ModBlocks.GINSENG_CROP.get(), "hundred_year_ginseng");
 
 
         //Ore Models
@@ -83,6 +91,50 @@ public class AscModelProvider extends ModelProvider {
         blockModels.createTrivialCube(ModBlocks.BLACK_IRON_BLOCK.get());
     }
 
+
+    private void cultivationSoilModel(BlockModelGenerators blockModels) {
+        Block block = ModBlocks.CULTIVATION_SOIL.get();
+        Identifier farmlandModel = Identifier.fromNamespaceAndPath("minecraft", "block/farmland");
+        blockModels.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, BlockModelGenerators.plainVariant(farmlandModel)));
+        blockModels.registerSimpleItemModel(block, farmlandModel);
+    }
+
+
+    private void herbCropModel(BlockModelGenerators blockModels, HerbCropBlock block) {
+        herbCropModel(blockModels, block, block.definition().id().getPath());
+    }
+
+    private void herbCropModel(BlockModelGenerators blockModels, HerbCropBlock block, String texturePath) {
+        int growthStages = block.definition().growthStages();
+        Identifier[] stageModels = new Identifier[growthStages];
+        String herbPath = block.definition().id().getPath();
+
+        for (int visualStage = 0; visualStage < growthStages; visualStage++) {
+            Identifier model = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/herbs/" + herbPath + "_stage" + visualStage);
+            Material texture = new Material(Identifier.fromNamespaceAndPath(
+                    AscensionCraft.MOD_ID,
+                    "block/herbs/" + texturePath + "_stage" + visualStage
+            ));
+            stageModels[visualStage] = ModelTemplates.CROSS.create(
+                    model,
+                    TextureMapping.cross(texture),
+                    blockModels.modelOutput
+            );
+        }
+
+        MultiPartGenerator blockState = MultiPartGenerator.multiPart(block);
+
+        for (int stage = 0; stage <= HerbCropBlock.MAX_STAGE; stage++) {
+            int visualStage = Math.min(stage, block.definition().maxGrowthStage());
+            blockState.with(
+                    BlockModelGenerators.condition().term(HerbCropBlock.STAGE, stage),
+                    BlockModelGenerators.plainVariant(stageModels[visualStage])
+            );
+        }
+
+        blockModels.blockStateOutput.accept(blockState);
+    }
+
     private Material herbItemTexture(Item item) {
         String name = BuiltInRegistries.ITEM.getKey(item).getPath();
         return new Material(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/herbs/" + name));
@@ -94,9 +146,16 @@ public class AscModelProvider extends ModelProvider {
     }
 
     private void herbItemModel(ItemModelGenerators itemModels, Item item) {
+        herbItemModel(itemModels, item, BuiltInRegistries.ITEM.getKey(item).getPath());
+    }
+
+    private void herbItemModel(ItemModelGenerators itemModels, Item item, String texturePath) {
         Identifier model = ModelTemplates.FLAT_ITEM.create(
                 ModelLocationUtils.getModelLocation(item),
-                TextureMapping.layer0(herbItemTexture(item)),
+                TextureMapping.layer0(new Material(Identifier.fromNamespaceAndPath(
+                        AscensionCraft.MOD_ID,
+                        "item/herbs/" + texturePath
+                ))),
                 itemModels.modelOutput);
         itemModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(model));
     }

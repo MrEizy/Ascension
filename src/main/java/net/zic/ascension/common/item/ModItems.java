@@ -9,8 +9,11 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionAscendant;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionEarth;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHeaven;
+import net.zic.ascension.common.blocks.ModBlocks;
+import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHuman;
 import net.zic.ascension.common.item.artifacts.pills.JadeBottleItem;
+import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.transfer_item.BloodlineTransferItem;
 import net.zic.ascension.common.item.transfer_item.PhysiqueTransferItem;
 import net.zic.ascension.common.item.transfer_item.TechniqueTransferItem;
@@ -78,6 +81,12 @@ public class ModItems {
 
 
     //Herbs Items
+    public static final DeferredItem<Item> JADE_DEW_GRASS = ITEMS.registerItem("jade_dew_grass",
+            properties -> new HerbItem(properties, ModHerbs.JADE_DEW_GRASS, () -> ModBlocks.JADE_DEW_GRASS_CROP.get()));
+    public static final DeferredItem<Item> JADE_DEW_GRASS_SEEDS = ITEMS.registerItem("jade_dew_grass_seeds",
+            properties -> new HerbItem.Seed(properties, () -> ModBlocks.JADE_DEW_GRASS_CROP.get()));
+    public static final DeferredItem<Item> GINSENG = ITEMS.registerItem("ginseng",
+            properties -> new HerbItem(properties, ModHerbs.GINSENG, () -> ModBlocks.GINSENG_CROP.get()));
     public static final DeferredItem<Item> LINGZHI_MUSHROOM = ITEMS.registerSimpleItem("lingzhi_mushroom");
     public static final DeferredItem<Item> BLOOD_LINGZHI_MUSHROOM = ITEMS.registerSimpleItem("blood_lingzhi_mushroom");
 

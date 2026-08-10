@@ -2,6 +2,7 @@ package net.zic.ascension.chunks.atmospheric_qi;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -45,8 +46,7 @@ public class ChunkQiContainer implements PathBonusProvider {
     }
 
     public static ChunkQiContainer getContainer(ChunkAccess access){
-        ChunkQiContainer container = access.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
-        return null;
+        return access.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
     }
 
     public void addAffinity(Identifier path, double val) {
@@ -70,6 +70,28 @@ public class ChunkQiContainer implements PathBonusProvider {
     }
     public double getEnergyCap(){return energyCap.getValue();}
     public double getEnergyRegenRate(){return energyRegenRate.getValue();}
+
+    public double getEnergyFraction() {
+        double cap = getEnergyCap();
+        if (cap <= 0.0D) return 0.0D;
+        return Mth.clamp(energy / cap, 0.0D, 1.0D);
+    }
+
+    public double getAffinity(Identifier path) {
+        return affinities.getBonus(PathEffectValueUtil.AFFINITY_CATEGORY, path);
+    }
+
+    public ValueContainer getAffinityContainer(Identifier path) {
+        return affinities.getPathBonusContainer(PathEffectValueUtil.AFFINITY_CATEGORY, path);
+    }
+
+    public Collection<Identifier> getAllAffinities() {
+        return affinities.getAllPathBonusesInCategory(PathEffectValueUtil.AFFINITY_CATEGORY);
+    }
+
+    public boolean hasAtmosphericConfiguration() {
+        return getEnergyCap() > 0.0D || !getAllAffinities().isEmpty();
+    }
 
     public void regenEnergy(){
         energy = Math.min(energyCap.getValue(), energyRegenRate.getValue()+energy);

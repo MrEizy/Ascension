@@ -60,6 +60,10 @@ public class ModCreativeModeTabs {
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.LINGZHI_MUSHROOM.get()))
                     .title(Component.translatable("creativetab.ascension.alchemy"))
                     .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModBlocks.CULTIVATION_SOIL);
+                        output.accept(ModItems.JADE_DEW_GRASS);
+                        output.accept(ModItems.JADE_DEW_GRASS_SEEDS);
+                        output.accept(ModItems.GINSENG);
                         output.accept(ModBlocks.LINGZHI_MUSHROOM_B);
                         output.accept(ModItems.LINGZHI_MUSHROOM);
                         output.accept(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B);

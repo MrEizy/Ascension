@@ -15,6 +15,7 @@ public class ModTags {
         public static final TagKey<Block> DESTRUCTIBLE_BLOCKS = createTag("blocks_destruction");
         public static final TagKey<Block> LINKABLE_CONTAINERS = createTag("linkable_containers");
         public static final TagKey<Block> PROJECTION_UNBREAKABLE = createTag("projection_unbreakable");
+        public static final TagKey<Block> HERB_SOILS = createTag("herb_soils");
 
 
 

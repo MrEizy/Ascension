@@ -1,0 +1,56 @@
+{
+  "animation_presets": [
+    "zenithlib:living"
+  ],
+  "pages": [
+    {
+      "elements": [
+        {
+          "type": "zenithlib:title_icon",
+          "on_all_pages": true,
+          "subtitle": {
+            "literal": "Herb"
+          },
+          "title": {
+            "source": "zenithlib:subject_name"
+          }
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "translate": "ascension.herb.tooltip.age"
+          },
+          "right": {
+            "source": "ascension:herb_age"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "translate": "ascension.herb.tooltip.quality"
+          },
+          "right": {
+            "source": "ascension:herb_quality"
+          },
+          "right_color": "positive"
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "translate": "ascension.herb.tooltip.origin"
+          },
+          "right": {
+            "source": "ascension:herb_origin"
+          },
+          "right_color": "muted"
+        }
+      ],
+      "title": {
+        "source": "zenithlib:subject_name"
+      }
+    }
+  ]
+}

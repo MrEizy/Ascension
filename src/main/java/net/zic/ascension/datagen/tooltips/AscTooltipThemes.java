@@ -73,6 +73,27 @@ public final class AscTooltipThemes {
                 .backgroundStyle(ZenithTooltipTheme.Pattern.RUNES, "accent", 15, 11);
     }
 
+    public static void herb(ZenithTooltipThemeBuilder theme) {
+        theme.colors(
+                        "#07110AE8",
+                        "#8FD66BFF",
+                        "#244727FF",
+                        "#EDF8E8FF",
+                        "#A8E07FFF",
+                        "#8FA189FF",
+                        "#8FE89BFF",
+                        "#E6C96FFF",
+                        "#E67A6FFF"
+                )
+                .layout(7, 246, 216, 3, 1)
+                .iconHolder(ZenithTooltipTheme.Shape.GEM, 30, 2, 8, "accent", "background", 88)
+                .badgeStyle(6, 1, 1, 214)
+                .dividerStyle(1, 2, 3, "accent", ZenithTooltipTheme.Decoration.CENTER_RUNE)
+                .frameStyle(ZenithTooltipTheme.CornerDecoration.RUNE, 6, 2, "accent", true, 2, "border_bottom", 104)
+                .headerStyle(ZenithTooltipTheme.Ornament.SMALL_DIAMONDS, "accent")
+                .backgroundStyle(ZenithTooltipTheme.Pattern.RUNES, "accent", 11, 9);
+    }
+
     public static void techniqueManual(ZenithTooltipThemeBuilder theme) {
         theme.colors(
                         "#0B0A0FE6",

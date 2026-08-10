@@ -22,6 +22,8 @@ public class AscPlacedFeatures {
 
 
     //Herbs
+    public static final ResourceKey<PlacedFeature> JADE_DEW_GRASS_PLACED_KEY = registerKey("jade_dew_grass_placed");
+    public static final ResourceKey<PlacedFeature> GINSENG_PLACED_KEY = registerKey("ginseng_placed");
     public static final ResourceKey<PlacedFeature> LINGZHI_MUSHROOM_PLACED_KEY = registerKey("lingzhi_mushroom_placed");
     public static final ResourceKey<PlacedFeature> BLOOD_LINGZHI_MUSHROOM_PLACED_KEY = registerKey("blood_lingzhi_mushroom_placed");
 
@@ -57,6 +59,22 @@ public class AscPlacedFeatures {
 
 
         //Herbs
+        register(context, JADE_DEW_GRASS_PLACED_KEY,
+                configuredFeatures.getOrThrow(AscConfiguredFeatures.JADE_DEW_GRASS),
+                List.of(
+                        CountPlacement.of(1),
+                        InSquarePlacement.spread(),
+                        BiomeFilter.biome()
+                ));
+
+        register(context, GINSENG_PLACED_KEY,
+                configuredFeatures.getOrThrow(AscConfiguredFeatures.GINSENG),
+                List.of(
+                        CountPlacement.of(1),
+                        InSquarePlacement.spread(),
+                        BiomeFilter.biome()
+                ));
+
         register(context, LINGZHI_MUSHROOM_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.LINGZHI_MUSHROOM),
                 List.of(

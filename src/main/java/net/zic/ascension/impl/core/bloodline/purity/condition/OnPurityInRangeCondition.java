@@ -14,9 +14,9 @@ public record OnPurityInRangeCondition(int start,int end) implements PurityChang
 
     @Override
     public boolean test(OriginSource source, Bloodline bloodline, BloodlineData bloodlineData, int purity, ProgressDirection direction) {
-        AscensionCraft.LOGGER.debug("Testing for purity : {}",purity);
-        AscensionCraft.LOGGER.debug("{} <= {} : {}",start,purity,(start<=purity));
-        AscensionCraft.LOGGER.debug("{} <= {} : {}",purity,end,(purity<=end));
+        //AscensionCraft.LOGGER.debug("Testing for purity : {}",purity);
+        //AscensionCraft.LOGGER.debug("{} <= {} : {}",start,purity,(start<=purity));
+        //AscensionCraft.LOGGER.debug("{} <= {} : {}",purity,end,(purity<=end));
         return start<=purity && purity<=end;
     }
 

@@ -126,7 +126,7 @@ public class PathHolder implements DataSourceInstance {
 
         ValueOutput.ValueOutputList paths = output.childrenList("paths");
         for(Identifier path : getPaths()){
-            AscensionCraft.LOGGER.debug("Saving Path {}",path);
+            //AscensionCraft.LOGGER.debug("Saving Path {}",path);
             try {
                 ValueOutput pathOutput = paths.addChild();
                 NbtHelpers.writeIdentifier(pathOutput,"path",path);
@@ -146,7 +146,7 @@ public class PathHolder implements DataSourceInstance {
         for(ValueInput pathInput : pathsInput){
             try {
                 Identifier pathId = NbtHelpers.readIdentifier(pathInput,"path");
-                AscensionCraft.LOGGER.debug("Reading Path {}",pathId);
+                //AscensionCraft.LOGGER.debug("Reading Path {}",pathId);
                 ValueInput pathData = pathInput.childOrEmpty("data");
 
                 Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,access);

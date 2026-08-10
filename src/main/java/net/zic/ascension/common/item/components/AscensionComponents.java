@@ -1,9 +1,12 @@
 package net.zic.ascension.common.item.components;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -38,6 +41,39 @@ public class AscensionComponents {
                     .networkSynchronized(Identifier.STREAM_CODEC)
                     .build()
     );
+
+    public static final Supplier<DataComponentType<HerbData>> HERB_DATA = DATA_COMPONENTS.register(
+            "herb_data",
+            () -> DataComponentType.<HerbData>builder()
+                    .persistent(HerbData.CODEC)
+                    .networkSynchronized(HerbData.STREAM_CODEC)
+                    .build()
+    );
+
+    public record HerbData(int ageTier, int qualityTier, boolean wild) {
+        public static final HerbData DEFAULT = new HerbData(0, 1, false);
+
+        public static final Codec<HerbData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Codec.intRange(0, 15).fieldOf("age_tier").forGetter(HerbData::ageTier),
+                Codec.intRange(0, 4).fieldOf("quality_tier").forGetter(HerbData::qualityTier),
+                Codec.BOOL.fieldOf("wild").forGetter(HerbData::wild)
+        ).apply(instance, HerbData::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, HerbData> STREAM_CODEC = new StreamCodec<>() {
+            @Override
+            public HerbData decode(RegistryFriendlyByteBuf buf) {
+                return new HerbData(buf.readVarInt(), buf.readVarInt(), buf.readBoolean());
+            }
+
+            @Override
+            public void encode(RegistryFriendlyByteBuf buf, HerbData data) {
+                buf.writeVarInt(data.ageTier());
+                buf.writeVarInt(data.qualityTier());
+                buf.writeBoolean(data.wild());
+            }
+        };
+    }
+
     public static void register(IEventBus eventBus) {
         DATA_COMPONENTS.register(eventBus);
     }

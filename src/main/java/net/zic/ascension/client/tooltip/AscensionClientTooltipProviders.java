@@ -1,5 +1,6 @@
 package net.zic.ascension.client.tooltip;
 
+import net.zic.ascension.client.tooltip.providers.AscensionHerbTooltipProvider;
 import net.zic.ascension.client.tooltip.providers.AscensionTabletTooltipProvider;
 import net.zic.ascension.client.tooltip.providers.AscensionTransferItemTooltipProvider;
 
@@ -19,6 +20,7 @@ public final class AscensionClientTooltipProviders {
         AscensionTooltipValueSources.register();
         AscensionTransferItemClassifications.register();
         AscensionTransferItemTooltipProvider.register();
+        AscensionHerbTooltipProvider.register();
         AscensionTabletTooltipProvider.register();
     }
 }

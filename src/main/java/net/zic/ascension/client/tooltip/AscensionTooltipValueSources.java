@@ -17,7 +17,9 @@ import net.zic.ascension.api.ascension.core.progression.ProgressActionReference;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
+import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.impl.core.technique.realm_change.condition.RealmChangeConditions;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.bloodline.purity.condition.OnPurityInRangeCondition;
@@ -64,6 +66,10 @@ public final class AscensionTooltipValueSources {
     public static final Identifier BLOODLINE_PURITY = AscensionCraft.prefix("bloodline_purity");
     public static final Identifier BLOODLINE_PURITY_GAINS = AscensionCraft.prefix("bloodline_purity_gains");
 
+    public static final Identifier HERB_AGE = AscensionCraft.prefix("herb_age");
+    public static final Identifier HERB_QUALITY = AscensionCraft.prefix("herb_quality");
+    public static final Identifier HERB_ORIGIN = AscensionCraft.prefix("herb_origin");
+
     private static boolean registered;
 
     private AscensionTooltipValueSources() {}
@@ -85,6 +91,10 @@ public final class AscensionTooltipValueSources {
 
         ZenithTooltipSources.registerValue(BLOODLINE_PURITY, AscensionTooltipValueSources::bloodlinePurity);
         ZenithTooltipSources.registerValue(BLOODLINE_PURITY_GAINS, AscensionTooltipValueSources::bloodlinePurityGains);
+
+        ZenithTooltipSources.registerValue(HERB_AGE, AscensionTooltipValueSources::herbAge);
+        ZenithTooltipSources.registerValue(HERB_QUALITY, AscensionTooltipValueSources::herbQuality);
+        ZenithTooltipSources.registerValue(HERB_ORIGIN, AscensionTooltipValueSources::herbOrigin);
 
         ZenithTooltipSources.registerElement(PHYSIQUE_PATHS, context -> badges(PHYSIQUE_PATHS, context, ZenithTooltipColor.ACCENT));
         ZenithTooltipSources.registerElement(PHYSIQUE_STATS, context -> rows(PHYSIQUE_STATS, context));
@@ -552,6 +562,38 @@ public final class AscensionTooltipValueSources {
                 + "%)";
     }
 
+
+    private static Optional<ZenithTooltipValue> herbAge(ZenithTooltipContext context) {
+        return herbContext(context).map(herb -> ZenithTooltipValue.text(
+                Component.translatable(
+                        "ascension.herb.tooltip.age_value",
+                        herb.definition().ageThreshold(herb.data().ageTier()).years()
+                )
+        ));
+    }
+
+    private static Optional<ZenithTooltipValue> herbQuality(ZenithTooltipContext context) {
+        return herbContext(context).map(herb -> {
+            HerbDefinition.Quality quality = HerbDefinition.Quality.byTier(herb.data().qualityTier());
+            String key = "ascension.herb.quality." + quality.name().toLowerCase(java.util.Locale.ROOT);
+            return ZenithTooltipValue.text(Component.translatable(key));
+        });
+    }
+
+    private static Optional<ZenithTooltipValue> herbOrigin(ZenithTooltipContext context) {
+        return herbContext(context).map(herb -> ZenithTooltipValue.text(
+                Component.translatable(herb.data().wild() ? "ascension.herb.origin.wild" : "ascension.herb.origin.cultivated")
+        ));
+    }
+
+    private static Optional<HerbContext> herbContext(ZenithTooltipContext context) {
+        if (!(context.stack().getItem() instanceof HerbItem herbItem)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new HerbContext(herbItem.definition(), herbItem.data(context.stack())));
+    }
+
     private static Component displayName(
             Identifier id,
             boolean affinity,
@@ -657,6 +699,11 @@ public final class AscensionTooltipValueSources {
                 .reduce((left, right) -> left + ", " + right)
                 .orElse("None");
     }
+
+    private record HerbContext(
+            HerbDefinition definition,
+            AscensionComponents.HerbData data
+    ) {}
 
     @FunctionalInterface
     private interface CadenceResolver {

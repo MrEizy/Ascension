@@ -18,7 +18,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.blocks.crops.mushrooms.LingzhiMushroomBlock;
+import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.ModItems;
 
 import java.util.function.Consumer;
@@ -55,6 +57,39 @@ public class ModBlocks {
 
 
     //Herb Blocks
+    public static final DeferredBlock<Block> CULTIVATION_SOIL = registerBlock("cultivation_soil",
+            properties -> new CultivationSoilBlock(properties
+                    .strength(0.6f)
+                    .sound(SoundType.GRAVEL)));
+
+    public static final DeferredBlock<HerbCropBlock> JADE_DEW_GRASS_CROP = BLOCKS.registerBlock("jade_dew_grass_crop",
+            properties -> new HerbCropBlock(
+                    properties
+                            .strength(0.0f)
+                            .sound(SoundType.GRASS)
+                            .noCollision()
+                            .randomTicks()
+                            .noLootTable()
+                            .pushReaction(PushReaction.DESTROY),
+                    ModHerbs.JADE_DEW_GRASS,
+                    () -> ModItems.JADE_DEW_GRASS.get(),
+                    () -> ModItems.JADE_DEW_GRASS_SEEDS.get()
+            ));
+
+    public static final DeferredBlock<HerbCropBlock> GINSENG_CROP = BLOCKS.registerBlock("ginseng_crop",
+            properties -> new HerbCropBlock(
+                    properties
+                            .strength(0.0f)
+                            .sound(SoundType.GRASS)
+                            .noCollision()
+                            .randomTicks()
+                            .noLootTable()
+                            .pushReaction(PushReaction.DESTROY),
+                    ModHerbs.GINSENG,
+                    () -> ModItems.GINSENG.get(),
+                    () -> ModItems.GINSENG.get()
+            ));
+
     public static final DeferredBlock<Block> LINGZHI_MUSHROOM_B = registerBlock("lingzhi_mushroom_b",
             properties -> new LingzhiMushroomBlock(properties
                     .strength(0.2f)

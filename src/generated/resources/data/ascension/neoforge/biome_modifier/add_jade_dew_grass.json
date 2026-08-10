@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_forest",
+  "features": "ascension:jade_dew_grass_placed",
+  "step": "vegetal_decoration"
+}

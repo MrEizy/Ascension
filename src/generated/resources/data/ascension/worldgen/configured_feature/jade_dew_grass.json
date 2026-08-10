@@ -1,0 +1,7 @@
+{
+  "type": "ascension:herb",
+  "config": {
+    "herb_block": "ascension:jade_dew_grass_crop",
+    "tries": 6
+  }
+}
