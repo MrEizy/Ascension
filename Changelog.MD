@@ -2,7 +2,7 @@
 
 # Ascension Changelog
 
-## Ascension Version 1.0.0 Snapshot 26.2-0.2.0
+## Ascension Version 1.0.0 Snapshot 26.1.2
 
 ### Added
 • Added 47 new Paths - Foundation Paths (3) Elemental Paths (29) Weapon Paths (15)  
