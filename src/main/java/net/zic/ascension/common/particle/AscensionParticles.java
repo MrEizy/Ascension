@@ -21,6 +21,9 @@ public final class AscensionParticles {
     public static final Supplier<SimpleParticleType> PARTICLE_FIELD_RUNE = register("particle_field_rune");
     public static final Supplier<SimpleParticleType> PARTICLE_FIELD_THREAD = register("particle_field_thread");
 
+
+    public static final Supplier<SimpleParticleType> PARTCILE_FIELD_PETAL_LOTUS = register("particle_field_petal_lotus");
+
     private AscensionParticles() {
     }
 

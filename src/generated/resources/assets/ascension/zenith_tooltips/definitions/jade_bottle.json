@@ -2,9 +2,9 @@
   "priority": 200,
   "selector": {
     "items": [
-      "ascension:tablet_of_destruction_heaven"
+      "ascension:jade_bottle"
     ]
   },
-  "template": "ascension:tablet_of_destruction_heaven",
+  "template": "ascension:jade_bottle",
   "theme": "ascension:artifact_themes"
 }

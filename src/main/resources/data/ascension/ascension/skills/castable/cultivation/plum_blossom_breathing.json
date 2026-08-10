@@ -13,33 +13,12 @@
   ],
   "rate": 2,
   "particle_field": {
-    "style": "gathering_ring",
+    "style": "inward_flow",
     "particles": [
       {
-        "type": "petal",
-        "weight": 6
-      },
-      {
-        "type": "thread",
-        "weight": 3
-      },
-      {
-        "type": "wisp",
-        "weight": 3
-      },
-      {
-        "type": "mote",
-        "weight": 2
-      },
-      {
-        "type": "rune",
-        "weight": 1
+        "type": "petals_lotus",
+        "weight": 8
       }
-    ],
-    "colours": [
-      "#F28EB7",
-      "#FFD6E5",
-      "#A7D98B"
     ],
     "density": 20,
     "radius": {"min": 0.7, "max": 1.35},

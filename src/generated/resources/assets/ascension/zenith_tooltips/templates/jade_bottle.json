@@ -1,0 +1,50 @@
+{
+  "pages": [
+    {
+      "elements": [
+        {
+          "type": "zenithlib:title_icon",
+          "title": {
+            "translate": "ascension.tooltip.jade_bottle"
+          }
+        },
+        {
+          "type": "zenithlib:classification",
+          "show_category": false,
+          "style": "badge"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "translate": "ascension.tooltip.jade_bottle.contained"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "translate": "ascension.tooltip.jade_bottle.contained_pill"
+          },
+          "right": {
+            "literal": "null"
+          }
+        },
+        {
+          "type": "zenithlib:row",
+          "left": {
+            "translate": "ascension.tooltip.jade_bottle.expiration"
+          },
+          "right": {
+            "literal": "20 seconds"
+          },
+          "right_color": "warning"
+        }
+      ],
+      "title": {
+        "translate": "ascension.tooltip.jade_bottle.page"
+      }
+    }
+  ]
+}

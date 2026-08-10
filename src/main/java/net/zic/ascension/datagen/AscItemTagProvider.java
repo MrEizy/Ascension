@@ -25,7 +25,8 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.TABLET_OF_DESTRUCTION_HUMAN.get());
 
         tag(ModTags.Items.PROFOUND_ITEMS)
-                .add(ModItems.TABLET_OF_DESTRUCTION_EARTH.get());
+                .add(ModItems.TABLET_OF_DESTRUCTION_EARTH.get())
+                .add(ModItems.JADE_BOTTLE.get());
 
         tag(ModTags.Items.HEAVEN_ITEMS)
                 .add(ModItems.TABLET_OF_DESTRUCTION_HEAVEN.get());
@@ -48,7 +49,8 @@ public class AscItemTagProvider extends ItemTagsProvider {
                         ModItems.TABLET_OF_DESTRUCTION_HUMAN.get(),
                         ModItems.TABLET_OF_DESTRUCTION_EARTH.get(),
                         ModItems.TABLET_OF_DESTRUCTION_HEAVEN.get(),
-                        ModItems.TABLET_OF_DESTRUCTION_ASCENDANT.get()
+                        ModItems.TABLET_OF_DESTRUCTION_ASCENDANT.get(),
+                        ModItems.JADE_BOTTLE.get()
                 );
 
         tag(ModTags.Items.MATERIALS)

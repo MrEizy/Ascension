@@ -25,6 +25,8 @@ import net.zic.ascension.client.visual.runtime.GuardianDharmaVisualController;
 import net.zic.ascension.client.visual.runtime.WeaponSwingVisualController;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 import net.zic.ascension.common.AscensionCreativeSections;
+import net.zic.ascension.common.gui.menus.AscMenuTypes;
+import net.zic.ascension.common.gui.menus.jade_bottle.JadeBottleScreen;
 import net.zic.ascension.common.particle.AscensionParticles;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
 import net.zic.ascension.network.WeaponSwingRequestPacket;
@@ -60,7 +62,7 @@ public class AscensionCraftClient {
 
         @SubscribeEvent
         public static void registerScreens(RegisterMenuScreensEvent event) {
-
+            event.register(AscMenuTypes.JADE_BOTTLE.get(), JadeBottleScreen::new);
         }
 
         @SubscribeEvent
@@ -92,6 +94,10 @@ public class AscensionCraftClient {
             event.registerSpriteSet(
                     AscensionParticles.PARTICLE_FIELD_THREAD.get(),
                     sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.THREAD, sprites)
+            );
+            event.registerSpriteSet(
+                    AscensionParticles.PARTCILE_FIELD_PETAL_LOTUS.get(),
+                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.PETALS_LOTUS, sprites)
             );
         }
 

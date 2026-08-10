@@ -12,6 +12,7 @@ public enum ParticleFieldParticleKind {
     MOTE("mote"),
     PETAL("petal"),
     RUNE("rune"),
+    PETALS_LOTUS("petals_lotus"),
     THREAD("thread");
 
     public static final Codec<ParticleFieldParticleKind> CODEC =

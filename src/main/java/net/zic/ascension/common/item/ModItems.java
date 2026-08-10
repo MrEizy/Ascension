@@ -10,6 +10,7 @@ import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionAsc
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionEarth;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHeaven;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHuman;
+import net.zic.ascension.common.item.artifacts.pills.JadeBottleItem;
 import net.zic.ascension.common.item.transfer_item.BloodlineTransferItem;
 import net.zic.ascension.common.item.transfer_item.PhysiqueTransferItem;
 import net.zic.ascension.common.item.transfer_item.TechniqueTransferItem;
@@ -53,6 +54,13 @@ public class ModItems {
             ITEMS.register("tablet_of_destruction_ascendant",
                     () -> new TabletOfDestructionAscendant(new Item.Properties()
                             .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "tablet_of_destruction_ascendant"))));
+
+
+
+
+    public static final DeferredItem<Item> JADE_BOTTLE = ITEMS.register("jade_bottle",
+            () -> new JadeBottleItem(new Item.Properties()
+                    .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "jade_bottle"))));
 
 
 

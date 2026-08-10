@@ -74,6 +74,11 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tablet.cycle_mode_info", "Press [V] to cycle drop mode.");
 
 
+
+
+        add("item.ascension.jade_bottle", "Jade Bottle");
+
+
         //Item Ores
         add("item.ascension.raw_black_iron", "Raw Black Iron");
         add("item.ascension.black_iron_ingot", "Black Iron Ingot");
@@ -192,6 +197,14 @@ public class AscLangProvider extends LanguageProvider {
         add("zenith.ascension.tier.saint", "Saint");
         add("zenith.ascension.tier.god", "God");
         add("zenith.ascension.tier.heavens_path", "Heaven's Path");
+
+
+        //Artifacts Tooltips
+        add("ascension.tooltip.jade_bottle.page", "Jade Bottle");
+        add("ascension.tooltip.jade_bottle", "Jade Bottle");
+        add("ascension.tooltip.jade_bottle.contained", "Contained");
+        add("ascension.tooltip.jade_bottle.contained_pill", "Contained Pill");
+        add("ascension.tooltip.jade_bottle.expiration", "Expiration");
 
 
 

@@ -7,7 +7,7 @@ import net.zic.zenithlib.tooltip.api.builder.ZenithTooltipThemeBuilder;
 public final class AscTooltipThemes {
     private AscTooltipThemes() {}
 
-    public static void tabletOfDestruction(ZenithTooltipThemeBuilder theme) {
+    public static void artifactThemes(ZenithTooltipThemeBuilder theme) {
         theme.colors(
                         "#0F0907E6",
                         "#F0B85BFF",

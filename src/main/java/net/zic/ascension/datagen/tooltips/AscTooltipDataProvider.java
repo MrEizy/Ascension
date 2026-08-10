@@ -24,8 +24,8 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
     protected void addTooltips() {
         addThemes();
         addDefaultTransferItemTooltips();
-        addTabletOfDestructionTooltips();
-        addTabletOfDestructionRules();
+        addArtifactsTooltips();
+        addArtifactsRules();
     }
 
 
@@ -120,17 +120,42 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
     }
 
     private void addThemes() {
-        AscTooltipThemes.tabletOfDestruction(theme("tablet_of_destruction"));
+        AscTooltipThemes.artifactThemes(theme("artifact_themes"));
         AscTooltipThemes.physiqueEssence(theme("physique_essence"));
         AscTooltipThemes.bloodlineEssence(theme("bloodline_essence"));
         AscTooltipThemes.techniqueManual(theme("technique_manual"));
     }
 
-    private void addTabletOfDestructionTooltips() {
+    private void addArtifactsTooltips() {
         addHumanTabletTooltip();
         addEarthTabletTooltip();
         addHeavenTabletTooltip();
         addAscendantTabletTooltip();
+        addJadeBottleTooltip();
+    }
+
+
+    private void addJadeBottleTooltip() {
+        template(id("jade_bottle"))
+                .page(page(translated("ascension.tooltip.jade_bottle.page"))
+                        .add(titleIcon(
+                                translated("ascension.tooltip.jade_bottle")
+                        ))
+                        .add(classificationRankBadge())
+                        .add(divider())
+                        .add(header(translated("ascension.tooltip.jade_bottle.contained"), ZenithTooltipColor.ACCENT))
+                        .add(row(
+                                translated("ascension.tooltip.jade_bottle.contained_pill"),
+                                literal("null"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(row(
+                                translated("ascension.tooltip.jade_bottle.expiration"),
+                                literal("20 seconds"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.WARNING
+                        )));
     }
 
     private void addHumanTabletTooltip() {
@@ -313,29 +338,35 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                         )));
     }
 
-    private void addTabletOfDestructionRules() {
+    private void addArtifactsRules() {
         rule(id("tablet_of_destruction_human"))
                 .priority(200)
                 .items(id("tablet_of_destruction_human"))
                 .template(id("tablet_of_destruction_human"))
-                .theme(id("tablet_of_destruction"));
+                .theme(id("artifact_themes"));
 
         rule(id("tablet_of_destruction_earth"))
                 .priority(200)
                 .items(id("tablet_of_destruction_earth"))
                 .template(id("tablet_of_destruction_earth"))
-                .theme(id("tablet_of_destruction"));
+                .theme(id("artifact_themes"));
 
         rule(id("tablet_of_destruction_heaven"))
                 .priority(200)
                 .items(id("tablet_of_destruction_heaven"))
                 .template(id("tablet_of_destruction_heaven"))
-                .theme(id("tablet_of_destruction"));
+                .theme(id("artifact_themes"));
 
         rule(id("tablet_of_destruction_ascendant"))
                 .priority(200)
                 .items(id("tablet_of_destruction_ascendant"))
                 .template(id("tablet_of_destruction_ascendant"))
-                .theme(id("tablet_of_destruction"));
+                .theme(id("artifact_themes"));
+
+        rule(id("jade_bottle"))
+                .priority(200)
+                .items(id("jade_bottle"))
+                .template(id("jade_bottle"))
+                .theme(id("artifact_themes"));
     }
 }

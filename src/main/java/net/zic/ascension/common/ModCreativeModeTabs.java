@@ -29,6 +29,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_HEAVEN);
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_ASCENDANT);
 
+                        output.accept(ModItems.JADE_BOTTLE);
+
                         output.accept(ModItems.JADE);
                         output.accept(ModItems.RAW_FROST_SILVER);
                         output.accept(ModItems.FROST_SILVER_INGOT);
