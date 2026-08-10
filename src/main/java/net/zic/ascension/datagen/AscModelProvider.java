@@ -66,9 +66,9 @@ public class AscModelProvider extends ModelProvider {
         herbBlockModelRotated(blockModels, ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get());
         cultivationSoilModel(blockModels);
         herbCropModel(blockModels, ModBlocks.JADE_DEW_GRASS_CROP.get());
-        herbCropModel(blockModels, ModBlocks.GINSENG_CROP.get(), "ginseng");
-        herbCropModel(blockModels, ModBlocks.FIRE_GINSENG_CROP.get(), "fire_ginseng");
-        herbCropModel(blockModels, ModBlocks.SNOW_GINSENG_CROP.get(), "snow_ginseng");
+        herbCropModel(blockModels, ModBlocks.GINSENG_CROP.get(), "hundred_year_ginseng");
+        herbCropModel(blockModels, ModBlocks.FIRE_GINSENG_CROP.get(), "hundred_year_fire_ginseng");
+        herbCropModel(blockModels, ModBlocks.SNOW_GINSENG_CROP.get(), "hundred_year_snow_ginseng");
 
 
         //Ore Models

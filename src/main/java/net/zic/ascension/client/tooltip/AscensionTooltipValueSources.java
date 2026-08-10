@@ -68,6 +68,7 @@ public final class AscensionTooltipValueSources {
 
     public static final Identifier HERB_AGE = AscensionCraft.prefix("herb_age");
     public static final Identifier HERB_QUALITY = AscensionCraft.prefix("herb_quality");
+    public static final Identifier HERB_QUALITY_BADGE = AscensionCraft.prefix("herb_quality_badge");
     public static final Identifier HERB_ORIGIN = AscensionCraft.prefix("herb_origin");
 
     private static boolean registered;
@@ -101,6 +102,7 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerElement(PHYSIQUE_AFFINITIES, context -> rows(PHYSIQUE_AFFINITIES, context));
         ZenithTooltipSources.registerElement(TECHNIQUE_PROGRESSION_GAINS, context -> rows(TECHNIQUE_PROGRESSION_GAINS, context));
         ZenithTooltipSources.registerElement(BLOODLINE_PURITY_GAINS, context -> rows(BLOODLINE_PURITY_GAINS, context));
+        ZenithTooltipSources.registerElement(HERB_QUALITY_BADGE, AscensionTooltipValueSources::herbQualityBadge);
     }
 
     private static List<ZenithTooltipElement> badges(
@@ -578,6 +580,39 @@ public final class AscensionTooltipValueSources {
             String key = "ascension.herb.quality." + quality.name().toLowerCase(java.util.Locale.ROOT);
             return ZenithTooltipValue.text(Component.translatable(key));
         });
+    }
+
+    private static List<ZenithTooltipElement> herbQualityBadge(ZenithTooltipContext context) {
+        return herbContext(context)
+                .map(herb -> {
+                    HerbDefinition.Quality quality = HerbDefinition.Quality.byTier(herb.data().qualityTier());
+                    String key = "ascension.herb.quality." + quality.name().toLowerCase(java.util.Locale.ROOT);
+                    ZenithTooltipColor color = herbQualityColor(quality);
+
+                    BadgeElement badge = new BadgeElement(
+                            ZenithTooltipText.resolved(Component.translatable(key)),
+                            color,
+                            ZenithTooltipColor.BACKGROUND,
+                            color
+                    ).withBackgroundGradient(
+                            BadgeElement.GradientDirection.HORIZONTAL,
+                            ZenithTooltipColor.BACKGROUND,
+                            ZenithTooltipColor.BORDER_BOTTOM
+                    );
+
+                    return List.<ZenithTooltipElement>of(new BadgeRowElement(List.of(badge)));
+                })
+                .orElseGet(List::of);
+    }
+
+    private static ZenithTooltipColor herbQualityColor(HerbDefinition.Quality quality) {
+        return switch (quality) {
+            case POOR -> ZenithTooltipColor.MUTED;
+            case COMMON -> ZenithTooltipColor.TEXT;
+            case GOOD -> ZenithTooltipColor.POSITIVE;
+            case SUPERIOR -> ZenithTooltipColor.ACCENT;
+            case PERFECT -> ZenithTooltipColor.WARNING;
+        };
     }
 
     private static Optional<ZenithTooltipValue> herbOrigin(ZenithTooltipContext context) {

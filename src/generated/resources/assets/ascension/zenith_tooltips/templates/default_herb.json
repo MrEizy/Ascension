@@ -9,10 +9,23 @@
           "type": "zenithlib:title_icon",
           "on_all_pages": true,
           "subtitle": {
-            "literal": "Herb"
+            "translate": "ascension.herb.tooltip.type"
           },
           "title": {
             "source": "zenithlib:subject_name"
+          }
+        },
+        {
+          "type": "zenithlib:dynamic",
+          "source": "ascension:herb_quality_badge"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:text",
+          "text": {
+            "source": "zenithlib:subject_description"
           }
         },
         {
@@ -26,16 +39,6 @@
           "right": {
             "source": "ascension:herb_age"
           }
-        },
-        {
-          "type": "zenithlib:row",
-          "left": {
-            "translate": "ascension.herb.tooltip.quality"
-          },
-          "right": {
-            "source": "ascension:herb_quality"
-          },
-          "right_color": "positive"
         },
         {
           "type": "zenithlib:row",

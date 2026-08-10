@@ -26,8 +26,6 @@ public final class ModHerbs {
                     )
                     .wildAgeWeights(1000, 180, 24, 3, 1)
                     .naturalSupport(state -> state.is(BlockTags.GRASS_BLOCKS))
-                    .qiCapacity(250.0D, 1100.0D)
-                    .availableQiFraction(0.05D, 0.50D)
                     .spawnRule((level, pos, random) -> random.nextInt(6) == 0)
                     .build()
     );
@@ -47,8 +45,6 @@ public final class ModHerbs {
                     )
                     .wildAgeWeights(1200, 220, 28, 4, 1)
                     .naturalSupport(state -> state.is(BlockTags.GRASS_BLOCKS))
-                    .qiCapacity(400.0D, 1400.0D)
-                    .availableQiFraction(0.10D, 0.60D)
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
                     .build()
     );
@@ -66,8 +62,6 @@ public final class ModHerbs {
                     )
                     .wildAgeWeights(1200, 220, 28, 4, 1)
                     .naturalSupport(state -> state.is(Blocks.SAND))
-                    .qiCapacity(400.0D, 1400.0D)
-                    .availableQiFraction(0.10D, 0.60D)
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
                     .build()
     );
@@ -84,9 +78,7 @@ public final class ModHerbs {
                             new HerbDefinition.AgeThreshold(1000, 0)
                     )
                     .wildAgeWeights(1200, 220, 28, 4, 1)
-                    .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK))
-                    .qiCapacity(400.0D, 1400.0D)
-                    .availableQiFraction(0.10D, 0.60D)
+                    .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.SNOW_BLOCK))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
                     .build()
     );

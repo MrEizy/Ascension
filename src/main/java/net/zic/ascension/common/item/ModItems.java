@@ -90,9 +90,9 @@ public class ModItems {
     public static final DeferredItem<Item> GINSENG = ITEMS.registerItem("ginseng",
             properties -> new HerbItem(properties, ModHerbs.GINSENG, () -> ModBlocks.GINSENG_CROP.get()));
     public static final DeferredItem<Item> FIRE_GINSENG = ITEMS.registerItem("fire_ginseng",
-            properties -> new HerbItem(properties, ModHerbs.GINSENG, () -> ModBlocks.GINSENG_CROP.get()));
+            properties -> new HerbItem(properties, ModHerbs.FIRE_GINSENG, () -> ModBlocks.FIRE_GINSENG_CROP.get()));
     public static final DeferredItem<Item> SNOW_GINSENG = ITEMS.registerItem("snow_ginseng",
-            properties -> new HerbItem(properties, ModHerbs.GINSENG, () -> ModBlocks.GINSENG_CROP.get()));
+            properties -> new HerbItem(properties, ModHerbs.SNOW_GINSENG, () -> ModBlocks.SNOW_GINSENG_CROP.get()));
 
 
     public static final DeferredItem<Item> LINGZHI_MUSHROOM = ITEMS.registerSimpleItem("lingzhi_mushroom");

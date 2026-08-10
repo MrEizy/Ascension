@@ -101,6 +101,7 @@ public class AscLangProvider extends LanguageProvider {
 
         // Herb Tooltips
         add("ascension.herb.tooltip.aged_name", "%s-Year %s");
+        add("ascension.herb.tooltip.type", "Herb");
         add("ascension.herb.tooltip.age", "Age");
         add("ascension.herb.tooltip.age_value", "%s Years");
         add("ascension.herb.tooltip.quality", "Quality");
@@ -112,6 +113,15 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.herb.quality.good", "Good");
         add("ascension.herb.quality.superior", "Superior");
         add("ascension.herb.quality.perfect", "Perfect");
+
+
+        // Herb descriptions for Tooltips
+        add("ascension.herb.jade_dew_grass.description", "A delicate herb whose leaves gather cool beads of dew.");
+        add("ascension.herb.ginseng.description", "A medicinal root prized for the strength it gathers with age.");
+        add("ascension.herb.fire_ginseng.description", "A blazing ginseng root that carries a distinct fiery nature.");
+        add("ascension.herb.snow_ginseng.description", "A frozen ginseng root adapted to cold and snowy lands.");
+        add("ascension.herb.lingzhi_mushroom.description", "A medicinal fungus that grows from old wood.");
+        add("ascension.herb.blood_lingzhi_mushroom.description", "A crimson Lingzhi that devoured the blood from dead Ghast rending it nothing but bones.");
 
 
         //Block Ores

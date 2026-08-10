@@ -35,20 +35,20 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                 .page(page(sourced("zenithlib:subject_name"))
                         .add(titleIcon(
                                 sourced("zenithlib:subject_name"),
-                                literal("Herb")
+                                translated("ascension.herb.tooltip.type")
                         ).withOnAllPages(true))
+                        .add(dynamic(id("herb_quality_badge")))
+                        .add(divider())
+                        .add(text(
+                                sourced("zenithlib:subject_description"),
+                                ZenithTooltipColor.TEXT
+                        ))
                         .add(divider())
                         .add(row(
                                 translated("ascension.herb.tooltip.age"),
                                 sourced("ascension:herb_age"),
                                 ZenithTooltipColor.TEXT,
                                 ZenithTooltipColor.ACCENT
-                        ))
-                        .add(row(
-                                translated("ascension.herb.tooltip.quality"),
-                                sourced("ascension:herb_quality"),
-                                ZenithTooltipColor.TEXT,
-                                ZenithTooltipColor.POSITIVE
                         ))
                         .add(row(
                                 translated("ascension.herb.tooltip.origin"),

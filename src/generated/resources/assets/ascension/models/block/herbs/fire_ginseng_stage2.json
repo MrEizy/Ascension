@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cross",
   "textures": {
-    "cross": "ascension:block/herbs/fire_ginseng_stage2"
+    "cross": "ascension:block/herbs/hundred_year_fire_ginseng_stage2"
   }
 }

@@ -56,7 +56,12 @@ public final class AscensionHerbTooltipProvider implements ZenithTooltipProvider
                 context,
                 definition.id(),
                 definition,
-                ZenithTooltipSubject.of(displayName, Component.empty())
+                ZenithTooltipSubject.of(displayName, herbDescription(definition))
         ));
+    }
+
+    private static Component herbDescription(HerbDefinition definition) {
+        Identifier id = definition.id();
+        return Component.translatable(id.getNamespace() + ".herb." + id.getPath() + ".description");
     }
 }

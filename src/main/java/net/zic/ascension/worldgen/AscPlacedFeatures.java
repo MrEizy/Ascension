@@ -77,14 +77,14 @@ public class AscPlacedFeatures {
                         BiomeFilter.biome()
                 ));
         register(context, FIRE_GINSENG_PLACED_KEY,
-                configuredFeatures.getOrThrow(AscConfiguredFeatures.GINSENG),
+                configuredFeatures.getOrThrow(AscConfiguredFeatures.FIRE_GINSENG),
                 List.of(
                         CountPlacement.of(6),
                         InSquarePlacement.spread(),
                         BiomeFilter.biome()
                 ));
         register(context, SNOW_GINSENG_PLACED_KEY,
-                configuredFeatures.getOrThrow(AscConfiguredFeatures.GINSENG),
+                configuredFeatures.getOrThrow(AscConfiguredFeatures.SNOW_GINSENG),
                 List.of(
                         CountPlacement.of(6),
                         InSquarePlacement.spread(),

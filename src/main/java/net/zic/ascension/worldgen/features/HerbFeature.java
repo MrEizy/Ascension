@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -40,7 +41,8 @@ public class HerbFeature extends Feature<HerbFeature.Configuration> {
             int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
             BlockPos pos = new BlockPos(x, y, z);
 
-            if (!level.isEmptyBlock(pos)) {
+            BlockState targetState = level.getBlockState(pos);
+            if (!targetState.isAir() && !targetState.is(Blocks.SNOW)) {
                 continue;
             }
             if (!definition.canSpawn(level, pos, random)) {

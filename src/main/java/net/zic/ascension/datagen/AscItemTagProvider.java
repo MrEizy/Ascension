@@ -41,6 +41,8 @@ public class AscItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.HERBS)
                 .add(ModItems.JADE_DEW_GRASS.get())
                 .add(ModItems.GINSENG.get())
+                .add(ModItems.FIRE_GINSENG.get())
+                .add(ModItems.SNOW_GINSENG.get())
                 .add(ModItems.LINGZHI_MUSHROOM.get())
                 .add(ModItems.BLOOD_LINGZHI_MUSHROOM.get());
 
