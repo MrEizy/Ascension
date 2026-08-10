@@ -9,9 +9,8 @@
 • Added 16 new Physiques  
 • Added 5 new bloodlines  
 • Added 6 new Herb
-• Added 1 new Artifact
+• Added 5 new Artifact
 • Ported Most blocks from 1.21.1
-• Added back the Tablets of Destruction. 4 Tiers  
 • Added Datapack support for Paths, Bloodlines, Physiques, Techniques, Skills, Tribulations and Atmospheric Qi Density.  
 • Health, Qi and Stamina Hud  
 • Foundation Toggle back to GUI  

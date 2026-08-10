@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "ascension:item/liquified_spiritual_qi_bucket"
+  }
+}

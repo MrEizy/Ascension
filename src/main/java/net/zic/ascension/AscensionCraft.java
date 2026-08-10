@@ -18,6 +18,8 @@ import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.blocks.ModBlocks;
+import net.zic.ascension.common.fluids.AscFluidTypes;
+import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.gui.menus.AscMenuTypes;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.particle.AscensionParticles;
@@ -94,6 +96,10 @@ public class AscensionCraft {
         AscensionParticles.register(modEventBus);
 
         AscMenuTypes.register(modEventBus);
+
+
+        AscFluidTypes.register(modEventBus);
+        AscFluids.register(modEventBus);
 
 
 

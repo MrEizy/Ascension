@@ -82,6 +82,11 @@ public class AscModelProvider extends ModelProvider {
 
 
 
+        //Fluids
+        itemModels.generateFlatItem(ModItems.LIQUIFIED_SPIRITUAL_QI_BUCKET.get(), ModelTemplates.FLAT_ITEM);
+
+
+
 
 
 
@@ -93,6 +98,9 @@ public class AscModelProvider extends ModelProvider {
         blockModels.createTrivialCube(ModBlocks.FROST_SILVER_BLOCK.get());
         blockModels.createTrivialCube(ModBlocks.BLACK_IRON_ORE.get());
         blockModels.createTrivialCube(ModBlocks.BLACK_IRON_BLOCK.get());
+
+        //Fluids
+        blockModels.createNonTemplateModelBlock(ModBlocks.LIQUIFIED_SPIRITUAL_QI_BLOCK.get());
     }
 
 

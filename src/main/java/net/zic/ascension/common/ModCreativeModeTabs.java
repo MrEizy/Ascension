@@ -39,6 +39,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BLACK_IRON_INGOT);
                         output.accept(ModItems.BLACK_IRON_NUGGET);
 
+                        output.accept(ModItems.LIQUIFIED_SPIRITUAL_QI_BUCKET);
+
 
                     }).build());
 
