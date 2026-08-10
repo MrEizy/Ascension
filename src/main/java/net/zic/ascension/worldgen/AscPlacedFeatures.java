@@ -73,7 +73,7 @@ public class AscPlacedFeatures {
         register(context, BLOOD_LINGZHI_MUSHROOM_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.BLOOD_LINGZHI_MUSHROOM),
                 List.of(
-                        CountPlacement.of(10),
+                        CountPlacement.of(14),
                         InSquarePlacement.spread(),
                         HeightRangePlacement.uniform(
                                 VerticalAnchor.absolute(0),
