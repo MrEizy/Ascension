@@ -7,6 +7,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.zic.ascension.common.blocks.crops.mushrooms.LingzhiMushroomBlock;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 
@@ -58,8 +59,12 @@ public class LingzhiMushroomFeature extends Feature<LingzhiMushroomConfiguration
                     continue;
                 }
 
-                BlockState state = config.mushroomBlock().defaultBlockState()
-                        .setValue(HorizontalDirectionalBlock.FACING, dir);
+                BlockState state;
+                if (config.mushroomBlock() instanceof LingzhiMushroomBlock lingzhi) {
+                    state = lingzhi.wildState(lingzhi.definition().chooseWildAgeTier(random)).setValue(HorizontalDirectionalBlock.FACING, dir);
+                } else {
+                    state = config.mushroomBlock().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, dir);
+                }
 
                 if (state.canSurvive(level, placePos)) {
                     level.setBlock(placePos, state, 2);

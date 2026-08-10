@@ -165,6 +165,7 @@ public final class HerbDefinition {
     }
 
     public enum PlantingType {
+        NONE,
         DIRECT,
         SEED
     }

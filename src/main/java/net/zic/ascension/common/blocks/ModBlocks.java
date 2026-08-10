@@ -69,11 +69,9 @@ public class ModBlocks {
                             .sound(SoundType.GRASS)
                             .noCollision()
                             .randomTicks()
-                            .noLootTable()
                             .pushReaction(PushReaction.DESTROY),
                     ModHerbs.JADE_DEW_GRASS,
-                    () -> ModItems.JADE_DEW_GRASS.get(),
-                    () -> ModItems.JADE_DEW_GRASS_SEEDS.get()
+                    () -> ModItems.JADE_DEW_GRASS.get()
             ));
 
     public static final DeferredBlock<HerbCropBlock> GINSENG_CROP = BLOCKS.registerBlock("ginseng_crop",
@@ -83,12 +81,11 @@ public class ModBlocks {
                             .sound(SoundType.GRASS)
                             .noCollision()
                             .randomTicks()
-                            .noLootTable()
                             .pushReaction(PushReaction.DESTROY),
                     ModHerbs.GINSENG,
-                    () -> ModItems.GINSENG.get(),
                     () -> ModItems.GINSENG.get()
             ));
+
     public static final DeferredBlock<HerbCropBlock> FIRE_GINSENG_CROP = BLOCKS.registerBlock("fire_ginseng_crop",
             properties -> new HerbCropBlock(
                     properties
@@ -96,12 +93,11 @@ public class ModBlocks {
                             .sound(SoundType.GRASS)
                             .noCollision()
                             .randomTicks()
-                            .noLootTable()
                             .pushReaction(PushReaction.DESTROY),
                     ModHerbs.FIRE_GINSENG,
-                    () -> ModItems.FIRE_GINSENG.get(),
                     () -> ModItems.FIRE_GINSENG.get()
             ));
+
     public static final DeferredBlock<HerbCropBlock> SNOW_GINSENG_CROP = BLOCKS.registerBlock("snow_ginseng_crop",
             properties -> new HerbCropBlock(
                     properties
@@ -109,25 +105,34 @@ public class ModBlocks {
                             .sound(SoundType.GRASS)
                             .noCollision()
                             .randomTicks()
-                            .noLootTable()
                             .pushReaction(PushReaction.DESTROY),
                     ModHerbs.SNOW_GINSENG,
-                    () -> ModItems.SNOW_GINSENG.get(),
                     () -> ModItems.SNOW_GINSENG.get()
             ));
 
-    public static final DeferredBlock<Block> LINGZHI_MUSHROOM_B = registerBlock("lingzhi_mushroom_b",
-            properties -> new LingzhiMushroomBlock(properties
-                    .strength(0.2f)
-                    .sound(SoundType.STEM)
-                    .pushReaction(PushReaction.DESTROY),
-                    BlockTags.LOGS));
-    public static final DeferredBlock<Block> BLOOD_LINGZHI_MUSHROOM_B = registerBlock("blood_lingzhi_mushroom_b",
-            properties -> new LingzhiMushroomBlock(properties
-                    .strength(0.2f)
-                    .sound(SoundType.STEM)
-                    .pushReaction(PushReaction.DESTROY),
-                    Blocks.BONE_BLOCK));
+    public static final DeferredBlock<LingzhiMushroomBlock> LINGZHI_MUSHROOM_B = registerBlock("lingzhi_mushroom_b",
+            properties -> new LingzhiMushroomBlock(
+                    properties
+                            .strength(0.2f)
+                            .sound(SoundType.STEM)
+                            .randomTicks()
+                            .pushReaction(PushReaction.DESTROY),
+                    ModHerbs.LINGZHI_MUSHROOM,
+                    () -> ModItems.LINGZHI_MUSHROOM.get()
+            ));
+
+    public static final DeferredBlock<LingzhiMushroomBlock> BLOOD_LINGZHI_MUSHROOM_B = registerBlock("blood_lingzhi_mushroom_b",
+            properties -> new LingzhiMushroomBlock(
+                    properties
+                            .strength(0.2f)
+                            .sound(SoundType.STEM)
+                            .randomTicks()
+                            .pushReaction(PushReaction.DESTROY),
+                    ModHerbs.BLOOD_LINGZHI_MUSHROOM,
+                    () -> ModItems.BLOOD_LINGZHI_MUSHROOM.get()
+            ));
+
+
 
 
 

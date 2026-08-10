@@ -95,8 +95,10 @@ public class ModItems {
             properties -> new HerbItem(properties, ModHerbs.SNOW_GINSENG, () -> ModBlocks.SNOW_GINSENG_CROP.get()));
 
 
-    public static final DeferredItem<Item> LINGZHI_MUSHROOM = ITEMS.registerSimpleItem("lingzhi_mushroom");
-    public static final DeferredItem<Item> BLOOD_LINGZHI_MUSHROOM = ITEMS.registerSimpleItem("blood_lingzhi_mushroom");
+    public static final DeferredItem<Item> LINGZHI_MUSHROOM = ITEMS.registerItem("lingzhi_mushroom",
+            properties -> new HerbItem(properties, ModHerbs.LINGZHI_MUSHROOM));
+    public static final DeferredItem<Item> BLOOD_LINGZHI_MUSHROOM = ITEMS.registerItem("blood_lingzhi_mushroom",
+            properties -> new HerbItem(properties, ModHerbs.BLOOD_LINGZHI_MUSHROOM));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

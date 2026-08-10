@@ -1,0 +1,343 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "minecraft:any_of",
+            "terms": [
+              {
+                "block": "ascension:jade_dew_grass_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "7"
+                }
+              },
+              {
+                "block": "ascension:jade_dew_grass_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "8"
+                }
+              },
+              {
+                "block": "ascension:jade_dew_grass_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "9"
+                }
+              },
+              {
+                "block": "ascension:jade_dew_grass_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "10"
+                }
+              },
+              {
+                "block": "ascension:jade_dew_grass_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "11"
+                }
+              },
+              {
+                "block": "ascension:jade_dew_grass_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "12"
+                }
+              },
+              {
+                "block": "ascension:jade_dew_grass_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "13"
+                }
+              },
+              {
+                "block": "ascension:jade_dew_grass_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "14"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "ascension:jade_dew_grass_seeds"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:any_of",
+          "terms": [
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "7"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "8"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "9"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "10"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "11"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "12"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "13"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "14"
+              }
+            }
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "ascension:jade_dew_grass"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:any_of",
+          "terms": [
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "7"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "8"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "9"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "10"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "11"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "12"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "13"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "14"
+              }
+            }
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "ascension:jade_dew_grass_seeds"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:any_of",
+          "terms": [
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "7"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "8"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "9"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "10"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "11"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "12"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "13"
+              }
+            },
+            {
+              "block": "ascension:jade_dew_grass_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "14"
+              }
+            }
+          ]
+        },
+        {
+          "chance": 0.35,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "ascension:jade_dew_grass_seeds"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ascension:blocks/jade_dew_grass_crop"
+}

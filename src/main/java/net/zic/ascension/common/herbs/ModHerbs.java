@@ -22,9 +22,12 @@ public final class ModHerbs {
                             new HerbDefinition.AgeThreshold(10, 48),
                             new HerbDefinition.AgeThreshold(100, 192),
                             new HerbDefinition.AgeThreshold(500, 768),
-                            new HerbDefinition.AgeThreshold(1000, 0)
+                            new HerbDefinition.AgeThreshold(1000, 7680),
+                            new HerbDefinition.AgeThreshold(10000, 76800),
+                            new HerbDefinition.AgeThreshold(100000, 768000),
+                            new HerbDefinition.AgeThreshold(1000000, 0)
                     )
-                    .wildAgeWeights(1000, 180, 24, 3, 1)
+                    .wildAgeWeights(1000, 180, 24, 3, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(BlockTags.GRASS_BLOCKS))
                     .spawnRule((level, pos, random) -> random.nextInt(6) == 0)
                     .build()
@@ -41,9 +44,12 @@ public final class ModHerbs {
                             new HerbDefinition.AgeThreshold(10, 72),
                             new HerbDefinition.AgeThreshold(100, 288),
                             new HerbDefinition.AgeThreshold(500, 1152),
-                            new HerbDefinition.AgeThreshold(1000, 0)
+                            new HerbDefinition.AgeThreshold(1000, 11520),
+                            new HerbDefinition.AgeThreshold(10000, 115200),
+                            new HerbDefinition.AgeThreshold(100000, 1152000),
+                            new HerbDefinition.AgeThreshold(1000000, 0)
                     )
-                    .wildAgeWeights(1200, 220, 28, 4, 1)
+                    .wildAgeWeights(1200, 220, 28, 4, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(BlockTags.GRASS_BLOCKS))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
                     .build()
@@ -58,9 +64,13 @@ public final class ModHerbs {
                             new HerbDefinition.AgeThreshold(10, 72),
                             new HerbDefinition.AgeThreshold(100, 288),
                             new HerbDefinition.AgeThreshold(500, 1152),
-                            new HerbDefinition.AgeThreshold(1000, 0)
+                            new HerbDefinition.AgeThreshold(1000, 0),
+                            new HerbDefinition.AgeThreshold(10000, 115200),
+                            new HerbDefinition.AgeThreshold(100000, 1152000),
+                            new HerbDefinition.AgeThreshold(1000000, 0)
+
                     )
-                    .wildAgeWeights(1200, 220, 28, 4, 1)
+                    .wildAgeWeights(1200, 220, 28, 4, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(Blocks.SAND))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
                     .build()
@@ -75,11 +85,55 @@ public final class ModHerbs {
                             new HerbDefinition.AgeThreshold(10, 72),
                             new HerbDefinition.AgeThreshold(100, 288),
                             new HerbDefinition.AgeThreshold(500, 1152),
-                            new HerbDefinition.AgeThreshold(1000, 0)
+                            new HerbDefinition.AgeThreshold(1000, 11520),
+                            new HerbDefinition.AgeThreshold(10000, 115200),
+                            new HerbDefinition.AgeThreshold(100000, 1152000),
+                            new HerbDefinition.AgeThreshold(1000000, 0)
                     )
-                    .wildAgeWeights(1200, 220, 28, 4, 1)
+                    .wildAgeWeights(1200, 220, 28, 4, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.SNOW_BLOCK))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
+                    .build()
+    );
+
+
+    public static final HerbDefinition LINGZHI_MUSHROOM = register(
+            HerbDefinition.builder(AscensionCraft.prefix("lingzhi_mushroom"))
+                    .growthStages(1)
+                    .baseGrowthChance(1.0F)
+                    .planting(HerbDefinition.PlantingType.NONE)
+                    .ageThresholds(
+                            new HerbDefinition.AgeThreshold(1, 24),
+                            new HerbDefinition.AgeThreshold(10, 96),
+                            new HerbDefinition.AgeThreshold(100, 384),
+                            new HerbDefinition.AgeThreshold(500, 1536),
+                            new HerbDefinition.AgeThreshold(1000, 15360),
+                            new HerbDefinition.AgeThreshold(10000, 153600),
+                            new HerbDefinition.AgeThreshold(100000, 1536000),
+                            new HerbDefinition.AgeThreshold(1000000, 0)
+                    )
+                    .wildAgeWeights(1400, 180, 20, 2, 1, 1, 1, 1)
+                    .naturalSupport(state -> state.is(BlockTags.LOGS))
+                    .build()
+    );
+
+    public static final HerbDefinition BLOOD_LINGZHI_MUSHROOM = register(
+            HerbDefinition.builder(AscensionCraft.prefix("blood_lingzhi_mushroom"))
+                    .growthStages(1)
+                    .baseGrowthChance(1.0F)
+                    .planting(HerbDefinition.PlantingType.NONE)
+                    .ageThresholds(
+                            new HerbDefinition.AgeThreshold(1, 36),
+                            new HerbDefinition.AgeThreshold(10, 144),
+                            new HerbDefinition.AgeThreshold(100, 576),
+                            new HerbDefinition.AgeThreshold(500, 2304),
+                            new HerbDefinition.AgeThreshold(1000, 23040),
+                            new HerbDefinition.AgeThreshold(10000, 230400),
+                            new HerbDefinition.AgeThreshold(100000, 2304000),
+                            new HerbDefinition.AgeThreshold(1000000, 0)
+                    )
+                    .wildAgeWeights(1600, 160, 16, 2, 1, 1, 1, 1)
+                    .naturalSupport(state -> state.is(Blocks.BONE_BLOCK))
                     .build()
     );
 

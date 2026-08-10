@@ -28,7 +28,6 @@ import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.ModTags;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -44,18 +43,15 @@ public class HerbCropBlock extends Block {
 
     private final HerbDefinition definition;
     private final Supplier<? extends Item> harvestItem;
-    private final Supplier<? extends Item> plantingItem;
 
     public HerbCropBlock(
             Properties properties,
             HerbDefinition definition,
-            Supplier<? extends Item> harvestItem,
-            Supplier<? extends Item> plantingItem
+            Supplier<? extends Item> harvestItem
     ) {
         super(properties);
         this.definition = definition;
         this.harvestItem = harvestItem;
-        this.plantingItem = plantingItem;
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(STAGE, 0)
                 .setValue(WILD, false));
@@ -181,26 +177,25 @@ public class HerbCropBlock extends Block {
 
     @Override
     protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
-        List<ItemStack> drops = new ArrayList<>();
-        boolean mature = isMature(state);
-        boolean wild = state.getValue(WILD);
+        List<ItemStack> drops = super.getDrops(state, params);
 
-        if (!mature) {
-            drops.add(new ItemStack(plantingItem.get()));
+        if (!isMature(state)) {
             return drops;
         }
 
+        boolean wild = state.getValue(WILD);
         int ageTier = ageTier(state);
+
         Vec3 origin = params.getOptionalParameter(LootContextParams.ORIGIN);
         BlockPos pos = origin == null ? BlockPos.ZERO : BlockPos.containing(origin);
         HerbDefinition.Quality quality = definition.resolveQuality(params.getLevel(), pos, state, wild);
 
-        ItemStack herb = new ItemStack(harvestItem.get());
-        herb.set(AscensionComponents.HERB_DATA.get(), new AscensionComponents.HerbData(ageTier, quality.ordinal(), wild));
-        drops.add(herb);
+        AscensionComponents.HerbData herbData = new AscensionComponents.HerbData(ageTier, quality.ordinal(), wild);
 
-        if (definition.plantingType() == HerbDefinition.PlantingType.SEED && plantingItem.get() != harvestItem.get()) {
-            drops.add(new ItemStack(plantingItem.get()));
+        for (ItemStack drop : drops) {
+            if (drop.getItem() == harvestItem.get()) {
+                drop.set(AscensionComponents.HERB_DATA.get(), herbData);
+            }
         }
 
         return drops;

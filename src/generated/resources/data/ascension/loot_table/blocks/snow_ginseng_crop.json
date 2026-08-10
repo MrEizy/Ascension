@@ -1,0 +1,256 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "minecraft:any_of",
+            "terms": [
+              {
+                "block": "ascension:snow_ginseng_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "3"
+                }
+              },
+              {
+                "block": "ascension:snow_ginseng_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "4"
+                }
+              },
+              {
+                "block": "ascension:snow_ginseng_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "5"
+                }
+              },
+              {
+                "block": "ascension:snow_ginseng_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "6"
+                }
+              },
+              {
+                "block": "ascension:snow_ginseng_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "7"
+                }
+              },
+              {
+                "block": "ascension:snow_ginseng_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "8"
+                }
+              },
+              {
+                "block": "ascension:snow_ginseng_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "9"
+                }
+              },
+              {
+                "block": "ascension:snow_ginseng_crop",
+                "condition": "minecraft:block_state_property",
+                "properties": {
+                  "stage": "10"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "ascension:snow_ginseng"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:any_of",
+          "terms": [
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "3"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "4"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "5"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "6"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "7"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "8"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "9"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "10"
+              }
+            }
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "ascension:snow_ginseng"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:any_of",
+          "terms": [
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "3"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "4"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "5"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "6"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "7"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "8"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "9"
+              }
+            },
+            {
+              "block": "ascension:snow_ginseng_crop",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "10"
+              }
+            }
+          ]
+        },
+        {
+          "chance": 0.25,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "ascension:snow_ginseng"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ascension:blocks/snow_ginseng_crop"
+}

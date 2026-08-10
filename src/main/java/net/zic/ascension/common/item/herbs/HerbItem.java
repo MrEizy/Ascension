@@ -22,6 +22,10 @@ public class HerbItem extends Item {
     private final HerbDefinition definition;
     private final Supplier<? extends Block> crop;
 
+    public HerbItem(Properties properties, HerbDefinition definition) {
+        this(properties, definition, null);
+    }
+
     public HerbItem(Properties properties, HerbDefinition definition, Supplier<? extends Block> crop) {
         super(properties.component(AscensionComponents.HERB_DATA.get(), AscensionComponents.HerbData.DEFAULT));
         this.definition = definition;
@@ -42,7 +46,7 @@ public class HerbItem extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        if (definition.plantingType() != HerbDefinition.PlantingType.DIRECT) {
+        if (definition.plantingType() != HerbDefinition.PlantingType.DIRECT || crop == null) {
             return super.useOn(context);
         }
         return plant(context, crop);
