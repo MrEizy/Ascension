@@ -32,6 +32,8 @@ public class AscConfiguredFeatures {
     //Herbs
     public static final ResourceKey<ConfiguredFeature<?, ?>> JADE_DEW_GRASS = registerKey("jade_dew_grass");
     public static final ResourceKey<ConfiguredFeature<?, ?>> GINSENG = registerKey("ginseng");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> FIRE_GINSENG = registerKey("fire_ginseng");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SNOW_GINSENG = registerKey("snow_ginseng");
     public static final ResourceKey<ConfiguredFeature<?, ?>> LINGZHI_MUSHROOM = registerKey("lingzhi_mushroom");
     public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOD_LINGZHI_MUSHROOM = registerKey("blood_lingzhi_mushroom");
 
@@ -68,6 +70,10 @@ public class AscConfiguredFeatures {
 
         register(context, GINSENG, AscFeatures.HERB.get(),
                 new HerbFeature.Configuration(ModBlocks.GINSENG_CROP.get(), 4, 3));
+        register(context, FIRE_GINSENG, AscFeatures.HERB.get(),
+                new HerbFeature.Configuration(ModBlocks.FIRE_GINSENG_CROP.get(), 4, 3));
+        register(context, SNOW_GINSENG, AscFeatures.HERB.get(),
+                new HerbFeature.Configuration(ModBlocks.SNOW_GINSENG_CROP.get(), 4, 3));
 
         register(context, LINGZHI_MUSHROOM, AscFeatures.LINGZHI_MUSHROOM.get(),
                 new LingzhiMushroomConfiguration(ModBlocks.LINGZHI_MUSHROOM_B.get(), blocks.getOrThrow(BlockTags.LOGS)));

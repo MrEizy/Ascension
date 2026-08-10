@@ -54,7 +54,9 @@ public class AscModelProvider extends ModelProvider {
         //Herb Items
         herbItemModel(itemModels, ModItems.JADE_DEW_GRASS.get());
         itemModels.generateFlatItem(ModItems.JADE_DEW_GRASS_SEEDS.get(), ModelTemplates.FLAT_ITEM);
-        herbItemModel(itemModels, ModItems.GINSENG.get(), "hundred_year_ginseng");
+        herbItemModel(itemModels, ModItems.GINSENG.get(), "ginseng");
+        herbItemModel(itemModels, ModItems.FIRE_GINSENG.get(), "fire_ginseng");
+        herbItemModel(itemModels, ModItems.SNOW_GINSENG.get(), "snow_ginseng");
         herbItemModel(itemModels, ModItems.LINGZHI_MUSHROOM.get());
         herbItemModel(itemModels, ModItems.BLOOD_LINGZHI_MUSHROOM.get());
 
@@ -64,7 +66,9 @@ public class AscModelProvider extends ModelProvider {
         herbBlockModelRotated(blockModels, ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get());
         cultivationSoilModel(blockModels);
         herbCropModel(blockModels, ModBlocks.JADE_DEW_GRASS_CROP.get());
-        herbCropModel(blockModels, ModBlocks.GINSENG_CROP.get(), "hundred_year_ginseng");
+        herbCropModel(blockModels, ModBlocks.GINSENG_CROP.get(), "ginseng");
+        herbCropModel(blockModels, ModBlocks.FIRE_GINSENG_CROP.get(), "fire_ginseng");
+        herbCropModel(blockModels, ModBlocks.SNOW_GINSENG_CROP.get(), "snow_ginseng");
 
 
         //Ore Models

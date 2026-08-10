@@ -24,6 +24,8 @@ public class AscPlacedFeatures {
     //Herbs
     public static final ResourceKey<PlacedFeature> JADE_DEW_GRASS_PLACED_KEY = registerKey("jade_dew_grass_placed");
     public static final ResourceKey<PlacedFeature> GINSENG_PLACED_KEY = registerKey("ginseng_placed");
+    public static final ResourceKey<PlacedFeature> FIRE_GINSENG_PLACED_KEY = registerKey("fire_ginseng_placed");
+    public static final ResourceKey<PlacedFeature> SNOW_GINSENG_PLACED_KEY = registerKey("snow_ginseng_placed");
     public static final ResourceKey<PlacedFeature> LINGZHI_MUSHROOM_PLACED_KEY = registerKey("lingzhi_mushroom_placed");
     public static final ResourceKey<PlacedFeature> BLOOD_LINGZHI_MUSHROOM_PLACED_KEY = registerKey("blood_lingzhi_mushroom_placed");
 
@@ -62,7 +64,7 @@ public class AscPlacedFeatures {
         register(context, JADE_DEW_GRASS_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.JADE_DEW_GRASS),
                 List.of(
-                        CountPlacement.of(1),
+                        CountPlacement.of(12),
                         InSquarePlacement.spread(),
                         BiomeFilter.biome()
                 ));
@@ -70,7 +72,21 @@ public class AscPlacedFeatures {
         register(context, GINSENG_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.GINSENG),
                 List.of(
-                        CountPlacement.of(1),
+                        CountPlacement.of(6),
+                        InSquarePlacement.spread(),
+                        BiomeFilter.biome()
+                ));
+        register(context, FIRE_GINSENG_PLACED_KEY,
+                configuredFeatures.getOrThrow(AscConfiguredFeatures.GINSENG),
+                List.of(
+                        CountPlacement.of(6),
+                        InSquarePlacement.spread(),
+                        BiomeFilter.biome()
+                ));
+        register(context, SNOW_GINSENG_PLACED_KEY,
+                configuredFeatures.getOrThrow(AscConfiguredFeatures.GINSENG),
+                List.of(
+                        CountPlacement.of(6),
                         InSquarePlacement.spread(),
                         BiomeFilter.biome()
                 ));

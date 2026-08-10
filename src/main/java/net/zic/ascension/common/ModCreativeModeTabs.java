@@ -64,6 +64,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.JADE_DEW_GRASS);
                         output.accept(ModItems.JADE_DEW_GRASS_SEEDS);
                         output.accept(ModItems.GINSENG);
+                        output.accept(ModItems.FIRE_GINSENG);
+                        output.accept(ModItems.SNOW_GINSENG);
                         output.accept(ModBlocks.LINGZHI_MUSHROOM_B);
                         output.accept(ModItems.LINGZHI_MUSHROOM);
                         output.accept(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B);

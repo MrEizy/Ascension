@@ -94,6 +94,8 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.jade_dew_grass", "Jade Dew Grass");
         add("item.ascension.jade_dew_grass_seeds", "Jade Dew Grass Seed");
         add("item.ascension.ginseng", "Ginseng");
+        add("item.ascension.fire_ginseng", "Fire Ginseng");
+        add("item.ascension.snow_ginseng", "Snow Ginseng");
         add("item.ascension.lingzhi_mushroom", "Lingzhi");
         add("item.ascension.blood_lingzhi_mushroom", "Blood Lingzhi");
 
@@ -126,6 +128,8 @@ public class AscLangProvider extends LanguageProvider {
         add("block.ascension.cultivation_soil", "Cultivation Soil");
         add("block.ascension.jade_dew_grass_crop", "Jade Dew Grass");
         add("block.ascension.ginseng_crop", "Ginseng");
+        add("block.ascension.fire_ginseng_crop", "Fire Ginseng");
+        add("block.ascension.snow_ginseng_crop", "Snow Ginseng");
         add("block.ascension.lingzhi_mushroom_b", "Lingzhi Mushroom");
         add("block.ascension.blood_lingzhi_mushroom_b", "Blood Lingzhi Mushroom");
 

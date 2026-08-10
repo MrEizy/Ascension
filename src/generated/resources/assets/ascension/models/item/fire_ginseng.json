@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "ascension:item/herbs/ginseng"
+    "layer0": "ascension:item/herbs/fire_ginseng"
   }
 }

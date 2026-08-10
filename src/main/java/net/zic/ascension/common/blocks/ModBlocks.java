@@ -60,7 +60,7 @@ public class ModBlocks {
     public static final DeferredBlock<Block> CULTIVATION_SOIL = registerBlock("cultivation_soil",
             properties -> new CultivationSoilBlock(properties
                     .strength(0.6f)
-                    .sound(SoundType.GRAVEL)));
+                    .sound(SoundType.WET_GRASS)));
 
     public static final DeferredBlock<HerbCropBlock> JADE_DEW_GRASS_CROP = BLOCKS.registerBlock("jade_dew_grass_crop",
             properties -> new HerbCropBlock(
@@ -88,6 +88,32 @@ public class ModBlocks {
                     ModHerbs.GINSENG,
                     () -> ModItems.GINSENG.get(),
                     () -> ModItems.GINSENG.get()
+            ));
+    public static final DeferredBlock<HerbCropBlock> FIRE_GINSENG_CROP = BLOCKS.registerBlock("fire_ginseng_crop",
+            properties -> new HerbCropBlock(
+                    properties
+                            .strength(0.0f)
+                            .sound(SoundType.GRASS)
+                            .noCollision()
+                            .randomTicks()
+                            .noLootTable()
+                            .pushReaction(PushReaction.DESTROY),
+                    ModHerbs.FIRE_GINSENG,
+                    () -> ModItems.FIRE_GINSENG.get(),
+                    () -> ModItems.FIRE_GINSENG.get()
+            ));
+    public static final DeferredBlock<HerbCropBlock> SNOW_GINSENG_CROP = BLOCKS.registerBlock("snow_ginseng_crop",
+            properties -> new HerbCropBlock(
+                    properties
+                            .strength(0.0f)
+                            .sound(SoundType.GRASS)
+                            .noCollision()
+                            .randomTicks()
+                            .noLootTable()
+                            .pushReaction(PushReaction.DESTROY),
+                    ModHerbs.SNOW_GINSENG,
+                    () -> ModItems.SNOW_GINSENG.get(),
+                    () -> ModItems.SNOW_GINSENG.get()
             ));
 
     public static final DeferredBlock<Block> LINGZHI_MUSHROOM_B = registerBlock("lingzhi_mushroom_b",

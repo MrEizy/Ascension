@@ -2,6 +2,7 @@ package net.zic.ascension.common.herbs;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Blocks;
 import net.zic.ascension.AscensionCraft;
 
 import java.util.Collections;
@@ -46,6 +47,44 @@ public final class ModHerbs {
                     )
                     .wildAgeWeights(1200, 220, 28, 4, 1)
                     .naturalSupport(state -> state.is(BlockTags.GRASS_BLOCKS))
+                    .qiCapacity(400.0D, 1400.0D)
+                    .availableQiFraction(0.10D, 0.60D)
+                    .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
+                    .build()
+    );
+    public static final HerbDefinition FIRE_GINSENG = register(
+            HerbDefinition.builder(AscensionCraft.prefix("fire_ginseng"))
+                    .growthStages(4)
+                    .baseGrowthChance(0.18F)
+                    .planting(HerbDefinition.PlantingType.DIRECT)
+                    .ageThresholds(
+                            new HerbDefinition.AgeThreshold(1, 18),
+                            new HerbDefinition.AgeThreshold(10, 72),
+                            new HerbDefinition.AgeThreshold(100, 288),
+                            new HerbDefinition.AgeThreshold(500, 1152),
+                            new HerbDefinition.AgeThreshold(1000, 0)
+                    )
+                    .wildAgeWeights(1200, 220, 28, 4, 1)
+                    .naturalSupport(state -> state.is(Blocks.SAND))
+                    .qiCapacity(400.0D, 1400.0D)
+                    .availableQiFraction(0.10D, 0.60D)
+                    .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
+                    .build()
+    );
+    public static final HerbDefinition SNOW_GINSENG = register(
+            HerbDefinition.builder(AscensionCraft.prefix("snow_ginseng"))
+                    .growthStages(4)
+                    .baseGrowthChance(0.18F)
+                    .planting(HerbDefinition.PlantingType.DIRECT)
+                    .ageThresholds(
+                            new HerbDefinition.AgeThreshold(1, 18),
+                            new HerbDefinition.AgeThreshold(10, 72),
+                            new HerbDefinition.AgeThreshold(100, 288),
+                            new HerbDefinition.AgeThreshold(500, 1152),
+                            new HerbDefinition.AgeThreshold(1000, 0)
+                    )
+                    .wildAgeWeights(1200, 220, 28, 4, 1)
+                    .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK))
                     .qiCapacity(400.0D, 1400.0D)
                     .availableQiFraction(0.10D, 0.60D)
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)

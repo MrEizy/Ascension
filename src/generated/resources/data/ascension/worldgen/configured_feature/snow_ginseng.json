@@ -1,0 +1,7 @@
+{
+  "type": "ascension:herb",
+  "config": {
+    "herb_block": "ascension:snow_ginseng_crop",
+    "tries": 4
+  }
+}

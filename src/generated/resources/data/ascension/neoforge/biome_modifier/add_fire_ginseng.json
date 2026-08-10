@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "minecraft:beach",
+    "minecraft:desert"
+  ],
+  "features": "ascension:fire_ginseng_placed",
+  "step": "vegetal_decoration"
+}
