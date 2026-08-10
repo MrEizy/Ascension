@@ -8,7 +8,7 @@
 • Added 47 new Paths - Foundation Paths (3) Elemental Paths (29) Weapon Paths (15)  
 • Added 16 new Physiques  
 • Added 5 new bloodlines  
-• Added 1 new Herb
+• Added 6 new Herb
 • Added 1 new Artifact
 • Ported Most blocks from 1.21.1
 • Added back the Tablets of Destruction. 4 Tiers  
