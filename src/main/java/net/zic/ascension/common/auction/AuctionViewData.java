@@ -18,7 +18,8 @@ public final class AuctionViewData {
             long currentBid,
             String highestBidderName,
             long endsAtMillis,
-            long viewerEscrow
+            long viewerEscrow,
+            boolean viewerNotifications
     ) {
         public AuctionView {
             item = item.copy();

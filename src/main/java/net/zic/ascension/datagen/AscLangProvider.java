@@ -182,6 +182,12 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.auction.bid_winning", "Winning");
         add("gui.ascension.auction.bid_outbid", "Outbid");
         add("gui.ascension.auction.inbox_empty", "Inbox empty");
+        add("gui.ascension.auction.my_auctions", "My Auctions");
+        add("gui.ascension.auction.cancel", "Cancel Auction");
+        add("gui.ascension.auction.cancel_hint", "You can cancel this auction until the first bid is placed.");
+        add("gui.ascension.auction.cancel_locked", "This auction is locked because a bid has been placed.");
+        add("gui.ascension.auction.notifications_on", "Notify: ON");
+        add("gui.ascension.auction.notifications_off", "Notify: OFF");
 
         add("auction.ascension.not_owner", "This Auction House belongs to %s.");
         add("auction.ascension.create_success", "Auction created.");
@@ -201,6 +207,16 @@ public class AscLangProvider extends LanguageProvider {
         add("auction.ascension.inbox_waiting", "You have unclaimed auction contents. Use /auction inbox to collect them.");
         add("auction.ascension.core_has_active", "This Auction House Core cannot be broken while it has active auctions.");
         add("auction.ascension.claimed_stones", "Claimed %s Spiritual Stones.");
+        add("auction.ascension.cancel_success", "Auction cancelled. The item was returned to your Auction Inbox.");
+        add("auction.ascension.cancel_has_bids", "You cannot cancel an auction after a bid has been placed.");
+        add("auction.ascension.notifications_enabled", "Auction notifications enabled.");
+        add("auction.ascension.notifications_disabled", "Auction notifications disabled.");
+        add("auction.ascension.five_minutes", "%s has 5 minutes remaining.");
+        add("auction.ascension.lost", "You lost the auction for %s. Your %s Spiritual Stones were returned to your Auction Inbox.");
+        add("auction.ascension.ended_watching", "The auction for %s has ended.");
+        add("auction.ascension.cancelled_watching", "The auction for %s was cancelled.");
+        add("auction.ascension.admin_cancelled_bidder", "An administrator cancelled the auction for %s. Your %s Spiritual Stones were returned to your Auction Inbox.");
+        add("auction.ascension.admin_cancelled_seller", "An administrator cancelled your auction for %s. The item was returned to your Auction Inbox.");
 
 
         // GUI

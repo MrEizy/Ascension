@@ -25,8 +25,10 @@ import net.zic.ascension.common.blocks.ModBlocks;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
@@ -34,6 +36,7 @@ public final class AuctionManager extends SavedData {
     public static final int BIDDER_RADIUS = 20;
     public static final long MIN_DURATION_MILLIS = 30L * 60L * 1000L;
     public static final long MAX_DURATION_MILLIS = 7L * 24L * 60L * 60L * 1000L;
+    public static final long FIVE_MINUTE_WARNING_MILLIS = 5L * 60L * 1000L;
 
     private static final Codec<UUID> UUID_CODEC = Codec.STRING.xmap(UUID::fromString, UUID::toString);
 
@@ -255,7 +258,8 @@ public final class AuctionManager extends SavedData {
                 listing.currentBid(),
                 listing.highestBidderName(),
                 listing.endsAtMillis(),
-                viewerId == null ? 0L : listing.escrowedBy(viewerId)
+                viewerId == null ? 0L : listing.escrowedBy(viewerId),
+                viewerId != null && listing.notificationsEnabled(viewerId)
         );
     }
 
@@ -351,37 +355,164 @@ public final class AuctionManager extends SavedData {
         listing.placeBid(bidder.getUUID(), bidder.getName().getString(), amount);
         setDirty();
 
-        if (previousWinner != null && !previousWinner.equals(bidder.getUUID())) {
+        if (previousWinner != null
+                && !previousWinner.equals(bidder.getUUID())
+                && listing.notificationsEnabled(previousWinner)) {
             MinecraftServer server = bidder.level().getServer();
             if (server != null) {
-                ServerPlayer previous = server.getPlayerList().getPlayer(previousWinner);
-                if (previous != null) {
-                    previous.sendSystemMessage(Component.translatable(
-                            "auction.ascension.outbid",
-                            listing.itemStack().getHoverName()
-                    ));
-                }
+                notifyOnline(server, previousWinner, Component.translatable(
+                        "auction.ascension.outbid",
+                        listing.itemStack().getHoverName()
+                ));
             }
         }
         return BidResult.SUCCESS;
     }
 
+    public synchronized NotificationResult toggleNotifications(
+            ServerPlayer player,
+            BlockPos bidderPos,
+            UUID auctionId
+    ) {
+        AuctionListing listing = auctions.get(auctionId);
+        if (!canAccessAuctionFromBidder(player, bidderPos, listing)) {
+            return NotificationResult.INVALID_ACCESS;
+        }
+
+        long now = System.currentTimeMillis();
+        if (listing.isExpired(now)) {
+            return NotificationResult.ENDED;
+        }
+
+        boolean enabled = listing.toggleNotifications(player.getUUID());
+        if (enabled
+                && listing.endsAtMillis() - now <= FIVE_MINUTE_WARNING_MILLIS
+                && !listing.hasFiveMinuteWarning(player.getUUID())) {
+            player.sendSystemMessage(Component.translatable(
+                    "auction.ascension.five_minutes",
+                    listing.itemStack().getHoverName()
+            ));
+            listing.markFiveMinuteWarning(player.getUUID());
+        }
+
+        setDirty();
+        return enabled ? NotificationResult.ENABLED : NotificationResult.DISABLED;
+    }
+
+    public synchronized CancelResult cancelAuction(
+            ServerPlayer seller,
+            BlockPos corePos,
+            UUID auctionId
+    ) {
+        AuctionListing listing = auctions.get(auctionId);
+        if (listing == null) {
+            return CancelResult.NOT_FOUND;
+        }
+        if (!canManageHouse(seller, corePos, listing.houseId())) {
+            return CancelResult.INVALID_ACCESS;
+        }
+        if (listing.hasBid()) {
+            return CancelResult.HAS_BIDS;
+        }
+
+        removeAuctionReference(listing);
+        auctions.remove(auctionId);
+        getInbox(listing.sellerId()).addItem(listing.itemStack());
+
+        MinecraftServer server = seller.level().getServer();
+        if (server != null) {
+            notifyAuctionCancelledWatchers(server, listing, seller.getUUID());
+        }
+
+        setDirty();
+        return CancelResult.SUCCESS;
+    }
+
+    public synchronized boolean adminCancelAuction(MinecraftServer server, UUID auctionId) {
+        AuctionListing listing = auctions.remove(auctionId);
+        if (listing == null) {
+            return false;
+        }
+
+        removeAuctionReference(listing);
+        getInbox(listing.sellerId()).addItem(listing.itemStack());
+        for (Map.Entry<UUID, Long> entry : listing.escrow().entrySet()) {
+            if (entry.getValue() > 0L) {
+                getInbox(entry.getKey()).addCurrency(entry.getValue());
+                notifyOnline(server, entry.getKey(), Component.translatable(
+                        "auction.ascension.admin_cancelled_bidder",
+                        listing.itemStack().getHoverName(),
+                        entry.getValue()
+                ));
+            }
+        }
+
+        notifyOnline(server, listing.sellerId(), Component.translatable(
+                "auction.ascension.admin_cancelled_seller",
+                listing.itemStack().getHoverName()
+        ));
+        notifyAuctionCancelledWatchers(server, listing, listing.sellerId());
+        setDirty();
+        return true;
+    }
+
+    public synchronized boolean adminResolveAuction(MinecraftServer server, UUID auctionId) {
+        if (!auctions.containsKey(auctionId)) {
+            return false;
+        }
+        resolveAuction(server, auctionId);
+        setDirty();
+        return true;
+    }
+
+    public synchronized List<AuctionListing> activeAuctions() {
+        ArrayList<AuctionListing> result = new ArrayList<>(auctions.values());
+        result.sort(Comparator.comparingLong(AuctionListing::endsAtMillis));
+        return List.copyOf(result);
+    }
+
     public synchronized void resolveExpired(MinecraftServer server) {
         long now = System.currentTimeMillis();
+        boolean changed = sendFiveMinuteWarnings(server, now);
+
         ArrayList<UUID> expired = new ArrayList<>();
         for (AuctionListing listing : auctions.values()) {
             if (listing.isExpired(now)) {
                 expired.add(listing.id());
             }
         }
-        if (expired.isEmpty()) {
-            return;
-        }
 
         for (UUID auctionId : expired) {
             resolveAuction(server, auctionId);
+            changed = true;
         }
-        setDirty();
+        if (changed) {
+            setDirty();
+        }
+    }
+
+    private boolean sendFiveMinuteWarnings(MinecraftServer server, long now) {
+        boolean changed = false;
+        for (AuctionListing listing : auctions.values()) {
+            long remaining = listing.endsAtMillis() - now;
+            if (remaining <= 0L || remaining > FIVE_MINUTE_WARNING_MILLIS) {
+                continue;
+            }
+
+            for (UUID subscriber : listing.notificationSubscribers()) {
+                if (listing.hasFiveMinuteWarning(subscriber)) {
+                    continue;
+                }
+                if (notifyOnline(server, subscriber, Component.translatable(
+                        "auction.ascension.five_minutes",
+                        listing.itemStack().getHoverName()
+                ))) {
+                    listing.markFiveMinuteWarning(subscriber);
+                    changed = true;
+                }
+            }
+        }
+        return changed;
     }
 
     private void resolveAuction(MinecraftServer server, UUID auctionId) {
@@ -390,10 +521,7 @@ public final class AuctionManager extends SavedData {
             return;
         }
 
-        AuctionHouseData house = houses.get(listing.houseId());
-        if (house != null) {
-            houses.put(house.id(), house.withoutAuction(auctionId));
-        }
+        removeAuctionReference(listing);
 
         if (!listing.hasBid()) {
             getInbox(listing.sellerId()).addItem(listing.itemStack());
@@ -401,6 +529,14 @@ public final class AuctionManager extends SavedData {
                     "auction.ascension.ended_no_bid",
                     listing.itemStack().getHoverName()
             ));
+            for (UUID subscriber : listing.notificationSubscribers()) {
+                if (!subscriber.equals(listing.sellerId())) {
+                    notifyOnline(server, subscriber, Component.translatable(
+                            "auction.ascension.ended_watching",
+                            listing.itemStack().getHoverName()
+                    ));
+                }
+            }
             return;
         }
 
@@ -408,21 +544,59 @@ public final class AuctionManager extends SavedData {
         getInbox(winner).addItem(listing.itemStack());
         getInbox(listing.sellerId()).addCurrency(listing.currentBid());
 
+        Set<UUID> participants = new HashSet<>();
         for (Map.Entry<UUID, Long> entry : listing.escrow().entrySet()) {
+            participants.add(entry.getKey());
             if (!entry.getKey().equals(winner)) {
                 getInbox(entry.getKey()).addCurrency(entry.getValue());
+                if (listing.notificationsEnabled(entry.getKey())) {
+                    notifyOnline(server, entry.getKey(), Component.translatable(
+                            "auction.ascension.lost",
+                            listing.itemStack().getHoverName(),
+                            entry.getValue()
+                    ));
+                }
             }
         }
 
-        notifyOnline(server, winner, Component.translatable(
-                "auction.ascension.won",
-                listing.itemStack().getHoverName()
-        ));
+        if (listing.notificationsEnabled(winner)) {
+            notifyOnline(server, winner, Component.translatable(
+                    "auction.ascension.won",
+                    listing.itemStack().getHoverName()
+            ));
+        }
+        for (UUID subscriber : listing.notificationSubscribers()) {
+            if (!participants.contains(subscriber) && !subscriber.equals(listing.sellerId())) {
+                notifyOnline(server, subscriber, Component.translatable(
+                        "auction.ascension.ended_watching",
+                        listing.itemStack().getHoverName()
+                ));
+            }
+        }
+
         notifyOnline(server, listing.sellerId(), Component.translatable(
                 "auction.ascension.sold",
                 listing.itemStack().getHoverName(),
                 listing.currentBid()
         ));
+    }
+
+    private void removeAuctionReference(AuctionListing listing) {
+        AuctionHouseData house = houses.get(listing.houseId());
+        if (house != null) {
+            houses.put(house.id(), house.withoutAuction(listing.id()));
+        }
+    }
+
+    private void notifyAuctionCancelledWatchers(MinecraftServer server, AuctionListing listing, UUID exceptPlayer) {
+        for (UUID subscriber : listing.notificationSubscribers()) {
+            if (!subscriber.equals(exceptPlayer) && listing.escrowedBy(subscriber) <= 0L) {
+                notifyOnline(server, subscriber, Component.translatable(
+                        "auction.ascension.cancelled_watching",
+                        listing.itemStack().getHoverName()
+                ));
+            }
+        }
     }
 
     public synchronized long claimCurrency(ServerPlayer player) {
@@ -489,11 +663,13 @@ public final class AuctionManager extends SavedData {
         return player.distanceToSqr(x, y, z) <= maxDistance * maxDistance;
     }
 
-    private static void notifyOnline(MinecraftServer server, UUID playerId, Component message) {
+    private static boolean notifyOnline(MinecraftServer server, UUID playerId, Component message) {
         ServerPlayer player = server.getPlayerList().getPlayer(playerId);
-        if (player != null) {
-            player.sendSystemMessage(message);
+        if (player == null) {
+            return false;
         }
+        player.sendSystemMessage(message);
+        return true;
     }
 
     private void pruneMissingAuctionReferences() {
@@ -591,5 +767,19 @@ public final class AuctionManager extends SavedData {
         BID_TOO_LOW,
         NOT_ENOUGH_CURRENCY,
         CURRENCY_UNAVAILABLE
+    }
+
+    public enum CancelResult {
+        SUCCESS,
+        INVALID_ACCESS,
+        HAS_BIDS,
+        NOT_FOUND
+    }
+
+    public enum NotificationResult {
+        ENABLED,
+        DISABLED,
+        INVALID_ACCESS,
+        ENDED
     }
 }

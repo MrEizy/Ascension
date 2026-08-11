@@ -326,6 +326,11 @@ public class AscensionCraft {
                     net.zic.ascension.network.auction.AuctionInboxActionPacket.STREAM_CODEC,
                     net.zic.ascension.network.auction.AuctionInboxActionPacket::handle
             );
+            registrar.playToServer(
+                    net.zic.ascension.network.auction.AuctionActionPacket.TYPE,
+                    net.zic.ascension.network.auction.AuctionActionPacket.STREAM_CODEC,
+                    net.zic.ascension.network.auction.AuctionActionPacket::handle
+            );
 
         }
     }

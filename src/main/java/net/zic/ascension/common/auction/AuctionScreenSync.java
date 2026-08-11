@@ -39,6 +39,29 @@ public final class AuctionScreenSync {
         openOwnerHome(player, manager.getHouse(houseId));
     }
 
+    public static void openOwnerAuctions(ServerPlayer player, UUID houseId, BlockPos corePos) {
+        AuctionManager manager = AuctionManager.getInstance();
+        if (manager == null || !manager.canManageHouse(player, corePos, houseId)) {
+            return;
+        }
+        AuctionHouseData house = manager.getHouse(houseId);
+        if (house == null) {
+            return;
+        }
+        AuctionInboxData inbox = manager.getInboxIfPresent(player.getUUID());
+        PacketDistributor.sendToPlayer(player, new AuctionScreenPacket(
+                AuctionScreenPacket.Mode.OWNER_AUCTIONS,
+                house.corePos(),
+                house.id(),
+                house.ownerName(),
+                inbox == null ? 0L : inbox.currency(),
+                List.of(),
+                manager.auctionViewsForHouse(house.id(), player.getUUID()),
+                List.of(),
+                null
+        ));
+    }
+
     public static void openBidderBrowser(ServerPlayer player, BlockPos bidderPos, UUID focusAuctionId) {
         AuctionManager manager = AuctionManager.getInstance();
         if (manager == null || !manager.canUseBidder(player, bidderPos)) {

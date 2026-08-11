@@ -18,6 +18,7 @@ import net.zic.ascension.common.auction.AuctionManager;
 import net.zic.ascension.common.auction.AuctionViewData;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 import net.zic.ascension.network.auction.AuctionScreenPacket;
+import net.zic.ascension.network.auction.AuctionActionPacket;
 import net.zic.ascension.network.auction.BidAuctionPacket;
 import net.zic.ascension.network.auction.AuctionInboxActionPacket;
 import net.zic.ascension.network.auction.CreateAuctionPacket;
@@ -52,6 +53,7 @@ public final class AuctionContainer extends RenderableElement {
 
         switch (packet.mode()) {
             case OWNER -> openPanel(new OwnerPanel(frame));
+            case OWNER_AUCTIONS -> openPanel(new MyAuctionsPanel(frame, 0));
             case OWNER_INBOX -> openPanel(new InboxPanel(frame, 0));
             case BIDDER -> openBidderInitial(frame);
             case INBOX -> openPanel(new InboxPanel(frame, 0));
@@ -97,6 +99,11 @@ public final class AuctionContainer extends RenderableElement {
             create.place(12, 34, 116, 22);
             addChild(create);
 
+            TextButton myAuctions = new TextButton(frame, Component.translatable("gui.ascension.auction.my_auctions"),
+                    () -> openPanel(new MyAuctionsPanel(frame, 0)));
+            myAuctions.place(132, 34, 96, 22);
+            addChild(myAuctions);
+
             TextButton inbox = new TextButton(frame,
                     Component.translatable("gui.ascension.auction.open_inbox", packet.inboxCurrency()),
                     () -> ClientPacketDistributor.sendToServer(AuctionInboxActionPacket.open(packet.houseId(), packet.accessPos())));
@@ -124,6 +131,128 @@ public final class AuctionContainer extends RenderableElement {
             }
             if (packet.auctions().size() > 4) {
                 graphics.text(font, Component.literal("+ " + (packet.auctions().size() - 4) + " more"), 14, 224, MUTED, false);
+            }
+        }
+    }
+
+    private final class MyAuctionsPanel extends RenderableElement {
+        private final int page;
+
+        MyAuctionsPanel(UIFrame frame, int page) {
+            super(frame);
+            int pages = Math.max(1, (packet.auctions().size() + 4) / 5);
+            this.page = Math.max(0, Math.min(page, pages - 1));
+            setWidth(WIDTH);
+            setHeight(HEIGHT);
+
+            TextButton back = new TextButton(frame, Component.translatable("gui.ascension.auction.back"),
+                    () -> openPanel(new OwnerPanel(frame)));
+            back.place(10, 8, 52, 18);
+            addChild(back);
+
+            int start = this.page * 5;
+            int y = 43;
+            for (int i = start; i < Math.min(start + 5, packet.auctions().size()); i++) {
+                AuctionViewData.AuctionView auction = packet.auctions().get(i);
+                int returnPage = this.page;
+                ListingButton button = new ListingButton(frame, auction,
+                        () -> openPanel(new OwnerAuctionDetailPanel(frame, auction, returnPage)));
+                button.place(12, y, 336, 32);
+                addChild(button);
+                y += 35;
+            }
+
+            if (this.page > 0) {
+                TextButton previous = new TextButton(frame, Component.literal("<"),
+                        () -> openPanel(new MyAuctionsPanel(frame, this.page - 1)));
+                previous.place(10, 218, 26, 16);
+                addChild(previous);
+            }
+            if (this.page + 1 < pages) {
+                TextButton next = new TextButton(frame, Component.literal(">"),
+                        () -> openPanel(new MyAuctionsPanel(frame, this.page + 1)));
+                next.place(324, 218, 26, 16);
+                addChild(next);
+            }
+        }
+
+        @Override
+        public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+            Font font = Minecraft.getInstance().font;
+            graphics.centeredText(font, Component.translatable("gui.ascension.auction.my_auctions"), WIDTH / 2, 12, TEXT);
+
+            if (packet.auctions().isEmpty()) {
+                graphics.centeredText(font, Component.translatable("gui.ascension.auction.no_auctions"), WIDTH / 2, 106, MUTED);
+                return;
+            }
+
+            int pages = Math.max(1, (packet.auctions().size() + 4) / 5);
+            graphics.centeredText(font, Component.literal("Page " + (page + 1) + " / " + pages), WIDTH / 2, 221, MUTED);
+        }
+    }
+
+    private final class OwnerAuctionDetailPanel extends RenderableElement {
+        private final AuctionViewData.AuctionView auction;
+        private final int returnPage;
+
+        OwnerAuctionDetailPanel(UIFrame frame, AuctionViewData.AuctionView auction, int returnPage) {
+            super(frame);
+            this.auction = auction;
+            this.returnPage = returnPage;
+            setWidth(WIDTH);
+            setHeight(HEIGHT);
+
+            TextButton back = new TextButton(frame, Component.translatable("gui.ascension.auction.back"),
+                    () -> openPanel(new MyAuctionsPanel(frame, this.returnPage)));
+            back.place(10, 8, 52, 18);
+            addChild(back);
+
+            if (auction.currentBid() <= 0L) {
+                TextButton cancel = new TextButton(frame, Component.translatable("gui.ascension.auction.cancel"),
+                        () -> ClientPacketDistributor.sendToServer(AuctionActionPacket.cancel(packet.accessPos(), auction.id())));
+                cancel.place(125, 201, 110, 24);
+                addChild(cancel);
+            }
+        }
+
+        @Override
+        public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+            Font font = Minecraft.getInstance().font;
+            graphics.centeredText(font, auction.item().getHoverName(), WIDTH / 2, 12, TEXT);
+
+            graphics.fill(154, 38, 206, 90, PANEL);
+            border(graphics, 154, 38, 52, 52, BORDER);
+            graphics.item(auction.item(), 172, 56);
+
+            int y = 103;
+            graphics.centeredText(font,
+                    Component.translatable(auction.currentBid() > 0L
+                                    ? "gui.ascension.auction.current_bid"
+                                    : "gui.ascension.auction.starting_bid",
+                            auction.currentBid() > 0L ? auction.currentBid() : auction.startingBid()),
+                    WIDTH / 2, y, GOLD);
+            y += 15;
+
+            if (!auction.highestBidderName().isBlank()) {
+                graphics.centeredText(font,
+                        Component.translatable("gui.ascension.auction.highest_bidder", auction.highestBidderName()),
+                        WIDTH / 2, y, MUTED);
+                y += 15;
+            }
+
+            graphics.centeredText(font,
+                    Component.translatable("gui.ascension.auction.time_left",
+                            formatDuration(Math.max(0L, auction.endsAtMillis() - System.currentTimeMillis()))),
+                    WIDTH / 2, y, MUTED);
+
+            if (auction.currentBid() > 0L) {
+                graphics.centeredText(font,
+                        Component.translatable("gui.ascension.auction.cancel_locked"),
+                        WIDTH / 2, 203, MUTED);
+            } else {
+                graphics.centeredText(font,
+                        Component.translatable("gui.ascension.auction.cancel_hint"),
+                        WIDTH / 2, 181, MUTED);
             }
         }
     }
@@ -356,6 +485,16 @@ public final class AuctionContainer extends RenderableElement {
                     modifiers -> desiredBid = safeAdd(desiredBid, modifierLong(modifiers, 1L, 10L, 100L)));
             bidUp.place(235, 175, 30, 22);
             addChild(bidUp);
+
+            TextButton notifications = new TextButton(frame,
+                    Component.translatable(auction.viewerNotifications()
+                            ? "gui.ascension.auction.notifications_on"
+                            : "gui.ascension.auction.notifications_off"),
+                    () -> ClientPacketDistributor.sendToServer(
+                            AuctionActionPacket.toggleNotifications(packet.accessPos(), auction.id())));
+            notifications.place(12, 204, 100, 23);
+            addChild(notifications);
+
             TextButton place = new TextButton(frame, Component.translatable("gui.ascension.auction.bid_now"), () ->
                     ClientPacketDistributor.sendToServer(new BidAuctionPacket(packet.accessPos(), auction.id(), desiredBid)));
             place.place(125, 204, 110, 23);
