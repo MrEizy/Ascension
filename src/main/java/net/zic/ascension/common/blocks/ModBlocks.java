@@ -8,11 +8,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DropExperienceBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -22,6 +20,7 @@ import net.zic.ascension.common.blocks.auction.AuctionBidderBlock;
 import net.zic.ascension.common.blocks.auction.AuctionHouseCoreBlock;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.blocks.crops.mushrooms.LingzhiMushroomBlock;
+import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.ModItems;
 
@@ -74,6 +73,15 @@ public class ModBlocks {
                     .pushReaction(PushReaction.BLOCK)
                     .requiresCorrectToolForDrops()
                     .sound(SoundType.METAL)));
+
+
+    //Fluids
+
+    public static final DeferredBlock<LiquidBlock> LIQUIFIED_SPIRITUAL_QI_BLOCK = BLOCKS.registerBlock("liquified_spiritual_qi_block",
+            properties -> new LiquidBlock(AscFluids.LIQUIFIED_SPIRITUAL_QI_SOURCE.get(), properties
+                    .mapColor(MapColor.WATER).replaceable().noCollision().strength(100.0F)
+                    .pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
+
 
 
     //Herb Blocks

@@ -1,11 +1,14 @@
 package net.zic.ascension.common.item;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionAscendant;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionEarth;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHeaven;
@@ -40,6 +43,12 @@ public class ModItems {
                     .setId(RegistryHelper.key(Registries.ITEM,AscensionCraft.MOD_ID,"technique_manual"))
                     .stacksTo(1)
             ));
+
+
+
+    //Fluids
+    public static final DeferredItem<Item> LIQUIFIED_SPIRITUAL_QI_BUCKET = ITEMS.registerItem("liquified_spiritual_qi_bucket",
+            properties -> new BucketItem(AscFluids.LIQUIFIED_SPIRITUAL_QI_SOURCE.get(), properties.stacksTo(1).craftRemainder(Items.BUCKET)));
 
 
 

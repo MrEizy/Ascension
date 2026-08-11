@@ -1,5 +1,8 @@
 package net.zic.ascension;
 
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -8,6 +11,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
@@ -25,6 +29,8 @@ import net.zic.ascension.client.visual.runtime.GuardianDharmaVisualController;
 import net.zic.ascension.client.visual.runtime.WeaponSwingVisualController;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 import net.zic.ascension.common.AscensionCreativeSections;
+import net.zic.ascension.common.fluids.AscFluidTypes;
+import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.gui.menus.AscMenuTypes;
 import net.zic.ascension.common.gui.menus.jade_bottle.JadeBottleScreen;
 import net.zic.ascension.common.particle.AscensionParticles;
@@ -99,6 +105,25 @@ public class AscensionCraftClient {
                     AscensionParticles.PARTCILE_FIELD_PETAL_LOTUS.get(),
                     sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.PETALS_LOTUS, sprites)
             );
+        }
+
+
+        @SubscribeEvent
+        public static void registerOnClientExtensions(RegisterClientExtensionsEvent event) {
+            event.registerFluidType(AscFluidTypes.LIQUIFIED_SPIRITUAL_QI_EXTENSION, AscFluidTypes.LIQUIFIED_SPIRITUAL_QI_TYPE.get());
+        }
+
+
+        @SubscribeEvent
+        public static void registerFluidModelsEvent(RegisterFluidModelsEvent event) {
+            FluidModel.Unbaked liquifiedSpiritualQiModel = new FluidModel.Unbaked(
+                    new Material(Identifier.withDefaultNamespace("block/water_still")),
+                    new Material(Identifier.withDefaultNamespace("block/water_flow")),
+                    new Material(Identifier.withDefaultNamespace("block/water_overlay")),
+                    state -> 0xA129A6FF);
+
+            event.register(liquifiedSpiritualQiModel, AscFluids.LIQUIFIED_SPIRITUAL_QI_SOURCE.get());
+            event.register(liquifiedSpiritualQiModel, AscFluids.LIQUIFIED_SPIRITUAL_QI_FLOWING.get());
         }
 
         @SubscribeEvent
