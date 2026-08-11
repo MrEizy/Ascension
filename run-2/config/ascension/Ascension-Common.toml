@@ -1,0 +1,66 @@
+[PillCauldron]
+	#Heat items for Pill Cauldron
+	#Format: ["modid:item_id,heat_value", "modid:item_id,heat_value"]
+	#Example: ["ascension:flame,8", "ascension:soul_flame,16", "ascension:crimson_lotus_flame,200"]
+	heat_items = ["ascension:flame,8,0,0", "ascension:soul_flame,16,5,0", "ascension:crimson_lotus_flame,200,15,1"]
+	#Heat loss settings for Pill Cauldron
+	#Interval in ticks between heat loss (20 ticks = 1 second) [Default: 20]
+	# Default: 20
+	# Range: > 1
+	heat_loss_interval = 20
+	#Amount of heat lost each interval [Default: 1]
+	# Default: 1
+	# Range: > 0
+	heat_loss_amount = 1
+	#Maximum heat capacity of the Pill Cauldron [Default: 1000]
+	# Default: 1000
+	# Range: > 100
+	max_heat = 1000
+
+[Artifacts]
+	#Artifact Modifiers
+	#Interval in ticks between Repairs [Default: 100]
+	# Default: 100
+	# Range: > 1
+	repairInterval = 100
+	#Amount of durability to Repair each interval [Default: 2]
+	# Default: 2
+	# Range: > 1
+	repairAmount = 2
+
+[ArmorDurability]
+	#Enable armor durability loss limiting [Default: true]
+	enabled = true
+	#Maximum percentage of an armor piece's max durability that can be lost from one hit.
+	#Example: 0.01 = 1% max durability loss per hit.
+	#Set lower for tougher armor durability. [Default: 0.01]
+	# Default: 0.01
+	# Range: 0.0 ~ 1.0
+	maxLossPercentPerHit = 0.01
+	#Minimum armor durability lost when armor is damaged.
+	#Usually keep this at 1 so armor can still wear down. [Default: 1]
+	# Default: 1
+	# Range: > 0
+	minLossPerHit = 1
+
+[StarterKit]
+	#Starter Kit settings for new players
+	#Enable starter kit for new players [Default: true]
+	enabled = true
+	#Starter kit items configuration
+	#Format: ["modid:item_id,amount,enabled", "modid:item_id,amount,enabled"]
+	#Example: ["minecraft:stone_sword,1,true", "minecraft:bread,5,true"]
+	#Set enabled to false to disable specific items from the starter kit
+	items = ["ascension:spatial_rupture_talisman_t1,1,true", "ascension:fasting_pill_t1,8,true"]
+
+[WeaponProjections]
+	#Allow weapon projections to break blocks when their block_impact mode is 'break'.
+	#Disable this to keep projection entity damage and collision while preventing terrain damage. [Default: true]
+	blockBreakingEnabled = true
+
+[OreSight]
+	#Ore Sight skill configuration
+	#Format: ["modid:block_id,hex_color,enabled", "modid:block_id,hex_color,enabled"]
+	#Example: ["minecraft:coal_ore,0x2F2F2F,true", "minecraft:diamond_ore,0x00FFFF,true"]
+	#Hex colors should be in 0xRRGGBB format
+	ore_colors = ["minecraft:coal_ore,0x2F2F2F,true", "minecraft:deepslate_coal_ore,0x2F2F2F,true", "minecraft:iron_ore,0xD8D8D8,true", "minecraft:deepslate_iron_ore,0xD8D8D8,true", "minecraft:copper_ore,0xB87333,true", "minecraft:deepslate_copper_ore,0xB87333,true", "minecraft:gold_ore,0xFFD700,true", "minecraft:deepslate_gold_ore,0xFFD700,true", "minecraft:diamond_ore,0x00FFFF,true", "minecraft:deepslate_diamond_ore,0x00FFFF,true", "minecraft:emerald_ore,0x00FF00,true", "minecraft:deepslate_emerald_ore,0x00FF00,true", "minecraft:lapis_ore,0x0000FF,true", "minecraft:deepslate_lapis_ore,0x0000FF,true", "minecraft:redstone_ore,0xFF0000,true", "minecraft:deepslate_redstone_ore,0xFF0000,true", "minecraft:nether_quartz_ore,0xF0F0F0,true", "minecraft:ancient_debris,0x8B4513,true"]

@@ -68,6 +68,9 @@ public class ModItems {
 
 
 
+    public static final DeferredItem<Item> SPIRITUAL_STONE = ITEMS.registerSimpleItem("spiritual_stone");
+
+
     //Ores
     public static final DeferredItem<Item> JADE = ITEMS.registerSimpleItem("jade");
 

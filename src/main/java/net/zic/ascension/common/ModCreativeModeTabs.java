@@ -31,6 +31,7 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.JADE_BOTTLE);
 
+                        output.accept(ModItems.SPIRITUAL_STONE);
                         output.accept(ModItems.JADE);
                         output.accept(ModItems.RAW_FROST_SILVER);
                         output.accept(ModItems.FROST_SILVER_INGOT);
@@ -52,6 +53,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.BLACK_IRON_ORE);
                         output.accept(ModBlocks.FROST_SILVER_BLOCK);
                         output.accept(ModBlocks.FROST_SILVER_ORE);
+                        output.accept(ModBlocks.AUCTION_HOUSE_CORE);
+                        output.accept(ModBlocks.AUCTION_BIDDER);
 
 
                     }).build());

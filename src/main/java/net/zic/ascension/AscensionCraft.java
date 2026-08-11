@@ -24,6 +24,7 @@ import net.zic.ascension.common.particle.AscensionParticles;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
+import net.zic.ascension.common.command.commands.AuctionCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
@@ -177,6 +178,7 @@ public class AscensionCraft {
     public static void registerCommands(RegisterCommandsEvent event){
         StatDisplayCommand.register(event.getDispatcher());
         AscensionCommand.register(event.getDispatcher());
+        AuctionCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent
@@ -302,6 +304,37 @@ public class AscensionCraft {
                     ChooseStarterOptionPacket.TYPE,
                     ChooseStarterOptionPacket.STREAM_CODEC,
                     ChooseStarterOptionPacket::handle
+            );
+
+            registrar.playToClient(
+                    net.zic.ascension.network.auction.AuctionScreenPacket.TYPE,
+                    net.zic.ascension.network.auction.AuctionScreenPacket.STREAM_CODEC,
+                    net.zic.ascension.network.auction.AuctionScreenPacket::handle
+            );
+            registrar.playToServer(
+                    net.zic.ascension.network.auction.CreateAuctionPacket.TYPE,
+                    net.zic.ascension.network.auction.CreateAuctionPacket.STREAM_CODEC,
+                    net.zic.ascension.network.auction.CreateAuctionPacket::handle
+            );
+            registrar.playToServer(
+                    net.zic.ascension.network.auction.BidAuctionPacket.TYPE,
+                    net.zic.ascension.network.auction.BidAuctionPacket.STREAM_CODEC,
+                    net.zic.ascension.network.auction.BidAuctionPacket::handle
+            );
+            registrar.playToServer(
+                    net.zic.ascension.network.auction.OpenAuctionInboxPacket.TYPE,
+                    net.zic.ascension.network.auction.OpenAuctionInboxPacket.STREAM_CODEC,
+                    net.zic.ascension.network.auction.OpenAuctionInboxPacket::handle
+            );
+            registrar.playToServer(
+                    net.zic.ascension.network.auction.ClaimAuctionCurrencyPacket.TYPE,
+                    net.zic.ascension.network.auction.ClaimAuctionCurrencyPacket.STREAM_CODEC,
+                    net.zic.ascension.network.auction.ClaimAuctionCurrencyPacket::handle
+            );
+            registrar.playToServer(
+                    net.zic.ascension.network.auction.ClaimAuctionItemPacket.TYPE,
+                    net.zic.ascension.network.auction.ClaimAuctionItemPacket.STREAM_CODEC,
+                    net.zic.ascension.network.auction.ClaimAuctionItemPacket::handle
             );
 
         }

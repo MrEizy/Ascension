@@ -71,6 +71,12 @@ public class AscModelProvider extends ModelProvider {
         herbCropModel(blockModels, ModBlocks.SNOW_GINSENG_CROP.get(), "hundred_year_snow_ginseng");
 
 
+        itemModels.itemModelOutput.accept(
+                ModItems.SPIRITUAL_STONE.get(),
+                ItemModelUtils.plainModel(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/spiritual_stone_small"))
+        );
+
+
         //Ore Models
         itemModels.generateFlatItem(ModItems.JADE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.RAW_FROST_SILVER.get(), ModelTemplates.FLAT_ITEM);
@@ -93,8 +99,18 @@ public class AscModelProvider extends ModelProvider {
         blockModels.createTrivialCube(ModBlocks.FROST_SILVER_BLOCK.get());
         blockModels.createTrivialCube(ModBlocks.BLACK_IRON_ORE.get());
         blockModels.createTrivialCube(ModBlocks.BLACK_IRON_BLOCK.get());
+        vanillaBlockModel(blockModels, ModBlocks.AUCTION_HOUSE_CORE.get(), "block/chiseled_deepslate");
+        vanillaBlockModel(blockModels, ModBlocks.AUCTION_BIDDER.get(), "block/polished_blackstone_bricks");
     }
 
+
+    private void vanillaBlockModel(BlockModelGenerators blockModels, Block block, String vanillaModelPath) {
+        Identifier model = Identifier.fromNamespaceAndPath("minecraft", vanillaModelPath);
+        blockModels.blockStateOutput.accept(
+                BlockModelGenerators.createSimpleBlock(block, BlockModelGenerators.plainVariant(model))
+        );
+        blockModels.registerSimpleItemModel(block, model);
+    }
 
     private void cultivationSoilModel(BlockModelGenerators blockModels) {
         Block block = ModBlocks.CULTIVATION_SOIL.get();

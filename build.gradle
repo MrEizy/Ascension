@@ -60,8 +60,21 @@ neoForge {
     runs {
         client {
             client()
+            gameDirectory = project.file('run')
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+        }
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+        client2 {
+            client()
+            gameDirectory = project.file('run-2')
+            programArguments.addAll '--username', 'Dev2'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        client3 {
+            client()
+            gameDirectory = project.file('run-3')
+            programArguments.addAll '--username', 'Dev3'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 

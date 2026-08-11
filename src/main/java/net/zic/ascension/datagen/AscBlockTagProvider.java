@@ -27,7 +27,9 @@ public class AscBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.FROST_SILVER_BLOCK.get())
                 .add(ModBlocks.FROST_SILVER_ORE.get())
                 .add(ModBlocks.BLACK_IRON_BLOCK.get())
-                .add(ModBlocks.BLACK_IRON_ORE.get());
+                .add(ModBlocks.BLACK_IRON_ORE.get())
+                .add(ModBlocks.AUCTION_HOUSE_CORE.get())
+                .add(ModBlocks.AUCTION_BIDDER.get());
 
 
         tag(BlockTags.MINEABLE_WITH_HOE)

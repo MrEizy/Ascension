@@ -18,6 +18,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.blocks.auction.AuctionBidderBlock;
+import net.zic.ascension.common.blocks.auction.AuctionHouseCoreBlock;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.blocks.crops.mushrooms.LingzhiMushroomBlock;
 import net.zic.ascension.common.herbs.ModHerbs;
@@ -54,6 +56,24 @@ public class ModBlocks {
             properties -> new Block(properties.strength(5.5f).explosionResistance(4.5f)
                     .requiresCorrectToolForDrops().sound(SoundType.METAL)));
 
+
+
+    //Auction Blocks
+    public static final DeferredBlock<AuctionHouseCoreBlock> AUCTION_HOUSE_CORE = registerBlock("auction_house_core",
+            properties -> new AuctionHouseCoreBlock(properties
+                    .strength(5.0f)
+                    .explosionResistance(1200.0f)
+                    .pushReaction(PushReaction.BLOCK)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
+
+    public static final DeferredBlock<AuctionBidderBlock> AUCTION_BIDDER = registerBlock("auction_bidder",
+            properties -> new AuctionBidderBlock(properties
+                    .strength(3.5f)
+                    .explosionResistance(6.0f)
+                    .pushReaction(PushReaction.BLOCK)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
 
 
     //Herb Blocks
