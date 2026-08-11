@@ -17,6 +17,12 @@ public final class AuctionCommand {
                             ServerPlayer player = context.getSource().getPlayerOrException();
                             AuctionScreenSync.openInbox(player);
                             return 1;
+                        }))
+                .then(Commands.literal("bids")
+                        .executes(context -> {
+                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            AuctionScreenSync.openBids(player);
+                            return 1;
                         })));
     }
 }

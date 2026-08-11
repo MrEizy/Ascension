@@ -177,6 +177,11 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.auction.auctions_count", "%s active auctions");
         add("gui.ascension.auction.bid_now", "Place Bid");
         add("gui.ascension.auction.minimum_bid", "Minimum bid: %s");
+        add("gui.ascension.auction.current_bids", "Current Bids");
+        add("gui.ascension.auction.no_current_bids", "You have no active bids.");
+        add("gui.ascension.auction.bid_winning", "Winning");
+        add("gui.ascension.auction.bid_outbid", "Outbid");
+        add("gui.ascension.auction.inbox_empty", "Inbox empty");
 
         add("auction.ascension.not_owner", "This Auction House belongs to %s.");
         add("auction.ascension.create_success", "Auction created.");

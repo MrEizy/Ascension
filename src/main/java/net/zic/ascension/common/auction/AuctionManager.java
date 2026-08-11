@@ -199,7 +199,7 @@ public final class AuctionManager extends SavedData {
             if (!isHouseInBidderRange(player.level(), bidderPos, house)) {
                 continue;
             }
-            List<AuctionViewData.AuctionView> active = auctionViewsForHouse(house.id());
+            List<AuctionViewData.AuctionView> active = auctionViewsForHouse(house.id(), player.getUUID());
             if (!active.isEmpty()) {
                 result.add(new AuctionViewData.HouseView(house.id(), house.ownerName(), active));
             }
@@ -209,6 +209,10 @@ public final class AuctionManager extends SavedData {
     }
 
     public List<AuctionViewData.AuctionView> auctionViewsForHouse(UUID houseId) {
+        return auctionViewsForHouse(houseId, null);
+    }
+
+    public List<AuctionViewData.AuctionView> auctionViewsForHouse(UUID houseId, UUID viewerId) {
         AuctionHouseData house = houses.get(houseId);
         if (house == null) {
             return List.of();
@@ -218,7 +222,19 @@ public final class AuctionManager extends SavedData {
         for (UUID auctionId : house.auctionIds()) {
             AuctionListing listing = auctions.get(auctionId);
             if (listing != null && !listing.isExpired(now)) {
-                result.add(toView(listing));
+                result.add(toView(listing, viewerId));
+            }
+        }
+        result.sort(Comparator.comparingLong(AuctionViewData.AuctionView::endsAtMillis));
+        return List.copyOf(result);
+    }
+
+    public List<AuctionViewData.AuctionView> activeBidViews(UUID playerId) {
+        ArrayList<AuctionViewData.AuctionView> result = new ArrayList<>();
+        long now = System.currentTimeMillis();
+        for (AuctionListing listing : auctions.values()) {
+            if (!listing.isExpired(now) && listing.escrowedBy(playerId) > 0L) {
+                result.add(toView(listing, playerId));
             }
         }
         result.sort(Comparator.comparingLong(AuctionViewData.AuctionView::endsAtMillis));
@@ -226,6 +242,10 @@ public final class AuctionManager extends SavedData {
     }
 
     public AuctionViewData.AuctionView toView(AuctionListing listing) {
+        return toView(listing, null);
+    }
+
+    public AuctionViewData.AuctionView toView(AuctionListing listing, UUID viewerId) {
         return new AuctionViewData.AuctionView(
                 listing.id(),
                 listing.houseId(),
@@ -234,7 +254,8 @@ public final class AuctionManager extends SavedData {
                 listing.startingBid(),
                 listing.currentBid(),
                 listing.highestBidderName(),
-                listing.endsAtMillis()
+                listing.endsAtMillis(),
+                viewerId == null ? 0L : listing.escrowedBy(viewerId)
         );
     }
 
@@ -549,11 +570,11 @@ public final class AuctionManager extends SavedData {
             }
             return;
         }
+
         if (event.getAction() == PlayerInteractEvent.LeftClickBlock.Action.STOP) {
             manager.removeHouseIfEmpty(player.level(), event.getPos());
         }
     }
-
 
     public enum CreateResult {
         SUCCESS,

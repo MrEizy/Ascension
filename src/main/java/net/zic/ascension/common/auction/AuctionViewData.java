@@ -17,16 +17,22 @@ public final class AuctionViewData {
             long startingBid,
             long currentBid,
             String highestBidderName,
-            long endsAtMillis
+            long endsAtMillis,
+            long viewerEscrow
     ) {
         public AuctionView {
             item = item.copy();
             sellerName = sellerName == null ? "" : sellerName;
             highestBidderName = highestBidderName == null ? "" : highestBidderName;
+            viewerEscrow = Math.max(0L, viewerEscrow);
         }
 
         public long minimumNextBid() {
             return currentBid > 0L ? currentBid + 1L : startingBid;
+        }
+
+        public boolean viewerIsWinning() {
+            return viewerEscrow > 0L && currentBid == viewerEscrow;
         }
     }
 

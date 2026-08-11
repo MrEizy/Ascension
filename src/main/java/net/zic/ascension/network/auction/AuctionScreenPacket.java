@@ -117,6 +117,7 @@ public record AuctionScreenPacket(
                 buf.readVarLong(),
                 buf.readVarLong(),
                 buf.readUtf(),
+                buf.readVarLong(),
                 buf.readVarLong()
         );
     }
@@ -130,6 +131,7 @@ public record AuctionScreenPacket(
         buf.writeVarLong(auction.currentBid());
         buf.writeUtf(auction.highestBidderName());
         buf.writeVarLong(auction.endsAtMillis());
+        buf.writeVarLong(auction.viewerEscrow());
     }
 
     private static UUID readOptionalUuid(RegistryFriendlyByteBuf buf) {
@@ -154,7 +156,9 @@ public record AuctionScreenPacket(
 
     public enum Mode {
         OWNER,
+        OWNER_INBOX,
         BIDDER,
-        INBOX
+        INBOX,
+        BIDS
     }
 }

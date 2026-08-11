@@ -12,6 +12,8 @@ import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.properties.numeric.Count;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,6 +27,8 @@ import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.item.ModItems;
 
+
+import java.util.List;
 public class AscModelProvider extends ModelProvider {
     public AscModelProvider(PackOutput output) {
         super(output, AscensionCraft.MOD_ID);
@@ -71,9 +75,25 @@ public class AscModelProvider extends ModelProvider {
         herbCropModel(blockModels, ModBlocks.SNOW_GINSENG_CROP.get(), "hundred_year_snow_ginseng");
 
 
+        ItemModel.Unbaked spiritualStoneSmall = ItemModelUtils.plainModel(
+                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/spiritual_stone_small")
+        );
+        ItemModel.Unbaked spiritualStoneMedium = ItemModelUtils.plainModel(
+                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/spiritual_stone_medium")
+        );
+        ItemModel.Unbaked spiritualStoneLarge = ItemModelUtils.plainModel(
+                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/spiritual_stone_large")
+        );
         itemModels.itemModelOutput.accept(
                 ModItems.SPIRITUAL_STONE.get(),
-                ItemModelUtils.plainModel(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/spiritual_stone_small"))
+                ItemModelUtils.rangeSelect(
+                        new Count(false),
+                        List.of(
+                                ItemModelUtils.override(spiritualStoneSmall, 1.0F),
+                                ItemModelUtils.override(spiritualStoneMedium, 16.0F),
+                                ItemModelUtils.override(spiritualStoneLarge, 32.0F)
+                        )
+                )
         );
 
 

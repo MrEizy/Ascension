@@ -20,6 +20,8 @@ build
 # other
 eclipse
 run
+run-2
+run-3
 runs
 run-data
 *.cache
@@ -33,6 +35,8 @@ docs/superpowers
 
 ### Minecraft Modding ###
 run/
+run-2/
+run-3/
 !**/src/**/run/
 repo/
 !**/src/**/repo/
