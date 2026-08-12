@@ -15,6 +15,8 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.configuration.dimension.DimensionConfiguration;
 import net.zic.zenithlib.registry.RegistryHelper;
 
+import static net.zic.ascension.configuration.ConfigurationRegistries.RAW_BIOME_CONFIGURATION_REGISTRY;
+
 /**
  * Holds the ascension specific configurations of Biomes
  * <br>
@@ -33,8 +35,6 @@ public class BiomeConfigurations {
     //used while resolving configurations
     private static final Reference2ObjectMap<Holder<Biome>,BiomeConfiguration.Builder> builders = new Reference2ObjectOpenHashMap<>();
 
-    private static final RegistryHelper.DataPackRegistry<RawBiomeConfiguration> RAW_CONFIGURATION_REGISTRY =
-            new RegistryHelper.DataPackRegistry<>(RegistryHelper.key(AscensionCraft.MOD_ID,"biome_configurations"),()->RawBiomeConfiguration.CODEC);
 
     public static BiomeConfigurations getInstance(){
         return instance;
@@ -44,7 +44,7 @@ public class BiomeConfigurations {
     public static void onServerStarting(ServerAboutToStartEvent event){
 
         RegistryAccess access =event.getServer().registryAccess();
-        Registry<RawBiomeConfiguration> rawConfigurations = RAW_CONFIGURATION_REGISTRY.get(access);
+        Registry<RawBiomeConfiguration> rawConfigurations = RAW_BIOME_CONFIGURATION_REGISTRY.get(access);
         builders.clear();
         //TODO a lot of nested looping, see if i can make it more efficient
         for(RawBiomeConfiguration rawConfiguration : rawConfigurations){
@@ -63,18 +63,6 @@ public class BiomeConfigurations {
 
         builders.forEach((key,builder)->configurations.put(key,builder.build()));
         instance = new  BiomeConfigurations(configurations);
-    }
-    @SubscribeEvent
-    public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-
-        AscensionCraft.LOGGER.info("Creating Biome Configuration Registry");
-        event.dataPackRegistry(
-                RAW_CONFIGURATION_REGISTRY.key(),
-                RAW_CONFIGURATION_REGISTRY.codec().get(),
-                RAW_CONFIGURATION_REGISTRY.codec().get()
-        );
-        AscensionCraft.LOGGER.info("Finished Creating Biome Configuration Registry");
-
     }
 
     private final Reference2ObjectMap<Holder<Biome>,BiomeConfiguration> configurations;

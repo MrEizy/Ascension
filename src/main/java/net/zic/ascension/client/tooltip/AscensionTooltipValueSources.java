@@ -8,7 +8,6 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionConditionReference;
@@ -30,6 +29,7 @@ import net.zic.ascension.impl.core.technique.realm_change.condition.EveryMinorRe
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryRealmCondition;
 import net.zic.ascension.impl.core.technique.realm_change.condition.EveryRealmInCondition;
 
+import net.zic.ascension.util.PathInteractionUtil;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
@@ -204,11 +204,11 @@ public final class AscensionTooltipValueSources {
             return ZenithTooltipValue.rows(
                     combineRows(
                             baseAffinityRows(
-                                    physique.basePathBonuses().stream().filter(val->val.category().equals(PathEffectValueUtil.AFFINITY_CATEGORY)).collect(Collectors.toCollection(ArrayList::new)),
+                                    physique.basePathBonuses().stream().filter(val->val.category().equals(PathInteractionUtil.AFFINITY_CATEGORY)).collect(Collectors.toCollection(ArrayList::new)),
                                     access
                             ),
                             affinityModifierRows(
-                                    physique.pathBonusModifiers().stream().filter(val->val.category().equals(PathEffectValueUtil.AFFINITY_CATEGORY)).collect(Collectors.toCollection(ArrayList::new)),
+                                    physique.pathBonusModifiers().stream().filter(val->val.category().equals(PathInteractionUtil.AFFINITY_CATEGORY)).collect(Collectors.toCollection(ArrayList::new)),
                                     access
                             )
                     )

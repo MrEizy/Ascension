@@ -61,7 +61,6 @@ public interface Bloodline {
 
             //purity increased
             for(int purity = data.getPurity()+1;purity<=newPurity;purity++){
-                System.out.println(purity);
                 data.setPurity(purity);
                 purityUp(source,data);
             }

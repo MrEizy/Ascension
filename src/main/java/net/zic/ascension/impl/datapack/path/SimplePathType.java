@@ -7,7 +7,6 @@ import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.impl.core.path.realms.MajorRealmDefinition;
-import net.zic.ascension.impl.core.path.PathRelationship;
 
 import net.zic.ascension.impl.core.path.simple.SimplePath;
 

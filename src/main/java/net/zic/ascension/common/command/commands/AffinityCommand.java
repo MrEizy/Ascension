@@ -6,16 +6,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
-import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
-import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
-import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
+import net.zic.ascension.util.PathInteractionUtil;
 
 public class AffinityCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> build() {
@@ -35,8 +31,8 @@ public class AffinityCommand {
         for(ServerPlayer player : players){
             AscensionEntityPathBonusHolder pathBonusHolder = player.getData(CoreAttachments.PATH_BONUS_HOLDER);
             player.sendSystemMessage(Component.literal("===Affinities (").append(player.getName()).append(Component.literal(")===")));
-            for(Identifier path : pathBonusHolder.getAllPathBonusesInCategory(PathEffectValueUtil.AFFINITY_CATEGORY)){
-                player.sendSystemMessage(Component.literal(path+": "+pathBonusHolder.getPathBonus(PathEffectValueUtil.AFFINITY_CATEGORY,path)));
+            for(Identifier path : pathBonusHolder.getAllPathBonusesInCategory(PathInteractionUtil.AFFINITY_CATEGORY)){
+                player.sendSystemMessage(Component.literal(path+": "+pathBonusHolder.getPathBonus(PathInteractionUtil.AFFINITY_CATEGORY,path)));
             }
         }
         return 1;

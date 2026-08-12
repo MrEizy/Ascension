@@ -3,16 +3,9 @@ package net.zic.ascension.util;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.ascension.core.technique.Technique;
-import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-
-
-import java.util.List;
 
 public class CultivationUtil {
     public static final Identifier CULTIVATION_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"cultivation");
@@ -32,9 +25,9 @@ public class CultivationUtil {
 
 
 
-        double cultivationAmount = baseRate*(1+PathEffectValueUtil.getEffectiveAffinity(caster,path));
+        double cultivationAmount = baseRate*(1+PathInteractionUtil.getEffectivePathMultiplier(caster,path));
 
-        if(!path.equals(secondaryPath) && secondaryPath != null)cultivationAmount += baseRate*(1+PathEffectValueUtil.getEffectiveAffinity(caster,secondaryPath));
+        if(!path.equals(secondaryPath) && secondaryPath != null)cultivationAmount += baseRate*(1+PathInteractionUtil.getEffectivePathMultiplier(caster,secondaryPath));
 
 
         pathInstance.progressPath(secondaryPath,cultivationAmount,source,caster);

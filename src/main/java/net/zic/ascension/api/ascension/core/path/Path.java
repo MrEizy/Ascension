@@ -3,11 +3,17 @@ package net.zic.ascension.api.ascension.core.path;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionHolder;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.interaction.PathInteraction;
+import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionType;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealmDefinition;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
+import org.apache.logging.log4j.core.Core;
+
+import java.util.Collection;
 
 public interface Path {
 
@@ -16,7 +22,9 @@ public interface Path {
     Component name();
     Component description();
 
-
+    default Identifier getId(RegistryAccess access){
+        return CoreRegistries.PATH_REGISTRY.get(access).getKey(this);
+    }
     //──Realms────────────────────────────────────────────────────────
     //TODO move some methods to PathInstance since CompositeRealm holds its own definition
     int getMaxMajorRealm();
@@ -36,8 +44,20 @@ public interface Path {
     boolean hasTribulation(int majorRealm, int minorRealm);
 
     //──Path Interactions────────────────────────────────────────────────────────
-    void registerInteractions(PathInteractionHolder holder, RegistryAccess access);
 
+    // methods marked with source treat this path as source, and opposite for those marked with target
+
+
+    boolean hasSourceInteraction(Identifier target,RegistryAccess access);
+    boolean hasSourceInteraction(Identifier target,PathInteractionType type,RegistryAccess access);
+    boolean hasTargetInteraction(Identifier source,RegistryAccess access);
+    boolean hasTargetInteraction(Identifier source,PathInteractionType type,RegistryAccess access);
+
+    PathInteraction getSourceInteraction(Identifier target,RegistryAccess access);
+    PathInteraction getTargetInteraction(Identifier source,RegistryAccess access);
+
+    Collection<PathInteraction> getAllSourceInteractions(RegistryAccess access);
+    Collection<PathInteraction> getAllTargetInteractions(RegistryAccess access);
 
     //──Data────────────────────────────────────────────────────────
 

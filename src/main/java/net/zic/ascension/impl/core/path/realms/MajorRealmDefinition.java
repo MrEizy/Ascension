@@ -6,7 +6,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealmDefinition;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinitionReference;
-import net.zic.ascension.impl.core.path.RealmDefinition;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;

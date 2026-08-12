@@ -1,4 +1,4 @@
-package net.zic.ascension.api.ascension.core.path.interactions;
+package net.zic.ascension.api.ascension.core.path.interaction;
 
 public enum PathInteractionType {
     GENERATIVE,

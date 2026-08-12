@@ -11,7 +11,7 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public interface PathInstance {
 
-
+    Path getPath();
 
 
     /**

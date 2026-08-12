@@ -51,3 +51,13 @@ TODO
     Can you add Requirement to Techniques, Skills, Bloodlines, Physiques etc?
     in case we want to make a Bloodline, Physique and Technique match
 so you have to have the bloodline to get the physique and you have to have the physique to get the technique=?
+
+
+
+TODO
+    think about path interactions more.
+    I could very easily make it a type based system. and create a contract with developers.
+    then developers could build unique interaction types!! like a chaos interaction type, that is always random
+    this would also simplify the override problem, since we will just expect the same datapack path as the path
+    It will mostly be used how I am using it now, but would allow for more adventurous ideas.
+    think about what I can do to expand the contract

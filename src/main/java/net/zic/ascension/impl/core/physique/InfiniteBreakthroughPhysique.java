@@ -51,10 +51,10 @@ public record InfiniteBreakthroughPhysique(Component name, Component description
         while(!tempRef.isEmpty()){
             InfiniteBreakthroughPhysique physique = tempRef.removeLast();
             Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(event.getServer().registryAccess()).getKey(physique);
-            System.out.println("physique : "+physiqueId);
+
             if(physiqueId == null) return;
 
-            System.out.println("registering infinite : "+physiqueId);
+
 
             existingPhysiques.add(physiqueId);
         }

@@ -16,9 +16,7 @@ public record EveryMajorRealmInCondition(List<Integer> majorRealms) implements R
     @Override
     public boolean test(OriginSource source, Identifier path, PathInstance PathInstance,  int majorRealm, int minorRealm, ProgressDirection direction) {
 
-        System.out.println(minorRealm);
-        System.out.println(majorRealm);
-        System.out.println(minorRealm == 0 && majorRealms.contains(majorRealm));
+
         return minorRealm == 0 && majorRealms.contains(majorRealm);
     }
 

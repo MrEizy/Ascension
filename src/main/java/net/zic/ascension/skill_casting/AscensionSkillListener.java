@@ -4,6 +4,8 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
@@ -23,7 +25,8 @@ import org.lwjgl.glfw.GLFW;
  *
  * does not handle action end, since the skill and cast instance handle that
  */
-@EventBusSubscriber(modid = AscensionCraft.MOD_ID)
+
+@EventBusSubscriber(modid = AscensionCraft.MOD_ID,value = Dist.CLIENT)
 public class AscensionSkillListener {
     public static final Identifier skillCast = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"skill_cast");
     private static final MappingHandler handler = InputHandler.registerAction(

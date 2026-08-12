@@ -26,6 +26,7 @@ import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
 
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 import net.zic.zenithlib.registry.RegistryHelper;
+
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class CoreRegistries {
 
@@ -51,6 +52,7 @@ public class CoreRegistries {
             "paths",
             ()-> PathType.PATH_CODEC
     );
+
     public static final RegistryHelper.DataPackRegistry<Skill> SKILL_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID,
             "skills",

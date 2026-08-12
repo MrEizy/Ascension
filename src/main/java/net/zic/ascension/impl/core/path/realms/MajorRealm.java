@@ -1,12 +1,9 @@
 package net.zic.ascension.impl.core.path.realms;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.chat.ComponentSerialization;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealm;
-import net.zic.ascension.api.ascension.core.path.realm.CompositeRealmDefinition;
-import net.zic.ascension.impl.core.path.RealmDefinition;
+import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -62,6 +59,18 @@ public class MajorRealm implements CompositeRealm {
             majorRealm.setLimitBroken(true,limitBrokenSource);
         }
         return majorRealm;
+    }
+    public static MajorRealm of(ByteBuf buf,MajorRealmDefinition definition){
+        MajorRealm majorRealm = MajorRealm.of(definition);
+
+        majorRealm.currentRealm = buf.readInt();
+        majorRealm.limitBrokenSources.addAll(ByteBufHelpers.decodeArray(buf,ByteBufHelpers::decodeIdentifier));
+        return  majorRealm;
+    }
+
+    public void encode(ByteBuf buf){
+        buf.writeInt(currentRealm);
+        ByteBufHelpers.encodeCollection(limitBrokenSources,buf,ByteBufHelpers::encodeIdentifier);
     }
 
 }

@@ -9,6 +9,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealm;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
@@ -23,6 +24,7 @@ import net.zic.ascension.impl.core.path.CompletedTribulation;
 import net.zic.ascension.impl.core.path.realms.BreakthroughBehaviour;
 import net.zic.ascension.impl.core.path.realms.MajorRealm;
 import net.zic.ascension.impl.core.path.realms.MinorRealmDefinition;
+import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.*;
 
@@ -48,6 +50,10 @@ public class SimplePathInstance implements PathInstance {
     }
 
 
+    @Override
+    public Path getPath() {
+        return path;
+    }
 
     //──SETTERS────────────────────────────────────────────────────────
     //need to consider how I want tribulations to be handled should the be auto triggered? or would they need
@@ -111,12 +117,7 @@ public class SimplePathInstance implements PathInstance {
         boolean maxMajorRealm = path.getMaxMajorRealm() == getCurrentMajorRealm();
         boolean maxMinorRealm = getMaxMinorRealm(getCurrentMajorRealm()) == getCurrentMinorRealm();
 
-        if(currentRealm.isLimitBroken()) {
-            System.out.println("conditions");
-            System.out.println(isProgressFull);
-            System.out.println(!isBreakingThrough());
-            System.out.println(!(maxMinorRealm && maxMajorRealm));
-        }
+
         return isProgressFull && !isBreakingThrough() && !(maxMinorRealm && maxMajorRealm);
     }
 
@@ -286,7 +287,6 @@ public class SimplePathInstance implements PathInstance {
             direction = ProgressDirection.DOWN;
             traversedRealms = traversedRealms.reversed();
         }
-        System.out.println("traversing realms : "+traversedRealms);
         //we do not traverse the start realm
         if(!fromStart) traversedRealms.removeFirst();
         while(!traversedRealms.isEmpty()){
@@ -317,12 +317,12 @@ public class SimplePathInstance implements PathInstance {
                         for(int minorRealm = getCurrentRealmInstance().definition().getMaxRealm()+1;
                             minorRealm <= getCurrentRealmInstance().getCurrentRealm();
                             minorRealm ++){
-                            System.out.println("added Realm : "+minorRealm);
+
                             traversedRealms.add(index,Realm.of(getCurrentMajorRealm(),minorRealm));
                             index++;
                         }
 
-                        System.out.println(traversedRealms.toString());
+
                     }
                     if(getCurrentRealmInstance().getCurrentRealm() != 0){
                         getCurrentRealmInstance().setCurrentRealm(0);
@@ -458,9 +458,22 @@ public class SimplePathInstance implements PathInstance {
         tribulationId.ifPresent(s ->activeTribulationId = UUID.fromString(s));
     }
 
-                     @Override
+     @Override
     public void encode(ByteBuf buf, RegistryAccess access) {
+        buf.writeInt(realms.size());
+        for(MajorRealm realm : realms){
+            realm.encode(buf);
+        }
+        buf.writeDouble(progress);
+    }
 
+    public void decode(ByteBuf buf,RegistryAccess access){
+        realms.clear();
+        int size = buf.readInt();
+        for(int i = 0;i<size;i++){
+            realms.add(MajorRealm.of(buf,path.getRealmDefinition(i)));
+        }
+        progress = buf.readDouble();
     }
 
 
