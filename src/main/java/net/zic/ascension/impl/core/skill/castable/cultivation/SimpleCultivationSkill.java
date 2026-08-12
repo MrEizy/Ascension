@@ -8,7 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
-import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
@@ -19,6 +19,9 @@ import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
+
+import net.zic.ascension.impl.core.skill.EmptySkillData;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.CastSoundDefinition;
 import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
@@ -35,12 +38,11 @@ public record SimpleCultivationSkill(
         Component name,
         Component description,
         Identifier primaryPath,
-        List<Identifier> secondaryPaths,
+        Identifier secondaryPath,
         double baseRate,
         Optional<ParticleFieldDefinition> particleField,
         List<CastSoundDefinition> sounds) implements CastableSkill {
     public SimpleCultivationSkill {
-        secondaryPaths = secondaryPaths == null ? List.of() : List.copyOf(secondaryPaths);
         baseRate = Double.isFinite(baseRate) ? Math.max(0.0D, baseRate) : 0.0D;
         particleField = particleField == null ? Optional.empty() : particleField;
         sounds = sounds == null ? List.of() : List.copyOf(sounds);
@@ -94,18 +96,10 @@ public record SimpleCultivationSkill(
         OriginSource source = holder.getData(caster).getSource();
 
 
-        PathData pathData = AscensionOriginSourceHelper.getPathData(source,primaryPath());
+        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,primaryPath());
 
-        if(pathData == null) return;
-        CastSoundPlayer.playPeriodic(caster, sounds, ticksElapsed);
-
-        if(holder.getData(caster).isCultivationSuppressed() && pathData instanceof FoundationPathData foundationPathData){
-            CultivationUtil.cultivateFoundation(
-                    caster,
-                    source,
-                    foundationPathData,
-                    baseRate);
-        }else CultivationUtil.cultivate(caster,source,pathData,secondaryPaths(),baseRate);
+        if(pathInstance == null) return;
+        CultivationUtil.cultivate(caster,source,primaryPath,pathInstance,secondaryPath,baseRate);
 
 
     }

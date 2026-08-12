@@ -15,7 +15,6 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
-import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.fluids.AscFluidTypes;
@@ -66,12 +65,12 @@ import java.util.Map;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 @Mod(AscensionCraft.MOD_ID)
 public class AscensionCraft {
+
     public static float hue;
     public static final String MOD_ID = "ascension";
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final Map<String, String> SECT_DATA = new HashMap<>();
 
- private static final PathInteractionHolder pathInteractionHolder = new PathInteractionHolder();
     public static Identifier prefix(String name){
         return Identifier.fromNamespaceAndPath(MOD_ID, name);
     }
@@ -86,7 +85,6 @@ public class AscensionCraft {
     public void register(IEventBus modEventBus){
         COMPONENTS.register(modEventBus);
         RECIPES.register(modEventBus);
-
         CoreHolderProviders.register(modEventBus);
         CoreAttachments.register(modEventBus);
 
@@ -199,8 +197,7 @@ public class AscensionCraft {
 
 
 
-    public static PathInteractionHolder getPathInteractionHolder(){return pathInteractionHolder;}
-    @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
+   @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
     public static class ModEvents {
 
         @SubscribeEvent

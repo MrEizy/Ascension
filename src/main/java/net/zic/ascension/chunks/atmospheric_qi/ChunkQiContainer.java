@@ -11,11 +11,11 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.AscensionCraft;
 
-import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
+import net.zic.ascension.util.PathInteractionUtil;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import org.jspecify.annotations.Nullable;
@@ -50,13 +50,13 @@ public class ChunkQiContainer implements PathBonusProvider {
     }
 
     public void addAffinity(Identifier path, double val) {
-        affinities.addBonus(PathEffectValueUtil.AFFINITY_CATEGORY,path,val);
+        affinities.addBonus(PathInteractionUtil.AFFINITY_CATEGORY,path,val);
     }
     public void addAffinityModifier(Identifier path, ValueContainerModifier modifier) {
-        affinities.addBonusModifier(PathEffectValueUtil.AFFINITY_CATEGORY,path,modifier);
+        affinities.addBonusModifier(PathInteractionUtil.AFFINITY_CATEGORY,path,modifier);
     }
     public void removeAffinityModifier(Identifier path,Identifier modifier) {
-        affinities.removeBonusModifier(PathEffectValueUtil.AFFINITY_CATEGORY,path,modifier);
+        affinities.removeBonusModifier(PathInteractionUtil.AFFINITY_CATEGORY,path,modifier);
     }
 
     public void addEnergyCapModifier(ValueContainerModifier modifier) {}

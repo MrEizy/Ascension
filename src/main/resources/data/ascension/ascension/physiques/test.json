@@ -1,0 +1,22 @@
+{
+  "type": "ascension:infinite_breakthrough",
+  "name": {
+    "translate": "ascension.physique.test.name"
+  },
+  "description": {
+    "translate": "ascension.physique.test.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence"
+  ],
+  "skills": [
+    "ascension:castable/cultivation/dev_cultivate"
+  ],
+  "infinite_path":  "ascension:foundation/essence",
+  "infinite_realm": 0,
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:ordinary"
+  }
+}

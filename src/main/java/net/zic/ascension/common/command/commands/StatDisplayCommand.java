@@ -11,11 +11,11 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.impl.core.path.foundation.FoundationPath;
-import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
+
+import net.zic.ascension.impl.core.path.simple.SimplePathInstance;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.ZenithStatHolder;
@@ -51,27 +51,17 @@ public class StatDisplayCommand {
                             }
                             player.sendSystemMessage(Component.literal("Suppressed : "+data.isCultivationSuppressed()));
                             player.sendSystemMessage(Component.literal("===Paths==="));
-                            for(Identifier path : AscensionOriginSourceHelper.getPaths(originSource)){
-                                Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,data.getSource().getRegistryAccess());
-                                player.sendSystemMessage(pathInstance.name());
-                                PathData pathData = AscensionOriginSourceHelper.getPathData(originSource,path);
+                            for(Identifier pathId : AscensionOriginSourceHelper.getPaths(originSource)){
+                                Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,data.getSource().getRegistryAccess());
+                                player.sendSystemMessage(path.name());
+                                PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(originSource,pathId);
 
-                                player.sendSystemMessage(Component.literal("realm : ").append(pathData.getRealmName(pathData.getMajorRealm(),pathData.getMinorRealm(),data.getSource().getRegistryAccess())));
-                                player.sendSystemMessage(Component.literal("progress : "+pathData.getProgress()));
-                                player.sendSystemMessage(Component.literal("technique : "+pathData.getCurrentTechnique()));
-
-                                if(pathData instanceof FoundationPathData foundationPathData && pathInstance instanceof FoundationPath foundationPath){
-                                    player.sendSystemMessage(Component.literal("Foundation : ").append(
-                                            foundationPath.getFoundationRealmName(
-                                                    foundationPathData.getMajorRealm(),
-                                                    foundationPathData.getFoundationRealm(foundationPathData.getMajorRealm())
-                                            )));
-                                    System.out.println(foundationPathData.getFoundationRealm(foundationPathData.getMajorRealm()));
-                                    player.sendSystemMessage(Component.literal(
-                                            "Foundation Progress : "+
-                                                    foundationPathData.getFoundationRealmProgress(foundationPathData.getMajorRealm())
-                                    ));
+                                player.sendSystemMessage(Component.literal("realm : ").append(path.getRealmName(pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm())));
+                                player.sendSystemMessage(Component.literal("progress : "+pathInstance.getProgress()));
+                                if(pathInstance instanceof SimplePathInstance simplePathInstance){
+                                    player.sendSystemMessage(Component.literal("limitBroken: "+simplePathInstance.isLimitBroken()));
                                 }
+
                             }
                             return 1;
                         })

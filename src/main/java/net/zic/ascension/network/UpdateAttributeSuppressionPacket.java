@@ -51,14 +51,13 @@ public record UpdateAttributeSuppressionPacket(
             if (!(context.player() instanceof ServerPlayer player)) {
                 return;
             }
-            System.out.println("setting suppression : "+packet.percentage);
+
             ZenithAttributeHolder holder = player.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
 
             Holder<Attribute> attributeHolder = BuiltInRegistries.ATTRIBUTE.get(packet.attribute).get();
 
             holder.setSuppression(attributeHolder,packet.percentage);
 
-            System.out.println(((SuppressedZenithAttribute)holder.getAttribute(attributeHolder)).getSuppression());
             player.syncData(ZenithAttachments.ATTRIBUTE_HOLDER);
 
         });

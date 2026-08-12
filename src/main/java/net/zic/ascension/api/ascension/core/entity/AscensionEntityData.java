@@ -3,6 +3,7 @@ package net.zic.ascension.api.ascension.core.entity;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
@@ -10,6 +11,8 @@ import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.StatProvider;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
+
+import java.util.Collection;
 
 /**
  * All OriginSource wrappers must Implement this
@@ -21,7 +24,7 @@ public interface AscensionEntityData extends StatProvider, PathBonusProvider {
 
     default void registerProviders(){
         getEntity().getData(ZenithAttachments.STAT_HOLDER).registerStatProvider(this);
-        getEntity().getData(CoreAttachments.PATH_BONUS_HOLDER).registerPathBonusProvider(this);
+        //getEntity().getData(CoreAttachments.PATH_BONUS_HOLDER).registerPathBonusProvider(this);
     }
 
     OriginSource getSource();
@@ -37,7 +40,7 @@ public interface AscensionEntityData extends StatProvider, PathBonusProvider {
     void removeBonusModifier(Identifier category,Identifier path,Identifier modifier);
 
     void updatePathBonus(Identifier category, Identifier path);
-
+    void updatePathBonuses(Collection<PathBonus> bonuses);
 
     void addStat(Stat stat, double val);
     void removeStat(Stat stat, double val);

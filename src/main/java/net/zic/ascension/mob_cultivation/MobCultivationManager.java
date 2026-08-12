@@ -11,8 +11,12 @@ import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.api.ascension.core.path.realm.Realm;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.entity.AscensionStats;
@@ -153,28 +157,34 @@ public final class MobCultivationManager {
             data.clearGeneratedState();
             return false;
         }
-        PathData pathData = AscensionOriginSourceHelper.getPathData(source, pathId);
-        if (pathData == null) {
-            AscensionOriginSourceHelper.removePath(source, pathId, MOB_CULTIVATION_OWNER);
+
+        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,pathId);
+        if (pathInstance == null) {
+            AscensionOriginSourceHelper.removePath(source,pathId, MOB_CULTIVATION_OWNER);
+            data.setCultivated(false);
             data.clearGeneratedState();
             return false;
         }
 
-        int majorRealm = Math.clamp(requestedMajorRealm, 0, pathData.getMaxMajorRealm(source.getRegistryAccess()));
+        int majorRealm = Math.clamp(requestedMajorRealm, 0, path.getMaxMajorRealm());
         int minorRealm = Math.clamp(
                 requestedMinorRealm,
                 0,
-                pathData.getMaxMinorRealm(majorRealm, source.getRegistryAccess())
+                pathInstance.getMaxMinorRealm(majorRealm)
         );
-        pathData.setMajorRealm(majorRealm, source);
-        pathData.setMinorRealm(minorRealm);
-        double maximumProgress = pathData.getMaxProgress(majorRealm, minorRealm, source.getRegistryAccess());
+
+        pathInstance.handleRealmChange(Realm.of(majorRealm,minorRealm),source);
+
+        double maximumProgress = pathInstance.getMaxProgress();
         double clampedPercentage = Math.clamp(progressPercentage, 0.0D, 100.0D);
-        pathData.setProgress(maximumProgress * clampedPercentage / 100.0D);
-        capturePathState(data, pathData);
+
         AscensionOriginSourceHelper.markPathDirty(source, pathId);
+        pathInstance.progressPath(pathId,maximumProgress * clampedPercentage / 100.0D,source,mob);
+        capturePathState(data, pathInstance);
+        AscensionOriginSourceHelper.markPathDirty(source,pathId);
 
         MobCultivationGenerator.rebuildGeneratedStats(mob, data, source, pathData);
+        rebuildGeneratedStats(mob, data, source, pathInstance);
         refreshAttributesAndHealth(mob, true);
         MobCultivationSkillService.synchronize(mob);
         MobCultivationPersistence.refresh(mob);
@@ -297,15 +307,20 @@ public final class MobCultivationManager {
         return true;
     }
 
-    public static PathData getPathData(Mob mob) {
+    public static PathInstance getPathInstance(Mob mob) {
         MobCultivationData data = getCultivationData(mob);
+        if (!data.isCultivated() || data.getFoundationPath() == null) {
+            return null;
+        }
+
+        return AscensionOriginSourceHelper.getPathInstance(getEntityData(mob).getSource(),data.getFoundationPath());
         if (!data.isCultivated() || data.getFoundationPath() == null) return null;
         return AscensionOriginSourceHelper.getPathData(getEntityData(mob).getSource(), data.getFoundationPath());
     }
 
     public static int getRealmScore(Mob mob) {
-        PathData pathData = getPathData(mob);
-        return pathData == null ? -1 : pathData.getMajorRealm() * 3 + pathData.getMinorRealm();
+        PathInstance pathInstance = getPathInstance(mob);
+        return pathInstance == null ? -1 : pathInstance.getCurrentMajorRealm() * 3 + pathInstance.getCurrentMinorRealm();
     }
 
     public static int getHighestPlayerRealmScore(ServerPlayer player) {
@@ -318,10 +333,132 @@ public final class MobCultivationManager {
             if (!(path instanceof FoundationPath)) continue;
             PathData pathData = AscensionOriginSourceHelper.getPathData(source, pathId);
             if (pathData != null) highest = Math.max(highest, pathData.getMajorRealm() * 3 + pathData.getMinorRealm());
+
+            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,pathId);
+            if (pathInstance != null) {
+                highest = Math.max(highest, pathInstance.getCurrentMajorRealm() * 3 + pathInstance.getCurrentMinorRealm());
+            }
         }
         return highest;
     }
 
+    public static double getAtmosphericQiRatio(Mob mob) {
+        ChunkAccess chunk = mob.level().getChunk(mob.blockPosition());
+        ChunkQiContainer qi = chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
+        double cap = qi.getEnergyCap();
+        if (cap <= 0.0D) {
+            return 0.0D;
+        }
+        return Math.clamp(qi.getEnergy() / cap, 0.0D, 1.5D);
+    }
+
+    public static ItemStack rollBonusLoot(Mob mob) {
+        MobCultivationData data = getCultivationData(mob);
+        if (!data.isCultivated()) {
+            return ItemStack.EMPTY;
+        }
+
+        int realmScore = Math.max(0, getRealmScore(mob));
+        double chance = Math.min(
+                1.0D,
+                0.18D + realmScore * 0.055D + data.getCategory().lootChanceBonus()
+        );
+
+        if (mob.getRandom().nextDouble() > chance) {
+            return ItemStack.EMPTY;
+        }
+
+        int count = Math.clamp(1 + realmScore / 4, 1, 4);
+        Identifier path = data.getFoundationPath();
+
+        if (realmScore >= 9 && mob.getRandom().nextDouble() < 0.22D) {
+            return new ItemStack(Items.DIAMOND, 1);
+        }
+        if (realmScore >= 6) {
+            return new ItemStack(
+                    mob.getRandom().nextBoolean() ? Items.EMERALD : Items.GLOWSTONE_DUST,
+                    Math.min(count, 2)
+            );
+        }
+        if (realmScore >= 3) {
+            if (SOUL_PATH.equals(path)) {
+                return new ItemStack(
+                        mob.getRandom().nextBoolean() ? Items.AMETHYST_SHARD : Items.ENDER_PEARL,
+                        Math.min(count, 2)
+                );
+            }
+            if (ESSENCE_PATH.equals(path)) {
+                return new ItemStack(
+                        mob.getRandom().nextBoolean() ? Items.LAPIS_LAZULI : Items.REDSTONE,
+                        count
+                );
+            }
+            return new ItemStack(
+                    mob.getRandom().nextBoolean() ? Items.GOLD_NUGGET : Items.IRON_NUGGET,
+                    count
+            );
+        }
+
+        if (SOUL_PATH.equals(path)) {
+            return new ItemStack(Items.AMETHYST_SHARD, count);
+        }
+        if (ESSENCE_PATH.equals(path)) {
+            return new ItemStack(mob.getRandom().nextBoolean() ? Items.REDSTONE : Items.LAPIS_LAZULI, count);
+        }
+        return new ItemStack(mob.getRandom().nextBoolean() ? Items.IRON_NUGGET : Items.BONE_MEAL, count);
+    }
+
+    public static boolean areDebugNamesEnabled() {
+        return debugNamesEnabled;
+    }
+
+    public static void setDebugNamesEnabled(boolean enabled) {
+        debugNamesEnabled = enabled;
+    }
+
+    public static void applyDebugName(Mob mob) {
+        MobCultivationData data = getCultivationData(mob);
+        if (!debugNamesEnabled || !data.isCultivated()) {
+            clearDebugName(mob);
+            return;
+        }
+
+        PathInstance pathInstance = getPathInstance(mob);
+        if (pathInstance == null) {
+            return;
+        }
+        //TODO update and fix
+
+        String generatedName = "Temp";
+
+        if (data.isDebugNameApplied()) {
+            Component currentName = mob.getCustomName();
+            if (currentName != null && !currentName.getString().equals(data.getLastDebugName())) {
+                data.clearDebugNameState();
+                return;
+            }
+        } else if (mob.getCustomName() != null) {
+            return;
+        }
+
+        mob.setCustomName(Component.literal(generatedName));
+        mob.setCustomNameVisible(true);
+        data.setDebugName(generatedName);
+    }
+
+    public static void clearDebugName(Mob mob) {
+        MobCultivationData data = getCultivationData(mob);
+        if (!data.isDebugNameApplied()) {
+            return;
+        }
+
+        Component currentName = mob.getCustomName();
+        if (currentName != null && currentName.getString().equals(data.getLastDebugName())) {
+            mob.setCustomName(null);
+            mob.setCustomNameVisible(false);
+        }
+        data.clearDebugNameState();
+    }
     public static double getAtmosphericQiRatio(Mob mob) { return MobCultivationGrowth.getAtmosphericQiRatio(mob); }
     public static List<ItemStack> rollBonusLoot(Mob mob) { return MobCultivationLoot.rollBonusLoot(mob); }
     public static boolean areDebugNamesEnabled() { return MobCultivationVisuals.areDebugNamesEnabled(); }
@@ -338,6 +475,13 @@ public final class MobCultivationManager {
         ResolvedMobCultivationProfile profile = MobCultivationProfileManager.resolve(mob, data.getCategory());
         double maximum = pathData.getMaxProgress(pathData.getMajorRealm(), pathData.getMinorRealm(), source.getRegistryAccess());
         double percentage = maximum <= 0.0D ? 100.0D : pathData.getProgress() / maximum * 100.0D;
+        PathInstance pathInstance = getPathInstance(mob);
+        if (pathInstance == null) {
+            return Component.literal("Cultivated mob has missing path data.");
+        }
+
+        double maximum = pathInstance.getMaxProgress();
+        double percentage = maximum <= 0.0D ? 100.0D : pathInstance.getProgress() / maximum * 100.0D;
 
         String subPaths = joinIds(data.getSubPaths());
         String traits = joinIds(data.getTraits());
@@ -391,8 +535,128 @@ public final class MobCultivationManager {
                 MobCultivationGrowth.getDistanceGrowthMultiplier(mob),
                 data.isGrowthFrozen(),
                 data.isCultivationPersistenceGranted()
+        return Component.literal("Cultivated ")
+                .append(mob.getType().getDescription())
+                .append(" [")
+                .append(data.getCategory().name().toLowerCase(Locale.ROOT))
+                .append("]\nPath: ")
+                .append(String.valueOf(data.getFoundationPath()))
+                .append(String.format(Locale.ROOT, "\nProgress: %.2f / %.2f (%.1f%%)", pathInstance.getProgress(), maximum, percentage))
+                .append(String.format(
+                        Locale.ROOT,
+                        "\nCategory stat multiplier: x%.2f",
+                        data.getCategory().statMultiplier()
+                ))
+                .append(String.format(
+                        Locale.ROOT,
+                        "\nGenerated stats: vitality %.2f, strength %.2f, agility %.2f, spirit %.2f",
+                        data.getGeneratedVitality(),
+                        data.getGeneratedStrength(),
+                        data.getGeneratedAgility(),
+                        data.getGeneratedSpirit()
+                ))
+                .append(String.format(
+                        Locale.ROOT,
+                        "\nEffective stats: vitality %.2f, strength %.2f, agility %.2f, spirit %.2f",
+                        source.getStat(AscensionStats.VITALITY.get()),
+                        source.getStat(AscensionStats.STRENGTH.get()),
+                        source.getStat(AscensionStats.AGILITY.get()),
+                        source.getStat(AscensionStats.SPIRIT.get())
+                ))
+                .append(String.format(
+                        Locale.ROOT,
+                        "\nAtmospheric qi: %.1f%%",
+                        getAtmosphericQiRatio(mob) * 100.0D
+                ));
+    }
+
+    private static void generateFreshCultivation(
+            Mob mob,
+            MobCultivationData data,
+            OriginSource source,
+            boolean forceCultivated
+    ) {
+        clearGeneratedCultivation(data, source);
+        data.setInitialized(true);
+        data.setCategory(getCategory(mob));
+        data.setCultivated(forceCultivated || mob.getRandom().nextDouble() < data.getCategory().cultivationChance());
+
+        if (!data.isCultivated()) {
+            clearDebugName(mob);
+            return;
+        }
+
+        Identifier pathId = chooseFoundationPath(mob, data.getCategory());
+        data.setFoundationPath(pathId);
+
+        if (!AscensionOriginSourceHelper.addPath(source,pathId, MOB_CULTIVATION_OWNER) && !AscensionOriginSourceHelper.hasPath(source,pathId)) {
+            data.setCultivated(false);
+            data.clearGeneratedState();
+            return;
+        }
+
+        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,pathId);
+        if (pathInstance == null) {
+            AscensionOriginSourceHelper.removePath(source,pathId, MOB_CULTIVATION_OWNER);
+            data.setCultivated(false);
+            data.clearGeneratedState();
+            return;
+        }
+
+        int[] realm = chooseInitialRealm(mob, data.getCategory(), pathInstance, source);
+        pathInstance.handleRealmChange(Realm.of(realm[0],realm[1]),source);
+        capturePathState(data, pathInstance);
+        AscensionOriginSourceHelper.markPathDirty(source,pathId);
+
+        rebuildGeneratedStats(mob, data, source, pathInstance);
+        refreshAttributesAndHealth(mob, true);
+        spawnAura(mob, 18);
+        applyDebugName(mob);
+    }
+
+    private static void repairPersistedCultivation(Mob mob, MobCultivationData data, OriginSource source) {
+        Identifier pathId = data.getFoundationPath();
+        if (pathId == null || !FOUNDATION_PATHS.contains(pathId)) {
+            generateFreshCultivation(mob, data, source, true);
+            return;
+        }
+
+        if (!AscensionOriginSourceHelper.hasPath(source,pathId)) {
+            AscensionOriginSourceHelper.addPath(source,pathId, MOB_CULTIVATION_OWNER);
+        }
+
+        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,pathId);
+        if (pathInstance == null) {
+            generateFreshCultivation(mob, data, source, true);
+            return;
+        }
+
+        int majorRealm = Math.max(
+                data.getMajorRealm(),
+                0
         );
         return Component.literal(description);
+        int minorRealm = Math.clamp(
+                data.getMinorRealm(),
+                0,
+                pathInstance.getMaxMinorRealm(majorRealm)
+        );
+        pathInstance.handleRealmChange(Realm.of(majorRealm,minorRealm),source);
+        double maximumProgress = pathInstance.getMaxProgress();
+        pathInstance.progressPath(pathId,Math.clamp(data.getProgress(), 0.0D, Math.max(0.0D, maximumProgress)),source,mob);
+        capturePathState(data, pathInstance);
+        AscensionOriginSourceHelper.markPathDirty(source,pathId);
+
+        boolean missingGeneratedStats = Math.abs(data.getGeneratedVitality()) < EPSILON
+                && Math.abs(data.getGeneratedStrength()) < EPSILON
+                && Math.abs(data.getGeneratedAgility()) < EPSILON
+                && Math.abs(data.getGeneratedSpirit()) < EPSILON;
+
+        if (missingGeneratedStats) {
+            rebuildGeneratedStats(mob, data, source, pathInstance);
+        } else if (!data.areGeneratedStatsApplied()) {
+            restoreGeneratedStats(data, source);
+        }
     }
 
     private static String joinIds(Collection<Identifier> ids) {
@@ -407,6 +671,185 @@ public final class MobCultivationManager {
         data.setCategory(resolvedCategory);
         PathData pathData = getPathData(mob);
         if (pathData == null) return;
+        if (data.areGeneratedStatsApplied()) {
+            removeGeneratedStat(source, AscensionStats.VITALITY.get(), data.getGeneratedVitality());
+            removeGeneratedStat(source, AscensionStats.STRENGTH.get(), data.getGeneratedStrength());
+            removeGeneratedStat(source, AscensionStats.AGILITY.get(), data.getGeneratedAgility());
+            removeGeneratedStat(source, AscensionStats.SPIRIT.get(), data.getGeneratedSpirit());
+        }
+        data.clearGeneratedState();
+    }
+
+    private static void ensureEntityDataInitialized(Mob mob, SimpleAscensionEntityData entityData) {
+        entityData.initialize();
+    }
+
+    private static void removeGeneratedStat(OriginSource source, net.zic.zenithlib.stats.Stat stat, double amount) {
+        if (Math.abs(amount) > EPSILON) {
+            source.removeStat(stat, amount);
+        }
+    }
+
+    private static void rebuildGeneratedStats(
+            Mob mob,
+            MobCultivationData data,
+            OriginSource source,
+            PathInstance pathInstance
+    ) {
+        if (data.areGeneratedStatsApplied()) {
+            removeGeneratedStat(source, AscensionStats.VITALITY.get(), data.getGeneratedVitality());
+            removeGeneratedStat(source, AscensionStats.STRENGTH.get(), data.getGeneratedStrength());
+            removeGeneratedStat(source, AscensionStats.AGILITY.get(), data.getGeneratedAgility());
+            removeGeneratedStat(source, AscensionStats.SPIRIT.get(), data.getGeneratedSpirit());
+        }
+
+        int realmScore = pathInstance.getCurrentMajorRealm() * 3 + pathInstance.getCurrentMinorRealm();
+        double realmFactor = 1.0D + pathInstance.getCurrentMajorRealm() * 3.0D + pathInstance.getCurrentMinorRealm() * 0.75D;
+        double base = realmFactor * data.getCategory().statMultiplier();
+
+        long seed = mob.getUUID().getMostSignificantBits()
+                ^ mob.getUUID().getLeastSignificantBits()
+                ^ (long) data.getFoundationPath().hashCode() * 31L
+                ^ (long) realmScore * 1_000_003L;
+        RandomSource random = RandomSource.create(seed);
+
+        double vitalityWeight = 1.0D;
+        double strengthWeight = 1.0D;
+        double agilityWeight = 1.0D;
+        double spiritWeight = 1.0D;
+
+        if (BODY_PATH.equals(data.getFoundationPath())) {
+            vitalityWeight = 1.35D;
+            strengthWeight = 1.25D;
+            agilityWeight = 0.85D;
+            spiritWeight = 0.75D;
+        } else if (ESSENCE_PATH.equals(data.getFoundationPath())) {
+            vitalityWeight = 0.90D;
+            strengthWeight = 1.10D;
+            agilityWeight = 1.10D;
+            spiritWeight = 1.35D;
+        } else if (SOUL_PATH.equals(data.getFoundationPath())) {
+            vitalityWeight = 0.85D;
+            strengthWeight = 0.85D;
+            agilityWeight = 1.0D;
+            spiritWeight = 1.50D;
+        }
+
+        double vitality = roundStat(base * vitalityWeight * randomVariation(random));
+        double strength = roundStat(base * strengthWeight * randomVariation(random));
+        double agility = roundStat(base * agilityWeight * randomVariation(random));
+        double spirit = roundStat(base * spiritWeight * randomVariation(random));
+
+        source.addStat(AscensionStats.VITALITY.get(), vitality);
+        source.addStat(AscensionStats.STRENGTH.get(), strength);
+        source.addStat(AscensionStats.AGILITY.get(), agility);
+        source.addStat(AscensionStats.SPIRIT.get(), spirit);
+        data.setGeneratedStats(vitality, strength, agility, spirit);
+        data.setGeneratedStatsApplied(true);
+    }
+
+    private static void restoreGeneratedStats(MobCultivationData data, OriginSource source) {
+        restoreGeneratedStat(source, AscensionStats.VITALITY.get(), data.getGeneratedVitality());
+        restoreGeneratedStat(source, AscensionStats.STRENGTH.get(), data.getGeneratedStrength());
+        restoreGeneratedStat(source, AscensionStats.AGILITY.get(), data.getGeneratedAgility());
+        restoreGeneratedStat(source, AscensionStats.SPIRIT.get(), data.getGeneratedSpirit());
+        data.setGeneratedStatsApplied(true);
+    }
+
+    private static void restoreGeneratedStat(OriginSource source, net.zic.zenithlib.stats.Stat stat, double amount) {
+        if (Math.abs(amount) <= EPSILON) {
+            return;
+        }
+        if (Math.abs(source.getBaseStat(stat)) <= EPSILON) {
+            source.addStat(stat, amount);
+        }
+    }
+
+    private static void capturePathState(MobCultivationData data, PathInstance pathInstance) {
+        data.setPathState(pathInstance.getCurrentMajorRealm(), pathInstance.getCurrentMinorRealm(), pathInstance.getProgress());
+    }
+
+    private static double randomVariation(RandomSource random) {
+        return 0.85D + random.nextDouble() * 0.30D;
+    }
+
+    private static double roundStat(double value) {
+        return Math.round(value * 100.0D) / 100.0D;
+    }
+
+    private static Identifier chooseFoundationPath(Mob mob, MobCultivationCategory category) {
+        double roll = mob.getRandom().nextDouble();
+        if (category == MobCultivationCategory.PASSIVE) {
+            if (roll < 0.60D) {
+                return BODY_PATH;
+            }
+            return roll < 0.80D ? ESSENCE_PATH : SOUL_PATH;
+        }
+        if (category == MobCultivationCategory.HOSTILE) {
+            if (roll < 0.34D) {
+                return BODY_PATH;
+            }
+            return roll < 0.67D ? ESSENCE_PATH : SOUL_PATH;
+        }
+        return FOUNDATION_PATHS.get(mob.getRandom().nextInt(FOUNDATION_PATHS.size()));
+    }
+
+    private static int[] chooseInitialRealm(
+            Mob mob,
+            MobCultivationCategory category,
+            PathInstance pathInstance,
+            OriginSource source
+    ) {
+        int majorRealm;
+        int minorRealm;
+
+        switch (category) {
+            case PASSIVE -> {
+                majorRealm = 0;
+                minorRealm = mob.getRandom().nextDouble() < 0.25D ? 1 : 0;
+            }
+            case HOSTILE -> {
+                majorRealm = mob.getRandom().nextDouble() < 0.08D ? 1 : 0;
+                minorRealm = majorRealm == 0 ? mob.getRandom().nextInt(3) : 0;
+            }
+            case BOSS -> {
+                majorRealm = 1 + mob.getRandom().nextInt(2);
+                minorRealm = mob.getRandom().nextInt(3);
+            }
+            default -> {
+                majorRealm = 0;
+                minorRealm = 0;
+            }
+        }
+
+        majorRealm = Math.max(majorRealm, 0);
+        minorRealm = Math.clamp(
+                minorRealm,
+                0,
+                pathInstance.getMaxMinorRealm(majorRealm)
+        );
+        return new int[]{majorRealm, minorRealm};
+    }
+
+    private static void growFromAtmosphericQi(Mob mob, int intervals) {
+        MobCultivationData data = getCultivationData(mob);
+        PathInstance PathInstance = getPathInstance(mob);
+        if (PathInstance == null) {
+            return;
+        }
+
+        double qiRatio = getAtmosphericQiRatio(mob);
+        double qiMultiplier = 0.15D + qiRatio * 1.85D;
+        double progress = BASE_GROWTH_PER_INTERVAL
+                * intervals
+                * qiMultiplier
+                * data.getCategory().growthMultiplier();
+
+        addProgressWithoutTribulation(mob, progress);
+    }
+
+    private static void addProgressWithoutTribulation(Mob mob, double amount) {
+        MobCultivationData data = getCultivationData(mob);
         OriginSource source = getEntityData(mob).getSource();
         ResolvedMobCultivationProfile profile = MobCultivationProfileManager.resolve(mob, data.getCategory());
         MobCultivationGenerator.refreshProfileContent(mob, data, profile);
@@ -424,6 +867,15 @@ public final class MobCultivationManager {
 
     public static void capturePathState(MobCultivationData data, PathData pathData) {
         data.setPathState(pathData.getMajorRealm(), pathData.getMinorRealm(), pathData.getProgress());
+        PathInstance pathInstance = getPathInstance(mob);
+        if (pathInstance == null || amount <= 0.0D) {
+            return;
+        }
+        //TODO either accept tribulation or do realm change, dont try this
+
+        capturePathState(data, pathInstance);
+        AscensionOriginSourceHelper.markPathDirty(source,data.getFoundationPath());
+
     }
 
     public static void refreshAttributesAndHealth(Mob mob, boolean healFully) {

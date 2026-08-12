@@ -1,0 +1,9 @@
+[
+  {
+    "source": "ascension:elemental/water",
+    "target": "ascension:elemental/fire",
+    "type": "destructive",
+    "value": 0.5
+
+  }
+]

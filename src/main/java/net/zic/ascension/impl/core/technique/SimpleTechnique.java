@@ -9,7 +9,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
@@ -226,19 +225,11 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public TribulationDefinition getTribulation(int majorRealm, int minorRealm, RegistryAccess access) {
-        if(majorRealmOverrides.containsKey(majorRealm) &&
-                majorRealmOverrides.get(majorRealm).hasRealmOverride(minorRealm) &&
-                majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).hasTribulationOverride()){
-            return majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).getTribulation(access);
-        }
-        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,access);
-
-        return pathInstance == null ? null : pathInstance.getTribulationDefinition(majorRealm,minorRealm,access);
-    }
+        return null;
+         }
 
     @Override
     public boolean tryBreakthrough(LivingEntity entity, OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData) {
-        if(AscensionOriginSourceHelper.getPathData(source,getPath()).isBreakingThrough()) return false;
         double maxProgress = getMaxProgress(majorRealm,minorRealm,techniqueData,source.getRegistryAccess());
         double maxMajorRealm = getMaxMajorRealm(techniqueData,source.getRegistryAccess());
         double maxMinorRealm = getMaxMinorRealm(majorRealm,techniqueData,source.getRegistryAccess());
@@ -254,19 +245,8 @@ public class SimpleTechnique implements Technique {
         TribulationDefinition definition = getTribulation(majorRealm,minorRealm,source.getRegistryAccess());
         if(definition == null) return true;
         UUID id =   TribulationManager.getInstance().triggerTribulation(definition,entity);
-        AscensionOriginSourceHelper.getPathData(source,getPath()).setBreakthroughTribulation(
-                id,
-                source.getRegistryAccess()
-        );
 
-        TribulationManager.getInstance().setTribulationConsumer(id,(tribulationDefinition,data)->{
-            PathData pathData = AscensionOriginSourceHelper.getPathData(source,getPath());
 
-            pathData.handleRealmChange(
-                source,pathData.getMajorRealm()+1,0);
-            pathData.setProgress(0);
-            pathData.setCompletedTribulation(source,pathData.getMajorRealm(),pathData.getMinorRealm(),tribulationDefinition,data);
-        });
         return false;
 
     }

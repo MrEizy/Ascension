@@ -13,6 +13,8 @@ import net.zic.zenithlib.registry.RegistryHelper;
 import java.util.HashMap;
 import java.util.Map;
 
+import static net.zic.ascension.configuration.ConfigurationRegistries.RAW_DIMENSION_CONFIGURATION_REGISTRY;
+
 //TODO update to use raw identifier keys, rather than Holder<Level>
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class DimensionConfigurations {
@@ -20,9 +22,6 @@ public class DimensionConfigurations {
 
     //used while resolving configurations
     private static final Map<Identifier, DimensionConfiguration.Builder> builders = new HashMap<>();
-
-    private static final RegistryHelper.DataPackRegistry<RawDimensionConfiguration> RAW_CONFIGURATION_REGISTRY =
-            new RegistryHelper.DataPackRegistry<>(RegistryHelper.key(AscensionCraft.MOD_ID,"dimension_configurations"),()->RawDimensionConfiguration.CODEC);
 
     public static DimensionConfigurations getInstance(){
         return instance;
@@ -32,7 +31,7 @@ public class DimensionConfigurations {
     public static void onServerStarting(ServerAboutToStartEvent event){
 
         RegistryAccess access =event.getServer().registryAccess();
-        Registry<RawDimensionConfiguration> rawConfigurations = RAW_CONFIGURATION_REGISTRY.get(access);
+        Registry<RawDimensionConfiguration> rawConfigurations = RAW_DIMENSION_CONFIGURATION_REGISTRY.get(access);
         builders.clear();
         //TODO a lot of nested looping, see if i can make it more efficient
         for(RawDimensionConfiguration rawConfiguration : rawConfigurations){
@@ -51,18 +50,6 @@ public class DimensionConfigurations {
 
         builders.forEach((key,builder)->configurations.put(key,builder.build()));
         instance = new  DimensionConfigurations(configurations);
-    }
-    @SubscribeEvent
-    public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-
-        AscensionCraft.LOGGER.info("Creating Dimension Configuration Registry");
-        event.dataPackRegistry(
-                RAW_CONFIGURATION_REGISTRY.key(),
-                RAW_CONFIGURATION_REGISTRY.codec().get(),
-                RAW_CONFIGURATION_REGISTRY.codec().get()
-        );
-        AscensionCraft.LOGGER.info("Finished Creating Biome Configuration Registry");
-
     }
 
     private final Map<Identifier,DimensionConfiguration> configurations;

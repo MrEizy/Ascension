@@ -152,10 +152,7 @@ public class TribulationManager extends SavedData {
         return tribulations.get(tribulation).getTribulation();
     }
     public HashMap<UUID,HashSet<UUID>> getEntities() {return entityTribulations;}
-    public void setOnFinishListener(UUID id, BiConsumer<TribulationDefinition,TribulationData> tribulationDataConsumer){
-        if(!tribulations.containsKey(id))return;
-        tribulations.get(id).setFinalizationConsumer(tribulationDataConsumer);
-    }
+
     public UUID triggerTribulation(TribulationDefinition definition, LivingEntity targetEntity){
 
         TribulationData data = definition.getType().newData(definition);

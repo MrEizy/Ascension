@@ -9,12 +9,13 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.damage_provider.AscensionDamageSourceProvider;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
-import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
+import net.zic.ascension.api.rpg_engine.damage.RPGEngineDamageTypeHolder;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineGatherDamageTypesEvent;
 import net.zic.ascension.util.AscensionDamageUtil;
+import net.zic.ascension.util.PathInteractionUtil;
 import net.zic.zenithlib.value_containers.ModifierOperation;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
@@ -24,7 +25,7 @@ public class AscensionDamageHandler {
 
     @SubscribeEvent
     public static void gatherDamageType(RPGEngineGatherDamageTypesEvent event){
-        if(event.hasTypeHolder(AscensionDamageTypeHolders.PATH)) return;
+        if(event.hasTypeHolder(ID)) return;
 
 
         if(event.getSource().getEntity()!= null && event.getSource().getEntity() == event.getSource().getDirectEntity()){
@@ -61,30 +62,13 @@ public class AscensionDamageHandler {
         if(!event.getSource().hasDamageTypeHolder(AscensionDamageTypeHolders.PATH)) return;
         if(!(event.getSource().getDamageTypeHolder(AscensionDamageTypeHolders.PATH) instanceof AscensionDamageTypeHolders.Path(Identifier path))) return;
 
+        /*
+            TODO:
+                add affinity damage
+                an attack has an attacker affinity multiplier, and a defender affinity multiplier
 
-        double attackerAffinity = AscensionDamageUtil.getEffectiveAttackerAffinity(
-                attackerBonusHolder.getPathBonus(PathEffectValueUtil.AFFINITY_CATEGORY, path),
-                attacker,
-                path
-        );
+         */
 
-        //apply the targets affinities to attacker affinity, but ignore related affinity
-        attackerAffinity = AscensionDamageUtil.getFinalAttackerAffinity(attackerAffinity,event.getEntity(),path);
-
-        double defenderAffinity = AscensionDamageUtil.getEffectiveDefenderAffinity(
-                defenderBonusHolder.getPathBonus(PathEffectValueUtil.AFFINITY_CATEGORY,path),
-                event.getEntity(),
-                path
-        );
-
-        double multiplier = AscensionDamageUtil.getFinalAffinity(attackerAffinity,defenderAffinity);
-
-        event.addDamageModifier(new ValueContainerModifier(
-                multiplier,
-                ModifierOperation.MULTIPLY_FINAL,
-                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"affinity"),
-                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"affinity")
-        ));
     }
 
 }

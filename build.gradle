@@ -126,7 +126,7 @@ configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 dependencies {
-    jarJar(implementation('com.github.MrEizy:ZenithLib:6c208f8'))
+    implementation 'com.github.MrEizy:ZenithLib:e4d867b9d8'
     // compile against the JEI API but do not include it at runtime
     //compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
     // at runtime, use the full JEI jar for NeoForge
@@ -134,7 +134,7 @@ dependencies {
 
     //implementation "maven.modrinth:jade:${project.jade_version}"
 
-   jarJar(implementation('com.github.OliverHesse:EasyGui:d71b1e115c'))
+   implementation('com.github.OliverHesse:EasyGui:d71b1e115c')
     //implementation 'com.github.MrEizy:Builders-Zenith:ae34247ef0'
 
    // implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"

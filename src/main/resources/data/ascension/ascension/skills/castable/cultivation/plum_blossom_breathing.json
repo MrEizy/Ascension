@@ -7,10 +7,7 @@
     "translate": "ascension.skill.plum_blossom_breathing.desc"
   },
   "path": "ascension:foundation/essence",
-  "secondary_paths": [
-    "ascension:weapon/sword",
-    "ascension:elemental/wood"
-  ],
+  "secondary_paths": "ascension:elemental/wood",
   "rate": 2,
   "particle_field": {
     "style": "inward_flow",

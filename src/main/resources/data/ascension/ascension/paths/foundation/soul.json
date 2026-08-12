@@ -1,5 +1,5 @@
 {
-  "type": "ascension:foundation_path",
+  "type": "ascension:simple_path",
   "name": "Soul",
   "description": "Awaken the spirit within and forge it into an unyielding will",
   "realms": [
@@ -16,38 +16,9 @@
         },
         {
           "name": "high",
-          "progress": 100000,
-          "tribulation": {
-            "type": "ascension:lightning",
-            "strikes": 4,
-            "damage": 2.0,
-            "tick_delay": 10
-          }
-        }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
           "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
         }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Spirit Forging",
@@ -64,30 +35,7 @@
           "name": "high",
           "progress": 10000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Soul Fixation",
@@ -104,30 +52,7 @@
           "name": "high",
           "progress": 1000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Spirit Tempering",
@@ -144,30 +69,7 @@
           "name": "high",
           "progress": 100000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Soul Condensation",
@@ -184,30 +86,7 @@
           "name": "high",
           "progress": 10000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Spirit Severing",
@@ -224,30 +103,7 @@
           "name": "high",
           "progress": 1000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Soul Ascension",
@@ -264,30 +120,7 @@
           "name": "high",
           "progress": 100000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Divine Spirit",
@@ -304,30 +137,7 @@
           "name": "high",
           "progress": 10000000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Soul Transcendence",
@@ -344,30 +154,7 @@
           "name": "high",
           "progress": 1000000000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Immortal Soul",
@@ -384,30 +171,7 @@
           "name": "high",
           "progress": 100000000000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Divine Soul",
@@ -424,30 +188,7 @@
           "name": "high",
           "progress": 10000000000000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     },
     {
       "name": "Eternal Soul",
@@ -464,30 +205,7 @@
           "name": "high",
           "progress": 1000000000000000000000000000
         }
-      ],
-      "foundation_realms": [
-        {
-          "name": "Weak",
-          "progress": 10000
-        },
-        {
-          "name": "Normal",
-          "progress": 100000
-        },
-        {
-          "name": "Strong",
-          "progress": 1000000
-        },
-        {
-          "name": "Perfect",
-          "progress": 10000000
-        },
-        {
-          "name": "Primordial",
-          "progress": 0
-        }
-      ],
-      "foundation_change_handler": []
+      ]
     }
   ]
 }

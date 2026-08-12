@@ -47,6 +47,7 @@ public final class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<Path> PATH_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "paths", () -> PathType.PATH_CODEC
     );
+
     public static final RegistryHelper.DataPackRegistry<Skill> SKILL_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skills", () -> SkillType.SKILL_CODEC
     );
