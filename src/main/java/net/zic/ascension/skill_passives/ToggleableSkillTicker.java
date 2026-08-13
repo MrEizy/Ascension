@@ -41,7 +41,7 @@ public final class ToggleableSkillTicker {
             return;
         }
 
-        OriginSource originSource = holder.getData(entity).getSource();
+        OriginSource originSource = holder.getData().getSource();
         if (entity.level().isClientSide()) return;
 
         long gameTime = entity.level().getGameTime();

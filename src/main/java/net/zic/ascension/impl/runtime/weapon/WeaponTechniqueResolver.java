@@ -1,7 +1,7 @@
 package net.zic.ascension.impl.runtime.weapon;
 
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
@@ -52,8 +52,8 @@ public final class WeaponTechniqueResolver {
         if (source == null || path == null || !AscensionOriginSourceHelper.hasPath(source, path)) {
             return null;
         }
-        PathData data = AscensionOriginSourceHelper.getPathData(source, path);
-        return data == null ? null : data.getCurrentTechnique();
+        PathInstance data = AscensionOriginSourceHelper.getPathInstance(source, path);
+        return Identifier.parse("none");
     }
 
     public record Resolution(Identifier technique, String colorFolder) {

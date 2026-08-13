@@ -7,9 +7,8 @@
     "translate": "ascension.skill.stillfrost_breathing.desc"
   },
   "path": "ascension:foundation/soul",
-  "secondary_paths": [
-    "ascension:elemental/ice"
-  ],
+  "secondary_paths": "ascension:elemental/ice",
+
   "rate": 1.5,
   "particle_field": {
     "style": "breath_flow",

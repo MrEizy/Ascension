@@ -31,9 +31,9 @@ public class StatDisplayCommand {
 
                             AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
                             if(holder == null) return 0;
-                            AscensionEntityData data = holder.getData(player);
+                            AscensionEntityData data = holder.getData();
 
-                            OriginSource originSource =holder.getData(player).getSource();
+                            OriginSource originSource =holder.getData().getSource();
 
                             ZenithStatHolder statHolder = player.getData(ZenithAttachments.STAT_HOLDER);
                             player.sendSystemMessage(Component.literal("===Stats==="));

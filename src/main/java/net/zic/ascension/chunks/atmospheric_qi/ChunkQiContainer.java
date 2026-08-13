@@ -78,15 +78,15 @@ public class ChunkQiContainer implements PathBonusProvider {
     }
 
     public double getAffinity(Identifier path) {
-        return affinities.getBonus(PathEffectValueUtil.AFFINITY_CATEGORY, path);
+        return affinities.getBonus(PathInteractionUtil.AFFINITY_CATEGORY, path);
     }
 
     public ValueContainer getAffinityContainer(Identifier path) {
-        return affinities.getPathBonusContainer(PathEffectValueUtil.AFFINITY_CATEGORY, path);
+        return affinities.getPathBonusContainer(PathInteractionUtil.AFFINITY_CATEGORY, path);
     }
 
     public Collection<Identifier> getAllAffinities() {
-        return affinities.getAllPathBonusesInCategory(PathEffectValueUtil.AFFINITY_CATEGORY);
+        return affinities.getAllPathBonusesInCategory(PathInteractionUtil.AFFINITY_CATEGORY);
     }
 
     public boolean hasAtmosphericConfiguration() {

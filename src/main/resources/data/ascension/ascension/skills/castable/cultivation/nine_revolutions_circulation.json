@@ -7,10 +7,9 @@
     "translate": "ascension.skill.nine_revolutions_circulation.desc"
   },
   "path": "ascension:foundation/essence",
-  "secondary_paths": [
-    "ascension:elemental/blood",
-    "ascension:elemental/chaos"
-  ],
+  "secondary_paths": "ascension:elemental/blood",
+
+
   "rate": 2.75,
   "particle_field": {
     "style": "gathering_ring",

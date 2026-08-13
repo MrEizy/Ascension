@@ -7,7 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectContext;
-import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
+
 import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.CodecType;
@@ -123,7 +123,6 @@ public final class ScaledValueSources {
                 return 0.0D;
             }
             Identifier resolvedCategory = category
-                    .filter(value -> !value.equals(PathEffectValueUtil.NO_CATEGORY))
                     .orElse(AscensionOriginSourceHelper.AFFINITY_CATEGORY);
             ValueContainer container = AscensionOriginSourceHelper.getPathBonusContainer(
                     context.source(),

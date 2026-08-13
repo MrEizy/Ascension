@@ -14,7 +14,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
-import net.zic.ascension.api.ascension.core.path.PathData;
+
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
@@ -59,8 +60,8 @@ public final class WeaponMasteryDamageService {
                         || !matches(player, event.getSource().getDirectEntity(), module)) {
                     continue;
                 }
-                PathData pathData = AscensionOriginSourceHelper.hasPath(source, module.path())
-                        ? AscensionOriginSourceHelper.getPathData(source, module.path())
+                PathInstance pathData = AscensionOriginSourceHelper.hasPath(source, module.path())
+                        ? AscensionOriginSourceHelper.getPathInstance(source, module.path())
                         : null;
                 bestMultiplier = Math.max(
                         bestMultiplier,

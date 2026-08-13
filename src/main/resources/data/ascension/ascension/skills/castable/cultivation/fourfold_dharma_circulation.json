@@ -7,11 +7,8 @@
     "translate": "ascension.skill.fourfold_dharma_circulation.desc"
   },
   "path": "ascension:foundation/soul",
-  "secondary_paths": [
-    "ascension:elemental/life",
-    "ascension:elemental/order",
-    "ascension:weapon/fist"
-  ],
+  "secondary_paths": "ascension:elemental/life",
+
   "rate": 2.35,
   "particle_field": {
     "style": "meridian_flow",

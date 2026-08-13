@@ -9,8 +9,9 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.damage_provider.AscensionDamageSourceProvider;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
+import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
-import net.zic.ascension.api.ascension.core.path.PathEffectValueUtil;
+
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineDamageTypeHolder;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineGatherDamageTypesEvent;
@@ -25,7 +26,7 @@ public class AscensionDamageHandler {
 
     @SubscribeEvent
     public static void gatherDamageType(RPGEngineGatherDamageTypesEvent event){
-        if(event.hasTypeHolder(ID)) return;
+        if(event.hasTypeHolder(AscensionDamageTypeHolders.PATH)) return;
 
 
         if(event.getSource().getEntity()!= null && event.getSource().getEntity() == event.getSource().getDirectEntity()){

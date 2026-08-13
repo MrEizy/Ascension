@@ -20,7 +20,7 @@ public class EntityHandler {
         AscensionEntityDataProvider holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if(holder == null) return;
 
-        holder.getData(event.getEntity()).initialize();
+        holder.getData().initialize();
         if (event.getEntity() instanceof ServerPlayer player) {
             StarterSelectionManager.openIfIncomplete(player);
         }
@@ -31,18 +31,18 @@ public class EntityHandler {
         AscensionEntityDataProvider holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if(holder == null) return;
 
-        if(holder.getData(event.getEntity()) == null) return;
+        if(holder.getData() == null) return;
 
-        if(holder.getData(event.getEntity()).getSource() == null) return;
+        if(holder.getData().getSource() == null) return;
 
-        holder.getData(event.getEntity()).getSource().detachFromEntity(event.getEntity());
+        holder.getData().getSource().detachFromEntity(event.getEntity());
     }
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event){
         AscensionEntityDataProvider holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if(holder == null) return;
 
-        holder.getData(event.getEntity()).initialize();
+        holder.getData().initialize();
         if (event.getEntity() instanceof ServerPlayer player) {
             StarterSelectionManager.openIfIncomplete(player);
         }

@@ -12,7 +12,7 @@ import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolder;
 import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
+
 import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
@@ -27,7 +27,9 @@ import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.core.technique.TechniqueHolder;
 import net.zic.ascension.api.ascension.event.bloodline.BloodlineEvent;
+import net.zic.ascension.api.ascension.event.path.PathAddedEvent;
 import net.zic.ascension.api.ascension.event.path.PathEvent;
+import net.zic.ascension.api.ascension.event.path.PathRemovedEvent;
 import net.zic.ascension.api.ascension.event.physique.PhysiqueChangedEvent;
 import net.zic.ascension.api.ascension.event.skill.SkillEvent;
 import net.zic.ascension.api.ascension.event.technique.TechniqueEvent;
@@ -62,7 +64,7 @@ public class AscensionOriginSourceHelper {
                 CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
         );
         if (provider != null) {
-            return provider.getData(entity).getSource();
+            return provider.getData().getSource();
         }
         return entity.getData(AscensionAttachments.SIMPLE_ENTITY_DATA).getSource();
     }
@@ -159,10 +161,8 @@ public class AscensionOriginSourceHelper {
                 newPhysiqueDefinition.applyToEntity(entity,newPhysiqueData);
             }
         }
-        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,newPhysique,newPhysiqueData,source);
+        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData(),source);
         NeoForge.EVENT_BUS.post(post);
-
-
         //first add all new paths with the new physique as owner, this ensures that if there is path overlap there is owners >1
 
         for(Identifier path : toAdd){
@@ -171,8 +171,6 @@ public class AscensionOriginSourceHelper {
         for(Identifier path : toRemove){
             removePath(source,path,oldPhysique);
         }
-        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData(),source);
-        NeoForge.EVENT_BUS.post(post);
 
         resolveProcess(source,"set_physique");
         return true;
@@ -683,7 +681,7 @@ public class AscensionOriginSourceHelper {
         for(LivingEntity entity : source.getAttachedEntities()){
             AscensionEntityDataProvider provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(provider == null) continue;
-            provider.getData(entity).updatePathBonus(category,path);
+            provider.getData().updatePathBonus(category,path);
         }
     }
     //──Affinity Quick Access────────────────────────────────────────────────────────
@@ -721,7 +719,7 @@ public class AscensionOriginSourceHelper {
         for(LivingEntity entity : source.getAttachedEntities()){
             AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(holder == null) continue;
-            holder.getData(entity).markDirty(patch,false);
+            holder.getData().markDirty(patch,false);
         }
 
     }

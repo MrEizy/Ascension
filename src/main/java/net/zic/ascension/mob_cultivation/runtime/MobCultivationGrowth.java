@@ -1,5 +1,6 @@
 package net.zic.ascension.mob_cultivation.runtime;
 
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.Config;
 import net.minecraft.core.BlockPos;
@@ -9,7 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
@@ -61,7 +61,7 @@ public final class MobCultivationGrowth {
 
     private static void growFromAtmosphericQi(Mob mob, int intervals) {
         MobCultivationData data = MobCultivationManager.getCultivationData(mob);
-        if (MobCultivationManager.getPathData(mob) == null) {
+        if (MobCultivationManager.getPathInstance(mob) == null) {
             return;
         }
         ResolvedMobCultivationProfile profile = MobCultivationProfileManager.resolve(mob, data.getCategory());
@@ -104,26 +104,27 @@ public final class MobCultivationGrowth {
     public static void addProgressWithoutTribulation(Mob mob, double amount) {
         MobCultivationData data = MobCultivationManager.getCultivationData(mob);
         OriginSource source = MobCultivationManager.getEntityData(mob).getSource();
-        PathData pathData = MobCultivationManager.getPathData(mob);
+        PathInstance pathData = MobCultivationManager.getPathInstance(mob);
         if (pathData == null || amount <= 0.0D) {
             return;
         }
 
-        int originalMajor = pathData.getMajorRealm();
-        int originalMinor = pathData.getMinorRealm();
+        int originalMajor = pathData.getCurrentMajorRealm();
+        int originalMinor = pathData.getCurrentMinorRealm();
         double progress = pathData.getProgress() + amount;
         boolean reachedMaximum = false;
 
         for (int safety = 0; safety < 32; safety++) {
-            int major = pathData.getMajorRealm();
-            int minor = pathData.getMinorRealm();
-            double needed = pathData.getMaxProgress(major, minor, source.getRegistryAccess());
+            int major = pathData.getCurrentMajorRealm();
+            int minor = pathData.getCurrentMinorRealm();
+            double needed = pathData.getPath().getMaxProgress(major, minor);
             if (needed <= 0.0D || progress < needed) {
                 break;
             }
-            int maxMinor = pathData.getMaxMinorRealm(major, source.getRegistryAccess());
-            int maxMajor = pathData.getMaxMajorRealm(source.getRegistryAccess());
+            int maxMinor = pathData.getMaxMinorRealm(major);
+            int maxMajor = pathData.getPath().getMaxMajorRealm();
             progress -= needed;
+            /*
             if (minor < maxMinor) {
                 pathData.setMinorRealm(minor + 1);
             } else if (major < maxMajor) {
@@ -134,8 +135,10 @@ public final class MobCultivationGrowth {
                 reachedMaximum = true;
                 break;
             }
-        }
 
+             */
+        }
+        /*
         if (!reachedMaximum) {
             double newMaximum = pathData.getMaxProgress(
                     pathData.getMajorRealm(),
@@ -147,9 +150,11 @@ public final class MobCultivationGrowth {
             pathData.setProgress(progress);
         }
 
-        MobCultivationManager.capturePathState(data, pathData);
+         */
+
+        //MobCultivationManager.capturePathState(data, pathData);
         AscensionOriginSourceHelper.markPathDirty(source, data.getFoundationPath());
-        boolean realmChanged = originalMajor != pathData.getMajorRealm() || originalMinor != pathData.getMinorRealm();
+        boolean realmChanged = originalMajor != pathData.getCurrentMajorRealm() || originalMinor != pathData.getCurrentMinorRealm();
         if (!realmChanged) {
             return;
         }
@@ -158,7 +163,7 @@ public final class MobCultivationGrowth {
         MobCultivationManager.refreshAttributesAndHealth(mob, false);
         MobCultivationSkillService.synchronize(mob);
         MobCultivationPersistence.refresh(mob);
-        boolean majorBreakthrough = originalMajor != pathData.getMajorRealm();
+        boolean majorBreakthrough = originalMajor != pathData.getCurrentMajorRealm();
         MobCultivationVisuals.onBreakthrough(mob, majorBreakthrough);
         MobCultivationVisuals.applyDebugName(mob);
 

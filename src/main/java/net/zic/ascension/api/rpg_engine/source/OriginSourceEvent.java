@@ -13,6 +13,9 @@ public abstract class OriginSourceEvent extends Event {
         return source;
     }
 
+    /**
+     * Called just before Origin Source calls finishedLoading, this allows for other systems to make final adjustments
+    */
     public static class OriginSourceFinishedLoadingEvent extends OriginSourceEvent{
 
         public OriginSourceFinishedLoadingEvent(OriginSource source) {

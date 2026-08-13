@@ -404,13 +404,13 @@ public class ResourceModifierPassiveSkill implements LevelledSkill, Owner {
         }
 
         @Override
-        public void write(ValueOutput output) {
+        public void write(ValueOutput output,RegistryAccess access) {
             progression.write(output.child("progression"));
             output.putBoolean("enabled", enabled);
         }
 
         @Override
-        public void encode(ByteBuf buf) {
+        public void encode(ByteBuf buf,RegistryAccess access) {
             progression.encode(buf);
             buf.writeBoolean(enabled);
         }

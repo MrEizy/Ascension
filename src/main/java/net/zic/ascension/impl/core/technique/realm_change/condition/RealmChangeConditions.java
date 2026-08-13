@@ -1,10 +1,12 @@
 package net.zic.ascension.impl.core.technique.realm_change.condition;
 
-import net.zic.ascension.api.ascension.core.path.PathData;
+
+import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.api.ascension.core.path.realm.realm_change.RealmChangeActionCondition;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
-import net.zic.ascension.api.ascension.core.technique.realm_change.RealmChangeActionCondition;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionConditionTypes;
@@ -17,8 +19,9 @@ public final class RealmChangeConditions {
     }
 
     public static final class EveryRealm implements RealmChangeActionCondition {
+
         @Override
-        public boolean test(OriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return true;
         }
 
@@ -30,7 +33,7 @@ public final class RealmChangeConditions {
 
     public static final class EveryMinorRealm implements RealmChangeActionCondition {
         @Override
-        public boolean test(OriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return majorRealm != 0;
         }
 
@@ -42,7 +45,7 @@ public final class RealmChangeConditions {
 
     public static final class EveryMajorRealm implements RealmChangeActionCondition {
         @Override
-        public boolean test(OriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return minorRealm == 0 && majorRealm > 0;
         }
 
@@ -54,7 +57,7 @@ public final class RealmChangeConditions {
 
     public record MajorRealmsIn(List<Integer> majorRealms) implements RealmChangeActionCondition {
         @Override
-        public boolean test(OriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return minorRealm == 0 && majorRealms.contains(majorRealm);
         }
 
@@ -66,7 +69,7 @@ public final class RealmChangeConditions {
 
     public record MinorRealmsIn(List<Integer> minorRealms) implements RealmChangeActionCondition {
         @Override
-        public boolean test(OriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return minorRealm != 0 && minorRealms.contains(minorRealm);
         }
 
@@ -78,7 +81,7 @@ public final class RealmChangeConditions {
 
     public record RealmsIn(Map<Integer, List<Integer>> realms) implements RealmChangeActionCondition {
         @Override
-        public boolean test(OriginSource source, PathData pathData, Technique technique, TechniqueData techniqueData, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return realms.containsKey(majorRealm) && realms.get(majorRealm).contains(minorRealm);
         }
 

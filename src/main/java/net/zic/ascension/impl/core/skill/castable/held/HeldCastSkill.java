@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.skill.castable.held;
 
+import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
@@ -263,7 +264,7 @@ public record HeldCastSkill(
                 net.zic.ascension.api.ascension.capabilities.CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
         );
         if (holder != null) {
-            source = holder.getData(caster).getSource();
+            source = holder.getData().getSource();
         }
         return new ScaledValue.Context(source, skillId, caster, null, charge, Map.of());
     }
@@ -340,11 +341,11 @@ public record HeldCastSkill(
 
     public static final class Data implements SkillData {
         @Override
-        public void write(net.minecraft.world.level.storage.ValueOutput output) {
+        public void write(ValueOutput output, RegistryAccess access) {
         }
 
         @Override
-        public void encode(ByteBuf buf) {
+        public void encode(ByteBuf buf,RegistryAccess access) {
         }
 
         @Override

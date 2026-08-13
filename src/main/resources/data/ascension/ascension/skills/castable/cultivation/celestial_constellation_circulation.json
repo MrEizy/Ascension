@@ -7,10 +7,7 @@
     "translate": "ascension.skill.celestial_constellation_circulation.desc"
   },
   "path": "ascension:foundation/soul",
-  "secondary_paths": [
-    "ascension:elemental/star",
-    "ascension:weapon/bow"
-  ],
+  "secondary_paths": "ascension:elemental/star",
   "rate": 2.5,
   "particle_field": {
     "style": "gathering_ring",

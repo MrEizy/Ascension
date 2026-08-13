@@ -7,7 +7,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.PathData;
+
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -41,7 +42,8 @@ public final class TechniqueProgressionEvents {
         }
 
         for (Identifier pathId : List.copyOf(AscensionOriginSourceHelper.getPaths(source))) {
-            PathData pathData = AscensionOriginSourceHelper.getPathData(source, pathId);
+            PathInstance pathData = AscensionOriginSourceHelper.getPathInstance(source, pathId);
+            /* TODO handle new technique system
             if (pathData == null || pathData.getCurrentTechnique() == null) {
                 continue;
             }
@@ -51,6 +53,8 @@ public final class TechniqueProgressionEvents {
             if (technique instanceof KillProgressionTechnique killProgressionTechnique) {
                 killProgressionTechnique.handleKill(killer, victim, source, pathData);
             }
+
+             */
         }
     }
 }

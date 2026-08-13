@@ -103,6 +103,6 @@ public final class PassiveDefenseService {
 
     private static OriginSource originSource(LivingEntity entity) {
         var provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-        return provider == null ? null : provider.getData(entity).getSource();
+        return provider == null ? null : provider.getData().getSource();
     }
 }

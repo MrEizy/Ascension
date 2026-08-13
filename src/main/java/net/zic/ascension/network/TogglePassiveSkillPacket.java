@@ -56,7 +56,7 @@ public record TogglePassiveSkillPacket(
                 return;
             }
 
-            OriginSource source = holder.getData(player).getSource();
+            OriginSource source = holder.getData().getSource();
             //TODO need to add skill enable @SortOfSmart?
         });
     }

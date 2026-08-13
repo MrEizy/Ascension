@@ -7,7 +7,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.ascension.core.RegistryObjectData;
+
+
 import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
@@ -15,7 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class SkillProgressionData implements RegistryObjectData {
+public final class SkillProgressionData {
     public static final MapCodec<SkillProgressionData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.INT.optionalFieldOf("trained_level", 0).forGetter(SkillProgressionData::getTrainedLevel),
             Codec.DOUBLE.optionalFieldOf("experience", 0.0D).forGetter(SkillProgressionData::getExperience),
@@ -112,7 +113,7 @@ public final class SkillProgressionData implements RegistryObjectData {
         return removedFloor || removedCap;
     }
 
-    @Override
+
     public void write(ValueOutput output) {
         output.putInt("trained_level", trainedLevel);
         output.putDouble("experience", experience);
@@ -120,7 +121,7 @@ public final class SkillProgressionData implements RegistryObjectData {
         writeContributions(output.childrenList("level_caps"), levelCaps);
     }
 
-    @Override
+
     public void encode(ByteBuf buf) {
         buf.writeInt(trainedLevel);
         buf.writeDouble(experience);

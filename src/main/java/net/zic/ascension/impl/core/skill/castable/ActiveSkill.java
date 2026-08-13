@@ -450,12 +450,12 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
         }
 
         @Override
-        public void write(ValueOutput output) {
+        public void write(ValueOutput output,RegistryAccess access) {
             progression.write(output.child("progression"));
         }
 
         @Override
-        public void encode(ByteBuf buf) {
+        public void encode(ByteBuf buf,RegistryAccess access) {
             progression.encode(buf);
         }
 

@@ -19,12 +19,10 @@ import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.api.core.skill.castable.particle_field.ParticleFieldDefinition;
 
-import net.zic.ascension.impl.core.skill.EmptySkillData;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.CastSoundDefinition;
-import net.zic.ascension.impl.core.path.foundation.FoundationPathData;
+
 import net.zic.ascension.util.CultivationUtil;
 import net.zic.ascension.impl.core.skill.castable.CastSoundPlayer;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
@@ -93,7 +91,7 @@ public record SimpleCultivationSkill(
         AscensionEntityDataProvider holder = caster.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if(holder == null) return;
 
-        OriginSource source = holder.getData(caster).getSource();
+        OriginSource source = holder.getData().getSource();
 
 
         PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,primaryPath());

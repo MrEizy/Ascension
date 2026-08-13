@@ -7,6 +7,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.physique.Physique;
@@ -33,7 +37,6 @@ public record SimplePhysique(Component name, Component description, List<Identif
                              Optional<AscensionItemTooltipDefinition> itemTooltip
                             ) implements Physique {
 
-
     public SimplePhysique(
             Component name,
             Component description,
@@ -54,7 +57,6 @@ public record SimplePhysique(Component name, Component description, List<Identif
         this.statModifiers = statModifiers;
         this.pathBonusModifiers = pathBonusModifiers;
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
-        AscensionCraft.LOGGER.info("created Simple Physique {}", name);
 
     }
 
@@ -144,11 +146,11 @@ public record SimplePhysique(Component name, Component description, List<Identif
         }
 
         @Override
-        public void write(ValueOutput output) {
+        public void write(ValueOutput output,RegistryAccess access) {
         }
 
         @Override
-        public void encode(ByteBuf buf) {
+        public void encode(ByteBuf buf,RegistryAccess access) {
         }
     }
 }

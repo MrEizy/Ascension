@@ -6,7 +6,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.ascension.core.path.PathData;
+
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
@@ -107,19 +108,13 @@ public final class KillProgressionTechnique extends SimpleTechnique {
             LivingEntity killer,
             LivingEntity victim,
             OriginSource source,
-            PathData pathData
+            PathInstance pathData
     ) {
         if (killer == null || victim == null || source == null || pathData == null) {
             return;
         }
-        if (!(pathData.getCurrentTechniqueData() instanceof KillProgressionTechniqueData data)) {
-            return;
-        }
 
-        double earnedProgress = calculateProgress(victim);
-        data.recordKill(earnedProgress);
-        addProgress(killer, source, pathData, data, earnedProgress);
-        AscensionOriginSourceHelper.markPathDirty(source, pathData.getPath());
+        //TODO redo for new technique system
     }
 
     private double calculateProgress(LivingEntity victim) {
@@ -133,47 +128,11 @@ public final class KillProgressionTechnique extends SimpleTechnique {
     private void addProgress(
             LivingEntity killer,
             OriginSource source,
-            PathData pathData,
+            PathInstance pathData,
             KillProgressionTechniqueData data,
             double amount
     ) {
-        double remaining = sanitizeNonNegative(amount);
-        int breakthroughs = 0;
-
-        while (remaining > PROGRESS_EPSILON && breakthroughs < MAX_BREAKTHROUGHS_PER_KILL) {
-            int majorRealm = pathData.getMajorRealm();
-            int minorRealm = pathData.getMinorRealm();
-            double maximum = pathData.getMaxProgress(
-                    majorRealm,
-                    minorRealm,
-                    source.getRegistryAccess()
-            );
-            if (!Double.isFinite(maximum) || maximum <= 0.0D) {
-                return;
-            }
-
-            double current = Math.clamp(pathData.getProgress(), 0.0D, maximum);
-            double applied = Math.min(remaining, Math.max(0.0D, maximum - current));
-            pathData.setProgress(current + applied);
-            remaining -= applied;
-
-            if (pathData.getProgress() + PROGRESS_EPSILON < maximum) {
-                return;
-            }
-
-            if (!tryBreakthrough(killer, source, majorRealm, minorRealm, pathData.getProgress(), data)) {
-                return;
-            }
-
-            int maximumMinorRealm = pathData.getMaxMinorRealm(majorRealm, source.getRegistryAccess());
-            if (minorRealm >= maximumMinorRealm) {
-                pathData.handleRealmChange(source, majorRealm + 1, 0);
-            } else {
-                pathData.handleRealmChange(source, majorRealm, minorRealm + 1);
-            }
-            pathData.setProgress(0.0D);
-            breakthroughs++;
-        }
+        //TODO redo with new technique system
     }
 
     private static double sanitizeNonNegative(double value) {

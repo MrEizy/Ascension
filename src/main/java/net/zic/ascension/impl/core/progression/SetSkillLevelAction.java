@@ -1,7 +1,7 @@
 package net.zic.ascension.impl.core.progression;
 
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.RegistryObjectData;
+
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionService;
@@ -25,12 +25,12 @@ public record SetSkillLevelAction(
         return UUID.nameUUIDFromBytes(key.getBytes(StandardCharsets.UTF_8));
     }
 
+
+
     @Override
     public void run(
             UUID holderId,
-            OriginSource source,
-            Identifier contextIdentifier,
-            RegistryObjectData contextData,
+            OriginSource source, Identifier contextIdentifier, Object contextData,
             ProgressDirection direction
     ) {
         if (direction == ProgressDirection.UP) {

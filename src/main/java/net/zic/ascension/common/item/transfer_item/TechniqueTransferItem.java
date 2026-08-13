@@ -40,8 +40,8 @@ public class TechniqueTransferItem  extends Item {
 
         AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
 
-        if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
-        OriginSource source = holder.getData(player).getSource();
+        if(holder == null || holder.getData() == null) return InteractionResult.FAIL;
+        OriginSource source = holder.getData().getSource();
 
         //TODO update to use new technique
 

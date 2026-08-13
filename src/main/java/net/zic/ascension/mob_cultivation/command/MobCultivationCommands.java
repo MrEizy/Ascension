@@ -26,7 +26,7 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.impl.core.path.foundation.FoundationPath;
+
 import net.zic.ascension.mob_cultivation.MobCultivationManager;
 import net.zic.ascension.mob_cultivation.generation.MobCultivationEliteTier;
 import net.zic.ascension.mob_cultivation.skill.MobCultivationSkillPoolManager;
@@ -401,6 +401,6 @@ public final class MobCultivationCommands {
     }
 
     private static boolean isFoundationPath(Identifier pathId, RegistryAccess registryAccess) {
-        return CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, pathId, registryAccess) instanceof FoundationPath;
+        return false;
     }
 }

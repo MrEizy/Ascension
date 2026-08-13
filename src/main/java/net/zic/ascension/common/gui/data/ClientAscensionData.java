@@ -36,7 +36,7 @@ public final class ClientAscensionData {
                 return Optional.empty();
             }
 
-            return Optional.ofNullable(holder.getData(player));
+            return Optional.ofNullable(holder.getData());
         });
     }
 

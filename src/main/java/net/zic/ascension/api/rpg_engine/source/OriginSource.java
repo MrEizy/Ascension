@@ -184,7 +184,7 @@ public class OriginSource implements StatProvider {
         for(LivingEntity entity : getAttachedEntities()){
             AscensionEntityDataProvider provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(provider == null) continue;
-            if(provider.getData(entity) == null) continue;
+            if(provider.getData() == null) continue;
             entity.getData(ZenithAttachments.STAT_HOLDER).updateStats(dirtyStats);
         }
         dirtyStats.clear();

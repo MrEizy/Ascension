@@ -4,7 +4,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.PathData;
+
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
@@ -97,8 +98,8 @@ public final class WeaponMasteryService {
     private static boolean spawn(ServerPlayer player, OriginSource source, Candidate candidate) {
         Identifier skillId = candidate.skillId();
         PassiveModules.WeaponSwing module = candidate.module();
-        PathData pathData = AscensionOriginSourceHelper.hasPath(source, module.path())
-                ? AscensionOriginSourceHelper.getPathData(source, module.path())
+        PathInstance pathData = AscensionOriginSourceHelper.hasPath(source, module.path())
+                ? AscensionOriginSourceHelper.getPathInstance(source, module.path())
                 : null;
         double multiplier = damageMultiplier(pathData, module.realmScaling());
         double qiCost = Math.max(0.0D, module.qiCost() * multiplier);
@@ -159,15 +160,15 @@ public final class WeaponMasteryService {
     }
 
     static double damageMultiplier(
-            PathData pathData,
+            PathInstance pathData,
             PassiveModules.WeaponSwing.RealmScaling scaling
     ) {
         if (pathData == null) {
             return 1.0D;
         }
         double bonus = scaling.baseBonus()
-                + pathData.getMajorRealm() * scaling.bonusPerMajorRealm()
-                + pathData.getMinorRealm() * scaling.bonusPerMinorRealm();
+                + pathData.getCurrentMajorRealm() * scaling.bonusPerMajorRealm()
+                + pathData.getCurrentMinorRealm() * scaling.bonusPerMinorRealm();
         return 1.0D + Math.clamp(bonus, 0.0D, scaling.maximumBonus());
     }
 

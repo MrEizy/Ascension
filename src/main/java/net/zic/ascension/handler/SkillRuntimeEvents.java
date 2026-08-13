@@ -66,7 +66,7 @@ public final class SkillRuntimeEvents {
         if (provider == null) {
             return;
         }
-        AscensionEntityData entityData = provider.getData(event.getContext().request().entity());
+        AscensionEntityData entityData = provider.getData();
         if (entityData == null || entityData.getSource() == null) {
             return;
         }

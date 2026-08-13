@@ -69,8 +69,8 @@ public class CultivationCommand {
         for (ServerPlayer player : players) {
             AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(holder == null) continue;
-            holder.getData(player).setCultivationSuppressed(!holder.getData(player).isCultivationSuppressed());
-            player.sendSystemMessage(Component.literal("Cultivation Suppressed : "+holder.getData(player).isCultivationSuppressed()));
+            holder.getData().setCultivationSuppressed(!holder.getData().isCultivationSuppressed());
+            player.sendSystemMessage(Component.literal("Cultivation Suppressed : "+holder.getData().isCultivationSuppressed()));
 
         }
         return 1;
@@ -90,7 +90,7 @@ public class CultivationCommand {
             if(holder == null) continue;
             player.sendSystemMessage(Component.literal("==="+target.getDisplayName().getString()+"==="));
 
-            OriginSource source = holder.getData(target).getSource();
+            OriginSource source = holder.getData().getSource();
             if(!AscensionOriginSourceHelper.hasPath(source,id)){
                 player.sendSystemMessage(Component.literal("no path data"));
                 continue;
@@ -145,7 +145,7 @@ public class CultivationCommand {
                 return false;
             }
 
-            OriginSource originSource = holder.getData(player).getSource();
+            OriginSource originSource = holder.getData().getSource();
 
             if(originSource == null){
                 source.sendFailure(Component.literal(

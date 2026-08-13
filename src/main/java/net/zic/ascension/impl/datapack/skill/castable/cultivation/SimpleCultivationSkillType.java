@@ -26,9 +26,10 @@ public class SimpleCultivationSkillType extends SkillType {
                         Identifier.CODEC.fieldOf("path").forGetter(SimpleCultivationSkill::primaryPath),
                         Identifier.CODEC.optionalFieldOf("secondary_paths").forGetter((obj)-> Optional.of(obj.secondaryPath())),
                         Codec.DOUBLE.fieldOf("rate").forGetter(SimpleCultivationSkill::baseRate),
-                        ParticleFieldDefinition.CODEC.optionalFieldOf("particle_field").forGetter(SimpleCultivationSkill::particleField)
-                ).apply(instance, (name,description,path,secondaryPath,rate,particleField)->
-                        new SimpleCultivationSkill(name,description,path,secondaryPath.orElse(path),rate,particleField))
+                        ParticleFieldDefinition.CODEC.optionalFieldOf("particle_field").forGetter(SimpleCultivationSkill::particleField),
+                        CastSoundDefinition.CODEC.listOf().optionalFieldOf("cast_sounds",List.of()).forGetter(SimpleCultivationSkill::sounds)
+                ).apply(instance, (name,description,path,secondaryPath,rate,particleField,castSoundDefinitions)->
+                        new SimpleCultivationSkill(name,description,path,secondaryPath.orElse(path),rate,particleField,castSoundDefinitions))
         );
     }
 

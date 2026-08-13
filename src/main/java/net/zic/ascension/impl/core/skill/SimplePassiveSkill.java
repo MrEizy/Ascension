@@ -170,11 +170,11 @@ public class SimplePassiveSkill implements Skill {
 
     public static final class EmptyData implements SkillData {
         @Override
-        public void write(ValueOutput output) {
+        public void write(ValueOutput output,RegistryAccess access) {
         }
 
         @Override
-        public void encode(ByteBuf buf) {
+        public void encode(ByteBuf buf,RegistryAccess access) {
         }
 
         @Override
