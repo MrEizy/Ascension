@@ -97,17 +97,21 @@ public class ModItems {
 
 
     public static final DeferredItem<Item> GINSENG = ITEMS.registerItem("ginseng",
-            properties -> new HerbItem(properties, ModHerbs.GINSENG, () -> ModBlocks.GINSENG_CROP.get()));
+            properties -> new HerbItem(properties.food(AscFoodProperties.GINSENG), ModHerbs.GINSENG, () -> ModBlocks.GINSENG_CROP.get()));
     public static final DeferredItem<Item> FIRE_GINSENG = ITEMS.registerItem("fire_ginseng",
-            properties -> new HerbItem(properties, ModHerbs.FIRE_GINSENG, () -> ModBlocks.FIRE_GINSENG_CROP.get()));
+            properties -> new HerbItem(properties.food(AscFoodProperties.GINSENG), ModHerbs.FIRE_GINSENG, () -> ModBlocks.FIRE_GINSENG_CROP.get()));
     public static final DeferredItem<Item> SNOW_GINSENG = ITEMS.registerItem("snow_ginseng",
-            properties -> new HerbItem(properties, ModHerbs.SNOW_GINSENG, () -> ModBlocks.SNOW_GINSENG_CROP.get()));
+            properties -> new HerbItem(properties.food(AscFoodProperties.GINSENG), ModHerbs.SNOW_GINSENG, () -> ModBlocks.SNOW_GINSENG_CROP.get()));
+    public static final DeferredItem<Item> WHITE_JADE_ORCHID = ITEMS.registerItem("white_jade_orchid",
+            properties -> new HerbItem(properties.food(AscFoodProperties.ORCHID), ModHerbs.WHITE_JADE_ORCHID, () -> ModBlocks.WHITE_JADE_ORCHID_CROP.get()));
 
 
     public static final DeferredItem<Item> LINGZHI_MUSHROOM = ITEMS.registerItem("lingzhi_mushroom",
-            properties -> new HerbItem(properties, ModHerbs.LINGZHI_MUSHROOM));
+            properties -> new HerbItem(properties.food(AscFoodProperties.MUSHROOM), ModHerbs.LINGZHI_MUSHROOM));
     public static final DeferredItem<Item> BLOOD_LINGZHI_MUSHROOM = ITEMS.registerItem("blood_lingzhi_mushroom",
-            properties -> new HerbItem(properties, ModHerbs.BLOOD_LINGZHI_MUSHROOM));
+            properties -> new HerbItem(properties.food(AscFoodProperties.MUSHROOM), ModHerbs.BLOOD_LINGZHI_MUSHROOM));
+    public static final DeferredItem<Item> PEACH = ITEMS.registerItem("peach",
+            properties -> new HerbItem(properties.food(AscFoodProperties.PEACH), ModHerbs.PEACH));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

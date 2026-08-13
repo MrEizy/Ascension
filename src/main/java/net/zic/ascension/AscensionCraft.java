@@ -45,6 +45,7 @@ import net.zic.ascension.impl.datapack.targeting.AscensionTargetingTypes;
 import net.zic.ascension.impl.datapack.effect.AscensionSkillEffectModuleTypes;
 import net.zic.ascension.impl.datapack.projectile.AscensionProjectileBehaviorTypes;
 import net.zic.ascension.worldgen.AscFeatures;
+import net.zic.ascension.worldgen.AscTreeDecoratorTypes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -105,6 +106,7 @@ public class AscensionCraft {
         ModBlocks.register(modEventBus);
 
         AscFeatures.register(modEventBus);
+        AscTreeDecoratorTypes.register(modEventBus);
 
         ModCreativeModeTabs.register(modEventBus);
 

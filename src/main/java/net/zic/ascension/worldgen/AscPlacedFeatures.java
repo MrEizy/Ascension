@@ -3,12 +3,15 @@ package net.zic.ascension.worldgen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.blocks.ModBlocks;
 
 import java.util.List;
 
@@ -21,11 +24,17 @@ public class AscPlacedFeatures {
     public static final ResourceKey<PlacedFeature> FROST_SILVER_ORE_PLACED_KEY = registerKey("frost_silver_ore_placed");
 
 
+
+    //Trees
+    public static final ResourceKey<PlacedFeature> PEACH_TREE_PLACED_KEY = registerKey("peach_tree_placed");
+
+
     //Herbs
     public static final ResourceKey<PlacedFeature> JADE_DEW_GRASS_PLACED_KEY = registerKey("jade_dew_grass_placed");
     public static final ResourceKey<PlacedFeature> GINSENG_PLACED_KEY = registerKey("ginseng_placed");
     public static final ResourceKey<PlacedFeature> FIRE_GINSENG_PLACED_KEY = registerKey("fire_ginseng_placed");
     public static final ResourceKey<PlacedFeature> SNOW_GINSENG_PLACED_KEY = registerKey("snow_ginseng_placed");
+    public static final ResourceKey<PlacedFeature> WHITE_JADE_ORCHID_PLACED_KEY = registerKey("white_jade_orchid_placed");
     public static final ResourceKey<PlacedFeature> LINGZHI_MUSHROOM_PLACED_KEY = registerKey("lingzhi_mushroom_placed");
     public static final ResourceKey<PlacedFeature> BLOOD_LINGZHI_MUSHROOM_PLACED_KEY = registerKey("blood_lingzhi_mushroom_placed");
 
@@ -58,6 +67,12 @@ public class AscPlacedFeatures {
                         )));
 
 
+        //Trees
+        register(context, PEACH_TREE_PLACED_KEY, configuredFeatures.getOrThrow(AscConfiguredFeatures.PEACH_TREE_KEY),
+                VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f, 2),
+                        ModBlocks.PEACH_SAPLING.get()));
+
+
 
 
         //Herbs
@@ -85,6 +100,13 @@ public class AscPlacedFeatures {
                 ));
         register(context, SNOW_GINSENG_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.SNOW_GINSENG),
+                List.of(
+                        CountPlacement.of(6),
+                        InSquarePlacement.spread(),
+                        BiomeFilter.biome()
+                ));
+        register(context, WHITE_JADE_ORCHID_PLACED_KEY,
+                configuredFeatures.getOrThrow(AscConfiguredFeatures.WHITE_JADE_ORCHID),
                 List.of(
                         CountPlacement.of(6),
                         InSquarePlacement.spread(),

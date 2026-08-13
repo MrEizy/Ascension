@@ -55,6 +55,18 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.FROST_SILVER_BLOCK);
                         output.accept(ModBlocks.FROST_SILVER_ORE);
 
+                        output.accept(ModBlocks.PEACH_LOG);
+                        output.accept(ModBlocks.PEACH_WOOD);
+                        output.accept(ModBlocks.STRIPPED_PEACH_LOG);
+                        output.accept(ModBlocks.STRIPPED_PEACH_WOOD);
+
+                        output.accept(ModBlocks.PEACH_PLANKS);
+                        output.accept(ModBlocks.PEACH_LEAVES);
+
+                        output.accept(ModBlocks.PEACH_SAPLING);
+
+                        output.accept(ModBlocks.FERMENTING_BARREL);
+
 
                     }).build());
 
@@ -72,6 +84,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.LINGZHI_MUSHROOM);
                         output.accept(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B);
                         output.accept(ModItems.BLOOD_LINGZHI_MUSHROOM);
+                        output.accept(ModItems.WHITE_JADE_ORCHID);
+                        output.accept(ModItems.PEACH);
 
 
                     }).build());

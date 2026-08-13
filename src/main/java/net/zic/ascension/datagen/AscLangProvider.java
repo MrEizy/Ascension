@@ -98,6 +98,8 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.snow_ginseng", "Snow Ginseng");
         add("item.ascension.lingzhi_mushroom", "Lingzhi");
         add("item.ascension.blood_lingzhi_mushroom", "Blood Lingzhi");
+        add("item.ascension.white_jade_orchid", "White Jade Orchid");
+        add("item.ascension.peach", "Peach");
 
         // Herb Tooltips
         add("ascension.herb.tooltip.aged_name", "%s-Year %s");
@@ -128,6 +130,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.herb.snow_ginseng.description", "A frozen ginseng root adapted to cold and snowy lands.");
         add("ascension.herb.lingzhi_mushroom.description", "A medicinal fungus that grows from old wood.");
         add("ascension.herb.blood_lingzhi_mushroom.description", "A crimson Lingzhi that devoured the blood from dead Ghast rending it nothing but bones.");
+        add("ascension.herb.peach.description", "W.I.P");
+        add("ascension.herb.white_jade_orchid.description", "W.I.P");
 
 
         //Block Ores
@@ -140,6 +144,25 @@ public class AscLangProvider extends LanguageProvider {
         add("block.ascension.jade_block", "Jade Block");
 
 
+        //Fluids
+        add("item.ascension.liquified_spiritual_qi_bucket", "Liquified Spiritual Qi Bucket");
+        add("block.ascension.liquified_spiritual_qi_block", "Liquified Spiritual Qi");
+
+
+        //Wood Blocks
+        add("block.ascension.peach_log", "Peach Log");
+        add("block.ascension.peach_wood", "Peach Wood");
+        add("block.ascension.stripped_peach_log", "Stripped Peach Log");
+        add("block.ascension.stripped_peach_wood", "Stripped Peach Wood");
+        add("block.ascension.peach_planks", "Peach Planks");
+        add("block.ascension.peach_leaves", "Peach Leaves");
+        add("block.ascension.peach_sapling", "Peach Sapling");
+        add("block.ascension.potted_peach_sapling", "Potted Peach Sapling");
+
+        //Block Entity
+        add("block.ascension.fermenting_barrel", "Fermenting Barrel");
+
+
         //Herb Blocks
         add("block.ascension.cultivation_soil", "Cultivation Soil");
         add("block.ascension.jade_dew_grass_crop", "Jade Dew Grass");
@@ -148,6 +171,8 @@ public class AscLangProvider extends LanguageProvider {
         add("block.ascension.snow_ginseng_crop", "Snow Ginseng");
         add("block.ascension.lingzhi_mushroom_b", "Lingzhi Mushroom");
         add("block.ascension.blood_lingzhi_mushroom_b", "Blood Lingzhi Mushroom");
+        add("block.ascension.peach_pod", "Peach Pod");
+        add("block.ascension.white_jade_orchid_crop", "White Jade Orchid");
 
 
 

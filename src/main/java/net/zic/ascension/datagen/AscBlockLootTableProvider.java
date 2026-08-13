@@ -24,6 +24,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
+import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.common.item.ModItems;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.JADE_BLOCK.get());
         dropSelf(ModBlocks.FROST_SILVER_BLOCK.get());
         dropSelf(ModBlocks.BLACK_IRON_BLOCK.get());
+        dropSelf(ModBlocks.FERMENTING_BARREL.get());
 
         // Ore Drop Blocks
         add(ModBlocks.BLACK_IRON_ORE.get(),
@@ -81,11 +83,47 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
                 1, 1,
                 0.25F
         ));
+        add(ModBlocks.WHITE_JADE_ORCHID_CROP.get(), createDirectHerbDrops(
+                ModBlocks.WHITE_JADE_ORCHID_CROP.get(),
+                ModItems.WHITE_JADE_ORCHID.get(),
+                1, 1,
+                0.25F
+        ));
 
         add(ModBlocks.LINGZHI_MUSHROOM_B.get(),
                 createSingleItemTableWithSilkTouch(ModBlocks.LINGZHI_MUSHROOM_B.get(), ModItems.LINGZHI_MUSHROOM.get()));
         add(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get(),
                 createSingleItemTableWithSilkTouch(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get(), ModItems.BLOOD_LINGZHI_MUSHROOM.get()));
+
+        add(ModBlocks.PEACH_POD.get(), createPodHerbDrops(ModBlocks.PEACH_POD.get(), 1, 3));
+
+
+
+
+        //Trees
+        dropSelf(ModBlocks.PEACH_LOG.get());
+        dropSelf(ModBlocks.PEACH_WOOD.get());
+        dropSelf(ModBlocks.STRIPPED_PEACH_LOG.get());
+        dropSelf(ModBlocks.STRIPPED_PEACH_WOOD.get());
+
+        dropSelf(ModBlocks.PEACH_PLANKS.get());
+        dropSelf(ModBlocks.PEACH_SAPLING.get());
+
+        add(ModBlocks.POTTED_PEACH_SAPLING.get(), createPotFlowerItemTable(ModBlocks.PEACH_SAPLING.get()));
+        add(ModBlocks.PEACH_LEAVES.get(), block -> createLeavesDrops(block, ModBlocks.PEACH_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
+    }
+
+    protected LootTable.Builder createPodHerbDrops(PodHerbBlock block, float minCount, float maxCount) {
+        LootItemCondition.Builder mature = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(PodHerbBlock.AGE, PodHerbBlock.MAX_AGE));
+
+        return LootTable.lootTable().withPool(
+                LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .when(mature)
+                        .add(applyExplosionDecay(block,
+                                LootItem.lootTableItem(block.harvestItem())
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(minCount, maxCount))))));
     }
 
     protected LootTable.Builder createSeedHerbDrops(HerbCropBlock block, Item herb, Item seeds, float minHerbs, float maxHerbs, int baseSeeds, float bonusSeedChance) {

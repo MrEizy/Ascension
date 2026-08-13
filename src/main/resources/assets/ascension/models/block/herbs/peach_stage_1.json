@@ -1,0 +1,70 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "ascension:block/herbs/peach_stage_1"
+	},
+	"elements": [
+		{
+			"from": [6, 4, 0],
+			"to": [10, 8, 4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 4, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 4], "texture": "#1"},
+				"east": {"uv": [0, 4, 4, 8], "texture": "#1"},
+				"south": {"uv": [4, 0, 8, 4], "texture": "#1"},
+				"west": {"uv": [4, 4, 8, 8], "texture": "#1"},
+				"up": {"uv": [4, 12, 0, 8], "texture": "#1"},
+				"down": {"uv": [12, 0, 8, 4], "texture": "#1"}
+			}
+		},
+		{
+			"from": [7.5, 8, 0],
+			"to": [8.5, 10, 1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.5, 8, 0]},
+			"faces": {
+				"north": {"uv": [4, 8, 5, 10], "texture": "#1"},
+				"east": {"uv": [8, 4, 9, 6], "texture": "#1"},
+				"south": {"uv": [5, 8, 6, 10], "texture": "#1"},
+				"west": {"uv": [6, 8, 7, 10], "texture": "#1"},
+				"up": {"uv": [9, 7, 8, 6], "texture": "#1"},
+				"down": {"uv": [8, 8, 7, 9], "texture": "#1"}
+			}
+		},
+		{
+			"from": [7.5, 9.525, -0.35],
+			"to": [8.5, 10.525, 0.65],
+			"rotation": {"angle": -45, "axis": "x", "origin": [8, 10.025, 0.15]},
+			"faces": {
+				"north": {"uv": [8, 7, 9, 8], "texture": "#1"},
+				"east": {"uv": [8, 8, 9, 9], "texture": "#1"},
+				"south": {"uv": [9, 4, 10, 5], "texture": "#1"},
+				"west": {"uv": [9, 5, 10, 6], "texture": "#1"},
+				"up": {"uv": [10, 7, 9, 6], "texture": "#1"},
+				"down": {"uv": [8, 9, 7, 10], "texture": "#1"}
+			}
+		},
+		{
+			"from": [7.5, 9.75, -0.8],
+			"to": [8.5, 10.75, 0.2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 10.25, -0.3]},
+			"faces": {
+				"north": {"uv": [9, 7, 10, 8], "texture": "#1"},
+				"east": {"uv": [8, 9, 9, 10], "texture": "#1"},
+				"south": {"uv": [9, 8, 10, 9], "texture": "#1"},
+				"west": {"uv": [9, 9, 10, 10], "texture": "#1"},
+				"up": {"uv": [5, 11, 4, 10], "texture": "#1"},
+				"down": {"uv": [11, 4, 10, 5], "texture": "#1"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "group",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
+}

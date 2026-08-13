@@ -21,6 +21,11 @@ public class AscBiomeModifier {
     public static final ResourceKey<BiomeModifier> ADD_FROST_SILVER_ORE = registerKey(("add_frost_silver_ore"));
 
 
+
+    //Trees
+    public static final ResourceKey<BiomeModifier> ADD_PEACH_TREE = registerKey("add_peach_tree");
+
+
     //Herbs
     public static final ResourceKey<BiomeModifier> ADD_JADE_DEW_GRASS = registerKey("add_jade_dew_grass");
     public static final ResourceKey<BiomeModifier> ADD_GINSENG = registerKey("add_ginseng");
@@ -28,6 +33,7 @@ public class AscBiomeModifier {
     public static final ResourceKey<BiomeModifier> ADD_SNOW_GINSENG = registerKey("add_snow_ginseng");
     public static final ResourceKey<BiomeModifier> ADD_LINGZHI_MUSHROOM = registerKey("add_lingzhi_mushroom");
     public static final ResourceKey<BiomeModifier> ADD_BLOOD_LINGZHI_MUSHROOM = registerKey("add_blood_lingzhi_mushroom");
+    public static final ResourceKey<BiomeModifier> ADD_WHITE_JADE_ORCHID = registerKey("add_white_jade_orchid");
 
 
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
@@ -72,6 +78,11 @@ public class AscBiomeModifier {
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.SNOW_GINSENG_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
+        context.register(ADD_WHITE_JADE_ORCHID, new BiomeModifiers.AddFeaturesBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(Biomes.DARK_FOREST), biomes.getOrThrow(Biomes.PALE_GARDEN)),
+                HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.WHITE_JADE_ORCHID_PLACED_KEY)),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
+
         context.register(ADD_LINGZHI_MUSHROOM, new BiomeModifiers.AddFeaturesBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_FOREST),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.LINGZHI_MUSHROOM_PLACED_KEY)),
@@ -80,6 +91,14 @@ public class AscBiomeModifier {
         context.register(ADD_BLOOD_LINGZHI_MUSHROOM, new BiomeModifiers.AddFeaturesBiomeModifier(
                 HolderSet.direct(biomes.getOrThrow(Biomes.SOUL_SAND_VALLEY)),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.BLOOD_LINGZHI_MUSHROOM_PLACED_KEY)),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
+
+
+
+        //Trees
+        context.register(ADD_PEACH_TREE, new BiomeModifiers.AddFeaturesBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(Biomes.PLAINS)),
+                HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.PEACH_TREE_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
 

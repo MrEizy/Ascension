@@ -30,12 +30,34 @@ public class AscBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.BLACK_IRON_ORE.get());
 
 
+        tag(BlockTags.MINEABLE_WITH_AXE)
+                .add(ModBlocks.PEACH_LOG.get())
+                .add(ModBlocks.PEACH_WOOD.get())
+                .add(ModBlocks.STRIPPED_PEACH_LOG.get())
+                .add(ModBlocks.STRIPPED_PEACH_WOOD.get())
+                .add(ModBlocks.PEACH_PLANKS.get());
+
         tag(BlockTags.MINEABLE_WITH_HOE)
                 .add(ModBlocks.LINGZHI_MUSHROOM_B.get())
                 .add(ModBlocks.CULTIVATION_SOIL.get());
 
         tag(ModTags.Blocks.HERB_SOILS)
                 .add(ModBlocks.CULTIVATION_SOIL.get());
+
+        tag(BlockTags.LOGS_THAT_BURN)
+                .add(ModBlocks.PEACH_LOG.get())
+                .add(ModBlocks.PEACH_WOOD.get())
+                .add(ModBlocks.STRIPPED_PEACH_LOG.get())
+                .add(ModBlocks.STRIPPED_PEACH_WOOD.get());
+
+        tag(BlockTags.LEAVES)
+                .add(ModBlocks.PEACH_LEAVES.get());
+
+        tag(BlockTags.SAPLINGS)
+                .add(ModBlocks.PEACH_SAPLING.get());
+
+        tag(BlockTags.PLANKS)
+                .add(ModBlocks.PEACH_PLANKS.get());
 
 
         tag(BlockTags.NEEDS_IRON_TOOL)

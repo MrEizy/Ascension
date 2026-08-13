@@ -1,0 +1,160 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_0"
+      },
+      "when": {
+        "age": "0",
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_0",
+        "y": 90
+      },
+      "when": {
+        "age": "0",
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_0",
+        "y": 90
+      },
+      "when": {
+        "age": "0",
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_0",
+        "y": 90
+      },
+      "when": {
+        "age": "0",
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_1"
+      },
+      "when": {
+        "age": "1",
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_1",
+        "y": 90
+      },
+      "when": {
+        "age": "1",
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_1",
+        "y": 90
+      },
+      "when": {
+        "age": "1",
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_1",
+        "y": 90
+      },
+      "when": {
+        "age": "1",
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_2"
+      },
+      "when": {
+        "age": "2",
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_2",
+        "y": 90
+      },
+      "when": {
+        "age": "2",
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_2",
+        "y": 90
+      },
+      "when": {
+        "age": "2",
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_2",
+        "y": 90
+      },
+      "when": {
+        "age": "2",
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_3"
+      },
+      "when": {
+        "age": "3",
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_3",
+        "y": 90
+      },
+      "when": {
+        "age": "3",
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_3",
+        "y": 90
+      },
+      "when": {
+        "age": "3",
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/peach_stage_3",
+        "y": 90
+      },
+      "when": {
+        "age": "3",
+        "facing": "west"
+      }
+    }
+  ]
+}

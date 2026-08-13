@@ -7,10 +7,7 @@ import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.model.ItemModelUtils;
-import net.minecraft.client.data.models.model.ModelLocationUtils;
-import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
@@ -19,10 +16,12 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
+import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.common.item.ModItems;
 
 public class AscModelProvider extends ModelProvider {
@@ -59,6 +58,8 @@ public class AscModelProvider extends ModelProvider {
         herbItemModel(itemModels, ModItems.SNOW_GINSENG.get(), "snow_ginseng");
         herbItemModel(itemModels, ModItems.LINGZHI_MUSHROOM.get());
         herbItemModel(itemModels, ModItems.BLOOD_LINGZHI_MUSHROOM.get());
+        herbItemModel(itemModels, ModItems.WHITE_JADE_ORCHID.get());
+        herbItemModel(itemModels, ModItems.PEACH.get());
 
 
         //Herb Blocks
@@ -66,9 +67,11 @@ public class AscModelProvider extends ModelProvider {
         herbBlockModelRotated(blockModels, ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get());
         cultivationSoilModel(blockModels);
         herbCropModel(blockModels, ModBlocks.JADE_DEW_GRASS_CROP.get());
-        herbCropModel(blockModels, ModBlocks.GINSENG_CROP.get(), "hundred_year_ginseng");
+        herbCropModel(blockModels, ModBlocks.GINSENG_CROP.get(), "ginseng");
         herbCropModel(blockModels, ModBlocks.FIRE_GINSENG_CROP.get(), "hundred_year_fire_ginseng");
         herbCropModel(blockModels, ModBlocks.SNOW_GINSENG_CROP.get(), "hundred_year_snow_ginseng");
+        herbCropModel(blockModels, ModBlocks.WHITE_JADE_ORCHID_CROP.get(), "white_jade_orchid");
+        podHerbModel(blockModels, ModBlocks.PEACH_POD.get(), "peach");
 
 
         //Ore Models
@@ -88,6 +91,16 @@ public class AscModelProvider extends ModelProvider {
 
 
 
+        //Trees
+        blockModels.createTrivialCube(ModBlocks.PEACH_PLANKS.get());
+        blockModels.woodProvider(ModBlocks.PEACH_LOG.get()).logWithHorizontal(ModBlocks.PEACH_LOG.get()).wood(ModBlocks.PEACH_WOOD.get());
+        blockModels.woodProvider(ModBlocks.STRIPPED_PEACH_LOG.get()).logWithHorizontal(ModBlocks.STRIPPED_PEACH_LOG.get()).wood(ModBlocks.STRIPPED_PEACH_WOOD.get());
+
+        blockModels.createTintedLeaves(ModBlocks.PEACH_LEAVES.get(), TexturedModel.LEAVES, -12012255);
+        blockModels.createPlantWithDefaultItem(ModBlocks.PEACH_SAPLING.get(), ModBlocks.POTTED_PEACH_SAPLING.get(), BlockModelGenerators.PlantType.TINTED);
+
+
+
 
 
 
@@ -99,8 +112,93 @@ public class AscModelProvider extends ModelProvider {
         blockModels.createTrivialCube(ModBlocks.BLACK_IRON_ORE.get());
         blockModels.createTrivialCube(ModBlocks.BLACK_IRON_BLOCK.get());
 
+
+        //Block Entities
+        fermentingBarrelModel(blockModels);
+
         //Fluids
         blockModels.createNonTemplateModelBlock(ModBlocks.LIQUIFIED_SPIRITUAL_QI_BLOCK.get());
+    }
+
+    private void podHerbModel(BlockModelGenerators blockModels, PodHerbBlock block) {
+        podHerbModel(blockModels, block, block.definition().id().getPath());
+    }
+
+    private void podHerbModel(BlockModelGenerators blockModels, PodHerbBlock block, String texturePath) {
+        int stages = PodHerbBlock.MAX_AGE + 1;
+        Identifier[] ageModels = new Identifier[stages];
+        for (int age = 0; age < stages; age++) {
+            ageModels[age] = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/herbs/" + texturePath + "_stage_" + age);
+        }
+
+        MultiPartGenerator blockState = MultiPartGenerator.multiPart(block);
+
+        for (int age = 0; age < stages; age++) {
+            MultiVariant base = BlockModelGenerators.plainVariant(ageModels[age]);
+
+            blockState.with(
+                    BlockModelGenerators.condition()
+                            .term(PodHerbBlock.AGE, age)
+                            .term(PodHerbBlock.FACING, Direction.NORTH),
+                    base);
+            blockState.with(
+                    BlockModelGenerators.condition()
+                            .term(PodHerbBlock.AGE, age)
+                            .term(PodHerbBlock.FACING, Direction.EAST),
+                    base.with(BlockModelGenerators.Y_ROT_90));
+            blockState.with(
+                    BlockModelGenerators.condition()
+                            .term(PodHerbBlock.AGE, age)
+                            .term(PodHerbBlock.FACING, Direction.SOUTH),
+                    base.with(BlockModelGenerators.Y_ROT_90.then(BlockModelGenerators.Y_ROT_90)));
+            blockState.with(
+                    BlockModelGenerators.condition()
+                            .term(PodHerbBlock.AGE, age)
+                            .term(PodHerbBlock.FACING, Direction.WEST),
+                    base.with(BlockModelGenerators.Y_ROT_90.then(BlockModelGenerators.Y_ROT_90).then(BlockModelGenerators.Y_ROT_90)));
+        }
+
+        blockModels.blockStateOutput.accept(blockState);
+
+        // Inventory icon — same convention as vanilla cocoa using its stage0 model as the item model.
+        blockModels.registerSimpleItemModel(block, ageModels[0]);
+    }
+
+    private void fermentingBarrelModel(BlockModelGenerators blockModels) {
+        Block block = ModBlocks.FERMENTING_BARREL.get();
+        String path = "block/fermenting_barrel";
+
+        Material top = new Material(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, path + "_top"));
+        Material bottom = new Material(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, path + "_bottom"));
+        Material side = new Material(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, path + "_side"));
+
+        TextureMapping textures = new TextureMapping()
+                .put(TextureSlot.SIDE, side)
+                .put(TextureSlot.TOP, top)
+                .put(TextureSlot.BOTTOM, bottom);
+
+        Identifier model = ModelTemplates.CUBE_BOTTOM_TOP.create(
+                ModelLocationUtils.getModelLocation(block),
+                textures,
+                blockModels.modelOutput);
+
+        MultiVariant baseVariant = BlockModelGenerators.plainVariant(model);
+
+        var xRot180 = BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.X_ROT_90);
+        var xRot270 = xRot180.then(BlockModelGenerators.X_ROT_90);
+        var yRot270 = BlockModelGenerators.Y_ROT_90.then(BlockModelGenerators.Y_ROT_90).then(BlockModelGenerators.Y_ROT_90);
+
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(block, baseVariant)
+                        .with(PropertyDispatch.modify(DirectionalBlock.FACING)
+                                .select(Direction.UP, BlockModelGenerators.NOP)
+                                .select(Direction.DOWN, xRot180)
+                                .select(Direction.NORTH, xRot270)
+                                .select(Direction.SOUTH, BlockModelGenerators.X_ROT_90)
+                                .select(Direction.EAST, BlockModelGenerators.X_ROT_90.then(yRot270))
+                                .select(Direction.WEST, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_90))));
+
+        blockModels.registerSimpleItemModel(block, model);
     }
 
 

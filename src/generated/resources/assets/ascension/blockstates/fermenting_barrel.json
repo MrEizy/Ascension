@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "ascension:block/fermenting_barrel",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "ascension:block/fermenting_barrel",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "ascension:block/fermenting_barrel",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "ascension:block/fermenting_barrel",
+      "x": 90
+    },
+    "facing=up": {
+      "model": "ascension:block/fermenting_barrel"
+    },
+    "facing=west": {
+      "model": "ascension:block/fermenting_barrel",
+      "x": 90,
+      "y": 90
+    }
+  }
+}
