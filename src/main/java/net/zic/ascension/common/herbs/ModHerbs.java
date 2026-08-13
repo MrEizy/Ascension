@@ -84,7 +84,7 @@ public final class ModHerbs {
                             new HerbDefinition.AgeThreshold(10, 72),
                             new HerbDefinition.AgeThreshold(100, 288),
                             new HerbDefinition.AgeThreshold(500, 1152),
-                            new HerbDefinition.AgeThreshold(1000, 0),
+                            new HerbDefinition.AgeThreshold(1000, 11520),
                             new HerbDefinition.AgeThreshold(10000, 115200),
                             new HerbDefinition.AgeThreshold(100000, 1152000),
                             new HerbDefinition.AgeThreshold(1000000, 0)
