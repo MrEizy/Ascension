@@ -29,6 +29,7 @@ import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.AscensionAttributes;
+import net.zic.ascension.configuration.mob_traits.traits.AscensionTraitTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 import net.zic.ascension.impl.datapack.alchemy.AlchemyMaterialProviders;
 import net.zic.ascension.network.*;
@@ -142,6 +143,8 @@ public class AscensionCraft {
 
 
 
+
+        AscensionTraitTypes.register(modEventBus);
     }
 
     public AscensionCraft(IEventBus modEventBus, ModContainer modContainer) {
@@ -158,7 +161,7 @@ public class AscensionCraft {
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC, "ascension/Ascension-Common.toml");
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.CULTIVATION_SPEC, "ascension/Ascension-Cultivation.toml");
-         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC, "ascension/Ascension-Client.toml");
+        modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC, "ascension/Ascension-Client.toml");
 
     }
 

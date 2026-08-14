@@ -7,8 +7,7 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+
 import net.zic.zenithlib.value_containers.typed.ModifierHolder;
 import net.zic.zenithlib.value_containers.typed.ValueContainerCodecHelper;
 
