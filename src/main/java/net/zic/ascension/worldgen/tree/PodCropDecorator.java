@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.zic.ascension.common.blocks.ModBlocks;
-import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.worldgen.AscTreeDecoratorTypes;
 
 import java.util.ArrayList;
@@ -63,9 +62,7 @@ public class PodCropDecorator extends TreeDecorator {
                     continue;
                 }
 
-                BlockState state = ModBlocks.PEACH_POD.get().defaultBlockState()
-                        .setValue(PodHerbBlock.FACING, dir.getOpposite())
-                        .setValue(PodHerbBlock.AGE, random.nextInt(PodHerbBlock.MAX_AGE + 1));
+                BlockState state = ModBlocks.PEACH_POD.get().wildState(dir.getOpposite(), random);
 
                 if (state.canSurvive(context.level(), podPos)) {
                     context.setBlock(podPos, state);

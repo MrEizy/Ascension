@@ -114,16 +114,27 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
     }
 
     protected LootTable.Builder createPodHerbDrops(PodHerbBlock block, float minCount, float maxCount) {
-        LootItemCondition.Builder mature = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
-                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(PodHerbBlock.AGE, PodHerbBlock.MAX_AGE));
-
         return LootTable.lootTable().withPool(
                 LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1.0F))
-                        .when(mature)
+                        .when(podMatureCondition(block))
                         .add(applyExplosionDecay(block,
                                 LootItem.lootTableItem(block.harvestItem())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(minCount, maxCount))))));
+    }
+
+    private LootItemCondition.Builder podMatureCondition(PodHerbBlock block) {
+        List<LootItemCondition.Builder> matureStages = new ArrayList<>();
+        int firstMatureStage = block.definition().maxGrowthStage();
+        int lastMatureStage = firstMatureStage + block.definition().maxAgeTier();
+
+        for (int stage = firstMatureStage; stage <= lastMatureStage; stage++) {
+            matureStages.add(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                    .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(PodHerbBlock.STAGE, stage))
+            );
+        }
+
+        return AnyOfCondition.anyOf(matureStages.toArray(LootItemCondition.Builder[]::new));
     }
 
     protected LootTable.Builder createSeedHerbDrops(HerbCropBlock block, Item herb, Item seeds, float minHerbs, float maxHerbs, int baseSeeds, float bonusSeedChance) {

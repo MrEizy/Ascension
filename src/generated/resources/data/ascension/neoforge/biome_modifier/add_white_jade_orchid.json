@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "minecraft:dark_forest",
+    "minecraft:pale_garden"
+  ],
+  "features": "ascension:white_jade_orchid_placed",
+  "step": "vegetal_decoration"
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "ascension:block/herbs/white_jade_orchid_stage1"
+  }
+}

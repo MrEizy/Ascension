@@ -13,7 +13,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
-import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
@@ -60,8 +59,6 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private Identifier selectedStarterBloodline;
     private Identifier selectedStarterPhysique;
     private boolean starterSelectionComplete;
-
-    private float cachedHealth = 0;
 
     private final Random random = new Random();
 
@@ -210,6 +207,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
     @Override
     public void initialize() {
+        float healthBeforeInitialization = attachedEntity.getHealth();
 
         AscensionEntityData.super.initialize();
         ZenithAttributeHolder attributeHolder = attachedEntity.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
@@ -224,7 +222,8 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         getSource().attachToEntity(getEntity());
         statHolder.resolveProcess("initialize_on_entity");
         attributeHolder.resolveProcess("initialize_on_entity");
-        attachedEntity.setHealth(cachedHealth);
+
+        attachedEntity.setHealth(Math.min(healthBeforeInitialization, attachedEntity.getMaxHealth()));
 
     }
 
@@ -618,7 +617,6 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
             SimpleAscensionEntityData data = new SimpleAscensionEntityData(originSource, entity);
 
-            data.cachedHealth = input.getFloatOr("cached_health",entity.getMaxHealth());
             data.setCultivationSuppressed(
                     input.getBooleanOr("cultivation_suppressed", false)
             );
@@ -642,7 +640,6 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         @Override
         public boolean write(SimpleAscensionEntityData attachment, ValueOutput output) {
             attachment.source.writeOriginSourceData(output.child("source_data"));
-            output.putFloat("cached_health",attachment.getEntity().getHealth());
             output.putBoolean(
                     "cultivation_suppressed",
                     attachment.isCultivationSuppressed()

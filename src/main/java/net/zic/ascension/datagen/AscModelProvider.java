@@ -8,7 +8,6 @@ import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
-import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -17,7 +16,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
@@ -120,48 +118,48 @@ public class AscModelProvider extends ModelProvider {
         blockModels.createNonTemplateModelBlock(ModBlocks.LIQUIFIED_SPIRITUAL_QI_BLOCK.get());
     }
 
-    private void podHerbModel(BlockModelGenerators blockModels, PodHerbBlock block) {
-        podHerbModel(blockModels, block, block.definition().id().getPath());
-    }
-
     private void podHerbModel(BlockModelGenerators blockModels, PodHerbBlock block, String texturePath) {
-        int stages = PodHerbBlock.MAX_AGE + 1;
-        Identifier[] ageModels = new Identifier[stages];
-        for (int age = 0; age < stages; age++) {
-            ageModels[age] = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/herbs/" + texturePath + "_stage_" + age);
+        int growthStages = block.definition().growthStages();
+        Identifier[] stageModels = new Identifier[growthStages];
+
+        for (int visualStage = 0; visualStage < growthStages; visualStage++) {
+            stageModels[visualStage] = Identifier.fromNamespaceAndPath(
+                    AscensionCraft.MOD_ID,
+                    "block/herbs/" + texturePath + "_stage_" + visualStage
+            );
         }
 
         MultiPartGenerator blockState = MultiPartGenerator.multiPart(block);
 
-        for (int age = 0; age < stages; age++) {
-            MultiVariant base = BlockModelGenerators.plainVariant(ageModels[age]);
+        for (int stage = 0; stage <= PodHerbBlock.MAX_STAGE; stage++) {
+            int visualStage = Math.min(stage, block.definition().maxGrowthStage());
+            MultiVariant base = BlockModelGenerators.plainVariant(stageModels[visualStage]);
 
             blockState.with(
                     BlockModelGenerators.condition()
-                            .term(PodHerbBlock.AGE, age)
+                            .term(PodHerbBlock.STAGE, stage)
                             .term(PodHerbBlock.FACING, Direction.NORTH),
                     base);
             blockState.with(
                     BlockModelGenerators.condition()
-                            .term(PodHerbBlock.AGE, age)
+                            .term(PodHerbBlock.STAGE, stage)
                             .term(PodHerbBlock.FACING, Direction.EAST),
                     base.with(BlockModelGenerators.Y_ROT_90));
             blockState.with(
                     BlockModelGenerators.condition()
-                            .term(PodHerbBlock.AGE, age)
+                            .term(PodHerbBlock.STAGE, stage)
                             .term(PodHerbBlock.FACING, Direction.SOUTH),
-                    base.with(BlockModelGenerators.Y_ROT_90.then(BlockModelGenerators.Y_ROT_90)));
+                    base.with(BlockModelGenerators.Y_ROT_180));
             blockState.with(
                     BlockModelGenerators.condition()
-                            .term(PodHerbBlock.AGE, age)
+                            .term(PodHerbBlock.STAGE, stage)
                             .term(PodHerbBlock.FACING, Direction.WEST),
-                    base.with(BlockModelGenerators.Y_ROT_90.then(BlockModelGenerators.Y_ROT_90).then(BlockModelGenerators.Y_ROT_90)));
+                    base.with(BlockModelGenerators.Y_ROT_270));
         }
 
         blockModels.blockStateOutput.accept(blockState);
 
-        // Inventory icon — same convention as vanilla cocoa using its stage0 model as the item model.
-        blockModels.registerSimpleItemModel(block, ageModels[0]);
+        blockModels.registerSimpleItemModel(block, stageModels[3]);
     }
 
     private void fermentingBarrelModel(BlockModelGenerators blockModels) {
