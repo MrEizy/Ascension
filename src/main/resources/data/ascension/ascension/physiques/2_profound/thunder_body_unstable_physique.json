@@ -10,7 +10,7 @@
     "ascension:foundation/body",
     "ascension:elemental/lightning",
     "ascension:elemental/metal",
-    "ascension:elemental/blade"
+    "ascension:weapon/blade"
   ],
   "skills": [],
   "item_tooltip": {
@@ -21,10 +21,12 @@
   "base_stats": {
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:body": 3,
-    "ascension:lightning": 2.5,
-    "ascension:metal": 1.5,
-    "ascension:blade": 2
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 3,
+      "ascension:elemental/lightning": 2.5,
+      "ascension:elemental/metal": 1.5,
+      "ascension:weapon/blade": 2
+    }
   }
 }

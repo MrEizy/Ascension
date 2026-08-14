@@ -21,19 +21,23 @@
   "base_stats": {
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:soul": 2.5,
-    "ascension:ice": 2,
-    "ascension:yang": 3,
-    "ascension:fist": 1.75
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": 2.5,
+      "ascension:elemental/ice": 2,
+      "ascension:elemental/yang": 3,
+      "ascension:weapon/fist": 1.75
+    }
   },
-  "affinity_modifiers": {
-    "ascension:fist": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:ice_soul_body_flawed_physique_fist_modifier"
-      }
-    ]
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:weapon/fist": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:ice_soul_body_flawed_physique_fist_modifier"
+        }
+      ]
+    }
   }
 }

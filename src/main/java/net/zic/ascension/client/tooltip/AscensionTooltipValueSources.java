@@ -25,6 +25,7 @@ import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.bloodline.purity.condition.OnPurityInRangeCondition;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
 import net.zic.ascension.impl.core.progression.GiveBaseStatsAction;
+import net.zic.ascension.impl.core.progression.GivePathBonusesAction;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
 
 import net.zic.ascension.util.PathInteractionUtil;
@@ -483,24 +484,43 @@ public final class AscensionTooltipValueSources {
 
                 ProgressAction action = actionReference.resolve(access);
 
-                if (!(action instanceof GiveBaseStatsAction statsAction)) {
+                if (action instanceof GiveBaseStatsAction statsAction) {
+                    for (ValueContainer.BaseModifier modifier
+                            : statsAction.baseStats()) {
+
+                        rows.add(
+                                ZenithTooltipValue.row(
+                                        statName(modifier.container()),
+                                        Component.literal(
+                                                signedNumber(modifier.val())
+                                                        + " · "
+                                                        + cadence
+                                        ),
+                                        tone(modifier.val())
+                                )
+                        );
+                    }
                     continue;
                 }
 
-                for (ValueContainer.BaseModifier modifier
-                        : statsAction.baseStats()) {
+                if (action instanceof GivePathBonusesAction pathBonusAction) {
+                    for (PathBonusBase bonus : pathBonusAction.bonuses()) {
+                        Component label = Component.empty()
+                                .append(pathName(bonus.path(), access))
+                                .append(" Affinity");
 
-                    rows.add(
-                            ZenithTooltipValue.row(
-                                    statName(modifier.container()),
-                                    Component.literal(
-                                            signedNumber(modifier.val())
-                                                    + " · "
-                                                    + cadence
-                                    ),
-                                    tone(modifier.val())
-                            )
-                    );
+                        rows.add(
+                                ZenithTooltipValue.row(
+                                        label,
+                                        Component.literal(
+                                                signedNumber(bonus.value())
+                                                        + " · "
+                                                        + cadence
+                                        ),
+                                        tone(bonus.value())
+                                )
+                        );
+                    }
                 }
             }
         }

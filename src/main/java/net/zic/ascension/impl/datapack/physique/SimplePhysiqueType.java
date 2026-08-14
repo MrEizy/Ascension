@@ -41,7 +41,7 @@ public class SimplePhysiqueType extends PhysiqueType {
                         ).optionalFieldOf("base_stats",List.of()).forGetter(SimplePhysique::baseStats),
                         ValueContainerModifier.MAP_CODEC.optionalFieldOf("stat_modifiers", Map.of()).forGetter(SimplePhysique::statModifiers),
                         PathBonusBase.CODEC.optionalFieldOf("base_path_bonuses",List.of()).forGetter(SimplePhysique::basePathBonuses),
-                        PathBonusModifier.CODEC.optionalFieldOf("path_bonuse_modifiers",List.of()).forGetter(SimplePhysique::pathBonusModifiers),
+                        PathBonusModifier.CODEC.optionalFieldOf("path_bonus_modifiers",List.of()).forGetter(SimplePhysique::pathBonusModifiers),
                         AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(SimplePhysique::itemTooltip)
                 ).apply(instance, SimplePhysique::new)
         );

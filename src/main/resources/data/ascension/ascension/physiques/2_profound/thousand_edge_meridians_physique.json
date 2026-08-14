@@ -1,0 +1,69 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.thousand_edge_meridians.name"
+  },
+  "description": {
+    "translate": "ascension.physique.thousand_edge_meridians.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/metal",
+    "ascension:weapon/sword",
+    "ascension:weapon/blade",
+    "ascension:weapon/knife"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:agility": 3.0,
+    "ascension:strength": 2.0
+  },
+  "stat_modifiers": {
+    "ascension:agility": [
+      {
+        "value": 0.15,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:thousand_edge_agility_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": 1.0,
+      "ascension:elemental/metal": 1.5,
+      "ascension:weapon/sword": 2.0,
+      "ascension:weapon/blade": 2.0,
+      "ascension:weapon/knife": 1.25
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:weapon/sword": [
+        {
+          "value": 0.1,
+          "operation": "ADD_BASE",
+          "id": "ascension:thousand_edge_sword_affinity_modifier"
+        }
+      ],
+      "ascension:weapon/blade": [
+        {
+          "value": 0.1,
+          "operation": "ADD_BASE",
+          "id": "ascension:thousand_edge_blade_affinity_modifier"
+        }
+      ],
+      "ascension:weapon/knife": [
+        {
+          "value": 0.1,
+          "operation": "ADD_BASE",
+          "id": "ascension:thousand_edge_knife_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:profound"
+  }
+}

@@ -8,6 +8,7 @@ import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.impl.datapack.progression.action.GiveBaseStatsActionType;
 import net.zic.ascension.impl.datapack.progression.action.GiveSkillsActionType;
+import net.zic.ascension.impl.datapack.progression.action.GivePathBonusesActionType;
 import net.zic.ascension.impl.datapack.progression.action.SetSkillLevelActionType;
 
 public class AscensionProgressActionTypes {
@@ -20,6 +21,11 @@ public class AscensionProgressActionTypes {
             "give_base_stats",
             GiveBaseStatsActionType::new
     );
+    public static final DeferredHolder<ProgressActionType,ProgressActionType> GIVE_PATH_BONUSES_TYPE = PROGRESS_ACTION_TYPES.register(
+            "give_path_bonuses",
+            GivePathBonusesActionType::new
+    );
+
     public static final DeferredHolder<ProgressActionType,ProgressActionType> GIVE_SKILLS_TYPE = PROGRESS_ACTION_TYPES.register(
             "give_skills",
             GiveSkillsActionType::new

@@ -21,26 +21,30 @@
   "base_stats": {
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:body": 3,
-    "ascension:fire": 1,
-    "ascension:metal": 1,
-    "ascension:hammer": 2
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 3,
+      "ascension:elemental/fire": 1,
+      "ascension:elemental/metal": 1,
+      "ascension:weapon/hammer": 2
+    }
   },
-  "affinity_modifiers": {
-    "ascension:hammer": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:heavy_bone_physique_hammer_modifier"
-      }
-    ],
-    "ascension:wind": [
-      {
-        "value": 0.1,
-        "operation": "ADD_BASE",
-        "id": "ascension:heavy_bone_physique_metal_modifier"
-      }
-    ]
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:weapon/hammer": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:heavy_bone_physique_hammer_modifier"
+        }
+      ],
+      "ascension:elemental/wind": [
+        {
+          "value": 0.1,
+          "operation": "ADD_BASE",
+          "id": "ascension:heavy_bone_physique_metal_modifier"
+        }
+      ]
+    }
   }
 }

@@ -11,7 +11,6 @@ import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.core.physique.InfiniteBreakthroughPhysique;
-import net.zic.ascension.impl.core.physique.SimplePhysique;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
@@ -42,7 +41,7 @@ public class InfiniteBreakthroughPhysiqueType extends PhysiqueType {
                         ).optionalFieldOf("base_stats",List.of()).forGetter(InfiniteBreakthroughPhysique::baseStats),
                         ValueContainerModifier.MAP_CODEC.optionalFieldOf("stat_modifiers", Map.of()).forGetter(InfiniteBreakthroughPhysique::statModifiers),
                         PathBonusBase.CODEC.optionalFieldOf("base_path_bonuses",List.of()).forGetter(InfiniteBreakthroughPhysique::basePathBonuses),
-                        PathBonusModifier.CODEC.optionalFieldOf("path_bonuse_modifiers",List.of()).forGetter(InfiniteBreakthroughPhysique::pathBonusModifiers),
+                        PathBonusModifier.CODEC.optionalFieldOf("path_bonus_modifiers",List.of()).forGetter(InfiniteBreakthroughPhysique::pathBonusModifiers),
                         Identifier.CODEC.fieldOf("infinite_path").forGetter(InfiniteBreakthroughPhysique::path),
                         Codec.INT.fieldOf("infinite_realm").forGetter(InfiniteBreakthroughPhysique::infiniteRealm),
                         AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(InfiniteBreakthroughPhysique::itemTooltip)

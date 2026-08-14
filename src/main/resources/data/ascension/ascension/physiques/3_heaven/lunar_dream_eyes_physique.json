@@ -1,0 +1,60 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.lunar_dream_eyes.name"
+  },
+  "description": {
+    "translate": "ascension.physique.lunar_dream_eyes.desc"
+  },
+  "paths": [
+    "ascension:foundation/soul",
+    "ascension:elemental/moon",
+    "ascension:elemental/yin",
+    "ascension:elemental/illusion"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 6.0,
+    "ascension:agility": 2.0
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.25,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:lunar_dream_eyes_spirit_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": 2.0,
+      "ascension:elemental/moon": 3.0,
+      "ascension:elemental/yin": 2.0,
+      "ascension:elemental/illusion": 3.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/moon": [
+        {
+          "value": 0.2,
+          "operation": "ADD_BASE",
+          "id": "ascension:lunar_dream_eyes_moon_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/illusion": [
+        {
+          "value": 0.2,
+          "operation": "ADD_BASE",
+          "id": "ascension:lunar_dream_eyes_illusion_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:heaven"
+  }
+}

@@ -411,6 +411,16 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.sword_bone.name", "Sword Bone");
         add("ascension.physique.sword_bone.desc", "Your bones are forged into blades, letting out a hum as they resonate with your blade");
 
+        //Profound Physiques
+        add("ascension.physique.jade_furnace.name", "Jade Furnace Physique");
+        add("ascension.physique.jade_furnace.desc", "The flesh tempers qi like a living furnace, drawing fire through the body and tempering them like volcanic channels.");
+        add("ascension.physique.thousand_edge_meridians.name", "Thousand Edge Meridians");
+        add("ascension.physique.thousand_edge_meridians.desc", "Meridians branch through the limbs like sharpened blades, carrying metal qi cleanly into swords, sabres, and knives.");
+
+        //Heaven Physiques
+        add("ascension.physique.lunar_dream_eyes.name", "Lunar Dream Eyes");
+        add("ascension.physique.lunar_dream_eyes.desc", "Eyes born beneath an unachievable moon perceive the seam between waking thought and dream.");
+
         //Bloodlines
         add("ascension.bloodline.human.name", "Human");
         add("ascension.bloodline.human.desc", "The most common and adaptable of mortal bloodlines, balanced in body and spirit");
@@ -422,6 +432,12 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.bloodline.scalekin.desc", "Descendants of the deep-water jiao, their skin bears faint scales and their bodies endure where lesser mortals would drown");
         add("ascension.bloodline.frostkin.name", "Frostkin");
         add("ascension.bloodline.frostkin.desc", "Descendants of the tribes that endured the frozen wastes for generations, their blood carries an innate resistance to the cold and a body built to endure");
+        add("ascension.bloodline.verdantblood.name", "Verdantblood");
+        add("ascension.bloodline.verdantblood.desc", "A mortal lineage steeped in old forest qi, whose blood recovers stubbornly and takes to wood cultivation with ease.");
+        add("ascension.bloodline.moonveil_fox.name", "Moonveil Fox Bloodline");
+        add("ascension.bloodline.moonveil_fox.desc", "A spirit-beast lineage carrying the blood of moon foxes.");
+        add("ascension.bloodline.azure_thunder_dragon.name", "Azure Thunder Dragon Bloodline");
+        add("ascension.bloodline.azure_thunder_dragon.desc", "A rare draconic inheritance in which storm and deep water mingle in the blood.");
 
         //Techniques
         add("ascension.technique.mount_hua_sword_manual.name", "Plum Blossom Sword Manual");

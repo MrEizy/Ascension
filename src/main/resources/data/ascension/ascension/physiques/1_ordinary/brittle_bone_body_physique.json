@@ -21,11 +21,6 @@
     "ascension:vitality": 1,
     "ascension:strength": 0.5
   },
-  "base_affinity": {
-    "ascension:soul": 3,
-    "ascension:wood": 1,
-    "ascension:staff": 2
-  },
   "stat_modifiers": {
     "ascension:vitality": [
       {
@@ -35,13 +30,22 @@
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:staff": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:brittle_bone_body_staff_modifier"
-      }
-    ]
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": 3,
+      "ascension:elemental/wood": 1,
+      "ascension:weapon/staff": 2
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:weapon/staff": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:brittle_bone_body_staff_modifier"
+        }
+      ]
+    }
   }
 }
