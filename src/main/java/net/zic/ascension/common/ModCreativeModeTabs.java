@@ -80,6 +80,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.GINSENG);
                         output.accept(ModItems.FIRE_GINSENG);
                         output.accept(ModItems.SNOW_GINSENG);
+                        output.accept(ModItems.NINE_SUN_FIRE_ROOT);
+                        output.accept(ModItems.MOONWELL_JADE_LOTUS);
+                        output.accept(ModItems.HEAVENLY_THUNDER_PEACH);
                         output.accept(ModBlocks.LINGZHI_MUSHROOM_B);
                         output.accept(ModItems.LINGZHI_MUSHROOM);
                         output.accept(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B);

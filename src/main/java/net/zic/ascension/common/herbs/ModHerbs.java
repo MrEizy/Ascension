@@ -1,8 +1,13 @@
 package net.zic.ascension.common.herbs;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluid;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
 
@@ -50,6 +55,155 @@ public final class ModHerbs {
                     )
                     .wildAgeWeights(1000, 180, 24, 3, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(ModBlocks.PEACH_LEAVES.get()))
+                    .build()
+    );
+
+    public static final HerbDefinition NINE_SUN_FIRE_ROOT = register(
+            HerbDefinition.builder(AscensionCraft.prefix("nine_sun_fire_root"))
+                    .growthStages(4)
+                    .baseGrowthChance(0.12F)
+                    .planting(HerbDefinition.PlantingType.DIRECT)
+                    .ageThresholds(
+                            new HerbDefinition.AgeThreshold(1, 24),
+                            new HerbDefinition.AgeThreshold(10, 96),
+                            new HerbDefinition.AgeThreshold(100, 384),
+                            new HerbDefinition.AgeThreshold(500, 1536),
+                            new HerbDefinition.AgeThreshold(1000, 15360),
+                            new HerbDefinition.AgeThreshold(10000, 153600),
+                            new HerbDefinition.AgeThreshold(100000, 1536000),
+                            new HerbDefinition.AgeThreshold(1000000, 0)
+                    )
+                    .wildAgeWeights(1100, 170, 20, 3, 1, 1, 1, 1)
+                    .qualityGrowth(32, 128, 512, 2048)
+                    .wildQualityWeights(15, 900, 180, 20, 2)
+                    .qualityAffinity(AscensionCraft.prefix("elemental/fire"), 6.0D)
+                    .qiCapacity(100.0D, 900.0D)
+                    .availableQiFraction(0.02D, 0.15D)
+                    .atmosphericQiCost(3.0D)
+                    .naturalSupport(state -> state.is(Blocks.SAND) || state.is(Blocks.RED_SAND) || state.is(Blocks.TERRACOTTA))
+                    .spawnRule((level, pos, random) -> pos.getY() >= 62 && level.canSeeSky(pos) && random.nextInt(8) == 0)
+                    .growthModifier((level, pos, state) -> {
+                        boolean nearLava = hasFluidNearby(level, pos, FluidTags.LAVA, 4, 2);
+                        long time = Math.floorMod(level.getGameTime(), 24000L);
+                        boolean day = time < 12000L;
+
+                        double multiplier = day ? 1.25D : 0.45D;
+                        if (nearLava) {
+                            multiplier *= 1.5D;
+                        }
+                        return multiplier;
+                    })
+                    .qualityModifier((level, pos, state, wild) -> {
+                        double multiplier = hasFluidNearby(level, pos, FluidTags.LAVA, 4, 2) ? 1.5D : 0.8D;
+                        if (wild) {
+                            multiplier *= 1.15D;
+                        }
+                        return multiplier;
+                    })
+                    .build()
+    );
+
+    public static final HerbDefinition MOONWELL_JADE_LOTUS = register(
+            HerbDefinition.builder(AscensionCraft.prefix("moonwell_jade_lotus"))
+                    .growthStages(4)
+                    .baseGrowthChance(0.14F)
+                    .planting(HerbDefinition.PlantingType.DIRECT)
+                    .ageThresholds(
+                            new HerbDefinition.AgeThreshold(1, 18),
+                            new HerbDefinition.AgeThreshold(10, 72),
+                            new HerbDefinition.AgeThreshold(100, 288),
+                            new HerbDefinition.AgeThreshold(500, 1152),
+                            new HerbDefinition.AgeThreshold(1000, 11520),
+                            new HerbDefinition.AgeThreshold(10000, 115200),
+                            new HerbDefinition.AgeThreshold(100000, 1152000),
+                            new HerbDefinition.AgeThreshold(1000000, 0)
+                    )
+                    .wildAgeWeights(1000, 210, 35, 6, 2, 1, 1, 1)
+                    .qualityGrowth(18, 72, 288, 1152)
+                    .wildQualityWeights(8, 650, 260, 70, 12)
+                    .qiCapacity(100.0D, 800.0D)
+                    .qiAffinity(AscensionCraft.prefix("elemental/water"), 0.5D, 2.0D)
+                    .qualityAffinity(AscensionCraft.prefix("elemental/water"), 2.0D)
+                    .availableQiFraction(0.02D, 0.12D)
+                    .atmosphericQiCost(2.0D)
+                    .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.MUD) || state.is(Blocks.CLAY))
+                    .spawnRule((level, pos, random) -> level.canSeeSky(pos) && hasFluidNearby(level, pos, FluidTags.WATER, 3, 1) && random.nextInt(5) == 0)
+                    .growthModifier((level, pos, state) -> {
+                        long time = Math.floorMod(level.getGameTime(), 24000L);
+                        boolean night = time >= 13000L && time <= 23000L;
+
+                        double multiplier = night ? 1.65D : 0.55D;
+                        if (level.isRainingAt(pos.above())) {
+                            multiplier *= 1.25D;
+                        }
+                        if (!hasFluidNearby(level, pos, FluidTags.WATER, 3, 1)) {
+                            multiplier *= 0.5D;
+                        }
+                        return multiplier;
+                    })
+                    .qualityModifier((level, pos, state, wild) -> {
+                        long time = Math.floorMod(level.getGameTime(), 24000L);
+                        boolean moonlit = time >= 13000L && time <= 23000L && level.canSeeSky(pos);
+
+                        double multiplier = moonlit ? 1.75D : 0.65D;
+                        if (level.isRainingAt(pos.above())) {
+                            multiplier += 0.25D;
+                        }
+                        if (wild) {
+                            multiplier += 0.25D;
+                        }
+                        return multiplier;
+                    })
+                    .build()
+    );
+
+    public static final HerbDefinition HEAVENLY_THUNDER_PEACH = register(
+            HerbDefinition.builder(AscensionCraft.prefix("heavenly_thunder_peach"))
+                    .growthStages(4)
+                    .baseGrowthChance(0.16F)
+                    .planting(HerbDefinition.PlantingType.NONE)
+                    .ageThresholds(
+                            new HerbDefinition.AgeThreshold(1, 36),
+                            new HerbDefinition.AgeThreshold(10, 144),
+                            new HerbDefinition.AgeThreshold(100, 576),
+                            new HerbDefinition.AgeThreshold(500, 2304),
+                            new HerbDefinition.AgeThreshold(1000, 23040),
+                            new HerbDefinition.AgeThreshold(10000, 230400),
+                            new HerbDefinition.AgeThreshold(100000, 2304000),
+                            new HerbDefinition.AgeThreshold(1000000, 0)
+                    )
+                    .wildAgeWeights(900, 220, 45, 8, 2, 1, 1, 1)
+                    .qualityGrowth(48, 192, 768, 3072)
+                    .wildQualityWeights(10, 700, 220, 60, 10)
+                    .qualityAffinity(AscensionCraft.prefix("elemental/lightning"), 8.0D)
+                    .qiCapacity(250.0D, 1100.0D)
+                    .availableQiFraction(0.05D, 0.35D)
+                    .atmosphericQiCost(8.0D)
+                    .naturalSupport(state -> state.is(ModBlocks.PEACH_LEAVES.get()))
+                    .growthModifier((level, pos, state) -> {
+                        if (level.isThundering()) {
+                            return 3.0D;
+                        }
+                        if (level.isRaining()) {
+                            return 1.0D;
+                        }
+                        return 0.20D;
+                    })
+                    .qualityModifier((level, pos, state, wild) -> {
+                        double multiplier;
+                        if (level.isThundering()) {
+                            multiplier = 3.0D;
+                        } else if (level.isRaining()) {
+                            multiplier = 1.25D;
+                        } else {
+                            multiplier = 0.5D;
+                        }
+
+                        if (wild) {
+                            multiplier *= 1.20D;
+                        }
+                        return multiplier;
+                    })
                     .build()
     );
 
@@ -372,6 +526,19 @@ public final class ModHerbs {
      * The herb consumes 2 raw atmospheric Qi only when a visual-growth, age, or quality
      * advancement roll SUCCEEDS. If the chunk cannot pay the cost, that advancement simply does not happen.
      */
+
+    private static boolean hasFluidNearby(
+            BlockGetter level,
+            BlockPos center,
+            TagKey<Fluid> fluidTag,
+            int horizontalRadius,
+            int verticalRadius
+    ) {
+        return BlockPos.betweenClosedStream(
+                center.offset(-horizontalRadius, -verticalRadius, -horizontalRadius),
+                center.offset(horizontalRadius, verticalRadius, horizontalRadius)
+        ).anyMatch(pos -> level.getFluidState(pos).is(fluidTag));
+    }
 
     private ModHerbs() {
     }

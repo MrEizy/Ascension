@@ -125,6 +125,30 @@ public class ModBlocks {
                     ModHerbs.SNOW_GINSENG,
                     () -> ModItems.SNOW_GINSENG.get()
             ));
+    public static final DeferredBlock<HerbCropBlock> NINE_SUN_FIRE_ROOT_CROP = BLOCKS.registerBlock("nine_sun_fire_root_crop",
+            properties -> new HerbCropBlock(
+                    properties
+                            .strength(0.0f)
+                            .sound(SoundType.GRASS)
+                            .noCollision()
+                            .randomTicks()
+                            .pushReaction(PushReaction.DESTROY),
+                    ModHerbs.NINE_SUN_FIRE_ROOT,
+                    () -> ModItems.NINE_SUN_FIRE_ROOT.get()
+            ));
+
+    public static final DeferredBlock<HerbCropBlock> MOONWELL_JADE_LOTUS_CROP = BLOCKS.registerBlock("moonwell_jade_lotus_crop",
+            properties -> new HerbCropBlock(
+                    properties
+                            .strength(0.0f)
+                            .sound(SoundType.GRASS)
+                            .noCollision()
+                            .randomTicks()
+                            .pushReaction(PushReaction.DESTROY),
+                    ModHerbs.MOONWELL_JADE_LOTUS,
+                    () -> ModItems.MOONWELL_JADE_LOTUS.get()
+            ));
+
     public static final DeferredBlock<HerbCropBlock> WHITE_JADE_ORCHID_CROP = BLOCKS.registerBlock("white_jade_orchid_crop",
             properties -> new HerbStemCropBlock(
                     properties
@@ -169,6 +193,18 @@ public class ModBlocks {
                     .mapColor(MapColor.PLANT),
                     ModHerbs.PEACH,
                     () -> ModItems.PEACH.get()));
+
+
+    public static final DeferredBlock<PodHerbBlock> HEAVENLY_THUNDER_PEACH_POD = registerBlock("heavenly_thunder_peach_pod",
+            properties -> new PodHerbBlock(properties
+                    .strength(0.2f, 3.0f)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()
+                    .randomTicks()
+                    .pushReaction(PushReaction.DESTROY)
+                    .mapColor(MapColor.PLANT),
+                    ModHerbs.HEAVENLY_THUNDER_PEACH,
+                    () -> ModItems.HEAVENLY_THUNDER_PEACH.get()));
 
 
     //Trees

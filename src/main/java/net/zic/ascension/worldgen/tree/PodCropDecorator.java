@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.zic.ascension.common.blocks.ModBlocks;
+import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.worldgen.AscTreeDecoratorTypes;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ import java.util.Random;
  * horizontal side of the leaf — FACING is set toward the leaf so the model rotates to match.
  */
 public class PodCropDecorator extends TreeDecorator {
+
+    private static final int HEAVENLY_THUNDER_MIN_Y = 90;
+    private static final int HEAVENLY_THUNDER_CHANCE = 16;
 
     public static final MapCodec<PodCropDecorator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.floatRange(0f, 1f).fieldOf("probability").forGetter(d -> d.probability)
@@ -62,7 +66,10 @@ public class PodCropDecorator extends TreeDecorator {
                     continue;
                 }
 
-                BlockState state = ModBlocks.PEACH_POD.get().wildState(dir.getOpposite(), random);
+                boolean heavenlyThunder = leafPos.getY() >= HEAVENLY_THUNDER_MIN_Y && random.nextInt(HEAVENLY_THUNDER_CHANCE) == 0;
+                PodHerbBlock pod = heavenlyThunder ? ModBlocks.HEAVENLY_THUNDER_PEACH_POD.get() : ModBlocks.PEACH_POD.get();
+
+                BlockState state = pod.wildState(dir.getOpposite(), random);
 
                 if (state.canSurvive(context.level(), podPos)) {
                     context.setBlock(podPos, state);

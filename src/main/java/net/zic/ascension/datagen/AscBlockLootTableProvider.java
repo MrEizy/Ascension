@@ -83,6 +83,18 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
                 1, 1,
                 0.25F
         ));
+        add(ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get(), createDirectHerbDrops(
+                ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get(),
+                ModItems.NINE_SUN_FIRE_ROOT.get(),
+                1, 1,
+                0.15F
+        ));
+        add(ModBlocks.MOONWELL_JADE_LOTUS_CROP.get(), createDirectHerbDrops(
+                ModBlocks.MOONWELL_JADE_LOTUS_CROP.get(),
+                ModItems.MOONWELL_JADE_LOTUS.get(),
+                1, 1,
+                0.10F
+        ));
         add(ModBlocks.WHITE_JADE_ORCHID_CROP.get(), createDirectHerbDrops(
                 ModBlocks.WHITE_JADE_ORCHID_CROP.get(),
                 ModItems.WHITE_JADE_ORCHID.get(),
@@ -96,6 +108,9 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
                 createSingleItemTableWithSilkTouch(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get(), ModItems.BLOOD_LINGZHI_MUSHROOM.get()));
 
         add(ModBlocks.PEACH_POD.get(), createPodHerbDrops(ModBlocks.PEACH_POD.get(), 1, 3));
+
+        add(ModBlocks.HEAVENLY_THUNDER_PEACH_POD.get(),
+                createPodHerbDrops(ModBlocks.HEAVENLY_THUNDER_PEACH_POD.get(), 1, 2));
 
 
 

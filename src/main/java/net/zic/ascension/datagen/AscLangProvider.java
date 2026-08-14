@@ -96,6 +96,9 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.ginseng", "Ginseng");
         add("item.ascension.fire_ginseng", "Fire Ginseng");
         add("item.ascension.snow_ginseng", "Snow Ginseng");
+        add("item.ascension.nine_sun_fire_root", "Nine-Sun Fire Root");
+        add("item.ascension.moonwell_jade_lotus", "Moonwell Jade Lotus");
+        add("item.ascension.heavenly_thunder_peach", "Heavenly Thunder Peach");
         add("item.ascension.lingzhi_mushroom", "Lingzhi");
         add("item.ascension.blood_lingzhi_mushroom", "Blood Lingzhi");
         add("item.ascension.white_jade_orchid", "White Jade Orchid");
@@ -128,6 +131,9 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.herb.ginseng.description", "A medicinal root prized for the strength it gathers with age.");
         add("ascension.herb.fire_ginseng.description", "A blazing ginseng root that carries a distinct fiery nature.");
         add("ascension.herb.snow_ginseng.description", "A frozen ginseng root adapted to cold and snowy lands.");
+        add("ascension.herb.nine_sun_fire_root.description", "A sun-fed root that thrives in scorching lands and holds heat within its flesh.");
+        add("ascension.herb.moonwell_jade_lotus.description", "A pale jade lotus nourished by water Qi, rain, and the cold radiance of the night sky.");
+        add("ascension.herb.heavenly_thunder_peach.description", "A rare peach whose flesh ripens slowly until storms and thunder drive its spiritual nature awake.");
         add("ascension.herb.lingzhi_mushroom.description", "A medicinal fungus that grows from old wood.");
         add("ascension.herb.blood_lingzhi_mushroom.description", "A crimson Lingzhi that devoured the blood from dead Ghast rending it nothing but bones.");
         add("ascension.herb.peach.description", "W.I.P");
@@ -169,6 +175,9 @@ public class AscLangProvider extends LanguageProvider {
         add("block.ascension.ginseng_crop", "Ginseng");
         add("block.ascension.fire_ginseng_crop", "Fire Ginseng");
         add("block.ascension.snow_ginseng_crop", "Snow Ginseng");
+        add("block.ascension.nine_sun_fire_root_crop", "Nine-Sun Fire Root");
+        add("block.ascension.moonwell_jade_lotus_crop", "Moonwell Jade Lotus");
+        add("block.ascension.heavenly_thunder_peach_pod", "Heavenly Thunder Peach Pod");
         add("block.ascension.lingzhi_mushroom_b", "Lingzhi Mushroom");
         add("block.ascension.blood_lingzhi_mushroom_b", "Blood Lingzhi Mushroom");
         add("block.ascension.peach_pod", "Peach Pod");

@@ -1,6 +1,10 @@
 {
   "type": "neoforge:add_features",
-  "biomes": "minecraft:plains",
+  "biomes": [
+    "minecraft:plains",
+    "minecraft:meadow",
+    "minecraft:windswept_hills"
+  ],
   "features": "ascension:peach_tree_placed",
   "step": "vegetal_decoration"
 }

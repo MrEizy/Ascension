@@ -14,11 +14,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.trunkplacers.BendingTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
@@ -48,6 +45,8 @@ public class AscConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> FIRE_GINSENG = registerKey("fire_ginseng");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SNOW_GINSENG = registerKey("snow_ginseng");
     public static final ResourceKey<ConfiguredFeature<?, ?>> WHITE_JADE_ORCHID = registerKey("white_jade_orchid");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> NINE_SUN_FIRE_ROOT = registerKey("nine_sun_fire_root");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MOONWELL_JADE_LOTUS = registerKey("moonwell_jade_lotus");
     public static final ResourceKey<ConfiguredFeature<?, ?>> LINGZHI_MUSHROOM = registerKey("lingzhi_mushroom");
     public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOD_LINGZHI_MUSHROOM = registerKey("blood_lingzhi_mushroom");
 
@@ -107,6 +106,10 @@ public class AscConfiguredFeatures {
                 new HerbFeature.Configuration(ModBlocks.SNOW_GINSENG_CROP.get(), 4, 3));
         register(context, WHITE_JADE_ORCHID, AscFeatures.HERB.get(),
                 new HerbFeature.Configuration(ModBlocks.WHITE_JADE_ORCHID_CROP.get(), 4, 3));
+        register(context, NINE_SUN_FIRE_ROOT, AscFeatures.HERB.get(),
+                new HerbFeature.Configuration(ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get(), 5, 4));
+        register(context, MOONWELL_JADE_LOTUS, AscFeatures.HERB.get(),
+                new HerbFeature.Configuration(ModBlocks.MOONWELL_JADE_LOTUS_CROP.get(), 5, 4));
 
         register(context, LINGZHI_MUSHROOM, AscFeatures.LINGZHI_MUSHROOM.get(),
                 new LingzhiMushroomConfiguration(ModBlocks.LINGZHI_MUSHROOM_B.get(), blocks.getOrThrow(BlockTags.LOGS)));

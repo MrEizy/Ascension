@@ -35,6 +35,8 @@ public class AscPlacedFeatures {
     public static final ResourceKey<PlacedFeature> FIRE_GINSENG_PLACED_KEY = registerKey("fire_ginseng_placed");
     public static final ResourceKey<PlacedFeature> SNOW_GINSENG_PLACED_KEY = registerKey("snow_ginseng_placed");
     public static final ResourceKey<PlacedFeature> WHITE_JADE_ORCHID_PLACED_KEY = registerKey("white_jade_orchid_placed");
+    public static final ResourceKey<PlacedFeature> NINE_SUN_FIRE_ROOT_PLACED_KEY = registerKey("nine_sun_fire_root_placed");
+    public static final ResourceKey<PlacedFeature> MOONWELL_JADE_LOTUS_PLACED_KEY = registerKey("moonwell_jade_lotus_placed");
     public static final ResourceKey<PlacedFeature> LINGZHI_MUSHROOM_PLACED_KEY = registerKey("lingzhi_mushroom_placed");
     public static final ResourceKey<PlacedFeature> BLOOD_LINGZHI_MUSHROOM_PLACED_KEY = registerKey("blood_lingzhi_mushroom_placed");
 
@@ -109,6 +111,22 @@ public class AscPlacedFeatures {
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.WHITE_JADE_ORCHID),
                 List.of(
                         CountPlacement.of(6),
+                        InSquarePlacement.spread(),
+                        BiomeFilter.biome()
+                ));
+
+        register(context, NINE_SUN_FIRE_ROOT_PLACED_KEY,
+                configuredFeatures.getOrThrow(AscConfiguredFeatures.NINE_SUN_FIRE_ROOT),
+                List.of(
+                        CountPlacement.of(8),
+                        InSquarePlacement.spread(),
+                        BiomeFilter.biome()
+                ));
+
+        register(context, MOONWELL_JADE_LOTUS_PLACED_KEY,
+                configuredFeatures.getOrThrow(AscConfiguredFeatures.MOONWELL_JADE_LOTUS),
+                List.of(
+                        CountPlacement.of(8),
                         InSquarePlacement.spread(),
                         BiomeFilter.biome()
                 ));

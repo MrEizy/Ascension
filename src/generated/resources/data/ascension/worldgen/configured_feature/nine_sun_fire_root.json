@@ -1,0 +1,8 @@
+{
+  "type": "ascension:herb",
+  "config": {
+    "herb_block": "ascension:nine_sun_fire_root_crop",
+    "spread": 4,
+    "tries": 5
+  }
+}

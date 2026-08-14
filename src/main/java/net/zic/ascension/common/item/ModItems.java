@@ -102,6 +102,10 @@ public class ModItems {
             properties -> new HerbItem(properties.food(AscFoodProperties.GINSENG), ModHerbs.FIRE_GINSENG, () -> ModBlocks.FIRE_GINSENG_CROP.get()));
     public static final DeferredItem<Item> SNOW_GINSENG = ITEMS.registerItem("snow_ginseng",
             properties -> new HerbItem(properties.food(AscFoodProperties.GINSENG), ModHerbs.SNOW_GINSENG, () -> ModBlocks.SNOW_GINSENG_CROP.get()));
+    public static final DeferredItem<Item> NINE_SUN_FIRE_ROOT = ITEMS.registerItem("nine_sun_fire_root",
+            properties -> new HerbItem(properties.food(AscFoodProperties.GINSENG), ModHerbs.NINE_SUN_FIRE_ROOT, () -> ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get()));
+    public static final DeferredItem<Item> MOONWELL_JADE_LOTUS = ITEMS.registerItem("moonwell_jade_lotus",
+            properties -> new HerbItem(properties.food(AscFoodProperties.ORCHID), ModHerbs.MOONWELL_JADE_LOTUS, () -> ModBlocks.MOONWELL_JADE_LOTUS_CROP.get()));
     public static final DeferredItem<Item> WHITE_JADE_ORCHID = ITEMS.registerItem("white_jade_orchid",
             properties -> new HerbItem(properties.food(AscFoodProperties.ORCHID), ModHerbs.WHITE_JADE_ORCHID, () -> ModBlocks.WHITE_JADE_ORCHID_CROP.get()));
 
@@ -112,6 +116,9 @@ public class ModItems {
             properties -> new HerbItem(properties.food(AscFoodProperties.MUSHROOM), ModHerbs.BLOOD_LINGZHI_MUSHROOM));
     public static final DeferredItem<Item> PEACH = ITEMS.registerItem("peach",
             properties -> new HerbItem(properties.food(AscFoodProperties.PEACH), ModHerbs.PEACH));
+
+    public static final DeferredItem<Item> HEAVENLY_THUNDER_PEACH = ITEMS.registerItem("heavenly_thunder_peach",
+            properties -> new HerbItem(properties.food(AscFoodProperties.PEACH), ModHerbs.HEAVENLY_THUNDER_PEACH));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

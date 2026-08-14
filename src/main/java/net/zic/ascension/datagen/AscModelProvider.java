@@ -54,6 +54,9 @@ public class AscModelProvider extends ModelProvider {
         herbItemModel(itemModels, ModItems.GINSENG.get(), "ginseng");
         herbItemModel(itemModels, ModItems.FIRE_GINSENG.get(), "fire_ginseng");
         herbItemModel(itemModels, ModItems.SNOW_GINSENG.get(), "snow_ginseng");
+        herbItemModel(itemModels, ModItems.NINE_SUN_FIRE_ROOT.get());
+        herbItemModel(itemModels, ModItems.MOONWELL_JADE_LOTUS.get());
+        herbItemModel(itemModels, ModItems.HEAVENLY_THUNDER_PEACH.get());
         herbItemModel(itemModels, ModItems.LINGZHI_MUSHROOM.get());
         herbItemModel(itemModels, ModItems.BLOOD_LINGZHI_MUSHROOM.get());
         herbItemModel(itemModels, ModItems.WHITE_JADE_ORCHID.get());
@@ -68,8 +71,11 @@ public class AscModelProvider extends ModelProvider {
         herbCropModel(blockModels, ModBlocks.GINSENG_CROP.get(), "ginseng");
         herbCropModel(blockModels, ModBlocks.FIRE_GINSENG_CROP.get(), "hundred_year_fire_ginseng");
         herbCropModel(blockModels, ModBlocks.SNOW_GINSENG_CROP.get(), "hundred_year_snow_ginseng");
+        herbCropModel(blockModels, ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get());
+        herbCropModel(blockModels, ModBlocks.MOONWELL_JADE_LOTUS_CROP.get());
         herbCropModel(blockModels, ModBlocks.WHITE_JADE_ORCHID_CROP.get(), "white_jade_orchid");
         podHerbModel(blockModels, ModBlocks.PEACH_POD.get(), "peach");
+        podHerbModel(blockModels, ModBlocks.HEAVENLY_THUNDER_PEACH_POD.get(), "heavenly_thunder_peach");
 
 
         //Ore Models
@@ -223,9 +229,9 @@ public class AscModelProvider extends ModelProvider {
                     AscensionCraft.MOD_ID,
                     "block/herbs/" + texturePath + "_stage" + visualStage
             ));
-            stageModels[visualStage] = ModelTemplates.CROSS.create(
+            stageModels[visualStage] = ModelTemplates.CROP.create(
                     model,
-                    TextureMapping.cross(texture),
+                    TextureMapping.crop(texture),
                     blockModels.modelOutput
             );
         }
