@@ -1,0 +1,44 @@
+{
+  "values": {
+    "minecraft:zombie": {
+      "tiers": {
+        "normal": 90,
+        "elite": 9,
+        "ancient": 1
+      },
+      "traits": {
+        "normal": [
+          {
+            "trait": {
+              "type": "ascension:simple_trait",
+              "name": "Basic",
+              "paths": {
+                "ascension:essence": [
+                  {
+                    "major_realm": 0,
+                    "min_realm":0,
+                    "max_realm": 9,
+                    "weight": 20
+                  },
+                  {
+                    "major_realm": 1,
+                    "min_realm":0,
+                    "max_realm": 9,
+                    "weight": 10
+                  },
+                  {
+                    "major_realm": 1,
+                    "min_realm":0,
+                    "max_realm": 9,
+                    "weight": 1
+                  }
+                ]
+              }
+            },
+            "chance": 1.0
+          }
+        ]
+      }
+    }
+  }
+}

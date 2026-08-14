@@ -27,6 +27,7 @@ import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.AscensionAttributes;
+import net.zic.ascension.configuration.mob_traits.traits.AscensionTraitTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 import net.zic.ascension.network.*;
 import net.zic.ascension.impl.core.entity.AscensionStats;
@@ -130,6 +131,8 @@ public class AscensionCraft {
 
         AscensionAttributes.register(modEventBus);
 
+
+        AscensionTraitTypes.register(modEventBus);
     }
 
     public AscensionCraft(IEventBus modEventBus, ModContainer modContainer) {

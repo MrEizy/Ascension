@@ -1,4 +1,4 @@
-package net.zic.ascension.configuration.mobs.cultivation;
+package net.zic.ascension.configuration.mob_traits.traits.cultivation_traits;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
