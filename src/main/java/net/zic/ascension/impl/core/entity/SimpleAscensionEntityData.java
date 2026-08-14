@@ -48,6 +48,8 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private final OriginSource source;
     private final LivingEntity attachedEntity;
 
+    private float cachedHealth;
+
     private boolean fullPatch;
     private OriginSourcePatch patch;
 
@@ -66,6 +68,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
         this.source = source;
         this.attachedEntity = entity;
+        this.cachedHealth = Math.max(0.0F, entity.getHealth());
         this.source.setRegistryAccess(entity.registryAccess());
     }
     public void startProcess(String process){
@@ -207,8 +210,15 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
     @Override
     public void initialize() {
-        float healthBeforeInitialization = attachedEntity.getHealth();
+        initializeInternal(false);
+    }
 
+    @Override
+    public void initializeAfterRespawn() {
+        initializeInternal(true);
+    }
+
+    private void initializeInternal(boolean fullHealth) {
         AscensionEntityData.super.initialize();
         ZenithAttributeHolder attributeHolder = attachedEntity.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
         ZenithStatHolder statHolder = attachedEntity.getData(ZenithAttachments.STAT_HOLDER);
@@ -223,8 +233,9 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         statHolder.resolveProcess("initialize_on_entity");
         attributeHolder.resolveProcess("initialize_on_entity");
 
-        attachedEntity.setHealth(Math.min(healthBeforeInitialization, attachedEntity.getMaxHealth()));
-
+        float restoredHealth = fullHealth ? attachedEntity.getMaxHealth() : Math.min(cachedHealth, attachedEntity.getMaxHealth());
+        attachedEntity.setHealth(Math.max(0.0F, restoredHealth));
+        cachedHealth = attachedEntity.getHealth();
     }
 
 
@@ -616,6 +627,8 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
 
             SimpleAscensionEntityData data = new SimpleAscensionEntityData(originSource, entity);
+            float savedHealth = input.getFloatOr("cached_health", entity.getHealth());
+            data.cachedHealth = Float.isFinite(savedHealth) ? Math.max(0.0F, savedHealth) : Math.max(0.0F, entity.getHealth());
 
             data.setCultivationSuppressed(
                     input.getBooleanOr("cultivation_suppressed", false)
@@ -640,6 +653,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         @Override
         public boolean write(SimpleAscensionEntityData attachment, ValueOutput output) {
             attachment.source.writeOriginSourceData(output.child("source_data"));
+            output.putFloat("cached_health", Math.max(0.0F, attachment.getEntity().getHealth()));
             output.putBoolean(
                     "cultivation_suppressed",
                     attachment.isCultivationSuppressed()

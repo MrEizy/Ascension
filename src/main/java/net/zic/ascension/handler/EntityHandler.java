@@ -1,7 +1,6 @@
 package net.zic.ascension.handler;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -42,7 +41,7 @@ public class EntityHandler {
         AscensionEntityDataProvider holder = event.getEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if(holder == null) return;
 
-        holder.getData().initialize();
+        holder.getData().initializeAfterRespawn();
         if (event.getEntity() instanceof ServerPlayer player) {
             StarterSelectionManager.openIfIncomplete(player);
         }

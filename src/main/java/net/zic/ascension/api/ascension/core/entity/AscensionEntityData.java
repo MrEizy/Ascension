@@ -2,7 +2,6 @@ package net.zic.ascension.api.ascension.core.entity;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
-import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -33,6 +32,9 @@ public interface AscensionEntityData extends StatProvider, PathBonusProvider {
     default void initialize(){
         registerProviders();
     };
+    default void initializeAfterRespawn() {
+        initialize();
+    }
 
     void addBonus(Identifier category,Identifier path,double val);
     void addBonusModifier(Identifier category, Identifier path, ValueContainerModifier modifier);
