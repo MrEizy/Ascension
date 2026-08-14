@@ -36,6 +36,11 @@ import java.util.function.Supplier;
 
 public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
     public static final IntegerProperty AGE_TIER = IntegerProperty.create("age_tier", 0, HerbDefinition.MAX_AGE_TIERS - 1);
+    public static final IntegerProperty QUALITY = IntegerProperty.create(
+            "quality",
+            0,
+            HerbDefinition.Quality.values().length - 1
+    );
     public static final BooleanProperty WILD = BooleanProperty.create("wild");
 
     private static final VoxelShape NORTH_SHAPE = Shapes.or(
@@ -55,6 +60,7 @@ public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(AGE_TIER, 0)
+                .setValue(QUALITY, definition.cultivatedQuality().ordinal())
                 .setValue(WILD, false));
     }
 
@@ -70,9 +76,18 @@ public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
         return Mth.clamp(state.getValue(AGE_TIER), 0, definition.maxAgeTier());
     }
 
+    public int qualityTier(BlockState state) {
+        return Mth.clamp(state.getValue(QUALITY), 0, HerbDefinition.Quality.values().length - 1);
+    }
+
     public BlockState wildState(int ageTier) {
+        return wildState(ageTier, HerbDefinition.Quality.COMMON.ordinal());
+    }
+
+    public BlockState wildState(int ageTier, int qualityTier) {
         return defaultBlockState()
                 .setValue(AGE_TIER, Mth.clamp(ageTier, 0, definition.maxAgeTier()))
+                .setValue(QUALITY, Mth.clamp(qualityTier, 0, definition.qualityCap().ordinal()))
                 .setValue(WILD, true);
     }
 
@@ -83,7 +98,7 @@ public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, AGE_TIER, WILD);
+        builder.add(FACING, AGE_TIER, QUALITY, WILD);
     }
 
     @Override
@@ -117,19 +132,14 @@ public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
+    protected boolean isRandomlyTicking(BlockState state) {
+        return ageTier(state) < definition.maxAgeTier() || definition.canQualityAdvance(qualityTier(state));
+    }
+
+    @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!canSurvive(state, level, pos)) {
             level.destroyBlock(pos, true);
-            return;
-        }
-
-        int ageTier = ageTier(state);
-        if (ageTier >= definition.maxAgeTier()) {
-            return;
-        }
-
-        HerbDefinition.AgeThreshold threshold = definition.ageThreshold(ageTier);
-        if (!threshold.canAdvance()) {
             return;
         }
 
@@ -138,9 +148,38 @@ public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
             return;
         }
 
-        double chance = Math.min(1.0D, environmentMultiplier / threshold.averageRandomTicksToNext());
-        if (random.nextDouble() < chance) {
-            level.setBlock(pos, state.setValue(AGE_TIER, ageTier + 1), 2);
+        BlockState nextState = state;
+        boolean changed = false;
+
+        int ageTier = ageTier(state);
+        if (ageTier < definition.maxAgeTier()) {
+            HerbDefinition.AgeThreshold threshold = definition.ageThreshold(ageTier);
+            if (threshold.canAdvance()) {
+                double chance = Math.min(1.0D, environmentMultiplier / threshold.averageRandomTicksToNext());
+                if (random.nextDouble() < chance && definition.tryConsumeProgressQi(level, pos)) {
+                    nextState = nextState.setValue(AGE_TIER, ageTier + 1);
+                    changed = true;
+                }
+            }
+        }
+
+        int qualityTier = qualityTier(state);
+        double qualityChance = definition.qualityAdvanceChance(
+                level,
+                pos,
+                nextState,
+                state.getValue(WILD),
+                qualityTier
+        );
+        if (qualityChance > 0.0D
+                && random.nextDouble() < qualityChance
+                && definition.tryConsumeProgressQi(level, pos)) {
+            nextState = nextState.setValue(QUALITY, qualityTier + 1);
+            changed = true;
+        }
+
+        if (changed) {
+            level.setBlock(pos, nextState, 2);
         }
     }
 
@@ -167,9 +206,16 @@ public class LingzhiMushroomBlock extends HorizontalDirectionalBlock {
 
         boolean wild = state.getValue(WILD);
         int ageTier = ageTier(state);
+        HerbDefinition.Quality grownQuality = HerbDefinition.Quality.byTier(qualityTier(state));
         Vec3 origin = params.getOptionalParameter(LootContextParams.ORIGIN);
         BlockPos pos = origin == null ? BlockPos.ZERO : BlockPos.containing(origin);
-        HerbDefinition.Quality quality = definition.resolveQuality(params.getLevel(), pos, state, wild);
+        HerbDefinition.Quality quality = definition.resolveQuality(
+                params.getLevel(),
+                pos,
+                state,
+                wild,
+                grownQuality
+        );
 
         for (ItemStack drop : drops) {
             if (drop.getItem() == harvestItem.get()) {

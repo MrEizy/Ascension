@@ -53,7 +53,8 @@ public class HerbFeature extends Feature<HerbFeature.Configuration> {
             }
 
             int ageTier = definition.chooseWildAgeTier(random);
-            BlockState state = herbBlock.matureState(true, ageTier);
+            int qualityTier = definition.chooseWildQualityTier(random);
+            BlockState state = herbBlock.matureState(true, ageTier, qualityTier);
             if (!state.canSurvive(level, pos)) {
                 continue;
             }

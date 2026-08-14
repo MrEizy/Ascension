@@ -53,6 +53,11 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
 
     public static final int MAX_STAGE = HerbDefinition.MAX_GROWTH_STAGES + HerbDefinition.MAX_AGE_TIERS - 2;
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, MAX_STAGE);
+    public static final IntegerProperty QUALITY = IntegerProperty.create(
+            "quality",
+            0,
+            HerbDefinition.Quality.values().length - 1
+    );
     public static final BooleanProperty WILD = BooleanProperty.create("wild");
 
     private static final VoxelShape[] NORTH_SHAPE_BY_GROWTH_STAGE = new VoxelShape[]{
@@ -83,6 +88,7 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
         registerDefaultState(stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(STAGE, 0)
+                .setValue(QUALITY, definition.cultivatedQuality().ordinal())
                 .setValue(WILD, false));
     }
 
@@ -102,6 +108,10 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
         return Mth.clamp(state.getValue(STAGE) - definition.maxGrowthStage(), 0, definition.maxAgeTier());
     }
 
+    public int qualityTier(BlockState state) {
+        return Mth.clamp(state.getValue(QUALITY), 0, HerbDefinition.Quality.values().length - 1);
+    }
+
     public boolean isMature(BlockState state) {
         return state.getValue(STAGE) >= definition.maxGrowthStage();
     }
@@ -112,9 +122,11 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
 
     public BlockState wildState(Direction supportDirection, RandomSource random) {
         int ageTier = definition.chooseWildAgeTier(random);
+        int qualityTier = definition.chooseWildQualityTier(random);
         return defaultBlockState()
                 .setValue(FACING, supportDirection)
                 .setValue(STAGE, definition.maxGrowthStage() + ageTier)
+                .setValue(QUALITY, Mth.clamp(qualityTier, 0, definition.qualityCap().ordinal()))
                 .setValue(WILD, true);
     }
 
@@ -125,7 +137,7 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, STAGE, WILD);
+        builder.add(FACING, STAGE, QUALITY, WILD);
     }
 
     @Override
@@ -133,8 +145,6 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
         int visualStage = Math.min(growthStage(state), NORTH_SHAPE_BY_GROWTH_STAGE.length - 1);
         return SHAPES_BY_FACING.get(state.getValue(FACING))[visualStage];
     }
-
-    // --- Placement ---
 
     @Nullable
     @Override
@@ -149,6 +159,7 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
                 return defaultBlockState()
                         .setValue(FACING, supportDirection)
                         .setValue(STAGE, 0)
+                        .setValue(QUALITY, definition.cultivatedQuality().ordinal())
                         .setValue(WILD, false);
             }
         }
@@ -158,6 +169,7 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
                 return defaultBlockState()
                         .setValue(FACING, direction)
                         .setValue(STAGE, 0)
+                        .setValue(QUALITY, definition.cultivatedQuality().ordinal())
                         .setValue(WILD, false);
             }
         }
@@ -190,11 +202,9 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
         return super.updateShape(state, level, tickAccess, pos, direction, neighborPos, neighborState, random);
     }
 
-    // --- Visual growth, then herb aging ---
-
     @Override
     protected boolean isRandomlyTicking(BlockState state) {
-        return state.getValue(STAGE) < maxStage();
+        return state.getValue(STAGE) < maxStage() || definition.canQualityAdvance(qualityTier(state));
     }
 
     @Override
@@ -210,32 +220,48 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
         }
 
         int stage = state.getValue(STAGE);
-
         if (stage < definition.maxGrowthStage()) {
             double chance = Math.min(1.0D, definition.baseGrowthChance() * environmentMultiplier);
-            if (random.nextDouble() < chance) {
+            if (random.nextDouble() < chance && definition.tryConsumeProgressQi(level, pos)) {
                 level.setBlock(pos, state.setValue(STAGE, stage + 1), 2);
             }
             return;
         }
 
+        BlockState nextState = state;
+        boolean changed = false;
+
         int ageTier = ageTier(state);
-        if (ageTier >= definition.maxAgeTier()) {
-            return;
+        if (ageTier < definition.maxAgeTier()) {
+            HerbDefinition.AgeThreshold threshold = definition.ageThreshold(ageTier);
+            if (threshold.canAdvance()) {
+                double chance = Math.min(1.0D, environmentMultiplier / threshold.averageRandomTicksToNext());
+                if (random.nextDouble() < chance && definition.tryConsumeProgressQi(level, pos)) {
+                    nextState = nextState.setValue(STAGE, stage + 1);
+                    changed = true;
+                }
+            }
         }
 
-        HerbDefinition.AgeThreshold threshold = definition.ageThreshold(ageTier);
-        if (!threshold.canAdvance()) {
-            return;
+        int qualityTier = qualityTier(state);
+        double qualityChance = definition.qualityAdvanceChance(
+                level,
+                pos,
+                nextState,
+                state.getValue(WILD),
+                qualityTier
+        );
+        if (qualityChance > 0.0D
+                && random.nextDouble() < qualityChance
+                && definition.tryConsumeProgressQi(level, pos)) {
+            nextState = nextState.setValue(QUALITY, qualityTier + 1);
+            changed = true;
         }
 
-        double chance = Math.min(1.0D, environmentMultiplier / threshold.averageRandomTicksToNext());
-        if (random.nextDouble() < chance) {
-            level.setBlock(pos, state.setValue(STAGE, stage + 1), 2);
+        if (changed) {
+            level.setBlock(pos, nextState, 2);
         }
     }
-
-    // --- Right-click harvest then regrow from visual stage 0 ---
 
     @Override
     protected InteractionResult useItemOn(
@@ -273,7 +299,16 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
                 popResource(level, pos, drop);
             }
 
-            level.setBlock(pos, state.setValue(STAGE, 0), 2);
+            int resetQuality = state.getValue(WILD)
+                    ? definition.chooseWildQualityTier(level.getRandom())
+                    : definition.cultivatedQuality().ordinal();
+
+            level.setBlock(
+                    pos,
+                    state.setValue(STAGE, 0)
+                            .setValue(QUALITY, Mth.clamp(resetQuality, 0, definition.qualityCap().ordinal())),
+                    2
+            );
             level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
             level.playSound(
                     null,
@@ -297,9 +332,16 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
 
         boolean wild = state.getValue(WILD);
         int ageTier = ageTier(state);
+        HerbDefinition.Quality grownQuality = HerbDefinition.Quality.byTier(qualityTier(state));
         Vec3 origin = params.getOptionalParameter(LootContextParams.ORIGIN);
         BlockPos pos = origin == null ? BlockPos.ZERO : BlockPos.containing(origin);
-        HerbDefinition.Quality quality = definition.resolveQuality(params.getLevel(), pos, state, wild);
+        HerbDefinition.Quality quality = definition.resolveQuality(
+                params.getLevel(),
+                pos,
+                state,
+                wild,
+                grownQuality
+        );
 
         AscensionComponents.HerbData herbData = new AscensionComponents.HerbData(
                 ageTier,
@@ -315,8 +357,6 @@ public class PodHerbBlock extends HorizontalDirectionalBlock {
 
         return drops;
     }
-
-    // --- Shape rotation ---
 
     private static Map<Direction, VoxelShape[]> buildShapes() {
         Map<Direction, VoxelShape[]> map = new EnumMap<>(Direction.class);

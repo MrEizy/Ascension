@@ -31,6 +31,9 @@ public final class HerbDefinition {
     public static final int MAX_GROWTH_STAGES = 16;
     public static final int MAX_AGE_TIERS = 16;
 
+    private static final int[] DEFAULT_QUALITY_GROWTH_TICKS = {24, 96, 384, 1536};
+    private static final int[] DEFAULT_WILD_QUALITY_WEIGHTS = {0, 1, 0, 0, 0};
+
     private final Identifier id;
     private final int growthStages;
     private final float baseGrowthChance;
@@ -41,7 +44,16 @@ public final class HerbDefinition {
     private final QiProfile qiProfile;
     private final GrowthModifier growthModifier;
     private final SpawnRule spawnRule;
+
+    private final int[] qualityGrowthTicks;
+    private final int[] wildQualityWeights;
+    private final Quality cultivatedQuality;
+    private final Quality qualityCap;
+    private final Map<Identifier, Double> qualityAffinityIdeals;
+    private final QualityGrowthModifier qualityGrowthModifier;
     private final QualityResolver qualityResolver;
+
+    private final double atmosphericQiCost;
     private final List<HerbEffect> effects;
 
     private HerbDefinition(Builder builder) {
@@ -59,7 +71,16 @@ public final class HerbDefinition {
         );
         this.growthModifier = builder.growthModifier;
         this.spawnRule = builder.spawnRule;
+
+        this.qualityGrowthTicks = Arrays.copyOf(builder.qualityGrowthTicks, builder.qualityGrowthTicks.length);
+        this.wildQualityWeights = Arrays.copyOf(builder.wildQualityWeights, builder.wildQualityWeights.length);
+        this.cultivatedQuality = builder.cultivatedQuality;
+        this.qualityCap = builder.qualityCap;
+        this.qualityAffinityIdeals = Map.copyOf(builder.qualityAffinityIdeals);
+        this.qualityGrowthModifier = builder.qualityGrowthModifier;
         this.qualityResolver = builder.qualityResolver;
+
+        this.atmosphericQiCost = builder.atmosphericQiCost;
         this.effects = List.copyOf(builder.effects);
 
         if (growthStages < 1 || growthStages > MAX_GROWTH_STAGES) {
@@ -70,6 +91,15 @@ public final class HerbDefinition {
         }
         if (wildAgeWeights.length != ageThresholds.size()) {
             throw new IllegalArgumentException("Herb " + id + " must provide one wild age weight per age tier");
+        }
+        if (qualityGrowthTicks.length != Quality.values().length - 1) {
+            throw new IllegalArgumentException("Herb " + id + " must provide one quality growth time per quality transition");
+        }
+        if (wildQualityWeights.length != Quality.values().length) {
+            throw new IllegalArgumentException("Herb " + id + " must provide one wild quality weight per quality tier");
+        }
+        if (cultivatedQuality.ordinal() > qualityCap.ordinal()) {
+            throw new IllegalArgumentException("Herb " + id + " cultivated quality cannot be above its quality cap");
         }
     }
 
@@ -133,14 +163,108 @@ public final class HerbDefinition {
         return qiProfile.canWildSpawn(level, pos) && spawnRule.canSpawn(level, pos, random);
     }
 
-    public Quality resolveQuality(ServerLevel level, BlockPos pos, BlockState state, boolean wild) {
-        Quality quality = qualityResolver.resolve(level, pos, state, wild);
-        return quality == null ? Quality.COMMON : quality;
+    public Quality cultivatedQuality() {
+        return cultivatedQuality;
+    }
+
+    public Quality qualityCap() {
+        return qualityCap;
+    }
+
+    public boolean canQualityAdvance(int tier) {
+        int current = Mth.clamp(tier, 0, Quality.values().length - 1);
+        return current < qualityCap.ordinal()
+                && current < qualityGrowthTicks.length
+                && qualityGrowthTicks[current] > 0;
+    }
+
+    public double qualityAdvanceChance(
+            ServerLevel level,
+            BlockPos pos,
+            BlockState state,
+            boolean wild,
+            int currentTier
+    ) {
+        int tier = Mth.clamp(currentTier, 0, Quality.values().length - 1);
+        if (!canQualityAdvance(tier)) {
+            return 0.0D;
+        }
+
+        double multiplier = growthMultiplier(level, pos, state);
+        if (multiplier <= 0.0D) {
+            return 0.0D;
+        }
+
+        multiplier *= Math.max(0.0D, qualityGrowthModifier.multiplier(level, pos, state, wild));
+        if (multiplier <= 0.0D) {
+            return 0.0D;
+        }
+
+        if (!qualityAffinityIdeals.isEmpty()) {
+            ChunkQiContainer qi = ChunkQiContainer.getContainer(level.getChunk(pos));
+            double bestAffinityBonus = 0.0D;
+            for (Map.Entry<Identifier, Double> entry : qualityAffinityIdeals.entrySet()) {
+                double ideal = entry.getValue();
+                if (ideal <= 0.0D) {
+                    continue;
+                }
+                bestAffinityBonus = Math.max(
+                        bestAffinityBonus,
+                        Mth.clamp(qi.getAffinity(entry.getKey()) / ideal, 0.0D, 1.0D)
+                );
+            }
+            multiplier *= 1.0D + bestAffinityBonus;
+        }
+
+        return Math.min(1.0D, multiplier / qualityGrowthTicks[tier]);
+    }
+
+    public int chooseWildQualityTier(RandomSource random) {
+        return chooseWeightedTier(random, wildQualityWeights);
+    }
+
+    public Quality chooseWildQuality(RandomSource random) {
+        return Quality.byTier(chooseWildQualityTier(random));
+    }
+
+    public Quality resolveQuality(
+            ServerLevel level,
+            BlockPos pos,
+            BlockState state,
+            boolean wild,
+            Quality grownQuality
+    ) {
+        Quality override = qualityResolver.resolve(level, pos, state, wild);
+        return override == null ? grownQuality : override;
+    }
+
+
+    public boolean tryConsumeProgressQi(ServerLevel level, BlockPos pos) {
+        if (atmosphericQiCost <= 0.0D) {
+            return true;
+        }
+
+        var chunk = level.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+        ChunkQiContainer qi = ChunkQiContainer.getContainer(chunk);
+        if (!qi.tryConsumeEnergy(atmosphericQiCost)) {
+            return false;
+        }
+
+        chunk.markUnsaved();
+        return true;
+    }
+
+    public double atmosphericQiCost() {
+        return atmosphericQiCost;
     }
 
     public int chooseWildAgeTier(RandomSource random) {
+        return chooseWeightedTier(random, wildAgeWeights);
+    }
+
+    private static int chooseWeightedTier(RandomSource random, int[] weights) {
         long total = 0L;
-        for (int weight : wildAgeWeights) {
+        for (int weight : weights) {
             total += Math.max(0, weight);
         }
         if (total <= 0L) {
@@ -149,8 +273,8 @@ public final class HerbDefinition {
 
         long roll = Math.floorMod(random.nextLong(), total);
         long cursor = 0L;
-        for (int i = 0; i < wildAgeWeights.length; i++) {
-            cursor += Math.max(0, wildAgeWeights[i]);
+        for (int i = 0; i < weights.length; i++) {
+            cursor += Math.max(0, weights[i]);
             if (roll < cursor) {
                 return i;
             }
@@ -324,7 +448,21 @@ public final class HerbDefinition {
 
         private record WorldgenQi(double capacity, Map<Identifier, Double> affinities) {
             private double affinity(Identifier path) {
-                return affinities.getOrDefault(path, 0.0D);
+                double direct = affinities.getOrDefault(path, 0.0D);
+                if (direct != 0.0D) {
+                    return direct;
+                }
+
+                String pathName = path.getPath();
+                int slash = pathName.lastIndexOf('/');
+                if (slash >= 0 && slash + 1 < pathName.length()) {
+                    Identifier shorthand = Identifier.fromNamespaceAndPath(
+                            path.getNamespace(),
+                            pathName.substring(slash + 1)
+                    );
+                    return affinities.getOrDefault(shorthand, 0.0D);
+                }
+                return direct;
             }
         }
     }
@@ -344,7 +482,15 @@ public final class HerbDefinition {
     }
 
     @FunctionalInterface
+    public interface QualityGrowthModifier {
+        QualityGrowthModifier NORMAL = (level, pos, state, wild) -> 1.0D;
+
+        double multiplier(ServerLevel level, BlockPos pos, BlockState state, boolean wild);
+    }
+
+    @FunctionalInterface
     public interface QualityResolver {
+        QualityResolver GROWN = (level, pos, state, wild) -> null;
         QualityResolver COMMON = (level, pos, state, wild) -> Quality.COMMON;
 
         Quality resolve(ServerLevel level, BlockPos pos, BlockState state, boolean wild);
@@ -368,7 +514,16 @@ public final class HerbDefinition {
         private final Map<Identifier, QiRequirement> qiAffinities = new LinkedHashMap<>();
         private GrowthModifier growthModifier = GrowthModifier.NORMAL;
         private SpawnRule spawnRule = SpawnRule.ALWAYS;
-        private QualityResolver qualityResolver = QualityResolver.COMMON;
+
+        private int[] qualityGrowthTicks = Arrays.copyOf(DEFAULT_QUALITY_GROWTH_TICKS, DEFAULT_QUALITY_GROWTH_TICKS.length);
+        private int[] wildQualityWeights = Arrays.copyOf(DEFAULT_WILD_QUALITY_WEIGHTS, DEFAULT_WILD_QUALITY_WEIGHTS.length);
+        private Quality cultivatedQuality = Quality.COMMON;
+        private Quality qualityCap = Quality.PERFECT;
+        private final Map<Identifier, Double> qualityAffinityIdeals = new LinkedHashMap<>();
+        private QualityGrowthModifier qualityGrowthModifier = QualityGrowthModifier.NORMAL;
+        private QualityResolver qualityResolver = QualityResolver.GROWN;
+
+        private double atmosphericQiCost = 0.0D;
         private final List<HerbEffect> effects = new ArrayList<>();
 
         private Builder(Identifier id) {
@@ -440,8 +595,60 @@ public final class HerbDefinition {
             return this;
         }
 
+        public Builder qualityGrowth(int poorToCommon, int commonToGood, int goodToSuperior, int superiorToPerfect) {
+            this.qualityGrowthTicks = new int[]{
+                    nonNegativeQualityTicks(poorToCommon),
+                    nonNegativeQualityTicks(commonToGood),
+                    nonNegativeQualityTicks(goodToSuperior),
+                    nonNegativeQualityTicks(superiorToPerfect)
+            };
+            return this;
+        }
+
+        public Builder qualityGrowth(int averageRandomTicksPerTier) {
+            int ticks = nonNegativeQualityTicks(averageRandomTicksPerTier);
+            this.qualityGrowthTicks = new int[]{ticks, ticks, ticks, ticks};
+            return this;
+        }
+
+        public Builder wildQualityWeights(int poor, int common, int good, int superior, int perfect) {
+            this.wildQualityWeights = new int[]{poor, common, good, superior, perfect};
+            return this;
+        }
+
+        public Builder cultivatedQuality(Quality quality) {
+            this.cultivatedQuality = Objects.requireNonNull(quality, "quality");
+            return this;
+        }
+
+        public Builder qualityCap(Quality quality) {
+            this.qualityCap = Objects.requireNonNull(quality, "quality");
+            return this;
+        }
+
+        public Builder qualityAffinity(Identifier path, double idealAffinity) {
+            if (!Double.isFinite(idealAffinity) || idealAffinity <= 0.0D) {
+                throw new IllegalArgumentException("qualityAffinity ideal must be a positive finite number");
+            }
+            this.qualityAffinityIdeals.put(Objects.requireNonNull(path, "path"), idealAffinity);
+            return this;
+        }
+
+        public Builder qualityModifier(QualityGrowthModifier qualityGrowthModifier) {
+            this.qualityGrowthModifier = Objects.requireNonNull(qualityGrowthModifier, "qualityGrowthModifier");
+            return this;
+        }
+
         public Builder quality(QualityResolver qualityResolver) {
             this.qualityResolver = Objects.requireNonNull(qualityResolver, "qualityResolver");
+            return this;
+        }
+
+        public Builder atmosphericQiCost(double amount) {
+            if (!Double.isFinite(amount) || amount < 0.0D) {
+                throw new IllegalArgumentException("atmosphericQiCost must be a finite non-negative number");
+            }
+            this.atmosphericQiCost = amount;
             return this;
         }
 
@@ -452,6 +659,13 @@ public final class HerbDefinition {
 
         public HerbDefinition build() {
             return new HerbDefinition(this);
+        }
+
+        private static int nonNegativeQualityTicks(int ticks) {
+            if (ticks < 0) {
+                throw new IllegalArgumentException("quality growth ticks cannot be negative");
+            }
+            return ticks;
         }
     }
 }

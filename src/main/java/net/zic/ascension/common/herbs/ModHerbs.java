@@ -70,6 +70,9 @@ public final class ModHerbs {
                             new HerbDefinition.AgeThreshold(1000000, 0)
                     )
                     .wildAgeWeights(1200, 220, 28, 4, 1, 1, 1, 1)
+                    .qualityGrowth(24, 96, 384, 1536)
+                    .wildQualityWeights(20, 1000, 160, 12, 1)
+                    .qualityAffinity(AscensionCraft.prefix("elemental/wood"), 6.0D)
                     .naturalSupport(state -> state.is(BlockTags.GRASS_BLOCKS))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
                     .build()
@@ -91,6 +94,9 @@ public final class ModHerbs {
 
                     )
                     .wildAgeWeights(1200, 220, 28, 4, 1, 1, 1, 1)
+                    .qualityGrowth(24, 96, 384, 1536)
+                    .wildQualityWeights(20, 1000, 160, 12, 1)
+                    .qualityAffinity(AscensionCraft.prefix("elemental/fire"), 6.0D)
                     .naturalSupport(state -> state.is(Blocks.SAND))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
                     .build()
@@ -111,6 +117,9 @@ public final class ModHerbs {
                             new HerbDefinition.AgeThreshold(1000000, 0)
                     )
                     .wildAgeWeights(1200, 220, 28, 4, 1, 1, 1, 1)
+                    .qualityGrowth(24, 96, 384, 1536)
+                    .wildQualityWeights(20, 1000, 160, 12, 1)
+                    .qualityAffinity(AscensionCraft.prefix("elemental/ice"), 6.0D)
                     .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.SNOW_BLOCK))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
                     .build()
@@ -251,47 +260,48 @@ public final class ModHerbs {
      *
      *
      * ---
-     * QUALITY
+     * QUALITY GROWTH
      *
-     * This decides the herb's quality when the player harvests it.
-     * Qualities: Feel Free to Change BTW
-     *   POOR
-     *   COMMON
-     *   GOOD
-     *   SUPERIOR
-     *   PERFECT
+     * Normal cultivated herbs start COMMON. Wild herbs use wildQualityWeights(...).
      *
-     * qiSuitability tells us how good the local Qi is for this herb.
-     *   0.0 = terrible
-     *   1.0 = perfect
+     * Easy setup:
      *
-     * Example:
-     * Better Qi = better herb.
+     * .qualityGrowth(24, 96, 384, 1536)
      *
-     * NOTE:
-     * Replace MY_HERB with the actual herb definition.
+     * The four numbers are average RANDOM TICKS for:
+     *   Poor -> Common
+     *   Common -> Good
+     *   Good -> Superior
+     *   Superior -> Perfect
      *
-     * .quality((level, pos, state, wild) -> {
-     *     double qiSuitability = MY_HERB.qiSuitability(level, pos);
+     * All herbs already have these values as defaults, so this line is only needed
+     * when a species should improve quality faster/slower.
      *
-     *     if (wild && qiSuitability >= 0.95D) {
-     *         return HerbDefinition.Quality.PERFECT;
-     *     }
+     * Wild starting quality:
      *
-     *     if (qiSuitability >= 0.80D) {
-     *         return HerbDefinition.Quality.SUPERIOR;
-     *     }
+     * .wildQualityWeights(20, 1000, 160, 12, 1)
      *
-     *     if (qiSuitability >= 0.55D) {
-     *         return HerbDefinition.Quality.GOOD;
-     *     }
+     * Order is:
+     *   Poor, Common, Good, Superior, Perfect
      *
-     *     if (qiSuitability >= 0.25D) {
-     *         return HerbDefinition.Quality.COMMON;
-     *     }
+     * The numbers are relative weights, exactly like wildAgeWeights(...).
      *
-     *     return HerbDefinition.Quality.POOR;
-     * })
+     * Optional quality-only Qi bonus:
+     *
+     * .qualityAffinity(AscensionCraft.prefix("elemental/fire"), 6.0D)
+     *
+     * This is NOT a requirement. Zero Fire Qi still lets quality grow normally.
+     * At 6+ Fire affinity, quality grows up to twice as fast.
+     *
+     * Optional custom quality modifier for weird herbs:
+     *
+     * .qualityModifier((level, pos, state, wild) -> wild ? 1.25D : 1.0D)
+     *
+     * 0.0 stops quality growth, 0.5 halves it, 2.0 doubles it, etc.
+     *
+     * Optional static cap:
+     *
+     * .qualityCap(HerbDefinition.Quality.SUPERIOR)
      *
      *
      * ---
@@ -326,7 +336,7 @@ public final class ModHerbs {
      *   Soul herb -> likes Soul Qi
      *
      * Example:
-     * .qiAffinity(FIRE_PATH, 2.0D, 8.0D)
+     * .qiAffinity(AscensionCraft.prefix("elemental/fire"), 2.0D, 8.0D)
      *
      * First number:
      *   Minimum amount of Fire Qi it wants.
@@ -348,11 +358,19 @@ public final class ModHerbs {
      *
      * This checks how full the chunk's current Qi storage is.
      *
-     * Ascension does not really consume chunk Qi yet,
-     * so the chunk normally fills up and stays full.
+     * Most Ascension systems still do not consume chunk Qi yet. Herbs only drain it if
+     * atmosphericQiCost(...) is explicitly configured, so this is still mostly future-facing.
      *
-     * This will be more useful later when things start draining
-     * atmospheric Qi.
+     *
+     * ---
+     * ATMOSPHERIC QI CONSUMPTION
+     *
+     * Optional. Leave this out for normal herbs.
+     *
+     * .atmosphericQiCost(2.0D)
+     *
+     * The herb consumes 2 raw atmospheric Qi only when a visual-growth, age, or quality
+     * advancement roll SUCCEEDS. If the chunk cannot pay the cost, that advancement simply does not happen.
      */
 
     private ModHerbs() {
