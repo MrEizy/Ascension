@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:erosion",
+    "input": "ascension:terrain/ridge_height_raw",
+    "sample_distance": 28,
+    "strength": 0.3,
+    "curvature_scale": 7.5,
+    "slope_scale": 34.0
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:spline",
+  "spline": {
+    "coordinate": "ascension:terrain/massif_noise",
+    "points": [
+      {
+        "location": -1.0,
+        "value": 0.68,
+        "derivative": 0.0
+      },
+      {
+        "location": -0.55,
+        "value": 0.76,
+        "derivative": 0.14
+      },
+      {
+        "location": 0.0,
+        "value": 0.96,
+        "derivative": 0.28
+      },
+      {
+        "location": 0.45,
+        "value": 1.16,
+        "derivative": 0.32
+      },
+      {
+        "location": 0.78,
+        "value": 1.36,
+        "derivative": 0.18
+      },
+      {
+        "location": 1.0,
+        "value": 1.46,
+        "derivative": 0.0
+      }
+    ]
+  }
+}

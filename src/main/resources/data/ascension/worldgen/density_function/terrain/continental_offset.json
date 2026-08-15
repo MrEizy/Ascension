@@ -5,52 +5,47 @@
     "points": [
       {
         "location": -1.0,
-        "value": -1.08,
+        "value": -1.12,
         "derivative": 0.0
       },
       {
         "location": -0.72,
-        "value": -0.82,
+        "value": -0.84,
         "derivative": 0.55
       },
       {
-        "location": -0.52,
-        "value": -0.48,
+        "location": -0.5,
+        "value": -0.5,
         "derivative": 1.0
       },
       {
-        "location": -0.34,
-        "value": -0.22,
-        "derivative": 0.85
+        "location": -0.3,
+        "value": -0.2,
+        "derivative": 0.9
       },
       {
-        "location": -0.2,
-        "value": -0.08,
+        "location": -0.16,
+        "value": -0.07,
         "derivative": 0.55
       },
       {
-        "location": -0.08,
+        "location": -0.06,
         "value": 0.0,
         "derivative": 0.35
       },
       {
-        "location": 0.08,
-        "value": 0.045,
-        "derivative": 0.2
+        "location": 0.1,
+        "value": 0.035,
+        "derivative": 0.12
       },
       {
-        "location": 0.35,
-        "value": 0.075,
-        "derivative": 0.1
-      },
-      {
-        "location": 0.7,
-        "value": 0.095,
+        "location": 0.4,
+        "value": 0.055,
         "derivative": 0.05
       },
       {
         "location": 1.0,
-        "value": 0.11,
+        "value": 0.07,
         "derivative": 0.0
       }
     ]

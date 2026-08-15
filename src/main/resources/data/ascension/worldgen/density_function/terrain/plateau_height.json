@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:terrace",
+    "input": "ascension:terrain/plateau_height_raw",
+    "step_size": 0.22,
+    "strength": 0.88,
+    "transition": 0.06
+  }
+}

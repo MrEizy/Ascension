@@ -18,9 +18,13 @@
               "from_value": 2.0,
               "to_value": -4.0
             },
-            "argument2": "ascension:terrain/base_offset"
+            "argument2": "ascension:terrain/base_height"
           },
-          "argument2": "ascension:terrain/surface_detail"
+          "argument2": {
+            "type": "minecraft:add",
+            "argument1": "ascension:terrain/surface_detail",
+            "argument2": "ascension:terrain/cliff_detail"
+          }
         }
       }
     }

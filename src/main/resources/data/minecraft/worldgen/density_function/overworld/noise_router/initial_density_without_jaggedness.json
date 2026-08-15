@@ -9,7 +9,7 @@
       "from_value": 2.0,
       "to_value": -4.0
     },
-    "argument2": "ascension:terrain/base_offset"
+    "argument2": "ascension:terrain/base_height"
   },
   "min": -64.0,
   "max": 64.0

@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:clamp",
+    "input": {
+      "type": "ascension:domain_warp",
+      "input": {
+        "type": "minecraft:noise",
+        "noise": "ascension:terrain/massifs",
+        "xz_scale": 1.0,
+        "y_scale": 0.0
+      },
+      "shift_x": {
+        "type": "minecraft:mul",
+        "argument1": 0.35,
+        "argument2": {
+          "type": "minecraft:noise",
+          "noise": "ascension:terrain/mountain_warp_x",
+          "xz_scale": 1.0,
+          "y_scale": 0.0
+        }
+      },
+      "shift_z": {
+        "type": "minecraft:mul",
+        "argument1": 0.35,
+        "argument2": {
+          "type": "minecraft:noise",
+          "noise": "ascension:terrain/mountain_warp_z",
+          "xz_scale": 1.0,
+          "y_scale": 0.0
+        }
+      },
+      "amplitude": 650.0
+    },
+    "min": -1.0,
+    "max": 1.0
+  }
+}

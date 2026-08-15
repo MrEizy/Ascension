@@ -11,39 +11,39 @@
           "xz_scale": 1.0,
           "y_scale": 0.0
         },
-        "min": -1.0,
-        "max": 1.0
+        "min": -1,
+        "max": 1
       }
     },
     "points": [
       {
         "location": -1.0,
-        "value": 0.56,
+        "value": 0.72,
         "derivative": 0.0
       },
       {
         "location": -0.45,
-        "value": 0.68,
-        "derivative": 0.2
+        "value": 0.8,
+        "derivative": 0.16
       },
       {
         "location": 0.0,
-        "value": 0.86,
-        "derivative": 0.35
+        "value": 0.96,
+        "derivative": 0.22
       },
       {
         "location": 0.45,
-        "value": 1.08,
-        "derivative": 0.35
+        "value": 1.12,
+        "derivative": 0.22
       },
       {
-        "location": 0.78,
+        "location": 0.8,
         "value": 1.28,
-        "derivative": 0.18
+        "derivative": 0.12
       },
       {
         "location": 1.0,
-        "value": 1.38,
+        "value": 1.34,
         "derivative": 0.0
       }
     ]

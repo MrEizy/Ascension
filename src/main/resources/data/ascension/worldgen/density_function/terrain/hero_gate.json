@@ -11,8 +11,8 @@
           "xz_scale": 1.0,
           "y_scale": 0.0
         },
-        "min": -1.0,
-        "max": 1.0
+        "min": -1,
+        "max": 1
       }
     },
     "points": [
@@ -22,22 +22,27 @@
         "derivative": 0.0
       },
       {
-        "location": 0.56,
+        "location": 0.42,
         "value": 0.0,
         "derivative": 0.0
       },
       {
-        "location": 0.72,
-        "value": 0.08,
-        "derivative": 0.8
+        "location": 0.54,
+        "value": 0.1,
+        "derivative": 0.9
       },
       {
-        "location": 0.84,
-        "value": 0.74,
-        "derivative": 4.0
+        "location": 0.66,
+        "value": 0.52,
+        "derivative": 3.0
       },
       {
-        "location": 0.92,
+        "location": 0.78,
+        "value": 0.92,
+        "derivative": 2.0
+      },
+      {
+        "location": 0.88,
         "value": 1.0,
         "derivative": 0.0
       },

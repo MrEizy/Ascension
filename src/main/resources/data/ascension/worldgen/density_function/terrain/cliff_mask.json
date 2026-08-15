@@ -1,35 +1,35 @@
 {
   "type": "minecraft:spline",
   "spline": {
-    "coordinate": "ascension:terrain/plateau_coord",
+    "coordinate": "ascension:terrain/terrain_slope",
     "points": [
       {
-        "location": -1.0,
+        "location": 0.0,
         "value": 0.0,
         "derivative": 0.0
       },
       {
-        "location": 0.5,
+        "location": 0.12,
         "value": 0.0,
         "derivative": 0.0
       },
       {
-        "location": 0.59,
-        "value": 0.03,
-        "derivative": 0.4
+        "location": 0.22,
+        "value": 0.06,
+        "derivative": 0.8
       },
       {
-        "location": 0.64,
-        "value": 0.28,
-        "derivative": 5.0
+        "location": 0.34,
+        "value": 0.44,
+        "derivative": 2.6
       },
       {
-        "location": 0.69,
-        "value": 0.88,
-        "derivative": 5.0
+        "location": 0.48,
+        "value": 0.9,
+        "derivative": 1.6
       },
       {
-        "location": 0.74,
+        "location": 0.62,
         "value": 1.0,
         "derivative": 0.0
       },

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:clamp",
+    "input": {
+      "type": "minecraft:add",
+      "argument1": "ascension:terrain/mountain_mass",
+      "argument2": "ascension:terrain/ridge_height"
+    },
+    "min": 0.0,
+    "max": 3.65
+  }
+}

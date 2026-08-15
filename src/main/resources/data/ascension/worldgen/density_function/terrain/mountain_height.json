@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:clamp",
+    "input": {
+      "type": "minecraft:mul",
+      "argument1": "ascension:terrain/mountain_height_raw",
+      "argument2": "ascension:terrain/valley_keep"
+    },
+    "min": 0.0,
+    "max": 3.65
+  }
+}

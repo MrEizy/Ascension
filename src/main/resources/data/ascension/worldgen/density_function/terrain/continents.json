@@ -3,37 +3,26 @@
   "argument": {
     "type": "minecraft:clamp",
     "input": {
-      "type": "minecraft:shifted_noise",
-      "noise": "ascension:terrain/continents",
-      "xz_scale": 1.0,
-      "y_scale": 0.0,
-      "shift_x": {
-        "type": "minecraft:flat_cache",
-        "argument": {
-          "type": "minecraft:mul",
-          "argument1": 520.0,
-          "argument2": {
-            "type": "minecraft:noise",
-            "noise": "ascension:terrain/continent_warp_x",
-            "xz_scale": 1.0,
-            "y_scale": 0.0
-          }
-        }
+      "type": "ascension:domain_warp",
+      "input": {
+        "type": "minecraft:noise",
+        "noise": "ascension:terrain/continents",
+        "xz_scale": 1.0,
+        "y_scale": 0.0
       },
-      "shift_y": 0.0,
+      "shift_x": {
+        "type": "minecraft:noise",
+        "noise": "ascension:terrain/continent_warp_x",
+        "xz_scale": 1.0,
+        "y_scale": 0.0
+      },
       "shift_z": {
-        "type": "minecraft:flat_cache",
-        "argument": {
-          "type": "minecraft:mul",
-          "argument1": 520.0,
-          "argument2": {
-            "type": "minecraft:noise",
-            "noise": "ascension:terrain/continent_warp_z",
-            "xz_scale": 1.0,
-            "y_scale": 0.0
-          }
-        }
-      }
+        "type": "minecraft:noise",
+        "noise": "ascension:terrain/continent_warp_z",
+        "xz_scale": 1.0,
+        "y_scale": 0.0
+      },
+      "amplitude": 720.0
     },
     "min": -1.0,
     "max": 1.0

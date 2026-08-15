@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:clamp",
+    "input": {
+      "type": "minecraft:add",
+      "argument1": {
+        "type": "minecraft:add",
+        "argument1": "ascension:terrain/continental_offset",
+        "argument2": "ascension:terrain/rolling_height"
+      },
+      "argument2": {
+        "type": "minecraft:add",
+        "argument1": "ascension:terrain/plateau_height",
+        "argument2": "ascension:terrain/mountain_height"
+      }
+    },
+    "min": -1.18,
+    "max": 3.72
+  }
+}
