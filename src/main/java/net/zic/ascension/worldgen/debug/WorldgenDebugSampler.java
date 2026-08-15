@@ -36,6 +36,7 @@ public final class WorldgenDebugSampler {
             "rolling_mask",
             "lowland_target_y",
             "plateau_target_y",
+            "mountain_target_raw_y",
             "mountain_target_uncarved_y",
             "mountain_target_y",
             "mountain_eroded_y",
@@ -166,13 +167,13 @@ public final class WorldgenDebugSampler {
             if (value("land_mask") < 0.20) {
                 return "ocean/coast";
             }
-            if (value("hero_score") >= 0.38) {
+            if (value("hero_score") >= 0.50) {
                 return "hero massif";
             }
-            if (value("core_mask") >= 0.45) {
+            if (value("core_mask") >= 0.50) {
                 return "mountain core";
             }
-            if (value("foothill_mask") >= 0.38) {
+            if (value("foothill_mask") >= 0.34) {
                 return "foothills";
             }
             if (value("plateau_mask") >= 0.40) {

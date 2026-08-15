@@ -3,7 +3,7 @@
   "argument1": "ascension:terrain/ridge_primary",
   "argument2": {
     "type": "minecraft:mul",
-    "argument1": 0.62,
+    "argument1": 0.52,
     "argument2": "ascension:terrain/ridge_secondary"
   }
 }

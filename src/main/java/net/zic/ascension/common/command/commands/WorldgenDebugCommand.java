@@ -121,11 +121,11 @@ public final class WorldgenDebugCommand {
         )), false);
         source.sendSuccess(() -> Component.literal(String.format(
                 Locale.ROOT,
-                "Targets: low %.1f | plateau %.1f | mountain %.1f (raw %.1f) | final %.1f",
+                "Targets: low %.1f | plateau %.1f | mountain %.1f | pre-cap %.1f | final %.1f",
                 sample.value("lowland_target_y"),
                 sample.value("plateau_target_y"),
                 sample.value("mountain_eroded_y"),
-                sample.value("mountain_target_uncarved_y"),
+                sample.value("mountain_target_raw_y"),
                 sample.value("surface_target_y")
         )), false);
 
@@ -154,8 +154,12 @@ public final class WorldgenDebugCommand {
         int above250 = 0;
         int above280 = 0;
         int above300 = 0;
+        int rawAbove314 = 0;
+        int rawAbove340 = 0;
+        int rawAbove370 = 0;
 
         WorldgenDebugSampler.TerrainSample highest = null;
+        WorldgenDebugSampler.TerrainSample highestRaw = null;
         WorldgenDebugSampler.TerrainSample strongestOrogeny = null;
         WorldgenDebugSampler.TerrainSample strongestCore = null;
         WorldgenDebugSampler.TerrainSample strongestHero = null;
@@ -183,6 +187,9 @@ public final class WorldgenDebugCommand {
                 if (highest == null || y > highest.predictedSurfaceY()) {
                     highest = sample;
                 }
+                if (highestRaw == null || sample.value("mountain_target_raw_y") > highestRaw.value("mountain_target_raw_y")) {
+                    highestRaw = sample;
+                }
                 if (strongestOrogeny == null || sample.value("orogeny") > strongestOrogeny.value("orogeny")) {
                     strongestOrogeny = sample;
                 }
@@ -193,14 +200,19 @@ public final class WorldgenDebugCommand {
                     strongestHero = sample;
                 }
 
-                if (sample.value("foothill_mask") >= 0.38) foothillSamples++;
-                if (sample.value("core_mask") >= 0.45) mountainSamples++;
-                if (sample.value("core_mask") >= 0.62 && sample.value("massif_noise") >= 0.25) massifSamples++;
-                if (sample.value("hero_score") >= 0.38) heroSamples++;
+                if (sample.value("foothill_mask") >= 0.34) foothillSamples++;
+                if (sample.value("core_mask") >= 0.50) mountainSamples++;
+                if (sample.value("core_mask") >= 0.62 && sample.value("massif_noise") >= 0.55) massifSamples++;
+                if (sample.value("hero_score") >= 0.50) heroSamples++;
                 if (y >= 200.0) above200++;
                 if (y >= 250.0) above250++;
                 if (y >= 280.0) above280++;
                 if (y >= 300.0) above300++;
+
+                double rawMountainY = sample.value("mountain_target_raw_y");
+                if (rawMountainY >= 314.0) rawAbove314++;
+                if (rawMountainY >= 340.0) rawAbove340++;
+                if (rawMountainY >= 370.0) rawAbove370++;
             }
         }
 
@@ -215,6 +227,9 @@ public final class WorldgenDebugCommand {
         final int finalAbove250 = above250;
         final int finalAbove280 = above280;
         final int finalAbove300 = above300;
+        final int finalRawAbove314 = rawAbove314;
+        final int finalRawAbove340 = rawAbove340;
+        final int finalRawAbove370 = rawAbove370;
         final long finalElapsedMs = elapsedMs;
         final double finalMinLandY = minLandY;
 
@@ -226,7 +241,7 @@ public final class WorldgenDebugCommand {
         )), false);
         source.sendSuccess(() -> Component.literal(String.format(
                 Locale.ROOT,
-                "Land %,d | foothill %.1f%% | core %.1f%% | massif %.1f%% | hero %.2f%%",
+                "Land %,d | influence %.1f%% | core %.1f%% | massif %.1f%% | hero %.2f%%",
                 finalLandSamples,
                 percent(finalFoothillSamples, finalLandSamples),
                 percent(finalMountainSamples, finalLandSamples),
@@ -237,6 +252,11 @@ public final class WorldgenDebugCommand {
                 Locale.ROOT,
                 "Targets >=Y200: %,d | >=Y250: %,d | >=Y280: %,d | >=Y300: %,d",
                 finalAbove200, finalAbove250, finalAbove280, finalAbove300
+        )), false);
+        source.sendSuccess(() -> Component.literal(String.format(
+                Locale.ROOT,
+                "Pre-cap mountain targets >=Y314: %,d | >=Y340: %,d | >=Y370: %,d",
+                finalRawAbove314, finalRawAbove340, finalRawAbove370
         )), false);
 
         if (highest != null) {
@@ -254,6 +274,15 @@ public final class WorldgenDebugCommand {
                     "Land relief: %.1f blocks | min target %.1f",
                     result.predictedSurfaceY() - finalMinLandY,
                     finalMinLandY
+            )), false);
+        }
+
+        if (highestRaw != null) {
+            WorldgenDebugSampler.TerrainSample result = highestRaw;
+            source.sendSuccess(() -> Component.literal(String.format(
+                    Locale.ROOT,
+                    "Highest pre-cap mountain target: Y %.1f at %d,%d | clamped final %.1f",
+                    result.value("mountain_target_raw_y"), result.x(), result.z(), result.predictedSurfaceY()
             )), false);
         }
 
