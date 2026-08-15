@@ -3,9 +3,9 @@
   "argument": {
     "type": "ascension:erosion",
     "input": "ascension:terrain/mountain_target_y",
-    "sample_distance": 32,
-    "strength": 18.0,
-    "curvature_scale": 0.055,
-    "slope_scale": 2.4
+    "sample_distance": 40,
+    "strength": 22.0,
+    "curvature_scale": 0.05,
+    "slope_scale": 2.1
   }
 }

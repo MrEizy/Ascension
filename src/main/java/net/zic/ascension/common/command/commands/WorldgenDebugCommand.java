@@ -14,7 +14,7 @@ import net.zic.ascension.worldgen.debug.WorldgenDebugSampler;
 
 import java.util.Locale;
 
-/** Temporary terrain-development commands for worldgen */
+/** Temporary terrain-development commands for worldgen. */
 public final class WorldgenDebugCommand {
 
     private static final int DEFAULT_SCAN_RADIUS = 5_000;
@@ -32,13 +32,13 @@ public final class WorldgenDebugCommand {
                                         .executes(WorldgenDebugCommand::sampleCoordinates))))
                 .then(Commands.literal("scan")
                         .executes(context -> scan(context, DEFAULT_SCAN_RADIUS, DEFAULT_SCAN_STEP))
-                        .then(Commands.argument("radius", IntegerArgumentType.integer(256, 20_000))
+                        .then(Commands.argument("radius", IntegerArgumentType.integer(256, 50_000))
                                 .executes(context -> scan(
                                         context,
                                         IntegerArgumentType.getInteger(context, "radius"),
                                         DEFAULT_SCAN_STEP
                                 ))
-                                .then(Commands.argument("step", IntegerArgumentType.integer(64, 1_024))
+                                .then(Commands.argument("step", IntegerArgumentType.integer(64, 2_048))
                                         .executes(context -> scan(
                                                 context,
                                                 IntegerArgumentType.getInteger(context, "radius"),
@@ -48,41 +48,38 @@ public final class WorldgenDebugCommand {
 
     private static int sampleCurrent(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
-        return sendSample(context.getSource(), player.getBlockX(), player.getBlockZ(), true);
+        return sendSample(context.getSource(), player.getBlockX(), player.getBlockZ());
     }
 
     private static int sampleCoordinates(CommandContext<CommandSourceStack> context) {
         int x = IntegerArgumentType.getInteger(context, "x");
         int z = IntegerArgumentType.getInteger(context, "z");
-        return sendSample(context.getSource(), x, z, true);
+        return sendSample(context.getSource(), x, z);
     }
 
-    private static int sendSample(CommandSourceStack source, int x, int z, boolean includeActualSurface) {
-        WorldgenDebugSampler.TerrainSample sample = WorldgenDebugSampler.sample(source.registryAccess(), x, z);
+    private static int sendSample(CommandSourceStack source, int x, int z) {
+        WorldgenDebugSampler.Sampler sampler = createSampler(source);
+        if (sampler == null) {
+            return 0;
+        }
+
+        WorldgenDebugSampler.TerrainSample sample = sampler.sample(x, z);
+        ServerLevel level = source.getLevel();
+        int actualY = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
 
         source.sendSuccess(() -> Component.literal("=== Ascension Worldgen Sample ==="), false);
         source.sendSuccess(() -> Component.literal("XZ: " + x + ", " + z + " | Region: " + sample.regionName()), false);
-
-        if (includeActualSurface) {
-            ServerLevel level = source.getLevel();
-            int actualY = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
-            source.sendSuccess(() -> Component.literal(String.format(
-                    Locale.ROOT,
-                    "Target surface: %.1f | Actual surface: %d | Delta: %+.1f",
-                    sample.predictedSurfaceY(), actualY, actualY - sample.predictedSurfaceY()
-            )), false);
-        } else {
-            source.sendSuccess(() -> Component.literal(String.format(
-                    Locale.ROOT,
-                    "Target surface: %.1f",
-                    sample.predictedSurfaceY()
-            )), false);
-        }
+        source.sendSuccess(() -> Component.literal(String.format(
+                Locale.ROOT,
+                "Target surface: %.1f | Actual surface: %d | Delta: %+.1f",
+                sample.predictedSurfaceY(), actualY, actualY - sample.predictedSurfaceY()
+        )), false);
 
         source.sendSuccess(() -> Component.literal(String.format(
                 Locale.ROOT,
-                "Land %.3f | Orogeny %.3f | Province %.3f | Axis |x| %.3f",
+                "Land %.3f | Land gate %.3f | Orogeny %.3f | Province %.3f | Axis |x| %.3f",
                 sample.value("land_mask"),
+                sample.value("mountain_land_gate"),
                 sample.value("orogeny"),
                 sample.value("mountain_province"),
                 sample.value("mountain_axis_abs")
@@ -105,11 +102,12 @@ public final class WorldgenDebugCommand {
         )), false);
         source.sendSuccess(() -> Component.literal(String.format(
                 Locale.ROOT,
-                "Targets: low %.1f | plateau %.1f | mountain %.1f (raw %.1f)",
+                "Targets: low %.1f | plateau %.1f | mountain %.1f (raw %.1f) | final %.1f",
                 sample.value("lowland_target_y"),
                 sample.value("plateau_target_y"),
                 sample.value("mountain_eroded_y"),
-                sample.value("mountain_target_uncarved_y")
+                sample.value("mountain_target_uncarved_y"),
+                sample.value("surface_target_y")
         )), false);
 
         return 1;
@@ -121,15 +119,25 @@ public final class WorldgenDebugCommand {
         int centerX = player.getBlockX();
         int centerZ = player.getBlockZ();
 
+        WorldgenDebugSampler.Sampler sampler = createSampler(source);
+        if (sampler == null) {
+            return 0;
+        }
+
         long started = System.nanoTime();
         int samples = 0;
         int landSamples = 0;
+        int foothillSamples = 0;
         int mountainSamples = 0;
+        int massifSamples = 0;
+        int heroSamples = 0;
         int above200 = 0;
         int above250 = 0;
         int above280 = 0;
+        int above300 = 0;
 
         WorldgenDebugSampler.TerrainSample highest = null;
+        WorldgenDebugSampler.TerrainSample strongestOrogeny = null;
         WorldgenDebugSampler.TerrainSample strongestCore = null;
         WorldgenDebugSampler.TerrainSample strongestHero = null;
         double minLandY = Double.POSITIVE_INFINITY;
@@ -141,7 +149,7 @@ public final class WorldgenDebugCommand {
 
         for (int x = minX; x <= maxX; x += step) {
             for (int z = minZ; z <= maxZ; z += step) {
-                WorldgenDebugSampler.TerrainSample sample = WorldgenDebugSampler.sample(source.registryAccess(), x, z);
+                WorldgenDebugSampler.TerrainSample sample = sampler.sample(x, z);
                 samples++;
 
                 double land = sample.value("land_mask");
@@ -156,6 +164,9 @@ public final class WorldgenDebugCommand {
                 if (highest == null || y > highest.predictedSurfaceY()) {
                     highest = sample;
                 }
+                if (strongestOrogeny == null || sample.value("orogeny") > strongestOrogeny.value("orogeny")) {
+                    strongestOrogeny = sample;
+                }
                 if (strongestCore == null || sample.value("core_mask") > strongestCore.value("core_mask")) {
                     strongestCore = sample;
                 }
@@ -163,22 +174,28 @@ public final class WorldgenDebugCommand {
                     strongestHero = sample;
                 }
 
-                if (sample.value("core_mask") >= 0.45) {
-                    mountainSamples++;
-                }
+                if (sample.value("foothill_mask") >= 0.38) foothillSamples++;
+                if (sample.value("core_mask") >= 0.45) mountainSamples++;
+                if (sample.value("core_mask") >= 0.62 && sample.value("massif_noise") >= 0.25) massifSamples++;
+                if (sample.value("hero_score") >= 0.38) heroSamples++;
                 if (y >= 200.0) above200++;
                 if (y >= 250.0) above250++;
                 if (y >= 280.0) above280++;
+                if (y >= 300.0) above300++;
             }
         }
 
         long elapsedMs = (System.nanoTime() - started) / 1_000_000L;
         final int finalSamples = samples;
         final int finalLandSamples = landSamples;
+        final int finalFoothillSamples = foothillSamples;
         final int finalMountainSamples = mountainSamples;
+        final int finalMassifSamples = massifSamples;
+        final int finalHeroSamples = heroSamples;
         final int finalAbove200 = above200;
         final int finalAbove250 = above250;
         final int finalAbove280 = above280;
+        final int finalAbove300 = above300;
         final long finalElapsedMs = elapsedMs;
         final double finalMinLandY = minLandY;
 
@@ -190,15 +207,17 @@ public final class WorldgenDebugCommand {
         )), false);
         source.sendSuccess(() -> Component.literal(String.format(
                 Locale.ROOT,
-                "Land %,d | mountain-core %,d (%.1f%% of land)",
+                "Land %,d | foothill %.1f%% | core %.1f%% | massif %.1f%% | hero %.2f%%",
                 finalLandSamples,
-                finalMountainSamples,
-                percent(finalMountainSamples, finalLandSamples)
+                percent(finalFoothillSamples, finalLandSamples),
+                percent(finalMountainSamples, finalLandSamples),
+                percent(finalMassifSamples, finalLandSamples),
+                percent(finalHeroSamples, finalLandSamples)
         )), false);
         source.sendSuccess(() -> Component.literal(String.format(
                 Locale.ROOT,
-                "Land targets >=Y200: %,d | >=Y250: %,d | >=Y280: %,d",
-                finalAbove200, finalAbove250, finalAbove280
+                "Targets >=Y200: %,d | >=Y250: %,d | >=Y280: %,d | >=Y300: %,d",
+                finalAbove200, finalAbove250, finalAbove280, finalAbove300
         )), false);
 
         if (highest != null) {
@@ -209,34 +228,54 @@ public final class WorldgenDebugCommand {
                     result.predictedSurfaceY(), result.x(), result.z(), result.regionName()
             )), false);
             source.sendSuccess(() -> Component.literal(
-                    "Teleport candidate: /tp @s " + result.x() + " 300 " + result.z()
+                    "Teleport candidate: /tp @s " + result.x() + " 315 " + result.z()
             ), false);
             source.sendSuccess(() -> Component.literal(String.format(
                     Locale.ROOT,
-                    "Land relief in scan: %.1f blocks (min target %.1f)",
+                    "Land relief: %.1f blocks | min target %.1f",
                     result.predictedSurfaceY() - finalMinLandY,
                     finalMinLandY
             )), false);
         }
 
+        if (strongestOrogeny != null) {
+            WorldgenDebugSampler.TerrainSample result = strongestOrogeny;
+            source.sendSuccess(() -> Component.literal(String.format(
+                    Locale.ROOT,
+                    "Strongest orogeny: %.3f at %d,%d | province %.3f | target %.1f",
+                    result.value("orogeny"), result.x(), result.z(),
+                    result.value("mountain_province"), result.predictedSurfaceY()
+            )), false);
+        }
         if (strongestCore != null) {
             WorldgenDebugSampler.TerrainSample result = strongestCore;
             source.sendSuccess(() -> Component.literal(String.format(
                     Locale.ROOT,
-                    "Strongest core: %.3f at %d,%d | target %.1f",
-                    result.value("core_mask"), result.x(), result.z(), result.predictedSurfaceY()
+                    "Strongest core: %.3f at %d,%d | axis %.3f | target %.1f",
+                    result.value("core_mask"), result.x(), result.z(),
+                    result.value("mountain_axis_abs"), result.predictedSurfaceY()
             )), false);
         }
         if (strongestHero != null) {
             WorldgenDebugSampler.TerrainSample result = strongestHero;
             source.sendSuccess(() -> Component.literal(String.format(
                     Locale.ROOT,
-                    "Strongest hero: %.3f at %d,%d | target %.1f",
-                    result.value("hero_score"), result.x(), result.z(), result.predictedSurfaceY()
+                    "Strongest hero: %.3f at %d,%d | gate %.3f | target %.1f",
+                    result.value("hero_score"), result.x(), result.z(),
+                    result.value("hero_gate"), result.predictedSurfaceY()
             )), false);
         }
 
         return 1;
+    }
+
+    private static WorldgenDebugSampler.Sampler createSampler(CommandSourceStack source) {
+        try {
+            return WorldgenDebugSampler.create(source.getLevel());
+        } catch (RuntimeException exception) {
+            source.sendFailure(Component.literal("Worldgen debugger could not create a seeded sampler: " + exception.getMessage()));
+            return null;
+        }
     }
 
     private static double percent(int part, int total) {

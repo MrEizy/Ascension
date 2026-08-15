@@ -9,27 +9,27 @@
         "derivative": 0.0
       },
       {
-        "location": 0.18,
+        "location": 0.24,
         "value": 1.0,
         "derivative": 0.0
       },
       {
-        "location": 0.32,
-        "value": 0.94,
-        "derivative": -0.6
+        "location": 0.42,
+        "value": 0.96,
+        "derivative": -0.4
       },
       {
-        "location": 0.48,
-        "value": 0.68,
-        "derivative": -1.8
-      },
-      {
-        "location": 0.62,
-        "value": 0.28,
+        "location": 0.6,
+        "value": 0.72,
         "derivative": -1.6
       },
       {
-        "location": 0.74,
+        "location": 0.76,
+        "value": 0.34,
+        "derivative": -2.0
+      },
+      {
+        "location": 0.88,
         "value": 0.0,
         "derivative": 0.0
       },

@@ -14,43 +14,53 @@
         "derivative": 0.0
       },
       {
-        "location": 0.15,
-        "value": 90.0,
-        "derivative": 200.0
+        "location": 0.14,
+        "value": 92.0,
+        "derivative": 220.0
       },
       {
-        "location": 0.3,
-        "value": 130.0,
-        "derivative": 250.0
+        "location": 0.24,
+        "value": 128.0,
+        "derivative": 350.0
       },
       {
-        "location": 0.45,
+        "location": 0.34,
         "value": 170.0,
+        "derivative": 390.0
+      },
+      {
+        "location": 0.44,
+        "value": 210.0,
+        "derivative": 360.0
+      },
+      {
+        "location": 0.54,
+        "value": 240.0,
         "derivative": 260.0
       },
       {
-        "location": 0.6,
-        "value": 202.0,
-        "derivative": 200.0
+        "location": 0.64,
+        "value": 264.0,
+        "derivative": 220.0
       },
       {
-        "location": 0.72,
-        "value": 226.0,
-        "derivative": 170.0
+        "location": 0.74,
+        "value": 282.0,
+        "derivative": 150.0
       },
       {
         "location": 0.84,
-        "value": 246.0,
-        "derivative": 135.0
+        "value": 296.0,
+        "derivative": 110.0
       },
       {
         "location": 0.94,
-        "value": 259.0,
-        "derivative": 80.0
+        "value": 306.0,
+        "derivative": 65.0
       },
       {
         "location": 1.0,
-        "value": 266.0,
+        "value": 312.0,
         "derivative": 0.0
       }
     ]

@@ -1,14 +1,19 @@
 package net.zic.ascension.worldgen.debug;
 
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.zic.ascension.AscensionCraft;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Runtime sampler for Ascension terrain density functions.
+ */
 public final class WorldgenDebugSampler {
 
     private static final String PREFIX = "terrain/";
@@ -16,6 +21,7 @@ public final class WorldgenDebugSampler {
     private static final String[] SAMPLE_FIELDS = {
             "continents",
             "land_mask",
+            "mountain_land_gate",
             "orogeny",
             "mountain_province",
             "mountain_axis_abs",
@@ -39,21 +45,49 @@ public final class WorldgenDebugSampler {
     private WorldgenDebugSampler() {
     }
 
-    public static TerrainSample sample(RegistryAccess access, int x, int z) {
-        var registry = access.lookupOrThrow(Registries.DENSITY_FUNCTION);
-        DensityFunction.FunctionContext context = new SampleContext(x, 64, z);
-        Map<String, Double> values = new LinkedHashMap<>();
+    public static Sampler create(ServerLevel level) {
+        var chunkGenerator = level.getChunkSource().getGenerator();
+        if (!(chunkGenerator instanceof NoiseBasedChunkGenerator noiseGenerator)) {
+            throw new IllegalStateException("Ascension worldgen debugging requires a NoiseBasedChunkGenerator");
+        }
+
+        var settings = noiseGenerator.generatorSettings().value();
+        var noiseRegistry = level.registryAccess().lookupOrThrow(Registries.NOISE);
+        RandomState randomState = RandomState.create(settings, noiseRegistry, level.getSeed());
+        RuntimeDensityFunctionMapper mapper = new RuntimeDensityFunctionMapper(randomState);
+
+        var densityRegistry = level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION);
+        Map<String, DensityFunction> functions = new LinkedHashMap<>();
 
         for (String field : SAMPLE_FIELDS) {
             ResourceKey<DensityFunction> key = ResourceKey.create(
                     Registries.DENSITY_FUNCTION,
                     AscensionCraft.prefix(PREFIX + field)
             );
-            DensityFunction function = registry.getOrThrow(key).value();
-            values.put(field, function.compute(context));
+            DensityFunction runtimeFunction = densityRegistry.getOrThrow(key).value().mapAll(mapper);
+            functions.put(field, runtimeFunction);
         }
 
-        return new TerrainSample(x, z, values);
+        return new Sampler(functions);
+    }
+
+    public static final class Sampler {
+        private final Map<String, DensityFunction> functions;
+
+        private Sampler(Map<String, DensityFunction> functions) {
+            this.functions = Map.copyOf(functions);
+        }
+
+        public TerrainSample sample(int x, int z) {
+            DensityFunction.FunctionContext context = new SampleContext(x, 64, z);
+            Map<String, Double> values = new LinkedHashMap<>();
+
+            for (Map.Entry<String, DensityFunction> entry : functions.entrySet()) {
+                values.put(entry.getKey(), entry.getValue().compute(context));
+            }
+
+            return new TerrainSample(x, z, values);
+        }
     }
 
     public record TerrainSample(int x, int z, Map<String, Double> values) {
@@ -69,7 +103,7 @@ public final class WorldgenDebugSampler {
             if (value("land_mask") < 0.20) {
                 return "ocean/coast";
             }
-            if (value("hero_score") >= 0.40) {
+            if (value("hero_score") >= 0.38) {
                 return "hero massif";
             }
             if (value("core_mask") >= 0.45) {
