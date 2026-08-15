@@ -3,13 +3,13 @@
   "argument": {
     "type": "minecraft:clamp",
     "input": {
-      "type": "minecraft:mul",
-      "argument1": {
-        "type": "minecraft:mul",
-        "argument1": "ascension:terrain/land_mask",
-        "argument2": "ascension:terrain/mountain_province"
-      },
-      "argument2": "ascension:terrain/foothill_profile"
+      "type": "minecraft:min",
+      "argument1": "ascension:terrain/land_mask",
+      "argument2": {
+        "type": "minecraft:min",
+        "argument1": "ascension:terrain/mountain_province",
+        "argument2": "ascension:terrain/foothill_profile"
+      }
     },
     "min": 0.0,
     "max": 1.0

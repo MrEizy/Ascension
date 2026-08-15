@@ -18,6 +18,7 @@ public final class AscDensityFunctionTypes {
         TYPES.register("slope", () -> SlopeDensityFunction.DATA_CODEC);
         TYPES.register("erosion", () -> ErosionDensityFunction.DATA_CODEC);
         TYPES.register("terrace", () -> TerraceDensityFunction.DATA_CODEC);
+        TYPES.register("height_target", () -> HeightTargetDensityFunction.DATA_CODEC);
     }
 
     private AscDensityFunctionTypes() {

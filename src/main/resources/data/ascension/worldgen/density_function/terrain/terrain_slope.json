@@ -2,9 +2,9 @@
   "type": "minecraft:flat_cache",
   "argument": {
     "type": "ascension:slope",
-    "input": "ascension:terrain/base_height",
+    "input": "ascension:terrain/surface_target_y",
     "sample_distance": 16,
-    "scale": 26.0,
+    "scale": 2.2,
     "max": 1.0
   }
 }

@@ -25,34 +25,34 @@
           "points": [
             {
               "location": -1.0,
-              "value": -0.05,
+              "value": -3.0,
               "derivative": 0.0
             },
             {
               "location": -0.5,
-              "value": -0.01,
-              "derivative": 0.1
+              "value": -1.0,
+              "derivative": 3.0
             },
             {
               "location": 0.0,
-              "value": 0.06,
-              "derivative": 0.15
+              "value": 3.0,
+              "derivative": 8.0
             },
             {
               "location": 0.5,
-              "value": 0.15,
-              "derivative": 0.15
+              "value": 9.0,
+              "derivative": 8.0
             },
             {
               "location": 1.0,
-              "value": 0.22,
+              "value": 15.0,
               "derivative": 0.0
             }
           ]
         }
       }
     },
-    "min": -0.08,
-    "max": 0.24
+    "min": -4.0,
+    "max": 16.0
   }
 }

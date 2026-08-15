@@ -22,27 +22,32 @@
         "derivative": 0.0
       },
       {
-        "location": 0.42,
+        "location": 0.22,
         "value": 0.0,
         "derivative": 0.0
       },
       {
-        "location": 0.54,
-        "value": 0.1,
-        "derivative": 0.9
+        "location": 0.34,
+        "value": 0.08,
+        "derivative": 0.8
       },
       {
-        "location": 0.66,
-        "value": 0.52,
-        "derivative": 3.0
+        "location": 0.46,
+        "value": 0.36,
+        "derivative": 2.8
+      },
+      {
+        "location": 0.58,
+        "value": 0.72,
+        "derivative": 2.8
+      },
+      {
+        "location": 0.7,
+        "value": 0.96,
+        "derivative": 1.2
       },
       {
         "location": 0.78,
-        "value": 0.92,
-        "derivative": 2.0
-      },
-      {
-        "location": 0.88,
         "value": 1.0,
         "derivative": 0.0
       },

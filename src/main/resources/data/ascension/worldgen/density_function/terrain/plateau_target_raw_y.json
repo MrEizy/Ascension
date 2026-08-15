@@ -4,14 +4,10 @@
     "type": "minecraft:clamp",
     "input": {
       "type": "minecraft:add",
-      "argument1": {
-        "type": "minecraft:mul",
-        "argument1": 1.24,
-        "argument2": "ascension:terrain/plateau_mask"
-      },
+      "argument1": "ascension:terrain/plateau_base_y",
       "argument2": {
         "type": "minecraft:mul",
-        "argument1": 0.18,
+        "argument1": 10.0,
         "argument2": {
           "type": "minecraft:mul",
           "argument1": "ascension:terrain/plateau_mask",
@@ -24,7 +20,7 @@
         }
       }
     },
-    "min": 0.0,
-    "max": 1.5
+    "min": -64.0,
+    "max": 198.0
   }
 }

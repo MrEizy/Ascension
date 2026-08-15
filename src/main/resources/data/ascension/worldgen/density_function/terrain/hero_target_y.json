@@ -1,0 +1,53 @@
+{
+  "type": "minecraft:spline",
+  "spline": {
+    "coordinate": "ascension:terrain/hero_score",
+    "points": [
+      {
+        "location": 0.0,
+        "value": -64.0,
+        "derivative": 0.0
+      },
+      {
+        "location": 0.18,
+        "value": -64.0,
+        "derivative": 0.0
+      },
+      {
+        "location": 0.28,
+        "value": 218.0,
+        "derivative": 0.0
+      },
+      {
+        "location": 0.4,
+        "value": 244.0,
+        "derivative": 210.0
+      },
+      {
+        "location": 0.52,
+        "value": 268.0,
+        "derivative": 190.0
+      },
+      {
+        "location": 0.64,
+        "value": 284.0,
+        "derivative": 110.0
+      },
+      {
+        "location": 0.76,
+        "value": 296.0,
+        "derivative": 75.0
+      },
+      {
+        "location": 0.9,
+        "value": 302.0,
+        "derivative": 25.0
+      },
+      {
+        "location": 1.0,
+        "value": 304.0,
+        "derivative": 0.0
+      }
+    ]
+  }
+}

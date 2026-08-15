@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:spline",
+  "spline": {
+    "coordinate": "ascension:terrain/plateau_mask",
+    "points": [
+      {
+        "location": 0.0,
+        "value": -64.0,
+        "derivative": 0.0
+      },
+      {
+        "location": 0.12,
+        "value": 68.0,
+        "derivative": 0.0
+      },
+      {
+        "location": 0.28,
+        "value": 100.0,
+        "derivative": 180.0
+      },
+      {
+        "location": 0.46,
+        "value": 132.0,
+        "derivative": 170.0
+      },
+      {
+        "location": 0.64,
+        "value": 155.0,
+        "derivative": 115.0
+      },
+      {
+        "location": 0.82,
+        "value": 174.0,
+        "derivative": 80.0
+      },
+      {
+        "location": 1.0,
+        "value": 188.0,
+        "derivative": 0.0
+      }
+    ]
+  }
+}

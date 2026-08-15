@@ -32,6 +32,7 @@ public class AscensionCommand {
                 )
                 .then(TribulationCommand.build())
                 .then(ChunkCommand.build())
+                .then(WorldgenDebugCommand.build())
                 .then(AffinityCommand.build())
                 .then(AscensionGive.build())
                 .then(MobCultivationCommands.build())
