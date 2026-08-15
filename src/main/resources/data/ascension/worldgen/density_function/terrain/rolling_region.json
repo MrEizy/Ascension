@@ -1,0 +1,48 @@
+{
+  "type": "minecraft:spline",
+  "spline": {
+    "coordinate": "ascension:terrain/macro_regions",
+    "points": [
+      {
+        "location": -1.0,
+        "value": 0.0,
+        "derivative": 0.0
+      },
+      {
+        "location": -0.58,
+        "value": 0.0,
+        "derivative": 0.0
+      },
+      {
+        "location": -0.42,
+        "value": 0.2,
+        "derivative": 1.0
+      },
+      {
+        "location": -0.2,
+        "value": 0.85,
+        "derivative": 1.0
+      },
+      {
+        "location": 0.06,
+        "value": 0.75,
+        "derivative": -0.5
+      },
+      {
+        "location": 0.28,
+        "value": 0.12,
+        "derivative": -1.0
+      },
+      {
+        "location": 0.4,
+        "value": 0.0,
+        "derivative": 0.0
+      },
+      {
+        "location": 1.0,
+        "value": 0.0,
+        "derivative": 0.0
+      }
+    ]
+  }
+}

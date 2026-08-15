@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:abs",
+    "argument": "ascension:terrain/mountain_belt_raw"
+  }
+}

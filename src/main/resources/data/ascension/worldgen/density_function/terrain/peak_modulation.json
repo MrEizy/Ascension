@@ -1,0 +1,51 @@
+{
+  "type": "minecraft:spline",
+  "spline": {
+    "coordinate": {
+      "type": "minecraft:flat_cache",
+      "argument": {
+        "type": "minecraft:clamp",
+        "input": {
+          "type": "minecraft:noise",
+          "noise": "ascension:terrain/peak_modulation",
+          "xz_scale": 1.0,
+          "y_scale": 0.0
+        },
+        "min": -1.0,
+        "max": 1.0
+      }
+    },
+    "points": [
+      {
+        "location": -1.0,
+        "value": 0.56,
+        "derivative": 0.0
+      },
+      {
+        "location": -0.45,
+        "value": 0.68,
+        "derivative": 0.2
+      },
+      {
+        "location": 0.0,
+        "value": 0.86,
+        "derivative": 0.35
+      },
+      {
+        "location": 0.45,
+        "value": 1.08,
+        "derivative": 0.35
+      },
+      {
+        "location": 0.78,
+        "value": 1.28,
+        "derivative": 0.18
+      },
+      {
+        "location": 1.0,
+        "value": 1.38,
+        "derivative": 0.0
+      }
+    ]
+  }
+}

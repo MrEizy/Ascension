@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:clamp",
+    "input": {
+      "type": "minecraft:shifted_noise",
+      "noise": "ascension:terrain/macro_regions",
+      "xz_scale": 1.0,
+      "y_scale": 0.0,
+      "shift_x": {
+        "type": "minecraft:flat_cache",
+        "argument": {
+          "type": "minecraft:mul",
+          "argument1": 760.0,
+          "argument2": {
+            "type": "minecraft:noise",
+            "noise": "ascension:terrain/region_warp_x",
+            "xz_scale": 1.0,
+            "y_scale": 0.0
+          }
+        }
+      },
+      "shift_y": 0.0,
+      "shift_z": {
+        "type": "minecraft:flat_cache",
+        "argument": {
+          "type": "minecraft:mul",
+          "argument1": 760.0,
+          "argument2": {
+            "type": "minecraft:noise",
+            "noise": "ascension:terrain/region_warp_z",
+            "xz_scale": 1.0,
+            "y_scale": 0.0
+          }
+        }
+      }
+    },
+    "min": -1.0,
+    "max": 1.0
+  }
+}
