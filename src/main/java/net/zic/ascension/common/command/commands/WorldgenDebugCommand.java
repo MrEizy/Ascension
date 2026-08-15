@@ -66,13 +66,32 @@ public final class WorldgenDebugCommand {
         WorldgenDebugSampler.TerrainSample sample = sampler.sample(x, z);
         ServerLevel level = source.getLevel();
         int actualY = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
+        WorldgenDebugSampler.GeneratorColumnSample generator = sampler.sampleGeneratorColumn(
+                x, z, sample.predictedSurfaceY(), actualY
+        );
 
         source.sendSuccess(() -> Component.literal("=== Ascension Worldgen Sample ==="), false);
         source.sendSuccess(() -> Component.literal("XZ: " + x + ", " + z + " | Region: " + sample.regionName()), false);
         source.sendSuccess(() -> Component.literal(String.format(
                 Locale.ROOT,
-                "Target surface: %.1f | Actual surface: %d | Delta: %+.1f",
-                sample.predictedSurfaceY(), actualY, actualY - sample.predictedSurfaceY()
+                "Ascension target: %.1f | Generator surface: %s | Actual surface: %d",
+                sample.predictedSurfaceY(),
+                generator.foundSurface() ? Integer.toString(generator.surfaceY()) : "none",
+                actualY
+        )), false);
+        if (generator.foundSurface()) {
+            source.sendSuccess(() -> Component.literal(String.format(
+                    Locale.ROOT,
+                    "Target->generator: %+.1f | Generator->actual: %+d",
+                    generator.surfaceY() - sample.predictedSurfaceY(),
+                    actualY - generator.surfaceY()
+            )), false);
+        }
+        source.sendSuccess(() -> Component.literal(String.format(
+                Locale.ROOT,
+                "Generator density: target Y%d = %.4f | actual Y%d = %.4f",
+                generator.targetProbeY(), generator.densityAtTarget(),
+                generator.actualProbeY(), generator.densityAtActual()
         )), false);
 
         source.sendSuccess(() -> Component.literal(String.format(

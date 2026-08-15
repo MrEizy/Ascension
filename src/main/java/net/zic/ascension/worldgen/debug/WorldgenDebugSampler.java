@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Runtime sampler for Ascension terrain density functions.
+ * Runtime sampler for Ascension terrain density functions and the active noise generator.
  */
 public final class WorldgenDebugSampler {
 
@@ -68,14 +68,22 @@ public final class WorldgenDebugSampler {
             functions.put(field, runtimeFunction);
         }
 
-        return new Sampler(functions);
+        return new Sampler(functions, noiseGenerator, randomState);
     }
 
     public static final class Sampler {
         private final Map<String, DensityFunction> functions;
+        private final NoiseBasedChunkGenerator noiseGenerator;
+        private final RandomState randomState;
 
-        private Sampler(Map<String, DensityFunction> functions) {
+        private Sampler(
+                Map<String, DensityFunction> functions,
+                NoiseBasedChunkGenerator noiseGenerator,
+                RandomState randomState
+        ) {
             this.functions = Map.copyOf(functions);
+            this.noiseGenerator = noiseGenerator;
+            this.randomState = randomState;
         }
 
         public TerrainSample sample(int x, int z) {
@@ -87,6 +95,61 @@ public final class WorldgenDebugSampler {
             }
 
             return new TerrainSample(x, z, values);
+        }
+
+        public GeneratorColumnSample sampleGeneratorColumn(int x, int z, double ascensionTargetY, int actualSurfaceY) {
+            int minY = noiseGenerator.getMinY();
+            int maxYExclusive = minY + noiseGenerator.getGenDepth();
+            int generatorSurfaceY = Integer.MIN_VALUE;
+
+            for (int y = maxYExclusive - 1; y >= minY; y--) {
+                double density = generatorDensity(x, y, z);
+                if (!Double.isNaN(density) && density > 0.0) {
+                    generatorSurfaceY = y + 1;
+                    break;
+                }
+            }
+
+            int targetProbeY = clampY((int) Math.round(ascensionTargetY), minY, maxYExclusive - 1);
+            int actualProbeY = clampY(actualSurfaceY - 1, minY, maxYExclusive - 1);
+
+            double densityAtTarget = generatorDensity(x, targetProbeY, z);
+            double densityAtActual = generatorDensity(x, actualProbeY, z);
+
+            return new GeneratorColumnSample(
+                    generatorSurfaceY,
+                    minY,
+                    maxYExclusive,
+                    targetProbeY,
+                    densityAtTarget,
+                    actualProbeY,
+                    densityAtActual
+            );
+        }
+
+        private double generatorDensity(int x, int y, int z) {
+            return noiseGenerator.getInterpolatedNoiseValue(
+                    randomState,
+                    new SampleContext(x, y, z)
+            );
+        }
+
+        private static int clampY(int y, int minY, int maxY) {
+            return Math.max(minY, Math.min(maxY, y));
+        }
+    }
+
+    public record GeneratorColumnSample(
+            int surfaceY,
+            int minY,
+            int maxYExclusive,
+            int targetProbeY,
+            double densityAtTarget,
+            int actualProbeY,
+            double densityAtActual
+    ) {
+        public boolean foundSurface() {
+            return surfaceY != Integer.MIN_VALUE;
         }
     }
 
