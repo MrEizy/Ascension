@@ -108,12 +108,15 @@ public final class WorldgenDebugCommand {
                 climate.value("biome_humidity"),
                 climate.value("biome_continentalness")
         )), false);
+        double weirdness = climate.value("biome_weirdness");
+        double peaksAndValleys = peaksAndValleys(weirdness);
         source.sendSuccess(() -> Component.literal(String.format(
                 Locale.ROOT,
-                "Biome climate: E %.3f | D %.3f | W %.3f | probe Y%d",
+                "Biome climate: E %.3f | D %.3f | W %.3f | PV %.3f | probe Y%d",
                 climate.value("biome_erosion"),
                 climate.value("biome_depth"),
-                climate.value("biome_weirdness"),
+                weirdness,
+                peaksAndValleys,
                 biomeProbeY
         )), false);
 
@@ -365,6 +368,10 @@ public final class WorldgenDebugCommand {
             source.sendFailure(Component.literal("Worldgen debugger could not create a seeded sampler: " + exception.getMessage()));
             return null;
         }
+    }
+
+    private static double peaksAndValleys(double weirdness) {
+        return -(Math.abs(Math.abs(weirdness) - 2.0 / 3.0) - 1.0 / 3.0) * 3.0;
     }
 
     private static double percent(int part, int total) {

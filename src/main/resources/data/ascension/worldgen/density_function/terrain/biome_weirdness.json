@@ -23,12 +23,12 @@
           "type": "minecraft:add",
           "argument1": {
             "type": "minecraft:mul",
-            "argument1": 0.10,
+            "argument1": 0.50,
             "argument2": "ascension:terrain/foothill_mask"
           },
           "argument2": {
             "type": "minecraft:mul",
-            "argument1": 0.18,
+            "argument1": 0.10,
             "argument2": "ascension:terrain/core_mask"
           }
         },
@@ -36,12 +36,12 @@
           "type": "minecraft:add",
           "argument1": {
             "type": "minecraft:mul",
-            "argument1": 0.08,
+            "argument1": 0.06666666666666667,
             "argument2": "ascension:terrain/ridge_score"
           },
           "argument2": {
             "type": "minecraft:mul",
-            "argument1": -0.22,
+            "argument1": -0.28,
             "argument2": "ascension:terrain/valley_score"
           }
         }
