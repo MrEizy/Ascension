@@ -152,11 +152,15 @@ public final class WorldgenDebugCommand {
         int heroSamples = 0;
         int above200 = 0;
         int above250 = 0;
-        int above280 = 0;
         int above300 = 0;
-        int rawAbove314 = 0;
-        int rawAbove340 = 0;
-        int rawAbove370 = 0;
+        int above340 = 0;
+        int above370 = 0;
+        int above400 = 0;
+        int above450 = 0;
+        int rawAbove320 = 0;
+        int rawAbove360 = 0;
+        int rawAbove400 = 0;
+        int rawAbove450 = 0;
 
         WorldgenDebugSampler.TerrainSample highest = null;
         WorldgenDebugSampler.TerrainSample highestRaw = null;
@@ -206,13 +210,17 @@ public final class WorldgenDebugCommand {
                 if (sample.value("hero_score") >= 0.50) heroSamples++;
                 if (y >= 200.0) above200++;
                 if (y >= 250.0) above250++;
-                if (y >= 280.0) above280++;
                 if (y >= 300.0) above300++;
+                if (y >= 340.0) above340++;
+                if (y >= 370.0) above370++;
+                if (y >= 400.0) above400++;
+                if (y >= 450.0) above450++;
 
                 double rawMountainY = sample.value("mountain_target_raw_y");
-                if (rawMountainY >= 314.0) rawAbove314++;
-                if (rawMountainY >= 340.0) rawAbove340++;
-                if (rawMountainY >= 370.0) rawAbove370++;
+                if (rawMountainY >= 320.0) rawAbove320++;
+                if (rawMountainY >= 360.0) rawAbove360++;
+                if (rawMountainY >= 400.0) rawAbove400++;
+                if (rawMountainY >= 450.0) rawAbove450++;
             }
         }
 
@@ -225,11 +233,15 @@ public final class WorldgenDebugCommand {
         final int finalHeroSamples = heroSamples;
         final int finalAbove200 = above200;
         final int finalAbove250 = above250;
-        final int finalAbove280 = above280;
         final int finalAbove300 = above300;
-        final int finalRawAbove314 = rawAbove314;
-        final int finalRawAbove340 = rawAbove340;
-        final int finalRawAbove370 = rawAbove370;
+        final int finalAbove340 = above340;
+        final int finalAbove370 = above370;
+        final int finalAbove400 = above400;
+        final int finalAbove450 = above450;
+        final int finalRawAbove320 = rawAbove320;
+        final int finalRawAbove360 = rawAbove360;
+        final int finalRawAbove400 = rawAbove400;
+        final int finalRawAbove450 = rawAbove450;
         final long finalElapsedMs = elapsedMs;
         final double finalMinLandY = minLandY;
 
@@ -250,13 +262,18 @@ public final class WorldgenDebugCommand {
         )), false);
         source.sendSuccess(() -> Component.literal(String.format(
                 Locale.ROOT,
-                "Targets >=Y200: %,d | >=Y250: %,d | >=Y280: %,d | >=Y300: %,d",
-                finalAbove200, finalAbove250, finalAbove280, finalAbove300
+                "Targets >=Y200: %,d | >=Y250: %,d | >=Y300: %,d | >=Y340: %,d",
+                finalAbove200, finalAbove250, finalAbove300, finalAbove340
         )), false);
         source.sendSuccess(() -> Component.literal(String.format(
                 Locale.ROOT,
-                "Pre-cap mountain targets >=Y314: %,d | >=Y340: %,d | >=Y370: %,d",
-                finalRawAbove314, finalRawAbove340, finalRawAbove370
+                "High targets >=Y370: %,d | >=Y400: %,d | >=Y450: %,d",
+                finalAbove370, finalAbove400, finalAbove450
+        )), false);
+        source.sendSuccess(() -> Component.literal(String.format(
+                Locale.ROOT,
+                "Raw mountain >=Y320: %,d | >=Y360: %,d | >=Y400: %,d | >=Y450: %,d",
+                finalRawAbove320, finalRawAbove360, finalRawAbove400, finalRawAbove450
         )), false);
 
         if (highest != null) {
@@ -266,8 +283,9 @@ public final class WorldgenDebugCommand {
                     "Highest target: Y %.1f at %d,%d (%s)",
                     result.predictedSurfaceY(), result.x(), result.z(), result.regionName()
             )), false);
+            int teleportY = Math.min(500, Math.max(80, (int) Math.ceil(result.predictedSurfaceY()) + 12));
             source.sendSuccess(() -> Component.literal(
-                    "Teleport candidate: /tp @s " + result.x() + " 315 " + result.z()
+                    "Teleport candidate: /tp @s " + result.x() + " " + teleportY + " " + result.z()
             ), false);
             source.sendSuccess(() -> Component.literal(String.format(
                     Locale.ROOT,
@@ -281,7 +299,7 @@ public final class WorldgenDebugCommand {
             WorldgenDebugSampler.TerrainSample result = highestRaw;
             source.sendSuccess(() -> Component.literal(String.format(
                     Locale.ROOT,
-                    "Highest pre-cap mountain target: Y %.1f at %d,%d | clamped final %.1f",
+                    "Highest raw mountain target: Y %.1f at %d,%d | final %.1f",
                     result.value("mountain_target_raw_y"), result.x(), result.z(), result.predictedSurfaceY()
             )), false);
         }
