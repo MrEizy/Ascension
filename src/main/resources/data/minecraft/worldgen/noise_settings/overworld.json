@@ -24,9 +24,9 @@
       "xz_scale": 1.0,
       "y_scale": 0.5
     },
-    "continents": "minecraft:overworld/continents",
-    "depth": "minecraft:overworld/depth",
-    "erosion": "minecraft:overworld/erosion",
+    "continents": "ascension:terrain/biome_continentalness",
+    "depth": "ascension:terrain/biome_depth",
+    "erosion": "ascension:terrain/biome_erosion",
     "final_density": "ascension:terrain/final_density",
     "fluid_level_floodedness": {
       "type": "minecraft:noise",
@@ -58,31 +58,9 @@
       "xz_scale": 1.0,
       "y_scale": 1.0
     },
-    "ridges": "minecraft:overworld/ridges",
-    "temperature": {
-      "type": "minecraft:flat_cache",
-      "argument": {
-        "type": "minecraft:shifted_noise",
-        "noise": "minecraft:temperature",
-        "shift_x": "minecraft:shift_x",
-        "shift_y": 0,
-        "shift_z": "minecraft:shift_z",
-        "xz_scale": 0.25,
-        "y_scale": 0
-      }
-    },
-    "vegetation": {
-      "type": "minecraft:flat_cache",
-      "argument": {
-        "type": "minecraft:shifted_noise",
-        "noise": "minecraft:vegetation",
-        "shift_x": "minecraft:shift_x",
-        "shift_y": 0,
-        "shift_z": "minecraft:shift_z",
-        "xz_scale": 0.25,
-        "y_scale": 0
-      }
-    },
+    "ridges": "ascension:terrain/biome_weirdness",
+    "temperature": "ascension:terrain/biome_temperature",
+    "vegetation": "ascension:terrain/biome_humidity",
     "vein_gap": {
       "type": "minecraft:noise",
       "noise": "minecraft:ore_gap",

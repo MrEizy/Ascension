@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -69,6 +70,12 @@ public final class WorldgenDebugCommand {
         WorldgenDebugSampler.GeneratorColumnSample generator = sampler.sampleGeneratorColumn(
                 x, z, sample.predictedSurfaceY(), actualY
         );
+        int biomeProbeY = actualY - 1;
+        WorldgenDebugSampler.BiomeClimateSample climate = sampler.sampleBiomeClimate(x, biomeProbeY, z);
+        String biomeId = level.getBiome(new BlockPos(x, biomeProbeY, z))
+                .unwrapKey()
+                .map(key -> key.identifier().toString())
+                .orElse("unregistered");
 
         source.sendSuccess(() -> Component.literal("=== Ascension Worldgen Sample ==="), false);
         source.sendSuccess(() -> Component.literal("XZ: " + x + ", " + z + " | Region: " + sample.regionName()), false);
@@ -92,6 +99,22 @@ public final class WorldgenDebugCommand {
                 "Generator density: target Y%d = %.4f | actual Y%d = %.4f",
                 generator.targetProbeY(), generator.densityAtTarget(),
                 generator.actualProbeY(), generator.densityAtActual()
+        )), false);
+        source.sendSuccess(() -> Component.literal(String.format(
+                Locale.ROOT,
+                "Biome: %s | T %.3f | H %.3f | C %.3f",
+                biomeId,
+                climate.value("biome_temperature"),
+                climate.value("biome_humidity"),
+                climate.value("biome_continentalness")
+        )), false);
+        source.sendSuccess(() -> Component.literal(String.format(
+                Locale.ROOT,
+                "Biome climate: E %.3f | D %.3f | W %.3f | probe Y%d",
+                climate.value("biome_erosion"),
+                climate.value("biome_depth"),
+                climate.value("biome_weirdness"),
+                biomeProbeY
         )), false);
 
         source.sendSuccess(() -> Component.literal(String.format(

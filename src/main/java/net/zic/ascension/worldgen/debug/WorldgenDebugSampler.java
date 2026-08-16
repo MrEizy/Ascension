@@ -43,6 +43,15 @@ public final class WorldgenDebugSampler {
             "surface_target_y"
     };
 
+    private static final String[] BIOME_FIELDS = {
+            "biome_temperature",
+            "biome_humidity",
+            "biome_continentalness",
+            "biome_erosion",
+            "biome_depth",
+            "biome_weirdness"
+    };
+
     private static final String[] SCAN_FIELDS = {
             "land_mask",
             "orogeny",
@@ -76,8 +85,9 @@ public final class WorldgenDebugSampler {
         var densityRegistry = level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION);
         Map<String, DensityFunction> functions = mapFields(densityRegistry, mapper, SAMPLE_FIELDS);
         Map<String, DensityFunction> scanFunctions = selectFields(functions, SCAN_FIELDS);
+        Map<String, DensityFunction> biomeFunctions = mapFields(densityRegistry, mapper, BIOME_FIELDS);
 
-        return new Sampler(functions, scanFunctions, noiseGenerator, randomState);
+        return new Sampler(functions, scanFunctions, biomeFunctions, noiseGenerator, randomState);
     }
 
     private static Map<String, DensityFunction> mapFields(
@@ -114,31 +124,39 @@ public final class WorldgenDebugSampler {
     public static final class Sampler {
         private final Map<String, DensityFunction> functions;
         private final Map<String, DensityFunction> scanFunctions;
+        private final Map<String, DensityFunction> biomeFunctions;
         private final NoiseBasedChunkGenerator noiseGenerator;
         private final RandomState randomState;
 
         private Sampler(
                 Map<String, DensityFunction> functions,
                 Map<String, DensityFunction> scanFunctions,
+                Map<String, DensityFunction> biomeFunctions,
                 NoiseBasedChunkGenerator noiseGenerator,
                 RandomState randomState
         ) {
             this.functions = functions;
             this.scanFunctions = scanFunctions;
+            this.biomeFunctions = biomeFunctions;
             this.noiseGenerator = noiseGenerator;
             this.randomState = randomState;
         }
 
         public TerrainSample sample(int x, int z) {
-            return sampleFields(functions, x, z);
+            return sampleFields(functions, x, 64, z);
         }
 
         public TerrainSample sampleForScan(int x, int z) {
-            return sampleFields(scanFunctions, x, z);
+            return sampleFields(scanFunctions, x, 64, z);
         }
 
-        private static TerrainSample sampleFields(Map<String, DensityFunction> fields, int x, int z) {
-            DensityFunction.FunctionContext context = new SampleContext(x, 64, z);
+        public BiomeClimateSample sampleBiomeClimate(int x, int y, int z) {
+            TerrainSample values = sampleFields(biomeFunctions, x, y, z);
+            return new BiomeClimateSample(values.values());
+        }
+
+        private static TerrainSample sampleFields(Map<String, DensityFunction> fields, int x, int y, int z) {
+            DensityFunction.FunctionContext context = new SampleContext(x, y, z);
             Map<String, Double> values = new LinkedHashMap<>();
 
             for (Map.Entry<String, DensityFunction> entry : fields.entrySet()) {
@@ -213,6 +231,13 @@ public final class WorldgenDebugSampler {
     ) {
         public boolean foundSurface() {
             return surfaceY != Integer.MIN_VALUE;
+        }
+    }
+
+
+    public record BiomeClimateSample(Map<String, Double> values) {
+        public double value(String id) {
+            return values.getOrDefault(id, 0.0);
         }
     }
 

@@ -1,0 +1,53 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:clamp",
+    "input": {
+      "type": "minecraft:add",
+      "argument1": {
+        "type": "minecraft:mul",
+        "argument1": "minecraft:overworld/ridges",
+        "argument2": {
+          "type": "minecraft:add",
+          "argument1": 1.0,
+          "argument2": {
+            "type": "minecraft:mul",
+            "argument1": -1.0,
+            "argument2": "ascension:terrain/foothill_mask"
+          }
+        }
+      },
+      "argument2": {
+        "type": "minecraft:add",
+        "argument1": {
+          "type": "minecraft:add",
+          "argument1": {
+            "type": "minecraft:mul",
+            "argument1": 0.10,
+            "argument2": "ascension:terrain/foothill_mask"
+          },
+          "argument2": {
+            "type": "minecraft:mul",
+            "argument1": 0.18,
+            "argument2": "ascension:terrain/core_mask"
+          }
+        },
+        "argument2": {
+          "type": "minecraft:add",
+          "argument1": {
+            "type": "minecraft:mul",
+            "argument1": 0.08,
+            "argument2": "ascension:terrain/ridge_score"
+          },
+          "argument2": {
+            "type": "minecraft:mul",
+            "argument1": -0.22,
+            "argument2": "ascension:terrain/valley_score"
+          }
+        }
+      }
+    },
+    "min": -1.0,
+    "max": 1.0
+  }
+}
