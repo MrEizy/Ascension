@@ -12,13 +12,20 @@ public class AscLangProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
 
-        // World presets
+        // World preset
         add("generator.ascension.ascension", "Jianghu");
 
         // Biomes
         add("biome.ascension.greystone_foothills", "Greystone Foothills");
         add("biome.ascension.azure_cloud_range", "Azure Cloud Range");
         add("biome.ascension.heavenreach_peaks", "Heavenreach Peaks");
+        add("biome.ascension.ancient_grove", "Ancient Grove");
+        add("biome.ascension.jadebloom_forest", "Jadebloom Forest");
+        add("biome.ascension.misty_woods", "Misty Woods");
+        add("biome.ascension.verdant_moor", "Verdant Moor");
+        add("biome.ascension.golden_steppe", "Golden Steppe");
+
+
 
         // Configs
         add("ascension.config.hud", "HUD Settings");

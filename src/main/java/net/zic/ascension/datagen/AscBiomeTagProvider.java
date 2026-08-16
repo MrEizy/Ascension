@@ -17,6 +17,7 @@ public class AscBiomeTagProvider extends BiomeTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        // Ascension biomes
         tag(ModTags.Biomes.MOUNTAIN_BIOMES)
                 .add(
                         AscBiomes.GREYSTONE_FOOTHILLS,
@@ -33,11 +34,29 @@ public class AscBiomeTagProvider extends BiomeTagsProvider {
         tag(ModTags.Biomes.MOUNTAIN_PEAK_BIOMES)
                 .add(AscBiomes.HEAVENREACH_PEAKS);
 
+        tag(ModTags.Biomes.FOREST_BIOMES)
+                .add(
+                        AscBiomes.ANCIENT_GROVE,
+                        AscBiomes.JADEBLOOM_FOREST,
+                        AscBiomes.MISTY_WOODS
+                );
+
+        tag(ModTags.Biomes.OPEN_COUNTRY_BIOMES)
+                .add(
+                        AscBiomes.VERDANT_MOOR,
+                        AscBiomes.GOLDEN_STEPPE
+                );
+
         tag(BiomeTags.IS_OVERWORLD)
                 .add(
                         AscBiomes.GREYSTONE_FOOTHILLS,
                         AscBiomes.AZURE_CLOUD_RANGE,
-                        AscBiomes.HEAVENREACH_PEAKS
+                        AscBiomes.HEAVENREACH_PEAKS,
+                        AscBiomes.ANCIENT_GROVE,
+                        AscBiomes.JADEBLOOM_FOREST,
+                        AscBiomes.MISTY_WOODS,
+                        AscBiomes.VERDANT_MOOR,
+                        AscBiomes.GOLDEN_STEPPE
                 );
 
         tag(BiomeTags.IS_MOUNTAIN)
@@ -51,30 +70,53 @@ public class AscBiomeTagProvider extends BiomeTagsProvider {
                 .add(AscBiomes.GREYSTONE_FOOTHILLS);
 
         tag(BiomeTags.IS_FOREST)
-                .add(AscBiomes.AZURE_CLOUD_RANGE);
+                .add(
+                        AscBiomes.AZURE_CLOUD_RANGE,
+                        AscBiomes.ANCIENT_GROVE,
+                        AscBiomes.JADEBLOOM_FOREST,
+                        AscBiomes.MISTY_WOODS
+                );
 
         tag(BiomeTags.IS_TAIGA)
-                .add(AscBiomes.AZURE_CLOUD_RANGE);
+                .add(
+                        AscBiomes.AZURE_CLOUD_RANGE,
+                        AscBiomes.MISTY_WOODS
+                );
 
         tag(BiomeTags.HAS_MINESHAFT)
                 .add(
                         AscBiomes.GREYSTONE_FOOTHILLS,
                         AscBiomes.AZURE_CLOUD_RANGE,
-                        AscBiomes.HEAVENREACH_PEAKS
+                        AscBiomes.HEAVENREACH_PEAKS,
+                        AscBiomes.ANCIENT_GROVE,
+                        AscBiomes.JADEBLOOM_FOREST,
+                        AscBiomes.MISTY_WOODS,
+                        AscBiomes.VERDANT_MOOR,
+                        AscBiomes.GOLDEN_STEPPE
                 );
 
         tag(BiomeTags.HAS_STRONGHOLD)
                 .add(
                         AscBiomes.GREYSTONE_FOOTHILLS,
                         AscBiomes.AZURE_CLOUD_RANGE,
-                        AscBiomes.HEAVENREACH_PEAKS
+                        AscBiomes.HEAVENREACH_PEAKS,
+                        AscBiomes.ANCIENT_GROVE,
+                        AscBiomes.JADEBLOOM_FOREST,
+                        AscBiomes.MISTY_WOODS,
+                        AscBiomes.VERDANT_MOOR,
+                        AscBiomes.GOLDEN_STEPPE
                 );
 
         tag(BiomeTags.HAS_TRIAL_CHAMBERS)
                 .add(
                         AscBiomes.GREYSTONE_FOOTHILLS,
                         AscBiomes.AZURE_CLOUD_RANGE,
-                        AscBiomes.HEAVENREACH_PEAKS
+                        AscBiomes.HEAVENREACH_PEAKS,
+                        AscBiomes.ANCIENT_GROVE,
+                        AscBiomes.JADEBLOOM_FOREST,
+                        AscBiomes.MISTY_WOODS,
+                        AscBiomes.VERDANT_MOOR,
+                        AscBiomes.GOLDEN_STEPPE
                 );
 
         tag(BiomeTags.HAS_RUINED_PORTAL_MOUNTAIN)

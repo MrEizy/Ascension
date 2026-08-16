@@ -2,6 +2,11 @@
   "values": [
     "ascension:greystone_foothills",
     "ascension:azure_cloud_range",
-    "ascension:heavenreach_peaks"
+    "ascension:heavenreach_peaks",
+    "ascension:ancient_grove",
+    "ascension:jadebloom_forest",
+    "ascension:misty_woods",
+    "ascension:verdant_moor",
+    "ascension:golden_steppe"
   ]
 }

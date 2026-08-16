@@ -87,7 +87,11 @@ public class AscBiomeModifier {
                         biomes.getOrThrow(Biomes.BIRCH_FOREST),
                         biomes.getOrThrow(Biomes.DARK_FOREST),
                         biomes.getOrThrow(Biomes.BIRCH_FOREST),
-                        biomes.getOrThrow(AscBiomes.GREYSTONE_FOOTHILLS)
+                        biomes.getOrThrow(AscBiomes.GREYSTONE_FOOTHILLS),
+                        biomes.getOrThrow(AscBiomes.ANCIENT_GROVE),
+                        biomes.getOrThrow(AscBiomes.JADEBLOOM_FOREST),
+                        biomes.getOrThrow(AscBiomes.MISTY_WOODS),
+                        biomes.getOrThrow(AscBiomes.VERDANT_MOOR)
                 ),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.GINSENG_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
@@ -109,7 +113,11 @@ public class AscBiomeModifier {
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
         context.register(ADD_WHITE_JADE_ORCHID, new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.DARK_FOREST), biomes.getOrThrow(Biomes.PALE_GARDEN)),
+                HolderSet.direct(
+                        biomes.getOrThrow(Biomes.DARK_FOREST),
+                        biomes.getOrThrow(Biomes.PALE_GARDEN),
+                        biomes.getOrThrow(AscBiomes.ANCIENT_GROVE)
+                ),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.WHITE_JADE_ORCHID_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
@@ -150,7 +158,9 @@ public class AscBiomeModifier {
                         biomes.getOrThrow(Biomes.PLAINS),
                         biomes.getOrThrow(Biomes.MEADOW),
                         biomes.getOrThrow(Biomes.WINDSWEPT_HILLS),
-                        biomes.getOrThrow(AscBiomes.GREYSTONE_FOOTHILLS)
+                        biomes.getOrThrow(AscBiomes.GREYSTONE_FOOTHILLS),
+                        biomes.getOrThrow(AscBiomes.JADEBLOOM_FOREST),
+                        biomes.getOrThrow(AscBiomes.VERDANT_MOOR)
                 ),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.PEACH_TREE_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));

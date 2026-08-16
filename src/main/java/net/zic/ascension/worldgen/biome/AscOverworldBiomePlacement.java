@@ -9,6 +9,7 @@ public final class AscOverworldBiomePlacement {
     }
 
     public static ResourceKey<Biome> remapSurfaceBiome(ResourceKey<Biome> vanillaBiome) {
+        // Mountains
         if (isAny(vanillaBiome,
                 Biomes.MEADOW,
                 Biomes.WINDSWEPT_HILLS,
@@ -28,6 +29,41 @@ public final class AscOverworldBiomePlacement {
                 Biomes.FROZEN_PEAKS,
                 Biomes.STONY_PEAKS)) {
             return AscBiomes.HEAVENREACH_PEAKS;
+        }
+
+        // Forests
+        if (isAny(vanillaBiome,
+                Biomes.DARK_FOREST,
+                Biomes.OLD_GROWTH_BIRCH_FOREST)) {
+            return AscBiomes.ANCIENT_GROVE;
+        }
+
+        if (isAny(vanillaBiome,
+                Biomes.FOREST,
+                Biomes.FLOWER_FOREST,
+                Biomes.BIRCH_FOREST)) {
+            return AscBiomes.JADEBLOOM_FOREST;
+        }
+
+        if (isAny(vanillaBiome,
+                Biomes.TAIGA,
+                Biomes.OLD_GROWTH_PINE_TAIGA,
+                Biomes.OLD_GROWTH_SPRUCE_TAIGA)) {
+            return AscBiomes.MISTY_WOODS;
+        }
+
+        // Open-countries
+        if (isAny(vanillaBiome,
+                Biomes.PLAINS,
+                Biomes.SUNFLOWER_PLAINS)) {
+            return AscBiomes.VERDANT_MOOR;
+        }
+
+        if (isAny(vanillaBiome,
+                Biomes.SAVANNA,
+                Biomes.SAVANNA_PLATEAU,
+                Biomes.WINDSWEPT_SAVANNA)) {
+            return AscBiomes.GOLDEN_STEPPE;
         }
 
         return vanillaBiome;

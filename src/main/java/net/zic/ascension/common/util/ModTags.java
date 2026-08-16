@@ -73,6 +73,8 @@ public class ModTags {
         public static final TagKey<Biome> FOOTHILL_BIOMES = createTag("foothill_biomes");
         public static final TagKey<Biome> MOUNTAIN_SLOPE_BIOMES = createTag("mountain_slope_biomes");
         public static final TagKey<Biome> MOUNTAIN_PEAK_BIOMES = createTag("mountain_peak_biomes");
+        public static final TagKey<Biome> FOREST_BIOMES = createTag("forest_biomes");
+        public static final TagKey<Biome> OPEN_COUNTRY_BIOMES = createTag("open_country_biomes");
 
         private static TagKey<Biome> createTag(String name) {
             return TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
