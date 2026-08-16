@@ -6,9 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 
-/**
- * Converts surface-height field, expressed in block Y coordinates, into the density offset used by the overworld terrain equation.
- */
 public record HeightTargetDensityFunction(
         DensityFunction targetY,
         double baselineY,

@@ -3,7 +3,8 @@
   "biomes": [
     "minecraft:plains",
     "minecraft:meadow",
-    "minecraft:windswept_hills"
+    "minecraft:windswept_hills",
+    "ascension:greystone_foothills"
   ],
   "features": "ascension:peach_tree_placed",
   "step": "vegetal_decoration"

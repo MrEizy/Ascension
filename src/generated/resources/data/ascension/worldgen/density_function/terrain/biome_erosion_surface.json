@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:clamp",
+    "input": {
+      "type": "minecraft:add",
+      "argument1": {
+        "type": "minecraft:add",
+        "argument1": {
+          "type": "minecraft:add",
+          "argument1": {
+            "type": "minecraft:add",
+            "argument1": {
+              "type": "minecraft:add",
+              "argument1": 0.58,
+              "argument2": {
+                "type": "minecraft:mul",
+                "argument1": -0.95,
+                "argument2": "ascension:terrain/foothill_mask"
+              }
+            },
+            "argument2": {
+              "type": "minecraft:mul",
+              "argument1": -0.38,
+              "argument2": "ascension:terrain/core_mask"
+            }
+          },
+          "argument2": {
+            "type": "minecraft:mul",
+            "argument1": -0.18,
+            "argument2": "ascension:terrain/ridge_score"
+          }
+        },
+        "argument2": {
+          "type": "minecraft:mul",
+          "argument1": 0.38,
+          "argument2": "ascension:terrain/valley_score"
+        }
+      },
+      "argument2": {
+        "type": "minecraft:mul",
+        "argument1": -0.25,
+        "argument2": "ascension:terrain/plateau_mask"
+      }
+    },
+    "max": 1.0,
+    "min": -1.0
+  }
+}

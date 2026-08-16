@@ -6,9 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 
-/**
- * Estimates the horizontal gradient magnitude of a density function.
- */
 public record SlopeDensityFunction(
         DensityFunction input,
         int sampleDistance,

@@ -6,9 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 
-/**
- * A lightweight slope/curvature-aware relief pass for two-dimensional height fields.
- */
 public record ErosionDensityFunction(
         DensityFunction input,
         int sampleDistance,

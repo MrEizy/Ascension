@@ -6,9 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 
-/**
- * Compresses a continuous height field toward broad elevation shelves.
- */
 public record TerraceDensityFunction(
         DensityFunction input,
         double stepSize,

@@ -11,9 +11,6 @@ import net.zic.ascension.AscensionCraft;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Runtime sampler for Ascension terrain density functions and the active noise generator.
- */
 public final class WorldgenDebugSampler {
 
     private static final String PREFIX = "terrain/";

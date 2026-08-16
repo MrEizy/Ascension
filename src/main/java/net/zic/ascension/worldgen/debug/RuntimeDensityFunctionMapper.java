@@ -5,9 +5,6 @@ import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
-/**
- * Seeds data-pack density functions with the same world seed/noise state used by world generation
- */
 final class RuntimeDensityFunctionMapper implements DensityFunction.Visitor {
 
     private final RandomState randomState;

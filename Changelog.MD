@@ -10,6 +10,8 @@
 • Added 5 new bloodlines  
 • Added 6 new Herb
 • Added 5 new Artifact
+• Added New World Type -> Jianghu with overhauled terrain generation and increased world height (416)
+• Added 6 new ascension biomes; Heavenreach Peak, Graystone Foothills, Azure Cloud Range
 • Ported Most blocks from 1.21.1
 • Added Datapack support for Paths, Bloodlines, Physiques, Techniques, Skills, Tribulations and Atmospheric Qi Density.  
 • Health, Qi and Stamina Hud  

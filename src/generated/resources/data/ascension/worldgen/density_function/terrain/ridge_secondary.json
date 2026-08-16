@@ -1,0 +1,41 @@
+{
+  "type": "ascension:hermite_spline",
+  "coordinate": "ascension:terrain/ridge_secondary_coord",
+  "points": [
+    {
+      "derivative": 0.0,
+      "location": 0.0,
+      "value": 1.0
+    },
+    {
+      "derivative": -0.5,
+      "location": 0.05,
+      "value": 0.96
+    },
+    {
+      "derivative": -2.8,
+      "location": 0.12,
+      "value": 0.7
+    },
+    {
+      "derivative": -2.3,
+      "location": 0.2,
+      "value": 0.34
+    },
+    {
+      "derivative": -1.1,
+      "location": 0.3,
+      "value": 0.08
+    },
+    {
+      "derivative": 0.0,
+      "location": 0.36,
+      "value": 0.0
+    },
+    {
+      "derivative": 0.0,
+      "location": 1.0,
+      "value": 0.0
+    }
+  ]
+}

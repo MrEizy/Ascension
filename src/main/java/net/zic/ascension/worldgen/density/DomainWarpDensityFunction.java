@@ -6,9 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 
-/**
- * Evaluates another density function in horizontally warped coordinate space.
- */
 public record DomainWarpDensityFunction(
         DensityFunction input,
         DensityFunction shiftX,

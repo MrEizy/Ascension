@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:flat_cache",
-  "argument": {
-    "type": "minecraft:max",
-    "argument1": "ascension:terrain/foothill_target_y",
-    "argument2": "ascension:terrain/core_target_y"
-  }
-}
