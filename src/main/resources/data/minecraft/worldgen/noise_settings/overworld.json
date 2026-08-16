@@ -13,7 +13,7 @@
   "legacy_random_source": false,
   "noise": {
     "min_y": -64,
-    "height": 576,
+    "height": 480,
     "size_horizontal": 1,
     "size_vertical": 2
   },
@@ -43,7 +43,7 @@
     "initial_density_without_jaggedness": "ascension:terrain/initial_density_without_jaggedness",
     "preliminary_surface_level": {
       "type": "minecraft:find_top_surface",
-      "upper_bound": 512,
+      "upper_bound": 416,
       "lower_bound": -64,
       "cell_height": 8,
       "density": {

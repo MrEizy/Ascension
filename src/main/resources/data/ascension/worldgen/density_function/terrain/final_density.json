@@ -14,9 +14,9 @@
             "argument1": {
               "type": "minecraft:y_clamped_gradient",
               "from_y": -64,
-              "to_y": 512,
+              "to_y": 416,
               "from_value": 2.0,
-              "to_value": -7.0
+              "to_value": -5.5
             },
             "argument2": "ascension:terrain/base_height"
           },

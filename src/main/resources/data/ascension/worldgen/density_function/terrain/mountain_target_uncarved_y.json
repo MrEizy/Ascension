@@ -16,6 +16,6 @@
       "argument2": "ascension:terrain/hero_target_y"
     },
     "min": -64.0,
-    "max": 496.0
+    "max": 400.0
   }
 }

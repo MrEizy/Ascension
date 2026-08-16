@@ -13,22 +13,12 @@
       "shift_x": {
         "type": "minecraft:mul",
         "argument1": 0.35,
-        "argument2": {
-          "type": "minecraft:noise",
-          "noise": "ascension:terrain/mountain_warp_x",
-          "xz_scale": 1.0,
-          "y_scale": 0.0
-        }
+        "argument2": "ascension:terrain/mountain_warp_x"
       },
       "shift_z": {
         "type": "minecraft:mul",
         "argument1": 0.35,
-        "argument2": {
-          "type": "minecraft:noise",
-          "noise": "ascension:terrain/mountain_warp_z",
-          "xz_scale": 1.0,
-          "y_scale": 0.0
-        }
+        "argument2": "ascension:terrain/mountain_warp_z"
       },
       "amplitude": 650.0
     },

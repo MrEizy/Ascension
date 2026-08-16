@@ -43,6 +43,22 @@ public final class WorldgenDebugSampler {
             "surface_target_y"
     };
 
+    private static final String[] SCAN_FIELDS = {
+            "land_mask",
+            "orogeny",
+            "mountain_province",
+            "mountain_axis_abs",
+            "foothill_mask",
+            "core_mask",
+            "massif_noise",
+            "hero_gate",
+            "hero_score",
+            "plateau_mask",
+            "rolling_mask",
+            "mountain_target_raw_y",
+            "surface_target_y"
+    };
+
     private WorldgenDebugSampler() {
     }
 
@@ -58,9 +74,19 @@ public final class WorldgenDebugSampler {
         RuntimeDensityFunctionMapper mapper = new RuntimeDensityFunctionMapper(randomState);
 
         var densityRegistry = level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION);
-        Map<String, DensityFunction> functions = new LinkedHashMap<>();
+        Map<String, DensityFunction> functions = mapFields(densityRegistry, mapper, SAMPLE_FIELDS);
+        Map<String, DensityFunction> scanFunctions = selectFields(functions, SCAN_FIELDS);
 
-        for (String field : SAMPLE_FIELDS) {
+        return new Sampler(functions, scanFunctions, noiseGenerator, randomState);
+    }
+
+    private static Map<String, DensityFunction> mapFields(
+            net.minecraft.core.HolderLookup.RegistryLookup<DensityFunction> densityRegistry,
+            RuntimeDensityFunctionMapper mapper,
+            String[] fields
+    ) {
+        Map<String, DensityFunction> functions = new LinkedHashMap<>();
+        for (String field : fields) {
             ResourceKey<DensityFunction> key = ResourceKey.create(
                     Registries.DENSITY_FUNCTION,
                     AscensionCraft.prefix(PREFIX + field)
@@ -68,34 +94,58 @@ public final class WorldgenDebugSampler {
             DensityFunction runtimeFunction = densityRegistry.getOrThrow(key).value().mapAll(mapper);
             functions.put(field, runtimeFunction);
         }
+        return Map.copyOf(functions);
+    }
 
-        return new Sampler(functions, noiseGenerator, randomState);
+    private static Map<String, DensityFunction> selectFields(
+            Map<String, DensityFunction> functions,
+            String[] fields
+    ) {
+        Map<String, DensityFunction> selected = new LinkedHashMap<>();
+        for (String field : fields) {
+            DensityFunction function = functions.get(field);
+            if (function != null) {
+                selected.put(field, function);
+            }
+        }
+        return Map.copyOf(selected);
     }
 
     public static final class Sampler {
         private final Map<String, DensityFunction> functions;
+        private final Map<String, DensityFunction> scanFunctions;
         private final NoiseBasedChunkGenerator noiseGenerator;
         private final RandomState randomState;
 
         private Sampler(
                 Map<String, DensityFunction> functions,
+                Map<String, DensityFunction> scanFunctions,
                 NoiseBasedChunkGenerator noiseGenerator,
                 RandomState randomState
         ) {
-            this.functions = Map.copyOf(functions);
+            this.functions = functions;
+            this.scanFunctions = scanFunctions;
             this.noiseGenerator = noiseGenerator;
             this.randomState = randomState;
         }
 
         public TerrainSample sample(int x, int z) {
+            return sampleFields(functions, x, z);
+        }
+
+        public TerrainSample sampleForScan(int x, int z) {
+            return sampleFields(scanFunctions, x, z);
+        }
+
+        private static TerrainSample sampleFields(Map<String, DensityFunction> fields, int x, int z) {
             DensityFunction.FunctionContext context = new SampleContext(x, 64, z);
             Map<String, Double> values = new LinkedHashMap<>();
 
-            for (Map.Entry<String, DensityFunction> entry : functions.entrySet()) {
+            for (Map.Entry<String, DensityFunction> entry : fields.entrySet()) {
                 values.put(entry.getKey(), entry.getValue().compute(context));
             }
 
-            return new TerrainSample(x, z, values);
+            return new TerrainSample(x, z, Map.copyOf(values));
         }
 
         public GeneratorColumnSample sampleGeneratorColumn(int x, int z, double ascensionTargetY, int actualSurfaceY) {
@@ -103,11 +153,23 @@ public final class WorldgenDebugSampler {
             int maxYExclusive = minY + noiseGenerator.getGenDepth();
             int generatorSurfaceY = Integer.MIN_VALUE;
 
-            for (int y = maxYExclusive - 1; y >= minY; y--) {
+            final int stride = 8;
+            int positiveBandY = Integer.MIN_VALUE;
+            for (int y = maxYExclusive - 1; y >= minY; y -= stride) {
                 double density = generatorDensity(x, y, z);
                 if (!Double.isNaN(density) && density > 0.0) {
-                    generatorSurfaceY = y + 1;
+                    positiveBandY = y;
                     break;
+                }
+            }
+            if (positiveBandY != Integer.MIN_VALUE) {
+                int refineTop = Math.min(maxYExclusive - 1, positiveBandY + stride - 1);
+                for (int y = refineTop; y >= positiveBandY; y--) {
+                    double density = generatorDensity(x, y, z);
+                    if (!Double.isNaN(density) && density > 0.0) {
+                        generatorSurfaceY = y + 1;
+                        break;
+                    }
                 }
             }
 

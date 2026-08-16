@@ -10,18 +10,8 @@
         "xz_scale": 1.0,
         "y_scale": 0.0
       },
-      "shift_x": {
-        "type": "minecraft:noise",
-        "noise": "ascension:terrain/region_warp_x",
-        "xz_scale": 1.0,
-        "y_scale": 0.0
-      },
-      "shift_z": {
-        "type": "minecraft:noise",
-        "noise": "ascension:terrain/region_warp_z",
-        "xz_scale": 1.0,
-        "y_scale": 0.0
-      },
+      "shift_x": "ascension:terrain/region_warp_x",
+      "shift_z": "ascension:terrain/region_warp_z",
       "amplitude": 860.0
     },
     "min": -1.0,

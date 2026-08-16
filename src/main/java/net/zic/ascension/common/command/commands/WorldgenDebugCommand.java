@@ -18,7 +18,7 @@ import java.util.Locale;
 public final class WorldgenDebugCommand {
 
     private static final int DEFAULT_SCAN_RADIUS = 5_000;
-    private static final int DEFAULT_SCAN_STEP = 128;
+    private static final int DEFAULT_SCAN_STEP = 256;
 
     private WorldgenDebugCommand() {
     }
@@ -176,7 +176,7 @@ public final class WorldgenDebugCommand {
 
         for (int x = minX; x <= maxX; x += step) {
             for (int z = minZ; z <= maxZ; z += step) {
-                WorldgenDebugSampler.TerrainSample sample = sampler.sample(x, z);
+                WorldgenDebugSampler.TerrainSample sample = sampler.sampleForScan(x, z);
                 samples++;
 
                 double land = sample.value("land_mask");
