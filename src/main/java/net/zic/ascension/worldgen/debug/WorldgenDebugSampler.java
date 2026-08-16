@@ -49,7 +49,9 @@ public final class WorldgenDebugSampler {
             "biome_continentalness",
             "biome_erosion",
             "biome_depth",
-            "biome_weirdness"
+            "biome_weirdness",
+            "biome_surface_depth",
+            "biome_surface_proximity"
     };
 
     private static final String[] SCAN_FIELDS = {

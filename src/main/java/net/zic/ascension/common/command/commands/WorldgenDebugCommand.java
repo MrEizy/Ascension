@@ -49,16 +49,16 @@ public final class WorldgenDebugCommand {
 
     private static int sampleCurrent(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
-        return sendSample(context.getSource(), player.getBlockX(), player.getBlockZ());
+        return sendSample(context.getSource(), player.getBlockX(), player.getBlockZ(), player.getBlockY());
     }
 
     private static int sampleCoordinates(CommandContext<CommandSourceStack> context) {
         int x = IntegerArgumentType.getInteger(context, "x");
         int z = IntegerArgumentType.getInteger(context, "z");
-        return sendSample(context.getSource(), x, z);
+        return sendSample(context.getSource(), x, z, null);
     }
 
-    private static int sendSample(CommandSourceStack source, int x, int z) {
+    private static int sendSample(CommandSourceStack source, int x, int z, Integer currentProbeY) {
         WorldgenDebugSampler.Sampler sampler = createSampler(source);
         if (sampler == null) {
             return 0;
@@ -119,6 +119,39 @@ public final class WorldgenDebugCommand {
                 peaksAndValleys,
                 biomeProbeY
         )), false);
+        source.sendSuccess(() -> Component.literal(String.format(
+                Locale.ROOT,
+                "Surface biome influence: %.3f | depth below target: %.1f blocks",
+                climate.value("biome_surface_proximity"),
+                climate.value("biome_surface_depth") * 64.0
+        )), false);
+
+        if (currentProbeY != null && Math.abs(currentProbeY - biomeProbeY) > 2) {
+            WorldgenDebugSampler.BiomeClimateSample currentClimate = sampler.sampleBiomeClimate(x, currentProbeY, z);
+            String currentBiomeId = level.getBiome(new BlockPos(x, currentProbeY, z))
+                    .unwrapKey()
+                    .map(key -> key.identifier().toString())
+                    .orElse("unregistered");
+            double currentWeirdness = currentClimate.value("biome_weirdness");
+            double currentPeaksAndValleys = peaksAndValleys(currentWeirdness);
+
+            source.sendSuccess(() -> Component.literal(String.format(
+                    Locale.ROOT,
+                    "Current Y%d biome: %s | E %.3f | D %.3f | W %.3f | PV %.3f",
+                    currentProbeY,
+                    currentBiomeId,
+                    currentClimate.value("biome_erosion"),
+                    currentClimate.value("biome_depth"),
+                    currentWeirdness,
+                    currentPeaksAndValleys
+            )), false);
+            source.sendSuccess(() -> Component.literal(String.format(
+                    Locale.ROOT,
+                    "Current surface influence: %.3f | depth below target: %.1f blocks",
+                    currentClimate.value("biome_surface_proximity"),
+                    currentClimate.value("biome_surface_depth") * 64.0
+            )), false);
+        }
 
         source.sendSuccess(() -> Component.literal(String.format(
                 Locale.ROOT,
