@@ -1,14 +1,17 @@
 package net.zic.ascension.api.ascension.core.progression;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ProgressAction {
     //an extra layer of salting to prevent duplicate keys among same type instances
     UUID getUniqueId();
+
     /**
      * performs a generic action on a source assuming the Condition was met
      *
@@ -22,6 +25,10 @@ public interface ProgressAction {
      * @param direction is the expected progression gained/up or lost/down
      */
     void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction);
+
+    default List<ProgressActionDescription> getDescriptions(RegistryAccess access) {
+        return List.of();
+    }
 
     ProgressActionType getType();
 }

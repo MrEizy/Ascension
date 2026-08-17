@@ -1,7 +1,10 @@
 package net.zic.ascension.impl.core.progression;
 
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
+import net.zic.ascension.api.ascension.core.progression.ProgressActionDescription;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
@@ -41,6 +44,20 @@ public record GivePathBonusesAction(UUID uuid, List<PathBonusBase> bonuses) impl
                 AscensionOriginSourceHelper.removeBonus(source, bonus.category(), bonus.path(), bonus.value());
             }
         }
+    }
+
+    @Override
+    public List<ProgressActionDescription> getDescriptions(RegistryAccess access) {
+        return bonuses.stream()
+                .map(bonus -> ProgressActionDescription.numeric(
+                        ProgressionDescriptionUtil.pathBonusName(
+                                bonus.category(),
+                                bonus.path(),
+                                access),
+                        Component.literal(ProgressionDescriptionUtil.signedNumber(bonus.value())),
+                        bonus.value()
+                ))
+                .toList();
     }
 
     @Override

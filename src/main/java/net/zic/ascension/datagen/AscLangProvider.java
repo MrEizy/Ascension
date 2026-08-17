@@ -240,6 +240,36 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.bloodline_essence", "Bloodline Essence");
         add("item.ascension.technique_manual", "Technique Manual");
 
+        // Transfer Item Tooltips
+        add("ascension.tooltip.bloodline.purity", "Purity");
+        add("ascension.tooltip.bloodline.purity_growth", "Purity Growth");
+        add("ascension.tooltip.physique.stats_affinities", "Stats & Affinities");
+        add("ascension.tooltip.physique.stats", "Stats");
+        add("ascension.tooltip.physique.affinities", "Affinities");
+        add("ascension.tooltip.technique.max_realm", "Max Realm");
+        add("ascension.tooltip.technique.realm_growth", "Realm Growth");
+
+        // Progression Descriptions
+        add("ascension.tooltip.progression.affinity", "%s Affinity");
+        add("ascension.tooltip.progression.path_bonus", "%s %s");
+        add("ascension.tooltip.progression.unlock", "Unlock");
+        add("ascension.tooltip.progression.level", "Lv. %s");
+        add("ascension.tooltip.value.percent", "%s%%");
+        add("ascension.tooltip.progression.condition.conditional", "Conditional");
+        add("ascension.tooltip.progression.condition.on_acquisition", "On Acquisition");
+        add("ascension.tooltip.progression.condition.at_purity", "At %s%% Purity");
+        add("ascension.tooltip.progression.condition.each_purity", "On Acquisition + Each %s%% Purity");
+        add("ascension.tooltip.progression.condition.purity_range", "Each %s%% Purity (%s-%s%%)");
+        add("ascension.tooltip.progression.condition.each_realm", "On Learning + Each Realm");
+        add("ascension.tooltip.progression.condition.each_minor_realm", "Each Minor Realm");
+        add("ascension.tooltip.progression.condition.each_major_realm", "Each Major Realm");
+        add("ascension.tooltip.progression.condition.on_learn", "On Learning");
+        add("ascension.tooltip.progression.condition.major_realm", "Major Realm %s");
+        add("ascension.tooltip.progression.condition.major_realms", "Major Realms %s");
+        add("ascension.tooltip.progression.condition.minor_realm", "Minor Realm %s");
+        add("ascension.tooltip.progression.condition.minor_realms", "Minor Realms %s");
+        add("ascension.tooltip.progression.condition.selected_realms", "Selected Realms");
+
 
         //Keybinds
         add("key.category.minecraft.ascension", "Ascension");
