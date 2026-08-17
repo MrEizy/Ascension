@@ -13,6 +13,7 @@ import net.zic.ascension.impl.datapack.progression.AscensionProgressActionCondit
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalInt;
 
 public final class RealmChangeConditions {
     private RealmChangeConditions() {}
@@ -81,6 +82,13 @@ public final class RealmChangeConditions {
         }
 
         @Override
+        public OptionalInt getEarliestMajorRealm() {
+            return majorRealms.stream()
+                    .mapToInt(Integer::intValue)
+                    .min();
+        }
+
+        @Override
         public Component getDescription(RegistryAccess access) {
             if (majorRealms.size() == 1 && majorRealms.contains(0)) {
                 return Component.translatable(
@@ -138,6 +146,13 @@ public final class RealmChangeConditions {
         @Override
         public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return realms.containsKey(majorRealm) && realms.get(majorRealm).contains(minorRealm);
+        }
+
+        @Override
+        public OptionalInt getEarliestMajorRealm() {
+            return realms.keySet().stream()
+                    .mapToInt(Integer::intValue)
+                    .min();
         }
 
         @Override

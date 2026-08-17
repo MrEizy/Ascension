@@ -254,6 +254,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tooltip.progression.path_bonus", "%s %s");
         add("ascension.tooltip.progression.unlock", "Unlock");
         add("ascension.tooltip.progression.level", "Lv. %s");
+        add("ascension.tooltip.progression.beyond_comprehension", "Beyond Comprehension");
         add("ascension.tooltip.value.percent", "%s%%");
         add("ascension.tooltip.progression.condition.conditional", "Conditional");
         add("ascension.tooltip.progression.condition.on_acquisition", "On Acquisition");

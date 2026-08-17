@@ -277,6 +277,7 @@
   "ascension.tooltip.physique.stats": "Stats",
   "ascension.tooltip.physique.stats_affinities": "Stats & Affinities",
   "ascension.tooltip.progression.affinity": "%s Affinity",
+  "ascension.tooltip.progression.beyond_comprehension": "Beyond Comprehension",
   "ascension.tooltip.progression.condition.at_purity": "At %s%% Purity",
   "ascension.tooltip.progression.condition.conditional": "Conditional",
   "ascension.tooltip.progression.condition.each_major_realm": "Each Major Realm",

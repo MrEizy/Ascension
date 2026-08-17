@@ -6,6 +6,8 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
+import java.util.OptionalInt;
+
 public interface ProgressActionCondition {
     /**
      *
@@ -19,6 +21,10 @@ public interface ProgressActionCondition {
 
     default Component getDescription(RegistryAccess access) {
         return Component.translatable("ascension.tooltip.progression.condition.conditional");
+    }
+
+    default OptionalInt getEarliestMajorRealm() {
+        return OptionalInt.empty();
     }
 
     ProgressActionConditionType getType();
