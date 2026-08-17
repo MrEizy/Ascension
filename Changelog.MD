@@ -6,8 +6,8 @@
 
 ### Added
 • Added 47 new Paths - Foundation Paths (3) Elemental Paths (29) Weapon Paths (15)  
-• Added 16 new Physiques + 3 + 5 + 5 + 
-• Added 5 new bloodlines  + 3 + 3 + 3 + 
+• Added 16 new Physiques + 3 + 5 + 5 + 5 + 
+• Added 5 new bloodlines  + 3 + 3 + 3 + 3 + 
 • Added 6 new Herb
 • Added 5 new Artifact
 • Ported Most blocks from 1.21.1

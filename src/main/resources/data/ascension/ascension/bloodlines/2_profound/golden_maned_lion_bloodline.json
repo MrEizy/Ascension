@@ -1,0 +1,93 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.bloodline.golden_maned_lion.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.golden_maned_lion.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/sound",
+    "ascension:elemental/yang"
+  ],
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 0.09
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.08
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.04
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:foundation/body": 0.008,
+              "ascension:elemental/sound": 0.018,
+              "ascension:elemental/yang": 0.012
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 50,
+        "end": 50
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 2.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 100,
+        "end": 100
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 3.0
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 1.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:profound"
+  }
+}

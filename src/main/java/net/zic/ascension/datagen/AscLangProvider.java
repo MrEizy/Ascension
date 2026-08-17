@@ -443,9 +443,11 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.sword_bone.desc", "Your bones are forged into blades, letting out a hum as they resonate with your blade");
         add("ascension.physique.starlit_meridians.name", "Starlit Meridians");
         add("ascension.physique.starlit_meridians.desc", "Fine meridians branch close to the skin, gathering faint star qi more readily than ordinary channels.");
-
         add("ascension.physique.iron_ant_bones.name", "Iron Ant Bones");
         add("ascension.physique.iron_ant_bones.desc", "The bones are compact and dark, bearing weight with ease and lending the limbs significant force.");
+
+        add("ascension.physique.tiger_marrow.name", "Tiger Marrow");
+        add("ascension.physique.tiger_marrow.desc", "The marrow is dense and vigorous, continually nourishing the bones and lending the body a tiger's force.");
 
 
         //Profound Physiques
@@ -457,11 +459,15 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.moonjade_marrow.desc", "The marrow carries a cool jade lustre.");
         add("ascension.physique.golden_sun_heart.name", "Golden Sun Heart");
         add("ascension.physique.golden_sun_heart.desc", "A dense knot of yang qi rests around the heart, emblazing your blood.");
-
         add("ascension.physique.firefly_spirit_eyes.name", "Firefly Spirit Eyes");
         add("ascension.physique.firefly_spirit_eyes.desc", "Faint lights gather behind the pupils, making wandering spiritual qi easier to perceive and follow.");
         add("ascension.physique.hundred_venom_dantian.name", "Hundred Venom Dantian");
         add("ascension.physique.hundred_venom_dantian.desc", "The dantian tolerates poisonous and impure qi that would cripple ordinary cultivators, refining it without easily fouling the meridians.");
+
+        add("ascension.physique.gale_cheetah_meridians.name", "Gale Cheetah Meridians");
+        add("ascension.physique.gale_cheetah_meridians.desc", "Broad, springing meridians carry qi cleanly through the legs and hips.");
+        add("ascension.physique.lion_roar_chest.name", "Lion-Roar Chest");
+        add("ascension.physique.lion_roar_chest.desc", "The chest and lungs form a deep resonant chamber. Breath carries qi with force, giving sound cultivation a firm foundation.");
 
 
         //Heaven Physiques
@@ -471,11 +477,15 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.seven_star_bones.desc", "Seven points of star qi are sealed within the skeleton, tempering the bones over time.");
         add("ascension.physique.heavenly_river_dantian.name", "Heavenly River Dantian");
         add("ascension.physique.heavenly_river_dantian.desc", "The dantian forms a broad, tranquil sea where star qi drifts in a slow current.");
-
         add("ascension.physique.mantis_blade.name", "Mantis Blade Physique");
         add("ascension.physique.mantis_blade.desc", "The tendons and forearms naturally align with short cutting motions, making blade arts unnervingly quick and precise.");
         add("ascension.physique.jade_cocoon_body.name", "Jade Cocoon Body");
         add("ascension.physique.jade_cocoon_body.desc", "When qi is circulated inward, the flesh settles into a cocoon-like state that promotes recovery.");
+
+        add("ascension.physique.nine_life_demon_cat_body.name", "Nine-Life Demon Cat Body");
+        add("ascension.physique.nine_life_demon_cat_body.desc", "A rare demon-cat constitution whose souls clings stubbornly to life.");
+        add("ascension.physique.shadow_leopard_veins.name", "Shadow Leopard Veins");
+        add("ascension.physique.shadow_leopard_veins.desc", "Dark qi settles naturally within meridians running through the limbs.");
 
 
         //Bloodlines
@@ -501,13 +511,19 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.bloodline.moon_white_crane.desc", "A spirit-beast lineage descended from glimmering cranes that nest above moonlit cloud seas.");
         add("ascension.bloodline.purple_star_qilin.name", "Purple Star Qilin Bloodline");
         add("ascension.bloodline.purple_star_qilin.desc", "An auspicious qilin lineage tied to the purple sovereign star.");
-
         add("ascension.bloodline.black_iron_ant.name", "Black-Iron Ant Bloodline");
         add("ascension.bloodline.black_iron_ant.desc", "A low-grade demonic insect lineage descended from black-iron ants, prized for dense flesh and strength far beyond their size.");
         add("ascension.bloodline.jade_cicada.name", "Jade Cicada Bloodline");
         add("ascension.bloodline.jade_cicada.desc", "A spirit-insect lineage known for shedding its shell as it matures.");
         add("ascension.bloodline.golden_silkworm.name", "Golden Silkworm Bloodline");
         add("ascension.bloodline.golden_silkworm.desc", "A rare gu lineage descended from golden silkworms raised on medicinal poisons. Its qi is dense and venomous, and its threads harden like metal.");
+
+        add("ascension.bloodline.wind_chasing_leopard.name", "Wind-Chasing Leopard Bloodline");
+        add("ascension.bloodline.wind_chasing_leopard.desc", "A minor spirit-beast lineage descended from mountain leopards that hunt along windy ridges.");
+        add("ascension.bloodline.golden_maned_lion.name", "Golden-Maned Lion Bloodline");
+        add("ascension.bloodline.golden_maned_lion.desc", "A proud spirit-beast lineage whose warm yang blood strengthens the body and gives the voice a natural resonance with qi.");
+        add("ascension.bloodline.white_tiger.name", "White Tiger Bloodline");
+        add("ascension.bloodline.white_tiger.desc", "A rare lineage carrying a trace of the White Tiger, sacred beast of the western heavens.");
 
 
 

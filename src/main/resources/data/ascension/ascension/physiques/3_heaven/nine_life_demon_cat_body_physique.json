@@ -1,0 +1,59 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.nine_life_demon_cat_body.name"
+  },
+  "description": {
+    "translate": "ascension.physique.nine_life_demon_cat_body.desc"
+  },
+  "paths": [
+    "ascension:foundation/soul",
+    "ascension:elemental/life",
+    "ascension:elemental/reincarnation"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 4.0,
+    "ascension:vitality": 4.0,
+    "ascension:agility": 2.0
+  },
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.18,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:nine_life_demon_cat_body_vitality_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": 2.0,
+      "ascension:elemental/life": 2.5,
+      "ascension:elemental/reincarnation": 2.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/life": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:nine_life_demon_cat_body_life_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/reincarnation": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:nine_life_demon_cat_body_reincarnation_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:heaven"
+  }
+}
