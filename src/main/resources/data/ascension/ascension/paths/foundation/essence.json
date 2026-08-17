@@ -236,6 +236,10 @@
             {
               "id": "ascension:agility",
               "value": 1.0
+            },
+            {
+              "id": "ascension:strength",
+              "value": 1.0
             }
           ]
         }

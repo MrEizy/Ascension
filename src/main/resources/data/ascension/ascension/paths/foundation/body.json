@@ -213,5 +213,59 @@
         }
       ]
     }
+  ],
+  "actions": [
+    {
+      "condition": "ascension:realm_change/on_gained",
+      "actions":[
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 2.0
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 8.0
+            },
+            {
+              "id": "ascension:strength",
+              "value": 10.0
+            },
+            {
+              "id": "ascension:agility",
+              "value": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 0.2
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.8
+            },
+            {
+              "id": "ascension:strength",
+              "value": 1.0
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.1
+            }
+          ]
+        }
+      ]
+    }
   ]
 }
