@@ -1,0 +1,13 @@
+{
+  "type": "ascension:surface_rock",
+  "config": {
+    "blocks": [
+      "minecraft:stone",
+      "minecraft:andesite",
+      "minecraft:tuff"
+    ],
+    "max_height": 2,
+    "max_radius": 2,
+    "min_radius": 1
+  }
+}

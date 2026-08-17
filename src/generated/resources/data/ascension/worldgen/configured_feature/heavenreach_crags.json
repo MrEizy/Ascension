@@ -1,0 +1,13 @@
+{
+  "type": "ascension:surface_rock",
+  "config": {
+    "blocks": [
+      "minecraft:stone",
+      "minecraft:tuff",
+      "minecraft:calcite"
+    ],
+    "max_height": 3,
+    "max_radius": 3,
+    "min_radius": 2
+  }
+}

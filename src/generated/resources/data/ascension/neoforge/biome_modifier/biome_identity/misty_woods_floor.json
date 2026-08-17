@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "ascension:misty_woods",
+  "features": "ascension:misty_woods_floor_scatter",
+  "step": "vegetal_decoration"
+}
