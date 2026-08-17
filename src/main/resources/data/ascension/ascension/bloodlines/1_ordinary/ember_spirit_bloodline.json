@@ -1,0 +1,65 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.bloodline.ember_spirit.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.ember_spirit.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/fire"
+  ],
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 0.06
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.04
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:foundation/essence": 0.006,
+              "ascension:elemental/fire": 0.012
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 100,
+        "end": 100
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 2.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:ordinary"
+  }
+}

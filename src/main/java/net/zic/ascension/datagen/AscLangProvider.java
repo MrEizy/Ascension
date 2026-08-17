@@ -445,9 +445,12 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.starlit_meridians.desc", "Fine meridians branch close to the skin, gathering faint star qi more readily than ordinary channels.");
         add("ascension.physique.iron_ant_bones.name", "Iron Ant Bones");
         add("ascension.physique.iron_ant_bones.desc", "The bones are compact and dark, bearing weight with ease and lending the limbs significant force.");
-
         add("ascension.physique.tiger_marrow.name", "Tiger Marrow");
         add("ascension.physique.tiger_marrow.desc", "The marrow is dense and vigorous, continually nourishing the bones and lending the body a tiger's force.");
+
+        add("ascension.physique.ember_touched_meridians.name", "Ember-Touched Meridians");
+        add("ascension.physique.ember_touched_meridians.desc", "The meridians remain naturally warm, allowing fire qi to circulate with less strain and making lesser flame spirits easier to accommodate.");
+
 
 
         //Profound Physiques
@@ -463,11 +466,16 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.firefly_spirit_eyes.desc", "Faint lights gather behind the pupils, making wandering spiritual qi easier to perceive and follow.");
         add("ascension.physique.hundred_venom_dantian.name", "Hundred Venom Dantian");
         add("ascension.physique.hundred_venom_dantian.desc", "The dantian tolerates poisonous and impure qi that would cripple ordinary cultivators, refining it without easily fouling the meridians.");
-
         add("ascension.physique.gale_cheetah_meridians.name", "Gale Cheetah Meridians");
         add("ascension.physique.gale_cheetah_meridians.desc", "Broad, springing meridians carry qi cleanly through the legs and hips.");
         add("ascension.physique.lion_roar_chest.name", "Lion-Roar Chest");
         add("ascension.physique.lion_roar_chest.desc", "The chest and lungs form a deep resonant chamber. Breath carries qi with force, giving sound cultivation a firm foundation.");
+
+        add("ascension.physique.cold_spring_dantian.name", "Cold Spring Dantian");
+        add("ascension.physique.cold_spring_dantian.desc", "The dantian resembles a clear, cold spring. Water qi settles easily within it, while colder currents can condense without disrupting circulation.");
+        add("ascension.physique.thunder_spirit_veins.name", "Thunder Spirit Veins");
+        add("ascension.physique.thunder_spirit_veins.desc", "Fine channels run through the limbs like branching lightning, letting violent thunder qi pass through flesh with unusual speed.");
+
 
 
         //Heaven Physiques
@@ -481,11 +489,16 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.mantis_blade.desc", "The tendons and forearms naturally align with short cutting motions, making blade arts unnervingly quick and precise.");
         add("ascension.physique.jade_cocoon_body.name", "Jade Cocoon Body");
         add("ascension.physique.jade_cocoon_body.desc", "When qi is circulated inward, the flesh settles into a cocoon-like state that promotes recovery.");
-
         add("ascension.physique.nine_life_demon_cat_body.name", "Nine-Life Demon Cat Body");
         add("ascension.physique.nine_life_demon_cat_body.desc", "A rare demon-cat constitution whose souls clings stubbornly to life.");
         add("ascension.physique.shadow_leopard_veins.name", "Shadow Leopard Veins");
         add("ascension.physique.shadow_leopard_veins.desc", "Dark qi settles naturally within meridians running through the limbs.");
+
+        add("ascension.physique.five_element_spirit_vessel.name", "Five-Element Spirit Vessel");
+        add("ascension.physique.five_element_spirit_vessel.desc", "An unusually balanced vessel whose essence can nourish spirits of wood, fire, earth, metal, and water without strongly rejecting any one of them.");
+        add("ascension.physique.spirit_furnace_dantian.name", "Spirit Furnace Dantian");
+        add("ascension.physique.spirit_furnace_dantian.desc", "A furnace-like chamber forms within the dantian, giving living flame qi a place to settle and be nurtured without scorching its host.");
+
 
 
         //Bloodlines
@@ -517,13 +530,20 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.bloodline.jade_cicada.desc", "A spirit-insect lineage known for shedding its shell as it matures.");
         add("ascension.bloodline.golden_silkworm.name", "Golden Silkworm Bloodline");
         add("ascension.bloodline.golden_silkworm.desc", "A rare gu lineage descended from golden silkworms raised on medicinal poisons. Its qi is dense and venomous, and its threads harden like metal.");
-
         add("ascension.bloodline.wind_chasing_leopard.name", "Wind-Chasing Leopard Bloodline");
         add("ascension.bloodline.wind_chasing_leopard.desc", "A minor spirit-beast lineage descended from mountain leopards that hunt along windy ridges.");
         add("ascension.bloodline.golden_maned_lion.name", "Golden-Maned Lion Bloodline");
         add("ascension.bloodline.golden_maned_lion.desc", "A proud spirit-beast lineage whose warm yang blood strengthens the body and gives the voice a natural resonance with qi.");
         add("ascension.bloodline.white_tiger.name", "White Tiger Bloodline");
         add("ascension.bloodline.white_tiger.desc", "A rare lineage carrying a trace of the White Tiger, sacred beast of the western heavens.");
+
+        add("ascension.bloodline.ember_spirit.name", "Ember Spirit Bloodline");
+        add("ascension.bloodline.ember_spirit.desc", "A minor lineage altered by generations spent beside small fire spirits. Its qi runs warm and answers readily to flame.");
+        add("ascension.bloodline.deep_spring_spirit.name", "Deep Spring Spirit Bloodline");
+        add("ascension.bloodline.deep_spring_spirit.desc", "A spirit-blooded lineage descended from beings born in old mountain springs. Its qi is cool, patient, and difficult to exhaust.");
+        add("ascension.bloodline.verdant_flame_spirit.name", "Verdant Flame Spirit Bloodline");
+        add("ascension.bloodline.verdant_flame_spirit.desc", "A rare lineage carrying the nature of a living green flame that feeds upon spiritual herbs. Its fire burns cleanly and is highly prized by refiners.");
+
 
 
 
