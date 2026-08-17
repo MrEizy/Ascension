@@ -1,0 +1,91 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.bloodline.moonveil_fox.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.moonveil_fox.desc"
+  },
+  "paths": [
+    "ascension:foundation/soul",
+    "ascension:elemental/moon",
+    "ascension:elemental/yin",
+    "ascension:elemental/illusion"
+  ],
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 0.12
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.08
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:foundation/soul": 0.015,
+              "ascension:elemental/moon": 0.02,
+              "ascension:elemental/yin": 0.015,
+              "ascension:elemental/illusion": 0.02
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 50,
+        "end": 50
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 2.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 100,
+        "end": 100
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:agility",
+              "value": 2.0
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 2.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:profound"
+  }
+}

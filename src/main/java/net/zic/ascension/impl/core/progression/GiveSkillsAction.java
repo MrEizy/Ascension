@@ -1,9 +1,12 @@
 package net.zic.ascension.impl.core.progression;
 
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
+import net.zic.ascension.api.ascension.core.progression.ProgressActionDescription;
+import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -14,8 +17,8 @@ import java.util.UUID;
 
 public record GiveSkillsAction(UUID uuid,List<Identifier> skills)  implements ProgressAction {
 
-    public static GiveSkillsAction from(List<Identifier> skills){
-        return new GiveSkillsAction(UUID.randomUUID(),skills);
+    public static GiveSkillsAction from(List<Identifier> skills) {
+        return new GiveSkillsAction(UUID.randomUUID(), skills);
     }
 
     /**
@@ -37,6 +40,17 @@ public record GiveSkillsAction(UUID uuid,List<Identifier> skills)  implements Pr
             if(direction.equals(ProgressDirection.UP)) AscensionOriginSourceHelper.addSkill(source,skill,getOwnerId());
             else AscensionOriginSourceHelper.removeSkill(source,skill,getOwnerId());
         }
+    }
+
+    @Override
+    public List<ProgressActionDescription> getDescriptions(RegistryAccess access) {
+        return skills.stream()
+                .map(skill -> new ProgressActionDescription(
+                        ProgressionDescriptionUtil.skillName(skill, access),
+                        Component.translatable("ascension.tooltip.progression.unlock"),
+                        ProgressActionDescription.Tone.SPECIAL
+                ))
+                .toList();
     }
 
     @Override

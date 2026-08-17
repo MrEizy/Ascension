@@ -22,12 +22,6 @@
     "ascension:vitality": 1.5,
     "ascension:strength": 0.5
   },
-  "base_affinity": {
-    "ascension:body": 1,
-    "ascension:earth": 1,
-    "ascension:wood": 1,
-    "ascension:umbrella": 2
-  },
   "stat_modifiers": {
     "ascension:vitality": [
       {
@@ -37,13 +31,23 @@
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:umbrella": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:iron_blossom_body_shield_modifier"
-      }
-    ]
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 1,
+      "ascension:elemental/earth": 1,
+      "ascension:elemental/wood": 1,
+      "ascension:weapon/umbrella": 2
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:weapon/umbrella": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:iron_blossom_body_shield_modifier"
+        }
+      ]
+    }
   }
 }

@@ -25,16 +25,19 @@ public class SimpleBloodline implements Bloodline {
     private final Component name;
     private final Component description;
     private final ProgressActionHolder holder;
+    private final List<Identifier> unlockedPaths;
     private final Optional<AscensionItemTooltipDefinition> itemTooltip;
 
     public SimpleBloodline(
             Component name,
             Component description,
+            List<Identifier> unlockedPaths,
             ProgressActionHolder holder,
             Optional<AscensionItemTooltipDefinition> itemTooltip
     ) {
         this.name = name;
         this.description = description;
+        this.unlockedPaths = unlockedPaths == null ? List.of() : List.copyOf(unlockedPaths);
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
         this.holder = holder;
     }
@@ -45,6 +48,10 @@ public class SimpleBloodline implements Bloodline {
     }
 
     public ProgressActionHolder getHolder(){return holder;}
+
+    public List<Identifier> unlockedPaths() {
+        return unlockedPaths;
+    }
 
     @Override
     public Component getName() {
@@ -65,7 +72,7 @@ public class SimpleBloodline implements Bloodline {
     public Collection<Identifier> onAdded(OriginSource source, BloodlineData data) {
 
         holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), data,ProgressDirection.UP);
-        return List.of();
+        return unlockedPaths;
     }
 
     @Override
@@ -73,7 +80,7 @@ public class SimpleBloodline implements Bloodline {
 
         data.setPurity(0);
         holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.DOWN);
-        return List.of();
+        return unlockedPaths;
     }
 
     @Override

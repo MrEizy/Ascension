@@ -1,0 +1,50 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.firefly_spirit_eyes.name"
+  },
+  "description": {
+    "translate": "ascension.physique.firefly_spirit_eyes.desc"
+  },
+  "paths": [
+    "ascension:foundation/soul",
+    "ascension:elemental/light"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 3.5,
+    "ascension:agility": 1.5
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.12,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:firefly_spirit_eyes_spirit_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": 1.25,
+      "ascension:elemental/light": 2.0,
+      "ascension:elemental/illusion": 0.75
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/light": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:firefly_spirit_eyes_light_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:profound"
+  }
+}

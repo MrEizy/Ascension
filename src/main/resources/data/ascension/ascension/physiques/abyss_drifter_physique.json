@@ -25,15 +25,15 @@
   },
   "base_path_bonuses": {
     "ascension:affinity": {
-      "ascension:essence": 1,
-      "ascension:water": 0.5,
-      "ascension:dark": 1,
-      "ascension:yin": 1
+      "ascension:foundation/essence": 1,
+      "ascension:elemental/water": 0.5,
+      "ascension:elemental/dark": 1,
+      "ascension:elemental/yin": 1
     }
   },
   "path_bonus_modifiers": {
     "ascension:affinity": {
-      "ascension:dark": [
+      "ascension:elemental/dark": [
         {
           "value": 0.15,
           "operation": "ADD_BASE",

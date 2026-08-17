@@ -9,7 +9,7 @@
           "type": "zenithlib:title_icon",
           "on_all_pages": true,
           "subtitle": {
-            "literal": "Bloodline Essence"
+            "translate": "item.ascension.bloodline_essence"
           },
           "title": {
             "source": "zenithlib:subject_name"
@@ -27,7 +27,7 @@
           "type": "zenithlib:bar",
           "color": "negative",
           "label": {
-            "literal": "Purity"
+            "translate": "ascension.tooltip.bloodline.purity"
           },
           "source": "ascension:bloodline_purity"
         },
@@ -56,7 +56,7 @@
             "type": "zenithlib:shimmer"
           },
           "text": {
-            "literal": "Purity Growth"
+            "translate": "ascension.tooltip.bloodline.purity_growth"
           }
         },
         {
@@ -65,7 +65,7 @@
         }
       ],
       "title": {
-        "literal": "Purity Growth"
+        "translate": "ascension.tooltip.bloodline.purity_growth"
       }
     }
   ]

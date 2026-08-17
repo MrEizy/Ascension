@@ -1,0 +1,59 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.shadow_leopard_veins.name"
+  },
+  "description": {
+    "translate": "ascension.physique.shadow_leopard_veins.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/dark",
+    "ascension:elemental/wind"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:agility": 6.0,
+    "ascension:strength": 3.0,
+    "ascension:spirit": 1.0
+  },
+  "stat_modifiers": {
+    "ascension:agility": [
+      {
+        "value": 0.22,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:shadow_leopard_veins_agility_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 1.5,
+      "ascension:elemental/dark": 2.5,
+      "ascension:elemental/wind": 2.5
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/dark": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:shadow_leopard_veins_dark_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/wind": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:shadow_leopard_veins_wind_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:heaven"
+  }
+}

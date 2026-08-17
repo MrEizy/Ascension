@@ -9,7 +9,7 @@
           "type": "zenithlib:title_icon",
           "on_all_pages": true,
           "subtitle": {
-            "literal": "Physique Essence"
+            "translate": "item.ascension.physique_essence"
           },
           "title": {
             "source": "zenithlib:subject_name"
@@ -47,7 +47,7 @@
           "type": "zenithlib:header",
           "color": "positive",
           "text": {
-            "literal": "Statistics"
+            "translate": "ascension.tooltip.physique.stats"
           }
         },
         {
@@ -60,7 +60,7 @@
         {
           "type": "zenithlib:header",
           "text": {
-            "literal": "Affinities"
+            "translate": "ascension.tooltip.physique.affinities"
           }
         },
         {
@@ -69,7 +69,7 @@
         }
       ],
       "title": {
-        "literal": "Attributes"
+        "translate": "ascension.tooltip.physique.stats_affinities"
       }
     }
   ]

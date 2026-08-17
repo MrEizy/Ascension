@@ -8,23 +8,24 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
+import net.zic.ascension.api.ascension.core.progression.ProgressActionDescription;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionConditionReference;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionReference;
 import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
+import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipProvider;
-import net.zic.ascension.impl.core.technique.realm_change.condition.RealmChangeConditions;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
-import net.zic.ascension.impl.core.bloodline.purity.condition.OnPurityInRangeCondition;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
-import net.zic.ascension.impl.core.progression.GiveBaseStatsAction;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
 
 import net.zic.ascension.util.PathInteractionUtil;
@@ -32,10 +33,13 @@ import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipText;
+import net.zic.zenithlib.tooltip.api.animation.RuneDecipherTextEffect;
+import net.zic.zenithlib.tooltip.api.animation.ScrambleRevealTextEffect;
 import net.zic.zenithlib.tooltip.api.context.ZenithTooltipContext;
 import net.zic.zenithlib.tooltip.api.element.BadgeElement;
 import net.zic.zenithlib.tooltip.api.element.BadgeRowElement;
 import net.zic.zenithlib.tooltip.api.element.RowElement;
+import net.zic.zenithlib.tooltip.api.element.TextElement;
 import net.zic.zenithlib.tooltip.api.element.ZenithTooltipElement;
 import net.zic.zenithlib.tooltip.api.value.ZenithTooltipSources;
 import net.zic.zenithlib.tooltip.api.value.ZenithTooltipValue;
@@ -49,8 +53,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 /**
  * Registers Ascension-owned runtime values referenced by registry item tooltips.
@@ -74,6 +78,16 @@ public final class AscensionTooltipValueSources {
     public static final Identifier HERB_RELATED_TYPE_BADGE = AscensionCraft.prefix("herb_related_type_badge");
     public static final Identifier HERB_RELATED_TARGET_ROW = AscensionCraft.prefix("herb_related_target_row");
 
+    private static final int TECHNIQUE_REVEAL_LOOKAHEAD = 3;
+
+    private static final ScrambleRevealTextEffect BEYOND_COMPREHENSION_EFFECT =
+            new ScrambleRevealTextEffect(
+                    0.0F,
+                    55,
+                    ScrambleRevealTextEffect.Mode.SCATTERED,
+                    RuneDecipherTextEffect.DEFAULT_RUNE_GLYPHS
+            );
+
     private static boolean registered;
 
     private AscensionTooltipValueSources() {}
@@ -91,10 +105,8 @@ public final class AscensionTooltipValueSources {
 
         ZenithTooltipSources.registerValue(TECHNIQUE_PATH, AscensionTooltipValueSources::techniquePath);
         ZenithTooltipSources.registerValue(TECHNIQUE_MAX_REALM, AscensionTooltipValueSources::techniqueMaxRealm);
-        ZenithTooltipSources.registerValue(TECHNIQUE_PROGRESSION_GAINS, AscensionTooltipValueSources::techniqueProgressionGains);
 
         ZenithTooltipSources.registerValue(BLOODLINE_PURITY, AscensionTooltipValueSources::bloodlinePurity);
-        ZenithTooltipSources.registerValue(BLOODLINE_PURITY_GAINS, AscensionTooltipValueSources::bloodlinePurityGains);
 
         ZenithTooltipSources.registerValue(HERB_AGE, AscensionTooltipValueSources::herbAge);
         ZenithTooltipSources.registerValue(HERB_QUALITY, AscensionTooltipValueSources::herbQuality);
@@ -103,8 +115,8 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerElement(PHYSIQUE_PATHS, context -> badges(PHYSIQUE_PATHS, context, ZenithTooltipColor.ACCENT));
         ZenithTooltipSources.registerElement(PHYSIQUE_STATS, context -> rows(PHYSIQUE_STATS, context));
         ZenithTooltipSources.registerElement(PHYSIQUE_AFFINITIES, context -> rows(PHYSIQUE_AFFINITIES, context));
-        ZenithTooltipSources.registerElement(TECHNIQUE_PROGRESSION_GAINS, context -> rows(TECHNIQUE_PROGRESSION_GAINS, context));
-        ZenithTooltipSources.registerElement(BLOODLINE_PURITY_GAINS, context -> rows(BLOODLINE_PURITY_GAINS, context));
+        ZenithTooltipSources.registerElement(TECHNIQUE_PROGRESSION_GAINS, AscensionTooltipValueSources::techniqueProgressionElements);
+        ZenithTooltipSources.registerElement(BLOODLINE_PURITY_GAINS, AscensionTooltipValueSources::bloodlinePurityElements);
         ZenithTooltipSources.registerElement(HERB_QUALITY_BADGE, AscensionTooltipValueSources::herbQualityBadge);
         ZenithTooltipSources.registerElement(HERB_RELATED_TYPE_BADGE, AscensionTooltipValueSources::herbRelatedTypeBadge);
         ZenithTooltipSources.registerElement(HERB_RELATED_TARGET_ROW, AscensionTooltipValueSources::herbRelatedTargetRow);
@@ -161,6 +173,15 @@ public final class AscensionTooltipValueSources {
         };
     }
 
+    private static ZenithTooltipColor toneColor(ProgressActionDescription.Tone tone) {
+        return switch (tone) {
+            case POSITIVE -> ZenithTooltipColor.POSITIVE;
+            case NEGATIVE -> ZenithTooltipColor.NEGATIVE;
+            case SPECIAL -> ZenithTooltipColor.ACCENT;
+            case NEUTRAL -> ZenithTooltipColor.MUTED;
+        };
+    }
+
     private static Optional<ZenithTooltipValue> physiquePaths(
             ZenithTooltipContext context
     ) {
@@ -185,44 +206,40 @@ public final class AscensionTooltipValueSources {
     private static Optional<ZenithTooltipValue> physiqueStats(
             ZenithTooltipContext context
     ) {
-        return context.subject(SimplePhysique.class).map(physique -> {
-            RegistryAccess access = context.registryAccess().orElse(null);
-
-            return ZenithTooltipValue.rows(
-                    combineRows(
-                            baseRows(
-                                    physique.baseStats(),
-                                    false,
-                                    access
-                            ),
-                            modifierRows(
-                                    physique.statModifiers(),
-                                    false,
-                                    access
-                            )
-                    )
-            );
-        });
+        return context.subject(SimplePhysique.class).map(physique ->
+                ZenithTooltipValue.rows(
+                        combinedStatRows(
+                                physique.baseStats(),
+                                physique.statModifiers()
+                        )
+                )
+        );
     }
-
-
 
     private static Optional<ZenithTooltipValue> physiqueAffinities(
             ZenithTooltipContext context
     ) {
+        if (context.registryAccess().isEmpty()) {
+            return Optional.empty();
+        }
+
+        RegistryAccess access = context.registryAccess().orElseThrow();
         return context.subject(SimplePhysique.class).map(physique -> {
-            RegistryAccess access = context.registryAccess().orElse(null);
+            List<PathBonusBase> baseAffinities = physique.basePathBonuses()
+                    .stream()
+                    .filter(value -> value.category().equals(PathInteractionUtil.AFFINITY_CATEGORY))
+                    .toList();
+
+            List<PathBonusModifier> affinityModifiers = physique.pathBonusModifiers()
+                    .stream()
+                    .filter(value -> value.category().equals(PathInteractionUtil.AFFINITY_CATEGORY))
+                    .toList();
 
             return ZenithTooltipValue.rows(
-                    combineRows(
-                            baseAffinityRows(
-                                    physique.basePathBonuses().stream().filter(val->val.category().equals(PathInteractionUtil.AFFINITY_CATEGORY)).collect(Collectors.toCollection(ArrayList::new)),
-                                    access
-                            ),
-                            affinityModifierRows(
-                                    physique.pathBonusModifiers().stream().filter(val->val.category().equals(PathInteractionUtil.AFFINITY_CATEGORY)).collect(Collectors.toCollection(ArrayList::new)),
-                                    access
-                            )
+                    combinedAffinityRows(
+                            baseAffinities,
+                            affinityModifiers,
+                            access
                     )
             );
         });
@@ -273,27 +290,6 @@ public final class AscensionTooltipValueSources {
         );
     }
 
-    private static Optional<ZenithTooltipValue> techniqueProgressionGains(
-            ZenithTooltipContext context
-    ) {
-        Optional<SimpleTechnique> technique =
-                context.subject(SimpleTechnique.class);
-
-        if (technique.isEmpty() || context.registryAccess().isEmpty()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(
-                ZenithTooltipValue.rows(
-                        progressionRows(
-                                technique.orElseThrow().getHolder(),
-                                context.registryAccess().orElseThrow(),
-                                AscensionTooltipValueSources::techniqueCadence
-                        )
-                )
-        );
-    }
-
     private static Optional<ZenithTooltipValue> bloodlinePurity(
             ZenithTooltipContext context
     ) {
@@ -312,263 +308,215 @@ public final class AscensionTooltipValueSources {
                 ZenithTooltipValue.progress(
                         purity,
                         100,
-                        Component.literal(purity + "%")
+                        Component.translatable(
+                                "ascension.tooltip.value.percent",
+                                purity
+                        )
                 )
         );
     }
 
-    private static Optional<ZenithTooltipValue> bloodlinePurityGains(
-            ZenithTooltipContext context
+    private static List<ZenithTooltipValue.Row> combinedStatRows(
+            Collection<ValueContainer.BaseModifier> baseStats,
+            Map<Identifier, List<ValueContainerModifier>> modifiers
     ) {
-        Optional<SimpleBloodline> bloodline =
-                context.subject(SimpleBloodline.class);
+        Map<Identifier, List<String>> values = new java.util.TreeMap<>(
+                Comparator.comparing(Identifier::toString)
+        );
+        Map<Identifier, Double> tones = new java.util.HashMap<>();
 
-        if (bloodline.isEmpty() || context.registryAccess().isEmpty()) {
-            return Optional.empty();
+        for (ValueContainer.BaseModifier base : baseStats) {
+            values.computeIfAbsent(base.container(), ignored -> new ArrayList<>())
+                    .add(signedNumber(base.val()));
+            tones.merge(base.container(), base.val(), AscensionTooltipValueSources::mergeTone);
         }
 
-        return Optional.of(
-                ZenithTooltipValue.rows(
-                        progressionRows(
-                                bloodline.orElseThrow().getHolder(),
-                                context.registryAccess().orElseThrow(),
-                                AscensionTooltipValueSources::purityCadence
-                        )
-                )
-        );
+        modifiers.forEach((stat, statModifiers) -> statModifiers.stream()
+                .sorted(Comparator.comparing(modifier -> modifier.getIdentifier().toString()))
+                .forEach(modifier -> {
+                    values.computeIfAbsent(stat, ignored -> new ArrayList<>())
+                            .add(formatModifier(modifier));
+                    tones.merge(stat, modifier.getVal(), AscensionTooltipValueSources::mergeTone);
+                }));
+
+        return values.entrySet().stream()
+                .map(entry -> ZenithTooltipValue.row(
+                        statName(entry.getKey()),
+                        Component.literal(String.join(" · ", entry.getValue())),
+                        tone(tones.getOrDefault(entry.getKey(), 0.0))
+                ))
+                .toList();
     }
 
-    private static List<ZenithTooltipValue.Row> combineRows(
-            Collection<ZenithTooltipValue.Row> first,
-            Collection<ZenithTooltipValue.Row> second
-    ) {
-        List<ZenithTooltipValue.Row> rows =
-                new ArrayList<>(first.size() + second.size());
-
-        rows.addAll(first);
-        rows.addAll(second);
-
-        return List.copyOf(rows);
-    }
-
-
-    private static List<ZenithTooltipValue.Row> baseAffinityRows(
+    private static List<ZenithTooltipValue.Row> combinedAffinityRows(
             Collection<PathBonusBase> baseAffinities,
-            RegistryAccess access
-    ){
-        return baseAffinities.stream()
-                .sorted(
-                        Comparator.comparing(
-                                baseAffinity -> baseAffinity.path().toString()+baseAffinity.category()
-                        )
-                )
-                .map(modifier -> ZenithTooltipValue.row(
-                        pathName(modifier.path(), access),
-                        Component.literal(
-                                signedNumber(modifier.value())
-                        ),
-                        tone(modifier.value())
-                ))
-                .toList();
-    }
-
-    private static List<ZenithTooltipValue.Row> baseRows(
-            Collection<ValueContainer.BaseModifier> modifiers,
-            boolean affinity,
+            Collection<PathBonusModifier> modifiers,
             RegistryAccess access
     ) {
-        return modifiers.stream()
-                .sorted(
-                        Comparator.comparing(
-                                modifier -> modifier.container().toString()
-                        )
-                )
-                .map(modifier -> ZenithTooltipValue.row(
-                        displayName(
-                                modifier.container(),
-                                affinity,
-                                access
-                        ),
-                        Component.literal(
-                                signedNumber(modifier.val())
-                        ),
-                        tone(modifier.val())
-                ))
-                .toList();
-    }
-    private static List<ZenithTooltipValue.Row> affinityModifierRows(
-            List<PathBonusModifier> modifiers,
-            RegistryAccess access
-    ){
-        List<ZenithTooltipValue.Row> rows = new ArrayList<>();
-        modifiers.stream().sorted(
-                Comparator.comparing(
-                        val->val.path().toString()+val.modifier().getIdentifier().toString()
-                )
-        ).forEach(modifier ->rows.add(
-                ZenithTooltipValue.row(
-                        pathName(modifier.path(),access),
-                        Component.literal(
-                                formatModifier(modifier.modifier())
-                        ),
-                        tone(modifier.modifier().getVal())
-                )
-            )
+        Map<Identifier, List<String>> values = new java.util.TreeMap<>(
+                Comparator.comparing(Identifier::toString)
         );
-        return rows;
+        Map<Identifier, Double> tones = new java.util.HashMap<>();
+
+        for (PathBonusBase base : baseAffinities) {
+            values.computeIfAbsent(base.path(), ignored -> new ArrayList<>())
+                    .add(signedNumber(base.value()));
+            tones.merge(base.path(), base.value(), AscensionTooltipValueSources::mergeTone);
+        }
+
+        modifiers.stream()
+                .sorted(Comparator.comparing(
+                        modifier -> modifier.path() + "|" + modifier.modifier().getIdentifier()
+                ))
+                .forEach(modifier -> {
+                    values.computeIfAbsent(modifier.path(), ignored -> new ArrayList<>())
+                            .add(formatModifier(modifier.modifier()));
+                    tones.merge(
+                            modifier.path(),
+                            modifier.modifier().getVal(),
+                            AscensionTooltipValueSources::mergeTone
+                    );
+                });
+
+        return values.entrySet().stream()
+                .map(entry -> ZenithTooltipValue.row(
+                        pathName(entry.getKey(), access),
+                        Component.literal(String.join(" · ", entry.getValue())),
+                        tone(tones.getOrDefault(entry.getKey(), 0.0))
+                ))
+                .toList();
     }
-    
-    private static List<ZenithTooltipValue.Row> modifierRows(
-            Map<Identifier, List<ValueContainerModifier>> modifiers,
-            boolean affinity,
-            RegistryAccess access
+
+    private static double mergeTone(double current, double next) {
+        if (current == 0.0) {
+            return next;
+        }
+        if (next == 0.0) {
+            return current;
+        }
+        return Math.signum(current) == Math.signum(next) ? current : 0.0;
+    }
+
+    private static List<ZenithTooltipElement> techniqueProgressionElements(
+            ZenithTooltipContext context
     ) {
-        List<ZenithTooltipValue.Row> rows = new ArrayList<>();
+        Optional<SimpleTechnique> technique = context.subject(SimpleTechnique.class);
+        if (technique.isEmpty() || context.registryAccess().isEmpty()) {
+            return List.of();
+        }
 
-        modifiers.entrySet()
-                .stream()
-                .sorted(
-                        Comparator.comparing(
-                                entry -> entry.getKey().toString()
-                        )
-                )
-                .forEach(entry -> entry.getValue()
-                        .stream()
-                        .sorted(
-                                Comparator.comparing(
-                                        modifier ->
-                                                modifier.getIdentifier().toString()
-                                )
-                        )
-                        .forEach(modifier -> rows.add(
-                                ZenithTooltipValue.row(
-                                        displayName(
-                                                entry.getKey(),
-                                                affinity,
-                                                access
-                                        ),
-                                        Component.literal(
-                                                formatModifier(modifier)
-                                        ),
-                                        tone(modifier.getVal())
-                                )
-                        )));
-
-        return List.copyOf(rows);
+        SimpleTechnique resolvedTechnique = technique.orElseThrow();
+        return progressionElements(
+                resolvedTechnique.getHolder(),
+                context.registryAccess().orElseThrow(),
+                OptionalInt.of(currentTechniqueMajorRealm(resolvedTechnique))
+        );
     }
 
-    private static List<ZenithTooltipValue.Row> progressionRows(
+    private static List<ZenithTooltipElement> bloodlinePurityElements(
+            ZenithTooltipContext context
+    ) {
+        Optional<SimpleBloodline> bloodline = context.subject(SimpleBloodline.class);
+        if (bloodline.isEmpty() || context.registryAccess().isEmpty()) {
+            return List.of();
+        }
+
+        return progressionElements(
+                bloodline.orElseThrow().getHolder(),
+                context.registryAccess().orElseThrow(),
+                OptionalInt.empty()
+        );
+    }
+
+    private static int currentTechniqueMajorRealm(SimpleTechnique technique) {
+        return ClientAscensionData.getSource()
+                .map(source -> {
+                    Identifier path = technique.getPath();
+                    if (path == null || !AscensionOriginSourceHelper.hasPath(source, path)) {
+                        return -1;
+                    }
+
+                    PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
+                    return pathInstance == null ? -1 : pathInstance.getCurrentMajorRealm();
+                })
+                .orElse(-1);
+    }
+
+    private static List<ZenithTooltipElement> progressionElements(
             ProgressActionHolder holder,
             RegistryAccess access,
-            CadenceResolver cadenceResolver
+            OptionalInt currentMajorRealm
     ) {
-        List<ZenithTooltipValue.Row> rows = new ArrayList<>();
+        List<ZenithTooltipElement> elements = new ArrayList<>();
 
-        for (Pair<
-                ProgressActionConditionReference,
-                List<ProgressActionReference>
-                > listener : holder.listeners()) {
-
-            ProgressActionCondition condition =
-                    listener.getFirst().resolve(access);
-
+        for (Pair<ProgressActionConditionReference, List<ProgressActionReference>> listener
+                : holder.listeners()) {
+            ProgressActionCondition condition = listener.getFirst().resolve(access);
             if (condition == null) {
                 continue;
             }
 
-            String cadence = cadenceResolver.resolve(condition);
-
-            for (ProgressActionReference actionReference
-                    : listener.getSecond()) {
-
+            List<ProgressActionDescription> descriptions = new ArrayList<>();
+            for (ProgressActionReference actionReference : listener.getSecond()) {
                 ProgressAction action = actionReference.resolve(access);
+                if (action != null) {
+                    descriptions.addAll(action.getDescriptions(access));
+                }
+            }
 
-                if (!(action instanceof GiveBaseStatsAction statsAction)) {
+            if (descriptions.isEmpty()) {
+                continue;
+            }
+
+            elements.add(new RowElement(
+                    ZenithTooltipText.resolved(condition.getDescription(access)),
+                    ZenithTooltipText.resolved(Component.empty()),
+                    ZenithTooltipColor.ACCENT,
+                    ZenithTooltipColor.MUTED
+            ));
+
+            boolean obscureDescriptions = shouldObscureDescriptions(condition, currentMajorRealm);
+            for (ProgressActionDescription description : descriptions) {
+                if (obscureDescriptions) {
+                    elements.add(beyondComprehensionElement());
                     continue;
                 }
 
-                for (ValueContainer.BaseModifier modifier
-                        : statsAction.baseStats()) {
-
-                    rows.add(
-                            ZenithTooltipValue.row(
-                                    statName(modifier.container()),
-                                    Component.literal(
-                                            signedNumber(modifier.val())
-                                                    + " · "
-                                                    + cadence
-                                    ),
-                                    tone(modifier.val())
-                            )
-                    );
-                }
+                elements.add(new RowElement(
+                        ZenithTooltipText.resolved(description.label()),
+                        ZenithTooltipText.resolved(description.value()),
+                        ZenithTooltipColor.TEXT,
+                        toneColor(description.tone())
+                ));
             }
         }
 
-        return List.copyOf(rows);
+        return List.copyOf(elements);
     }
 
-    private static String techniqueCadence(
-            ProgressActionCondition condition
+    private static boolean shouldObscureDescriptions(
+            ProgressActionCondition condition,
+            OptionalInt currentMajorRealm
     ) {
-        if (condition instanceof RealmChangeConditions.EveryMajorRealm) {
-            return "Each Major Realm";
+        if (currentMajorRealm.isEmpty()) {
+            return false;
         }
 
-        if (condition instanceof RealmChangeConditions.EveryMinorRealm) {
-            return "Each Minor Realm";
-        }
-
-        if (condition instanceof RealmChangeConditions.EveryRealm) {
-            return "On Learn + Each Realm";
-        }
-
-        if (condition instanceof RealmChangeConditions.MajorRealmsIn selected) {
-            if (selected.majorRealms().size() == 1
-                    && selected.majorRealms().contains(0)) {
-                return "On Learn";
-            }
-
-            return "Major Realms " + joinInts(selected.majorRealms());
-        }
-
-        if (condition instanceof RealmChangeConditions.MinorRealmsIn selected) {
-            return "Minor Realms " + joinInts(selected.minorRealms());
-        }
-
-        if (condition instanceof RealmChangeConditions.RealmsIn) {
-            return "Selected Realms";
-        }
-
-        return "Conditional";
+        OptionalInt earliestMajorRealm = condition.getEarliestMajorRealm();
+        return earliestMajorRealm.isPresent()
+                && earliestMajorRealm.getAsInt()
+                > currentMajorRealm.getAsInt() + TECHNIQUE_REVEAL_LOOKAHEAD;
     }
 
-    private static String purityCadence(
-            ProgressActionCondition condition
-    ) {
-        if (!(condition instanceof OnPurityInRangeCondition purity)) {
-            return "Conditional";
-        }
-
-        if (purity.start() == 1 && purity.end() == 1) {
-            return "On Acquisition";
-        }
-
-        if (purity.start() == purity.end()) {
-            return "At " + purity.start() + "% Purity";
-        }
-
-        if (purity.start() == 1 && purity.end() == 100) {
-            return "On Acquisition + Each 1% Purity";
-        }
-
-        return "Each 1% Purity ("
-                + purity.start()
-                + "–"
-                + purity.end()
-                + "%)";
+    private static ZenithTooltipElement beyondComprehensionElement() {
+        return TextElement.animated(
+                ZenithTooltipText.resolved(Component.translatable(
+                        "ascension.tooltip.progression.beyond_comprehension"
+                )),
+                ZenithTooltipColor.MUTED,
+                BEYOND_COMPREHENSION_EFFECT
+        );
     }
-
 
     private static Optional<ZenithTooltipValue> herbAge(ZenithTooltipContext context) {
         return herbContext(context).map(herb -> ZenithTooltipValue.text(
@@ -664,16 +612,6 @@ public final class AscensionTooltipValueSources {
         return Optional.of(new HerbContext(herbItem.definition(), herbItem.data(context.stack())));
     }
 
-    private static Component displayName(
-            Identifier id,
-            boolean affinity,
-            RegistryAccess access
-    ) {
-        return affinity && access != null
-                ? pathName(id, access)
-                : statName(id);
-    }
-
     private static Component statName(Identifier id) {
         Stat stat = ZenithRegistries.STAT_REGISTRY.getValue(id);
 
@@ -762,21 +700,10 @@ public final class AscensionTooltipValueSources {
         return result.toString();
     }
 
-    private static String joinInts(Collection<Integer> values) {
-        return values.stream()
-                .sorted()
-                .map(String::valueOf)
-                .reduce((left, right) -> left + ", " + right)
-                .orElse("None");
-    }
 
     private record HerbContext(
             HerbDefinition definition,
             AscensionComponents.HerbData data
     ) {}
 
-    @FunctionalInterface
-    private interface CadenceResolver {
-        String resolve(ProgressActionCondition condition);
-    }
 }

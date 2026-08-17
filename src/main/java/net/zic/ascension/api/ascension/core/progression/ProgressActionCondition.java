@@ -1,8 +1,12 @@
 package net.zic.ascension.api.ascension.core.progression;
 
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+
+import java.util.OptionalInt;
 
 public interface ProgressActionCondition {
     /**
@@ -15,6 +19,13 @@ public interface ProgressActionCondition {
      */
     boolean test(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction);
 
+    default Component getDescription(RegistryAccess access) {
+        return Component.translatable("ascension.tooltip.progression.condition.conditional");
+    }
+
+    default OptionalInt getEarliestMajorRealm() {
+        return OptionalInt.empty();
+    }
 
     ProgressActionConditionType getType();
 }

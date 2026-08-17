@@ -211,7 +211,6 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.castable_skill", "Castable skill. Select it, then click a hotbar slot below to assign or remove it.");
         add("gui.ascension.introspection.toggle_passive.enable", "Enable passive");
         add("gui.ascension.introspection.toggle_passive.disable", "Disable passive");
-
         add("gui.ascension.introspection.attribute.health", "Health");
         add("gui.ascension.introspection.attribute.damage", "Damage");
         add("gui.ascension.introspection.attribute.armor", "Armor");
@@ -228,6 +227,7 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.recovery.per_second", "%s/s");
 
 
+
         // Starter Screen Lang
         add("gui.ascension.starter.title", "Starting Selection");
         add("gui.ascension.starter.choose_bloodline", "Choose Your Bloodline");
@@ -236,11 +236,12 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.path_progress.tooltip", "%s (%s%%)");
 
 
+
         // Stats
         add("stat.ascension.vitality", "Vitality");
         add("stat.ascension.agility", "Agility");
         add("stat.ascension.strength", "Strength");
-        add("stat.ascension.intelligence", "Intelligence");
+        add("stat.ascension.spirit", "Spirit");
 
 
 
@@ -249,6 +250,45 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.bloodline_essence", "Bloodline Essence");
         add("item.ascension.technique_manual", "Technique Manual");
 
+        // Transfer Item Tooltips
+        add("ascension.tooltip.bloodline.purity", "Purity");
+        add("ascension.tooltip.bloodline.purity_growth", "Purity Growth");
+        add("ascension.tooltip.physique.stats_affinities", "Stats & Affinities");
+        add("ascension.tooltip.physique.stats", "Stats");
+        add("ascension.tooltip.physique.affinities", "Affinities");
+        add("ascension.tooltip.technique.max_realm", "Max Realm");
+        add("ascension.tooltip.technique.realm_growth", "Realm Growth");
+
+        // Progression Descriptions
+        add("ascension.tooltip.progression.affinity", "%s Affinity");
+        add("ascension.tooltip.progression.path_bonus", "%s %s");
+        add("ascension.tooltip.progression.unlock", "Unlock");
+        add("ascension.tooltip.progression.level", "Lv. %s");
+        add("ascension.tooltip.progression.beyond_comprehension", "Beyond Comprehension");
+        add("ascension.tooltip.value.percent", "%s%%");
+        add("ascension.tooltip.progression.condition.conditional", "Conditional");
+        add("ascension.tooltip.progression.condition.on_acquisition", "On Acquisition");
+        add("ascension.tooltip.progression.condition.at_purity", "At %s%% Purity");
+        add("ascension.tooltip.progression.condition.each_purity", "On Acquisition + Each %s%% Purity");
+        add("ascension.tooltip.progression.condition.purity_range", "Each %s%% Purity (%s-%s%%)");
+        add("ascension.tooltip.progression.condition.each_realm", "On Learning + Each Realm");
+        add("ascension.tooltip.progression.condition.each_minor_realm", "Each Minor Realm");
+        add("ascension.tooltip.progression.condition.each_major_realm", "Each Major Realm");
+        add("ascension.tooltip.progression.condition.on_learn", "On Learning");
+        add("ascension.tooltip.progression.condition.major_realm", "Major Realm %s");
+        add("ascension.tooltip.progression.condition.major_realms", "Major Realms %s");
+        add("ascension.tooltip.progression.condition.minor_realm", "Minor Realm %s");
+        add("ascension.tooltip.progression.condition.minor_realms", "Minor Realms %s");
+        add("ascension.tooltip.progression.condition.selected_realms", "Selected Realms");
+
+        //Artifacts Tooltips
+        add("ascension.tooltip.jade_bottle.page", "Jade Bottle");
+        add("ascension.tooltip.jade_bottle", "Jade Bottle");
+        add("ascension.tooltip.jade_bottle.contained", "Contained");
+        add("ascension.tooltip.jade_bottle.contained_pill", "Contained Pill");
+        add("ascension.tooltip.jade_bottle.expiration", "Expiration");
+
+
 
         //Keybinds
         add("key.category.minecraft.ascension", "Ascension");
@@ -256,6 +296,7 @@ public class AscLangProvider extends LanguageProvider {
         add("key.ascension.open_introspection", "Open Introspection");
         add("key.ascension.open_skill_wheel", "Open Skill Wheel");
         add("key.ascension.skill.skill_cast", "Cast Skill");
+
 
 
         //Classifications
@@ -273,16 +314,10 @@ public class AscLangProvider extends LanguageProvider {
         add("zenith.ascension.tier.heavens_path", "Heaven's Path");
 
 
-        //Artifacts Tooltips
-        add("ascension.tooltip.jade_bottle.page", "Jade Bottle");
-        add("ascension.tooltip.jade_bottle", "Jade Bottle");
-        add("ascension.tooltip.jade_bottle.contained", "Contained");
-        add("ascension.tooltip.jade_bottle.contained_pill", "Contained Pill");
-        add("ascension.tooltip.jade_bottle.expiration", "Expiration");
-
-
 
         // DATAPACK LANG STUFF
+
+        // Paths
 
         //Paths - Foundation
         add("ascension.path.foundation.essence.name", "Essence");
@@ -384,6 +419,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.path.weapon.umbrella.name", "Umbrella");
         add("ascension.path.weapon.umbrella.desc", "cultivate the deceptive grace of the warding canopy, sheltering blow and blade alike");
 
+
+
         //Physiques
 
         //Ordinary Physiques
@@ -419,6 +456,70 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.weak_spirit_body_physique.desc", "A body with weak spiritual roots, making it difficult to absorb and cultivate qi. Progress is excruciatingly slow.");
         add("ascension.physique.sword_bone.name", "Sword Bone");
         add("ascension.physique.sword_bone.desc", "Your bones are forged into blades, letting out a hum as they resonate with your blade");
+        add("ascension.physique.starlit_meridians.name", "Starlit Meridians");
+        add("ascension.physique.starlit_meridians.desc", "Fine meridians branch close to the skin, gathering faint star qi more readily than ordinary channels.");
+        add("ascension.physique.iron_ant_bones.name", "Iron Ant Bones");
+        add("ascension.physique.iron_ant_bones.desc", "The bones are compact and dark, bearing weight with ease and lending the limbs significant force.");
+        add("ascension.physique.tiger_marrow.name", "Tiger Marrow");
+        add("ascension.physique.tiger_marrow.desc", "The marrow is dense and vigorous, continually nourishing the bones and lending the body a tiger's force.");
+        add("ascension.physique.ember_touched_meridians.name", "Ember-Touched Meridians");
+        add("ascension.physique.ember_touched_meridians.desc", "The meridians remain naturally warm, allowing fire qi to circulate with less strain and making lesser flame spirits easier to accommodate.");
+
+        //Profound Physiques
+        add("ascension.physique.jade_furnace.name", "Jade Furnace Physique");
+        add("ascension.physique.jade_furnace.desc", "The flesh tempers qi like a living furnace, drawing fire through the body and tempering them like volcanic channels.");
+        add("ascension.physique.thousand_edge_meridians.name", "Thousand Edge Meridians");
+        add("ascension.physique.thousand_edge_meridians.desc", "Meridians branch through the limbs like sharpened blades, carrying metal qi cleanly into swords, sabres, and knives.");
+        add("ascension.physique.moonjade_marrow.name", "Moonjade Marrow");
+        add("ascension.physique.moonjade_marrow.desc", "The marrow carries a cool jade lustre.");
+        add("ascension.physique.golden_sun_heart.name", "Golden Sun Heart");
+        add("ascension.physique.golden_sun_heart.desc", "A dense knot of yang qi rests around the heart, emblazing your blood.");
+        add("ascension.physique.firefly_spirit_eyes.name", "Firefly Spirit Eyes");
+        add("ascension.physique.firefly_spirit_eyes.desc", "Faint lights gather behind the pupils, making wandering spiritual qi easier to perceive and follow.");
+        add("ascension.physique.hundred_venom_dantian.name", "Hundred Venom Dantian");
+        add("ascension.physique.hundred_venom_dantian.desc", "The dantian tolerates poisonous and impure qi that would cripple ordinary cultivators, refining it without easily fouling the meridians.");
+        add("ascension.physique.gale_cheetah_meridians.name", "Gale Cheetah Meridians");
+        add("ascension.physique.gale_cheetah_meridians.desc", "Broad, springing meridians carry qi cleanly through the legs and hips.");
+        add("ascension.physique.lion_roar_chest.name", "Lion-Roar Chest");
+        add("ascension.physique.lion_roar_chest.desc", "The chest and lungs form a deep resonant chamber. Breath carries qi with force, giving sound cultivation a firm foundation.");
+        add("ascension.physique.cold_spring_dantian.name", "Cold Spring Dantian");
+        add("ascension.physique.cold_spring_dantian.desc", "The dantian resembles a clear, cold spring. Water qi settles easily within it, while colder currents can condense without disrupting circulation.");
+        add("ascension.physique.thunder_spirit_veins.name", "Thunder Spirit Veins");
+        add("ascension.physique.thunder_spirit_veins.desc", "Fine channels run through the limbs like branching lightning, letting violent thunder qi pass through flesh with unusual speed.");
+
+        //Heaven Physiques
+        add("ascension.physique.lunar_dream_eyes.name", "Lunar Dream Eyes");
+        add("ascension.physique.lunar_dream_eyes.desc", "Eyes born beneath an unachievable moon perceive the seam between waking thought and dream.");
+        add("ascension.physique.seven_star_bones.name", "Seven-Star Bones");
+        add("ascension.physique.seven_star_bones.desc", "Seven points of star qi are sealed within the skeleton, tempering the bones over time.");
+        add("ascension.physique.heavenly_river_dantian.name", "Heavenly River Dantian");
+        add("ascension.physique.heavenly_river_dantian.desc", "The dantian forms a broad, tranquil sea where star qi drifts in a slow current.");
+        add("ascension.physique.mantis_blade.name", "Mantis Blade Physique");
+        add("ascension.physique.mantis_blade.desc", "The tendons and forearms naturally align with short cutting motions, making blade arts unnervingly quick and precise.");
+        add("ascension.physique.jade_cocoon_body.name", "Jade Cocoon Body");
+        add("ascension.physique.jade_cocoon_body.desc", "When qi is circulated inward, the flesh settles into a cocoon-like state that promotes recovery.");
+        add("ascension.physique.nine_life_demon_cat_body.name", "Nine-Life Demon Cat Body");
+        add("ascension.physique.nine_life_demon_cat_body.desc", "A rare demon-cat constitution whose souls clings stubbornly to life.");
+        add("ascension.physique.shadow_leopard_veins.name", "Shadow Leopard Veins");
+        add("ascension.physique.shadow_leopard_veins.desc", "Dark qi settles naturally within meridians running through the limbs.");
+        add("ascension.physique.five_element_spirit_vessel.name", "Five-Element Spirit Vessel");
+        add("ascension.physique.five_element_spirit_vessel.desc", "An unusually balanced vessel whose essence can nourish spirits of wood, fire, earth, metal, and water without strongly rejecting any one of them.");
+        add("ascension.physique.spirit_furnace_dantian.name", "Spirit Furnace Dantian");
+        add("ascension.physique.spirit_furnace_dantian.desc", "A furnace-like chamber forms within the dantian, giving living flame qi a place to settle and be nurtured without scorching its host.");
+
+        // Saint Physiques
+        add("ascension.physique.great_sun_sacred_body.name", "Great Sun Sacred Body");
+        add("ascension.physique.great_sun_sacred_body.desc", "A constitution whose blood, marrow, and meridians carry the heat of a rising sun. Yang qi gathers without urging, cold struggle to take root, and every circulation tempers the body as though beneath blistering light.");
+
+        // God Physiques
+        add("ascension.physique.primordial_chaos_dao_body.name", "Primordial Chaos Dao Body");
+        add("ascension.physique.primordial_chaos_dao_body.desc", "A constitution born with an essence sea that accepts both chaos and order. Opposing forces settle within the same circulation without immediate collapse, while space, time, and fate find unusually little resistance within its meridians.");
+
+        // Heavens Path Physiques
+        add("ascension.physique.nine_heavens_myriad_worlds_dao_body.name", "Nine Heavens Myriad Worlds Dao Body");
+        add("ascension.physique.nine_heavens_myriad_worlds_dao_body.desc", "An unimaginable physique said to mirror the structure of the heavens themselves. Qi turns through flesh, marrow, and acupoints in eonic cycles, as though every point of the body holds the shadow of a world. Spatio-temporal rivers nourish the body, flooding the hidden shadows and letting them flourish. Laws and Daos seek out the worlds within the folds of this body, fighting for acceptance.");
+
+
 
         //Bloodlines
         add("ascension.bloodline.human.name", "Human");
@@ -431,6 +532,43 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.bloodline.scalekin.desc", "Descendants of the deep-water jiao, their skin bears faint scales and their bodies endure where lesser mortals would drown");
         add("ascension.bloodline.frostkin.name", "Frostkin");
         add("ascension.bloodline.frostkin.desc", "Descendants of the tribes that endured the frozen wastes for generations, their blood carries an innate resistance to the cold and a body built to endure");
+        add("ascension.bloodline.verdantblood.name", "Verdantblood");
+        add("ascension.bloodline.verdantblood.desc", "A mortal lineage steeped in old forest qi, whose blood recovers stubbornly and takes to wood cultivation with ease.");
+        add("ascension.bloodline.moonveil_fox.name", "Moonveil Fox Bloodline");
+        add("ascension.bloodline.moonveil_fox.desc", "A spirit-beast lineage carrying the blood of moon foxes.");
+        add("ascension.bloodline.azure_thunder_dragon.name", "Azure Thunder Dragon Bloodline");
+        add("ascension.bloodline.azure_thunder_dragon.desc", "A rare draconic inheritance in which storm and deep water mingle in the blood.");
+        add("ascension.bloodline.falling_star.name", "Falling Star Bloodline");
+        add("ascension.bloodline.falling_star.desc", "A mortal lineage born of those living within meteor fields.");
+        add("ascension.bloodline.moon_white_crane.name", "Moon-White Crane Bloodline");
+        add("ascension.bloodline.moon_white_crane.desc", "A spirit-beast lineage descended from glimmering cranes that nest above moonlit cloud seas.");
+        add("ascension.bloodline.purple_star_qilin.name", "Purple Star Qilin Bloodline");
+        add("ascension.bloodline.purple_star_qilin.desc", "An auspicious qilin lineage tied to the purple sovereign star.");
+        add("ascension.bloodline.black_iron_ant.name", "Black-Iron Ant Bloodline");
+        add("ascension.bloodline.black_iron_ant.desc", "A low-grade demonic insect lineage descended from black-iron ants, prized for dense flesh and strength far beyond their size.");
+        add("ascension.bloodline.jade_cicada.name", "Jade Cicada Bloodline");
+        add("ascension.bloodline.jade_cicada.desc", "A spirit-insect lineage known for shedding its shell as it matures.");
+        add("ascension.bloodline.golden_silkworm.name", "Golden Silkworm Bloodline");
+        add("ascension.bloodline.golden_silkworm.desc", "A rare gu lineage descended from golden silkworms raised on medicinal poisons. Its qi is dense and venomous, and its threads harden like metal.");
+        add("ascension.bloodline.wind_chasing_leopard.name", "Wind-Chasing Leopard Bloodline");
+        add("ascension.bloodline.wind_chasing_leopard.desc", "A minor spirit-beast lineage descended from mountain leopards that hunt along windy ridges.");
+        add("ascension.bloodline.golden_maned_lion.name", "Golden-Maned Lion Bloodline");
+        add("ascension.bloodline.golden_maned_lion.desc", "A proud spirit-beast lineage whose warm yang blood strengthens the body and gives the voice a natural resonance with qi.");
+        add("ascension.bloodline.white_tiger.name", "White Tiger Bloodline");
+        add("ascension.bloodline.white_tiger.desc", "A rare lineage carrying a trace of the White Tiger, sacred beast of the western heavens.");
+        add("ascension.bloodline.ember_spirit.name", "Ember Spirit Bloodline");
+        add("ascension.bloodline.ember_spirit.desc", "A minor lineage altered by generations spent beside small fire spirits. Its qi runs warm and answers readily to flame.");
+        add("ascension.bloodline.deep_spring_spirit.name", "Deep Spring Spirit Bloodline");
+        add("ascension.bloodline.deep_spring_spirit.desc", "A spirit-blooded lineage descended from beings born in old mountain springs. Its qi is cool, patient, and difficult to exhaust.");
+        add("ascension.bloodline.verdant_flame_spirit.name", "Verdant Flame Spirit Bloodline");
+        add("ascension.bloodline.verdant_flame_spirit.desc", "A rare lineage carrying the nature of a living green flame that feeds upon spiritual herbs. Its fire burns cleanly and is highly prized by refiners.");
+        add("ascension.bloodline.sun_crowned_phoenix.name", "Sun-Crowned Phoenix Bloodline");
+        add("ascension.bloodline.sun_crowned_phoenix.desc", "A phoenix lineage whose blood burns with a clear solar flame. Wounds close beneath its heat, exhausted qi rekindles readily, and each rise in purity strengthens the faint cycle of death and renewal hidden within the blood.");
+        add("ascension.bloodline.void_devouring_kunpeng.name", "Void-Devouring Kunpeng Bloodline");
+        add("ascension.bloodline.void_devouring_kunpeng.desc", "A lineage carrying a trace of the Kunpeng, the vast spirit beast said to cross sea and sky in a single transformation. Its blood hungers for distance itself, causing storms of wind and space with every beat.");
+        add("ascension.bloodline.eternal_tribulation_ancestral_dragon.name", "Eternal Tribulation Ancestral Dragon Bloodline");
+        add("ascension.bloodline.eternal_tribulation_ancestral_dragon.desc", "An impossible draconic inheritance said to descend from an ancestral dragon that tempered itself beneath heavenly tribulation before the laws of the world had fully settled. Lightning strengthened its blood, chaos fed its marrow, and every drop contains an immeasurable tyranny.");
+
 
         //Techniques
         add("ascension.technique.mount_hua_sword_manual.name", "Plum Blossom Sword Manual");
@@ -439,7 +577,6 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.sustained_spirit_art.desc", "An ordinary soul art that draws cold spiritual energy inward, quieting needless bodily activity to preserve nourishment and endurance");
         add("ascension.technique.imperial_seven_stances.name", "Seven Stance Imperial Army Art");
         add("ascension.technique.imperial_seven_stances.desc", "Seven practical sword stances drilled into the mortal armies of the Yonmeng Empire; modest alone, dependable in formation.");
-
         add("ascension.technique.celestial_constellation_circulation.name", "Celestial Constellation Circulation");
         add("ascension.technique.celestial_constellation_circulation.desc", "A soul inheritance that maps the night sky within the spirit and expresses its constellations through celestial archery");
         add("ascension.technique.guardian_dharma_manual.name", "Guardian Dharma Manual");
@@ -452,6 +589,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.nine_revolutions_slaughter_wheel.desc", "Carve nine interlocking revolutions into the essence sea, condensing a slaughter wheel that grows with each cycle.");
         add("ascension.technique.slaughter_wheel_battle_manual.name", "Slaughter Wheel Battle Manual");
         add("ascension.technique.slaughter_wheel_battle_manual.desc", "A combat scripture that teaches applications of the Slaughter Wheel.");
+
 
 
         //Skills

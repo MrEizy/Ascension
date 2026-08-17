@@ -10,7 +10,7 @@
           "type": "zenithlib:title_icon",
           "on_all_pages": true,
           "subtitle": {
-            "literal": "Technique Manual"
+            "translate": "item.ascension.technique_manual"
           },
           "title": {
             "source": "zenithlib:subject_name"
@@ -52,7 +52,7 @@
         {
           "type": "zenithlib:row",
           "left": {
-            "literal": "Max Realm"
+            "translate": "ascension.tooltip.technique.max_realm"
           },
           "right": {
             "source": "ascension:technique_max_realm"
@@ -68,7 +68,7 @@
         {
           "type": "zenithlib:header",
           "text": {
-            "literal": "Realm Growth"
+            "translate": "ascension.tooltip.technique.realm_growth"
           }
         },
         {
@@ -77,7 +77,7 @@
         }
       ],
       "title": {
-        "literal": "Realm Growth"
+        "translate": "ascension.tooltip.technique.realm_growth"
       }
     }
   ]

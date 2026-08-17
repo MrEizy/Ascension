@@ -1,8 +1,11 @@
 package net.zic.ascension.impl.core.progression;
 
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
+import net.zic.ascension.api.ascension.core.progression.ProgressActionDescription;
+import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;
@@ -17,7 +20,6 @@ public record GiveBaseStatsAction(UUID uuid,List<ValueContainer.BaseModifier> ba
         return new GiveBaseStatsAction(UUID.randomUUID(),baseStats);
     }
 
-
     @Override
     public UUID getUniqueId() {
         return uuid;
@@ -25,11 +27,24 @@ public record GiveBaseStatsAction(UUID uuid,List<ValueContainer.BaseModifier> ba
 
     @Override
     public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction) {
-        for(ValueContainer.BaseModifier modifier : baseStats){
-
-            if(direction == ProgressDirection.UP) source.addStat(ZenithRegistries.STAT_REGISTRY.getValue(modifier.container()), modifier.val());
-            else source.removeStat(ZenithRegistries.STAT_REGISTRY.getValue(modifier.container()),modifier.val());
+        for (ValueContainer.BaseModifier modifier : baseStats) {
+            if (direction == ProgressDirection.UP) {
+                source.addStat(ZenithRegistries.STAT_REGISTRY.getValue(modifier.container()), modifier.val());
+            } else {
+                source.removeStat(ZenithRegistries.STAT_REGISTRY.getValue(modifier.container()), modifier.val());
+            }
         }
+    }
+
+    @Override
+    public List<ProgressActionDescription> getDescriptions(RegistryAccess access) {
+        return baseStats.stream()
+                .map(modifier -> ProgressActionDescription.numeric(
+                        ProgressionDescriptionUtil.statName(modifier.container()),
+                        Component.literal(ProgressionDescriptionUtil.signedNumber(modifier.val())),
+                        modifier.val()
+                ))
+                .toList();
     }
 
     @Override

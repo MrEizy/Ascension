@@ -1,0 +1,66 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.spirit_furnace_dantian.name"
+  },
+  "description": {
+    "translate": "ascension.physique.spirit_furnace_dantian.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/fire"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 5.0,
+    "ascension:vitality": 3.0,
+    "ascension:strength": 2.0
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.18,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:spirit_furnace_dantian_spirit_modifier"
+      }
+    ],
+    "ascension:vitality": [
+      {
+        "value": 0.1,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:spirit_furnace_dantian_vitality_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": 2.0,
+      "ascension:elemental/fire": 3.0,
+      "ascension:elemental/wood": 1.5,
+      "ascension:elemental/yang": 1.25
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/fire": [
+        {
+          "value": 0.2,
+          "operation": "ADD_BASE",
+          "id": "ascension:spirit_furnace_dantian_fire_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/wood": [
+        {
+          "value": 0.1,
+          "operation": "ADD_BASE",
+          "id": "ascension:spirit_furnace_dantian_wood_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:heaven"
+  }
+}
