@@ -1,0 +1,123 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.nine_heavens_myriad_worlds_dao_body.name"
+  },
+  "description": {
+    "translate": "ascension.physique.nine_heavens_myriad_worlds_dao_body.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/space",
+    "ascension:elemental/time"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:vitality": 32.0,
+    "ascension:strength": 30.0,
+    "ascension:spirit": 32.0,
+    "ascension:agility": 28.0
+  },
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.9,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:nine_heavens_myriad_worlds_dao_body_vitality_modifier"
+      }
+    ],
+    "ascension:strength": [
+      {
+        "value": 0.75,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:nine_heavens_myriad_worlds_dao_body_strength_modifier"
+      }
+    ],
+    "ascension:spirit": [
+      {
+        "value": 0.9,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:nine_heavens_myriad_worlds_dao_body_spirit_modifier"
+      }
+    ],
+    "ascension:agility": [
+      {
+        "value": 0.75,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:nine_heavens_myriad_worlds_dao_body_agility_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 10.0,
+      "ascension:foundation/essence": 6.0,
+      "ascension:foundation/soul": 6.0,
+      "ascension:elemental/space": 15.0,
+      "ascension:elemental/time": 15.0,
+      "ascension:elemental/chaos": 12.0,
+      "ascension:elemental/order": 12.0,
+      "ascension:elemental/fate": 10.0,
+      "ascension:elemental/reincarnation": 8.0,
+      "ascension:elemental/life": 8.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/space": [
+        {
+          "value": 0.75,
+          "operation": "ADD_BASE",
+          "id": "ascension:nine_heavens_myriad_worlds_dao_body_space_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/time": [
+        {
+          "value": 0.75,
+          "operation": "ADD_BASE",
+          "id": "ascension:nine_heavens_myriad_worlds_dao_body_time_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/chaos": [
+        {
+          "value": 0.5,
+          "operation": "ADD_BASE",
+          "id": "ascension:nine_heavens_myriad_worlds_dao_body_chaos_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/order": [
+        {
+          "value": 0.5,
+          "operation": "ADD_BASE",
+          "id": "ascension:nine_heavens_myriad_worlds_dao_body_order_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/fate": [
+        {
+          "value": 0.4,
+          "operation": "ADD_BASE",
+          "id": "ascension:nine_heavens_myriad_worlds_dao_body_fate_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/reincarnation": [
+        {
+          "value": 0.35,
+          "operation": "ADD_BASE",
+          "id": "ascension:nine_heavens_myriad_worlds_dao_body_reincarnation_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/life": [
+        {
+          "value": 0.35,
+          "operation": "ADD_BASE",
+          "id": "ascension:nine_heavens_myriad_worlds_dao_body_life_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:heavens_path"
+  }
+}
