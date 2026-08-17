@@ -231,7 +231,7 @@ public class AscLangProvider extends LanguageProvider {
         add("stat.ascension.vitality", "Vitality");
         add("stat.ascension.agility", "Agility");
         add("stat.ascension.strength", "Strength");
-        add("stat.ascension.intelligence", "Intelligence");
+        add("stat.ascension.spirit", "Spirit");
 
 
 
@@ -442,15 +442,30 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.sword_bone.name", "Sword Bone");
         add("ascension.physique.sword_bone.desc", "Your bones are forged into blades, letting out a hum as they resonate with your blade");
 
+        add("ascension.physique.starlit_meridians.name", "Starlit Meridians");
+        add("ascension.physique.starlit_meridians.desc", "Fine meridians branch close to the skin, gathering faint star qi more readily than ordinary channels.");
+
         //Profound Physiques
         add("ascension.physique.jade_furnace.name", "Jade Furnace Physique");
         add("ascension.physique.jade_furnace.desc", "The flesh tempers qi like a living furnace, drawing fire through the body and tempering them like volcanic channels.");
         add("ascension.physique.thousand_edge_meridians.name", "Thousand Edge Meridians");
         add("ascension.physique.thousand_edge_meridians.desc", "Meridians branch through the limbs like sharpened blades, carrying metal qi cleanly into swords, sabres, and knives.");
 
+        add("ascension.physique.moonjade_marrow.name", "Moonjade Marrow");
+        add("ascension.physique.moonjade_marrow.desc", "The marrow carries a cool jade lustre.");
+        add("ascension.physique.golden_sun_heart.name", "Golden Sun Heart");
+        add("ascension.physique.golden_sun_heart.desc", "A dense knot of yang qi rests around the heart, emblazing your blood.");
+
+
         //Heaven Physiques
         add("ascension.physique.lunar_dream_eyes.name", "Lunar Dream Eyes");
         add("ascension.physique.lunar_dream_eyes.desc", "Eyes born beneath an unachievable moon perceive the seam between waking thought and dream.");
+
+        add("ascension.physique.seven_star_bones.name", "Seven-Star Bones");
+        add("ascension.physique.seven_star_bones.desc", "Seven points of star qi are sealed within the skeleton, tempering the bones over time.");
+        add("ascension.physique.heavenly_river_dantian.name", "Heavenly River Dantian");
+        add("ascension.physique.heavenly_river_dantian.desc", "The dantian forms a broad, tranquil sea where star qi drifts in a slow current.");
+
 
         //Bloodlines
         add("ascension.bloodline.human.name", "Human");
@@ -469,6 +484,13 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.bloodline.moonveil_fox.desc", "A spirit-beast lineage carrying the blood of moon foxes.");
         add("ascension.bloodline.azure_thunder_dragon.name", "Azure Thunder Dragon Bloodline");
         add("ascension.bloodline.azure_thunder_dragon.desc", "A rare draconic inheritance in which storm and deep water mingle in the blood.");
+
+        add("ascension.bloodline.falling_star.name", "Falling Star Bloodline");
+        add("ascension.bloodline.falling_star.desc", "A mortal lineage born of those living within meteor fields.");
+        add("ascension.bloodline.moon_white_crane.name", "Moon-White Crane Bloodline");
+        add("ascension.bloodline.moon_white_crane.desc", "A spirit-beast lineage descended from glimmering cranes that nest above moonlit cloud seas.");
+        add("ascension.bloodline.purple_star_qilin.name", "Purple Star Qilin Bloodline");
+        add("ascension.bloodline.purple_star_qilin.desc", "An auspicious qilin lineage tied to the purple sovereign star.");
 
         //Techniques
         add("ascension.technique.mount_hua_sword_manual.name", "Plum Blossom Sword Manual");

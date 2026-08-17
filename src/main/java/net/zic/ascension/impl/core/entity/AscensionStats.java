@@ -13,13 +13,13 @@ public class AscensionStats {
 
 
     public static final DeferredHolder<Stat,Stat> VITALITY = STATS.register("vitality",()->
-            new Stat(Component.literal("Vitality")));
+            new Stat(Component.translatable("stat.ascension.vitality")));
     public static final DeferredHolder<Stat,Stat> AGILITY = STATS.register("agility",()->
-            new Stat(Component.literal("Agility")));
+            new Stat(Component.translatable("stat.ascension.agility")));
     public static final DeferredHolder<Stat,Stat> STRENGTH = STATS.register("strength",()->
-            new Stat(Component.literal("Strength")));
+            new Stat(Component.translatable("stat.ascension.strength")));
     public static final DeferredHolder<Stat,Stat> SPIRIT = STATS.register("spirit",()->
-            new Stat(Component.literal("Spirit")));
+            new Stat(Component.translatable("stat.ascension.spirit")));
 
     public static void register(IEventBus modEventBus){
         STATS.register(modEventBus);
