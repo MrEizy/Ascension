@@ -17,11 +17,11 @@ import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.resource.ResourceModifiers;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
-import net.zic.ascension.api.ascension.core.skill.LevelledSkill;
-import net.zic.ascension.api.ascension.core.skill.LevelledSkillData;
+import net.zic.ascension.api.ascension.core.skill.ProgressingSkill;
+import net.zic.ascension.api.ascension.core.skill.ProgressingSkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Owner;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
-import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
 import net.zic.ascension.api.ascension.core.skill.PassiveModule;
 import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
@@ -37,7 +37,7 @@ import java.util.Optional;
 import java.util.Set;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 
-public class ResourceModifierPassiveSkill implements LevelledSkill, Owner {
+public class ResourceModifierPassiveSkill implements ProgressingSkill, Owner {
     private final Component name;
     private final Component description;
     private final int defaultAccessibleLevel;
@@ -63,8 +63,8 @@ public class ResourceModifierPassiveSkill implements LevelledSkill, Owner {
         this.description = description;
         this.levels = resolveLevels(templates, rootModules);
         this.defaultAccessibleLevel = Math.clamp(
-                defaultAccessibleLevel <= 0 ? this.levels.size() : defaultAccessibleLevel,
-                0,
+                defaultAccessibleLevel <= 0 ? 1 : defaultAccessibleLevel,
+                1,
                 this.levels.size()
         );
         this.definitions = definitions == null ? SkillDefinitions.EMPTY : definitions;
@@ -161,20 +161,43 @@ public class ResourceModifierPassiveSkill implements LevelledSkill, Owner {
     }
 
     @Override
-    public int getMaximumLevel() {
+    public int getMaximumProgression() {
         return levels.size();
     }
 
     @Override
-    public int getDefaultAccessibleLevel() {
+    public int getInitialProgression() {
+        return 1;
+    }
+
+    @Override
+    public int getDefaultProgressionCap() {
         return defaultAccessibleLevel;
     }
 
     @Override
-    public double getExperienceRequiredForNextLevel(int currentLevel) {
+    public double getExperienceRequiredForNextProgression(int currentLevel) {
         return currentLevel < 0 || currentLevel >= experienceRequirements.size()
                 ? Double.POSITIVE_INFINITY
                 : experienceRequirements.get(currentLevel);
+    }
+
+    @Override
+    public void onProgressionChanged(
+            OriginSource source,
+            ProgressingSkillData data,
+            int previousProgression,
+            int currentProgression
+    ) {
+        if (!active(data) || previousProgression == currentProgression) {
+            return;
+        }
+        Identifier skillId = skillId(source);
+        if (skillId == null) {
+            return;
+        }
+        modules(previousProgression).forEach(module -> module.remove(source, skillId));
+        modules(currentProgression).forEach(module -> module.apply(source, skillId));
     }
 
     @Override
@@ -238,7 +261,7 @@ public class ResourceModifierPassiveSkill implements LevelledSkill, Owner {
         if (skillId == null) {
             return;
         }
-        int level = SkillLevelResolver.resolve(source, skillId).effectiveLevel();
+        int level = SkillProgressionResolver.resolve(source, skillId).effectiveProgression();
         modules(level).forEach(module -> module.apply(source, skillId));
     }
 
@@ -247,7 +270,7 @@ public class ResourceModifierPassiveSkill implements LevelledSkill, Owner {
         if (skillId == null) {
             return;
         }
-        int level = SkillLevelResolver.resolve(source, skillId).effectiveLevel();
+        int level = SkillProgressionResolver.resolve(source, skillId).effectiveProgression();
         modules(level).forEach(module -> module.remove(source, skillId));
     }
 
@@ -373,7 +396,7 @@ public class ResourceModifierPassiveSkill implements LevelledSkill, Owner {
         }
     }
 
-    public static final class Data implements LevelledSkillData {
+    public static final class Data implements ProgressingSkillData {
         private final SkillProgressionData progression;
         private boolean enabled;
 

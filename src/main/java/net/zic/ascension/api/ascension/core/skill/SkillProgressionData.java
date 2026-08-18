@@ -7,8 +7,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-
-
 import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
@@ -18,52 +16,43 @@ import java.util.Map;
 
 public final class SkillProgressionData {
     public static final MapCodec<SkillProgressionData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.INT.optionalFieldOf("trained_level", 0).forGetter(SkillProgressionData::getTrainedLevel),
+            Codec.INT.optionalFieldOf("trained", 1).forGetter(SkillProgressionData::getTrainedProgression),
             Codec.DOUBLE.optionalFieldOf("experience", 0.0D).forGetter(SkillProgressionData::getExperience),
-            Codec.unboundedMap(Identifier.CODEC, Codec.INT).optionalFieldOf("level_floors", Map.of()).forGetter(SkillProgressionData::getLevelFloors),
-            Codec.unboundedMap(Identifier.CODEC, Codec.INT).optionalFieldOf("level_caps", Map.of()).forGetter(SkillProgressionData::getLevelCaps)
+            Codec.unboundedMap(Identifier.CODEC, Codec.INT).optionalFieldOf("caps", Map.of()).forGetter(SkillProgressionData::getCaps)
     ).apply(instance, SkillProgressionData::new));
 
-    private int trainedLevel;
+    private int trainedProgression;
     private double experience;
-    private final Map<Identifier, Integer> levelFloors = new HashMap<>();
-    private final Map<Identifier, Integer> levelCaps = new HashMap<>();
+    private final Map<Identifier, Integer> caps = new HashMap<>();
 
     public SkillProgressionData() {
+        this(1, 0.0D, Map.of());
     }
 
-    public SkillProgressionData(
-            int trainedLevel,
-            double experience,
-            Map<Identifier, Integer> levelFloors,
-            Map<Identifier, Integer> levelCaps
-    ) {
-        this.trainedLevel = Math.max(0, trainedLevel);
+    public SkillProgressionData(int trainedProgression, double experience, Map<Identifier, Integer> caps) {
+        this.trainedProgression = Math.max(1, trainedProgression);
         this.experience = Math.max(0.0D, experience);
-        copyContributions(levelFloors, this.levelFloors);
-        copyContributions(levelCaps, this.levelCaps);
+        copyContributions(caps, this.caps);
     }
 
     public SkillProgressionData(ValueInput input) {
-        trainedLevel = Math.max(0, input.getIntOr("trained_level", 0));
+        trainedProgression = Math.max(1, input.getIntOr("trained", 1));
         experience = Math.max(0.0D, input.getDoubleOr("experience", 0.0D));
-        readContributions(input.childrenListOrEmpty("level_floors"), levelFloors);
-        readContributions(input.childrenListOrEmpty("level_caps"), levelCaps);
+        readContributions(input.childrenListOrEmpty("caps"), caps);
     }
 
     public SkillProgressionData(ByteBuf buf) {
-        trainedLevel = Math.max(0, buf.readInt());
+        trainedProgression = Math.max(1, buf.readInt());
         experience = Math.max(0.0D, buf.readDouble());
-        readContributions(buf, levelFloors);
-        readContributions(buf, levelCaps);
+        readContributions(buf, caps);
     }
 
-    public int getTrainedLevel() {
-        return trainedLevel;
+    public int getTrainedProgression() {
+        return trainedProgression;
     }
 
-    public void setTrainedLevel(int trainedLevel) {
-        this.trainedLevel = Math.max(0, trainedLevel);
+    public void setTrainedProgression(int trainedProgression) {
+        this.trainedProgression = Math.max(1, trainedProgression);
     }
 
     public double getExperience() {
@@ -74,79 +63,53 @@ public final class SkillProgressionData {
         this.experience = Math.max(0.0D, experience);
     }
 
-    public Map<Identifier, Integer> getLevelFloors() {
-        return Collections.unmodifiableMap(levelFloors);
+    public Map<Identifier, Integer> getCaps() {
+        return Collections.unmodifiableMap(caps);
     }
 
-    public Map<Identifier, Integer> getLevelCaps() {
-        return Collections.unmodifiableMap(levelCaps);
+    public int getAccessibleCap(int defaultCap, int maximumProgression) {
+        int contributedCap = maximumContribution(caps, defaultCap);
+        return clamp(contributedCap, 1, maximumProgression);
     }
 
-    public int getLevelFloor() {
-        return maximumContribution(levelFloors, 0);
+    public boolean setCap(Identifier contributionId, int progression) {
+        return setContribution(caps, contributionId, progression);
     }
 
-    public int getAccessibleLevelCap(int defaultAccessibleLevel, int maximumLevel) {
-        int contributedCap = maximumContribution(levelCaps, defaultAccessibleLevel);
-        return clamp(contributedCap, 0, maximumLevel);
+    public boolean removeCap(Identifier contributionId) {
+        return contributionId != null && caps.remove(contributionId) != null;
     }
-
-    public boolean setLevelFloor(Identifier contributionId, int level) {
-        return setContribution(levelFloors, contributionId, level);
-    }
-
-    public boolean removeLevelFloor(Identifier contributionId) {
-        return contributionId != null && levelFloors.remove(contributionId) != null;
-    }
-
-    public boolean setLevelCap(Identifier contributionId, int level) {
-        return setContribution(levelCaps, contributionId, level);
-    }
-
-    public boolean removeLevelCap(Identifier contributionId) {
-        return contributionId != null && levelCaps.remove(contributionId) != null;
-    }
-
-    public boolean removeContribution(Identifier contributionId) {
-        boolean removedFloor = removeLevelFloor(contributionId);
-        boolean removedCap = removeLevelCap(contributionId);
-        return removedFloor || removedCap;
-    }
-
 
     public void write(ValueOutput output) {
-        output.putInt("trained_level", trainedLevel);
+        output.putInt("trained", trainedProgression);
         output.putDouble("experience", experience);
-        writeContributions(output.childrenList("level_floors"), levelFloors);
-        writeContributions(output.childrenList("level_caps"), levelCaps);
+        writeContributions(output.childrenList("caps"), caps);
     }
 
-
     public void encode(ByteBuf buf) {
-        buf.writeInt(trainedLevel);
+        buf.writeInt(trainedProgression);
         buf.writeDouble(experience);
-        writeContributions(buf, levelFloors);
-        writeContributions(buf, levelCaps);
+        writeContributions(buf, caps);
     }
 
     private static void copyContributions(Map<Identifier, Integer> source, Map<Identifier, Integer> target) {
         if (source == null) {
             return;
         }
-        source.forEach((id, level) -> {
-            if (id != null && level != null) {
-                target.put(id, Math.max(0, level));
+        source.forEach((id, progression) -> {
+            if (id != null && progression != null) {
+                target.put(id, Math.max(1, progression));
             }
         });
     }
 
-    private static boolean setContribution(Map<Identifier, Integer> contributions, Identifier contributionId, int level) {
+    private static boolean setContribution(Map<Identifier, Integer> contributions, Identifier contributionId, int progression) {
         if (contributionId == null) {
             return false;
         }
-        int clampedLevel = Math.max(0, level);
-        Integer previous = contributions.put(contributionId, clampedLevel);
-        return previous == null || previous != clampedLevel;
+        int resolved = Math.max(1, progression);
+        Integer previous = contributions.put(contributionId, resolved);
+        return previous == null || previous != resolved;
     }
 
     private static int maximumContribution(Map<Identifier, Integer> contributions, int fallback) {
@@ -158,10 +121,10 @@ public final class SkillProgressionData {
     }
 
     private static void writeContributions(ValueOutput.ValueOutputList output, Map<Identifier, Integer> contributions) {
-        contributions.forEach((id, level) -> {
+        contributions.forEach((id, progression) -> {
             ValueOutput contributionOutput = output.addChild();
             NbtHelpers.writeIdentifier(contributionOutput, "id", id);
-            contributionOutput.putInt("level", level);
+            contributionOutput.putInt("progression", progression);
         });
     }
 
@@ -169,16 +132,16 @@ public final class SkillProgressionData {
         for (ValueInput contributionInput : input) {
             Identifier id = NbtHelpers.readIdentifier(contributionInput, "id");
             if (id != null) {
-                contributions.put(id, Math.max(0, contributionInput.getIntOr("level", 0)));
+                contributions.put(id, Math.max(1, contributionInput.getIntOr("progression", 1)));
             }
         }
     }
 
     private static void writeContributions(ByteBuf buf, Map<Identifier, Integer> contributions) {
         buf.writeInt(contributions.size());
-        contributions.forEach((id, level) -> {
+        contributions.forEach((id, progression) -> {
             ByteBufHelpers.encodeIdentifier(id, buf);
-            buf.writeInt(level);
+            buf.writeInt(progression);
         });
     }
 
@@ -186,8 +149,8 @@ public final class SkillProgressionData {
         int size = buf.readInt();
         for (int index = 0; index < size; index++) {
             Identifier id = ByteBufHelpers.decodeIdentifier(buf);
-            int level = Math.max(0, buf.readInt());
-            contributions.put(id, level);
+            int progression = Math.max(1, buf.readInt());
+            contributions.put(id, progression);
         }
     }
 

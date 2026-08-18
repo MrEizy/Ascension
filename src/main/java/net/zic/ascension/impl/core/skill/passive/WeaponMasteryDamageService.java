@@ -13,7 +13,7 @@ import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
-import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
 import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
@@ -47,7 +47,7 @@ public final class WeaponMasteryDamageService {
                 continue;
             }
 
-            int level = Math.max(1, SkillLevelResolver.resolve(source, skillId).effectiveLevel());
+            int level = Math.max(1, SkillProgressionResolver.resolve(source, skillId).effectiveProgression());
             for (var passiveModule : passive.modules(level)) {
                 if (!(passiveModule instanceof PassiveModules.WeaponDamage module)
                         || !matches(player, event.getSource().getDirectEntity(), module)) {

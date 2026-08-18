@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Vector Step",
   "description": "Stores a return anchor and moves the caster toward the looked-at position.",
-  "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:look_position",
     "range": {

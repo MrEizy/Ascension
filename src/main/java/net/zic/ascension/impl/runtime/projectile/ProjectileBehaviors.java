@@ -45,7 +45,7 @@ public final class ProjectileBehaviors {
                         context.level(),
                         context.owner(),
                         context.projectile().skillId(),
-                        context.execution().variables().getOrDefault(TargetingDefinition.Context.EFFECTIVE_LEVEL, 0.0D).intValue(),
+                        context.execution().variables().getOrDefault(TargetingDefinition.Context.EFFECTIVE_PROGRESSION, 0.0D).intValue(),
                         context.execution().charge(),
                         context.execution().variables()
                 ));

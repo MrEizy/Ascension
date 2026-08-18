@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Stagger",
   "description": "Applies stagger buildup. Repeated hits trigger guard break, movement suppression, immunity and cast interruption.",
-  "default_accessible_level": 1,
   "definitions": {
     "stagger": {
       "calibration": {

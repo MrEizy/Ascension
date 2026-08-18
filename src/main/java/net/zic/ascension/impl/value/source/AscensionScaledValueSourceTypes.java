@@ -16,8 +16,8 @@ public final class AscensionScaledValueSourceTypes {
 
     public static final DeferredHolder<CodecType<ScaledValue.Source>, CodecType<ScaledValue.Source>> CONSTANT =
             TYPES.add("constant", ScaledValueSources.Constant.CODEC);
-    public static final DeferredHolder<CodecType<ScaledValue.Source>, CodecType<ScaledValue.Source>> SKILL_LEVEL =
-            TYPES.add("skill_level", ScaledValueSources.SkillLevel.CODEC);
+    public static final DeferredHolder<CodecType<ScaledValue.Source>, CodecType<ScaledValue.Source>> MASTERY =
+            TYPES.add("mastery", ScaledValueSources.Mastery.CODEC);
     public static final DeferredHolder<CodecType<ScaledValue.Source>, CodecType<ScaledValue.Source>> CHARGE =
             TYPES.add("charge", ScaledValueSources.Charge.CODEC);
     public static final DeferredHolder<CodecType<ScaledValue.Source>, CodecType<ScaledValue.Source>> STAT =

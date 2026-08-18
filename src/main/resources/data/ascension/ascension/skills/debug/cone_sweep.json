@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Cone Sweep",
   "description": "Tests cone targeting, target sorting and target limits.",
-  "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:cone",
     "range": {

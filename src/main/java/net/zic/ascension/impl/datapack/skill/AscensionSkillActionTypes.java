@@ -17,6 +17,7 @@ public final class AscensionSkillActionTypes {
             AscensionCraft.MOD_ID
     );
 
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> MASTERY_GATE = TYPES.add("mastery_gate", SkillActions.MasteryGate.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> MESSAGE = TYPES.add("message", SkillActions.Message.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> SOUND = TYPES.add("sound", SkillActions.Sound.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> PARTICLES = TYPES.add("particles", SkillActions.Particles.CODEC);

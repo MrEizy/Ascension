@@ -479,6 +479,5 @@
   },
   "cooldown": {
     "base": 420
-  },
-  "initial_level": 1
+  }
 }

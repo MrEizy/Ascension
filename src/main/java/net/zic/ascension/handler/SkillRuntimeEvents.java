@@ -17,7 +17,7 @@ import net.zic.ascension.api.ascension.core.resource.ResourceModifiers;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
-import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.event.resource.ResourceTransactionEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -79,7 +79,7 @@ public final class SkillRuntimeEvents {
                     || passive instanceof net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill && !passiveData.isEnabled()) {
                 continue;
             }
-            int level = SkillLevelResolver.resolve(source, skillId).effectiveLevel();
+            int level = SkillProgressionResolver.resolve(source, skillId).effectiveProgression();
             for (ResourceModifiers.Definition definition : passive.getModifiers(level)) {
                 if (definition.matches(event.getContext())) {
                     event.getCollector().add(definition.resolve(event.getContext(), source, skillId));

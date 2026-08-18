@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Barrier",
   "description": "Applies a 20 durability barrier for testing absorption, overflow, break, expiry and visual stages.",
-  "default_accessible_level": 1,
   "definitions": {
     "barriers": {
       "main": {

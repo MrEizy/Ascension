@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Repair Construct",
   "description": "Restores stability to the construct after it intercepts damage.",
-  "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:self"
   },

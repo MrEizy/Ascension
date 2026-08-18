@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Owner Construct",
   "description": "Tests construct replacement, owner damage interception, stability loss, overflow, break and expiry.",
-  "default_accessible_level": 1,
   "definitions": {
     "constructs": {
       "main": {

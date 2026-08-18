@@ -250,6 +250,5 @@
   ],
   "cooldown": {
     "base": 100
-  },
-  "initial_level": 1
+  }
 }

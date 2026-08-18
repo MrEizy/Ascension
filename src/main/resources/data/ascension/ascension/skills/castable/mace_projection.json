@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Mace Projection",
   "description": "Launches a crushing mace wave",
-  "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:self"
   },

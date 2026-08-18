@@ -6,7 +6,6 @@
   "description": {
     "translate": "ascension.skill.aquila_crossing.desc"
   },
-  "default_accessible_level": 0,
   "definitions": {
     "visuals": {
       "crossing": {
@@ -182,218 +181,248 @@
       }
     }
   },
-  "levels": [
+  "targeting": {
+    "type": "ascension:look_position",
+    "range": {
+      "base": 8,
+      "terms": [
+        {
+          "source": {
+            "type": "ascension:mastery"
+          },
+          "operation": "add",
+          "scale": 4.0,
+          "offset": -4.0
+        }
+      ]
+    },
+    "include_fluids": false,
+    "fallback_to_maximum_range": true
+  },
+  "require_targets": true,
+  "features": [
     {
-      "targeting": {
-        "type": "ascension:look_position",
-        "range": {
-          "base": 8
-        },
-        "include_fluids": false,
-        "fallback_to_maximum_range": true
+      "type": "ascension:visual",
+      "duration": {
+        "base": 18,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 6.0,
+            "offset": -6.0
+          }
+        ]
       },
-      "require_targets": true,
-      "features": [
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 18
-          },
-          "follow": true,
-          "definition": "#crossing",
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:cloud",
-          "count": {
-            "base": 14
-          },
-          "spread": {
-            "base": 0.4
-          },
-          "speed": {
-            "base": 0.05
-          },
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:entity.phantom.flap",
-          "volume": {
-            "base": 0.7
-          },
-          "pitch": {
-            "base": 1.5
-          },
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:move",
-          "mode": "target_position",
-          "subject": "caster",
-          "maximum_distance": {
-            "base": 8
-          },
-          "stopping_distance": {
-            "base": 0.6
-          },
-          "vertical_offset": {
-            "base": 0
-          },
-          "collision": "stop_before_collision",
-          "preserve_velocity": false
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:end_rod",
-          "count": {
-            "base": 22
-          },
-          "spread": {
-            "base": 0.55
-          },
-          "speed": {
-            "base": 0.06
-          },
-          "subject": "position"
-        },
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 18
-          },
-          "definition": "#arrival",
-          "subject": "position"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 12
-          },
-          "operation": "ascension:consume"
-        },
-        {
-          "resource": "ascension:stamina",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 8
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 140
-      }
+      "follow": true,
+      "definition": "#crossing",
+      "subject": "caster"
     },
     {
-      "targeting": {
-        "type": "ascension:look_position",
-        "range": {
-          "base": 12
-        },
-        "include_fluids": false,
-        "fallback_to_maximum_range": true
+      "type": "ascension:particles",
+      "particle": "minecraft:cloud",
+      "count": {
+        "base": 14,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 4.0,
+            "offset": -4.0
+          }
+        ]
       },
-      "require_targets": true,
-      "features": [
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 24
-          },
-          "follow": true,
-          "definition": "#crossing",
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:cloud",
-          "count": {
-            "base": 18
-          },
-          "spread": {
-            "base": 0.5
-          },
-          "speed": {
-            "base": 0.06
-          },
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:entity.phantom.flap",
-          "volume": {
-            "base": 0.8
-          },
-          "pitch": {
-            "base": 1.65
-          },
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:move",
-          "mode": "target_position",
-          "subject": "caster",
-          "maximum_distance": {
-            "base": 12
-          },
-          "stopping_distance": {
-            "base": 0.6
-          },
-          "vertical_offset": {
-            "base": 0
-          },
-          "collision": "stop_before_collision",
-          "preserve_velocity": false
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:end_rod",
-          "count": {
-            "base": 30
-          },
-          "spread": {
-            "base": 0.7
-          },
-          "speed": {
-            "base": 0.07
-          },
-          "subject": "position"
-        },
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 18
-          },
-          "definition": "#arrival",
-          "subject": "position"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 14
-          },
-          "operation": "ascension:consume"
-        },
-        {
-          "resource": "ascension:stamina",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 9
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 110
-      }
+      "spread": {
+        "base": 0.4,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.1,
+            "offset": -0.1
+          }
+        ]
+      },
+      "speed": {
+        "base": 0.05,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.01,
+            "offset": -0.01
+          }
+        ]
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.phantom.flap",
+      "volume": {
+        "base": 0.7,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.1,
+            "offset": -0.1
+          }
+        ]
+      },
+      "pitch": {
+        "base": 1.5,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.15,
+            "offset": -0.15
+          }
+        ]
+      },
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:move",
+      "mode": "target_position",
+      "subject": "caster",
+      "maximum_distance": {
+        "base": 8,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 4.0,
+            "offset": -4.0
+          }
+        ]
+      },
+      "stopping_distance": {
+        "base": 0.6
+      },
+      "vertical_offset": {
+        "base": 0
+      },
+      "collision": "stop_before_collision",
+      "preserve_velocity": false
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:end_rod",
+      "count": {
+        "base": 22,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 8.0,
+            "offset": -8.0
+          }
+        ]
+      },
+      "spread": {
+        "base": 0.55,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.15,
+            "offset": -0.15
+          }
+        ]
+      },
+      "speed": {
+        "base": 0.06,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.01,
+            "offset": -0.01
+          }
+        ]
+      },
+      "subject": "position"
+    },
+    {
+      "type": "ascension:visual",
+      "duration": {
+        "base": 18
+      },
+      "definition": "#arrival",
+      "subject": "position"
     }
-  ]
+  ],
+  "costs": [
+    {
+      "resource": "ascension:qi",
+      "source": "ascension:skill_casting",
+      "amount": {
+        "base": 12,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 2.0,
+            "offset": -2.0
+          }
+        ]
+      },
+      "operation": "ascension:consume"
+    },
+    {
+      "resource": "ascension:stamina",
+      "source": "ascension:skill_casting",
+      "amount": {
+        "base": 8,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 1.0,
+            "offset": -1.0
+          }
+        ]
+      },
+      "operation": "ascension:consume"
+    }
+  ],
+  "cooldown": {
+    "base": 140,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:mastery"
+        },
+        "operation": "add",
+        "scale": -30.0,
+        "offset": 30.0
+      }
+    ]
+  }
 }

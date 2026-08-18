@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Self Pulse",
   "description": "Tests self targeting, caster features, particles, sound, messages and Qi restoration.",
-  "default_accessible_level": 1,
   "definitions": {
     "visuals": {
       "pulse": {

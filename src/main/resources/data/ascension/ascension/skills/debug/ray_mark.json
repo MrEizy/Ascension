@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Ray Mark",
   "description": "Tests ray targeting and temporary effect stacking.",
-  "default_accessible_level": 1,
   "definitions": {
     "effects": {
       "calibration_mark": {

@@ -6,7 +6,6 @@
   "description": {
     "translate": "ascension.skill.imperial_fifth_stance.desc"
   },
-  "default_accessible_level": 1,
   "definitions": {
     "barriers": {
       "formation_guard": {

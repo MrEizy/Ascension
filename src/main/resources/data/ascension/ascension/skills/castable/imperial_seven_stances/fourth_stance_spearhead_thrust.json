@@ -6,7 +6,6 @@
   "description": {
     "translate": "ascension.skill.imperial_fourth_stance.desc"
   },
-  "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:self"
   },

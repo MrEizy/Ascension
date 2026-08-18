@@ -6,15 +6,20 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
-import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastDefinition;
-import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillLevelDefinition;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
+import net.zic.ascension.api.ascension.core.skill.SkillMasteryRank;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
+import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastDefinition;
+import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillCostDefinition;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
+import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
+import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
 import net.zic.ascension.impl.core.skill.castable.ActiveSkill.Data;
 
 import java.util.List;
+import java.util.Map;
 
 public final class ActiveSkillType extends SkillType {
     private static final MapCodec<Data> DATA_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -27,15 +32,16 @@ public final class ActiveSkillType extends SkillType {
         return RecordCodecBuilder.<ActiveSkill>mapCodec(instance -> instance.group(
                 ComponentSerialization.CODEC.fieldOf("name").forGetter(ActiveSkill::getName),
                 ComponentSerialization.CODEC.fieldOf("description").forGetter(ActiveSkill::getDescription),
-                Codec.INT.optionalFieldOf("default_accessible_level", 0).forGetter(ActiveSkill::getConfiguredDefaultAccessibleLevel),
-                Codec.INT.optionalFieldOf("initial_level", 0).forGetter(ActiveSkill::getInitialLevel),
                 SkillDefinitions.CODEC.codec().optionalFieldOf("definitions", SkillDefinitions.EMPTY).forGetter(ActiveSkill::definitions),
                 ActiveCastDefinition.CODEC.optionalFieldOf("cast", ActiveCastDefinition.instant()).forGetter(ActiveSkill::cast),
-                ActiveSkillLevelDefinition.Template.CODEC.forGetter(ActiveSkill::getRootTemplate),
-                ActiveSkillLevelDefinition.Template.CODEC.codec().listOf().optionalFieldOf("levels", List.of())
-                        .forGetter(ActiveSkill::getLevelTemplates),
-                Codec.DOUBLE.listOf().optionalFieldOf("experience_requirements", List.of())
-                        .forGetter(ActiveSkill::getExperienceRequirements)
+                TargetingDefinition.CODEC.fieldOf("targeting").forGetter(ActiveSkill::targeting),
+                Codec.BOOL.optionalFieldOf("require_targets", true).forGetter(ActiveSkill::requireTargets),
+                SkillAction.CODEC.listOf().optionalFieldOf("features", List.of()).forGetter(ActiveSkill::actions),
+                ActiveSkillCostDefinition.CODEC.codec().listOf().optionalFieldOf("costs", List.of()).forGetter(ActiveSkill::costs),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("cooldown", ScaledValue.constant(0.0D)).forGetter(ActiveSkill::cooldown),
+                SkillMasteryRank.CODEC.optionalFieldOf("base_mastery_cap", SkillMasteryRank.INITIATE).forGetter(ActiveSkill::defaultMasteryCap),
+                Codec.unboundedMap(SkillMasteryRank.CODEC, Codec.DOUBLE).optionalFieldOf("mastery_requirements", Map.of())
+                        .forGetter(ActiveSkill::masteryRequirements)
         ).apply(instance, ActiveSkill::new));
     }
 

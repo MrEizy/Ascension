@@ -26,7 +26,7 @@ import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
-import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
 import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.impl.core.skill.passive.ResourceModifierPassiveSkill;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionAttribution;
@@ -278,7 +278,7 @@ public final class NormalProjectileService {
                     continue;
                 }
                 List<NormalProjectileDefinition> localProfiles = passive.projectileProfiles(
-                        SkillLevelResolver.resolve(source, skillId).effectiveLevel()
+                        SkillProgressionResolver.resolve(source, skillId).effectiveProgression()
                 );
                 for (int index = 0; index < localProfiles.size(); index++) {
                     NormalProjectileDefinition definition = localProfiles.get(index);

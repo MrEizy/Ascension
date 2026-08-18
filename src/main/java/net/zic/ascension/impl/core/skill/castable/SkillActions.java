@@ -34,6 +34,7 @@ import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionCon
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
+import net.zic.ascension.api.ascension.core.skill.SkillMasteryRank;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.CodecHelpers;
@@ -76,6 +77,34 @@ public final class SkillActions {
         return entity == null ? context.position() : entity.getBoundingBox().getCenter();
     }
 
+    public record MasteryGate(
+            SkillMasteryRank minimum,
+            List<SkillAction> actions
+    ) implements SkillAction {
+        public static final MapCodec<MasteryGate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                SkillMasteryRank.CODEC.fieldOf("minimum").forGetter(MasteryGate::minimum),
+                SkillAction.CODEC.listOf().fieldOf("actions").forGetter(MasteryGate::actions)
+        ).apply(instance, MasteryGate::new));
+
+        public MasteryGate {
+            minimum = minimum == null ? SkillMasteryRank.INITIATE : minimum;
+            actions = actions == null ? List.of() : List.copyOf(actions);
+        }
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.MASTERY_GATE.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+        }
+    }
 
     public record Message(ActionSubject subject, Component message, boolean overlay) implements SkillAction {
         public static final MapCodec<Message> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

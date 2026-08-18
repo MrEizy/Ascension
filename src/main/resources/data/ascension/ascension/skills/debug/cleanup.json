@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Cleanup",
   "description": "Removes calibration fields, anchor networks, constructs, barriers, movement anchors and stagger state owned by or applied to the caster.",
-  "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:self"
   },

@@ -6,7 +6,6 @@
   "description": {
     "translate": "ascension.skill.ninefold_carnage_circuit.desc"
   },
-  "default_accessible_level": 1,
   "definitions": {
     "fields": {
       "circuit": {
@@ -16,7 +15,7 @@
           "terms": [
             {
               "source": {
-                "type": "ascension:skill_level",
+                "type": "ascension:mastery",
                 "skill": "ascension:castable/ninefold_carnage_circuit"
               },
               "operation": "add",
@@ -30,7 +29,7 @@
           "terms": [
             {
               "source": {
-                "type": "ascension:skill_level",
+                "type": "ascension:mastery",
                 "skill": "ascension:castable/ninefold_carnage_circuit"
               },
               "operation": "add",
@@ -44,7 +43,7 @@
           "terms": [
             {
               "source": {
-                "type": "ascension:skill_level",
+                "type": "ascension:mastery",
                 "skill": "ascension:castable/ninefold_carnage_circuit"
               },
               "operation": "add",
@@ -111,7 +110,7 @@
                 },
                 {
                   "source": {
-                    "type": "ascension:skill_level"
+                    "type": "ascension:mastery"
                   },
                   "operation": "add",
                   "scale": 0.8
@@ -153,7 +152,7 @@
                 },
                 {
                   "source": {
-                    "type": "ascension:skill_level"
+                    "type": "ascension:mastery"
                   },
                   "operation": "add",
                   "scale": 1.5
@@ -218,7 +217,7 @@
                 },
                 {
                   "source": {
-                    "type": "ascension:skill_level"
+                    "type": "ascension:mastery"
                   },
                   "operation": "add",
                   "scale": 3.5
@@ -260,7 +259,7 @@
                 },
                 {
                   "source": {
-                    "type": "ascension:skill_level"
+                    "type": "ascension:mastery"
                   },
                   "operation": "add",
                   "scale": 5.0
@@ -595,138 +594,98 @@
       }
     }
   },
-  "levels": [
+  "targeting": {
+    "type": "ascension:look_position",
+    "range": {
+      "base": 15,
+      "terms": [
+        {
+          "source": {
+            "type": "ascension:mastery"
+          },
+          "operation": "add",
+          "scale": 5.0,
+          "offset": -5.0
+        }
+      ]
+    },
+    "include_fluids": false,
+    "fallback_to_maximum_range": true
+  },
+  "require_targets": true,
+  "features": [
     {
-      "targeting": {
-        "type": "ascension:look_position",
-        "range": {
-          "base": 15
-        },
-        "include_fluids": false,
-        "fallback_to_maximum_range": true
+      "type": "ascension:visual",
+      "duration": {
+        "base": 18
       },
-      "require_targets": true,
-      "features": [
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 18
-          },
-          "follow": true,
-          "definition": "#cast",
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:field",
-          "action": "apply",
-          "definition": "#circuit",
-          "subject": "position"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:crit",
-          "count": {
-            "base": 38
-          },
-          "spread": {
-            "base": 1.4
-          },
-          "speed": {
-            "base": 0.07
-          },
-          "subject": "position"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:block.respawn_anchor.set_spawn",
-          "volume": {
-            "base": 0.9
-          },
-          "pitch": {
-            "base": 0.62
-          },
-          "subject": "position"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 30
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 360
-      }
+      "follow": true,
+      "definition": "#cast",
+      "subject": "caster"
     },
     {
-      "targeting": {
-        "type": "ascension:look_position",
-        "range": {
-          "base": 20
-        },
-        "include_fluids": false,
-        "fallback_to_maximum_range": true
+      "type": "ascension:field",
+      "action": "apply",
+      "definition": "#circuit",
+      "subject": "position"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:crit",
+      "count": {
+        "base": 38
       },
-      "require_targets": true,
-      "features": [
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 18
-          },
-          "follow": true,
-          "definition": "#cast",
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:field",
-          "action": "apply",
-          "definition": "#circuit",
-          "subject": "position"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:crit",
-          "count": {
-            "base": 38
-          },
-          "spread": {
-            "base": 1.4
-          },
-          "speed": {
-            "base": 0.07
-          },
-          "subject": "position"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:block.respawn_anchor.set_spawn",
-          "volume": {
-            "base": 0.9
-          },
-          "pitch": {
-            "base": 0.62
-          },
-          "subject": "position"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 38
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 300
-      }
+      "spread": {
+        "base": 1.4
+      },
+      "speed": {
+        "base": 0.07
+      },
+      "subject": "position"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.respawn_anchor.set_spawn",
+      "volume": {
+        "base": 0.9
+      },
+      "pitch": {
+        "base": 0.62
+      },
+      "subject": "position"
     }
-  ]
+  ],
+  "costs": [
+    {
+      "resource": "ascension:qi",
+      "source": "ascension:skill_casting",
+      "amount": {
+        "base": 30,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 8.0,
+            "offset": -8.0
+          }
+        ]
+      },
+      "operation": "ascension:consume"
+    }
+  ],
+  "cooldown": {
+    "base": 360,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:mastery"
+        },
+        "operation": "add",
+        "scale": -60.0,
+        "offset": 60.0
+      }
+    ]
+  }
 }

@@ -8,7 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectContext;
 
-import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.impl.core.effect.SkillEffectService;
@@ -54,18 +54,18 @@ public final class ScaledValueSources {
         }
     }
 
-    public record SkillLevel(Optional<Identifier> skill) implements ScaledValue.Source {
-        public static final MapCodec<SkillLevel> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Identifier.CODEC.optionalFieldOf("skill").forGetter(SkillLevel::skill)
-        ).apply(instance, SkillLevel::new));
+    public record Mastery(Optional<Identifier> skill) implements ScaledValue.Source {
+        public static final MapCodec<Mastery> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Identifier.CODEC.optionalFieldOf("skill").forGetter(Mastery::skill)
+        ).apply(instance, Mastery::new));
 
-        public SkillLevel {
+        public Mastery {
             skill = skill == null ? Optional.empty() : skill;
         }
 
         @Override
         public CodecType<ScaledValue.Source> getType() {
-            return AscensionScaledValueSourceTypes.SKILL_LEVEL.get();
+            return AscensionScaledValueSourceTypes.MASTERY.get();
         }
 
         @Override
@@ -73,7 +73,7 @@ public final class ScaledValueSources {
             Identifier skillId = skill.orElse(context.skill());
             return context.source() == null || skillId == null
                     ? 0.0D
-                    : SkillLevelResolver.resolve(context.source(), skillId).effectiveLevel();
+                    : SkillProgressionResolver.resolve(context.source(), skillId).effectiveProgression();
         }
     }
 

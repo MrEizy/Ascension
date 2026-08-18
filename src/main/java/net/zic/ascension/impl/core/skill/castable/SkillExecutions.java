@@ -34,19 +34,19 @@ public final class SkillExecutions {
             ServerLevel level,
             LivingEntity caster,
             Identifier skill,
-            int effectiveLevel,
+            int effectiveProgression,
             double charge,
             Map<Identifier, Double> variables,
             SkillExecutionDefinition definition
     ) {
         Map<Identifier, Double> resolvedVariables = new HashMap<>(variables == null ? Map.of() : variables);
-        resolvedVariables.put(TargetingDefinition.Context.EFFECTIVE_LEVEL, (double) effectiveLevel);
+        resolvedVariables.put(TargetingDefinition.Context.EFFECTIVE_PROGRESSION, (double) effectiveProgression);
         resolvedVariables.put(CAST_PROGRESS, charge);
         TargetingDefinition.Result targeting = definition.targeting().resolve(new TargetingDefinition.Context(
                 level,
                 caster,
                 skill,
-                effectiveLevel,
+                effectiveProgression,
                 charge,
                 resolvedVariables
         ));
@@ -75,30 +75,53 @@ public final class SkillExecutions {
         Vec3 origin = caster.position().add(0.0D, caster.getBbHeight() * 0.5D, 0.0D);
         LivingEntity primary = primaryEntity(resolution);
         for (SkillAction action : definition.actions()) {
-            switch (action.subject()) {
-                case CASTER, ORIGIN -> action.apply(new SkillActionContext(
-                        level,
-                        caster,
-                        skill,
-                        primary,
-                        origin,
-                        charge,
-                        resolution.variables()
-                ));
-                case TARGET, POSITION -> {
-                    for (TargetingDefinition.Target target : resolution.targets()) {
-                        Map<Identifier, Double> targetVariables = new HashMap<>(resolution.variables());
-                        targetVariables.put(TARGET_DISTANCE, caster.getEyePosition().distanceTo(target.position()));
-                        action.apply(new SkillActionContext(
-                                level,
-                                caster,
-                                skill,
-                                target.entity(),
-                                target.position(),
-                                charge,
-                                targetVariables
-                        ));
-                    }
+            applyAction(level, caster, skill, charge, resolution, origin, primary, action);
+        }
+    }
+
+    private static void applyAction(
+            ServerLevel level,
+            LivingEntity caster,
+            Identifier skill,
+            double charge,
+            Resolution resolution,
+            Vec3 origin,
+            LivingEntity primary,
+            SkillAction action
+    ) {
+        if (action instanceof SkillActions.MasteryGate gate) {
+            double progression = resolution.variables().getOrDefault(TargetingDefinition.Context.EFFECTIVE_PROGRESSION, 0.0D);
+            if (progression >= gate.minimum().progression()) {
+                for (SkillAction nested : gate.actions()) {
+                    applyAction(level, caster, skill, charge, resolution, origin, primary, nested);
+                }
+            }
+            return;
+        }
+
+        switch (action.subject()) {
+            case CASTER, ORIGIN -> action.apply(new SkillActionContext(
+                    level,
+                    caster,
+                    skill,
+                    primary,
+                    origin,
+                    charge,
+                    resolution.variables()
+            ));
+            case TARGET, POSITION -> {
+                for (TargetingDefinition.Target target : resolution.targets()) {
+                    Map<Identifier, Double> targetVariables = new HashMap<>(resolution.variables());
+                    targetVariables.put(TARGET_DISTANCE, caster.getEyePosition().distanceTo(target.position()));
+                    action.apply(new SkillActionContext(
+                            level,
+                            caster,
+                            skill,
+                            target.entity(),
+                            target.position(),
+                            charge,
+                            targetVariables
+                    ));
                 }
             }
         }

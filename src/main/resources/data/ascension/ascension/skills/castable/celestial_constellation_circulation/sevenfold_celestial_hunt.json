@@ -6,7 +6,6 @@
   "description": {
     "translate": "ascension.skill.sevenfold_celestial_hunt.desc"
   },
-  "default_accessible_level": 0,
   "definitions": {
     "fields": {
       "field": {
@@ -78,7 +77,7 @@
                 },
                 {
                   "source": {
-                    "type": "ascension:skill_level"
+                    "type": "ascension:mastery"
                   },
                   "operation": "add",
                   "scale": 1.0
@@ -131,7 +130,7 @@
                 },
                 {
                   "source": {
-                    "type": "ascension:skill_level"
+                    "type": "ascension:mastery"
                   },
                   "operation": "add",
                   "scale": 3.0

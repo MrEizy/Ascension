@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Guided Bolt",
   "description": "Tests target-bound virtual projectiles, homing, impact features and expiry.",
-  "default_accessible_level": 1,
   "definitions": {
     "projectiles": {
       "main": {
@@ -60,7 +59,7 @@
               "terms": [
                 {
                   "source": {
-                    "type": "ascension:skill_level"
+                    "type": "ascension:mastery"
                   },
                   "operation": "add",
                   "scale": 1.0

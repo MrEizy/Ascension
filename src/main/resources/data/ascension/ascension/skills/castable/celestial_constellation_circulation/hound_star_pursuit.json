@@ -6,7 +6,6 @@
   "description": {
     "translate": "ascension.skill.hound_star_pursuit.desc"
   },
-  "default_accessible_level": 0,
   "definitions": {
     "effects": {
       "hound_star_mark": {
@@ -261,206 +260,242 @@
       }
     }
   },
-  "levels": [
+  "targeting": {
+    "type": "ascension:ray",
+    "range": {
+      "base": 24,
+      "terms": [
+        {
+          "source": {
+            "type": "ascension:mastery"
+          },
+          "operation": "add",
+          "scale": 6.0,
+          "offset": -6.0
+        }
+      ]
+    },
+    "width": {
+      "base": 0.45,
+      "terms": [
+        {
+          "source": {
+            "type": "ascension:mastery"
+          },
+          "operation": "add",
+          "scale": 0.1,
+          "offset": -0.1
+        }
+      ]
+    },
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ],
+      "include_players": true,
+      "line_of_sight": true
+    }
+  },
+  "require_targets": true,
+  "features": [
     {
-      "targeting": {
-        "type": "ascension:ray",
-        "range": {
-          "base": 24
-        },
-        "width": {
-          "base": 0.45
-        },
-        "filter": {
-          "relations": [
-            "neutral",
-            "hostile"
-          ],
-          "include_players": true,
-          "line_of_sight": true
-        }
+      "type": "ascension:sound",
+      "sound": "minecraft:block.amethyst_block.chime",
+      "volume": {
+        "base": 0.8,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.1,
+            "offset": -0.1
+          }
+        ]
       },
-      "require_targets": true,
-      "features": [
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:block.amethyst_block.chime",
-          "volume": {
-            "base": 0.8
-          },
-          "pitch": {
-            "base": 1.5
-          },
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 12
-          },
-          "points": "caster_to_target",
-          "definition": "#link",
-          "subject": "target"
-        },
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 240
-          },
-          "follow": true,
-          "definition": "#mark",
-          "subject": "target"
-        },
-        {
-          "type": "ascension:effect",
-          "duration": {
-            "base": 240
-          },
-          "potency": {
-            "base": 1.0
-          },
-          "definition": "#hound_star_mark",
-          "subject": "target"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:end_rod",
-          "count": {
-            "base": 24
-          },
-          "spread": {
-            "base": 0.55
-          },
-          "speed": {
-            "base": 0.04
-          },
-          "subject": "position"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:entity.wolf.ambient",
-          "volume": {
-            "base": 0.5
-          },
-          "pitch": {
-            "base": 1.4
-          },
-          "subject": "target"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 10
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 80
-      }
+      "pitch": {
+        "base": 1.5,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.1,
+            "offset": -0.1
+          }
+        ]
+      },
+      "subject": "caster"
     },
     {
-      "targeting": {
-        "type": "ascension:ray",
-        "range": {
-          "base": 30
-        },
-        "width": {
-          "base": 0.55
-        },
-        "filter": {
-          "relations": [
-            "neutral",
-            "hostile"
-          ],
-          "include_players": true,
-          "line_of_sight": true
-        }
+      "type": "ascension:visual",
+      "duration": {
+        "base": 12
       },
-      "require_targets": true,
-      "features": [
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:block.amethyst_block.chime",
-          "volume": {
-            "base": 0.9
-          },
-          "pitch": {
-            "base": 1.6
-          },
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 12
-          },
-          "points": "caster_to_target",
-          "definition": "#link",
-          "subject": "target"
-        },
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 320
-          },
-          "follow": true,
-          "definition": "#mark",
-          "subject": "target"
-        },
-        {
-          "type": "ascension:effect",
-          "duration": {
-            "base": 320
-          },
-          "potency": {
-            "base": 1.2
-          },
-          "definition": "#hound_star_mark",
-          "subject": "target"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:end_rod",
-          "count": {
-            "base": 32
-          },
-          "spread": {
-            "base": 0.65
-          },
-          "speed": {
-            "base": 0.05
-          },
-          "subject": "position"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:entity.wolf.ambient",
-          "volume": {
-            "base": 0.6
-          },
-          "pitch": {
-            "base": 1.5
-          },
-          "subject": "target"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 12
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 60
-      }
+      "points": "caster_to_target",
+      "definition": "#link",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:visual",
+      "duration": {
+        "base": 240,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 80.0,
+            "offset": -80.0
+          }
+        ]
+      },
+      "follow": true,
+      "definition": "#mark",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:effect",
+      "duration": {
+        "base": 240,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 80.0,
+            "offset": -80.0
+          }
+        ]
+      },
+      "potency": {
+        "base": 1.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.2,
+            "offset": -0.2
+          }
+        ]
+      },
+      "definition": "#hound_star_mark",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:end_rod",
+      "count": {
+        "base": 24,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 8.0,
+            "offset": -8.0
+          }
+        ]
+      },
+      "spread": {
+        "base": 0.55,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.1,
+            "offset": -0.1
+          }
+        ]
+      },
+      "speed": {
+        "base": 0.04,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.01,
+            "offset": -0.01
+          }
+        ]
+      },
+      "subject": "position"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.wolf.ambient",
+      "volume": {
+        "base": 0.5,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.1,
+            "offset": -0.1
+          }
+        ]
+      },
+      "pitch": {
+        "base": 1.4,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 0.1,
+            "offset": -0.1
+          }
+        ]
+      },
+      "subject": "target"
     }
-  ]
+  ],
+  "costs": [
+    {
+      "resource": "ascension:qi",
+      "source": "ascension:skill_casting",
+      "amount": {
+        "base": 10,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "operation": "add",
+            "scale": 2.0,
+            "offset": -2.0
+          }
+        ]
+      },
+      "operation": "ascension:consume"
+    }
+  ],
+  "cooldown": {
+    "base": 80,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:mastery"
+        },
+        "operation": "add",
+        "scale": -20.0,
+        "offset": 20.0
+      }
+    ]
+  }
 }

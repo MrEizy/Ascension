@@ -8,7 +8,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
-import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -94,7 +94,7 @@ public final class PassiveDefenseService {
                 && data instanceof Data passiveData
                 && (!(passive instanceof net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill)
                 || passiveData.isEnabled())) {
-            return passive.defenses(SkillLevelResolver.resolve(source, skillId).effectiveLevel());
+            return passive.defenses(SkillProgressionResolver.resolve(source, skillId).effectiveProgression());
         }
         return List.of();
     }

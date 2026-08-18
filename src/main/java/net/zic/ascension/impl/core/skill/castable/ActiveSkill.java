@@ -11,26 +11,30 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
-import net.zic.ascension.api.ascension.core.skill.LevelledSkill;
-import net.zic.ascension.api.ascension.core.skill.LevelledSkillData;
+import net.zic.ascension.api.ascension.core.skill.ProgressingSkill;
+import net.zic.ascension.api.ascension.core.skill.ProgressingSkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
-import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
-import net.zic.ascension.api.ascension.core.skill.SkillLevelSnapshot;
+import net.zic.ascension.api.ascension.core.skill.SkillMasteryRank;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionService;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionSnapshot;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastData;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastVisualState;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillCostDefinition;
-import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillLevelDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.CastData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
+import net.zic.ascension.api.ascension.core.skill.castable.SkillExecutionDefinition;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -38,121 +42,95 @@ import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.cooldown.EntityCooldownHandler;
 
-import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDefinitions.Owner {
+public final class ActiveSkill implements CastableSkill, ProgressingSkill, SkillDefinitions.Owner {
+    private static final int CHANNEL_MASTERY_INTERVAL = 20;
+    private static final double MASTERY_EXPERIENCE_PER_USE = 1.0D;
+
     private final Component name;
     private final Component description;
-    private final int defaultAccessibleLevel;
-    private final int initialLevel;
-    private final ActiveCastDefinition cast;
-    private final List<ActiveSkillLevelDefinition> levels;
-    private final List<Double> experienceRequirements;
     private final SkillDefinitions definitions;
+    private final ActiveCastDefinition cast;
+    private final SkillExecutionDefinition execution;
+    private final List<ActiveSkillCostDefinition> costs;
+    private final ScaledValue cooldown;
+    private final SkillMasteryRank defaultMasteryCap;
+    private final Map<SkillMasteryRank, Double> masteryRequirements;
 
     public ActiveSkill(
             Component name,
             Component description,
-            int defaultAccessibleLevel,
-            int initialLevel,
             SkillDefinitions definitions,
             ActiveCastDefinition cast,
-            ActiveSkillLevelDefinition.Template root,
-            List<ActiveSkillLevelDefinition.Template> templates,
-            List<Double> experienceRequirements
+            TargetingDefinition targeting,
+            boolean requireTargets,
+            List<SkillAction> actions,
+            List<ActiveSkillCostDefinition> costs,
+            ScaledValue cooldown,
+            SkillMasteryRank defaultMasteryCap,
+            Map<SkillMasteryRank, Double> masteryRequirements
     ) {
         this.name = name;
         this.description = description;
         this.definitions = definitions == null ? SkillDefinitions.EMPTY : definitions;
         this.cast = cast == null ? ActiveCastDefinition.instant() : cast;
-        this.levels = resolveLevels(root, templates);
-        this.defaultAccessibleLevel = Math.clamp(
-                defaultAccessibleLevel <= 0 ? this.levels.size() : defaultAccessibleLevel,
-                0,
-                this.levels.size()
+        this.execution = new SkillExecutionDefinition(
+                targeting,
+                requireTargets,
+                actions == null ? List.of() : List.copyOf(actions)
         );
-        this.initialLevel = Math.clamp(initialLevel, 0, this.levels.size());
-        this.experienceRequirements = experienceRequirements == null
-                ? List.of()
-                : experienceRequirements.stream().map(value -> Math.max(0.0D, value)).toList();
-    }
-
-    private static List<ActiveSkillLevelDefinition> resolveLevels(
-            ActiveSkillLevelDefinition.Template root,
-            List<ActiveSkillLevelDefinition.Template> templates
-    ) {
-        ActiveSkillLevelDefinition.Template base = root == null
-                ? emptyTemplate()
-                : root;
-        List<ActiveSkillLevelDefinition> values = new ArrayList<>();
-        ActiveSkillLevelDefinition previous = null;
-        if (templates == null || templates.isEmpty()) {
-            values.add(base.resolve(null));
-            return List.copyOf(values);
+        this.costs = costs == null ? List.of() : List.copyOf(costs);
+        this.cooldown = cooldown == null ? ScaledValue.constant(0.0D) : cooldown;
+        this.defaultMasteryCap = defaultMasteryCap == null ? SkillMasteryRank.INITIATE : defaultMasteryCap;
+        EnumMap<SkillMasteryRank, Double> requirements = new EnumMap<>(SkillMasteryRank.class);
+        if (masteryRequirements != null) {
+            masteryRequirements.forEach((rank, value) -> {
+                if (rank != null
+                        && rank != SkillMasteryRank.INITIATE
+                        && value != null
+                        && Double.isFinite(value)
+                        && value > 0.0D) {
+                    requirements.put(rank, value);
+                }
+            });
         }
-        for (ActiveSkillLevelDefinition.Template template : templates) {
-            ActiveSkillLevelDefinition.Template current = merge(base, template);
-            previous = current.resolve(previous);
-            values.add(previous);
-        }
-        return List.copyOf(values);
-    }
-
-    private static ActiveSkillLevelDefinition.Template emptyTemplate() {
-        return new ActiveSkillLevelDefinition.Template(
-                Optional.empty(),
-                Optional.empty(),
-                Optional.empty(),
-                Optional.empty(),
-                Optional.empty()
-        );
-    }
-
-    private static ActiveSkillLevelDefinition.Template merge(
-            ActiveSkillLevelDefinition.Template root,
-            ActiveSkillLevelDefinition.Template level
-    ) {
-        if (level == null) {
-            return root;
-        }
-        return new ActiveSkillLevelDefinition.Template(
-                level.targeting().isPresent() ? level.targeting() : root.targeting(),
-                level.requireTargets().isPresent() ? level.requireTargets() : root.requireTargets(),
-                level.actions().isPresent() ? level.actions() : root.actions(),
-                level.costs().isPresent() ? level.costs() : root.costs(),
-                level.cooldown().isPresent() ? level.cooldown() : root.cooldown()
-        );
-    }
-
-    public int getConfiguredDefaultAccessibleLevel() {
-        return defaultAccessibleLevel;
-    }
-
-    public int getInitialLevel() {
-        return initialLevel;
+        this.masteryRequirements = Map.copyOf(requirements);
     }
 
     public ActiveCastDefinition cast() {
         return cast;
     }
 
-    public List<ActiveSkillLevelDefinition> getLevels() {
-        return levels;
+    public TargetingDefinition targeting() {
+        return execution.targeting();
     }
 
-    public ActiveSkillLevelDefinition.Template getRootTemplate() {
-        return levels.isEmpty() ? emptyTemplate() : ActiveSkillLevelDefinition.Template.from(levels.getFirst());
+    public boolean requireTargets() {
+        return execution.requireTargets();
     }
 
-    public List<ActiveSkillLevelDefinition.Template> getLevelTemplates() {
-        return levels.stream().map(ActiveSkillLevelDefinition.Template::from).toList();
+    public List<SkillAction> actions() {
+        return execution.actions();
     }
 
-    public List<Double> getExperienceRequirements() {
-        return experienceRequirements;
+    public List<ActiveSkillCostDefinition> costs() {
+        return costs;
+    }
+
+    public ScaledValue cooldown() {
+        return cooldown;
+    }
+
+    public SkillMasteryRank defaultMasteryCap() {
+        return defaultMasteryCap;
+    }
+
+    public Map<SkillMasteryRank, Double> masteryRequirements() {
+        return masteryRequirements;
     }
 
     @Override
@@ -160,22 +138,23 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
         return definitions;
     }
 
-    public ActiveSkillLevelDefinition getLevelDefinition(int level) {
-        if (level <= 0 || level > levels.size()) {
-            return null;
-        }
-        return levels.get(level - 1);
-    }
-
     public Optional<ParticleFieldDefinition> particleField(int stage) {
         return cast.particleField(stage);
     }
 
     public Optional<Identifier> cultivationPath() {
-        for (ActiveSkillLevelDefinition level : levels) {
-            for (var action : level.execution().actions()) {
-                if (action instanceof SkillActions.Cultivate cultivate) {
-                    return Optional.of(cultivate.path());
+        return cultivationPath(execution.actions());
+    }
+
+    private static Optional<Identifier> cultivationPath(List<SkillAction> actions) {
+        for (SkillAction action : actions) {
+            if (action instanceof SkillActions.Cultivate cultivate) {
+                return Optional.of(cultivate.path());
+            }
+            if (action instanceof SkillActions.MasteryGate gate) {
+                Optional<Identifier> nested = cultivationPath(gate.actions());
+                if (nested.isPresent()) {
+                    return nested;
                 }
             }
         }
@@ -255,14 +234,14 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
             return CastResult.fail();
         }
 
-        ResolvedLevel resolvedLevel = resolveLevel(caster, skillId);
-        if (resolvedLevel.failureMessage() != null) {
-            return CastResult.fail(resolvedLevel.failureMessage());
+        ResolvedMastery mastery = resolveMastery(caster, skillId);
+        if (mastery.failureMessage() != null) {
+            return CastResult.fail(mastery.failureMessage());
         }
 
         return switch (cast.mode()) {
             case INSTANT -> {
-                ResolvedActiveCast resolved = resolve(level, caster, skillId, resolvedLevel, 0.0D, Map.of());
+                ResolvedActiveCast resolved = resolve(level, caster, skillId, mastery, 0.0D, Map.of());
                 if (resolved.failureMessage() != null) {
                     yield CastResult.fail(resolved.failureMessage());
                 }
@@ -284,7 +263,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
                         : CastResult.fail(Component.literal("Not enough resources"));
             }
             case CHANNEL -> {
-                ResolvedActiveCast resolved = resolve(level, caster, skillId, resolvedLevel, 0.0D, Map.of());
+                ResolvedActiveCast resolved = resolve(level, caster, skillId, mastery, 0.0D, Map.of());
                 if (resolved.failureMessage() != null) {
                     yield CastResult.fail(resolved.failureMessage());
                 }
@@ -423,15 +402,15 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
             }
 
             double progress = cast.progress(data.getTicks());
-            ResolvedLevel resolvedLevel = resolveLevel(caster, skillId);
-            if (resolvedLevel.failureMessage() != null) {
+            ResolvedMastery mastery = resolveMastery(caster, skillId);
+            if (mastery.failureMessage() != null) {
                 return;
             }
             ResolvedActiveCast resolved = resolve(
                     level,
                     caster,
                     skillId,
-                    resolvedLevel,
+                    mastery,
                     progress,
                     castVariables(data)
             );
@@ -443,19 +422,20 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
                 sendFailure(caster, Component.literal("Not enough resources"));
                 return;
             }
-            SkillExecutions.apply(level, caster, skillId, progress, resolved.definition().execution(), resolved.execution());
+            SkillExecutions.apply(level, caster, skillId, progress, execution, resolved.execution());
             applyCooldown(caster, skillId, resolved);
+            awardMasteryExperience(caster, skillId);
             return;
         }
 
         if (data.getTicks() > 0 && !status.isCancelled() && !status.isInvalidated()) {
-            ResolvedLevel resolvedLevel = resolveLevel(caster, skillId);
-            if (resolvedLevel.failureMessage() == null) {
+            ResolvedMastery mastery = resolveMastery(caster, skillId);
+            if (mastery.failureMessage() == null) {
                 ResolvedActiveCast resolved = resolve(
                         level,
                         caster,
                         skillId,
-                        resolvedLevel,
+                        mastery,
                         cast.progress(data.getTicks()),
                         castVariables(data)
                 );
@@ -467,12 +447,12 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
     }
 
     private void executeInstant(ServerLevel level, LivingEntity caster, Identifier skillId) {
-        ResolvedLevel resolvedLevel = resolveLevel(caster, skillId);
-        if (resolvedLevel.failureMessage() != null) {
-            sendFailure(caster, resolvedLevel.failureMessage());
+        ResolvedMastery mastery = resolveMastery(caster, skillId);
+        if (mastery.failureMessage() != null) {
+            sendFailure(caster, mastery.failureMessage());
             return;
         }
-        ResolvedActiveCast resolved = resolve(level, caster, skillId, resolvedLevel, 0.0D, Map.of());
+        ResolvedActiveCast resolved = resolve(level, caster, skillId, mastery, 0.0D, Map.of());
         if (resolved.failureMessage() != null) {
             sendFailure(caster, resolved.failureMessage());
             return;
@@ -481,8 +461,9 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
             sendFailure(caster, Component.literal("Not enough resources"));
             return;
         }
-        SkillExecutions.apply(level, caster, skillId, 0.0D, resolved.definition().execution(), resolved.execution());
+        SkillExecutions.apply(level, caster, skillId, 0.0D, execution, resolved.execution());
         applyCooldown(caster, skillId, resolved);
+        awardMasteryExperience(caster, skillId);
     }
 
     private void executeChannelTick(
@@ -493,8 +474,8 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
             CastStatus status
     ) {
         double progress = cast.progress(data.getTicks());
-        ResolvedLevel resolvedLevel = resolveLevel(caster, skillId);
-        if (resolvedLevel.failureMessage() != null) {
+        ResolvedMastery mastery = resolveMastery(caster, skillId);
+        if (mastery.failureMessage() != null) {
             status.invalidate();
             return;
         }
@@ -502,7 +483,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
                 level,
                 caster,
                 skillId,
-                resolvedLevel,
+                mastery,
                 progress,
                 castVariables(data)
         );
@@ -513,45 +494,42 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
             status.outOfResource();
             return;
         }
-        SkillExecutions.apply(level, caster, skillId, progress, resolved.definition().execution(), resolved.execution());
+        SkillExecutions.apply(level, caster, skillId, progress, execution, resolved.execution());
+        if (data.getTicks() % CHANNEL_MASTERY_INTERVAL == 0) {
+            awardMasteryExperience(caster, skillId);
+        }
     }
 
-    private ResolvedLevel resolveLevel(LivingEntity caster, Identifier skillId) {
+    private ResolvedMastery resolveMastery(LivingEntity caster, Identifier skillId) {
         OriginSource source = getOriginSource(caster);
-        SkillLevelSnapshot snapshot = SkillLevelResolver.resolve(source, skillId);
-        ActiveSkillLevelDefinition definition = getLevelDefinition(snapshot.effectiveLevel());
-        if (definition == null) {
-            return ResolvedLevel.failure(Component.literal("Skill level is not accessible"));
+        SkillProgressionSnapshot snapshot = SkillProgressionResolver.resolve(source, skillId);
+        if (snapshot.effectiveProgression() < SkillMasteryRank.INITIATE.progression()) {
+            return ResolvedMastery.failure(Component.literal("Skill mastery is not accessible"));
         }
-        return new ResolvedLevel(snapshot.effectiveLevel(), definition, null);
+        return new ResolvedMastery(snapshot.effectiveProgression(), null);
     }
 
     private ResolvedActiveCast resolve(
             ServerLevel level,
             LivingEntity caster,
             Identifier skillId,
-            ResolvedLevel resolvedLevel,
+            ResolvedMastery mastery,
             double progress,
             Map<Identifier, Double> variables
     ) {
-        SkillExecutions.Resolution execution = SkillExecutions.resolve(
+        SkillExecutions.Resolution resolvedExecution = SkillExecutions.resolve(
                 level,
                 caster,
                 skillId,
-                resolvedLevel.effectiveLevel(),
+                mastery.effectiveMastery(),
                 progress,
                 variables,
-                resolvedLevel.definition().execution()
+                execution
         );
-        if (!execution.succeeded()) {
-            return ResolvedActiveCast.failure(execution.failureMessage());
+        if (!resolvedExecution.succeeded()) {
+            return ResolvedActiveCast.failure(resolvedExecution.failureMessage());
         }
-        return new ResolvedActiveCast(
-                resolvedLevel.effectiveLevel(),
-                resolvedLevel.definition(),
-                execution,
-                null
-        );
+        return new ResolvedActiveCast(mastery.effectiveMastery(), resolvedExecution, null);
     }
 
     private boolean canPayCosts(LivingEntity caster, Identifier skillId, ResolvedActiveCast resolved) {
@@ -563,7 +541,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
                 resolved.execution().variables().getOrDefault(SkillExecutions.CAST_PROGRESS, 0.0D),
                 resolved.execution().variables()
         );
-        for (ActiveSkillCostDefinition cost : resolved.definition().costs()) {
+        for (ActiveSkillCostDefinition cost : costs) {
             if (!cost.canPay(caster, skillId, target, context, resolved.execution().variables())) {
                 return false;
             }
@@ -575,7 +553,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
         LivingEntity target = SkillExecutions.primaryEntity(resolved.execution());
         double progress = resolved.execution().variables().getOrDefault(SkillExecutions.CAST_PROGRESS, 0.0D);
         ScaledValue.Context context = scaledValueContext(caster, skillId, target, progress, resolved.execution().variables());
-        for (ActiveSkillCostDefinition cost : resolved.definition().costs()) {
+        for (ActiveSkillCostDefinition cost : costs) {
             if (!cost.pay(caster, skillId, target, context, resolved.execution().variables())) {
                 return false;
             }
@@ -584,9 +562,16 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
     }
 
     private void applyCooldown(LivingEntity caster, Identifier skillId, ResolvedActiveCast resolved) {
-        int cooldown = resolveCooldown(caster, skillId, resolved);
-        if (cooldown > 0) {
-            caster.getData(ZenithAttachments.COOLDOWN_HANDLER).addCooldown(skillId, cooldown);
+        int resolvedCooldown = resolveCooldown(caster, skillId, resolved);
+        if (resolvedCooldown > 0) {
+            caster.getData(ZenithAttachments.COOLDOWN_HANDLER).addCooldown(skillId, resolvedCooldown);
+        }
+    }
+
+    private void awardMasteryExperience(LivingEntity caster, Identifier skillId) {
+        OriginSource source = getOriginSource(caster);
+        if (source != null) {
+            SkillProgressionService.addExperience(source, skillId, MASTERY_EXPERIENCE_PER_USE);
         }
     }
 
@@ -610,7 +595,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
     private int resolveCooldown(LivingEntity caster, Identifier skillId, ResolvedActiveCast resolved) {
         LivingEntity target = SkillExecutions.primaryEntity(resolved.execution());
         double progress = resolved.execution().variables().getOrDefault(SkillExecutions.CAST_PROGRESS, 0.0D);
-        double value = resolved.definition().cooldown().resolve(
+        double value = cooldown.resolve(
                 scaledValueContext(caster, skillId, target, progress, resolved.execution().variables())
         );
         if (!Double.isFinite(value) || value <= 0.0D) {
@@ -662,21 +647,27 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
     }
 
     @Override
-    public int getMaximumLevel() {
-        return levels.size();
+    public int getMaximumProgression() {
+        return SkillMasteryRank.TRANSCENDENCE.progression();
     }
 
     @Override
-    public int getDefaultAccessibleLevel() {
-        return defaultAccessibleLevel;
+    public int getInitialProgression() {
+        return SkillMasteryRank.INITIATE.progression();
     }
 
     @Override
-    public double getExperienceRequiredForNextLevel(int currentLevel) {
-        if (currentLevel < 0 || currentLevel >= experienceRequirements.size()) {
+    public int getDefaultProgressionCap() {
+        return defaultMasteryCap.progression();
+    }
+
+    @Override
+    public double getExperienceRequiredForNextProgression(int currentProgression) {
+        if (currentProgression >= SkillMasteryRank.TRANSCENDENCE.progression()) {
             return Double.POSITIVE_INFINITY;
         }
-        return experienceRequirements.get(currentLevel);
+        SkillMasteryRank target = SkillMasteryRank.fromProgression(currentProgression + 1);
+        return Math.max(0.0D, masteryRequirements.getOrDefault(target, target.defaultExperienceToReach()));
     }
 
     @Override
@@ -712,7 +703,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
 
     @Override
     public SkillData newData(RegistryAccess access) {
-        return new Data(new SkillProgressionData(initialLevel, 0.0D, Map.of(), Map.of()));
+        return new Data(new SkillProgressionData(getInitialProgression(), 0.0D, Map.of()));
     }
 
     @Override
@@ -725,28 +716,23 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, SkillDef
         return new Data(buf);
     }
 
-    private record ResolvedLevel(
-            int effectiveLevel,
-            ActiveSkillLevelDefinition definition,
-            Component failureMessage
-    ) {
-        private static ResolvedLevel failure(Component message) {
-            return new ResolvedLevel(0, null, message);
+    private record ResolvedMastery(int effectiveMastery, Component failureMessage) {
+        private static ResolvedMastery failure(Component message) {
+            return new ResolvedMastery(0, message);
         }
     }
 
     private record ResolvedActiveCast(
-            int effectiveLevel,
-            ActiveSkillLevelDefinition definition,
+            int effectiveMastery,
             SkillExecutions.Resolution execution,
             Component failureMessage
     ) {
         private static ResolvedActiveCast failure(Component message) {
-            return new ResolvedActiveCast(0, null, null, message);
+            return new ResolvedActiveCast(0, null, message);
         }
     }
 
-    public static final class Data implements LevelledSkillData {
+    public static final class Data implements ProgressingSkillData {
         private final SkillProgressionData progression;
 
         public Data(SkillProgressionData progression) {

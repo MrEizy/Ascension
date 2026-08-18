@@ -14,7 +14,7 @@ public final class SetSkillLevelActionType extends ProgressActionType {
         return RecordCodecBuilder.<SetSkillLevelAction>mapCodec(instance -> instance.group(
                 Identifier.CODEC.fieldOf("skill").forGetter(SetSkillLevelAction::skill),
                 Identifier.CODEC.fieldOf("contribution").forGetter(SetSkillLevelAction::contribution),
-                Codec.intRange(0, Integer.MAX_VALUE).fieldOf("level").forGetter(SetSkillLevelAction::level),
+                Codec.intRange(1, Integer.MAX_VALUE).fieldOf("level").forGetter(SetSkillLevelAction::level),
                 Codec.BOOL.optionalFieldOf("set_floor", true).forGetter(SetSkillLevelAction::setFloor),
                 Codec.BOOL.optionalFieldOf("set_cap", true).forGetter(SetSkillLevelAction::setCap)
         ).apply(instance, SetSkillLevelAction::new));

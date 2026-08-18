@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Anchor Network",
   "description": "Tests anchor nodes, links and a child area field.",
-  "default_accessible_level": 1,
   "definitions": {
     "networks": {
       "main": {

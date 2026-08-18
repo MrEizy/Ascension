@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Sword Projection",
   "description": "Launches a arc of sword qi",
-  "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:self"
   },

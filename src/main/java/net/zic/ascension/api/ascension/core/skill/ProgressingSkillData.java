@@ -1,5 +1,5 @@
 package net.zic.ascension.api.ascension.core.skill;
 
-public interface LevelledSkillData extends SkillData {
+public interface ProgressingSkillData extends SkillData {
     SkillProgressionData getSkillProgression();
 }

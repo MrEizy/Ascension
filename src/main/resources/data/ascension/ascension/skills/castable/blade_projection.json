@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Blade Projection",
   "description": "Sends a swift red blade crescent forward.",
-  "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:self"
   },

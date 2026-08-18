@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Test Field",
   "description": "Tests looked-position targeting, field entry, ticking, exit and expiry.",
-  "default_accessible_level": 1,
   "definitions": {
     "fields": {
       "main": {
