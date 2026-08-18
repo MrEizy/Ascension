@@ -288,14 +288,9 @@ public class AscensionCraft {
             );
 
             registrar.playToClient(
-                    ParticleFieldStatePacket.TYPE,
-                    ParticleFieldStatePacket.STREAM_CODEC,
-                    ParticleFieldStatePacket::handle
-            );
-            registrar.playToClient(
-                    HeldCastVisualStatePacket.TYPE,
-                    HeldCastVisualStatePacket.STREAM_CODEC,
-                    HeldCastVisualStatePacket::handle
+                    ActiveCastVisualStatePacket.TYPE,
+                    ActiveCastVisualStatePacket.STREAM_CODEC,
+                    ActiveCastVisualStatePacket::handle
             );
             registrar.playToClient(
                     RuntimeVisualPacket.TYPE,

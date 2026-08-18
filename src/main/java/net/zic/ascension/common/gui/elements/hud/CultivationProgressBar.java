@@ -14,7 +14,7 @@ import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 
-import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
+import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
 import net.zic.ascension.skill_casting.AscensionSkillListener;
 import net.zic.zenithlib.common.ZenithAttachments;
 
@@ -158,11 +158,11 @@ public class CultivationProgressBar extends RenderableElement {
 
                 Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, activeSkillId, player.registryAccess());
 
-                if (!(skill instanceof SimpleCultivationSkill cultivationSkill)) {
+                if (!(skill instanceof ActiveSkill activeSkill) || activeSkill.cultivationPath().isEmpty()) {
                     return Optional.empty();
                 }
 
-                Identifier pathId = cultivationSkill.primaryPath();
+                Identifier pathId = activeSkill.cultivationPath().get();
 
                 return ClientAscensionData.getEntityData().flatMap(entityData -> {
                     PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(entityData.getSource(),pathId);

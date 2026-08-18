@@ -1,11 +1,11 @@
 {
-  "type": "ascension:held_cast",
+  "type": "ascension:active_skill",
   "name": "Channel",
   "description": "A long channel",
   "cast": {
-    "minimum_charge": 20,
-    "maximum_charge": 200,
-    "cooldown": 10,
+    "mode": "charge",
+    "minimum_ticks": 20,
+    "maximum_ticks": 200,
     "movement": {
       "horizontal_drag": {
         "base": 0.8
@@ -35,5 +35,9 @@
       "overlay": true,
       "subject": "caster"
     }
-  ]
+  ],
+  "cooldown": {
+    "base": 10
+  },
+  "initial_level": 1
 }

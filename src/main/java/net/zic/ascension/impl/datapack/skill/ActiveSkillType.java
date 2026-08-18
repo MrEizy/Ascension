@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillLevelDefinition;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
@@ -27,7 +28,9 @@ public final class ActiveSkillType extends SkillType {
                 ComponentSerialization.CODEC.fieldOf("name").forGetter(ActiveSkill::getName),
                 ComponentSerialization.CODEC.fieldOf("description").forGetter(ActiveSkill::getDescription),
                 Codec.INT.optionalFieldOf("default_accessible_level", 0).forGetter(ActiveSkill::getConfiguredDefaultAccessibleLevel),
+                Codec.INT.optionalFieldOf("initial_level", 0).forGetter(ActiveSkill::getInitialLevel),
                 SkillDefinitions.CODEC.codec().optionalFieldOf("definitions", SkillDefinitions.EMPTY).forGetter(ActiveSkill::definitions),
+                ActiveCastDefinition.CODEC.optionalFieldOf("cast", ActiveCastDefinition.instant()).forGetter(ActiveSkill::cast),
                 ActiveSkillLevelDefinition.Template.CODEC.forGetter(ActiveSkill::getRootTemplate),
                 ActiveSkillLevelDefinition.Template.CODEC.codec().listOf().optionalFieldOf("levels", List.of())
                         .forGetter(ActiveSkill::getLevelTemplates),

@@ -18,8 +18,9 @@ import java.util.Map;
 public final class SkillExecutions {
     public static final Identifier TARGET_COUNT = AscensionCraft.prefix("execution/target_count");
     public static final Identifier TARGET_DISTANCE = AscensionCraft.prefix("execution/target_distance");
-    public static final Identifier CHARGE_TICKS = AscensionCraft.prefix("execution/charge_ticks");
-    public static final Identifier MAXIMUM_CHARGE_TICKS = AscensionCraft.prefix("execution/maximum_charge_ticks");
+    public static final Identifier CAST_PROGRESS = AscensionCraft.prefix("cast/progress");
+    public static final Identifier CAST_TICKS = AscensionCraft.prefix("cast/ticks");
+    public static final Identifier MAXIMUM_CAST_TICKS = AscensionCraft.prefix("cast/maximum_ticks");
     public static final Identifier PROJECTILE_TRAVELLED = AscensionCraft.prefix("execution/projectile_travelled");
     public static final Identifier PROJECTILE_SPEED = AscensionCraft.prefix("execution/projectile_speed");
     public static final Identifier PROJECTILE_PIERCE_INDEX = AscensionCraft.prefix("execution/projectile_pierce_index");
@@ -40,6 +41,7 @@ public final class SkillExecutions {
     ) {
         Map<Identifier, Double> resolvedVariables = new HashMap<>(variables == null ? Map.of() : variables);
         resolvedVariables.put(TargetingDefinition.Context.EFFECTIVE_LEVEL, (double) effectiveLevel);
+        resolvedVariables.put(CAST_PROGRESS, charge);
         TargetingDefinition.Result targeting = definition.targeting().resolve(new TargetingDefinition.Context(
                 level,
                 caster,

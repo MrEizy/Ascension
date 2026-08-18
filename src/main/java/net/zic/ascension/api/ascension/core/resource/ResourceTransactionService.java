@@ -195,8 +195,8 @@ public final class ResourceTransactionService {
             variables.put(AscensionCraft.prefix("resource/current_amount"), amountBefore);
             variables.put(AscensionCraft.prefix("resource/maximum_amount"), resourceType.getMaximum(request.entity()));
             variables.put(AscensionCraft.prefix("resource/transaction_depth"), (double) depth);
-            double charge = variables.getOrDefault(AscensionCraft.prefix("cast/charge"), 0.0D);
-            return new ScaledValue.Context(source, skillId, request.entity(), request.target(), charge, variables);
+            double castProgress = variables.getOrDefault(AscensionCraft.prefix("cast/progress"), 0.0D);
+            return new ScaledValue.Context(source, skillId, request.entity(), request.target(), castProgress, variables);
         }
     }
 

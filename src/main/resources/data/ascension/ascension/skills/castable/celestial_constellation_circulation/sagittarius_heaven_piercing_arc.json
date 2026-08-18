@@ -1,5 +1,5 @@
 {
-  "type": "ascension:held_cast",
+  "type": "ascension:active_skill",
   "name": {
     "translate": "ascension.skill.sagittarius_heaven_piercing_arc.name"
   },
@@ -7,9 +7,9 @@
     "translate": "ascension.skill.sagittarius_heaven_piercing_arc.desc"
   },
   "cast": {
-    "minimum_charge": 20,
-    "maximum_charge": 80,
-    "cooldown": 300,
+    "mode": "charge",
+    "minimum_ticks": 20,
+    "maximum_ticks": 80,
     "cost": {
       "resource": "ascension:qi",
       "source": "ascension:skill_casting",
@@ -702,5 +702,9 @@
       "direction": "target",
       "subject": "target"
     }
-  ]
+  ],
+  "cooldown": {
+    "base": 300
+  },
+  "initial_level": 1
 }

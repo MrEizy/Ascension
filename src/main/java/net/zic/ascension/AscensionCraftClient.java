@@ -34,7 +34,6 @@ import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.gui.menus.AscMenuTypes;
 import net.zic.ascension.common.gui.menus.jade_bottle.JadeBottleScreen;
 import net.zic.ascension.common.particle.AscensionParticles;
-import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
 import net.zic.ascension.network.WeaponSwingRequestPacket;
 
 
@@ -75,35 +74,35 @@ public class AscensionCraftClient {
         public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
             event.registerSpriteSet(
                     AscensionParticles.PARTICLE_FIELD_SPARK.get(),
-                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.SPARK, sprites)
+                    sprites -> new ParticleFieldParticle.Provider(AscensionCraft.prefix("particle_field_spark"), sprites)
             );
             event.registerSpriteSet(
                     AscensionParticles.PARTICLE_FIELD_WISP.get(),
-                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.WISP, sprites)
+                    sprites -> new ParticleFieldParticle.Provider(AscensionCraft.prefix("particle_field_wisp"), sprites)
             );
             event.registerSpriteSet(
                     AscensionParticles.PARTICLE_FIELD_BLOB.get(),
-                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.BLOB, sprites)
+                    sprites -> new ParticleFieldParticle.Provider(AscensionCraft.prefix("particle_field_blob"), sprites)
             );
             event.registerSpriteSet(
                     AscensionParticles.PARTICLE_FIELD_MOTE.get(),
-                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.MOTE, sprites)
+                    sprites -> new ParticleFieldParticle.Provider(AscensionCraft.prefix("particle_field_mote"), sprites)
             );
             event.registerSpriteSet(
                     AscensionParticles.PARTICLE_FIELD_PETAL.get(),
-                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.PETAL, sprites)
+                    sprites -> new ParticleFieldParticle.Provider(AscensionCraft.prefix("particle_field_petal"), sprites)
             );
             event.registerSpriteSet(
                     AscensionParticles.PARTICLE_FIELD_RUNE.get(),
-                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.RUNE, sprites)
+                    sprites -> new ParticleFieldParticle.Provider(AscensionCraft.prefix("particle_field_rune"), sprites)
             );
             event.registerSpriteSet(
                     AscensionParticles.PARTICLE_FIELD_THREAD.get(),
-                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.THREAD, sprites)
+                    sprites -> new ParticleFieldParticle.Provider(AscensionCraft.prefix("particle_field_thread"), sprites)
             );
             event.registerSpriteSet(
                     AscensionParticles.PARTCILE_FIELD_PETAL_LOTUS.get(),
-                    sprites -> new ParticleFieldParticle.Provider(ParticleFieldParticleKind.PETALS_LOTUS, sprites)
+                    sprites -> new ParticleFieldParticle.Provider(AscensionCraft.prefix("particle_field_petal_lotus"), sprites)
             );
         }
 

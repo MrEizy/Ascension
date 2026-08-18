@@ -3,17 +3,17 @@ package net.zic.ascension.skill_casting;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
-import net.zic.ascension.network.HeldCastVisualStatePacket;
+import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastVisualState;
+import net.zic.ascension.network.ActiveCastVisualStatePacket;
 
-public final class HeldCastVisualSyncManager {
+public final class ActiveCastVisualSyncManager {
     private static final int HEARTBEAT_INTERVAL = 10;
     private static final double SYNC_DISTANCE_SQR = 64.0D * 64.0D;
 
-    private HeldCastVisualSyncManager() {
+    private ActiveCastVisualSyncManager() {
     }
 
-    public static void syncNow(ServerPlayer caster, HeldCastVisualState state) {
+    public static void syncNow(ServerPlayer caster, ActiveCastVisualState state) {
         if (state == null) {
             sendStop(caster);
             return;
@@ -21,7 +21,7 @@ public final class HeldCastVisualSyncManager {
         sendNearby(caster, state);
     }
 
-    public static void heartbeat(ServerPlayer caster, HeldCastVisualState state) {
+    public static void heartbeat(ServerPlayer caster, ActiveCastVisualState state) {
         if (state == null) {
             return;
         }
@@ -33,17 +33,16 @@ public final class HeldCastVisualSyncManager {
         sendNearby(caster, state);
     }
 
-    private static void sendNearby(ServerPlayer caster, HeldCastVisualState state) {
+    private static void sendNearby(ServerPlayer caster, ActiveCastVisualState state) {
         MinecraftServer server = caster.level().getServer();
         if (server == null) {
             return;
         }
-        HeldCastVisualStatePacket packet = new HeldCastVisualStatePacket(
+        ActiveCastVisualStatePacket packet = new ActiveCastVisualStatePacket(
                 caster.getUUID(),
                 state.skill(),
-                state.phase(),
                 state.stage(),
-                (float) state.charge()
+                (float) state.progress()
         );
         for (ServerPlayer viewer : server.getPlayerList().getPlayers()) {
             if (viewer == caster || viewer.level() != caster.level()) {
@@ -60,10 +59,9 @@ public final class HeldCastVisualSyncManager {
         if (server == null) {
             return;
         }
-        HeldCastVisualStatePacket packet = new HeldCastVisualStatePacket(
+        ActiveCastVisualStatePacket packet = new ActiveCastVisualStatePacket(
                 caster.getUUID(),
                 null,
-                HeldCastVisualState.Phase.STOPPED,
                 0,
                 0.0F
         );

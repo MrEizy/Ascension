@@ -1,5 +1,5 @@
 {
-  "type": "ascension:held_cast",
+  "type": "ascension:active_skill",
   "name": {
     "translate": "ascension.skill.frostbound_stillness.name"
   },
@@ -7,9 +7,9 @@
     "translate": "ascension.skill.frostbound_stillness.desc"
   },
   "cast": {
-    "minimum_charge": 20,
-    "maximum_charge": 80,
-    "cooldown": 100,
+    "mode": "charge",
+    "minimum_ticks": 20,
+    "maximum_ticks": 80,
     "cost": {
       "resource": "ascension:qi",
       "source": "ascension:skill_casting",
@@ -247,5 +247,9 @@
       "definition": "#frozen_form",
       "subject": "target"
     }
-  ]
+  ],
+  "cooldown": {
+    "base": 100
+  },
+  "initial_level": 1
 }

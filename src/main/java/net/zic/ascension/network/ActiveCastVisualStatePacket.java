@@ -6,44 +6,40 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.client.particle.ParticleFieldController;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.UUID;
 
-public record HeldCastVisualStatePacket(
+public record ActiveCastVisualStatePacket(
         UUID playerId,
         Identifier skillId,
-        HeldCastVisualState.Phase phase,
         int stage,
-        float charge
+        float progress
 ) implements CustomPacketPayload {
-    public static final Type<HeldCastVisualStatePacket> TYPE = new Type<>(
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "held_cast_visual_state")
+    public static final Type<ActiveCastVisualStatePacket> TYPE = new Type<>(
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "active_cast_visual_state")
     );
 
-    public static final StreamCodec<FriendlyByteBuf, HeldCastVisualStatePacket> STREAM_CODEC = new StreamCodec<>() {
+    public static final StreamCodec<FriendlyByteBuf, ActiveCastVisualStatePacket> STREAM_CODEC = new StreamCodec<>() {
         @Override
-        public HeldCastVisualStatePacket decode(FriendlyByteBuf buf) {
+        public ActiveCastVisualStatePacket decode(FriendlyByteBuf buf) {
             UUID playerId = buf.readUUID();
             Identifier skillId = buf.readBoolean() ? ByteBufHelpers.decodeIdentifier(buf) : null;
-            HeldCastVisualState.Phase phase = buf.readEnum(HeldCastVisualState.Phase.class);
             int stage = buf.readVarInt();
-            float charge = buf.readFloat();
-            return new HeldCastVisualStatePacket(playerId, skillId, phase, stage, charge);
+            float progress = buf.readFloat();
+            return new ActiveCastVisualStatePacket(playerId, skillId, stage, progress);
         }
 
         @Override
-        public void encode(FriendlyByteBuf buf, HeldCastVisualStatePacket packet) {
+        public void encode(FriendlyByteBuf buf, ActiveCastVisualStatePacket packet) {
             buf.writeUUID(packet.playerId());
             buf.writeBoolean(packet.skillId() != null);
             if (packet.skillId() != null) {
                 ByteBufHelpers.encodeIdentifier(packet.skillId(), buf);
             }
-            buf.writeEnum(packet.phase());
             buf.writeVarInt(Math.max(0, packet.stage()));
-            buf.writeFloat(Math.clamp(packet.charge(), 0.0F, 1.0F));
+            buf.writeFloat(Math.clamp(packet.progress(), 0.0F, 1.0F));
         }
     };
 
@@ -52,13 +48,12 @@ public record HeldCastVisualStatePacket(
         return TYPE;
     }
 
-    public static void handle(HeldCastVisualStatePacket packet, IPayloadContext context) {
-        context.enqueueWork(() -> ParticleFieldController.updateRemoteHeld(
+    public static void handle(ActiveCastVisualStatePacket packet, IPayloadContext context) {
+        context.enqueueWork(() -> ParticleFieldController.updateRemoteCast(
                 packet.playerId(),
                 packet.skillId(),
-                packet.phase(),
                 packet.stage(),
-                packet.charge()
+                packet.progress()
         ));
     }
 }

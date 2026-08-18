@@ -1,9 +1,10 @@
-package net.zic.ascension.api.ascension.core.skill.castable.held;
+package net.zic.ascension.api.ascension.core.skill.castable;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
@@ -11,9 +12,9 @@ import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
-import net.zic.ascension.api.ascension.core.skill.castable.CastSoundDefinition;
-import net.zic.ascension.api.ascension.value.ScaledValue;
+import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
+import net.zic.ascension.api.ascension.value.ScaledValue;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,32 +24,46 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public record HeldCastSpec(
-        int minimumCharge,
-        int maximumCharge,
-        int cooldown,
+public record ActiveCastDefinition(
+        Mode mode,
+        int minimumTicks,
+        int maximumTicks,
         Optional<Cost> cost,
         Movement movement,
         Optional<Interruption> interruption,
         List<Stage> stages
 ) {
-    public static final Codec<HeldCastSpec> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.intRange(0, 72000).optionalFieldOf("minimum_charge", 0).forGetter(HeldCastSpec::minimumCharge),
-            Codec.intRange(1, 72000).optionalFieldOf("maximum_charge", 40).forGetter(HeldCastSpec::maximumCharge),
-            Codec.intRange(0, 72000).optionalFieldOf("cooldown", 0).forGetter(HeldCastSpec::cooldown),
-            Cost.CODEC.codec().optionalFieldOf("cost").forGetter(HeldCastSpec::cost),
-            Movement.CODEC.codec().optionalFieldOf("movement", Movement.defaults()).forGetter(HeldCastSpec::movement),
-            Interruption.CODEC.codec().optionalFieldOf("interruption").forGetter(HeldCastSpec::interruption),
-            Stage.CODEC.listOf().optionalFieldOf("stages", List.of()).forGetter(HeldCastSpec::stages)
-    ).apply(instance, HeldCastSpec::new));
+    public static final Codec<ActiveCastDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Mode.CODEC.optionalFieldOf("mode", Mode.INSTANT).forGetter(ActiveCastDefinition::mode),
+            Codec.intRange(0, 72000).optionalFieldOf("minimum_ticks", 0).forGetter(ActiveCastDefinition::minimumTicks),
+            Codec.intRange(0, 72000).optionalFieldOf("maximum_ticks", 0).forGetter(ActiveCastDefinition::maximumTicks),
+            Cost.CODEC.codec().optionalFieldOf("cost").forGetter(ActiveCastDefinition::cost),
+            Movement.CODEC.codec().optionalFieldOf("movement", Movement.defaults()).forGetter(ActiveCastDefinition::movement),
+            Interruption.CODEC.codec().optionalFieldOf("interruption").forGetter(ActiveCastDefinition::interruption),
+            Stage.CODEC.listOf().optionalFieldOf("stages", List.of()).forGetter(ActiveCastDefinition::stages)
+    ).apply(instance, ActiveCastDefinition::new));
 
-    public HeldCastSpec {
-        maximumCharge = Math.max(1, maximumCharge);
-        minimumCharge = Math.clamp(minimumCharge, 0, maximumCharge);
-        cooldown = Math.max(0, cooldown);
+    public ActiveCastDefinition {
+        mode = mode == null ? Mode.INSTANT : mode;
+        minimumTicks = Math.max(0, minimumTicks);
+        maximumTicks = Math.max(0, maximumTicks);
         cost = cost == null ? Optional.empty() : cost;
         movement = movement == null ? Movement.defaults() : movement;
         interruption = interruption == null ? Optional.empty() : interruption;
+
+        if (mode == Mode.INSTANT) {
+            minimumTicks = 0;
+            maximumTicks = 0;
+            cost = Optional.empty();
+            interruption = Optional.empty();
+        } else if (mode == Mode.CHARGE) {
+            maximumTicks = maximumTicks <= 0 ? 40 : maximumTicks;
+            minimumTicks = Math.clamp(minimumTicks, 0, maximumTicks);
+        } else {
+            minimumTicks = 0;
+            cost = Optional.empty();
+        }
+
         List<Stage> sorted = new ArrayList<>(stages == null ? List.of() : stages);
         sorted.sort(Comparator.comparingDouble(Stage::threshold));
         Map<Double, Stage> unique = new LinkedHashMap<>();
@@ -62,14 +77,21 @@ public record HeldCastSpec(
         stages = List.copyOf(sorted);
     }
 
-    public double charge(int ticks) {
-        return Math.clamp(ticks / (double) maximumCharge, 0.0D, 1.0D);
+    public static ActiveCastDefinition instant() {
+        return new ActiveCastDefinition(Mode.INSTANT, 0, 0, Optional.empty(), Movement.defaults(), Optional.empty(), List.of());
     }
 
-    public int stage(double charge) {
+    public double progress(int ticks) {
+        if (mode == Mode.INSTANT || maximumTicks <= 0) {
+            return 0.0D;
+        }
+        return Math.clamp(ticks / (double) maximumTicks, 0.0D, 1.0D);
+    }
+
+    public int stage(double progress) {
         int stage = 0;
         for (int index = 0; index < stages.size(); index++) {
-            if (charge + 1.0E-8D < stages.get(index).threshold()) {
+            if (progress + 1.0E-8D < stages.get(index).threshold()) {
                 break;
             }
             stage = index;
@@ -78,7 +100,42 @@ public record HeldCastSpec(
     }
 
     public boolean minimumReached(int ticks) {
-        return ticks >= minimumCharge;
+        return ticks >= minimumTicks;
+    }
+
+    public boolean maximumReached(int ticks) {
+        return maximumTicks > 0 && ticks >= maximumTicks;
+    }
+
+    public Optional<ParticleFieldDefinition> particleField(int stage) {
+        if (stage < 0 || stage >= stages.size()) {
+            return Optional.empty();
+        }
+        return stages.get(stage).particleField();
+    }
+
+    public enum Mode implements StringRepresentable {
+        INSTANT("instant", CastType.INSTANT),
+        CHARGE("charge", CastType.CHARGE),
+        CHANNEL("channel", CastType.CHANNEL);
+
+        public static final Codec<Mode> CODEC = StringRepresentable.fromEnum(Mode::values);
+        private final String serializedName;
+        private final CastType castType;
+
+        Mode(String serializedName, CastType castType) {
+            this.serializedName = serializedName;
+            this.castType = castType;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return serializedName;
+        }
+
+        public CastType castType() {
+            return castType;
+        }
     }
 
     public record Stage(
@@ -135,7 +192,7 @@ public record HeldCastSpec(
                 Codec.BOOL.optionalFieldOf("release_after_minimum", false).forGetter(Interruption::releaseAfterMinimum)
         ).apply(instance, Interruption::new));
 
-        public boolean shouldInterrupt(HeldCastData data, int ticksElapsed, double damage, ScaledValue.Context context) {
+        public boolean shouldInterrupt(ActiveCastData data, int ticksElapsed, double damage, ScaledValue.Context context) {
             double threshold = damageThreshold.resolve(context);
             return Double.isFinite(threshold) && threshold > 0.0D
                     && data.addInterruptionDamage(damage, ticksElapsed, accumulationWindow) >= threshold;
@@ -149,9 +206,9 @@ public record HeldCastSpec(
             ScaledValue cumulativeCost,
             boolean releaseOnFailure
     ) {
-        public static final Identifier CHARGE_VALUE = AscensionCraft.prefix("cast/charge");
-        public static final Identifier CHARGE_TICKS_VALUE = AscensionCraft.prefix("cast/charge_ticks");
-        public static final Identifier MAXIMUM_CHARGE_TICKS_VALUE = AscensionCraft.prefix("cast/maximum_charge_ticks");
+        public static final Identifier CAST_PROGRESS = AscensionCraft.prefix("cast/progress");
+        public static final Identifier CAST_TICKS = AscensionCraft.prefix("cast/ticks");
+        public static final Identifier MAXIMUM_CAST_TICKS = AscensionCraft.prefix("cast/maximum_ticks");
         public static final MapCodec<Cost> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Identifier.CODEC.fieldOf("resource").forGetter(Cost::resource),
                 ResourceOperation.CODEC.optionalFieldOf("operation", ResourceOperation.CONSUME).forGetter(Cost::operation),
@@ -168,9 +225,9 @@ public record HeldCastSpec(
         public ResourceTransactionService.Result payIncrement(
                 LivingEntity caster,
                 Identifier skill,
-                HeldCastData data,
+                ActiveCastData data,
                 ScaledValue.Context context,
-                int maximumChargeTicks
+                int maximumTicks
         ) {
             double target = resolveCumulativeCost(context);
             double delta = Math.max(0.0D, target - data.getCumulativeCostTarget());
@@ -179,7 +236,7 @@ public record HeldCastSpec(
                 return null;
             }
             ResourceTransactionService.Result result = ResourceTransactionService.transact(request(
-                    caster, skill, context, data.getChargeTicks(), maximumChargeTicks, delta, Set.of()
+                    caster, skill, context, data.getTicks(), maximumTicks, delta, Set.of()
             ));
             if (result.succeeded() && result.appliedAmount() + 1.0E-8D >= result.resolvedAmount()) {
                 data.setCumulativeCostTarget(target);
@@ -187,13 +244,13 @@ public record HeldCastSpec(
             return result;
         }
 
-        public boolean canStart(LivingEntity caster, Identifier skill, ScaledValue.Context context, int maximumChargeTicks) {
+        public boolean canStart(LivingEntity caster, Identifier skill, ScaledValue.Context context, int maximumTicks) {
             double target = resolveCumulativeCost(context);
             if (target <= 1.0E-8D) {
                 return true;
             }
             ResourceTransactionService.Result result = ResourceTransactionService.transact(request(
-                    caster, skill, context, 1, maximumChargeTicks, target, Set.of(ResourceTransactionRequest.Flag.SIMULATE)
+                    caster, skill, context, 1, maximumTicks, target, Set.of(ResourceTransactionRequest.Flag.SIMULATE)
             ));
             return result.succeeded() && result.appliedAmount() + 1.0E-8D >= result.resolvedAmount();
         }
@@ -202,8 +259,8 @@ public record HeldCastSpec(
                 LivingEntity caster,
                 Identifier skill,
                 ScaledValue.Context context,
-                int chargeTicks,
-                int maximumChargeTicks,
+                int ticks,
+                int maximumTicks,
                 double amount,
                 Set<ResourceTransactionRequest.Flag> flags
         ) {
@@ -216,9 +273,9 @@ public record HeldCastSpec(
                     skill,
                     null,
                     Map.of(
-                            CHARGE_VALUE, context.charge(),
-                            CHARGE_TICKS_VALUE, (double) chargeTicks,
-                            MAXIMUM_CHARGE_TICKS_VALUE, (double) maximumChargeTicks
+                            CAST_PROGRESS, context.charge(),
+                            CAST_TICKS, (double) ticks,
+                            MAXIMUM_CAST_TICKS, (double) maximumTicks
                     ),
                     flags
             );

@@ -18,6 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.control.StaggerDefinition;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.projectile.VirtualProjectileDefinition;
 import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
@@ -53,6 +54,7 @@ import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
 import net.zic.ascension.impl.runtime.weapon.WeaponSwingSpec;
 import net.zic.ascension.impl.runtime.weapon.WeaponTechniqueResolver;
 import net.zic.ascension.impl.runtime.weapon.WeaponVfxUtils;
+import net.zic.ascension.util.CultivationUtil;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -226,6 +228,54 @@ public final class SkillActions {
                     context.variables(),
                     Set.of()
             ));
+        }
+    }
+
+
+    public record Cultivate(
+            Identifier path,
+            Optional<Identifier> secondaryPath,
+            ScaledValue rate
+    ) implements SkillAction {
+        public static final MapCodec<Cultivate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Identifier.CODEC.fieldOf("path").forGetter(Cultivate::path),
+                Identifier.CODEC.optionalFieldOf("secondary_path").forGetter(Cultivate::secondaryPath),
+                ScaledValue.COMPACT_CODEC.fieldOf("rate").forGetter(Cultivate::rate)
+        ).apply(instance, Cultivate::new));
+
+        public Cultivate {
+            secondaryPath = secondaryPath == null ? Optional.empty() : secondaryPath;
+            rate = rate == null ? ScaledValue.constant(0.0D) : rate;
+        }
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.CULTIVATE.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(context.originSource(), path);
+            if (pathInstance == null) {
+                return;
+            }
+            double resolvedRate = rate.resolve(context.scaledValueContext());
+            if (!Double.isFinite(resolvedRate) || resolvedRate <= 0.0D) {
+                return;
+            }
+            CultivationUtil.cultivate(
+                    context.caster(),
+                    context.originSource(),
+                    path,
+                    pathInstance,
+                    secondaryPath.orElse(path),
+                    resolvedRate
+            );
         }
     }
 

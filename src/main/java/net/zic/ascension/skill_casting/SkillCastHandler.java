@@ -12,7 +12,7 @@ import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
+import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastVisualState;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.skill_casting.hotbar.SkillHotBar;
 import net.zic.zenithlib.common.ZenithAttachments;
@@ -39,8 +39,7 @@ public class SkillCastHandler {
             return;
         }
         if (instance.isDirty() && player instanceof ServerPlayer serverPlayer) {
-            ParticleFieldSyncManager.syncNow(serverPlayer, instance.getSkill());
-            HeldCastVisualSyncManager.syncNow(serverPlayer, instance.getHeldVisualState(player));
+            ActiveCastVisualSyncManager.syncNow(serverPlayer, instance.getActiveCastVisualState(player));
         }
         if (hotBar.isDirty() || instance.isDirty()) {
             player.syncData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER);
@@ -59,8 +58,8 @@ public class SkillCastHandler {
         return instance.getSkill();
     }
 
-    public HeldCastVisualState getHeldCastVisualState() {
-        return instance.getHeldVisualState(player);
+    public ActiveCastVisualState getActiveCastVisualState() {
+        return instance.getActiveCastVisualState(player);
     }
 
     public boolean isWaitingForCastRelease() {
@@ -136,17 +135,16 @@ public class SkillCastHandler {
 
     public void tick() {
         Identifier previousSkill = instance.getSkill();
-        boolean previousHeldCast = instance.getHeldVisualState(player) != null;
+        boolean previousLongCast = instance.getActiveCastVisualState(player) != null;
 
         instance.continueCasting(player);
 
-        if (previousHeldCast && previousSkill != null && instance.getSkill() == null && player.getData(ZenithAttachments.ACTION_MANAGER).isActive(AscensionSkillListener.skillCast)) {
+        if (previousLongCast && previousSkill != null && instance.getSkill() == null && player.getData(ZenithAttachments.ACTION_MANAGER).isActive(AscensionSkillListener.skillCast)) {
             requireCastInputRelease();
         }
 
         if (player instanceof ServerPlayer serverPlayer) {
-            ParticleFieldSyncManager.heartbeat(serverPlayer, instance.getSkill());
-            HeldCastVisualSyncManager.heartbeat(serverPlayer, instance.getHeldVisualState(player));
+            ActiveCastVisualSyncManager.heartbeat(serverPlayer, instance.getActiveCastVisualState(player));
         }
 
         resolve();

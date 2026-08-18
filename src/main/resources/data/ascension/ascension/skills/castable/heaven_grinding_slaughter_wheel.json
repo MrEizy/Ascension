@@ -1,5 +1,5 @@
 {
-  "type": "ascension:held_cast",
+  "type": "ascension:active_skill",
   "name": {
     "translate": "ascension.skill.heaven_grinding_slaughter_wheel.name"
   },
@@ -7,9 +7,9 @@
     "translate": "ascension.skill.heaven_grinding_slaughter_wheel.desc"
   },
   "cast": {
-    "minimum_charge": 24,
-    "maximum_charge": 100,
-    "cooldown": 420,
+    "mode": "charge",
+    "minimum_ticks": 24,
+    "maximum_ticks": 100,
     "cost": {
       "resource": "ascension:qi",
       "source": "ascension:skill_casting",
@@ -476,5 +476,9 @@
         ]
       }
     }
-  }
+  },
+  "cooldown": {
+    "base": 420
+  },
+  "initial_level": 1
 }

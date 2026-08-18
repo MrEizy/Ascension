@@ -1,37 +1,36 @@
-package net.zic.ascension.api.ascension.core.skill.castable.held;
+package net.zic.ascension.api.ascension.core.skill.castable;
 
 import io.netty.buffer.ByteBuf;
-import net.zic.ascension.api.ascension.core.skill.castable.CastData;
 
-public final class HeldCastData implements CastData {
-    private int chargeTicks;
+public final class ActiveCastData implements CastData {
+    private int ticks;
     private int stageIndex;
     private double cumulativeCostTarget;
     private double interruptionDamage;
     private int lastDamageTick = Integer.MIN_VALUE;
     private boolean dirty = true;
-    private int lastSyncedChargeTicks;
+    private int lastSyncedTicks;
 
-    public HeldCastData() {
+    public ActiveCastData() {
     }
 
-    public HeldCastData(ByteBuf buf) {
-        chargeTicks = Math.max(0, buf.readInt());
+    public ActiveCastData(ByteBuf buf) {
+        ticks = Math.max(0, buf.readInt());
         stageIndex = Math.max(0, buf.readInt());
         cumulativeCostTarget = Math.max(0.0D, buf.readDouble());
         interruptionDamage = Math.max(0.0D, buf.readDouble());
         lastDamageTick = buf.readInt();
-        lastSyncedChargeTicks = chargeTicks;
+        lastSyncedTicks = ticks;
         dirty = false;
     }
 
-    public int getChargeTicks() {
-        return chargeTicks;
+    public int getTicks() {
+        return ticks;
     }
 
-    public void setChargeTicks(int chargeTicks) {
-        this.chargeTicks = Math.max(0, chargeTicks);
-        if (Math.abs(this.chargeTicks - lastSyncedChargeTicks) >= 5) {
+    public void setTicks(int ticks) {
+        this.ticks = Math.max(0, ticks);
+        if (Math.abs(this.ticks - lastSyncedTicks) >= 5) {
             dirty = true;
         }
     }
@@ -67,7 +66,7 @@ public final class HeldCastData implements CastData {
 
     @Override
     public void encode(ByteBuf buf) {
-        buf.writeInt(chargeTicks);
+        buf.writeInt(ticks);
         buf.writeInt(stageIndex);
         buf.writeDouble(cumulativeCostTarget);
         buf.writeDouble(interruptionDamage);
@@ -82,6 +81,6 @@ public final class HeldCastData implements CastData {
     @Override
     public void resolveDirty() {
         dirty = false;
-        lastSyncedChargeTicks = chargeTicks;
+        lastSyncedTicks = ticks;
     }
 }

@@ -2,20 +2,21 @@ package net.zic.ascension.client.particle;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastVisualState;
+import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldColour;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
-import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldStyle;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
-import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
-import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.skill_casting.AscensionSkillListener;
 import net.zic.zenithlib.common.ZenithAttachments;
 
@@ -61,7 +62,7 @@ public final class ParticleFieldController {
         tickRemote(level, localPlayer);
     }
 
-    public static void updateRemote(UUID playerId, Identifier skillId) {
+    public static void updateRemoteCast(UUID playerId, Identifier skillId, int stage, double progress) {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level != null && level != activeLevel) {
@@ -71,34 +72,13 @@ public final class ParticleFieldController {
         if (minecraft.player != null && minecraft.player.getUUID().equals(playerId)) {
             return;
         }
-
         if (skillId == null) {
             REMOTE_FIELDS.remove(playerId);
             return;
         }
 
         RemoteFieldState state = REMOTE_FIELDS.computeIfAbsent(playerId, ignored -> new RemoteFieldState());
-        state.setSkill(skillId, 0, 1.0D, false);
-        state.lastSyncTick = clientTicks;
-    }
-
-    public static void updateRemoteHeld(
-            UUID playerId,
-            Identifier skillId,
-            HeldCastVisualState.Phase phase,
-            int stage,
-            double charge
-    ) {
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player != null && minecraft.player.getUUID().equals(playerId)) {
-            return;
-        }
-        if (skillId == null || phase == HeldCastVisualState.Phase.STOPPED) {
-            REMOTE_FIELDS.remove(playerId);
-            return;
-        }
-        RemoteFieldState state = REMOTE_FIELDS.computeIfAbsent(playerId, ignored -> new RemoteFieldState());
-        state.setSkill(skillId, stage, charge, true);
+        state.setSkill(skillId, stage, progress);
         state.lastSyncTick = clientTicks;
     }
 
@@ -109,25 +89,16 @@ public final class ParticleFieldController {
         }
 
         var handler = player.getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER);
-        HeldCastVisualState heldState = handler.getHeldCastVisualState();
-        if (heldState != null) {
-            if (!tickEmitter(
-                    level,
-                    player,
-                    heldState.skill(),
-                    heldState.stage(),
-                    heldState.charge(),
-                    1.0D,
-                    LOCAL_EMITTER
-            )) {
-                LOCAL_EMITTER.reset();
-            }
-            return;
-        }
-
-        Identifier castingSkill = handler.getCastingSkill();
-        Identifier skillId = castingSkill != null ? castingSkill : handler.getSkill(handler.getSelectedSlot());
-        if (skillId == null || !tickEmitter(level, player, skillId, 0, 1.0D, 1.0D, LOCAL_EMITTER)) {
+        ActiveCastVisualState state = handler.getActiveCastVisualState();
+        if (state == null || !tickEmitter(
+                level,
+                player,
+                state.skill(),
+                state.stage(),
+                state.progress(),
+                1.0D,
+                LOCAL_EMITTER
+        )) {
             LOCAL_EMITTER.reset();
         }
     }
@@ -157,7 +128,7 @@ public final class ParticleFieldController {
                     remotePlayer,
                     state.skillId,
                     state.stage,
-                    state.charge,
+                    state.progress,
                     densityMultiplier,
                     state.emitter
             )) {
@@ -176,14 +147,10 @@ public final class ParticleFieldController {
             EmitterState state
     ) {
         Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, player.registryAccess());
-        ParticleFieldDefinition definition;
-        if (skill instanceof SimpleCultivationSkill cultivationSkill && cultivationSkill.particleField().isPresent()) {
-            definition = cultivationSkill.particleField().get();
-        } else if (skill instanceof HeldCastSkill heldSkill && heldSkill.particleField(stage).isPresent()) {
-            definition = heldSkill.particleField(stage).get();
-        } else {
+        if (!(skill instanceof ActiveSkill activeSkill) || activeSkill.particleField(stage).isEmpty()) {
             return false;
         }
+        ParticleFieldDefinition definition = activeSkill.particleField(stage).get();
 
         state.activate(skillId, stage);
         state.activeTicks++;
@@ -236,13 +203,13 @@ public final class ParticleFieldController {
                 spawnPoint.orbitDirection(),
                 random
         );
-        ParticleFieldParticleKind kind = definition.randomParticle(random);
+        Identifier particleId = definition.randomParticle(random);
         int colour = randomPaletteColour(definition.colours(), random);
         float size = (float) definition.size().random(random);
         int lifetime = definition.lifetime().random(random);
 
         ParticleFieldParticle particle = ParticleFieldParticle.create(
-                kind,
+                particleId,
                 level,
                 spawnPoint.x(),
                 spawnPoint.y(),
@@ -266,6 +233,20 @@ public final class ParticleFieldController {
         );
         if (particle != null) {
             Minecraft.getInstance().particleEngine.add(particle);
+            return;
+        }
+
+        ParticleType<?> type = BuiltInRegistries.PARTICLE_TYPE.getValue(particleId);
+        if (type instanceof SimpleParticleType simple) {
+            level.addParticle(
+                    simple,
+                    spawnPoint.x(),
+                    spawnPoint.y(),
+                    spawnPoint.z(),
+                    velocity[0],
+                    velocity[1],
+                    velocity[2]
+            );
         }
     }
 
@@ -547,19 +528,17 @@ public final class ParticleFieldController {
     private static final class RemoteFieldState {
         private Identifier skillId;
         private int stage;
-        private double charge = 1.0D;
-        private boolean held;
+        private double progress;
         private long lastSyncTick;
         private final EmitterState emitter = new EmitterState();
 
-        private void setSkill(Identifier newSkillId, int newStage, double newCharge, boolean newHeld) {
-            if (!newSkillId.equals(skillId) || stage != newStage || held != newHeld) {
+        private void setSkill(Identifier newSkillId, int newStage, double newProgress) {
+            if (!newSkillId.equals(skillId) || stage != newStage) {
                 emitter.reset();
             }
             skillId = newSkillId;
             stage = Math.max(0, newStage);
-            charge = Double.isFinite(newCharge) ? Math.clamp(newCharge, 0.0D, 1.0D) : 0.0D;
-            held = newHeld;
+            progress = Double.isFinite(newProgress) ? Math.clamp(newProgress, 0.0D, 1.0D) : 0.0D;
         }
     }
 }
