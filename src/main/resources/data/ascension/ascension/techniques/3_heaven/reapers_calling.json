@@ -25,23 +25,12 @@
   "base_progress": 25.0,
   "max_health_multiplier": 5.0,
   "player_multiplier": 5.0,
+  "skills": {
+    "ascension:passive/samsaras_witness": {
+      "unlock": 2
+    }
+  },
   "realm_change_handler": [
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          2
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:passive/samsaras_witness"
-          ]
-        }
-      ]
-    },
     {
       "condition": "ascension:realm_change/all_realms",
       "actions": [

@@ -17,72 +17,18 @@
   ],
   "max_realm": 2,
   "max_minor_realm": 2,
-  "realm_change_handler": [
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          0
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/cultivation/stillfrost_breathing"
-          ]
-        }
-      ]
+  "skills": {
+    "ascension:castable/cultivation/stillfrost_breathing": {},
+    "ascension:passive/sustained_spirit": {
+      "unlock": 1,
+      "caps": {
+        "2": 2
+      }
     },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          1
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:passive/sustained_spirit"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:passive/sustained_spirit",
-          "contribution": "ascension:sustained_spirit_art/realm_1",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          2
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/frostbound_stillness"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:passive/sustained_spirit",
-          "contribution": "ascension:sustained_spirit_art/realm_2",
-          "level": 2,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
+    "ascension:castable/frostbound_stillness": {
+      "unlock": 2
     }
-  ],
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "theme_overrides": {

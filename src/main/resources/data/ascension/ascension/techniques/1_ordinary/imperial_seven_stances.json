@@ -17,116 +17,23 @@
   ],
   "max_realm": 2,
   "max_minor_realm": 2,
-  "realm_change_handler": [
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          0
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/imperial_seven_stances/first_stance_measured_draw",
-            "ascension:castable/imperial_seven_stances/second_stance_guarded_advance",
-            "ascension:castable/imperial_seven_stances/third_stance_banner_sweep"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/imperial_seven_stances/first_stance_measured_draw",
-          "contribution": "ascension:imperial_seven_stances/first_stance_measured_draw",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/imperial_seven_stances/second_stance_guarded_advance",
-          "contribution": "ascension:imperial_seven_stances/second_stance_guarded_advance",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/imperial_seven_stances/third_stance_banner_sweep",
-          "contribution": "ascension:imperial_seven_stances/third_stance_banner_sweep",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
+  "skills": {
+    "ascension:castable/imperial_seven_stances/first_stance_measured_draw": {},
+    "ascension:castable/imperial_seven_stances/second_stance_guarded_advance": {},
+    "ascension:castable/imperial_seven_stances/third_stance_banner_sweep": {},
+    "ascension:castable/imperial_seven_stances/fourth_stance_spearhead_thrust": {
+      "unlock": 1
     },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          1
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/imperial_seven_stances/fourth_stance_spearhead_thrust",
-            "ascension:castable/imperial_seven_stances/fifth_stance_formation_guard"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/imperial_seven_stances/fourth_stance_spearhead_thrust",
-          "contribution": "ascension:imperial_seven_stances/fourth_stance_spearhead_thrust",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/imperial_seven_stances/fifth_stance_formation_guard",
-          "contribution": "ascension:imperial_seven_stances/fifth_stance_formation_guard",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
+    "ascension:castable/imperial_seven_stances/fifth_stance_formation_guard": {
+      "unlock": 1
     },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          2
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/imperial_seven_stances/sixth_stance_encircling_cut",
-            "ascension:castable/imperial_seven_stances/seventh_stance_imperial_execution"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/imperial_seven_stances/sixth_stance_encircling_cut",
-          "contribution": "ascension:imperial_seven_stances/sixth_stance_encircling_cut",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/imperial_seven_stances/seventh_stance_imperial_execution",
-          "contribution": "ascension:imperial_seven_stances/seventh_stance_imperial_execution",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
+    "ascension:castable/imperial_seven_stances/sixth_stance_encircling_cut": {
+      "unlock": 2
+    },
+    "ascension:castable/imperial_seven_stances/seventh_stance_imperial_execution": {
+      "unlock": 2
     }
-  ],
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_technique_manual",

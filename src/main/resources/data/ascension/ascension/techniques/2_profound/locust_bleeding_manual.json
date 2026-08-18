@@ -17,68 +17,14 @@
     "staff"
   ],
   "max_realm": 5,
-  "realm_change_handler": [
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          0
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/locust_bleeding_manual/bleeding_locust_swarm"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/locust_bleeding_manual/bleeding_locust_swarm",
-          "contribution": "ascension:locust_bleeding_manual/bleeding_locust_swarm_1",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          1
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/locust_bleeding_manual/bleeding_locust_swarm",
-          "contribution": "ascension:locust_bleeding_manual/bleeding_locust_swarm_2",
-          "level": 2,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          4
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/locust_bleeding_manual/bleeding_locust_swarm",
-          "contribution": "ascension:locust_bleeding_manual/bleeding_locust_swarm_3",
-          "level": 3,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
+  "skills": {
+    "ascension:castable/locust_bleeding_manual/bleeding_locust_swarm": {
+      "caps": {
+        "1": "minor_mastery",
+        "4": "major_mastery"
+      }
     }
-  ],
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_technique_manual",

@@ -16,7 +16,10 @@ import net.zic.ascension.api.ascension.core.progression.ProgressActionConditionR
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionReference;
 import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.api.ascension.core.technique.TechniqueSkillCap;
+import net.zic.ascension.api.ascension.core.technique.TechniqueSkillDefinition;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
@@ -26,6 +29,7 @@ import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipProvider;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
+import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
 
 import net.zic.ascension.util.PathInteractionUtil;
@@ -55,6 +59,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.StringJoiner;
+import java.util.TreeMap;
 
 /**
  * Registers Ascension-owned runtime values referenced by registry item tooltips.
@@ -406,11 +411,107 @@ public final class AscensionTooltipValueSources {
         }
 
         SimpleTechnique resolvedTechnique = technique.orElseThrow();
-        return progressionElements(
+        RegistryAccess access = context.registryAccess().orElseThrow();
+        int currentMajorRealm = currentTechniqueMajorRealm(resolvedTechnique);
+        List<ZenithTooltipElement> elements = new ArrayList<>();
+        elements.addAll(techniqueSkillProgressionElements(resolvedTechnique, access, currentMajorRealm));
+        elements.addAll(progressionElements(
                 resolvedTechnique.getHolder(),
-                context.registryAccess().orElseThrow(),
-                OptionalInt.of(currentTechniqueMajorRealm(resolvedTechnique))
+                access,
+                OptionalInt.of(currentMajorRealm)
+        ));
+        return List.copyOf(elements);
+    }
+
+    private static List<ZenithTooltipElement> techniqueSkillProgressionElements(
+            SimpleTechnique technique,
+            RegistryAccess access,
+            int currentMajorRealm
+    ) {
+        Map<Integer, List<ZenithTooltipElement>> rows = new TreeMap<>();
+
+        technique.getSkills().entrySet().stream()
+                .sorted(Comparator.comparing(entry -> entry.getKey().toString()))
+                .forEach(entry -> {
+                    Identifier skillId = entry.getKey();
+                    TechniqueSkillDefinition definition = entry.getValue();
+                    addTechniqueSkillRow(
+                            rows,
+                            definition.unlock(),
+                            currentMajorRealm,
+                            skillName(skillId, access),
+                            Component.translatable("ascension.tooltip.progression.unlock")
+                    );
+
+                    definition.caps().entrySet().stream()
+                            .sorted(Map.Entry.comparingByKey())
+                            .filter(capEntry -> capEntry.getValue().progression() > 1)
+                            .forEach(capEntry -> addTechniqueSkillRow(
+                                    rows,
+                                    capEntry.getKey(),
+                                    currentMajorRealm,
+                                    skillName(skillId, access),
+                                    techniqueSkillCapValue(skillId, capEntry.getValue(), access)
+                            ));
+                });
+
+        List<ZenithTooltipElement> elements = new ArrayList<>();
+        rows.forEach((realm, realmRows) -> {
+            Component label = realm == 0
+                    ? Component.translatable("ascension.tooltip.progression.condition.on_learn")
+                    : Component.translatable("ascension.tooltip.progression.condition.major_realm", realm);
+            elements.add(new RowElement(
+                    ZenithTooltipText.resolved(label),
+                    ZenithTooltipText.resolved(Component.empty()),
+                    ZenithTooltipColor.ACCENT,
+                    ZenithTooltipColor.MUTED
+            ));
+            elements.addAll(realmRows);
+        });
+        return List.copyOf(elements);
+    }
+
+    private static void addTechniqueSkillRow(
+            Map<Integer, List<ZenithTooltipElement>> rows,
+            int realm,
+            int currentMajorRealm,
+            Component label,
+            Component value
+    ) {
+        ZenithTooltipElement element = realm > currentMajorRealm + TECHNIQUE_REVEAL_LOOKAHEAD
+                ? beyondComprehensionElement()
+                : new RowElement(
+                        ZenithTooltipText.resolved(label),
+                        ZenithTooltipText.resolved(value),
+                        ZenithTooltipColor.TEXT,
+                        ZenithTooltipColor.ACCENT
+                );
+        rows.computeIfAbsent(realm, ignored -> new ArrayList<>()).add(element);
+    }
+
+    private static Component techniqueSkillCapValue(
+            Identifier skillId,
+            TechniqueSkillCap cap,
+            RegistryAccess access
+    ) {
+        Skill skill = CoreRegistries.safeAccess(
+                CoreRegistries.SKILL_REGISTRY,
+                skillId,
+                access
         );
+        if (skill instanceof ActiveSkill) {
+            return Component.literal("Mastery cap: " + cap.masteryRank().displayName());
+        }
+        return Component.translatable("ascension.tooltip.progression.level", cap.progression());
+    }
+
+    private static Component skillName(Identifier skillId, RegistryAccess access) {
+        Skill skill = CoreRegistries.safeAccess(
+                CoreRegistries.SKILL_REGISTRY,
+                skillId,
+                access
+        );
+        return skill == null ? Component.literal(skillId.getPath()) : skill.getName();
     }
 
     private static List<ZenithTooltipElement> bloodlinePurityElements(

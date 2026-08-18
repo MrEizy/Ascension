@@ -22,175 +22,37 @@
   ],
   "max_realm": 6,
   "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/cultivation/celestial_constellation_circulation": {},
+    "ascension:passive/celestial_constellation_circulation/orions_celestial_draw": {
+      "unlock": 1
+    },
+    "ascension:castable/celestial_constellation_circulation/hound_star_pursuit": {
+      "unlock": 2,
+      "caps": {
+        "4": "minor_mastery"
+      }
+    },
+    "ascension:castable/celestial_constellation_circulation/aquila_crossing": {
+      "unlock": 3,
+      "caps": {
+        "6": "minor_mastery"
+      }
+    },
+    "ascension:castable/celestial_constellation_circulation/scorpius_star_nail_formation": {
+      "unlock": 4,
+      "caps": {
+        "6": "minor_mastery"
+      }
+    },
+    "ascension:castable/celestial_constellation_circulation/sagittarius_heaven_piercing_arc": {
+      "unlock": 5
+    },
+    "ascension:castable/celestial_constellation_circulation/sevenfold_celestial_hunt": {
+      "unlock": 6
+    }
+  },
   "realm_change_handler": [
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          0
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/cultivation/celestial_constellation_circulation"
-          ]
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          1
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:passive/celestial_constellation_circulation/orions_celestial_draw"
-          ]
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          2
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/celestial_constellation_circulation/hound_star_pursuit"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/celestial_constellation_circulation/hound_star_pursuit",
-          "contribution": "ascension:celestial_constellation/realm_2",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          3
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/celestial_constellation_circulation/aquila_crossing"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/celestial_constellation_circulation/aquila_crossing",
-          "contribution": "ascension:celestial_constellation/realm_3",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          4
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/celestial_constellation_circulation/scorpius_star_nail_formation"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/celestial_constellation_circulation/scorpius_star_nail_formation",
-          "contribution": "ascension:celestial_constellation/realm_4",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/celestial_constellation_circulation/hound_star_pursuit",
-          "contribution": "ascension:celestial_constellation/realm_4_hound",
-          "level": 2,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          5
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/celestial_constellation_circulation/sagittarius_heaven_piercing_arc"
-          ]
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          6
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/celestial_constellation_circulation/sevenfold_celestial_hunt"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/celestial_constellation_circulation/sevenfold_celestial_hunt",
-          "contribution": "ascension:celestial_constellation/realm_6",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/celestial_constellation_circulation/aquila_crossing",
-          "contribution": "ascension:celestial_constellation/realm_6_aquila",
-          "level": 2,
-          "set_floor": true,
-          "set_cap": true
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/celestial_constellation_circulation/scorpius_star_nail_formation",
-          "contribution": "ascension:celestial_constellation/realm_6_scorpius",
-          "level": 2,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
     {
       "condition": "ascension:realm_change/all_realms",
       "actions": [
