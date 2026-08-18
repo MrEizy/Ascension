@@ -49,7 +49,7 @@ public record ActiveCastVisualStatePacket(
     }
 
     public static void handle(ActiveCastVisualStatePacket packet, IPayloadContext context) {
-        context.enqueueWork(() -> ParticleFieldController.updateRemoteCast(
+        context.enqueueWork(() -> ParticleFieldController.updateCast(
                 packet.playerId(),
                 packet.skillId(),
                 packet.stage(),

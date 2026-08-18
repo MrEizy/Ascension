@@ -45,7 +45,7 @@ public final class ActiveCastVisualSyncManager {
                 (float) state.progress()
         );
         for (ServerPlayer viewer : server.getPlayerList().getPlayers()) {
-            if (viewer == caster || viewer.level() != caster.level()) {
+            if (viewer.level() != caster.level()) {
                 continue;
             }
             if (viewer.distanceToSqr(caster) <= SYNC_DISTANCE_SQR) {
@@ -66,7 +66,7 @@ public final class ActiveCastVisualSyncManager {
                 0.0F
         );
         for (ServerPlayer viewer : server.getPlayerList().getPlayers()) {
-            if (viewer != caster) {
+            if (viewer.level() == caster.level() && viewer.distanceToSqr(caster) <= SYNC_DISTANCE_SQR) {
                 PacketDistributor.sendToPlayer(viewer, packet);
             }
         }
