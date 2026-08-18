@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Qi-Infused Shot",
   "description": "A Skeleton releases a narrow projectile reinforced with qi.",
-  "default_accessible_level": 1,
   "definitions": {
     "projectiles": {
       "shot": {

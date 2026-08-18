@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Target Disruption",
   "description": "Strikes an opponent's focus with concentrated soul pressure.",
-  "default_accessible_level": 1,
   "definitions": {
     "stagger": {
       "disruption": {

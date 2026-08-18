@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Fear Pulse",
   "description": "Projects a short soul pulse that shakes nearby opponents.",
-  "default_accessible_level": 1,
   "definitions": {
     "stagger": {
       "shock": {

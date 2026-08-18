@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Corpse Resilience",
   "description": "A cultivated Zombie hardens its dead flesh when badly injured.",
-  "default_accessible_level": 1,
   "definitions": {
     "barriers": {
       "corpse_guard": {

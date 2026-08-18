@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Fang Leap",
   "description": "A Spider lunges forward and bites with cultivated force.",
-  "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:radial",
     "radius": 8,

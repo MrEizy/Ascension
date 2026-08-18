@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Pack Howl",
   "description": "A Wolf fortifies itself and nearby allies with a brief shared ward.",
-  "default_accessible_level": 1,
   "definitions": {
     "barriers": {
       "pack_guard": {

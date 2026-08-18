@@ -2,7 +2,6 @@
   "type": "ascension:active_skill",
   "name": "Elemental Pulse",
   "description": "Releases a restrained pulse of essence around the caster.",
-  "default_accessible_level": 1,
   "targeting": {
     "type": "ascension:radial",
     "radius": 5,
