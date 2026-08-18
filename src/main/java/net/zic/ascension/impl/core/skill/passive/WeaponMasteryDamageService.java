@@ -8,13 +8,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
-
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
@@ -24,22 +19,20 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
-@EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class WeaponMasteryDamageService {
     private WeaponMasteryDamageService() {
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void onDamage(RPGEngineEntityDamagedEvent.Pre event) {
+    public static double resolveMultiplier(RPGEngineEntityDamagedEvent.Pre event) {
         if (event.getDamage() <= 0.0D
                 || event.getSource().hasDamageTypeHolder(AscensionDamageTypeHolders.ATTRIBUTION)
                 || !(event.getSource().getEntity() instanceof ServerPlayer player)) {
-            return;
+            return 1.0D;
         }
 
         OriginSource source = AscensionOriginSourceHelper.getEntitySource(player);
         if (source == null) {
-            return;
+            return 1.0D;
         }
 
         double bestMultiplier = 1.0D;
@@ -69,10 +62,7 @@ public final class WeaponMasteryDamageService {
                 );
             }
         }
-
-        if (bestMultiplier > 1.0D + 1.0E-8D) {
-            event.setDamage(event.getDamage() * bestMultiplier);
-        }
+        return bestMultiplier;
     }
 
     private static boolean matches(

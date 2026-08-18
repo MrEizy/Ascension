@@ -10,7 +10,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
@@ -92,8 +91,7 @@ public final class NormalProjectileService {
         steer(level, projectile, data);
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void gatherDamageTypes(RPGEngineGatherDamageTypesEvent event) {
+    public static void contributeDamageTypes(RPGEngineGatherDamageTypesEvent event) {
         if (!(event.getSource() instanceof RPGEngineDamageSource source)
                 || !(source.getDirectEntity() instanceof Projectile projectile)) {
             return;
@@ -146,18 +144,17 @@ public final class NormalProjectileService {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void onDamage(RPGEngineEntityDamagedEvent.Pre event) {
+    public static double resolveDamage(RPGEngineEntityDamagedEvent.Pre event, double incomingDamage) {
         if (!(event.getSource().getDirectEntity() instanceof Projectile projectile)
                 || !(projectile.getOwner() instanceof LivingEntity owner)) {
-            return;
+            return Math.max(0.0D, incomingDamage);
         }
         Data data = projectile.getData(AscensionAttachments.NORMAL_PROJECTILE_DATA);
         if (!data.active()) {
-            return;
+            return Math.max(0.0D, incomingDamage);
         }
 
-        double damage = event.getDamage();
+        double damage = Math.max(0.0D, incomingDamage);
         for (Identifier profileId : data.profiles()) {
             NormalProjectileDefinition definition = definition(projectile, profileId);
             if (definition == null) {
@@ -182,11 +179,10 @@ public final class NormalProjectileService {
             }
             damage = Math.max(0.0D, damage * Math.max(0.0D, multiplier) + bonus);
         }
-        event.setDamage(damage);
+        return damage;
     }
 
-    @SubscribeEvent
-    public static void onDamagePost(RPGEngineEntityDamagedEvent.Post event) {
+    public static void handleDamagePost(RPGEngineEntityDamagedEvent.Post event) {
         if (event.getDamage() <= 0.0D
                 || !(event.getSource().getDirectEntity() instanceof Projectile projectile)
                 || !(projectile.level() instanceof ServerLevel level)

@@ -8,6 +8,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.damage.AscensionDamageProfile;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionAttribution;
 import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
@@ -32,11 +33,22 @@ public final class AscensionDamageService {
             Optional<Identifier> path,
             Optional<Identifier> technique
     ) {
+        return apply(
+                context,
+                AscensionDamageProfile.base(amount),
+                damageType,
+                classifications,
+                path,
+                technique
+        );
+    }
+
+    public static boolean apply(SkillExecutionContext context, AscensionDamageProfile profile, Identifier damageType, Set<Identifier> classifications, Optional<Identifier> path, Optional<Identifier> technique) {
         LivingEntity target = context.target();
         if (target == null || target.isRemoved() || target.level().isClientSide()) {
             return false;
         }
-        if (!Double.isFinite(amount) || amount <= 0.0D || damageType == null) {
+        if (profile == null || profile.baseDamage() <= 0.0D || damageType == null) {
             return false;
         }
 
@@ -68,6 +80,7 @@ public final class AscensionDamageService {
 
         RPGEngineDamageSource source = new RPGEngineDamageSource(vanillaSource);
         path.ifPresent(value -> AscensionDamageTypeHolders.attachPath(source, value));
+        AscensionDamageTypeHolders.attachProfile(source, profile);
 
         LinkedHashSet<Identifier> resolvedClassifications = new LinkedHashSet<>();
         if (classifications != null) {
@@ -86,7 +99,7 @@ public final class AscensionDamageService {
                 )
         );
 
-        float resolvedAmount = (float) Math.min(amount, Float.MAX_VALUE);
-        return target.hurtServer(context.level(), source, resolvedAmount);
+        float initialDamage = (float) Math.min(profile.baseDamage(), Float.MAX_VALUE);
+        return target.hurtServer(context.level(), source, initialDamage);
     }
 }

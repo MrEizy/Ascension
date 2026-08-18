@@ -22,11 +22,11 @@ public final class PassiveDefenseService {
     private PassiveDefenseService() {
     }
 
-    public static void applyDamage(RPGEngineEntityDamagedEvent.Pre event) {
+    public static double resolveDamage(RPGEngineEntityDamagedEvent.Pre event, double incomingDamage) {
         LivingEntity target = event.getEntity();
         OriginSource source = originSource(target);
-        if (source == null) {
-            return;
+        if (source == null || incomingDamage <= 0.0D) {
+            return Math.max(0.0D, incomingDamage);
         }
         double flatReduction = 0.0D;
         double retainedDamage = 1.0D;
@@ -49,9 +49,7 @@ public final class PassiveDefenseService {
                 }
             }
         }
-        if (flatReduction > 0.0D || retainedDamage < 1.0D) {
-            event.setDamage(Math.max(0.0D, (event.getDamage() - flatReduction) * retainedDamage));
-        }
+        return Math.max(0.0D, (incomingDamage - flatReduction) * retainedDamage);
     }
 
     public static double staggerResistance(LivingEntity target, SkillExecutionContext executionContext) {
