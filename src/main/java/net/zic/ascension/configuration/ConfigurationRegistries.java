@@ -23,6 +23,9 @@ public class ConfigurationRegistries {
     public static final RegistryHelper.DataPackRegistry<RawBiomeConfiguration> RAW_BIOME_CONFIGURATION_REGISTRY =
             new RegistryHelper.DataPackRegistry<>(RegistryHelper.key(AscensionCraft.MOD_ID,"config/biome_configurations"),()->RawBiomeConfiguration.CODEC);
 
+    public static final RegistryHelper.DataPackRegistry<RealmEffectivenessConfiguration> REALM_EFFECTIVENESS_REGISTRY =
+            RegistryHelper.dataPackRegistry(AscensionCraft.MOD_ID, "config/realm_effectiveness", () -> RealmEffectivenessConfiguration.CODEC);
+
     @SubscribeEvent
     public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(
@@ -39,6 +42,11 @@ public class ConfigurationRegistries {
                 RAW_BIOME_CONFIGURATION_REGISTRY.key(),
                 RAW_BIOME_CONFIGURATION_REGISTRY.codec().get(),
                 RAW_BIOME_CONFIGURATION_REGISTRY.codec().get()
+        );
+        event.dataPackRegistry(
+                REALM_EFFECTIVENESS_REGISTRY.key(),
+                REALM_EFFECTIVENESS_REGISTRY.codec().get(),
+                REALM_EFFECTIVENESS_REGISTRY.codec().get()
         );
     }
 }

@@ -225,6 +225,9 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.recovery.qi", "Qi");
         add("gui.ascension.introspection.recovery.stamina", "Stamina");
         add("gui.ascension.introspection.recovery.per_second", "%s/s");
+        add("gui.ascension.introspection.stat_tooltip.raw", "Raw: %s");
+        add("gui.ascension.introspection.stat_tooltip.realm_effectiveness", "Realm Effectiveness: ×%s");
+        add("gui.ascension.introspection.stat_tooltip.effective", "Effective: %s");
 
 
 
