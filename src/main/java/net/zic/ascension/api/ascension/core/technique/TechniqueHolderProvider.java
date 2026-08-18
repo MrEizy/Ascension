@@ -18,7 +18,7 @@ public class TechniqueHolderProvider implements DataSource {
 
     @Override
     public LoadPriority loadPriority() {
-        return LoadPriority.HIGHEST;
+        return LoadPriority.HIGH;
     }
 
     protected TechniqueHolder getHolder(DataSourceInstance instance) {

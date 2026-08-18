@@ -8,9 +8,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
-import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
-import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.nbt.NbtHelpers;
@@ -48,6 +45,7 @@ public class PathHolder implements DataSourceInstance {
             if(hasCachedPath(path)) pathInstance = removeCachedPath(path);
             paths.put(path,pathInstance);
             pathOwners.computeIfAbsent(path,key->new HashSet<>());
+            markPathDirty(path);
         }
         pathOwners.get(path).add(owner);
         return true;

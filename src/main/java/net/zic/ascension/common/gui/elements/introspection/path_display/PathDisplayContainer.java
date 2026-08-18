@@ -6,6 +6,7 @@ import net.lucent.easygui.gui.elements.built_in.EasyLabel;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
@@ -172,6 +173,8 @@ public class PathDisplayContainer extends RenderableElement {
                 }
 
 
+                refreshSelectedTechnique(source, player.registryAccess());
+
                 Component description = path.description() == null
                         ? Component.empty()
                         : path.description();
@@ -186,6 +189,37 @@ public class PathDisplayContainer extends RenderableElement {
                 );
             }, this::showUnavailableState);
         }, this::showUnavailableState);
+    }
+
+    private void refreshSelectedTechnique(OriginSource source, RegistryAccess access) {
+        Identifier techniqueId = AscensionOriginSourceHelper.getTechniques(source).stream()
+                .filter(id -> {
+                    Technique technique = CoreRegistries.safeAccess(
+                            CoreRegistries.TECHNIQUE_REGISTRY,
+                            id,
+                            access
+                    );
+                    return technique != null && selectedPath.equals(technique.getPath());
+                })
+                .sorted(Comparator.comparing(Identifier::toString))
+                .findFirst()
+                .orElse(null);
+
+        if (techniqueId == null) {
+            setTechniqueTitle(Component.translatable("gui.ascension.introspection.none"));
+            return;
+        }
+
+        Technique technique = CoreRegistries.safeAccess(
+                CoreRegistries.TECHNIQUE_REGISTRY,
+                techniqueId,
+                access
+        );
+        setTechniqueTitle(
+                technique == null
+                        ? Component.literal(techniqueId.toString())
+                        : technique.getName(AscensionOriginSourceHelper.getTechniqueData(source, techniqueId))
+        );
     }
 
     private void setTechniqueTitle(Component title) {

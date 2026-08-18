@@ -9,6 +9,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
@@ -140,8 +141,16 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public void onAdded(OriginSource source, TechniqueData data) {
-
-        holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data,ProgressDirection.UP);
+        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
+        if (pathInstance == null) {
+            return;
+        }
+        holder.run(
+                source,
+                CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),
+                pathInstance,
+                ProgressDirection.UP
+        );
     }
     //TODO UPDATE PROGRESSION TEST TO TAKE IN A TYPE CALLED REGISTRY_OBJECT_DATA AS CONTEXT DATA
     @Override
@@ -253,12 +262,30 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public void onRealmUp(OriginSource source, TechniqueData techniqueData) {
-        holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),techniqueData,ProgressDirection.UP);
+        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
+        if (pathInstance == null) {
+            return;
+        }
+        holder.run(
+                source,
+                CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),
+                pathInstance,
+                ProgressDirection.UP
+        );
     }
 
     @Override
     public void onRealmDown(OriginSource source, TechniqueData techniqueData) {
-        holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),techniqueData,ProgressDirection.DOWN);
+        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
+        if (pathInstance == null) {
+            return;
+        }
+        holder.run(
+                source,
+                CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),
+                pathInstance,
+                ProgressDirection.DOWN
+        );
     }
 
     @Override
