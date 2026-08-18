@@ -10,8 +10,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageProfile;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionAttribution;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionAttribution;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineDamageSource;
 
 import java.util.LinkedHashSet;
@@ -26,7 +26,7 @@ public final class AscensionDamageService {
     }
 
     public static boolean apply(
-            SkillExecutionContext context,
+            SkillActionContext context,
             double amount,
             Identifier damageType,
             Set<Identifier> classifications,
@@ -43,7 +43,7 @@ public final class AscensionDamageService {
         );
     }
 
-    public static boolean apply(SkillExecutionContext context, AscensionDamageProfile profile, Identifier damageType, Set<Identifier> classifications, Optional<Identifier> path, Optional<Identifier> technique) {
+    public static boolean apply(SkillActionContext context, AscensionDamageProfile profile, Identifier damageType, Set<Identifier> classifications, Optional<Identifier> path, Optional<Identifier> technique) {
         LivingEntity target = context.target();
         if (target == null || target.isRemoved() || target.level().isClientSide()) {
             return false;
@@ -52,7 +52,7 @@ public final class AscensionDamageService {
             return false;
         }
 
-        SkillExecutionAttribution executionAttribution = context.attribution();
+        SkillActionAttribution executionAttribution = context.attribution();
         Entity owner = context.level().getEntity(executionAttribution.ownerId());
         if (owner == null || owner.isRemoved()) {
             owner = context.caster();

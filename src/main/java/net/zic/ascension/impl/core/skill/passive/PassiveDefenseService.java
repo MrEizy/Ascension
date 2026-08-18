@@ -7,7 +7,7 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
@@ -52,7 +52,7 @@ public final class PassiveDefenseService {
         return Math.max(0.0D, (incomingDamage - flatReduction) * retainedDamage);
     }
 
-    public static double staggerResistance(LivingEntity target, SkillExecutionContext executionContext) {
+    public static double staggerResistance(LivingEntity target, SkillActionContext executionContext) {
         OriginSource source = originSource(target);
         if (source == null) {
             return 0.0D;

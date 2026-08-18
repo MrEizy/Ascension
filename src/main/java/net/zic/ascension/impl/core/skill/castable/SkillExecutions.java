@@ -8,8 +8,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillExecutionDefinition;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 
 import java.util.HashMap;
 import java.util.List;
@@ -72,9 +72,9 @@ public final class SkillExecutions {
     ) {
         Vec3 origin = caster.position().add(0.0D, caster.getBbHeight() * 0.5D, 0.0D);
         LivingEntity primary = primaryEntity(resolution);
-        for (SkillExecutionFeature feature : definition.features()) {
-            switch (feature.subject()) {
-                case CASTER, ORIGIN -> feature.apply(new SkillExecutionContext(
+        for (SkillAction action : definition.actions()) {
+            switch (action.subject()) {
+                case CASTER, ORIGIN -> action.apply(new SkillActionContext(
                         level,
                         caster,
                         skill,
@@ -87,7 +87,7 @@ public final class SkillExecutions {
                     for (TargetingDefinition.Target target : resolution.targets()) {
                         Map<Identifier, Double> targetVariables = new HashMap<>(resolution.variables());
                         targetVariables.put(TARGET_DISTANCE, caster.getEyePosition().distanceTo(target.position()));
-                        feature.apply(new SkillExecutionContext(
+                        action.apply(new SkillActionContext(
                                 level,
                                 caster,
                                 skill,

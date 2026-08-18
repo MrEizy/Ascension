@@ -22,8 +22,8 @@ import net.zic.ascension.api.ascension.core.effect.SkillEffectModule;
 import net.zic.ascension.api.ascension.core.resource.ResourceModifiers;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionAttribution;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionAttribution;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.impl.core.damage.AscensionDamageService;
@@ -240,7 +240,7 @@ public final class SkillEffectModules {
             if (profile.immune(entity) || effect.remainingDuration() % interval != 0) {
                 return;
             }
-            SkillExecutionContext context = executionContext(entity, effect);
+            SkillActionContext context = executionContext(entity, effect);
             if (context == null) {
                 return;
             }
@@ -488,7 +488,7 @@ public final class SkillEffectModules {
                 return;
             }
 
-            SkillExecutionContext context = executionContext(entity, effect);
+            SkillActionContext context = executionContext(entity, effect);
             if (context == null) {
                 return;
             }
@@ -515,7 +515,7 @@ public final class SkillEffectModules {
         );
     }
 
-    private static SkillExecutionContext executionContext(LivingEntity entity, SkillEffectContext effect) {
+    private static SkillActionContext executionContext(LivingEntity entity, SkillEffectContext effect) {
         if (!(entity.level() instanceof ServerLevel level)) {
             return null;
         }
@@ -523,7 +523,7 @@ public final class SkillEffectModules {
         LivingEntity caster = source instanceof LivingEntity living ? living : entity;
         UUID ownerId = effect.sourceEntity() == null ? caster.getUUID() : effect.sourceEntity();
         Identifier sourceSkill = effect.sourceSkill() == null ? effect.definition() : effect.sourceSkill();
-        return new SkillExecutionContext(
+        return new SkillActionContext(
                 level,
                 caster,
                 sourceSkill,
@@ -531,7 +531,7 @@ public final class SkillEffectModules {
                 entity.getBoundingBox().getCenter(),
                 effect.potency(),
                 Map.of(EFFECT_POTENCY, effect.potency(), EFFECT_STACKS, (double) effect.stacks()),
-                new SkillExecutionAttribution(ownerId, ownerId, source, Optional.empty(), Optional.empty())
+                new SkillActionAttribution(ownerId, ownerId, source, Optional.empty(), Optional.empty())
         );
     }
 

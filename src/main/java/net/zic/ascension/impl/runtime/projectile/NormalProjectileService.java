@@ -29,8 +29,8 @@ import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.SkillLevelResolver;
 import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.impl.core.skill.passive.ResourceModifierPassiveSkill;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionAttribution;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionAttribution;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineDamageSource;
@@ -218,7 +218,7 @@ public final class NormalProjectileService {
             }
             Map<Identifier, Double> variables = variables(projectile, data, definition, event.getDamage());
             Identifier skill = definition.requiredSkill().orElse(profileId);
-            SkillExecutionContext context = new SkillExecutionContext(
+            SkillActionContext context = new SkillActionContext(
                     level,
                     owner,
                     skill,
@@ -226,7 +226,7 @@ public final class NormalProjectileService {
                     event.getEntity().position().add(0.0D, event.getEntity().getBbHeight() * 0.5D, 0.0D),
                     charge(data, definition),
                     variables,
-                    new SkillExecutionAttribution(
+                    new SkillActionAttribution(
                             owner.getUUID(),
                             owner.getUUID(),
                             projectile,
@@ -446,7 +446,7 @@ public final class NormalProjectileService {
     ) {
         if (owner instanceof ServerPlayer player) {
             Identifier skill = definition.requiredSkill().orElse(profileId);
-            SkillExecutionContext context = new SkillExecutionContext(
+            SkillActionContext context = new SkillActionContext(
                     level,
                     player,
                     skill,
@@ -454,7 +454,7 @@ public final class NormalProjectileService {
                     projectile.position(),
                     0.0D,
                     Map.of(),
-                    SkillExecutionAttribution.direct(player)
+                    SkillActionAttribution.direct(player)
             );
             Resolved<SkillEffectDefinition> resolved = SkillDefinitions.effect(context, reference);
             return resolved == null ? null : resolved.id();

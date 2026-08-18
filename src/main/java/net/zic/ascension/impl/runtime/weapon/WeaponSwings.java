@@ -25,7 +25,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.Config;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.impl.core.damage.AscensionDamageService;
 import net.zic.ascension.impl.core.effect.SkillEffectService;
 import net.zic.ascension.impl.core.skill.passive.WeaponMasteryService;
@@ -214,7 +214,7 @@ public final class WeaponSwings {
         if (instance.spec.damage() <= 0.0D) {
             return;
         }
-        SkillExecutionContext context = new SkillExecutionContext(
+        SkillActionContext context = new SkillActionContext(
                 level,
                 owner,
                 instance.spec.skillId(),

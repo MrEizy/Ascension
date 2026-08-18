@@ -100,7 +100,7 @@ public final class ActiveSkill implements CastableSkill, LevelledSkill, Owner {
         return new ActiveSkillLevelDefinition.Template(
                 level.targeting().isPresent() ? level.targeting() : root.targeting(),
                 level.requireTargets().isPresent() ? level.requireTargets() : root.requireTargets(),
-                level.features().isPresent() ? level.features() : root.features(),
+                level.actions().isPresent() ? level.actions() : root.actions(),
                 level.costs().isPresent() ? level.costs() : root.costs(),
                 level.cooldown().isPresent() ? level.cooldown() : root.cooldown()
         );

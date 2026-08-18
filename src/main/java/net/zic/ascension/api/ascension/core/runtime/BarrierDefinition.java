@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineDamageSource;
@@ -23,28 +23,23 @@ public record BarrierDefinition(
         boolean replaceExisting,
         DamageFilter filter,
         NormalProjectileDefinition.ImpactResponse projectileResponse,
-        List<SkillExecutionFeature> onAbsorb,
-        List<SkillExecutionFeature> onBreak,
-        List<SkillExecutionFeature> onExpire,
+        List<SkillAction> onAbsorb,
+        List<SkillAction> onBreak,
+        List<SkillAction> onExpire,
         Optional<Visual> visual
 ) {
     public static final Codec<BarrierDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ScaledValue.COMPACT_CODEC.fieldOf("duration").forGetter(BarrierDefinition::duration),
             ScaledValue.COMPACT_CODEC.fieldOf("durability").forGetter(BarrierDefinition::durability),
-            ScaledValue.COMPACT_CODEC.optionalFieldOf("absorption", ScaledValue.constant(1.0D))
-                    .forGetter(BarrierDefinition::absorption),
+            ScaledValue.COMPACT_CODEC.optionalFieldOf("absorption", ScaledValue.constant(1.0D)).forGetter(BarrierDefinition::absorption),
             Codec.BOOL.optionalFieldOf("overflow", true).forGetter(BarrierDefinition::overflow),
             Codec.INT.optionalFieldOf("priority", 0).forGetter(BarrierDefinition::priority),
             Codec.BOOL.optionalFieldOf("replace_existing", true).forGetter(BarrierDefinition::replaceExisting),
             DamageFilter.CODEC.optionalFieldOf("filter", DamageFilter.EMPTY).forGetter(BarrierDefinition::filter),
-            NormalProjectileDefinition.ImpactResponse.CODEC.optionalFieldOf("projectile_response", NormalProjectileDefinition.ImpactResponse.DISCARD)
-                    .forGetter(BarrierDefinition::projectileResponse),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_absorb", List.of())
-                    .forGetter(BarrierDefinition::onAbsorb),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_break", List.of())
-                    .forGetter(BarrierDefinition::onBreak),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_expire", List.of())
-                    .forGetter(BarrierDefinition::onExpire),
+            NormalProjectileDefinition.ImpactResponse.CODEC.optionalFieldOf("projectile_response", NormalProjectileDefinition.ImpactResponse.DISCARD).forGetter(BarrierDefinition::projectileResponse),
+            SkillAction.CODEC.listOf().optionalFieldOf("on_absorb", List.of()).forGetter(BarrierDefinition::onAbsorb),
+            SkillAction.CODEC.listOf().optionalFieldOf("on_break", List.of()).forGetter(BarrierDefinition::onBreak),
+            SkillAction.CODEC.listOf().optionalFieldOf("on_expire", List.of()).forGetter(BarrierDefinition::onExpire),
             Visual.CODEC.optionalFieldOf("visual").forGetter(BarrierDefinition::visual)
     ).apply(instance, BarrierDefinition::new));
 
@@ -65,14 +60,10 @@ public record BarrierDefinition(
     ) {
         public static final DamageFilter EMPTY = new DamageFilter(List.of(), List.of(), List.of(), List.of());
         public static final Codec<DamageFilter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Identifier.CODEC.listOf().optionalFieldOf("include_classifications", List.of())
-                        .forGetter(DamageFilter::includeClassifications),
-                Identifier.CODEC.listOf().optionalFieldOf("exclude_classifications", List.of())
-                        .forGetter(DamageFilter::excludeClassifications),
-                Identifier.CODEC.listOf().optionalFieldOf("include_damage_types", List.of())
-                        .forGetter(DamageFilter::includeDamageTypes),
-                Identifier.CODEC.listOf().optionalFieldOf("exclude_damage_types", List.of())
-                        .forGetter(DamageFilter::excludeDamageTypes)
+                Identifier.CODEC.listOf().optionalFieldOf("include_classifications", List.of()).forGetter(DamageFilter::includeClassifications),
+                Identifier.CODEC.listOf().optionalFieldOf("exclude_classifications", List.of()).forGetter(DamageFilter::excludeClassifications),
+                Identifier.CODEC.listOf().optionalFieldOf("include_damage_types", List.of()).forGetter(DamageFilter::includeDamageTypes),
+                Identifier.CODEC.listOf().optionalFieldOf("exclude_damage_types", List.of()).forGetter(DamageFilter::excludeDamageTypes)
         ).apply(instance, DamageFilter::new));
 
         public DamageFilter {
@@ -92,14 +83,11 @@ public record BarrierDefinition(
             }
 
             AscensionDamageTypeHolders.Classifications classifications =
-                    source.getDamageTypeHolder(AscensionDamageTypeHolders.CLASSIFICATIONS)
-                            instanceof AscensionDamageTypeHolders.Classifications values ? values : null;
-            if (!includeClassifications.isEmpty()
-                    && (classifications == null || includeClassifications.stream().noneMatch(classifications::contains))) {
+                    source.getDamageTypeHolder(AscensionDamageTypeHolders.CLASSIFICATIONS) instanceof AscensionDamageTypeHolders.Classifications values ? values : null;
+            if (!includeClassifications.isEmpty() && (classifications == null || includeClassifications.stream().noneMatch(classifications::contains))) {
                 return false;
             }
-            return classifications == null
-                    || excludeClassifications.stream().noneMatch(classifications::contains);
+            return classifications == null || excludeClassifications.stream().noneMatch(classifications::contains);
         }
     }
 
@@ -111,24 +99,19 @@ public record BarrierDefinition(
     ) {
         public static final Codec<Visual> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 DefinitionRef.codec(RuntimeVisualDefinition.CODEC).fieldOf("id").forGetter(Visual::id),
-                ScaledValue.COMPACT_CODEC.optionalFieldOf("radius", ScaledValue.constant(1.15D))
-                        .forGetter(Visual::radius),
-                ScaledValue.COMPACT_CODEC.optionalFieldOf("height", ScaledValue.constant(2.3D))
-                        .forGetter(Visual::height),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("radius", ScaledValue.constant(1.15D)).forGetter(Visual::radius),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("height", ScaledValue.constant(2.3D)).forGetter(Visual::height),
                 VisualStage.CODEC.listOf().optionalFieldOf("stages", List.of()).forGetter(Visual::stages)
         ).apply(instance, Visual::new));
 
         public Visual {
-            stages = stages == null
-                    ? List.of()
-                    : stages.stream().sorted(Comparator.comparingDouble(VisualStage::maximumDurabilityFraction)).toList();
+            stages = stages == null ? List.of() : stages.stream().sorted(Comparator.comparingDouble(VisualStage::maximumDurabilityFraction)).toList();
         }
     }
 
     public record VisualStage(double maximumDurabilityFraction, DefinitionRef<RuntimeVisualDefinition> visual) {
         public static final Codec<VisualStage> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.doubleRange(0.0D, 1.0D).fieldOf("maximum_durability_fraction")
-                        .forGetter(VisualStage::maximumDurabilityFraction),
+                Codec.doubleRange(0.0D, 1.0D).fieldOf("maximum_durability_fraction").forGetter(VisualStage::maximumDurabilityFraction),
                 DefinitionRef.codec(RuntimeVisualDefinition.CODEC).fieldOf("visual").forGetter(VisualStage::visual)
         ).apply(instance, VisualStage::new));
     }

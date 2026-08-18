@@ -14,7 +14,7 @@ import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
 import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
 import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -59,56 +59,56 @@ public record SkillDefinitions(
     }
 
     public static Resolved<SkillEffectDefinition> effect(
-            SkillExecutionContext context,
+            SkillActionContext context,
             DefinitionRef<SkillEffectDefinition> reference
     ) {
         return remember(SkillEffectDefinition.class, resolve(context, reference, "effect", SkillDefinitions::effects, SkillEffectDefinition.class, CoreRegistries.SKILL_EFFECT_REGISTRY));
     }
 
     public static Resolved<VirtualProjectileDefinition> projectile(
-            SkillExecutionContext context,
+            SkillActionContext context,
             DefinitionRef<VirtualProjectileDefinition> reference
     ) {
         return remember(VirtualProjectileDefinition.class, resolve(context, reference, "projectile", SkillDefinitions::projectiles, VirtualProjectileDefinition.class, CoreRegistries.VIRTUAL_PROJECTILE_REGISTRY));
     }
 
     public static Resolved<AreaFieldDefinition> field(
-            SkillExecutionContext context,
+            SkillActionContext context,
             DefinitionRef<AreaFieldDefinition> reference
     ) {
         return remember(AreaFieldDefinition.class, resolve(context, reference, "field", SkillDefinitions::fields, AreaFieldDefinition.class, CoreRegistries.AREA_FIELD_REGISTRY));
     }
 
     public static Resolved<AnchorNetworkDefinition> network(
-            SkillExecutionContext context,
+            SkillActionContext context,
             DefinitionRef<AnchorNetworkDefinition> reference
     ) {
         return remember(AnchorNetworkDefinition.class, resolve(context, reference, "network", SkillDefinitions::networks, AnchorNetworkDefinition.class, CoreRegistries.ANCHOR_NETWORK_REGISTRY));
     }
 
     public static Resolved<OwnerBoundConstructDefinition> construct(
-            SkillExecutionContext context,
+            SkillActionContext context,
             DefinitionRef<OwnerBoundConstructDefinition> reference
     ) {
         return remember(OwnerBoundConstructDefinition.class, resolve(context, reference, "construct", SkillDefinitions::constructs, OwnerBoundConstructDefinition.class, CoreRegistries.CONSTRUCT_REGISTRY));
     }
 
     public static Resolved<BarrierDefinition> barrier(
-            SkillExecutionContext context,
+            SkillActionContext context,
             DefinitionRef<BarrierDefinition> reference
     ) {
         return remember(BarrierDefinition.class, resolve(context, reference, "barrier", SkillDefinitions::barriers, BarrierDefinition.class, CoreRegistries.BARRIER_REGISTRY));
     }
 
     public static Resolved<StaggerDefinition> stagger(
-            SkillExecutionContext context,
+            SkillActionContext context,
             DefinitionRef<StaggerDefinition> reference
     ) {
         return remember(StaggerDefinition.class, resolve(context, reference, "stagger", SkillDefinitions::stagger, StaggerDefinition.class, CoreRegistries.STAGGER_REGISTRY));
     }
 
     public static Resolved<RuntimeVisualDefinition> visual(
-            SkillExecutionContext context,
+            SkillActionContext context,
             DefinitionRef<RuntimeVisualDefinition> reference
     ) {
         Resolved<RuntimeVisualDefinition> resolved = resolve(
@@ -126,7 +126,7 @@ public record SkillDefinitions(
     }
 
     private static <T> Resolved<T> resolve(
-            SkillExecutionContext context,
+            SkillActionContext context,
             DefinitionRef<T> reference,
             String category,
             MapSelector<T> selector,
@@ -151,7 +151,7 @@ public record SkillDefinitions(
         return value == null ? null : new Resolved<>(localId(context.skill(), category, name), value);
     }
 
-    public static SkillDefinitions definitions(SkillExecutionContext context) {
+    public static SkillDefinitions definitions(SkillActionContext context) {
         if (context == null || context.skill() == null) {
             return EMPTY;
         }

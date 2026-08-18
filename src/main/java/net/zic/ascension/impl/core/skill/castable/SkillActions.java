@@ -6,13 +6,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.TagKey;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,9 +28,9 @@ import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
 import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.ExecutionSubject;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.castable.action.ActionSubject;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
@@ -45,7 +43,7 @@ import net.zic.ascension.impl.core.damage.AscensionDamageService;
 import net.zic.ascension.impl.core.effect.AscensionBuildupChannels;
 import net.zic.ascension.impl.core.effect.SkillEffectService;
 import net.zic.ascension.impl.core.movement.MovementService;
-import net.zic.ascension.impl.datapack.skill.AscensionSkillExecutionFeatureTypes;
+import net.zic.ascension.impl.datapack.skill.AscensionSkillActionTypes;
 import net.zic.ascension.impl.runtime.object.Barriers;
 import net.zic.ascension.impl.runtime.object.AnchorNetworks;
 import net.zic.ascension.impl.runtime.object.AreaFields;
@@ -63,34 +61,34 @@ import java.util.Set;
 import java.util.UUID;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 
-public final class SkillFeatures {
+public final class SkillActions {
     private static final Identifier DEFAULT_DAMAGE_TYPE = Identifier.fromNamespaceAndPath("minecraft", "player_attack");
     private static final Identifier DEFAULT_RESOURCE_SOURCE = AscensionCraft.prefix("skill_casting");
     private static final Identifier FROZEN = AscensionCraft.prefix("frozen");
 
-    private SkillFeatures() {
+    private SkillActions() {
     }
 
-    private static Vec3 subjectPosition(SkillExecutionContext context, ExecutionSubject subject) {
+    private static Vec3 subjectPosition(SkillActionContext context, ActionSubject subject) {
         LivingEntity entity = context.entity(subject);
         return entity == null ? context.position() : entity.getBoundingBox().getCenter();
     }
 
 
-    public record Message(ExecutionSubject subject, Component message, boolean overlay) implements SkillExecutionFeature {
+    public record Message(ActionSubject subject, Component message, boolean overlay) implements SkillAction {
         public static final MapCodec<Message> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.CASTER).forGetter(Message::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(Message::subject),
                 ComponentSerialization.CODEC.fieldOf("message").forGetter(Message::message),
                 Codec.BOOL.optionalFieldOf("overlay", true).forGetter(Message::overlay)
         ).apply(instance, Message::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.MESSAGE.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.MESSAGE.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             if (!(context.caster() instanceof ServerPlayer player)) {
                 return;
             }
@@ -103,25 +101,25 @@ public final class SkillFeatures {
     }
 
     public record Sound(
-            ExecutionSubject subject,
+            ActionSubject subject,
             Identifier sound,
             ScaledValue volume,
             ScaledValue pitch
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Sound> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.ORIGIN).forGetter(Sound::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.ORIGIN).forGetter(Sound::subject),
                 Identifier.CODEC.fieldOf("sound").forGetter(Sound::sound),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("volume", ScaledValue.constant(1.0D)).forGetter(Sound::volume),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("pitch", ScaledValue.constant(1.0D)).forGetter(Sound::pitch)
         ).apply(instance, Sound::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.SOUND.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.SOUND.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             SoundEvent event = BuiltInRegistries.SOUND_EVENT.getValue(sound);
             if (event == null) {
                 return;
@@ -144,14 +142,14 @@ public final class SkillFeatures {
     }
 
     public record Particles(
-            ExecutionSubject subject,
+            ActionSubject subject,
             Identifier particle,
             ScaledValue count,
             ScaledValue spread,
             ScaledValue speed
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Particles> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.POSITION).forGetter(Particles::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.POSITION).forGetter(Particles::subject),
                 Identifier.CODEC.fieldOf("particle").forGetter(Particles::particle),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("count", ScaledValue.constant(12.0D)).forGetter(Particles::count),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("spread", ScaledValue.constant(0.5D)).forGetter(Particles::spread),
@@ -159,12 +157,12 @@ public final class SkillFeatures {
         ).apply(instance, Particles::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.PARTICLES.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.PARTICLES.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             ParticleType<?> type = BuiltInRegistries.PARTICLE_TYPE.getValue(particle);
             if (!(type instanceof SimpleParticleType simple)) {
                 return;
@@ -188,14 +186,14 @@ public final class SkillFeatures {
     }
 
     public record Resource(
-            ExecutionSubject subject,
+            ActionSubject subject,
             Identifier resource,
             ResourceOperation operation,
             Identifier source,
             ScaledValue amount
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Resource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.TARGET).forGetter(Resource::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.TARGET).forGetter(Resource::subject),
                 Identifier.CODEC.fieldOf("resource").forGetter(Resource::resource),
                 ResourceOperation.CODEC.fieldOf("operation").forGetter(Resource::operation),
                 Identifier.CODEC.optionalFieldOf("source", DEFAULT_RESOURCE_SOURCE).forGetter(Resource::source),
@@ -203,12 +201,12 @@ public final class SkillFeatures {
         ).apply(instance, Resource::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.RESOURCE.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.RESOURCE.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             LivingEntity entity = context.entity(subject);
             if (entity == null) {
                 return;
@@ -232,15 +230,15 @@ public final class SkillFeatures {
     }
 
     public record Damage(
-            ExecutionSubject subject,
+            ActionSubject subject,
             ScaledValue amount,
             Identifier damageType,
             List<Identifier> classifications,
             Optional<Identifier> path,
             Optional<Identifier> technique
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Damage> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.TARGET).forGetter(Damage::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.TARGET).forGetter(Damage::subject),
                 ScaledValue.COMPACT_CODEC.fieldOf("amount").forGetter(Damage::amount),
                 Identifier.CODEC.optionalFieldOf("damage_type", DEFAULT_DAMAGE_TYPE).forGetter(Damage::damageType),
                 Identifier.CODEC.listOf().optionalFieldOf("classifications", List.of()).forGetter(Damage::classifications),
@@ -255,12 +253,12 @@ public final class SkillFeatures {
         }
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.DAMAGE.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.DAMAGE.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             LivingEntity entity = context.entity(subject);
             if (entity != null) {
                 AscensionDamageService.apply(
@@ -276,25 +274,25 @@ public final class SkillFeatures {
     }
 
     public record Effect(
-            ExecutionSubject subject,
+            ActionSubject subject,
             DefinitionRef<SkillEffectDefinition> definition,
             ScaledValue duration,
             ScaledValue potency
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Effect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.TARGET).forGetter(Effect::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.TARGET).forGetter(Effect::subject),
                 DefinitionRef.codec(SkillEffectDefinition.CODEC).fieldOf("definition").forGetter(Effect::definition),
                 ScaledValue.COMPACT_CODEC.fieldOf("duration").forGetter(Effect::duration),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("potency", ScaledValue.constant(1.0D)).forGetter(Effect::potency)
         ).apply(instance, Effect::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.EFFECT.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.EFFECT.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             LivingEntity entity = context.entity(subject);
             if (entity == null) {
                 return;
@@ -315,25 +313,25 @@ public final class SkillFeatures {
     }
 
     public record Buildup(
-            ExecutionSubject subject,
+            ActionSubject subject,
             Identifier channel,
             ScaledValue amount,
             int decayDelay
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Buildup> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.TARGET).forGetter(Buildup::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.TARGET).forGetter(Buildup::subject),
                 Identifier.CODEC.optionalFieldOf("channel", FROZEN).forGetter(Buildup::channel),
                 ScaledValue.COMPACT_CODEC.fieldOf("amount").forGetter(Buildup::amount),
                 Codec.INT.optionalFieldOf("decay_delay", 40).forGetter(Buildup::decayDelay)
         ).apply(instance, Buildup::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.BUILDUP.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.BUILDUP.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             LivingEntity entity = context.entity(subject);
             var buildup = AscensionBuildupChannels.get(channel);
             if (entity != null && buildup != null) {
@@ -343,14 +341,14 @@ public final class SkillFeatures {
     }
 
     public record Stagger(
-            ExecutionSubject subject,
+            ActionSubject subject,
             StaggerAction action,
             Optional<DefinitionRef<StaggerDefinition>> definition,
             ScaledValue amount,
             ScaledValue duration
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Stagger> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.TARGET).forGetter(Stagger::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.TARGET).forGetter(Stagger::subject),
                 StaggerAction.CODEC.optionalFieldOf("action", StaggerAction.APPLY).forGetter(Stagger::action),
                 DefinitionRef.codec(StaggerDefinition.CODEC).optionalFieldOf("definition").forGetter(Stagger::definition),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("amount", ScaledValue.constant(0.0D)).forGetter(Stagger::amount),
@@ -362,12 +360,12 @@ public final class SkillFeatures {
         }
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.STAGGER.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.STAGGER.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             LivingEntity entity = context.entity(subject);
             if (entity == null) {
                 return;
@@ -392,25 +390,25 @@ public final class SkillFeatures {
     }
 
     public record Barrier(
-            ExecutionSubject subject,
+            ActionSubject subject,
             RuntimeAction action,
             DefinitionRef<BarrierDefinition> definition,
             ScaledValue amount
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Barrier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.TARGET).forGetter(Barrier::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.TARGET).forGetter(Barrier::subject),
                 RuntimeAction.CODEC.optionalFieldOf("action", RuntimeAction.APPLY).forGetter(Barrier::action),
                 DefinitionRef.codec(BarrierDefinition.CODEC).fieldOf("definition").forGetter(Barrier::definition),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("amount", ScaledValue.constant(0.0D)).forGetter(Barrier::amount)
         ).apply(instance, Barrier::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.BARRIER.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.BARRIER.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             LivingEntity entity = context.entity(subject);
             if (entity == null) {
                 return;
@@ -442,23 +440,23 @@ public final class SkillFeatures {
     }
 
     public record Projectile(
-            ExecutionSubject subject,
+            ActionSubject subject,
             DefinitionRef<VirtualProjectileDefinition> definition,
             VirtualProjectileDefinition.Direction direction
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Projectile> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.CASTER).forGetter(Projectile::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(Projectile::subject),
                 DefinitionRef.codec(VirtualProjectileDefinition.CODEC).fieldOf("definition").forGetter(Projectile::definition),
                 VirtualProjectileDefinition.Direction.CODEC.optionalFieldOf("direction", VirtualProjectileDefinition.Direction.LOOK).forGetter(Projectile::direction)
         ).apply(instance, Projectile::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.PROJECTILE.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.PROJECTILE.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             Resolved<VirtualProjectileDefinition> resolved = SkillDefinitions.projectile(context, definition);
             if (resolved != null) {
                 VirtualProjectiles.spawn(context, resolved.id(), direction);
@@ -467,23 +465,23 @@ public final class SkillFeatures {
     }
 
     public record Field(
-            ExecutionSubject subject,
+            ActionSubject subject,
             RuntimeAction action,
             DefinitionRef<AreaFieldDefinition> definition
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Field> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.POSITION).forGetter(Field::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.POSITION).forGetter(Field::subject),
                 RuntimeAction.CODEC.optionalFieldOf("action", RuntimeAction.APPLY).forGetter(Field::action),
                 DefinitionRef.codec(AreaFieldDefinition.CODEC).fieldOf("definition").forGetter(Field::definition)
         ).apply(instance, Field::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.FIELD.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.FIELD.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             Resolved<AreaFieldDefinition> resolved = SkillDefinitions.field(context, definition);
             if (resolved == null) {
                 return;
@@ -497,23 +495,23 @@ public final class SkillFeatures {
     }
 
     public record Network(
-            ExecutionSubject subject,
+            ActionSubject subject,
             RuntimeAction action,
             DefinitionRef<AnchorNetworkDefinition> definition
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Network> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.POSITION).forGetter(Network::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.POSITION).forGetter(Network::subject),
                 RuntimeAction.CODEC.optionalFieldOf("action", RuntimeAction.APPLY).forGetter(Network::action),
                 DefinitionRef.codec(AnchorNetworkDefinition.CODEC).fieldOf("definition").forGetter(Network::definition)
         ).apply(instance, Network::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.NETWORK.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.NETWORK.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             Resolved<AnchorNetworkDefinition> resolved = SkillDefinitions.network(context, definition);
             if (resolved == null) {
                 return;
@@ -527,25 +525,25 @@ public final class SkillFeatures {
     }
 
     public record Construct(
-            ExecutionSubject subject,
+            ActionSubject subject,
             RuntimeAction action,
             DefinitionRef<OwnerBoundConstructDefinition> definition,
             ScaledValue amount
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Construct> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.CASTER).forGetter(Construct::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(Construct::subject),
                 RuntimeAction.CODEC.optionalFieldOf("action", RuntimeAction.APPLY).forGetter(Construct::action),
                 DefinitionRef.codec(OwnerBoundConstructDefinition.CODEC).fieldOf("definition").forGetter(Construct::definition),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("amount", ScaledValue.constant(0.0D)).forGetter(Construct::amount)
         ).apply(instance, Construct::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.CONSTRUCT.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.CONSTRUCT.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             Resolved<OwnerBoundConstructDefinition> resolved = SkillDefinitions.construct(context, definition);
             if (resolved == null) {
                 return;
@@ -564,7 +562,7 @@ public final class SkillFeatures {
     }
 
     public record Move(
-            ExecutionSubject subject,
+            ActionSubject subject,
             MoveMode mode,
             ScaledValue distance,
             MoveDirection direction,
@@ -577,9 +575,9 @@ public final class SkillFeatures {
             boolean restoreRotation,
             MovementService.CollisionPolicy collision,
             boolean preserveVelocity
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Move> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.CASTER).forGetter(Move::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(Move::subject),
                 MoveMode.CODEC.fieldOf("mode").forGetter(Move::mode),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("distance", ScaledValue.constant(0.0D)).forGetter(Move::distance),
                 MoveDirection.CODEC.optionalFieldOf("direction", MoveDirection.LOOK).forGetter(Move::direction),
@@ -599,12 +597,12 @@ public final class SkillFeatures {
         }
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.MOVE.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.MOVE.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             LivingEntity mover = context.entity(subject);
             if (mover == null) {
                 return;
@@ -616,7 +614,7 @@ public final class SkillFeatures {
             }
         }
 
-        private void directional(SkillExecutionContext context, LivingEntity mover) {
+        private void directional(SkillActionContext context, LivingEntity mover) {
             LivingEntity target = context.target() == context.caster() ? null : context.target();
             Vec3 vector = switch (direction) {
                 case LOOK -> mover.getLookAngle();
@@ -635,7 +633,7 @@ public final class SkillFeatures {
             }
         }
 
-        private void targetPosition(SkillExecutionContext context, LivingEntity mover) {
+        private void targetPosition(SkillActionContext context, LivingEntity mover) {
             Vec3 delta = context.position().subtract(mover.position());
             double length = delta.length();
             double stopping = Math.max(0.0D, stoppingDistance.resolve(context.scaledValueContext()));
@@ -659,11 +657,11 @@ public final class SkillFeatures {
             MovementService.Result result = MovementService.move(context.level(), mover, destination, collision, preserveVelocity);
 
             if (!result.succeeded()) {
-                AscensionCraft.LOGGER.debug("Movement feature for {} failed: {} from {} toward {}", context.skill(), result.failureReason(), result.origin(), destination);
+                AscensionCraft.LOGGER.debug("Movement action for {} failed: {} from {} toward {}", context.skill(), result.failureReason(), result.origin(), destination);
             }
         }
 
-        private void anchor(SkillExecutionContext context, LivingEntity mover) {
+        private void anchor(SkillActionContext context, LivingEntity mover) {
             if (anchor.isEmpty()) {
                 return;
             }
@@ -686,25 +684,25 @@ public final class SkillFeatures {
     }
 
     public record Anchor(
-            ExecutionSubject subject,
+            ActionSubject subject,
             AnchorAction action,
             Identifier anchor,
             ScaledValue duration
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Anchor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.CASTER).forGetter(Anchor::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(Anchor::subject),
                 AnchorAction.CODEC.fieldOf("action").forGetter(Anchor::action),
                 Identifier.CODEC.fieldOf("anchor").forGetter(Anchor::anchor),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("duration", ScaledValue.constant(0.0D)).forGetter(Anchor::duration)
         ).apply(instance, Anchor::new));
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.ANCHOR.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.ANCHOR.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             if (action == AnchorAction.CLEAR) {
                 MovementService.removeAnchor(context.caster(), anchor);
             } else {
@@ -715,7 +713,7 @@ public final class SkillFeatures {
     }
 
     public record WeaponSwing(
-            ExecutionSubject subject,
+            ActionSubject subject,
             String vfxType,
             String color,
             Vec3 radius,
@@ -728,9 +726,9 @@ public final class SkillFeatures {
             Optional<Identifier> weaponTag,
             List<Identifier> classifications,
             Extras extras
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<WeaponSwing> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.CASTER).forGetter(WeaponSwing::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(WeaponSwing::subject),
                 Codec.STRING.optionalFieldOf("vfx_type", "sword_swing").forGetter(WeaponSwing::vfxType),
                 Codec.STRING.optionalFieldOf("color", "blue").forGetter(WeaponSwing::color),
                 CodecHelpers.VEC3.optionalFieldOf("radius", new Vec3(2.0D, 2.0D, 2.0D)).forGetter(WeaponSwing::radius),
@@ -760,12 +758,12 @@ public final class SkillFeatures {
         }
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.WEAPON_SWING.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.WEAPON_SWING.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             LivingEntity owner = context.entity(subject);
             if (owner == null) {
                 owner = context.caster();
@@ -866,7 +864,7 @@ public final class SkillFeatures {
     }
 
     public record Visual(
-            ExecutionSubject subject,
+            ActionSubject subject,
             DefinitionRef<RuntimeVisualDefinition> definition,
             ScaledValue duration,
             boolean follow,
@@ -877,9 +875,9 @@ public final class SkillFeatures {
             ScaledValue primary,
             ScaledValue secondary,
             int stage
-    ) implements SkillExecutionFeature {
+    ) implements SkillAction {
         public static final MapCodec<Visual> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ExecutionSubject.CODEC.optionalFieldOf("subject", ExecutionSubject.ORIGIN).forGetter(Visual::subject),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.ORIGIN).forGetter(Visual::subject),
                 DefinitionRef.codec(RuntimeVisualDefinition.CODEC).fieldOf("definition").forGetter(Visual::definition),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("duration", ScaledValue.constant(20.0D)).forGetter(Visual::duration),
                 Codec.BOOL.optionalFieldOf("follow", false).forGetter(Visual::follow),
@@ -898,12 +896,12 @@ public final class SkillFeatures {
         }
 
         @Override
-        public CodecType<SkillExecutionFeature> getType() {
-            return AscensionSkillExecutionFeatureTypes.VISUAL.get();
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.VISUAL.get();
         }
 
         @Override
-        public void apply(SkillExecutionContext context) {
+        public void apply(SkillActionContext context) {
             Resolved<RuntimeVisualDefinition> resolved = SkillDefinitions.visual(context, definition);
             if (resolved == null) {
                 return;
@@ -1037,7 +1035,7 @@ public final class SkillFeatures {
             this.name = name;
         }
 
-        public List<Vec3> resolve(SkillExecutionContext context) {
+        public List<Vec3> resolve(SkillActionContext context) {
             Vec3 caster = context.caster().position().add(0.0D, context.caster().getBbHeight() * 0.5D, 0.0D);
             return switch (this) {
                 case NONE -> List.of();

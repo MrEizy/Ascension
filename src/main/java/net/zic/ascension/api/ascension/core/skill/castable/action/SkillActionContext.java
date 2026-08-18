@@ -1,4 +1,4 @@
-package net.zic.ascension.api.ascension.core.skill.castable.feature;
+package net.zic.ascension.api.ascension.core.skill.castable.action;
 
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.minecraft.resources.Identifier;
@@ -10,7 +10,7 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 
 import java.util.Map;
 
-public record SkillExecutionContext(
+public record SkillActionContext(
         ServerLevel level,
         LivingEntity caster,
         Identifier skill,
@@ -18,28 +18,28 @@ public record SkillExecutionContext(
         Vec3 position,
         double charge,
         Map<Identifier, Double> variables,
-        SkillExecutionAttribution attribution
+        SkillActionAttribution attribution
 ) {
-    public SkillExecutionContext(ServerLevel level, LivingEntity caster, Identifier skill, LivingEntity target, Vec3 position, double charge, Map<Identifier, Double> variables) {
-        this(level, caster, skill, target, position, charge, variables, SkillExecutionAttribution.direct(caster));
+    public SkillActionContext(ServerLevel level, LivingEntity caster, Identifier skill, LivingEntity target, Vec3 position, double charge, Map<Identifier, Double> variables) {
+        this(level, caster, skill, target, position, charge, variables, SkillActionAttribution.direct(caster));
     }
 
-    public SkillExecutionContext {
+    public SkillActionContext {
         position = position == null
                 ? caster.position().add(0.0D, caster.getBbHeight() * 0.5D, 0.0D)
                 : position;
         charge = Double.isFinite(charge) ? Math.clamp(charge, 0.0D, 1.0D) : 0.0D;
         variables = variables == null ? Map.of() : Map.copyOf(variables);
-        attribution = attribution == null ? SkillExecutionAttribution.direct(caster) : attribution;
+        attribution = attribution == null ? SkillActionAttribution.direct(caster) : attribution;
     }
 
 
-    public LivingEntity entity(ExecutionSubject subject) {
-        return subject == ExecutionSubject.CASTER || subject == ExecutionSubject.ORIGIN ? caster : target;
+    public LivingEntity entity(ActionSubject subject) {
+        return subject == ActionSubject.CASTER || subject == ActionSubject.ORIGIN ? caster : target;
     }
 
-    public SkillExecutionContext retarget(LivingEntity entity, Vec3 resolvedPosition) {
-        return new SkillExecutionContext(
+    public SkillActionContext retarget(LivingEntity entity, Vec3 resolvedPosition) {
+        return new SkillActionContext(
                 level,
                 caster,
                 skill,

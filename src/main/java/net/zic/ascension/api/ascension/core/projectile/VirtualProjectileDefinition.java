@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.value.ScaledValue;
@@ -22,9 +22,9 @@ public record VirtualProjectileDefinition(
         TargetingDefinition.Filter filter,
         Optional<Identifier> flightParticle,
         List<ProjectileBehavior> behaviors,
-        List<SkillExecutionFeature> onEntityHit,
-        List<SkillExecutionFeature> onBlockHit,
-        List<SkillExecutionFeature> onExpire,
+        List<SkillAction> onEntityHit,
+        List<SkillAction> onBlockHit,
+        List<SkillAction> onExpire,
         Optional<DefinitionRef<RuntimeVisualDefinition>> visual
 ) {
     public static final Codec<VirtualProjectileDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -33,17 +33,12 @@ public record VirtualProjectileDefinition(
             Codec.DOUBLE.optionalFieldOf("gravity", 0.0D).forGetter(VirtualProjectileDefinition::gravity),
             Codec.DOUBLE.optionalFieldOf("hit_radius", 0.3D).forGetter(VirtualProjectileDefinition::hitRadius),
             Codec.intRange(0, 64).optionalFieldOf("pierces", 0).forGetter(VirtualProjectileDefinition::pierces),
-            TargetingDefinition.Filter.CODEC.codec().optionalFieldOf("filter", TargetingDefinition.Filter.hostile())
-                    .forGetter(VirtualProjectileDefinition::filter),
+            TargetingDefinition.Filter.CODEC.codec().optionalFieldOf("filter", TargetingDefinition.Filter.hostile()).forGetter(VirtualProjectileDefinition::filter),
             Identifier.CODEC.optionalFieldOf("flight_particle").forGetter(VirtualProjectileDefinition::flightParticle),
-            ProjectileBehavior.CODEC.listOf().optionalFieldOf("behaviors", List.of())
-                    .forGetter(VirtualProjectileDefinition::behaviors),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_entity_hit", List.of())
-                    .forGetter(VirtualProjectileDefinition::onEntityHit),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_block_hit", List.of())
-                    .forGetter(VirtualProjectileDefinition::onBlockHit),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_expire", List.of())
-                    .forGetter(VirtualProjectileDefinition::onExpire),
+            ProjectileBehavior.CODEC.listOf().optionalFieldOf("behaviors", List.of()).forGetter(VirtualProjectileDefinition::behaviors),
+            SkillAction.CODEC.listOf().optionalFieldOf("on_entity_hit", List.of()).forGetter(VirtualProjectileDefinition::onEntityHit),
+            SkillAction.CODEC.listOf().optionalFieldOf("on_block_hit", List.of()).forGetter(VirtualProjectileDefinition::onBlockHit),
+            SkillAction.CODEC.listOf().optionalFieldOf("on_expire", List.of()).forGetter(VirtualProjectileDefinition::onExpire),
             DefinitionRef.codec(RuntimeVisualDefinition.CODEC).optionalFieldOf("visual").forGetter(VirtualProjectileDefinition::visual)
     ).apply(instance, VirtualProjectileDefinition::new));
 
