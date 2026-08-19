@@ -1,0 +1,15 @@
+{
+  "feature": "ascension:verdant_moor_floor_scatter",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

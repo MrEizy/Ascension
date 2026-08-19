@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:mapped",
+    "input": "ascension:terrain/mountain_axis",
+    "operation": "abs"
+  }
+}

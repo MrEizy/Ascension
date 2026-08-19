@@ -8,6 +8,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.biome.Biome;
 import net.zic.ascension.AscensionCraft;
 
 public class ModTags {
@@ -64,6 +65,19 @@ public class ModTags {
 
         private static TagKey<Item> createItemTag(String name) {
             return ItemTags.create(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
+        }
+    }
+
+    public static class Biomes {
+        public static final TagKey<Biome> MOUNTAIN_BIOMES = createTag("mountain_biomes");
+        public static final TagKey<Biome> FOOTHILL_BIOMES = createTag("foothill_biomes");
+        public static final TagKey<Biome> MOUNTAIN_SLOPE_BIOMES = createTag("mountain_slope_biomes");
+        public static final TagKey<Biome> MOUNTAIN_PEAK_BIOMES = createTag("mountain_peak_biomes");
+        public static final TagKey<Biome> FOREST_BIOMES = createTag("forest_biomes");
+        public static final TagKey<Biome> OPEN_COUNTRY_BIOMES = createTag("open_country_biomes");
+
+        private static TagKey<Biome> createTag(String name) {
+            return TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
         }
     }
 

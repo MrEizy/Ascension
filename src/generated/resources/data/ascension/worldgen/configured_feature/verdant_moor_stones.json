@@ -1,0 +1,13 @@
+{
+  "type": "ascension:surface_rock",
+  "config": {
+    "blocks": [
+      "minecraft:stone",
+      "minecraft:andesite",
+      "minecraft:mossy_cobblestone"
+    ],
+    "max_height": 1,
+    "max_radius": 2,
+    "min_radius": 1
+  }
+}

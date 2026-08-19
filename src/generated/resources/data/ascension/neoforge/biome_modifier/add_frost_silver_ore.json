@@ -9,7 +9,9 @@
     "minecraft:snowy_beach",
     "minecraft:frozen_ocean",
     "minecraft:frozen_river",
-    "minecraft:deep_frozen_ocean"
+    "minecraft:deep_frozen_ocean",
+    "ascension:azure_cloud_range",
+    "ascension:heavenreach_peaks"
   ],
   "features": "ascension:frost_silver_ore_placed",
   "step": "underground_ores"

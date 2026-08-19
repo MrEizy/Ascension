@@ -1,0 +1,16 @@
+{
+  "type": "ascension:clamp",
+  "input": {
+    "type": "minecraft:add",
+    "argument1": {
+      "type": "minecraft:y_clamped_gradient",
+      "from_value": 2.0,
+      "from_y": -64,
+      "to_value": -5.5,
+      "to_y": 416
+    },
+    "argument2": "ascension:terrain/base_height"
+  },
+  "max": 64.0,
+  "min": -64.0
+}

@@ -1,0 +1,10 @@
+{
+  "type": "ascension:surface_scatter",
+  "config": {
+    "blocks": [
+      "minecraft:dead_bush"
+    ],
+    "spread": 7,
+    "tries": 10
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:height_target",
+    "target_y": "ascension:terrain/surface_target_y"
+  }
+}
