@@ -18,6 +18,10 @@ public final class AscensionScaledValueSourceTypes {
             TYPES.add("constant", ScaledValueSources.Constant.CODEC);
     public static final DeferredHolder<CodecType<ScaledValue.Source>, CodecType<ScaledValue.Source>> MASTERY =
             TYPES.add("mastery", ScaledValueSources.Mastery.CODEC);
+    public static final DeferredHolder<CodecType<ScaledValue.Source>, CodecType<ScaledValue.Source>> LEVEL =
+            TYPES.add("level", ScaledValueSources.Level.CODEC);
+    public static final DeferredHolder<CodecType<ScaledValue.Source>, CodecType<ScaledValue.Source>> PATH_REALM_MULTIPLIER =
+            TYPES.add("path_realm_multiplier", ScaledValueSources.PathRealmMultiplier.CODEC);
     public static final DeferredHolder<CodecType<ScaledValue.Source>, CodecType<ScaledValue.Source>> CHARGE =
             TYPES.add("charge", ScaledValueSources.Charge.CODEC);
     public static final DeferredHolder<CodecType<ScaledValue.Source>, CodecType<ScaledValue.Source>> STAT =

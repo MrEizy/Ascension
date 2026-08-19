@@ -1,7 +1,6 @@
 package net.zic.ascension.impl.core.skill.passive;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
@@ -13,99 +12,101 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
+import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
-import net.zic.ascension.api.ascension.core.resource.ResourceModifiers;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkill;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkillData;
-import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Owner;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
-import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
-import net.zic.ascension.api.ascension.core.skill.PassiveModule;
+import net.zic.ascension.api.ascension.core.skill.passive.PassiveModifier;
+import net.zic.ascension.api.ascension.core.skill.passive.PassiveTrigger;
 import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 
-public class ResourceModifierPassiveSkill implements ProgressingSkill, Owner {
+public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
     private final Component name;
     private final Component description;
+    private final int levels;
     private final int defaultAccessibleLevel;
-    private final List<Level> levels;
     private final List<Double> experienceRequirements;
+    private final List<PassiveModifier> modifiers;
+    private final List<PassiveTrigger> triggers;
     private final SkillDefinitions definitions;
     private final boolean enabledByDefault;
     private final Optional<Upkeep> upkeep;
 
-    public ResourceModifierPassiveSkill(
+    protected PassiveSkill(
             Component name,
             Component description,
+            int levels,
             int defaultAccessibleLevel,
-            List<LevelTemplate> templates,
-            List<PassiveModule> rootModules,
-            SkillDefinitions definitions,
             List<Double> experienceRequirements,
-            boolean toggleable,
+            List<PassiveModifier> modifiers,
+            List<PassiveTrigger> triggers,
+            SkillDefinitions definitions,
             boolean enabledByDefault,
             Optional<Upkeep> upkeep
     ) {
         this.name = name;
         this.description = description;
-        this.levels = resolveLevels(templates, rootModules);
-        this.defaultAccessibleLevel = Math.clamp(
-                defaultAccessibleLevel <= 0 ? 1 : defaultAccessibleLevel,
-                1,
-                this.levels.size()
-        );
-        this.definitions = definitions == null ? SkillDefinitions.EMPTY : definitions;
+        this.levels = Math.max(1, levels);
+        this.defaultAccessibleLevel = Math.clamp(defaultAccessibleLevel <= 0 ? 1 : defaultAccessibleLevel, 1, this.levels);
         this.experienceRequirements = experienceRequirements == null
                 ? List.of()
                 : experienceRequirements.stream().map(value -> Math.max(0.0D, value)).toList();
+        this.modifiers = modifiers == null ? List.of() : List.copyOf(modifiers);
+        this.triggers = triggers == null ? List.of() : List.copyOf(triggers);
+        this.definitions = definitions == null ? SkillDefinitions.EMPTY : definitions;
         this.enabledByDefault = enabledByDefault;
         this.upkeep = upkeep == null ? Optional.empty() : upkeep;
     }
 
-    public static ResourceModifierPassiveSkill create(
+    public static PassiveSkill create(
             Component name,
             Component description,
+            int levels,
             int defaultAccessibleLevel,
-            List<LevelTemplate> templates,
-            List<PassiveModule> rootModules,
-            SkillDefinitions definitions,
             List<Double> experienceRequirements,
+            List<PassiveModifier> modifiers,
+            List<PassiveTrigger> triggers,
+            SkillDefinitions definitions,
             boolean toggleable,
             boolean enabledByDefault,
             Optional<Upkeep> upkeep
     ) {
         return toggleable
-                ? new Toggleable(name, description, defaultAccessibleLevel, templates, rootModules, definitions, experienceRequirements, enabledByDefault, upkeep)
-                : new ResourceModifierPassiveSkill(name, description, defaultAccessibleLevel, templates, rootModules, definitions, experienceRequirements, false, true, Optional.empty());
+                ? new Toggleable(name, description, levels, defaultAccessibleLevel, experienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep)
+                : new PassiveSkill(name, description, levels, defaultAccessibleLevel, experienceRequirements, modifiers, triggers, definitions, true, Optional.empty());
+    }
+
+    public int getConfiguredLevels() {
+        return levels;
     }
 
     public int getConfiguredDefaultAccessibleLevel() {
         return defaultAccessibleLevel;
     }
 
-    public List<Level> getLevels() {
-        return levels;
-    }
-
-    public List<LevelTemplate> getLevelTemplates() {
-        return levels.stream().map(level -> new LevelTemplate(Optional.of(level.modules()))).toList();
-    }
-
     public List<Double> getExperienceRequirements() {
         return experienceRequirements;
+    }
+
+    public List<PassiveModifier> modifiers() {
+        return modifiers;
+    }
+
+    public List<PassiveTrigger> triggers() {
+        return triggers;
     }
 
     @Override
@@ -125,44 +126,13 @@ public class ResourceModifierPassiveSkill implements ProgressingSkill, Owner {
         return upkeep;
     }
 
-    public List<PassiveModule> modules(int level) {
-        if (levels.isEmpty()) {
-            return List.of();
-        }
-        int resolved = Math.clamp(level <= 0 ? 1 : level, 1, levels.size());
-        return levels.get(resolved - 1).modules();
-    }
-
-    public List<ResourceModifiers.Definition> getModifiers(int level) {
-        List<ResourceModifiers.Definition> values = new ArrayList<>();
-        for (PassiveModule module : modules(level)) {
-            if (module instanceof PassiveModules.Resources resources) {
-                values.addAll(resources.modifiers());
-            }
-        }
-        return List.copyOf(values);
-    }
-
-    public List<PassiveModules.Defense> defenses(int level) {
-        return modules(level).stream()
-                .filter(PassiveModules.Defense.class::isInstance)
-                .map(PassiveModules.Defense.class::cast)
-                .toList();
-    }
-
-    public List<net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition> projectileProfiles(int level) {
-        List<net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition> values = new ArrayList<>();
-        for (PassiveModule module : modules(level)) {
-            if (module instanceof PassiveModules.Projectiles projectiles) {
-                values.addAll(projectiles.profiles());
-            }
-        }
-        return List.copyOf(values);
+    public boolean isActive(SkillData data) {
+        return !(this instanceof Toggleable) || data instanceof Data passiveData && passiveData.isEnabled();
     }
 
     @Override
     public int getMaximumProgression() {
-        return levels.size();
+        return levels;
     }
 
     @Override
@@ -177,32 +147,28 @@ public class ResourceModifierPassiveSkill implements ProgressingSkill, Owner {
 
     @Override
     public double getExperienceRequiredForNextProgression(int currentLevel) {
-        return currentLevel < 0 || currentLevel >= experienceRequirements.size()
+        int index = currentLevel - 1;
+        return index < 0 || index >= experienceRequirements.size()
                 ? Double.POSITIVE_INFINITY
-                : experienceRequirements.get(currentLevel);
+                : experienceRequirements.get(index);
     }
 
     @Override
-    public void onProgressionChanged(
-            OriginSource source,
-            ProgressingSkillData data,
-            int previousProgression,
-            int currentProgression
-    ) {
-        if (!active(data) || previousProgression == currentProgression) {
+    public void onProgressionChanged(OriginSource source, ProgressingSkillData data, int previousProgression, int currentProgression) {
+        if (!isActive(data) || previousProgression == currentProgression) {
             return;
         }
         Identifier skillId = skillId(source);
         if (skillId == null) {
             return;
         }
-        modules(previousProgression).forEach(module -> module.remove(source, skillId));
-        modules(currentProgression).forEach(module -> module.apply(source, skillId));
+        modifiers.forEach(modifier -> modifier.remove(source, skillId));
+        modifiers.forEach(modifier -> modifier.apply(source, skillId));
     }
 
     @Override
     public SkillType getType() {
-        return AscensionSkillTypes.RESOURCE_MODIFIER_PASSIVE_SKILL_TYPE.get();
+        return AscensionSkillTypes.PASSIVE_SKILL_TYPE.get();
     }
 
     @Override
@@ -217,15 +183,15 @@ public class ResourceModifierPassiveSkill implements ProgressingSkill, Owner {
 
     @Override
     public void onAdded(OriginSource source, SkillData data) {
-        if (active(data)) {
-            applyModules(source, data);
+        if (isActive(data)) {
+            applyModifiers(source);
         }
     }
 
     @Override
     public void onRemoved(OriginSource source, SkillData data) {
-        if (active(data)) {
-            removeModules(source, data);
+        if (isActive(data)) {
+            removeModifiers(source);
         }
     }
 
@@ -252,62 +218,22 @@ public class ResourceModifierPassiveSkill implements ProgressingSkill, Owner {
         return new Data(buf);
     }
 
-    protected boolean active(SkillData data) {
-        return !(this instanceof Toggleable) || data instanceof Data passiveData && passiveData.isEnabled();
+    protected void applyModifiers(OriginSource source) {
+        Identifier skillId = skillId(source);
+        if (skillId != null) {
+            modifiers.forEach(modifier -> modifier.apply(source, skillId));
+        }
     }
 
-    protected void applyModules(OriginSource source, SkillData data) {
+    protected void removeModifiers(OriginSource source) {
         Identifier skillId = skillId(source);
-        if (skillId == null) {
-            return;
+        if (skillId != null) {
+            modifiers.forEach(modifier -> modifier.remove(source, skillId));
         }
-        int level = SkillProgressionResolver.resolve(source, skillId).effectiveProgression();
-        modules(level).forEach(module -> module.apply(source, skillId));
-    }
-
-    protected void removeModules(OriginSource source, SkillData data) {
-        Identifier skillId = skillId(source);
-        if (skillId == null) {
-            return;
-        }
-        int level = SkillProgressionResolver.resolve(source, skillId).effectiveProgression();
-        modules(level).forEach(module -> module.remove(source, skillId));
     }
 
     private Identifier skillId(OriginSource source) {
         return CoreRegistries.SKILL_REGISTRY.get(source.getRegistryAccess()).getKey(this);
-    }
-
-    private static List<Level> resolveLevels(List<LevelTemplate> templates, List<PassiveModule> rootModules) {
-        List<PassiveModule> current = rootModules == null ? List.of() : List.copyOf(rootModules);
-        List<Level> resolved = new ArrayList<>();
-        if (templates == null || templates.isEmpty()) {
-            resolved.add(new Level(current));
-            return List.copyOf(resolved);
-        }
-        for (LevelTemplate template : templates) {
-            if (template != null && template.modules().isPresent()) {
-                current = List.copyOf(template.modules().get());
-            }
-            resolved.add(new Level(current));
-        }
-        return List.copyOf(resolved);
-    }
-
-    public record Level(List<PassiveModule> modules) {
-        public Level {
-            modules = modules == null ? List.of() : List.copyOf(modules);
-        }
-    }
-
-    public record LevelTemplate(Optional<List<PassiveModule>> modules) {
-        public static final MapCodec<LevelTemplate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                PassiveModule.CODEC.listOf().optionalFieldOf("modules").forGetter(LevelTemplate::modules)
-        ).apply(instance, LevelTemplate::new));
-
-        public LevelTemplate {
-            modules = modules == null ? Optional.empty() : modules.map(List::copyOf);
-        }
     }
 
     public record Upkeep(
@@ -326,19 +252,20 @@ public class ResourceModifierPassiveSkill implements ProgressingSkill, Owner {
         ).apply(instance, Upkeep::new));
     }
 
-    private static final class Toggleable extends ResourceModifierPassiveSkill implements ToggleableSkill {
+    private static final class Toggleable extends PassiveSkill implements ToggleableSkill {
         private Toggleable(
                 Component name,
                 Component description,
+                int levels,
                 int defaultAccessibleLevel,
-                List<LevelTemplate> templates,
-                List<PassiveModule> rootModules,
-                SkillDefinitions definitions,
                 List<Double> experienceRequirements,
+                List<PassiveModifier> modifiers,
+                List<PassiveTrigger> triggers,
+                SkillDefinitions definitions,
                 boolean enabledByDefault,
                 Optional<Upkeep> upkeep
         ) {
-            super(name, description, defaultAccessibleLevel, templates, rootModules, definitions, experienceRequirements, true, enabledByDefault, upkeep);
+            super(name, description, levels, defaultAccessibleLevel, experienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep);
         }
 
         @Override
@@ -360,12 +287,12 @@ public class ResourceModifierPassiveSkill implements ProgressingSkill, Owner {
 
         @Override
         public void onEnabled(OriginSource source, SkillData data) {
-            applyModules(source, data);
+            applyModifiers(source);
         }
 
         @Override
         public void onDisabled(OriginSource source, SkillData data) {
-            removeModules(source, data);
+            removeModifiers(source);
         }
 
         @Override
@@ -427,21 +354,20 @@ public class ResourceModifierPassiveSkill implements ProgressingSkill, Owner {
         }
 
         @Override
-        public void write(ValueOutput output,RegistryAccess access) {
+        public void write(ValueOutput output, RegistryAccess access) {
             progression.write(output.child("progression"));
             output.putBoolean("enabled", enabled);
         }
 
         @Override
-        public void encode(ByteBuf buf,RegistryAccess access) {
+        public void encode(ByteBuf buf, RegistryAccess access) {
             progression.encode(buf);
             buf.writeBoolean(enabled);
         }
 
         @Override
         public SkillType getType() {
-            return AscensionSkillTypes.RESOURCE_MODIFIER_PASSIVE_SKILL_TYPE.get();
+            return AscensionSkillTypes.PASSIVE_SKILL_TYPE.get();
         }
     }
-
 }

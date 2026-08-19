@@ -14,10 +14,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.ascension.core.resource.ResourceModifiers;
-import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
-import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.event.resource.ResourceTransactionEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -25,8 +22,8 @@ import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.effect.FrozenStateService;
 import net.zic.ascension.impl.core.effect.SkillEffectManager;
 import net.zic.ascension.impl.core.effect.SkillEffectModules;
-import net.zic.ascension.impl.core.skill.passive.ResourceModifierPassiveSkill;
-import net.zic.ascension.impl.core.skill.passive.ResourceModifierPassiveSkill.Data;
+import net.zic.ascension.impl.core.skill.passive.PassiveModifiers;
+import net.zic.ascension.impl.core.skill.passive.PassiveSkillService;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class SkillRuntimeEvents {
@@ -71,18 +68,11 @@ public final class SkillRuntimeEvents {
             return;
         }
         OriginSource source = entityData.getSource();
-        for (Identifier skillId : AscensionOriginSourceHelper.getSkills(source)) {
-            Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, source.getRegistryAccess());
-            SkillData skillData = AscensionOriginSourceHelper.getSkillData(source, skillId);
-            if (!(skill instanceof ResourceModifierPassiveSkill passive)
-                    || !(skillData instanceof Data passiveData)
-                    || passive instanceof net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill && !passiveData.isEnabled()) {
-                continue;
-            }
-            int level = SkillProgressionResolver.resolve(source, skillId).effectiveProgression();
-            for (ResourceModifiers.Definition definition : passive.getModifiers(level)) {
+        for (PassiveSkillService.Entry<PassiveModifiers.Resources> entry
+                : PassiveSkillService.modifiers(source, source.getRegistryAccess(), PassiveModifiers.Resources.class)) {
+            for (ResourceModifiers.Definition definition : entry.modifier().modifiers()) {
                 if (definition.matches(event.getContext())) {
-                    event.getCollector().add(definition.resolve(event.getContext(), source, skillId));
+                    event.getCollector().add(definition.resolve(event.getContext(), source, entry.skillId()));
                 }
             }
         }

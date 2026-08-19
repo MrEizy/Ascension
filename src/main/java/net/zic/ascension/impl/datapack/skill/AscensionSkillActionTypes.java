@@ -8,7 +8,7 @@ import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.api.ascension.datapack.ExtensionTypeRegistry;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.impl.core.skill.castable.SkillActions;
-import net.zic.ascension.impl.core.skill.passive.PassiveModules;
+import net.zic.ascension.impl.core.skill.passive.PassiveModifiers;
 import net.zic.ascension.impl.core.effect.AscensionBuildupChannels;
 
 public final class AscensionSkillActionTypes {
@@ -42,7 +42,7 @@ public final class AscensionSkillActionTypes {
 
     public static void register(IEventBus eventBus) {
         TYPES.register(eventBus);
-        PassiveModules.register(eventBus);
+        PassiveModifiers.register(eventBus);
         AscensionBuildupChannels.register(eventBus);
     }
 }

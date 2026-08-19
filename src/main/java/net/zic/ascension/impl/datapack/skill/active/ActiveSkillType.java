@@ -1,4 +1,4 @@
-package net.zic.ascension.impl.datapack.skill;
+package net.zic.ascension.impl.datapack.skill.active;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;

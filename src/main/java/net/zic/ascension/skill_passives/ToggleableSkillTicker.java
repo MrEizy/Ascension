@@ -11,10 +11,9 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-
 
 import java.util.List;
 import java.util.Map;
@@ -29,44 +28,33 @@ public final class ToggleableSkillTicker {
 
     @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Pre event) {
-        if (!(event.getEntity() instanceof LivingEntity entity)
-                || entity.level().isClientSide()) {
+        if (!(event.getEntity() instanceof LivingEntity entity) || entity.level().isClientSide()) {
             return;
         }
-
-        AscensionEntityDataProvider holder = entity.getCapability(
-                CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
-        );
+        AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if (holder == null) {
             return;
         }
-
-        OriginSource originSource = holder.getData().getSource();
-        if (entity.level().isClientSide()) return;
-
+        OriginSource source = holder.getData().getSource();
         long gameTime = entity.level().getGameTime();
-        if (LAST_SOURCE_TICK.getOrDefault(originSource, Long.MIN_VALUE) == gameTime) {
+        if (LAST_SOURCE_TICK.getOrDefault(source, Long.MIN_VALUE) == gameTime) {
             return;
         }
-        LAST_SOURCE_TICK.put(originSource, gameTime);
+        LAST_SOURCE_TICK.put(source, gameTime);
 
-        for (Identifier skillId : List.copyOf(AscensionOriginSourceHelper.getSkills(originSource))) {
-            Skill skill = CoreRegistries.safeAccess(
-                    CoreRegistries.SKILL_REGISTRY,
-                    skillId,
-                    entity.registryAccess()
-            );
-            SkillData data = AscensionOriginSourceHelper.getSkillData(originSource,skillId);
-
-            if (!(skill instanceof ToggleableSkill toggleable)
-                    || data == null
-                    || !toggleable.isEnabled(data)) {
+        for (Identifier skillId : List.copyOf(AscensionOriginSourceHelper.getSkills(source))) {
+            Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, entity.registryAccess());
+            SkillData data = AscensionOriginSourceHelper.getSkillData(source, skillId);
+            if (!(skill instanceof ToggleableSkill toggleable) || data == null || !toggleable.isEnabled(data)) {
                 continue;
             }
-
-            if (!toggleable.tickEnabled(entity, originSource, data)) {
-                //TODO need to add skill enable @SortOfSmart?
+            if (toggleable.tickEnabled(entity, source, data)) {
+                continue;
             }
+            toggleable.onDisabled(source, data);
+            toggleable.removeEnabledFromEntity(entity, data);
+            toggleable.setEnabled(data, false);
+            AscensionOriginSourceHelper.markSkillDirty(source, skillId);
         }
     }
 }

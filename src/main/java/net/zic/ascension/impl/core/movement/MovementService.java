@@ -49,7 +49,19 @@ public final class MovementService {
 
         Vec3 velocity = entity.getDeltaMovement();
         if (entity instanceof ServerPlayer player) {
-            player.teleportTo(level, destination.x, destination.y, destination.z, Set.of(), player.getYRot(), player.getXRot(), false);
+            boolean moved = player.teleportTo(
+                    level,
+                    destination.x,
+                    destination.y,
+                    destination.z,
+                    Set.of(),
+                    player.getYRot(),
+                    player.getXRot(),
+                    true
+            );
+            if (!moved) {
+                return Result.failure(origin, destination, FailureReason.TELEPORT_REJECTED);
+            }
         } else {
             entity.teleportTo(destination.x, destination.y, destination.z);
         }
@@ -148,6 +160,7 @@ public final class MovementService {
         WRONG_DIMENSION,
         UNLOADED_DESTINATION,
         BLOCKED_DESTINATION,
+        TELEPORT_REJECTED,
         INVALID_DIRECTION,
         NO_MOVEMENT
     }

@@ -1,65 +1,112 @@
 {
-  "type": "ascension:resource_modifier_passive",
+  "type": "ascension:passive",
   "name": "Spear Mastery",
   "description": "Extends spear intent into a narrow piercing line.",
-  "default_accessible_level": 1,
-  "modules": [
-    {
-      "type": "ascension:weapon_swing",
-      "path": "ascension:weapon/spear",
-      "weapon_tag": "ascension:weapon/spears",
-      "vfx_type": "spear_particle",
-      "fallback_color": "simple_purple",
-      "technique_colors": {
-        "ascension:2_profound/mount_hua_sword_manual": "simple_red",
-        "ascension:1_ordinary/sustained_spirit_art": "simple_purple",
-        "ascension:3_heaven/celestial_constellation_circulation": "super_blue",
-        "ascension:3_heaven/guardian_dharma_manual": "simple_blue",
-        "ascension:bug_tester_manual": "simple_purple",
-        "ascension:example_technique": "simple_green"
-      },
-      "radius": [
-        0.8,
-        0.8,
-        4.5
-      ],
-      "base_damage": 6.0,
-      "knockback": 1.0,
-      "duration": 6,
-      "rotation_z": 0.0,
-      "movement": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "qi_cost": 1.5,
-      "minimum_interval": 1,
-      "realm_scaling": {
-        "base_bonus": 0.1,
-        "bonus_per_major_realm": 0.22,
-        "bonus_per_minor_realm": 0.025,
-        "maximum_bonus": 5.0
-      },
-      "classifications": [
-        "ascension:skill",
-        "ascension:melee",
-        "ascension:weapon",
-        "ascension:spear"
-      ],
-      "hit_shape": "ray",
-      "priority": 10
-    },
+  "modifiers": [
     {
       "type": "ascension:weapon_damage",
-      "path": "ascension:weapon/spear",
       "weapon_tag": "ascension:weapon/spears",
       "match": "held_weapon",
-      "realm_scaling": {
-        "base_bonus": 0.1,
-        "bonus_per_major_realm": 0.22,
-        "bonus_per_minor_realm": 0.025,
-        "maximum_bonus": 5.0
+      "multiplier": {
+        "base": 1.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:path_realm_multiplier",
+              "path": "ascension:weapon/spear",
+              "base_bonus": 0.1,
+              "bonus_per_major_realm": 0.22,
+              "bonus_per_minor_realm": 0.025,
+              "maximum_bonus": 5.0
+            },
+            "operation": "multiply"
+          }
+        ]
       }
+    }
+  ],
+  "triggers": [
+    {
+      "event": "attack",
+      "weapon_tag": "ascension:weapon/spears",
+      "allow_empty_hand": false,
+      "cooldown": 1,
+      "priority": 10,
+      "costs": [
+        {
+          "resource": "ascension:qi",
+          "source": "ascension:skill_casting",
+          "amount": {
+            "base": 1.5,
+            "terms": [
+              {
+                "source": {
+                  "type": "ascension:path_realm_multiplier",
+                  "path": "ascension:weapon/spear",
+                  "base_bonus": 0.1,
+                  "bonus_per_major_realm": 0.22,
+                  "bonus_per_minor_realm": 0.025,
+                  "maximum_bonus": 5.0
+                },
+                "operation": "multiply"
+              }
+            ]
+          }
+        }
+      ],
+      "actions": [
+        {
+          "type": "ascension:weapon_swing",
+          "vfx_type": "spear_particle",
+          "color": "simple_purple",
+          "technique_colors": {
+            "ascension:2_profound/mount_hua_sword_manual": "simple_red",
+            "ascension:1_ordinary/sustained_spirit_art": "simple_purple",
+            "ascension:3_heaven/celestial_constellation_circulation": "super_blue",
+            "ascension:3_heaven/guardian_dharma_manual": "simple_blue",
+            "ascension:bug_tester_manual": "simple_purple",
+            "ascension:example_technique": "simple_green"
+          },
+          "radius": [
+            0.8,
+            0.8,
+            4.5
+          ],
+          "damage": {
+            "base": 6.0,
+            "terms": [
+              {
+                "source": {
+                  "type": "ascension:path_realm_multiplier",
+                  "path": "ascension:weapon/spear",
+                  "base_bonus": 0.1,
+                  "bonus_per_major_realm": 0.22,
+                  "bonus_per_minor_realm": 0.025,
+                  "maximum_bonus": 5.0
+                },
+                "operation": "multiply"
+              }
+            ]
+          },
+          "knockback": 1.0,
+          "duration": 6,
+          "rotation_z": 0.0,
+          "movement": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "path": "ascension:weapon/spear",
+          "weapon_tag": "ascension:weapon/spears",
+          "classifications": [
+            "ascension:skill",
+            "ascension:melee",
+            "ascension:weapon",
+            "ascension:spear"
+          ],
+          "hit_shape": "ray"
+        }
+      ]
     }
   ]
 }

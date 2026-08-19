@@ -13,8 +13,7 @@ import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineGatherDamageTypesEvent;
 import net.zic.ascension.impl.core.damage.AscensionDamageProfileResolver;
 import net.zic.ascension.impl.core.damage.DamageTrace;
-import net.zic.ascension.impl.core.skill.passive.PassiveDefenseService;
-import net.zic.ascension.impl.core.skill.passive.WeaponMasteryDamageService;
+import net.zic.ascension.impl.core.skill.passive.PassiveCombatService;
 import net.zic.ascension.impl.runtime.object.Barriers;
 import net.zic.ascension.impl.runtime.object.OwnerBoundConstructs;
 import net.zic.ascension.impl.runtime.projectile.NormalProjectileService;
@@ -68,7 +67,7 @@ public final class AscensionDamageHandler {
             return;
         }
 
-        double masteryMultiplier = WeaponMasteryDamageService.resolveMultiplier(event);
+        double masteryMultiplier = PassiveCombatService.outgoingDamageMultiplier(event);
         if (Double.isFinite(masteryMultiplier) && masteryMultiplier > 0.0D) {
             event.setDamage(event.getDamage() * masteryMultiplier);
             trace.multiply("Weapon mastery", masteryMultiplier);
@@ -78,7 +77,7 @@ public final class AscensionDamageHandler {
         }
 
         double beforeDefense = event.getDamage();
-        event.setDamage(PassiveDefenseService.resolveDamage(event, beforeDefense));
+        event.setDamage(PassiveCombatService.incomingDamage(event, beforeDefense));
         trace.transition("Passive defense", beforeDefense, event.getDamage());
         if (finishIfResolved(event, trace)) {
             return;

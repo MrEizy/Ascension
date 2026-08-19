@@ -7,6 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastData;
@@ -17,7 +18,6 @@ import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.impl.core.skill.SimplePassiveSkill;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.cooldown.EntityCooldownHandler;
@@ -143,16 +143,30 @@ public record DebugCastable(String message,int cooldown,UUID uuid) implements Ca
 
     @Override
     public SkillData newData(RegistryAccess access) {
-        return new SimplePassiveSkill.EmptyData();
+        return new EmptyData();
     }
 
     @Override
     public SkillData loadData(ValueInput input,RegistryAccess access) {
-        return new SimplePassiveSkill.EmptyData();
+        return new EmptyData();
     }
 
     @Override
     public SkillData loadData(ByteBuf buf) {
-        return new SimplePassiveSkill.EmptyData();
+        return new EmptyData();
+    }
+    public static final class EmptyData implements SkillData {
+        @Override
+        public SkillType getType() {
+            return AscensionSkillTypes.DEBUG_CASTABLE_TYPE.get();
+        }
+
+        @Override
+        public void write(ValueOutput output, RegistryAccess access) {
+        }
+
+        @Override
+        public void encode(ByteBuf buf, RegistryAccess access) {
+        }
     }
 }

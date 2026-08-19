@@ -21,14 +21,11 @@ import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
 import net.zic.ascension.api.ascension.core.control.StaggerDefinition;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
-import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
-import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
-import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
-import net.zic.ascension.impl.core.skill.passive.ResourceModifierPassiveSkill;
+import net.zic.ascension.impl.core.skill.passive.PassiveModifiers;
+import net.zic.ascension.impl.core.skill.passive.PassiveSkillService;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionAttribution;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
@@ -271,21 +268,15 @@ public final class NormalProjectileService {
             }
         }
         if (source != null) {
-            for (Identifier skillId : AscensionOriginSourceHelper.getSkills(source)) {
-                Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, level.registryAccess());
-                SkillData skillData = AscensionOriginSourceHelper.getSkillData(source, skillId);
-                if (!(skill instanceof ResourceModifierPassiveSkill passive) || !(skillData instanceof ResourceModifierPassiveSkill.Data passiveData) || passive instanceof ToggleableSkill && !passiveData.isEnabled()) {
-                    continue;
-                }
-                List<NormalProjectileDefinition> localProfiles = passive.projectileProfiles(
-                        SkillProgressionResolver.resolve(source, skillId).effectiveProgression()
-                );
+            for (PassiveSkillService.Entry<PassiveModifiers.Projectiles> entry
+                    : PassiveSkillService.modifiers(source, level.registryAccess(), PassiveModifiers.Projectiles.class)) {
+                List<NormalProjectileDefinition> localProfiles = entry.modifier().profiles();
                 for (int index = 0; index < localProfiles.size(); index++) {
                     NormalProjectileDefinition definition = localProfiles.get(index);
                     if (!matches(projectile, definition)) {
                         continue;
                     }
-                    Identifier profileId = SkillDefinitions.localId(skillId, "normal_projectile", "profile_" + index);
+                    Identifier profileId = SkillDefinitions.localId(entry.skillId(), "normal_projectile", "profile_" + index);
                     SkillDefinitions.remember(
                             NormalProjectileDefinition.class,
                             new Resolved<>(profileId, definition)

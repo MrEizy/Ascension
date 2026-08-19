@@ -28,7 +28,7 @@ import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.impl.core.damage.AscensionDamageService;
 import net.zic.ascension.impl.core.effect.SkillEffectService;
-import net.zic.ascension.impl.core.skill.passive.WeaponMasteryService;
+import net.zic.ascension.impl.core.skill.passive.PassiveTriggerService;
 import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
 
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public final class WeaponSwings {
     @SubscribeEvent
     public static void onServerStopped(ServerStoppedEvent event) {
         ACTIVE.clear();
-        WeaponMasteryService.clearRuntimeState();
+        PassiveTriggerService.clearRuntimeState();
     }
 
     private static boolean tick(ServerLevel level, Instance instance) {

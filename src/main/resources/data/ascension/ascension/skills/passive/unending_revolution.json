@@ -1,12 +1,12 @@
 {
-  "type": "ascension:resource_modifier_passive",
+  "type": "ascension:passive",
   "name": {
     "translate": "ascension.skill.unending_revolution.name"
   },
   "description": {
     "translate": "ascension.skill.unending_revolution.desc"
   },
-  "modules": [
+  "modifiers": [
     {
       "type": "ascension:stats",
       "stat_modifiers": {

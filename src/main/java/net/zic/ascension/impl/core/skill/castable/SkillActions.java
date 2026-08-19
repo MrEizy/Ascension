@@ -795,6 +795,7 @@ public final class SkillActions {
             ActionSubject subject,
             String vfxType,
             String color,
+            java.util.Map<Identifier, String> techniqueColors,
             Vec3 radius,
             ScaledValue damage,
             ScaledValue knockback,
@@ -810,6 +811,7 @@ public final class SkillActions {
                 ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(WeaponSwing::subject),
                 Codec.STRING.optionalFieldOf("vfx_type", "sword_swing").forGetter(WeaponSwing::vfxType),
                 Codec.STRING.optionalFieldOf("color", "blue").forGetter(WeaponSwing::color),
+                Codec.unboundedMap(Identifier.CODEC, Codec.STRING).optionalFieldOf("technique_colors", java.util.Map.of()).forGetter(WeaponSwing::techniqueColors),
                 CodecHelpers.VEC3.optionalFieldOf("radius", new Vec3(2.0D, 2.0D, 2.0D)).forGetter(WeaponSwing::radius),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("damage", ScaledValue.constant(4.0D)).forGetter(WeaponSwing::damage),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("knockback", ScaledValue.constant(1.0D)).forGetter(WeaponSwing::knockback),
@@ -825,6 +827,7 @@ public final class SkillActions {
         public WeaponSwing {
             vfxType = vfxType == null || vfxType.isBlank() ? "sword_swing" : vfxType;
             color = color == null || color.isBlank() ? "blue" : color;
+            techniqueColors = techniqueColors == null ? java.util.Map.of() : java.util.Map.copyOf(techniqueColors);
             radius = radius == null ? new Vec3(2.0D, 2.0D, 2.0D) : radius;
             damage = damage == null ? ScaledValue.constant(4.0D) : damage;
             knockback = knockback == null ? ScaledValue.constant(1.0D) : knockback;
@@ -858,7 +861,7 @@ public final class SkillActions {
                     pathId,
                     vfxType,
                     color,
-                    java.util.Map.of()
+                    techniqueColors
             );
             Optional<WeaponSwingSpec.HitEffect> hitEffect = extras.hitEffect().flatMap(effect -> {
                 Resolved<SkillEffectDefinition> resolved = SkillDefinitions.effect(context, effect.definition());
