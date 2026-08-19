@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.stillfrost_breathing.name"
   },
@@ -79,18 +79,13 @@
       }
     ]
   },
-  "targeting": {
-    "type": "ascension:self"
-  },
   "require_targets": false,
-  "features": [
+  "actions": [
     {
       "type": "ascension:cultivate",
       "path": "ascension:foundation/soul",
       "secondary_path": "ascension:elemental/ice",
-      "rate": {
-        "base": 1.5
-      }
+      "rate": 1.5
     }
   ]
 }

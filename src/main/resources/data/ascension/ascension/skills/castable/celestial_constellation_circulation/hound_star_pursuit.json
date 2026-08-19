@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.hound_star_pursuit.name"
   },
@@ -39,7 +39,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_stacks"
                   },
-                  "operation": "add",
                   "scale": 0.035
                 },
                 {
@@ -47,7 +46,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": 0.025
                 }
               ],
@@ -59,81 +57,40 @@
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:ray",
     "range": {
       "base": 24,
-      "terms": [
-        {
-          "source": {
-            "type": "ascension:mastery"
-          },
-          "operation": "add",
-          "scale": 6.0,
-          "offset": -6.0
-        }
-      ]
+      "per_mastery": 6.0
     },
     "width": {
       "base": 0.45,
-      "terms": [
-        {
-          "source": {
-            "type": "ascension:mastery"
-          },
-          "operation": "add",
-          "scale": 0.1,
-          "offset": -0.1
-        }
-      ]
+      "per_mastery": 0.1
     },
     "filter": {
       "relations": [
         "neutral",
         "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
+      ]
     }
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:sound",
       "sound": "minecraft:block.amethyst_block.chime",
       "volume": {
         "base": 0.8,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.1,
-            "offset": -0.1
-          }
-        ]
+        "per_mastery": 0.1
       },
       "pitch": {
         "base": 1.5,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.1,
-            "offset": -0.1
-          }
-        ]
+        "per_mastery": 0.1
       },
       "subject": "caster"
     },
     {
       "type": "ascension:visual",
-      "duration": {
-        "base": 12
-      },
+      "duration": 12,
       "points": "caster_to_target",
       "subject": "target",
       "visual": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/visual/link"
@@ -142,16 +99,7 @@
       "type": "ascension:visual",
       "duration": {
         "base": 240,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 80.0,
-            "offset": -80.0
-          }
-        ]
+        "per_mastery": 80.0
       },
       "follow": true,
       "subject": "target",
@@ -161,29 +109,11 @@
       "type": "ascension:effect",
       "duration": {
         "base": 240,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 80.0,
-            "offset": -80.0
-          }
-        ]
+        "per_mastery": 80.0
       },
       "potency": {
         "base": 1.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.2,
-            "offset": -0.2
-          }
-        ]
+        "per_mastery": 0.2
       },
       "definition": "#hound_star_mark",
       "subject": "target"
@@ -193,42 +123,15 @@
       "particle": "minecraft:end_rod",
       "count": {
         "base": 24,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 8.0,
-            "offset": -8.0
-          }
-        ]
+        "per_mastery": 8.0
       },
       "spread": {
         "base": 0.55,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.1,
-            "offset": -0.1
-          }
-        ]
+        "per_mastery": 0.1
       },
       "speed": {
         "base": 0.04,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.01,
-            "offset": -0.01
-          }
-        ]
+        "per_mastery": 0.01
       },
       "subject": "position"
     },
@@ -237,64 +140,24 @@
       "sound": "minecraft:entity.wolf.ambient",
       "volume": {
         "base": 0.5,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.1,
-            "offset": -0.1
-          }
-        ]
+        "per_mastery": 0.1
       },
       "pitch": {
         "base": 1.4,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.1,
-            "offset": -0.1
-          }
-        ]
+        "per_mastery": 0.1
       },
       "subject": "target"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 10,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 2.0,
-            "offset": -2.0
-          }
-        ]
-      },
-      "operation": "ascension:consume"
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 10,
+      "per_mastery": 2.0
     }
-  ],
+  },
   "cooldown": {
     "base": 80,
-    "terms": [
-      {
-        "source": {
-          "type": "ascension:mastery"
-        },
-        "operation": "add",
-        "scale": -20.0,
-        "offset": 20.0
-      }
-    ]
+    "per_mastery": -20.0
   }
 }

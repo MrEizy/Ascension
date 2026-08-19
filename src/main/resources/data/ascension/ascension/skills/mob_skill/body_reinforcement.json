@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Body Reinforcement",
   "description": "Briefly braces the body against incoming attacks.",
   "definitions": {
@@ -14,7 +14,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.45
             }
           ],
@@ -29,9 +28,7 @@
       }
     }
   },
-  "targeting": "self",
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:barrier",
       "action": "apply",
@@ -60,6 +57,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
   "cooldown": 180
 }

@@ -6,97 +6,6 @@
   "description": {
     "translate": "ascension.skill.orions_celestial_draw.desc"
   },
-  "definitions": {
-    "stagger": {
-      "heaven_piercing": {
-        "threshold": {
-          "base": 105.0,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:stat",
-                "stat": "ascension:vitality"
-              },
-              "operation": "add",
-              "scale": 2.0
-            },
-            {
-              "source": {
-                "type": "ascension:stat",
-                "stat": "ascension:strength"
-              },
-              "operation": "add",
-              "scale": 1.0
-            }
-          ],
-          "minimum": 50.0
-        },
-        "resistance": {
-          "base": 0.0,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:stat",
-                "stat": "ascension:vitality"
-              },
-              "operation": "add",
-              "scale": 0.0045
-            }
-          ],
-          "minimum": 0.0,
-          "maximum": 0.6
-        },
-        "decay_per_second": {
-          "base": 12.0,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:stat",
-                "stat": "ascension:vitality"
-              },
-              "operation": "add",
-              "scale": 0.15
-            }
-          ],
-          "minimum": 1.0
-        },
-        "decay_delay": 42,
-        "guard_break_duration": {
-          "base": 38.0
-        },
-        "immunity_duration": {
-          "base": 65.0
-        },
-        "movement_multiplier": 0.18,
-        "interrupt_held_casts": true,
-        "on_guard_break": [
-          {
-            "type": "ascension:particles",
-            "particle": "minecraft:crit",
-            "count": {
-              "base": 30.0
-            },
-            "spread": {
-              "base": 0.8
-            },
-            "speed": {
-              "base": 0.13
-            }
-          },
-          {
-            "type": "ascension:sound",
-            "sound": "minecraft:item.shield.break",
-            "volume": {
-              "base": 1.0
-            },
-            "pitch": {
-              "base": 1.1
-            }
-          }
-        ]
-      }
-    }
-  },
   "modifiers": [
     {
       "type": "ascension:stats",
@@ -131,7 +40,6 @@
                   "type": "ascension:stat",
                   "stat": "ascension:agility"
                 },
-                "operation": "add",
                 "scale": 0.002
               },
               {
@@ -139,7 +47,6 @@
                   "type": "ascension:stat",
                   "stat": "ascension:spirit"
                 },
-                "operation": "add",
                 "scale": 0.0015
               },
               {
@@ -148,7 +55,6 @@
                   "key": "ascension:projectile_charge",
                   "fallback": 0.0
                 },
-                "operation": "add",
                 "scale": 0.2
               },
               {
@@ -159,7 +65,6 @@
                   "metric": "stacks",
                   "aggregation": "sum"
                 },
-                "operation": "add",
                 "scale": 0.05
               }
             ],
@@ -167,14 +72,12 @@
             "maximum": 2.5
           },
           "bonus_damage": {
-            "base": 0.0,
             "terms": [
               {
                 "source": {
                   "type": "ascension:stat",
                   "stat": "ascension:spirit"
                 },
-                "operation": "add",
                 "scale": 0.08
               },
               {
@@ -182,7 +85,6 @@
                   "type": "ascension:stat",
                   "stat": "ascension:agility"
                 },
-                "operation": "add",
                 "scale": 0.06
               },
               {
@@ -192,9 +94,7 @@
                   "owner_scoped": true,
                   "metric": "stacks",
                   "aggregation": "sum"
-                },
-                "operation": "add",
-                "scale": 1.0
+                }
               }
             ],
             "minimum": 0.0,
@@ -221,7 +121,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.05
                 }
               ],
@@ -236,7 +135,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:agility"
                   },
-                  "operation": "add",
                   "scale": 0.0005
                 }
               ],
@@ -257,7 +155,6 @@
                     "key": "ascension:projectile_charge",
                     "fallback": 0.0
                   },
-                  "operation": "add",
                   "scale": 8.0
                 },
                 {
@@ -265,7 +162,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:agility"
                   },
-                  "operation": "add",
                   "scale": 0.025
                 },
                 {
@@ -273,7 +169,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.02
                 },
                 {
@@ -284,7 +179,6 @@
                     "metric": "stacks",
                     "aggregation": "sum"
                   },
-                  "operation": "add",
                   "scale": 2.0
                 }
               ],
@@ -296,5 +190,76 @@
         }
       ]
     }
-  ]
+  ],
+  "definitions": {
+    "stagger": {
+      "heaven_piercing": {
+        "threshold": {
+          "base": 105.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "scale": 2.0
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:strength"
+              }
+            }
+          ],
+          "minimum": 50.0
+        },
+        "resistance": {
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "scale": 0.0045
+            }
+          ],
+          "minimum": 0.0,
+          "maximum": 0.6
+        },
+        "decay_per_second": {
+          "base": 12.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "scale": 0.15
+            }
+          ],
+          "minimum": 1.0
+        },
+        "decay_delay": 42,
+        "guard_break_duration": 38.0,
+        "immunity_duration": 65.0,
+        "movement_multiplier": 0.18,
+        "interrupt_held_casts": true,
+        "on_guard_break": [
+          {
+            "type": "ascension:particles",
+            "particle": "minecraft:crit",
+            "count": 30.0,
+            "spread": 0.8,
+            "speed": 0.13
+          },
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:item.shield.break",
+            "volume": 1.0,
+            "pitch": 1.1
+          }
+        ]
+      }
+    }
+  }
 }

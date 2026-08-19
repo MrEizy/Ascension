@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Crushing Blow",
   "description": "A heavy close-range strike that builds stagger.",
   "definitions": {
@@ -17,38 +17,14 @@
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:radial",
     "radius": 4,
-    "maximum_targets": 1,
-    "sort": "nearest",
-    "filter": {
-      "relations": [
-        "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
-    }
+    "maximum_targets": 1
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:damage",
-      "amount": {
-        "base": 6.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:stat",
-              "stat": "ascension:strength"
-            },
-            "operation": "add",
-            "scale": 0.35
-          }
-        ],
-        "minimum": 0.0,
-        "maximum": 24.0
-      },
       "damage_type": "minecraft:mob_attack",
       "classifications": [
         "ascension:skill",
@@ -56,7 +32,13 @@
         "ascension:melee"
       ],
       "path": "ascension:foundation/body",
-      "subject": "target"
+      "subject": "target",
+      "base": 6.0,
+      "stats": {
+        "ascension:strength": 0.35
+      },
+      "minimum": 0.0,
+      "maximum": 24.0
     },
     {
       "type": "ascension:stagger",
@@ -81,6 +63,5 @@
       "subject": "target"
     }
   ],
-  "costs": [],
   "cooldown": 110
 }

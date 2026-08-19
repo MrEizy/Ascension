@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Ray Mark",
   "description": "Tests ray targeting and temporary effect stacking.",
   "definitions": {
@@ -35,7 +35,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_stacks"
                   },
-                  "operation": "add",
                   "scale": 0.03
                 }
               ],
@@ -47,77 +46,49 @@
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:ray",
-    "range": {
-      "base": 24
-    },
-    "width": {
-      "base": 0.4
-    },
+    "range": 24,
+    "width": 0.4,
     "filter": {
       "relations": [
         "ally",
         "neutral",
         "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
+      ]
     }
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:visual",
-      "duration": {
-        "base": 18
-      },
+      "duration": 18,
       "points": "caster_to_target",
-      "progress": {
-        "base": 1.0
-      },
+      "progress": 1.0,
       "subject": "target",
       "visual": "ascension:skill/debug/ray_mark/visual/link"
     },
     {
       "type": "ascension:effect",
-      "duration": {
-        "base": 200
-      },
-      "potency": {
-        "base": 1
-      },
+      "duration": 200,
+      "potency": 1,
       "definition": "#calibration_mark",
       "subject": "target"
     },
     {
       "type": "ascension:particles",
       "particle": "minecraft:end_rod",
-      "count": {
-        "base": 18
-      },
-      "spread": {
-        "base": 0.45
-      },
-      "speed": {
-        "base": 0.03
-      },
+      "count": 18,
+      "spread": 0.45,
+      "speed": 0.03,
       "subject": "position"
     },
     {
       "type": "ascension:sound",
       "sound": "minecraft:block.amethyst_cluster.hit",
-      "volume": {
-        "base": 0.8
-      },
-      "pitch": {
-        "base": 1.4
-      },
+      "volume": 0.8,
+      "pitch": 1.4,
       "subject": "target"
     }
   ],
-  "costs": [],
-  "cooldown": {
-    "base": 10
-  }
+  "cooldown": 10
 }

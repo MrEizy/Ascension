@@ -1,15 +1,10 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Fist Projection",
   "description": "Fires condensed fist force",
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:weapon_swing",
-      "subject": "caster",
       "vfx_type": "fist_punch",
       "color": "super_blue",
       "radius": [
@@ -20,13 +15,8 @@
       "damage": {
         "base": 9.0
       },
-      "knockback": {
-        "base": 1.4
-      },
-      "duration": {
-        "base": 40.0
-      },
-      "rotation_z": 0.0,
+      "knockback": 1.4,
+      "duration": 40.0,
       "movement": [
         0.0,
         0.0,
@@ -52,17 +42,9 @@
       "allow_empty_hand": true
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "operation": "ascension:consume",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 70.0
-      }
-    }
-  ],
-  "cooldown": {
-    "base": 160.0
-  }
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 70.0
+  },
+  "cooldown": 160.0
 }

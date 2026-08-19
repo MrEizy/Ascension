@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.sevenfold_celestial_hunt.name"
   },
@@ -10,93 +10,35 @@
     "fields": {
       "field": {
         "shape": "cylinder",
-        "radius": {
-          "base": 7.0
-        },
-        "height": {
-          "base": 6.0
-        },
-        "duration": {
-          "base": 240
-        },
+        "radius": 7.0,
+        "height": 6.0,
+        "duration": 240,
         "tick_interval": 10,
         "filter": {
           "relations": [
             "neutral",
             "hostile"
           ],
-          "include_players": true,
           "line_of_sight": false
         },
         "on_enter": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:enchant",
-            "count": {
-              "base": 18
-            },
-            "spread": {
-              "base": 0.7
-            },
-            "speed": {
-              "base": 0.05
-            }
+            "count": 18,
+            "spread": 0.7,
+            "speed": 0.05
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.beacon.ambient",
-            "volume": {
-              "base": 0.6
-            },
-            "pitch": {
-              "base": 1.4
-            }
+            "volume": 0.6,
+            "pitch": 1.4
           }
         ],
         "on_tick": [
           {
             "type": "ascension:damage",
-            "amount": {
-              "base": 2.0,
-              "terms": [
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:spirit"
-                  },
-                  "operation": "add",
-                  "scale": 0.12
-                },
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:agility"
-                  },
-                  "operation": "add",
-                  "scale": 0.06
-                },
-                {
-                  "source": {
-                    "type": "ascension:mastery"
-                  },
-                  "operation": "add",
-                  "scale": 1.0
-                },
-                {
-                  "source": {
-                    "type": "ascension:skill_effect",
-                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
-                    "owner_scoped": true,
-                    "metric": "stacks",
-                    "aggregation": "sum"
-                  },
-                  "operation": "add",
-                  "scale": 0.75
-                }
-              ],
-              "minimum": 2.0,
-              "maximum": 20.0
-            },
             "damage_type": "minecraft:magic",
             "classifications": [
               "ascension:skill",
@@ -105,7 +47,29 @@
               "ascension:star"
             ],
             "path": "ascension:foundation/soul",
-            "technique": "ascension:3_heaven/celestial_constellation_circulation"
+            "technique": "ascension:3_heaven/celestial_constellation_circulation",
+            "base": {
+              "base": 2.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:skill_effect",
+                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
+                    "owner_scoped": true,
+                    "metric": "stacks",
+                    "aggregation": "sum"
+                  },
+                  "scale": 0.75
+                }
+              ],
+              "mastery": 1.0
+            },
+            "stats": {
+              "ascension:spirit": 0.12,
+              "ascension:agility": 0.06
+            },
+            "minimum": 2.0,
+            "maximum": 20.0
           },
           {
             "type": "ascension:stagger",
@@ -117,7 +81,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.06
                 },
                 {
@@ -125,99 +88,42 @@
                     "type": "ascension:stat",
                     "stat": "ascension:agility"
                   },
-                  "operation": "add",
                   "scale": 0.03
-                },
-                {
-                  "source": {
-                    "type": "ascension:mastery"
-                  },
-                  "operation": "add",
-                  "scale": 3.0
                 }
               ],
               "minimum": 2.0,
-              "maximum": 32.0
+              "maximum": 32.0,
+              "mastery": 3.0
             },
             "definition": "ascension:skill/castable/celestial_constellation_circulation/scorpius_star_nail_formation/stagger/formation_pressure"
           },
           {
             "type": "ascension:effect",
-            "duration": {
-              "base": 30
-            },
-            "potency": {
-              "base": 1.5
-            },
+            "duration": 30,
+            "potency": 1.5,
             "definition": "ascension:skill/castable/celestial_constellation_circulation/scorpius_star_nail_formation/effect/star_nail_drag"
           },
           {
             "type": "ascension:particles",
             "particle": "minecraft:end_rod",
-            "count": {
-              "base": 6
-            },
-            "spread": {
-              "base": 0.35
-            },
-            "speed": {
-              "base": 0.02
-            }
+            "count": 6,
+            "spread": 0.35,
+            "speed": 0.02
           }
         ],
         "on_exit": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:reverse_portal",
-            "count": {
-              "base": 10
-            },
-            "spread": {
-              "base": 0.4
-            },
-            "speed": {
-              "base": 0.03
-            }
+            "count": 10,
+            "spread": 0.4,
+            "speed": 0.03
           }
         ],
         "visual": "ascension:skill/castable/celestial_constellation_circulation/sevenfold_celestial_hunt/visual/field_visual",
         "on_expire": [
           {
             "type": "ascension:damage",
-            "amount": {
-              "base": 8.0,
-              "terms": [
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:spirit"
-                  },
-                  "operation": "add",
-                  "scale": 0.3
-                },
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:agility"
-                  },
-                  "operation": "add",
-                  "scale": 0.16
-                },
-                {
-                  "source": {
-                    "type": "ascension:skill_effect",
-                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
-                    "owner_scoped": true,
-                    "metric": "stacks",
-                    "aggregation": "sum"
-                  },
-                  "operation": "add",
-                  "scale": 2.0
-                }
-              ],
-              "minimum": 8.0,
-              "maximum": 70.0
-            },
             "damage_type": "minecraft:magic",
             "classifications": [
               "ascension:skill",
@@ -226,7 +132,28 @@
               "ascension:star"
             ],
             "path": "ascension:foundation/soul",
-            "technique": "ascension:3_heaven/celestial_constellation_circulation"
+            "technique": "ascension:3_heaven/celestial_constellation_circulation",
+            "base": {
+              "base": 8.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:skill_effect",
+                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
+                    "owner_scoped": true,
+                    "metric": "stacks",
+                    "aggregation": "sum"
+                  },
+                  "scale": 2.0
+                }
+              ]
+            },
+            "stats": {
+              "ascension:spirit": 0.3,
+              "ascension:agility": 0.16
+            },
+            "minimum": 8.0,
+            "maximum": 70.0
           },
           {
             "type": "ascension:stagger",
@@ -238,7 +165,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.18
                 },
                 {
@@ -246,7 +172,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:agility"
                   },
-                  "operation": "add",
                   "scale": 0.1
                 }
               ],
@@ -257,50 +182,34 @@
           },
           {
             "type": "ascension:visual",
-            "duration": {
-              "base": 24
-            },
+            "duration": 24,
             "subject": "target",
             "visual": "ascension:skill/castable/celestial_constellation_circulation/sevenfold_celestial_hunt/visual/collapse"
           },
           {
             "type": "ascension:particles",
             "particle": "minecraft:flash",
-            "count": {
-              "base": 1.0
-            }
+            "count": 1.0
           },
           {
             "type": "ascension:particles",
             "particle": "minecraft:end_rod",
-            "count": {
-              "base": 34.0
-            },
-            "spread": {
-              "base": 1.1
-            },
-            "speed": {
-              "base": 0.12
-            }
+            "count": 34.0,
+            "spread": 1.1,
+            "speed": 0.12
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:entity.lightning_bolt.impact",
-            "volume": {
-              "base": 0.8
-            },
-            "pitch": {
-              "base": 1.35
-            }
+            "volume": 0.8,
+            "pitch": 1.35
           }
         ]
       }
     },
     "networks": {
       "network": {
-        "duration": {
-          "base": 240
-        },
+        "duration": 240,
         "nodes": [
           {
             "id": "ascension:celestial/dubhe",
@@ -404,7 +313,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 1.8
             },
             {
@@ -412,21 +320,18 @@
                 "type": "ascension:stat",
                 "stat": "ascension:strength"
               },
-              "operation": "add",
               "scale": 0.8
             }
           ],
           "minimum": 40.0
         },
         "resistance": {
-          "base": 0.0,
           "terms": [
             {
               "source": {
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.004
             }
           ],
@@ -441,54 +346,40 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.12
             }
           ],
           "minimum": 1.0
         },
         "decay_delay": 36,
-        "guard_break_duration": {
-          "base": 32.0
-        },
-        "immunity_duration": {
-          "base": 55.0
-        },
+        "guard_break_duration": 32.0,
+        "immunity_duration": 55.0,
         "movement_multiplier": 0.12,
         "interrupt_held_casts": true,
         "on_guard_break": [
           {
             "type": "ascension:visual",
-            "duration": {
-              "base": 18
-            },
+            "duration": 18,
             "subject": "target",
             "visual": "ascension:skill/castable/celestial_constellation_circulation/sevenfold_celestial_hunt/visual/collapse"
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.chain.break",
-            "volume": {
-              "base": 0.8
-            },
-            "pitch": {
-              "base": 1.2
-            }
+            "volume": 0.8,
+            "pitch": 1.2
           }
         ]
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:look_position",
-    "range": {
-      "base": 24
-    },
+    "range": 24,
     "include_fluids": false,
     "fallback_to_maximum_range": true
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:network",
       "action": "apply",
@@ -498,40 +389,22 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:enchant",
-      "count": {
-        "base": 96
-      },
-      "spread": {
-        "base": 3.0
-      },
-      "speed": {
-        "base": 0.08
-      },
+      "count": 96,
+      "spread": 3.0,
+      "speed": 0.08,
       "subject": "position"
     },
     {
       "type": "ascension:sound",
       "sound": "minecraft:block.beacon.activate",
-      "volume": {
-        "base": 1.2
-      },
-      "pitch": {
-        "base": 0.7
-      },
+      "volume": 1.2,
+      "pitch": 0.7,
       "subject": "target"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 50
-      },
-      "operation": "ascension:consume"
-    }
-  ],
-  "cooldown": {
-    "base": 1200
-  }
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 50
+  },
+  "cooldown": 1200
 }

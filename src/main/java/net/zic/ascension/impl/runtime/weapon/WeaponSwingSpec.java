@@ -3,6 +3,7 @@ package net.zic.ascension.impl.runtime.weapon;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.ascension.core.damage.AscensionDamageProfile;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.phys.Vec3;
 
@@ -16,7 +17,7 @@ public record WeaponSwingSpec(
         String vfxType,
         String colorFolder,
         Vec3 radius,
-        double damage,
+        AscensionDamageProfile damage,
         double knockback,
         int duration,
         float rotationZ,
@@ -42,7 +43,7 @@ public record WeaponSwingSpec(
                 Math.max(0.05D, radius.y),
                 Math.max(0.05D, radius.z)
         );
-        damage = Double.isFinite(damage) ? Math.max(0.0D, damage) : 0.0D;
+        damage = damage == null ? AscensionDamageProfile.base(0.0D) : damage;
         knockback = Double.isFinite(knockback) ? Math.max(0.0D, knockback) : 0.0D;
         duration = Math.clamp(duration, 1, 1200);
         movement = movement == null ? Vec3.ZERO : movement;
@@ -75,7 +76,6 @@ public record WeaponSwingSpec(
         }
     }
 
-    /** Behaviour when a moving projection reaches a solid block. */
     public record BlockImpact(
             Mode mode,
             double radius,
@@ -139,7 +139,6 @@ public record WeaponSwingSpec(
         }
     }
 
-    /** Resolved Ascension skill effect applied after a successful hit. */
     public record HitEffect(Identifier definition, int duration, double potency) {
         public HitEffect {
             duration = Math.clamp(duration, 1, 72000);

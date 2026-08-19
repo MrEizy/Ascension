@@ -1,16 +1,10 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Blade Projection",
   "description": "Sends a swift red blade crescent forward.",
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:weapon_swing",
-      "subject": "caster",
-      "vfx_type": "sword_swing",
       "color": "red",
       "radius": [
         2.0,
@@ -18,14 +12,11 @@
         3.0
       ],
       "damage": {
-        "base": 11.0
+        "base": 11.0,
+        "weapon": 1.0
       },
-      "knockback": {
-        "base": 0.8
-      },
-      "duration": {
-        "base": 50.0
-      },
+      "knockback": 0.8,
+      "duration": 50.0,
       "rotation_z": 30.0,
       "movement": [
         0.0,
@@ -52,17 +43,9 @@
       "weapon_tag": "ascension:weapon/blades"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "operation": "ascension:consume",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 75.0
-      }
-    }
-  ],
-  "cooldown": {
-    "base": 180.0
-  }
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 75.0
+  },
+  "cooldown": 180.0
 }

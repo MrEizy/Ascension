@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.nine_revolutions_circulation.name"
   },
@@ -80,18 +80,13 @@
       }
     ]
   },
-  "targeting": {
-    "type": "ascension:self"
-  },
   "require_targets": false,
-  "features": [
+  "actions": [
     {
       "type": "ascension:cultivate",
       "path": "ascension:foundation/essence",
       "secondary_path": "ascension:elemental/blood",
-      "rate": {
-        "base": 2.75
-      }
+      "rate": 2.75
     }
   ]
 }

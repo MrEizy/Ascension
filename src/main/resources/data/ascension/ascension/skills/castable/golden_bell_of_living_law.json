@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.golden_bell_of_living_law.name"
   },
@@ -40,7 +40,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": -0.1
                 }
               ],
@@ -75,7 +74,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": -0.06
                 }
               ],
@@ -97,7 +95,6 @@
                 "type": "ascension:mastery",
                 "skill": "ascension:castable/golden_bell_of_living_law"
               },
-              "operation": "add",
               "scale": 40
             }
           ]
@@ -110,7 +107,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 5
             },
             {
@@ -118,7 +114,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:spirit"
               },
-              "operation": "add",
               "scale": 3
             },
             {
@@ -126,15 +121,12 @@
                 "type": "ascension:mastery",
                 "skill": "ascension:castable/golden_bell_of_living_law"
               },
-              "operation": "add",
               "scale": 14
             }
           ],
           "minimum": 20
         },
-        "absorption": {
-          "base": 1.0
-        },
+        "absorption": 1.0,
         "overflow": true,
         "priority": 200,
         "replace_existing": true,
@@ -142,12 +134,8 @@
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.bell.use",
-            "volume": {
-              "base": 1.2
-            },
-            "pitch": {
-              "base": 0.55
-            }
+            "volume": 1.2,
+            "pitch": 0.55
           }
         ],
         "visual": {
@@ -160,7 +148,6 @@
                   "type": "ascension:mastery",
                   "skill": "ascension:castable/golden_bell_of_living_law"
                 },
-                "operation": "add",
                 "scale": 0.05
               }
             ]
@@ -173,7 +160,6 @@
                   "type": "ascension:mastery",
                   "skill": "ascension:castable/golden_bell_of_living_law"
                 },
-                "operation": "add",
                 "scale": 0.08
               }
             ]
@@ -194,62 +180,30 @@
           {
             "type": "ascension:particles",
             "particle": "minecraft:enchanted_hit",
-            "count": {
-              "base": 7.0
-            },
-            "spread": {
-              "base": 0.45
-            },
-            "speed": {
-              "base": 0.04
-            }
+            "count": 7.0,
+            "spread": 0.45,
+            "speed": 0.04
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.bell.use",
-            "volume": {
-              "base": 0.3
-            },
-            "pitch": {
-              "base": 1.45
-            }
+            "volume": 0.3,
+            "pitch": 1.45
           }
         ]
       }
     }
   },
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:effect",
       "duration": {
         "base": 160,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 40.0,
-            "offset": -40.0
-          }
-        ]
+        "per_mastery": 40.0
       },
       "potency": {
         "base": 1.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.25,
-            "offset": -0.25
-          }
-        ]
+        "per_mastery": 0.25
       },
       "definition": "#golden_bell_discipline",
       "subject": "caster"
@@ -270,70 +224,32 @@
             "source": {
               "type": "ascension:mastery"
             },
-            "operation": "add",
-            "scale": 9.0
-          },
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 1.0,
             "power": 2.0
           }
-        ]
+        ],
+        "mastery": 9.0
       },
-      "spread": {
-        "base": 1.0
-      },
-      "speed": {
-        "base": 0.08
-      },
+      "spread": 1.0,
+      "speed": 0.08,
       "subject": "caster"
     },
     {
       "type": "ascension:sound",
       "sound": "minecraft:block.bell.resonate",
-      "volume": {
-        "base": 1.0
-      },
-      "pitch": {
-        "base": 0.85
-      },
+      "volume": 1.0,
+      "pitch": 0.85,
       "subject": "caster"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 20,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 4.0,
-            "offset": -4.0
-          }
-        ]
-      },
-      "operation": "ascension:consume"
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 20,
+      "per_mastery": 4.0
     }
-  ],
+  },
   "cooldown": {
     "base": 400,
-    "terms": [
-      {
-        "source": {
-          "type": "ascension:mastery"
-        },
-        "operation": "add",
-        "scale": -40.0,
-        "offset": 40.0
-      }
-    ]
+    "per_mastery": -40.0
   }
 }

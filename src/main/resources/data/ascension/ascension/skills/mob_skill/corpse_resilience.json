@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Corpse Resilience",
   "description": "A cultivated Zombie hardens its dead flesh when badly injured.",
   "definitions": {
@@ -14,7 +14,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.5
             }
           ],
@@ -29,9 +28,7 @@
       }
     }
   },
-  "targeting": "self",
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:barrier",
       "action": "apply",
@@ -60,6 +57,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
   "cooldown": 240
 }

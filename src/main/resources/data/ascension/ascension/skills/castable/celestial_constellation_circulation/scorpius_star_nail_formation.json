@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.scorpius_star_nail_formation.name"
   },
@@ -39,7 +39,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": 0.1
                 }
               ],
@@ -55,32 +54,14 @@
         "shape": "cylinder",
         "radius": {
           "base": 4.0,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:mastery"
-              },
-              "operation": "add",
-              "scale": 1.0
-            }
-          ],
-          "maximum": 6.5
+          "maximum": 6.5,
+          "mastery": 1.0
         },
-        "height": {
-          "base": 4.0
-        },
+        "height": 4.0,
         "duration": {
           "base": 100,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:mastery"
-              },
-              "operation": "add",
-              "scale": 40
-            }
-          ],
-          "maximum": 220
+          "maximum": 220,
+          "mastery": 40.0
         },
         "tick_interval": 10,
         "filter": {
@@ -88,78 +69,26 @@
             "neutral",
             "hostile"
           ],
-          "include_players": true,
           "line_of_sight": false
         },
         "on_enter": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:witch",
-            "count": {
-              "base": 10
-            },
-            "spread": {
-              "base": 0.4
-            },
-            "speed": {
-              "base": 0.03
-            }
+            "count": 10,
+            "spread": 0.4,
+            "speed": 0.03
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.chain.hit",
-            "volume": {
-              "base": 0.6
-            },
-            "pitch": {
-              "base": 1.3
-            }
+            "volume": 0.6,
+            "pitch": 1.3
           }
         ],
         "on_tick": [
           {
             "type": "ascension:damage",
-            "amount": {
-              "base": 1.0,
-              "terms": [
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:spirit"
-                  },
-                  "operation": "add",
-                  "scale": 0.08
-                },
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:agility"
-                  },
-                  "operation": "add",
-                  "scale": 0.03
-                },
-                {
-                  "source": {
-                    "type": "ascension:mastery"
-                  },
-                  "operation": "add",
-                  "scale": 0.75
-                },
-                {
-                  "source": {
-                    "type": "ascension:skill_effect",
-                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
-                    "owner_scoped": true,
-                    "metric": "stacks",
-                    "aggregation": "sum"
-                  },
-                  "operation": "add",
-                  "scale": 0.4
-                }
-              ],
-              "minimum": 1.0,
-              "maximum": 12.0
-            },
             "damage_type": "minecraft:magic",
             "classifications": [
               "ascension:skill",
@@ -168,7 +97,29 @@
               "ascension:star"
             ],
             "path": "ascension:foundation/soul",
-            "technique": "ascension:3_heaven/celestial_constellation_circulation"
+            "technique": "ascension:3_heaven/celestial_constellation_circulation",
+            "base": {
+              "base": 1.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:skill_effect",
+                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
+                    "owner_scoped": true,
+                    "metric": "stacks",
+                    "aggregation": "sum"
+                  },
+                  "scale": 0.4
+                }
+              ],
+              "mastery": 0.75
+            },
+            "stats": {
+              "ascension:spirit": 0.08,
+              "ascension:agility": 0.03
+            },
+            "minimum": 1.0,
+            "maximum": 12.0
           },
           {
             "type": "ascension:stagger",
@@ -180,59 +131,36 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.04
-                },
-                {
-                  "source": {
-                    "type": "ascension:mastery"
-                  },
-                  "operation": "add",
-                  "scale": 2.0
                 }
               ],
               "minimum": 1.0,
-              "maximum": 20.0
+              "maximum": 20.0,
+              "mastery": 2.0
             },
             "definition": "#formation_pressure"
           },
           {
             "type": "ascension:effect",
-            "duration": {
-              "base": 30
-            },
-            "potency": {
-              "base": 1
-            },
+            "duration": 30,
+            "potency": 1,
             "definition": "#star_nail_drag"
           },
           {
             "type": "ascension:particles",
             "particle": "minecraft:end_rod",
-            "count": {
-              "base": 4
-            },
-            "spread": {
-              "base": 0.25
-            },
-            "speed": {
-              "base": 0.01
-            }
+            "count": 4,
+            "spread": 0.25,
+            "speed": 0.01
           }
         ],
         "on_exit": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:smoke",
-            "count": {
-              "base": 8
-            },
-            "spread": {
-              "base": 0.3
-            },
-            "speed": {
-              "base": 0.02
-            }
+            "count": 8,
+            "spread": 0.3,
+            "speed": 0.02
           }
         ],
         "visual": "ascension:skill/castable/celestial_constellation_circulation/scorpius_star_nail_formation/visual/field_visual"
@@ -242,16 +170,8 @@
       "network": {
         "duration": {
           "base": 100,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:mastery"
-              },
-              "operation": "add",
-              "scale": 40
-            }
-          ],
-          "maximum": 220
+          "maximum": 220,
+          "mastery": 40.0
         },
         "nodes": [
           {
@@ -308,7 +228,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 1.8
             },
             {
@@ -316,21 +235,18 @@
                 "type": "ascension:stat",
                 "stat": "ascension:strength"
               },
-              "operation": "add",
               "scale": 0.8
             }
           ],
           "minimum": 40.0
         },
         "resistance": {
-          "base": 0.0,
           "terms": [
             {
               "source": {
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.004
             }
           ],
@@ -345,64 +261,43 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.12
             }
           ],
           "minimum": 1.0
         },
         "decay_delay": 36,
-        "guard_break_duration": {
-          "base": 32.0
-        },
-        "immunity_duration": {
-          "base": 55.0
-        },
+        "guard_break_duration": 32.0,
+        "immunity_duration": 55.0,
         "movement_multiplier": 0.12,
         "interrupt_held_casts": true,
         "on_guard_break": [
           {
             "type": "ascension:visual",
-            "duration": {
-              "base": 18
-            },
+            "duration": 18,
             "subject": "target",
             "visual": "ascension:skill/castable/celestial_constellation_circulation/sevenfold_celestial_hunt/visual/collapse"
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.chain.break",
-            "volume": {
-              "base": 0.8
-            },
-            "pitch": {
-              "base": 1.2
-            }
+            "volume": 0.8,
+            "pitch": 1.2
           }
         ]
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:look_position",
     "range": {
       "base": 18,
-      "terms": [
-        {
-          "source": {
-            "type": "ascension:mastery"
-          },
-          "operation": "add",
-          "scale": 6.0,
-          "offset": -6.0
-        }
-      ]
+      "per_mastery": 6.0
     },
     "include_fluids": false,
     "fallback_to_maximum_range": true
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:network",
       "action": "apply",
@@ -414,42 +309,15 @@
       "particle": "minecraft:end_rod",
       "count": {
         "base": 42,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 14.0,
-            "offset": -14.0
-          }
-        ]
+        "per_mastery": 14.0
       },
       "spread": {
         "base": 1.5,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.4,
-            "offset": -0.4
-          }
-        ]
+        "per_mastery": 0.4
       },
       "speed": {
         "base": 0.04,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.01,
-            "offset": -0.01
-          }
-        ]
+        "per_mastery": 0.01
       },
       "subject": "position"
     },
@@ -458,64 +326,24 @@
       "sound": "minecraft:block.amethyst_cluster.place",
       "volume": {
         "base": 0.9,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.1,
-            "offset": -0.1
-          }
-        ]
+        "per_mastery": 0.1
       },
       "pitch": {
         "base": 0.9,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": -0.1,
-            "offset": 0.1
-          }
-        ]
+        "per_mastery": -0.1
       },
       "subject": "target"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 24,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 4.0,
-            "offset": -4.0
-          }
-        ]
-      },
-      "operation": "ascension:consume"
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 24,
+      "per_mastery": 4.0
     }
-  ],
+  },
   "cooldown": {
     "base": 360,
-    "terms": [
-      {
-        "source": {
-          "type": "ascension:mastery"
-        },
-        "operation": "add",
-        "scale": -60.0,
-        "offset": 60.0
-      }
-    ]
+    "per_mastery": -60.0
   }
 }

@@ -1,33 +1,21 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Repair Construct",
   "description": "Restores stability to the construct after it intercepts damage.",
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:construct",
       "action": "repair",
       "definition": "ascension:skill/debug/calibration_construct/construct/main",
-      "amount": {
-        "base": 25
-      },
+      "amount": 25,
       "subject": "caster"
     },
     {
       "type": "ascension:particles",
       "particle": "minecraft:happy_villager",
-      "count": {
-        "base": 20
-      },
-      "spread": {
-        "base": 0.6
-      },
-      "speed": {
-        "base": 0.04
-      },
+      "count": 20,
+      "spread": 0.6,
+      "speed": 0.04,
       "subject": "caster"
     },
     {
@@ -37,8 +25,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
-  "cooldown": {
-    "base": 10
-  }
+  "cooldown": 10
 }

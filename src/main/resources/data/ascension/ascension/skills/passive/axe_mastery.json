@@ -29,31 +29,7 @@
     {
       "event": "attack",
       "weapon_tag": "minecraft:axes",
-      "allow_empty_hand": false,
       "cooldown": 1,
-      "priority": 0,
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 2.0,
-            "terms": [
-              {
-                "source": {
-                  "type": "ascension:path_realm_multiplier",
-                  "path": "ascension:weapon/axe",
-                  "base_bonus": 0.1,
-                  "bonus_per_major_realm": 0.22,
-                  "bonus_per_minor_realm": 0.025,
-                  "maximum_bonus": 5.0
-                },
-                "operation": "multiply"
-              }
-            ]
-          }
-        }
-      ],
       "actions": [
         {
           "type": "ascension:weapon_swing",
@@ -73,29 +49,25 @@
             3.0
           ],
           "damage": {
-            "base": 7.0,
-            "terms": [
-              {
-                "source": {
-                  "type": "ascension:path_realm_multiplier",
-                  "path": "ascension:weapon/axe",
-                  "base_bonus": 0.1,
-                  "bonus_per_major_realm": 0.22,
-                  "bonus_per_minor_realm": 0.025,
-                  "maximum_bonus": 5.0
-                },
-                "operation": "multiply"
-              }
-            ]
+            "base": {
+              "base": 7.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:path_realm_multiplier",
+                    "path": "ascension:weapon/axe",
+                    "base_bonus": 0.1,
+                    "bonus_per_major_realm": 0.22,
+                    "bonus_per_minor_realm": 0.025,
+                    "maximum_bonus": 5.0
+                  },
+                  "operation": "multiply"
+                }
+              ]
+            },
+            "weapon": 0.5
           },
-          "knockback": 1.0,
-          "duration": 10,
           "rotation_z": -15.0,
-          "movement": [
-            0.0,
-            0.0,
-            0.0
-          ],
           "path": "ascension:weapon/axe",
           "weapon_tag": "minecraft:axes",
           "classifications": [
@@ -106,7 +78,26 @@
           ],
           "hit_shape": "area"
         }
-      ]
+      ],
+      "cost": {
+        "resource": "ascension:qi",
+        "amount": {
+          "base": 2.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:path_realm_multiplier",
+                "path": "ascension:weapon/axe",
+                "base_bonus": 0.1,
+                "bonus_per_major_realm": 0.22,
+                "bonus_per_minor_realm": 0.025,
+                "maximum_bonus": 5.0
+              },
+              "operation": "multiply"
+            }
+          ]
+        }
+      }
     }
   ]
 }

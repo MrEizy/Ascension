@@ -17,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.control.StaggerDefinition;
+import net.zic.ascension.api.ascension.core.damage.SkillDamageDefinition;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.projectile.VirtualProjectileDefinition;
@@ -310,7 +311,7 @@ public final class SkillActions {
 
     public record Damage(
             ActionSubject subject,
-            ScaledValue amount,
+            SkillDamageDefinition damage,
             Identifier damageType,
             List<Identifier> classifications,
             Optional<Identifier> path,
@@ -318,7 +319,7 @@ public final class SkillActions {
     ) implements SkillAction {
         public static final MapCodec<Damage> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.TARGET).forGetter(Damage::subject),
-                ScaledValue.COMPACT_CODEC.fieldOf("amount").forGetter(Damage::amount),
+                SkillDamageDefinition.CODEC.forGetter(Damage::damage),
                 Identifier.CODEC.optionalFieldOf("damage_type", DEFAULT_DAMAGE_TYPE).forGetter(Damage::damageType),
                 Identifier.CODEC.listOf().optionalFieldOf("classifications", List.of()).forGetter(Damage::classifications),
                 Identifier.CODEC.optionalFieldOf("path").forGetter(Damage::path),
@@ -326,6 +327,7 @@ public final class SkillActions {
         ).apply(instance, Damage::new));
 
         public Damage {
+            damage = damage == null ? SkillDamageDefinition.base(0.0D) : damage;
             classifications = classifications == null ? List.of() : List.copyOf(classifications);
             path = path == null ? Optional.empty() : path;
             technique = technique == null ? Optional.empty() : technique;
@@ -340,9 +342,10 @@ public final class SkillActions {
         public void apply(SkillActionContext context) {
             LivingEntity entity = context.entity(subject);
             if (entity != null) {
+                SkillActionContext targetContext = context.retarget(entity, entity.getBoundingBox().getCenter());
                 AscensionDamageService.apply(
-                        context.retarget(entity, entity.getBoundingBox().getCenter()),
-                        amount.resolve(context.scaledValueContext()),
+                        targetContext,
+                        damage.resolve(targetContext.scaledValueContext()),
                         damageType,
                         new LinkedHashSet<>(classifications),
                         path,
@@ -797,7 +800,7 @@ public final class SkillActions {
             String color,
             java.util.Map<Identifier, String> techniqueColors,
             Vec3 radius,
-            ScaledValue damage,
+            SkillDamageDefinition damage,
             ScaledValue knockback,
             ScaledValue duration,
             float rotationZ,
@@ -813,7 +816,7 @@ public final class SkillActions {
                 Codec.STRING.optionalFieldOf("color", "blue").forGetter(WeaponSwing::color),
                 Codec.unboundedMap(Identifier.CODEC, Codec.STRING).optionalFieldOf("technique_colors", java.util.Map.of()).forGetter(WeaponSwing::techniqueColors),
                 CodecHelpers.VEC3.optionalFieldOf("radius", new Vec3(2.0D, 2.0D, 2.0D)).forGetter(WeaponSwing::radius),
-                ScaledValue.COMPACT_CODEC.optionalFieldOf("damage", ScaledValue.constant(4.0D)).forGetter(WeaponSwing::damage),
+                SkillDamageDefinition.CODEC.codec().optionalFieldOf("damage", SkillDamageDefinition.base(4.0D)).forGetter(WeaponSwing::damage),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("knockback", ScaledValue.constant(1.0D)).forGetter(WeaponSwing::knockback),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("duration", ScaledValue.constant(10.0D)).forGetter(WeaponSwing::duration),
                 Codec.FLOAT.optionalFieldOf("rotation_z", 0.0F).forGetter(WeaponSwing::rotationZ),
@@ -829,7 +832,7 @@ public final class SkillActions {
             color = color == null || color.isBlank() ? "blue" : color;
             techniqueColors = techniqueColors == null ? java.util.Map.of() : java.util.Map.copyOf(techniqueColors);
             radius = radius == null ? new Vec3(2.0D, 2.0D, 2.0D) : radius;
-            damage = damage == null ? ScaledValue.constant(4.0D) : damage;
+            damage = damage == null ? SkillDamageDefinition.base(4.0D) : damage;
             knockback = knockback == null ? ScaledValue.constant(1.0D) : knockback;
             duration = duration == null ? ScaledValue.constant(10.0D) : duration;
             movement = movement == null ? Vec3.ZERO : movement;
@@ -880,7 +883,7 @@ public final class SkillActions {
                     owner,
                     rotationZ,
                     radius,
-                    Math.max(0.0D, damage.resolve(context.scaledValueContext())),
+                    damage.resolve(context.scaledValueContext()),
                     Math.max(0.0D, knockback.resolve(context.scaledValueContext())),
                     Math.clamp((int) Math.round(duration.resolve(context.scaledValueContext())), 1, 1200),
                     vfxType,

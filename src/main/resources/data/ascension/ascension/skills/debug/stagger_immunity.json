@@ -1,12 +1,8 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Stagger Immunity",
   "description": "Clears current stagger and grants five seconds of stagger immunity ",
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:stagger",
       "action": "clear",
@@ -15,9 +11,7 @@
     {
       "type": "ascension:stagger",
       "action": "immunity",
-      "duration": {
-        "base": 100.0
-      },
+      "duration": 100.0,
       "subject": "caster"
     },
     {
@@ -27,8 +21,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
-  "cooldown": {
-    "base": 10.0
-  }
+  "cooldown": 10.0
 }

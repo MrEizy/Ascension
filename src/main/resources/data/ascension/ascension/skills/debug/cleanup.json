@@ -1,12 +1,8 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Cleanup",
   "description": "Removes calibration fields, anchor networks, constructs, barriers, movement anchors and stagger state owned by or applied to the caster.",
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:field",
       "action": "remove",
@@ -45,15 +41,9 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:smoke",
-      "count": {
-        "base": 20
-      },
-      "spread": {
-        "base": 0.8
-      },
-      "speed": {
-        "base": 0.02
-      },
+      "count": 20,
+      "spread": 0.8,
+      "speed": 0.02,
       "subject": "caster"
     },
     {
@@ -63,8 +53,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
-  "cooldown": {
-    "base": 5
-  }
+  "cooldown": 5
 }

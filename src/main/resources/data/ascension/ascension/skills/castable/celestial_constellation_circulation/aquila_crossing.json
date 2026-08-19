@@ -1,45 +1,26 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.aquila_crossing.name"
   },
   "description": {
     "translate": "ascension.skill.aquila_crossing.desc"
   },
-  "targeting": {
+  "target": {
     "type": "ascension:look_position",
     "range": {
       "base": 8,
-      "terms": [
-        {
-          "source": {
-            "type": "ascension:mastery"
-          },
-          "operation": "add",
-          "scale": 4.0,
-          "offset": -4.0
-        }
-      ]
+      "per_mastery": 4.0
     },
     "include_fluids": false,
     "fallback_to_maximum_range": true
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:visual",
       "duration": {
         "base": 18,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 6.0,
-            "offset": -6.0
-          }
-        ]
+        "per_mastery": 6.0
       },
       "follow": true,
       "subject": "caster",
@@ -50,42 +31,15 @@
       "particle": "minecraft:cloud",
       "count": {
         "base": 14,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 4.0,
-            "offset": -4.0
-          }
-        ]
+        "per_mastery": 4.0
       },
       "spread": {
         "base": 0.4,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.1,
-            "offset": -0.1
-          }
-        ]
+        "per_mastery": 0.1
       },
       "speed": {
         "base": 0.05,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.01,
-            "offset": -0.01
-          }
-        ]
+        "per_mastery": 0.01
       },
       "subject": "caster"
     },
@@ -94,29 +48,11 @@
       "sound": "minecraft:entity.phantom.flap",
       "volume": {
         "base": 0.7,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.1,
-            "offset": -0.1
-          }
-        ]
+        "per_mastery": 0.1
       },
       "pitch": {
         "base": 1.5,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.15,
-            "offset": -0.15
-          }
-        ]
+        "per_mastery": 0.15
       },
       "subject": "caster"
     },
@@ -126,23 +62,10 @@
       "subject": "caster",
       "maximum_distance": {
         "base": 8,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 4.0,
-            "offset": -4.0
-          }
-        ]
+        "per_mastery": 4.0
       },
-      "stopping_distance": {
-        "base": 0.6
-      },
-      "vertical_offset": {
-        "base": 0
-      },
+      "stopping_distance": 0.6,
+      "vertical_offset": 0,
       "collision": "stop_before_collision",
       "preserve_velocity": false
     },
@@ -151,103 +74,43 @@
       "particle": "minecraft:end_rod",
       "count": {
         "base": 22,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 8.0,
-            "offset": -8.0
-          }
-        ]
+        "per_mastery": 8.0
       },
       "spread": {
         "base": 0.55,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.15,
-            "offset": -0.15
-          }
-        ]
+        "per_mastery": 0.15
       },
       "speed": {
         "base": 0.06,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.01,
-            "offset": -0.01
-          }
-        ]
+        "per_mastery": 0.01
       },
       "subject": "position"
     },
     {
       "type": "ascension:visual",
-      "duration": {
-        "base": 18
-      },
+      "duration": 18,
       "subject": "position",
       "visual": "ascension:skill/castable/celestial_constellation_circulation/aquila_crossing/visual/arrival"
     }
   ],
-  "costs": [
+  "cost": [
     {
       "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
       "amount": {
         "base": 12,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 2.0,
-            "offset": -2.0
-          }
-        ]
-      },
-      "operation": "ascension:consume"
+        "per_mastery": 2.0
+      }
     },
     {
       "resource": "ascension:stamina",
-      "source": "ascension:skill_casting",
       "amount": {
         "base": 8,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 1.0,
-            "offset": -1.0
-          }
-        ]
-      },
-      "operation": "ascension:consume"
+        "per_mastery": 1.0
+      }
     }
   ],
   "cooldown": {
     "base": 140,
-    "terms": [
-      {
-        "source": {
-          "type": "ascension:mastery"
-        },
-        "operation": "add",
-        "scale": -30.0,
-        "offset": 30.0
-      }
-    ]
+    "per_mastery": -30.0
   }
 }

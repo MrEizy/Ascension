@@ -1,13 +1,11 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Anchor Network",
   "description": "Tests anchor nodes, links and a child area field.",
   "definitions": {
     "networks": {
       "main": {
-        "duration": {
-          "base": 200
-        },
+        "duration": 200,
         "nodes": [
           {
             "id": "ascension:debug/north",
@@ -54,16 +52,13 @@
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:look_position",
-    "range": {
-      "base": 14
-    },
+    "range": 14,
     "include_fluids": false,
     "fallback_to_maximum_range": true
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:network",
       "action": "apply",
@@ -73,20 +68,11 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:end_rod",
-      "count": {
-        "base": 42
-      },
-      "spread": {
-        "base": 1.5
-      },
-      "speed": {
-        "base": 0.04
-      },
+      "count": 42,
+      "spread": 1.5,
+      "speed": 0.04,
       "subject": "position"
     }
   ],
-  "costs": [],
-  "cooldown": {
-    "base": 20
-  }
+  "cooldown": 20
 }

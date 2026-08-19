@@ -1,15 +1,14 @@
 package net.zic.ascension.impl.core.skill.castable;
 
-import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.skill.castable.SkillExecutionDefinition;
-import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
+import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,12 +36,13 @@ public final class SkillExecutions {
             int effectiveProgression,
             double charge,
             Map<Identifier, Double> variables,
-            SkillExecutionDefinition definition
+            TargetingDefinition target,
+            boolean requireTargets
     ) {
         Map<Identifier, Double> resolvedVariables = new HashMap<>(variables == null ? Map.of() : variables);
         resolvedVariables.put(TargetingDefinition.Context.EFFECTIVE_PROGRESSION, (double) effectiveProgression);
         resolvedVariables.put(CAST_PROGRESS, charge);
-        TargetingDefinition.Result targeting = definition.targeting().resolve(new TargetingDefinition.Context(
+        TargetingDefinition.Result targeting = target.resolve(new TargetingDefinition.Context(
                 level,
                 caster,
                 skill,
@@ -53,7 +53,7 @@ public final class SkillExecutions {
         if (!targeting.succeeded()) {
             return Resolution.failure(targeting.failureMessage());
         }
-        if (definition.requireTargets() && targeting.targets().isEmpty()) {
+        if (requireTargets && targeting.targets().isEmpty()) {
             return Resolution.failure(Component.literal("No valid target"));
         }
         resolvedVariables.put(TARGET_COUNT, (double) targeting.targets().size());
@@ -69,12 +69,12 @@ public final class SkillExecutions {
             LivingEntity caster,
             Identifier skill,
             double charge,
-            SkillExecutionDefinition definition,
+            List<SkillAction> actions,
             Resolution resolution
     ) {
         Vec3 origin = caster.position().add(0.0D, caster.getBbHeight() * 0.5D, 0.0D);
         LivingEntity primary = primaryEntity(resolution);
-        for (SkillAction action : definition.actions()) {
+        for (SkillAction action : actions) {
             applyAction(level, caster, skill, charge, resolution, origin, primary, action);
         }
     }

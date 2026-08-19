@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/** Records a developer trace of the damage stages resolved by the mod */
 public final class DamageTrace {
     private static final boolean ENABLED = Boolean.getBoolean("ascension.damageTrace");
     private static final DamageTrace DISABLED = new DamageTrace();
@@ -19,13 +18,19 @@ public final class DamageTrace {
         this.lines = null;
     }
 
-    private DamageTrace(double baseDamage) {
-        this.lines = new ArrayList<>();
-        lines.add(formatValue("Base", baseDamage));
+    private DamageTrace(boolean enabled) {
+        this.lines = enabled ? new ArrayList<>() : null;
     }
 
-    public static DamageTrace begin(double baseDamage) {
-        return ENABLED ? new DamageTrace(baseDamage) : DISABLED;
+    public static DamageTrace begin() {
+        return ENABLED ? new DamageTrace(true) : DISABLED;
+    }
+
+    public void value(String name, double value) {
+        if (lines == null || !Double.isFinite(value)) {
+            return;
+        }
+        lines.add(formatValue(name, value));
     }
 
     public void add(String name, double amount) {

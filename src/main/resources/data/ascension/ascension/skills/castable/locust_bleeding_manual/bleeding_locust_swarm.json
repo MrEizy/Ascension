@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.bleeding_locust_swarm.name"
   },
@@ -23,7 +23,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": 0.25
                 },
                 {
@@ -31,7 +30,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.008
                 }
               ],
@@ -61,7 +59,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": 0.35
                 }
               ],
@@ -88,52 +85,27 @@
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:ray",
-    "range": {
-      "base": 14.0
-    },
-    "width": {
-      "base": 0.5
-    },
+    "range": 14.0,
+    "width": 0.5,
     "filter": {
       "relations": [
         "neutral",
         "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
+      ]
     }
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:effect",
       "duration": {
         "base": 80,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 15.0,
-            "offset": -15.0
-          }
-        ]
+        "per_mastery": 15.0
       },
       "potency": {
         "base": 1.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.2,
-            "offset": -0.2
-          }
-        ]
+        "per_mastery": 0.2
       },
       "definition": "#swarm",
       "subject": "target"
@@ -143,42 +115,15 @@
       "particle": "minecraft:spore_blossom_air",
       "count": {
         "base": 18,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 4.0,
-            "offset": -4.0
-          }
-        ]
+        "per_mastery": 4.0
       },
       "spread": {
         "base": 0.55,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.1,
-            "offset": -0.1
-          }
-        ]
+        "per_mastery": 0.1
       },
       "speed": {
         "base": 0.025,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.005,
-            "offset": -0.005
-          }
-        ]
+        "per_mastery": 0.005
       },
       "subject": "target"
     },
@@ -187,16 +132,7 @@
       "sound": "minecraft:entity.silverfish.ambient",
       "volume": {
         "base": 0.7,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.05,
-            "offset": -0.05
-          }
-        ]
+        "per_mastery": 0.05
       },
       "pitch": {
         "base": 0.83,
@@ -205,53 +141,24 @@
             "source": {
               "type": "ascension:mastery"
             },
-            "operation": "add",
-            "scale": -0.085
-          },
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
             "scale": 0.005,
             "power": 2.0
           }
-        ]
+        ],
+        "mastery": -0.085
       },
       "subject": "target"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 5.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 1.5,
-            "offset": -1.5
-          }
-        ]
-      },
-      "operation": "ascension:consume"
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 5.0,
+      "per_mastery": 1.5
     }
-  ],
+  },
   "cooldown": {
     "base": 100,
-    "terms": [
-      {
-        "source": {
-          "type": "ascension:mastery"
-        },
-        "operation": "add",
-        "scale": -10.0,
-        "offset": 10.0
-      }
-    ]
+    "per_mastery": -10.0
   }
 }

@@ -1,19 +1,13 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Barrier",
   "description": "Applies a 20 durability barrier for testing absorption, overflow, break, expiry and visual stages.",
   "definitions": {
     "barriers": {
       "main": {
-        "duration": {
-          "base": 240
-        },
-        "durability": {
-          "base": 20
-        },
-        "absorption": {
-          "base": 1.0
-        },
+        "duration": 240,
+        "durability": 20,
+        "absorption": 1.0,
         "overflow": true,
         "priority": 100,
         "replace_existing": true,
@@ -33,12 +27,8 @@
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.glass.break",
-            "volume": {
-              "base": 0.8
-            },
-            "pitch": {
-              "base": 0.75
-            }
+            "volume": 0.8,
+            "pitch": 0.75
           }
         ],
         "on_expire": [
@@ -50,22 +40,14 @@
         ],
         "visual": {
           "id": "ascension:skill/debug/calibration_barrier/visual/barrier_visual",
-          "radius": {
-            "base": 1.1
-          },
-          "height": {
-            "base": 2.25
-          }
+          "radius": 1.1,
+          "height": 2.25
         },
         "projectile_response": "discard"
       }
     }
   },
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:barrier",
       "action": "apply",
@@ -79,8 +61,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
-  "cooldown": {
-    "base": 10
-  }
+  "cooldown": 10
 }

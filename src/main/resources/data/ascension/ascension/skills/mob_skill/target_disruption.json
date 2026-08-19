@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Target Disruption",
   "description": "Strikes an opponent's focus with concentrated soul pressure.",
   "definitions": {
@@ -17,21 +17,12 @@
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:radial",
     "radius": 8,
-    "maximum_targets": 1,
-    "sort": "nearest",
-    "filter": {
-      "relations": [
-        "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
-    }
+    "maximum_targets": 1
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:stagger",
       "action": "apply",
@@ -63,6 +54,5 @@
       "subject": "target"
     }
   ],
-  "costs": [],
   "cooldown": 150
 }

@@ -7,7 +7,6 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.datapack.skill.active.ActiveSkillType;
-import net.zic.ascension.impl.datapack.skill.castable.DebugCastableType;
 import net.zic.ascension.impl.datapack.skill.passive.PassiveSkillType;
 
 public final class AscensionSkillTypes {
@@ -19,12 +18,8 @@ public final class AscensionSkillTypes {
             PassiveSkillType::new
     );
     public static final DeferredHolder<SkillType, SkillType> ACTIVE_SKILL_TYPE = SKILL_TYPES.register(
-            "active_skill",
+            "active",
             ActiveSkillType::new
-    );
-    public static final DeferredHolder<SkillType, SkillType> DEBUG_CASTABLE_TYPE = SKILL_TYPES.register(
-            "debug_castable",
-            DebugCastableType::new
     );
 
     private AscensionSkillTypes() {

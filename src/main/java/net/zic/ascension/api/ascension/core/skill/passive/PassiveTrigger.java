@@ -25,7 +25,7 @@ public record PassiveTrigger(
             Codec.BOOL.optionalFieldOf("allow_empty_hand", false).forGetter(PassiveTrigger::allowEmptyHand),
             Codec.intRange(0, 72000).optionalFieldOf("cooldown", 0).forGetter(PassiveTrigger::cooldown),
             Codec.INT.optionalFieldOf("priority", 0).forGetter(PassiveTrigger::priority),
-            ActiveSkillCostDefinition.CODEC.codec().listOf().optionalFieldOf("costs", List.of()).forGetter(PassiveTrigger::costs),
+            ActiveSkillCostDefinition.LIST_CODEC.optionalFieldOf("cost", List.of()).forGetter(PassiveTrigger::costs),
             SkillAction.CODEC.listOf().optionalFieldOf("actions", List.of()).forGetter(PassiveTrigger::actions)
     ).apply(instance, PassiveTrigger::new));
 

@@ -1,19 +1,13 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Repair Barrier",
   "description": "Repairs 10 durability on the caster's barrier.",
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:barrier",
       "action": "repair",
       "definition": "ascension:skill/debug/calibration_barrier/visual/barrier_visual",
-      "amount": {
-        "base": 10
-      },
+      "amount": 10,
       "subject": "caster"
     },
     {
@@ -23,8 +17,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
-  "cooldown": {
-    "base": 5
-  }
+  "cooldown": 5
 }

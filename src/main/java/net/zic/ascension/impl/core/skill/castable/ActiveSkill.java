@@ -27,7 +27,6 @@ import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillCostDefini
 import net.zic.ascension.api.ascension.core.skill.castable.CastData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
-import net.zic.ascension.api.ascension.core.skill.castable.SkillExecutionDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
@@ -39,6 +38,7 @@ import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
+import net.zic.ascension.impl.core.targeting.TargetingDefinitions;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.cooldown.EntityCooldownHandler;
 
@@ -55,7 +55,9 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
     private final Component description;
     private final SkillDefinitions definitions;
     private final ActiveCastDefinition cast;
-    private final SkillExecutionDefinition execution;
+    private final TargetingDefinition target;
+    private final boolean requireTargets;
+    private final List<SkillAction> actions;
     private final List<ActiveSkillCostDefinition> costs;
     private final ScaledValue cooldown;
     private final SkillMasteryRank defaultMasteryCap;
@@ -66,7 +68,7 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
             Component description,
             SkillDefinitions definitions,
             ActiveCastDefinition cast,
-            TargetingDefinition targeting,
+            TargetingDefinition target,
             boolean requireTargets,
             List<SkillAction> actions,
             List<ActiveSkillCostDefinition> costs,
@@ -78,11 +80,9 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
         this.description = description;
         this.definitions = definitions == null ? SkillDefinitions.EMPTY : definitions;
         this.cast = cast == null ? ActiveCastDefinition.instant() : cast;
-        this.execution = new SkillExecutionDefinition(
-                targeting,
-                requireTargets,
-                actions == null ? List.of() : List.copyOf(actions)
-        );
+        this.target = target == null ? new TargetingDefinitions.Self() : target;
+        this.requireTargets = requireTargets;
+        this.actions = actions == null ? List.of() : List.copyOf(actions);
         this.costs = costs == null ? List.of() : List.copyOf(costs);
         this.cooldown = cooldown == null ? ScaledValue.constant(0.0D) : cooldown;
         this.defaultMasteryCap = defaultMasteryCap == null ? SkillMasteryRank.INITIATE : defaultMasteryCap;
@@ -105,16 +105,16 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
         return cast;
     }
 
-    public TargetingDefinition targeting() {
-        return execution.targeting();
+    public TargetingDefinition target() {
+        return target;
     }
 
     public boolean requireTargets() {
-        return execution.requireTargets();
+        return requireTargets;
     }
 
     public List<SkillAction> actions() {
-        return execution.actions();
+        return actions;
     }
 
     public List<ActiveSkillCostDefinition> costs() {
@@ -143,7 +143,7 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
     }
 
     public Optional<Identifier> cultivationPath() {
-        return cultivationPath(execution.actions());
+        return cultivationPath(actions);
     }
 
     private static Optional<Identifier> cultivationPath(List<SkillAction> actions) {
@@ -422,7 +422,7 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
                 sendFailure(caster, Component.literal("Not enough resources"));
                 return;
             }
-            SkillExecutions.apply(level, caster, skillId, progress, execution, resolved.execution());
+            SkillExecutions.apply(level, caster, skillId, progress, actions, resolved.execution());
             applyCooldown(caster, skillId, resolved);
             awardMasteryExperience(caster, skillId);
             return;
@@ -461,7 +461,7 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
             sendFailure(caster, Component.literal("Not enough resources"));
             return;
         }
-        SkillExecutions.apply(level, caster, skillId, 0.0D, execution, resolved.execution());
+        SkillExecutions.apply(level, caster, skillId, 0.0D, actions, resolved.execution());
         applyCooldown(caster, skillId, resolved);
         awardMasteryExperience(caster, skillId);
     }
@@ -494,7 +494,7 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
             status.outOfResource();
             return;
         }
-        SkillExecutions.apply(level, caster, skillId, progress, execution, resolved.execution());
+        SkillExecutions.apply(level, caster, skillId, progress, actions, resolved.execution());
         if (data.getTicks() % CHANNEL_MASTERY_INTERVAL == 0) {
             awardMasteryExperience(caster, skillId);
         }
@@ -524,7 +524,8 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
                 mastery.effectiveMastery(),
                 progress,
                 variables,
-                execution
+                target,
+                requireTargets
         );
         if (!resolvedExecution.succeeded()) {
             return ResolvedActiveCast.failure(resolvedExecution.failureMessage());

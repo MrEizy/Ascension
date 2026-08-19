@@ -1,16 +1,12 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Owner Construct",
   "description": "Tests construct replacement, owner damage interception, stability loss, overflow, break and expiry.",
   "definitions": {
     "constructs": {
       "main": {
-        "duration": {
-          "base": 240
-        },
-        "stability": {
-          "base": 100
-        },
+        "duration": 240,
+        "stability": 100,
         "offset": [
           0.0,
           1.8,
@@ -18,12 +14,8 @@
         ],
         "rotate_with_owner": true,
         "interception": {
-          "absorption": {
-            "base": 1.0
-          },
-          "stability_cost": {
-            "base": 1.0
-          },
+          "absorption": 1.0,
+          "stability_cost": 1.0,
           "overflow": true,
           "priority": 1000,
           "on_intercept": [
@@ -35,12 +27,8 @@
             {
               "type": "ascension:sound",
               "sound": "minecraft:block.amethyst_block.hit",
-              "volume": {
-                "base": 0.7
-              },
-              "pitch": {
-                "base": 1.0
-              }
+              "volume": 0.7,
+              "pitch": 1.0
             }
           ],
           "projectile_response": "deflect"
@@ -54,12 +42,8 @@
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.glass.break",
-            "volume": {
-              "base": 0.8
-            },
-            "pitch": {
-              "base": 0.8
-            }
+            "volume": 0.8,
+            "pitch": 0.8
           }
         ],
         "on_expire": [
@@ -72,11 +56,7 @@
       }
     }
   },
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:construct",
       "action": "remove",
@@ -92,15 +72,9 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:totem_of_undying",
-      "count": {
-        "base": 32
-      },
-      "spread": {
-        "base": 0.9
-      },
-      "speed": {
-        "base": 0.08
-      },
+      "count": 32,
+      "spread": 0.9,
+      "speed": 0.08,
       "subject": "caster"
     },
     {
@@ -110,8 +84,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
-  "cooldown": {
-    "base": 20
-  }
+  "cooldown": 20
 }

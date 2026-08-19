@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.plum_blossom_breathing.name"
   },
@@ -44,18 +44,13 @@
       }
     ]
   },
-  "targeting": {
-    "type": "ascension:self"
-  },
   "require_targets": false,
-  "features": [
+  "actions": [
     {
       "type": "ascension:cultivate",
       "path": "ascension:foundation/essence",
       "secondary_path": "ascension:elemental/wood",
-      "rate": {
-        "base": 2
-      }
+      "rate": 2
     }
   ]
 }

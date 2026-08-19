@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.guardian_dharma_idol.name"
   },
@@ -11,33 +11,17 @@
       "idol": {
         "duration": {
           "base": 160,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:mastery"
-              },
-              "operation": "add",
-              "scale": 40
-            }
-          ],
-          "maximum": 340
+          "maximum": 340,
+          "mastery": 40.0
         },
         "stability": {
           "base": 50.0,
           "terms": [
             {
               "source": {
-                "type": "ascension:mastery"
-              },
-              "operation": "add",
-              "scale": 25.0
-            },
-            {
-              "source": {
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 2.0
             },
             {
@@ -45,12 +29,12 @@
                 "type": "ascension:stat",
                 "stat": "ascension:spirit"
               },
-              "operation": "add",
               "scale": 1.25
             }
           ],
           "minimum": 50.0,
-          "maximum": 320.0
+          "maximum": 320.0,
+          "mastery": 25.0
         },
         "offset": [
           0.0,
@@ -61,64 +45,15 @@
         "interception": {
           "absorption": {
             "base": 0.65,
-            "terms": [
-              {
-                "source": {
-                  "type": "ascension:mastery"
-                },
-                "operation": "add",
-                "scale": 0.08
-              }
-            ],
-            "maximum": 0.95
+            "maximum": 0.95,
+            "mastery": 0.08
           },
-          "stability_cost": {
-            "base": 1.0
-          },
+          "stability_cost": 1.0,
           "overflow": true,
           "priority": 100,
           "on_intercept": [
             {
               "type": "ascension:damage",
-              "amount": {
-                "base": 1.0,
-                "terms": [
-                  {
-                    "source": {
-                      "type": "ascension:context",
-                      "key": "ascension:construct_intercepted",
-                      "fallback": 0.0
-                    },
-                    "operation": "add",
-                    "scale": 0.35
-                  },
-                  {
-                    "source": {
-                      "type": "ascension:stat",
-                      "stat": "ascension:spirit"
-                    },
-                    "operation": "add",
-                    "scale": 0.08
-                  },
-                  {
-                    "source": {
-                      "type": "ascension:stat",
-                      "stat": "ascension:strength"
-                    },
-                    "operation": "add",
-                    "scale": 0.12
-                  },
-                  {
-                    "source": {
-                      "type": "ascension:mastery"
-                    },
-                    "operation": "add",
-                    "scale": 1.5
-                  }
-                ],
-                "minimum": 1.0,
-                "maximum": 45.0
-              },
               "damage_type": "minecraft:magic",
               "classifications": [
                 "ascension:skill",
@@ -127,7 +62,27 @@
                 "ascension:dharma"
               ],
               "path": "ascension:foundation/soul",
-              "technique": "ascension:3_heaven/guardian_dharma_manual"
+              "technique": "ascension:3_heaven/guardian_dharma_manual",
+              "base": {
+                "base": 1.0,
+                "terms": [
+                  {
+                    "source": {
+                      "type": "ascension:context",
+                      "key": "ascension:construct_intercepted",
+                      "fallback": 0.0
+                    },
+                    "scale": 0.35
+                  }
+                ],
+                "mastery": 1.5
+              },
+              "stats": {
+                "ascension:spirit": 0.08,
+                "ascension:strength": 0.12
+              },
+              "minimum": 1.0,
+              "maximum": 45.0
             },
             {
               "type": "ascension:stagger",
@@ -140,7 +95,6 @@
                       "key": "ascension:construct_intercepted",
                       "fallback": 0.0
                     },
-                    "operation": "add",
                     "scale": 0.4
                   },
                   {
@@ -148,52 +102,33 @@
                       "type": "ascension:stat",
                       "stat": "ascension:strength"
                     },
-                    "operation": "add",
                     "scale": 0.15
-                  },
-                  {
-                    "source": {
-                      "type": "ascension:mastery"
-                    },
-                    "operation": "add",
-                    "scale": 2.0
                   }
                 ],
                 "minimum": 4.0,
-                "maximum": 50.0
+                "maximum": 50.0,
+                "mastery": 2.0
               },
               "definition": "#dharma_impact"
             },
             {
               "type": "ascension:visual",
-              "duration": {
-                "base": 12
-              },
+              "duration": 12,
               "subject": "target",
               "visual": "ascension:skill/castable/guardian_dharma_idol/visual/strike"
             },
             {
               "type": "ascension:particles",
               "particle": "minecraft:enchanted_hit",
-              "count": {
-                "base": 12.0
-              },
-              "spread": {
-                "base": 0.55
-              },
-              "speed": {
-                "base": 0.08
-              }
+              "count": 12.0,
+              "spread": 0.55,
+              "speed": 0.08
             },
             {
               "type": "ascension:sound",
               "sound": "minecraft:block.amethyst_block.hit",
-              "volume": {
-                "base": 0.55
-              },
-              "pitch": {
-                "base": 0.7
-              }
+              "volume": 0.55,
+              "pitch": 0.7
             }
           ],
           "projectile_response": "deflect",
@@ -207,37 +142,23 @@
           {
             "type": "ascension:particles",
             "particle": "minecraft:totem_of_undying",
-            "count": {
-              "base": 42
-            },
-            "spread": {
-              "base": 1.1
-            },
-            "speed": {
-              "base": 0.08
-            }
+            "count": 42,
+            "spread": 1.1,
+            "speed": 0.08
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.beacon.deactivate",
-            "volume": {
-              "base": 1.0
-            },
-            "pitch": {
-              "base": 0.65
-            }
+            "volume": 1.0,
+            "pitch": 0.65
           }
         ],
         "on_expire": [
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.amethyst_block.chime",
-            "volume": {
-              "base": 0.35
-            },
-            "pitch": {
-              "base": 0.6
-            }
+            "volume": 0.35,
+            "pitch": 0.6
           }
         ],
         "visual": "ascension:guardian_dharma_idol"
@@ -253,7 +174,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 2.2
             },
             {
@@ -261,21 +181,18 @@
                 "type": "ascension:stat",
                 "stat": "ascension:strength"
               },
-              "operation": "add",
               "scale": 0.9
             }
           ],
           "minimum": 50.0
         },
         "resistance": {
-          "base": 0.0,
           "terms": [
             {
               "source": {
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.005
             }
           ],
@@ -290,49 +207,34 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.14
             }
           ],
           "minimum": 1.0
         },
         "decay_delay": 40,
-        "guard_break_duration": {
-          "base": 42.0
-        },
-        "immunity_duration": {
-          "base": 70.0
-        },
+        "guard_break_duration": 42.0,
+        "immunity_duration": 70.0,
         "movement_multiplier": 0.1,
         "interrupt_held_casts": true,
         "on_guard_break": [
           {
             "type": "ascension:visual",
-            "duration": {
-              "base": 20
-            },
+            "duration": 20,
             "subject": "target",
             "visual": "ascension:skill/castable/guardian_dharma_idol/visual/strike"
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.anvil.land",
-            "volume": {
-              "base": 0.7
-            },
-            "pitch": {
-              "base": 1.35
-            }
+            "volume": 0.7,
+            "pitch": 1.35
           }
         ]
       }
     }
   },
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:construct",
       "action": "remove",
@@ -355,70 +257,32 @@
             "source": {
               "type": "ascension:mastery"
             },
-            "operation": "add",
-            "scale": 7.0
-          },
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 1.0,
             "power": 2.0
           }
-        ]
+        ],
+        "mastery": 7.0
       },
-      "spread": {
-        "base": 1.25
-      },
-      "speed": {
-        "base": 0.09
-      },
+      "spread": 1.25,
+      "speed": 0.09,
       "subject": "caster"
     },
     {
       "type": "ascension:sound",
       "sound": "minecraft:block.beacon.activate",
-      "volume": {
-        "base": 1.0
-      },
-      "pitch": {
-        "base": 0.65
-      },
+      "volume": 1.0,
+      "pitch": 0.65,
       "subject": "caster"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 30,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 4.0,
-            "offset": -4.0
-          }
-        ]
-      },
-      "operation": "ascension:consume"
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 30,
+      "per_mastery": 4.0
     }
-  ],
+  },
   "cooldown": {
     "base": 600,
-    "terms": [
-      {
-        "source": {
-          "type": "ascension:mastery"
-        },
-        "operation": "add",
-        "scale": -40.0,
-        "offset": 40.0
-      }
-    ]
+    "per_mastery": -40.0
   }
 }

@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Flame Body Transformation",
   "description": "A Blaze condenses its spiritual fire into a temporary ward.",
   "definitions": {
@@ -14,7 +14,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:spirit"
               },
-              "operation": "add",
               "scale": 0.5
             }
           ],
@@ -29,9 +28,7 @@
       }
     }
   },
-  "targeting": "self",
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:barrier",
       "action": "apply",
@@ -54,6 +51,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
   "cooldown": 220
 }

@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.slaughter_wheel_manifestation.name"
   },
@@ -17,7 +17,6 @@
                 "type": "ascension:mastery",
                 "skill": "ascension:castable/slaughter_wheel_manifestation"
               },
-              "operation": "add",
               "scale": 0.15
             }
           ],
@@ -31,7 +30,6 @@
                 "type": "ascension:mastery",
                 "skill": "ascension:castable/slaughter_wheel_manifestation"
               },
-              "operation": "add",
               "scale": 5
             }
           ],
@@ -44,15 +42,22 @@
           "relations": [
             "neutral",
             "hostile"
-          ],
-          "include_players": true,
-          "line_of_sight": true
+          ]
         },
         "flight_particle": "minecraft:crit",
         "on_entity_hit": [
           {
             "type": "ascension:damage",
-            "amount": {
+            "damage_type": "minecraft:indirect_magic",
+            "classifications": [
+              "ascension:skill",
+              "ascension:projectile",
+              "ascension:essence",
+              "ascension:slaughter",
+              "ascension:wheel"
+            ],
+            "path": "ascension:foundation/essence",
+            "base": {
               "base": 7.0,
               "terms": [
                 {
@@ -60,7 +65,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:strength"
                   },
-                  "operation": "add",
                   "scale": 0.34
                 },
                 {
@@ -68,14 +72,12 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.28
                 },
                 {
                   "source": {
                     "type": "ascension:mastery"
                   },
-                  "operation": "add",
                   "scale": 2.5
                 },
                 {
@@ -91,16 +93,7 @@
               ],
               "minimum": 1.0,
               "maximum": 72.0
-            },
-            "damage_type": "minecraft:indirect_magic",
-            "classifications": [
-              "ascension:skill",
-              "ascension:projectile",
-              "ascension:essence",
-              "ascension:slaughter",
-              "ascension:wheel"
-            ],
-            "path": "ascension:foundation/essence"
+            }
           },
           {
             "type": "ascension:stagger",
@@ -112,7 +105,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:strength"
                   },
-                  "operation": "add",
                   "scale": 0.12
                 },
                 {
@@ -120,84 +112,51 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.08
-                },
-                {
-                  "source": {
-                    "type": "ascension:mastery"
-                  },
-                  "operation": "add",
-                  "scale": 4.0
                 }
               ],
               "minimum": 4.0,
-              "maximum": 48.0
+              "maximum": 48.0,
+              "mastery": 4.0
             },
             "definition": "#wheel_impact"
           },
           {
             "type": "ascension:particles",
             "particle": "minecraft:enchanted_hit",
-            "count": {
-              "base": 18
-            },
-            "spread": {
-              "base": 0.55
-            },
-            "speed": {
-              "base": 0.09
-            }
+            "count": 18,
+            "spread": 0.55,
+            "speed": 0.09
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.grindstone.use",
-            "volume": {
-              "base": 0.75
-            },
-            "pitch": {
-              "base": 0.58
-            }
+            "volume": 0.75,
+            "pitch": 0.58
           }
         ],
         "on_block_hit": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:poof",
-            "count": {
-              "base": 20
-            },
-            "spread": {
-              "base": 0.55
-            },
-            "speed": {
-              "base": 0.07
-            }
+            "count": 20,
+            "spread": 0.55,
+            "speed": 0.07
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.netherite_block.hit",
-            "volume": {
-              "base": 0.8
-            },
-            "pitch": {
-              "base": 0.65
-            }
+            "volume": 0.8,
+            "pitch": 0.65
           }
         ],
         "on_expire": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:smoke",
-            "count": {
-              "base": 12
-            },
-            "spread": {
-              "base": 0.35
-            },
-            "speed": {
-              "base": 0.025
-            }
+            "count": 12,
+            "spread": 0.35,
+            "speed": 0.025
           }
         ],
         "visual": "ascension:skill/castable/slaughter_wheel_manifestation/visual/wheel"
@@ -213,7 +172,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 2.0
             },
             {
@@ -221,21 +179,18 @@
                 "type": "ascension:stat",
                 "stat": "ascension:strength"
               },
-              "operation": "add",
               "scale": 1.1
             }
           ],
           "minimum": 50.0
         },
         "resistance": {
-          "base": 0.0,
           "terms": [
             {
               "source": {
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.0045
             }
           ],
@@ -250,74 +205,47 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.14
             }
           ],
           "minimum": 1.0
         },
         "decay_delay": 40,
-        "guard_break_duration": {
-          "base": 42.0
-        },
-        "immunity_duration": {
-          "base": 68.0
-        },
+        "guard_break_duration": 42.0,
+        "immunity_duration": 68.0,
         "movement_multiplier": 0.14,
         "interrupt_held_casts": true,
         "on_guard_break": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:crit",
-            "count": {
-              "base": 28
-            },
-            "spread": {
-              "base": 0.75
-            },
-            "speed": {
-              "base": 0.12
-            }
+            "count": 28,
+            "spread": 0.75,
+            "speed": 0.12
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:item.shield.break",
-            "volume": {
-              "base": 1.0
-            },
-            "pitch": {
-              "base": 0.72
-            }
+            "volume": 1.0,
+            "pitch": 0.72
           }
         ]
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:look_position",
     "range": {
       "base": 18,
-      "terms": [
-        {
-          "source": {
-            "type": "ascension:mastery"
-          },
-          "operation": "add",
-          "scale": 6.0,
-          "offset": -6.0
-        }
-      ]
+      "per_mastery": 6.0
     },
     "include_fluids": false,
     "fallback_to_maximum_range": true
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:visual",
-      "duration": {
-        "base": 14
-      },
+      "duration": 14,
       "follow": true,
       "subject": "caster",
       "visual": "ascension:skill/castable/slaughter_wheel_manifestation/visual/release"
@@ -325,26 +253,16 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:crit",
-      "count": {
-        "base": 18
-      },
-      "spread": {
-        "base": 0.7
-      },
-      "speed": {
-        "base": 0.06
-      },
+      "count": 18,
+      "spread": 0.7,
+      "speed": 0.06,
       "subject": "caster"
     },
     {
       "type": "ascension:sound",
       "sound": "minecraft:entity.blaze.shoot",
-      "volume": {
-        "base": 0.9
-      },
-      "pitch": {
-        "base": 0.62
-      },
+      "volume": 0.9,
+      "pitch": 0.62,
       "subject": "caster"
     },
     {
@@ -354,33 +272,22 @@
       "subject": "target"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 13.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 1.5
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 13.0,
+      "terms": [
+        {
+          "source": {
+            "type": "ascension:mastery"
           },
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 0.5,
-            "power": 2.0
-          }
-        ]
-      },
-      "operation": "ascension:consume"
+          "scale": 0.5,
+          "power": 2.0
+        }
+      ],
+      "mastery": 1.5
     }
-  ],
+  },
   "cooldown": {
     "base": 110.0,
     "terms": [
@@ -388,17 +295,9 @@
         "source": {
           "type": "ascension:mastery"
         },
-        "operation": "add",
-        "scale": -21.0
-      },
-      {
-        "source": {
-          "type": "ascension:mastery"
-        },
-        "operation": "add",
-        "scale": 1.0,
         "power": 2.0
       }
-    ]
+    ],
+    "mastery": -21.0
   }
 }

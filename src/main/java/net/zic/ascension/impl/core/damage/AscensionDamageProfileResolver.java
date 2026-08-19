@@ -9,14 +9,30 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.damage.AscensionDamageProfile;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.stats.Stat;
 
-/** Resolves weapon, stat, and attribute values used by a damage profile */
 public final class AscensionDamageProfileResolver {
     private AscensionDamageProfileResolver() {
+    }
+
+
+    public static double rawDamage(LivingEntity attacker, AscensionDamageProfile profile) {
+        if (attacker == null || profile == null) {
+            return 0.0D;
+        }
+        double damage = profile.baseDamage();
+        damage += weaponDamage(attacker) * profile.weaponMultiplier();
+        for (var entry : profile.statScaling().entrySet()) {
+            damage += stat(attacker, entry.getKey()) * entry.getValue();
+        }
+        for (var entry : profile.attributeScaling().entrySet()) {
+            damage += attribute(attacker, entry.getKey()) * entry.getValue();
+        }
+        return Double.isFinite(damage) ? Math.max(0.0D, profile.clamp(damage)) : 0.0D;
     }
 
     public static double weaponDamage(LivingEntity attacker) {

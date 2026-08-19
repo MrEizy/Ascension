@@ -17,6 +17,7 @@ import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
 import net.zic.ascension.impl.core.skill.castable.ActiveSkill.Data;
+import net.zic.ascension.impl.core.targeting.TargetingDefinitions;
 
 import java.util.List;
 import java.util.Map;
@@ -34,13 +35,13 @@ public final class ActiveSkillType extends SkillType {
                 ComponentSerialization.CODEC.fieldOf("description").forGetter(ActiveSkill::getDescription),
                 SkillDefinitions.CODEC.codec().optionalFieldOf("definitions", SkillDefinitions.EMPTY).forGetter(ActiveSkill::definitions),
                 ActiveCastDefinition.CODEC.optionalFieldOf("cast", ActiveCastDefinition.instant()).forGetter(ActiveSkill::cast),
-                TargetingDefinition.CODEC.fieldOf("targeting").forGetter(ActiveSkill::targeting),
+                TargetingDefinition.CODEC.optionalFieldOf("target", new TargetingDefinitions.Self()).forGetter(ActiveSkill::target),
                 Codec.BOOL.optionalFieldOf("require_targets", true).forGetter(ActiveSkill::requireTargets),
-                SkillAction.CODEC.listOf().optionalFieldOf("features", List.of()).forGetter(ActiveSkill::actions),
-                ActiveSkillCostDefinition.CODEC.codec().listOf().optionalFieldOf("costs", List.of()).forGetter(ActiveSkill::costs),
+                SkillAction.CODEC.listOf().optionalFieldOf("actions", List.of()).forGetter(ActiveSkill::actions),
+                ActiveSkillCostDefinition.LIST_CODEC.optionalFieldOf("cost", List.of()).forGetter(ActiveSkill::costs),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("cooldown", ScaledValue.constant(0.0D)).forGetter(ActiveSkill::cooldown),
-                SkillMasteryRank.CODEC.optionalFieldOf("base_mastery_cap", SkillMasteryRank.INITIATE).forGetter(ActiveSkill::defaultMasteryCap),
-                Codec.unboundedMap(SkillMasteryRank.CODEC, Codec.DOUBLE).optionalFieldOf("mastery_requirements", Map.of())
+                SkillMasteryRank.CODEC.optionalFieldOf("mastery_cap", SkillMasteryRank.INITIATE).forGetter(ActiveSkill::defaultMasteryCap),
+                Codec.unboundedMap(SkillMasteryRank.CODEC, Codec.DOUBLE).optionalFieldOf("mastery_xp", Map.of())
                         .forGetter(ActiveSkill::masteryRequirements)
         ).apply(instance, ActiveSkill::new));
     }

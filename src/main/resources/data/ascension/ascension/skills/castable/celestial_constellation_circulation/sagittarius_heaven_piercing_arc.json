@@ -1,52 +1,10 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.sagittarius_heaven_piercing_arc.name"
   },
   "description": {
     "translate": "ascension.skill.sagittarius_heaven_piercing_arc.desc"
-  },
-  "cast": {
-    "mode": "charge",
-    "minimum_ticks": 20,
-    "maximum_ticks": 80,
-    "cost": {
-      "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
-      "release_on_failure": true,
-      "cumulative_cost": {
-        "base": 8,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:charge"
-            },
-            "operation": "add",
-            "scale": 24,
-            "power": 1.5
-          }
-        ],
-        "maximum": 32
-      },
-      "operation": "ascension:consume"
-    },
-    "movement": {
-      "horizontal_drag": {
-        "base": 0.55
-      },
-      "vertical_drag": {
-        "base": 1.0
-      },
-      "disable_sprinting": true
-    },
-    "interruption": {
-      "damage_threshold": {
-        "base": 10
-      },
-      "accumulation_window": 20,
-      "release_after_minimum": false
-    },
-    "stages": []
   },
   "definitions": {
     "effects": {
@@ -81,7 +39,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": 0.12
                 }
               ],
@@ -96,29 +53,13 @@
       "main": {
         "speed": {
           "base": 1.6,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:charge"
-              },
-              "operation": "add",
-              "scale": 0.9
-            }
-          ],
-          "maximum": 2.5
+          "maximum": 2.5,
+          "charge": 0.9
         },
         "range": {
           "base": 28,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:charge"
-              },
-              "operation": "add",
-              "scale": 24
-            }
-          ],
-          "maximum": 52
+          "maximum": 52,
+          "charge": 24.0
         },
         "gravity": 0.0,
         "hit_radius": 0.45,
@@ -127,9 +68,7 @@
           "relations": [
             "neutral",
             "hostile"
-          ],
-          "include_players": true,
-          "line_of_sight": true
+          ]
         },
         "flight_particle": "minecraft:end_rod",
         "behaviors": [
@@ -137,33 +76,17 @@
             "type": "ascension:homing",
             "turn_rate": {
               "base": 0.015,
-              "terms": [
-                {
-                  "source": {
-                    "type": "ascension:charge"
-                  },
-                  "operation": "add",
-                  "scale": 0.03
-                }
-              ],
-              "maximum": 0.045
+              "maximum": 0.045,
+              "charge": 0.03
             },
             "reacquire": true,
             "acquisition": {
               "type": "ascension:radial",
               "radius": {
                 "base": 14.0,
-                "terms": [
-                  {
-                    "source": {
-                      "type": "ascension:charge"
-                    },
-                    "operation": "add",
-                    "scale": 10.0
-                  }
-                ],
                 "minimum": 10.0,
-                "maximum": 24.0
+                "maximum": 24.0,
+                "charge": 10.0
               },
               "maximum_targets": 1,
               "sort": "closest_to_view",
@@ -172,7 +95,6 @@
                   "neutral",
                   "hostile"
                 ],
-                "include_players": true,
                 "line_of_sight": false
               }
             }
@@ -181,7 +103,17 @@
         "on_entity_hit": [
           {
             "type": "ascension:damage",
-            "amount": {
+            "damage_type": "minecraft:indirect_magic",
+            "classifications": [
+              "ascension:skill",
+              "ascension:projectile",
+              "ascension:ranged",
+              "ascension:soul",
+              "ascension:star"
+            ],
+            "path": "ascension:foundation/soul",
+            "technique": "ascension:3_heaven/celestial_constellation_circulation",
+            "base": {
               "base": 6.0,
               "terms": [
                 {
@@ -189,7 +121,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.35
                 },
                 {
@@ -197,14 +128,12 @@
                     "type": "ascension:stat",
                     "stat": "ascension:agility"
                   },
-                  "operation": "add",
                   "scale": 0.2
                 },
                 {
                   "source": {
                     "type": "ascension:charge"
                   },
-                  "operation": "add",
                   "scale": 14.0
                 },
                 {
@@ -213,7 +142,6 @@
                     "key": "ascension:execution/projectile_travelled",
                     "fallback": 0.0
                   },
-                  "operation": "add",
                   "scale": 0.1
                 },
                 {
@@ -222,7 +150,6 @@
                     "key": "ascension:execution/projectile_speed",
                     "fallback": 0.0
                   },
-                  "operation": "add",
                   "scale": 1.25
                 },
                 {
@@ -233,7 +160,6 @@
                     "metric": "stacks",
                     "aggregation": "sum"
                   },
-                  "operation": "add",
                   "scale": 1.75
                 },
                 {
@@ -249,17 +175,7 @@
               ],
               "minimum": 1.0,
               "maximum": 100.0
-            },
-            "damage_type": "minecraft:indirect_magic",
-            "classifications": [
-              "ascension:skill",
-              "ascension:projectile",
-              "ascension:ranged",
-              "ascension:soul",
-              "ascension:star"
-            ],
-            "path": "ascension:foundation/soul",
-            "technique": "ascension:3_heaven/celestial_constellation_circulation"
+            }
           },
           {
             "type": "ascension:stagger",
@@ -271,7 +187,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.12
                 },
                 {
@@ -279,19 +194,12 @@
                     "type": "ascension:stat",
                     "stat": "ascension:agility"
                   },
-                  "operation": "add",
                   "scale": 0.08
-                },
-                {
-                  "source": {
-                    "type": "ascension:charge"
-                  },
-                  "operation": "add",
-                  "scale": 24.0
                 }
               ],
               "minimum": 8.0,
-              "maximum": 60.0
+              "maximum": 60.0,
+              "charge": 24.0
             },
             "definition": "#heaven_piercing"
           },
@@ -300,83 +208,51 @@
             "resource": "ascension:stamina",
             "operation": "ascension:drain",
             "source": "ascension:skill_casting",
-            "amount": {
-              "base": 16
-            },
+            "amount": 16,
             "subject": "target"
           },
           {
             "type": "ascension:effect",
-            "duration": {
-              "base": 80
-            },
-            "potency": {
-              "base": 1
-            },
+            "duration": 80,
+            "potency": 1,
             "definition": "#star_severance"
           },
           {
             "type": "ascension:particles",
             "particle": "minecraft:crit",
-            "count": {
-              "base": 28
-            },
-            "spread": {
-              "base": 0.6
-            },
-            "speed": {
-              "base": 0.08
-            }
+            "count": 28,
+            "spread": 0.6,
+            "speed": 0.08
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.glass.break",
-            "volume": {
-              "base": 0.9
-            },
-            "pitch": {
-              "base": 0.7
-            }
+            "volume": 0.9,
+            "pitch": 0.7
           }
         ],
         "on_block_hit": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:poof",
-            "count": {
-              "base": 24
-            },
-            "spread": {
-              "base": 0.55
-            },
-            "speed": {
-              "base": 0.07
-            }
+            "count": 24,
+            "spread": 0.55,
+            "speed": 0.07
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.amethyst_block.break",
-            "volume": {
-              "base": 0.8
-            },
-            "pitch": {
-              "base": 0.8
-            }
+            "volume": 0.8,
+            "pitch": 0.8
           }
         ],
         "on_expire": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:end_rod",
-            "count": {
-              "base": 12
-            },
-            "spread": {
-              "base": 0.3
-            },
-            "speed": {
-              "base": 0.02
-            }
+            "count": 12,
+            "spread": 0.3,
+            "speed": 0.02
           }
         ],
         "visual": "ascension:skill/castable/celestial_constellation_circulation/sagittarius_heaven_piercing_arc/visual/arc"
@@ -392,29 +268,24 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 2.0
             },
             {
               "source": {
                 "type": "ascension:stat",
                 "stat": "ascension:strength"
-              },
-              "operation": "add",
-              "scale": 1.0
+              }
             }
           ],
           "minimum": 50.0
         },
         "resistance": {
-          "base": 0.0,
           "terms": [
             {
               "source": {
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.0045
             }
           ],
@@ -429,89 +300,89 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.15
             }
           ],
           "minimum": 1.0
         },
         "decay_delay": 42,
-        "guard_break_duration": {
-          "base": 38.0
-        },
-        "immunity_duration": {
-          "base": 65.0
-        },
+        "guard_break_duration": 38.0,
+        "immunity_duration": 65.0,
         "movement_multiplier": 0.18,
         "interrupt_held_casts": true,
         "on_guard_break": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:crit",
-            "count": {
-              "base": 30.0
-            },
-            "spread": {
-              "base": 0.8
-            },
-            "speed": {
-              "base": 0.13
-            }
+            "count": 30.0,
+            "spread": 0.8,
+            "speed": 0.13
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:item.shield.break",
-            "volume": {
-              "base": 1.0
-            },
-            "pitch": {
-              "base": 1.1
-            }
+            "volume": 1.0,
+            "pitch": 1.1
           }
         ]
       }
     }
   },
-  "targeting": {
-    "type": "ascension:look_position",
-    "range": {
-      "base": 42
+  "cast": {
+    "mode": "charge",
+    "minimum_ticks": 20,
+    "maximum_ticks": 80,
+    "cost": {
+      "resource": "ascension:qi",
+      "cumulative_cost": {
+        "base": 8,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "scale": 24,
+            "power": 1.5
+          }
+        ],
+        "maximum": 32
+      }
     },
+    "movement": {
+      "horizontal_drag": 0.55,
+      "disable_sprinting": true
+    },
+    "interruption": {
+      "damage_threshold": 10,
+      "accumulation_window": 20,
+      "release_after_minimum": false
+    }
+  },
+  "target": {
+    "type": "ascension:look_position",
+    "range": 42,
     "include_fluids": false,
     "fallback_to_maximum_range": true
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:particles",
       "particle": "minecraft:enchant",
-      "count": {
-        "base": 28
-      },
-      "spread": {
-        "base": 0.8
-      },
-      "speed": {
-        "base": 0.04
-      },
+      "count": 28,
+      "spread": 0.8,
+      "speed": 0.04,
       "subject": "caster"
     },
     {
       "type": "ascension:sound",
       "sound": "minecraft:entity.arrow.shoot",
-      "volume": {
-        "base": 1.0
-      },
-      "pitch": {
-        "base": 0.65
-      },
+      "volume": 1.0,
+      "pitch": 0.65,
       "subject": "caster"
     },
     {
       "type": "ascension:visual",
-      "duration": {
-        "base": 14
-      },
+      "duration": 14,
       "points": "caster_to_target",
       "subject": "target",
       "visual": "ascension:skill/castable/celestial_constellation_circulation/sagittarius_heaven_piercing_arc/visual/release"
@@ -523,7 +394,5 @@
       "subject": "target"
     }
   ],
-  "cooldown": {
-    "base": 300
-  }
+  "cooldown": 300
 }

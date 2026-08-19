@@ -1,15 +1,10 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Spear Projection",
   "description": "Projects a narrow spear line",
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:weapon_swing",
-      "subject": "caster",
       "vfx_type": "spear_particle",
       "color": "simple_purple",
       "radius": [
@@ -18,15 +13,11 @@
         5.5
       ],
       "damage": {
-        "base": 12.0
+        "base": 12.0,
+        "weapon": 1.0
       },
-      "knockback": {
-        "base": 0.7
-      },
-      "duration": {
-        "base": 55.0
-      },
-      "rotation_z": 0.0,
+      "knockback": 0.7,
+      "duration": 55.0,
       "movement": [
         0.0,
         0.0,
@@ -52,17 +43,9 @@
       "weapon_tag": "ascension:weapon/spears"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "operation": "ascension:consume",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 85.0
-      }
-    }
-  ],
-  "cooldown": {
-    "base": 180.0
-  }
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 85.0
+  },
+  "cooldown": 180.0
 }

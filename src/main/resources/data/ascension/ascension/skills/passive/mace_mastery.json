@@ -2,30 +2,6 @@
   "type": "ascension:passive",
   "name": "Mace Mastery",
   "description": "Projects a crushing mace wave",
-  "definitions": {
-    "effects": {
-      "crushing_slow": {
-        "stacking": "refresh",
-        "stacking_scope": "source_skill",
-        "max_stacks": 1,
-        "modules": [
-          {
-            "type": "ascension:frozen_form",
-            "frozen_floor": {
-              "base": 0.0
-            },
-            "movement_reduction": {
-              "base": 0.25
-            },
-            "player_multiplier": 0.7,
-            "resistant_multiplier": 0.5,
-            "boss_multiplier": 0.25,
-            "remove_when_burning": false
-          }
-        ]
-      }
-    }
-  },
   "modifiers": [
     {
       "type": "ascension:weapon_damage",
@@ -53,36 +29,11 @@
     {
       "event": "attack",
       "weapon_tag": "ascension:weapon/maces",
-      "allow_empty_hand": false,
       "cooldown": 1,
-      "priority": 0,
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 3.0,
-            "terms": [
-              {
-                "source": {
-                  "type": "ascension:path_realm_multiplier",
-                  "path": "ascension:weapon/mace",
-                  "base_bonus": 0.1,
-                  "bonus_per_major_realm": 0.22,
-                  "bonus_per_minor_realm": 0.025,
-                  "maximum_bonus": 5.0
-                },
-                "operation": "multiply"
-              }
-            ]
-          }
-        }
-      ],
       "actions": [
         {
           "type": "ascension:weapon_swing",
           "vfx_type": "mace_particle",
-          "color": "blue",
           "technique_colors": {
             "ascension:2_profound/mount_hua_sword_manual": "blue",
             "ascension:1_ordinary/sustained_spirit_art": "purple",
@@ -97,29 +48,26 @@
             3.0
           ],
           "damage": {
-            "base": 9.0,
-            "terms": [
-              {
-                "source": {
-                  "type": "ascension:path_realm_multiplier",
-                  "path": "ascension:weapon/mace",
-                  "base_bonus": 0.1,
-                  "bonus_per_major_realm": 0.22,
-                  "bonus_per_minor_realm": 0.025,
-                  "maximum_bonus": 5.0
-                },
-                "operation": "multiply"
-              }
-            ]
+            "base": {
+              "base": 9.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:path_realm_multiplier",
+                    "path": "ascension:weapon/mace",
+                    "base_bonus": 0.1,
+                    "bonus_per_major_realm": 0.22,
+                    "bonus_per_minor_realm": 0.025,
+                    "maximum_bonus": 5.0
+                  },
+                  "operation": "multiply"
+                }
+              ]
+            },
+            "weapon": 0.5
           },
-          "knockback": 1.0,
           "duration": 12,
           "rotation_z": 90.0,
-          "movement": [
-            0.0,
-            0.0,
-            0.0
-          ],
           "path": "ascension:weapon/mace",
           "weapon_tag": "ascension:weapon/maces",
           "classifications": [
@@ -135,7 +83,46 @@
             "potency": 1.0
           }
         }
-      ]
+      ],
+      "cost": {
+        "resource": "ascension:qi",
+        "amount": {
+          "base": 3.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:path_realm_multiplier",
+                "path": "ascension:weapon/mace",
+                "base_bonus": 0.1,
+                "bonus_per_major_realm": 0.22,
+                "bonus_per_minor_realm": 0.025,
+                "maximum_bonus": 5.0
+              },
+              "operation": "multiply"
+            }
+          ]
+        }
+      }
     }
-  ]
+  ],
+  "definitions": {
+    "effects": {
+      "crushing_slow": {
+        "stacking": "refresh",
+        "stacking_scope": "source_skill",
+        "max_stacks": 1,
+        "modules": [
+          {
+            "type": "ascension:frozen_form",
+            "frozen_floor": 0.0,
+            "movement_reduction": 0.25,
+            "player_multiplier": 0.7,
+            "resistant_multiplier": 0.5,
+            "boss_multiplier": 0.25,
+            "remove_when_burning": false
+          }
+        ]
+      }
+    }
+  }
 }

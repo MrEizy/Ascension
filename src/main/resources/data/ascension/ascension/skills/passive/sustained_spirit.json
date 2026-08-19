@@ -40,15 +40,7 @@
           "operation": "multiply_total",
           "value": {
             "base": -0.1,
-            "terms": [
-              {
-                "source": {
-                  "type": "ascension:level"
-                },
-                "operation": "add",
-                "scale": -0.15
-              }
-            ]
+            "level": -0.15
           },
           "priority": 100
         },
@@ -81,16 +73,7 @@
           },
           "operation": "multiply_total",
           "value": {
-            "base": 0.0,
-            "terms": [
-              {
-                "source": {
-                  "type": "ascension:level"
-                },
-                "operation": "add",
-                "scale": -0.1
-              }
-            ]
+            "level": -0.1
           },
           "priority": 100
         }

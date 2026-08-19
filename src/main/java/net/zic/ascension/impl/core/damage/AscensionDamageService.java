@@ -48,7 +48,12 @@ public final class AscensionDamageService {
         if (target == null || target.isRemoved() || target.level().isClientSide()) {
             return false;
         }
-        if (profile == null || profile.baseDamage() <= 0.0D || damageType == null) {
+        if (profile == null || damageType == null) {
+            return false;
+        }
+
+        double initialDamage = AscensionDamageProfileResolver.rawDamage(context.caster(), profile);
+        if (initialDamage <= 0.0D) {
             return false;
         }
 
@@ -99,7 +104,6 @@ public final class AscensionDamageService {
                 )
         );
 
-        float initialDamage = (float) Math.min(profile.baseDamage(), Float.MAX_VALUE);
-        return target.hurtServer(context.level(), source, initialDamage);
+        return target.hurtServer(context.level(), source, (float) Math.min(initialDamage, Float.MAX_VALUE));
     }
 }

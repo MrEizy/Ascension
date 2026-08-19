@@ -37,8 +37,8 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
     private final Component name;
     private final Component description;
     private final int levels;
-    private final int defaultAccessibleLevel;
-    private final List<Double> experienceRequirements;
+    private final int baseLevelCap;
+    private final List<Double> levelExperienceRequirements;
     private final List<PassiveModifier> modifiers;
     private final List<PassiveTrigger> triggers;
     private final SkillDefinitions definitions;
@@ -49,8 +49,8 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
             Component name,
             Component description,
             int levels,
-            int defaultAccessibleLevel,
-            List<Double> experienceRequirements,
+            int baseLevelCap,
+            List<Double> levelExperienceRequirements,
             List<PassiveModifier> modifiers,
             List<PassiveTrigger> triggers,
             SkillDefinitions definitions,
@@ -60,10 +60,10 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
         this.name = name;
         this.description = description;
         this.levels = Math.max(1, levels);
-        this.defaultAccessibleLevel = Math.clamp(defaultAccessibleLevel <= 0 ? 1 : defaultAccessibleLevel, 1, this.levels);
-        this.experienceRequirements = experienceRequirements == null
+        this.baseLevelCap = Math.clamp(baseLevelCap <= 0 ? 1 : baseLevelCap, 1, this.levels);
+        this.levelExperienceRequirements = levelExperienceRequirements == null
                 ? List.of()
-                : experienceRequirements.stream().map(value -> Math.max(0.0D, value)).toList();
+                : levelExperienceRequirements.stream().map(value -> Math.max(0.0D, value)).toList();
         this.modifiers = modifiers == null ? List.of() : List.copyOf(modifiers);
         this.triggers = triggers == null ? List.of() : List.copyOf(triggers);
         this.definitions = definitions == null ? SkillDefinitions.EMPTY : definitions;
@@ -75,8 +75,8 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
             Component name,
             Component description,
             int levels,
-            int defaultAccessibleLevel,
-            List<Double> experienceRequirements,
+            int baseLevelCap,
+            List<Double> levelExperienceRequirements,
             List<PassiveModifier> modifiers,
             List<PassiveTrigger> triggers,
             SkillDefinitions definitions,
@@ -85,20 +85,20 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
             Optional<Upkeep> upkeep
     ) {
         return toggleable
-                ? new Toggleable(name, description, levels, defaultAccessibleLevel, experienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep)
-                : new PassiveSkill(name, description, levels, defaultAccessibleLevel, experienceRequirements, modifiers, triggers, definitions, true, Optional.empty());
+                ? new Toggleable(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep)
+                : new PassiveSkill(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, true, Optional.empty());
     }
 
     public int getConfiguredLevels() {
         return levels;
     }
 
-    public int getConfiguredDefaultAccessibleLevel() {
-        return defaultAccessibleLevel;
+    public int getConfiguredBaseLevelCap() {
+        return baseLevelCap;
     }
 
-    public List<Double> getExperienceRequirements() {
-        return experienceRequirements;
+    public List<Double> getLevelExperienceRequirements() {
+        return levelExperienceRequirements;
     }
 
     public List<PassiveModifier> modifiers() {
@@ -142,15 +142,15 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
 
     @Override
     public int getDefaultProgressionCap() {
-        return defaultAccessibleLevel;
+        return baseLevelCap;
     }
 
     @Override
     public double getExperienceRequiredForNextProgression(int currentLevel) {
         int index = currentLevel - 1;
-        return index < 0 || index >= experienceRequirements.size()
+        return index < 0 || index >= levelExperienceRequirements.size()
                 ? Double.POSITIVE_INFINITY
-                : experienceRequirements.get(index);
+                : levelExperienceRequirements.get(index);
     }
 
     @Override
@@ -257,15 +257,15 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
                 Component name,
                 Component description,
                 int levels,
-                int defaultAccessibleLevel,
-                List<Double> experienceRequirements,
+                int baseLevelCap,
+                List<Double> levelExperienceRequirements,
                 List<PassiveModifier> modifiers,
                 List<PassiveTrigger> triggers,
                 SkillDefinitions definitions,
                 boolean enabledByDefault,
                 Optional<Upkeep> upkeep
         ) {
-            super(name, description, levels, defaultAccessibleLevel, experienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep);
+            super(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep);
         }
 
         @Override

@@ -1,20 +1,14 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Test Field",
   "description": "Tests looked-position targeting, field entry, ticking, exit and expiry.",
   "definitions": {
     "fields": {
       "main": {
         "shape": "cylinder",
-        "radius": {
-          "base": 4.5
-        },
-        "height": {
-          "base": 4
-        },
-        "duration": {
-          "base": 200
-        },
+        "radius": 4.5,
+        "height": 4,
+        "duration": 200,
         "tick_interval": 10,
         "filter": {
           "relations": [
@@ -23,68 +17,46 @@
             "neutral",
             "hostile"
           ],
-          "include_players": true,
           "line_of_sight": false
         },
         "on_enter": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:happy_villager",
-            "count": {
-              "base": 12
-            },
-            "spread": {
-              "base": 0.45
-            },
-            "speed": {
-              "base": 0.03
-            }
+            "count": 12,
+            "spread": 0.45,
+            "speed": 0.03
           }
         ],
         "on_tick": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:enchant",
-            "count": {
-              "base": 5
-            },
-            "spread": {
-              "base": 0.3
-            },
-            "speed": {
-              "base": 0.02
-            }
+            "count": 5,
+            "spread": 0.3,
+            "speed": 0.02
           }
         ],
         "on_exit": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:smoke",
-            "count": {
-              "base": 6
-            },
-            "spread": {
-              "base": 0.25
-            },
-            "speed": {
-              "base": 0.01
-            }
+            "count": 6,
+            "spread": 0.25,
+            "speed": 0.01
           }
         ],
         "visual": "ascension:skill/debug/calibration_field/visual/field_visual"
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:look_position",
-    "range": {
-      "base": 14
-    },
+    "range": 14,
     "include_fluids": false,
     "fallback_to_maximum_range": true
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:field",
       "action": "apply",
@@ -94,20 +66,11 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:enchant",
-      "count": {
-        "base": 36
-      },
-      "spread": {
-        "base": 1.2
-      },
-      "speed": {
-        "base": 0.04
-      },
+      "count": 36,
+      "spread": 1.2,
+      "speed": 0.04,
       "subject": "position"
     }
   ],
-  "costs": [],
-  "cooldown": {
-    "base": 20
-  }
+  "cooldown": 20
 }

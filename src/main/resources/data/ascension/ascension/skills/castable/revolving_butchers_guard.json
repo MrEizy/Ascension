@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.revolving_butchers_guard.name"
   },
@@ -17,7 +17,6 @@
                 "type": "ascension:mastery",
                 "skill": "ascension:castable/revolving_butchers_guard"
               },
-              "operation": "add",
               "scale": 45
             }
           ],
@@ -31,7 +30,6 @@
                 "type": "ascension:mastery",
                 "skill": "ascension:castable/revolving_butchers_guard"
               },
-              "operation": "add",
               "scale": 28.0
             },
             {
@@ -39,7 +37,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:strength"
               },
-              "operation": "add",
               "scale": 1.6
             },
             {
@@ -47,7 +44,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:spirit"
               },
-              "operation": "add",
               "scale": 1.2
             }
           ],
@@ -69,60 +65,18 @@
                   "type": "ascension:mastery",
                   "skill": "ascension:castable/revolving_butchers_guard"
                 },
-                "operation": "add",
                 "scale": 0.11
               }
             ],
             "minimum": 0.5,
             "maximum": 0.84
           },
-          "stability_cost": {
-            "base": 1.0
-          },
+          "stability_cost": 1.0,
           "overflow": true,
           "priority": 125,
           "on_intercept": [
             {
               "type": "ascension:damage",
-              "amount": {
-                "base": 2.0,
-                "terms": [
-                  {
-                    "source": {
-                      "type": "ascension:context",
-                      "key": "ascension:construct_intercepted",
-                      "fallback": 0.0
-                    },
-                    "operation": "add",
-                    "scale": 0.28
-                  },
-                  {
-                    "source": {
-                      "type": "ascension:stat",
-                      "stat": "ascension:strength"
-                    },
-                    "operation": "add",
-                    "scale": 0.16
-                  },
-                  {
-                    "source": {
-                      "type": "ascension:stat",
-                      "stat": "ascension:spirit"
-                    },
-                    "operation": "add",
-                    "scale": 0.1
-                  },
-                  {
-                    "source": {
-                      "type": "ascension:mastery"
-                    },
-                    "operation": "add",
-                    "scale": 1.75
-                  }
-                ],
-                "minimum": 1.0,
-                "maximum": 42.0
-              },
               "damage_type": "minecraft:magic",
               "classifications": [
                 "ascension:skill",
@@ -131,7 +85,27 @@
                 "ascension:slaughter",
                 "ascension:wheel"
               ],
-              "path": "ascension:foundation/essence"
+              "path": "ascension:foundation/essence",
+              "base": {
+                "base": 2.0,
+                "terms": [
+                  {
+                    "source": {
+                      "type": "ascension:context",
+                      "key": "ascension:construct_intercepted",
+                      "fallback": 0.0
+                    },
+                    "scale": 0.28
+                  }
+                ],
+                "mastery": 1.75
+              },
+              "stats": {
+                "ascension:strength": 0.16,
+                "ascension:spirit": 0.1
+              },
+              "minimum": 1.0,
+              "maximum": 42.0
             },
             {
               "type": "ascension:stagger",
@@ -143,44 +117,27 @@
                       "type": "ascension:stat",
                       "stat": "ascension:strength"
                     },
-                    "operation": "add",
                     "scale": 0.1
-                  },
-                  {
-                    "source": {
-                      "type": "ascension:mastery"
-                    },
-                    "operation": "add",
-                    "scale": 2.5
                   }
                 ],
                 "minimum": 3.0,
-                "maximum": 34.0
+                "maximum": 34.0,
+                "mastery": 2.5
               },
               "definition": "#guard_impact"
             },
             {
               "type": "ascension:particles",
               "particle": "minecraft:enchanted_hit",
-              "count": {
-                "base": 10
-              },
-              "spread": {
-                "base": 0.45
-              },
-              "speed": {
-                "base": 0.07
-              }
+              "count": 10,
+              "spread": 0.45,
+              "speed": 0.07
             },
             {
               "type": "ascension:sound",
               "sound": "minecraft:block.grindstone.use",
-              "volume": {
-                "base": 0.48
-              },
-              "pitch": {
-                "base": 0.82
-              }
+              "volume": 0.48,
+              "pitch": 0.82
             }
           ],
           "projectile_response": "deflect",
@@ -194,50 +151,30 @@
           {
             "type": "ascension:particles",
             "particle": "minecraft:flash",
-            "count": {
-              "base": 1
-            },
-            "spread": {
-              "base": 0.0
-            },
-            "speed": {
-              "base": 0.0
-            }
+            "count": 1,
+            "spread": 0.0,
+            "speed": 0.0
           },
           {
             "type": "ascension:particles",
             "particle": "minecraft:crit",
-            "count": {
-              "base": 36
-            },
-            "spread": {
-              "base": 1.0
-            },
-            "speed": {
-              "base": 0.11
-            }
+            "count": 36,
+            "spread": 1.0,
+            "speed": 0.11
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:item.shield.break",
-            "volume": {
-              "base": 1.0
-            },
-            "pitch": {
-              "base": 0.62
-            }
+            "volume": 1.0,
+            "pitch": 0.62
           }
         ],
         "on_expire": [
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.amethyst_block.chime",
-            "volume": {
-              "base": 0.3
-            },
-            "pitch": {
-              "base": 0.55
-            }
+            "volume": 0.3,
+            "pitch": 0.55
           }
         ],
         "visual": "ascension:skill/castable/revolving_butchers_guard/visual/guard_construct"
@@ -253,7 +190,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 2.0
             },
             {
@@ -261,21 +197,18 @@
                 "type": "ascension:stat",
                 "stat": "ascension:strength"
               },
-              "operation": "add",
               "scale": 1.1
             }
           ],
           "minimum": 50.0
         },
         "resistance": {
-          "base": 0.0,
           "terms": [
             {
               "source": {
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.0045
             }
           ],
@@ -290,54 +223,35 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.14
             }
           ],
           "minimum": 1.0
         },
         "decay_delay": 40,
-        "guard_break_duration": {
-          "base": 42.0
-        },
-        "immunity_duration": {
-          "base": 68.0
-        },
+        "guard_break_duration": 42.0,
+        "immunity_duration": 68.0,
         "movement_multiplier": 0.14,
         "interrupt_held_casts": true,
         "on_guard_break": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:crit",
-            "count": {
-              "base": 28
-            },
-            "spread": {
-              "base": 0.75
-            },
-            "speed": {
-              "base": 0.12
-            }
+            "count": 28,
+            "spread": 0.75,
+            "speed": 0.12
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:item.shield.break",
-            "volume": {
-              "base": 1.0
-            },
-            "pitch": {
-              "base": 0.72
-            }
+            "volume": 1.0,
+            "pitch": 0.72
           }
         ]
       }
     }
   },
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:construct",
       "action": "remove",
@@ -352,9 +266,7 @@
     },
     {
       "type": "ascension:visual",
-      "duration": {
-        "base": 20
-      },
+      "duration": 20,
       "follow": true,
       "subject": "caster",
       "visual": "ascension:skill/castable/revolving_butchers_guard/visual/summon"
@@ -362,68 +274,34 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:crit",
-      "count": {
-        "base": 28
-      },
-      "spread": {
-        "base": 0.9
-      },
-      "speed": {
-        "base": 0.09
-      },
+      "count": 28,
+      "spread": 0.9,
+      "speed": 0.09,
       "subject": "caster"
     },
     {
       "type": "ascension:sound",
       "sound": "minecraft:block.netherite_block.place",
-      "volume": {
-        "base": 0.85
-      },
-      "pitch": {
-        "base": 0.72
-      },
+      "volume": 0.85,
+      "pitch": 0.72,
       "subject": "caster"
     }
   ],
-  "costs": [
+  "cost": [
     {
       "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
       "amount": {
         "base": 18,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:mastery"
-            },
-            "operation": "add",
-            "scale": 4.0,
-            "offset": -4.0
-          }
-        ]
-      },
-      "operation": "ascension:consume"
+        "per_mastery": 4.0
+      }
     },
     {
       "resource": "ascension:stamina",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 6
-      },
-      "operation": "ascension:consume"
+      "amount": 6
     }
   ],
   "cooldown": {
     "base": 260,
-    "terms": [
-      {
-        "source": {
-          "type": "ascension:mastery"
-        },
-        "operation": "add",
-        "scale": -40.0,
-        "offset": 40.0
-      }
-    ]
+    "per_mastery": -40.0
   }
 }

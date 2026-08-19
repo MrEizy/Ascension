@@ -2,8 +2,6 @@
   "type": "ascension:passive",
   "name": "Plum Blossom Sword Aura",
   "description": "Circulates sword qi through the limbs, increasing strength and agility while steadily consuming qi.",
-  "enabled_by_default": false,
-  "toggleable": true,
   "modifiers": [
     {
       "type": "ascension:stats",
@@ -25,9 +23,10 @@
       }
     }
   ],
+  "toggleable": true,
+  "enabled_by_default": false,
   "upkeep": {
     "resource": "ascension:qi",
-    "source": "ascension:skill_casting",
     "amount": 2.0,
     "interval": 20
   }

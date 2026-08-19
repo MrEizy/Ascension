@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Channel",
   "description": "A long channel",
   "cast": {
@@ -7,28 +7,16 @@
     "minimum_ticks": 20,
     "maximum_ticks": 200,
     "movement": {
-      "horizontal_drag": {
-        "base": 0.8
-      },
-      "vertical_drag": {
-        "base": 1.0
-      },
+      "horizontal_drag": 0.8,
       "disable_sprinting": true
     },
     "interruption": {
-      "damage_threshold": {
-        "base": 10000.0
-      },
+      "damage_threshold": 10000.0,
       "accumulation_window": 20,
       "release_after_minimum": false
-    },
-    "stages": []
+    }
   },
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:message",
       "message": "Calibration channel completed",
@@ -36,7 +24,5 @@
       "subject": "caster"
     }
   ],
-  "cooldown": {
-    "base": 10
-  }
+  "cooldown": 10
 }

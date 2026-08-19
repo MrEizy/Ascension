@@ -211,9 +211,6 @@ public final class WeaponSwings {
             LivingEntity target,
             Instance instance
     ) {
-        if (instance.spec.damage() <= 0.0D) {
-            return;
-        }
         SkillActionContext context = new SkillActionContext(
                 level,
                 owner,

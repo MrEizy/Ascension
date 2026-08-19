@@ -1,5 +1,5 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "dev_cultivate",
   "description": "breath in the essence, let it settle",
   "cast": {
@@ -56,17 +56,12 @@
       }
     ]
   },
-  "targeting": {
-    "type": "ascension:self"
-  },
   "require_targets": false,
-  "features": [
+  "actions": [
     {
       "type": "ascension:cultivate",
       "path": "ascension:foundation/essence",
-      "rate": {
-        "base": 100000000
-      }
+      "rate": 100000000
     }
   ]
 }

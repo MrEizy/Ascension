@@ -29,35 +29,11 @@
     {
       "event": "attack",
       "weapon_tag": "ascension:weapon/blades",
-      "allow_empty_hand": false,
       "cooldown": 1,
       "priority": 10,
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 2.0,
-            "terms": [
-              {
-                "source": {
-                  "type": "ascension:path_realm_multiplier",
-                  "path": "ascension:weapon/blade",
-                  "base_bonus": 0.1,
-                  "bonus_per_major_realm": 0.22,
-                  "bonus_per_minor_realm": 0.025,
-                  "maximum_bonus": 5.0
-                },
-                "operation": "multiply"
-              }
-            ]
-          }
-        }
-      ],
       "actions": [
         {
           "type": "ascension:weapon_swing",
-          "vfx_type": "sword_swing",
           "color": "red",
           "technique_colors": {
             "ascension:2_profound/mount_hua_sword_manual": "red",
@@ -73,29 +49,26 @@
             3.0
           ],
           "damage": {
-            "base": 5.5,
-            "terms": [
-              {
-                "source": {
-                  "type": "ascension:path_realm_multiplier",
-                  "path": "ascension:weapon/blade",
-                  "base_bonus": 0.1,
-                  "bonus_per_major_realm": 0.22,
-                  "bonus_per_minor_realm": 0.025,
-                  "maximum_bonus": 5.0
-                },
-                "operation": "multiply"
-              }
-            ]
+            "base": {
+              "base": 5.5,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:path_realm_multiplier",
+                    "path": "ascension:weapon/blade",
+                    "base_bonus": 0.1,
+                    "bonus_per_major_realm": 0.22,
+                    "bonus_per_minor_realm": 0.025,
+                    "maximum_bonus": 5.0
+                  },
+                  "operation": "multiply"
+                }
+              ]
+            },
+            "weapon": 0.5
           },
-          "knockback": 1.0,
           "duration": 8,
           "rotation_z": 30.0,
-          "movement": [
-            0.0,
-            0.0,
-            0.0
-          ],
           "path": "ascension:weapon/blade",
           "weapon_tag": "ascension:weapon/blades",
           "classifications": [
@@ -106,7 +79,26 @@
           ],
           "hit_shape": "area"
         }
-      ]
+      ],
+      "cost": {
+        "resource": "ascension:qi",
+        "amount": {
+          "base": 2.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:path_realm_multiplier",
+                "path": "ascension:weapon/blade",
+                "base_bonus": 0.1,
+                "bonus_per_major_realm": 0.22,
+                "bonus_per_minor_realm": 0.025,
+                "maximum_bonus": 5.0
+              },
+              "operation": "multiply"
+            }
+          ]
+        }
+      }
     }
   ]
 }

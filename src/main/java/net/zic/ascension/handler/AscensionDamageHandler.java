@@ -53,7 +53,7 @@ public final class AscensionDamageHandler {
 
     @SubscribeEvent
     public static void onRPGEngineDamage(RPGEngineEntityDamagedEvent.Pre event) {
-        DamageTrace trace = DamageTrace.begin(event.getDamage());
+        DamageTrace trace = DamageTrace.begin();
 
         applyProfile(event, trace);
         if (finishIfResolved(event, trace)) {
@@ -99,44 +99,43 @@ public final class AscensionDamageHandler {
     private static void applyProfile(RPGEngineEntityDamagedEvent.Pre event, DamageTrace trace) {
         if (!(event.getSource().getDamageTypeHolder(AscensionDamageTypeHolders.PROFILE)
                 instanceof AscensionDamageProfile profile)
-                || !(event.getSource().getEntity() instanceof LivingEntity attacker)
-                || profile.baseDamage() <= 0.0D) {
+                || !(event.getSource().getEntity() instanceof LivingEntity attacker)) {
+            trace.value("Incoming", event.getDamage());
             return;
         }
 
-        double effectiveScale = event.getDamage() / profile.baseDamage();
-        if (!Double.isFinite(effectiveScale) || effectiveScale <= 0.0D) {
-            return;
-        }
+        double rawDamage = profile.baseDamage();
+        trace.value("Base", profile.baseDamage());
 
-        double addedDamage = 0.0D;
         if (profile.weaponMultiplier() > 0.0D) {
-            double contribution = AscensionDamageProfileResolver.weaponDamage(attacker) * profile.weaponMultiplier() * effectiveScale;
+            double contribution = AscensionDamageProfileResolver.weaponDamage(attacker) * profile.weaponMultiplier();
             if (Double.isFinite(contribution) && contribution > 0.0D) {
-                addedDamage += contribution;
+                rawDamage += contribution;
                 trace.add("Weapon", contribution);
             }
         }
 
         for (var entry : profile.statScaling().entrySet()) {
-            double contribution = AscensionDamageProfileResolver.stat(attacker, entry.getKey()) * entry.getValue() * effectiveScale;
+            double contribution = AscensionDamageProfileResolver.stat(attacker, entry.getKey()) * entry.getValue();
             if (Double.isFinite(contribution) && Math.abs(contribution) > 1.0E-10D) {
-                addedDamage += contribution;
+                rawDamage += contribution;
                 trace.add("Stat " + entry.getKey(), contribution);
             }
         }
 
         for (var entry : profile.attributeScaling().entrySet()) {
-            double contribution = AscensionDamageProfileResolver.attribute(attacker, entry.getKey()) * entry.getValue() * effectiveScale;
+            double contribution = AscensionDamageProfileResolver.attribute(attacker, entry.getKey()) * entry.getValue();
             if (Double.isFinite(contribution) && Math.abs(contribution) > 1.0E-10D) {
-                addedDamage += contribution;
+                rawDamage += contribution;
                 trace.add("Attribute " + entry.getKey(), contribution);
             }
         }
 
-        if (Math.abs(addedDamage) > 1.0E-10D) {
-            event.setDamage(event.getDamage() + addedDamage);
+        double composedDamage = Math.max(0.0D, profile.clamp(rawDamage));
+        if (Math.abs(composedDamage - rawDamage) > 1.0E-10D) {
+            trace.transition("Profile clamp", rawDamage, composedDamage);
         }
+        trace.transition("Vanilla reductions", composedDamage, event.getDamage());
     }
 
     private static boolean finishIfResolved(RPGEngineEntityDamagedEvent.Pre event, DamageTrace trace) {
