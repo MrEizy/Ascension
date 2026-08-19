@@ -1,0 +1,53 @@
+{
+  "elements": [
+    {
+      "type": "ascension:beam",
+      "tint": [
+        80,
+        175,
+        255,
+        75
+      ],
+      "secondary_tint": [
+        225,
+        255,
+        205,
+        240
+      ],
+      "line_width": 3.0,
+      "no_depth": false
+    },
+    {
+      "type": "ascension:sprite",
+      "position": "each_point",
+      "tint": [
+        95,
+        185,
+        255,
+        130
+      ],
+      "secondary_tint": [
+        230,
+        255,
+        205,
+        235
+      ],
+      "width": 0.64,
+      "height": 0.64,
+      "spin": 3.0,
+      "pulse": 0.12,
+      "pulse_speed": 0.25,
+      "texture": "ascension:vfx/impact_ring_01"
+    },
+    {
+      "type": "ascension:particles",
+      "position": "each_point",
+      "radius": 0.16,
+      "height": 0.3,
+      "length": 0.02,
+      "count": 1,
+      "interval": 2,
+      "particle": "minecraft:end_rod"
+    }
+  ]
+}

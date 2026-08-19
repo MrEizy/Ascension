@@ -348,7 +348,7 @@ public final class Barriers {
             return;
         }
 
-        RuntimeVisualState state = visualState(barrier, selection.id(), selection.stage(), barrier.expiresAt, selection.definition());
+        RuntimeVisualState state = visualState(barrier, selection.id(), selection.stage(), barrier.expiresAt);
         if (barrier.visualId == null) {
             RuntimeVisualSync.spawn(level, state);
         } else if (!barrier.visualId.equals(selection.id())) {
@@ -356,8 +356,7 @@ public final class Barriers {
                     barrier,
                     barrier.visualId,
                     barrier.visualStage,
-                    0L,
-                    SkillDefinitions.cached(RuntimeVisualDefinition.class, barrier.visualId, null)
+                    0L
             ));
             RuntimeVisualSync.spawn(level, state);
         } else {
@@ -378,8 +377,7 @@ public final class Barriers {
                 barrier,
                 barrier.visualId,
                 barrier.visualStage,
-                0L,
-                SkillDefinitions.cached(RuntimeVisualDefinition.class, barrier.visualId, null)
+                0L
         ));
         barrier.visualId = null;
     }
@@ -394,11 +392,11 @@ public final class Barriers {
             BarrierDefinition.VisualStage stage = visual.stages().get(index);
             if (fraction <= stage.maximumDurabilityFraction()) {
                 Resolved<RuntimeVisualDefinition> resolved = SkillDefinitions.visual(context, stage.visual());
-                return resolved == null ? null : new VisualSelection(resolved.id(), resolved.value(), index + 1);
+                return resolved == null ? null : new VisualSelection(resolved.id(), index + 1);
             }
         }
         Resolved<RuntimeVisualDefinition> resolved = SkillDefinitions.visual(context, visual.id());
-        return resolved == null ? null : new VisualSelection(resolved.id(), resolved.value(), 0);
+        return resolved == null ? null : new VisualSelection(resolved.id(), 0);
     }
 
     private static SkillActionContext context(ServerLevel level, BarrierInstance barrier) {
@@ -423,8 +421,7 @@ public final class Barriers {
             BarrierInstance barrier,
             Identifier visual,
             int stage,
-            long expiresAt,
-            RuntimeVisualDefinition definition
+            long expiresAt
     ) {
         float progress = barrier.maximumDurability <= 0.0D
                 ? 0.0F
@@ -443,12 +440,11 @@ public final class Barriers {
                 progress,
                 barrier.runtimeId.getMostSignificantBits(),
                 barrier.radius,
-                barrier.height,
-                definition
+                barrier.height
         );
     }
 
-    private record VisualSelection(Identifier id, RuntimeVisualDefinition definition, int stage) {
+    private record VisualSelection(Identifier id, int stage) {
     }
 
     public enum Removal {

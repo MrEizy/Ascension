@@ -1,0 +1,9 @@
+{
+  "elements": [
+    {
+      "type": "ascension:decal",
+      "texture": "ascension:vfx/magic_circle_01",
+      "radius": 1.0
+    }
+  ]
+}

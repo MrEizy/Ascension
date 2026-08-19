@@ -944,8 +944,12 @@ public final class SkillActions {
 
     public record Visual(
             ActionSubject subject,
-            DefinitionRef<RuntimeVisualDefinition> definition,
+            Identifier visual,
             ScaledValue duration,
+            ScaledValue scale,
+            ScaledValue spin,
+            RuntimeVisualDefinition.VisualColor tint,
+            Optional<RuntimeVisualDefinition.VisualColor> secondaryTint,
             boolean follow,
             boolean rotateWithSubject,
             Vec3 offset,
@@ -957,8 +961,12 @@ public final class SkillActions {
     ) implements SkillAction {
         public static final MapCodec<Visual> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.ORIGIN).forGetter(Visual::subject),
-                DefinitionRef.codec(RuntimeVisualDefinition.CODEC).fieldOf("definition").forGetter(Visual::definition),
+                Identifier.CODEC.fieldOf("visual").forGetter(Visual::visual),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("duration", ScaledValue.constant(20.0D)).forGetter(Visual::duration),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("scale", ScaledValue.constant(1.0D)).forGetter(Visual::scale),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("spin", ScaledValue.constant(0.0D)).forGetter(Visual::spin),
+                RuntimeVisualDefinition.VisualColor.CODEC.optionalFieldOf("tint", RuntimeVisualDefinition.VisualColor.WHITE).forGetter(Visual::tint),
+                RuntimeVisualDefinition.VisualColor.CODEC.optionalFieldOf("secondary_tint").forGetter(Visual::secondaryTint),
                 Codec.BOOL.optionalFieldOf("follow", false).forGetter(Visual::follow),
                 Codec.BOOL.optionalFieldOf("rotate_with_subject", false).forGetter(Visual::rotateWithSubject),
                 CodecHelpers.VEC3.optionalFieldOf("offset", Vec3.ZERO).forGetter(Visual::offset),
@@ -970,6 +978,10 @@ public final class SkillActions {
         ).apply(instance, Visual::new));
 
         public Visual {
+            scale = scale == null ? ScaledValue.constant(1.0D) : scale;
+            spin = spin == null ? ScaledValue.constant(0.0D) : spin;
+            tint = tint == null ? RuntimeVisualDefinition.VisualColor.WHITE : tint;
+            secondaryTint = secondaryTint == null ? Optional.empty() : secondaryTint;
             offset = offset == null ? Vec3.ZERO : offset;
             points = points == null ? PointMode.NONE : points;
         }
@@ -981,7 +993,7 @@ public final class SkillActions {
 
         @Override
         public void apply(SkillActionContext context) {
-            Resolved<RuntimeVisualDefinition> resolved = SkillDefinitions.visual(context, definition);
+            Resolved<RuntimeVisualDefinition> resolved = SkillDefinitions.visual(context, visual);
             if (resolved == null) {
                 return;
             }
@@ -991,6 +1003,7 @@ public final class SkillActions {
                     : attached.position().add(0.0D, attached.getBbHeight() * 0.5D, 0.0D);
             UUID runtimeId = UUID.randomUUID();
             List<Vec3> resolvedPoints = points.resolve(context);
+            RuntimeVisualDefinition.VisualColor endTint = secondaryTint.orElse(tint);
             RuntimeVisualSync.spawn(context.level(), new RuntimeVisualState(
                     runtimeId,
                     resolved.id(),
@@ -1006,7 +1019,11 @@ public final class SkillActions {
                     runtimeId.getMostSignificantBits(),
                     primary.resolve(context.scaledValueContext()),
                     secondary.resolve(context.scaledValueContext()),
-                    resolved.value()
+                    (float) Math.max(0.0001D, scale.resolve(context.scaledValueContext())),
+                    spin.resolve(context.scaledValueContext()),
+                    tint.argb(),
+                    endTint.argb(),
+                    null
             ));
         }
     }

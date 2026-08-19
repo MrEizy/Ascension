@@ -1,0 +1,94 @@
+{
+  "elements": [
+    {
+      "type": "ascension:decal",
+      "offset": [
+        0,
+        0.03,
+        0
+      ],
+      "tint": [
+        75,
+        220,
+        255,
+        185
+      ],
+      "secondary_tint": [
+        120,
+        255,
+        190,
+        220
+      ],
+      "line_width": 2.0,
+      "no_depth": false,
+      "radius": {
+        "source": "primary",
+        "scale": 1.0,
+        "minimum": 0.25
+      },
+      "inner_radius": {
+        "source": "primary",
+        "scale": 0.42
+      },
+      "segments": 40,
+      "count": 8,
+      "spin": 0.35,
+      "pulse": 0.025,
+      "pulse_speed": 0.12
+    },
+    {
+      "type": "ascension:ring",
+      "offset": [
+        0,
+        0.08,
+        0
+      ],
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "tint": [
+        80,
+        180,
+        255,
+        115
+      ],
+      "secondary_tint": [
+        125,
+        255,
+        195,
+        155
+      ],
+      "line_width": 1.4,
+      "radius": {
+        "source": "primary",
+        "scale": 0.98,
+        "minimum": 0.25
+      },
+      "segments": 36,
+      "spin": -0.55
+    },
+    {
+      "type": "ascension:particles",
+      "tint": [
+        120,
+        255,
+        220,
+        180
+      ],
+      "radius": {
+        "source": "primary",
+        "scale": 0.78
+      },
+      "height": {
+        "source": "secondary",
+        "scale": 0.7
+      },
+      "length": 0.025,
+      "count": 2,
+      "interval": 3,
+      "particle": "minecraft:enchant"
+    }
+  ]
+}

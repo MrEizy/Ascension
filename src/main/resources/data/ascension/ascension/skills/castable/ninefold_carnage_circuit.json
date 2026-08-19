@@ -192,7 +192,7 @@
             }
           }
         ],
-        "visual": "#circuit_visual",
+        "visual": "ascension:skill/castable/ninefold_carnage_circuit/visual/circuit_visual",
         "on_expire": [
           {
             "type": "ascension:damage",
@@ -397,201 +397,6 @@
           }
         ]
       }
-    },
-    "visuals": {
-      "circuit_visual": {
-        "layers": [
-          {
-            "type": "ascension:ground_glyph",
-            "transform": {
-              "offset": [
-                0,
-                0.025,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                90,
-                4,
-                8,
-                110
-              ],
-              "secondary_color": [
-                235,
-                55,
-                28,
-                220
-              ],
-              "line_width": 2.2,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 4.8,
-              "segments": 36
-            },
-            "motion": {
-              "spin": 1.8,
-              "pulse": 0.1,
-              "pulse_speed": 0.25
-            }
-          },
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                70,
-                2,
-                5,
-                90
-              ],
-              "secondary_color": [
-                240,
-                60,
-                30,
-                205
-              ],
-              "line_width": 2.3,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 4.2,
-              "segments": 28
-            },
-            "motion": {
-              "spin": -2.5,
-              "pulse": 0.1,
-              "pulse_speed": 0.35
-            }
-          },
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                240,
-                135,
-                55,
-                80
-              ],
-              "secondary_color": [
-                255,
-                215,
-                135,
-                190
-              ],
-              "line_width": 1.6,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 2.8,
-              "segments": 28
-            },
-            "motion": {
-              "spin": 3.8,
-              "pulse": 0.1,
-              "pulse_speed": 0.35
-            }
-          },
-          {
-            "type": "ascension:particle_emitter",
-            "geometry": {
-              "radius": 4.0,
-              "height": 0.25,
-              "length": 0.04,
-              "count": 4
-            },
-            "motion": {
-              "interval": 2
-            },
-            "resources": {
-              "particle": "minecraft:crit"
-            }
-          }
-        ]
-      },
-      "cast": {
-        "layers": [
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                80,
-                3,
-                8,
-                100
-              ],
-              "secondary_color": [
-                245,
-                70,
-                30,
-                230
-              ],
-              "line_width": 2.7,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 1.2,
-              "segments": 28
-            },
-            "motion": {
-              "spin": 7.0,
-              "pulse": 0.1,
-              "pulse_speed": 0.35
-            }
-          },
-          {
-            "type": "ascension:shell",
-            "appearance": {
-              "color": [
-                60,
-                0,
-                4,
-                8
-              ],
-              "secondary_color": [
-                220,
-                45,
-                20,
-                70
-              ],
-              "line_width": 1.7,
-              "filled": true,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 0.8,
-              "height": 1.8,
-              "segments": 24
-            },
-            "motion": {
-              "spin": 2.2,
-              "pulse": 0.08,
-              "pulse_speed": 0.4
-            }
-          }
-        ]
-      }
     }
   },
   "targeting": {
@@ -620,8 +425,8 @@
         "base": 18
       },
       "follow": true,
-      "definition": "#cast",
-      "subject": "caster"
+      "subject": "caster",
+      "visual": "ascension:skill/castable/ninefold_carnage_circuit/visual/cast"
     },
     {
       "type": "ascension:field",

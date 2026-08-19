@@ -6,13 +6,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
-import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 
 import java.util.List;
 import java.util.Optional;
 
+/** Defines a virtual projectile and its optional registry-backed visual. */
 public record VirtualProjectileDefinition(
         ScaledValue speed,
         ScaledValue range,
@@ -25,7 +25,7 @@ public record VirtualProjectileDefinition(
         List<SkillAction> onEntityHit,
         List<SkillAction> onBlockHit,
         List<SkillAction> onExpire,
-        Optional<DefinitionRef<RuntimeVisualDefinition>> visual
+        Optional<Identifier> visual
 ) {
     public static final Codec<VirtualProjectileDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ScaledValue.COMPACT_CODEC.fieldOf("speed").forGetter(VirtualProjectileDefinition::speed),
@@ -39,7 +39,7 @@ public record VirtualProjectileDefinition(
             SkillAction.CODEC.listOf().optionalFieldOf("on_entity_hit", List.of()).forGetter(VirtualProjectileDefinition::onEntityHit),
             SkillAction.CODEC.listOf().optionalFieldOf("on_block_hit", List.of()).forGetter(VirtualProjectileDefinition::onBlockHit),
             SkillAction.CODEC.listOf().optionalFieldOf("on_expire", List.of()).forGetter(VirtualProjectileDefinition::onExpire),
-            DefinitionRef.codec(RuntimeVisualDefinition.CODEC).optionalFieldOf("visual").forGetter(VirtualProjectileDefinition::visual)
+            Identifier.CODEC.optionalFieldOf("visual").forGetter(VirtualProjectileDefinition::visual)
     ).apply(instance, VirtualProjectileDefinition::new));
 
     public VirtualProjectileDefinition {

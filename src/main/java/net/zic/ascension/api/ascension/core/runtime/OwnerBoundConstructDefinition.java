@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
-import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 
@@ -20,7 +19,7 @@ public record OwnerBoundConstructDefinition(
         ScaledValue stability,
         Vec3 offset,
         boolean rotateWithOwner,
-        Optional<DefinitionRef<RuntimeVisualDefinition>> visual,
+        Optional<Identifier> visual,
         List<VisualStage> visualStages,
         Optional<Interception> interception,
         List<SkillAction> onBreak,
@@ -31,7 +30,7 @@ public record OwnerBoundConstructDefinition(
             ScaledValue.COMPACT_CODEC.fieldOf("stability").forGetter(OwnerBoundConstructDefinition::stability),
             CodecHelpers.VEC3.optionalFieldOf("offset", Vec3.ZERO).forGetter(OwnerBoundConstructDefinition::offset),
             Codec.BOOL.optionalFieldOf("rotate_with_owner", true).forGetter(OwnerBoundConstructDefinition::rotateWithOwner),
-            DefinitionRef.codec(RuntimeVisualDefinition.CODEC).optionalFieldOf("visual").forGetter(OwnerBoundConstructDefinition::visual),
+            Identifier.CODEC.optionalFieldOf("visual").forGetter(OwnerBoundConstructDefinition::visual),
             VisualStage.CODEC.listOf().optionalFieldOf("visual_stages", List.of()).forGetter(OwnerBoundConstructDefinition::visualStages),
             Interception.CODEC.optionalFieldOf("interception").forGetter(OwnerBoundConstructDefinition::interception),
             SkillAction.CODEC.listOf().optionalFieldOf("on_break", List.of()).forGetter(OwnerBoundConstructDefinition::onBreak),
@@ -50,10 +49,10 @@ public record OwnerBoundConstructDefinition(
         onExpire = onExpire == null ? List.of() : List.copyOf(onExpire);
     }
 
-    public record VisualStage(double maximumStabilityFraction, DefinitionRef<RuntimeVisualDefinition> visual) {
+    public record VisualStage(double maximumStabilityFraction, Identifier visual) {
         public static final Codec<VisualStage> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.doubleRange(0.0D, 1.0D).fieldOf("maximum_stability_fraction").forGetter(VisualStage::maximumStabilityFraction),
-                DefinitionRef.codec(RuntimeVisualDefinition.CODEC).fieldOf("visual").forGetter(VisualStage::visual)
+                Identifier.CODEC.fieldOf("visual").forGetter(VisualStage::visual)
         ).apply(instance, VisualStage::new));
     }
 

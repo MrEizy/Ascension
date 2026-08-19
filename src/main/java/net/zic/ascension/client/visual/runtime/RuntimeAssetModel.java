@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public final class GuardianDharmaModel {
+public final class RuntimeAssetModel {
     private static final double PIXELS_PER_BLOCK = 16.0D;
     private static final double MODEL_CENTER_X = 8.0D;
     private static final double MODEL_CENTER_Z = 8.0D;
@@ -35,7 +35,7 @@ public final class GuardianDharmaModel {
     private ResourceManager loadedFrom;
     private LoadedModel loadedModel = LoadedModel.EMPTY;
 
-    public GuardianDharmaModel(Identifier modelId) {
+    public RuntimeAssetModel(Identifier modelId) {
         if (modelId == null) {
             throw new IllegalArgumentException("modelId cannot be null");
         }
@@ -59,6 +59,32 @@ public final class GuardianDharmaModel {
             int alpha,
             int packedLight
     ) {
+        render(
+                pose,
+                buffers,
+                origin,
+                new Vec3(0.0D, Math.toDegrees(yawRadians), 0.0D),
+                scale,
+                red,
+                green,
+                blue,
+                alpha,
+                packedLight
+        );
+    }
+
+    public void render(
+            PoseStack.Pose pose,
+            MultiBufferSource.BufferSource buffers,
+            Vec3 origin,
+            Vec3 rotation,
+            double scale,
+            int red,
+            int green,
+            int blue,
+            int alpha,
+            int packedLight
+    ) {
         if (pose == null || buffers == null || origin == null) {
             return;
         }
@@ -73,7 +99,7 @@ public final class GuardianDharmaModel {
                 pose,
                 buffers,
                 origin,
-                yawRadians,
+                rotation == null ? Vec3.ZERO : rotation,
                 resolvedScale,
                 Math.clamp(red, 0, 255),
                 Math.clamp(green, 0, 255),
@@ -111,7 +137,7 @@ public final class GuardianDharmaModel {
             }
         } catch (Exception exception) {
             AscensionCraft.LOGGER.error(
-                    "Unable to load Guardian Dharma runtime model {}",
+                    "Unable to load runtime model {}",
                     modelId,
                     exception
             );
@@ -427,7 +453,7 @@ public final class GuardianDharmaModel {
                 PoseStack.Pose pose,
                 MultiBufferSource.BufferSource buffers,
                 Vec3 origin,
-                double yawRadians,
+                Vec3 rotation,
                 double scale,
                 int red,
                 int green,
@@ -441,12 +467,12 @@ public final class GuardianDharmaModel {
                 );
 
                 for (ModelFace face : entry.getValue()) {
-                    Vec3 normal = rotateY(face.normal(), yawRadians).normalize();
+                    Vec3 normal = rotate(face.normal(), rotation).normalize();
 
                     for (int index = 0; index < 4; index++) {
-                        Vec3 point = rotateY(
+                        Vec3 point = rotate(
                                 face.vertices()[index].scale(scale),
-                                yawRadians
+                                rotation
                         ).add(origin);
                         Uv uv = face.uvs()[index];
 

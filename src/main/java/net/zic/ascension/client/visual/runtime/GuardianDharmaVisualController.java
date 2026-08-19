@@ -10,7 +10,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 
 public final class GuardianDharmaVisualController implements RuntimeVisualController {
-    private static final GuardianDharmaModel MODEL = new GuardianDharmaModel(
+    private static final RuntimeAssetModel MODEL = new RuntimeAssetModel(
             AscensionCraft.prefix("models/runtime/guardian_dharma.json")
     );
 

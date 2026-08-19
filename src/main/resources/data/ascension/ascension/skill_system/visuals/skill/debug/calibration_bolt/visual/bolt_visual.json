@@ -1,0 +1,76 @@
+{
+  "elements": [
+    {
+      "type": "ascension:trail",
+      "tint": [
+        75,
+        205,
+        255,
+        20
+      ],
+      "secondary_tint": [
+        170,
+        255,
+        220,
+        220
+      ],
+      "line_width": 3.0,
+      "no_depth": false,
+      "history": 22
+    },
+    {
+      "type": "ascension:afterimage",
+      "tint": [
+        75,
+        190,
+        255,
+        10
+      ],
+      "secondary_tint": [
+        180,
+        255,
+        225,
+        125
+      ],
+      "height": 0.42,
+      "width": 0.42,
+      "history": 18
+    },
+    {
+      "type": "ascension:ring",
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "tint": [
+        150,
+        245,
+        255,
+        210
+      ],
+      "secondary_tint": [
+        220,
+        255,
+        230,
+        245
+      ],
+      "line_width": 1.8,
+      "no_depth": false,
+      "radius": 0.28,
+      "segments": 18,
+      "spin": 3.0,
+      "pulse": 0.12,
+      "pulse_speed": 0.3
+    },
+    {
+      "type": "ascension:particles",
+      "radius": 0.08,
+      "height": 0.08,
+      "length": 0.025,
+      "count": 1,
+      "interval": 2,
+      "particle": "minecraft:electric_spark"
+    }
+  ]
+}

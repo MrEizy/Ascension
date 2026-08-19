@@ -23,7 +23,6 @@ import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.projectile.ProjectileBehavior;
 import net.zic.ascension.api.ascension.core.projectile.VirtualProjectileDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionAttribution;
-import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
@@ -91,8 +90,7 @@ public final class VirtualProjectiles {
                             visual.id(),
                             context.level().getGameTime() + Math.max(1L, (long) Math.ceil(range / speed) + 20L),
                             range,
-                            definition.hitRadius(),
-                            visual.value()
+                            definition.hitRadius()
                     )
             );
         }
@@ -250,8 +248,7 @@ public final class VirtualProjectiles {
                                 visual.id(),
                                 expiresAt,
                                 projectile.maximumRange(),
-                                definition.hitRadius(),
-                                visual.value()
+                                definition.hitRadius()
                         )
                 );
             }
@@ -289,7 +286,7 @@ public final class VirtualProjectiles {
 
     private static Resolved<RuntimeVisualDefinition> visual(
             SkillActionContext context,
-            Optional<DefinitionRef<RuntimeVisualDefinition>> reference
+            Optional<Identifier> reference
     ) {
         return reference.map(value -> SkillDefinitions.visual(context, value)).orElse(null);
     }
@@ -470,8 +467,7 @@ public final class VirtualProjectiles {
             Identifier visual,
             long expiresAt,
             double range,
-            double hitRadius,
-            RuntimeVisualDefinition definition
+            double hitRadius
     ) {
         return new RuntimeVisualState(
                 projectile.runtimeId(),
@@ -493,8 +489,7 @@ public final class VirtualProjectiles {
                         ),
                 projectile.runtimeId().getMostSignificantBits(),
                 range,
-                hitRadius,
-                definition
+                hitRadius
         );
     }
 
@@ -514,7 +509,7 @@ public final class VirtualProjectiles {
         if (visual != null) {
             RuntimeVisualSync.remove(
                     level,
-                    visualState(projectile, visual.id(), 0L, projectile.maximumRange(), definition.hitRadius(), visual.value())
+                    visualState(projectile, visual.id(), 0L, projectile.maximumRange(), definition.hitRadius())
             );
         }
     }
@@ -532,7 +527,7 @@ public final class VirtualProjectiles {
             List<SkillAction> entityHitFeatures,
             List<SkillAction> blockHitFeatures,
             List<SkillAction> expiryFeatures,
-            Optional<DefinitionRef<RuntimeVisualDefinition>> visual
+            Optional<Identifier> visual
     ) {
     }
 

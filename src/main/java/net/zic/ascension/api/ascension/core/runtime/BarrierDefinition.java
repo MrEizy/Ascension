@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
-import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineDamageSource;
 
@@ -92,13 +91,13 @@ public record BarrierDefinition(
     }
 
     public record Visual(
-            DefinitionRef<RuntimeVisualDefinition> id,
+            Identifier id,
             ScaledValue radius,
             ScaledValue height,
             List<VisualStage> stages
     ) {
         public static final Codec<Visual> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                DefinitionRef.codec(RuntimeVisualDefinition.CODEC).fieldOf("id").forGetter(Visual::id),
+                Identifier.CODEC.fieldOf("id").forGetter(Visual::id),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("radius", ScaledValue.constant(1.15D)).forGetter(Visual::radius),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("height", ScaledValue.constant(2.3D)).forGetter(Visual::height),
                 VisualStage.CODEC.listOf().optionalFieldOf("stages", List.of()).forGetter(Visual::stages)
@@ -109,10 +108,10 @@ public record BarrierDefinition(
         }
     }
 
-    public record VisualStage(double maximumDurabilityFraction, DefinitionRef<RuntimeVisualDefinition> visual) {
+    public record VisualStage(double maximumDurabilityFraction, Identifier visual) {
         public static final Codec<VisualStage> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.doubleRange(0.0D, 1.0D).fieldOf("maximum_durability_fraction").forGetter(VisualStage::maximumDurabilityFraction),
-                DefinitionRef.codec(RuntimeVisualDefinition.CODEC).fieldOf("visual").forGetter(VisualStage::visual)
+                Identifier.CODEC.fieldOf("visual").forGetter(VisualStage::visual)
         ).apply(instance, VisualStage::new));
     }
 }

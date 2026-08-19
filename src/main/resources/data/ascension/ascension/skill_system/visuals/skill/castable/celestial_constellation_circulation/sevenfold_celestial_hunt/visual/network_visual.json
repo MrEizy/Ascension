@@ -1,0 +1,85 @@
+{
+  "elements": [
+    {
+      "type": "ascension:beam",
+      "tint": [
+        85,
+        145,
+        255,
+        150
+      ],
+      "secondary_tint": [
+        240,
+        225,
+        255,
+        240
+      ],
+      "line_width": 3.2,
+      "no_depth": false
+    },
+    {
+      "type": "ascension:decal",
+      "position": "each_point",
+      "offset": [
+        0,
+        0.035,
+        0
+      ],
+      "tint": [
+        90,
+        155,
+        255,
+        145
+      ],
+      "secondary_tint": [
+        255,
+        230,
+        150,
+        230
+      ],
+      "line_width": 2.0,
+      "no_depth": false,
+      "radius": 0.52,
+      "inner_radius": 0.22,
+      "segments": 28,
+      "count": 7,
+      "spin": 0.85,
+      "pulse": 0.07,
+      "pulse_speed": 0.18
+    },
+    {
+      "type": "ascension:shell",
+      "position": "each_point",
+      "tint": [
+        100,
+        175,
+        255,
+        16
+      ],
+      "secondary_tint": [
+        255,
+        240,
+        175,
+        80
+      ],
+      "line_width": 1.0,
+      "filled": true,
+      "no_depth": false,
+      "radius": 0.38,
+      "height": 0.7,
+      "segments": 14,
+      "pulse": 0.12,
+      "pulse_speed": 0.25
+    },
+    {
+      "type": "ascension:particles",
+      "position": "each_point",
+      "radius": 0.22,
+      "height": 0.5,
+      "length": 0.018,
+      "count": 1,
+      "interval": 3,
+      "particle": "minecraft:end_rod"
+    }
+  ]
+}

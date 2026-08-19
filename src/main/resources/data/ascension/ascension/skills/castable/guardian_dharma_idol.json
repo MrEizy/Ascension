@@ -169,8 +169,8 @@
               "duration": {
                 "base": 12
               },
-              "definition": "#strike",
-              "subject": "target"
+              "subject": "target",
+              "visual": "ascension:skill/castable/guardian_dharma_idol/visual/strike"
             },
             {
               "type": "ascension:particles",
@@ -240,16 +240,7 @@
             }
           }
         ],
-        "visual": {
-          "layers": [
-            {
-              "type": "ascension:model_layer",
-              "resources": {
-                "visual": "ascension:guardian_dharma_idol"
-              }
-            }
-          ]
-        }
+        "visual": "ascension:guardian_dharma_idol"
       }
     },
     "stagger": {
@@ -320,8 +311,8 @@
             "duration": {
               "base": 20
             },
-            "definition": "#strike",
-            "subject": "target"
+            "subject": "target",
+            "visual": "ascension:skill/castable/guardian_dharma_idol/visual/strike"
           },
           {
             "type": "ascension:sound",
@@ -331,92 +322,6 @@
             },
             "pitch": {
               "base": 1.35
-            }
-          }
-        ]
-      }
-    },
-    "visuals": {
-      "strike": {
-        "layers": [
-          {
-            "type": "ascension:shell",
-            "appearance": {
-              "color": [
-                255,
-                115,
-                35,
-                18
-              ],
-              "secondary_color": [
-                255,
-                235,
-                120,
-                125
-              ],
-              "line_width": 2.0,
-              "filled": true,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 0.9,
-              "height": 1.8,
-              "segments": 18
-            },
-            "motion": {
-              "pulse": 0.22,
-              "pulse_speed": 0.5,
-              "spin": 2.0
-            }
-          },
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                255,
-                145,
-                45,
-                150
-              ],
-              "secondary_color": [
-                255,
-                245,
-                170,
-                245
-              ],
-              "line_width": 2.6,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 1.05,
-              "segments": 24
-            },
-            "motion": {
-              "spin": 4.0,
-              "pulse": 0.18,
-              "pulse_speed": 0.45
-            }
-          },
-          {
-            "type": "ascension:particle_emitter",
-            "geometry": {
-              "radius": 0.65,
-              "height": 1.4,
-              "length": 0.07,
-              "count": 4
-            },
-            "motion": {
-              "interval": 1
-            },
-            "resources": {
-              "particle": "minecraft:enchanted_hit"
             }
           }
         ]

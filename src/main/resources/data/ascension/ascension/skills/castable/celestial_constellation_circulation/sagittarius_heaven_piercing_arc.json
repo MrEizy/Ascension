@@ -379,7 +379,7 @@
             }
           }
         ],
-        "visual": "#arc"
+        "visual": "ascension:skill/castable/celestial_constellation_circulation/sagittarius_heaven_piercing_arc/visual/arc"
       }
     },
     "stagger": {
@@ -470,186 +470,6 @@
           }
         ]
       }
-    },
-    "visuals": {
-      "release": {
-        "layers": [
-          {
-            "type": "ascension:beam",
-            "appearance": {
-              "color": [
-                90,
-                155,
-                255,
-                100
-              ],
-              "secondary_color": [
-                255,
-                230,
-                125,
-                245
-              ],
-              "line_width": 4.5,
-              "no_depth": false
-            }
-          },
-          {
-            "type": "ascension:beam",
-            "appearance": {
-              "color": [
-                230,
-                245,
-                255,
-                220
-              ],
-              "secondary_color": [
-                255,
-                255,
-                220,
-                255
-              ],
-              "line_width": 1.4,
-              "no_depth": false
-            }
-          },
-          {
-            "type": "ascension:ring",
-            "position": "each_point",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                130,
-                200,
-                255,
-                170
-              ],
-              "secondary_color": [
-                255,
-                235,
-                145,
-                240
-              ],
-              "line_width": 2.2,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 0.48,
-              "segments": 24
-            },
-            "motion": {
-              "spin": 4.0,
-              "pulse": 0.12,
-              "pulse_speed": 0.4
-            }
-          }
-        ]
-      },
-      "arc": {
-        "layers": [
-          {
-            "type": "ascension:ribbon",
-            "appearance": {
-              "color": [
-                90,
-                155,
-                255,
-                12
-              ],
-              "secondary_color": [
-                255,
-                225,
-                125,
-                235
-              ],
-              "line_width": 4.0,
-              "no_depth": false
-            },
-            "motion": {
-              "history": 28
-            }
-          },
-          {
-            "type": "ascension:afterimage",
-            "appearance": {
-              "color": [
-                110,
-                170,
-                255,
-                8
-              ],
-              "secondary_color": [
-                255,
-                235,
-                165,
-                130
-              ]
-            },
-            "geometry": {
-              "width": 0.55,
-              "height": 0.55
-            },
-            "motion": {
-              "history": 22
-            }
-          },
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                165,
-                210,
-                255,
-                190
-              ],
-              "secondary_color": [
-                255,
-                240,
-                150,
-                245
-              ],
-              "line_width": 2.0,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 0.36,
-              "segments": 20
-            },
-            "motion": {
-              "spin": 5.0,
-              "pulse": 0.1,
-              "pulse_speed": 0.35
-            }
-          },
-          {
-            "type": "ascension:particle_emitter",
-            "geometry": {
-              "radius": 0.12,
-              "height": 0.12,
-              "length": 0.035,
-              "count": 2
-            },
-            "motion": {
-              "interval": 2
-            },
-            "resources": {
-              "particle": "minecraft:end_rod"
-            }
-          }
-        ]
-      }
     }
   },
   "targeting": {
@@ -693,8 +513,8 @@
         "base": 14
       },
       "points": "caster_to_target",
-      "definition": "#release",
-      "subject": "target"
+      "subject": "target",
+      "visual": "ascension:skill/castable/celestial_constellation_circulation/sagittarius_heaven_piercing_arc/visual/release"
     },
     {
       "type": "ascension:projectile",

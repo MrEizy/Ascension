@@ -6,181 +6,6 @@
   "description": {
     "translate": "ascension.skill.aquila_crossing.desc"
   },
-  "definitions": {
-    "visuals": {
-      "crossing": {
-        "layers": [
-          {
-            "type": "ascension:ribbon",
-            "appearance": {
-              "color": [
-                90,
-                175,
-                255,
-                20
-              ],
-              "secondary_color": [
-                235,
-                245,
-                255,
-                210
-              ],
-              "line_width": 4.0,
-              "no_depth": false
-            },
-            "motion": {
-              "history": 26
-            }
-          },
-          {
-            "type": "ascension:afterimage",
-            "appearance": {
-              "color": [
-                110,
-                190,
-                255,
-                10
-              ],
-              "secondary_color": [
-                255,
-                245,
-                200,
-                95
-              ]
-            },
-            "geometry": {
-              "width": 0.75,
-              "height": 1.7
-            },
-            "motion": {
-              "history": 20
-            }
-          },
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                120,
-                205,
-                255,
-                160
-              ],
-              "secondary_color": [
-                255,
-                245,
-                185,
-                235
-              ],
-              "line_width": 2.1,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 0.55,
-              "segments": 24
-            },
-            "motion": {
-              "spin": 3.2,
-              "pulse": 0.1,
-              "pulse_speed": 0.32
-            }
-          },
-          {
-            "type": "ascension:particle_emitter",
-            "geometry": {
-              "radius": 0.45,
-              "height": 1.5,
-              "length": 0.035,
-              "count": 2
-            },
-            "motion": {
-              "interval": 2
-            },
-            "resources": {
-              "particle": "minecraft:end_rod"
-            }
-          }
-        ]
-      },
-      "arrival": {
-        "layers": [
-          {
-            "type": "ascension:ground_glyph",
-            "transform": {
-              "offset": [
-                0,
-                0.03,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                100,
-                185,
-                255,
-                120
-              ],
-              "secondary_color": [
-                255,
-                240,
-                170,
-                225
-              ],
-              "line_width": 2.3,
-              "filled": true,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 1.15,
-              "inner_radius": 0.62,
-              "segments": 36,
-              "count": 8
-            },
-            "motion": {
-              "spin": 1.7,
-              "pulse": 0.12,
-              "pulse_speed": 0.28
-            }
-          },
-          {
-            "type": "ascension:shell",
-            "appearance": {
-              "color": [
-                100,
-                175,
-                255,
-                10
-              ],
-              "secondary_color": [
-                245,
-                250,
-                255,
-                75
-              ],
-              "line_width": 1.2,
-              "filled": true,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 0.85,
-              "height": 1.6,
-              "segments": 18
-            },
-            "motion": {
-              "pulse": 0.16,
-              "pulse_speed": 0.35
-            }
-          }
-        ]
-      }
-    }
-  },
   "targeting": {
     "type": "ascension:look_position",
     "range": {
@@ -217,8 +42,8 @@
         ]
       },
       "follow": true,
-      "definition": "#crossing",
-      "subject": "caster"
+      "subject": "caster",
+      "visual": "ascension:skill/castable/celestial_constellation_circulation/aquila_crossing/visual/crossing"
     },
     {
       "type": "ascension:particles",
@@ -370,8 +195,8 @@
       "duration": {
         "base": 18
       },
-      "definition": "#arrival",
-      "subject": "position"
+      "subject": "position",
+      "visual": "ascension:skill/castable/celestial_constellation_circulation/aquila_crossing/visual/arrival"
     }
   ],
   "costs": [

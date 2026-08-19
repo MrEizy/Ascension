@@ -18,7 +18,6 @@ import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
 
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
-import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
@@ -81,7 +80,7 @@ public final class AreaFields {
             double height = definition.height().resolve(context.scaledValueContext());
             RuntimeVisualSync.spawn(
                     context.level(),
-                    visualState(field, visual.id(), field.expiresAt(), radius, height, visual.value())
+                    visualState(field, visual.id(), field.expiresAt(), radius, height)
             );
         }
         return field.runtimeId();
@@ -296,7 +295,7 @@ public final class AreaFields {
         if (visual != null) {
             RuntimeVisualSync.remove(
                     level,
-                    visualState(field, visual.id(), 0L, radius, height, visual.value())
+                    visualState(field, visual.id(), 0L, radius, height)
             );
         }
     }
@@ -306,8 +305,7 @@ public final class AreaFields {
             Identifier visual,
             long expiresAt,
             double radius,
-            double height,
-            RuntimeVisualDefinition definition
+            double height
     ) {
         return new RuntimeVisualState(
                 field.runtimeId(),
@@ -323,14 +321,13 @@ public final class AreaFields {
                 0.0F,
                 field.runtimeId().getMostSignificantBits(),
                 radius,
-                height,
-                definition
+                height
         );
     }
 
     private static Resolved<RuntimeVisualDefinition> visual(
             SkillActionContext context,
-            java.util.Optional<DefinitionRef<RuntimeVisualDefinition>> reference
+            java.util.Optional<Identifier> reference
     ) {
         return reference.map(value -> SkillDefinitions.visual(context, value)).orElse(null);
     }

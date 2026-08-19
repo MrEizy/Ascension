@@ -1,0 +1,55 @@
+{
+  "elements": [
+    {
+      "type": "ascension:ring",
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "tint": [
+        80,
+        3,
+        8,
+        80
+      ],
+      "secondary_tint": [
+        245,
+        70,
+        30,
+        225
+      ],
+      "line_width": 3.2,
+      "no_depth": false,
+      "radius": 1.3,
+      "segments": 28,
+      "spin": 7.0,
+      "pulse": 0.1,
+      "pulse_speed": 0.35
+    },
+    {
+      "type": "ascension:shell",
+      "tint": [
+        60,
+        0,
+        5,
+        8
+      ],
+      "secondary_tint": [
+        230,
+        50,
+        25,
+        70
+      ],
+      "line_width": 1.7,
+      "filled": true,
+      "no_depth": false,
+      "radius": 0.95,
+      "height": 2.0,
+      "segments": 24,
+      "spin": 2.5,
+      "pulse": 0.08,
+      "pulse_speed": 0.4
+    }
+  ]
+}

@@ -371,8 +371,7 @@ public final class OwnerBoundConstructs {
                             definition,
                             construct.visualId(),
                             construct.visualStage(),
-                            0L,
-                            SkillDefinitions.cached(RuntimeVisualDefinition.class, construct.visualId(), null)
+                            0L
                     )
             );
             construct.setVisualState(null, 0);
@@ -396,8 +395,7 @@ public final class OwnerBoundConstructs {
                 definition,
                 visual.id(),
                 visual.stage(),
-                construct.expiresAt(),
-                visual.definition()
+                construct.expiresAt()
         );
         if (construct.visualId() == null) {
             RuntimeVisualSync.spawn(level, state);
@@ -409,8 +407,7 @@ public final class OwnerBoundConstructs {
                             definition,
                             construct.visualId(),
                             construct.visualStage(),
-                            0L,
-                            SkillDefinitions.cached(RuntimeVisualDefinition.class, construct.visualId(), null)
+                            0L
                     )
             );
             RuntimeVisualSync.spawn(level, state);
@@ -436,8 +433,7 @@ public final class OwnerBoundConstructs {
                         definition,
                         construct.visualId(),
                         construct.visualStage(),
-                        0L,
-                        SkillDefinitions.cached(RuntimeVisualDefinition.class, construct.visualId(), null)
+                        0L
                 )
         );
     }
@@ -454,13 +450,13 @@ public final class OwnerBoundConstructs {
             OwnerBoundConstructDefinition.VisualStage stage = definition.visualStages().get(index);
             if (fraction <= stage.maximumStabilityFraction()) {
                 Resolved<RuntimeVisualDefinition> resolved = SkillDefinitions.visual(context, stage.visual());
-                return resolved == null ? null : new VisualSelection(resolved.id(), resolved.value(), index + 1);
+                return resolved == null ? null : new VisualSelection(resolved.id(), index + 1);
             }
         }
         Resolved<RuntimeVisualDefinition> resolved = definition.visual()
                 .map(reference -> SkillDefinitions.visual(context, reference))
                 .orElse(null);
-        return resolved == null ? null : new VisualSelection(resolved.id(), resolved.value(), 0);
+        return resolved == null ? null : new VisualSelection(resolved.id(), 0);
     }
 
     private static SkillActionContext constructContext(
@@ -485,8 +481,7 @@ public final class OwnerBoundConstructs {
             OwnerBoundConstructDefinition definition,
             Identifier visual,
             int stage,
-            long expiresAt,
-            RuntimeVisualDefinition visualDefinition
+            long expiresAt
     ) {
         float progress = construct.maximumStability() <= 0.0D
                 ? 0.0F
@@ -510,8 +505,7 @@ public final class OwnerBoundConstructs {
                 progress,
                 construct.runtimeId().getMostSignificantBits(),
                 construct.stability(),
-                construct.maximumStability(),
-                visualDefinition
+                construct.maximumStability()
         );
     }
 
@@ -539,7 +533,7 @@ public final class OwnerBoundConstructs {
         EXPIRED
     }
 
-    private record VisualSelection(Identifier id, RuntimeVisualDefinition definition, int stage) {
+    private record VisualSelection(Identifier id, int stage) {
     }
 
     private static final class Instance implements OwnerBoundConstructDefinition.View {

@@ -18,7 +18,6 @@ import net.zic.ascension.api.ascension.core.runtime.AnchorNetworkDefinition;
 
 
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
-import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 
@@ -85,7 +84,7 @@ public final class AnchorNetworks {
         if (visual != null) {
             RuntimeVisualSync.spawn(
                     context.level(),
-                    visualState(network, definition, visual.id(), network.expiresAt(), visual.value())
+                    visualState(network, definition, visual.id(), network.expiresAt())
             );
         }
         return network.runtimeId();
@@ -212,8 +211,7 @@ public final class AnchorNetworks {
             Instance network,
             AnchorNetworkDefinition definition,
             Identifier visual,
-            long expiresAt,
-            RuntimeVisualDefinition visualDefinition
+            long expiresAt
     ) {
         List<Vec3> points = new ArrayList<>();
         Map<Identifier, Integer> indices = new HashMap<>();
@@ -249,14 +247,13 @@ public final class AnchorNetworks {
                 0.0F,
                 network.runtimeId().getMostSignificantBits(),
                 points.size(),
-                links.size(),
-                visualDefinition
+                links.size()
         );
     }
 
     private static Resolved<RuntimeVisualDefinition> visual(
             SkillActionContext context,
-            Optional<DefinitionRef<RuntimeVisualDefinition>> reference
+            Optional<Identifier> reference
     ) {
         return reference.map(value -> SkillDefinitions.visual(context, value)).orElse(null);
     }
@@ -307,7 +304,7 @@ public final class AnchorNetworks {
             if (visual != null) {
                 RuntimeVisualSync.remove(
                         level,
-                        visualState(network, definition, visual.id(), 0L, visual.value())
+                        visualState(network, definition, visual.id(), 0L)
                 );
             }
         }

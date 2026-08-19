@@ -1,0 +1,81 @@
+{
+  "elements": [
+    {
+      "type": "ascension:decal",
+      "offset": [
+        0,
+        0.035,
+        0
+      ],
+      "tint": [
+        92,
+        55,
+        175,
+        145
+      ],
+      "secondary_tint": [
+        180,
+        95,
+        255,
+        210
+      ],
+      "line_width": 2.3,
+      "filled": true,
+      "no_depth": false,
+      "radius": {
+        "source": "primary",
+        "scale": 1.0,
+        "minimum": 0.5
+      },
+      "inner_radius": {
+        "source": "primary",
+        "scale": 0.72
+      },
+      "segments": 48,
+      "count": 12,
+      "spin": 0.22,
+      "pulse": 0.018,
+      "pulse_speed": 0.11
+    },
+    {
+      "type": "ascension:ring",
+      "offset": [
+        0,
+        0.1,
+        0
+      ],
+      "tint": [
+        105,
+        65,
+        205,
+        190
+      ],
+      "secondary_tint": [
+        215,
+        145,
+        255,
+        235
+      ],
+      "line_width": 1.7,
+      "no_depth": false,
+      "radius": {
+        "source": "primary",
+        "scale": 0.92
+      },
+      "segments": 36,
+      "spin": -0.5
+    },
+    {
+      "type": "ascension:particles",
+      "radius": {
+        "source": "primary",
+        "scale": 0.85
+      },
+      "height": 0.5,
+      "length": 0.02,
+      "count": 2,
+      "interval": 4,
+      "particle": "minecraft:witch"
+    }
+  ]
+}

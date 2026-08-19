@@ -27,13 +27,12 @@ public record SkillDefinitions(
         Map<String, AnchorNetworkDefinition> networks,
         Map<String, OwnerBoundConstructDefinition> constructs,
         Map<String, BarrierDefinition> barriers,
-        Map<String, StaggerDefinition> stagger,
-        Map<String, RuntimeVisualDefinition> visuals
+        Map<String, StaggerDefinition> stagger
 ) {
     private static final Map<Class<?>, Map<Identifier, Object>> CACHE = new ConcurrentHashMap<>();
 
     public static final SkillDefinitions EMPTY = new SkillDefinitions(
-            Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), Map.of()
+            Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), Map.of()
     );
 
     public static final MapCodec<SkillDefinitions> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -43,8 +42,7 @@ public record SkillDefinitions(
             map(AnchorNetworkDefinition.CODEC).optionalFieldOf("networks", Map.of()).forGetter(SkillDefinitions::networks),
             map(OwnerBoundConstructDefinition.CODEC).optionalFieldOf("constructs", Map.of()).forGetter(SkillDefinitions::constructs),
             map(BarrierDefinition.CODEC).optionalFieldOf("barriers", Map.of()).forGetter(SkillDefinitions::barriers),
-            map(StaggerDefinition.CODEC).optionalFieldOf("stagger", Map.of()).forGetter(SkillDefinitions::stagger),
-            map(RuntimeVisualDefinition.CODEC).optionalFieldOf("visuals", Map.of()).forGetter(SkillDefinitions::visuals)
+            map(StaggerDefinition.CODEC).optionalFieldOf("stagger", Map.of()).forGetter(SkillDefinitions::stagger)
     ).apply(instance, SkillDefinitions::new));
 
     public SkillDefinitions {
@@ -55,7 +53,6 @@ public record SkillDefinitions(
         constructs = copy(constructs);
         barriers = copy(barriers);
         stagger = copy(stagger);
-        visuals = copy(visuals);
     }
 
     public static Resolved<SkillEffectDefinition> effect(
@@ -109,20 +106,18 @@ public record SkillDefinitions(
 
     public static Resolved<RuntimeVisualDefinition> visual(
             SkillActionContext context,
-            DefinitionRef<RuntimeVisualDefinition> reference
+            Identifier id
     ) {
-        Resolved<RuntimeVisualDefinition> resolved = resolve(
-                context,
-                reference,
-                "visual",
-                SkillDefinitions::visuals,
-                RuntimeVisualDefinition.class,
-                CoreRegistries.RUNTIME_VISUAL_REGISTRY
-        );
-        if (resolved == null && reference != null && reference.global().isPresent()) {
-            return new Resolved<>(reference.global().get(), null);
+        if (context == null || id == null) {
+            return null;
         }
-        return remember(RuntimeVisualDefinition.class, resolved);
+        RuntimeVisualDefinition value = cached(
+                RuntimeVisualDefinition.class,
+                id,
+                CoreRegistries.RUNTIME_VISUAL_REGISTRY,
+                context.level().registryAccess()
+        );
+        return new Resolved<>(id, value);
     }
 
     private static <T> Resolved<T> resolve(
@@ -200,7 +195,6 @@ public record SkillDefinitions(
         constructs.forEach((name, value) -> remember(OwnerBoundConstructDefinition.class, new Resolved<>(localId(skill, "construct", name), value)));
         barriers.forEach((name, value) -> remember(BarrierDefinition.class, new Resolved<>(localId(skill, "barrier", name), value)));
         stagger.forEach((name, value) -> remember(StaggerDefinition.class, new Resolved<>(localId(skill, "stagger", name), value)));
-        visuals.forEach((name, value) -> remember(RuntimeVisualDefinition.class, new Resolved<>(localId(skill, "visual", name), value)));
     }
 
     public static Identifier localId(Identifier skill, String category, String name) {

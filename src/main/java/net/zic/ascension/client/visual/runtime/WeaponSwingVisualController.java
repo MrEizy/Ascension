@@ -15,8 +15,6 @@ import net.zic.ascension.impl.runtime.weapon.WeaponSwings;
 
 
 public final class WeaponSwingVisualController implements RuntimeVisualController {
-    private static final int FRAME_COUNT = 7;
-    private static final int FRAME_TICKS = 1;
     private static final double DRAG = 0.92D;
 
     private WeaponSwingVisualController() {
@@ -29,11 +27,11 @@ public final class WeaponSwingVisualController implements RuntimeVisualControlle
     @Override
     public void render(RuntimeVisualState state, RenderLevelStageEvent.AfterTranslucentFeatures event) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.level == null || state.definition() == null || state.definition().layers().isEmpty()) {
+        if (minecraft.level == null || state.definition() == null || state.definition().elements().isEmpty()) {
             return;
         }
 
-        RuntimeVisualDefinition.Layer layer = state.definition().layers().getFirst();
+        RuntimeVisualDefinition.Element layer = state.definition().elements().getFirst();
         Identifier textureBase = layer.resources().texture().orElse(null);
         if (textureBase == null) {
             return;
@@ -42,7 +40,9 @@ public final class WeaponSwingVisualController implements RuntimeVisualControlle
         float partialTick = ClientRuntimeVisuals.partialTick();
         double now = minecraft.level.getGameTime() + partialTick;
         double age = Math.max(0.0D, now - state.primaryValue());
-        int frame = Math.clamp((int) Math.floor(age / FRAME_TICKS), 0, FRAME_COUNT - 1);
+        int frameTicks = Math.max(1, layer.resources().frameTicks());
+        int frameCount = Math.max(1, layer.resources().frames());
+        int frame = Math.clamp((int) Math.floor(age / frameTicks), 0, frameCount - 1);
         Identifier texture = Identifier.fromNamespaceAndPath(
                 textureBase.getNamespace(),
                 "textures/" + textureBase.getPath() + "/" + frame + ".png"

@@ -3,9 +3,9 @@ package net.zic.ascension.api.ascension.core.runtime;
 import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
-import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public record AreaFieldDefinition(
         List<SkillAction> onTick,
         List<SkillAction> onExit,
         List<SkillAction> onExpire,
-        Optional<DefinitionRef<RuntimeVisualDefinition>> visual
+        Optional<Identifier> visual
 ) {
     public static final Codec<AreaFieldDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Shape.CODEC.optionalFieldOf("shape", Shape.CYLINDER).forGetter(AreaFieldDefinition::shape),
@@ -35,7 +35,7 @@ public record AreaFieldDefinition(
             SkillAction.CODEC.listOf().optionalFieldOf("on_tick", List.of()).forGetter(AreaFieldDefinition::onTick),
             SkillAction.CODEC.listOf().optionalFieldOf("on_exit", List.of()).forGetter(AreaFieldDefinition::onExit),
             SkillAction.CODEC.listOf().optionalFieldOf("on_expire", List.of()).forGetter(AreaFieldDefinition::onExpire),
-            DefinitionRef.codec(RuntimeVisualDefinition.CODEC).optionalFieldOf("visual").forGetter(AreaFieldDefinition::visual)
+            Identifier.CODEC.optionalFieldOf("visual").forGetter(AreaFieldDefinition::visual)
     ).apply(instance, AreaFieldDefinition::new));
 
     public AreaFieldDefinition {

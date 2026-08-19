@@ -373,8 +373,8 @@ public final class WeaponSwings {
                 instance.spec.colorFolder()
         );
         Vec3 radius = instance.spec.radius();
-        RuntimeVisualDefinition.Layer layer = new RuntimeVisualDefinition.Layer(
-                RuntimeVisualDefinition.Primitives.BILLBOARD,
+        RuntimeVisualDefinition.Element layer = new RuntimeVisualDefinition.Element(
+                RuntimeVisualDefinition.Types.SPRITE,
                 RuntimeVisualDefinition.PositionMode.ORIGIN,
                 new RuntimeVisualDefinition.Transform(
                         Vec3.ZERO,
@@ -401,7 +401,10 @@ public final class WeaponSwings {
                 new RuntimeVisualDefinition.Resources(
                         Optional.of(textureBase),
                         Optional.empty(),
-                        Optional.empty()
+                        Optional.empty(),
+                        Optional.empty(),
+                        7,
+                        1
                 )
         );
         return new RuntimeVisualState(
