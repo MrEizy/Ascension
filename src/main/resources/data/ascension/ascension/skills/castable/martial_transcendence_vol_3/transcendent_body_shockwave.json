@@ -1,0 +1,75 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.transcendent_body_shockwave.name"
+  },
+  "description": {
+    "translate": "ascension.skill.transcendent_body_shockwave.desc"
+  },
+  "target": {
+    "type": "ascension:radial",
+    "radius": {
+      "base": 4.5,
+      "per_mastery": 0.45
+    },
+    "maximum_targets": 0,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 7.0,
+        "per_mastery": 1.4
+      },
+      "stats": {
+        "ascension:strength": 0.22,
+        "ascension:vitality": 0.08
+      },
+      "minimum": 3.0,
+      "maximum": 48.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:body",
+        "ascension:area"
+      ],
+      "path": "ascension:foundation/body"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:poof",
+      "count": 22,
+      "spread": 0.9,
+      "speed": 0.09,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.generic.explode",
+      "volume": 0.6,
+      "pitch": 0.85,
+      "subject": "caster"
+    }
+  ],
+  "cost": [
+    {
+      "resource": "ascension:stamina",
+      "amount": 8.0
+    },
+    {
+      "resource": "ascension:qi",
+      "amount": 6.0
+    }
+  ],
+  "cooldown": {
+    "base": 120,
+    "per_mastery": -8,
+    "minimum": 76
+  }
+}

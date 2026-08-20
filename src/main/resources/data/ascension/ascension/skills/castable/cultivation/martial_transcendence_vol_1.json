@@ -1,0 +1,40 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.martial_transcendence_vol_1_circulation.name"
+  },
+  "description": {
+    "translate": "ascension.skill.martial_transcendence_vol_1_circulation.desc"
+  },
+  "cast": {
+    "mode": "channel",
+    "stages": [
+      {
+        "particle_field": {
+          "style": "meridian_flow",
+          "particles": [
+            "minecraft:crit"
+          ],
+          "density": 14,
+          "radius": {
+            "min": 0.65,
+            "max": 1.35
+          },
+          "height": {
+            "min": 0.0,
+            "max": 1.7
+          },
+          "full_bright": true
+        }
+      }
+    ]
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:cultivate",
+      "path": "ascension:foundation/body",
+      "rate": 1.5
+    }
+  ]
+}

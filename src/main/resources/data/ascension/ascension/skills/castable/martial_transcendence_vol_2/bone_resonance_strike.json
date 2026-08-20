@@ -1,0 +1,65 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.bone_resonance_strike.name"
+  },
+  "description": {
+    "translate": "ascension.skill.bone_resonance_strike.desc"
+  },
+  "target": {
+    "type": "ascension:ray",
+    "range": 4.5,
+    "width": 0.8,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 5.0,
+        "per_mastery": 0.9
+      },
+      "stats": {
+        "ascension:strength": 0.15,
+        "ascension:vitality": 0.04
+      },
+      "minimum": 2.0,
+      "maximum": 30.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:body"
+      ],
+      "path": "ascension:foundation/body"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:crit",
+      "count": 14,
+      "spread": 0.4,
+      "speed": 0.07,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.anvil.land",
+      "volume": 0.35,
+      "pitch": 1.25,
+      "subject": "target"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:stamina",
+    "amount": 3.5
+  },
+  "cooldown": {
+    "base": 72,
+    "per_mastery": -5,
+    "minimum": 44
+  }
+}

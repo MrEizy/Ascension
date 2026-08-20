@@ -1,0 +1,105 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.thirty_three_divines_chaotic_vessel_meridians.name"
+  },
+  "description": {
+    "translate": "ascension.physique.thirty_three_divines_chaotic_vessel_meridians.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/chaos",
+    "ascension:elemental/light"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:vitality": 24.0,
+    "ascension:strength": 15.0,
+    "ascension:spirit": 48.0,
+    "ascension:agility": 33.0
+  },
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.5,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:thirty_three_divines_chaotic_vessel_meridians_vitality_modifier"
+      }
+    ],
+    "ascension:strength": [
+      {
+        "value": 0.45,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:thirty_three_divines_chaotic_vessel_meridians_strength_modifier"
+      }
+    ],
+    "ascension:spirit": [
+      {
+        "value": 1.3,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:thirty_three_divines_chaotic_vessel_meridians_spirit_modifier"
+      }
+    ],
+    "ascension:agility": [
+      {
+        "value": 0.8,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:thirty_three_divines_chaotic_vessel_meridians_agility_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": 16.0,
+      "ascension:elemental/chaos": 22.0,
+      "ascension:elemental/order": 12.0,
+      "ascension:elemental/fate": 10.0,
+      "ascension:elemental/ice": 8.0,
+      "ascension:elemental/light": 15.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/chaos": [
+        {
+          "value": 0.5,
+          "operation": "ADD_BASE",
+          "id": "ascension:thirty_three_divines_chaotic_vessel_meridians_chaos_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/order": [
+        {
+          "value": 0.5,
+          "operation": "ADD_BASE",
+          "id": "ascension:thirty_three_divines_chaotic_vessel_meridians_order_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/fate": [
+        {
+          "value": 0.4,
+          "operation": "ADD_BASE",
+          "id": "ascension:thirty_three_divines_chaotic_vessel_meridians_fate_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/ice": [
+        {
+          "value": 0.35,
+          "operation": "ADD_BASE",
+          "id": "ascension:thirty_three_divines_chaotic_vessel_meridians_ice_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/light": [
+        {
+          "value": 0.35,
+          "operation": "ADD_BASE",
+          "id": "ascension:thirty_three_divines_chaotic_vessel_meridians_light_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:heavens_path"
+  }
+}

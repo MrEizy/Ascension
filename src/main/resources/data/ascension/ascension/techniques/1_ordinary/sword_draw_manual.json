@@ -1,0 +1,57 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.sword_draw_manual.name"
+  },
+  "description": {
+    "translate": "ascension.technique.sword_draw_manual.desc"
+  },
+  "path": "ascension:weapon/sword",
+  "milestone_realms": [
+    0,
+    1,
+    2
+  ],
+  "technique_families": [
+    "sword"
+  ],
+  "max_realm": 2,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/cultivation/sword_draw_meditation": {},
+    "ascension:castable/sword_draw_manual/one_breath_draw": {
+      "caps": {
+        "1": "minor_mastery",
+        "2": "major_mastery"
+      }
+    },
+    "ascension:passive/sword_draw_manual/sheathed_edge": {
+      "unlock": 1
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:agility",
+              "value": 0.18
+            },
+            {
+              "id": "ascension:strength",
+              "value": 0.14
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:ordinary"
+  }
+}

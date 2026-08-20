@@ -1,0 +1,61 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.rigid_stance_summation_technique.name"
+  },
+  "description": {
+    "translate": "ascension.technique.rigid_stance_summation_technique.desc"
+  },
+  "path": "ascension:foundation/body",
+  "milestone_realms": [
+    0,
+    1,
+    3,
+    5
+  ],
+  "technique_families": [
+    "body"
+  ],
+  "max_realm": 5,
+  "skills": {
+    "ascension:castable/cultivation/rigid_stance_breathing": {},
+    "ascension:passive/rigid_stance_summation_technique/summated_guard": {
+      "unlock": 1
+    },
+    "ascension:castable/rigid_stance_summation_technique/mountain_receives_strike": {
+      "unlock": 3,
+      "caps": {
+        "5": "minor_mastery"
+      }
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 0.7
+            },
+            {
+              "id": "ascension:strength",
+              "value": 0.2
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:profound"
+  }
+}

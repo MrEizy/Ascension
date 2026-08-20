@@ -1,0 +1,17 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.summated_guard.name"
+  },
+  "description": {
+    "translate": "ascension.skill.summated_guard.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:defense",
+      "flat_reduction": 0.8,
+      "percentage_reduction": 0.07,
+      "stagger_resistance": 0.18
+    }
+  ]
+}

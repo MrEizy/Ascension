@@ -1,0 +1,57 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.grasping_sand_technique.name"
+  },
+  "description": {
+    "translate": "ascension.technique.grasping_sand_technique.desc"
+  },
+  "path": "ascension:foundation/body",
+  "milestone_realms": [
+    0,
+    1,
+    2
+  ],
+  "technique_families": [
+    "earth",
+    "fist"
+  ],
+  "max_realm": 2,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/grasping_sand_technique/grasping_sand_palm": {
+      "caps": {
+        "1": "minor_mastery",
+        "2": "major_mastery"
+      }
+    },
+    "ascension:passive/grasping_sand_technique/rooted_grip": {
+      "unlock": 1
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 0.16
+            },
+            {
+              "id": "ascension:strength",
+              "value": 0.14
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:ordinary"
+  }
+}

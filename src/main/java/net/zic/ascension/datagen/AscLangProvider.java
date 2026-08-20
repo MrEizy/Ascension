@@ -529,10 +529,18 @@ public class AscLangProvider extends LanguageProvider {
         // God Physiques
         add("ascension.physique.primordial_chaos_dao_body.name", "Primordial Chaos Dao Body");
         add("ascension.physique.primordial_chaos_dao_body.desc", "A constitution born with an essence sea that accepts both chaos and order. Opposing forces settle within the same circulation without immediate collapse, while space, time, and fate find unusually little resistance within its meridians.");
+        add("ascension.physique.ethereal_grandmist_connate_physique.name", "Ethereal Grandmist Connate Physique");
+        add("ascension.physique.ethereal_grandmist_connate_physique.desc", "A connate soul constitution filled with pale grandmist. Starlight sinks into the mist while gravity gathers around the spirit like a tide, making vast and weighty soul arts simple to cultivate.");
+        add("ascension.physique.azure_ashura_divine_general_form.name", "Azure Ashura Divine General Form");
+        add("ascension.physique.azure_ashura_divine_general_form.desc", "A divine war-form whose blood moves like an azure tide through a resilient frame. Water qi tempers its violence, blood qi feeds its recovery, and every fist carries the momentum of a general.");
 
         // Heavens Path Physiques
         add("ascension.physique.nine_heavens_myriad_worlds_dao_body.name", "Nine Heavens Myriad Worlds Dao Body");
         add("ascension.physique.nine_heavens_myriad_worlds_dao_body.desc", "An unimaginable physique said to mirror the structure of the heavens themselves. Qi turns through flesh, marrow, and acupoints in eonic cycles, as though every point of the body holds the shadow of a world. Spatio-temporal rivers nourish the body, flooding the hidden shadows and letting them flourish. Laws and Daos seek out the worlds within the folds of this body, fighting for acceptance.");
+        add("ascension.physique.soul_sovereignty_revolution_throne_trinity.name", "Threefold Soul Sovereignty Throne");
+        add("ascension.physique.soul_sovereignty_revolution_throne_trinity.desc", "Three sovereign thrones revolve within the soul, each presiding over thought, dreams, and the pull of fate. The body is merely their heavenly court; the spirit is the divine kingdom, and lesser souls struggle to shake its rule.");
+        add("ascension.physique.thirty_three_divines_chaotic_vessel_meridians.name", "Thirty Three Divines Chaotic Vessel Meridians");
+        add("ascension.physique.thirty_three_divines_chaotic_vessel_meridians.desc", "Thirty-three impossible vessel meridians overlap the ordinary channels, each carrying a different current through the essence sea. Chaos rushes between them without tearing the body apart, while divine light threads the disorder into patterns of sheer purity.");
 
 
 
@@ -583,9 +591,47 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.bloodline.void_devouring_kunpeng.desc", "A lineage carrying a trace of the Kunpeng, the vast spirit beast said to cross sea and sky in a single transformation. Its blood hungers for distance itself, causing storms of wind and space with every beat.");
         add("ascension.bloodline.eternal_tribulation_ancestral_dragon.name", "Eternal Tribulation Ancestral Dragon Bloodline");
         add("ascension.bloodline.eternal_tribulation_ancestral_dragon.desc", "An impossible draconic inheritance said to descend from an ancestral dragon that tempered itself beneath heavenly tribulation before the laws of the world had fully settled. Lightning strengthened its blood, chaos fed its marrow, and every drop contains an immeasurable tyranny.");
+        add("ascension.bloodline.celestial_war_tiger.name", "Celestial War Tiger Bloodline");
+        add("ascension.bloodline.celestial_war_tiger.desc", "A tiger lineage descended from beasts that prowled ancient celestial battlefields, bringing ruin to all in their way.");
+        add("ascension.bloodline.formless_river_dragon.name", "Formless River Dragon Bloodline");
+        add("ascension.bloodline.formless_river_dragon.desc", "A river-dragon lineage whose blood refuses a fixed shape.");
+        add("ascension.bloodline.dreamless_sovereign_turtle.name", "Dreamless Sovereign Turtle Bloodline");
+        add("ascension.bloodline.dreamless_sovereign_turtle.desc", "An ancient sovereign-turtle lineage whose spirit rests in absolute silence.");
+        add("ascension.bloodline.wilderness_stalker_dragon_turtle.name", "Wilderness Stalker Dragon Turtle Bloodline");
+        add("ascension.bloodline.wilderness_stalker_dragon_turtle.desc", "A divine dragon-turtle lineage born in untamed continents beyond known lands. Its presence sinks into earth and ancient growth, masking immense strength beneath patience, erupting the moment it strikes.");
+        add("ascension.bloodline.stargazing_virtuous_roc.name", "Stargazing Virtuous Roc Bloodline");
+        add("ascension.bloodline.stargazing_virtuous_roc.desc", "A mythical roc lineage said to navigate by the sovereign stars rather than the horizon. Auspicious winds gather beneath its wings, causing swirls in fate with each beat.");
+        add("ascension.bloodline.eighteen_winged_three_legged_glass_crow.name", "Eighteen-Winged Three-Legged Glass Crow Bloodline");
+        add("ascension.bloodline.eighteen_winged_three_legged_glass_crow.desc", "An impossible solar-crow lineage bearing eighteen crystalline wings and three radiant legs. Its transparent blood refracts heavenly fire into searing light, as though a fragment of the true sun had learned to fly.");
+        add("ascension.bloodline.virtuous_freedom_grand_immortal.name", "Virtuous Freedom Grand Immortal Bloodline");
+        add("ascension.bloodline.virtuous_freedom_grand_immortal.desc", "A transcendent immortal lineage said to have cast off every worldly shackle without abandoning virtue.");
 
 
         //Techniques
+        add("ascension.technique.eagle_claw_palm_technique.name", "Eagle Claw Palm Technique");
+        add("ascension.technique.eagle_claw_palm_technique.desc", "A body art modeled on the hooked talons of mountain eagles, conditioning grip, forearms, and striking lines for sudden tearing palms.");
+        add("ascension.technique.grasping_sand_technique.name", "Grasping Sand Technique");
+        add("ascension.technique.grasping_sand_technique.desc", "An ordinary palm art built around rooted footing and crushing hand control, training the practitioner to seize what would normally slip through the fingers.");
+        add("ascension.technique.iron_fist_tempering_manual.name", "Iron Fist Tempering Manual");
+        add("ascension.technique.iron_fist_tempering_manual.desc", "A rough body-tempering manual that hardens knuckles, wrists, and forearms through repeated circulation and impact until the hands strike with the weight of iron.");
+        add("ascension.technique.lightness_technique.name", "Lightness Technique");
+        add("ascension.technique.lightness_technique.desc", "A common body art of weight transfer and explosive footwork, allowing short bursts of speed and daring leaps.");
+        add("ascension.technique.martial_transcendence_vol_1.name", "Martial Transcendence, Volume I");
+        add("ascension.technique.martial_transcendence_vol_1.desc", "The first volume of a progressive body scripture, stripping weakness from the mortal frame and establishing the foundation required for transcendence.");
+        add("ascension.technique.nine_paths_of_truth.name", "Nine Paths of Truth");
+        add("ascension.technique.nine_paths_of_truth.desc", "An eccentric essence scripture that seeks truth through refinements of the first realm, widening the same foundation again and again rather than rushing forward.");
+        add("ascension.technique.shadowless_art.name", "Shadowless Art");
+        add("ascension.technique.shadowless_art.desc", "A qigong essence art that threads qi through each step until motion seems to outrun its own shadow.");
+        add("ascension.technique.sword_draw_manual.name", "Sword Draw Manual");
+        add("ascension.technique.sword_draw_manual.desc", "A plain sword manual devoted to the instant between stillness and steel, cultivating the sword through a single decisive draw.");
+        add("ascension.technique.burning_bones_technique.name", "Burning Bones Technique");
+        add("ascension.technique.burning_bones_technique.desc", "A profound body technique that kindles fire within the marrow and uses the heat to temper bone from the inside out.");
+        add("ascension.technique.martial_transcendence_vol_2.name", "Martial Transcendence, Volume II");
+        add("ascension.technique.martial_transcendence_vol_2.desc", "The second volume rebuilds the refined mortal frame under harsher circulation, forcing bone, blood, and tendon to resonate as one body.");
+        add("ascension.technique.rigid_stance_summation_technique.name", "Rigid Stance Summation Technique");
+        add("ascension.technique.rigid_stance_summation_technique.desc", "A profound defensive body art that collects dozens of bracing principles into one immovable stance, turning endurance and structure into a shield.");
+        add("ascension.technique.martial_transcendence_vol_3.name", "Martial Transcendence, Volume III");
+        add("ascension.technique.martial_transcendence_vol_3.desc", "The third volume carries the martial body beyond mere refinement, making flesh, bone, breath, and will act as a single heaven-defying weapon.");
         add("ascension.technique.mount_hua_sword_manual.name", "Plum Blossom Sword Manual");
         add("ascension.technique.mount_hua_sword_manual.desc", "A sword manual of Mount Hua that binds breath and sword as one, its gentle, falling-petal forms hiding a killing edge just a heartbeat behind");
         add("ascension.technique.sustained_spirit_art.name", "Sustained Spirit Art");
@@ -608,6 +654,72 @@ public class AscLangProvider extends LanguageProvider {
 
 
         //Skills
+        add("ascension.skill.eagle_claw_rending_palm.name", "Eagle-Claw Rending Palm");
+        add("ascension.skill.eagle_claw_rending_palm.desc", "Hook the hand like a talon and drive a short tearing palm through the opponent's guard.");
+        add("ascension.skill.hooked_talon_grip.name", "Hooked Talon Grip");
+        add("ascension.skill.hooked_talon_grip.desc", "Conditioned fingers and wrists lend greater force to empty-hand and fist-weapon strikes.");
+        add("ascension.skill.grasping_sand_palm.name", "Grasping Sand Palm");
+        add("ascension.skill.grasping_sand_palm.desc", "Drive a compact palm through the space ahead, catching several nearby opponents in the same crushing motion.");
+        add("ascension.skill.rooted_grip.name", "Rooted Grip");
+        add("ascension.skill.rooted_grip.desc", "A low, settled stance makes the body harder to shift and slightly softens incoming blows.");
+        add("ascension.skill.iron_fist_tempering.name", "Iron Fist Tempering");
+        add("ascension.skill.iron_fist_tempering.desc", "Circulate body qi through hand, wrist, and forearm, tempering the striking frame through repeated pressure.");
+        add("ascension.skill.tempered_knuckles.name", "Tempered Knuckles");
+        add("ascension.skill.tempered_knuckles.desc", "Hardened hands transfer more force through unarmed and fist-weapon attacks.");
+        add("ascension.skill.iron_breaking_fist.name", "Iron-Breaking Fist");
+        add("ascension.skill.iron_breaking_fist.desc", "Commit the tempered arm to a heavy forward punch capable of knocking an opponent off balance.");
+        add("ascension.skill.featherstep.name", "Featherstep");
+        add("ascension.skill.featherstep.desc", "Shift the body's weight in an instant and skim rapidly across the ground.");
+        add("ascension.skill.cloud_leaping_step.name", "Cloud-Leaping Step");
+        add("ascension.skill.cloud_leaping_step.desc", "Carry the principles of lightness into the air, bursting along the direction of your gaze.");
+        add("ascension.skill.skimming_stride.name", "Skimming Stride");
+        add("ascension.skill.skimming_stride.desc", "Habitual lightness training makes every ordinary movement quicker and less burdened.");
+        add("ascension.skill.martial_transcendence_vol_1_circulation.name", "First Transcendence Circulation");
+        add("ascension.skill.martial_transcendence_vol_1_circulation.desc", "Run body qi through the major muscle groups to refine the mortal frame without wasting motion.");
+        add("ascension.skill.refined_mortal_frame.name", "Refined Mortal Frame");
+        add("ascension.skill.refined_mortal_frame.desc", "The first stage of transcendence leaves flesh and musculature denser, stronger, and harder to exhaust.");
+        add("ascension.skill.transcendent_impact.name", "Transcendent Impact");
+        add("ascension.skill.transcendent_impact.desc", "Release the force gathered through the refined frame in one short, direct body strike.");
+        add("ascension.skill.nine_paths_circulation.name", "Nine Paths Circulation");
+        add("ascension.skill.nine_paths_circulation.desc", "Guide essence through repeated internal routes, polishing the same foundation from a different angle with every cycle.");
+        add("ascension.skill.truth_seeking_channels.name", "Truth-Seeking Channels");
+        add("ascension.skill.truth_seeking_channels.desc", "Repeated refinement steadies the essence channels, strengthening both spiritual clarity and bodily endurance.");
+        add("ascension.skill.shadowless_step.name", "Shadowless Step");
+        add("ascension.skill.shadowless_step.desc", "Push essence through the legs in a single pulse and cross the ground before the trailing shadow seems to catch up.");
+        add("ascension.skill.unseen_circulation.name", "Unseen Circulation");
+        add("ascension.skill.unseen_circulation.desc", "A quiet, economical circulation keeps the body light and the spirit alert even outside deliberate movement.");
+        add("ascension.skill.sword_draw_meditation.name", "Sheathed Sword Meditation");
+        add("ascension.skill.sword_draw_meditation.desc", "Cultivate the sword while it remains sheathed, binding breath and intent to the moment before the draw.");
+        add("ascension.skill.one_breath_draw.name", "One-Breath Draw");
+        add("ascension.skill.one_breath_draw.desc", "Release sword, breath, and forward momentum in one clean cut before returning to stillness.");
+        add("ascension.skill.sheathed_edge.name", "Sheathed Edge");
+        add("ascension.skill.sheathed_edge.desc", "Long practice at the draw sharpens ordinary sword attacks with a small but constant edge.");
+        add("ascension.skill.burning_bone_tempering.name", "Burning Bone Tempering");
+        add("ascension.skill.burning_bone_tempering.desc", "Draw fire through the marrow and let its heat temper the skeleton while body cultivation advances.");
+        add("ascension.skill.cinder_bones.name", "Cinder Bones");
+        add("ascension.skill.cinder_bones.desc", "Fire-tempered bones endure impact with greater stubbornness and resist being staggered.");
+        add("ascension.skill.marrow_flame_fist.name", "Marrow-Flame Fist");
+        add("ascension.skill.marrow_flame_fist.desc", "Drive heat from the marrow into a close-range strike that scorches the target from the point of impact.");
+        add("ascension.skill.martial_transcendence_vol_2_circulation.name", "Second Transcendence Circulation");
+        add("ascension.skill.martial_transcendence_vol_2_circulation.desc", "Force body qi through bone and tendon in a harsher circuit, reforging the frame established by the first volume.");
+        add("ascension.skill.reforged_mortal_frame.name", "Reforged Mortal Frame");
+        add("ascension.skill.reforged_mortal_frame.desc", "The second stage of transcendence binds strength, endurance, and speed into a sturdier whole.");
+        add("ascension.skill.bone_resonance_strike.name", "Bone-Resonance Strike");
+        add("ascension.skill.bone_resonance_strike.desc", "Set the skeleton ringing with gathered body qi and discharge that resonance through a compact blow.");
+        add("ascension.skill.rigid_stance_breathing.name", "Rigid Stance Breathing");
+        add("ascension.skill.rigid_stance_breathing.desc", "Root the feet, slow the breath, and cultivate while holding the body's structure against imagined pressure.");
+        add("ascension.skill.summated_guard.name", "Summated Guard");
+        add("ascension.skill.summated_guard.desc", "Layered stance principles reduce incoming force and make the body increasingly difficult to stagger.");
+        add("ascension.skill.mountain_receives_strike.name", "Mountain Receives the Strike");
+        add("ascension.skill.mountain_receives_strike.desc", "Brace every joint into one structure and raise a short-lived guard whose durability follows your Vitality.");
+        add("ascension.skill.martial_transcendence_vol_3_circulation.name", "Third Transcendence Circulation");
+        add("ascension.skill.martial_transcendence_vol_3_circulation.desc", "Circulate body qi through the entire frame as one system, refining flesh and spirit toward a genuinely transcendent body.");
+        add("ascension.skill.body_beyond_mortal_limits.name", "Body Beyond Mortal Limits");
+        add("ascension.skill.body_beyond_mortal_limits.desc", "A transcendent frame multiplies the body's core qualities while hardening it against damage and stagger.");
+        add("ascension.skill.transcendent_body_shockwave.name", "Transcendent Body Shockwave");
+        add("ascension.skill.transcendent_body_shockwave.desc", "Stamp and release the body's gathered force outward, battering every nearby opponent with a physical shockwave.");
+        add("ascension.skill.heaven_breaking_fist.name", "Heaven-Breaking Fist");
+        add("ascension.skill.heaven_breaking_fist.desc", "Hold the whole body behind one fist, charge its force, and release a blow whose power rises with the gathered moment.");
         add("ascension.skill.plum_blossom_breathing.name", "Plum Blossom Breathing");
         add("ascension.skill.plum_blossom_breathing.desc", "The first breathing method taught at Mount Hua, circulating qi until it flows naturally into the sword, letting sword and essence grow together as one");
         add("ascension.skill.stillfrost_breathing.name", "Stillfrost Breathing");

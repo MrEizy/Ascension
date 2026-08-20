@@ -1,0 +1,62 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.burning_bones_technique.name"
+  },
+  "description": {
+    "translate": "ascension.technique.burning_bones_technique.desc"
+  },
+  "path": "ascension:foundation/body",
+  "milestone_realms": [
+    0,
+    2,
+    5
+  ],
+  "technique_families": [
+    "fire",
+    "body"
+  ],
+  "max_realm": 5,
+  "skills": {
+    "ascension:castable/cultivation/burning_bone_tempering": {},
+    "ascension:passive/burning_bones_technique/cinder_bones": {
+      "unlock": 1
+    },
+    "ascension:castable/burning_bones_technique/marrow_flame_fist": {
+      "unlock": 2,
+      "caps": {
+        "3": "minor_mastery",
+        "5": "major_mastery"
+      }
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 0.45
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.4
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:profound"
+  }
+}

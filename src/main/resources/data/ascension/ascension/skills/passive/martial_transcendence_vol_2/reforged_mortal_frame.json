@@ -1,0 +1,37 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.reforged_mortal_frame.name"
+  },
+  "description": {
+    "translate": "ascension.skill.reforged_mortal_frame.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:strength": [
+          {
+            "value": 0.12,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:reforged_mortal_frame_strength"
+          }
+        ],
+        "ascension:vitality": [
+          {
+            "value": 0.12,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:reforged_mortal_frame_vitality"
+          }
+        ],
+        "ascension:agility": [
+          {
+            "value": 0.05,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:reforged_mortal_frame_agility"
+          }
+        ]
+      }
+    }
+  ]
+}

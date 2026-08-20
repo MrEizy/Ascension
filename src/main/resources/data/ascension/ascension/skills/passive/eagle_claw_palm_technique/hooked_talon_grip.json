@@ -1,0 +1,17 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.hooked_talon_grip.name"
+  },
+  "description": {
+    "translate": "ascension.skill.hooked_talon_grip.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:weapon_damage",
+      "weapon_tag": "ascension:weapon/fists",
+      "match": "empty_hand_or_tag",
+      "multiplier": 1.08
+    }
+  ]
+}

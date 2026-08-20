@@ -1,0 +1,17 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.rooted_grip.name"
+  },
+  "description": {
+    "translate": "ascension.skill.rooted_grip.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:defense",
+      "flat_reduction": 0.15,
+      "percentage_reduction": 0.02,
+      "stagger_resistance": 0.08
+    }
+  ]
+}

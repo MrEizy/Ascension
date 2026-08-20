@@ -1,0 +1,60 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.shadowless_art.name"
+  },
+  "description": {
+    "translate": "ascension.technique.shadowless_art.desc"
+  },
+  "path": "ascension:foundation/essence",
+  "milestone_realms": [
+    0,
+    1,
+    2
+  ],
+  "technique_families": [
+    "shadow"
+  ],
+  "max_realm": 2,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/shadowless_art/shadowless_step": {
+      "caps": {
+        "1": "minor_mastery",
+        "2": "major_mastery"
+      }
+    },
+    "ascension:passive/shadowless_art/unseen_circulation": {
+      "unlock": 1
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:agility",
+              "value": 0.22
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.12
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.04
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:ordinary"
+  }
+}

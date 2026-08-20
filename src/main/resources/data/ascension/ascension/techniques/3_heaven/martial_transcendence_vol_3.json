@@ -1,0 +1,74 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.martial_transcendence_vol_3.name"
+  },
+  "description": {
+    "translate": "ascension.technique.martial_transcendence_vol_3.desc"
+  },
+  "path": "ascension:foundation/body",
+  "milestone_realms": [
+    0,
+    1,
+    3,
+    5,
+    7
+  ],
+  "technique_families": [
+    "body"
+  ],
+  "max_realm": 7,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/cultivation/martial_transcendence_vol_3": {},
+    "ascension:passive/martial_transcendence_vol_3/body_beyond_mortal_limits": {
+      "unlock": 1
+    },
+    "ascension:castable/martial_transcendence_vol_3/transcendent_body_shockwave": {
+      "unlock": 3,
+      "caps": {
+        "5": "minor_mastery",
+        "7": "major_mastery"
+      }
+    },
+    "ascension:castable/martial_transcendence_vol_3/heaven_breaking_fist": {
+      "unlock": 5,
+      "caps": {
+        "7": "minor_mastery"
+      }
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 2.2
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 1.8
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.8
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_technique_manual",
+    "rank": "ascension:heaven"
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.bloodline.eighteen_winged_three_legged_glass_crow.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.eighteen_winged_three_legged_glass_crow.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/sun",
+    "ascension:elemental/fire"
+  ],
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 1.05
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.9
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.75
+            },
+            {
+              "id": "ascension:strength",
+              "value": 0.5
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:foundation/essence": 0.1,
+              "ascension:elemental/sun": 0.2,
+              "ascension:elemental/fire": 0.16,
+              "ascension:elemental/light": 0.1,
+              "ascension:elemental/yang": 0.08
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 10,
+        "end": 10
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 10.0
+            },
+            {
+              "id": "ascension:agility",
+              "value": 10.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 25,
+        "end": 25
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 12.0
+            },
+            {
+              "id": "ascension:agility",
+              "value": 12.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/sun": 3.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 50,
+        "end": 50
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 20.0
+            },
+            {
+              "id": "ascension:agility",
+              "value": 18.0
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 12.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/fire": 4.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 75,
+        "end": 75
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 18.0
+            },
+            {
+              "id": "ascension:agility",
+              "value": 18.0
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 14.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/light": 3.0,
+              "ascension:elemental/yang": 3.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 100,
+        "end": 100
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 38.0
+            },
+            {
+              "id": "ascension:agility",
+              "value": 32.0
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 28.0
+            },
+            {
+              "id": "ascension:strength",
+              "value": 22.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/sun": 6.0,
+              "ascension:elemental/fire": 6.0,
+              "ascension:elemental/light": 4.0,
+              "ascension:elemental/yang": 4.0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:heavens_path"
+  }
+}
