@@ -63,10 +63,10 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private final Random random = new Random();
 
     private String process = null;
+
     public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
         this.source = source;
         this.attachedEntity = entity;
-        this.source.setRegistryAccess(entity.registryAccess());
     }
     public void startProcess(String process){
         if(this.process == null) this.process = process;
@@ -216,10 +216,9 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         attributeHolder.startProcess("initialize_on_entity");
         initializeAttributes();
 
-
+        getSource().attachToEntity(getEntity());
         markDirty(getSource().load(),true);
         initializePathBonuses();
-        getSource().attachToEntity(getEntity());
         statHolder.resolveProcess("initialize_on_entity");
         attributeHolder.resolveProcess("initialize_on_entity");
 
@@ -520,6 +519,9 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         }
     }
 
+
+
+
     private static void writeIdentifierList(ValueOutput output, String key, Collection<Identifier> identifiers) {
         ValueOutput.ValueOutputList list = output.childrenList(key);
         for (Identifier identifier : identifiers) {
@@ -529,6 +531,40 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             ValueOutput element = list.addChild();
             element.putString("id", identifier.toString());
         }
+    }
+    public void write(ValueOutput output){
+        output.putBoolean(
+                "cultivation_suppressed",
+                isCultivationSuppressed()
+        );
+
+
+
+        output.putString("starter_selection_stage", starterSelectionStage.name());
+        output.putBoolean("starter_selection_complete", starterSelectionComplete);
+        writeIdentifierList(output, "offered_starter_bloodlines", offeredStarterBloodlines);
+        writeIdentifierList(output, "offered_starter_physiques", offeredStarterPhysiques);
+        writeOptionalIdentifier(output, "selected_starter_bloodline", selectedStarterBloodline);
+        writeOptionalIdentifier(output, "selected_starter_physique", selectedStarterPhysique);
+    }
+    public void read(ValueInput input){
+        setCultivationSuppressed(
+                input.getBooleanOr("cultivation_suppressed", false)
+        );
+
+
+
+        setStarterSelectionStage(readStarterSelectionStage(
+                input.getStringOr("starter_selection_stage", StarterSelectionStage.BLOODLINE.name())
+        ));
+        setStarterSelectionComplete(
+                input.getBooleanOr("starter_selection_complete", false)
+        );
+        setOfferedStarterBloodlines(readIdentifierList(input, "offered_starter_bloodlines"));
+        setOfferedStarterPhysiques(readIdentifierList(input, "offered_starter_physiques"));
+        setSelectedStarterBloodline(readOptionalIdentifier(input, "selected_starter_bloodline"));
+        setSelectedStarterPhysique(readOptionalIdentifier(input, "selected_starter_physique"));
+
     }
 
     public static class SyncHandler implements AttachmentSyncHandler<SimpleAscensionEntityData> {
@@ -613,47 +649,15 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             OriginSource originSource = new OriginSource();
             originSource.setCachedData(input.childOrEmpty("source_data"));
 
-
-
             SimpleAscensionEntityData data = new SimpleAscensionEntityData(originSource, entity);
-
-            data.setCultivationSuppressed(
-                    input.getBooleanOr("cultivation_suppressed", false)
-            );
-
-
-
-            data.setStarterSelectionStage(readStarterSelectionStage(
-                    input.getStringOr("starter_selection_stage", StarterSelectionStage.BLOODLINE.name())
-            ));
-            data.setStarterSelectionComplete(
-                    input.getBooleanOr("starter_selection_complete", false)
-            );
-            data.setOfferedStarterBloodlines(readIdentifierList(input, "offered_starter_bloodlines"));
-            data.setOfferedStarterPhysiques(readIdentifierList(input, "offered_starter_physiques"));
-            data.setSelectedStarterBloodline(readOptionalIdentifier(input, "selected_starter_bloodline"));
-            data.setSelectedStarterPhysique(readOptionalIdentifier(input, "selected_starter_physique"));
-
+            data.read(input);
             return data;
         }
 
         @Override
         public boolean write(SimpleAscensionEntityData attachment, ValueOutput output) {
             attachment.source.writeOriginSourceData(output.child("source_data"));
-            output.putBoolean(
-                    "cultivation_suppressed",
-                    attachment.isCultivationSuppressed()
-            );
-
-
-
-            output.putString("starter_selection_stage", attachment.starterSelectionStage.name());
-            output.putBoolean("starter_selection_complete", attachment.starterSelectionComplete);
-            writeIdentifierList(output, "offered_starter_bloodlines", attachment.offeredStarterBloodlines);
-            writeIdentifierList(output, "offered_starter_physiques", attachment.offeredStarterPhysiques);
-            writeOptionalIdentifier(output, "selected_starter_bloodline", attachment.selectedStarterBloodline);
-            writeOptionalIdentifier(output, "selected_starter_physique", attachment.selectedStarterPhysique);
-
+            attachment.write(output);
             return true;
         }
     }

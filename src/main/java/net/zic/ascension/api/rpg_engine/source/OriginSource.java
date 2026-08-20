@@ -2,6 +2,7 @@ package net.zic.ascension.api.rpg_engine.source;
 
 import com.mojang.datafixers.util.Pair;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,7 +36,6 @@ public class OriginSource implements StatProvider {
     private final HashSet<Identifier> removedDataSources = new HashSet<>();
 
     private ValueInput cachedData; //used in situations where we cannot easily have registry access
-    private RegistryAccess registryAccess;
 
     private final StatSheet statSheet = new StatSheet();
 
@@ -46,19 +46,11 @@ public class OriginSource implements StatProvider {
     private String process;
 
     public RegistryAccess getRegistryAccess(){
-        if (registryAccess != null) {
-            return registryAccess;
-        }
-        if (!attachedEntities.isEmpty()) {
-            return attachedEntities.iterator().next().registryAccess();
-        }
         return ServerLifecycleHooks.getCurrentServer() == null
-                ? null
+                ? (Minecraft.getInstance().getConnection() == null ? null : Minecraft.getInstance().getConnection().registryAccess())
                 : ServerLifecycleHooks.getCurrentServer().registryAccess();
     }
-    public void setRegistryAccess(RegistryAccess registryAccess){
-        this.registryAccess = registryAccess;
-    }
+
     public void setCachedData(ValueInput cachedData){this.cachedData =cachedData;}
 
     //──Source State────────────────────────────────────────────────────────
@@ -110,7 +102,6 @@ public class OriginSource implements StatProvider {
 
     public void attachToEntity(LivingEntity entity) {
         if (entity == null || attachedEntities.contains(entity)) { return; }
-        setRegistryAccess(entity.registryAccess());
         attachedEntities.add(entity);
         entity.getData(ZenithAttachments.STAT_HOLDER).registerStatProvider(this);
         for (DataSourceInstance instance : dataSources.values()) { instance.getDataSource().applyToEntity(entity, instance); }
