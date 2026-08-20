@@ -3,6 +3,7 @@ package net.zic.ascension.common.data_attachements;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -48,8 +49,11 @@ public class AscensionAttachments {
     );
 
 
-
-
+    public static final Supplier<AttachmentType<MobAscensionData>> MOB_ENTITY_DATA = ATTACHMENT_TYPES.register(
+            "mob_entity_data", () -> AttachmentType.builder(holder -> new MobAscensionData(new OriginSource(),(Mob) holder))
+                    .serialize(new MobAscensionData.Provider())
+                    .build()
+    );
 
 
     public static final Supplier<AttachmentType<SkillCastHandler>> ASCENSION_SKILL_CAST_HANDLER = ATTACHMENT_TYPES.register(

@@ -56,6 +56,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private final Random random = new Random();
 
     private String process = null;
+
     public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
         this.source = source;
         this.attachedEntity = entity;
