@@ -51,7 +51,7 @@
   ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
-    "template": "ascension:default_technique_manual",
+    "template": "ascension:default_cultivation_technique",
     "rank": "ascension:ordinary"
   }
 }

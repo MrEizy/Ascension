@@ -53,7 +53,7 @@
   ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
-    "template": "ascension:default_technique_manual",
+    "template": "ascension:default_battle_style",
     "rank": "ascension:ordinary"
   }
 }

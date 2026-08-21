@@ -45,7 +45,7 @@
         "spacing": 15
       }
     },
-    "template": "ascension:default_technique_manual",
+    "template": "ascension:default_cultivation_technique",
     "rank": "ascension:ordinary"
   }
 }

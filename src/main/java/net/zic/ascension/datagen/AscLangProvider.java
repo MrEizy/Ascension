@@ -265,6 +265,8 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.physique_essence", "Physique Essence");
         add("item.ascension.bloodline_essence", "Bloodline Essence");
         add("item.ascension.technique_manual", "Technique Manual");
+        add("item.ascension.technique_manual.battle_style", "Battle Style");
+        add("item.ascension.technique_manual.cultivation_technique", "Cultivation Technique");
 
         // Transfer Item Tooltips
         add("ascension.tooltip.bloodline.purity", "Purity");

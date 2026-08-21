@@ -10,7 +10,7 @@
           "type": "zenithlib:title_icon",
           "on_all_pages": true,
           "subtitle": {
-            "translate": "item.ascension.technique_manual"
+            "translate": "item.ascension.technique_manual.cultivation_technique"
           },
           "title": {
             "source": "zenithlib:subject_name"
