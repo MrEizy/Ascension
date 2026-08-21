@@ -18,7 +18,7 @@
   ],
   "max_realm": 5,
   "skills": {
-    "ascension:castable/cultivation/rigid_stance_breathing": {},
+    "ascension:body_cultivation/rigid_stance_breathing": {},
     "ascension:passive/rigid_stance_summation_technique/summated_guard": {
       "unlock": 1
     },

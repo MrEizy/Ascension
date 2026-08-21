@@ -1,6 +1,5 @@
 package net.zic.ascension.handler;
 
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -15,15 +14,17 @@ import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.ascension.core.resource.ResourceModifiers;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.event.resource.ResourceTransactionEvent;
+import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.effect.FrozenStateService;
 import net.zic.ascension.impl.core.effect.SkillEffectManager;
 import net.zic.ascension.impl.core.effect.SkillEffectModules;
+import net.zic.ascension.impl.core.skill.body.BodyCultivationSkillService;
 import net.zic.ascension.impl.core.skill.passive.PassiveModifiers;
 import net.zic.ascension.impl.core.skill.passive.PassiveSkillService;
+import net.zic.ascension.impl.resource.AscensionResourceSources;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class SkillRuntimeEvents {
@@ -38,6 +39,13 @@ public final class SkillRuntimeEvents {
     }
 
     @SubscribeEvent
+    public static void onResolvedDamage(RPGEngineEntityDamagedEvent.Post event) {
+        if (event.getEntity() instanceof ServerPlayer player && event.getDamage() > 0.0D) {
+            BodyCultivationSkillService.stimulate(player, AscensionResourceSources.DAMAGE, event.getDamage());
+        }
+    }
+
+    @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Pre event) {
         if (!(event.getEntity() instanceof LivingEntity entity) || entity.level().isClientSide()) {
             return;
@@ -47,6 +55,9 @@ public final class SkillRuntimeEvents {
         }
         if (SkillEffectManager.hasActiveEffects(entity)) {
             SkillEffectManager.tick(entity);
+        }
+        if (entity instanceof ServerPlayer player) {
+            BodyCultivationSkillService.tick(player);
         }
     }
 

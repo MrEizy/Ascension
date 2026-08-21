@@ -19,7 +19,7 @@
   "max_realm": 5,
   "max_minor_realm": 2,
   "skills": {
-    "ascension:castable/cultivation/martial_transcendence_vol_2": {},
+    "ascension:body_cultivation/martial_transcendence_vol_2": {},
     "ascension:passive/martial_transcendence_vol_2/reforged_mortal_frame": {
       "unlock": 1
     },

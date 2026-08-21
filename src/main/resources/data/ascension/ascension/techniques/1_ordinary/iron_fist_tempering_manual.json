@@ -19,7 +19,7 @@
   "max_realm": 2,
   "max_minor_realm": 2,
   "skills": {
-    "ascension:castable/cultivation/iron_fist_tempering": {},
+    "ascension:body_cultivation/iron_fist_tempering": {},
     "ascension:passive/iron_fist_tempering_manual/tempered_knuckles": {
       "unlock": 1
     },

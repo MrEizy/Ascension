@@ -18,7 +18,7 @@
   ],
   "max_realm": 5,
   "skills": {
-    "ascension:castable/cultivation/burning_bone_tempering": {},
+    "ascension:body_cultivation/burning_bone_tempering": {},
     "ascension:passive/burning_bones_technique/cinder_bones": {
       "unlock": 1
     },
