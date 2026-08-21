@@ -248,6 +248,7 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.starter.choose_bloodline", "Choose Your Bloodline");
         add("gui.ascension.starter.choose_physique", "Choose Your Physique");
         add("gui.ascension.starter.physique_paths", "Paths: %s");
+        add("gui.ascension.starter.incomplete_notice", "Starter selection incomplete. It will reopen when you rejoin or respawn.");
         add("gui.ascension.path_progress.tooltip", "%s (%s%%)");
 
 

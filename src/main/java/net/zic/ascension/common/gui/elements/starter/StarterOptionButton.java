@@ -11,7 +11,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
@@ -21,7 +20,6 @@ import net.zic.ascension.common.gui.elements.general.BetterButton;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.starter.StarterSelectionStage;
-import net.zic.ascension.network.ChooseStarterOptionPacket;
 
 import java.util.Collection;
 import java.util.List;
@@ -61,6 +59,8 @@ public class StarterOptionButton extends BetterButton {
     private static final int PHYSIQUE_DESCRIPTION_HEIGHT = 80;
 
     private static final int PATHS_COLOR = 0xFFD8C28F;
+    private static final int SELECTED_BORDER_COLOR = 0xFFD8C28F;
+    private static final int SELECTED_BORDER_WIDTH = 2;
 
     private static final Identifier PANEL_TEXTURE = Identifier.fromNamespaceAndPath(
             AscensionCraft.MOD_ID,
@@ -82,6 +82,7 @@ public class StarterOptionButton extends BetterButton {
             0, 0, HOLDER_WIDTH, HOLDER_HEIGHT
     );
 
+    private final StarterSelectionContainer owner;
     private final StarterSelectionStage stage;
     private final Identifier optionId;
     private final ItemStack iconStack;
@@ -92,12 +93,13 @@ public class StarterOptionButton extends BetterButton {
 
     public StarterOptionButton(
             UIFrame frame,
+            StarterSelectionContainer owner,
             StarterSelectionStage stage,
             Identifier optionId,
-            Identifier selectedBloodline,
             float scale
     ) {
         super(frame, 0, 0);
+        this.owner = owner;
         this.stage = stage;
         this.optionId = optionId;
         this.scale = scale;
@@ -184,7 +186,7 @@ public class StarterOptionButton extends BetterButton {
 
     @Override
     public void onClick() {
-        ClientPacketDistributor.sendToServer(new ChooseStarterOptionPacket(stage, optionId));
+        owner.selectOption(optionId);
     }
 
     @Override
@@ -193,6 +195,9 @@ public class StarterOptionButton extends BetterButton {
         graphics.pose().scale(scale, scale);
 
         PANEL.render(graphics);
+        if (owner.isSelected(optionId)) {
+            renderSelectedBorder(graphics);
+        }
         HOLDER.renderAt(graphics, HOLDER_X, HOLDER_Y);
         graphics.item(iconStack, ICON_X, ICON_Y);
 
@@ -201,6 +206,14 @@ public class StarterOptionButton extends BetterButton {
         renderDescription(graphics);
 
         graphics.pose().popMatrix();
+    }
+
+
+    private void renderSelectedBorder(GuiGraphicsExtractor graphics) {
+        graphics.fill(0, 0, PANEL_WIDTH, SELECTED_BORDER_WIDTH, SELECTED_BORDER_COLOR);
+        graphics.fill(0, PANEL_HEIGHT - SELECTED_BORDER_WIDTH, PANEL_WIDTH, PANEL_HEIGHT, SELECTED_BORDER_COLOR);
+        graphics.fill(0, SELECTED_BORDER_WIDTH, SELECTED_BORDER_WIDTH, PANEL_HEIGHT - SELECTED_BORDER_WIDTH, SELECTED_BORDER_COLOR);
+        graphics.fill(PANEL_WIDTH - SELECTED_BORDER_WIDTH, SELECTED_BORDER_WIDTH, PANEL_WIDTH, PANEL_HEIGHT - SELECTED_BORDER_WIDTH, SELECTED_BORDER_COLOR);
     }
 
     private void renderName(GuiGraphicsExtractor graphics) {
