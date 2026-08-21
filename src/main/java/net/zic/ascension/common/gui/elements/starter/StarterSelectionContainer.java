@@ -7,7 +7,9 @@ import net.lucent.easygui.gui.layout.positioning.rules.PositioningRules;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.common.starter.StarterSelectionStage;
+import net.zic.ascension.network.ChooseStarterOptionPacket;
 
 import java.util.List;
 
@@ -21,13 +23,19 @@ public class StarterSelectionContainer extends RenderableElement {
     private static final int BLOODLINE_CARD_GAP = 6;
     private static final int PHYSIQUE_CARD_GAP = 10;
 
+    private static final int ACTION_GAP_Y = 10;
+    private static final int ACTION_GAP_X = 8;
+
+    private final StarterSelectionStage stage;
+    private Identifier selectedOption;
+
     public StarterSelectionContainer(
             UIFrame frame,
             StarterSelectionStage stage,
-            List<Identifier> options,
-            Identifier selectedBloodline
+            List<Identifier> options
     ) {
         super(frame);
+        this.stage = stage;
 
         int optionCount = Math.max(1, options.size());
         float cardScale = scaleFor(stage);
@@ -36,8 +44,11 @@ public class StarterSelectionContainer extends RenderableElement {
         int cardHeight = StarterOptionButton.heightFor(cardScale);
         int totalCardsWidth = optionCount * cardWidth + Math.max(0, optionCount - 1) * cardGap;
 
-        setWidth(totalCardsWidth);
-        setHeight(TITLE_HEIGHT + TITLE_GAP + cardHeight);
+        int actionWidth = StarterSelectionActionButton.WIDTH * 2 + ACTION_GAP_X;
+        int actionY = TITLE_HEIGHT + TITLE_GAP + cardHeight + ACTION_GAP_Y;
+
+        setWidth(Math.max(totalCardsWidth, actionWidth));
+        setHeight(actionY + StarterSelectionActionButton.HEIGHT);
         getPositioning().setPositioningRule(PositioningRules.CENTER);
         getPositioning().setX(-getWidth() / 2);
         getPositioning().setY(-getHeight() / 2);
@@ -54,15 +65,16 @@ public class StarterSelectionContainer extends RenderableElement {
         titleLabel.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
         addChild(titleLabel);
 
-        int x = 0;
+        int cardsX = (getWidth() - totalCardsWidth) / 2;
+        int x = cardsX;
         int y = TITLE_HEIGHT + TITLE_GAP;
 
         for (Identifier option : options) {
             StarterOptionButton button = new StarterOptionButton(
                     frame,
+                    this,
                     stage,
                     option,
-                    selectedBloodline,
                     cardScale
             );
 
@@ -72,6 +84,52 @@ public class StarterSelectionContainer extends RenderableElement {
 
             x += cardWidth + cardGap;
         }
+
+        int actionX = (getWidth() - actionWidth) / 2;
+
+        StarterSelectionActionButton cancelButton = new StarterSelectionActionButton(
+                frame,
+                this,
+                StarterSelectionActionButton.Action.CANCEL
+        );
+        cancelButton.getPositioning().setX(actionX);
+        cancelButton.getPositioning().setY(actionY);
+        addChild(cancelButton);
+
+        StarterSelectionActionButton confirmButton = new StarterSelectionActionButton(
+                frame,
+                this,
+                StarterSelectionActionButton.Action.CONFIRM
+        );
+        confirmButton.getPositioning().setX(actionX + StarterSelectionActionButton.WIDTH + ACTION_GAP_X);
+        confirmButton.getPositioning().setY(actionY);
+        addChild(confirmButton);
+    }
+
+    public void selectOption(Identifier optionId) {
+        if (optionId != null) {
+            selectedOption = optionId;
+        }
+    }
+
+    public void clearSelection() {
+        selectedOption = null;
+    }
+
+    public boolean hasSelection() {
+        return selectedOption != null;
+    }
+
+    public boolean isSelected(Identifier optionId) {
+        return selectedOption != null && selectedOption.equals(optionId);
+    }
+
+    public void confirmSelection() {
+        if (selectedOption == null) {
+            return;
+        }
+
+        ClientPacketDistributor.sendToServer(new ChooseStarterOptionPacket(stage, selectedOption));
     }
 
     private static float scaleFor(StarterSelectionStage stage) {

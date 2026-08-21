@@ -582,6 +582,7 @@
   "gui.ascension.path_progress.tooltip": "%s (%s%%)",
   "gui.ascension.starter.choose_bloodline": "Choose Your Bloodline",
   "gui.ascension.starter.choose_physique": "Choose Your Physique",
+  "gui.ascension.starter.incomplete_notice": "Starter selection incomplete. It will reopen when you rejoin or respawn.",
   "gui.ascension.starter.physique_paths": "Paths: %s",
   "gui.ascension.starter.title": "Starting Selection",
   "item.ascension.black_iron_ingot": "Black Iron Ingot",
