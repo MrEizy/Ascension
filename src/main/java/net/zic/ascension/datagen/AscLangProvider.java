@@ -783,9 +783,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.heaven_grinding_slaughter_wheel.desc", "Charge the completed wheel and release it through the surrounding space, crushing nearby enemies beneath your revolutions.");
 
 
-
-
-
+        // Mob Cultivation
         add("ascension.mob_cultivation.presence", "Spiritual Qi shifts through the air Something unnerving is nearby");
     }
 }
