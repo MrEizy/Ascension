@@ -32,7 +32,8 @@
     },
     "ascension:castable/imperial_seven_stances/seventh_stance_imperial_execution": {
       "unlock": 2
-    }
+    },
+    "ascension:castable/divine_sense/divine_sense_imperial_seven_stances": {}
   },
   "item_tooltip": {
     "theme": "ascension:technique_manual",

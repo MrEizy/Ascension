@@ -12,6 +12,7 @@ import net.zic.ascension.common.command.commands.SkillMasteryCommand;
 import net.zic.ascension.common.command.commands.SlotSkillCommand;
 import net.zic.ascension.common.command.commands.TribulationCommand;
 import net.zic.ascension.common.command.commands.WorldgenDebugCommand;
+import net.zic.ascension.common.command.commands.*;
 import net.zic.ascension.mob_cultivation.command.MobCultivationCommands;
 
 public final class AscensionCommand {

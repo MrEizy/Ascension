@@ -1,0 +1,42 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.imperial_seven_stances.divine_sense.name"
+  },
+  "description": {
+    "translate": "ascension.skill.imperial_seven_stances.divine_sense.desc"
+  },
+  "default_accessible_level": 1,
+  "targeting": {
+    "type": "ascension:self"
+  },
+  "require_targets": false,
+  "features": [
+    {
+      "type": "ascension:divine_sense",
+      "subject": "caster",
+      "radius": {
+        "base": 16.0
+      },
+      "duration": {
+        "base": 100.0
+      },
+      "color": "#D4AF37",
+      "include_items": true,
+      "include_self": false
+    }
+  ],
+  "costs": [
+    {
+      "resource": "ascension:qi",
+      "operation": "ascension:consume",
+      "source": "ascension:skill_casting",
+      "amount": {
+        "base": 30.0
+      }
+    }
+  ],
+  "cooldown": {
+    "base": 200.0
+  }
+}

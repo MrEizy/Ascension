@@ -1,0 +1,229 @@
+package net.zic.ascension.client.renderer;
+
+import com.mojang.blaze3d.buffers.GpuBuffer;
+import com.mojang.blaze3d.buffers.Std140Builder;
+import com.mojang.blaze3d.buffers.Std140SizeCalculator;
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.systems.CommandEncoder;
+import com.mojang.blaze3d.systems.RenderPass;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.MeshData;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MappableRingBuffer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.zic.ascension.api.ascension.value.HexColorCodec;
+import net.zic.ascension.client.visual.DivineSenseClientState;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+
+import java.util.OptionalInt;
+
+/**
+ * Corrected against the real decompiled 26.1.2 sources:
+ *  - Std140SizeCalculator#putMat4f (not putMat4)
+ *  - Camera#position() (not getPosition())
+ *  - RenderPass#bindTexture(name, GpuTextureView, GpuSampler) — no bindSampler
+ *    method exists; sampler is @Nullable so null uses the default
+ *  - No RenderSystem.getQuadVertexBuffer() exists at all — the fullscreen
+ *    wave quad is now built with BufferBuilder/MeshData exactly like the
+ *    marker quads are, reusing the confirmed
+ *    RenderSystem.getSequentialBuffer(VertexFormat.Mode.QUADS) for indices
+ *
+ * Still inferred, not directly confirmed — check these first if something
+ * else doesn't compile:
+ *  - MeshData#vertexBuffer()/indexBuffer()/drawState() and DrawState#indexCount()
+ *  - GpuBuffer.USAGE_VERTEX / USAGE_UNIFORM / USAGE_MAP_WRITE constant names
+ *  - CommandEncoder#createRenderPass's exact overload shape
+ *
+ * Both draw calls read from DivineSenseClientState, only ever populated on the
+ * casting player's own client — that's the privacy mechanism, unaffected by
+ * any of this rendering-API back-and-forth.
+ */
+public enum DivineSenseRenderer {
+    INSTANCE;
+
+    private static final float GROWTH_DURATION_MS = 600.0F;
+
+    private final MappableRingBuffer effectUbo = new MappableRingBuffer(
+            () -> "Divine Sense Effect UBO",
+            GpuBuffer.USAGE_UNIFORM | GpuBuffer.USAGE_MAP_WRITE,
+            new Std140SizeCalculator()
+                    .putMat4f() // InvViewMat
+                    .putMat4f() // InvProjMat
+                    .putVec3()  // Pos
+                    .putVec3()  // Center
+                    .putFloat() // Radius
+                    .putVec3()  // Color
+                    .get()
+    );
+
+    private final MappableRingBuffer resultUbo = new MappableRingBuffer(
+            () -> "Divine Sense Result UBO",
+            GpuBuffer.USAGE_UNIFORM | GpuBuffer.USAGE_MAP_WRITE,
+            new Std140SizeCalculator()
+                    .putMat4f() // ProjMat
+                    .putMat4f() // ModelViewMat
+                    .putFloat() // Time
+                    .putVec3()  // Tint
+                    .get()
+    );
+
+    public static void renderWave(Matrix4f viewMatrix, Matrix4f projectionMatrix) {
+        INSTANCE.doRenderWave(viewMatrix, projectionMatrix);
+    }
+
+    public static void renderMarkers(PoseStack poseStack, Matrix4f projectionMatrix, float partialTick) {
+        INSTANCE.doRenderMarkers(poseStack, projectionMatrix, partialTick);
+    }
+
+    private void doRenderWave(Matrix4f viewMatrix, Matrix4f projectionMatrix) {
+        DivineSenseClientState state = DivineSenseClientState.get();
+        if (!state.isActive()) {
+            return;
+        }
+
+        float progress = Math.min(1.0F, (System.currentTimeMillis() - state.startTimeMs()) / GROWTH_DURATION_MS);
+        float radius = state.radius() * progress;
+        Matrix4f invView = new Matrix4f(viewMatrix).invert();
+        Matrix4f invProj = new Matrix4f(projectionMatrix).invert();
+        Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        float[] rgb = HexColorCodec.toFloats(state.color());
+
+        CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
+
+        effectUbo.rotate();
+        try (GpuBuffer.MappedView view = encoder.mapBuffer(effectUbo.currentBuffer(), false, true)) {
+            Std140Builder.intoBuffer(view.data())
+                    .putMat4f(invView)
+                    .putMat4f(invProj)
+                    .putVec3(new Vector3f((float) cameraPos.x, (float) cameraPos.y, (float) cameraPos.z))
+                    .putVec3(state.center().toVector3f())
+                    .putFloat(radius)
+                    .putVec3(new Vector3f(rgb[0], rgb[1], rgb[2]));
+        }
+
+        // Build the fullscreen quad the same way the markers are built below —
+        // there is no engine-provided quad vertex buffer to reach for.
+        BufferBuilder quadBuilder = new BufferBuilder(
+                new ByteBufferBuilder(256), VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX
+        );
+        quadBuilder.addVertex(-1.0F, -1.0F, 0.0F).setUv(0.0F, 0.0F);
+        quadBuilder.addVertex(1.0F, -1.0F, 0.0F).setUv(1.0F, 0.0F);
+        quadBuilder.addVertex(1.0F, 1.0F, 0.0F).setUv(1.0F, 1.0F);
+        quadBuilder.addVertex(-1.0F, 1.0F, 0.0F).setUv(0.0F, 1.0F);
+        MeshData quadMesh = quadBuilder.build();
+        if (quadMesh == null) {
+            return;
+        }
+
+        RenderTarget mainTarget = Minecraft.getInstance().getMainRenderTarget();
+
+        try (GpuBuffer quadVertexBuffer = RenderSystem.getDevice().createBuffer(
+                () -> "Divine Sense Wave Quad", GpuBuffer.USAGE_VERTEX, quadMesh.vertexBuffer()
+        )) {
+            // Sampling the depth view of the same target we're rendering color into is the
+            // one piece I can't confirm is safe under 26.1.2's texture model without a real
+            // example doing exactly this. If you get validation errors or stale/blank depth
+            // reads, copy the depth view into a scratch GpuTexture first via
+            // CommandEncoder#copyTextureToTexture and sample that instead.
+            try (RenderPass pass = encoder.createRenderPass(
+                    () -> "Divine Sense Wave",
+                    mainTarget.getColorTextureView(),
+                    OptionalInt.empty()
+            )) {
+                pass.setPipeline(DivineSensePipelines.DIVINE_SENSE_EFFECT);
+                pass.bindTexture("DepthSampler", mainTarget.getDepthTextureView(), null);
+                pass.setUniform("DivineSenseEffectUniform", effectUbo.currentBuffer());
+
+                RenderSystem.AutoStorageIndexBuffer indices = RenderSystem.getSequentialBuffer(VertexFormat.Mode.QUADS);
+                pass.setVertexBuffer(0, quadVertexBuffer);
+                pass.setIndexBuffer(indices.getBuffer(6), indices.type());
+                pass.drawIndexed(0, 0, 6, 1);
+            }
+        }
+    }
+
+    private void doRenderMarkers(PoseStack poseStack, Matrix4f projectionMatrix, float partialTick) {
+        DivineSenseClientState state = DivineSenseClientState.get();
+        Level level = Minecraft.getInstance().level;
+        if (!state.isActive() || level == null) {
+            return;
+        }
+
+        float[] rgb = HexColorCodec.toFloats(state.color());
+        float time = (System.currentTimeMillis() - state.startTimeMs()) / 1000.0F;
+
+        CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
+        resultUbo.rotate();
+        try (GpuBuffer.MappedView view = encoder.mapBuffer(resultUbo.currentBuffer(), false, true)) {
+            Std140Builder.intoBuffer(view.data())
+                    .putMat4f(projectionMatrix)
+                    .putMat4f(poseStack.last().pose())
+                    .putFloat(time)
+                    .putVec3(new Vector3f(rgb[0], rgb[1], rgb[2]));
+        }
+
+        Vec3 camPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        byte r = (byte) Math.round(rgb[0] * 255.0F);
+        byte g = (byte) Math.round(rgb[1] * 255.0F);
+        byte b = (byte) Math.round(rgb[2] * 255.0F);
+
+        BufferBuilder builder = new BufferBuilder(
+                new ByteBufferBuilder(1536), VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR
+        );
+
+        for (int id : state.highlightedIds()) {
+            Entity entity = level.getEntity(id);
+            if (entity == null) {
+                continue;
+            }
+            Vec3 relative = entity.getPosition(partialTick).subtract(camPos).add(0, entity.getBbHeight() * 0.5, 0);
+            float size = Math.max(entity.getBbWidth(), entity.getBbHeight()) * 0.6F + 0.3F;
+            addBillboard(builder, relative, size, r, g, b);
+        }
+
+        MeshData mesh = builder.build();
+        if (mesh == null) {
+            return; // nothing highlighted this frame
+        }
+
+        try (GpuBuffer vertexBuffer = RenderSystem.getDevice().createBuffer(
+                () -> "Divine Sense Markers", GpuBuffer.USAGE_VERTEX, mesh.vertexBuffer()
+        )) {
+            RenderTarget mainTarget = Minecraft.getInstance().getMainRenderTarget();
+            try (RenderPass pass = encoder.createRenderPass(
+                    () -> "Divine Sense Markers",
+                    mainTarget.getColorTextureView(),
+                    OptionalInt.empty()
+            )) {
+                pass.setPipeline(DivineSensePipelines.DIVINE_SENSE_RESULT);
+                pass.setUniform("DivineSenseResultUniform", resultUbo.currentBuffer());
+                pass.setVertexBuffer(0, vertexBuffer);
+                if (mesh.indexBuffer() != null) {
+                    RenderSystem.AutoStorageIndexBuffer indices = RenderSystem.getSequentialBuffer(VertexFormat.Mode.QUADS);
+                    pass.setIndexBuffer(indices.getBuffer(mesh.drawState().indexCount()), indices.type());
+                    pass.drawIndexed(0, 0, mesh.drawState().indexCount(), 1);
+                }
+            }
+        }
+    }
+
+    private static void addBillboard(BufferBuilder builder, Vec3 relativePos, float size, byte r, byte g, byte b) {
+        float x = (float) relativePos.x;
+        float y = (float) relativePos.y;
+        float z = (float) relativePos.z;
+        builder.addVertex(x - size, y - size, z).setUv(0, 0).setColor(r, g, b, (byte) 200);
+        builder.addVertex(x - size, y + size, z).setUv(0, 1).setColor(r, g, b, (byte) 200);
+        builder.addVertex(x + size, y + size, z).setUv(1, 1).setColor(r, g, b, (byte) 200);
+        builder.addVertex(x + size, y - size, z).setUv(1, 0).setColor(r, g, b, (byte) 200);
+    }
+}
