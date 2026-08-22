@@ -7,11 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Lives only on the client that received the packet. Because the server
- * only ever sends ClientboundDivineSensePacket to the casting player, no
- * other client ever populates this — that's the entire privacy mechanism.
- */
 public final class DivineSenseClientState {
     private static final DivineSenseClientState INSTANCE = new DivineSenseClientState();
 

@@ -27,27 +27,7 @@ import org.joml.Vector3f;
 
 import java.util.OptionalInt;
 
-/**
- * Corrected against the real decompiled 26.1.2 sources:
- *  - Std140SizeCalculator#putMat4f (not putMat4)
- *  - Camera#position() (not getPosition())
- *  - RenderPass#bindTexture(name, GpuTextureView, GpuSampler) — no bindSampler
- *    method exists; sampler is @Nullable so null uses the default
- *  - No RenderSystem.getQuadVertexBuffer() exists at all — the fullscreen
- *    wave quad is now built with BufferBuilder/MeshData exactly like the
- *    marker quads are, reusing the confirmed
- *    RenderSystem.getSequentialBuffer(VertexFormat.Mode.QUADS) for indices
- *
- * Still inferred, not directly confirmed — check these first if something
- * else doesn't compile:
- *  - MeshData#vertexBuffer()/indexBuffer()/drawState() and DrawState#indexCount()
- *  - GpuBuffer.USAGE_VERTEX / USAGE_UNIFORM / USAGE_MAP_WRITE constant names
- *  - CommandEncoder#createRenderPass's exact overload shape
- *
- * Both draw calls read from DivineSenseClientState, only ever populated on the
- * casting player's own client — that's the privacy mechanism, unaffected by
- * any of this rendering-API back-and-forth.
- */
+
 public enum DivineSenseRenderer {
     INSTANCE;
 
@@ -57,12 +37,12 @@ public enum DivineSenseRenderer {
             () -> "Divine Sense Effect UBO",
             GpuBuffer.USAGE_UNIFORM | GpuBuffer.USAGE_MAP_WRITE,
             new Std140SizeCalculator()
-                    .putMat4f() // InvViewMat
-                    .putMat4f() // InvProjMat
-                    .putVec3()  // Pos
-                    .putVec3()  // Center
-                    .putFloat() // Radius
-                    .putVec3()  // Color
+                    .putMat4f()
+                    .putMat4f()
+                    .putVec3()
+                    .putVec3()
+                    .putFloat()
+                    .putVec3()
                     .get()
     );
 
@@ -70,10 +50,10 @@ public enum DivineSenseRenderer {
             () -> "Divine Sense Result UBO",
             GpuBuffer.USAGE_UNIFORM | GpuBuffer.USAGE_MAP_WRITE,
             new Std140SizeCalculator()
-                    .putMat4f() // ProjMat
-                    .putMat4f() // ModelViewMat
-                    .putFloat() // Time
-                    .putVec3()  // Tint
+                    .putMat4f()
+                    .putMat4f()
+                    .putFloat()
+                    .putVec3()
                     .get()
     );
 
@@ -111,8 +91,7 @@ public enum DivineSenseRenderer {
                     .putVec3(new Vector3f(rgb[0], rgb[1], rgb[2]));
         }
 
-        // Build the fullscreen quad the same way the markers are built below —
-        // there is no engine-provided quad vertex buffer to reach for.
+
         BufferBuilder quadBuilder = new BufferBuilder(
                 new ByteBufferBuilder(256), VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX
         );
@@ -130,11 +109,7 @@ public enum DivineSenseRenderer {
         try (GpuBuffer quadVertexBuffer = RenderSystem.getDevice().createBuffer(
                 () -> "Divine Sense Wave Quad", GpuBuffer.USAGE_VERTEX, quadMesh.vertexBuffer()
         )) {
-            // Sampling the depth view of the same target we're rendering color into is the
-            // one piece I can't confirm is safe under 26.1.2's texture model without a real
-            // example doing exactly this. If you get validation errors or stale/blank depth
-            // reads, copy the depth view into a scratch GpuTexture first via
-            // CommandEncoder#copyTextureToTexture and sample that instead.
+
             try (RenderPass pass = encoder.createRenderPass(
                     () -> "Divine Sense Wave",
                     mainTarget.getColorTextureView(),
@@ -193,7 +168,7 @@ public enum DivineSenseRenderer {
 
         MeshData mesh = builder.build();
         if (mesh == null) {
-            return; // nothing highlighted this frame
+            return;
         }
 
         try (GpuBuffer vertexBuffer = RenderSystem.getDevice().createBuffer(

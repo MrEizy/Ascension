@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.client.visual.DivineSenseClientState;
 
-/** Registered by DivineSenseNetworking.onRegisterPayloadHandlers. */
+
 public final class ClientboundDivineSensePacketHandler {
     private ClientboundDivineSensePacketHandler() {
     }

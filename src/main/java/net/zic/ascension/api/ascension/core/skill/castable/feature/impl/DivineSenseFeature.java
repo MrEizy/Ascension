@@ -25,16 +25,7 @@ import net.zic.ascension.network.DivineSenseNetworking;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * "ascension:divine_sense" — expands an outward scan from the caster and,
- * for anything caught inside it, tells ONLY the caster's client to render a
- * glow-style highlight. Nothing is applied server-side as a real status
- * effect, so no other player's client ever learns which entities were hit.
- *
- * The tint color is per-cast JSON config so different techniques that grant
- * Divine Sense can each hand this feature a different hex color without
- * needing separate feature types.
- */
+
 public record DivineSenseFeature(
         ScaledValue radius,
         ScaledValue durationTicks,
