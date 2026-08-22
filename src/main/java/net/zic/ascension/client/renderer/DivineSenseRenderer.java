@@ -7,6 +7,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.CommandEncoder;
 import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.textures.FilterMode;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -18,8 +19,6 @@ import net.minecraft.client.renderer.MappableRingBuffer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.zic.ascension.api.ascension.value.HexColorCodec;
 import net.zic.ascension.client.visual.DivineSenseClientState;
 import org.joml.Matrix4f;
@@ -50,7 +49,6 @@ public enum DivineSenseRenderer {
             () -> "Divine Sense Result UBO",
             GpuBuffer.USAGE_UNIFORM | GpuBuffer.USAGE_MAP_WRITE,
             new Std140SizeCalculator()
-                    .putMat4f()
                     .putMat4f()
                     .putFloat()
                     .putVec3()
@@ -116,7 +114,7 @@ public enum DivineSenseRenderer {
                     OptionalInt.empty()
             )) {
                 pass.setPipeline(DivineSensePipelines.DIVINE_SENSE_EFFECT);
-                pass.bindTexture("DepthSampler", mainTarget.getDepthTextureView(), null);
+                pass.bindTexture("DepthSampler", mainTarget.getDepthTextureView(), RenderSystem.getSamplerCache().getClampToEdge(FilterMode.NEAREST));
                 pass.setUniform("DivineSenseEffectUniform", effectUbo.currentBuffer());
 
                 RenderSystem.AutoStorageIndexBuffer indices = RenderSystem.getSequentialBuffer(VertexFormat.Mode.QUADS);
@@ -142,12 +140,12 @@ public enum DivineSenseRenderer {
         try (GpuBuffer.MappedView view = encoder.mapBuffer(resultUbo.currentBuffer(), false, true)) {
             Std140Builder.intoBuffer(view.data())
                     .putMat4f(projectionMatrix)
-                    .putMat4f(poseStack.last().pose())
                     .putFloat(time)
                     .putVec3(new Vector3f(rgb[0], rgb[1], rgb[2]));
         }
 
         Vec3 camPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        Matrix4f modelView = poseStack.last().pose();
         byte r = (byte) Math.round(rgb[0] * 255.0F);
         byte g = (byte) Math.round(rgb[1] * 255.0F);
         byte b = (byte) Math.round(rgb[2] * 255.0F);
@@ -162,8 +160,10 @@ public enum DivineSenseRenderer {
                 continue;
             }
             Vec3 relative = entity.getPosition(partialTick).subtract(camPos).add(0, entity.getBbHeight() * 0.5, 0);
+            Vector3f viewPosition = relative.toVector3f();
+            modelView.transformPosition(viewPosition);
             float size = Math.max(entity.getBbWidth(), entity.getBbHeight()) * 0.6F + 0.3F;
-            addBillboard(builder, relative, size, r, g, b);
+            addBillboard(builder, viewPosition, size, r, g, b);
         }
 
         MeshData mesh = builder.build();
@@ -183,19 +183,17 @@ public enum DivineSenseRenderer {
                 pass.setPipeline(DivineSensePipelines.DIVINE_SENSE_RESULT);
                 pass.setUniform("DivineSenseResultUniform", resultUbo.currentBuffer());
                 pass.setVertexBuffer(0, vertexBuffer);
-                if (mesh.indexBuffer() != null) {
-                    RenderSystem.AutoStorageIndexBuffer indices = RenderSystem.getSequentialBuffer(VertexFormat.Mode.QUADS);
-                    pass.setIndexBuffer(indices.getBuffer(mesh.drawState().indexCount()), indices.type());
-                    pass.drawIndexed(0, 0, mesh.drawState().indexCount(), 1);
-                }
+                RenderSystem.AutoStorageIndexBuffer indices = RenderSystem.getSequentialBuffer(VertexFormat.Mode.QUADS);
+                pass.setIndexBuffer(indices.getBuffer(mesh.drawState().indexCount()), indices.type());
+                pass.drawIndexed(0, 0, mesh.drawState().indexCount(), 1);
             }
         }
     }
 
-    private static void addBillboard(BufferBuilder builder, Vec3 relativePos, float size, byte r, byte g, byte b) {
-        float x = (float) relativePos.x;
-        float y = (float) relativePos.y;
-        float z = (float) relativePos.z;
+    private static void addBillboard(BufferBuilder builder, Vector3f viewPosition, float size, byte r, byte g, byte b) {
+        float x = viewPosition.x;
+        float y = viewPosition.y;
+        float z = viewPosition.z;
         builder.addVertex(x - size, y - size, z).setUv(0, 0).setColor(r, g, b, (byte) 200);
         builder.addVertex(x - size, y + size, z).setUv(0, 1).setColor(r, g, b, (byte) 200);
         builder.addVertex(x + size, y + size, z).setUv(1, 1).setColor(r, g, b, (byte) 200);

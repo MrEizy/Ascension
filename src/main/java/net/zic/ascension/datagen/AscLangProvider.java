@@ -657,6 +657,9 @@ public class AscLangProvider extends LanguageProvider {
 
 
         //Skills
+        add("ascension.skill.divine_sense.name", "Divine Sense");
+        add("ascension.skill.divine_sense.desc", "Release a pulse of spiritual perception that reveals nearby beings and items through obstacles.");
+
         add("ascension.skill.eagle_claw_rending_palm.name", "Eagle-Claw Rending Palm");
         add("ascension.skill.eagle_claw_rending_palm.desc", "Hook the hand like a talon and drive a short tearing palm through the opponent's guard.");
         add("ascension.skill.hooked_talon_grip.name", "Hooked Talon Grip");

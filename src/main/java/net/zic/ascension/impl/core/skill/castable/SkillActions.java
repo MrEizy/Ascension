@@ -13,7 +13,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.control.StaggerDefinition;
@@ -40,6 +43,7 @@ import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.datapack.CodecType;
+import net.zic.ascension.api.ascension.value.HexColorCodec;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.impl.core.control.StaggerService;
 import net.zic.ascension.impl.core.damage.AscensionDamageService;
@@ -56,8 +60,10 @@ import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
 import net.zic.ascension.impl.runtime.weapon.WeaponSwingSpec;
 import net.zic.ascension.impl.runtime.weapon.WeaponTechniqueResolver;
 import net.zic.ascension.impl.runtime.weapon.WeaponVfxUtils;
+import net.zic.ascension.network.ClientboundDivineSensePacket;
 import net.zic.ascension.util.CultivationUtil;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -214,6 +220,67 @@ public final class SkillActions {
                     resolvedSpread,
                     Math.clamp(speed.resolve(context.scaledValueContext()), 0.0D, 4.0D)
             );
+        }
+    }
+
+    public record DivineSense(
+            ScaledValue radius,
+            ScaledValue durationTicks,
+            int color,
+            boolean includeItems,
+            boolean includeSelf
+    ) implements SkillAction {
+        public static final MapCodec<DivineSense> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("radius", ScaledValue.constant(16.0D)).forGetter(DivineSense::radius),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("duration", ScaledValue.constant(100.0D)).forGetter(DivineSense::durationTicks),
+                HexColorCodec.CODEC.optionalFieldOf("color", 0xFFFFFF).forGetter(DivineSense::color),
+                Codec.BOOL.optionalFieldOf("include_items", true).forGetter(DivineSense::includeItems),
+                Codec.BOOL.optionalFieldOf("include_self", false).forGetter(DivineSense::includeSelf)
+        ).apply(instance, DivineSense::new));
+
+        public DivineSense {
+            radius = radius == null ? ScaledValue.constant(16.0D) : radius;
+            durationTicks = durationTicks == null ? ScaledValue.constant(100.0D) : durationTicks;
+            color &= 0xFFFFFF;
+        }
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.DIVINE_SENSE.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            if (!(context.caster() instanceof ServerPlayer player)) {
+                return;
+            }
+
+            double resolvedRadius = Math.max(0.0D, radius.resolve(context.scaledValueContext()));
+            if (!Double.isFinite(resolvedRadius) || resolvedRadius <= 0.0D) {
+                return;
+            }
+            int resolvedDuration = Math.clamp((int) Math.round(durationTicks.resolve(context.scaledValueContext())), 1, 12000);
+            Vec3 center = player.position();
+            AABB area = AABB.ofSize(center, resolvedRadius * 2.0D, resolvedRadius * 2.0D, resolvedRadius * 2.0D);
+            List<Integer> highlighted = new ArrayList<>();
+            for (Entity entity : player.level().getEntities(includeSelf ? null : player, area, this::isValidTarget)) {
+                if (entity.position().distanceToSqr(center) <= resolvedRadius * resolvedRadius) {
+                    highlighted.add(entity.getId());
+                }
+            }
+            ClientboundDivineSensePacket.sendToPlayer(player, new ClientboundDivineSensePacket(center, (float) resolvedRadius, resolvedDuration, color, highlighted));
+        }
+
+        private boolean isValidTarget(Entity entity) {
+            if (entity instanceof LivingEntity living) {
+                return living.isAlive();
+            }
+            return includeItems && entity instanceof ItemEntity item && item.isAlive();
         }
     }
 

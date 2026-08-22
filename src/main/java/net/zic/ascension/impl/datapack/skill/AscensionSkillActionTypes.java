@@ -21,6 +21,7 @@ public final class AscensionSkillActionTypes {
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> MESSAGE = TYPES.add("message", SkillActions.Message.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> SOUND = TYPES.add("sound", SkillActions.Sound.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> PARTICLES = TYPES.add("particles", SkillActions.Particles.CODEC);
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> DIVINE_SENSE = TYPES.add("divine_sense", SkillActions.DivineSense.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> RESOURCE = TYPES.add("resource", SkillActions.Resource.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> CULTIVATE = TYPES.add("cultivate", SkillActions.Cultivate.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> DAMAGE = TYPES.add("damage", SkillActions.Damage.CODEC);

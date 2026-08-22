@@ -34,5 +34,6 @@ public class ModRenderPipelines {
 
         event.registerPipeline(LINES_NO_DEPTH);
         event.registerPipeline(ENERGY_LINES);
+        DivineSensePipelines.register(event);
     }
 }

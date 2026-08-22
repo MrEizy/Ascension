@@ -299,6 +299,11 @@ public class AscensionCraft {
                     RuntimeVisualPacket.STREAM_CODEC,
                     RuntimeVisualPacket::handle
             );
+            registrar.playToClient(
+                    ClientboundDivineSensePacket.TYPE,
+                    ClientboundDivineSensePacket.STREAM_CODEC,
+                    ClientboundDivineSensePacket::handle
+            );
 
             registrar.playToServer(
                     ChooseStarterOptionPacket.TYPE,

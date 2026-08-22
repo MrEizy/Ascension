@@ -2,7 +2,6 @@
 
 layout(std140) uniform DivineSenseResultUniform {
     mat4 ProjMat;
-    mat4 ModelViewMat;
     float Time;
     vec3 Tint;
 };

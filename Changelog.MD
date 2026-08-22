@@ -15,7 +15,7 @@
 * [W.I.P] Added 8 new biomes; Heavenreach Peak, Graystone Foothills, Azure Cloud Range, Ancient Grove, Jadebloom Forest, Misty Woods, Verdant Moor, Golden Steppe
 * Ported Most blocks from 1.21.1
 * Added Datapack support for Paths, Bloodlines, Physiques, Techniques, Skills, Tribulations and Atmospheric Qi Density.  
-* [W.I.P] Starter Bloodline and Physique Selection on first world/server join
+* Starter Bloodline and Physique Selection on first world/server join
 * [W.I.P] A growing Mob Cultivation System
 * Added a Stamina system for movement and physical actions  
 * Added Mastery to active skills   

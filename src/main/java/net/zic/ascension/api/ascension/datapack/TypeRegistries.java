@@ -5,7 +5,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
 import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
@@ -36,7 +35,6 @@ public final class TypeRegistries {
     public static final Registry<CodecType<SkillAction>> SKILL_ACTION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "skill_action_type");
     public static final Registry<CodecType<TargetingDefinition>> TARGETING_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "targeting_type");
     public static final Registry<CodecType<ProjectileBehavior>> PROJECTILE_BEHAVIOR_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "projectile_behavior_type");
-    public static final Registry<CodecType<SkillExecutionFeature>> SKILL_EXECUTION_FEATURE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "skill_execution_feature_type");
 
 
     private TypeRegistries() {
@@ -58,7 +56,6 @@ public final class TypeRegistries {
         event.register(SKILL_ACTION_TYPE_REGISTRY);
         event.register(TARGETING_TYPE_REGISTRY);
         event.register(PROJECTILE_BEHAVIOR_TYPE_REGISTRY);
-        event.register(SKILL_EXECUTION_FEATURE_TYPE_REGISTRY);
         AscensionCraft.LOGGER.info("Finished loading type registries");
     }
 }

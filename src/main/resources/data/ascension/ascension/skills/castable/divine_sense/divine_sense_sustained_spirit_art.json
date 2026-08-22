@@ -1,20 +1,18 @@
 {
   "type": "ascension:active",
   "name": {
-    "translate": "ascension.skill.sustained_spirit_art.divine_sense.name"
+    "translate": "ascension.skill.divine_sense.name"
   },
   "description": {
-    "translate": "ascension.skill.sustained_spirit_art.divine_sense.desc"
+    "translate": "ascension.skill.divine_sense.desc"
   },
-  "default_accessible_level": 1,
-  "targeting": {
+  "target": {
     "type": "ascension:self"
   },
   "require_targets": false,
-  "features": [
+  "actions": [
     {
       "type": "ascension:divine_sense",
-      "subject": "caster",
       "radius": {
         "base": 16.0
       },
@@ -26,16 +24,14 @@
       "include_self": false
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "operation": "ascension:consume",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 30.0
-      }
+  "cost": {
+    "resource": "ascension:qi",
+    "operation": "ascension:consume",
+    "source": "ascension:skill_casting",
+    "amount": {
+      "base": 30.0
     }
-  ],
+  },
   "cooldown": {
     "base": 200.0
   }
