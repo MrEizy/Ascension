@@ -75,25 +75,5 @@ public class MobConfigurationInstance {
         }
     }
 
-    //only generates the traits and tiers, does not apply them
-    public static MobConfigurationInstance generateInstance(MobConfiguration configuration,Mob mob){
-        int totalWeight = 0;
-        for (MobTierDefinition definition : configuration.tierDefinitions()) totalWeight += definition.weight();
-        int roll = ThreadLocalRandom.current().nextInt(totalWeight);
-        totalWeight = 0;
-        MobCultivationEliteTier mobTier = MobCultivationEliteTier.NORMAL;
-        for(MobTierDefinition definition : configuration.tierDefinitions()){
-            totalWeight += definition.weight();
-            if(roll <= totalWeight){
-                mobTier = definition.tier();
-                break;
-            }
-        }
 
-        List<MobTraitReference> traits = new ArrayList<>();
-        for(PotentialTrait potentialTrait : configuration.getPotentialTraits(mobTier)){
-            if(ThreadLocalRandom.current().nextDouble(1) <= potentialTrait.chance()) traits.add(potentialTrait.trait());
-        }
-        return new MobConfigurationInstance(mobTier,traits);
-    }
 }

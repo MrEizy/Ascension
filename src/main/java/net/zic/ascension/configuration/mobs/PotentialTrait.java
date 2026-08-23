@@ -21,6 +21,8 @@ public record PotentialTrait(MobTraitReference trait, List<MobConfigurationCondi
             ).apply(instance, PotentialTrait::new)
     );
 
+
+
     public boolean test(Mob mob){
         for(MobConfigurationCondition condition : conditions) {
             if(!condition.test(mob)) return false;

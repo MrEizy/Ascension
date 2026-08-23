@@ -2,9 +2,15 @@
   "values": {
     "minecraft:zombie": {
       "tiers": {
-        "normal": 90,
-        "elite": 9,
-        "ancient": 1
+        "normal": {
+          "base_weight": 90
+        },
+        "elite": {
+          "base_weight": 9
+        },
+        "ancient": {
+          "base_weight": 1
+        }
       },
       "traits": {
         "normal": [
