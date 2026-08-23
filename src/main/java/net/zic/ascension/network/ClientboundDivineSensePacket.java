@@ -18,6 +18,7 @@ import java.util.List;
 public record ClientboundDivineSensePacket(
         Vec3 center,
         float radius,
+        float speed,
         int durationTicks,
         int color,
         List<Integer> entityIds
@@ -29,6 +30,7 @@ public record ClientboundDivineSensePacket(
     public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundDivineSensePacket> STREAM_CODEC = StreamCodec.composite(
             StreamCodec.of(ClientboundDivineSensePacket::writeVec3, ClientboundDivineSensePacket::readVec3), ClientboundDivineSensePacket::center,
             ByteBufCodecs.FLOAT, ClientboundDivineSensePacket::radius,
+            ByteBufCodecs.FLOAT, ClientboundDivineSensePacket::speed,
             ByteBufCodecs.VAR_INT, ClientboundDivineSensePacket::durationTicks,
             ByteBufCodecs.INT, ClientboundDivineSensePacket::color,
             ByteBufCodecs.INT.apply(ByteBufCodecs.list()), ClientboundDivineSensePacket::entityIds,
@@ -45,7 +47,7 @@ public record ClientboundDivineSensePacket(
             if (Minecraft.getInstance().level == null) {
                 return;
             }
-            DivineSenseClientState.get().start(packet.center(), packet.radius(), packet.durationTicks(), packet.color(), packet.entityIds());
+            DivineSenseClientState.get().start(packet.center(), packet.radius(), packet.speed(), packet.durationTicks(), packet.color(), packet.entityIds());
         });
     }
 

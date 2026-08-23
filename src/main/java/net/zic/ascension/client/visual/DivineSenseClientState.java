@@ -10,13 +10,13 @@ import java.util.Set;
 
 public final class DivineSenseClientState {
     private static final DivineSenseClientState INSTANCE = new DivineSenseClientState();
-    private static final float WAVE_GROWTH_DURATION_MS = 1800.0F;
-    private static final float WAVE_TIME_OFFSET_MS = 220.0F;
+    private static final float WAVE_TIME_OFFSET_RATIO = 220.0F / 1800.0F;
 
     private boolean active;
     private long startTimeMs;
     private Vec3 center = Vec3.ZERO;
     private float radius;
+    private float speed;
     private int durationTicks;
     private int color = 0xFFFFFF;
     private final Set<Integer> highlighted = new HashSet<>();
@@ -28,9 +28,10 @@ public final class DivineSenseClientState {
         return INSTANCE;
     }
 
-    public void start(Vec3 center, float radius, int durationTicks, int color, List<Integer> entityIds) {
+    public void start(Vec3 center, float radius, float speed, int durationTicks, int color, List<Integer> entityIds) {
         this.center = center;
         this.radius = radius;
+        this.speed = speed;
         this.durationTicks = durationTicks;
         this.color = color;
         this.startTimeMs = System.currentTimeMillis();
@@ -68,19 +69,24 @@ public final class DivineSenseClientState {
     }
 
     public float waveProgress() {
-        return Math.min(1.0F, elapsedMs() / WAVE_GROWTH_DURATION_MS);
+        return Math.min(1.0F, elapsedMs() / waveDurationMs());
     }
 
     public float waveRadius() {
-        float elapsed = Math.min(WAVE_GROWTH_DURATION_MS, elapsedMs());
-        float b = WAVE_TIME_OFFSET_MS;
-        float denominator = (WAVE_GROWTH_DURATION_MS + b) * (WAVE_GROWTH_DURATION_MS + b) - b * b;
+        float duration = waveDurationMs();
+        float elapsed = Math.min(duration, elapsedMs());
+        float b = duration * WAVE_TIME_OFFSET_RATIO;
+        float denominator = (duration + b) * (duration + b) - b * b;
         float normalized = ((elapsed + b) * (elapsed + b) - b * b) / denominator;
         return radius * normalized;
     }
 
     public boolean isWaveActive() {
         return isActive() && waveProgress() < 1.0F;
+    }
+
+    public float speed() {
+        return speed;
     }
 
     public int color() {
@@ -93,6 +99,10 @@ public final class DivineSenseClientState {
 
     public int durationTicks() {
         return durationTicks;
+    }
+
+    private float waveDurationMs() {
+        return Math.max(1.0F, radius / Math.max(speed, 0.001F) * 1000.0F);
     }
 
     private long elapsedMs() {

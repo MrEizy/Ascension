@@ -14,14 +14,33 @@
     {
       "type": "ascension:divine_sense",
       "radius": {
-        "base": 16.0
+        "base": 20.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.025
+          }
+        ],
+        "maximum": 72.0
       },
-      "duration": {
-        "base": 100.0
+      "speed": {
+        "base": 12.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ],
+        "maximum": 36.0
       },
-      "color": "#BDEFFF",
-      "include_items": true,
-      "include_self": false
+      "duration": 120.0,
+      "color": "#BDEFFF"
     }
   ],
   "cost": {

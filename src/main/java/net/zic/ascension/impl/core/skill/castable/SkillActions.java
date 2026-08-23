@@ -225,6 +225,7 @@ public final class SkillActions {
 
     public record DivineSense(
             ScaledValue radius,
+            ScaledValue speed,
             ScaledValue durationTicks,
             int color,
             boolean includeItems,
@@ -232,6 +233,7 @@ public final class SkillActions {
     ) implements SkillAction {
         public static final MapCodec<DivineSense> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("radius", ScaledValue.constant(16.0D)).forGetter(DivineSense::radius),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("speed", ScaledValue.constant(9.0D)).forGetter(DivineSense::speed),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("duration", ScaledValue.constant(100.0D)).forGetter(DivineSense::durationTicks),
                 HexColorCodec.CODEC.optionalFieldOf("color", 0xFFFFFF).forGetter(DivineSense::color),
                 Codec.BOOL.optionalFieldOf("include_items", true).forGetter(DivineSense::includeItems),
@@ -240,6 +242,7 @@ public final class SkillActions {
 
         public DivineSense {
             radius = radius == null ? ScaledValue.constant(16.0D) : radius;
+            speed = speed == null ? ScaledValue.constant(9.0D) : speed;
             durationTicks = durationTicks == null ? ScaledValue.constant(100.0D) : durationTicks;
             color &= 0xFFFFFF;
         }
@@ -264,6 +267,11 @@ public final class SkillActions {
             if (!Double.isFinite(resolvedRadius) || resolvedRadius <= 0.0D) {
                 return;
             }
+            double resolvedSpeed = speed.resolve(context.scaledValueContext());
+            if (!Double.isFinite(resolvedSpeed) || resolvedSpeed <= 0.0D) {
+                return;
+            }
+            resolvedSpeed = Math.clamp(resolvedSpeed, 0.1D, 512.0D);
             int resolvedDuration = Math.clamp((int) Math.round(durationTicks.resolve(context.scaledValueContext())), 1, 12000);
             Vec3 center = player.position();
             AABB area = AABB.ofSize(center, resolvedRadius * 2.0D, resolvedRadius * 2.0D, resolvedRadius * 2.0D);
@@ -273,7 +281,7 @@ public final class SkillActions {
                     highlighted.add(entity.getId());
                 }
             }
-            ClientboundDivineSensePacket.sendToPlayer(player, new ClientboundDivineSensePacket(center, (float) resolvedRadius, resolvedDuration, color, highlighted));
+            ClientboundDivineSensePacket.sendToPlayer(player, new ClientboundDivineSensePacket(center, (float) resolvedRadius, (float) resolvedSpeed, resolvedDuration, color, highlighted));
         }
 
         private boolean isValidTarget(Entity entity) {
