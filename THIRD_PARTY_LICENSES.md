@@ -13,24 +13,23 @@ in full.
 - **Version referenced:** 1.21.11 branch
 - **License:** MIT
 
-Portions of the following files in this project are adapted from Scannable:
+Portions of the Divine Sense rendering implementation are adapted from, or
+were developed with reference to, Scannable:
 
-- The fullscreen vertex shader — near line-for-line reuse of Scannable's
-  fullscreen-triangle-from-`gl_VertexID` implementation.
-- The fragment shader — world-position reconstruction and expanding
-  spherical-shell algorithm, adapted with different colors, shell width,
-  scanline intensity, depth-mode support, and naming.
-- `DivineSenseRenderer` — adapted from `ScannerRenderer`; the core render
-  sequence (main render target → depth texture → inverted view/projection →
-  packed UBO → color pass with no depth attachment → bind depth sampler →
-  fullscreen `draw(0, 3)`) is directly based on Scannable's implementation.
-- `DivineSensePipelines` — adapted from Scannable's pipeline configuration
-  (`POST_PROCESSING_SNIPPET`, empty vertex format, triangle mode, depth
-  sampler, UBO, additive blend, disabled culling), with Ascension's 26.1
-  pipeline registration and API differences layered on top.
-- The pulse/radius progression equation — the quadratic growth behavior is
-  based on Scannable's radius progression, simplified around Ascension's
-  fixed skill radius and duration.
+- The fragment shader's world-position reconstruction (_converting a sampled
+  depth-buffer value and screen coordinates back into world space via the
+  inverse view and projection matrices_) remains substantially derived from
+  Scannable's `scan_effect.fsh`.
+- The render-pass strategy (rendering into Minecraft's main color target
+  while sampling the completed world depth texture, with no depth attachment
+  on the effect pass) was developed from studying Scannable's
+  `ScannerRenderer`. The surrounding renderer infrastructure has since been
+  substantially rewritten around Ascension's own architecture.
+
+The fullscreen geometry and vertex shader, propagation equation, pulse timing
+and stat scaling, visual pulse mathematics, resonance and flare styling, and
+entity highlighting are Ascension-specific and are no longer fully derived from
+Scannable.
 
 Full license text:
 

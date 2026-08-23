@@ -55,7 +55,7 @@ public final class DivineSenseEvents {
     private static void applyHighlight(Entity entity, EntityRenderState renderState) {
         DivineSenseClientState state = DivineSenseClientState.get();
         if (state.isHighlighted(entity)) {
-            renderState.outlineColor = 0xFF000000 | state.color();
+            renderState.outlineColor = state.outlineColor(entity);
         }
     }
 }
