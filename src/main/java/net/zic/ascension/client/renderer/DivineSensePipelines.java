@@ -18,7 +18,6 @@ public final class DivineSensePipelines {
             new ColorTargetState(BlendFunction.ADDITIVE);
 
     public static RenderPipeline DIVINE_SENSE_EFFECT;
-    public static RenderPipeline DIVINE_SENSE_RESULT;
 
     public static void register(RegisterRenderPipelinesEvent event) {
         DIVINE_SENSE_EFFECT = RenderPipeline.builder()
@@ -33,19 +32,7 @@ public final class DivineSensePipelines {
             .withCull(false)
             .build();
 
-        DIVINE_SENSE_RESULT = RenderPipeline.builder()
-            .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/divine_sense_result"))
-            .withVertexShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/divine_sense_result"))
-            .withFragmentShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/divine_sense_result"))
-            .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
-            .withUniform("DivineSenseResultUniform", UniformType.UNIFORM_BUFFER)
-            .withColorTargetState(ADDITIVE_BLEND)
-            .withDepthStencilState(Optional.empty())
-            .withCull(false)
-            .build();
-
         event.registerPipeline(DIVINE_SENSE_EFFECT);
-        event.registerPipeline(DIVINE_SENSE_RESULT);
     }
 
     private DivineSensePipelines() {

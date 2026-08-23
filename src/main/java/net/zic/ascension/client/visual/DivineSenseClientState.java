@@ -1,5 +1,6 @@
 package net.zic.ascension.client.visual;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collections;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 public final class DivineSenseClientState {
     private static final DivineSenseClientState INSTANCE = new DivineSenseClientState();
+    private static final float WAVE_GROWTH_DURATION_MS = 1200.0F;
 
     private boolean active;
     private long startTimeMs;
@@ -44,6 +46,14 @@ public final class DivineSenseClientState {
         return isActive() && highlighted.contains(entityId);
     }
 
+    public boolean isHighlighted(Entity entity) {
+        if (!isHighlighted(entity.getId())) {
+            return false;
+        }
+        float reach = waveRadius() + Math.max(entity.getBbWidth(), 0.25F) * 0.5F;
+        return entity.position().distanceToSqr(center) <= reach * reach;
+    }
+
     public Set<Integer> highlightedIds() {
         return Collections.unmodifiableSet(highlighted);
     }
@@ -54,6 +64,18 @@ public final class DivineSenseClientState {
 
     public float radius() {
         return radius;
+    }
+
+    public float waveProgress() {
+        return Math.min(1.0F, elapsedMs() / WAVE_GROWTH_DURATION_MS);
+    }
+
+    public float waveRadius() {
+        return radius * waveProgress();
+    }
+
+    public boolean isWaveActive() {
+        return isActive() && waveProgress() < 1.0F;
     }
 
     public int color() {
