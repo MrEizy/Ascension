@@ -5,7 +5,7 @@ import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 
-public record PlayerDataProvider(LivingEntity entity) implements AscensionEntityDataProvider {
+public record SimpleEntityDataProvider(LivingEntity entity) implements AscensionEntityDataProvider {
 
     @Override
     public boolean hasData() {

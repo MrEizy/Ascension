@@ -1,0 +1,3 @@
+TODO update trait weights:
+    each includes a base weight + conditional weights(for now just a condition and a weight for if true, in the future the condition might return a weight directly)
+    also discuss more with SortOf how/what he means by the Passive Hostile and Boss category, and how it is meant to differ from tier

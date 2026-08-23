@@ -17,7 +17,7 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
-
+import net.zic.ascension.mob_cultivation.oliver_rewrite.MobConfigurationHolder;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
 import java.util.function.Supplier;
@@ -52,6 +52,11 @@ public class AscensionAttachments {
     public static final Supplier<AttachmentType<MobAscensionData>> MOB_ENTITY_DATA = ATTACHMENT_TYPES.register(
             "mob_entity_data", () -> AttachmentType.builder(holder -> new MobAscensionData(new OriginSource(),(Mob) holder))
                     .serialize(new MobAscensionData.Provider())
+                    .build()
+    );
+    public static final Supplier<AttachmentType<MobConfigurationHolder>> MOB_CONFIG_HOLDER = ATTACHMENT_TYPES.register(
+            "mob_config_holder", () -> AttachmentType.builder(holder -> new MobConfigurationHolder((Mob) holder))
+                    .serialize(new MobConfigurationHolder.Provider())
                     .build()
     );
 

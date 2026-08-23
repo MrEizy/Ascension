@@ -40,8 +40,7 @@ public class SimpleTraitDefinitionType extends MobTraitDefinitionType {
                         ).optionalFieldOf("base_stats", List.of()).forGetter(SimpleTraitDefinition::baseStats),
                         ValueContainerModifier.MAP_CODEC.optionalFieldOf("stat_modifiers", Map.of()).forGetter(SimpleTraitDefinition::statModifiers),
                         ValueContainerModifier.MAP_CODEC.optionalFieldOf("attribute_modifiers", Map.of()).forGetter(SimpleTraitDefinition::attributeModifiers),
-                        Identifier.CODEC.listOf().optionalFieldOf("skills", List.of()).forGetter(SimpleTraitDefinition::skills),
-                        MobConfigurationConditionType.MOB_CONFIGURATION_CONDITION_CODEC.listOf().optionalFieldOf("conditions",List.of()).forGetter(SimpleTraitDefinition::conditions)
+                        Identifier.CODEC.listOf().optionalFieldOf("skills", List.of()).forGetter(SimpleTraitDefinition::skills)
                 ).apply(instance, SimpleTraitDefinition::new)
         );
     }

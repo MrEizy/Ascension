@@ -2,7 +2,9 @@ package net.zic.ascension.chunks.atmospheric_qi;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.SectionPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
@@ -37,6 +39,7 @@ import java.util.stream.Stream;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class ChunkHandler {
+
     public static final  Identifier chunkModifierId = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"chunk_modifier");
 
     /*
@@ -56,7 +59,7 @@ public class ChunkHandler {
         ReferenceSet<Holder<Biome>> processed = new ReferenceOpenHashSet<>();
         for(LevelChunkSection section : chunk.getSections()){
             section.getBiomes().getAll(biome->{
-               // if(BiomeConfigurations.getInstance() == null) return; //should not happen but just in case
+                // if(BiomeConfigurations.getInstance() == null) return; //should not happen but just in case
                 if(!BiomeConfigurations.getInstance().hasConfiguration(biome)) return;
                 if(processed.contains(biome)) return;
                 //DO smth here
@@ -69,7 +72,7 @@ public class ChunkHandler {
                 processed.add(biome);
             });
         }
-       DimensionConfiguration dimensionConfiguration = DimensionConfigurations.getInstance().getConfiguration(event.getChunk().getLevel().dimension().identifier());
+        DimensionConfiguration dimensionConfiguration = DimensionConfigurations.getInstance().getConfiguration(event.getChunk().getLevel().dimension().identifier());
 
         if(dimensionConfiguration == null) return;
 
@@ -101,7 +104,6 @@ public class ChunkHandler {
     }
 
 
-
     @SubscribeEvent
     public static void onEnterLevel(EntityJoinLevelEvent event){
         if(!(event.getEntity() instanceof LivingEntity entity)) return;
@@ -109,9 +111,9 @@ public class ChunkHandler {
 
 
         EntityPathBonusHolder bonusHolder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
-
-        ChunkAccess chunk = entity.level().getChunk(entity.blockPosition());
-
+        BlockPos pos = entity.blockPosition();
+        ChunkAccess chunk = entity.level().getChunkSource().getChunkNow(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
+        if(chunk == null) return;
         bonusHolder.registerProvider(chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
 
 
@@ -123,9 +125,9 @@ public class ChunkHandler {
         AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY, null);
         if(holder == null) return;
         EntityPathBonusHolder bonusHolder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
-
-        ChunkAccess chunk = entity.level().getChunk(entity.blockPosition());
-
+        BlockPos pos = entity.blockPosition();
+        ChunkAccess chunk = entity.level().getChunkSource().getChunkNow(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
+        if(chunk == null) return;
         bonusHolder.removeProvider(chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
 
     }
@@ -141,15 +143,14 @@ public class ChunkHandler {
 
             Stream<ChunkHolder> chunks = level.getChunkSource().chunkMap.allChunksWithAtLeastStatus(ChunkStatus.FULL);
             chunks.forEach(chunkHolder -> {
-               LevelChunk chunk = chunkHolder.getTickingChunk();
-               if(chunk == null) return;
-               if(chunk.getPos().hashCode()%20 != bucket) return;
-               if(!chunk.hasData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER))return;
-               chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER).regenEnergy();
+                LevelChunk chunk = chunkHolder.getTickingChunk();
+                if(chunk == null) return;
+                if(chunk.getPos().hashCode()%20 != bucket) return;
+                if(!chunk.hasData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER))return;
+                chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER).regenEnergy();
 
-               chunk.markUnsaved();
+                chunk.markUnsaved();
             });
         }
     }
-
 }

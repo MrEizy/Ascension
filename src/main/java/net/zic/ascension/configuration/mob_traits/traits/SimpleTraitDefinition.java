@@ -28,7 +28,6 @@ import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -39,8 +38,7 @@ public record SimpleTraitDefinition (UUID traitId,
                                      List<ValueContainer.BaseModifier> baseStats,
                                      Map<Identifier, List<ValueContainerModifier>> statModifiers,
                                      Map<Identifier, List<ValueContainerModifier>> attributeModifiers,
-                                     List<Identifier> skills,
-                                     List<MobConfigurationCondition> conditions) implements MobTraitDefinition {
+                                     List<Identifier> skills) implements MobTraitDefinition {
 
     public SimpleTraitDefinition(Component name,
                                  Component prefix,
@@ -48,25 +46,15 @@ public record SimpleTraitDefinition (UUID traitId,
                                  List<ValueContainer.BaseModifier> baseStats,
                                  Map<Identifier, List<ValueContainerModifier>> statModifiers,
                                  Map<Identifier, List<ValueContainerModifier>> attributeModifiers,
-                                 List<Identifier> skills,
-                                 List<MobConfigurationCondition> conditions) {
-        this(UUID.randomUUID(), name, prefix, paths, baseStats, statModifiers, attributeModifiers, skills, conditions);
+                                 List<Identifier> skills) {
+        this(UUID.randomUUID(), name, prefix, paths, baseStats, statModifiers, attributeModifiers, skills);
 
     }
 
 
     @Override
     public MobTraitDefinitionType getType() {
-        return null;
-    }
-
-    @Override
-    public boolean test(Mob mob) {
-        for(MobConfigurationCondition condition : conditions) {
-            if (!condition.test(mob)) return false;
-        }
-
-        return true;
+        return AscensionTraitTypes.SIMPLE_TRAIT_TYPE.get();
     }
 
 
@@ -75,7 +63,10 @@ public record SimpleTraitDefinition (UUID traitId,
     }
     @Override
     public void applyToSource(OriginSource source) {
-        paths.forEach(path-> AscensionOriginSourceHelper.addPath(source,path.path(),getId()));
+        paths.forEach(path-> {
+            if(AscensionOriginSourceHelper.hasPath(source,path.path())) AscensionOriginSourceHelper.addPath(source, path.path(), getId());
+            else createFreshPath(source,path);
+        });
         skills.forEach(skill->AscensionOriginSourceHelper.addSkill(source,skill,getId()));
     }
 
@@ -113,43 +104,43 @@ public record SimpleTraitDefinition (UUID traitId,
     }
 
     @Override
-    public void removeFromBom(Mob mob) {
+    public void removeFromMob(Mob mob) {
         //TODO
     }
-
-    @Override
-    public void initializeTrait(Mob mob) {
-        AscensionEntityDataProvider provider = mob.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-        if(provider == null) return;
-        if(provider.getData() == null) return;
+    public void createFreshPath(OriginSource source, PathDefinition definition){
 
 
 
-        for(PathDefinition definition : paths){
-            if(definition.potentialRealms().isEmpty()) {
-                addPath(provider.getData().getSource(), definition.path(), Realm.of(0, 0));
-                continue;
-            }
-            int totalWeight = 0;
-
-            for(PotentialRealmDefinition potentialRealmDefinition : definition.potentialRealms()){
-                totalWeight += potentialRealmDefinition.weight();
-            }
-            int rolledValue = ThreadLocalRandom.current().nextInt(totalWeight);
-            totalWeight = 0;
-            PotentialRealmDefinition selectedRealm = null;
-            for(PotentialRealmDefinition potentialRealmDefinition : definition.potentialRealms()){
-                totalWeight += potentialRealmDefinition.weight();
-                if(rolledValue <= totalWeight){
-                    selectedRealm = potentialRealmDefinition;
-                    break;
-                }
-
-            }
-            int majorRealm = selectedRealm.realm();
-            int minorRealm = ThreadLocalRandom.current().nextInt(selectedRealm.minMinorRealm(),selectedRealm.maxMinorRealm()+1);
-            addPath(provider.getData().getSource(),definition.path(),Realm.of(majorRealm,minorRealm));
+        if(definition.potentialRealms().isEmpty()) {
+            addPath(source, definition.path(), Realm.of(0, 0));
+            return;
         }
+        int totalWeight = 0;
+
+        for(PotentialRealmDefinition potentialRealmDefinition : definition.potentialRealms()){
+            totalWeight += potentialRealmDefinition.weight();
+        }
+        int rolledValue = ThreadLocalRandom.current().nextInt(totalWeight);
+        totalWeight = 0;
+        PotentialRealmDefinition selectedRealm = null;
+        for(PotentialRealmDefinition potentialRealmDefinition : definition.potentialRealms()){
+            totalWeight += potentialRealmDefinition.weight();
+            if(rolledValue <= totalWeight){
+                selectedRealm = potentialRealmDefinition;
+                break;
+            }
+
+        }
+        int majorRealm = selectedRealm.realm();
+        int minorRealm = ThreadLocalRandom.current().nextInt(selectedRealm.minMinorRealm(),selectedRealm.maxMinorRealm()+1);
+        addPath(source,definition.path(),Realm.of(majorRealm,minorRealm));
+
+    }
+    public PathDefinition getPath(Identifier id){
+        for(PathDefinition  definition : paths) {
+            if(definition.path().equals(id)) return definition;
+        }
+        return null;
     }
 
     private void addPath(OriginSource source,Identifier path, Realm realm){

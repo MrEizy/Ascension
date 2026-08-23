@@ -227,15 +227,20 @@ public class OriginSource implements StatProvider {
     }
 
     public OriginSourcePatch load(){
-        if(cachedData == null) return null;
+        if(cachedData == null) {
+            finishLoading();
+            return null;
+        };
         loadOriginSourceData(cachedData);
         cachedData = null;
         return resolveFullPatch();
     }
+    public void finishLoading(){
+        NeoForge.EVENT_BUS.post(new OriginSourceEvent.OriginSourceFinishedLoadingEvent(this));
+    }
 
     public void loadOriginSourceData(ValueInput input){
         HashMap<LoadPriority,ArrayList<DataSourceInstance>> loadMap = new HashMap<>();
-
         ValueInput.ValueInputList inputList = input.childrenListOrEmpty("data_sources");
         for(ValueInput dataSourceInput : inputList){
             DataSourceInstance instance = loadDataSource(dataSourceInput,getRegistryAccess());
@@ -258,7 +263,7 @@ public class OriginSource implements StatProvider {
                 instance.getDataSource().onAdded(this,instance);
             }
         }
-        NeoForge.EVENT_BUS.post(new OriginSourceEvent.OriginSourceFinishedLoadingEvent(this));
+        finishLoading();
         for(DataSourceInstance instance : dataSources.values()) instance.getDataSource().finishedLoading(this,instance);
     }
 
