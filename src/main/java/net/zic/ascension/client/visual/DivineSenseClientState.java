@@ -10,7 +10,8 @@ import java.util.Set;
 
 public final class DivineSenseClientState {
     private static final DivineSenseClientState INSTANCE = new DivineSenseClientState();
-    private static final float WAVE_GROWTH_DURATION_MS = 1200.0F;
+    private static final float WAVE_GROWTH_DURATION_MS = 1800.0F;
+    private static final float WAVE_TIME_OFFSET_MS = 220.0F;
 
     private boolean active;
     private long startTimeMs;
@@ -71,7 +72,11 @@ public final class DivineSenseClientState {
     }
 
     public float waveRadius() {
-        return radius * waveProgress();
+        float elapsed = Math.min(WAVE_GROWTH_DURATION_MS, elapsedMs());
+        float b = WAVE_TIME_OFFSET_MS;
+        float denominator = (WAVE_GROWTH_DURATION_MS + b) * (WAVE_GROWTH_DURATION_MS + b) - b * b;
+        float normalized = ((elapsed + b) * (elapsed + b) - b * b) / denominator;
+        return radius * normalized;
     }
 
     public boolean isWaveActive() {

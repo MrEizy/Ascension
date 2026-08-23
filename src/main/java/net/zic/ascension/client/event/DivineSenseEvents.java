@@ -45,7 +45,7 @@ public final class DivineSenseEvents {
     }
 
     @SubscribeEvent
-    public static void onAfterTranslucentBlocks(RenderLevelStageEvent.AfterTranslucentBlocks event) {
+    public static void onAfterLevel(RenderLevelStageEvent.AfterLevel event) {
         DivineSenseRenderer.renderWave(
                 new Matrix4f(event.getModelViewMatrix()),
                 new Matrix4f(event.getLevelRenderState().cameraRenderState.projectionMatrix)

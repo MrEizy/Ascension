@@ -1,11 +1,10 @@
-#version 150
-
-in vec3 Position;
-in vec2 UV0;
+#version 330
 
 out vec2 texCoord0;
 
 void main() {
-  gl_Position = vec4(Position, 1.0);
-  texCoord0 = UV0;
+    vec2 uv = vec2((gl_VertexID << 1) & 2, gl_VertexID & 2);
+
+    gl_Position = vec4(uv * 2.0 - 1.0, 0.0, 1.0);
+    texCoord0 = uv;
 }

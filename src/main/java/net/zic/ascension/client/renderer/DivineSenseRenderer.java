@@ -8,21 +8,17 @@ import com.mojang.blaze3d.systems.CommandEncoder;
 import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.FilterMode;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.ByteBufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.MeshData;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.textures.GpuTextureView;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MappableRingBuffer;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.ascension.value.HexColorCodec;
 import net.zic.ascension.client.visual.DivineSenseClientState;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
+import org.joml.Vector4f;
 
+import java.util.OptionalDouble;
 import java.util.OptionalInt;
-
 
 public enum DivineSenseRenderer {
     INSTANCE;
@@ -33,11 +29,9 @@ public enum DivineSenseRenderer {
             new Std140SizeCalculator()
                     .putMat4f()
                     .putMat4f()
-                    .putVec3()
-                    .putVec3()
-                    .putFloat()
-                    .putFloat()
-                    .putVec3()
+                    .putVec4()
+                    .putVec4()
+                    .putVec4()
                     .get()
     );
 
@@ -51,10 +45,16 @@ public enum DivineSenseRenderer {
             return;
         }
 
-        float radius = state.waveRadius();
+        RenderTarget mainTarget = Minecraft.getInstance().getMainRenderTarget();
+        GpuTextureView depth = mainTarget.getDepthTextureView();
+        if (depth == null) {
+            return;
+        }
+
         Matrix4f invView = new Matrix4f(viewMatrix).invert();
         Matrix4f invProj = new Matrix4f(projectionMatrix).invert();
         Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        Vec3 center = state.center();
         float[] rgb = HexColorCodec.toFloats(state.color());
 
         CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
@@ -64,44 +64,27 @@ public enum DivineSenseRenderer {
             Std140Builder.intoBuffer(view.data())
                     .putMat4f(invView)
                     .putMat4f(invProj)
-                    .putVec3(new Vector3f((float) cameraPos.x, (float) cameraPos.y, (float) cameraPos.z))
-                    .putVec3(state.center().toVector3f())
-                    .putFloat(radius)
-                    .putFloat(RenderSystem.getDevice().isZZeroToOne() ? 1.0F : 0.0F)
-                    .putVec3(new Vector3f(rgb[0], rgb[1], rgb[2]));
+                    .putVec4(new Vector4f((float) cameraPos.x, (float) cameraPos.y, (float) cameraPos.z, 0.0F))
+                    .putVec4(new Vector4f((float) center.x, (float) center.y, (float) center.z, state.waveRadius()))
+                    .putVec4(new Vector4f(rgb[0], rgb[1], rgb[2], RenderSystem.getDevice().isZZeroToOne() ? 1.0F : 0.0F));
         }
 
-        BufferBuilder quadBuilder = new BufferBuilder(
-                new ByteBufferBuilder(256), VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX
-        );
-        quadBuilder.addVertex(-1.0F, -1.0F, 0.0F).setUv(0.0F, 0.0F);
-        quadBuilder.addVertex(1.0F, -1.0F, 0.0F).setUv(1.0F, 0.0F);
-        quadBuilder.addVertex(1.0F, 1.0F, 0.0F).setUv(1.0F, 1.0F);
-        quadBuilder.addVertex(-1.0F, 1.0F, 0.0F).setUv(0.0F, 1.0F);
-        MeshData quadMesh = quadBuilder.build();
-        if (quadMesh == null) {
-            return;
-        }
-
-        RenderTarget mainTarget = Minecraft.getInstance().getMainRenderTarget();
-
-        try (GpuBuffer quadVertexBuffer = RenderSystem.getDevice().createBuffer(
-                () -> "Divine Sense Wave Quad", GpuBuffer.USAGE_VERTEX, quadMesh.vertexBuffer()
+        try (RenderPass pass = encoder.createRenderPass(
+                () -> "Divine Sense Wave",
+                mainTarget.getColorTextureView(),
+                OptionalInt.empty(),
+                null,
+                OptionalDouble.empty()
         )) {
-            try (RenderPass pass = encoder.createRenderPass(
-                    () -> "Divine Sense Wave",
-                    mainTarget.getColorTextureView(),
-                    OptionalInt.empty()
-            )) {
-                pass.setPipeline(DivineSensePipelines.DIVINE_SENSE_EFFECT);
-                pass.bindTexture("DepthSampler", mainTarget.getDepthTextureView(), RenderSystem.getSamplerCache().getClampToEdge(FilterMode.NEAREST));
-                pass.setUniform("DivineSenseEffectUniform", effectUbo.currentBuffer());
-
-                RenderSystem.AutoStorageIndexBuffer indices = RenderSystem.getSequentialBuffer(VertexFormat.Mode.QUADS);
-                pass.setVertexBuffer(0, quadVertexBuffer);
-                pass.setIndexBuffer(indices.getBuffer(6), indices.type());
-                pass.drawIndexed(0, 0, 6, 1);
-            }
+            pass.setPipeline(DivineSensePipelines.DIVINE_SENSE_EFFECT);
+            RenderSystem.bindDefaultUniforms(pass);
+            pass.setUniform(DivineSensePipelines.EFFECT_UNIFORM, effectUbo.currentBuffer());
+            pass.bindTexture(
+                    DivineSensePipelines.DEPTH_SAMPLER,
+                    depth,
+                    RenderSystem.getSamplerCache().getClampToEdge(FilterMode.NEAREST)
+            );
+            pass.draw(0, 3);
         }
     }
 }
