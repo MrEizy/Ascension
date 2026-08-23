@@ -5,6 +5,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
 import net.zic.ascension.common.command.commands.*;
+import net.zic.ascension.common.command.commands.mob.MobCommands;
 import net.zic.ascension.mob_cultivation.command.MobCultivationCommands;
 
 public class AscensionCommand {
@@ -30,6 +31,10 @@ public class AscensionCommand {
                         .then(SlotSkillCommand.buildUnSlot())
                         .then(SlotSkillCommand.buildDisplay())
                 )
+                .then(Commands.literal("mobs")
+                        .then(MobCommands.build())
+                )
+                .then(ViewStats.build())
                 .then(TribulationCommand.build())
                 .then(ChunkCommand.build())
                 .then(AffinityCommand.build())

@@ -9,32 +9,7 @@
       "traits": {
         "normal": [
           {
-            "trait": {
-              "type": "ascension:simple_trait",
-              "name": "Basic",
-              "paths": {
-                "ascension:essence": [
-                  {
-                    "major_realm": 0,
-                    "min_realm":0,
-                    "max_realm": 9,
-                    "weight": 20
-                  },
-                  {
-                    "major_realm": 1,
-                    "min_realm":0,
-                    "max_realm": 9,
-                    "weight": 10
-                  },
-                  {
-                    "major_realm": 1,
-                    "min_realm":0,
-                    "max_realm": 9,
-                    "weight": 1
-                  }
-                ]
-              }
-            },
+            "trait": "ascension:sturdy",
             "chance": 1.0
           }
         ]

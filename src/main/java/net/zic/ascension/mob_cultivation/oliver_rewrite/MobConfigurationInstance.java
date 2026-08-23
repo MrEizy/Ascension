@@ -1,14 +1,12 @@
 package net.zic.ascension.mob_cultivation.oliver_rewrite;
 
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.server.level.DistanceManager;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.configuration.mob_traits.MobTraitDefinition;
-import net.zic.ascension.configuration.mob_traits.MobTraitDefinitionType;
+import net.zic.ascension.configuration.mob_traits.MobTraitReference;
 import net.zic.ascension.configuration.mobs.MobConfiguration;
 import net.zic.ascension.configuration.mobs.MobTierDefinition;
 import net.zic.ascension.configuration.mobs.PotentialTrait;
@@ -28,49 +26,55 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MobConfigurationInstance {
 
     private MobCultivationEliteTier tier;
-    private final List<MobTraitDefinition> definitions = new ArrayList<>();
+    private final List<MobTraitReference> traits = new ArrayList<>();
 
     public MobConfigurationInstance(){
         tier =MobCultivationEliteTier.NORMAL;
     }
-    public MobConfigurationInstance(MobCultivationEliteTier tier, List<MobTraitDefinition> definitions){
+    public MobConfigurationInstance(MobCultivationEliteTier tier, List<MobTraitReference> traits){
         this.tier = tier;
-        this.definitions.addAll(definitions);
+        this.traits.addAll(traits);
     }
-
+    public MobCultivationEliteTier getTier(){return tier;}
+    public List<MobTraitReference> getTraits(){return traits;}
     public void applyToMob(Mob mob){
-        for(MobTraitDefinition definition : definitions) definition.applyToMob(mob);
+        for(MobTraitReference trait : traits) trait.getTrait(mob.registryAccess()).applyToMob(mob);
     }
     public void applyToSource(OriginSource source){
-        for(MobTraitDefinition definition : definitions) definition.applyToSource(source);
+        for(MobTraitReference trait : traits) trait.getTrait(source.getRegistryAccess()).applyToSource(source);
     }
 
+    public void removeFromMob(Mob mob){
+        for(MobTraitReference trait : traits) trait.getTrait(mob.registryAccess()).removeFromMob(mob);
+    }
+    public void removeFromSource(OriginSource source){
+        for(MobTraitReference trait : traits) trait.getTrait(source.getRegistryAccess()).removeFromSource(source);
+
+    }
 
     public void write(ValueOutput output, RegistryAccess access){
         output.putString("tier",tier.name());
         ValueOutput.ValueOutputList traits = output.childrenList("traits");
-        for(MobTraitDefinition definition : definitions){
+        for(MobTraitReference trait : this.traits){
             ValueOutput traitOutput = traits.addChild();
-            traitOutput.store("trait", MobTraitDefinitionType.MOB_TRAIT_CODEC,definition);
+            trait.write(traitOutput);
         }
     }
     public void read(ValueInput input,RegistryAccess access){
         tier = MobCultivationEliteTier.valueOf(input.getStringOr("tier","NORMAL"));
-        definitions.clear();
+        traits.clear();
         ValueInput.ValueInputList inputs = input.childrenListOrEmpty("traits");
-        for(ValueInput definitionInput : inputs){
+        for(ValueInput traitInput : inputs){
             try {
-                MobTraitDefinition definition = definitionInput.read("trait",MobTraitDefinitionType.MOB_TRAIT_CODEC).get();
-                definitions.add(definition);
+                MobTraitReference ref = MobTraitReference.of(traitInput);
+                if(ref.isValid(access)) traits.add(ref);
 
             }catch (Exception e){
-                AscensionCraft.LOGGER.debug("unable to load mob trait definition");
+                AscensionCraft.LOGGER.debug("unable to load mob trait");
             }
         }
     }
-    public void freshApply(Mob mob){
-        for(MobTraitDefinition definition : definitions) definition.initializeTrait(mob);
-    }
+
     //only generates the traits and tiers, does not apply them
     public static MobConfigurationInstance generateInstance(MobConfiguration configuration,Mob mob){
         int totalWeight = 0;
@@ -86,9 +90,9 @@ public class MobConfigurationInstance {
             }
         }
 
-        List<MobTraitDefinition> traits = new ArrayList<>();
+        List<MobTraitReference> traits = new ArrayList<>();
         for(PotentialTrait potentialTrait : configuration.getPotentialTraits(mobTier)){
-            if(ThreadLocalRandom.current().nextDouble(1) <= potentialTrait.chance()) traits.add(potentialTrait.trait().resolve(mob.registryAccess()));
+            if(ThreadLocalRandom.current().nextDouble(1) <= potentialTrait.chance()) traits.add(potentialTrait.trait());
         }
         return new MobConfigurationInstance(mobTier,traits);
     }

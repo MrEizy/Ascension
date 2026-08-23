@@ -11,34 +11,49 @@ import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
-import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.OriginSourceEvent;
-import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
-import org.apache.logging.log4j.core.Core;
+import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import org.jspecify.annotations.NonNull;
-@EventBusSubscriber(modid = AscensionCraft.MOD_ID)
-public class MobAscensionData extends SimpleAscensionEntityData {
 
+/**
+ * A holder for a specific instance of a mobs config
+ */
+public class MobConfigurationHolder implements ConfigurableMobData {
+    private final Mob mob;
     private MobConfigurationInstance configurationInstance = new MobConfigurationInstance();
 
-    public MobAscensionData(OriginSource source, Mob entity) {
-        super(source, entity);
+    public MobConfigurationHolder(Mob mob) {
+        this.mob = mob;
     }
-    @SubscribeEvent
-    public static void onSourceLoad(OriginSourceEvent.OriginSourceFinishedLoadingEvent event){
-        for(LivingEntity attachedEntity : event.getSource().getAttachedEntities()){
-            AscensionEntityDataProvider provider = attachedEntity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-            if(provider == null) continue;
-            if(!(provider.getData() instanceof MobAscensionData mobAscensionData)) continue;
-            System.out.println(attachedEntity.getClass());
-            mobAscensionData.applyConfigurationToSource();
-        }
+
+
+
+    public Mob getMob(){return mob;}
+    public OriginSource getSource(){
+        AscensionEntityDataProvider provider = getMob().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+
+        return (provider == null || provider.getData() == null) ? null : provider.getData().getSource() ;
     }
-    public Mob getMob(){return (Mob) getEntity();}
+    @Override
     public void setMobConfigurationInstance(MobConfigurationInstance configurationInstance){
+        if(this.configurationInstance != null) removeConfigurationInstance();
         this.configurationInstance = configurationInstance;
-        this.configurationInstance.freshApply(getMob());
+    }
+
+    @Override
+    public MobConfigurationInstance getConfigurationInstance() {
+        return configurationInstance;
+    }
+
+    public void removeConfigurationInstance(){
+        if(getMob() == null) return;
+        configurationInstance.removeFromMob(getMob());
+
+        AscensionEntityDataProvider provider = getMob().getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+        if(provider == null || provider.getData() == null || provider.getData().getSource() == null) return;
+        configurationInstance.removeFromSource(provider.getData().getSource());
+        configurationInstance = null;
     }
 
     public void applyConfigurationToSource(){
@@ -49,40 +64,33 @@ public class MobAscensionData extends SimpleAscensionEntityData {
 
     }
 
-    @Override
+
     public void read(ValueInput input) {
-        super.read(input);
         configurationInstance.read(input,getSource().getRegistryAccess());
     }
 
-    @Override
+
     public void write(ValueOutput output) {
-        super.write(output);
         configurationInstance.write(output,getSource().getRegistryAccess());
     }
 
-
-    public static class Provider implements IAttachmentSerializer<MobAscensionData> {
+    public static class Provider implements IAttachmentSerializer<MobConfigurationHolder> {
         @Override
-        public MobAscensionData read(
+        public MobConfigurationHolder read(
                 @NonNull IAttachmentHolder holder,
                 ValueInput input
         ) {
             if (!(holder instanceof Mob entity)) {
                 return null;
             }
+            MobConfigurationHolder instance = new MobConfigurationHolder(entity);
+            instance.read(input);
 
-            OriginSource originSource = new OriginSource();
-            originSource.setCachedData(input.childOrEmpty("source_data"));
-
-            MobAscensionData data = new MobAscensionData(originSource, entity);
-            data.read(input);
-            return data;
+            return instance;
         }
 
         @Override
-        public boolean write(MobAscensionData attachment, ValueOutput output) {
-            attachment.getSource().writeOriginSourceData(output.child("source_data"));
+        public boolean write(MobConfigurationHolder attachment, ValueOutput output) {
             attachment.write(output);
             return true;
         }
