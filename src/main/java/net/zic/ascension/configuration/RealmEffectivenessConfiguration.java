@@ -5,12 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreHolderProviders;
-import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 
 import java.util.List;
 
@@ -73,6 +70,9 @@ public record RealmEffectivenessConfiguration(List<Double> multipliers) {
         return apply(value, getMultiplier(entity));
     }
 
+    public static double getGameplayMultiplier(OriginSource source, double exponent) {
+        return response(getMultiplier(source), exponent);
+    }
 
     public static double getRelativeEffectiveness(LivingEntity attacker, LivingEntity defender) {
         double attackerMultiplier = getMultiplier(attacker);
@@ -89,6 +89,15 @@ public record RealmEffectivenessConfiguration(List<Double> multipliers) {
     private static double apply(double value, double multiplier) {
         double result = value * multiplier;
         return Double.isFinite(result) ? result : value;
+    }
+
+    private static double response(double multiplier, double exponent) {
+        if (!Double.isFinite(multiplier) || multiplier <= 0.0D || !Double.isFinite(exponent) || exponent < 0.0D) {
+            return 1.0D;
+        }
+
+        double response = Math.pow(multiplier, exponent);
+        return Double.isFinite(response) && response > 0.0D ? response : 1.0D;
     }
 
     private double resolveMultiplier(OriginSource source) {
