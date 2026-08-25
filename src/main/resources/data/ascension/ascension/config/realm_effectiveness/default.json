@@ -1,91 +1,16 @@
 {
-  "paths": {
-    "ascension:foundation/body": [1.0, 1.25, 1.6, 2.1, 3.0, 4.5, 7.0, 12.0, 22.0, 45.0, 100.0, 250.0],
-    "ascension:foundation/soul": [1.0, 1.25, 1.6, 2.1, 3.0, 4.5, 7.0, 12.0, 22.0, 45.0, 100.0, 250.0],
-    "ascension:foundation/essence": [1.0, 1.25, 1.6, 2.1, 3.0, 4.5, 7.0, 12.0, 22.0, 45.0, 100.0, 250.0]
-  },
-  "stats": {
-    "ascension:strength": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 1.0
-    },
-    "ascension:vitality": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 1.0
-    },
-    "ascension:agility": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 1.0
-    },
-    "ascension:spirit": {
-      "paths": ["ascension:foundation/essence", "ascension:foundation/soul"],
-      "exponent": 1.0
-    }
-  },
-  "attribute_scalings": {
-    "base_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.65
-    },
-    "strength_damage_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 1.0
-    },
-    "strength_jump_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.2
-    },
-    "strength_movement_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.15
-    },
-    "agility_movement_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.15
-    },
-    "agility_step_height_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.1
-    },
-    "strength_attack_speed_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.1
-    },
-    "agility_attack_speed_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.1
-    },
-    "strength_mining_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.35
-    },
-    "strength_safe_fall_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.35
-    },
-    "spirit_max_qi_scaling": {
-      "paths": ["ascension:foundation/essence"],
-      "exponent": 0.75
-    },
-    "spirit_qi_regen_scaling": {
-      "paths": ["ascension:foundation/essence"],
-      "exponent": 0.45
-    },
-    "vitality_max_stamina_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.65
-    },
-    "strength_max_stamina_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.65
-    },
-    "vitality_stamina_regen_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.45
-    },
-    "agility_stamina_regen_scaling": {
-      "paths": ["ascension:foundation/body"],
-      "exponent": 0.45
-    }
-  }
+  "multipliers": [
+    1.0,
+    1.25,
+    1.6,
+    2.1,
+    3.0,
+    5.5,
+    10.5,
+    17.0,
+    36.25,
+    88.0,
+    190.0,
+    355.75
+  ]
 }

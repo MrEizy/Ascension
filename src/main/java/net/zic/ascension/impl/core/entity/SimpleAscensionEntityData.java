@@ -114,52 +114,52 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private void applyAttributeStatScalings(ZenithAttributeHolder attributeHolder, boolean initializeAttributes) {
         // WIll BE BALANCED OVER TIME HOPEFULLY
         configureAttributeStatScaling(attributeHolder, Attributes.MAX_HEALTH,
-                AscensionStats.VITALITY.get(), "base_scaling", 2.0D, false, initializeAttributes);
+                AscensionStats.VITALITY.get(), "base_scaling", 2.0D, 0.65D, false, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, Attributes.ATTACK_DAMAGE,
-                AscensionStats.STRENGTH.get(), "strength_damage_scaling", 1.0D, true, initializeAttributes);
+                AscensionStats.STRENGTH.get(), "strength_damage_scaling", 1.0D, 1.0D, true, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, Attributes.JUMP_STRENGTH,
-                AscensionStats.STRENGTH.get(), "strength_jump_scaling", 0.005D, true, initializeAttributes);
+                AscensionStats.STRENGTH.get(), "strength_jump_scaling", 0.005D, 0.2D, true, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
-                AscensionStats.STRENGTH.get(), "strength_movement_scaling", 0.00005D, true, initializeAttributes);
+                AscensionStats.STRENGTH.get(), "strength_movement_scaling", 0.00005D, 0.15D, true, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
-                AscensionStats.AGILITY.get(), "agility_movement_scaling", 0.002D, true, initializeAttributes);
+                AscensionStats.AGILITY.get(), "agility_movement_scaling", 0.002D, 0.15D, true, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, Attributes.STEP_HEIGHT,
-                AscensionStats.AGILITY.get(), "agility_step_height_scaling", 0.05D, true, initializeAttributes);
+                AscensionStats.AGILITY.get(), "agility_step_height_scaling", 0.05D, 0.1D, true, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
-                AscensionStats.STRENGTH.get(), "strength_attack_speed_scaling", 0.001D, true, initializeAttributes);
+                AscensionStats.STRENGTH.get(), "strength_attack_speed_scaling", 0.001D, 0.1D, true, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
-                AscensionStats.AGILITY.get(), "agility_attack_speed_scaling", 0.001D, true, initializeAttributes);
+                AscensionStats.AGILITY.get(), "agility_attack_speed_scaling", 0.001D, 0.1D, true, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, Attributes.MINING_EFFICIENCY,
-                AscensionStats.STRENGTH.get(), "strength_mining_scaling", 0.001D, true, initializeAttributes);
+                AscensionStats.STRENGTH.get(), "strength_mining_scaling", 0.001D, 0.35D, true, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, Attributes.SAFE_FALL_DISTANCE,
-                AscensionStats.STRENGTH.get(), "strength_safe_fall_scaling", 0.1D, false, initializeAttributes);
+                AscensionStats.STRENGTH.get(), "strength_safe_fall_scaling", 0.1D, 0.35D, false, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, AscensionAttributes.MAX_QI,
-                AscensionStats.SPIRIT.get(), "spirit_max_qi_scaling", 10.0D, false, initializeAttributes);
+                AscensionStats.SPIRIT.get(), "spirit_max_qi_scaling", 10.0D, 0.75D, false, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, AscensionAttributes.QI_REGEN_RATE,
-                AscensionStats.SPIRIT.get(), "spirit_qi_regen_scaling", 0.25D, false, initializeAttributes);
+                AscensionStats.SPIRIT.get(), "spirit_qi_regen_scaling", 0.25D, 0.45D, false, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
-                AscensionStats.VITALITY.get(), "vitality_max_stamina_scaling", 5.0D, false, initializeAttributes);
+                AscensionStats.VITALITY.get(), "vitality_max_stamina_scaling", 5.0D, 0.65D, false, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
-                AscensionStats.STRENGTH.get(), "strength_max_stamina_scaling", 2.0D, false, initializeAttributes);
+                AscensionStats.STRENGTH.get(), "strength_max_stamina_scaling", 2.0D, 0.65D, false, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
-                AscensionStats.VITALITY.get(), "vitality_stamina_regen_scaling", 0.4D, false, initializeAttributes);
+                AscensionStats.VITALITY.get(), "vitality_stamina_regen_scaling", 0.4D, 0.45D, false, initializeAttributes);
 
         configureAttributeStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
-                AscensionStats.AGILITY.get(), "agility_stamina_regen_scaling", 0.2D, false, initializeAttributes);
+                AscensionStats.AGILITY.get(), "agility_stamina_regen_scaling", 0.2D, 0.45D, false, initializeAttributes);
     }
 
     private void configureAttributeStatScaling(
@@ -168,6 +168,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             Stat stat,
             String scalingName,
             double baseScaling,
+            double realmResponse,
             boolean suppressed,
             boolean initializeAttribute) {
         if (initializeAttribute) {
@@ -187,10 +188,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                 AscensionCraft.MOD_ID,
                 scalingName
         );
-        double effectiveScaling = baseScaling * RealmEffectivenessConfiguration.getAttributeScalingMultiplier(
-                source,
-                scalingName
-        );
+        double effectiveScaling = RealmEffectivenessConfiguration.apply(source, baseScaling, realmResponse);
 
         zenithAttribute.removeScaling(stat, scalingId);
         zenithAttribute.addStatScaling(stat, scalingId, effectiveScaling);

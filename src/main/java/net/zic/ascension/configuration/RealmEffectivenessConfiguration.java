@@ -11,28 +11,23 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 
 import java.util.List;
-import java.util.Map;
 
-public record RealmEffectivenessConfiguration(
-        Map<Identifier, List<Double>> paths,
-        Map<Identifier, EffectivenessRule> stats,
-        Map<String, EffectivenessRule> attributeScalings
-) {
+/**
+ * Global realm-effectiveness curve.
+ */
+public record RealmEffectivenessConfiguration(List<Double> multipliers) {
     public static final Identifier DEFAULT_ID = AscensionCraft.prefix("default");
+    private static final String FOUNDATION_PATH_PREFIX = "foundation/";
 
     public static final Codec<RealmEffectivenessConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.unboundedMap(Identifier.CODEC, Codec.DOUBLE.listOf()).optionalFieldOf("paths", Map.of()).forGetter(RealmEffectivenessConfiguration::paths),
-            Codec.unboundedMap(Identifier.CODEC, EffectivenessRule.CODEC).optionalFieldOf("stats", Map.of()).forGetter(RealmEffectivenessConfiguration::stats),
-            Codec.unboundedMap(Codec.STRING, EffectivenessRule.CODEC).optionalFieldOf("attribute_scalings", Map.of()).forGetter(RealmEffectivenessConfiguration::attributeScalings)
+            Codec.DOUBLE.listOf().optionalFieldOf("multipliers", List.of(1.0D)).forGetter(RealmEffectivenessConfiguration::multipliers)
     ).apply(instance, RealmEffectivenessConfiguration::new));
 
     private static final RealmEffectivenessConfiguration DISABLED =
-            new RealmEffectivenessConfiguration(Map.of(), Map.of(), Map.of());
+            new RealmEffectivenessConfiguration(List.of(1.0D));
 
     public RealmEffectivenessConfiguration {
-        paths = paths == null ? Map.of() : Map.copyOf(paths);
-        stats = stats == null ? Map.of() : Map.copyOf(stats);
-        attributeScalings = attributeScalings == null ? Map.of() : Map.copyOf(attributeScalings);
+        multipliers = multipliers == null || multipliers.isEmpty() ? List.of(1.0D) : List.copyOf(multipliers);
     }
 
     public static RealmEffectivenessConfiguration get(OriginSource source) {
@@ -45,114 +40,54 @@ public record RealmEffectivenessConfiguration(
         return configuration == null ? DISABLED : configuration;
     }
 
-    public static double getPathEffectiveness(OriginSource source, Identifier path) {
-        return get(source).resolvePathEffectiveness(source, path);
+    public static double getMultiplier(OriginSource source) {
+        return get(source).resolveMultiplier(source);
     }
 
-    public static double applyToStat(OriginSource source, Identifier stat, double rawValue) {
-        return applyToStat(source, stat, rawValue, 1.0D);
-    }
-
-    public static double getStatMultiplier(OriginSource source, Identifier stat) {
-        RealmEffectivenessConfiguration configuration = get(source);
-        EffectivenessRule rule = configuration.stats.get(stat);
-        return rule == null ? 1.0D : configuration.resolveRuleMultiplier(source, rule);
-    }
-
-    public static double applyToStat(OriginSource source, Identifier stat, double rawValue, double exponentScale) {
-        RealmEffectivenessConfiguration configuration = get(source);
-        EffectivenessRule rule = configuration.stats.get(stat);
-        if (rule == null) {
-            return rawValue;
-        }
-        return rawValue * configuration.resolveRuleMultiplier(source, rule, exponentScale);
-    }
-
-    public static double getAttributeScalingMultiplier(OriginSource source, String scalingName) {
-        RealmEffectivenessConfiguration configuration = get(source);
-        EffectivenessRule rule = configuration.attributeScalings.get(scalingName);
-        return rule == null ? 1.0D : configuration.resolveRuleMultiplier(source, rule);
-    }
-
-    public static double apply(OriginSource source, Identifier path, double value, double exponent) {
-        double potency = getPathEffectiveness(source, path);
-        double multiplier = Math.pow(potency, exponent);
-        return Double.isFinite(multiplier) ? value * multiplier : value;
-    }
-
-    private double resolveRuleMultiplier(OriginSource source, EffectivenessRule rule) {
-        return resolveRuleMultiplier(source, rule, 1.0D);
-    }
-
-    private double resolveRuleMultiplier(OriginSource source, EffectivenessRule rule, double exponentScale) {
-        if (rule.paths().isEmpty()) {
+    public double getMultiplier(int majorRealm) {
+        if (majorRealm < 0 || multipliers.isEmpty()) {
             return 1.0D;
         }
 
-        double strongest = 0.0D;
-        boolean found = false;
-        for (Identifier path : rule.paths()) {
-            Double potency = resolveOwnedPathEffectiveness(source, path);
-            if (potency == null) {
-                continue;
-            }
-            strongest = found ? Math.max(strongest, potency) : potency;
-            found = true;
-        }
+        int index = Math.min(majorRealm, multipliers.size() - 1);
+        double multiplier = multipliers.get(index);
+        return Double.isFinite(multiplier) && multiplier >= 0.0D ? multiplier : 1.0D;
+    }
 
-        if (!found) {
+    public static double apply(OriginSource source, double value) {
+        double result = value * getMultiplier(source);
+        return Double.isFinite(result) ? result : value;
+    }
+
+    public static double apply(OriginSource source, double value, double responseExponent) {
+        double safeExponent = Double.isFinite(responseExponent) ? responseExponent : 1.0D;
+        double multiplier = Math.pow(getMultiplier(source), safeExponent);
+        double result = value * multiplier;
+        return Double.isFinite(result) ? result : value;
+    }
+
+    private double resolveMultiplier(OriginSource source) {
+        if (source == null) {
             return 1.0D;
-        }
-
-        double safeExponentScale = Double.isFinite(exponentScale) ? exponentScale : 1.0D;
-        double multiplier = Math.pow(strongest, rule.exponent() * safeExponentScale);
-        return Double.isFinite(multiplier) ? multiplier : 1.0D;
-    }
-
-    private double resolvePathEffectiveness(OriginSource source, Identifier path) {
-        Double potency = resolveOwnedPathEffectiveness(source, path);
-        return potency == null ? 1.0D : potency;
-    }
-
-    private Double resolveOwnedPathEffectiveness(OriginSource source, Identifier path) {
-        if (source == null || path == null) {
-            return null;
         }
 
         DataSourceInstance dataSource = source.hasDataSource(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId()) ? source.getDataSource(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId()) : null;
         if (!(dataSource instanceof PathHolder holder)) {
-            return null;
-        }
-
-        PathInstance pathInstance = holder.getPath(path);
-        if (pathInstance == null) {
-            return null;
-        }
-
-        List<Double> curve = paths.get(path);
-        if (curve == null || curve.isEmpty()) {
             return 1.0D;
         }
 
-        int majorRealm = pathInstance.getCurrentMajorRealm();
-        if (majorRealm < 0) {
-            return 1.0D;
+        int highestMajorRealm = -1;
+        for (Identifier pathId : holder.getPaths()) {
+            if (pathId == null || !pathId.getPath().startsWith(FOUNDATION_PATH_PREFIX)) {
+                continue;
+            }
+
+            PathInstance pathInstance = holder.getPath(pathId);
+            if (pathInstance != null) {
+                highestMajorRealm = Math.max(highestMajorRealm, pathInstance.getCurrentMajorRealm());
+            }
         }
 
-        int index = Math.min(majorRealm, curve.size() - 1);
-        double potency = curve.get(index);
-        return Double.isFinite(potency) && potency >= 0.0D ? potency : 1.0D;
-    }
-
-    public record EffectivenessRule(List<Identifier> paths, double exponent) {
-        public static final Codec<EffectivenessRule> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Identifier.CODEC.listOf().fieldOf("paths").forGetter(EffectivenessRule::paths),
-                Codec.DOUBLE.optionalFieldOf("exponent", 1.0D).forGetter(EffectivenessRule::exponent)
-        ).apply(instance, EffectivenessRule::new));
-
-        public EffectivenessRule {
-            paths = paths == null ? List.of() : List.copyOf(paths);
-            exponent = Double.isFinite(exponent) ? exponent : 1.0D;
-        }
+        return getMultiplier(highestMajorRealm);
     }
 }

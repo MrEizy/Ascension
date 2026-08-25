@@ -140,16 +140,11 @@ public final class ScaledValueSources {
         }
     }
 
-    public record StatValue(Identifier stat, boolean base, double realmExponent) implements ScaledValue.Source {
+    public record StatValue(Identifier stat, boolean base) implements ScaledValue.Source {
         public static final MapCodec<StatValue> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Identifier.CODEC.fieldOf("stat").forGetter(StatValue::stat),
-                Codec.BOOL.optionalFieldOf("base", false).forGetter(StatValue::base),
-                Codec.DOUBLE.optionalFieldOf("realm_exponent", 1.0D).forGetter(StatValue::realmExponent)
+                Codec.BOOL.optionalFieldOf("base", false).forGetter(StatValue::base)
         ).apply(instance, StatValue::new));
-
-        public StatValue(Identifier stat, boolean base) {
-            this(stat, base, 1.0D);
-        }
 
         @Override
         public CodecType<ScaledValue.Source> getType() {
@@ -166,7 +161,7 @@ public final class ScaledValueSources {
                 return 0.0D;
             }
             double rawValue = base ? context.source().getBaseStat(definition) : context.source().getStat(definition);
-            return RealmEffectivenessConfiguration.applyToStat(context.source(), stat, rawValue, realmExponent);
+            return RealmEffectivenessConfiguration.apply(context.source(), rawValue);
         }
     }
 

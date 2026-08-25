@@ -68,7 +68,7 @@ public class StatsDisplay extends RenderableElement {
 
     private void updateTooltip() {
         ClientAscensionData.getSource().ifPresent(source -> {
-            double multiplier = RealmEffectivenessConfiguration.getStatMultiplier(source, statId);
+            double multiplier = RealmEffectivenessConfiguration.getMultiplier(source);
             double effectiveValue = rawValue * multiplier;
 
             tooltip.setText(Component.empty()
