@@ -37,6 +37,7 @@ public class SkillDisplayContainer extends RenderableElement {
     private final SkillOptionsScrollBox skillOptions;
     private final DescriptionDisplayContainer selectedSkillInformation;
     private final SkillBarContainer skillBar;
+    private final SkillMasteryBar masteryBar;
 
     private OriginSource observedSource;
     private long observedRevision = Long.MIN_VALUE;
@@ -70,6 +71,11 @@ public class SkillDisplayContainer extends RenderableElement {
         selectedSkillInformation.getPositioning().setX(121);
         selectedSkillInformation.getPositioning().setY(49);
         addChild(selectedSkillInformation);
+
+        masteryBar = new SkillMasteryBar(frame, this);
+        masteryBar.getPositioning().setX(218);
+        masteryBar.getPositioning().setY(57);
+        addChild(masteryBar);
 
         skillBar = new SkillBarContainer(frame, this);
         skillBar.getPositioning().setX(3);

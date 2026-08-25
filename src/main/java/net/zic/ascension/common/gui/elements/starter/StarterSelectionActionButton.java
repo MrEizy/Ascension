@@ -4,8 +4,10 @@ import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.gui.elements.general.AscensionTooltip;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 
 public class StarterSelectionActionButton extends BetterButton {
@@ -18,6 +20,7 @@ public class StarterSelectionActionButton extends BetterButton {
     private final Action action;
     private final ITextureData activeTexture;
     private final ITextureData inactiveTexture;
+    private final AscensionTooltip tooltip;
 
     public StarterSelectionActionButton(
             UIFrame frame,
@@ -54,6 +57,8 @@ public class StarterSelectionActionButton extends BetterButton {
 
         setWidth(WIDTH);
         setHeight(HEIGHT);
+        tooltip = new AscensionTooltip(frame);
+        tooltip.setActive(true);
     }
 
     @Override
@@ -75,6 +80,15 @@ public class StarterSelectionActionButton extends BetterButton {
             activeTexture.render(graphics);
         } else {
             inactiveTexture.render(graphics);
+        }
+
+        if (isHovered()) {
+            tooltip.setText(Component.translatable(
+                    action == Action.CONFIRM
+                            ? "gui.ascension.starter.confirm"
+                            : "gui.ascension.starter.cancel"
+            ));
+            getUiFrame().setTooltip(tooltip);
         }
     }
 

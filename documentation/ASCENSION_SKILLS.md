@@ -1,4 +1,4 @@
-# Ascension Technique and Skill Systems
+# Ascension Skills
 This page documents the datapack format used to create Ascension skills and techniques.
 
 It is written for content authors first. The intended workflow is:

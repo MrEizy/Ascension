@@ -6,7 +6,6 @@ import net.lucent.easygui.gui.elements.built_in.EasyLabel;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
@@ -14,7 +13,6 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.info.PathInstanceDisplayElement;
@@ -35,7 +33,7 @@ public class PathDisplayContainer extends RenderableElement {
     );
 
     private final PathOptionsScrollBox pathOptions;
-    private final EasyLabel selectedTechniqueLabel;
+    private final EasyLabel selectedPathLabel;
     private final PathInstanceDisplayElement pathInformation;
     private final PathProgressBar progressBar;
 
@@ -56,18 +54,17 @@ public class PathDisplayContainer extends RenderableElement {
         pathOptions.getPositioning().setY(43);
         addChild(pathOptions);
 
-
-        selectedTechniqueLabel = new EasyLabel(frame);
-        selectedTechniqueLabel.setTextColor(0xFFFFFFFF);
-        selectedTechniqueLabel.setWidth(78);
-        selectedTechniqueLabel.setHeight(8);
-        selectedTechniqueLabel.setScaleToFit(true);
-        selectedTechniqueLabel.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
-        selectedTechniqueLabel.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
-        selectedTechniqueLabel.getPositioning().setX(131);
-        selectedTechniqueLabel.getPositioning().setY(16);
-        selectedTechniqueLabel.setText(Component.translatable("gui.ascension.introspection.none"));
-        addChild(selectedTechniqueLabel);
+        selectedPathLabel = new EasyLabel(frame);
+        selectedPathLabel.setTextColor(0xFFFFFFFF);
+        selectedPathLabel.setWidth(78);
+        selectedPathLabel.setHeight(8);
+        selectedPathLabel.setScaleToFit(true);
+        selectedPathLabel.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
+        selectedPathLabel.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
+        selectedPathLabel.getPositioning().setX(131);
+        selectedPathLabel.getPositioning().setY(16);
+        selectedPathLabel.setText(Component.translatable("gui.ascension.introspection.none"));
+        addChild(selectedPathLabel);
 
         pathInformation = new PathInstanceDisplayElement(
                 frame,
@@ -103,14 +100,11 @@ public class PathDisplayContainer extends RenderableElement {
         }
         selectedPath = pathId;
         progressBar.setPath(pathId);
-
         refreshSelectedPath();
     }
 
     private void refreshSynchronizedState() {
         OriginSource source = ClientAscensionData.getSource().orElse(null);
-
-
         observedSource = source;
 
         if (source == null) {
@@ -118,7 +112,6 @@ public class PathDisplayContainer extends RenderableElement {
             selectedPath = null;
             pathOptions.setPaths(this, displayedPaths);
             progressBar.setPath(null);
-
             showUnavailableState();
             return;
         }
@@ -135,7 +128,6 @@ public class PathDisplayContainer extends RenderableElement {
         if (paths.isEmpty()) {
             selectedPath = null;
             progressBar.setPath(null);
-
             showEmptyState();
             return;
         }
@@ -144,7 +136,6 @@ public class PathDisplayContainer extends RenderableElement {
             selectedPath = paths.getFirst();
         }
         progressBar.setPath(selectedPath);
-
         refreshSelectedPath();
     }
 
@@ -155,7 +146,7 @@ public class PathDisplayContainer extends RenderableElement {
         }
 
         ClientAscensionData.getSource().ifPresentOrElse(source -> {
-            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,selectedPath);
+            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, selectedPath);
             if (pathInstance == null) {
                 showMissingPath(selectedPath);
                 return;
@@ -172,9 +163,7 @@ public class PathDisplayContainer extends RenderableElement {
                     return;
                 }
 
-
-                refreshSelectedTechnique(source, player.registryAccess());
-
+                setPathTitle(path.name());
                 Component description = path.description() == null
                         ? Component.empty()
                         : path.description();
@@ -183,7 +172,6 @@ public class PathDisplayContainer extends RenderableElement {
                         path.getRealmName(
                                 pathInstance.getCurrentMajorRealm(),
                                 pathInstance.getCurrentMinorRealm()
-
                         ),
                         description
                 );
@@ -191,44 +179,13 @@ public class PathDisplayContainer extends RenderableElement {
         }, this::showUnavailableState);
     }
 
-    private void refreshSelectedTechnique(OriginSource source, RegistryAccess access) {
-        Identifier techniqueId = AscensionOriginSourceHelper.getTechniques(source).stream()
-                .filter(id -> {
-                    Technique technique = CoreRegistries.safeAccess(
-                            CoreRegistries.TECHNIQUE_REGISTRY,
-                            id,
-                            access
-                    );
-                    return technique != null && selectedPath.equals(technique.getPath());
-                })
-                .sorted(Comparator.comparing(Identifier::toString))
-                .findFirst()
-                .orElse(null);
-
-        if (techniqueId == null) {
-            setTechniqueTitle(Component.translatable("gui.ascension.introspection.none"));
-            return;
-        }
-
-        Technique technique = CoreRegistries.safeAccess(
-                CoreRegistries.TECHNIQUE_REGISTRY,
-                techniqueId,
-                access
-        );
-        setTechniqueTitle(
-                technique == null
-                        ? Component.literal(techniqueId.toString())
-                        : technique.getName(AscensionOriginSourceHelper.getTechniqueData(source, techniqueId))
-        );
-    }
-
-    private void setTechniqueTitle(Component title) {
-        selectedTechniqueLabel.setText(title == null ? Component.empty() : title);
-        selectedTechniqueLabel.setTextScale(1.0F);
+    private void setPathTitle(Component title) {
+        selectedPathLabel.setText(title == null ? Component.empty() : title);
+        selectedPathLabel.setTextScale(1.0F);
     }
 
     private void showEmptyState() {
-        setTechniqueTitle(Component.translatable("gui.ascension.introspection.none"));
+        setPathTitle(Component.translatable("gui.ascension.introspection.none"));
         pathInformation.setInformation(
                 Component.translatable("gui.ascension.introspection.no_paths"),
                 Component.translatable("gui.ascension.introspection.no_paths_description")
@@ -236,7 +193,7 @@ public class PathDisplayContainer extends RenderableElement {
     }
 
     private void showUnavailableState() {
-        setTechniqueTitle(Component.translatable("gui.ascension.introspection.none"));
+        setPathTitle(Component.translatable("gui.ascension.introspection.none"));
         pathInformation.setInformation(
                 Component.translatable("gui.ascension.introspection.cultivation"),
                 Component.translatable("gui.ascension.introspection.data_unavailable")
@@ -244,7 +201,7 @@ public class PathDisplayContainer extends RenderableElement {
     }
 
     private void showMissingPath(Identifier pathId) {
-        setTechniqueTitle(Component.translatable("gui.ascension.introspection.none"));
+        setPathTitle(Component.literal(pathId.toString()));
         pathInformation.setInformation(
                 Component.literal(pathId.toString()),
                 Component.translatable("gui.ascension.introspection.missing_registry_entry")

@@ -25,6 +25,8 @@ public class StarterSelectionContainer extends RenderableElement {
 
     private static final int ACTION_GAP_Y = 10;
     private static final int ACTION_GAP_X = 8;
+    private static final int SCREEN_MARGIN_X = 12;
+    private static final int SCREEN_MARGIN_Y = 12;
 
     private final StarterSelectionStage stage;
     private Identifier selectedOption;
@@ -38,8 +40,8 @@ public class StarterSelectionContainer extends RenderableElement {
         this.stage = stage;
 
         int optionCount = Math.max(1, options.size());
-        float cardScale = scaleFor(stage);
         int cardGap = gapFor(stage);
+        float cardScale = scaleFor(frame, stage, optionCount, cardGap);
         int cardWidth = StarterOptionButton.widthFor(cardScale);
         int cardHeight = StarterOptionButton.heightFor(cardScale);
         int totalCardsWidth = optionCount * cardWidth + Math.max(0, optionCount - 1) * cardGap;
@@ -132,10 +134,23 @@ public class StarterSelectionContainer extends RenderableElement {
         ClientPacketDistributor.sendToServer(new ChooseStarterOptionPacket(stage, selectedOption));
     }
 
-    private static float scaleFor(StarterSelectionStage stage) {
-        return stage == StarterSelectionStage.PHYSIQUE
+    private static float scaleFor(UIFrame frame, StarterSelectionStage stage, int optionCount, int cardGap) {
+        float preferredScale = stage == StarterSelectionStage.PHYSIQUE
                 ? PHYSIQUE_CARD_SCALE
                 : BLOODLINE_CARD_SCALE;
+
+        int availableWidth = Math.max(1, frame.getWidth() - SCREEN_MARGIN_X * 2);
+        int availableHeight = Math.max(1, frame.getHeight() - SCREEN_MARGIN_Y * 2);
+
+        int totalGapWidth = Math.max(0, optionCount - 1) * cardGap;
+        float widthScale = Math.max(0.1F,
+                (availableWidth - totalGapWidth) / (float) (optionCount * StarterOptionButton.PANEL_WIDTH));
+
+        int fixedHeight = TITLE_HEIGHT + TITLE_GAP + ACTION_GAP_Y + StarterSelectionActionButton.HEIGHT;
+        float heightScale = Math.max(0.1F,
+                (availableHeight - fixedHeight) / (float) StarterOptionButton.PANEL_HEIGHT);
+
+        return Math.min(preferredScale, Math.min(widthScale, heightScale));
     }
 
     private static int gapFor(StarterSelectionStage stage) {

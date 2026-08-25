@@ -1,4 +1,4 @@
-package net.zic.ascension.common.gui.elements.introspection;
+package net.zic.ascension.common.gui.elements.introspection.cultivation;
 
 import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.textures.ITextureData;
@@ -9,27 +9,28 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.common.gui.elements.general.AscensionTooltip;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 
-public class NavButton extends BetterButton {
-    private final IntrospectionContainer owner;
-    private final IntrospectionContainer.Panel panel;
+public class CultivationPageButton extends BetterButton {
+    private final CultivationDisplayContainer owner;
+    private final CultivationDisplayContainer.Page page;
     private final ITextureData defaultTexture;
     private final ITextureData alternateTexture;
     private final AscensionTooltip tooltip;
     private boolean selected;
 
-    public NavButton(
+    public CultivationPageButton(
             UIFrame frame,
-            IntrospectionContainer owner,
-            IntrospectionContainer.Panel panel,
+            CultivationDisplayContainer owner,
+            CultivationDisplayContainer.Page page,
             Identifier texture
     ) {
         super(frame, 0, 0);
         this.owner = owner;
-        this.panel = panel;
+        this.page = page;
         this.defaultTexture = new TextureDataSubsection(texture, 24, 48, 0, 0, 24, 24);
         this.alternateTexture = new TextureDataSubsection(texture, 24, 48, 0, 24, 24, 24);
         setWidth(defaultTexture.getWidth());
         setHeight(defaultTexture.getHeight());
+        setZIndex(10);
         tooltip = new AscensionTooltip(frame);
         tooltip.setActive(true);
     }
@@ -40,7 +41,7 @@ public class NavButton extends BetterButton {
 
     @Override
     public void onClick() {
-        owner.openPanel(panel);
+        owner.openPage(page);
     }
 
     @Override
@@ -54,12 +55,11 @@ public class NavButton extends BetterButton {
         }
 
         if (isHovered()) {
-            tooltip.setText(Component.translatable(switch (panel) {
-                case MAIN -> "gui.ascension.introspection.main";
-                case STATS -> "gui.ascension.introspection.stats";
-                case SKILLS -> "gui.ascension.introspection.skills";
-                case CULTIVATION -> "gui.ascension.introspection.cultivation";
-            }));
+            tooltip.setText(Component.translatable(
+                    page == CultivationDisplayContainer.Page.PATHS
+                            ? "gui.ascension.introspection.paths"
+                            : "gui.ascension.introspection.techniques"
+            ));
             getUiFrame().setTooltip(tooltip);
         }
     }

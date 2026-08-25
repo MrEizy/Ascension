@@ -13,6 +13,8 @@ public class PathInstanceDisplayElement extends ScrollBox implements IInformatio
     private final EasyLabel realmLabel;
     private final EasyLabel descriptionLabel;
 
+    private Component currentRealmName = Component.empty();
+    private Component currentDescription = Component.empty();
     private int observedParentWidth = -1;
     private int observedParentHeight = -1;
     private boolean sizeFromParent;
@@ -57,13 +59,21 @@ public class PathInstanceDisplayElement extends ScrollBox implements IInformatio
     }
 
     public void setInformation(Component realmName, Component description) {
+        Component nextRealmName = realmName == null ? Component.empty() : realmName;
+        Component nextDescription = description == null ? Component.empty() : description;
+        if (currentRealmName.equals(nextRealmName) && currentDescription.equals(nextDescription)) {
+            return;
+        }
+        currentRealmName = nextRealmName;
+        currentDescription = nextDescription;
         resetScroll();
 
-        realmLabel.setText(realmName == null ? Component.empty() : realmName);
+        realmLabel.setText(nextRealmName);
         realmLabel.setTextScale(1.0F);
 
-        descriptionLabel.setText(description == null ? Component.empty() : description);
+        descriptionLabel.setText(nextDescription);
         descriptionLabel.setTextScale(DESCRIPTION_SCALE);
+        applyDimensions();
 
         setVisible(true);
         setActive(true);

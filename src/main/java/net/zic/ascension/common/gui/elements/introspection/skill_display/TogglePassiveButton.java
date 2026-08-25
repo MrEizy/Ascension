@@ -29,7 +29,7 @@ public class TogglePassiveButton extends BetterButton {
     private static final ITextureData CHECKMARK = new TextureDataSubsection(
             TEXTURE,
             234, 286,
-            191, 232,
+            171, 232,
             9, 7
     );
 
