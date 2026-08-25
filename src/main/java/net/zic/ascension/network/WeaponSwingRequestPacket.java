@@ -7,9 +7,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.impl.core.skill.passive.WeaponMasteryService;
+import net.zic.ascension.impl.core.skill.passive.PassiveTriggerService;
 
-/** Client attack intent; all eligibility, resource and damage decisions remain server-side. */
 public record WeaponSwingRequestPacket() implements CustomPacketPayload {
     public static final Type<WeaponSwingRequestPacket> TYPE = new Type<>(
             Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "weapon_swing_request")
@@ -25,7 +24,7 @@ public record WeaponSwingRequestPacket() implements CustomPacketPayload {
     public static void handle(WeaponSwingRequestPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             if (context.player() instanceof ServerPlayer player) {
-                WeaponMasteryService.trySwing(player);
+                PassiveTriggerService.tryAttack(player);
             }
         });
     }

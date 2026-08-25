@@ -10,6 +10,7 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 import net.zic.ascension.common.util.AscensionAttributes;
+import net.zic.ascension.impl.core.skill.body.BodyCultivationSkillService;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
 import net.zic.ascension.impl.resource.stamina.StaminaService;
@@ -41,10 +42,18 @@ public final class RecoveryTicker {
     }
 
     public static void spendJumpStamina(ServerPlayer player) {
+        if (!canSpend(player)) {
+            return;
+        }
+        BodyCultivationSkillService.stimulate(player, AscensionResourceSources.JUMPING, 1.0D);
         spend(player, AscensionResourceSources.JUMPING, JUMPING_COST);
     }
 
     public static void spendAttackStamina(ServerPlayer player) {
+        if (!canSpend(player)) {
+            return;
+        }
+        BodyCultivationSkillService.stimulate(player, AscensionResourceSources.ATTACKING, 1.0D);
         spend(player, AscensionResourceSources.ATTACKING, ATTACKING_COST);
     }
 
@@ -95,6 +104,14 @@ public final class RecoveryTicker {
             regenerateStamina(player);
             return;
         }
+        Vec3 deltaMovement = player.getDeltaMovement();
+        if (deltaMovement.lengthSqr() > 1.0E-4D) {
+            BodyCultivationSkillService.stimulate(
+                    player,
+                    AscensionResourceSources.movementSource(player),
+                    1.0D
+            );
+        }
         MovementCost movement = movementCost(player);
         if (movement == null) {
             regenerateStamina(player);
@@ -108,11 +125,15 @@ public final class RecoveryTicker {
     }
 
     private static void spend(ServerPlayer player, ResourceSourceIdentity source, double amount) {
-        if (player == null || player.isSpectator() || player.getAbilities().instabuild) {
+        if (!canSpend(player)) {
             return;
         }
         StaminaService.resetRegenerationDelay(player);
         StaminaService.spendOrDrain(player, source, amount);
+    }
+
+    private static boolean canSpend(ServerPlayer player) {
+        return player != null && !player.isSpectator() && !player.getAbilities().instabuild;
     }
 
     private static void clampStamina(ServerPlayer player) {

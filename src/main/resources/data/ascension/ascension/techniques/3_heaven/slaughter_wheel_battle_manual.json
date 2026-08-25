@@ -16,51 +16,12 @@
   ],
   "max_realm": 8,
   "max_minor_realm": 2,
-  "realm_change_handler": [
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          0
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/slaughter_wheel_manifestation",
-            "ascension:castable/revolving_butchers_guard",
-            "ascension:castable/ninefold_carnage_circuit",
-            "ascension:castable/heaven_grinding_slaughter_wheel"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/slaughter_wheel_manifestation",
-          "contribution": "ascension:slaughter_wheel_manual/slaughter_wheel_manifestation",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/revolving_butchers_guard",
-          "contribution": "ascension:slaughter_wheel_manual/revolving_butchers_guard",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/ninefold_carnage_circuit",
-          "contribution": "ascension:slaughter_wheel_manual/ninefold_carnage_circuit",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    }
-  ],
+  "skills": {
+    "ascension:castable/slaughter_wheel_manifestation": {},
+    "ascension:castable/revolving_butchers_guard": {},
+    "ascension:castable/ninefold_carnage_circuit": {},
+    "ascension:castable/heaven_grinding_slaughter_wheel": {}
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "theme_overrides": {
@@ -77,7 +38,7 @@
         "spacing": 15
       }
     },
-    "template": "ascension:default_technique_manual",
+    "template": "ascension:default_battle_style",
     "rank": "ascension:heaven"
   }
 }

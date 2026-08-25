@@ -1,15 +1,14 @@
 package net.zic.ascension.impl.core.skill.castable;
 
-import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.skill.castable.SkillExecutionDefinition;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
+import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +17,9 @@ import java.util.Map;
 public final class SkillExecutions {
     public static final Identifier TARGET_COUNT = AscensionCraft.prefix("execution/target_count");
     public static final Identifier TARGET_DISTANCE = AscensionCraft.prefix("execution/target_distance");
-    public static final Identifier CHARGE_TICKS = AscensionCraft.prefix("execution/charge_ticks");
-    public static final Identifier MAXIMUM_CHARGE_TICKS = AscensionCraft.prefix("execution/maximum_charge_ticks");
+    public static final Identifier CAST_PROGRESS = AscensionCraft.prefix("cast/progress");
+    public static final Identifier CAST_TICKS = AscensionCraft.prefix("cast/ticks");
+    public static final Identifier MAXIMUM_CAST_TICKS = AscensionCraft.prefix("cast/maximum_ticks");
     public static final Identifier PROJECTILE_TRAVELLED = AscensionCraft.prefix("execution/projectile_travelled");
     public static final Identifier PROJECTILE_SPEED = AscensionCraft.prefix("execution/projectile_speed");
     public static final Identifier PROJECTILE_PIERCE_INDEX = AscensionCraft.prefix("execution/projectile_pierce_index");
@@ -33,25 +33,27 @@ public final class SkillExecutions {
             ServerLevel level,
             LivingEntity caster,
             Identifier skill,
-            int effectiveLevel,
+            int effectiveProgression,
             double charge,
             Map<Identifier, Double> variables,
-            SkillExecutionDefinition definition
+            TargetingDefinition target,
+            boolean requireTargets
     ) {
         Map<Identifier, Double> resolvedVariables = new HashMap<>(variables == null ? Map.of() : variables);
-        resolvedVariables.put(TargetingDefinition.Context.EFFECTIVE_LEVEL, (double) effectiveLevel);
-        TargetingDefinition.Result targeting = definition.targeting().resolve(new TargetingDefinition.Context(
+        resolvedVariables.put(TargetingDefinition.Context.EFFECTIVE_PROGRESSION, (double) effectiveProgression);
+        resolvedVariables.put(CAST_PROGRESS, charge);
+        TargetingDefinition.Result targeting = target.resolve(new TargetingDefinition.Context(
                 level,
                 caster,
                 skill,
-                effectiveLevel,
+                effectiveProgression,
                 charge,
                 resolvedVariables
         ));
         if (!targeting.succeeded()) {
             return Resolution.failure(targeting.failureMessage());
         }
-        if (definition.requireTargets() && targeting.targets().isEmpty()) {
+        if (requireTargets && targeting.targets().isEmpty()) {
             return Resolution.failure(Component.literal("No valid target"));
         }
         resolvedVariables.put(TARGET_COUNT, (double) targeting.targets().size());
@@ -67,36 +69,59 @@ public final class SkillExecutions {
             LivingEntity caster,
             Identifier skill,
             double charge,
-            SkillExecutionDefinition definition,
+            List<SkillAction> actions,
             Resolution resolution
     ) {
         Vec3 origin = caster.position().add(0.0D, caster.getBbHeight() * 0.5D, 0.0D);
         LivingEntity primary = primaryEntity(resolution);
-        for (SkillExecutionFeature feature : definition.features()) {
-            switch (feature.subject()) {
-                case CASTER, ORIGIN -> feature.apply(new SkillExecutionContext(
-                        level,
-                        caster,
-                        skill,
-                        primary,
-                        origin,
-                        charge,
-                        resolution.variables()
-                ));
-                case TARGET, POSITION -> {
-                    for (TargetingDefinition.Target target : resolution.targets()) {
-                        Map<Identifier, Double> targetVariables = new HashMap<>(resolution.variables());
-                        targetVariables.put(TARGET_DISTANCE, caster.getEyePosition().distanceTo(target.position()));
-                        feature.apply(new SkillExecutionContext(
-                                level,
-                                caster,
-                                skill,
-                                target.entity(),
-                                target.position(),
-                                charge,
-                                targetVariables
-                        ));
-                    }
+        for (SkillAction action : actions) {
+            applyAction(level, caster, skill, charge, resolution, origin, primary, action);
+        }
+    }
+
+    private static void applyAction(
+            ServerLevel level,
+            LivingEntity caster,
+            Identifier skill,
+            double charge,
+            Resolution resolution,
+            Vec3 origin,
+            LivingEntity primary,
+            SkillAction action
+    ) {
+        if (action instanceof SkillActions.MasteryGate gate) {
+            double progression = resolution.variables().getOrDefault(TargetingDefinition.Context.EFFECTIVE_PROGRESSION, 0.0D);
+            if (progression >= gate.minimum().progression()) {
+                for (SkillAction nested : gate.actions()) {
+                    applyAction(level, caster, skill, charge, resolution, origin, primary, nested);
+                }
+            }
+            return;
+        }
+
+        switch (action.subject()) {
+            case CASTER, ORIGIN -> action.apply(new SkillActionContext(
+                    level,
+                    caster,
+                    skill,
+                    primary,
+                    origin,
+                    charge,
+                    resolution.variables()
+            ));
+            case TARGET, POSITION -> {
+                for (TargetingDefinition.Target target : resolution.targets()) {
+                    Map<Identifier, Double> targetVariables = new HashMap<>(resolution.variables());
+                    targetVariables.put(TARGET_DISTANCE, caster.getEyePosition().distanceTo(target.position()));
+                    action.apply(new SkillActionContext(
+                            level,
+                            caster,
+                            skill,
+                            target.entity(),
+                            target.position(),
+                            charge,
+                            targetVariables
+                    ));
                 }
             }
         }

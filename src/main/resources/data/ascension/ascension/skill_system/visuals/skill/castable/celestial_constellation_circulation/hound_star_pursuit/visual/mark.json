@@ -1,0 +1,87 @@
+{
+  "elements": [
+    {
+      "type": "ascension:entity_overlay",
+      "tint": [
+        70,
+        125,
+        255,
+        18
+      ],
+      "secondary_tint": [
+        220,
+        235,
+        255,
+        54
+      ],
+      "line_width": 1.2,
+      "filled": true,
+      "no_depth": false,
+      "radius": 0.72,
+      "height": 2.0,
+      "segments": 20,
+      "pulse": 0.04,
+      "pulse_speed": 0.18
+    },
+    {
+      "type": "ascension:sprite",
+      "offset": [
+        0,
+        0.78,
+        0
+      ],
+      "tint": [
+        95,
+        165,
+        255,
+        175
+      ],
+      "secondary_tint": [
+        255,
+        225,
+        130,
+        240
+      ],
+      "width": 1.04,
+      "height": 1.04,
+      "pulse": 0.08,
+      "pulse_speed": 0.25,
+      "spin": 1.5,
+      "texture": "ascension:vfx/orb_01"
+    },
+    {
+      "type": "ascension:ring",
+      "rotation": [
+        0,
+        0,
+        90
+      ],
+      "tint": [
+        125,
+        185,
+        255,
+        125
+      ],
+      "secondary_tint": [
+        255,
+        240,
+        175,
+        210
+      ],
+      "line_width": 1.4,
+      "no_depth": false,
+      "radius": 0.68,
+      "segments": 22,
+      "spin": -1.0
+    },
+    {
+      "type": "ascension:particles",
+      "radius": 0.55,
+      "height": 1.6,
+      "length": 0.015,
+      "count": 1,
+      "interval": 5,
+      "particle": "minecraft:end_rod"
+    }
+  ]
+}

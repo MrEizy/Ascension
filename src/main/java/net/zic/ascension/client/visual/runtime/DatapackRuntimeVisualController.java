@@ -32,6 +32,7 @@ import java.util.UUID;
 
 public final class DatapackRuntimeVisualController implements RuntimeVisualController {
     private static final Map<UUID, Deque<Vec3>> HISTORY = new HashMap<>();
+    private static final Map<Identifier, RuntimeAssetModel> MODELS = new HashMap<>();
     private static final Map<Identifier, PrimitiveHandler> PRIMITIVES = new HashMap<>();
 
     static {
@@ -100,8 +101,8 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
 
         try {
             double time = level.getGameTime() + (state.seed() & 1023L);
-            for (RuntimeVisualDefinition.Layer layer : definition.layers()) {
-                PrimitiveHandler handler = PRIMITIVES.get(layer.primitive());
+            for (RuntimeVisualDefinition.Element layer : definition.elements()) {
+                PrimitiveHandler handler = PRIMITIVES.get(layer.type());
                 if (handler != null) {
                     handler.tick(this, layer, state, level, time, visited);
                 }
@@ -134,7 +135,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
                     + ClientRuntimeVisuals.partialTick()
                     + (state.seed() & 1023L);
 
-            for (RuntimeVisualDefinition.Layer layer : definition.layers()) {
+            for (RuntimeVisualDefinition.Element layer : definition.elements()) {
                 renderLayer(layer, state, event, time, visited);
             }
         } finally {
@@ -145,13 +146,13 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
     }
 
     private void renderLayer(
-            RuntimeVisualDefinition.Layer layer,
+            RuntimeVisualDefinition.Element layer,
             RuntimeVisualState state,
             RenderLevelStageEvent.AfterTranslucentFeatures event,
             double time,
             Set<Identifier> visited
     ) {
-        PrimitiveHandler handler = PRIMITIVES.get(layer.primitive());
+        PrimitiveHandler handler = PRIMITIVES.get(layer.type());
         if (handler != null) {
             handler.render(this, layer, state, event, time, visited);
         }
@@ -159,7 +160,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
 
     private void renderGeometry(
             Identifier primitive,
-            RuntimeVisualDefinition.Layer layer,
+            RuntimeVisualDefinition.Element layer,
             RuntimeVisualState state,
             RenderLevelStageEvent.AfterTranslucentFeatures event,
             double time
@@ -173,18 +174,19 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
         Vec3 camera = minecraft.gameRenderer.getMainCamera().position();
         PoseStack.Pose pose = event.getPoseStack().last();
         MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
-        RuntimeVisualDefinition.VisualColor color = layer.appearance().resolved(state.progress());
+        RuntimeVisualDefinition.VisualColor color = layer.appearance().resolved(state);
         double pulse = 1.0D + Math.sin(time * layer.motion().pulseSpeed()) * layer.motion().pulse();
-        double scale = Math.max(0.0001D, layer.transform().scale().resolve(state, time) * pulse);
+        double scale = Math.max(0.0001D, layer.transform().scale().resolve(state, time) * state.scale() * pulse);
         double radius = Math.max(0.0D, layer.geometry().radius().resolve(state, time) * scale);
         double innerRadius = Math.max(0.0D, layer.geometry().innerRadius().resolve(state, time) * scale);
         double height = Math.max(0.0D, layer.geometry().height().resolve(state, time) * scale);
         double width = Math.max(0.0D, layer.geometry().width().resolve(state, time) * scale);
         double length = Math.max(0.0D, layer.geometry().length().resolve(state, time) * scale);
-        Vec3 rotation = layer.transform().rotation().add(0.0D, time * layer.motion().spin(), 0.0D);
+        double spin = layer.motion().spin() + state.spin();
+        Vec3 rotation = layer.transform().rotation().add(0.0D, time * spin, 0.0D);
         List<Vec3> centers = centers(layer, state, time, partialTick);
 
-        if (primitive.equals(RuntimeVisualDefinition.Primitives.BILLBOARD)) {
+        if (primitive.equals(RuntimeVisualDefinition.Types.SPRITE)) {
             for (Vec3 center : centers) {
                 drawBillboard(
                         buffers,
@@ -194,10 +196,30 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
                         width,
                         height,
                         color,
-                        layer.resources().texture().orElse(null)
+                        layer.resources().textureResource(time),
+                        layer.transform().rotation().z + time * spin
                 );
             }
-        } else if (primitive.equals(RuntimeVisualDefinition.Primitives.RING)) {
+        } else if (primitive.equals(RuntimeVisualDefinition.Types.MODEL)) {
+            Identifier modelId = layer.resources().modelResource();
+            if (modelId != null) {
+                RuntimeAssetModel model = MODELS.computeIfAbsent(modelId, RuntimeAssetModel::new);
+                for (Vec3 center : centers) {
+                    model.render(
+                            pose,
+                            buffers,
+                            center.subtract(camera),
+                            rotation,
+                            scale,
+                            color.red(),
+                            color.green(),
+                            color.blue(),
+                            color.alpha(),
+                            0x00F000F0
+                    );
+                }
+            }
+        } else if (primitive.equals(RuntimeVisualDefinition.Types.RING)) {
             for (Vec3 center : centers) {
                 drawRing(
                         buffers,
@@ -211,7 +233,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
                         layer.appearance()
                 );
             }
-        } else if (primitive.equals(RuntimeVisualDefinition.Primitives.SHELL)) {
+        } else if (primitive.equals(RuntimeVisualDefinition.Types.SHELL)) {
             for (Vec3 center : centers) {
                 drawShell(
                         buffers,
@@ -225,12 +247,12 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
                         layer.appearance()
                 );
             }
-        } else if (primitive.equals(RuntimeVisualDefinition.Primitives.BEAM)) {
+        } else if (primitive.equals(RuntimeVisualDefinition.Types.BEAM)) {
             VertexConsumer lines = lineBuffer(buffers, layer.appearance().noDepth());
             drawBeams(lines, pose, state, camera, layer, length, color, partialTick);
-        } else if (primitive.equals(RuntimeVisualDefinition.Primitives.GROUND_GLYPH)) {
+        } else if (primitive.equals(RuntimeVisualDefinition.Types.DECAL)) {
             for (Vec3 center : centers) {
-                drawGroundGlyph(
+                drawDecal(
                         buffers,
                         pose,
                         center.subtract(camera),
@@ -239,10 +261,11 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
                         layer.geometry().segments(),
                         rotation,
                         color,
-                        layer
+                        layer,
+                        time
                 );
             }
-        } else if (primitive.equals(RuntimeVisualDefinition.Primitives.RIBBON)) {
+        } else if (primitive.equals(RuntimeVisualDefinition.Types.TRAIL)) {
             VertexConsumer lines = lineBuffer(buffers, layer.appearance().noDepth());
             drawRibbon(
                     lines,
@@ -254,7 +277,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
                     layer.motion().history(),
                     partialTick
             );
-        } else if (primitive.equals(RuntimeVisualDefinition.Primitives.AFTERIMAGE)) {
+        } else if (primitive.equals(RuntimeVisualDefinition.Types.AFTERIMAGE)) {
             drawAfterimages(
                     buffers,
                     pose,
@@ -263,11 +286,11 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
                     width,
                     height,
                     color,
-                    layer.resources().texture().orElse(null),
+                    layer.resources().textureResource(time),
                     layer.motion().history(),
                     partialTick
             );
-        } else if (primitive.equals(RuntimeVisualDefinition.Primitives.LIVING_ENTITY_OVERLAY)) {
+        } else if (primitive.equals(RuntimeVisualDefinition.Types.ENTITY_OVERLAY)) {
             for (Vec3 center : centers) {
                 drawEntityOverlay(
                         buffers,
@@ -287,7 +310,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
     }
 
     private void emitParticles(
-            RuntimeVisualDefinition.Layer layer,
+            RuntimeVisualDefinition.Element layer,
             RuntimeVisualState state,
             ClientLevel level,
             double time
@@ -307,9 +330,11 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
         }
 
         RandomSource random = level.getRandom();
-        double radius = Math.max(0.0D, layer.geometry().radius().resolve(state, time));
-        double height = Math.max(0.0D, layer.geometry().height().resolve(state, time));
-        double speed = Math.max(0.0D, layer.geometry().length().resolve(state, time));
+        double pulse = 1.0D + Math.sin(time * layer.motion().pulseSpeed()) * layer.motion().pulse();
+        double scale = Math.max(0.0001D, layer.transform().scale().resolve(state, time) * state.scale() * pulse);
+        double radius = Math.max(0.0D, layer.geometry().radius().resolve(state, time) * scale);
+        double height = Math.max(0.0D, layer.geometry().height().resolve(state, time) * scale);
+        double speed = Math.max(0.0D, layer.geometry().length().resolve(state, time) * scale);
         int count = Math.clamp(layer.geometry().count(), 1, 64);
 
         for (Vec3 center : centers(layer, state, time, 1.0F)) {
@@ -328,7 +353,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
     }
 
     private List<Vec3> centers(
-            RuntimeVisualDefinition.Layer layer,
+            RuntimeVisualDefinition.Element layer,
             RuntimeVisualState state,
             double time,
             float partialTick
@@ -477,7 +502,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
             PoseStack.Pose pose,
             RuntimeVisualState state,
             Vec3 camera,
-            RuntimeVisualDefinition.Layer layer,
+            RuntimeVisualDefinition.Element layer,
             double length,
             RuntimeVisualDefinition.VisualColor color,
             float partialTick
@@ -514,7 +539,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
         );
     }
 
-    private void drawGroundGlyph(
+    private void drawDecal(
             MultiBufferSource.BufferSource buffers,
             PoseStack.Pose pose,
             Vec3 center,
@@ -523,9 +548,10 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
             int segments,
             Vec3 rotation,
             RuntimeVisualDefinition.VisualColor color,
-            RuntimeVisualDefinition.Layer layer
+            RuntimeVisualDefinition.Element layer,
+            double time
     ) {
-        Identifier texture = layer.resources().texture().orElse(null);
+        Identifier texture = layer.resources().textureResource(time);
 
         if (texture != null) {
             VertexConsumer textured = buffers.getBuffer(RenderTypes.entityTranslucent(texture));
@@ -617,7 +643,8 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
                     width,
                     height,
                     faded,
-                    texture
+                    texture,
+                    0.0D
             );
         }
     }
@@ -655,7 +682,8 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
             double width,
             double height,
             RuntimeVisualDefinition.VisualColor color,
-            Identifier texture
+            Identifier texture,
+            double rollDegrees
     ) {
         Vec3 forward = toCamera.lengthSqr() <= 1.0E-8D
                 ? new Vec3(0.0D, 0.0D, 1.0D)
@@ -668,6 +696,15 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
         }
 
         Vec3 up = forward.cross(right).normalize();
+        if (rollDegrees != 0.0D) {
+            double angle = Math.toRadians(rollDegrees);
+            double cos = Math.cos(angle);
+            double sin = Math.sin(angle);
+            Vec3 rolledRight = right.scale(cos).add(up.scale(sin));
+            Vec3 rolledUp = up.scale(cos).subtract(right.scale(sin));
+            right = rolledRight;
+            up = rolledUp;
+        }
         Vec3 halfRight = right.scale(width * 0.5D);
         Vec3 halfUp = up.scale(height * 0.5D);
         Vec3 a = center.subtract(halfRight).subtract(halfUp);
@@ -880,7 +917,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
     }
 
     private int historyLimit(RuntimeVisualDefinition definition) {
-        return definition.layers().stream()
+        return definition.elements().stream()
                 .mapToInt(layer -> layer.motion().history())
                 .max()
                 .orElse(12);
@@ -921,16 +958,20 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
                 state.seed(),
                 state.primaryValue(),
                 state.secondaryValue(),
+                state.scale(),
+                state.spin(),
+                state.tint(),
+                state.secondaryTint(),
                 null
         );
     }
 
     private static void registerBuiltIns() {
-        registerPrimitive(RuntimeVisualDefinition.Primitives.PARTICLE_EMITTER, new PrimitiveHandler() {
+        registerPrimitive(RuntimeVisualDefinition.Types.PARTICLES, new PrimitiveHandler() {
             @Override
             public void tick(
                     DatapackRuntimeVisualController controller,
-                    RuntimeVisualDefinition.Layer layer,
+                    RuntimeVisualDefinition.Element layer,
                     RuntimeVisualState state,
                     ClientLevel level,
                     double time,
@@ -940,11 +981,11 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
             }
         });
 
-        registerPrimitive(RuntimeVisualDefinition.Primitives.COMPOSITE, new PrimitiveHandler() {
+        registerPrimitive(RuntimeVisualDefinition.Types.COMPOSITE, new PrimitiveHandler() {
             @Override
             public void tick(
                     DatapackRuntimeVisualController controller,
-                    RuntimeVisualDefinition.Layer layer,
+                    RuntimeVisualDefinition.Element layer,
                     RuntimeVisualState state,
                     ClientLevel level,
                     double time,
@@ -961,7 +1002,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
             @Override
             public void render(
                     DatapackRuntimeVisualController controller,
-                    RuntimeVisualDefinition.Layer layer,
+                    RuntimeVisualDefinition.Element layer,
                     RuntimeVisualState state,
                     RenderLevelStageEvent.AfterTranslucentFeatures event,
                     double time,
@@ -976,11 +1017,11 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
             }
         });
 
-        registerPrimitive(RuntimeVisualDefinition.Primitives.MODEL_LAYER, new PrimitiveHandler() {
+        registerPrimitive(RuntimeVisualDefinition.Types.CUSTOM, new PrimitiveHandler() {
             @Override
             public void render(
                     DatapackRuntimeVisualController controller,
-                    RuntimeVisualDefinition.Layer layer,
+                    RuntimeVisualDefinition.Element layer,
                     RuntimeVisualState state,
                     RenderLevelStageEvent.AfterTranslucentFeatures event,
                     double time,
@@ -996,14 +1037,15 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
         });
 
         List<Identifier> geometry = List.of(
-                RuntimeVisualDefinition.Primitives.BILLBOARD,
-                RuntimeVisualDefinition.Primitives.RING,
-                RuntimeVisualDefinition.Primitives.SHELL,
-                RuntimeVisualDefinition.Primitives.BEAM,
-                RuntimeVisualDefinition.Primitives.GROUND_GLYPH,
-                RuntimeVisualDefinition.Primitives.RIBBON,
-                RuntimeVisualDefinition.Primitives.AFTERIMAGE,
-                RuntimeVisualDefinition.Primitives.LIVING_ENTITY_OVERLAY
+                RuntimeVisualDefinition.Types.SPRITE,
+                RuntimeVisualDefinition.Types.MODEL,
+                RuntimeVisualDefinition.Types.RING,
+                RuntimeVisualDefinition.Types.SHELL,
+                RuntimeVisualDefinition.Types.BEAM,
+                RuntimeVisualDefinition.Types.DECAL,
+                RuntimeVisualDefinition.Types.TRAIL,
+                RuntimeVisualDefinition.Types.AFTERIMAGE,
+                RuntimeVisualDefinition.Types.ENTITY_OVERLAY
         );
 
         for (Identifier id : geometry) {
@@ -1011,7 +1053,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
                 @Override
                 public void render(
                         DatapackRuntimeVisualController controller,
-                        RuntimeVisualDefinition.Layer layer,
+                        RuntimeVisualDefinition.Element layer,
                         RuntimeVisualState state,
                         RenderLevelStageEvent.AfterTranslucentFeatures event,
                         double time,
@@ -1026,7 +1068,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
     public interface PrimitiveHandler {
         default void tick(
                 DatapackRuntimeVisualController controller,
-                RuntimeVisualDefinition.Layer layer,
+                RuntimeVisualDefinition.Element layer,
                 RuntimeVisualState state,
                 ClientLevel level,
                 double time,
@@ -1036,7 +1078,7 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
 
         default void render(
                 DatapackRuntimeVisualController controller,
-                RuntimeVisualDefinition.Layer layer,
+                RuntimeVisualDefinition.Element layer,
                 RuntimeVisualState state,
                 RenderLevelStageEvent.AfterTranslucentFeatures event,
                 double time,

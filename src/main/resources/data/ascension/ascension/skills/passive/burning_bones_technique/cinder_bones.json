@@ -1,0 +1,17 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.cinder_bones.name"
+  },
+  "description": {
+    "translate": "ascension.skill.cinder_bones.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:defense",
+      "flat_reduction": 0.4,
+      "percentage_reduction": 0.04,
+      "stagger_resistance": 0.1
+    }
+  ]
+}

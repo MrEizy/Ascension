@@ -4,7 +4,9 @@ import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.common.gui.elements.general.AscensionTooltip;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 
 public class NavButton extends BetterButton {
@@ -12,6 +14,7 @@ public class NavButton extends BetterButton {
     private final IntrospectionContainer.Panel panel;
     private final ITextureData defaultTexture;
     private final ITextureData alternateTexture;
+    private final AscensionTooltip tooltip;
     private boolean selected;
 
     public NavButton(
@@ -27,6 +30,8 @@ public class NavButton extends BetterButton {
         this.alternateTexture = new TextureDataSubsection(texture, 24, 48, 0, 24, 24, 24);
         setWidth(defaultTexture.getWidth());
         setHeight(defaultTexture.getHeight());
+        tooltip = new AscensionTooltip(frame);
+        tooltip.setActive(true);
     }
 
     public void setSelected(boolean selected) {
@@ -46,6 +51,16 @@ public class NavButton extends BetterButton {
             alternateTexture.render(graphics);
         } else {
             defaultTexture.render(graphics);
+        }
+
+        if (isHovered()) {
+            tooltip.setText(Component.translatable(switch (panel) {
+                case MAIN -> "gui.ascension.introspection.main";
+                case STATS -> "gui.ascension.introspection.stats";
+                case SKILLS -> "gui.ascension.introspection.skills";
+                case CULTIVATION -> "gui.ascension.introspection.cultivation";
+            }));
+            getUiFrame().setTooltip(tooltip);
         }
     }
 }

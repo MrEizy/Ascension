@@ -1,235 +1,11 @@
 {
-  "type": "ascension:held_cast",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.heaven_grinding_slaughter_wheel.name"
   },
   "description": {
     "translate": "ascension.skill.heaven_grinding_slaughter_wheel.desc"
   },
-  "cast": {
-    "minimum_charge": 24,
-    "maximum_charge": 100,
-    "cooldown": 420,
-    "cost": {
-      "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
-      "release_on_failure": true,
-      "cumulative_cost": {
-        "base": 12.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:charge"
-            },
-            "operation": "add",
-            "scale": 44.0,
-            "power": 1.65
-          }
-        ]
-      },
-      "operation": "ascension:consume"
-    },
-    "movement": {
-      "horizontal_drag": {
-        "base": 0.55
-      },
-      "vertical_drag": {
-        "base": 1.0
-      },
-      "disable_sprinting": true
-    },
-    "interruption": {
-      "damage_threshold": {
-        "base": 12.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:stat",
-              "stat": "ascension:vitality"
-            },
-            "operation": "add",
-            "scale": 0.12
-          }
-        ],
-        "maximum": 30.0
-      },
-      "accumulation_window": 20,
-      "release_after_minimum": true
-    },
-    "stages": []
-  },
-  "targeting": {
-    "type": "ascension:radial",
-    "radius": {
-      "base": 4.5,
-      "terms": [
-        {
-          "source": {
-            "type": "ascension:charge"
-          },
-          "operation": "add",
-          "scale": 7.5
-        }
-      ],
-      "maximum": 12.0
-    },
-    "maximum_targets": 0,
-    "sort": "nearest",
-    "filter": {
-      "relations": [
-        "neutral",
-        "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": false
-    }
-  },
-  "require_targets": false,
-  "features": [
-    {
-      "type": "ascension:visual",
-      "duration": {
-        "base": 34
-      },
-      "follow": true,
-      "definition": "#heaven_wheel",
-      "subject": "caster"
-    },
-    {
-      "type": "ascension:particles",
-      "particle": "minecraft:crit",
-      "count": {
-        "base": 70
-      },
-      "spread": {
-        "base": 2.2
-      },
-      "speed": {
-        "base": 0.15
-      },
-      "subject": "caster"
-    },
-    {
-      "type": "ascension:particles",
-      "particle": "minecraft:flash",
-      "count": {
-        "base": 1
-      },
-      "spread": {
-        "base": 0.0
-      },
-      "speed": {
-        "base": 0.0
-      },
-      "subject": "caster"
-    },
-    {
-      "type": "ascension:sound",
-      "sound": "minecraft:entity.warden.sonic_boom",
-      "volume": {
-        "base": 1.0
-      },
-      "pitch": {
-        "base": 0.58
-      },
-      "subject": "caster"
-    },
-    {
-      "type": "ascension:damage",
-      "amount": {
-        "base": 12.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:stat",
-              "stat": "ascension:strength"
-            },
-            "operation": "add",
-            "scale": 0.52
-          },
-          {
-            "source": {
-              "type": "ascension:stat",
-              "stat": "ascension:spirit"
-            },
-            "operation": "add",
-            "scale": 0.44
-          },
-          {
-            "source": {
-              "type": "ascension:charge"
-            },
-            "operation": "add",
-            "scale": 38.0
-          }
-        ],
-        "minimum": 6.0,
-        "maximum": 140.0
-      },
-      "damage_type": "minecraft:magic",
-      "classifications": [
-        "ascension:skill",
-        "ascension:held",
-        "ascension:essence",
-        "ascension:slaughter",
-        "ascension:wheel"
-      ],
-      "path": "ascension:foundation/essence"
-    },
-    {
-      "type": "ascension:stagger",
-      "amount": {
-        "base": 28.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:stat",
-              "stat": "ascension:strength"
-            },
-            "operation": "add",
-            "scale": 0.2
-          },
-          {
-            "source": {
-              "type": "ascension:stat",
-              "stat": "ascension:spirit"
-            },
-            "operation": "add",
-            "scale": 0.14
-          },
-          {
-            "source": {
-              "type": "ascension:charge"
-            },
-            "operation": "add",
-            "scale": 70.0
-          }
-        ],
-        "minimum": 12.0,
-        "maximum": 120.0
-      },
-      "definition": "#heaven_grinding"
-    },
-    {
-      "type": "ascension:resource",
-      "resource": "ascension:stamina",
-      "operation": "ascension:drain",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 8.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:charge"
-            },
-            "operation": "add",
-            "scale": 18.0
-          }
-        ]
-      },
-      "subject": "target"
-    }
-  ],
   "definitions": {
     "stagger": {
       "heaven_grinding": {
@@ -241,7 +17,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 2.0
             },
             {
@@ -249,21 +24,18 @@
                 "type": "ascension:stat",
                 "stat": "ascension:strength"
               },
-              "operation": "add",
               "scale": 1.1
             }
           ],
           "minimum": 50.0
         },
         "resistance": {
-          "base": 0.0,
           "terms": [
             {
               "source": {
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.0045
             }
           ],
@@ -278,203 +50,181 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.14
             }
           ],
           "minimum": 1.0
         },
         "decay_delay": 40,
-        "guard_break_duration": {
-          "base": 42.0
-        },
-        "immunity_duration": {
-          "base": 68.0
-        },
+        "guard_break_duration": 42.0,
+        "immunity_duration": 68.0,
         "movement_multiplier": 0.14,
         "interrupt_held_casts": true,
         "on_guard_break": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:crit",
-            "count": {
-              "base": 28
-            },
-            "spread": {
-              "base": 0.75
-            },
-            "speed": {
-              "base": 0.12
-            }
+            "count": 28,
+            "spread": 0.75,
+            "speed": 0.12
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:item.shield.break",
-            "volume": {
-              "base": 1.0
-            },
-            "pitch": {
-              "base": 0.72
-            }
-          }
-        ]
-      }
-    },
-    "visuals": {
-      "heaven_wheel": {
-        "layers": [
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                55,
-                0,
-                4,
-                130
-              ],
-              "secondary_color": [
-                235,
-                48,
-                22,
-                245
-              ],
-              "line_width": 4.2,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 3.2,
-              "segments": 28
-            },
-            "motion": {
-              "spin": 9.0,
-              "pulse": 0.1,
-              "pulse_speed": 0.35
-            }
-          },
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                240,
-                120,
-                42,
-                130
-              ],
-              "secondary_color": [
-                255,
-                225,
-                145,
-                240
-              ],
-              "line_width": 2.6,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 2.35,
-              "segments": 28
-            },
-            "motion": {
-              "spin": -12.0,
-              "pulse": 0.1,
-              "pulse_speed": 0.35
-            }
-          },
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                45,
-                0,
-                2,
-                150
-              ],
-              "secondary_color": [
-                255,
-                70,
-                28,
-                245
-              ],
-              "line_width": 3.0,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 1.35,
-              "segments": 28
-            },
-            "motion": {
-              "spin": 16.0,
-              "pulse": 0.1,
-              "pulse_speed": 0.35
-            }
-          },
-          {
-            "type": "ascension:shell",
-            "appearance": {
-              "color": [
-                45,
-                0,
-                3,
-                12
-              ],
-              "secondary_color": [
-                225,
-                40,
-                18,
-                90
-              ],
-              "line_width": 1.7,
-              "filled": true,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 2.6,
-              "height": 3.6,
-              "segments": 24
-            },
-            "motion": {
-              "spin": 4.0,
-              "pulse": 0.08,
-              "pulse_speed": 0.4
-            }
-          },
-          {
-            "type": "ascension:particle_emitter",
-            "geometry": {
-              "radius": 2.5,
-              "height": 3.0,
-              "length": 0.04,
-              "count": 8
-            },
-            "motion": {
-              "interval": 1
-            },
-            "resources": {
-              "particle": "minecraft:crit"
-            }
+            "volume": 1.0,
+            "pitch": 0.72
           }
         ]
       }
     }
-  }
+  },
+  "cast": {
+    "mode": "charge",
+    "minimum_ticks": 24,
+    "maximum_ticks": 100,
+    "cost": {
+      "resource": "ascension:qi",
+      "cumulative_cost": {
+        "base": 12.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "scale": 44.0,
+            "power": 1.65
+          }
+        ]
+      }
+    },
+    "movement": {
+      "horizontal_drag": 0.55,
+      "disable_sprinting": true
+    },
+    "interruption": {
+      "damage_threshold": {
+        "base": 12.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:vitality"
+            },
+            "scale": 0.12
+          }
+        ],
+        "maximum": 30.0
+      },
+      "accumulation_window": 20,
+      "release_after_minimum": true
+    }
+  },
+  "target": {
+    "type": "ascension:radial",
+    "radius": {
+      "base": 4.5,
+      "maximum": 12.0,
+      "charge": 7.5
+    },
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ],
+      "line_of_sight": false
+    }
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:visual",
+      "duration": 34,
+      "follow": true,
+      "subject": "caster",
+      "visual": "ascension:skill/castable/heaven_grinding_slaughter_wheel/visual/heaven_wheel"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:crit",
+      "count": 70,
+      "spread": 2.2,
+      "speed": 0.15,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:flash",
+      "count": 1,
+      "spread": 0.0,
+      "speed": 0.0,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.warden.sonic_boom",
+      "volume": 1.0,
+      "pitch": 0.58,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:damage",
+      "damage_type": "minecraft:magic",
+      "classifications": [
+        "ascension:skill",
+        "ascension:held",
+        "ascension:essence",
+        "ascension:slaughter",
+        "ascension:wheel"
+      ],
+      "path": "ascension:foundation/essence",
+      "base": {
+        "base": 12.0,
+        "charge": 38.0
+      },
+      "stats": {
+        "ascension:strength": 0.52,
+        "ascension:spirit": 0.44
+      },
+      "minimum": 6.0,
+      "maximum": 140.0
+    },
+    {
+      "type": "ascension:stagger",
+      "amount": {
+        "base": 28.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:strength"
+            },
+            "scale": 0.2
+          },
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.14
+          }
+        ],
+        "minimum": 12.0,
+        "maximum": 120.0,
+        "charge": 70.0
+      },
+      "definition": "#heaven_grinding"
+    },
+    {
+      "type": "ascension:resource",
+      "resource": "ascension:stamina",
+      "operation": "ascension:drain",
+      "source": "ascension:skill_casting",
+      "amount": {
+        "base": 8.0,
+        "charge": 18.0
+      },
+      "subject": "target"
+    }
+  ],
+  "cooldown": 420
 }

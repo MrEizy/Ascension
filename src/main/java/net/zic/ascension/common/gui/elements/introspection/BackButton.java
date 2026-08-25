@@ -4,8 +4,10 @@ import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.gui.elements.general.AscensionTooltip;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 
 public class BackButton extends BetterButton {
@@ -15,6 +17,7 @@ public class BackButton extends BetterButton {
     );
 
     private final IntrospectionContainer owner;
+    private final AscensionTooltip tooltip;
     private final ITextureData defaultTexture = new TextureDataSubsection(
             TEXTURE, 18, 21, 0, 0, 18, 10
     );
@@ -27,6 +30,8 @@ public class BackButton extends BetterButton {
         this.owner = owner;
         setWidth(defaultTexture.getWidth());
         setHeight(defaultTexture.getHeight());
+        tooltip = new AscensionTooltip(frame);
+        tooltip.setActive(true);
     }
 
     @Override
@@ -40,6 +45,11 @@ public class BackButton extends BetterButton {
             alternateTexture.render(graphics);
         } else {
             defaultTexture.render(graphics);
+        }
+
+        if (isHovered()) {
+            tooltip.setText(Component.translatable("gui.ascension.introspection.back"));
+            getUiFrame().setTooltip(tooltip);
         }
     }
 }

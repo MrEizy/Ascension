@@ -1,0 +1,48 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.cloud_leaping_step.name"
+  },
+  "description": {
+    "translate": "ascension.skill.cloud_leaping_step.desc"
+  },
+  "actions": [
+    {
+      "type": "ascension:move",
+      "mode": "directional",
+      "direction": "look",
+      "distance": {
+        "base": 4.0,
+        "per_mastery": 0.6
+      },
+      "include_vertical": true,
+      "collision": "stop_before_collision",
+      "preserve_velocity": false,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:cloud",
+      "count": 12,
+      "spread": 0.45,
+      "speed": 0.04,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.breeze.jump",
+      "volume": 0.4,
+      "pitch": 1.25,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:stamina",
+    "amount": 2.0
+  },
+  "cooldown": {
+    "base": 58,
+    "per_mastery": -4,
+    "minimum": 34
+  }
+}

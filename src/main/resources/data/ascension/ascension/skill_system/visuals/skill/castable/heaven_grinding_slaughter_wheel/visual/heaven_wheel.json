@@ -1,0 +1,118 @@
+{
+  "elements": [
+    {
+      "type": "ascension:ring",
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "tint": [
+        55,
+        0,
+        4,
+        130
+      ],
+      "secondary_tint": [
+        235,
+        48,
+        22,
+        245
+      ],
+      "line_width": 4.2,
+      "no_depth": false,
+      "radius": 3.2,
+      "segments": 28,
+      "spin": 9.0,
+      "pulse": 0.1,
+      "pulse_speed": 0.35
+    },
+    {
+      "type": "ascension:ring",
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "tint": [
+        240,
+        120,
+        42,
+        130
+      ],
+      "secondary_tint": [
+        255,
+        225,
+        145,
+        240
+      ],
+      "line_width": 2.6,
+      "no_depth": false,
+      "radius": 2.35,
+      "segments": 28,
+      "spin": -12.0,
+      "pulse": 0.1,
+      "pulse_speed": 0.35
+    },
+    {
+      "type": "ascension:ring",
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "tint": [
+        45,
+        0,
+        2,
+        150
+      ],
+      "secondary_tint": [
+        255,
+        70,
+        28,
+        245
+      ],
+      "line_width": 3.0,
+      "no_depth": false,
+      "radius": 1.35,
+      "segments": 28,
+      "spin": 16.0,
+      "pulse": 0.1,
+      "pulse_speed": 0.35
+    },
+    {
+      "type": "ascension:shell",
+      "tint": [
+        45,
+        0,
+        3,
+        12
+      ],
+      "secondary_tint": [
+        225,
+        40,
+        18,
+        90
+      ],
+      "line_width": 1.7,
+      "filled": true,
+      "no_depth": false,
+      "radius": 2.6,
+      "height": 3.6,
+      "segments": 24,
+      "spin": 4.0,
+      "pulse": 0.08,
+      "pulse_speed": 0.4
+    },
+    {
+      "type": "ascension:particles",
+      "radius": 2.5,
+      "height": 3.0,
+      "length": 0.04,
+      "count": 8,
+      "interval": 1,
+      "particle": "minecraft:crit"
+    }
+  ]
+}

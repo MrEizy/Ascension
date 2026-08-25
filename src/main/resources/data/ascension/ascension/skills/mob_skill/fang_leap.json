@@ -1,23 +1,13 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Fang Leap",
   "description": "A Spider lunges forward and bites with cultivated force.",
-  "default_accessible_level": 1,
-  "targeting": {
+  "target": {
     "type": "ascension:radial",
     "radius": 8,
-    "maximum_targets": 1,
-    "sort": "nearest",
-    "filter": {
-      "relations": [
-        "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
-    }
+    "maximum_targets": 1
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:move",
       "mode": "target_position",
@@ -30,21 +20,6 @@
     },
     {
       "type": "ascension:damage",
-      "amount": {
-        "base": 4.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:stat",
-              "stat": "ascension:agility"
-            },
-            "operation": "add",
-            "scale": 0.25
-          }
-        ],
-        "minimum": 0.0,
-        "maximum": 16.0
-      },
       "damage_type": "minecraft:mob_attack",
       "classifications": [
         "ascension:skill",
@@ -52,7 +27,13 @@
         "ascension:melee"
       ],
       "path": "ascension:foundation/body",
-      "subject": "target"
+      "subject": "target",
+      "base": 4.0,
+      "stats": {
+        "ascension:agility": 0.25
+      },
+      "minimum": 0.0,
+      "maximum": 16.0
     },
     {
       "type": "ascension:particles",
@@ -70,6 +51,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
   "cooldown": 90
 }

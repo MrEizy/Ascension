@@ -4,10 +4,12 @@ import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
+import net.zic.ascension.common.gui.elements.general.AscensionTooltip;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 import net.zic.ascension.network.ToggleCultivationSuppressedPacket;
 
@@ -24,10 +26,14 @@ public class ToggleSuppressed extends BetterButton {
             9, 8
     );
 
+    private final AscensionTooltip tooltip;
+
     public ToggleSuppressed(UIFrame frame, int x, int y) {
         super(frame, x, y);
         setWidth(13);
         setHeight(13);
+        tooltip = new AscensionTooltip(frame);
+        tooltip.setActive(true);
     }
 
     public boolean isToggled() {
@@ -66,6 +72,12 @@ public class ToggleSuppressed extends BetterButton {
 
         if (isHovered()) {
             graphics.fill(0, 0, getWidth(), getHeight(), 0x64999999);
+            tooltip.setText(Component.translatable(
+                    isToggled()
+                            ? "gui.ascension.introspection.cultivation_suppression.disable"
+                            : "gui.ascension.introspection.cultivation_suppression.enable"
+            ));
+            getUiFrame().setTooltip(tooltip);
         }
     }
 }

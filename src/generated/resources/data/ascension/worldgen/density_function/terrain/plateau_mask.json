@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:clamp",
+    "input": {
+      "type": "minecraft:mul",
+      "argument1": {
+        "type": "minecraft:mul",
+        "argument1": "ascension:terrain/land_mask",
+        "argument2": "ascension:terrain/non_mountain"
+      },
+      "argument2": "ascension:terrain/plateau_region"
+    },
+    "max": 1.0,
+    "min": 0.0
+  }
+}

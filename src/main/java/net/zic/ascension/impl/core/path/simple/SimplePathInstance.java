@@ -23,8 +23,6 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.path.CompletedTribulation;
 import net.zic.ascension.impl.core.path.realms.BreakthroughBehaviour;
 import net.zic.ascension.impl.core.path.realms.MajorRealm;
-import net.zic.ascension.impl.core.path.realms.MinorRealmDefinition;
-import net.zic.zenithlib.network.ByteBufHelpers;
 
 import java.util.*;
 
@@ -263,7 +261,7 @@ public class SimplePathInstance implements PathInstance {
         path.getProgressActionHolder().run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.DOWN);
     }
     public void broadcastRealmDown(OriginSource source,Realm oldRealm){
-        PathRealmChangeEvent.PathRealmUpEvent event = new PathRealmChangeEvent.PathRealmUpEvent(source,Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()),oldRealm,getPathId(source.getRegistryAccess()),this);
+        PathRealmChangeEvent.PathRealmDownEvent event = new PathRealmChangeEvent.PathRealmDownEvent(source,Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()),oldRealm,getPathId(source.getRegistryAccess()),this);
         NeoForge.EVENT_BUS.post(event);
     }
     public void addNewMajorRealm(){

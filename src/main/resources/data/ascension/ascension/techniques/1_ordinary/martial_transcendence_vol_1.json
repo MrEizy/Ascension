@@ -1,0 +1,65 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.martial_transcendence_vol_1.name"
+  },
+  "description": {
+    "translate": "ascension.technique.martial_transcendence_vol_1.desc"
+  },
+  "path": "ascension:foundation/body",
+  "milestone_realms": [
+    0,
+    1,
+    2
+  ],
+  "technique_families": [
+    "body"
+  ],
+  "max_realm": 2,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:body_cultivation/martial_transcendence_vol_1": {},
+    "ascension:passive/martial_transcendence_vol_1/refined_mortal_frame": {
+      "unlock": 1
+    },
+    "ascension:castable/martial_transcendence_vol_1/transcendent_impact": {
+      "unlock": 2,
+      "caps": {
+        "2": "minor_mastery"
+      }
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 0.24
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.24
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.06
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.06
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:ordinary"
+  }
+}

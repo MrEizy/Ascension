@@ -1,0 +1,23 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.skimming_stride.name"
+  },
+  "description": {
+    "translate": "ascension.skill.skimming_stride.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:agility": [
+          {
+            "value": 0.08,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:skimming_stride_agility"
+          }
+        ]
+      }
+    }
+  ]
+}

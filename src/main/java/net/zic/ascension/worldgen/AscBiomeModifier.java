@@ -12,6 +12,8 @@ import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.worldgen.biome.AscBiomeFeatures;
+import net.zic.ascension.worldgen.biome.AscBiomes;
 
 public class AscBiomeModifier {
 
@@ -55,7 +57,19 @@ public class AscBiomeModifier {
                 GenerationStep.Decoration.UNDERGROUND_ORES));
 
         context.register(ADD_FROST_SILVER_ORE, new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.ICE_SPIKES), biomes.getOrThrow(Biomes.FROZEN_PEAKS), biomes.getOrThrow(Biomes.SNOWY_PLAINS), biomes.getOrThrow(Biomes.SNOWY_TAIGA), biomes.getOrThrow(Biomes.SNOWY_SLOPES), biomes.getOrThrow(Biomes.SNOWY_BEACH), biomes.getOrThrow(Biomes.FROZEN_OCEAN), biomes.getOrThrow(Biomes.FROZEN_RIVER), biomes.getOrThrow(Biomes.DEEP_FROZEN_OCEAN)),
+                HolderSet.direct(
+                        biomes.getOrThrow(Biomes.ICE_SPIKES),
+                        biomes.getOrThrow(Biomes.FROZEN_PEAKS),
+                        biomes.getOrThrow(Biomes.SNOWY_PLAINS),
+                        biomes.getOrThrow(Biomes.SNOWY_TAIGA),
+                        biomes.getOrThrow(Biomes.SNOWY_SLOPES),
+                        biomes.getOrThrow(Biomes.SNOWY_BEACH),
+                        biomes.getOrThrow(Biomes.FROZEN_OCEAN),
+                        biomes.getOrThrow(Biomes.FROZEN_RIVER),
+                        biomes.getOrThrow(Biomes.DEEP_FROZEN_OCEAN),
+                        biomes.getOrThrow(AscBiomes.AZURE_CLOUD_RANGE),
+                        biomes.getOrThrow(AscBiomes.HEAVENREACH_PEAKS)
+                ),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.FROST_SILVER_ORE_PLACED_KEY)),
                 GenerationStep.Decoration.UNDERGROUND_ORES));
 
@@ -67,7 +81,19 @@ public class AscBiomeModifier {
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
         context.register(ADD_GINSENG, new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.PLAINS), biomes.getOrThrow(Biomes.SUNFLOWER_PLAINS), biomes.getOrThrow(Biomes.FOREST), biomes.getOrThrow(Biomes.BIRCH_FOREST), biomes.getOrThrow(Biomes.DARK_FOREST), biomes.getOrThrow(Biomes.BIRCH_FOREST)),
+                HolderSet.direct(
+                        biomes.getOrThrow(Biomes.PLAINS),
+                        biomes.getOrThrow(Biomes.SUNFLOWER_PLAINS),
+                        biomes.getOrThrow(Biomes.FOREST),
+                        biomes.getOrThrow(Biomes.BIRCH_FOREST),
+                        biomes.getOrThrow(Biomes.DARK_FOREST),
+                        biomes.getOrThrow(Biomes.BIRCH_FOREST),
+                        biomes.getOrThrow(AscBiomes.GREYSTONE_FOOTHILLS),
+                        biomes.getOrThrow(AscBiomes.ANCIENT_GROVE),
+                        biomes.getOrThrow(AscBiomes.JADEBLOOM_FOREST),
+                        biomes.getOrThrow(AscBiomes.MISTY_WOODS),
+                        biomes.getOrThrow(AscBiomes.VERDANT_MOOR)
+                ),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.GINSENG_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
@@ -76,12 +102,23 @@ public class AscBiomeModifier {
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.FIRE_GINSENG_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
         context.register(ADD_SNOW_GINSENG, new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.SNOWY_TAIGA), biomes.getOrThrow(Biomes.SNOWY_BEACH), biomes.getOrThrow(Biomes.SNOWY_SLOPES), biomes.getOrThrow(Biomes.SNOWY_PLAINS)),
+                HolderSet.direct(
+                        biomes.getOrThrow(Biomes.SNOWY_TAIGA),
+                        biomes.getOrThrow(Biomes.SNOWY_BEACH),
+                        biomes.getOrThrow(Biomes.SNOWY_SLOPES),
+                        biomes.getOrThrow(Biomes.SNOWY_PLAINS),
+                        biomes.getOrThrow(AscBiomes.AZURE_CLOUD_RANGE),
+                        biomes.getOrThrow(AscBiomes.HEAVENREACH_PEAKS)
+                ),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.SNOW_GINSENG_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
         context.register(ADD_WHITE_JADE_ORCHID, new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.DARK_FOREST), biomes.getOrThrow(Biomes.PALE_GARDEN)),
+                HolderSet.direct(
+                        biomes.getOrThrow(Biomes.DARK_FOREST),
+                        biomes.getOrThrow(Biomes.PALE_GARDEN),
+                        biomes.getOrThrow(AscBiomes.ANCIENT_GROVE)
+                ),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.WHITE_JADE_ORCHID_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
@@ -121,13 +158,15 @@ public class AscBiomeModifier {
                 HolderSet.direct(
                         biomes.getOrThrow(Biomes.PLAINS),
                         biomes.getOrThrow(Biomes.MEADOW),
-                        biomes.getOrThrow(Biomes.WINDSWEPT_HILLS)
+                        biomes.getOrThrow(Biomes.WINDSWEPT_HILLS),
+                        biomes.getOrThrow(AscBiomes.GREYSTONE_FOOTHILLS),
+                        biomes.getOrThrow(AscBiomes.JADEBLOOM_FOREST),
+                        biomes.getOrThrow(AscBiomes.VERDANT_MOOR)
                 ),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.PEACH_TREE_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
-
-
+        AscBiomeFeatures.bootstrap(context);
     }
 
 

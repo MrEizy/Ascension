@@ -56,6 +56,11 @@ public final class AscensionResourceSources {
             ResourceSourceIdentity.Tags.CULTIVATION,
             ResourceSourceIdentity.Tags.SKILL
     );
+    public static final ResourceSourceIdentity BODY_CULTIVATION = ResourceSourceIdentity.of(
+            AscensionCraft.prefix("body_cultivation"),
+            ResourceSourceIdentity.Tags.CULTIVATION,
+            ResourceSourceIdentity.Tags.SKILL
+    );
     public static final ResourceSourceIdentity ENVIRONMENTAL = ResourceSourceIdentity.of(
             AscensionCraft.prefix("environmental"),
             ResourceSourceIdentity.Tags.ENVIRONMENTAL,
@@ -77,11 +82,17 @@ public final class AscensionResourceSources {
     }
 
     public static ResourceSourceIdentity movementSource(Player player) {
+        if (player.isFallFlying()) {
+            return ELYTRA;
+        }
         if (player.isSwimming()) {
             return SWIMMING;
         }
-        if (player.isFallFlying()) {
-            return ELYTRA;
+        if (player.onClimbable()) {
+            return CLIMBING;
+        }
+        if (player.isVisuallyCrawling()) {
+            return CRAWLING;
         }
         if (player.isSprinting()) {
             return SPRINTING;

@@ -13,6 +13,8 @@ public class DescriptionDisplayContainer extends ScrollBox implements IInformati
     private final EasyLabel titleLabel;
     private final EasyLabel descriptionLabel;
 
+    private Component currentTitle = Component.empty();
+    private Component currentDescription = Component.empty();
     private int observedParentWidth = -1;
     private int observedParentHeight = -1;
     private boolean sizeFromParent;
@@ -56,13 +58,21 @@ public class DescriptionDisplayContainer extends ScrollBox implements IInformati
     }
 
     public void setInformation(Component title, Component description) {
+        Component nextTitle = title == null ? Component.empty() : title;
+        Component nextDescription = description == null ? Component.empty() : description;
+        if (currentTitle.equals(nextTitle) && currentDescription.equals(nextDescription)) {
+            return;
+        }
+        currentTitle = nextTitle;
+        currentDescription = nextDescription;
         resetScroll();
 
-        titleLabel.setText(title == null ? Component.empty() : title);
+        titleLabel.setText(nextTitle);
         titleLabel.setTextScale(1.0F);
 
-        descriptionLabel.setText(description == null ? Component.empty() : description);
+        descriptionLabel.setText(nextDescription);
         descriptionLabel.setTextScale(DESCRIPTION_SCALE);
+        applyDimensions();
 
         setVisible(true);
         setActive(true);
@@ -102,6 +112,7 @@ public class DescriptionDisplayContainer extends ScrollBox implements IInformati
         int contentWidth = Math.max(1, getWidth() - 4);
         titleLabel.setWidth(contentWidth);
         titleLabel.setHeight(10);
+        titleLabel.setScaleToFit(true);
         descriptionLabel.setWidth(contentWidth);
         descriptionLabel.setFitHeight(true);
 

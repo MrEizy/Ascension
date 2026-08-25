@@ -1,0 +1,90 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.azure_ashura_divine_general_form.name"
+  },
+  "description": {
+    "translate": "ascension.physique.azure_ashura_divine_general_form.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/water",
+    "ascension:elemental/blood",
+    "ascension:weapon/fist"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 11.0,
+    "ascension:vitality": 21.0,
+    "ascension:strength": 19.0,
+    "ascension:agility": 15.0
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.2,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:azure_ashura_divine_general_form_spirit_modifier"
+      }
+    ],
+    "ascension:vitality": [
+      {
+        "value": 0.5,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:azure_ashura_divine_general_form_vitality_modifier"
+      }
+    ],
+    "ascension:strength": [
+      {
+        "value": 0.5,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:azure_ashura_divine_general_form_strength_modifier"
+      }
+    ],
+    "ascension:agility": [
+      {
+        "value": 0.4,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:azure_ashura_divine_general_form_agility_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 5.0,
+      "ascension:elemental/blood": 8.0,
+      "ascension:elemental/water": 7.0,
+      "ascension:weapon/fist": 4.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/blood": [
+        {
+          "value": 0.45,
+          "operation": "ADD_BASE",
+          "id": "ascension:azure_ashura_divine_general_form_blood_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/water": [
+        {
+          "value": 0.45,
+          "operation": "ADD_BASE",
+          "id": "ascension:azure_ashura_divine_general_form_water_affinity_modifier"
+        }
+      ],
+      "ascension:weapon/fist": [
+        {
+          "value": 0.35,
+          "operation": "ADD_BASE",
+          "id": "ascension:azure_ashura_divine_general_form_fist_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:god"
+  }
+}

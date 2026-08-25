@@ -24,197 +24,36 @@
   ],
   "max_realm": 8,
   "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/cultivation/nine_revolutions_circulation": {},
+    "ascension:passive/unending_revolution": {
+      "unlock": 1
+    },
+    "ascension:castable/slaughter_wheel_manifestation": {
+      "unlock": 2,
+      "caps": {
+        "3": "minor_mastery",
+        "5": "major_mastery"
+      }
+    },
+    "ascension:castable/revolving_butchers_guard": {
+      "unlock": 4,
+      "caps": {
+        "5": "minor_mastery",
+        "7": "major_mastery"
+      }
+    },
+    "ascension:castable/ninefold_carnage_circuit": {
+      "unlock": 6,
+      "caps": {
+        "7": "minor_mastery"
+      }
+    },
+    "ascension:castable/heaven_grinding_slaughter_wheel": {
+      "unlock": 8
+    }
+  },
   "realm_change_handler": [
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          0
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/cultivation/nine_revolutions_circulation"
-          ]
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          1
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:passive/unending_revolution"
-          ]
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          2
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/slaughter_wheel_manifestation"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/slaughter_wheel_manifestation",
-          "contribution": "ascension:nine_revolutions/realm_2_manifestation",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          3
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/slaughter_wheel_manifestation",
-          "contribution": "ascension:nine_revolutions/realm_3_manifestation",
-          "level": 2,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          4
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/revolving_butchers_guard"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/revolving_butchers_guard",
-          "contribution": "ascension:nine_revolutions/realm_4_guard",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          5
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/slaughter_wheel_manifestation",
-          "contribution": "ascension:nine_revolutions/realm_5_manifestation",
-          "level": 3,
-          "set_floor": true,
-          "set_cap": true
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/revolving_butchers_guard",
-          "contribution": "ascension:nine_revolutions/realm_5_guard",
-          "level": 2,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          6
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/ninefold_carnage_circuit"
-          ]
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/ninefold_carnage_circuit",
-          "contribution": "ascension:nine_revolutions/realm_6_circuit",
-          "level": 1,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          7
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/revolving_butchers_guard",
-          "contribution": "ascension:nine_revolutions/realm_7_guard",
-          "level": 3,
-          "set_floor": true,
-          "set_cap": true
-        },
-        {
-          "type": "ascension:set_skill_level",
-          "skill": "ascension:castable/ninefold_carnage_circuit",
-          "contribution": "ascension:nine_revolutions/realm_7_circuit",
-          "level": 2,
-          "set_floor": true,
-          "set_cap": true
-        }
-      ]
-    },
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          8
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/heaven_grinding_slaughter_wheel"
-          ]
-        }
-      ]
-    },
     {
       "condition": "ascension:realm_change/all_realms",
       "actions": [
@@ -287,7 +126,7 @@
         "spacing": 13
       }
     },
-    "template": "ascension:default_technique_manual",
+    "template": "ascension:default_cultivation_technique",
     "rank": "ascension:heaven"
   }
 }

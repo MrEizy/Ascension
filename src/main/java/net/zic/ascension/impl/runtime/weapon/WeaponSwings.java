@@ -25,10 +25,10 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.Config;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.impl.core.damage.AscensionDamageService;
 import net.zic.ascension.impl.core.effect.SkillEffectService;
-import net.zic.ascension.impl.core.skill.passive.WeaponMasteryService;
+import net.zic.ascension.impl.core.skill.passive.PassiveTriggerService;
 import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
 
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public final class WeaponSwings {
     @SubscribeEvent
     public static void onServerStopped(ServerStoppedEvent event) {
         ACTIVE.clear();
-        WeaponMasteryService.clearRuntimeState();
+        PassiveTriggerService.clearRuntimeState();
     }
 
     private static boolean tick(ServerLevel level, Instance instance) {
@@ -211,10 +211,7 @@ public final class WeaponSwings {
             LivingEntity target,
             Instance instance
     ) {
-        if (instance.spec.damage() <= 0.0D) {
-            return;
-        }
-        SkillExecutionContext context = new SkillExecutionContext(
+        SkillActionContext context = new SkillActionContext(
                 level,
                 owner,
                 instance.spec.skillId(),
@@ -373,8 +370,8 @@ public final class WeaponSwings {
                 instance.spec.colorFolder()
         );
         Vec3 radius = instance.spec.radius();
-        RuntimeVisualDefinition.Layer layer = new RuntimeVisualDefinition.Layer(
-                RuntimeVisualDefinition.Primitives.BILLBOARD,
+        RuntimeVisualDefinition.Element layer = new RuntimeVisualDefinition.Element(
+                RuntimeVisualDefinition.Types.SPRITE,
                 RuntimeVisualDefinition.PositionMode.ORIGIN,
                 new RuntimeVisualDefinition.Transform(
                         Vec3.ZERO,
@@ -401,7 +398,10 @@ public final class WeaponSwings {
                 new RuntimeVisualDefinition.Resources(
                         Optional.of(textureBase),
                         Optional.empty(),
-                        Optional.empty()
+                        Optional.empty(),
+                        Optional.empty(),
+                        7,
+                        1
                 )
         );
         return new RuntimeVisualState(

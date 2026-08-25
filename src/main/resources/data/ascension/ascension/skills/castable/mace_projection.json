@@ -1,32 +1,42 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Mace Projection",
   "description": "Launches a crushing mace wave",
-  "default_accessible_level": 1,
-  "targeting": {
-    "type": "ascension:self"
+  "definitions": {
+    "effects": {
+      "crushing_slow": {
+        "stacking": "refresh",
+        "stacking_scope": "source_skill",
+        "max_stacks": 1,
+        "modules": [
+          {
+            "type": "ascension:frozen_form",
+            "frozen_floor": 0.0,
+            "movement_reduction": 0.25,
+            "player_multiplier": 0.7,
+            "resistant_multiplier": 0.5,
+            "boss_multiplier": 0.25,
+            "remove_when_burning": false
+          }
+        ]
+      }
+    }
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:weapon_swing",
-      "subject": "caster",
       "vfx_type": "mace_particle",
-      "color": "blue",
       "radius": [
         3.2,
         2.6,
         3.2
       ],
       "damage": {
-        "base": 16.0
+        "base": 16.0,
+        "weapon": 1.0
       },
-      "knockback": {
-        "base": 1.8
-      },
-      "duration": {
-        "base": 35.0
-      },
+      "knockback": 1.8,
+      "duration": 35.0,
       "rotation_z": 90.0,
       "movement": [
         0.0,
@@ -53,50 +63,14 @@
       "weapon_tag": "ascension:weapon/maces",
       "hit_effect": {
         "definition": "#crushing_slow",
-        "duration": {
-          "base": 80.0
-        },
-        "potency": {
-          "base": 1.0
-        }
+        "duration": 80.0,
+        "potency": 1.0
       }
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "operation": "ascension:consume",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 120.0
-      }
-    }
-  ],
-  "cooldown": {
-    "base": 280.0
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 120.0
   },
-  "definitions": {
-    "effects": {
-      "crushing_slow": {
-        "stacking": "refresh",
-        "stacking_scope": "source_skill",
-        "max_stacks": 1,
-        "modules": [
-          {
-            "type": "ascension:frozen_form",
-            "frozen_floor": {
-              "base": 0.0
-            },
-            "movement_reduction": {
-              "base": 0.25
-            },
-            "player_multiplier": 0.7,
-            "resistant_multiplier": 0.5,
-            "boss_multiplier": 0.25,
-            "remove_when_burning": false
-          }
-        ]
-      }
-    }
-  }
+  "cooldown": 280.0
 }

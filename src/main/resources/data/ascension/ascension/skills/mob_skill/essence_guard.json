@@ -1,8 +1,7 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Essence Guard",
   "description": "Condenses essence into a short-lived defensive veil.",
-  "default_accessible_level": 1,
   "definitions": {
     "barriers": {
       "guard": {
@@ -15,7 +14,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:spirit"
               },
-              "operation": "add",
               "scale": 0.4
             }
           ],
@@ -30,9 +28,7 @@
       }
     }
   },
-  "targeting": "self",
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:barrier",
       "action": "apply",
@@ -55,6 +51,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
   "cooldown": 190
 }

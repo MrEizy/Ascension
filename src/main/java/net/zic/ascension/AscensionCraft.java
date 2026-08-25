@@ -40,11 +40,12 @@ import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
 import net.zic.ascension.impl.value.source.AscensionScaledValueSourceTypes;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
-import net.zic.ascension.impl.datapack.skill.AscensionSkillExecutionFeatureTypes;
+import net.zic.ascension.impl.datapack.skill.AscensionSkillActionTypes;
 import net.zic.ascension.impl.datapack.targeting.AscensionTargetingTypes;
 import net.zic.ascension.impl.datapack.effect.AscensionSkillEffectModuleTypes;
 import net.zic.ascension.impl.datapack.projectile.AscensionProjectileBehaviorTypes;
 import net.zic.ascension.worldgen.AscFeatures;
+import net.zic.ascension.worldgen.density.AscDensityFunctionTypes;
 import net.zic.ascension.worldgen.AscTreeDecoratorTypes;
 import org.slf4j.Logger;
 
@@ -105,6 +106,7 @@ public class AscensionCraft {
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
 
+        AscDensityFunctionTypes.register(modEventBus);
         AscFeatures.register(modEventBus);
         AscTreeDecoratorTypes.register(modEventBus);
 
@@ -123,7 +125,7 @@ public class AscensionCraft {
 
         AscensionScaledValueSourceTypes.register(modEventBus);
         AscensionResourceTypes.register(modEventBus);
-        AscensionSkillExecutionFeatureTypes.register(modEventBus);
+        AscensionSkillActionTypes.register(modEventBus);
         AscensionTargetingTypes.register(modEventBus);
         AscensionSkillEffectModuleTypes.register(modEventBus);
         AscensionProjectileBehaviorTypes.register(modEventBus);
@@ -288,19 +290,19 @@ public class AscensionCraft {
             );
 
             registrar.playToClient(
-                    ParticleFieldStatePacket.TYPE,
-                    ParticleFieldStatePacket.STREAM_CODEC,
-                    ParticleFieldStatePacket::handle
-            );
-            registrar.playToClient(
-                    HeldCastVisualStatePacket.TYPE,
-                    HeldCastVisualStatePacket.STREAM_CODEC,
-                    HeldCastVisualStatePacket::handle
+                    ActiveCastVisualStatePacket.TYPE,
+                    ActiveCastVisualStatePacket.STREAM_CODEC,
+                    ActiveCastVisualStatePacket::handle
             );
             registrar.playToClient(
                     RuntimeVisualPacket.TYPE,
                     RuntimeVisualPacket.STREAM_CODEC,
                     RuntimeVisualPacket::handle
+            );
+            registrar.playToClient(
+                    ClientboundDivineSensePacket.TYPE,
+                    ClientboundDivineSensePacket.STREAM_CODEC,
+                    ClientboundDivineSensePacket::handle
             );
 
             registrar.playToServer(

@@ -17,7 +17,7 @@ import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
-public class TechniqueTransferItem  extends Item {
+public class TechniqueTransferItem extends Item {
     public TechniqueTransferItem(Properties properties) {
         super(properties);
     }
@@ -30,11 +30,11 @@ public class TechniqueTransferItem  extends Item {
 
         if(!stack.has(AscensionComponents.REGISTRY_ID_HOLDER)) return InteractionResult.FAIL;
 
-        Technique targetTechnique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY,stack.get(AscensionComponents.REGISTRY_ID_HOLDER),level.registryAccess());
+        Identifier techniqueId = stack.get(AscensionComponents.REGISTRY_ID_HOLDER);
+        Technique targetTechnique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY, techniqueId, level.registryAccess());
 
         if(targetTechnique == null) {
-            player.sendSystemMessage(Component.literal("[technique does not exist :" +stack.get(AscensionComponents.REGISTRY_ID_HOLDER)+"]"));
-
+            player.sendSystemMessage(Component.literal("[technique does not exist :" + techniqueId + "]"));
             return InteractionResult.FAIL;
         }
 
@@ -43,8 +43,10 @@ public class TechniqueTransferItem  extends Item {
         if(holder == null || holder.getData() == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData().getSource();
 
-        //TODO update to use new technique
+        if (!AscensionOriginSourceHelper.addTechnique(source, techniqueId)) return InteractionResult.FAIL;
 
+        stack.shrink(1);
+        AscensionCraft.LOGGER.info("Player {} has transferred their technique", player.getName().getString());
         return InteractionResult.SUCCESS;
     }
 }

@@ -1,0 +1,33 @@
+{
+  "type": "ascension:mapped",
+  "input": {
+    "type": "minecraft:mul",
+    "argument1": 0.64,
+    "argument2": {
+      "type": "minecraft:interpolated",
+      "argument": {
+        "type": "minecraft:blend_density",
+        "argument": {
+          "type": "minecraft:add",
+          "argument1": {
+            "type": "minecraft:add",
+            "argument1": {
+              "type": "minecraft:y_clamped_gradient",
+              "from_value": 2.0,
+              "from_y": -64,
+              "to_value": -5.5,
+              "to_y": 416
+            },
+            "argument2": "ascension:terrain/base_height"
+          },
+          "argument2": {
+            "type": "minecraft:add",
+            "argument1": "ascension:terrain/surface_detail",
+            "argument2": "ascension:terrain/cliff_detail"
+          }
+        }
+      }
+    }
+  },
+  "operation": "squeeze"
+}

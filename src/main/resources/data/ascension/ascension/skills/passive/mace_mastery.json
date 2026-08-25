@@ -1,69 +1,107 @@
 {
-  "type": "ascension:resource_modifier_passive",
+  "type": "ascension:passive",
   "name": "Mace Mastery",
   "description": "Projects a crushing mace wave",
-  "default_accessible_level": 1,
-  "modules": [
-    {
-      "type": "ascension:weapon_swing",
-      "path": "ascension:weapon/mace",
-      "weapon_tag": "ascension:weapon/maces",
-      "vfx_type": "mace_particle",
-      "fallback_color": "blue",
-      "technique_colors": {
-        "ascension:2_profound/mount_hua_sword_manual": "blue",
-        "ascension:1_ordinary/sustained_spirit_art": "purple",
-        "ascension:3_heaven/celestial_constellation_circulation": "purple",
-        "ascension:3_heaven/guardian_dharma_manual": "blue",
-        "ascension:bug_tester_manual": "blue",
-        "ascension:example_technique": "green"
-      },
-      "radius": [
-        3.0,
-        2.5,
-        3.0
-      ],
-      "base_damage": 9.0,
-      "knockback": 1.0,
-      "duration": 12,
-      "rotation_z": 90.0,
-      "movement": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "qi_cost": 3.0,
-      "minimum_interval": 1,
-      "realm_scaling": {
-        "base_bonus": 0.1,
-        "bonus_per_major_realm": 0.22,
-        "bonus_per_minor_realm": 0.025,
-        "maximum_bonus": 5.0
-      },
-      "classifications": [
-        "ascension:skill",
-        "ascension:melee",
-        "ascension:weapon",
-        "ascension:mace"
-      ],
-      "hit_shape": "area",
-      "priority": 0,
-      "hit_effect": {
-        "definition": "crushing_slow",
-        "duration": 80,
-        "potency": 1.0
-      }
-    },
+  "modifiers": [
     {
       "type": "ascension:weapon_damage",
-      "path": "ascension:weapon/mace",
       "weapon_tag": "ascension:weapon/maces",
       "match": "held_weapon",
-      "realm_scaling": {
-        "base_bonus": 0.1,
-        "bonus_per_major_realm": 0.22,
-        "bonus_per_minor_realm": 0.025,
-        "maximum_bonus": 5.0
+      "multiplier": {
+        "base": 1.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:path_realm_multiplier",
+              "path": "ascension:weapon/mace",
+              "base_bonus": 0.1,
+              "bonus_per_major_realm": 0.22,
+              "bonus_per_minor_realm": 0.025,
+              "maximum_bonus": 5.0
+            },
+            "operation": "multiply"
+          }
+        ]
+      }
+    }
+  ],
+  "triggers": [
+    {
+      "event": "attack",
+      "weapon_tag": "ascension:weapon/maces",
+      "cooldown": 1,
+      "actions": [
+        {
+          "type": "ascension:weapon_swing",
+          "vfx_type": "mace_particle",
+          "technique_colors": {
+            "ascension:2_profound/mount_hua_sword_manual": "blue",
+            "ascension:1_ordinary/sustained_spirit_art": "purple",
+            "ascension:3_heaven/celestial_constellation_circulation": "purple",
+            "ascension:3_heaven/guardian_dharma_manual": "blue",
+            "ascension:bug_tester_manual": "blue",
+            "ascension:example_technique": "green"
+          },
+          "radius": [
+            3.0,
+            2.5,
+            3.0
+          ],
+          "damage": {
+            "base": {
+              "base": 9.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:path_realm_multiplier",
+                    "path": "ascension:weapon/mace",
+                    "base_bonus": 0.1,
+                    "bonus_per_major_realm": 0.22,
+                    "bonus_per_minor_realm": 0.025,
+                    "maximum_bonus": 5.0
+                  },
+                  "operation": "multiply"
+                }
+              ]
+            },
+            "weapon": 0.5
+          },
+          "duration": 12,
+          "rotation_z": 90.0,
+          "path": "ascension:weapon/mace",
+          "weapon_tag": "ascension:weapon/maces",
+          "classifications": [
+            "ascension:skill",
+            "ascension:melee",
+            "ascension:weapon",
+            "ascension:mace"
+          ],
+          "hit_shape": "area",
+          "hit_effect": {
+            "definition": "crushing_slow",
+            "duration": 80,
+            "potency": 1.0
+          }
+        }
+      ],
+      "cost": {
+        "resource": "ascension:qi",
+        "amount": {
+          "base": 3.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:path_realm_multiplier",
+                "path": "ascension:weapon/mace",
+                "base_bonus": 0.1,
+                "bonus_per_major_realm": 0.22,
+                "bonus_per_minor_realm": 0.025,
+                "maximum_bonus": 5.0
+              },
+              "operation": "multiply"
+            }
+          ]
+        }
       }
     }
   ],
@@ -76,12 +114,8 @@
         "modules": [
           {
             "type": "ascension:frozen_form",
-            "frozen_floor": {
-              "base": 0.0
-            },
-            "movement_reduction": {
-              "base": 0.25
-            },
+            "frozen_floor": 0.0,
+            "movement_reduction": 0.25,
             "player_multiplier": 0.7,
             "resistant_multiplier": 0.5,
             "boss_multiplier": 0.25,

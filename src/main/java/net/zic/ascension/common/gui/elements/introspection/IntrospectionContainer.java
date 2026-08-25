@@ -6,8 +6,8 @@ import net.lucent.easygui.gui.layout.positioning.rules.PositioningRules;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.gui.elements.introspection.cultivation.CultivationDisplayContainer;
 import net.zic.ascension.common.gui.elements.introspection.main.MainContainer;
-import net.zic.ascension.common.gui.elements.introspection.path_display.PathDisplayContainer;
 import net.zic.ascension.common.gui.elements.introspection.skill_display.SkillDisplayContainer;
 import net.zic.ascension.common.gui.elements.introspection.stats_display.StatsDisplayContainer;
 
@@ -25,6 +25,8 @@ public class IntrospectionContainer extends RenderableElement {
     private final Map<Panel, RenderableElement> containers = new EnumMap<>(Panel.class);
     private final Map<Panel, NavButton> buttons = new EnumMap<>(Panel.class);
     private final ActiveMenuTitle menuTitle;
+    private final CultivationDisplayContainer cultivationContainer;
+    private Panel currentPanel = Panel.MAIN;
 
     public IntrospectionContainer(UIFrame frame) {
         super(frame);
@@ -39,10 +41,10 @@ public class IntrospectionContainer extends RenderableElement {
         addChild(skillContainer);
         containers.put(Panel.SKILLS, skillContainer);
 
-        PathDisplayContainer pathContainer = new PathDisplayContainer(frame, this);
-        pathContainer.setActive(false);
-        addChild(pathContainer);
-        containers.put(Panel.CULTIVATION, pathContainer);
+        cultivationContainer = new CultivationDisplayContainer(frame, this);
+        cultivationContainer.setActive(false);
+        addChild(cultivationContainer);
+        containers.put(Panel.CULTIVATION, cultivationContainer);
 
         StatsDisplayContainer statsContainer = new StatsDisplayContainer(frame, this);
         statsContainer.setActive(false);
@@ -104,21 +106,28 @@ public class IntrospectionContainer extends RenderableElement {
     }
 
     public void openPanel(Panel panel) {
+        currentPanel = panel;
         for (Map.Entry<Panel, RenderableElement> entry : containers.entrySet()) {
             entry.getValue().setActive(entry.getKey() == panel);
         }
         for (Map.Entry<Panel, NavButton> entry : buttons.entrySet()) {
             entry.getValue().setSelected(entry.getKey() == panel);
         }
-        menuTitle.setMenuName(getPanelName(panel));
+        refreshMenuTitle();
     }
 
-    private static Component getPanelName(Panel panel) {
+    public void refreshMenuTitle() {
+        if (menuTitle != null) {
+            menuTitle.setMenuName(getPanelName(currentPanel));
+        }
+    }
+
+    private Component getPanelName(Panel panel) {
         return switch (panel) {
             case MAIN -> Component.translatable("gui.ascension.introspection.main");
             case STATS -> Component.translatable("gui.ascension.introspection.stats");
             case SKILLS -> Component.translatable("gui.ascension.introspection.skills");
-            case CULTIVATION -> Component.translatable("gui.ascension.introspection.cultivation");
+            case CULTIVATION -> cultivationContainer.getPageName();
         };
     }
 }

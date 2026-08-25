@@ -1,0 +1,13 @@
+{
+  "type": "ascension:surface_scatter",
+  "config": {
+    "blocks": [
+      "minecraft:moss_carpet",
+      "minecraft:fern",
+      "minecraft:brown_mushroom",
+      "minecraft:red_mushroom"
+    ],
+    "spread": 7,
+    "tries": 30
+  }
+}

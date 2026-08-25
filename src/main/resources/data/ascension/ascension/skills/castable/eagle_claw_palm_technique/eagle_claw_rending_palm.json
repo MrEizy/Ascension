@@ -1,0 +1,66 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.eagle_claw_rending_palm.name"
+  },
+  "description": {
+    "translate": "ascension.skill.eagle_claw_rending_palm.desc"
+  },
+  "actions": [
+    {
+      "type": "ascension:weapon_swing",
+      "vfx_type": "fist_punch",
+      "color": "simple_white",
+      "radius": [
+        1.25,
+        1.05,
+        2.35
+      ],
+      "damage": {
+        "base": {
+          "base": 1.6,
+          "per_mastery": 0.35
+        },
+        "stats": {
+          "ascension:strength": 0.04
+        },
+        "weapon": 0.25,
+        "minimum": 1.0,
+        "maximum": 10.0
+      },
+      "knockback": 0.2,
+      "duration": 8,
+      "movement": [
+        0.0,
+        0.0,
+        0.25
+      ],
+      "path": "ascension:foundation/body",
+      "weapon_tag": "ascension:weapon/fists",
+      "allow_empty_hand": true,
+      "hit_shape": "area",
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:body",
+        "ascension:fist"
+      ]
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.player.attack.crit",
+      "volume": 0.5,
+      "pitch": 1.15,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:stamina",
+    "amount": 1.0
+  },
+  "cooldown": {
+    "base": 26,
+    "per_mastery": -2,
+    "minimum": 16
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.unseen_circulation.name"
+  },
+  "description": {
+    "translate": "ascension.skill.unseen_circulation.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:agility": [
+          {
+            "value": 0.08,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:unseen_circulation_agility"
+          }
+        ],
+        "ascension:spirit": [
+          {
+            "value": 0.03,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:unseen_circulation_spirit"
+          }
+        ]
+      }
+    }
+  ]
+}

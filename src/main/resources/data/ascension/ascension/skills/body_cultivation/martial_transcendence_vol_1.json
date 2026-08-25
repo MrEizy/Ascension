@@ -1,0 +1,80 @@
+{
+  "type": "ascension:body_cultivation",
+  "name": {
+    "translate": "ascension.skill.martial_transcendence_vol_1_circulation.name"
+  },
+  "description": {
+    "translate": "ascension.skill.martial_transcendence_vol_1_circulation.desc"
+  },
+  "path": "ascension:foundation/body",
+  "priority": 110,
+  "stimuli": [
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "gain": 0.9
+    },
+    {
+      "source": {
+        "source_tags": [
+          "ascension:movement"
+        ]
+      },
+      "gain": 0.025
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:attacking"
+        ]
+      },
+      "gain": 0.25
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:jumping"
+        ]
+      },
+      "gain": 0.25
+    }
+  ],
+  "maximum_tempering": 100.0,
+  "conversion": {
+    "rate": 0.65,
+    "progress_per_tempering": 1.1,
+    "interval": 2,
+    "costs": [
+      {
+        "resource": "ascension:qi",
+        "amount": 0.6
+      },
+      {
+        "resource": "ascension:stamina",
+        "amount": 0.4
+      }
+    ]
+  },
+  "multipliers": [
+    {
+      "condition": {
+        "unarmored": true
+      },
+      "multiplier": 1.15
+    },
+    {
+      "source": {
+        "source_tags": [
+          "ascension:movement"
+        ]
+      },
+      "condition": {
+        "sprinting": true
+      },
+      "multiplier": 1.15
+    }
+  ]
+}

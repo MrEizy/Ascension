@@ -1,0 +1,53 @@
+{
+  "elements": [
+    {
+      "type": "ascension:decal",
+      "offset": [
+        0,
+        0.03,
+        0
+      ],
+      "tint": [
+        100,
+        185,
+        255,
+        120
+      ],
+      "secondary_tint": [
+        255,
+        240,
+        170,
+        225
+      ],
+      "no_depth": false,
+      "radius": 1.15,
+      "spin": 1.7,
+      "pulse": 0.12,
+      "pulse_speed": 0.28,
+      "texture": "ascension:vfx/magic_circle_01"
+    },
+    {
+      "type": "ascension:shell",
+      "tint": [
+        100,
+        175,
+        255,
+        10
+      ],
+      "secondary_tint": [
+        245,
+        250,
+        255,
+        75
+      ],
+      "line_width": 1.2,
+      "filled": true,
+      "no_depth": false,
+      "radius": 0.85,
+      "height": 1.6,
+      "segments": 18,
+      "pulse": 0.16,
+      "pulse_speed": 0.35
+    }
+  ]
+}

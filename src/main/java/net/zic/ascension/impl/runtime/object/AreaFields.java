@@ -17,13 +17,11 @@ import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
 
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.impl.core.targeting.TargetingService;
-import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,7 +41,7 @@ public final class AreaFields {
     }
 
     public static UUID spawn(
-            SkillExecutionContext context,
+            SkillActionContext context,
             Identifier definitionId,
             Vec3 center
     ) {
@@ -82,7 +80,7 @@ public final class AreaFields {
             double height = definition.height().resolve(context.scaledValueContext());
             RuntimeVisualSync.spawn(
                     context.level(),
-                    visualState(field, visual.id(), field.expiresAt(), radius, height, visual.value())
+                    visualState(field, visual.id(), field.expiresAt(), radius, height)
             );
         }
         return field.runtimeId();
@@ -158,7 +156,7 @@ public final class AreaFields {
             return false;
         }
 
-        SkillExecutionContext baseContext = new SkillExecutionContext(
+        SkillActionContext baseContext = new SkillActionContext(
                 level,
                 owner,
                 field.skillId(),
@@ -193,7 +191,7 @@ public final class AreaFields {
         )) {
             current.add(target.getUUID());
             if (!field.inside().contains(target.getUUID())) {
-                applyFeatures(level, owner, field, target, definition.onEnter());
+                applyActions(level, owner, field, target, definition.onEnter());
             }
         }
 
@@ -203,7 +201,7 @@ public final class AreaFields {
             }
             Entity entity = level.getEntity(previous);
             if (entity instanceof LivingEntity target) {
-                applyFeatures(level, owner, field, target, definition.onExit());
+                applyActions(level, owner, field, target, definition.onExit());
             }
         }
 
@@ -214,7 +212,7 @@ public final class AreaFields {
             for (UUID id : current) {
                 Entity entity = level.getEntity(id);
                 if (entity instanceof LivingEntity target) {
-                    applyFeatures(level, owner, field, target, definition.onTick());
+                    applyActions(level, owner, field, target, definition.onTick());
                 }
             }
         }
@@ -223,8 +221,8 @@ public final class AreaFields {
             for (UUID id : current) {
                 Entity entity = level.getEntity(id);
                 if (entity instanceof LivingEntity target) {
-                    applyFeatures(level, owner, field, target, definition.onExit());
-                    applyFeatures(level, owner, field, target, definition.onExpire());
+                    applyActions(level, owner, field, target, definition.onExit());
+                    applyActions(level, owner, field, target, definition.onExpire());
                 }
             }
             return false;
@@ -265,8 +263,8 @@ public final class AreaFields {
         for (UUID id : Set.copyOf(field.inside())) {
             Entity entity = level.getEntity(id);
             if (entity instanceof LivingEntity target) {
-                applyFeatures(level, owner, field, target, definition.onExit());
-                applyFeatures(level, owner, field, target, definition.onExpire());
+                applyActions(level, owner, field, target, definition.onExit());
+                applyActions(level, owner, field, target, definition.onExpire());
             }
         }
     }
@@ -278,8 +276,8 @@ public final class AreaFields {
         }
         Entity ownerEntity = level.getEntity(field.ownerId());
         LivingEntity target = ownerEntity instanceof LivingEntity living ? living : null;
-        SkillExecutionContext context = target instanceof ServerPlayer owner
-                ? new SkillExecutionContext(
+        SkillActionContext context = target instanceof ServerPlayer owner
+                ? new SkillActionContext(
                         level,
                         owner,
                         field.skillId(),
@@ -297,7 +295,7 @@ public final class AreaFields {
         if (visual != null) {
             RuntimeVisualSync.remove(
                     level,
-                    visualState(field, visual.id(), 0L, radius, height, visual.value())
+                    visualState(field, visual.id(), 0L, radius, height)
             );
         }
     }
@@ -307,8 +305,7 @@ public final class AreaFields {
             Identifier visual,
             long expiresAt,
             double radius,
-            double height,
-            RuntimeVisualDefinition definition
+            double height
     ) {
         return new RuntimeVisualState(
                 field.runtimeId(),
@@ -324,14 +321,13 @@ public final class AreaFields {
                 0.0F,
                 field.runtimeId().getMostSignificantBits(),
                 radius,
-                height,
-                definition
+                height
         );
     }
 
     private static Resolved<RuntimeVisualDefinition> visual(
-            SkillExecutionContext context,
-            java.util.Optional<DefinitionRef<RuntimeVisualDefinition>> reference
+            SkillActionContext context,
+            java.util.Optional<Identifier> reference
     ) {
         return reference.map(value -> SkillDefinitions.visual(context, value)).orElse(null);
     }
@@ -351,14 +347,14 @@ public final class AreaFields {
         return horizontal <= radius * radius && Math.abs(position.y - center.y) <= height * 0.5D;
     }
 
-    private static void applyFeatures(
+    private static void applyActions(
             ServerLevel level,
             ServerPlayer owner,
             Instance field,
             LivingEntity target,
-            List<SkillExecutionFeature> features
+            List<SkillAction> actions
     ) {
-        SkillExecutionContext context = new SkillExecutionContext(
+        SkillActionContext context = new SkillActionContext(
                 level,
                 owner,
                 field.skillId(),
@@ -367,8 +363,8 @@ public final class AreaFields {
                 field.charge(),
                 field.variables()
         );
-        for (SkillExecutionFeature feature : features) {
-            feature.apply(context);
+        for (SkillAction action : actions) {
+            action.apply(context);
         }
     }
 

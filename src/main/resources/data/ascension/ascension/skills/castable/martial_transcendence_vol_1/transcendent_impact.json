@@ -1,0 +1,64 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.transcendent_impact.name"
+  },
+  "description": {
+    "translate": "ascension.skill.transcendent_impact.desc"
+  },
+  "target": {
+    "type": "ascension:ray",
+    "range": 4.0,
+    "width": 0.7,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 2.8,
+        "per_mastery": 0.55
+      },
+      "stats": {
+        "ascension:strength": 0.08
+      },
+      "minimum": 1.0,
+      "maximum": 15.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:body"
+      ],
+      "path": "ascension:foundation/body"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:crit",
+      "count": 8,
+      "spread": 0.35,
+      "speed": 0.05,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.player.attack.strong",
+      "volume": 0.55,
+      "pitch": 0.9,
+      "subject": "target"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:stamina",
+    "amount": 2.0
+  },
+  "cooldown": {
+    "base": 44,
+    "per_mastery": -3,
+    "minimum": 28
+  }
+}

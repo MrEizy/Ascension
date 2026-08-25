@@ -1,65 +1,104 @@
 {
-  "type": "ascension:resource_modifier_passive",
+  "type": "ascension:passive",
   "name": "Fist Mastery",
   "description": "Projects condensed fist force",
-  "default_accessible_level": 1,
-  "modules": [
-    {
-      "type": "ascension:weapon_swing",
-      "path": "ascension:weapon/fist",
-      "weapon_tag": "ascension:weapon/fists",
-      "vfx_type": "fist_punch",
-      "fallback_color": "simple_blue",
-      "technique_colors": {
-        "ascension:2_profound/mount_hua_sword_manual": "simple_red",
-        "ascension:1_ordinary/sustained_spirit_art": "simple_purple",
-        "ascension:3_heaven/celestial_constellation_circulation": "super_blue",
-        "ascension:3_heaven/guardian_dharma_manual": "super_blue",
-        "ascension:bug_tester_manual": "simple_blue",
-        "ascension:example_technique": "simple_green"
-      },
-      "radius": [
-        0.8,
-        0.8,
-        4.5
-      ],
-      "base_damage": 4.0,
-      "knockback": 1.0,
-      "duration": 10,
-      "rotation_z": 0.0,
-      "movement": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "qi_cost": 2.0,
-      "minimum_interval": 1,
-      "realm_scaling": {
-        "base_bonus": 0.1,
-        "bonus_per_major_realm": 0.22,
-        "bonus_per_minor_realm": 0.025,
-        "maximum_bonus": 5.0
-      },
-      "classifications": [
-        "ascension:skill",
-        "ascension:melee",
-        "ascension:weapon",
-        "ascension:fist"
-      ],
-      "hit_shape": "area",
-      "priority": 20,
-      "allow_empty_hand": true
-    },
+  "modifiers": [
     {
       "type": "ascension:weapon_damage",
-      "path": "ascension:weapon/fist",
       "weapon_tag": "ascension:weapon/fists",
       "match": "empty_hand_or_tag",
-      "realm_scaling": {
-        "base_bonus": 0.1,
-        "bonus_per_major_realm": 0.22,
-        "bonus_per_minor_realm": 0.025,
-        "maximum_bonus": 5.0
+      "multiplier": {
+        "base": 1.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:path_realm_multiplier",
+              "path": "ascension:weapon/fist",
+              "base_bonus": 0.1,
+              "bonus_per_major_realm": 0.22,
+              "bonus_per_minor_realm": 0.025,
+              "maximum_bonus": 5.0
+            },
+            "operation": "multiply"
+          }
+        ]
+      }
+    }
+  ],
+  "triggers": [
+    {
+      "event": "attack",
+      "weapon_tag": "ascension:weapon/fists",
+      "allow_empty_hand": true,
+      "cooldown": 1,
+      "priority": 20,
+      "actions": [
+        {
+          "type": "ascension:weapon_swing",
+          "vfx_type": "fist_punch",
+          "color": "simple_blue",
+          "technique_colors": {
+            "ascension:2_profound/mount_hua_sword_manual": "simple_red",
+            "ascension:1_ordinary/sustained_spirit_art": "simple_purple",
+            "ascension:3_heaven/celestial_constellation_circulation": "super_blue",
+            "ascension:3_heaven/guardian_dharma_manual": "super_blue",
+            "ascension:bug_tester_manual": "simple_blue",
+            "ascension:example_technique": "simple_green"
+          },
+          "radius": [
+            0.8,
+            0.8,
+            4.5
+          ],
+          "damage": {
+            "base": {
+              "base": 4.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:path_realm_multiplier",
+                    "path": "ascension:weapon/fist",
+                    "base_bonus": 0.1,
+                    "bonus_per_major_realm": 0.22,
+                    "bonus_per_minor_realm": 0.025,
+                    "maximum_bonus": 5.0
+                  },
+                  "operation": "multiply"
+                }
+              ]
+            },
+            "weapon": 0.5
+          },
+          "path": "ascension:weapon/fist",
+          "weapon_tag": "ascension:weapon/fists",
+          "classifications": [
+            "ascension:skill",
+            "ascension:melee",
+            "ascension:weapon",
+            "ascension:fist"
+          ],
+          "allow_empty_hand": true,
+          "hit_shape": "area"
+        }
+      ],
+      "cost": {
+        "resource": "ascension:qi",
+        "amount": {
+          "base": 2.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:path_realm_multiplier",
+                "path": "ascension:weapon/fist",
+                "base_bonus": 0.1,
+                "bonus_per_major_realm": 0.22,
+                "bonus_per_minor_realm": 0.025,
+                "maximum_bonus": 5.0
+              },
+              "operation": "multiply"
+            }
+          ]
+        }
       }
     }
   ]

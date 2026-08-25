@@ -22,13 +22,12 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.projectile.ProjectileBehavior;
 import net.zic.ascension.api.ascension.core.projectile.VirtualProjectileDefinition;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionAttribution;
-import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionAttribution;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.impl.core.skill.castable.SkillExecutions;
 import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
 
@@ -51,7 +50,7 @@ public final class VirtualProjectiles {
     }
 
     public static UUID spawn(
-            SkillExecutionContext context,
+            SkillActionContext context,
             Identifier definitionId,
             VirtualProjectileDefinition.Direction launchDirection
     ) {
@@ -91,8 +90,7 @@ public final class VirtualProjectiles {
                             visual.id(),
                             context.level().getGameTime() + Math.max(1L, (long) Math.ceil(range / speed) + 20L),
                             range,
-                            definition.hitRadius(),
-                            visual.value()
+                            definition.hitRadius()
                     )
             );
         }
@@ -135,7 +133,7 @@ public final class VirtualProjectiles {
         projectile.incrementTicksLived();
         for (ProjectileBehavior behavior : definition.behaviors()) {
             LivingEntity target = resolveTarget(level, projectile.targetId());
-            SkillExecutionContext executionContext = executionContext(
+            SkillActionContext executionContext = executionContext(
                     level,
                     owner,
                     projectile,
@@ -183,7 +181,7 @@ public final class VirtualProjectiles {
                 : start.distanceToSqr(entityHit.position());
 
         if (entityHit != null && entityDistance <= blockDistance) {
-            applyFeatures(
+            applyActions(
                     level,
                     owner,
                     projectile,
@@ -208,7 +206,7 @@ public final class VirtualProjectiles {
                 return false;
             }
         } else if (blockDistance < Double.POSITIVE_INFINITY) {
-            applyFeatures(
+            applyActions(
                     level,
                     owner,
                     projectile,
@@ -250,8 +248,7 @@ public final class VirtualProjectiles {
                                 visual.id(),
                                 expiresAt,
                                 projectile.maximumRange(),
-                                definition.hitRadius(),
-                                visual.value()
+                                definition.hitRadius()
                         )
                 );
             }
@@ -288,8 +285,8 @@ public final class VirtualProjectiles {
     }
 
     private static Resolved<RuntimeVisualDefinition> visual(
-            SkillExecutionContext context,
-            Optional<DefinitionRef<RuntimeVisualDefinition>> reference
+            SkillActionContext context,
+            Optional<Identifier> reference
     ) {
         return reference.map(value -> SkillDefinitions.visual(context, value)).orElse(null);
     }
@@ -354,7 +351,7 @@ public final class VirtualProjectiles {
             Instance projectile,
             RuntimeDefinition definition
     ) {
-        applyFeatures(
+        applyActions(
                 level,
                 owner,
                 projectile,
@@ -374,21 +371,21 @@ public final class VirtualProjectiles {
         }
     }
 
-    private static void applyFeatures(
+    private static void applyActions(
             ServerLevel level,
             LivingEntity owner,
             Instance projectile,
-            List<SkillExecutionFeature> features,
+            List<SkillAction> actions,
             LivingEntity target,
             Vec3 position
     ) {
-        SkillExecutionContext context = executionContext(level, owner, projectile, target, position);
-        for (SkillExecutionFeature feature : features) {
-            feature.apply(context);
+        SkillActionContext context = executionContext(level, owner, projectile, target, position);
+        for (SkillAction action : actions) {
+            action.apply(context);
         }
     }
 
-    private static SkillExecutionContext executionContext(
+    private static SkillActionContext executionContext(
             ServerLevel level,
             LivingEntity owner,
             Instance projectile,
@@ -403,7 +400,7 @@ public final class VirtualProjectiles {
                 ? 0.0D
                 : Math.clamp(projectile.travelled() / projectile.maximumRange(), 0.0D, 1.0D));
         variables.put(SkillExecutions.PROJECTILE_TICKS_LIVED, (double) projectile.ticksLived());
-        return new SkillExecutionContext(
+        return new SkillActionContext(
                 level,
                 owner,
                 projectile.skillId(),
@@ -411,7 +408,7 @@ public final class VirtualProjectiles {
                 position,
                 projectile.charge(),
                 variables,
-                SkillExecutionAttribution.virtualProjectile(
+                SkillActionAttribution.virtualProjectile(
                         owner,
                         projectile.definitionId(),
                         projectile.runtimeId()
@@ -420,7 +417,7 @@ public final class VirtualProjectiles {
     }
 
     private static Vec3 resolveDirection(
-            SkillExecutionContext context,
+            SkillActionContext context,
             VirtualProjectileDefinition.Direction direction
     ) {
         if (direction == VirtualProjectileDefinition.Direction.TARGET && context.target() != null) {
@@ -470,8 +467,7 @@ public final class VirtualProjectiles {
             Identifier visual,
             long expiresAt,
             double range,
-            double hitRadius,
-            RuntimeVisualDefinition definition
+            double hitRadius
     ) {
         return new RuntimeVisualState(
                 projectile.runtimeId(),
@@ -493,8 +489,7 @@ public final class VirtualProjectiles {
                         ),
                 projectile.runtimeId().getMostSignificantBits(),
                 range,
-                hitRadius,
-                definition
+                hitRadius
         );
     }
 
@@ -514,7 +509,7 @@ public final class VirtualProjectiles {
         if (visual != null) {
             RuntimeVisualSync.remove(
                     level,
-                    visualState(projectile, visual.id(), 0L, projectile.maximumRange(), definition.hitRadius(), visual.value())
+                    visualState(projectile, visual.id(), 0L, projectile.maximumRange(), definition.hitRadius())
             );
         }
     }
@@ -529,10 +524,10 @@ public final class VirtualProjectiles {
             TargetingDefinition.Filter filter,
             Optional<Identifier> flightParticle,
             List<ProjectileBehavior> behaviors,
-            List<SkillExecutionFeature> entityHitFeatures,
-            List<SkillExecutionFeature> blockHitFeatures,
-            List<SkillExecutionFeature> expiryFeatures,
-            Optional<DefinitionRef<RuntimeVisualDefinition>> visual
+            List<SkillAction> entityHitFeatures,
+            List<SkillAction> blockHitFeatures,
+            List<SkillAction> expiryFeatures,
+            Optional<Identifier> visual
     ) {
     }
 

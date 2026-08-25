@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
@@ -16,15 +15,13 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionAttribution;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionAttribution;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.impl.runtime.projectile.ProjectileImpactResponses;
-import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,7 +32,6 @@ import java.util.Map;
 import java.util.UUID;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class OwnerBoundConstructs {
@@ -49,10 +45,7 @@ public final class OwnerBoundConstructs {
     private OwnerBoundConstructs() {
     }
 
-    public static UUID spawn(
-            SkillExecutionContext context,
-            Identifier definitionId
-    ) {
+    public static UUID spawn(SkillActionContext context, Identifier definitionId) {
         OwnerBoundConstructDefinition definition = SkillDefinitions.resolveStored(
                 OwnerBoundConstructDefinition.class,
                 context.skill(),
@@ -327,14 +320,14 @@ public final class OwnerBoundConstructs {
     private static void execute(
             ServerLevel level,
             Instance construct,
-            List<SkillExecutionFeature> features,
+            List<SkillAction> actions,
             ServerPlayer owner,
             LivingEntity target,
             double intercepted,
             double remaining,
             double stabilityLoss
     ) {
-        if (features.isEmpty() || owner == null) {
+        if (actions.isEmpty() || owner == null) {
             return;
         }
         Map<Identifier, Double> variables = new LinkedHashMap<>(construct.variables());
@@ -343,7 +336,7 @@ public final class OwnerBoundConstructs {
         variables.put(STABILITY_LOSS, stabilityLoss);
         variables.put(STABILITY, construct.stability());
         variables.put(MAXIMUM_STABILITY, construct.maximumStability());
-        SkillExecutionContext context = new SkillExecutionContext(
+        SkillActionContext context = new SkillActionContext(
                 level,
                 owner,
                 construct.skillId(),
@@ -351,10 +344,10 @@ public final class OwnerBoundConstructs {
                 construct.position(),
                 construct.charge(),
                 variables,
-                SkillExecutionAttribution.direct(owner)
+                SkillActionAttribution.direct(owner)
         );
-        for (SkillExecutionFeature feature : features) {
-            feature.apply(context);
+        for (SkillAction action : actions) {
+            action.apply(context);
         }
     }
 
@@ -368,7 +361,7 @@ public final class OwnerBoundConstructs {
         if (!(entity instanceof ServerPlayer owner)) {
             return;
         }
-        SkillExecutionContext context = constructContext(level, owner, construct);
+        SkillActionContext context = constructContext(level, owner, construct);
         VisualSelection visual = resolveVisual(context, definition, construct);
         if (visual == null && construct.visualId() != null) {
             RuntimeVisualSync.remove(
@@ -378,8 +371,7 @@ public final class OwnerBoundConstructs {
                             definition,
                             construct.visualId(),
                             construct.visualStage(),
-                            0L,
-                            SkillDefinitions.cached(RuntimeVisualDefinition.class, construct.visualId(), null)
+                            0L
                     )
             );
             construct.setVisualState(null, 0);
@@ -403,8 +395,7 @@ public final class OwnerBoundConstructs {
                 definition,
                 visual.id(),
                 visual.stage(),
-                construct.expiresAt(),
-                visual.definition()
+                construct.expiresAt()
         );
         if (construct.visualId() == null) {
             RuntimeVisualSync.spawn(level, state);
@@ -416,8 +407,7 @@ public final class OwnerBoundConstructs {
                             definition,
                             construct.visualId(),
                             construct.visualStage(),
-                            0L,
-                            SkillDefinitions.cached(RuntimeVisualDefinition.class, construct.visualId(), null)
+                            0L
                     )
             );
             RuntimeVisualSync.spawn(level, state);
@@ -443,14 +433,13 @@ public final class OwnerBoundConstructs {
                         definition,
                         construct.visualId(),
                         construct.visualStage(),
-                        0L,
-                        SkillDefinitions.cached(RuntimeVisualDefinition.class, construct.visualId(), null)
+                        0L
                 )
         );
     }
 
     private static VisualSelection resolveVisual(
-            SkillExecutionContext context,
+            SkillActionContext context,
             OwnerBoundConstructDefinition definition,
             Instance construct
     ) {
@@ -461,21 +450,21 @@ public final class OwnerBoundConstructs {
             OwnerBoundConstructDefinition.VisualStage stage = definition.visualStages().get(index);
             if (fraction <= stage.maximumStabilityFraction()) {
                 Resolved<RuntimeVisualDefinition> resolved = SkillDefinitions.visual(context, stage.visual());
-                return resolved == null ? null : new VisualSelection(resolved.id(), resolved.value(), index + 1);
+                return resolved == null ? null : new VisualSelection(resolved.id(), index + 1);
             }
         }
         Resolved<RuntimeVisualDefinition> resolved = definition.visual()
                 .map(reference -> SkillDefinitions.visual(context, reference))
                 .orElse(null);
-        return resolved == null ? null : new VisualSelection(resolved.id(), resolved.value(), 0);
+        return resolved == null ? null : new VisualSelection(resolved.id(), 0);
     }
 
-    private static SkillExecutionContext constructContext(
+    private static SkillActionContext constructContext(
             ServerLevel level,
             ServerPlayer owner,
             Instance construct
     ) {
-        return new SkillExecutionContext(
+        return new SkillActionContext(
                 level,
                 owner,
                 construct.skillId(),
@@ -483,7 +472,7 @@ public final class OwnerBoundConstructs {
                 construct.position(),
                 construct.charge(),
                 construct.variables(),
-                SkillExecutionAttribution.direct(owner)
+                SkillActionAttribution.direct(owner)
         );
     }
 
@@ -492,8 +481,7 @@ public final class OwnerBoundConstructs {
             OwnerBoundConstructDefinition definition,
             Identifier visual,
             int stage,
-            long expiresAt,
-            RuntimeVisualDefinition visualDefinition
+            long expiresAt
     ) {
         float progress = construct.maximumStability() <= 0.0D
                 ? 0.0F
@@ -517,8 +505,7 @@ public final class OwnerBoundConstructs {
                 progress,
                 construct.runtimeId().getMostSignificantBits(),
                 construct.stability(),
-                construct.maximumStability(),
-                visualDefinition
+                construct.maximumStability()
         );
     }
 
@@ -546,7 +533,7 @@ public final class OwnerBoundConstructs {
         EXPIRED
     }
 
-    private record VisualSelection(Identifier id, RuntimeVisualDefinition definition, int stage) {
+    private record VisualSelection(Identifier id, int stage) {
     }
 
     private static final class Instance implements OwnerBoundConstructDefinition.View {

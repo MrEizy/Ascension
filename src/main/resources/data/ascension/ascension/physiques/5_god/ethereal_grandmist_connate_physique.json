@@ -1,0 +1,81 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.ethereal_grandmist_connate_physique.name"
+  },
+  "description": {
+    "translate": "ascension.physique.ethereal_grandmist_connate_physique.desc"
+  },
+  "paths": [
+    "ascension:foundation/soul",
+    "ascension:elemental/gravity",
+    "ascension:elemental/star"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 22.0,
+    "ascension:vitality": 11.0,
+    "ascension:strength": 8.0,
+    "ascension:agility": 13.0
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.5,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:ethereal_grandmist_connate_physique_spirit_modifier"
+      }
+    ],
+    "ascension:vitality": [
+      {
+        "value": 0.2,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:ethereal_grandmist_connate_physique_vitality_modifier"
+      }
+    ],
+    "ascension:strength": [
+      {
+        "value": 0.2,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:ethereal_grandmist_connate_physique_strength_modifier"
+      }
+    ],
+    "ascension:agility": [
+      {
+        "value": 0.3,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:ethereal_grandmist_connate_physique_agility_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": 5.0,
+      "ascension:elemental/gravity": 8.0,
+      "ascension:elemental/star": 7.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/gravity": [
+        {
+          "value": 0.45,
+          "operation": "ADD_BASE",
+          "id": "ascension:ethereal_grandmist_connate_physique_gravity_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/star": [
+        {
+          "value": 0.3,
+          "operation": "ADD_BASE",
+          "id": "ascension:ethereal_grandmist_connate_physique_star_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:god"
+  }
+}

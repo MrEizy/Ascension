@@ -7,7 +7,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
@@ -17,9 +16,9 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionAttribution;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionAttribution;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions.Resolved;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
@@ -32,7 +31,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class Barriers {
@@ -45,7 +43,7 @@ public final class Barriers {
     private Barriers() {
     }
 
-    public static UUID apply(SkillExecutionContext context, LivingEntity protectedEntity, Identifier definitionId) {
+    public static UUID apply(SkillActionContext context, LivingEntity protectedEntity, Identifier definitionId) {
         if (context == null || protectedEntity == null || definitionId == null || protectedEntity.isRemoved()) {
             return null;
         }
@@ -290,12 +288,12 @@ public final class Barriers {
     private static void execute(
             ServerLevel level,
             BarrierInstance barrier,
-            List<SkillExecutionFeature> features,
+            List<SkillAction> actions,
             LivingEntity target,
             double absorbed,
             double remaining
     ) {
-        if (features.isEmpty()) {
+        if (actions.isEmpty()) {
             return;
         }
         Entity owner = level.getEntity(barrier.ownerId);
@@ -307,7 +305,7 @@ public final class Barriers {
         variables.put(REMAINING_DAMAGE, remaining);
         variables.put(DURABILITY, barrier.durability);
         variables.put(MAXIMUM_DURABILITY, barrier.maximumDurability);
-        SkillExecutionContext context = new SkillExecutionContext(
+        SkillActionContext context = new SkillActionContext(
                 level,
                 caster,
                 barrier.skillId,
@@ -315,10 +313,10 @@ public final class Barriers {
                 target.position().add(0.0D, target.getBbHeight() * 0.5D, 0.0D),
                 barrier.charge,
                 variables,
-                SkillExecutionAttribution.direct(caster)
+                SkillActionAttribution.direct(caster)
         );
-        for (SkillExecutionFeature feature : features) {
-            feature.apply(context);
+        for (SkillAction action : actions) {
+            action.apply(context);
         }
     }
 
@@ -332,7 +330,7 @@ public final class Barriers {
             removeVisual(level, barrier);
             return;
         }
-        SkillExecutionContext context = context(level, barrier);
+        SkillActionContext context = context(level, barrier);
         if (context == null) {
             return;
         }
@@ -350,7 +348,7 @@ public final class Barriers {
             return;
         }
 
-        RuntimeVisualState state = visualState(barrier, selection.id(), selection.stage(), barrier.expiresAt, selection.definition());
+        RuntimeVisualState state = visualState(barrier, selection.id(), selection.stage(), barrier.expiresAt);
         if (barrier.visualId == null) {
             RuntimeVisualSync.spawn(level, state);
         } else if (!barrier.visualId.equals(selection.id())) {
@@ -358,8 +356,7 @@ public final class Barriers {
                     barrier,
                     barrier.visualId,
                     barrier.visualStage,
-                    0L,
-                    SkillDefinitions.cached(RuntimeVisualDefinition.class, barrier.visualId, null)
+                    0L
             ));
             RuntimeVisualSync.spawn(level, state);
         } else {
@@ -380,14 +377,13 @@ public final class Barriers {
                 barrier,
                 barrier.visualId,
                 barrier.visualStage,
-                0L,
-                SkillDefinitions.cached(RuntimeVisualDefinition.class, barrier.visualId, null)
+                0L
         ));
         barrier.visualId = null;
     }
 
     private static VisualSelection selectVisual(
-            SkillExecutionContext context,
+            SkillActionContext context,
             BarrierDefinition.Visual visual,
             BarrierInstance barrier
     ) {
@@ -396,20 +392,20 @@ public final class Barriers {
             BarrierDefinition.VisualStage stage = visual.stages().get(index);
             if (fraction <= stage.maximumDurabilityFraction()) {
                 Resolved<RuntimeVisualDefinition> resolved = SkillDefinitions.visual(context, stage.visual());
-                return resolved == null ? null : new VisualSelection(resolved.id(), resolved.value(), index + 1);
+                return resolved == null ? null : new VisualSelection(resolved.id(), index + 1);
             }
         }
         Resolved<RuntimeVisualDefinition> resolved = SkillDefinitions.visual(context, visual.id());
-        return resolved == null ? null : new VisualSelection(resolved.id(), resolved.value(), 0);
+        return resolved == null ? null : new VisualSelection(resolved.id(), 0);
     }
 
-    private static SkillExecutionContext context(ServerLevel level, BarrierInstance barrier) {
+    private static SkillActionContext context(ServerLevel level, BarrierInstance barrier) {
         Entity owner = level.getEntity(barrier.ownerId);
         Entity protectedEntity = level.getEntity(barrier.protectedEntityId);
         if (!(owner instanceof LivingEntity caster) || !(protectedEntity instanceof LivingEntity target)) {
             return null;
         }
-        return new SkillExecutionContext(
+        return new SkillActionContext(
                 level,
                 caster,
                 barrier.skillId,
@@ -417,7 +413,7 @@ public final class Barriers {
                 target.position().add(0.0D, target.getBbHeight() * 0.5D, 0.0D),
                 barrier.charge,
                 barrier.variables,
-                SkillExecutionAttribution.direct(caster)
+                SkillActionAttribution.direct(caster)
         );
     }
 
@@ -425,8 +421,7 @@ public final class Barriers {
             BarrierInstance barrier,
             Identifier visual,
             int stage,
-            long expiresAt,
-            RuntimeVisualDefinition definition
+            long expiresAt
     ) {
         float progress = barrier.maximumDurability <= 0.0D
                 ? 0.0F
@@ -445,12 +440,11 @@ public final class Barriers {
                 progress,
                 barrier.runtimeId.getMostSignificantBits(),
                 barrier.radius,
-                barrier.height,
-                definition
+                barrier.height
         );
     }
 
-    private record VisualSelection(Identifier id, RuntimeVisualDefinition definition, int stage) {
+    private record VisualSelection(Identifier id, int stage) {
     }
 
     public enum Removal {

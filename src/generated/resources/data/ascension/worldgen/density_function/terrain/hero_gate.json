@@ -1,0 +1,64 @@
+{
+  "type": "ascension:hermite_spline",
+  "coordinate": {
+    "type": "minecraft:flat_cache",
+    "argument": {
+      "type": "ascension:clamp",
+      "input": {
+        "type": "minecraft:noise",
+        "noise": "ascension:terrain/extreme_peaks",
+        "xz_scale": 1.0,
+        "y_scale": 0.0
+      },
+      "max": 1.0,
+      "min": -1.0
+    }
+  },
+  "points": [
+    {
+      "derivative": 0.0,
+      "location": -1.0,
+      "value": 0.0
+    },
+    {
+      "derivative": 0.0,
+      "location": 0.28,
+      "value": 0.0
+    },
+    {
+      "derivative": 0.9,
+      "location": 0.38,
+      "value": 0.08
+    },
+    {
+      "derivative": 2.2,
+      "location": 0.48,
+      "value": 0.28
+    },
+    {
+      "derivative": 2.8,
+      "location": 0.58,
+      "value": 0.56
+    },
+    {
+      "derivative": 2.0,
+      "location": 0.68,
+      "value": 0.82
+    },
+    {
+      "derivative": 0.9,
+      "location": 0.78,
+      "value": 0.96
+    },
+    {
+      "derivative": 0.0,
+      "location": 0.86,
+      "value": 1.0
+    },
+    {
+      "derivative": 0.0,
+      "location": 1.0,
+      "value": 1.0
+    }
+  ]
+}

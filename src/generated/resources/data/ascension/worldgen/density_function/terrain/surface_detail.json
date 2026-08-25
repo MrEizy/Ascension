@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:mul",
+  "argument1": "ascension:terrain/local_detail_noise",
+  "argument2": {
+    "type": "minecraft:add",
+    "argument1": 0.018,
+    "argument2": {
+      "type": "minecraft:mul",
+      "argument1": 0.03,
+      "argument2": "ascension:terrain/foothill_mask"
+    }
+  }
+}

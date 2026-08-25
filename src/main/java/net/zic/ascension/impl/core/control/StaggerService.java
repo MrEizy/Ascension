@@ -15,13 +15,13 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.control.StaggerDefinition;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.util.ModTags;
-import net.zic.ascension.impl.core.skill.passive.PassiveDefenseService;
+import net.zic.ascension.impl.core.skill.passive.PassiveCombatService;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -44,7 +44,7 @@ public final class StaggerService {
     }
 
     public static double apply(
-            SkillExecutionContext context,
+            SkillActionContext context,
             LivingEntity target,
             Identifier profileId,
             double amount
@@ -84,7 +84,7 @@ public final class StaggerService {
         } else if (is(target, RESISTANT)) {
             resistance = Math.max(resistance, 0.5D);
         }
-        double passiveResistance = PassiveDefenseService.staggerResistance(target, context);
+        double passiveResistance = PassiveCombatService.staggerResistance(target, context);
         resistance = 1.0D - (1.0D - resistance) * (1.0D - passiveResistance);
         resistance = Math.clamp(resistance, 0.0D, 0.95D);
 
@@ -128,7 +128,7 @@ public final class StaggerService {
     }
 
     public static boolean forceGuardBreak(
-            SkillExecutionContext context,
+            SkillActionContext context,
             LivingEntity target,
             Identifier profileId
     ) {
@@ -158,7 +158,7 @@ public final class StaggerService {
         } else if (is(target, RESISTANT)) {
             resistance = Math.max(resistance, 0.5D);
         }
-        double passiveResistance = PassiveDefenseService.staggerResistance(target, context);
+        double passiveResistance = PassiveCombatService.staggerResistance(target, context);
         resistance = 1.0D - (1.0D - resistance) * (1.0D - passiveResistance);
         resistance = Math.clamp(resistance, 0.0D, 0.95D);
         guardBreak(context, target, profileId, definition, targetContext, 0.0D, threshold, resistance);
@@ -238,7 +238,7 @@ public final class StaggerService {
     }
 
     private static void guardBreak(
-            SkillExecutionContext context,
+            SkillActionContext context,
             LivingEntity target,
             Identifier profileId,
             StaggerDefinition definition,
@@ -266,7 +266,7 @@ public final class StaggerService {
         variables.put(THRESHOLD, threshold);
         variables.put(RESISTANCE, resistance);
         variables.put(GUARD_BREAK_TICKS, (double) duration);
-        SkillExecutionContext breakContext = new SkillExecutionContext(
+        SkillActionContext breakContext = new SkillActionContext(
                 context.level(),
                 context.caster(),
                 context.skill(),
@@ -276,12 +276,12 @@ public final class StaggerService {
                 variables,
                 context.attribution()
         );
-        for (SkillExecutionFeature feature : definition.onGuardBreak()) {
-            feature.apply(breakContext);
+        for (SkillAction action : definition.onGuardBreak()) {
+            action.apply(breakContext);
         }
     }
 
-    private static ScaledValue.Context targetContext(SkillExecutionContext context, LivingEntity target) {
+    private static ScaledValue.Context targetContext(SkillActionContext context, LivingEntity target) {
         return new ScaledValue.Context(
                 originSource(target),
                 context.skill(),

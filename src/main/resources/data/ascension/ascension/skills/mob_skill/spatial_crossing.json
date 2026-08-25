@@ -1,23 +1,13 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Spatial Crossing",
   "description": "An Enderman folds a short distance and strikes its target.",
-  "default_accessible_level": 1,
-  "targeting": {
+  "target": {
     "type": "ascension:radial",
     "radius": 12,
-    "maximum_targets": 1,
-    "sort": "nearest",
-    "filter": {
-      "relations": [
-        "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
-    }
+    "maximum_targets": 1
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:particles",
       "particle": "minecraft:portal",
@@ -38,21 +28,6 @@
     },
     {
       "type": "ascension:damage",
-      "amount": {
-        "base": 3.5,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:stat",
-              "stat": "ascension:spirit"
-            },
-            "operation": "add",
-            "scale": 0.22
-          }
-        ],
-        "minimum": 0.0,
-        "maximum": 16.0
-      },
       "damage_type": "minecraft:magic",
       "classifications": [
         "ascension:skill",
@@ -60,7 +35,13 @@
         "ascension:movement"
       ],
       "path": "ascension:foundation/soul",
-      "subject": "target"
+      "subject": "target",
+      "base": 3.5,
+      "stats": {
+        "ascension:spirit": 0.22
+      },
+      "minimum": 0.0,
+      "maximum": 16.0
     },
     {
       "type": "ascension:particles",
@@ -78,6 +59,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
   "cooldown": 120
 }

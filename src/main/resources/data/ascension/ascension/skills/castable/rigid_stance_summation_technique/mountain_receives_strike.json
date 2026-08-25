@@ -1,0 +1,83 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.mountain_receives_strike.name"
+  },
+  "description": {
+    "translate": "ascension.skill.mountain_receives_strike.desc"
+  },
+  "definitions": {
+    "barriers": {
+      "rigid_stance_guard": {
+        "duration": {
+          "base": 60,
+          "per_mastery": 8
+        },
+        "durability": {
+          "base": 8.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:vitality"
+              },
+              "scale": 0.15
+            }
+          ],
+          "minimum": 8.0,
+          "maximum": 28.0
+        },
+        "absorption": {
+          "base": 0.45,
+          "per_mastery": 0.04,
+          "maximum": 0.65
+        },
+        "overflow": true,
+        "priority": 8,
+        "replace_existing": true,
+        "projectile_response": "none",
+        "on_break": [
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:item.shield.break",
+            "volume": 0.45,
+            "pitch": 0.9,
+            "subject": "target"
+          }
+        ]
+      }
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:barrier",
+      "action": "apply",
+      "definition": "#rigid_stance_guard",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:ash",
+      "count": 18,
+      "spread": 0.65,
+      "speed": 0.03,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:item.shield.block",
+      "volume": 0.55,
+      "pitch": 0.75,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:stamina",
+    "amount": 4.0
+  },
+  "cooldown": {
+    "base": 150,
+    "per_mastery": -8,
+    "minimum": 110
+  }
+}

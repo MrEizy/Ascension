@@ -1,80 +1,92 @@
 {
-  "type": "ascension:simple_cultivation_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.fourfold_dharma_circulation.name"
   },
   "description": {
     "translate": "ascension.skill.fourfold_dharma_circulation.desc"
   },
-  "path": "ascension:foundation/soul",
-  "secondary_paths": "ascension:elemental/life",
-
-  "rate": 2.35,
-  "particle_field": {
-    "style": "meridian_flow",
-    "particles": [
+  "cast": {
+    "mode": "channel",
+    "stages": [
       {
-        "type": "rune",
-        "weight": 5
-      },
-      {
-        "type": "thread",
-        "weight": 4
-      },
-      {
-        "type": "mote",
-        "weight": 3
-      },
-      {
-        "type": "spark",
-        "weight": 2
+        "particle_field": {
+          "style": "meridian_flow",
+          "particles": [
+            {
+              "weight": 5,
+              "particle": "ascension:particle_field_rune"
+            },
+            {
+              "weight": 4,
+              "particle": "ascension:particle_field_thread"
+            },
+            {
+              "weight": 3,
+              "particle": "ascension:particle_field_mote"
+            },
+            {
+              "weight": 2,
+              "particle": "ascension:particle_field_spark"
+            }
+          ],
+          "colours": [
+            "#FFE9A8",
+            "#F7C95C",
+            "#FFF7D4",
+            "#C98A2E"
+          ],
+          "density": 18,
+          "radius": {
+            "min": 0.5,
+            "max": 1.2
+          },
+          "height": {
+            "min": 0.05,
+            "max": 1.9
+          },
+          "speed": {
+            "min": 0.035,
+            "max": 0.06
+          },
+          "size": {
+            "min": 0.04,
+            "max": 0.105
+          },
+          "lifetime": {
+            "min": 20,
+            "max": 36
+          },
+          "full_bright": true
+        },
+        "sounds": [
+          {
+            "sound": "minecraft:block.bell.resonate",
+            "interval": 72,
+            "initial_delay": 16,
+            "volume": 0.12,
+            "pitch": 1.15,
+            "pitch_variance": 0.06
+          },
+          {
+            "sound": "minecraft:block.amethyst_block.chime",
+            "interval": 48,
+            "initial_delay": 8,
+            "volume": 0.14,
+            "pitch": 0.8,
+            "pitch_variance": 0.08
+          }
+        ]
       }
-    ],
-    "colours": [
-      "#FFE9A8",
-      "#F7C95C",
-      "#FFF7D4",
-      "#C98A2E"
-    ],
-    "density": 18,
-    "radius": {
-      "min": 0.5,
-      "max": 1.2
-    },
-    "height": {
-      "min": 0.05,
-      "max": 1.9
-    },
-    "speed": {
-      "min": 0.035,
-      "max": 0.06
-    },
-    "size": {
-      "min": 0.04,
-      "max": 0.105
-    },
-    "lifetime": {
-      "min": 20,
-      "max": 36
-    },
-    "full_bright": true
+    ]
   },
-  "sounds": [
+  "require_targets": false,
+  "actions": [
     {
-      "sound": "minecraft:block.bell.resonate",
-      "interval": 72,
-      "initial_delay": 16,
-      "volume": 0.12,
-      "pitch": 1.15,
-      "pitch_variance": 0.06
-    },
-    {
-      "sound": "minecraft:block.amethyst_block.chime",
-      "interval": 48,
-      "initial_delay": 8,
-      "volume": 0.14,
-      "pitch": 0.8,
-      "pitch_variance": 0.08
+      "type": "ascension:cultivate",
+      "path": "ascension:foundation/soul",
+      "secondary_path": "ascension:elemental/life",
+      "rate": 2.35
     }
   ]
 }

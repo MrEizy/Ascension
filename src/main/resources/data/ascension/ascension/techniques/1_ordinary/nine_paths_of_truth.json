@@ -1,0 +1,47 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.nine_paths_of_truth.name"
+  },
+  "description": {
+    "translate": "ascension.technique.nine_paths_of_truth.desc"
+  },
+  "path": "ascension:foundation/essence",
+  "milestone_realms": [
+    0
+  ],
+  "technique_families": [
+    "essence"
+  ],
+  "max_realm": 0,
+  "max_minor_realm": 9,
+  "skills": {
+    "ascension:castable/cultivation/nine_paths_of_truth": {},
+    "ascension:passive/nine_paths_of_truth/truth_seeking_channels": {}
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 0.06
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.04
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:ordinary"
+  }
+}

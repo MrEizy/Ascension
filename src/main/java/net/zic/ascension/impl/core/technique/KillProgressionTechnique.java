@@ -6,11 +6,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
-
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
+import net.zic.ascension.api.ascension.core.technique.TechniqueSkillDefinition;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
@@ -43,6 +42,7 @@ public final class KillProgressionTechnique extends SimpleTechnique {
             Integer maxMinorRealm,
             int minMajorRealm,
             Optional<AscensionItemTooltipDefinition> itemTooltip,
+            Map<Identifier, TechniqueSkillDefinition> skills,
             ProgressActionHolder holder,
             Map<Integer, MajorRealmDefinitionOverride> majorRealmOverrides,
             double baseProgress,
@@ -59,6 +59,7 @@ public final class KillProgressionTechnique extends SimpleTechnique {
                 maxMinorRealm,
                 minMajorRealm,
                 itemTooltip,
+                skills,
                 holder,
                 majorRealmOverrides
         );
@@ -113,8 +114,6 @@ public final class KillProgressionTechnique extends SimpleTechnique {
         if (killer == null || victim == null || source == null || pathData == null) {
             return;
         }
-
-        //TODO redo for new technique system
     }
 
     private double calculateProgress(LivingEntity victim) {
@@ -132,7 +131,6 @@ public final class KillProgressionTechnique extends SimpleTechnique {
             KillProgressionTechniqueData data,
             double amount
     ) {
-        //TODO redo with new technique system
     }
 
     private static double sanitizeNonNegative(double value) {

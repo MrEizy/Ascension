@@ -1,8 +1,7 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Fear Pulse",
   "description": "Projects a short soul pulse that shakes nearby opponents.",
-  "default_accessible_level": 1,
   "definitions": {
     "stagger": {
       "shock": {
@@ -18,21 +17,12 @@
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:radial",
     "radius": 5,
-    "maximum_targets": 3,
-    "sort": "nearest",
-    "filter": {
-      "relations": [
-        "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
-    }
+    "maximum_targets": 3
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:stagger",
       "action": "apply",
@@ -56,6 +46,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
   "cooldown": 130
 }

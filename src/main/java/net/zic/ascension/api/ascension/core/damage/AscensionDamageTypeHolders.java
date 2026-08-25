@@ -14,6 +14,7 @@ public final class AscensionDamageTypeHolders {
     public static final Identifier PATH = AscensionCraft.prefix("damage_container");
     public static final Identifier CLASSIFICATIONS = AscensionCraft.prefix("damage_classifications");
     public static final Identifier ATTRIBUTION = AscensionCraft.prefix("damage_attribution");
+    public static final Identifier PROFILE = AscensionCraft.prefix("damage_profile");
 
     private AscensionDamageTypeHolders() {
     }
@@ -40,6 +41,12 @@ public final class AscensionDamageTypeHolders {
     public static void attachAttribution(RPGEngineDamageSource source, Attribution attribution) {
         if (source != null && attribution != null) {
             source.addDamageTypeHolder(ATTRIBUTION, attribution);
+        }
+    }
+
+    public static void attachProfile(RPGEngineDamageSource source, AscensionDamageProfile profile) {
+        if (source != null && profile != null) {
+            source.addDamageTypeHolder(PROFILE, profile);
         }
     }
 
