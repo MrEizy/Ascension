@@ -3,10 +3,12 @@ package net.zic.ascension.configuration;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 
@@ -44,6 +46,15 @@ public record RealmEffectivenessConfiguration(List<Double> multipliers) {
         return get(source).resolveMultiplier(source);
     }
 
+    public static double getMultiplier(LivingEntity entity) {
+        if (entity == null) {
+            return 1.0D;
+        }
+
+        OriginSource source = AscensionOriginSourceHelper.getEntitySource(entity);
+        return source == null ? 1.0D : getMultiplier(source);
+    }
+
     public double getMultiplier(int majorRealm) {
         if (majorRealm < 0 || multipliers.isEmpty()) {
             return 1.0D;
@@ -51,17 +62,31 @@ public record RealmEffectivenessConfiguration(List<Double> multipliers) {
 
         int index = Math.min(majorRealm, multipliers.size() - 1);
         double multiplier = multipliers.get(index);
-        return Double.isFinite(multiplier) && multiplier >= 0.0D ? multiplier : 1.0D;
+        return Double.isFinite(multiplier) && multiplier > 0.0D ? multiplier : 1.0D;
     }
 
     public static double apply(OriginSource source, double value) {
-        double result = value * getMultiplier(source);
-        return Double.isFinite(result) ? result : value;
+        return apply(value, getMultiplier(source));
     }
 
-    public static double apply(OriginSource source, double value, double responseExponent) {
-        double safeExponent = Double.isFinite(responseExponent) ? responseExponent : 1.0D;
-        double multiplier = Math.pow(getMultiplier(source), safeExponent);
+    public static double apply(LivingEntity entity, double value) {
+        return apply(value, getMultiplier(entity));
+    }
+
+
+    public static double getRelativeEffectiveness(LivingEntity attacker, LivingEntity defender) {
+        double attackerMultiplier = getMultiplier(attacker);
+        double defenderMultiplier = getMultiplier(defender);
+
+        if (!Double.isFinite(attackerMultiplier) || attackerMultiplier <= 0.0D || !Double.isFinite(defenderMultiplier) || defenderMultiplier <= 0.0D) {
+            return 1.0D;
+        }
+
+        double relative = attackerMultiplier / defenderMultiplier;
+        return Double.isFinite(relative) && relative > 0.0D ? relative : 1.0D;
+    }
+
+    private static double apply(double value, double multiplier) {
         double result = value * multiplier;
         return Double.isFinite(result) ? result : value;
     }
@@ -71,20 +96,20 @@ public record RealmEffectivenessConfiguration(List<Double> multipliers) {
             return 1.0D;
         }
 
-        DataSourceInstance dataSource = source.hasDataSource(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId()) ? source.getDataSource(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId()) : null;
-        if (!(dataSource instanceof PathHolder holder)) {
-            return 1.0D;
-        }
-
         int highestMajorRealm = -1;
-        for (Identifier pathId : holder.getPaths()) {
-            if (pathId == null || !pathId.getPath().startsWith(FOUNDATION_PATH_PREFIX)) {
+        for (Identifier pathId : AscensionOriginSourceHelper.getPaths(source)) {
+            if (!pathId.getPath().startsWith(FOUNDATION_PATH_PREFIX)) {
                 continue;
             }
 
-            PathInstance pathInstance = holder.getPath(pathId);
+            PathInstance pathInstance =
+                    AscensionOriginSourceHelper.getPathInstance(source, pathId);
+
             if (pathInstance != null) {
-                highestMajorRealm = Math.max(highestMajorRealm, pathInstance.getCurrentMajorRealm());
+                highestMajorRealm = Math.max(
+                        highestMajorRealm,
+                        pathInstance.getCurrentMajorRealm()
+                );
             }
         }
 

@@ -13,7 +13,6 @@ import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.impl.core.effect.SkillEffectService;
-import net.zic.ascension.configuration.RealmEffectivenessConfiguration;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.value_containers.ValueContainer;
@@ -160,8 +159,7 @@ public final class ScaledValueSources {
             if (definition == null) {
                 return 0.0D;
             }
-            double rawValue = base ? context.source().getBaseStat(definition) : context.source().getStat(definition);
-            return RealmEffectivenessConfiguration.apply(context.source(), rawValue);
+            return base ? context.source().getBaseStat(definition) : context.source().getStat(definition);
         }
     }
 

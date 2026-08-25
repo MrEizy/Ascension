@@ -11,6 +11,7 @@ import net.zic.ascension.api.ascension.core.damage.AscensionDamageProfile;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineGatherDamageTypesEvent;
+import net.zic.ascension.configuration.RealmEffectivenessConfiguration;
 import net.zic.ascension.impl.core.damage.AscensionDamageProfileResolver;
 import net.zic.ascension.impl.core.damage.DamageTrace;
 import net.zic.ascension.impl.core.skill.passive.PassiveCombatService;
@@ -20,6 +21,10 @@ import net.zic.ascension.impl.runtime.projectile.NormalProjectileService;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class AscensionDamageHandler {
+    private static final double REALM_PRESSURE_EXPONENT = 0.4D;
+    private static final double MIN_REALM_PRESSURE = 1.0E-4D;
+    private static final double MAX_REALM_PRESSURE = 10_000.0D;
+
     private AscensionDamageHandler() {
     }
 
@@ -83,6 +88,11 @@ public final class AscensionDamageHandler {
             return;
         }
 
+        applyRealmPressure(event, trace);
+        if (finishIfResolved(event, trace)) {
+            return;
+        }
+
         double beforeConstructs = event.getDamage();
         OwnerBoundConstructs.applyDamage(event);
         trace.transition("Constructs", beforeConstructs, event.getDamage());
@@ -94,6 +104,33 @@ public final class AscensionDamageHandler {
         Barriers.applyDamage(event);
         trace.transition("Barriers", beforeBarriers, event.getDamage());
         trace.finish(event);
+    }
+
+    private static void applyRealmPressure(RPGEngineEntityDamagedEvent.Pre event, DamageTrace trace) {
+        if (!(event.getSource().getEntity() instanceof LivingEntity attacker)) {
+            return;
+        }
+
+        double relativeEffectiveness = RealmEffectivenessConfiguration.getRelativeEffectiveness(
+                attacker,
+                event.getEntity()
+        );
+        if (!Double.isFinite(relativeEffectiveness) || relativeEffectiveness <= 0.0D) {
+            return;
+        }
+
+        double pressure = Math.pow(relativeEffectiveness, REALM_PRESSURE_EXPONENT);
+        if (!Double.isFinite(pressure) || pressure <= 0.0D) {
+            pressure = relativeEffectiveness > 1.0D ? MAX_REALM_PRESSURE : MIN_REALM_PRESSURE;
+        }
+        pressure = Math.clamp(pressure, MIN_REALM_PRESSURE, MAX_REALM_PRESSURE);
+
+        if (Math.abs(pressure - 1.0D) <= 1.0E-10D) {
+            return;
+        }
+
+        event.setDamage(event.getDamage() * pressure);
+        trace.multiply("Realm pressure", pressure);
     }
 
     private static void applyProfile(RPGEngineEntityDamagedEvent.Pre event, DamageTrace trace) {
