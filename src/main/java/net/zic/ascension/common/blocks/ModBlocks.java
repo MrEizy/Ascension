@@ -3,6 +3,7 @@ package net.zic.ascension.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
@@ -20,7 +21,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.common.blocks.blockentities.FermentingBarrelBlock;
+import net.zic.ascension.common.blocks.custom.SpiritVeinBlock;
+import net.zic.ascension.common.blocks.custom.SpiritualStoneClusterBlock;
+import net.zic.ascension.common.blocks.entity.FermentingBarrelBlock;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.HerbStemCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
@@ -29,6 +32,7 @@ import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.worldgen.tree.AscTreeGrowers;
+import net.zic.zenithlib.registry.RegistryHelper;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -51,15 +55,25 @@ public class ModBlocks {
 
 
 
-    public static final DeferredBlock<Block> JADE_BLOCK  = registerBlock("jade_block",
+    public static final DeferredBlock<Block> JADE_BLOCK = registerBlock("jade_block",
             properties -> new Block(properties.strength(5.5f).explosionResistance(4.5f)
                     .requiresCorrectToolForDrops().sound(SoundType.METAL)));
-    public static final DeferredBlock<Block> BLACK_IRON_BLOCK  = registerBlock("black_iron_block",
+    public static final DeferredBlock<Block> BLACK_IRON_BLOCK = registerBlock("black_iron_block",
             properties -> new Block(properties.strength(5.5f).explosionResistance(4.5f)
                     .requiresCorrectToolForDrops().sound(SoundType.METAL)));
-    public static final DeferredBlock<Block> FROST_SILVER_BLOCK  = registerBlock("frost_silver_block",
+    public static final DeferredBlock<Block> FROST_SILVER_BLOCK = registerBlock("frost_silver_block",
             properties -> new Block(properties.strength(5.5f).explosionResistance(4.5f)
                     .requiresCorrectToolForDrops().sound(SoundType.METAL)));
+
+
+    public static final DeferredBlock<Block> SPIRITUAL_STONE_CLUSTER = registerBlock("spiritual_stone_cluster",
+            properties -> new SpiritualStoneClusterBlock(properties.strength(6.5f, 5.5f)
+                    .requiresCorrectToolForDrops().sound(SoundType.AMETHYST).noOcclusion(), UniformInt.of(2, 4)));
+
+    public static final DeferredBlock<Block> SPIRIT_VEIN = registerBlock("spirit_vein",
+            properties -> new SpiritVeinBlock(properties));
+
+
 
 
 
