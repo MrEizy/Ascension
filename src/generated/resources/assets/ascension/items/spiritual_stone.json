@@ -1,0 +1,27 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "entries": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "ascension:item/spiritual_stone_medium"
+        },
+        "threshold": 16.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "ascension:item/spiritual_stone_large"
+        },
+        "threshold": 32.0
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "ascension:item/spiritual_stone_small"
+    },
+    "normalize": false,
+    "property": "minecraft:count"
+  }
+}

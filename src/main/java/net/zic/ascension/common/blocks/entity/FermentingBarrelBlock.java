@@ -1,4 +1,4 @@
-package net.zic.ascension.common.blocks.blockentities;
+package net.zic.ascension.common.blocks.entity;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Direction;
