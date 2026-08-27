@@ -28,7 +28,6 @@ import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.core.technique.TechniqueHolder;
 import net.zic.ascension.api.ascension.event.bloodline.BloodlineEvent;
 import net.zic.ascension.api.ascension.event.path.PathAddedEvent;
-import net.zic.ascension.api.ascension.event.path.PathEvent;
 import net.zic.ascension.api.ascension.event.path.PathRemovedEvent;
 import net.zic.ascension.api.ascension.event.physique.PhysiqueChangedEvent;
 import net.zic.ascension.api.ascension.event.skill.SkillEvent;
@@ -114,12 +113,15 @@ public class AscensionOriginSourceHelper {
         return getPhysiqueHolder(source).getData();
     }
     public static boolean setPhysique(OriginSource source,Identifier physique){
-        if (physique == null) return setPhysique(source, null, null);
+        if (physique == null) return setPhysique(source, null, null, true);
         Physique physiqueInstance = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,physique,source.getRegistryAccess());
         if(physiqueInstance == null) return false;
-        return setPhysique(source,physique, physiqueInstance.newData(source.getRegistryAccess()));
+        return setPhysique(source,physique, physiqueInstance.newData(source.getRegistryAccess()), true);
     }
     public static boolean setPhysique(OriginSource source, Identifier physique, PhysiqueData physiqueData) {
+        return setPhysique(source, physique, physiqueData, true);
+    }
+    public static boolean setPhysique(OriginSource source, Identifier physique, PhysiqueData physiqueData, boolean checkRequirements) {
 
         PhysiqueHolder holder = getPhysiqueHolder(source);
 
@@ -136,6 +138,9 @@ public class AscensionOriginSourceHelper {
         Physique newPhysiqueDefinition = pre.getNewPhysique(source.getRegistryAccess());
 
         if (newPhysique != null && (newPhysiqueDefinition == null || newPhysiqueData == null)) {
+            return false;
+        }
+        if (checkRequirements && newPhysiqueDefinition != null && !newPhysiqueDefinition.requirements().test(source)) {
             return false;
         }
 
@@ -202,7 +207,7 @@ public class AscensionOriginSourceHelper {
         if(bloodline == null)return false;
         Bloodline bloodlineInstance = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodline,source.getRegistryAccess());
         if(bloodlineInstance == null) return false;
-        return addBloodline(source,bloodline,bloodlineInstance.newData(source.getRegistryAccess()));
+        return addBloodline(source,bloodline,bloodlineInstance.newData(source.getRegistryAccess()), true);
     }
     public static void mergeBloodline(OriginSource source,Identifier bloodline,BloodlineData data){
 
@@ -219,6 +224,9 @@ public class AscensionOriginSourceHelper {
     }
     //TODO consider creating a replace bloodline event as well
     public static boolean addBloodline(OriginSource source,Identifier bloodline, BloodlineData data ) {
+        return addBloodline(source, bloodline, data, true);
+    }
+    public static boolean addBloodline(OriginSource source,Identifier bloodline, BloodlineData data, boolean checkRequirements) {
         if(bloodline == null) return false;
         if(getBloodlineHolder(source).hasBloodline(bloodline)) {
             source.startProcess("merge_bloodline");
@@ -230,6 +238,8 @@ public class AscensionOriginSourceHelper {
         BloodlineEvent.Added.Pre pre = new BloodlineEvent.Added.Pre(bloodline,data,source);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
+        Bloodline bloodlineDefinition = pre.getBloodline(source.getRegistryAccess());
+        if (bloodlineDefinition == null || checkRequirements && !bloodlineDefinition.requirements().test(source)) return false;
 
         boolean result = getBloodlineHolder(source).addBloodline(bloodline, data);
         if(!result) return false;
@@ -237,14 +247,14 @@ public class AscensionOriginSourceHelper {
         source.startProcess("add_bloodline");
         int purity = data.getPurity();
         data.setPurity(1);
-        Collection<Identifier> toAdd = pre.getBloodline(source.getRegistryAccess()).onAdded(source,pre.getBloodlineData());
+        Collection<Identifier> toAdd = bloodlineDefinition.onAdded(source,pre.getBloodlineData());
 
-        if(pre.getBloodline(source.getRegistryAccess()) != null){
+        if(bloodlineDefinition != null){
             for(LivingEntity entity : source.getAttachedEntities()){
-                pre.getBloodline(source.getRegistryAccess()).applyToEntity(entity,pre.getBloodlineData());
+                bloodlineDefinition.applyToEntity(entity,pre.getBloodlineData());
             }
         }
-        pre.getBloodline(source.getRegistryAccess()).handlePurityChange(source,data,purity);
+        bloodlineDefinition.handlePurityChange(source,data,purity);
 
         for(Identifier path : toAdd){
             addPath(source,path,pre.getBloodlineIdentifier());
@@ -535,10 +545,13 @@ public class AscensionOriginSourceHelper {
         Technique techniqueInstance = CoreRegistries.safeAccess(
                 CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
         );
-        return techniqueInstance != null && addTechnique(source, technique, techniqueInstance.newData());
+        return techniqueInstance != null && addTechnique(source, technique, techniqueInstance.newData(), true);
     }
 
     public static boolean addTechnique(OriginSource source, Identifier technique, TechniqueData data) {
+        return addTechnique(source, technique, data, true);
+    }
+    public static boolean addTechnique(OriginSource source, Identifier technique, TechniqueData data, boolean checkRequirements) {
         if (technique == null || data == null || hasTechnique(source, technique)) {
             return false;
         }
@@ -546,6 +559,9 @@ public class AscensionOriginSourceHelper {
                 CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
         );
         if (techniqueInstance == null || !broadcastTechniqueAddedAttempt(source, technique, data)) {
+            return false;
+        }
+        if (checkRequirements && !techniqueInstance.requirements().test(source)) {
             return false;
         }
         if (!getTechniqueHolder(source).addTechnique(technique, data)) {

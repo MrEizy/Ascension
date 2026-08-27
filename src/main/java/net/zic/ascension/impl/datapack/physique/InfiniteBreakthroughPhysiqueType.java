@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.physique.Physique;
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
@@ -44,7 +45,8 @@ public class InfiniteBreakthroughPhysiqueType extends PhysiqueType {
                         PathBonusModifier.CODEC.optionalFieldOf("path_bonus_modifiers",List.of()).forGetter(InfiniteBreakthroughPhysique::pathBonusModifiers),
                         Identifier.CODEC.fieldOf("infinite_path").forGetter(InfiniteBreakthroughPhysique::path),
                         Codec.INT.fieldOf("infinite_realm").forGetter(InfiniteBreakthroughPhysique::infiniteRealm),
-                        AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(InfiniteBreakthroughPhysique::itemTooltip)
+                        AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(InfiniteBreakthroughPhysique::itemTooltip),
+                        RequirementHolder.CODEC.optionalFieldOf("requirements", RequirementHolder.EMPTY).forGetter(InfiniteBreakthroughPhysique::requirements)
                 ).apply(instance, InfiniteBreakthroughPhysique::new)
         );
     }

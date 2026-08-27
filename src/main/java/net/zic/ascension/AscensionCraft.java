@@ -35,6 +35,7 @@ import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
 import net.zic.ascension.impl.datapack.path.AscensionPathTypes;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionConditionTypes;
+import net.zic.ascension.impl.datapack.requirement.AscensionRequirementTypes;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
@@ -118,6 +119,7 @@ public class AscensionCraft {
         AscensionBloodlineTypes.register(modEventBus);
         AscensionProgressActionTypes.register(modEventBus);
         AscensionProgressActionConditionTypes.register(modEventBus);
+        AscensionRequirementTypes.register(modEventBus);
         AscensionSkillTypes.register(modEventBus);
         AscensionTechniqueTypes.register(modEventBus);
         AscensionPathTypes.register(modEventBus);

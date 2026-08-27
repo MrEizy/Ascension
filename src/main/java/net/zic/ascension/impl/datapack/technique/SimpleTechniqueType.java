@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueSkillDefinition;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
@@ -37,7 +38,8 @@ public class SimpleTechniqueType extends TechniqueType {
                         .forGetter(SimpleTechnique::getMajorRealmOverrides),
                 Codec.unboundedMap(Identifier.CODEC, TechniqueSkillDefinition.CODEC).optionalFieldOf("skills", Map.of()).forGetter(SimpleTechnique::getSkills),
                 ProgressActionHolder.PROGRESS_HOLDER_CODEC.optionalFieldOf("realm_change_handler", emptyHandler).forGetter(SimpleTechnique::getHolder),
-                AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(Technique::itemTooltip)
+                AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(Technique::itemTooltip),
+                RequirementHolder.CODEC.optionalFieldOf("requirements", RequirementHolder.EMPTY).forGetter(Technique::requirements)
         ).apply(instance, (
                 name,
                 description,
@@ -50,7 +52,8 @@ public class SimpleTechniqueType extends TechniqueType {
                 overrides,
                 skills,
                 handler,
-                itemTooltip
+                itemTooltip,
+                requirements
         ) -> new SimpleTechnique(
                 name,
                 description,
@@ -63,7 +66,8 @@ public class SimpleTechniqueType extends TechniqueType {
                 itemTooltip,
                 skills,
                 handler,
-                overrides
+                overrides,
+                requirements
         )));
     }
 }

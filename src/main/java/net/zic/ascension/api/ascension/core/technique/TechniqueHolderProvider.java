@@ -32,7 +32,7 @@ public class TechniqueHolderProvider implements DataSource {
 
         holder.clearContainer();
         for (Map.Entry<Identifier, TechniqueData> entry : techniques.entrySet()) {
-            AscensionOriginSourceHelper.addTechnique(source, entry.getKey(), entry.getValue());
+            AscensionOriginSourceHelper.addTechnique(source, entry.getKey(), entry.getValue(), false);
         }
     }
 

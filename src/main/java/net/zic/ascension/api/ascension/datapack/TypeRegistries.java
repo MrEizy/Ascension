@@ -10,6 +10,7 @@ import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
+import net.zic.ascension.api.ascension.datapack.requirement.RequirementType;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
@@ -30,6 +31,7 @@ public final class TypeRegistries {
     public static final Registry<TribulationType> TRIBULATION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "tribulation_type");
     public static final Registry<ProgressActionType> PROGRESS_ACTION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "progression_action_type");
     public static final Registry<ProgressActionConditionType> PROGRESS_ACTION_CONDITION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "progression_action_condition_type");
+    public static final Registry<RequirementType> REQUIREMENT_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "requirement_type");
     public static final Registry<CodecType<ScaledValue.Source>> SCALED_VALUE_SOURCE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "scaled_value_source_type");
     public static final Registry<CodecType<SkillEffectModule>> SKILL_EFFECT_MODULE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "skill_effect_module_type");
     public static final Registry<CodecType<SkillAction>> SKILL_ACTION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "skill_action_type");
@@ -51,6 +53,7 @@ public final class TypeRegistries {
         event.register(TRIBULATION_TYPE_REGISTRY);
         event.register(PROGRESS_ACTION_TYPE_REGISTRY);
         event.register(PROGRESS_ACTION_CONDITION_TYPE_REGISTRY);
+        event.register(REQUIREMENT_TYPE_REGISTRY);
         event.register(SCALED_VALUE_SOURCE_TYPE_REGISTRY);
         event.register(SKILL_EFFECT_MODULE_TYPE_REGISTRY);
         event.register(SKILL_ACTION_TYPE_REGISTRY);

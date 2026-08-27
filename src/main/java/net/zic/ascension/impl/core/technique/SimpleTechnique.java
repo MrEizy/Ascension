@@ -12,6 +12,7 @@ import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
@@ -42,6 +43,7 @@ public class SimpleTechnique implements Technique {
     private final ProgressActionHolder holder;
     private final Map<Integer, MajorRealmDefinitionOverride> majorRealmOverrides;
     private final Optional<AscensionItemTooltipDefinition> itemTooltip;
+    private final RequirementHolder requirements;
 
     public SimpleTechnique(
             Component name,
@@ -55,7 +57,8 @@ public class SimpleTechnique implements Technique {
             Optional<AscensionItemTooltipDefinition> itemTooltip,
             Map<Identifier, TechniqueSkillDefinition> skills,
             ProgressActionHolder holder,
-            Map<Integer, MajorRealmDefinitionOverride> majorRealmOverrides
+            Map<Integer, MajorRealmDefinitionOverride> majorRealmOverrides,
+            RequirementHolder requirements
     ) {
         this.name = name;
         this.description = description;
@@ -69,6 +72,7 @@ public class SimpleTechnique implements Technique {
         this.skills = skills == null ? Map.of() : Map.copyOf(skills);
         this.holder = holder;
         this.majorRealmOverrides = majorRealmOverrides == null ? Map.of() : Map.copyOf(majorRealmOverrides);
+        this.requirements = requirements == null ? RequirementHolder.EMPTY : requirements;
     }
 
     public ProgressActionHolder getHolder() {
@@ -93,6 +97,12 @@ public class SimpleTechnique implements Technique {
 
     public Optional<Integer> getHardCodedMinMajorRealm() {
         return Optional.of(minMajorRealm);
+    }
+
+
+    @Override
+    public RequirementHolder requirements() {
+        return requirements;
     }
 
     @Override

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.core.technique.TechniqueSkillDefinition;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
@@ -47,7 +48,8 @@ public final class KillProgressionTechnique extends SimpleTechnique {
             Map<Integer, MajorRealmDefinitionOverride> majorRealmOverrides,
             double baseProgress,
             double maxHealthMultiplier,
-            double playerMultiplier
+            double playerMultiplier,
+            RequirementHolder requirements
     ) {
         super(
                 name,
@@ -61,7 +63,8 @@ public final class KillProgressionTechnique extends SimpleTechnique {
                 itemTooltip,
                 skills,
                 holder,
-                majorRealmOverrides
+                majorRealmOverrides,
+                requirements
         );
         this.baseProgress = sanitizeNonNegative(baseProgress);
         this.maxHealthMultiplier = sanitizeNonNegative(maxHealthMultiplier);

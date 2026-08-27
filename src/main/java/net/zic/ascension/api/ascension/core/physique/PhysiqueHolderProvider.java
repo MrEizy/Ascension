@@ -34,7 +34,7 @@ public class PhysiqueHolderProvider implements DataSource {
         Identifier physique = holder.getPhysique();
         PhysiqueData data = holder.getData();
         holder.setPhysique(null,null);
-        AscensionOriginSourceHelper.setPhysique(source,physique,data);
+        AscensionOriginSourceHelper.setPhysique(source,physique,data,false);
         //TODO fix other holders to do this
     }
 

@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.physique.Physique;
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
@@ -42,7 +43,8 @@ public class SimplePhysiqueType extends PhysiqueType {
                         ValueContainerModifier.MAP_CODEC.optionalFieldOf("stat_modifiers", Map.of()).forGetter(SimplePhysique::statModifiers),
                         PathBonusBase.CODEC.optionalFieldOf("base_path_bonuses",List.of()).forGetter(SimplePhysique::basePathBonuses),
                         PathBonusModifier.CODEC.optionalFieldOf("path_bonus_modifiers",List.of()).forGetter(SimplePhysique::pathBonusModifiers),
-                        AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(SimplePhysique::itemTooltip)
+                        AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(SimplePhysique::itemTooltip),
+                        RequirementHolder.CODEC.optionalFieldOf("requirements", RequirementHolder.EMPTY).forGetter(SimplePhysique::requirements)
                 ).apply(instance, SimplePhysique::new)
         );
     }

@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueSkillDefinition;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
@@ -40,7 +41,8 @@ public final class KillProgressionTechniqueType extends TechniqueType {
                 AscensionItemTooltipDefinition.CODEC.optionalFieldOf("item_tooltip").forGetter(Technique::itemTooltip),
                 Codec.DOUBLE.optionalFieldOf("base_progress", 0.0D).forGetter(KillProgressionTechnique::getBaseProgress),
                 Codec.DOUBLE.optionalFieldOf("max_health_multiplier", 1.0D).forGetter(KillProgressionTechnique::getMaxHealthMultiplier),
-                Codec.DOUBLE.optionalFieldOf("player_multiplier", 1.0D).forGetter(KillProgressionTechnique::getPlayerMultiplier)
+                Codec.DOUBLE.optionalFieldOf("player_multiplier", 1.0D).forGetter(KillProgressionTechnique::getPlayerMultiplier),
+                RequirementHolder.CODEC.optionalFieldOf("requirements", RequirementHolder.EMPTY).forGetter(Technique::requirements)
         ).apply(instance, (
                 name,
                 description,
@@ -56,7 +58,8 @@ public final class KillProgressionTechniqueType extends TechniqueType {
                 itemTooltip,
                 baseProgress,
                 maxHealthMultiplier,
-                playerMultiplier
+                playerMultiplier,
+                requirements
         ) -> new KillProgressionTechnique(
                 name,
                 description,
@@ -72,7 +75,8 @@ public final class KillProgressionTechniqueType extends TechniqueType {
                 overrides,
                 baseProgress,
                 maxHealthMultiplier,
-                playerMultiplier
+                playerMultiplier,
+                requirements
         )));
     }
 }

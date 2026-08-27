@@ -11,6 +11,7 @@ import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
@@ -27,19 +28,27 @@ public class SimpleBloodline implements Bloodline {
     private final ProgressActionHolder holder;
     private final List<Identifier> unlockedPaths;
     private final Optional<AscensionItemTooltipDefinition> itemTooltip;
+    private final RequirementHolder requirements;
 
     public SimpleBloodline(
             Component name,
             Component description,
             List<Identifier> unlockedPaths,
             ProgressActionHolder holder,
-            Optional<AscensionItemTooltipDefinition> itemTooltip
+            Optional<AscensionItemTooltipDefinition> itemTooltip,
+            RequirementHolder requirements
     ) {
         this.name = name;
         this.description = description;
         this.unlockedPaths = unlockedPaths == null ? List.of() : List.copyOf(unlockedPaths);
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
         this.holder = holder;
+        this.requirements = requirements == null ? RequirementHolder.EMPTY : requirements;
+    }
+
+    @Override
+    public RequirementHolder requirements() {
+        return requirements;
     }
 
     @Override
