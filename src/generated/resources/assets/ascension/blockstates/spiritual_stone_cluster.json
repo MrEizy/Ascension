@@ -2,7 +2,7 @@
   "variants": {
     "facing=down": {
       "model": "ascension:block/spiritual_stone_cluster",
-      "x": 180
+      "x": 90
     },
     "facing=east": {
       "model": "ascension:block/spiritual_stone_cluster",
@@ -16,7 +16,7 @@
     "facing=south": {
       "model": "ascension:block/spiritual_stone_cluster",
       "x": 90,
-      "y": 180
+      "y": 90
     },
     "facing=up": {
       "model": "ascension:block/spiritual_stone_cluster"
@@ -24,7 +24,7 @@
     "facing=west": {
       "model": "ascension:block/spiritual_stone_cluster",
       "x": 90,
-      "y": 270
+      "y": 90
     }
   }
 }

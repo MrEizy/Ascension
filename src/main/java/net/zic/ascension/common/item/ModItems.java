@@ -4,6 +4,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -43,6 +44,8 @@ public class ModItems {
                     .setId(RegistryHelper.key(Registries.ITEM,AscensionCraft.MOD_ID,"technique_manual"))
                     .stacksTo(1)
             ));
+
+
 
 
 
@@ -87,6 +90,10 @@ public class ModItems {
     public static final DeferredItem<Item> RAW_FROST_SILVER = ITEMS.registerSimpleItem("raw_frost_silver");
     public static final DeferredItem<Item> FROST_SILVER_NUGGET = ITEMS.registerSimpleItem("frost_silver_nugget");
     public static final DeferredItem<Item> FROST_SILVER_INGOT = ITEMS.registerSimpleItem("frost_silver_ingot");
+
+
+    public static final DeferredItem<Item> SPIRITUAL_STONE = ITEMS.register("spiritual_stone",
+            () -> new Item(new Item.Properties().rarity(Rarity.EPIC).setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "spiritual_stone"))));
 
 
     //Herbs Items

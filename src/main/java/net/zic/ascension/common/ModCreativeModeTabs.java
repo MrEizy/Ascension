@@ -31,6 +31,7 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.JADE_BOTTLE);
 
+                        output.accept(ModItems.SPIRITUAL_STONE);
                         output.accept(ModItems.JADE);
                         output.accept(ModItems.RAW_FROST_SILVER);
                         output.accept(ModItems.FROST_SILVER_INGOT);
@@ -48,6 +49,8 @@ public class ModCreativeModeTabs {
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.BLACK_IRON_BLOCK.get()))
                     .title(Component.translatable("creativetab.ascension.blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModBlocks.SPIRITUAL_STONE_CLUSTER);
+                        output.accept(ModBlocks.SPIRIT_VEIN);
                         output.accept(ModBlocks.JADE_BLOCK);
                         output.accept(ModBlocks.JADE_ORE);
                         output.accept(ModBlocks.BLACK_IRON_BLOCK);

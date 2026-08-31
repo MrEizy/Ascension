@@ -8,6 +8,9 @@ import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.RangeSelectItemModel;
+import net.minecraft.client.renderer.item.properties.numeric.Count;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,6 +23,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
+import net.zic.ascension.common.blocks.custom.SpiritualStoneClusterBlock;
 import net.zic.ascension.common.item.ModItems;
 
 public class AscModelProvider extends ModelProvider {
@@ -87,6 +91,11 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.BLACK_IRON_INGOT.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.BLACK_IRON_NUGGET.get(), ModelTemplates.FLAT_ITEM);
 
+        //Stack sized item models
+        stackCountItemModel(itemModels, ModItems.SPIRITUAL_STONE.get(), "_small",
+                new StackTier(16, "_medium"),
+                new StackTier(32, "_large"));
+
 
 
         //Fluids
@@ -115,13 +124,65 @@ public class AscModelProvider extends ModelProvider {
         blockModels.createTrivialCube(ModBlocks.FROST_SILVER_BLOCK.get());
         blockModels.createTrivialCube(ModBlocks.BLACK_IRON_ORE.get());
         blockModels.createTrivialCube(ModBlocks.BLACK_IRON_BLOCK.get());
+        blockModels.createTrivialCube(ModBlocks.SPIRIT_VEIN.get());
 
 
         //Block Entities
         fermentingBarrelModel(blockModels);
+        spiritualStoneClusterModel(blockModels);
 
         //Fluids
         blockModels.createNonTemplateModelBlock(ModBlocks.LIQUIFIED_SPIRITUAL_QI_BLOCK.get());
+    }
+
+
+    private void stackCountItemModel(ItemModelGenerators itemModels, Item item, String fallbackSuffix, StackTier... tiers) {
+        String itemPath = BuiltInRegistries.ITEM.getKey(item).getPath();
+        ItemModel.Unbaked fallback = flatTierModel(itemModels, itemPath, fallbackSuffix);
+
+        RangeSelectItemModel.Entry[] overrides = new RangeSelectItemModel.Entry[tiers.length];
+        for (int i = 0; i < tiers.length; i++) {
+            ItemModel.Unbaked tierModel = flatTierModel(itemModels, itemPath, tiers[i].suffix());
+            overrides[i] = ItemModelUtils.override(tierModel, tiers[i].threshold());
+        }
+
+        itemModels.itemModelOutput.accept(item,
+                ItemModelUtils.rangeSelect(new Count(false), 1.0f, fallback, overrides));
+    }
+
+
+    private ItemModel.Unbaked flatTierModel(ItemModelGenerators itemModels, String itemPath, String suffix) {
+        Identifier model = ModelTemplates.FLAT_ITEM.create(
+                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/" + itemPath + suffix),
+                TextureMapping.layer0(new Material(Identifier.fromNamespaceAndPath(
+                        AscensionCraft.MOD_ID, "item/" + itemPath + suffix))),
+                itemModels.modelOutput);
+        return ItemModelUtils.plainModel(model);
+    }
+
+
+    private record StackTier(float threshold, String suffix) {}
+
+    private void spiritualStoneClusterModel(BlockModelGenerators blockModels) {
+        Block block = ModBlocks.SPIRITUAL_STONE_CLUSTER.get();
+        Identifier model = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/spiritual_stone_cluster");
+        MultiVariant base = BlockModelGenerators.plainVariant(model);
+
+        var xRot180 = BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.X_ROT_90);
+        var yRot180 = BlockModelGenerators.Y_ROT_90.then(BlockModelGenerators.Y_ROT_90);
+        var yRot270 = yRot180.then(BlockModelGenerators.Y_ROT_90);
+
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(block, base)
+                        .with(PropertyDispatch.modify(SpiritualStoneClusterBlock.FACING)
+                                .select(Direction.UP, BlockModelGenerators.NOP)
+                                .select(Direction.DOWN, xRot180)
+                                .select(Direction.NORTH, BlockModelGenerators.X_ROT_90)
+                                .select(Direction.SOUTH, BlockModelGenerators.X_ROT_90.then(yRot180))
+                                .select(Direction.EAST, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_90))
+                                .select(Direction.WEST, BlockModelGenerators.X_ROT_90.then(yRot270))));
+
+        blockModels.registerSimpleItemModel(block, model);
     }
 
     private void podHerbModel(BlockModelGenerators blockModels, PodHerbBlock block, String texturePath) {

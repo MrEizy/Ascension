@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -52,6 +53,15 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
                 createOreDrop(ModBlocks.FROST_SILVER_ORE.get(), ModItems.RAW_FROST_SILVER.get()));
         add(ModBlocks.JADE_ORE.get(),
                 createMultipleOreDrops(ModBlocks.JADE_ORE.get(), ModItems.JADE.get(), 1, 4));
+
+        add(ModBlocks.SPIRITUAL_STONE_CLUSTER.get(),
+                createMultipleOreDrops(ModBlocks.SPIRITUAL_STONE_CLUSTER.get(), ModItems.SPIRITUAL_STONE.get(), 1, 3));
+
+
+
+        //Key Blocks
+
+
 
 
         add(ModBlocks.JADE_DEW_GRASS_CROP.get(), createSeedHerbDrops(
