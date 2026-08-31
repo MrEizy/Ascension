@@ -1,7 +1,7 @@
 # Ascension Bloodlines
 This page documents the datapack format used to create Ascension bloodlines.
 
-Bloodlines are purity-driven progression definitions. They may unlock paths and apply stat or path-bonus gains as purity rises from `1` to `100`.
+Bloodlines are purity-driven progression definitions. They may unlock paths and apply stat, path-bonus, or skill changes as purity rises from `1` to `100`.
 
 The intended workflow is:
 
@@ -60,6 +60,7 @@ Current bloodlines use:
 | `description` | Required | Description Component |
 | `paths` | `[]` | Paths unlocked while the bloodline is owned |
 | `purity_handler` | Required | Purity conditions and progression actions |
+| `requirements` | `[]` | Requirements that must pass before the bloodline can be acquired |
 | `item_tooltip` | None | Bloodline essence presentation |
 
 Path example:
@@ -186,6 +187,27 @@ Bloodlines currently use the shared progression actions.
 }
 ```
 
+## Skills
+Purity milestones may grant or remove skills:
+
+```json
+{
+  "condition": {
+    "type": "ascension:on_purity_in_range",
+    "start": 50,
+    "end": 50
+  },
+  "actions": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": ["example:passive/dragon_instinct"]
+    }
+  ]
+}
+```
+
+When purity falls back through that milestone, the grant is reversed automatically. `ascension:remove_skills` behaves inversely: it removes skills while progressing upward and restores them when that progression is reversed.
+
 Actions may also be stored as reusable files under:
 
 ```text
@@ -270,6 +292,10 @@ ascension:heavens_path
           "stats": [
             { "id": "ascension:spirit", "value": 3.0 }
           ]
+        },
+        {
+          "type": "ascension:grant_skills",
+          "skills": ["example:passive/dragon_instinct"]
         }
       ]
     },
@@ -314,6 +340,8 @@ ascension:all_purity
 Actions:
 ascension:give_base_stats
 ascension:give_path_bonuses
+ascension:grant_skills
+ascension:remove_skills
 
 Default tooltip:
 ascension:bloodline_essence

@@ -106,7 +106,8 @@ public record RuntimeVisualDefinition(List<Element> elements) {
             VisualValue width,
             VisualValue length,
             int segments,
-            int count
+            int count,
+            AuraStyle style
     ) {
         public static final Geometry DEFAULT = new Geometry(
                 VisualValue.constant(1.0D),
@@ -115,7 +116,8 @@ public record RuntimeVisualDefinition(List<Element> elements) {
                 VisualValue.constant(1.0D),
                 VisualValue.constant(1.0D),
                 24,
-                1
+                1,
+                AuraStyle.FLAME
         );
         public static final com.mojang.serialization.MapCodec<Geometry> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 VisualValue.CODEC.optionalFieldOf("radius", DEFAULT.radius()).forGetter(Geometry::radius),
@@ -124,8 +126,21 @@ public record RuntimeVisualDefinition(List<Element> elements) {
                 VisualValue.CODEC.optionalFieldOf("width", DEFAULT.width()).forGetter(Geometry::width),
                 VisualValue.CODEC.optionalFieldOf("length", DEFAULT.length()).forGetter(Geometry::length),
                 Codec.intRange(3, 128).optionalFieldOf("segments", 24).forGetter(Geometry::segments),
-                Codec.intRange(1, 128).optionalFieldOf("count", 1).forGetter(Geometry::count)
+                Codec.intRange(1, 128).optionalFieldOf("count", 1).forGetter(Geometry::count),
+                AuraStyle.CODEC.optionalFieldOf("style", AuraStyle.FLAME).forGetter(Geometry::style)
         ).apply(instance, Geometry::new));
+
+        public Geometry(
+                VisualValue radius,
+                VisualValue innerRadius,
+                VisualValue height,
+                VisualValue width,
+                VisualValue length,
+                int segments,
+                int count
+        ) {
+            this(radius, innerRadius, height, width, length, segments, count, AuraStyle.FLAME);
+        }
 
         public Geometry {
             radius = radius == null ? DEFAULT.radius() : radius;
@@ -135,6 +150,7 @@ public record RuntimeVisualDefinition(List<Element> elements) {
             length = length == null ? DEFAULT.length() : length;
             segments = Math.clamp(segments, 3, 128);
             count = Math.clamp(count, 1, 128);
+            style = style == null ? AuraStyle.FLAME : style;
         }
     }
 
@@ -323,6 +339,8 @@ public record RuntimeVisualDefinition(List<Element> elements) {
         public static final Identifier RING = id("ring");
         public static final Identifier SHELL = id("shell");
         public static final Identifier BEAM = id("beam");
+        public static final Identifier ENERGY_BEAM = id("energy_beam");
+        public static final Identifier AURA = id("aura");
         public static final Identifier TRAIL = id("trail");
         public static final Identifier AFTERIMAGE = id("afterimage");
         public static final Identifier ENTITY_OVERLAY = id("entity_overlay");
@@ -334,6 +352,25 @@ public record RuntimeVisualDefinition(List<Element> elements) {
 
         private static Identifier id(String path) {
             return Identifier.fromNamespaceAndPath("ascension", path);
+        }
+    }
+
+    public enum AuraStyle implements StringRepresentable {
+        FLAME("flame"),
+        FLOWING("flowing"),
+        MIST("mist"),
+        STORM("storm");
+
+        public static final Codec<AuraStyle> CODEC = StringRepresentable.fromEnum(AuraStyle::values);
+        private final String name;
+
+        AuraStyle(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return name;
         }
     }
 

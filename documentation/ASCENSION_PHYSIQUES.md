@@ -14,6 +14,7 @@ The intended workflow is:
 - [Base stats](#base-stats)
 - [Stat modifiers](#stat-modifiers)
 - [Path bonuses](#path-bonuses)
+- [Requirements](#requirements)
 - [Physique essences](#physique-essences)
 - [Complete example](#complete-example)
 - [Compact reference](#compact-reference)
@@ -67,6 +68,7 @@ Normal physiques use:
 | `stat_modifiers` | `{}` | Value-container modifiers by stat |
 | `base_path_bonuses` | `{}` | Flat path bonuses by category and path |
 | `path_bonus_modifiers` | `{}` | Path-bonus modifiers by category and path |
+| `requirements` | `[]` | Requirements that must pass before the physique can be acquired |
 | `item_tooltip` | None | Physique essence presentation |
 
 Paths:
@@ -172,6 +174,23 @@ The shape is:
 category -> path -> modifier list
 ```
 
+# Requirements
+Physiques use the shared Ascension requirement list.
+
+```json
+"requirements": [
+  {
+    "type": "ascension:path_realm",
+    "path": "ascension:foundation/body",
+    "minimum_major_realm": 2
+  }
+]
+```
+
+See `DATAPACK_HELP.md` for the compact requirement reference.
+
+Physiques may also grant toggleable state/form passives through `skills`. The form behaviour itself belongs in the passive skill JSON, so the physique can stay focused on origin bonuses.
+
 # Physique essences
 The standard tooltip setup is:
 
@@ -259,6 +278,7 @@ base_stats
 stat_modifiers
 base_path_bonuses
 path_bonus_modifiers
+requirements
 item_tooltip
 
 Modifier operations:

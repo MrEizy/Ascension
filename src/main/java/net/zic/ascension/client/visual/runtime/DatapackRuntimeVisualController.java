@@ -250,6 +250,39 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
         } else if (primitive.equals(RuntimeVisualDefinition.Types.BEAM)) {
             VertexConsumer lines = lineBuffer(buffers, layer.appearance().noDepth());
             drawBeams(lines, pose, state, camera, layer, length, color, partialTick);
+        } else if (primitive.equals(RuntimeVisualDefinition.Types.ENERGY_BEAM)) {
+            VertexConsumer surface = energySurfaceBuffer(buffers, layer.appearance().noDepth());
+            drawEnergyBeams(
+                    surface,
+                    pose,
+                    state,
+                    camera,
+                    layer,
+                    width,
+                    length,
+                    layer.geometry().segments(),
+                    color,
+                    partialTick
+            );
+        } else if (primitive.equals(RuntimeVisualDefinition.Types.AURA)) {
+            if (hideAuraInFirstPerson(state)) {
+                return;
+            }
+            VertexConsumer surface = auraSurfaceBuffer(buffers, layer.appearance().noDepth());
+            for (Vec3 center : centers) {
+                drawAura(
+                        surface,
+                        pose,
+                        center.subtract(camera),
+                        radius,
+                        height,
+                        layer.geometry().count(),
+                        layer.geometry().style(),
+                        color,
+                        time,
+                        state.seed()
+                );
+            }
         } else if (primitive.equals(RuntimeVisualDefinition.Types.DECAL)) {
             for (Vec3 center : centers) {
                 drawDecal(
@@ -539,6 +572,277 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
         );
     }
 
+    private void drawEnergyBeams(
+            VertexConsumer surface,
+            PoseStack.Pose pose,
+            RuntimeVisualState state,
+            Vec3 camera,
+            RuntimeVisualDefinition.Element layer,
+            double width,
+            double length,
+            int segments,
+            RuntimeVisualDefinition.VisualColor color,
+            float partialTick
+    ) {
+        Vec3 offset = layer.transform().offset();
+        double radius = Math.max(0.005D, width * 0.5D);
+        int radialSegments = Math.clamp(segments, 4, 32);
+
+        if (!state.links().isEmpty() && !state.points().isEmpty()) {
+            for (RuntimeVisualState.Link link : state.links()) {
+                if (link.from() >= state.points().size() || link.to() >= state.points().size()) {
+                    continue;
+                }
+                Vec3 start = state.points().get(link.from()).add(offset);
+                Vec3 end = state.points().get(link.to()).add(offset);
+                start = firstPersonBeamStart(state, start, end);
+                drawEnergyBeamSegment(
+                        surface,
+                        pose,
+                        start.subtract(camera),
+                        end.subtract(camera),
+                        radius,
+                        radialSegments,
+                        color
+                );
+            }
+            return;
+        }
+
+        Vec3 start = ClientRuntimeVisuals.position(state, partialTick).add(offset);
+        Vec3 direction = state.offset().lengthSqr() <= 1.0E-8D
+                ? new Vec3(0.0D, 1.0D, 0.0D)
+                : state.offset().normalize();
+        Vec3 end = start.add(direction.scale(length));
+        start = firstPersonBeamStart(state, start, end);
+        drawEnergyBeamSegment(
+                surface,
+                pose,
+                start.subtract(camera),
+                end.subtract(camera),
+                radius,
+                radialSegments,
+                color
+        );
+    }
+
+    private void drawEnergyBeamSegment(
+            VertexConsumer surface,
+            PoseStack.Pose pose,
+            Vec3 start,
+            Vec3 end,
+            double radius,
+            int segments,
+            RuntimeVisualDefinition.VisualColor color
+    ) {
+        Vec3 axis = end.subtract(start);
+        if (axis.lengthSqr() <= 1.0E-8D) {
+            return;
+        }
+
+        Vec3 direction = axis.normalize();
+        Vec3 reference = Math.abs(direction.y) < 0.95D
+                ? new Vec3(0.0D, 1.0D, 0.0D)
+                : new Vec3(1.0D, 0.0D, 0.0D);
+        Vec3 right = direction.cross(reference).normalize();
+        Vec3 up = right.cross(direction).normalize();
+
+        for (int index = 0; index < segments; index++) {
+            double firstAngle = Math.PI * 2.0D * index / segments;
+            double secondAngle = Math.PI * 2.0D * (index + 1) / segments;
+            Vec3 firstOffset = right.scale(Math.cos(firstAngle) * radius).add(up.scale(Math.sin(firstAngle) * radius));
+            Vec3 secondOffset = right.scale(Math.cos(secondAngle) * radius).add(up.scale(Math.sin(secondAngle) * radius));
+            energyQuad(
+                    surface,
+                    pose,
+                    start.add(firstOffset),
+                    end.add(firstOffset),
+                    end.add(secondOffset),
+                    start.add(secondOffset),
+                    color
+            );
+        }
+
+        RuntimeVisualDefinition.VisualColor cap = color.withAlpha(Math.min(255, Math.round(color.alpha() * 1.2F)));
+        for (int index = 1; index < segments - 1; index++) {
+            Vec3 first = right.scale(radius);
+            double secondAngle = Math.PI * 2.0D * index / segments;
+            double thirdAngle = Math.PI * 2.0D * (index + 1) / segments;
+            Vec3 second = right.scale(Math.cos(secondAngle) * radius).add(up.scale(Math.sin(secondAngle) * radius));
+            Vec3 third = right.scale(Math.cos(thirdAngle) * radius).add(up.scale(Math.sin(thirdAngle) * radius));
+            energyQuad(surface, pose, start.add(first), start.add(second), start.add(third), start.add(third), cap);
+            energyQuad(surface, pose, end.add(first), end.add(third), end.add(second), end.add(second), cap);
+        }
+    }
+
+    private void drawAura(
+            VertexConsumer surface,
+            PoseStack.Pose pose,
+            Vec3 center,
+            double radius,
+            double height,
+            int count,
+            RuntimeVisualDefinition.AuraStyle style,
+            RuntimeVisualDefinition.VisualColor color,
+            double time,
+            long seed
+    ) {
+        int segments = Math.clamp(Math.max(12, count), 12, 48);
+        int verticalSegments = style == RuntimeVisualDefinition.AuraStyle.MIST ? 9 : 7;
+        double scroll = time * switch (style) {
+            case FLAME -> 0.006D;
+            case FLOWING -> 0.003D;
+            case MIST -> 0.0018D;
+            case STORM -> 0.009D;
+        } % 1.0D;
+        float styleOffset = style.ordinal() * 8.0F;
+
+        for (int radial = 0; radial < segments; radial++) {
+            double firstAngle = Math.PI * 2.0D * radial / segments;
+            double secondAngle = Math.PI * 2.0D * (radial + 1) / segments;
+            float firstU = styleOffset + (float) radial / segments + (float) scroll;
+            float secondU = styleOffset + (float) (radial + 1) / segments + (float) scroll;
+
+            for (int vertical = 0; vertical < verticalSegments; vertical++) {
+                double lower = (double) vertical / verticalSegments;
+                double upper = (double) (vertical + 1) / verticalSegments;
+                Vec3 a = auraPoint(center, radius, height, firstAngle, lower, time, seed, style);
+                Vec3 b = auraPoint(center, radius, height, secondAngle, lower, time, seed, style);
+                Vec3 c = auraPoint(center, radius, height, secondAngle, upper, time, seed, style);
+                Vec3 d = auraPoint(center, radius, height, firstAngle, upper, time, seed, style);
+
+                auraVertex(surface, pose, a, firstU, (float) lower, color);
+                auraVertex(surface, pose, b, secondU, (float) lower, color);
+                auraVertex(surface, pose, c, secondU, (float) upper, color);
+                auraVertex(surface, pose, d, firstU, (float) upper, color);
+            }
+        }
+    }
+
+    private Vec3 auraPoint(
+            Vec3 center,
+            double radius,
+            double height,
+            double angle,
+            double vertical,
+            double time,
+            long seed,
+            RuntimeVisualDefinition.AuraStyle style
+    ) {
+        double noise = unitNoise(seed, (int) Math.round(angle * 1000.0D));
+        double phase = angle + noise * switch (style) {
+            case FLAME -> 0.35D;
+            case FLOWING -> 0.18D;
+            case MIST -> 0.12D;
+            case STORM -> 0.48D;
+        };
+        double angularWave = switch (style) {
+            case FLAME -> Math.sin(phase * 3.0D + time * 0.075D) * 0.045D
+                    + Math.sin(phase * 7.0D - time * 0.052D) * 0.028D;
+            case FLOWING -> Math.sin(phase * 2.0D + time * 0.032D) * 0.025D
+                    + Math.sin(phase * 4.0D - time * 0.021D) * 0.014D;
+            case MIST -> Math.sin(phase * 2.0D + time * 0.018D) * 0.035D
+                    + Math.sin(phase * 5.0D - time * 0.014D) * 0.018D;
+            case STORM -> Math.sin(phase * 5.0D + time * 0.12D) * 0.065D
+                    + Math.sin(phase * 11.0D - time * 0.095D) * 0.038D;
+        };
+        double upperFlicker = switch (style) {
+            case FLAME -> Math.sin(phase * 5.0D + time * 0.11D) * 0.05D * vertical;
+            case FLOWING -> Math.sin(phase * 3.0D + time * 0.045D) * 0.025D * vertical;
+            case MIST -> Math.sin(phase * 2.0D + time * 0.025D) * 0.035D * vertical;
+            case STORM -> Math.sin(phase * 9.0D + time * 0.17D) * 0.085D * vertical;
+        };
+        double shape = auraRadiusProfile(style, vertical);
+        double currentRadius = radius * Math.max(0.02D, shape + angularWave + upperFlicker);
+        double tipVariation = switch (style) {
+            case FLAME -> 0.88D
+                    + unitNoise(seed ^ 0x6A09E667F3BCC909L, (int) Math.round(angle * 1000.0D)) * 0.22D
+                    + Math.sin(phase * 4.0D + time * 0.09D) * 0.035D;
+            case FLOWING -> 0.94D
+                    + unitNoise(seed ^ 0x6A09E667F3BCC909L, (int) Math.round(angle * 1000.0D)) * 0.10D
+                    + Math.sin(phase * 2.0D + time * 0.035D) * 0.02D;
+            case MIST -> 0.91D
+                    + unitNoise(seed ^ 0x6A09E667F3BCC909L, (int) Math.round(angle * 1000.0D)) * 0.08D
+                    + Math.sin(phase * 2.0D + time * 0.02D) * 0.025D;
+            case STORM -> 0.82D
+                    + unitNoise(seed ^ 0x6A09E667F3BCC909L, (int) Math.round(angle * 1000.0D)) * 0.30D
+                    + Math.sin(phase * 7.0D + time * 0.15D) * 0.055D;
+        };
+        double y = center.y - height * 0.32D + height * vertical * tipVariation;
+        double sway = Math.sin(time * switch (style) {
+            case FLAME -> 0.045D;
+            case FLOWING -> 0.026D;
+            case MIST -> 0.018D;
+            case STORM -> 0.075D;
+        } + phase * 2.0D) * radius * switch (style) {
+            case FLAME -> 0.035D;
+            case FLOWING -> 0.055D;
+            case MIST -> 0.075D;
+            case STORM -> 0.05D;
+        } * vertical;
+
+        return new Vec3(
+                center.x + Math.cos(angle) * currentRadius + Math.cos(angle + Math.PI * 0.5D) * sway,
+                y,
+                center.z + Math.sin(angle) * currentRadius + Math.sin(angle + Math.PI * 0.5D) * sway
+        );
+    }
+
+    private double auraRadiusProfile(RuntimeVisualDefinition.AuraStyle style, double vertical) {
+        return switch (style) {
+            case FLAME -> {
+                if (vertical < 0.12D) {
+                    yield 0.56D + vertical / 0.12D * 0.44D;
+                }
+                if (vertical < 0.48D) {
+                    yield 1.0D - (vertical - 0.12D) / 0.36D * 0.08D;
+                }
+                if (vertical < 0.76D) {
+                    yield 0.92D - (vertical - 0.48D) / 0.28D * 0.32D;
+                }
+                yield 0.60D - (vertical - 0.76D) / 0.24D * 0.56D;
+            }
+            case FLOWING -> {
+                if (vertical < 0.16D) {
+                    yield 0.62D + vertical / 0.16D * 0.28D;
+                }
+                if (vertical < 0.62D) {
+                    yield 0.90D - (vertical - 0.16D) / 0.46D * 0.12D;
+                }
+                yield 0.78D - (vertical - 0.62D) / 0.38D * 0.50D;
+            }
+            case MIST -> {
+                if (vertical < 0.18D) {
+                    yield 0.72D + vertical / 0.18D * 0.22D;
+                }
+                if (vertical < 0.72D) {
+                    yield 0.94D - (vertical - 0.18D) / 0.54D * 0.10D;
+                }
+                yield 0.84D - (vertical - 0.72D) / 0.28D * 0.28D;
+            }
+            case STORM -> {
+                if (vertical < 0.10D) {
+                    yield 0.52D + vertical / 0.10D * 0.50D;
+                }
+                if (vertical < 0.42D) {
+                    yield 1.02D - (vertical - 0.10D) / 0.32D * 0.08D;
+                }
+                if (vertical < 0.70D) {
+                    yield 0.94D - (vertical - 0.42D) / 0.28D * 0.38D;
+                }
+                yield 0.56D - (vertical - 0.70D) / 0.30D * 0.54D;
+            }
+        };
+    }
+
+    private double unitNoise(long seed, int index) {
+        long value = seed + 0x9E3779B97F4A7C15L * (index + 1L);
+        value = (value ^ value >>> 30) * 0xBF58476D1CE4E5B9L;
+        value = (value ^ value >>> 27) * 0x94D049BB133111EBL;
+        value ^= value >>> 31;
+        return (value >>> 11) * 0x1.0p-53;
+    }
+
     private void drawDecal(
             MultiBufferSource.BufferSource buffers,
             PoseStack.Pose pose,
@@ -774,6 +1078,70 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
         return result;
     }
 
+    private Vec3 firstPersonBeamStart(RuntimeVisualState state, Vec3 start, Vec3 end) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player == null
+                || state.ownerId() == null
+                || !state.ownerId().equals(minecraft.player.getUUID())
+                || !minecraft.options.getCameraType().isFirstPerson()) {
+            return start;
+        }
+        Vec3 axis = end.subtract(start);
+        double length = axis.length();
+        if (length <= 1.0E-8D) {
+            return start;
+        }
+        double offset = Math.min(length * 0.45D, Math.max(1.35D, state.primaryValue() * 2.8D));
+        return start.add(axis.scale(offset / length));
+    }
+
+    private boolean hideAuraInFirstPerson(RuntimeVisualState state) {
+        Minecraft minecraft = Minecraft.getInstance();
+        return minecraft.player != null
+                && state.ownerId() != null
+                && state.ownerId().equals(minecraft.player.getUUID())
+                && minecraft.options.getCameraType().isFirstPerson();
+    }
+
+    private VertexConsumer auraSurfaceBuffer(MultiBufferSource.BufferSource buffers, boolean noDepth) {
+        return buffers.getBuffer(noDepth ? ModRenderTypes.auraSurfaceNoDepth() : ModRenderTypes.auraSurface());
+    }
+
+    private VertexConsumer energySurfaceBuffer(MultiBufferSource.BufferSource buffers, boolean noDepth) {
+        return buffers.getBuffer(noDepth ? ModRenderTypes.energySurfaceNoDepth() : ModRenderTypes.energySurface());
+    }
+
+    private void energyQuad(
+            VertexConsumer surface,
+            PoseStack.Pose pose,
+            Vec3 a,
+            Vec3 b,
+            Vec3 c,
+            Vec3 d,
+            RuntimeVisualDefinition.VisualColor color
+    ) {
+        vertex(surface, pose, a, color);
+        vertex(surface, pose, b, color);
+        vertex(surface, pose, c, color);
+        vertex(surface, pose, d, color);
+    }
+
+    private void gradientEnergyQuad(
+            VertexConsumer surface,
+            PoseStack.Pose pose,
+            Vec3 a,
+            Vec3 b,
+            Vec3 c,
+            Vec3 d,
+            RuntimeVisualDefinition.VisualColor lower,
+            RuntimeVisualDefinition.VisualColor upper
+    ) {
+        vertex(surface, pose, a, lower);
+        vertex(surface, pose, b, lower);
+        vertex(surface, pose, c, upper);
+        vertex(surface, pose, d, upper);
+    }
+
     private VertexConsumer lineBuffer(MultiBufferSource.BufferSource buffers, boolean noDepth) {
         return buffers.getBuffer(noDepth ? ModRenderTypes.linesNoDepth() : ModRenderTypes.energyLines());
     }
@@ -849,6 +1217,19 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
         texturedVertex(vertices, pose, b, 1.0F, 1.0F, color, normal);
         texturedVertex(vertices, pose, c, 1.0F, 0.0F, color, normal);
         texturedVertex(vertices, pose, d, 0.0F, 0.0F, color, normal);
+    }
+
+    private void auraVertex(
+            VertexConsumer vertices,
+            PoseStack.Pose pose,
+            Vec3 point,
+            float u,
+            float v,
+            RuntimeVisualDefinition.VisualColor color
+    ) {
+        vertices.addVertex(pose, (float) point.x, (float) point.y, (float) point.z)
+                .setColor(color.red(), color.green(), color.blue(), color.alpha())
+                .setUv(u, v);
     }
 
     private void texturedVertex(
@@ -1042,6 +1423,8 @@ public final class DatapackRuntimeVisualController implements RuntimeVisualContr
                 RuntimeVisualDefinition.Types.RING,
                 RuntimeVisualDefinition.Types.SHELL,
                 RuntimeVisualDefinition.Types.BEAM,
+                RuntimeVisualDefinition.Types.ENERGY_BEAM,
+                RuntimeVisualDefinition.Types.AURA,
                 RuntimeVisualDefinition.Types.DECAL,
                 RuntimeVisualDefinition.Types.TRAIL,
                 RuntimeVisualDefinition.Types.AFTERIMAGE,

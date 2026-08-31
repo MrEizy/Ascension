@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -20,13 +21,18 @@ import net.zic.ascension.api.ascension.core.skill.ProgressingSkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
+import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.skill.passive.PassiveModifier;
 import net.zic.ascension.api.ascension.core.skill.passive.PassiveTrigger;
 import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
+import net.zic.ascension.impl.core.skill.castable.SkillActionRuntime;
 
 import java.util.List;
 import java.util.Map;
@@ -44,6 +50,11 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
     private final SkillDefinitions definitions;
     private final boolean enabledByDefault;
     private final Optional<Upkeep> upkeep;
+    private final Optional<Identifier> stateGroup;
+    private final List<Identifier> grantedSkills;
+    private final List<SkillCondition> enableConditions;
+    private final List<SkillAction> enableActions;
+    private final List<SkillAction> disableActions;
 
     protected PassiveSkill(
             Component name,
@@ -55,7 +66,12 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
             List<PassiveTrigger> triggers,
             SkillDefinitions definitions,
             boolean enabledByDefault,
-            Optional<Upkeep> upkeep
+            Optional<Upkeep> upkeep,
+            Optional<Identifier> stateGroup,
+            List<Identifier> grantedSkills,
+            List<SkillCondition> enableConditions,
+            List<SkillAction> enableActions,
+            List<SkillAction> disableActions
     ) {
         this.name = name;
         this.description = description;
@@ -69,6 +85,11 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
         this.definitions = definitions == null ? SkillDefinitions.EMPTY : definitions;
         this.enabledByDefault = enabledByDefault;
         this.upkeep = upkeep == null ? Optional.empty() : upkeep;
+        this.stateGroup = stateGroup == null ? Optional.empty() : stateGroup;
+        this.grantedSkills = grantedSkills == null ? List.of() : List.copyOf(grantedSkills);
+        this.enableConditions = enableConditions == null ? List.of() : List.copyOf(enableConditions);
+        this.enableActions = enableActions == null ? List.of() : List.copyOf(enableActions);
+        this.disableActions = disableActions == null ? List.of() : List.copyOf(disableActions);
     }
 
     public static PassiveSkill create(
@@ -82,11 +103,16 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
             SkillDefinitions definitions,
             boolean toggleable,
             boolean enabledByDefault,
-            Optional<Upkeep> upkeep
+            Optional<Upkeep> upkeep,
+            Optional<Identifier> stateGroup,
+            List<Identifier> grantedSkills,
+            List<SkillCondition> enableConditions,
+            List<SkillAction> enableActions,
+            List<SkillAction> disableActions
     ) {
         return toggleable
-                ? new Toggleable(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep)
-                : new PassiveSkill(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, true, Optional.empty());
+                ? new Toggleable(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep, stateGroup, grantedSkills, enableConditions, enableActions, disableActions)
+                : new PassiveSkill(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, true, Optional.empty(), Optional.empty(), List.of(), List.of(), List.of(), List.of());
     }
 
     public int getConfiguredLevels() {
@@ -124,6 +150,26 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
 
     public Optional<Upkeep> getUpkeep() {
         return upkeep;
+    }
+
+    public Optional<Identifier> stateGroup() {
+        return stateGroup;
+    }
+
+    public List<Identifier> grantedSkills() {
+        return grantedSkills;
+    }
+
+    public List<SkillCondition> enableConditions() {
+        return enableConditions;
+    }
+
+    public List<SkillAction> enableActions() {
+        return enableActions;
+    }
+
+    public List<SkillAction> disableActions() {
+        return disableActions;
     }
 
     public boolean isActive(SkillData data) {
@@ -184,23 +230,57 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
     @Override
     public void onAdded(OriginSource source, SkillData data) {
         if (isActive(data)) {
-            applyModifiers(source);
+            if (this instanceof Toggleable) {
+                activateState(source);
+            } else {
+                applyModifiers(source);
+            }
         }
     }
 
     @Override
     public void onRemoved(OriginSource source, SkillData data) {
         if (isActive(data)) {
-            removeModifiers(source);
+            if (this instanceof Toggleable) {
+                deactivateState(source);
+            } else {
+                removeModifiers(source);
+            }
         }
     }
 
     @Override
     public void applyToEntity(LivingEntity entity, SkillData data) {
+        if (!isActive(data)) {
+            return;
+        }
+        OriginSource source = AscensionOriginSourceHelper.getEntitySource(entity);
+        Identifier skillId = skillId(source);
+        if (skillId == null) {
+            return;
+        }
+        modifiers.forEach(modifier -> modifier.applyToEntity(entity, skillId));
+        if (this instanceof Toggleable && entity.level() instanceof ServerLevel level) {
+            SkillActionContext context = new SkillActionContext(level, entity, skillId, null, null, 0.0D, Map.of());
+            SkillActionRuntime.restorePersistentVisuals(context, enableActions);
+        }
     }
 
     @Override
     public void removeFromEntity(LivingEntity entity, SkillData data) {
+        if (!isActive(data)) {
+            return;
+        }
+        OriginSource source = AscensionOriginSourceHelper.getEntitySource(entity);
+        Identifier skillId = skillId(source);
+        if (skillId == null) {
+            return;
+        }
+        modifiers.forEach(modifier -> modifier.removeFromEntity(entity, skillId));
+        if (this instanceof Toggleable && entity.level() instanceof ServerLevel level) {
+            SkillActionContext context = new SkillActionContext(level, entity, skillId, null, null, 0.0D, Map.of());
+            SkillActionRuntime.clearPersistentVisuals(context, enableActions);
+        }
     }
 
     @Override
@@ -229,6 +309,40 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
         Identifier skillId = skillId(source);
         if (skillId != null) {
             modifiers.forEach(modifier -> modifier.remove(source, skillId));
+        }
+    }
+
+    protected void activateState(OriginSource source) {
+        Identifier skillId = skillId(source);
+        if (skillId == null) {
+            return;
+        }
+        stateGroup.ifPresent(group -> PassiveSkillService.disableStateGroup(source, group, skillId));
+        applyModifiers(source);
+        grantedSkills.forEach(skill -> AscensionOriginSourceHelper.addSkill(source, skill, skillId));
+        runStateActions(source, skillId, enableActions);
+    }
+
+    protected void deactivateState(OriginSource source) {
+        Identifier skillId = skillId(source);
+        if (skillId == null) {
+            return;
+        }
+        runStateActions(source, skillId, disableActions);
+        grantedSkills.forEach(skill -> AscensionOriginSourceHelper.removeSkill(source, skill, skillId));
+        removeModifiers(source);
+    }
+
+    private void runStateActions(OriginSource source, Identifier skillId, List<SkillAction> actions) {
+        if (actions.isEmpty()) {
+            return;
+        }
+        for (LivingEntity entity : source.getAttachedEntities()) {
+            if (!(entity.level() instanceof ServerLevel level)) {
+                continue;
+            }
+            SkillActionContext context = new SkillActionContext(level, entity, skillId, null, null, 0.0D, Map.of());
+            SkillActionRuntime.execute(context, actions);
         }
     }
 
@@ -263,9 +377,14 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
                 List<PassiveTrigger> triggers,
                 SkillDefinitions definitions,
                 boolean enabledByDefault,
-                Optional<Upkeep> upkeep
+                Optional<Upkeep> upkeep,
+                Optional<Identifier> stateGroup,
+                List<Identifier> grantedSkills,
+                List<SkillCondition> enableConditions,
+                List<SkillAction> enableActions,
+                List<SkillAction> disableActions
         ) {
-            super(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep);
+            super(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep, stateGroup, grantedSkills, enableConditions, enableActions, disableActions);
         }
 
         @Override
@@ -282,17 +401,22 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
 
         @Override
         public boolean canEnable(LivingEntity entity, OriginSource source, SkillData data) {
-            return upkeepAvailable(entity, source, true);
+            if (!upkeepAvailable(entity, source, true) || !(entity.level() instanceof ServerLevel level)) {
+                return false;
+            }
+            Identifier skillId = CoreRegistries.SKILL_REGISTRY.get(source.getRegistryAccess()).getKey(this);
+            SkillActionContext context = new SkillActionContext(level, entity, skillId, null, null, 0.0D, Map.of());
+            return enableConditions().stream().allMatch(condition -> condition != null && condition.test(context));
         }
 
         @Override
         public void onEnabled(OriginSource source, SkillData data) {
-            applyModifiers(source);
+            activateState(source);
         }
 
         @Override
         public void onDisabled(OriginSource source, SkillData data) {
-            removeModifiers(source);
+            deactivateState(source);
         }
 
         @Override

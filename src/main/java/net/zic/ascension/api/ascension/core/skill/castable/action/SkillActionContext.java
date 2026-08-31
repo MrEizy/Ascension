@@ -51,6 +51,10 @@ public record SkillActionContext(
         );
     }
 
+    public SkillActionContext withVariables(Map<Identifier, Double> resolvedVariables) {
+        return new SkillActionContext(level, caster, skill, target, position, charge, resolvedVariables, attribution);
+    }
+
     public ScaledValue.Context scaledValueContext() {
         return new ScaledValue.Context(
                 originSource(),

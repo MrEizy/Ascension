@@ -24,6 +24,10 @@ public class ModRenderPipelines {
 
     public static RenderPipeline LINES_NO_DEPTH;
     public static RenderPipeline ENERGY_LINES;
+    public static RenderPipeline ENERGY_SURFACE;
+    public static RenderPipeline ENERGY_SURFACE_NO_DEPTH;
+    public static RenderPipeline AURA_SURFACE;
+    public static RenderPipeline AURA_SURFACE_NO_DEPTH;
     public static RenderPipeline DIVINE_SENSE_WAVE;
 
     @SubscribeEvent
@@ -37,6 +41,38 @@ public class ModRenderPipelines {
         ENERGY_LINES = RenderPipeline.builder(RenderPipelines.LINES_SNIPPET)
                 .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/energy_lines"))
                 .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                .build();
+
+        ENERGY_SURFACE = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/energy_surface"))
+                .withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE))
+                .withCull(false)
+                .build();
+
+        ENERGY_SURFACE_NO_DEPTH = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/energy_surface_no_depth"))
+                .withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE))
+                .withDepthStencilState(Optional.empty())
+                .withCull(false)
+                .build();
+
+        AURA_SURFACE = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/aura_surface"))
+                .withVertexShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/aura"))
+                .withFragmentShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/aura"))
+                .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                .withCull(false)
+                .build();
+
+        AURA_SURFACE_NO_DEPTH = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/aura_surface_no_depth"))
+                .withVertexShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/aura"))
+                .withFragmentShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/aura"))
+                .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                .withDepthStencilState(Optional.empty())
+                .withCull(false)
                 .build();
 
         DIVINE_SENSE_WAVE = RenderPipeline.builder()
@@ -53,6 +89,10 @@ public class ModRenderPipelines {
 
         event.registerPipeline(LINES_NO_DEPTH);
         event.registerPipeline(ENERGY_LINES);
+        event.registerPipeline(ENERGY_SURFACE);
+        event.registerPipeline(ENERGY_SURFACE_NO_DEPTH);
+        event.registerPipeline(AURA_SURFACE);
+        event.registerPipeline(AURA_SURFACE_NO_DEPTH);
         event.registerPipeline(DIVINE_SENSE_WAVE);
     }
 }

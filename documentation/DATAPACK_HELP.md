@@ -3,10 +3,10 @@ This page is the short reference for Ascension datapack layout and the common JS
 
 For system-specific authoring, use:
 
-- `ASCENSION_SKILL_SYSTEMS_GUIDE.md` for skills and runtime skill objects
-- `TECHNIQUES.md` for techniques and realm-driven progression
-- `BLOODLINES.md` for purity-driven bloodlines
-- `PHYSIQUES.md` for permanent physique bonuses
+- `ASCENSION_SKILLS.md` for skills, runtime conditions, states, and resources
+- `ASCENSION_TECHNIQUES.md` for techniques and realm-driven progression
+- `ASCENSION_BLOODLINES.md` for purity-driven bloodlines
+- `ASCENSION_PHYSIQUES.md` for persistent physique bonuses
 
 ## Quick links
 - [Files and IDs](#files-and-ids)
@@ -15,7 +15,9 @@ For system-specific authoring, use:
 - [Base stats](#base-stats)
 - [Value modifiers](#value-modifiers)
 - [Path bonuses](#path-bonuses)
+- [Requirements](#requirements)
 - [Progress actions](#progress-actions)
+- [Datapack resources](#datapack-resources)
 - [Item tooltips](#item-tooltips)
 - [Compact registry reference](#compact-registry-reference)
 
@@ -39,6 +41,8 @@ Common registries:
 | Progress conditions | `data/<namespace>/ascension/progress_action_conditions/...` |
 | Tribulations | `data/<namespace>/ascension/tribulation_definitions/...` |
 | Runtime visuals | `data/<namespace>/ascension/skill_system/visuals/...` |
+| Beam definitions | `data/<namespace>/ascension/skill_system/runtime/beams/...` |
+| Datapack resources | `data/<namespace>/ascension/skill_system/resources/...` |
 
 A file at:
 
@@ -188,6 +192,52 @@ Progression handlers use the same flat bonus shape through `ascension:give_path_
 }
 ```
 
+# Requirements
+Bloodlines, physiques, techniques, and individual technique skills may use Ascension's shared requirement list.
+
+```json
+"requirements": [
+  {
+    "type": "ascension:has_physique",
+    "physique": "example:iron_bloom"
+  },
+  {
+    "type": "ascension:stat",
+    "stat": "ascension:spirit",
+    "comparison": "at_least",
+    "value": 20
+  }
+]
+```
+
+Every entry in the list must pass. Use `ascension:any_of`, `ascension:all_of`, or `ascension:not` when more complex logic is needed.
+
+Built-in requirement types:
+
+```text
+ascension:all_of
+ascension:any_of
+ascension:not
+ascension:has_path
+ascension:path_realm
+ascension:has_technique
+ascension:has_bloodline
+ascension:bloodline_purity
+ascension:has_physique
+ascension:has_skill
+ascension:skill_mastery
+ascension:affinity
+ascension:stat
+```
+
+Comparisons used by purity, affinity, and stat requirements:
+
+```text
+at_least, at_most, greater_than, less_than, equal
+```
+
+Technique skill requirements use the same format. If their requirements stop passing, the technique stops owning that skill until the requirements pass again.
+
 # Progress actions
 Bloodlines and techniques share a small progression-action system.
 
@@ -218,6 +268,8 @@ Built-in actions:
 |---|---|
 | `ascension:give_base_stats` | Add/remove flat base stats |
 | `ascension:give_path_bonuses` | Add/remove flat path bonuses |
+| `ascension:grant_skills` | Grant skills while the matching progression is active |
+| `ascension:remove_skills` | Remove skills while the matching progression is active |
 
 Useful shipped condition references:
 
@@ -230,7 +282,92 @@ ascension:realm_change/all_major_realms
 ascension:realm_change/all_minor_realms
 ```
 
+Skill progression actions use a simple list:
+
+```json
+{
+  "type": "ascension:grant_skills",
+  "skills": [
+    "example:passive/dragon_instinct"
+  ]
+}
+```
+
+`grant_skills` is reversed when progression moves backward. `remove_skills` does the opposite: it removes while progressing upward and restores when that progression is reversed.
+
 See the bloodline and technique guides for the inline condition formats and their exact progression semantics.
+
+# Datapack resources
+Custom resources live in:
+
+```text
+data/<namespace>/ascension/skill_system/resources/...
+```
+
+A file at:
+
+```text
+data/example/ascension/skill_system/resources/resolve.json
+```
+
+creates the resource ID:
+
+```text
+example:resolve
+```
+
+Minimal definition:
+
+```json
+{
+  "maximum": 100,
+  "starting": 100,
+  "regeneration": 2,
+  "regeneration_interval": 20
+}
+```
+
+`maximum`, `starting`, and `regeneration` accept ScaledValues. `regeneration_interval` is an integer measured in ticks.
+
+Once defined, the resource works with normal skill costs, passive upkeep, resource modifiers, resource conditions, and `ascension:resource` actions:
+
+```json
+"cost": {
+  "resource": "example:resolve",
+  "amount": 15
+}
+```
+
+# Skill runtime additions
+The skill guide contains the full formats for v1.1 runtime features. The compact IDs are:
+
+```text
+Actions:
+ascension:delay
+ascension:repeat
+ascension:variable
+ascension:persistent_visual
+ascension:beam
+
+Passive modifier:
+ascension:movement
+
+Runtime visual elements:
+ascension:energy_beam
+ascension:aura
+
+Aura styles:
+flame
+flowing
+mist
+storm
+```
+
+Gameplay beam definitions may be local under a skill's `definitions.beams` block or stored globally under:
+
+```text
+data/<namespace>/ascension/skill_system/runtime/beams/...
+```
 
 # Item tooltips
 Techniques, bloodlines, and physiques may embed an `item_tooltip` definition.
@@ -274,4 +411,6 @@ Progress actions:          data/<namespace>/ascension/progress_actions/
 Progress conditions:       data/<namespace>/ascension/progress_action_conditions/
 Tribulation definitions:   data/<namespace>/ascension/tribulation_definitions/
 Runtime visuals:           data/<namespace>/ascension/skill_system/visuals/
+Beam definitions:           data/<namespace>/ascension/skill_system/runtime/beams/
+Datapack resources:         data/<namespace>/ascension/skill_system/resources/
 ```

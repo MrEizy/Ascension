@@ -12,6 +12,7 @@ import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
+import net.zic.ascension.api.ascension.core.resource.ResourceDefinition;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
@@ -27,6 +28,7 @@ import net.zic.ascension.api.ascension.core.runtime.AnchorNetworkDefinition;
 import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
 import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
+import net.zic.ascension.api.ascension.core.runtime.BeamDefinition;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
 import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
 import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
@@ -51,6 +53,9 @@ public final class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<Skill> SKILL_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skills", () -> SkillType.SKILL_CODEC
     );
+    public static final RegistryHelper.DataPackRegistry<ResourceDefinition> RESOURCE_DEFINITION_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "skill_system/resources", () -> ResourceDefinition.CODEC
+    );
     public static final RegistryHelper.DataPackRegistry<SkillEffectDefinition> SKILL_EFFECT_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/effects", () -> SkillEffectDefinition.CODEC
     );
@@ -71,6 +76,9 @@ public final class CoreRegistries {
     );
     public static final RegistryHelper.DataPackRegistry<BarrierDefinition> BARRIER_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/runtime/barriers", () -> BarrierDefinition.CODEC
+    );
+    public static final RegistryHelper.DataPackRegistry<BeamDefinition> BEAM_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "skill_system/runtime/beams", () -> BeamDefinition.CODEC
     );
     public static final RegistryHelper.DataPackRegistry<RuntimeVisualDefinition> RUNTIME_VISUAL_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/visuals", () -> RuntimeVisualDefinition.CODEC
@@ -106,6 +114,7 @@ public final class CoreRegistries {
         register(event, BLOODLINE_REGISTRY);
         register(event, PATH_REGISTRY);
         register(event, SKILL_REGISTRY);
+        register(event, RESOURCE_DEFINITION_REGISTRY);
         register(event, SKILL_EFFECT_REGISTRY);
         register(event, VIRTUAL_PROJECTILE_REGISTRY);
         register(event, NORMAL_PROJECTILE_REGISTRY);
@@ -113,6 +122,7 @@ public final class CoreRegistries {
         register(event, ANCHOR_NETWORK_REGISTRY);
         register(event, CONSTRUCT_REGISTRY);
         register(event, BARRIER_REGISTRY);
+        register(event, BEAM_REGISTRY);
         register(event, RUNTIME_VISUAL_REGISTRY);
         register(event, STAGGER_REGISTRY);
         register(event, PROGRESS_ACTION_REGISTRY);

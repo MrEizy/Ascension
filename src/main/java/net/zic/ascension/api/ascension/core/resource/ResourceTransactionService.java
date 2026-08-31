@@ -4,6 +4,7 @@ import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.event.resource.ResourceTransactionEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
@@ -44,12 +45,39 @@ public final class ResourceTransactionService {
         return transact(ResourceTransactionRequest.of(entity, resource, operation, amount, source));
     }
 
+    public static boolean supports(net.minecraft.world.entity.LivingEntity entity, Identifier resource) {
+        ResourceType type = resolveType(entity, resource);
+        return type != null && type.supports(entity);
+    }
+
+    public static double getAmount(net.minecraft.world.entity.LivingEntity entity, Identifier resource) {
+        ResourceType type = resolveType(entity, resource);
+        return type == null || !type.supports(entity) ? Double.NaN : type.getAmount(entity);
+    }
+
+    public static double getMaximum(net.minecraft.world.entity.LivingEntity entity, Identifier resource) {
+        ResourceType type = resolveType(entity, resource);
+        return type == null || !type.supports(entity) ? Double.NaN : type.getMaximum(entity);
+    }
+
+    private static ResourceType resolveType(net.minecraft.world.entity.LivingEntity entity, Identifier resource) {
+        if (entity == null || resource == null) {
+            return null;
+        }
+        ResourceType type = ResourceRegistries.RESOURCE_TYPE_REGISTRY.containsKey(resource) ? ResourceRegistries.RESOURCE_TYPE_REGISTRY.getValue(resource) : null;
+        if (type != null) {
+            return type;
+        }
+        ResourceDefinition definition = CoreRegistries.safeAccess(CoreRegistries.RESOURCE_DEFINITION_REGISTRY, resource, entity.registryAccess());
+        return definition == null ? null : new DatapackResourceType(resource, definition);
+    }
+
     public static Result transact(ResourceTransactionRequest request) {
         Result invalid = validateRequest(request);
         if (invalid != null) {
             return invalid;
         }
-        ResourceType resourceType = ResourceRegistries.RESOURCE_TYPE_REGISTRY.getValue(request.resource());
+        ResourceType resourceType = resolveType(request.entity(), request.resource());
         if (resourceType == null || !resourceType.supports(request.entity())) {
             return simpleResult(request, null, Status.UNSUPPORTED, 0.0D, 0.0D, 0.0D);
         }

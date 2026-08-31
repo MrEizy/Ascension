@@ -6,6 +6,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.passive.PassiveModifier;
+import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
@@ -14,6 +15,32 @@ import java.util.List;
 
 public final class PassiveSkillService {
     private PassiveSkillService() {
+    }
+
+    public static void disableStateGroup(OriginSource source, Identifier group, Identifier except) {
+        if (source == null || group == null) {
+            return;
+        }
+        for (Identifier skillId : List.copyOf(AscensionOriginSourceHelper.getSkills(source))) {
+            if (skillId.equals(except)) {
+                continue;
+            }
+            Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, source.getRegistryAccess());
+            SkillData data = AscensionOriginSourceHelper.getSkillData(source, skillId);
+            if (!(skill instanceof PassiveSkill passive)
+                    || !(skill instanceof ToggleableSkill toggleable)
+                    || data == null
+                    || !group.equals(passive.stateGroup().orElse(null))
+                    || !toggleable.isEnabled(data)) {
+                continue;
+            }
+            toggleable.onDisabled(source, data);
+            for (var entity : source.getAttachedEntities()) {
+                toggleable.removeEnabledFromEntity(entity, data);
+            }
+            toggleable.setEnabled(data, false);
+            AscensionOriginSourceHelper.markSkillDirty(source, skillId);
+        }
     }
 
     public static <T extends PassiveModifier> List<Entry<T>> modifiers(

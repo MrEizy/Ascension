@@ -139,6 +139,7 @@ public class SimpleTechnique implements Technique {
         }
         TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
         holder.run(source, techniqueId, pathInstance, ProgressDirection.UP);
+        TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
     }
 
     @Override
@@ -292,6 +293,7 @@ public class SimpleTechnique implements Technique {
         }
         TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
         holder.run(source, techniqueId, pathInstance, direction);
+        TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
     }
 
     private Identifier techniqueId(OriginSource source) {

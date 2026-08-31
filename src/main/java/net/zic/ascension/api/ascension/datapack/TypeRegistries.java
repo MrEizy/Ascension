@@ -16,6 +16,7 @@ import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectModule;
 import net.zic.ascension.api.ascension.core.projectile.ProjectileBehavior;
+import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.zic.ascension.api.ascension.value.ScaledValue;
@@ -35,6 +36,7 @@ public final class TypeRegistries {
     public static final Registry<CodecType<ScaledValue.Source>> SCALED_VALUE_SOURCE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "scaled_value_source_type");
     public static final Registry<CodecType<SkillEffectModule>> SKILL_EFFECT_MODULE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "skill_effect_module_type");
     public static final Registry<CodecType<SkillAction>> SKILL_ACTION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "skill_action_type");
+    public static final Registry<CodecType<SkillCondition>> SKILL_CONDITION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "skill_condition_type");
     public static final Registry<CodecType<TargetingDefinition>> TARGETING_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "targeting_type");
     public static final Registry<CodecType<ProjectileBehavior>> PROJECTILE_BEHAVIOR_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "projectile_behavior_type");
 
@@ -57,6 +59,7 @@ public final class TypeRegistries {
         event.register(SCALED_VALUE_SOURCE_TYPE_REGISTRY);
         event.register(SKILL_EFFECT_MODULE_TYPE_REGISTRY);
         event.register(SKILL_ACTION_TYPE_REGISTRY);
+        event.register(SKILL_CONDITION_TYPE_REGISTRY);
         event.register(TARGETING_TYPE_REGISTRY);
         event.register(PROJECTILE_BEHAVIOR_TYPE_REGISTRY);
         AscensionCraft.LOGGER.info("Finished loading type registries");

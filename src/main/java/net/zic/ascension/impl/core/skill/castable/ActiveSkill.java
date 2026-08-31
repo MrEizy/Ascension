@@ -20,6 +20,7 @@ import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionService;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionSnapshot;
+import net.zic.ascension.api.ascension.core.skill.passive.PassiveTrigger;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastData;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastVisualState;
@@ -38,6 +39,7 @@ import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
+import net.zic.ascension.impl.core.skill.passive.PassiveTriggerService;
 import net.zic.ascension.impl.core.targeting.TargetingDefinitions;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.cooldown.EntityCooldownHandler;
@@ -423,6 +425,7 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
                 return;
             }
             SkillExecutions.apply(level, caster, skillId, progress, actions, resolved.execution());
+            PassiveTriggerService.trigger(caster, PassiveTrigger.Event.SKILL_CAST, SkillExecutions.primaryEntity(resolved.execution()), resolved.execution().variables());
             applyCooldown(caster, skillId, resolved);
             awardMasteryExperience(caster, skillId);
             return;
@@ -462,6 +465,7 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
             return;
         }
         SkillExecutions.apply(level, caster, skillId, 0.0D, actions, resolved.execution());
+        PassiveTriggerService.trigger(caster, PassiveTrigger.Event.SKILL_CAST, SkillExecutions.primaryEntity(resolved.execution()), resolved.execution().variables());
         applyCooldown(caster, skillId, resolved);
         awardMasteryExperience(caster, skillId);
     }
@@ -495,6 +499,9 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
             return;
         }
         SkillExecutions.apply(level, caster, skillId, progress, actions, resolved.execution());
+        if (data.getTicks() == 1) {
+            PassiveTriggerService.trigger(caster, PassiveTrigger.Event.SKILL_CAST, SkillExecutions.primaryEntity(resolved.execution()), resolved.execution().variables());
+        }
         if (data.getTicks() % CHANNEL_MASTERY_INTERVAL == 0) {
             awardMasteryExperience(caster, skillId);
         }

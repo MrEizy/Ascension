@@ -55,8 +55,9 @@ public interface Bloodline {
         if(newPurity < data.getPurity()){
             //purity decreased
             for(int purity = data.getPurity();purity>newPurity;purity--){
-                data.setPurity(purity - 1);
+                data.setPurity(purity);
                 purityDown(source,data);
+                data.setPurity(purity - 1);
             }
         }else{
 

@@ -14,6 +14,7 @@ import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
 import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
 import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
+import net.zic.ascension.api.ascension.core.runtime.BeamDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 
 import java.util.Map;
@@ -27,12 +28,13 @@ public record SkillDefinitions(
         Map<String, AnchorNetworkDefinition> networks,
         Map<String, OwnerBoundConstructDefinition> constructs,
         Map<String, BarrierDefinition> barriers,
-        Map<String, StaggerDefinition> stagger
+        Map<String, StaggerDefinition> stagger,
+        Map<String, BeamDefinition> beams
 ) {
     private static final Map<Class<?>, Map<Identifier, Object>> CACHE = new ConcurrentHashMap<>();
 
     public static final SkillDefinitions EMPTY = new SkillDefinitions(
-            Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), Map.of()
+            Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), Map.of()
     );
 
     public static final MapCodec<SkillDefinitions> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -42,7 +44,8 @@ public record SkillDefinitions(
             map(AnchorNetworkDefinition.CODEC).optionalFieldOf("networks", Map.of()).forGetter(SkillDefinitions::networks),
             map(OwnerBoundConstructDefinition.CODEC).optionalFieldOf("constructs", Map.of()).forGetter(SkillDefinitions::constructs),
             map(BarrierDefinition.CODEC).optionalFieldOf("barriers", Map.of()).forGetter(SkillDefinitions::barriers),
-            map(StaggerDefinition.CODEC).optionalFieldOf("stagger", Map.of()).forGetter(SkillDefinitions::stagger)
+            map(StaggerDefinition.CODEC).optionalFieldOf("stagger", Map.of()).forGetter(SkillDefinitions::stagger),
+            map(BeamDefinition.CODEC).optionalFieldOf("beams", Map.of()).forGetter(SkillDefinitions::beams)
     ).apply(instance, SkillDefinitions::new));
 
     public SkillDefinitions {
@@ -53,6 +56,7 @@ public record SkillDefinitions(
         constructs = copy(constructs);
         barriers = copy(barriers);
         stagger = copy(stagger);
+        beams = copy(beams);
     }
 
     public static Resolved<SkillEffectDefinition> effect(
@@ -102,6 +106,13 @@ public record SkillDefinitions(
             DefinitionRef<StaggerDefinition> reference
     ) {
         return remember(StaggerDefinition.class, resolve(context, reference, "stagger", SkillDefinitions::stagger, StaggerDefinition.class, CoreRegistries.STAGGER_REGISTRY));
+    }
+
+    public static Resolved<BeamDefinition> beam(
+            SkillActionContext context,
+            DefinitionRef<BeamDefinition> reference
+    ) {
+        return remember(BeamDefinition.class, resolve(context, reference, "beam", SkillDefinitions::beams, BeamDefinition.class, CoreRegistries.BEAM_REGISTRY));
     }
 
     public static Resolved<RuntimeVisualDefinition> visual(
@@ -195,6 +206,7 @@ public record SkillDefinitions(
         constructs.forEach((name, value) -> remember(OwnerBoundConstructDefinition.class, new Resolved<>(localId(skill, "construct", name), value)));
         barriers.forEach((name, value) -> remember(BarrierDefinition.class, new Resolved<>(localId(skill, "barrier", name), value)));
         stagger.forEach((name, value) -> remember(StaggerDefinition.class, new Resolved<>(localId(skill, "stagger", name), value)));
+        beams.forEach((name, value) -> remember(BeamDefinition.class, new Resolved<>(localId(skill, "beam", name), value)));
     }
 
     public static Identifier localId(Identifier skill, String category, String name) {

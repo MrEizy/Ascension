@@ -4,6 +4,11 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.minecraft.util.StringRepresentable;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -46,6 +51,7 @@ public final class PassiveModifiers {
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> RESOURCES = register("resources", Resources.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> PROJECTILES = register("projectiles", Projectiles.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> WEAPON_DAMAGE = register("weapon_damage", WeaponDamage.CODEC);
+    public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> MOVEMENT = register("movement", Movement.CODEC);
 
     private PassiveModifiers() {
     }
@@ -182,6 +188,65 @@ public final class PassiveModifiers {
         @Override
         public CodecType<PassiveModifier> getType() {
             return PROJECTILES.get();
+        }
+    }
+
+    public record Movement(boolean allowFlight, double flightSpeedMultiplier, boolean noFallDamage) implements PassiveModifier {
+        public static final MapCodec<Movement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                com.mojang.serialization.Codec.BOOL.optionalFieldOf("allow_flight", false).forGetter(Movement::allowFlight),
+                com.mojang.serialization.Codec.doubleRange(0.05D, 20.0D).optionalFieldOf("flight_speed_multiplier", 1.0D).forGetter(Movement::flightSpeedMultiplier),
+                com.mojang.serialization.Codec.BOOL.optionalFieldOf("no_fall_damage", false).forGetter(Movement::noFallDamage)
+        ).apply(instance, Movement::new));
+
+        @Override
+        public CodecType<PassiveModifier> getType() {
+            return MOVEMENT.get();
+        }
+
+        @Override
+        public void apply(OriginSource source, Identifier skillId) {
+            source.getAttachedEntities().forEach(entity -> applyToEntity(entity, skillId));
+        }
+
+        @Override
+        public void remove(OriginSource source, Identifier skillId) {
+            source.getAttachedEntities().forEach(entity -> removeFromEntity(entity, skillId));
+        }
+
+        @Override
+        public void applyToEntity(LivingEntity entity, Identifier skillId) {
+            if (allowFlight) {
+                applyModifier(entity.getAttribute(NeoForgeMod.CREATIVE_FLIGHT), modifierId(skillId, "flight"), 1.0D, AttributeModifier.Operation.ADD_VALUE);
+            }
+            if (flightSpeedMultiplier != 1.0D) {
+                applyModifier(entity.getAttribute(Attributes.FLYING_SPEED), modifierId(skillId, "flight_speed"), flightSpeedMultiplier - 1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+            }
+            if (noFallDamage) {
+                applyModifier(entity.getAttribute(Attributes.FALL_DAMAGE_MULTIPLIER), modifierId(skillId, "fall_damage"), -1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+            }
+        }
+
+        @Override
+        public void removeFromEntity(LivingEntity entity, Identifier skillId) {
+            removeModifier(entity.getAttribute(NeoForgeMod.CREATIVE_FLIGHT), modifierId(skillId, "flight"));
+            removeModifier(entity.getAttribute(Attributes.FLYING_SPEED), modifierId(skillId, "flight_speed"));
+            removeModifier(entity.getAttribute(Attributes.FALL_DAMAGE_MULTIPLIER), modifierId(skillId, "fall_damage"));
+        }
+
+        private static void applyModifier(AttributeInstance instance, Identifier id, double value, AttributeModifier.Operation operation) {
+            if (instance != null) {
+                instance.addOrUpdateTransientModifier(new AttributeModifier(id, value, operation));
+            }
+        }
+
+        private static void removeModifier(AttributeInstance instance, Identifier id) {
+            if (instance != null) {
+                instance.removeModifier(id);
+            }
+        }
+
+        private static Identifier modifierId(Identifier skillId, String suffix) {
+            return Identifier.fromNamespaceAndPath(skillId.getNamespace(), "skill/" + skillId.getPath() + "/movement/" + suffix);
         }
     }
 

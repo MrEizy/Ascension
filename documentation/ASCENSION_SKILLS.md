@@ -12,12 +12,16 @@ Most normal content should require no Java. Active skills are assembled from tar
 - [Active skills](#active-skills)
 - [Cast modes and mastery](#cast-modes-and-mastery)
 - [Passive skills](#passive-skills)
+- [Runtime conditions](#runtime-conditions)
+- [Scheduled actions and variables](#scheduled-actions-and-variables)
+- [State and form passives](#state-and-form-passives)
 - [Techniques](#techniques)
 - [Scaled values](#scaled-values)
 - [Targeting](#targeting)
 - [Actions and definitions](#actions-and-definitions)
 - [Damage](#damage)
 - [Runtime objects](#runtime-objects)
+- [Datapack resources](#datapack-resources)
 - [Visuals and particle fields](#visuals-and-particle-fields)
 - [Complete miniature technique](#complete-miniature-technique)
 - [Glossary](#glossary)
@@ -28,6 +32,8 @@ Most normal content should require no Java. Active skills are assembled from tar
 | Skills | `data/<namespace>/ascension/skills/...` |
 | Techniques | `data/<namespace>/ascension/techniques/...` |
 | Runtime visuals | `data/<namespace>/ascension/skill_system/visuals/...` |
+| Beam definitions | `data/<namespace>/ascension/skill_system/runtime/beams/...` |
+| Datapack resources | `data/<namespace>/ascension/skill_system/resources/...` |
 | Textures | `assets/<namespace>/textures/...` |
 | Models | `assets/<namespace>/models/...` |
 
@@ -224,6 +230,11 @@ All normal passives use `ascension:passive`.
 | `toggleable` | `false` | Player may enable/disable |
 | `enabled_by_default` | `true` | Initial state |
 | `upkeep` | Empty | Periodic resource cost |
+| `state_group` | None | Exclusive group shared with other toggleable states/forms |
+| `granted_skills` | `[]` | Skills owned while the state is enabled |
+| `enable_conditions` | `[]` | Runtime conditions required to enable the state |
+| `on_enable` | `[]` | Actions run when enabled |
+| `on_disable` | `[]` | Actions run when disabled |
 
 `"levels": 3, "level_xp": [100, 300]` means level `1→2` costs `100 XP` and `2→3` costs `300 XP`.
 
@@ -235,6 +246,19 @@ Built-in modifiers:
 | `ascension:resources` | Resource transactions |
 | `ascension:projectiles` | Normal projectile profiles |
 | `ascension:weapon_damage` | Weapon, empty-hand/tag, arrow, or trident damage |
+| `ascension:movement` | Flight, flying-speed, and fall-damage state |
+
+Movement example:
+```json
+{
+  "type": "ascension:movement",
+  "allow_flight": true,
+  "flight_speed_multiplier": 1.25,
+  "no_fall_damage": true
+}
+```
+
+Movement modifiers are applied while the passive is active. They are especially useful on toggleable states/forms.
 
 Example defense:
 ```json
@@ -254,24 +278,57 @@ arrow
 trident
 ```
 
-The current passive trigger event is `attack`; triggers execute normal skill actions:
+Passive triggers execute normal skill actions when their event fires.
+
+Events:
+
+```text
+attack
+damage_dealt
+damage_taken
+kill
+skill_cast
+resource_changed
+```
+
+Trigger fields:
+
+| Field | Default | Meaning |
+|---|---|---|
+| `event` | Required | Event to react to |
+| `weapon_tag` | None | Attack-only held-item tag filter |
+| `allow_empty_hand` | `false` | Attack-only empty-hand match |
+| `cooldown` | `0` | Trigger cooldown in ticks |
+| `priority` | `0` | Higher-priority reactions run first |
+| `cost` | Empty | Resource cost paid before actions |
+| `conditions` | `[]` | Runtime conditions that must all pass |
+| `actions` | `[]` | Ordered actions to execute |
+
 ```json
 "triggers": [
   {
-    "event": "attack",
-    "weapon_tag": "minecraft:swords",
-    "cooldown": 10,
-    "cost": { "resource": "ascension:qi", "amount": 2 },
+    "event": "damage_taken",
+    "cooldown": 40,
+    "conditions": [
+      {
+        "type": "ascension:health",
+        "comparison": "at_most",
+        "value": 0.5
+      }
+    ],
     "actions": [
       {
-        "type": "ascension:weapon_swing",
-        "weapon_tag": "minecraft:swords",
-        "damage": { "base": 2, "weapon": 0.5 }
+        "type": "ascension:resource",
+        "resource": "example:resolve",
+        "operation": "ascension:restore",
+        "amount": 8
       }
     ]
   }
 ]
 ```
+
+`attack` preserves the weapon-filter behaviour used by weapon passives and selects the highest-priority matching attack trigger. Other events run matching reactions in priority order and may expose a target and runtime variables to their conditions/actions.
 
 Toggle/upkeep:
 ```json
@@ -285,6 +342,202 @@ Toggle/upkeep:
 ```
 If upkeep cannot be paid, the passive disables.
 
+# Runtime conditions
+Runtime conditions are small tests used by `ascension:conditional`, passive triggers, and state/form enable checks.
+
+Conditional action:
+
+```json
+{
+  "type": "ascension:conditional",
+  "condition": {
+    "type": "ascension:health",
+    "comparison": "at_most",
+    "value": 0.5
+  },
+  "if_true": [
+    { "type": "ascension:message", "message": "Low health branch." }
+  ],
+  "if_false": [
+    { "type": "ascension:message", "message": "Normal branch." }
+  ]
+}
+```
+
+Built-in conditions:
+
+| Type | Main fields |
+|---|---|
+| `ascension:all_of` | `conditions` |
+| `ascension:any_of` | `conditions` |
+| `ascension:not` | `condition` |
+| `ascension:requirement` | `requirements` |
+| `ascension:health` | `subject`, `comparison`, `value`, `percentage` |
+| `ascension:resource` | `subject`, `resource`, `comparison`, `value`, `percentage` |
+| `ascension:entity_state` | `subject`, `state`, `value` |
+| `ascension:distance` | `comparison`, `value` |
+| `ascension:variable` | `variable`, `comparison`, `value` |
+| `ascension:random` | `chance` |
+
+Comparisons:
+
+```text
+at_least, at_most, greater_than, less_than, equal
+```
+
+Entity states:
+
+```text
+sneaking, sprinting, airborne, on_fire, in_water
+```
+
+`health` uses a percentage by default. `resource` uses a raw amount by default; set `"percentage": true` to compare against `0.0..1.0` of the maximum. `random.chance` also uses `0.0..1.0`.
+
+The requirement condition wraps the normal origin requirement system:
+
+```json
+{
+  "type": "ascension:requirement",
+  "requirements": [
+    {
+      "type": "ascension:has_physique",
+      "physique": "example:iron_bloom"
+    }
+  ]
+}
+```
+
+`ascension:variable` reads values already provided by the current runtime context. Current useful trigger values include:
+
+```text
+ascension:trigger/damage
+ascension:trigger/resource_requested
+ascension:trigger/resource_applied
+ascension:trigger/resource_before
+ascension:trigger/resource_after
+ascension:trigger/resource_maximum
+```
+
+Damage triggers provide `trigger/damage`; resource-change triggers provide the resource transaction values. Cast contexts also expose normal cast variables such as `ascension:cast/progress`.
+
+# Scheduled actions and variables
+Actions may schedule normal nested actions for later execution.
+
+Delay:
+```json
+{
+  "type": "ascension:delay",
+  "ticks": 20,
+  "actions": [
+    { "type": "ascension:message", "message": "One second later." }
+  ]
+}
+```
+
+Repeat:
+```json
+{
+  "type": "ascension:repeat",
+  "times": 4,
+  "interval": 5,
+  "actions": [
+    { "type": "ascension:particles", "particle": "minecraft:electric_spark", "count": 4 }
+  ]
+}
+```
+
+`repeat` schedules the first run after one `interval`; it does not execute an immediate extra copy.
+
+Runtime variables use an ID and may be set, added, or multiplied:
+
+```json
+{
+  "type": "ascension:variable",
+  "variable": "example:power",
+  "operation": "set",
+  "value": 4
+}
+```
+
+Operations:
+```text
+set, add, multiply
+```
+
+Variables remain available to later actions in the same execution and are carried into delayed/repeated actions. Read one through a runtime condition or the normal `ascension:context` ScaledValue source:
+
+```json
+{
+  "base": 0,
+  "terms": [
+    {
+      "source": {
+        "type": "ascension:context",
+        "key": "example:power"
+      },
+      "scale": 2
+    }
+  ]
+}
+```
+
+# State and form passives
+Toggleable passives can act as persistent states, stances, transformations, or forms.
+
+```json
+{
+  "type": "ascension:passive",
+  "name": "Resolve Form",
+  "description": "Maintains a focused combat state.",
+  "toggleable": true,
+  "enabled_by_default": false,
+  "state_group": "example:combat_form",
+  "granted_skills": ["example:resolve_burst"],
+  "enable_conditions": [
+    {
+      "type": "ascension:resource",
+      "resource": "example:resolve",
+      "comparison": "at_least",
+      "value": 10
+    }
+  ],
+  "upkeep": {
+    "resource": "example:resolve",
+    "amount": 3,
+    "interval": 20
+  },
+  "on_enable": [
+    { "type": "ascension:message", "message": "Resolve Form enabled." }
+  ],
+  "on_disable": [
+    { "type": "ascension:message", "message": "Resolve Form disabled." }
+  ]
+}
+```
+
+When one enabled passive has a `state_group`, enabling another passive with the same group disables the previous one. Modifiers and `granted_skills` remain active only while the state is enabled. `enable_conditions` are checked when enabling; upkeep failure disables the state normally.
+
+Persistent form visuals use `ascension:persistent_visual`:
+
+```json
+"on_enable": [
+  {
+    "type": "ascension:persistent_visual",
+    "key": "example:form_aura",
+    "visual": "example:form_aura"
+  }
+],
+"on_disable": [
+  {
+    "type": "ascension:persistent_visual",
+    "action": "remove",
+    "key": "example:form_aura"
+  }
+]
+```
+
+`key` identifies the owned visual instance. Persistent visuals are restored when an enabled passive is attached to the player again, without replaying unrelated enable actions.
+
 # Techniques
 A technique connects a cultivation path to skills and progression.
 ```json
@@ -296,7 +549,15 @@ A technique connects a cultivation path to skills and progression.
   "max_realm": 6,
   "skills": {
     "example:ember_body/cultivation": {},
-    "example:ember_body/iron_pulse": { "unlock": 1 },
+    "example:ember_body/iron_pulse": {
+      "unlock": 1,
+      "requirements": [
+        {
+          "type": "ascension:has_physique",
+          "physique": "example:iron_bloom"
+        }
+      ]
+    },
     "example:ember_body/scarlet_step": {
       "unlock": 2,
       "caps": { "4": "minor_mastery", "6": "major_mastery" }
@@ -309,7 +570,7 @@ A technique connects a cultivation path to skills and progression.
 }
 ```
 
-`unlock` is the **zero-indexed major realm** where the technique begins owning the skill. Omit it for realm `0`.
+`unlock` is the **zero-indexed major realm** where the technique begins owning the skill. Omit it for realm `0`. Optional `requirements` use the shared Ascension requirement list and are re-evaluated as relevant origin progression changes.
 
 Active caps use mastery names:
 ```json
@@ -391,6 +652,16 @@ ascension:affinity
 ascension:context
 ascension:skill_effect
 ```
+
+`ascension:context` reads runtime variables by ID:
+
+```json
+{
+  "type": "ascension:context",
+  "key": "example:power",
+  "fallback": 0
+}
+```
 `ascension:skill_effect` can read `potency`, `stacks`, `duration`, or `count`, aggregated with `sum`, `max`, or `min`.
 
 # Targeting
@@ -441,6 +712,10 @@ Built-in actions:
 | Action | Purpose |
 |---|---|
 | `ascension:mastery_gate` | Rank-gated nested actions |
+| `ascension:conditional` | Runtime condition with `if_true`/`if_false` actions |
+| `ascension:delay` | Run nested actions after a delay |
+| `ascension:repeat` | Schedule repeated nested actions |
+| `ascension:variable` | Set/add/multiply a runtime variable |
 | `ascension:message` | Overlay/chat text |
 | `ascension:sound` | Sound |
 | `ascension:particles` | Simple-particle burst |
@@ -458,6 +733,8 @@ Built-in actions:
 | `ascension:move` | Movement |
 | `ascension:anchor` | Movement anchor |
 | `ascension:visual` | Runtime visual |
+| `ascension:persistent_visual` | Apply/remove an owned persistent visual |
+| `ascension:beam` | Spawn a gameplay beam definition |
 | `ascension:weapon_swing` | Projected weapon attack/VFX |
 
 Common forms:
@@ -485,7 +762,8 @@ A skill can define:
   "networks": {},
   "constructs": {},
   "barriers": {},
-  "stagger": {}
+  "stagger": {},
+  "beams": {}
 }
 ```
 
@@ -596,6 +874,34 @@ Other runtime definitions:
 | Barrier | Durability, absorption, filters, projectile response, callbacks |
 | Construct | Owner-bound stability object with optional interception |
 | Network | Positioned nodes/links, optionally carrying a child field |
+| Beam | Continuous look-direction ray with repeated hit actions |
+
+Beam definition:
+```json
+"definitions": {
+  "beams": {
+    "lance": {
+      "range": 32,
+      "width": 0.6,
+      "duration": 20,
+      "tick_interval": 2,
+      "stop_on_block": true,
+      "filter": { "relations": ["hostile"] },
+      "on_hit": [
+        { "type": "ascension:damage", "base": 6 }
+      ],
+      "visual": "example:energy_beam"
+    }
+  }
+}
+```
+
+Spawn with:
+```json
+{ "type": "ascension:beam", "definition": "#lance" }
+```
+
+Beam fields include `range`, `width`, `duration`, `tick_interval`, `maximum_targets`, `stop_on_block`, `filter`, `knockback`, `on_hit`, `on_block`, `on_expire`, and optional `visual`. `maximum_targets: 0` means unlimited. Beam hit actions expose `ascension:beam/distance` and `ascension:beam/range_fraction` as runtime variables.
 
 Runtime action values are `apply`, `repair`, and `remove`. Barrier projectile responses include `none`, `stop`, `discard`, and `deflect`.
 
@@ -610,6 +916,67 @@ Movement modes are `directional`, `target_position`, and `anchor`.
 }
 ```
 Collision values are `fail` and `stop_before_collision`.
+
+# Datapack resources
+Custom resources live in:
+
+```text
+data/<namespace>/ascension/skill_system/resources/
+```
+
+A resource definition needs no Java:
+
+```json
+{
+  "maximum": 100,
+  "starting": 100,
+  "regeneration": 2,
+  "regeneration_interval": 20
+}
+```
+
+The file path is the resource ID. For example:
+
+```text
+data/example/ascension/skill_system/resources/resolve.json
+-> example:resolve
+```
+
+Fields:
+
+| Field | Default | Meaning |
+|---|---:|---|
+| `maximum` | `100` | Maximum stored amount |
+| `starting` | `0` | Initial amount before the resource has stored data |
+| `regeneration` | `0` | Amount restored each regeneration interval |
+| `regeneration_interval` | `20` | Regeneration interval in ticks |
+
+`maximum`, `starting`, and `regeneration` accept ScaledValues.
+
+The resource then works everywhere normal resources do:
+
+```json
+"cost": { "resource": "example:resolve", "amount": 20 }
+```
+
+```json
+"upkeep": {
+  "resource": "example:resolve",
+  "amount": 3,
+  "interval": 20
+}
+```
+
+```json
+{
+  "type": "ascension:resource",
+  "resource": "example:resolve",
+  "operation": "ascension:restore",
+  "amount": 15
+}
+```
+
+This uses the same transaction path as built-in resources, so passive resource modifiers and `resource_changed` triggers apply normally.
 
 # Visuals and particle fields
 Runtime visuals live in:
@@ -647,18 +1014,42 @@ Spawn:
 Element types:
 ```text
 ascension:particles, ascension:sprite, ascension:decal, ascension:model,
-ascension:ring, ascension:shell, ascension:beam, ascension:trail,
-ascension:afterimage, ascension:entity_overlay, ascension:custom, ascension:composite
+ascension:ring, ascension:shell, ascension:beam, ascension:energy_beam,
+ascension:aura, ascension:trail, ascension:afterimage,
+ascension:entity_overlay, ascension:custom, ascension:composite
 ```
 
 Common fields:
 ```text
 position, offset, rotation, scale
 tint, secondary_tint, line_width, filled, no_depth
-radius, inner_radius, height, width, length, segments, count
+radius, inner_radius, height, width, length, segments, count, style
 spin, pulse, pulse_speed, bob, bob_speed, interval, history
 texture, model, particle, visual, frames, frame_ticks
 ```
+
+`ascension:energy_beam` is the volumetric beam visual intended for gameplay beams; the older `ascension:beam` element remains useful for thin links and network lines.
+
+`ascension:aura` supports:
+
+```text
+flame, flowing, mist, storm
+```
+
+Example:
+```json
+{
+  "type": "ascension:aura",
+  "position": "owner",
+  "radius": 1.1,
+  "height": 3.2,
+  "count": 7,
+  "style": "flame",
+  "tint": [255, 220, 80, 145]
+}
+```
+
+Multiple aura elements may be layered in one visual definition for a larger, softer outer field or mixed styles.
 
 Texture IDs omit `textures/` and `.png`:
 ```text
@@ -774,7 +1165,7 @@ This miniature technique uses two skill files and one technique file.
   },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
-    "template": "ascension:default_technique_manual",
+    "template": "ascension:default_cultivation_technique",
     "rank": "ascension:profound"
   }
 }
@@ -799,6 +1190,8 @@ Realm 5  Falling Mountain Cut cap -> Major Mastery
 
 **Classification** — Semantic damage metadata used by combat filters and modifiers.
 
+**Condition** — A runtime test used by conditional actions, passive triggers, or state enable checks.
+
 **Definition** — Reusable gameplay data such as an effect, projectile, field, barrier, construct, network, or stagger profile.
 
 **Definition reference** — An inline object, local `#name`, or global `namespace:path`.
@@ -809,9 +1202,15 @@ Realm 5  Falling Mountain Cut cap -> Major Mastery
 
 **Passive level** — Numeric progression used by `ascension:passive`.
 
-**Runtime object** — A longer-lived projectile, field, barrier, network, construct, or visual created by a skill.
+**Resource definition** — A datapack-defined resource with maximum, starting amount, and optional regeneration.
+
+**Runtime object** — A longer-lived projectile, field, barrier, network, construct, beam, or visual created by a skill.
 
 **ScaledValue** — A number derived from a base and optional mastery, level, charge, stats, affinity, realms, context, or effects.
+
+**Runtime variable** — An ID/value stored in the current skill execution and readable by conditions or ScaledValues.
+
+**State group** — An ID used to make toggleable passives mutually exclusive while enabled.
 
 **Subject** — What an action operates on: `caster`, `target`, `origin`, or `position`.
 

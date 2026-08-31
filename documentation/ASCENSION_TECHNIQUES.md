@@ -12,6 +12,7 @@ The intended workflow is:
 - [Minimal technique](#minimal-technique)
 - [Root fields](#root-fields)
 - [Skill unlocks and caps](#skill-unlocks-and-caps)
+- [Requirements](#requirements)
 - [Realm limits](#realm-limits)
 - [Realm overrides](#realm-overrides)
 - [Realm change handlers](#realm-change-handlers)
@@ -69,7 +70,8 @@ For normal datapack techniques, use:
 | `max_minor_realm` | Path value | Minor-realm cap at the technique's final major realm |
 | `realm_overrides` | `{}` | Technique-specific realm names/progress requirements |
 | `skills` | `{}` | Skills owned and progressed by the technique |
-| `realm_change_handler` | `[]` | Realm-driven stat/path-bonus actions |
+| `realm_change_handler` | `[]` | Realm-driven stat/path-bonus/skill actions |
+| `requirements` | `[]` | Requirements that must pass before the technique can be acquired |
 | `item_tooltip` | None | Technique manual presentation |
 
 Realm numbers in technique JSON are zero-indexed.
@@ -85,6 +87,14 @@ Realm numbers in technique JSON are zero-indexed.
   },
   "example:ember_body/scarlet_step": {
     "unlock": 2,
+    "requirements": [
+      {
+        "type": "ascension:stat",
+        "stat": "ascension:agility",
+        "comparison": "at_least",
+        "value": 20
+      }
+    ],
     "caps": {
       "4": "minor_mastery",
       "6": "major_mastery"
@@ -117,6 +127,8 @@ Passive skills use numeric levels:
 
 A cap raises the highest progression the player may train toward. It does not directly grant that mastery rank or passive level.
 
+Each skill entry may also use `requirements`. The technique owns the skill only when both its `unlock` realm and all of its requirements pass. If a requirement later stops passing, the technique removes its ownership/cap for that skill; it is restored when the requirement passes again.
+
 Active mastery IDs:
 
 ```text
@@ -126,6 +138,39 @@ major_mastery
 perfection
 transcendence
 ```
+
+# Requirements
+The technique root and individual skill entries use the same shared requirement system.
+
+Technique acquisition:
+
+```json
+"requirements": [
+  {
+    "type": "ascension:has_physique",
+    "physique": "example:iron_bloom"
+  }
+]
+```
+
+Technique skill gate:
+
+```json
+"skills": {
+  "example:ember_body/iron_pulse": {
+    "unlock": 1,
+    "requirements": [
+      {
+        "type": "ascension:skill_mastery",
+        "skill": "example:ember_body/cultivation",
+        "mastery": "minor_mastery"
+      }
+    ]
+  }
+}
+```
+
+See `DATAPACK_HELP.md` for the complete compact requirement list.
 
 # Realm limits
 `max_realm` limits the maximum major realm reachable with the technique.
@@ -237,6 +282,8 @@ Built-in actions:
 ```text
 ascension:give_base_stats
 ascension:give_path_bonuses
+ascension:grant_skills
+ascension:remove_skills
 ```
 
 Path bonus example:
@@ -352,4 +399,11 @@ ascension:realms_in
 Progress actions:
 ascension:give_base_stats
 ascension:give_path_bonuses
+ascension:grant_skills
+ascension:remove_skills
+
+Skill fields:
+unlock
+requirements
+caps
 ```

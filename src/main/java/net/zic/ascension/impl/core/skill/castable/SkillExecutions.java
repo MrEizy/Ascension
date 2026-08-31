@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.skill.castable.action.ActionSubject;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
@@ -74,8 +75,9 @@ public final class SkillExecutions {
     ) {
         Vec3 origin = caster.position().add(0.0D, caster.getBbHeight() * 0.5D, 0.0D);
         LivingEntity primary = primaryEntity(resolution);
+        Map<Identifier, Double> executionVariables = new HashMap<>(resolution.variables());
         for (SkillAction action : actions) {
-            applyAction(level, caster, skill, charge, resolution, origin, primary, action);
+            applyAction(level, caster, skill, charge, resolution, origin, primary, action, executionVariables);
         }
     }
 
@@ -87,41 +89,20 @@ public final class SkillExecutions {
             Resolution resolution,
             Vec3 origin,
             LivingEntity primary,
-            SkillAction action
+            SkillAction action,
+            Map<Identifier, Double> executionVariables
     ) {
-        if (action instanceof SkillActions.MasteryGate gate) {
-            double progression = resolution.variables().getOrDefault(TargetingDefinition.Context.EFFECTIVE_PROGRESSION, 0.0D);
-            if (progression >= gate.minimum().progression()) {
-                for (SkillAction nested : gate.actions()) {
-                    applyAction(level, caster, skill, charge, resolution, origin, primary, nested);
-                }
-            }
-            return;
-        }
-
         switch (action.subject()) {
-            case CASTER, ORIGIN -> action.apply(new SkillActionContext(
-                    level,
-                    caster,
-                    skill,
-                    primary,
-                    origin,
-                    charge,
-                    resolution.variables()
-            ));
+            case CASTER, ORIGIN -> SkillActionRuntime.execute(new SkillActionContext(
+                    level, caster, skill, primary, origin, charge, executionVariables
+            ), List.of(action), executionVariables);
             case TARGET, POSITION -> {
                 for (TargetingDefinition.Target target : resolution.targets()) {
-                    Map<Identifier, Double> targetVariables = new HashMap<>(resolution.variables());
+                    Map<Identifier, Double> targetVariables = new HashMap<>(executionVariables);
                     targetVariables.put(TARGET_DISTANCE, caster.getEyePosition().distanceTo(target.position()));
-                    action.apply(new SkillActionContext(
-                            level,
-                            caster,
-                            skill,
-                            target.entity(),
-                            target.position(),
-                            charge,
-                            targetVariables
-                    ));
+                    SkillActionRuntime.execute(new SkillActionContext(
+                            level, caster, skill, target.entity(), target.position(), charge, targetVariables
+                    ), List.of(action), targetVariables);
                 }
             }
         }

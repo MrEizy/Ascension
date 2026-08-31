@@ -14,10 +14,36 @@ import net.zic.ascension.api.ascension.core.technique.TechniqueSkillDefinition;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
 
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class TechniqueSkillService {
+    private static final Set<OriginSource> RECONCILING = Collections.newSetFromMap(new IdentityHashMap<>());
+
     private TechniqueSkillService() {
+    }
+
+    public static void reconcileAll(OriginSource source) {
+        if (source == null || !RECONCILING.add(source)) {
+            return;
+        }
+        try {
+            for (Identifier techniqueId : List.copyOf(AscensionOriginSourceHelper.getTechniques(source))) {
+                var technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY, techniqueId, source.getRegistryAccess());
+                if (!(technique instanceof SimpleTechnique simple)) {
+                    continue;
+                }
+                PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, simple.getPath());
+                if (pathInstance != null) {
+                    reconcile(source, techniqueId, pathInstance, simple.getSkills());
+                }
+            }
+        } finally {
+            RECONCILING.remove(source);
+        }
     }
 
     public static void reconcile(
@@ -38,7 +64,7 @@ public final class TechniqueSkillService {
                 continue;
             }
 
-            if (majorRealm < definition.unlock()) {
+            if (majorRealm < definition.unlock() || !definition.requirements().test(source)) {
                 SkillProgressionService.removeCap(source, skillId, techniqueId);
                 AscensionOriginSourceHelper.removeSkill(source, skillId, techniqueId);
                 continue;

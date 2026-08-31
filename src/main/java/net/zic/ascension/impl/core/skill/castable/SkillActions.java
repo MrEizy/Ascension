@@ -30,9 +30,11 @@ import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.runtime.AnchorNetworkDefinition;
 import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
 import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
+import net.zic.ascension.api.ascension.core.runtime.BeamDefinition;
 import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
+import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
 import net.zic.ascension.api.ascension.core.skill.castable.action.ActionSubject;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
@@ -57,6 +59,8 @@ import net.zic.ascension.impl.runtime.object.AreaFields;
 import net.zic.ascension.impl.runtime.object.OwnerBoundConstructs;
 import net.zic.ascension.impl.runtime.projectile.VirtualProjectiles;
 import net.zic.ascension.impl.runtime.object.RuntimeVisualSync;
+import net.zic.ascension.impl.runtime.object.Beams;
+import net.zic.ascension.impl.runtime.object.PersistentRuntimeVisuals;
 import net.zic.ascension.impl.runtime.weapon.WeaponSwingSpec;
 import net.zic.ascension.impl.runtime.weapon.WeaponTechniqueResolver;
 import net.zic.ascension.impl.runtime.weapon.WeaponVfxUtils;
@@ -110,6 +114,129 @@ public final class SkillActions {
 
         @Override
         public void apply(SkillActionContext context) {
+        }
+    }
+
+    public record Conditional(
+            ActionSubject subject,
+            SkillCondition condition,
+            List<SkillAction> ifTrue,
+            List<SkillAction> ifFalse
+    ) implements SkillAction {
+        public static final MapCodec<Conditional> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(Conditional::subject),
+                SkillCondition.CODEC.fieldOf("condition").forGetter(Conditional::condition),
+                SkillAction.CODEC.listOf().fieldOf("if_true").forGetter(Conditional::ifTrue),
+                SkillAction.CODEC.listOf().optionalFieldOf("if_false", List.of()).forGetter(Conditional::ifFalse)
+        ).apply(instance, Conditional::new));
+
+        public Conditional {
+            subject = subject == null ? ActionSubject.CASTER : subject;
+            ifTrue = ifTrue == null ? List.of() : List.copyOf(ifTrue);
+            ifFalse = ifFalse == null ? List.of() : List.copyOf(ifFalse);
+        }
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.CONDITIONAL.get();
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            if (context == null || condition == null) {
+                return;
+            }
+            List<SkillAction> actions = condition.test(context) ? ifTrue : ifFalse;
+            for (SkillAction action : actions) {
+                if (action != null) {
+                    action.apply(context);
+                }
+            }
+        }
+    }
+
+    public record Delay(ActionSubject subject, int ticks, List<SkillAction> actions) implements SkillAction {
+        public static final MapCodec<Delay> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(Delay::subject),
+                Codec.intRange(1, 72000).fieldOf("ticks").forGetter(Delay::ticks),
+                SkillAction.CODEC.listOf().fieldOf("actions").forGetter(Delay::actions)
+        ).apply(instance, Delay::new));
+
+        public Delay {
+            actions = actions == null ? List.of() : List.copyOf(actions);
+        }
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.DELAY.get();
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            SkillActionScheduler.schedule(context, ticks, actions);
+        }
+    }
+
+    public record Repeat(ActionSubject subject, int times, int interval, List<SkillAction> actions) implements SkillAction {
+        public static final MapCodec<Repeat> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(Repeat::subject),
+                Codec.intRange(1, 1024).fieldOf("times").forGetter(Repeat::times),
+                Codec.intRange(1, 72000).optionalFieldOf("interval", 1).forGetter(Repeat::interval),
+                SkillAction.CODEC.listOf().fieldOf("actions").forGetter(Repeat::actions)
+        ).apply(instance, Repeat::new));
+
+        public Repeat {
+            actions = actions == null ? List.of() : List.copyOf(actions);
+        }
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.REPEAT.get();
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            for (int i = 1; i <= times; i++) {
+                SkillActionScheduler.schedule(context, (long) interval * i, actions);
+            }
+        }
+    }
+
+    public record Variable(Identifier variable, VariableOperation operation, ScaledValue value) implements SkillAction {
+        public static final MapCodec<Variable> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Identifier.CODEC.fieldOf("variable").forGetter(Variable::variable),
+                VariableOperation.CODEC.optionalFieldOf("operation", VariableOperation.SET).forGetter(Variable::operation),
+                ScaledValue.COMPACT_CODEC.fieldOf("value").forGetter(Variable::value)
+        ).apply(instance, Variable::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.VARIABLE.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+        }
+    }
+
+    public enum VariableOperation implements StringRepresentable {
+        SET("set"), ADD("add"), MULTIPLY("multiply");
+
+        public static final Codec<VariableOperation> CODEC = StringRepresentable.fromEnum(VariableOperation::values);
+        private final String name;
+
+        VariableOperation(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return name;
         }
     }
 
@@ -1023,6 +1150,90 @@ public final class SkillActions {
         }
     }
 
+    public record Beam(DefinitionRef<BeamDefinition> definition) implements SkillAction {
+        public static final MapCodec<Beam> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                DefinitionRef.codec(BeamDefinition.CODEC).fieldOf("definition").forGetter(Beam::definition)
+        ).apply(instance, Beam::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.BEAM.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            Resolved<BeamDefinition> resolved = SkillDefinitions.beam(context, definition);
+            if (resolved != null) {
+                Beams.spawn(context, resolved);
+            }
+        }
+    }
+
+    public record PersistentVisual(
+            PersistentVisualAction action,
+            ActionSubject subject,
+            Identifier key,
+            Optional<Identifier> visual,
+            ScaledValue scale,
+            ScaledValue spin,
+            RuntimeVisualDefinition.VisualColor tint,
+            Optional<RuntimeVisualDefinition.VisualColor> secondaryTint,
+            boolean rotateWithSubject,
+            Vec3 offset
+    ) implements SkillAction {
+        public static final MapCodec<PersistentVisual> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                PersistentVisualAction.CODEC.optionalFieldOf("action", PersistentVisualAction.APPLY).forGetter(PersistentVisual::action),
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(PersistentVisual::subject),
+                Identifier.CODEC.fieldOf("key").forGetter(PersistentVisual::key),
+                Identifier.CODEC.optionalFieldOf("visual").forGetter(PersistentVisual::visual),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("scale", ScaledValue.constant(1.0D)).forGetter(PersistentVisual::scale),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("spin", ScaledValue.constant(0.0D)).forGetter(PersistentVisual::spin),
+                RuntimeVisualDefinition.VisualColor.CODEC.optionalFieldOf("tint", RuntimeVisualDefinition.VisualColor.WHITE).forGetter(PersistentVisual::tint),
+                RuntimeVisualDefinition.VisualColor.CODEC.optionalFieldOf("secondary_tint").forGetter(PersistentVisual::secondaryTint),
+                Codec.BOOL.optionalFieldOf("rotate_with_subject", false).forGetter(PersistentVisual::rotateWithSubject),
+                CodecHelpers.VEC3.optionalFieldOf("offset", Vec3.ZERO).forGetter(PersistentVisual::offset)
+        ).apply(instance, PersistentVisual::new));
+
+        public PersistentVisual {
+            action = action == null ? PersistentVisualAction.APPLY : action;
+            subject = subject == null ? ActionSubject.CASTER : subject;
+            visual = visual == null ? Optional.empty() : visual;
+            scale = scale == null ? ScaledValue.constant(1.0D) : scale;
+            spin = spin == null ? ScaledValue.constant(0.0D) : spin;
+            tint = tint == null ? RuntimeVisualDefinition.VisualColor.WHITE : tint;
+            secondaryTint = secondaryTint == null ? Optional.empty() : secondaryTint;
+            offset = offset == null ? Vec3.ZERO : offset;
+        }
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.PERSISTENT_VISUAL.get();
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            if (action == PersistentVisualAction.REMOVE) {
+                PersistentRuntimeVisuals.remove(context, key);
+                return;
+            }
+            LivingEntity attached = context.entity(subject);
+            if (attached == null || visual.isEmpty()) {
+                return;
+            }
+            RuntimeVisualDefinition.VisualColor endTint = secondaryTint.orElse(tint);
+            PersistentRuntimeVisuals.apply(
+                    context, key, visual.get(), attached, offset, rotateWithSubject,
+                    (float) Math.max(0.0001D, scale.resolve(context.scaledValueContext())),
+                    spin.resolve(context.scaledValueContext()), tint.argb(), endTint.argb()
+            );
+        }
+    }
+
     public record Visual(
             ActionSubject subject,
             Identifier visual,
@@ -1106,6 +1317,22 @@ public final class SkillActions {
                     endTint.argb(),
                     null
             ));
+        }
+    }
+
+    public enum PersistentVisualAction implements StringRepresentable {
+        APPLY("apply"), REMOVE("remove");
+
+        public static final Codec<PersistentVisualAction> CODEC = StringRepresentable.fromEnum(PersistentVisualAction::values);
+        private final String name;
+
+        PersistentVisualAction(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return name;
         }
     }
 

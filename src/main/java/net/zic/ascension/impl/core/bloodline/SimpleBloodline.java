@@ -16,6 +16,7 @@ import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
+import net.zic.ascension.impl.core.technique.TechniqueSkillService;
 
 import java.util.Collection;
 import java.util.List;
@@ -86,9 +87,13 @@ public class SimpleBloodline implements Bloodline {
 
     @Override
     public Collection<Identifier> onRemoved(OriginSource source, BloodlineData data) {
-
+        Identifier bloodlineId = CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
+        for (int purity = data.getPurity(); purity >= 1; purity--) {
+            data.setPurity(purity);
+            holder.run(source, bloodlineId, data, ProgressDirection.DOWN);
+        }
         data.setPurity(0);
-        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.DOWN);
+        TechniqueSkillService.reconcileAll(source);
         return unlockedPaths;
     }
 
@@ -105,12 +110,13 @@ public class SimpleBloodline implements Bloodline {
     @Override
     public void purityDown(OriginSource source, BloodlineData data) {
         holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.DOWN);
+        TechniqueSkillService.reconcileAll(source);
     }
 
     @Override
     public void purityUp(OriginSource source, BloodlineData data) {
         holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.UP);
-
+        TechniqueSkillService.reconcileAll(source);
     }
 
     @Override

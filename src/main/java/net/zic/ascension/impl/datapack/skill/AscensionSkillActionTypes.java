@@ -18,6 +18,10 @@ public final class AscensionSkillActionTypes {
     );
 
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> MASTERY_GATE = TYPES.add("mastery_gate", SkillActions.MasteryGate.CODEC);
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> CONDITIONAL = TYPES.add("conditional", SkillActions.Conditional.CODEC);
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> DELAY = TYPES.add("delay", SkillActions.Delay.CODEC);
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> REPEAT = TYPES.add("repeat", SkillActions.Repeat.CODEC);
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> VARIABLE = TYPES.add("variable", SkillActions.Variable.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> MESSAGE = TYPES.add("message", SkillActions.Message.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> SOUND = TYPES.add("sound", SkillActions.Sound.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> PARTICLES = TYPES.add("particles", SkillActions.Particles.CODEC);
@@ -36,6 +40,8 @@ public final class AscensionSkillActionTypes {
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> MOVE = TYPES.add("move", SkillActions.Move.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> ANCHOR = TYPES.add("anchor", SkillActions.Anchor.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> VISUAL = TYPES.add("visual", SkillActions.Visual.CODEC);
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> PERSISTENT_VISUAL = TYPES.add("persistent_visual", SkillActions.PersistentVisual.CODEC);
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> BEAM = TYPES.add("beam", SkillActions.Beam.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> WEAPON_SWING = TYPES.add("weapon_swing", SkillActions.WeaponSwing.CODEC);
 
     private AscensionSkillActionTypes() {
@@ -43,6 +49,7 @@ public final class AscensionSkillActionTypes {
 
     public static void register(IEventBus eventBus) {
         TYPES.register(eventBus);
+        AscensionSkillConditionTypes.register(eventBus);
         PassiveModifiers.register(eventBus);
         AscensionBuildupChannels.register(eventBus);
     }
