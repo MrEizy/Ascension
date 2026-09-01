@@ -168,19 +168,15 @@ public class AscModelProvider extends ModelProvider {
         Identifier model = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/spiritual_stone_cluster");
         MultiVariant base = BlockModelGenerators.plainVariant(model);
 
-        var xRot180 = BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.X_ROT_90);
-        var yRot180 = BlockModelGenerators.Y_ROT_90.then(BlockModelGenerators.Y_ROT_90);
-        var yRot270 = yRot180.then(BlockModelGenerators.Y_ROT_90);
-
         blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.dispatch(block, base)
                         .with(PropertyDispatch.modify(SpiritualStoneClusterBlock.FACING)
                                 .select(Direction.UP, BlockModelGenerators.NOP)
-                                .select(Direction.DOWN, xRot180)
+                                .select(Direction.DOWN, BlockModelGenerators.X_ROT_180)
                                 .select(Direction.NORTH, BlockModelGenerators.X_ROT_90)
-                                .select(Direction.SOUTH, BlockModelGenerators.X_ROT_90.then(yRot180))
+                                .select(Direction.SOUTH, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_180))
                                 .select(Direction.EAST, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_90))
-                                .select(Direction.WEST, BlockModelGenerators.X_ROT_90.then(yRot270))));
+                                .select(Direction.WEST, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_270))));
 
         blockModels.registerSimpleItemModel(block, model);
     }
@@ -249,19 +245,15 @@ public class AscModelProvider extends ModelProvider {
 
         MultiVariant baseVariant = BlockModelGenerators.plainVariant(model);
 
-        var xRot180 = BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.X_ROT_90);
-        var xRot270 = xRot180.then(BlockModelGenerators.X_ROT_90);
-        var yRot270 = BlockModelGenerators.Y_ROT_90.then(BlockModelGenerators.Y_ROT_90).then(BlockModelGenerators.Y_ROT_90);
-
         blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.dispatch(block, baseVariant)
                         .with(PropertyDispatch.modify(DirectionalBlock.FACING)
                                 .select(Direction.UP, BlockModelGenerators.NOP)
-                                .select(Direction.DOWN, xRot180)
-                                .select(Direction.NORTH, xRot270)
-                                .select(Direction.SOUTH, BlockModelGenerators.X_ROT_90)
-                                .select(Direction.EAST, BlockModelGenerators.X_ROT_90.then(yRot270))
-                                .select(Direction.WEST, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_90))));
+                                .select(Direction.DOWN, BlockModelGenerators.X_ROT_180)
+                                .select(Direction.NORTH, BlockModelGenerators.X_ROT_90)
+                                .select(Direction.SOUTH, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_180))
+                                .select(Direction.EAST, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_90))
+                                .select(Direction.WEST, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_270))));
 
         blockModels.registerSimpleItemModel(block, model);
     }
