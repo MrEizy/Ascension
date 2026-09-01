@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/crop",
   "textures": {
-    "crop": "ascension:block/herbs/nine_sun_fire_root_stage1"
+    "crop": "ascension:block/herbs/nine_sun_root_stage1"
   }
 }

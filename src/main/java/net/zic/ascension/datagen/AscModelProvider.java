@@ -58,26 +58,29 @@ public class AscModelProvider extends ModelProvider {
         herbItemModel(itemModels, ModItems.GINSENG.get(), "ginseng");
         herbItemModel(itemModels, ModItems.FIRE_GINSENG.get(), "fire_ginseng");
         herbItemModel(itemModels, ModItems.SNOW_GINSENG.get(), "snow_ginseng");
-        herbItemModel(itemModels, ModItems.NINE_SUN_FIRE_ROOT.get());
         herbItemModel(itemModels, ModItems.MOONWELL_JADE_LOTUS.get());
-        herbItemModel(itemModels, ModItems.HEAVENLY_THUNDER_PEACH.get());
         herbItemModel(itemModels, ModItems.LINGZHI_MUSHROOM.get());
         herbItemModel(itemModels, ModItems.BLOOD_LINGZHI_MUSHROOM.get());
         herbItemModel(itemModels, ModItems.WHITE_JADE_ORCHID.get());
         herbItemModel(itemModels, ModItems.PEACH.get());
+        herbItemModel(itemModels, ModItems.HEAVENLY_THUNDER_PEACH.get());
+        herbItemModel(itemModels, ModItems.NINE_SUN_FIRE_ROOT.get());
 
 
         //Herb Blocks
         herbBlockModelRotated(blockModels, ModBlocks.LINGZHI_MUSHROOM_B.get());
         herbBlockModelRotated(blockModels, ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get());
         cultivationSoilModel(blockModels);
-        herbCropModel(blockModels, ModBlocks.JADE_DEW_GRASS_CROP.get());
-        herbCropModel(blockModels, ModBlocks.GINSENG_CROP.get(), "ginseng");
-        herbCropModel(blockModels, ModBlocks.FIRE_GINSENG_CROP.get(), "hundred_year_fire_ginseng");
-        herbCropModel(blockModels, ModBlocks.SNOW_GINSENG_CROP.get(), "hundred_year_snow_ginseng");
-        herbCropModel(blockModels, ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get());
-        herbCropModel(blockModels, ModBlocks.MOONWELL_JADE_LOTUS_CROP.get());
-        herbCropModel(blockModels, ModBlocks.WHITE_JADE_ORCHID_CROP.get(), "white_jade_orchid");
+        herbCutoutCropModel(blockModels, ModBlocks.JADE_DEW_GRASS_CROP.get());
+        herbCutoutCropModel(blockModels, ModBlocks.GINSENG_CROP.get(), "ginseng");
+        herbCutoutCropModel(blockModels, ModBlocks.FIRE_GINSENG_CROP.get(), "hundred_year_fire_ginseng");
+        herbCutoutCropModel(blockModels, ModBlocks.SNOW_GINSENG_CROP.get(), "hundred_year_snow_ginseng");
+        herbCutoutCropModel(blockModels, ModBlocks.MOONWELL_JADE_LOTUS_CROP.get());
+
+        herbCutoutCropModel(blockModels, ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get(), "nine_sun_root");
+        herbCutoutCropModel(blockModels, ModBlocks.WHITE_JADE_ORCHID_CROP.get(), "white_jade_orchid");
+
+
         podHerbModel(blockModels, ModBlocks.PEACH_POD.get(), "peach");
         podHerbModel(blockModels, ModBlocks.HEAVENLY_THUNDER_PEACH_POD.get(), "heavenly_thunder_peach");
 
@@ -267,11 +270,46 @@ public class AscModelProvider extends ModelProvider {
     }
 
 
-    private void herbCropModel(BlockModelGenerators blockModels, HerbCropBlock block) {
-        herbCropModel(blockModels, block, block.definition().id().getPath());
+    private void herbCutoutCropModel(BlockModelGenerators blockModels, HerbCropBlock block) {
+        herbCutoutCropModel(blockModels, block, block.definition().id().getPath());
     }
 
-    private void herbCropModel(BlockModelGenerators blockModels, HerbCropBlock block, String texturePath) {
+    private void herbCutoutCropModel(BlockModelGenerators blockModels, HerbCropBlock block, String texturePath) {
+        int growthStages = block.definition().growthStages();
+        Identifier[] stageModels = new Identifier[growthStages];
+        String herbPath = block.definition().id().getPath();
+
+        for (int visualStage = 0; visualStage < growthStages; visualStage++) {
+            Identifier model = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/herbs/" + herbPath + "_stage" + visualStage);
+            Material texture = new Material(Identifier.fromNamespaceAndPath(
+                    AscensionCraft.MOD_ID,
+                    "block/herbs/" + texturePath + "_stage" + visualStage
+            ));
+            stageModels[visualStage] = ModelTemplates.CROP.create(
+                    model,
+                    TextureMapping.crop(texture),
+                    blockModels.modelOutput
+            );
+        }
+
+        MultiPartGenerator blockState = MultiPartGenerator.multiPart(block);
+
+        for (int stage = 0; stage <= HerbCropBlock.MAX_STAGE; stage++) {
+            int visualStage = Math.min(stage, block.definition().maxGrowthStage());
+            blockState.with(
+                    BlockModelGenerators.condition().term(HerbCropBlock.STAGE, stage),
+                    BlockModelGenerators.plainVariant(stageModels[visualStage])
+            );
+        }
+
+        blockModels.blockStateOutput.accept(blockState);
+    }
+
+    private void herbCrossCropModel(BlockModelGenerators blockModels, HerbCropBlock block) {
+        herbCutoutCropModel(blockModels, block, block.definition().id().getPath());
+    }
+
+    private void herbCrossCropModel(BlockModelGenerators blockModels, HerbCropBlock block, String texturePath) {
         int growthStages = block.definition().growthStages();
         Identifier[] stageModels = new Identifier[growthStages];
         String herbPath = block.definition().id().getPath();
