@@ -136,7 +136,7 @@ dependencies {
 
    implementation('com.github.OliverHesse:EasyGui:d71b1e115c')
     //implementation 'com.github.MrEizy:Builders-Zenith:ae34247ef0'
-
+    implementation 'com.github.OliverHesse:FormationArrays:e3287424e5'
    // implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     //compileOnly "net.favouriteless.modopedia:modopedia-neoforge-${minecraft_version}:${modopedia_version}"

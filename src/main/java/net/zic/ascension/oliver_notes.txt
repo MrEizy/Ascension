@@ -1,3 +1,5 @@
+TODO consider moving over to an INT/LONG system of units for qi instead of double
+
 
 TODO create a web dashboard.
 so write a mod that can hook into the server endpoints and read certain data from it
