@@ -25,6 +25,8 @@ public class ConfigurationDataMaps {
             // The codec of the data map entries.
             MobConfiguration.CODEC
     ).build();
+
+
     @SubscribeEvent // on the mod event bus
     public static void registerDataMapTypes(RegisterDataMapTypesEvent event) {
         System.out.println("registered data map");
