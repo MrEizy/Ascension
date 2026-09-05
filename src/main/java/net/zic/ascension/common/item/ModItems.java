@@ -17,6 +17,7 @@ import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHuman;
 import net.zic.ascension.common.item.artifacts.pills.JadeBottleItem;
 import net.zic.ascension.common.item.herbs.HerbItem;
+import net.zic.ascension.common.item.qi_holder.SpiritStone;
 import net.zic.ascension.common.item.transfer_item.BloodlineTransferItem;
 import net.zic.ascension.common.item.transfer_item.PhysiqueTransferItem;
 import net.zic.ascension.common.item.transfer_item.TechniqueTransferItem;
@@ -43,6 +44,12 @@ public class ModItems {
                     .setId(RegistryHelper.key(Registries.ITEM,AscensionCraft.MOD_ID,"technique_manual"))
                     .stacksTo(1)
             ));
+
+
+    //Spirit Stone stuff
+
+    public static final DeferredItem<Item> SPIRIT_STONE = ITEMS.registerItem("spirit_stone",
+            properties -> new SpiritStone(properties.stacksTo(64)));
 
 
 

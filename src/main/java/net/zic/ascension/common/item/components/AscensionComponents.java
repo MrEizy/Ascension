@@ -26,6 +26,25 @@ public class AscensionComponents {
                     .networkSynchronized(Identifier.STREAM_CODEC)
                     .build()
     );
+    //for now only used by qi items like spirit stones, but could be repurposed for a general use tier
+    //TODO consider expecting them to be translatable keys? or expand the tierCapacity definition to be a general
+    //TODO tier definition which includes a translatable key?
+    public static final Supplier<DataComponentType<String>> ITEM_TIER = DATA_COMPONENTS.register(
+            "spirit_stone_tier",
+            ()->DataComponentType.<String>builder()
+                    .persistent(Codec.STRING)
+                    .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                    .build()
+    );
+    public static final Supplier<DataComponentType<Long>> ITEM_QI = DATA_COMPONENTS.register(
+            "item_qi",
+            ()->DataComponentType.<Long>builder()
+                    .persistent(Codec.LONG)
+                    .networkSynchronized(ByteBufCodecs.LONG)
+                    .build()
+            );
+
+
     public static final Supplier<DataComponentType<Integer>> PURITY = DATA_COMPONENTS.register(
             "purity",
             ()->DataComponentType.<Integer>builder()

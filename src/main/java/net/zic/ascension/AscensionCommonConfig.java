@@ -28,8 +28,13 @@ public class AscensionCommonConfig {
     // Weapon Projections
     public final ModConfigSpec.BooleanValue WEAPON_PROJECTION_BLOCK_BREAKING;
 
+    //public final ModConfigSpec.ConfigValue<Map<String,Long>> SPIRIT_STONE_CAPACITY;
 
     public AscensionCommonConfig(ModConfigSpec.Builder builder) {
+        builder.push("SpiritStone");
+        builder.comment("qi capacity of spirit stones");
+        //SPIRIT_STONE_CAPACITY = builder.define
+
         builder.push("PillCauldron");
         builder.comment("Heat items for Pill Cauldron",
                 "Format: [\"modid:item_id,heat_value\", \"modid:item_id,heat_value\"]",
