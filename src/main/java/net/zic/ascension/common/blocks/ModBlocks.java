@@ -61,6 +61,9 @@ public class ModBlocks {
             properties -> new Block(properties.strength(5.5f).explosionResistance(4.5f)
                     .requiresCorrectToolForDrops().sound(SoundType.METAL)));
 
+    //Energy
+    public static final DeferredBlock<Block> SPIRIT_STONE_CLUSTER  = registerBlock("spirit_stone_cluster",
+            properties -> new Block(properties.sound(SoundType.AMETHYST)));
 
 
     //Fluids

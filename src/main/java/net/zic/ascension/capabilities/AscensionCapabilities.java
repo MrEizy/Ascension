@@ -13,6 +13,8 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.damage_provider.AscensionDamageSourceProvider;
 import net.zic.ascension.capabilities.entity_holder.SimpleEntityDataProvider;
 import net.zic.ascension.capabilities.qi_provider.SimpleEntityQiProvider;
+import net.zic.ascension.common.blocks.ModBlocks;
+import net.zic.ascension.common.blocks.spirit_stone.SpiritStoneClusterQiHandler;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class AscensionCapabilities {
@@ -51,6 +53,11 @@ public class AscensionCapabilities {
                 CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER,
                 EntityType.PLAYER,
                 (entity,nul)->new SimpleEntityQiProvider(entity)
+        );
+        event.registerBlock(
+                CoreCapabilities.BLOCK_QI_HANDLER,
+                (level,pos,state,entity,c)->new SpiritStoneClusterQiHandler(level,pos,state,entity),
+                ModBlocks.SPIRIT_STONE_CLUSTER.get()
         );
 
         System.out.println("registering capabilities");

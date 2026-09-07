@@ -1,13 +1,10 @@
 package net.zic.ascension.mob_cultivation.oliver_rewrite;
 
 import net.minecraft.world.entity.Mob;
-import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
-import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.configuration.ConfigurationDataMaps;
 import net.zic.ascension.configuration.mob_traits.MobTraitReference;
 import net.zic.ascension.configuration.mobs.MobConfiguration;
-import net.zic.ascension.configuration.mobs.MobTierDefinition;
 import net.zic.ascension.configuration.mobs.PotentialTier;
 import net.zic.ascension.configuration.mobs.PotentialTrait;
 import net.zic.ascension.configuration.mobs.condition.TierCondition;
@@ -21,10 +18,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MobSpawnHelper {
 
     public static boolean hasConfig(Mob mob){
-        return mob.getData(ConfigurationDataMaps.MOB_CONFIGURATION_DATA_MAP) != null;
+        return mob.getData(ConfigurationDataMaps.MOB_CONFIGURATION) != null;
     }
     public static MobConfiguration getConfig(Mob mob){
-        return mob.getData(ConfigurationDataMaps.MOB_CONFIGURATION_DATA_MAP);
+        return mob.getData(ConfigurationDataMaps.MOB_CONFIGURATION);
     }
     public static boolean hasConfigHolder(Mob mob){
         return mob.hasData(AscensionAttachments.MOB_CONFIG_HOLDER);

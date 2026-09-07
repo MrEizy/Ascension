@@ -30,6 +30,7 @@ public class ModTags {
     }
 
     public static class Items {
+
         public static final TagKey<Item> ARTIFACTS = createItemTag("artifacts");
         public static final TagKey<Item> HERBS = createItemTag("herbs");
         public static final TagKey<Item> PILLS = createItemTag("pills");
@@ -37,6 +38,7 @@ public class ModTags {
         public static final TagKey<Item> TOOLS = createItemTag("tools");
         public static final TagKey<Item> TALISMANS = createItemTag("talismans");
         public static final TagKey<Item> MATERIALS = createItemTag("materials");
+        public static final TagKey<Item> SPIRIT_STONE = createItemTag("spirit_stone");
 
         public static final TagKey<Item> WEAPON_BLADES = createItemTag("weapon/blades");
         public static final TagKey<Item> WEAPON_BOWS = createItemTag("weapon/bows");
