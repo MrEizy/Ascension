@@ -1,0 +1,7 @@
+update how base chunk stats are determined
+
+CAPACITY,REGEN_RATE, AFFINITY
+    - biome + dimension modifiers
+    - blocks/entities/block entities
+    - distance from 0,0 (make this part of the dimension modifier)
+    - random modifier per chunk based on seed?

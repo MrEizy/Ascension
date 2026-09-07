@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 /**
  * Holds the qi of a chunk.
  * Qi is either pure or typed
- *
+ * TODO split qi and affinity into 2 separate attachments
  */
 public class ChunkQiContainer implements PathBonusProvider {
     private double energy;
