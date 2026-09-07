@@ -11,6 +11,7 @@ import net.minecraft.resources.Identifier;
  * @param energyRegen the influence this dimension has on the energy Regen of a chunk
  * @param affinities the affinities this dimension gives a chunk
  */
+@Deprecated
 public record DimensionConfiguration(double energyCap, double energyRegen, Object2DoubleMap<Identifier> affinities){
     /**
      *  because multiple configurations can influence the same dimension we use a builder pattern

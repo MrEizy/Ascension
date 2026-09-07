@@ -25,6 +25,7 @@ import static net.zic.ascension.configuration.ConfigurationRegistries.RAW_BIOME_
  *
  * uses an instance so we can pass that for dependency injection rather that referenceing a static instance
  */
+@Deprecated
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class BiomeConfigurations {
 
