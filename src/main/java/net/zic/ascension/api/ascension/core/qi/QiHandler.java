@@ -38,4 +38,7 @@ public interface QiHandler {
 
     long getQi();
     long getCapacity();
+
+
+    boolean isFull();
 }
