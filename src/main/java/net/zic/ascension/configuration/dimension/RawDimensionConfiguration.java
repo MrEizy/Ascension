@@ -16,6 +16,7 @@ import java.util.Map;
  * @param energyRegen
  * @param affinities
  */
+@Deprecated
 public record RawDimensionConfiguration(List<Identifier> dimensions, double energyCap, double energyRegen,
                                         Object2DoubleOpenHashMap<Identifier> affinities) {
 

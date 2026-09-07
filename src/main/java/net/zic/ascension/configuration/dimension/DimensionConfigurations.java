@@ -16,6 +16,7 @@ import java.util.Map;
 import static net.zic.ascension.configuration.ConfigurationRegistries.RAW_DIMENSION_CONFIGURATION_REGISTRY;
 
 //TODO update to use raw identifier keys, rather than Holder<Level>
+@Deprecated
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class DimensionConfigurations {
     private static DimensionConfigurations instance;

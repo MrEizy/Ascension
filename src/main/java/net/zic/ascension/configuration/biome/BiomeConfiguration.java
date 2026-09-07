@@ -5,12 +5,14 @@ import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.resources.Identifier;
 
 /**
+ * //TODO update to long for energy cap and regen rate
  * Holds configuration details for a biome,
  * these are not configurations that effect world gen
  * @param energyCap the influence this biome has on the max energy of a chunk
  * @param energyRegen the influence this biome has on the energy Regen of a chunk
  * @param affinities the affinities this biome gives a chunk
  */
+@Deprecated
 public record BiomeConfiguration(double energyCap, double energyRegen, Object2DoubleMap<Identifier> affinities) {
 
     /**

@@ -19,6 +19,7 @@ import java.util.Map;
  * @param energyRegen
  * @param affinities
  */
+@Deprecated
 public record RawBiomeConfiguration(HolderSet<Biome> biomes, double energyCap, double energyRegen,
                                     Object2DoubleOpenHashMap<Identifier> affinities) {
 
