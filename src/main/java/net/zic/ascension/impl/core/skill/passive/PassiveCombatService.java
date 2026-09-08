@@ -11,11 +11,13 @@ import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
-import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.impl.resource.AscensionResourceSources;
+import net.zic.ascension.impl.resource.AscensionResourceTypes;
 
 import java.util.Map;
 
@@ -24,34 +26,50 @@ public final class PassiveCombatService {
     }
 
     public static double outgoingDamageMultiplier(RPGEngineEntityDamagedEvent.Pre event) {
-        if (event.getDamage() <= 0.0D
-                || event.getSource().hasDamageTypeHolder(AscensionDamageTypeHolders.ATTRIBUTION)
-                || !(event.getSource().getEntity() instanceof ServerPlayer player)) {
+        if (event.getDamage() <= 0.0D || !(event.getSource().getEntity() instanceof LivingEntity attacker)) {
             return 1.0D;
         }
-        OriginSource source = AscensionOriginSourceHelper.getEntitySource(player);
+        OriginSource source = originSource(attacker);
         if (source == null) {
             return 1.0D;
         }
-        double bestMultiplier = 1.0D;
-        for (PassiveSkillService.Entry<PassiveModifiers.WeaponDamage> entry
-                : PassiveSkillService.modifiers(source, player.registryAccess(), PassiveModifiers.WeaponDamage.class)) {
-            if (!matchesWeaponDamage(player, event.getSource().getDirectEntity(), entry.modifier())) {
-                continue;
+
+        double multiplier = 1.0D;
+        if (attacker instanceof ServerPlayer player && !event.getSource().hasDamageTypeHolder(AscensionDamageTypeHolders.ATTRIBUTION)) {
+            double bestWeaponMultiplier = 1.0D;
+            for (PassiveSkillService.Entry<PassiveModifiers.WeaponDamage> entry : PassiveSkillService.modifiers(source, player.registryAccess(), PassiveModifiers.WeaponDamage.class)) {
+                if (!matchesWeaponDamage(player, event.getSource().getDirectEntity(), entry.modifier())) {
+                    continue;
+                }
+                double value = entry.modifier().multiplier().resolve(new ScaledValue.Context(
+                        source,
+                        entry.skillId(),
+                        player,
+                        event.getEntity(),
+                        0.0D,
+                        Map.of()
+                ));
+                if (Double.isFinite(value)) {
+                    bestWeaponMultiplier = Math.max(bestWeaponMultiplier, Math.max(0.0D, value));
+                }
             }
-            double value = entry.modifier().multiplier().resolve(new ScaledValue.Context(
+            multiplier *= bestWeaponMultiplier;
+        }
+
+        for (PassiveSkillService.Entry<PassiveModifiers.Combat> entry : PassiveSkillService.modifiers(source, attacker.registryAccess(), PassiveModifiers.Combat.class)) {
+            double bonus = entry.modifier().outgoingDamage().resolve(new ScaledValue.Context(
                     source,
                     entry.skillId(),
-                    player,
+                    attacker,
                     event.getEntity(),
                     0.0D,
                     Map.of()
             ));
-            if (Double.isFinite(value)) {
-                bestMultiplier = Math.max(bestMultiplier, Math.max(0.0D, value));
+            if (Double.isFinite(bonus)) {
+                multiplier *= Math.max(0.0D, 1.0D + bonus);
             }
         }
-        return bestMultiplier;
+        return multiplier;
     }
 
     public static double incomingDamage(RPGEngineEntityDamagedEvent.Pre event, double incomingDamage) {
@@ -79,7 +97,56 @@ public final class PassiveCombatService {
                 retainedDamage *= 1.0D - Math.clamp(percentage, 0.0D, 0.95D);
             }
         }
-        return Math.max(0.0D, (incomingDamage - flatReduction) * retainedDamage);
+        double resolved = Math.max(0.0D, (incomingDamage - flatReduction) * retainedDamage);
+        for (PassiveSkillService.Entry<PassiveModifiers.Combat> entry : PassiveSkillService.modifiers(source, target.registryAccess(), PassiveModifiers.Combat.class)) {
+            double bonus = entry.modifier().incomingDamage().resolve(new ScaledValue.Context(
+                    source,
+                    entry.skillId(),
+                    target,
+                    attacker,
+                    0.0D,
+                    Map.of()
+            ));
+            if (Double.isFinite(bonus)) {
+                resolved *= Math.max(0.0D, 1.0D + bonus);
+            }
+        }
+        return Math.max(0.0D, resolved);
+    }
+
+    public static void applyLifesteal(RPGEngineEntityDamagedEvent.Post event) {
+        if (event.getDamage() <= 0.0D
+                || !(event.getSource().getEntity() instanceof LivingEntity attacker)
+                || attacker == event.getEntity()
+                || !attacker.isAlive()) {
+            return;
+        }
+        OriginSource source = originSource(attacker);
+        if (source == null) {
+            return;
+        }
+        double fraction = 0.0D;
+        for (PassiveSkillService.Entry<PassiveModifiers.Combat> entry : PassiveSkillService.modifiers(source, attacker.registryAccess(), PassiveModifiers.Combat.class)) {
+            double value = entry.modifier().lifesteal().resolve(new ScaledValue.Context(
+                    source,
+                    entry.skillId(),
+                    attacker,
+                    event.getEntity(),
+                    0.0D,
+                    Map.of()
+            ));
+            if (Double.isFinite(value) && value > 0.0D) {
+                fraction += value;
+            }
+        }
+        if (fraction > 0.0D) {
+            ResourceTransactionService.restore(
+                    attacker,
+                    AscensionResourceTypes.HEALTH.getId(),
+                    AscensionResourceSources.LIFESTEAL,
+                    event.getDamage() * fraction
+            );
+        }
     }
 
     public static double staggerResistance(LivingEntity target, SkillActionContext actionContext) {
@@ -91,8 +158,7 @@ public final class PassiveCombatService {
         LivingEntity attacker = actionContext == null ? null : actionContext.caster();
         double charge = actionContext == null ? 0.0D : actionContext.charge();
         Map<Identifier, Double> variables = actionContext == null ? Map.of() : actionContext.variables();
-        for (PassiveSkillService.Entry<PassiveModifiers.Defense> entry
-                : PassiveSkillService.modifiers(source, target.registryAccess(), PassiveModifiers.Defense.class)) {
+        for (PassiveSkillService.Entry<PassiveModifiers.Defense> entry : PassiveSkillService.modifiers(source, target.registryAccess(), PassiveModifiers.Defense.class)) {
             ScaledValue.Context context = new ScaledValue.Context(source, entry.skillId(), target, attacker, charge, variables);
             double resistance = entry.modifier().staggerResistance().resolve(context);
             if (Double.isFinite(resistance) && resistance > 0.0D) {
@@ -104,9 +170,7 @@ public final class PassiveCombatService {
 
     private static boolean matchesWeaponDamage(ServerPlayer player, Entity direct, PassiveModifiers.WeaponDamage modifier) {
         ItemStack stack = player.getMainHandItem();
-        boolean tagMatch = modifier.weaponTag().isPresent()
-                && !stack.isEmpty()
-                && stack.is(TagKey.create(Registries.ITEM, modifier.weaponTag().get()));
+        boolean tagMatch = modifier.weaponTag().isPresent() && !stack.isEmpty() && stack.is(TagKey.create(Registries.ITEM, modifier.weaponTag().get()));
         return switch (modifier.match()) {
             case HELD_WEAPON -> direct == player && tagMatch;
             case EMPTY_HAND_OR_TAG -> direct == player && (stack.isEmpty() || tagMatch);

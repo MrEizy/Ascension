@@ -48,6 +48,7 @@ public final class PassiveModifiers {
 
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> STATS = register("stats", Stats.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> DEFENSE = register("defense", Defense.CODEC);
+    public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> COMBAT = register("combat", Combat.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> RESOURCES = register("resources", Resources.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> PROJECTILES = register("projectiles", Projectiles.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> WEAPON_DAMAGE = register("weapon_damage", WeaponDamage.CODEC);
@@ -158,6 +159,29 @@ public final class PassiveModifiers {
         @Override
         public CodecType<PassiveModifier> getType() {
             return DEFENSE.get();
+        }
+    }
+
+    public record Combat(
+            ScaledValue outgoingDamage,
+            ScaledValue incomingDamage,
+            ScaledValue lifesteal
+    ) implements PassiveModifier {
+        public static final MapCodec<Combat> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("outgoing_damage", ScaledValue.constant(0.0D)).forGetter(Combat::outgoingDamage),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("incoming_damage", ScaledValue.constant(0.0D)).forGetter(Combat::incomingDamage),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("lifesteal", ScaledValue.constant(0.0D)).forGetter(Combat::lifesteal)
+        ).apply(instance, Combat::new));
+
+        public Combat {
+            outgoingDamage = outgoingDamage == null ? ScaledValue.constant(0.0D) : outgoingDamage;
+            incomingDamage = incomingDamage == null ? ScaledValue.constant(0.0D) : incomingDamage;
+            lifesteal = lifesteal == null ? ScaledValue.constant(0.0D) : lifesteal;
+        }
+
+        @Override
+        public CodecType<PassiveModifier> getType() {
+            return COMBAT.get();
         }
     }
 

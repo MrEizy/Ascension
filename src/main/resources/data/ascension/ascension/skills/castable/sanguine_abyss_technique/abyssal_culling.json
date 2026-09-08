@@ -11,7 +11,7 @@
     "minimum_ticks": 20,
     "maximum_ticks": 60,
     "cost": {
-      "resource": "ascension:stamina", //Todo make it use health
+      "resource": "ascension:health",
       "operation": "ascension:consume",
       "source": "ascension:skill_casting",
       "cumulative_cost": {

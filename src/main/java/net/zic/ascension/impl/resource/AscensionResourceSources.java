@@ -42,6 +42,11 @@ public final class AscensionResourceSources {
             AscensionCraft.prefix("damage"),
             ResourceSourceIdentity.Tags.COMBAT
     );
+    public static final ResourceSourceIdentity LIFESTEAL = ResourceSourceIdentity.of(
+            AscensionCraft.prefix("lifesteal"),
+            ResourceSourceIdentity.Tags.COMBAT,
+            ResourceSourceIdentity.Tags.SKILL
+    );
     public static final ResourceSourceIdentity NATURAL_REGENERATION = ResourceSourceIdentity.of(
             AscensionCraft.prefix("natural_regeneration"),
             ResourceSourceIdentity.Tags.REGENERATION,

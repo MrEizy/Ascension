@@ -36,6 +36,7 @@ import net.zic.ascension.impl.core.effect.FrozenStateService;
 import net.zic.ascension.impl.core.effect.SkillEffectManager;
 import net.zic.ascension.impl.core.effect.SkillEffectModules;
 import net.zic.ascension.impl.core.skill.body.BodyCultivationSkillService;
+import net.zic.ascension.impl.core.skill.passive.PassiveCombatService;
 import net.zic.ascension.impl.core.skill.passive.PassiveModifiers;
 import net.zic.ascension.impl.core.skill.passive.PassiveSkillService;
 import net.zic.ascension.impl.core.skill.passive.PassiveTriggerService;
@@ -68,6 +69,7 @@ public final class SkillRuntimeEvents {
         LivingEntity attacker = event.getSource().getEntity() instanceof LivingEntity entity ? entity : null;
         Map<Identifier, Double> variables = Map.of(PassiveTriggerService.DAMAGE, event.getDamage());
         if (attacker != null && attacker != event.getEntity()) {
+            PassiveCombatService.applyLifesteal(event);
             PassiveTriggerService.trigger(attacker, PassiveTrigger.Event.DAMAGE_DEALT, event.getEntity(), variables);
         }
         PassiveTriggerService.trigger(event.getEntity(), PassiveTrigger.Event.DAMAGE_TAKEN, attacker, variables);

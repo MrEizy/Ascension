@@ -143,9 +143,9 @@
     }
   ],
   "cost": {
-    "resource": "ascension:stamina",
+    "resource": "ascension:health",
     "operation": "ascension:consume",
     "source": "ascension:skill_casting",
-    "amount": 0.02
+    "amount": 0.1
   }
 }

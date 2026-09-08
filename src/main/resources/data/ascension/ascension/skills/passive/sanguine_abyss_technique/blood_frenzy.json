@@ -1,0 +1,27 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.blood_frenzy.name"
+  },
+  "description": {
+    "translate": "ascension.skill.blood_frenzy.desc"
+  },
+  "toggleable": true,
+  "enabled_by_default": false,
+  "enable_conditions": [
+    {
+      "type": "ascension:health",
+      "comparison": "greater_than",
+      "value": 2.0,
+      "percentage": false
+    }
+  ],
+  "modifiers": [
+    {
+      "type": "ascension:combat",
+      "outgoing_damage": 0.35,
+      "incoming_damage": 0.25,
+      "lifesteal": 0.15
+    }
+  ]
+}

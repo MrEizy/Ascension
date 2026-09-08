@@ -72,10 +72,10 @@ public final class AscensionDamageHandler {
             return;
         }
 
-        double masteryMultiplier = PassiveCombatService.outgoingDamageMultiplier(event);
-        if (Double.isFinite(masteryMultiplier) && masteryMultiplier > 0.0D) {
-            event.setDamage(event.getDamage() * masteryMultiplier);
-            trace.multiply("Weapon mastery", masteryMultiplier);
+        double outgoingMultiplier = PassiveCombatService.outgoingDamageMultiplier(event);
+        if (Double.isFinite(outgoingMultiplier) && outgoingMultiplier >= 0.0D) {
+            event.setDamage(event.getDamage() * outgoingMultiplier);
+            trace.multiply("Passive offense", outgoingMultiplier);
         }
         if (finishIfResolved(event, trace)) {
             return;
@@ -83,7 +83,7 @@ public final class AscensionDamageHandler {
 
         double beforeDefense = event.getDamage();
         event.setDamage(PassiveCombatService.incomingDamage(event, beforeDefense));
-        trace.transition("Passive defense", beforeDefense, event.getDamage());
+        trace.transition("Passive incoming damage", beforeDefense, event.getDamage());
         if (finishIfResolved(event, trace)) {
             return;
         }

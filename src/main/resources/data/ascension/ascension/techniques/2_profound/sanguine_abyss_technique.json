@@ -29,6 +29,9 @@
     "ascension:castable/blade_projection": {
       "unlock": 3
     },
+    "ascension:passive/sanguine_abyss_technique/blood_frenzy": {
+      "unlock": 4
+    },
     "ascension:castable/sanguine_abyss_technique/abyssal_culling": {
       "unlock": 5,
       "caps": {

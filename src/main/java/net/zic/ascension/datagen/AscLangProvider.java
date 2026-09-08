@@ -812,6 +812,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.malefic_sense.desc", "Cast a hungry, crimson-black awareness outward, hunting the heartbeat and fear of every living thing within reach.");
         add("ascension.skill.blood_thirst.name", "Blood Thirst");
         add("ascension.skill.blood_thirst.desc", "Killing and wounding feed a rising thirst, each fresh spill of blood lending the cultivator a fleeting, compounding savagery.");
+        add("ascension.skill.blood_frenzy.name", "Blood Frenzy");
+        add("ascension.skill.blood_frenzy.desc", "W.I.P");
         add("ascension.skill.abyssal_culling.name", "Abyssal Culling");
         add("ascension.skill.abyssal_culling.desc", "Charge the abyss behind a single blade and release it as one culling stroke, paid for in the cultivator's own held-back blood.");
 

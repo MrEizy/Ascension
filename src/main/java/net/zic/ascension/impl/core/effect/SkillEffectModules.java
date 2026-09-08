@@ -24,10 +24,15 @@ import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionAttribution;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.impl.core.damage.AscensionDamageService;
 import net.zic.ascension.impl.datapack.effect.AscensionSkillEffectModuleTypes;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.zenithlib.common.ZenithRegistries;
+import net.zic.zenithlib.stats.Stat;
+import net.zic.zenithlib.value_containers.ValueContainer;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -396,6 +401,54 @@ public final class SkillEffectModules {
                     spread,
                     speed
             );
+        }
+    }
+
+    public record BaseStats(List<ValueContainer.BaseModifier> stats) implements SkillEffectModule {
+        public static final MapCodec<BaseStats> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ValueContainer.BASE_MODIFIER_CODEC.listOf().fieldOf("stats").forGetter(BaseStats::stats)
+        ).apply(instance, BaseStats::new));
+
+        public BaseStats {
+            stats = stats == null ? List.of() : List.copyOf(stats);
+        }
+
+        @Override
+        public CodecType<SkillEffectModule> getType() {
+            return AscensionSkillEffectModuleTypes.BASE_STATS.get();
+        }
+
+        @Override
+        public void onApply(LivingEntity entity, SkillEffectContext context) {
+            applyDelta(entity, context.potency() * context.stacks());
+        }
+
+        @Override
+        public void onUpdate(LivingEntity entity, SkillEffectContext context, int previousStacks, double previousPotency) {
+            double previous = previousPotency * previousStacks;
+            double current = context.potency() * context.stacks();
+            applyDelta(entity, current - previous);
+        }
+
+        @Override
+        public void onRemove(LivingEntity entity, SkillEffectContext context) {
+            applyDelta(entity, -context.potency() * context.stacks());
+        }
+
+        private void applyDelta(LivingEntity entity, double multiplier) {
+            if (!Double.isFinite(multiplier) || Math.abs(multiplier) <= 1.0E-12D) {
+                return;
+            }
+            OriginSource source = AscensionOriginSourceHelper.getEntitySource(entity);
+            if (source == null) {
+                return;
+            }
+            for (ValueContainer.BaseModifier modifier : stats) {
+                Stat stat = ZenithRegistries.STAT_REGISTRY.getValue(modifier.container());
+                if (stat != null) {
+                    source.addStat(stat, modifier.val() * multiplier);
+                }
+            }
         }
     }
 
