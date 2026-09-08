@@ -1,0 +1,68 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.sanguine_abyss_technique.name"
+  },
+  "description": {
+    "translate": "ascension.technique.sanguine_abyss_technique.desc"
+  },
+  "path": "ascension:elemental/blood",
+  "milestone_realms": [
+    0,
+    2,
+    5
+  ],
+  "technique_families": [
+    "blood",
+    "dark",
+    "demonic"
+  ],
+  "max_realm": 5,
+  "skills": {
+    "ascension:castable/cultivation/sanguine_circulation": {},
+    "ascension:castable/sanguine_abyss_technique/malefic_sense": {
+      "unlock": 1
+    },
+    "ascension:passive/sanguine_abyss_technique/blood_thirst": {
+      "unlock": 2
+    },
+    "ascension:castable/blade_projection": {
+      "unlock": 3
+    },
+    "ascension:castable/sanguine_abyss_technique/abyssal_culling": {
+      "unlock": 5,
+      "caps": {
+        "5": "major_mastery"
+      }
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 0.55
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.3
+            },
+            {
+              "id": "ascension:vitality",
+              "value": -0.3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:profound"
+  }
+}

@@ -671,6 +671,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.nine_revolutions_slaughter_wheel.desc", "Carve nine interlocking revolutions into the essence sea, condensing a slaughter wheel that grows with each cycle.");
         add("ascension.technique.slaughter_wheel_battle_manual.name", "Slaughter Wheel Battle Manual");
         add("ascension.technique.slaughter_wheel_battle_manual.desc", "A combat scripture that teaches applications of the Slaughter Wheel.");
+        add("ascension.technique.sanguine_abyss_technique.name", "Sanguine Abyss Technique");
+        add("ascension.technique.sanguine_abyss_technique.desc", "A forbidden scripture that trades the cultivator's own blood and vitality for a swifter, crueler path through Essence, Blood, and Dark.");
 
 
 
@@ -804,7 +806,14 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.ninefold_carnage_circuit.desc", "Pins a revolving slaughter circuit to the ground, grinding any enemies caught within it.");
         add("ascension.skill.heaven_grinding_slaughter_wheel.name", "Heaven-Grinding Slaughter Wheel");
         add("ascension.skill.heaven_grinding_slaughter_wheel.desc", "Charge the completed wheel and release it through the surrounding space, crushing nearby enemies beneath your revolutions.");
-
+        add("ascension.skill.sanguine_circulation.name", "Sanguine Circulation");
+        add("ascension.skill.sanguine_circulation.desc", "Open the veins and let cultivation drink directly from the blood, converting vitality into swift, unstable progress for as long as the wound is held open.");
+        add("ascension.skill.malefic_sense.name", "Malefic Sense");
+        add("ascension.skill.malefic_sense.desc", "Cast a hungry, crimson-black awareness outward, hunting the heartbeat and fear of every living thing within reach.");
+        add("ascension.skill.blood_thirst.name", "Blood Thirst");
+        add("ascension.skill.blood_thirst.desc", "Killing and wounding feed a rising thirst, each fresh spill of blood lending the cultivator a fleeting, compounding savagery.");
+        add("ascension.skill.abyssal_culling.name", "Abyssal Culling");
+        add("ascension.skill.abyssal_culling.desc", "Charge the abyss behind a single blade and release it as one culling stroke, paid for in the cultivator's own held-back blood.");
 
         // Mob Cultivation
         add("ascension.mob_cultivation.presence", "Spiritual Qi shifts through the air Something unnerving is nearby");

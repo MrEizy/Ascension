@@ -1,0 +1,151 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.sanguine_circulation.name"
+  },
+  "description": {
+    "translate": "ascension.skill.sanguine_circulation.desc"
+  },
+  "cast": {
+    "mode": "channel",
+    "maximum_ticks": 400,
+    "interruption": {
+      "damage_threshold": {
+        "base": 4.0
+      },
+      "accumulation_window": 30,
+      "release_after_minimum": false
+    },
+    "stages": [
+      {
+        "threshold": 0.0,
+        "particle_field": {
+          "style": "spiral",
+          "particles": [
+            {
+              "weight": 6,
+              "particle": "ascension:particle_field_wisp"
+            },
+            {
+              "weight": 3,
+              "particle": "ascension:particle_field_spark"
+            }
+          ],
+          "colours": [
+            "#3B0000",
+            "#5C0A0A",
+            "#1A0000"
+          ],
+          "density": 16,
+          "radius": {
+            "min": 0.5,
+            "max": 1.3
+          },
+          "height": {
+            "min": -0.1,
+            "max": 1.6
+          },
+          "speed": {
+            "min": 0.03,
+            "max": 0.06
+          },
+          "size": {
+            "min": 0.05,
+            "max": 0.13
+          },
+          "lifetime": {
+            "min": 20,
+            "max": 36
+          },
+          "full_bright": false
+        },
+        "sounds": [
+          {
+            "sound": "minecraft:entity.wither.ambient",
+            "interval": 90,
+            "initial_delay": 20,
+            "volume": 0.1,
+            "pitch": 0.6,
+            "pitch_variance": 0.05
+          }
+        ]
+      },
+      {
+        "threshold": 0.5,
+        "particle_field": {
+          "style": "gathering_ring",
+          "particles": [
+            {
+              "weight": 5,
+              "particle": "ascension:particle_field_spark"
+            },
+            {
+              "weight": 2,
+              "particle": "ascension:particle_field_rune"
+            }
+          ],
+          "colours": [
+            "#7A0000",
+            "#2B0000"
+          ],
+          "density": 26,
+          "radius": {
+            "min": 0.6,
+            "max": 1.5
+          },
+          "height": {
+            "min": -0.1,
+            "max": 1.9
+          },
+          "speed": {
+            "min": 0.05,
+            "max": 0.09
+          },
+          "size": {
+            "min": 0.06,
+            "max": 0.15
+          },
+          "lifetime": {
+            "min": 16,
+            "max": 30
+          },
+          "full_bright": true
+        },
+        "sounds": [
+          {
+            "sound": "minecraft:entity.wither.hurt",
+            "interval": 60,
+            "initial_delay": 0,
+            "volume": 0.12,
+            "pitch": 0.7,
+            "pitch_variance": 0.1
+          }
+        ]
+      }
+    ]
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:cultivate",
+      "path": "ascension:foundation/essence",
+      "rate": 1.4
+    },
+    {
+      "type": "ascension:cultivate",
+      "path": "ascension:elemental/blood",
+      "rate": 1.8
+    },
+    {
+      "type": "ascension:cultivate",
+      "path": "ascension:elemental/dark",
+      "rate": 1.8
+    }
+  ],
+  "cost": {
+    "resource": "ascension:stamina",
+    "operation": "ascension:consume",
+    "source": "ascension:skill_casting",
+    "amount": 0.02
+  }
+}

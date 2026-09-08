@@ -1,0 +1,57 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.malefic_sense.name"
+  },
+  "description": {
+    "translate": "ascension.skill.malefic_sense.desc"
+  },
+  "target": {
+    "type": "ascension:self"
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:divine_sense",
+      "radius": {
+        "base": 10.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.008
+          }
+        ],
+        "maximum": 28.0
+      },
+      "speed": {
+        "base": 7.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.004
+          }
+        ],
+        "maximum": 18.0
+      },
+      "duration": 70.0,
+      "color": "#4A0404"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "operation": "ascension:consume",
+    "source": "ascension:skill_casting",
+    "amount": {
+      "base": 22.0
+    }
+  },
+  "cooldown": {
+    "base": 160.0
+  }
+}

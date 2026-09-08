@@ -1,0 +1,53 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.blood_thirst.name"
+  },
+  "description": {
+    "translate": "ascension.skill.blood_thirst.desc"
+  },
+  "triggers": [
+    {
+      "event": "kill",
+      "priority": 0,
+      "cooldown": 0,
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "duration": 300,
+          "stackable": true,
+          "max_stacks": 5,
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 0.08
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "event": "damage_dealt",
+      "priority": 0,
+      "cooldown": 20,
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "duration": 100,
+          "stackable": true,
+          "max_stacks": 3,
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 0.04
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

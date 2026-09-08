@@ -1,0 +1,120 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.abyssal_culling.name"
+  },
+  "description": {
+    "translate": "ascension.skill.abyssal_culling.desc"
+  },
+  "cast": {
+    "mode": "charge",
+    "minimum_ticks": 20,
+    "maximum_ticks": 60,
+    "cost": {
+      "resource": "ascension:stamina", //Todo make it use health
+      "operation": "ascension:consume",
+      "source": "ascension:skill_casting",
+      "cumulative_cost": {
+        "base": 0.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "scale": 20.0
+          }
+        ]
+      },
+      "release_on_failure": false
+    },
+    "stages": [
+      {
+        "threshold": 0.0,
+        "particle_field": {
+          "style": "spiral",
+          "particles": [
+            {
+              "weight": 1,
+              "particle": "ascension:particle_field_spark"
+            }
+          ],
+          "colours": [
+            "#5C0A0A",
+            "#0D0000"
+          ],
+          "density": 30,
+          "radius": {
+            "min": 0.6,
+            "max": 1.8
+          },
+          "height": {
+            "min": 0.0,
+            "max": 2.2
+          },
+          "speed": {
+            "min": 0.06,
+            "max": 0.12
+          },
+          "size": {
+            "min": 0.07,
+            "max": 0.16
+          },
+          "lifetime": {
+            "min": 14,
+            "max": 26
+          },
+          "full_bright": true
+        },
+        "sounds": [
+          {
+            "sound": "minecraft:entity.wither.spawn",
+            "interval": 200,
+            "initial_delay": 0,
+            "volume": 0.2,
+            "pitch": 0.5
+          }
+        ]
+      }
+    ]
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:weapon_swing",
+      "color": "dark_red",
+      "radius": [
+        3.5,
+        2.5,
+        4.5
+      ],
+      "damage": {
+        "base": 34.0,
+        "weapon": 1.4
+      },
+      "knockback": 1.4,
+      "duration": 60.0,
+      "rotation_z": 45.0,
+      "movement": [
+        0.0,
+        0.0,
+        1.4
+      ],
+      "path": "ascension:weapon/blade",
+      "hit_shape": "area",
+      "classifications": [
+        "ascension:skill",
+        "ascension:dark",
+        "ascension:demonic",
+        "ascension:blood"
+      ],
+      "weapon_tag": "ascension:weapon/blades"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 90.0
+  },
+  "cooldown": {
+    "base": 400.0
+  }
+}
