@@ -1,0 +1,21 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.sword_flight.name"
+  },
+  "description": {
+    "translate": "ascension.skill.sword_flight.desc"
+  },
+  "cast": {
+    "mode": "instant"
+  },
+  "cooldown": {
+    "base": 10.0
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:sword_flight"
+    }
+  ]
+}

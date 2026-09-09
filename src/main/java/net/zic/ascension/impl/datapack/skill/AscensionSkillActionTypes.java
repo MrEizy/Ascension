@@ -43,7 +43,8 @@ public final class AscensionSkillActionTypes {
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> PERSISTENT_VISUAL = TYPES.add("persistent_visual", SkillActions.PersistentVisual.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> BEAM = TYPES.add("beam", SkillActions.Beam.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> WEAPON_SWING = TYPES.add("weapon_swing", SkillActions.WeaponSwing.CODEC);
-
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> SWORD_FLIGHT = TYPES.add("sword_flight", SkillActions.SwordFlight.CODEC);
+    
     private AscensionSkillActionTypes() {
     }
 

@@ -1320,6 +1320,25 @@ public final class SkillActions {
         }
     }
 
+    public record SwordFlight() implements SkillAction {
+        public static final MapCodec<SwordFlight> CODEC = MapCodec.unit(SwordFlight::new);
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.SWORD_FLIGHT.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            SwordFlightPhysics.toggle(context.caster());
+        }
+    }
+
     public enum PersistentVisualAction implements StringRepresentable {
         APPLY("apply"), REMOVE("remove");
 

@@ -28,7 +28,8 @@
     "ascension:castable/frostbound_stillness": {
       "unlock": 2
     },
-    "ascension:castable/divine_sense/divine_sense_sustained_spirit_art": {}
+    "ascension:castable/divine_sense/divine_sense_sustained_spirit_art": {},
+    "ascension:castable/sword_flight": {}
   },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
