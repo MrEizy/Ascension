@@ -1,10 +1,9 @@
 package net.zic.ascension.impl.core.skill.castable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -19,9 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * TODO Make it less janky and properly introduce the model of the sword as it lays down under you.
- */
+
 public final class SwordFlightPhysics {
     private SwordFlightPhysics() {
     }
@@ -38,6 +35,12 @@ public final class SwordFlightPhysics {
     private static final double BANK_LERP = 0.15;
     private static final double SPEED_RAMP = 0.02;
     private static final double MIN_SPEED_SCALE = 0.35;
+    private static final double TURN_SPEED_LOSS = 0.05; // max fraction bled per tick at a full 90+ reversal
+    private static final double SPEED_SCALE_LERP = 0.06;
+    private static final double TURN_SIGN_DEADZONE_DEGREES = 1.5; // avoids bank sign flicker near dead-straight
+    private static final float BODY_ROTATION_LERP = 0.35F; // how hard this fights vanilla's own body-turn each tick
+    private static final float SKATEBOARD_OFFSET_DEGREES = 90.0F;
+    private static final double MIN_SKATE_SPEED = 0.05; // below this, leave body rotation alone (avoids atan2 noise)
 
     // Per-entity transient flight state. Not networked directly — vanilla entity
     // motion sync already carries velocity, and bank/speed-scale are client-cosmetic.
@@ -53,10 +56,43 @@ public final class SwordFlightPhysics {
         } else if (heldSword(caster) != null) {
             beginFlight(caster);
         }
-        // else: no sword and not currently flying — no-op.
     }
 
-    private static ItemStack heldSword(LivingEntity entity) {
+    /** Read-only check for the renderer — is this entity currently sword-flying? */
+    public static boolean isFlying(UUID entityId) {
+        return ACTIVE.containsKey(entityId);
+    }
+
+    /** Interpolated bank angle for this frame's partial tick — shared by camera roll and the renderer's tilt. */
+    public static double getBankDegrees(UUID entityId, float partialTick) {
+        FlightState state = ACTIVE.get(entityId);
+        if (state == null) {
+            return 0.0;
+        }
+        return Mth.lerp(partialTick, state.bankDegreesO, state.bankDegrees);
+    }
+
+    /**
+     * Pitch angle derived from actual flight velocity (climb/dive), not look
+     * direction — positive means diving (nose down), negative means climbing
+     * (nose up), matching the same sign convention as LivingEntity#getXRot().
+     * Physics-driven rather than camera-driven, so the model tilts with how
+     * the caster is actually moving, not just where they're looking.
+     */
+    public static double getVelocityPitchDegrees(UUID entityId) {
+        FlightState state = ACTIVE.get(entityId);
+        if (state == null) {
+            return 0.0;
+        }
+        double horizontal = state.velocity.horizontalDistance();
+        if (horizontal < 1.0E-4 && Math.abs(state.velocity.y) < 1.0E-4) {
+            return 0.0;
+        }
+        return -Math.toDegrees(Math.atan2(state.velocity.y, horizontal));
+    }
+
+    /** Public so the renderer can grab the same sword without duplicating the tag check. */
+    public static ItemStack heldSword(LivingEntity entity) {
         ItemStack main = entity.getMainHandItem();
         if (main.is(ItemTags.SWORDS)) {
             return main;
@@ -65,63 +101,21 @@ public final class SwordFlightPhysics {
         return off.is(ItemTags.SWORDS) ? off : null;
     }
 
-    // ── Activation / visual ─────────────────────────────────────────────────
+    // ── Activation ──────────────────────────────────────────────────────────
 
     private static void beginFlight(LivingEntity entity) {
         entity.setNoGravity(true);
         entity.fallDistance = 0.0F;
         FlightState state = ACTIVE.computeIfAbsent(entity.getUUID(), id -> new FlightState());
         state.velocity = entity.getDeltaMovement();
-        if (!entity.level().isClientSide() && state.displayId == null) {
-            state.displayId = spawnSwordDisplay(entity);
-        }
     }
 
     private static void endFlight(LivingEntity entity) {
         entity.setNoGravity(false);
-        FlightState state = ACTIVE.remove(entity.getUUID());
-        if (state != null && state.displayId != null && entity.level() instanceof ServerLevel serverLevel) {
-            Entity display = serverLevel.getEntity(state.displayId);
-            if (display != null) {
-                display.discard();
-            }
-        }
+        ACTIVE.remove(entity.getUUID());
     }
 
-    /** Spawns the floating sword the caster stands on top of. */
-    private static UUID spawnSwordDisplay(LivingEntity entity) {
-        if (!(entity.level() instanceof ServerLevel serverLevel)) {
-            return null;
-        }
-        ItemStack sword = heldSword(entity);
-        if (sword == null) {
-            return null;
-        }
-        Display.ItemDisplay display = new Display.ItemDisplay(EntityType.ITEM_DISPLAY, serverLevel);
-        SlotAccess itemSlot = display.getSlot(0);
-        if (itemSlot != null) {
-            itemSlot.set(sword.copy());
-        }
-        display.setPos(entity.getX(), entity.getY() - 0.1D, entity.getZ());
-        display.setYRot(entity.getYRot());
-        serverLevel.addFreshEntity(display);
-        return display.getUUID();
-    }
-
-    private static void updateSwordDisplay(LivingEntity entity, FlightState state) {
-        if (state.displayId == null || !(entity.level() instanceof ServerLevel serverLevel)) {
-            return;
-        }
-        Entity display = serverLevel.getEntity(state.displayId);
-        if (display == null) {
-            state.displayId = null;
-            return;
-        }
-        display.setPos(entity.getX(), entity.getY() - 0.1D, entity.getZ());
-        display.setYRot(entity.getYRot());
-    }
-
-    // ── Physics — velocity-based, not position-based ───────────────────────
+    // ── Physics — velocity-based, fully continuous (no branch = no click) ──
 
     private static void tickFlight(LivingEntity entity, boolean boosting) {
         FlightState state = ACTIVE.get(entity.getUUID());
@@ -145,32 +139,54 @@ public final class SwordFlightPhysics {
         maxSpeed += pitchFactor > 0 ? DIVE_SPEED_BONUS * pitchFactor : CLIMB_SPEED_PENALTY * pitchFactor;
         maxSpeed = Math.max(0.2, maxSpeed);
 
-        state.speedScale = Mth.clamp(state.speedScale + SPEED_RAMP, MIN_SPEED_SCALE, 1.0);
-
         Vec3 current = state.velocity;
         Vec3 desiredVelocity = desired.scale(maxSpeed * state.speedScale);
 
+        // turnFactor: 0 = flying straight, 1 = a full reversal. Everything below is
+        // a continuous function of it — nothing changes state at a fixed threshold.
         double turnAngle = angleBetweenDegrees(current, desiredVelocity);
-        if (turnAngle > 45.0) {
-            current = current.scale(0.97); // carving a hard turn bleeds speed
-            state.speedScale = Mth.clamp(state.speedScale - SPEED_RAMP * 2.0, MIN_SPEED_SCALE, 1.0);
-        }
+        double turnFactor = Mth.clamp(turnAngle / 90.0, 0.0, 1.0);
 
-        double accel = turnAngle > 30.0 ? TURN_ACCELERATION : ACCELERATION;
+        double accel = Mth.lerp(turnFactor, ACCELERATION, TURN_ACCELERATION);
+        current = current.scale(1.0 - turnFactor * TURN_SPEED_LOSS);
+
+        double speedScaleTarget = Mth.lerp(turnFactor, Math.min(1.0, state.speedScale + SPEED_RAMP), MIN_SPEED_SCALE);
+        state.speedScale = Mth.lerp(SPEED_SCALE_LERP, state.speedScale, speedScaleTarget);
+        desiredVelocity = desired.scale(maxSpeed * state.speedScale);
+
         Vec3 newVelocity = current.add(desiredVelocity.subtract(current).scale(accel)).scale(DRAG);
         if (newVelocity.length() > maxSpeed) {
             newVelocity = newVelocity.normalize().scale(maxSpeed);
         }
 
-        double turnSign = Math.signum(current.x * desired.z - current.z * desired.x);
+        double turnSign = turnAngle > TURN_SIGN_DEADZONE_DEGREES
+                ? Math.signum(current.x * desired.z - current.z * desired.x)
+                : 0.0;
         double desiredBank = Mth.clamp(turnSign * turnAngle, -MAX_BANK_DEGREES, MAX_BANK_DEGREES);
+        state.bankDegreesO = state.bankDegrees;
         state.bankDegrees = Mth.lerp(BANK_LERP, state.bankDegrees, desiredBank);
 
         state.velocity = newVelocity;
         entity.setDeltaMovement(newVelocity);
         entity.fallDistance = 0.0F;
 
-        updateSwordDisplay(entity, state);
+        applySkateboardStance(entity, newVelocity);
+    }
+
+    /**
+     * Rotates the caster's body — not the head/camera — perpendicular to travel
+     * direction, the "standing sideways on a skateboard" look. yBodyRot is public
+     * and separate from getYRot()/yHeadRot (confirmed straight off LivingEntity),
+     * so this never touches where the player is actually looking.
+     */
+    private static void applySkateboardStance(LivingEntity entity, Vec3 velocity) {
+        if (velocity.horizontalDistanceSqr() < MIN_SKATE_SPEED * MIN_SKATE_SPEED) {
+            return;
+        }
+        float heading = (float) (Mth.atan2(velocity.z, velocity.x) * (180.0 / Math.PI)) - 90.0F;
+        float target = heading + SKATEBOARD_OFFSET_DEGREES;
+        float delta = Mth.wrapDegrees(target - entity.yBodyRot);
+        entity.yBodyRot += delta * BODY_ROTATION_LERP;
     }
 
     private static double angleBetweenDegrees(Vec3 a, Vec3 b) {
@@ -185,7 +201,7 @@ public final class SwordFlightPhysics {
         Vec3 velocity = Vec3.ZERO;
         double speedScale = MIN_SPEED_SCALE;
         double bankDegrees;
-        UUID displayId;
+        double bankDegreesO;
     }
 
     // ── Server-authoritative tick; also auto-lands if the sword leaves the hand ──
@@ -220,14 +236,11 @@ public final class SwordFlightPhysics {
         @SubscribeEvent
         public static void onCameraAngles(ViewportEvent.ComputeCameraAngles event) {
             Player local = Minecraft.getInstance().player;
-            if (local == null) {
+            if (local == null || !isFlying(local.getUUID())) {
                 return;
             }
-            FlightState state = ACTIVE.get(local.getUUID());
-            if (state == null) {
-                return;
-            }
-            event.setRoll((float) state.bankDegrees);
+
+            event.setRoll((float) getBankDegrees(local.getUUID(), (float) event.getPartialTick()));
         }
     }
 }
