@@ -74,6 +74,10 @@ public record RealmEffectivenessConfiguration(List<Double> multipliers) {
         return response(getMultiplier(source), exponent);
     }
 
+    public static double getGameplayMultiplier(LivingEntity entity, double exponent) {
+        return response(getMultiplier(entity), exponent);
+    }
+
     public static double getRelativeEffectiveness(LivingEntity attacker, LivingEntity defender) {
         double attackerMultiplier = getMultiplier(attacker);
         double defenderMultiplier = getMultiplier(defender);

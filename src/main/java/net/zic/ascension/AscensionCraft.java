@@ -308,6 +308,11 @@ public class AscensionCraft {
                     ClientboundDivineSensePacket.STREAM_CODEC,
                     ClientboundDivineSensePacket::handle
             );
+            registrar.playToClient(
+                    SwordFlightStatePacket.TYPE,
+                    SwordFlightStatePacket.STREAM_CODEC,
+                    SwordFlightStatePacket::handle
+            );
 
             registrar.playToServer(
                     ChooseStarterOptionPacket.TYPE,
