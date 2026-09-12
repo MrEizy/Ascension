@@ -17,6 +17,8 @@ import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHuman;
 import net.zic.ascension.common.item.artifacts.pills.JadeBottleItem;
+import net.zic.ascension.common.item.artifacts.pills.ModPills;
+import net.zic.ascension.common.item.artifacts.pills.PillItem;
 import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.transfer_item.BloodlineTransferItem;
 import net.zic.ascension.common.item.transfer_item.PhysiqueTransferItem;
@@ -76,6 +78,12 @@ public class ModItems {
     public static final DeferredItem<Item> JADE_BOTTLE = ITEMS.register("jade_bottle",
             () -> new JadeBottleItem(new Item.Properties()
                     .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "jade_bottle"))));
+
+    // Pills
+    public static final DeferredItem<Item> FASTING_PILL = ITEMS.registerItem("fasting_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.FASTING));
+    public static final DeferredItem<Item> QI_REPLENISHING_PILL = ITEMS.registerItem("qi_replenishing_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.QI_REPLENISHING));
 
 
 

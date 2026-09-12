@@ -92,6 +92,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BLOOD_LINGZHI_MUSHROOM);
                         output.accept(ModItems.WHITE_JADE_ORCHID);
                         output.accept(ModItems.PEACH);
+                        output.accept(ModItems.FASTING_PILL);
+                        output.accept(ModItems.QI_REPLENISHING_PILL);
 
 
                     }).build());

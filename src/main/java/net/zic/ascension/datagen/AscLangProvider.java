@@ -90,8 +90,10 @@ public class AscLangProvider extends LanguageProvider {
 
 
 
-
+        // Pills and Pill Things
         add("item.ascension.jade_bottle", "Jade Bottle");
+        add("item.ascension.fasting_pill", "Fasting Pill");
+        add("item.ascension.qi_replenishing_pill", "Qi Replenishing Pill");
 
 
         //Item Ores
