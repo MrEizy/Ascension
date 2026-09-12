@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemySubstance;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.configuration.biome.BiomeConfiguration;
 import net.zic.ascension.configuration.biome.BiomeConfigurations;
@@ -55,6 +56,14 @@ public final class HerbDefinition {
 
     private final double atmosphericQiCost;
     private final List<HerbEffect> effects;
+    private final Map<Identifier, Double> alchemyProperties;
+    private final Map<Identifier, Double> alchemyAffinities;
+    private final int alchemyMajorRealm;
+    private final int alchemyMinorRealm;
+    private final double alchemyPotency;
+    private final double alchemyPurity;
+    private final double alchemyInstability;
+    private final double alchemyRefinementDifficulty;
 
     private HerbDefinition(Builder builder) {
         this.id = builder.id;
@@ -82,6 +91,14 @@ public final class HerbDefinition {
 
         this.atmosphericQiCost = builder.atmosphericQiCost;
         this.effects = List.copyOf(builder.effects);
+        this.alchemyProperties = Map.copyOf(builder.alchemyProperties);
+        this.alchemyAffinities = Map.copyOf(builder.alchemyAffinities);
+        this.alchemyMajorRealm = builder.alchemyMajorRealm;
+        this.alchemyMinorRealm = builder.alchemyMinorRealm;
+        this.alchemyPotency = builder.alchemyPotency;
+        this.alchemyPurity = builder.alchemyPurity;
+        this.alchemyInstability = builder.alchemyInstability;
+        this.alchemyRefinementDifficulty = builder.alchemyRefinementDifficulty;
 
         if (growthStages < 1 || growthStages > MAX_GROWTH_STAGES) {
             throw new IllegalArgumentException("Herb " + id + " must have between 1 and " + MAX_GROWTH_STAGES + " growth stages");
@@ -256,6 +273,37 @@ public final class HerbDefinition {
 
     public double atmosphericQiCost() {
         return atmosphericQiCost;
+    }
+
+    public boolean hasAlchemy() {
+        return !alchemyProperties.isEmpty() || !alchemyAffinities.isEmpty();
+    }
+
+    public double alchemyRefinementDifficulty() {
+        return alchemyRefinementDifficulty;
+    }
+
+    public AlchemySubstance alchemySubstance(AscensionComponents.HerbData data) {
+        if (!hasAlchemy()) {
+            return AlchemySubstance.EMPTY;
+        }
+
+        AscensionComponents.HerbData herbData = data == null ? AscensionComponents.HerbData.DEFAULT : data;
+        int ageYears = ageThreshold(herbData.ageTier()).years();
+        int realmScore = alchemyMajorRealm * 10 + alchemyMinorRealm + alchemyRealmOffset(ageYears);
+        double potency = alchemyPotency * alchemyAgePotency(ageYears) * alchemyQualityPotency(herbData.qualityTier());
+        double purity = Mth.clamp(alchemyPurity * alchemyQualityPurity(herbData.qualityTier()), 0.0D, 1.0D);
+        double instability = alchemyInstability * alchemyQualityInstability(herbData.qualityTier());
+
+        return new AlchemySubstance(
+                scaleAlchemyValues(alchemyProperties, potency),
+                scaleAlchemyValues(alchemyAffinities, potency),
+                realmScore / 10,
+                realmScore % 10,
+                potency,
+                purity,
+                instability
+        );
     }
 
     public int chooseWildAgeTier(RandomSource random) {
@@ -467,6 +515,67 @@ public final class HerbDefinition {
         }
     }
 
+    private static int alchemyRealmOffset(int years) {
+        if (years >= 1_000_000) return 40;
+        if (years >= 100_000) return 30;
+        if (years >= 10_000) return 20;
+        if (years >= 1_000) return 10;
+        if (years >= 500) return 6;
+        if (years >= 100) return 3;
+        if (years >= 10) return 1;
+        return 0;
+    }
+
+    private static double alchemyAgePotency(int years) {
+        if (years >= 1_000_000) return 6.0D;
+        if (years >= 100_000) return 4.5D;
+        if (years >= 10_000) return 3.0D;
+        if (years >= 1_000) return 2.0D;
+        if (years >= 500) return 1.5D;
+        if (years >= 100) return 1.25D;
+        if (years >= 10) return 1.10D;
+        return 1.0D;
+    }
+
+    private static double alchemyQualityPotency(int tier) {
+        return switch (Mth.clamp(tier, 0, Quality.values().length - 1)) {
+            case 0 -> 0.70D;
+            case 2 -> 1.15D;
+            case 3 -> 1.35D;
+            case 4 -> 1.60D;
+            default -> 1.0D;
+        };
+    }
+
+    private static double alchemyQualityPurity(int tier) {
+        return switch (Mth.clamp(tier, 0, Quality.values().length - 1)) {
+            case 0 -> 0.75D;
+            case 2 -> 1.04D;
+            case 3 -> 1.08D;
+            case 4 -> 1.12D;
+            default -> 1.0D;
+        };
+    }
+
+    private static double alchemyQualityInstability(int tier) {
+        return switch (Mth.clamp(tier, 0, Quality.values().length - 1)) {
+            case 0 -> 1.25D;
+            case 2 -> 0.90D;
+            case 3 -> 0.80D;
+            case 4 -> 0.65D;
+            default -> 1.0D;
+        };
+    }
+
+    private static Map<Identifier, Double> scaleAlchemyValues(Map<Identifier, Double> values, double multiplier) {
+        if (values.isEmpty() || multiplier <= 1.0E-12D) {
+            return Map.of();
+        }
+        LinkedHashMap<Identifier, Double> scaled = new LinkedHashMap<>();
+        values.forEach((id, value) -> scaled.put(id, value * multiplier));
+        return scaled;
+    }
+
     @FunctionalInterface
     public interface GrowthModifier {
         GrowthModifier NORMAL = (level, pos, state) -> 1.0D;
@@ -525,6 +634,14 @@ public final class HerbDefinition {
 
         private double atmosphericQiCost = 0.0D;
         private final List<HerbEffect> effects = new ArrayList<>();
+        private final Map<Identifier, Double> alchemyProperties = new LinkedHashMap<>();
+        private final Map<Identifier, Double> alchemyAffinities = new LinkedHashMap<>();
+        private int alchemyMajorRealm = 0;
+        private int alchemyMinorRealm = 0;
+        private double alchemyPotency = 1.0D;
+        private double alchemyPurity = 1.0D;
+        private double alchemyInstability = 0.0D;
+        private double alchemyRefinementDifficulty = 1.0D;
 
         private Builder(Identifier id) {
             this.id = Objects.requireNonNull(id, "id");
@@ -652,6 +769,30 @@ public final class HerbDefinition {
             return this;
         }
 
+        public Builder alchemy(double potency, double purity, double instability, double refinementDifficulty) {
+            this.alchemyPotency = nonNegativeAlchemyValue(potency, "potency");
+            this.alchemyPurity = Mth.clamp(finiteAlchemyValue(purity, "purity"), 0.0D, 1.0D);
+            this.alchemyInstability = nonNegativeAlchemyValue(instability, "instability");
+            this.alchemyRefinementDifficulty = nonNegativeAlchemyValue(refinementDifficulty, "refinementDifficulty");
+            return this;
+        }
+
+        public Builder alchemyRealm(int majorRealm, int minorRealm) {
+            this.alchemyMajorRealm = Math.max(0, majorRealm);
+            this.alchemyMinorRealm = Math.max(0, minorRealm);
+            return this;
+        }
+
+        public Builder alchemyProperty(Identifier property, double amount) {
+            this.alchemyProperties.put(Objects.requireNonNull(property, "property"), nonNegativeAlchemyValue(amount, "property amount"));
+            return this;
+        }
+
+        public Builder alchemyAffinity(Identifier affinity, double amount) {
+            this.alchemyAffinities.put(Objects.requireNonNull(affinity, "affinity"), nonNegativeAlchemyValue(amount, "affinity amount"));
+            return this;
+        }
+
         public Builder effect(HerbEffect effect) {
             this.effects.add(Objects.requireNonNull(effect, "effect"));
             return this;
@@ -659,6 +800,17 @@ public final class HerbDefinition {
 
         public HerbDefinition build() {
             return new HerbDefinition(this);
+        }
+
+        private static double finiteAlchemyValue(double value, String name) {
+            if (!Double.isFinite(value)) {
+                throw new IllegalArgumentException("alchemy " + name + " must be finite");
+            }
+            return value;
+        }
+
+        private static double nonNegativeAlchemyValue(double value, String name) {
+            return Math.max(0.0D, finiteAlchemyValue(value, name));
         }
 
         private static int nonNegativeQualityTicks(int ticks) {

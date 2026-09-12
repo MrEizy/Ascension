@@ -9,6 +9,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyAffinities;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyProperties;
 import net.zic.ascension.common.blocks.ModBlocks;
 
 import java.util.Collections;
@@ -36,6 +38,11 @@ public final class ModHerbs {
                     .wildAgeWeights(1000, 180, 24, 3, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(BlockTags.GRASS_BLOCKS))
                     .spawnRule((level, pos, random) -> random.nextInt(6) == 0)
+                    .alchemyProperty(AlchemyProperties.CLEANSING, 1.5D)
+                    .alchemyProperty(AlchemyProperties.COOLING, 1.0D)
+                    .alchemyProperty(AlchemyProperties.RESTORATION, 0.5D)
+                    .alchemyAffinity(AlchemyAffinities.WATER, 0.5D)
+                    .alchemy(0.75D, 0.9D, 0.03D, 0.5D)
                     .build()
     );
     public static final HerbDefinition PEACH = register(
@@ -55,6 +62,11 @@ public final class ModHerbs {
                     )
                     .wildAgeWeights(1000, 180, 24, 3, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(ModBlocks.PEACH_LEAVES.get()))
+                    .alchemyProperty(AlchemyProperties.CLEANSING, 7.0D)
+                    .alchemyProperty(AlchemyProperties.SPIRIT_NOURISHMENT, 3.0D)
+                    .alchemyProperty(AlchemyProperties.RESTORATION, 2.0D)
+                    .alchemyAffinity(AlchemyAffinities.LIFE, 3.0D)
+                    .alchemy(1.4D, 0.88D, 0.12D, 1.4D)
                     .build()
     );
 
@@ -76,7 +88,7 @@ public final class ModHerbs {
                     .wildAgeWeights(1100, 170, 20, 3, 1, 1, 1, 1)
                     .qualityGrowth(32, 128, 512, 2048)
                     .wildQualityWeights(15, 900, 180, 20, 2)
-                    .qualityAffinity(AscensionCraft.prefix("elemental/fire"), 6.0D)
+                    .qualityAffinity(AlchemyAffinities.FIRE, 6.0D)
                     .qiCapacity(100.0D, 900.0D)
                     .availableQiFraction(0.02D, 0.15D)
                     .atmosphericQiCost(3.0D)
@@ -100,6 +112,12 @@ public final class ModHerbs {
                         }
                         return multiplier;
                     })
+                    .alchemyProperty(AlchemyProperties.REINFORCEMENT, 4.0D)
+                    .alchemyProperty(AlchemyProperties.ESSENCE_GATHERING, 3.0D)
+                    .alchemyProperty(AlchemyProperties.HEATING, 5.0D)
+                    .alchemyAffinity(AlchemyAffinities.FIRE, 6.0D)
+                    .alchemyAffinity(AlchemyAffinities.YANG, 2.0D)
+                    .alchemy(1.5D, 0.82D, 0.22D, 2.0D)
                     .build()
     );
 
@@ -122,8 +140,8 @@ public final class ModHerbs {
                     .qualityGrowth(18, 72, 288, 1152)
                     .wildQualityWeights(8, 650, 260, 70, 12)
                     .qiCapacity(100.0D, 800.0D)
-                    .qiAffinity(AscensionCraft.prefix("elemental/water"), 0.5D, 2.0D)
-                    .qualityAffinity(AscensionCraft.prefix("elemental/water"), 2.0D)
+                    .qiAffinity(AlchemyAffinities.WATER, 0.5D, 2.0D)
+                    .qualityAffinity(AlchemyAffinities.WATER, 2.0D)
                     .availableQiFraction(0.02D, 0.12D)
                     .atmosphericQiCost(2.0D)
                     .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.MUD) || state.is(Blocks.CLAY))
@@ -154,6 +172,13 @@ public final class ModHerbs {
                         }
                         return multiplier;
                     })
+                    .alchemyProperty(AlchemyProperties.PURIFICATION, 4.0D)
+                    .alchemyProperty(AlchemyProperties.CALMING, 4.0D)
+                    .alchemyProperty(AlchemyProperties.RESTORATION, 3.0D)
+                    .alchemyAffinity(AlchemyAffinities.WATER, 4.0D)
+                    .alchemyAffinity(AlchemyAffinities.MOON, 2.0D)
+                    .alchemyAffinity(AlchemyAffinities.YIN, 1.0D)
+                    .alchemy(1.25D, 0.92D, 0.08D, 1.6D)
                     .build()
     );
 
@@ -175,7 +200,7 @@ public final class ModHerbs {
                     .wildAgeWeights(900, 220, 45, 8, 2, 1, 1, 1)
                     .qualityGrowth(48, 192, 768, 3072)
                     .wildQualityWeights(10, 700, 220, 60, 10)
-                    .qualityAffinity(AscensionCraft.prefix("elemental/lightning"), 8.0D)
+                    .qualityAffinity(AlchemyAffinities.LIGHTNING, 8.0D)
                     .qiCapacity(250.0D, 1100.0D)
                     .availableQiFraction(0.05D, 0.35D)
                     .atmosphericQiCost(8.0D)
@@ -204,6 +229,12 @@ public final class ModHerbs {
                         }
                         return multiplier;
                     })
+                    .alchemyProperty(AlchemyProperties.CIRCULATION, 5.0D)
+                    .alchemyProperty(AlchemyProperties.REINFORCEMENT, 3.0D)
+                    .alchemyProperty(AlchemyProperties.VITALITY, 3.0D)
+                    .alchemyAffinity(AlchemyAffinities.LIGHTNING, 6.0D)
+                    .alchemyAffinity(AlchemyAffinities.YANG, 1.5D)
+                    .alchemy(1.75D, 0.84D, 0.3D, 2.4D)
                     .build()
     );
 
@@ -226,9 +257,15 @@ public final class ModHerbs {
                     .wildAgeWeights(1200, 220, 28, 4, 1, 1, 1, 1)
                     .qualityGrowth(24, 96, 384, 1536)
                     .wildQualityWeights(20, 1000, 160, 12, 1)
-                    .qualityAffinity(AscensionCraft.prefix("elemental/wood"), 6.0D)
+                    .qualityAffinity(AlchemyAffinities.WOOD, 6.0D)
                     .naturalSupport(state -> state.is(BlockTags.GRASS_BLOCKS))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
+                    .alchemyProperty(AlchemyProperties.REINFORCEMENT, 6.0D)
+                    .alchemyProperty(AlchemyProperties.MARROW_CLEANSING, 4.0D)
+                    .alchemyProperty(AlchemyProperties.VITALITY, 2.0D)
+                    .alchemyAffinity(AlchemyAffinities.WOOD, 3.0D)
+                    .alchemyAffinity(AlchemyAffinities.LIFE, 1.0D)
+                    .alchemy(1.0D, 0.86D, 0.08D, 1.0D)
                     .build()
     );
     public static final HerbDefinition FIRE_GINSENG = register(
@@ -250,9 +287,15 @@ public final class ModHerbs {
                     .wildAgeWeights(1200, 220, 28, 4, 1, 1, 1, 1)
                     .qualityGrowth(24, 96, 384, 1536)
                     .wildQualityWeights(20, 1000, 160, 12, 1)
-                    .qualityAffinity(AscensionCraft.prefix("elemental/fire"), 6.0D)
+                    .qualityAffinity(AlchemyAffinities.FIRE, 6.0D)
                     .naturalSupport(state -> state.is(Blocks.SAND))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
+                    .alchemyProperty(AlchemyProperties.ESSENCE_GATHERING, 5.0D)
+                    .alchemyProperty(AlchemyProperties.MARROW_CLEANSING, 3.0D)
+                    .alchemyProperty(AlchemyProperties.CLEANSING, 2.0D)
+                    .alchemyAffinity(AlchemyAffinities.FIRE, 4.0D)
+                    .alchemyAffinity(AlchemyAffinities.YANG, 1.0D)
+                    .alchemy(1.1D, 0.84D, 0.15D, 1.25D)
                     .build()
     );
     public static final HerbDefinition SNOW_GINSENG = register(
@@ -273,9 +316,16 @@ public final class ModHerbs {
                     .wildAgeWeights(1200, 220, 28, 4, 1, 1, 1, 1)
                     .qualityGrowth(24, 96, 384, 1536)
                     .wildQualityWeights(20, 1000, 160, 12, 1)
-                    .qualityAffinity(AscensionCraft.prefix("elemental/ice"), 6.0D)
+                    .qualityAffinity(AlchemyAffinities.ICE, 6.0D)
                     .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.SNOW_BLOCK))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
+                    .alchemyProperty(AlchemyProperties.ESSENCE_GATHERING, 4.0D)
+                    .alchemyProperty(AlchemyProperties.SOUL_NOURISHMENT, 3.0D)
+                    .alchemyProperty(AlchemyProperties.ANTIDOTE, 4.0D)
+                    .alchemyProperty(AlchemyProperties.MARROW_CLEANSING, 2.0D)
+                    .alchemyAffinity(AlchemyAffinities.ICE, 4.0D)
+                    .alchemyAffinity(AlchemyAffinities.YIN, 1.0D)
+                    .alchemy(1.1D, 0.88D, 0.12D, 1.25D)
                     .build()
     );
     public static final HerbDefinition WHITE_JADE_ORCHID = register(
@@ -296,6 +346,11 @@ public final class ModHerbs {
                     .wildAgeWeights(1200, 220, 28, 4, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
+                    .alchemyProperty(AlchemyProperties.PURIFICATION, 7.0D)
+                    .alchemyProperty(AlchemyProperties.CLEANSING, 6.0D)
+                    .alchemyProperty(AlchemyProperties.STABILIZATION, 2.0D)
+                    .alchemyAffinity(AlchemyAffinities.METAL, 2.0D)
+                    .alchemy(1.1D, 0.95D, 0.04D, 1.1D)
                     .build()
     );
 
@@ -317,6 +372,12 @@ public final class ModHerbs {
                     )
                     .wildAgeWeights(1400, 180, 20, 2, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(BlockTags.LOGS))
+                    .alchemyProperty(AlchemyProperties.RESTORATION, 5.0D)
+                    .alchemyProperty(AlchemyProperties.VITALITY, 4.0D)
+                    .alchemyProperty(AlchemyProperties.SPIRIT_NOURISHMENT, 2.0D)
+                    .alchemyAffinity(AlchemyAffinities.LIFE, 3.0D)
+                    .alchemyAffinity(AlchemyAffinities.WOOD, 1.0D)
+                    .alchemy(1.0D, 0.86D, 0.06D, 1.0D)
                     .build()
     );
 
@@ -337,6 +398,12 @@ public final class ModHerbs {
                     )
                     .wildAgeWeights(1600, 160, 16, 2, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(Blocks.BONE_BLOCK))
+                    .alchemyProperty(AlchemyProperties.BLOOD_NOURISHMENT, 6.0D)
+                    .alchemyProperty(AlchemyProperties.VITALITY, 5.0D)
+                    .alchemyProperty(AlchemyProperties.REINFORCEMENT, 3.0D)
+                    .alchemyAffinity(AlchemyAffinities.BLOOD, 5.0D)
+                    .alchemyAffinity(AlchemyAffinities.LIFE, 1.0D)
+                    .alchemy(1.2D, 0.8D, 0.18D, 1.5D)
                     .build()
     );
 
@@ -442,7 +509,7 @@ public final class ModHerbs {
      *
      * Optional quality-only Qi bonus:
      *
-     * .qualityAffinity(AscensionCraft.prefix("elemental/fire"), 6.0D)
+     * .qualityAffinity(AlchemyAffinities.FIRE, 6.0D)
      *
      * This is NOT a requirement. Zero Fire Qi still lets quality grow normally.
      * At 6+ Fire affinity, quality grows up to twice as fast.
@@ -490,7 +557,7 @@ public final class ModHerbs {
      *   Soul herb -> likes Soul Qi
      *
      * Example:
-     * .qiAffinity(AscensionCraft.prefix("elemental/fire"), 2.0D, 8.0D)
+     * .qiAffinity(AlchemyAffinities.FIRE, 2.0D, 8.0D)
      *
      * First number:
      *   Minimum amount of Fire Qi it wants.

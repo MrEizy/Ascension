@@ -4,14 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
-import net.zic.ascension.common.command.commands.AffinityCommand;
-import net.zic.ascension.common.command.commands.AscensionGive;
-import net.zic.ascension.common.command.commands.ChunkCommand;
-import net.zic.ascension.common.command.commands.CultivationCommand;
-import net.zic.ascension.common.command.commands.SkillMasteryCommand;
-import net.zic.ascension.common.command.commands.SlotSkillCommand;
-import net.zic.ascension.common.command.commands.TribulationCommand;
-import net.zic.ascension.common.command.commands.WorldgenDebugCommand;
 import net.zic.ascension.common.command.commands.*;
 import net.zic.ascension.mob_cultivation.command.MobCultivationCommands;
 
@@ -33,6 +25,7 @@ public final class AscensionCommand {
                 .then(ChunkCommand.build())
                 .then(WorldgenDebugCommand.build())
                 .then(AffinityCommand.build())
+                .then(AlchemyCommand.build())
                 .then(AscensionGive.build())
                 .then(MobCultivationCommands.build())
         );
