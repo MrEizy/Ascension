@@ -137,6 +137,7 @@ public class AscModelProvider extends ModelProvider {
         //Block Entities
         fermentingBarrelModel(blockModels);
         spiritualStoneClusterModel(blockModels);
+        blockModels.createNonTemplateModelBlock(ModBlocks.ALCHEMY_FURNACE.get());
 
         //Fluids
         blockModels.createNonTemplateModelBlock(ModBlocks.LIQUIFIED_SPIRITUAL_QI_BLOCK.get());

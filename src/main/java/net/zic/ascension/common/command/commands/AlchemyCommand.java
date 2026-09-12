@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyBatch;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemySubstance;
+import net.zic.ascension.common.item.artifacts.pills.ModPills;
 
 public final class AlchemyCommand {
     private AlchemyCommand() {
@@ -22,7 +23,9 @@ public final class AlchemyCommand {
                 .then(Commands.literal("merge")
                         .then(Commands.argument("safe_delta", DoubleArgumentType.doubleArg(0.0D))
                                 .then(Commands.argument("explosion_delta", DoubleArgumentType.doubleArg(0.0D))
-                                        .executes(AlchemyCommand::merge))));
+                                        .executes(AlchemyCommand::merge))))
+                .then(Commands.literal("condense")
+                        .executes(AlchemyCommand::condense));
     }
 
     private static int inspect(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
@@ -54,6 +57,31 @@ public final class AlchemyCommand {
 
         player.sendSystemMessage(Component.literal("Merge outcome: " + result.outcome() + " | delta: " + result.energyDelta()));
         player.sendSystemMessage(Component.literal("Result: " + describe(result.batch().substance())));
+        return 1;
+    }
+
+    private static int condense(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        AlchemySubstance.Material first = AlchemySubstance.resolve(player.getMainHandItem()).orElse(null);
+        AlchemySubstance.Material second = AlchemySubstance.resolve(player.getOffhandItem()).orElse(null);
+        if (first == null || second == null) {
+            player.sendSystemMessage(Component.literal("Main hand and offhand must both contain alchemy substances."));
+            return 0;
+        }
+
+        AlchemyBatch batch = new AlchemyBatch(first.substance(), 1).merge(second.substance(), Double.MAX_VALUE, Double.MAX_VALUE).batch();
+        var result = ModPills.condense(batch);
+        if (result.isEmpty()) {
+            player.sendSystemMessage(Component.literal("No pill formula matches this batch exactly."));
+            player.sendSystemMessage(Component.literal("Batch: " + describe(batch.substance())));
+            return 0;
+        }
+
+        String name = result.get().getHoverName().getString();
+        if (!player.addItem(result.get())) {
+            player.drop(result.get(), false);
+        }
+        player.sendSystemMessage(Component.literal("Condensed " + name + "."));
         return 1;
     }
 

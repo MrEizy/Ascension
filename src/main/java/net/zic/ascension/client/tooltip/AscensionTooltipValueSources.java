@@ -26,6 +26,7 @@ import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.item.herbs.HerbItem;
+import net.zic.ascension.common.item.artifacts.pills.PillItem;
 import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipProvider;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
@@ -83,6 +84,10 @@ public final class AscensionTooltipValueSources {
     public static final Identifier HERB_RELATED_TYPE_BADGE = AscensionCraft.prefix("herb_related_type_badge");
     public static final Identifier HERB_RELATED_TARGET_ROW = AscensionCraft.prefix("herb_related_target_row");
 
+    public static final Identifier PILL_REALM = AscensionCraft.prefix("pill_realm");
+    public static final Identifier PILL_PURITY = AscensionCraft.prefix("pill_purity");
+    public static final Identifier PILL_EFFECT = AscensionCraft.prefix("pill_effect");
+
     private static final int TECHNIQUE_REVEAL_LOOKAHEAD = 3;
 
     private static final ScrambleRevealTextEffect BEYOND_COMPREHENSION_EFFECT =
@@ -116,6 +121,10 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerValue(HERB_AGE, AscensionTooltipValueSources::herbAge);
         ZenithTooltipSources.registerValue(HERB_QUALITY, AscensionTooltipValueSources::herbQuality);
         ZenithTooltipSources.registerValue(HERB_ORIGIN, AscensionTooltipValueSources::herbOrigin);
+
+        ZenithTooltipSources.registerValue(PILL_REALM, AscensionTooltipValueSources::pillRealm);
+        ZenithTooltipSources.registerValue(PILL_PURITY, AscensionTooltipValueSources::pillPurity);
+        ZenithTooltipSources.registerValue(PILL_EFFECT, AscensionTooltipValueSources::pillEffect);
 
         ZenithTooltipSources.registerElement(PHYSIQUE_PATHS, context -> badges(PHYSIQUE_PATHS, context, ZenithTooltipColor.ACCENT));
         ZenithTooltipSources.registerElement(PHYSIQUE_STATS, context -> rows(PHYSIQUE_STATS, context));
@@ -699,6 +708,34 @@ public final class AscensionTooltipValueSources {
                 .orElseGet(List::of);
     }
 
+    private static Optional<ZenithTooltipValue> pillRealm(ZenithTooltipContext context) {
+        return pillContext(context).map(pill -> ZenithTooltipValue.text(
+                Component.literal((pill.data().majorRealm() + 1) + "." + (pill.data().minorRealm() + 1))
+        ));
+    }
+
+    private static Optional<ZenithTooltipValue> pillPurity(ZenithTooltipContext context) {
+        return pillContext(context).map(pill -> ZenithTooltipValue.progress(
+                pill.data().purity(),
+                100,
+                Component.translatable("ascension.tooltip.value.percent", pill.data().purity())
+        ));
+    }
+
+    private static Optional<ZenithTooltipValue> pillEffect(ZenithTooltipContext context) {
+        return pillContext(context).map(pill -> ZenithTooltipValue.text(
+                pill.item().definition().effectDescription(pill.data())
+        ));
+    }
+
+    private static Optional<PillContext> pillContext(ZenithTooltipContext context) {
+        if (!(context.stack().getItem() instanceof PillItem pillItem)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new PillContext(pillItem, pillItem.data(context.stack())));
+    }
+
     private static Optional<ZenithTooltipValue> herbOrigin(ZenithTooltipContext context) {
         return herbContext(context).map(herb -> ZenithTooltipValue.text(
                 Component.translatable(herb.data().wild() ? "ascension.herb.origin.wild" : "ascension.herb.origin.cultivated")
@@ -801,6 +838,8 @@ public final class AscensionTooltipValueSources {
         return result.toString();
     }
 
+
+    private record PillContext(PillItem item, AscensionComponents.PillData data) {}
 
     private record HerbContext(
             HerbDefinition definition,

@@ -92,8 +92,29 @@ public class AscLangProvider extends LanguageProvider {
 
         // Pills and Pill Things
         add("item.ascension.jade_bottle", "Jade Bottle");
+
         add("item.ascension.fasting_pill", "Fasting Pill");
+        add("ascension.pill.fasting_pill.description", "A nourishing pill refined to sustain the body without ordinary food.");
+        add("ascension.pill.fasting_pill.effect", "Restores hunger and saturation to full.");
+
         add("item.ascension.qi_replenishing_pill", "Qi Replenishing Pill");
+        add("ascension.pill.qi_replenishing_pill.description", "A concentrated pill that releases refined spiritual energy back into the cultivator.");
+        add("ascension.pill.qi_replenishing_pill.effect", "Restores %s%% of maximum Qi.");
+
+
+        // Pill Tooltip
+        add("ascension.pill.tooltip.type", "Pill");
+        add("ascension.pill.tooltip.realm", "Realm");
+        add("ascension.pill.tooltip.purity", "Purity");
+        add("ascension.pill.tooltip.effect", "Effect");
+
+        add("block.ascension.alchemy_furnace", "Alchemy Furnace");
+        add("ascension.alchemy_furnace.inserted", "Material added (%s/%s)");
+        add("ascension.alchemy_furnace.full", "The alchemy furnace cannot hold any more materials.");
+        add("ascension.alchemy_furnace.condensed", "Condensed %s");
+        add("ascension.alchemy_furnace.status", "Alchemy furnace: %s/%s materials");
+        add("ascension.alchemy_furnace.cleared", "Alchemy batch cleared.");
+        add("ascension.alchemy_furnace.empty", "The alchemy furnace is empty.");
 
 
         //Item Ores
@@ -343,6 +364,7 @@ public class AscLangProvider extends LanguageProvider {
         add("zenith.ascension.category.technique", "Technique");
         add("zenith.ascension.category.artifacts", "Artifacts");
         add("zenith.ascension.category.herbs", "Herbs");
+        add("zenith.ascension.category.pill", "Pill");
 
         add("zenith.ascension.tier.ordinary", "Ordinary");
         add("zenith.ascension.tier.profound", "Profound");

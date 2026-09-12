@@ -28,6 +28,41 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
         addArtifactsRules();
         addDefaultHerbTooltip();
         addDefaultHerbRelatedTooltip();
+        addDefaultPillTooltip();
+    }
+
+    private void addDefaultPillTooltip() {
+        template(id("default_pill"))
+                .animationPreset(ZenithTooltipPresets.LIVING)
+                .page(page(sourced("zenithlib:subject_name"))
+                        .add(titleIcon(
+                                sourced("zenithlib:subject_name"),
+                                translated("ascension.pill.tooltip.type")
+                        ).withOnAllPages(true))
+                        .add(classification(false, true, ClassificationElement.Style.BADGE))
+                        .add(divider())
+                        .add(text(
+                                sourced("zenithlib:subject_description"),
+                                ZenithTooltipColor.TEXT
+                        ))
+                        .add(divider())
+                        .add(row(
+                                translated("ascension.pill.tooltip.realm"),
+                                sourced("ascension:pill_realm"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(dynamicBar(
+                                translated("ascension.pill.tooltip.purity"),
+                                id("pill_purity"),
+                                ZenithTooltipColor.POSITIVE
+                        ))
+                        .add(divider())
+                        .add(header(translated("ascension.pill.tooltip.effect"), ZenithTooltipColor.ACCENT))
+                        .add(text(
+                                sourced("ascension:pill_effect"),
+                                ZenithTooltipColor.POSITIVE
+                        )));
     }
 
     private void addDefaultHerbRelatedTooltip() {

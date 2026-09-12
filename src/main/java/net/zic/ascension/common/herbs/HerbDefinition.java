@@ -296,8 +296,8 @@ public final class HerbDefinition {
         double instability = alchemyInstability * alchemyQualityInstability(herbData.qualityTier());
 
         return new AlchemySubstance(
-                scaleAlchemyValues(alchemyProperties, potency),
-                scaleAlchemyValues(alchemyAffinities, potency),
+                alchemyProperties,
+                alchemyAffinities,
                 realmScore / 10,
                 realmScore % 10,
                 potency,
@@ -567,14 +567,6 @@ public final class HerbDefinition {
         };
     }
 
-    private static Map<Identifier, Double> scaleAlchemyValues(Map<Identifier, Double> values, double multiplier) {
-        if (values.isEmpty() || multiplier <= 1.0E-12D) {
-            return Map.of();
-        }
-        LinkedHashMap<Identifier, Double> scaled = new LinkedHashMap<>();
-        values.forEach((id, value) -> scaled.put(id, value * multiplier));
-        return scaled;
-    }
 
     @FunctionalInterface
     public interface GrowthModifier {
