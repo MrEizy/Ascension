@@ -101,6 +101,14 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.pill.qi_replenishing_pill.description", "A concentrated pill that releases refined spiritual energy back into the cultivator.");
         add("ascension.pill.qi_replenishing_pill.effect", "Restores %s%% of maximum Qi.");
 
+        add("item.ascension.regeneration_pill", "Regeneration Pill");
+        add("ascension.pill.regeneration_pill.description", "A restorative pill that rapidly replenishes damaged flesh and blood.");
+        add("ascension.pill.regeneration_pill.effect", "Restores %s%% of maximum health.");
+
+        add("item.ascension.stamina_replenishing_pill", "Stamina Replenishing Pill");
+        add("ascension.pill.stamina_replenishing_pill.description", "A vigorous pill that restores the body's spent physical energy.");
+        add("ascension.pill.stamina_replenishing_pill.effect", "Restores %s%% of maximum Stamina.");
+
 
         // Pill Tooltip
         add("ascension.pill.tooltip.type", "Pill");
@@ -112,6 +120,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.alchemy_furnace.inserted", "Material added (%s/%s)");
         add("ascension.alchemy_furnace.full", "The alchemy furnace cannot hold any more materials.");
         add("ascension.alchemy_furnace.condensed", "Condensed %s");
+        add("ascension.alchemy_furnace.no_recipe", "No pill forms from the current batch (%s/%s materials).");
         add("ascension.alchemy_furnace.status", "Alchemy furnace: %s/%s materials");
         add("ascension.alchemy_furnace.cleared", "Alchemy batch cleared.");
         add("ascension.alchemy_furnace.empty", "The alchemy furnace is empty.");

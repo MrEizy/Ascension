@@ -33,17 +33,22 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity {
         return batch.ingredientCount();
     }
 
-    public Optional<ItemStack> insert(AlchemySubstance substance) {
+    public boolean insert(AlchemySubstance substance) {
         if (substance == null || substance.isEmpty() || !canInsert()) {
-            return Optional.empty();
+            return false;
         }
 
         batch = batch.merge(substance, Double.MAX_VALUE, Double.MAX_VALUE).batch();
+        setChanged();
+        return true;
+    }
+
+    public Optional<ItemStack> condense() {
         Optional<ItemStack> result = ModPills.condense(batch);
         if (result.isPresent()) {
             batch = AlchemyBatch.EMPTY;
+            setChanged();
         }
-        setChanged();
         return result;
     }
 

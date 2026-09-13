@@ -67,26 +67,19 @@ public class AlchemyFurnaceBlock extends Block implements EntityBlock {
             return InteractionResult.SUCCESS;
         }
 
-        Optional<ItemStack> result = furnace.insert(material.get().substance());
+        if (!furnace.insert(material.get().substance())) {
+            return InteractionResult.FAIL;
+        }
+
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }
 
-        if (result.isPresent()) {
-            ItemStack pill = result.get();
-            popResource(level, pos.above(), pill);
-            if (level instanceof ServerLevel serverLevel) {
-                spawnSuccessParticles(serverLevel, pos);
-            }
-            player.sendOverlayMessage(Component.translatable("ascension.alchemy_furnace.condensed", pill.getHoverName()));
-        } else {
-            player.sendOverlayMessage(Component.translatable(
-                    "ascension.alchemy_furnace.inserted",
-                    furnace.ingredientCount(),
-                    AlchemyFurnaceBlockEntity.MAX_INGREDIENTS
-            ));
-        }
-
+        player.sendOverlayMessage(Component.translatable(
+                "ascension.alchemy_furnace.inserted",
+                furnace.ingredientCount(),
+                AlchemyFurnaceBlockEntity.MAX_INGREDIENTS
+        ));
         return InteractionResult.SUCCESS;
     }
 
@@ -116,11 +109,26 @@ public class AlchemyFurnaceBlock extends Block implements EntityBlock {
             return InteractionResult.SUCCESS;
         }
 
-        player.sendOverlayMessage(Component.translatable(
-                "ascension.alchemy_furnace.status",
-                furnace.ingredientCount(),
-                AlchemyFurnaceBlockEntity.MAX_INGREDIENTS
-        ));
+        if (furnace.isEmpty()) {
+            player.sendOverlayMessage(Component.translatable("ascension.alchemy_furnace.empty"));
+            return InteractionResult.SUCCESS;
+        }
+
+        Optional<ItemStack> result = furnace.condense();
+        if (result.isPresent()) {
+            ItemStack pill = result.get();
+            popResource(level, pos.above(), pill);
+            if (level instanceof ServerLevel serverLevel) {
+                spawnSuccessParticles(serverLevel, pos);
+            }
+            player.sendOverlayMessage(Component.translatable("ascension.alchemy_furnace.condensed", pill.getHoverName()));
+        } else {
+            player.sendOverlayMessage(Component.translatable(
+                    "ascension.alchemy_furnace.no_recipe",
+                    furnace.ingredientCount(),
+                    AlchemyFurnaceBlockEntity.MAX_INGREDIENTS
+            ));
+        }
         return InteractionResult.SUCCESS;
     }
 

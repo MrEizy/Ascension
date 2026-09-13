@@ -96,6 +96,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.PEACH);
                         output.accept(ModPills.maximumStack(ModItems.FASTING_PILL.get()));
                         output.accept(ModPills.maximumStack(ModItems.QI_REPLENISHING_PILL.get()));
+                        output.accept(ModPills.maximumStack(ModItems.REGENERATION_PILL.get()));
+                        output.accept(ModPills.maximumStack(ModItems.STAMINA_REPLENISHING_PILL.get()));
 
 
                     }).build());

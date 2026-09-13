@@ -48,6 +48,8 @@ public class AscModelProvider extends ModelProvider {
         // Pills
         pillItemModel(itemModels, ModItems.FASTING_PILL.get(), "fasting_pill_t1");
         pillItemModel(itemModels, ModItems.QI_REPLENISHING_PILL.get(), "qi_replenishing_pill");
+        pillItemModel(itemModels, ModItems.REGENERATION_PILL.get(), "regeneration_pill");
+        pillItemModel(itemModels, ModItems.STAMINA_REPLENISHING_PILL.get(), "inner_reinforcement_pill");
 
 
         //Key Items

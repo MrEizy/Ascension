@@ -84,6 +84,10 @@ public class ModItems {
             properties -> new PillItem(properties.stacksTo(16), ModPills.FASTING));
     public static final DeferredItem<Item> QI_REPLENISHING_PILL = ITEMS.registerItem("qi_replenishing_pill",
             properties -> new PillItem(properties.stacksTo(16), ModPills.QI_REPLENISHING));
+    public static final DeferredItem<Item> REGENERATION_PILL = ITEMS.registerItem("regeneration_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.REGENERATION));
+    public static final DeferredItem<Item> STAMINA_REPLENISHING_PILL = ITEMS.registerItem("stamina_replenishing_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.STAMINA_REPLENISHING));
 
 
 
