@@ -8,8 +8,10 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyBatch;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemySubstance;
+import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.artifacts.pills.ModPills;
 
 public final class AlchemyCommand {
@@ -71,23 +73,23 @@ public final class AlchemyCommand {
 
         AlchemyBatch batch = new AlchemyBatch(first.substance(), 1).merge(second.substance(), Double.MAX_VALUE, Double.MAX_VALUE).batch();
         var result = ModPills.condense(batch);
-        if (result.isEmpty()) {
-            player.sendSystemMessage(Component.literal("No pill formula matches this batch exactly."));
-            player.sendSystemMessage(Component.literal("Batch: " + describe(batch.substance())));
-            return 0;
+        ItemStack output = result.orElseGet(() -> new ItemStack(ModItems.PILL_RESIDUE.get()));
+        if (!player.addItem(output)) {
+            player.drop(output, false);
         }
 
-        String name = result.get().getHoverName().getString();
-        if (!player.addItem(result.get())) {
-            player.drop(result.get(), false);
+        if (result.isPresent()) {
+            player.sendSystemMessage(Component.literal("Condensed " + output.getHoverName().getString() + "."));
+            return 1;
         }
-        player.sendSystemMessage(Component.literal("Condensed " + name + "."));
-        return 1;
+
+        player.sendSystemMessage(Component.literal("No pill formula matched. The batch became Pill Residue."));
+        player.sendSystemMessage(Component.literal("Batch: " + describe(batch.substance())));
+        return 0;
     }
 
     private static String describe(AlchemySubstance substance) {
-        return "realm=" + substance.majorRealm() + "." + substance.minorRealm()
-                + ", potency=" + substance.potency()
+        return "rankTier=" + substance.rankTier()
                 + ", purity=" + substance.purity()
                 + ", instability=" + substance.instability()
                 + ", properties=" + substance.properties()

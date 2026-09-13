@@ -33,15 +33,6 @@
           "type": "zenithlib:divider"
         },
         {
-          "type": "zenithlib:row",
-          "left": {
-            "translate": "ascension.pill.tooltip.realm"
-          },
-          "right": {
-            "source": "ascension:pill_realm"
-          }
-        },
-        {
           "type": "zenithlib:bar",
           "color": "positive",
           "label": {

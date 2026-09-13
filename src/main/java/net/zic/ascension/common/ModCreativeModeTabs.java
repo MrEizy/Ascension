@@ -94,6 +94,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BLOOD_LINGZHI_MUSHROOM);
                         output.accept(ModItems.WHITE_JADE_ORCHID);
                         output.accept(ModItems.PEACH);
+                        output.accept(ModItems.PILL_RESIDUE);
                         output.accept(ModPills.maximumStack(ModItems.FASTING_PILL.get()));
                         output.accept(ModPills.maximumStack(ModItems.QI_REPLENISHING_PILL.get()));
                         output.accept(ModPills.maximumStack(ModItems.REGENERATION_PILL.get()));

@@ -84,7 +84,6 @@ public final class AscensionTooltipValueSources {
     public static final Identifier HERB_RELATED_TYPE_BADGE = AscensionCraft.prefix("herb_related_type_badge");
     public static final Identifier HERB_RELATED_TARGET_ROW = AscensionCraft.prefix("herb_related_target_row");
 
-    public static final Identifier PILL_REALM = AscensionCraft.prefix("pill_realm");
     public static final Identifier PILL_PURITY = AscensionCraft.prefix("pill_purity");
     public static final Identifier PILL_EFFECT = AscensionCraft.prefix("pill_effect");
 
@@ -122,7 +121,6 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerValue(HERB_QUALITY, AscensionTooltipValueSources::herbQuality);
         ZenithTooltipSources.registerValue(HERB_ORIGIN, AscensionTooltipValueSources::herbOrigin);
 
-        ZenithTooltipSources.registerValue(PILL_REALM, AscensionTooltipValueSources::pillRealm);
         ZenithTooltipSources.registerValue(PILL_PURITY, AscensionTooltipValueSources::pillPurity);
         ZenithTooltipSources.registerValue(PILL_EFFECT, AscensionTooltipValueSources::pillEffect);
 
@@ -706,12 +704,6 @@ public final class AscensionTooltipValueSources {
                         ZenithTooltipColor.ACCENT
                 )))
                 .orElseGet(List::of);
-    }
-
-    private static Optional<ZenithTooltipValue> pillRealm(ZenithTooltipContext context) {
-        return pillContext(context).map(pill -> ZenithTooltipValue.text(
-                Component.literal((pill.data().majorRealm() + 1) + "." + (pill.data().minorRealm() + 1))
-        ));
     }
 
     private static Optional<ZenithTooltipValue> pillPurity(ZenithTooltipContext context) {

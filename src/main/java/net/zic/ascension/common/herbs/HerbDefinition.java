@@ -58,9 +58,6 @@ public final class HerbDefinition {
     private final List<HerbEffect> effects;
     private final Map<Identifier, Double> alchemyProperties;
     private final Map<Identifier, Double> alchemyAffinities;
-    private final int alchemyMajorRealm;
-    private final int alchemyMinorRealm;
-    private final double alchemyPotency;
     private final double alchemyPurity;
     private final double alchemyInstability;
     private final double alchemyRefinementDifficulty;
@@ -93,9 +90,6 @@ public final class HerbDefinition {
         this.effects = List.copyOf(builder.effects);
         this.alchemyProperties = Map.copyOf(builder.alchemyProperties);
         this.alchemyAffinities = Map.copyOf(builder.alchemyAffinities);
-        this.alchemyMajorRealm = builder.alchemyMajorRealm;
-        this.alchemyMinorRealm = builder.alchemyMinorRealm;
-        this.alchemyPotency = builder.alchemyPotency;
         this.alchemyPurity = builder.alchemyPurity;
         this.alchemyInstability = builder.alchemyInstability;
         this.alchemyRefinementDifficulty = builder.alchemyRefinementDifficulty;
@@ -289,18 +283,14 @@ public final class HerbDefinition {
         }
 
         AscensionComponents.HerbData herbData = data == null ? AscensionComponents.HerbData.DEFAULT : data;
-        int ageYears = ageThreshold(herbData.ageTier()).years();
-        int realmScore = alchemyMajorRealm * 10 + alchemyMinorRealm + alchemyRealmOffset(ageYears);
-        double potency = alchemyPotency * alchemyAgePotency(ageYears) * alchemyQualityPotency(herbData.qualityTier());
+        AgeThreshold ageThreshold = ageThreshold(herbData.ageTier());
         double purity = Mth.clamp(alchemyPurity * alchemyQualityPurity(herbData.qualityTier()), 0.0D, 1.0D);
         double instability = alchemyInstability * alchemyQualityInstability(herbData.qualityTier());
 
         return new AlchemySubstance(
                 alchemyProperties,
                 alchemyAffinities,
-                realmScore / 10,
-                realmScore % 10,
-                potency,
+                ageThreshold.resolvedAlchemyRankTier(),
                 purity,
                 instability
         );
@@ -355,7 +345,13 @@ public final class HerbDefinition {
         }
     }
 
-    public record AgeThreshold(int years, int averageRandomTicksToNext) {
+    public record AgeThreshold(int years, int averageRandomTicksToNext, int alchemyRankTier) {
+        public static final int AUTO_ALCHEMY_RANK = -1;
+
+        public AgeThreshold(int years, int averageRandomTicksToNext) {
+            this(years, averageRandomTicksToNext, AUTO_ALCHEMY_RANK);
+        }
+
         public AgeThreshold {
             if (years < 0) {
                 throw new IllegalArgumentException("Herb age cannot be negative");
@@ -363,6 +359,13 @@ public final class HerbDefinition {
             if (averageRandomTicksToNext < 0) {
                 throw new IllegalArgumentException("averageRandomTicksToNext cannot be negative");
             }
+            if (alchemyRankTier < AUTO_ALCHEMY_RANK || alchemyRankTier > 5) {
+                throw new IllegalArgumentException("Alchemy rank tier must be automatic or between 0 and 5");
+            }
+        }
+
+        public int resolvedAlchemyRankTier() {
+            return alchemyRankTier == AUTO_ALCHEMY_RANK ? defaultAlchemyRankTier(years) : alchemyRankTier;
         }
 
         public boolean canAdvance() {
@@ -515,36 +518,13 @@ public final class HerbDefinition {
         }
     }
 
-    private static int alchemyRealmOffset(int years) {
-        if (years >= 1_000_000) return 40;
-        if (years >= 100_000) return 30;
-        if (years >= 10_000) return 20;
-        if (years >= 1_000) return 10;
-        if (years >= 500) return 6;
-        if (years >= 100) return 3;
-        if (years >= 10) return 1;
+    private static int defaultAlchemyRankTier(int years) {
+        if (years >= 1_000_000) return 5;
+        if (years >= 100_000) return 4;
+        if (years >= 10_000) return 3;
+        if (years >= 1_000) return 2;
+        if (years >= 100) return 1;
         return 0;
-    }
-
-    private static double alchemyAgePotency(int years) {
-        if (years >= 1_000_000) return 6.0D;
-        if (years >= 100_000) return 4.5D;
-        if (years >= 10_000) return 3.0D;
-        if (years >= 1_000) return 2.0D;
-        if (years >= 500) return 1.5D;
-        if (years >= 100) return 1.25D;
-        if (years >= 10) return 1.10D;
-        return 1.0D;
-    }
-
-    private static double alchemyQualityPotency(int tier) {
-        return switch (Mth.clamp(tier, 0, Quality.values().length - 1)) {
-            case 0 -> 0.70D;
-            case 2 -> 1.15D;
-            case 3 -> 1.35D;
-            case 4 -> 1.60D;
-            default -> 1.0D;
-        };
     }
 
     private static double alchemyQualityPurity(int tier) {
@@ -628,9 +608,6 @@ public final class HerbDefinition {
         private final List<HerbEffect> effects = new ArrayList<>();
         private final Map<Identifier, Double> alchemyProperties = new LinkedHashMap<>();
         private final Map<Identifier, Double> alchemyAffinities = new LinkedHashMap<>();
-        private int alchemyMajorRealm = 0;
-        private int alchemyMinorRealm = 0;
-        private double alchemyPotency = 1.0D;
         private double alchemyPurity = 1.0D;
         private double alchemyInstability = 0.0D;
         private double alchemyRefinementDifficulty = 1.0D;
@@ -761,17 +738,10 @@ public final class HerbDefinition {
             return this;
         }
 
-        public Builder alchemy(double potency, double purity, double instability, double refinementDifficulty) {
-            this.alchemyPotency = nonNegativeAlchemyValue(potency, "potency");
+        public Builder alchemy(double purity, double instability, double refinementDifficulty) {
             this.alchemyPurity = Mth.clamp(finiteAlchemyValue(purity, "purity"), 0.0D, 1.0D);
             this.alchemyInstability = nonNegativeAlchemyValue(instability, "instability");
             this.alchemyRefinementDifficulty = nonNegativeAlchemyValue(refinementDifficulty, "refinementDifficulty");
-            return this;
-        }
-
-        public Builder alchemyRealm(int majorRealm, int minorRealm) {
-            this.alchemyMajorRealm = Math.max(0, majorRealm);
-            this.alchemyMinorRealm = Math.max(0, minorRealm);
             return this;
         }
 

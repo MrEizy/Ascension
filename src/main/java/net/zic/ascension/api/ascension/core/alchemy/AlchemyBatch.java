@@ -54,24 +54,21 @@ public record AlchemyBatch(AlchemySubstance substance, int ingredientCount) {
         LinkedHashMap<Identifier, Double> properties = new LinkedHashMap<>(substance.properties());
         incoming.properties().forEach((id, amount) -> properties.merge(id, amount, Double::sum));
 
-        double totalPotency = substance.potency() + incoming.potency();
-        double purity = weightedAverage(substance.purity(), substance.potency(), incoming.purity(), incoming.potency());
-        double instability = weightedAverage(substance.instability(), substance.potency(), incoming.instability(), incoming.potency())
-                + energyDelta / Math.max(1.0D, totalPotency);
-        boolean incomingHigher = incoming.realmScore() > substance.realmScore();
+        int nextCount = ingredientCount + 1;
+        double purity = weightedAverage(substance.purity(), ingredientCount, incoming.purity(), 1.0D);
+        double instability = weightedAverage(substance.instability(), ingredientCount, incoming.instability(), 1.0D)
+                + energyDelta / Math.max(1.0D, nextCount);
 
         AlchemySubstance merged = new AlchemySubstance(
                 properties,
                 affinities,
-                incomingHigher ? incoming.majorRealm() : substance.majorRealm(),
-                incomingHigher ? incoming.minorRealm() : substance.minorRealm(),
-                totalPotency,
+                Math.min(substance.rankTier(), incoming.rankTier()),
                 purity,
                 instability
         );
 
         Outcome outcome = energyDelta <= safe ? Outcome.STABLE : energyDelta <= explosion ? Outcome.UNSTABLE : Outcome.CATASTROPHIC;
-        return new MergeResult(new AlchemyBatch(merged, ingredientCount + 1), outcome, energyDelta);
+        return new MergeResult(new AlchemyBatch(merged, nextCount), outcome, energyDelta);
     }
 
     private static double applyInteractions(Map<Identifier, Double> sources, Map<Identifier, Double> targets, Map<Identifier, Double> mutableTargets) {

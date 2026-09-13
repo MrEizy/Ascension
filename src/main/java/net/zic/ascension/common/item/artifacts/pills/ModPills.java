@@ -19,6 +19,10 @@ import java.util.Optional;
 
 public final class ModPills {
 
+    /**
+     * To make one, it needs the definition, the .canconsume, a list of .properties with amounts, and .affinities...
+     */
+
     public static final PillItem.Definition FASTING = PillItem.Definition.builder((level, player, stack, data) -> {
                 FoodData food = player.getFoodData();
                 food.setFoodLevel(20);
@@ -29,9 +33,8 @@ public final class ModPills {
                 return food.getFoodLevel() < 20 || food.getSaturationLevel() < 20.0F;
             })
             .property(AlchemyProperties.CLEANSING, 7.0D)
-            .property(AlchemyProperties.SPIRIT_NOURISHMENT, 5.0D)
+            .property(AlchemyProperties.NOURISHMENT, 9.0D)
             .property(AlchemyProperties.RESTORATION, 7.0D)
-            .property(AlchemyProperties.VITALITY, 4.0D)
             .affinity(AlchemyAffinities.LIFE, 6.0D)
             .affinity(AlchemyAffinities.WOOD, 1.0D)
             .effectDescription(data -> Component.translatable("ascension.pill.fasting_pill.effect"))
@@ -40,7 +43,7 @@ public final class ModPills {
     public static final PillItem.Definition QI_REPLENISHING = PillItem.Definition.builder((level, player, stack, data) -> {
                 EntityQiProvider provider = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
                 if (provider != null && provider.getMaxQi() > 0.0D) {
-                    provider.regenQi(provider.getMaxQi() * restoreFraction(data, 0.08D));
+                    provider.regenQi(provider.getMaxQi() * restoreFraction(data, 0.30D));
                 }
             })
             .canConsume((level, player, stack, data) -> {
@@ -48,33 +51,29 @@ public final class ModPills {
                 return provider != null && provider.getMaxQi() > 0.0D && provider.getQi() < provider.getMaxQi();
             })
             .property(AlchemyProperties.REINFORCEMENT, 4.0D)
-            .property(AlchemyProperties.ESSENCE_GATHERING, 8.0D)
-            .property(AlchemyProperties.HEATING, 5.0D)
-            .property(AlchemyProperties.MARROW_CLEANSING, 3.0D)
-            .property(AlchemyProperties.CLEANSING, 2.0D)
+            .property(AlchemyProperties.CIRCULATION, 8.0D)
+            .property(AlchemyProperties.CLEANSING, 5.0D)
             .affinity(AlchemyAffinities.FIRE, 10.0D)
             .affinity(AlchemyAffinities.YANG, 3.0D)
             .effectDescription(data -> Component.translatable(
                     "ascension.pill.qi_replenishing_pill.effect",
-                    Math.round(restoreFraction(data, 0.08D) * 100.0D)
+                    Math.round(restoreFraction(data, 0.30D) * 100.0D)
             ))
             .build();
 
     public static final PillItem.Definition REGENERATION = PillItem.Definition.builder((level, player, stack, data) ->
-                    player.heal((float) (player.getMaxHealth() * restoreFraction(data, 0.05D))))
+                    player.heal((float) (player.getMaxHealth() * restoreFraction(data, 0.20D))))
             .canConsume((level, player, stack, data) -> player.getHealth() < player.getMaxHealth())
             .property(AlchemyProperties.REINFORCEMENT, 9.0D)
-            .property(AlchemyProperties.MARROW_CLEANSING, 4.0D)
-            .property(AlchemyProperties.VITALITY, 11.0D)
+            .property(AlchemyProperties.CLEANSING, 4.0D)
+            .property(AlchemyProperties.NOURISHMENT, 19.0D)
             .property(AlchemyProperties.RESTORATION, 5.0D)
-            .property(AlchemyProperties.SPIRIT_NOURISHMENT, 2.0D)
-            .property(AlchemyProperties.BLOOD_NOURISHMENT, 6.0D)
             .affinity(AlchemyAffinities.WOOD, 4.0D)
             .affinity(AlchemyAffinities.LIFE, 5.0D)
             .affinity(AlchemyAffinities.BLOOD, 5.0D)
             .effectDescription(data -> Component.translatable(
                     "ascension.pill.regeneration_pill.effect",
-                    Math.round(restoreFraction(data, 0.05D) * 100.0D)
+                    Math.round(restoreFraction(data, 0.20D) * 100.0D)
             ))
             .build();
 
@@ -84,7 +83,7 @@ public final class ModPills {
                     StaminaService.restore(
                             player,
                             AscensionResourceSources.DIRECT,
-                            maximum * restoreFraction(data, 0.08D)
+                            maximum * restoreFraction(data, 0.40D)
                     );
                 }
             })
@@ -94,23 +93,24 @@ public final class ModPills {
             })
             .property(AlchemyProperties.CIRCULATION, 5.0D)
             .property(AlchemyProperties.REINFORCEMENT, 9.0D)
-            .property(AlchemyProperties.VITALITY, 9.0D)
-            .property(AlchemyProperties.MARROW_CLEANSING, 4.0D)
+            .property(AlchemyProperties.NOURISHMENT, 11.0D)
+            .property(AlchemyProperties.CLEANSING, 4.0D)
             .property(AlchemyProperties.RESTORATION, 5.0D)
-            .property(AlchemyProperties.SPIRIT_NOURISHMENT, 2.0D)
             .affinity(AlchemyAffinities.LIGHTNING, 6.0D)
             .affinity(AlchemyAffinities.YANG, 1.5D)
             .affinity(AlchemyAffinities.WOOD, 4.0D)
             .affinity(AlchemyAffinities.LIFE, 4.0D)
             .effectDescription(data -> Component.translatable(
                     "ascension.pill.stamina_replenishing_pill.effect",
-                    Math.round(restoreFraction(data, 0.08D) * 100.0D)
+                    Math.round(restoreFraction(data, 0.40D) * 100.0D)
             ))
             .build();
 
     private ModPills() {
     }
 
+
+    // --- Helpers ---
     public static Optional<ItemStack> condense(AlchemyBatch batch) {
         if (batch == null || batch.isEmpty()) {
             return Optional.empty();
@@ -136,15 +136,10 @@ public final class ModPills {
                 1.0D
         );
         int purity = Mth.clamp((int) Math.round(effectivePurity * 100.0D), 0, 100);
-        int majorRealm = batch.substance().majorRealm();
-        int minorRealm = batch.substance().minorRealm();
 
         return new AscensionComponents.PillData(
-                AscensionComponents.PillData.rankForRealm(majorRealm),
-                majorRealm,
-                minorRealm,
-                purity,
-                batch.substance().potency()
+                AscensionComponents.PillData.rankForTier(batch.substance().rankTier()),
+                purity
         );
     }
 
@@ -154,9 +149,8 @@ public final class ModPills {
         return stack;
     }
 
-    private static double restoreFraction(AscensionComponents.PillData data, double potencyScale) {
+    private static double restoreFraction(AscensionComponents.PillData data, double baseFraction) {
         AscensionComponents.PillData resolved = data == null ? AscensionComponents.PillData.DEFAULT : data;
-        double purityMultiplier = 0.5D + resolved.purity() / 100.0D;
-        return Math.min(1.0D, potencyScale * resolved.potency() * purityMultiplier);
+        return Math.min(1.0D, baseFraction * resolved.strengthMultiplier());
     }
 }

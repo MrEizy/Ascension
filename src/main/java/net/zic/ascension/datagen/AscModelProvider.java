@@ -46,6 +46,7 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.JADE_BOTTLE.get(), ModelTemplates.FLAT_ITEM);
 
         // Pills
+        pillItemModel(itemModels, ModItems.PILL_RESIDUE.get(), "pill_residue");
         pillItemModel(itemModels, ModItems.FASTING_PILL.get(), "fasting_pill_t1");
         pillItemModel(itemModels, ModItems.QI_REPLENISHING_PILL.get(), "qi_replenishing_pill");
         pillItemModel(itemModels, ModItems.REGENERATION_PILL.get(), "regeneration_pill");

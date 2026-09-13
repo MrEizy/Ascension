@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemySubstance;
 import net.zic.ascension.common.blocks.entity.AlchemyFurnaceBlockEntity;
+import net.zic.ascension.common.item.ModItems;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -123,11 +124,11 @@ public class AlchemyFurnaceBlock extends Block implements EntityBlock {
             }
             player.sendOverlayMessage(Component.translatable("ascension.alchemy_furnace.condensed", pill.getHoverName()));
         } else {
-            player.sendOverlayMessage(Component.translatable(
-                    "ascension.alchemy_furnace.no_recipe",
-                    furnace.ingredientCount(),
-                    AlchemyFurnaceBlockEntity.MAX_INGREDIENTS
-            ));
+            popResource(level, pos.above(), new ItemStack(ModItems.PILL_RESIDUE.get()));
+            if (level instanceof ServerLevel serverLevel) {
+                spawnFailureParticles(serverLevel, pos);
+            }
+            player.sendOverlayMessage(Component.translatable("ascension.alchemy_furnace.residue"));
         }
         return InteractionResult.SUCCESS;
     }
@@ -138,5 +139,12 @@ public class AlchemyFurnaceBlock extends Block implements EntityBlock {
         double z = pos.getZ() + 0.5D;
         level.sendParticles(ParticleTypes.WITCH, x, y, z, 14, 0.3D, 0.25D, 0.3D, 0.02D);
         level.sendParticles(ParticleTypes.END_ROD, x, y, z, 6, 0.2D, 0.2D, 0.2D, 0.01D);
+    }
+
+    private static void spawnFailureParticles(ServerLevel level, BlockPos pos) {
+        double x = pos.getX() + 0.5D;
+        double y = pos.getY() + 1.1D;
+        double z = pos.getZ() + 0.5D;
+        level.sendParticles(ParticleTypes.SMOKE, x, y, z, 10, 0.25D, 0.2D, 0.25D, 0.01D);
     }
 }

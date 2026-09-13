@@ -58,7 +58,7 @@ public class AscensionComponents {
                     .build()
     );
 
-    public record PillData(Identifier rank, int majorRealm, int minorRealm, int purity, double potency) {
+    public record PillData(Identifier rank, int purity) {
         public static final Identifier ORDINARY = AscensionCraft.prefix("ordinary");
         public static final Identifier PROFOUND = AscensionCraft.prefix("profound");
         public static final Identifier HEAVEN = AscensionCraft.prefix("heaven");
@@ -66,15 +66,12 @@ public class AscensionComponents {
         public static final Identifier GOD = AscensionCraft.prefix("god");
         public static final Identifier HEAVENS_PATH = AscensionCraft.prefix("heavens_path");
 
-        public static final PillData DEFAULT = new PillData(ORDINARY, 0, 0, 75, 2.5D);
-        public static final PillData MAXIMUM = new PillData(HEAVENS_PATH, 11, 2, 100, 100.0D);
+        public static final PillData DEFAULT = new PillData(ORDINARY, 75);
+        public static final PillData MAXIMUM = new PillData(HEAVENS_PATH, 100);
 
         public static final Codec<PillData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("rank").forGetter(PillData::rank),
-                Codec.INT.fieldOf("major_realm").forGetter(PillData::majorRealm),
-                Codec.INT.fieldOf("minor_realm").forGetter(PillData::minorRealm),
-                Codec.intRange(0, 100).fieldOf("purity").forGetter(PillData::purity),
-                Codec.DOUBLE.fieldOf("potency").forGetter(PillData::potency)
+                Codec.intRange(0, 100).fieldOf("purity").forGetter(PillData::purity)
         ).apply(instance, PillData::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, PillData> STREAM_CODEC = new StreamCodec<>() {
@@ -82,40 +79,47 @@ public class AscensionComponents {
             public PillData decode(RegistryFriendlyByteBuf buf) {
                 return new PillData(
                         Identifier.STREAM_CODEC.decode(buf),
-                        buf.readVarInt(),
-                        buf.readVarInt(),
-                        buf.readVarInt(),
-                        buf.readDouble()
+                        buf.readVarInt()
                 );
             }
 
             @Override
             public void encode(RegistryFriendlyByteBuf buf, PillData data) {
                 Identifier.STREAM_CODEC.encode(buf, data.rank());
-                buf.writeVarInt(data.majorRealm());
-                buf.writeVarInt(data.minorRealm());
                 buf.writeVarInt(data.purity());
-                buf.writeDouble(data.potency());
             }
         };
 
         public PillData {
             rank = rank == null ? ORDINARY : rank;
-            majorRealm = Math.max(0, majorRealm);
-            minorRealm = Math.max(0, minorRealm);
             purity = Math.max(0, Math.min(100, purity));
-            potency = Double.isFinite(potency) ? Math.max(0.0D, potency) : 0.0D;
         }
 
-        public static Identifier rankForRealm(int majorRealm) {
-            if (majorRealm >= 10) return HEAVENS_PATH;
-            if (majorRealm >= 8) return GOD;
-            if (majorRealm >= 6) return SAINT;
-            if (majorRealm >= 4) return HEAVEN;
-            if (majorRealm >= 2) return PROFOUND;
-            return ORDINARY;
+        public static Identifier rankForTier(int tier) {
+            return switch (Math.max(0, Math.min(5, tier))) {
+                case 1 -> PROFOUND;
+                case 2 -> HEAVEN;
+                case 3 -> SAINT;
+                case 4 -> GOD;
+                case 5 -> HEAVENS_PATH;
+                default -> ORDINARY;
+            };
         }
 
+        public static int rankTier(Identifier rank) {
+            if (HEAVENS_PATH.equals(rank)) return 5;
+            if (GOD.equals(rank)) return 4;
+            if (SAINT.equals(rank)) return 3;
+            if (HEAVEN.equals(rank)) return 2;
+            if (PROFOUND.equals(rank)) return 1;
+            return 0;
+        }
+
+        public double strengthMultiplier() {
+            double rankMultiplier = 1.0D + rankTier(rank) * 0.5D;
+            double purityMultiplier = 0.5D + purity / 200.0D;
+            return rankMultiplier * purityMultiplier;
+        }
     }
 
     public record HerbData(int ageTier, int qualityTier, boolean wild) {

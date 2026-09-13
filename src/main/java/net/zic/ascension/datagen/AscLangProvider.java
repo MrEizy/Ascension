@@ -92,6 +92,7 @@ public class AscLangProvider extends LanguageProvider {
 
         // Pills and Pill Things
         add("item.ascension.jade_bottle", "Jade Bottle");
+        add("item.ascension.pill_residue", "Pill Residue");
 
         add("item.ascension.fasting_pill", "Fasting Pill");
         add("ascension.pill.fasting_pill.description", "A nourishing pill refined to sustain the body without ordinary food.");
@@ -112,7 +113,6 @@ public class AscLangProvider extends LanguageProvider {
 
         // Pill Tooltip
         add("ascension.pill.tooltip.type", "Pill");
-        add("ascension.pill.tooltip.realm", "Realm");
         add("ascension.pill.tooltip.purity", "Purity");
         add("ascension.pill.tooltip.effect", "Effect");
 
@@ -120,7 +120,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.alchemy_furnace.inserted", "Material added (%s/%s)");
         add("ascension.alchemy_furnace.full", "The alchemy furnace cannot hold any more materials.");
         add("ascension.alchemy_furnace.condensed", "Condensed %s");
-        add("ascension.alchemy_furnace.no_recipe", "No pill forms from the current batch (%s/%s materials).");
+        add("ascension.alchemy_furnace.residue", "The batch failed to form a pill and collapsed into residue.");
         add("ascension.alchemy_furnace.status", "Alchemy furnace: %s/%s materials");
         add("ascension.alchemy_furnace.cleared", "Alchemy batch cleared.");
         add("ascension.alchemy_furnace.empty", "The alchemy furnace is empty.");

@@ -45,10 +45,8 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity {
 
     public Optional<ItemStack> condense() {
         Optional<ItemStack> result = ModPills.condense(batch);
-        if (result.isPresent()) {
-            batch = AlchemyBatch.EMPTY;
-            setChanged();
-        }
+        batch = AlchemyBatch.EMPTY;
+        setChanged();
         return result;
     }
 

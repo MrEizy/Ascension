@@ -80,6 +80,7 @@ public class ModItems {
                     .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "jade_bottle"))));
 
     // Pills
+    public static final DeferredItem<Item> PILL_RESIDUE = ITEMS.registerSimpleItem("pill_residue");
     public static final DeferredItem<Item> FASTING_PILL = ITEMS.registerItem("fasting_pill",
             properties -> new PillItem(properties.stacksTo(16), ModPills.FASTING));
     public static final DeferredItem<Item> QI_REPLENISHING_PILL = ITEMS.registerItem("qi_replenishing_pill",

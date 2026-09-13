@@ -14,30 +14,24 @@ import java.util.Optional;
 public record AlchemySubstance(
         Map<Identifier, Double> properties,
         Map<Identifier, Double> affinities,
-        int majorRealm,
-        int minorRealm,
-        double potency,
+        int rankTier,
         double purity,
         double instability
 ) {
     public static final Codec<AlchemySubstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.unboundedMap(Identifier.CODEC, Codec.DOUBLE).optionalFieldOf("properties", Map.of()).forGetter(AlchemySubstance::properties),
             Codec.unboundedMap(Identifier.CODEC, Codec.DOUBLE).optionalFieldOf("affinities", Map.of()).forGetter(AlchemySubstance::affinities),
-            Codec.INT.optionalFieldOf("major_realm", 0).forGetter(AlchemySubstance::majorRealm),
-            Codec.INT.optionalFieldOf("minor_realm", 0).forGetter(AlchemySubstance::minorRealm),
-            Codec.DOUBLE.optionalFieldOf("potency", 0.0D).forGetter(AlchemySubstance::potency),
+            Codec.INT.optionalFieldOf("rank_tier", 0).forGetter(AlchemySubstance::rankTier),
             Codec.DOUBLE.optionalFieldOf("purity", 1.0D).forGetter(AlchemySubstance::purity),
             Codec.DOUBLE.optionalFieldOf("instability", 0.0D).forGetter(AlchemySubstance::instability)
     ).apply(instance, AlchemySubstance::new));
 
-    public static final AlchemySubstance EMPTY = new AlchemySubstance(Map.of(), Map.of(), 0, 0, 0.0D, 1.0D, 0.0D);
+    public static final AlchemySubstance EMPTY = new AlchemySubstance(Map.of(), Map.of(), 0, 1.0D, 0.0D);
 
     public AlchemySubstance {
         properties = sanitize(properties);
         affinities = sanitize(affinities);
-        majorRealm = Math.max(0, majorRealm);
-        minorRealm = Math.max(0, minorRealm);
-        potency = finiteNonNegative(potency);
+        rankTier = Mth.clamp(rankTier, 0, 5);
         purity = Mth.clamp(Double.isFinite(purity) ? purity : 1.0D, 0.0D, 1.0D);
         instability = finiteNonNegative(instability);
     }
@@ -52,11 +46,7 @@ public record AlchemySubstance(
     }
 
     public boolean isEmpty() {
-        return properties.isEmpty() && affinities.isEmpty() && potency <= 1.0E-12D;
-    }
-
-    public int realmScore() {
-        return majorRealm * 10 + minorRealm;
+        return properties.isEmpty() && affinities.isEmpty();
     }
 
     private static Map<Identifier, Double> sanitize(Map<Identifier, Double> values) {
