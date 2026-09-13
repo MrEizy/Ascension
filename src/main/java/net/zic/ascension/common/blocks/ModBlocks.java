@@ -3,7 +3,6 @@ package net.zic.ascension.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
@@ -21,6 +20,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.blocks.alchemy.AlchemyFurnaceBlock;
 import net.zic.ascension.common.blocks.custom.SpiritVeinBlock;
 import net.zic.ascension.common.blocks.custom.SpiritualStoneClusterBlock;
 import net.zic.ascension.common.blocks.entity.FermentingBarrelBlock;
@@ -32,7 +32,6 @@ import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.worldgen.tree.AscTreeGrowers;
-import net.zic.zenithlib.registry.RegistryHelper;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -294,6 +293,10 @@ public class ModBlocks {
     public static final DeferredBlock<FermentingBarrelBlock> FERMENTING_BARREL = registerBlock("fermenting_barrel",
             properties -> new FermentingBarrelBlock(properties.strength(2).explosionResistance(3.5f)
                     .requiresCorrectToolForDrops().sound(SoundType.WOOD)));
+
+    public static final DeferredBlock<AlchemyFurnaceBlock> ALCHEMY_FURNACE = registerBlock("alchemy_furnace",
+            properties -> new AlchemyFurnaceBlock(properties.strength(3.0F).explosionResistance(6.0F)
+                    .sound(SoundType.STONE)));
 
 
 

@@ -90,8 +90,40 @@ public class AscLangProvider extends LanguageProvider {
 
 
 
-
+        // Pills and Pill Things
         add("item.ascension.jade_bottle", "Jade Bottle");
+        add("item.ascension.pill_residue", "Pill Residue");
+
+        add("item.ascension.fasting_pill", "Fasting Pill");
+        add("ascension.pill.fasting_pill.description", "A nourishing pill refined to sustain the body without ordinary food.");
+        add("ascension.pill.fasting_pill.effect", "Restores hunger and saturation to full.");
+
+        add("item.ascension.qi_replenishing_pill", "Qi Replenishing Pill");
+        add("ascension.pill.qi_replenishing_pill.description", "A concentrated pill that releases refined spiritual energy back into the cultivator.");
+        add("ascension.pill.qi_replenishing_pill.effect", "Restores %s%% of maximum Qi.");
+
+        add("item.ascension.regeneration_pill", "Regeneration Pill");
+        add("ascension.pill.regeneration_pill.description", "A restorative pill that rapidly replenishes damaged flesh and blood.");
+        add("ascension.pill.regeneration_pill.effect", "Restores %s%% of maximum health.");
+
+        add("item.ascension.stamina_replenishing_pill", "Stamina Replenishing Pill");
+        add("ascension.pill.stamina_replenishing_pill.description", "A vigorous pill that restores the body's spent physical energy.");
+        add("ascension.pill.stamina_replenishing_pill.effect", "Restores %s%% of maximum Stamina.");
+
+
+        // Pill Tooltip
+        add("ascension.pill.tooltip.type", "Pill");
+        add("ascension.pill.tooltip.purity", "Purity");
+        add("ascension.pill.tooltip.effect", "Effect");
+
+        add("block.ascension.alchemy_furnace", "Alchemy Furnace");
+        add("ascension.alchemy_furnace.inserted", "Material added (%s/%s)");
+        add("ascension.alchemy_furnace.full", "The alchemy furnace cannot hold any more materials.");
+        add("ascension.alchemy_furnace.condensed", "Condensed %s");
+        add("ascension.alchemy_furnace.residue", "The batch failed to form a pill and collapsed into residue.");
+        add("ascension.alchemy_furnace.status", "Alchemy furnace: %s/%s materials");
+        add("ascension.alchemy_furnace.cleared", "Alchemy batch cleared.");
+        add("ascension.alchemy_furnace.empty", "The alchemy furnace is empty.");
 
 
         //Item Ores
@@ -341,6 +373,7 @@ public class AscLangProvider extends LanguageProvider {
         add("zenith.ascension.category.technique", "Technique");
         add("zenith.ascension.category.artifacts", "Artifacts");
         add("zenith.ascension.category.herbs", "Herbs");
+        add("zenith.ascension.category.pill", "Pill");
 
         add("zenith.ascension.tier.ordinary", "Ordinary");
         add("zenith.ascension.tier.profound", "Profound");

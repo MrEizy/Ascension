@@ -37,6 +37,10 @@ public final class AscClassificationDataProvider extends ZenithClassificationDat
         category("herbs")
                 .label("zenith.ascension.category.herbs")
                 .color("#AAFF00");
+
+        category("pill")
+                .label("zenith.ascension.category.pill")
+                .color("#D9B6FFFF");
     }
 
     private void addRanks() {

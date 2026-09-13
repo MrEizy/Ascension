@@ -45,6 +45,13 @@ public class AscModelProvider extends ModelProvider {
 
         itemModels.generateFlatItem(ModItems.JADE_BOTTLE.get(), ModelTemplates.FLAT_ITEM);
 
+        // Pills
+        pillItemModel(itemModels, ModItems.PILL_RESIDUE.get(), "pill_residue");
+        pillItemModel(itemModels, ModItems.FASTING_PILL.get(), "fasting_pill_t1");
+        pillItemModel(itemModels, ModItems.QI_REPLENISHING_PILL.get(), "qi_replenishing_pill");
+        pillItemModel(itemModels, ModItems.REGENERATION_PILL.get(), "regeneration_pill");
+        pillItemModel(itemModels, ModItems.STAMINA_REPLENISHING_PILL.get(), "inner_reinforcement_pill");
+
 
         //Key Items
         itemModels.generateFlatItem(ModItems.BLOODLINE_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
@@ -133,6 +140,7 @@ public class AscModelProvider extends ModelProvider {
         //Block Entities
         fermentingBarrelModel(blockModels);
         spiritualStoneClusterModel(blockModels);
+        blockModels.createNonTemplateModelBlock(ModBlocks.ALCHEMY_FURNACE.get());
 
         //Fluids
         blockModels.createNonTemplateModelBlock(ModBlocks.LIQUIFIED_SPIRITUAL_QI_BLOCK.get());
@@ -348,6 +356,18 @@ public class AscModelProvider extends ModelProvider {
     private Material herbBlockTexture(Block block) {
         String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
         return new Material(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/herbs/" + name));
+    }
+
+
+    private void pillItemModel(ItemModelGenerators itemModels, Item item, String texturePath) {
+        Identifier model = ModelTemplates.FLAT_ITEM.create(
+                ModelLocationUtils.getModelLocation(item),
+                TextureMapping.layer0(new Material(Identifier.fromNamespaceAndPath(
+                        AscensionCraft.MOD_ID,
+                        "item/pills/" + texturePath
+                ))),
+                itemModels.modelOutput);
+        itemModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(model));
     }
 
     private void herbItemModel(ItemModelGenerators itemModels, Item item) {

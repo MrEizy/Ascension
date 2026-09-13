@@ -1,0 +1,65 @@
+{
+  "animation_presets": [
+    "zenithlib:living"
+  ],
+  "pages": [
+    {
+      "elements": [
+        {
+          "type": "zenithlib:title_icon",
+          "on_all_pages": true,
+          "subtitle": {
+            "translate": "ascension.pill.tooltip.type"
+          },
+          "title": {
+            "source": "zenithlib:subject_name"
+          }
+        },
+        {
+          "type": "zenithlib:classification",
+          "show_category": false,
+          "style": "badge"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:text",
+          "text": {
+            "source": "zenithlib:subject_description"
+          }
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:bar",
+          "color": "positive",
+          "label": {
+            "translate": "ascension.pill.tooltip.purity"
+          },
+          "source": "ascension:pill_purity"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "translate": "ascension.pill.tooltip.effect"
+          }
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "positive",
+          "text": {
+            "source": "ascension:pill_effect"
+          }
+        }
+      ],
+      "title": {
+        "source": "zenithlib:subject_name"
+      }
+    }
+  ]
+}

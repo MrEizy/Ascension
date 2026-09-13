@@ -12,6 +12,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
+import net.zic.ascension.common.item.artifacts.pills.ModPills;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
 import java.util.function.Supplier;
@@ -78,6 +79,7 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("creativetab.ascension.alchemy"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.CULTIVATION_SOIL);
+                        output.accept(ModBlocks.ALCHEMY_FURNACE);
                         output.accept(ModItems.JADE_DEW_GRASS);
                         output.accept(ModItems.JADE_DEW_GRASS_SEEDS);
                         output.accept(ModItems.GINSENG);
@@ -92,6 +94,11 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BLOOD_LINGZHI_MUSHROOM);
                         output.accept(ModItems.WHITE_JADE_ORCHID);
                         output.accept(ModItems.PEACH);
+                        output.accept(ModItems.PILL_RESIDUE);
+                        output.accept(ModPills.maximumStack(ModItems.FASTING_PILL.get()));
+                        output.accept(ModPills.maximumStack(ModItems.QI_REPLENISHING_PILL.get()));
+                        output.accept(ModPills.maximumStack(ModItems.REGENERATION_PILL.get()));
+                        output.accept(ModPills.maximumStack(ModItems.STAMINA_REPLENISHING_PILL.get()));
 
 
                     }).build());
