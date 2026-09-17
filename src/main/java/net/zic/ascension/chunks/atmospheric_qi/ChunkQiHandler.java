@@ -23,7 +23,7 @@ public class ChunkQiHandler implements QiHandler {
     }
 
     public ChunkQiHandler(long qi,long baseCapacity,long baseRegenRate) {
-        qi = 0;
+        this.qi = qi;
         CAPACITY = ValueContainerHelpers.longValueContainer(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "capacity"), baseCapacity);
         REGEN_RATE = ValueContainerHelpers.longValueContainer(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "regen_rate"), baseRegenRate);
     }
@@ -113,12 +113,13 @@ public class ChunkQiHandler implements QiHandler {
         @Override
         public ChunkQiHandler read(IAttachmentHolder holder, ValueInput input) {
             long qi = input.getLongOr("qi",0);
+
             return new ChunkQiHandler(qi);
         }
 
         @Override
         public boolean write(ChunkQiHandler attachment, ValueOutput output) {
-            output.putLong("qiy",attachment.getQi());
+            output.putLong("qi",attachment.getQi());
             return true;
         }
     }
