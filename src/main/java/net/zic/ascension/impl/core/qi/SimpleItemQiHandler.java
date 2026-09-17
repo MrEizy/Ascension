@@ -2,13 +2,14 @@ package net.zic.ascension.impl.core.qi;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ItemStack;
+import net.zic.ascension.api.ascension.core.qi.ItemQiHandler;
 import net.zic.ascension.api.ascension.core.qi.QiHandler;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
 /**
  * TODO update max capacity to use a tier string that links to a config?
  */
-public class SimpleItemQiHandler implements QiHandler {
+public abstract class SimpleItemQiHandler implements ItemQiHandler {
 
     private final ItemStack itemStack;
     private final long CAPACITY;
@@ -18,20 +19,31 @@ public class SimpleItemQiHandler implements QiHandler {
 
     }
 
+
     @Override
     public boolean tryConsume(int amount) {
-        return false;
-    }//TODO
+        long newQi = Math.min( getQi() -amount,CAPACITY);
+        if(newQi < 0) return false;
+        setQi(newQi);
+        return true;
+    }
 
     @Override
     public int insertQi(int amount) {
-        return 0;
-    }//TODO
+        long qi = getQi();
+        int change = Math.toIntExact(Math.min(amount, CAPACITY - qi));
+        setQi(qi+change);
+        return change;
+    }
 
     @Override
     public int extractQi(int amount) {
-        return 0;
-    }//TODO
+        long qi = getQi();
+        int change = Math.toIntExact(Math.min(qi, amount));
+        setQi(qi-change);
+        return change;
+    }
+
 
     @Override
     public long getQi() {
@@ -50,5 +62,9 @@ public class SimpleItemQiHandler implements QiHandler {
     @Override
     public boolean isFull() {
         return getQi() == getCapacity();
+    }
+
+    public ItemStack getItem(){
+        return itemStack;
     }
 }

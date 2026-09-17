@@ -13,6 +13,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkPathAffinityProvider;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHandler;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
@@ -27,6 +28,7 @@ import net.zic.ascension.impl.core.movement.MovementService;
 import net.zic.ascension.impl.runtime.projectile.NormalProjectileService;
 import net.zic.ascension.impl.core.effect.SkillEffectManager;
 
+//TODO go thorough and clean up what we are no longer using
 public class AscensionAttachments {
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, AscensionCraft.MOD_ID);
 
@@ -86,6 +88,13 @@ public class AscensionAttachments {
                     .serialize(new ChunkQiHandler.Provider())
                     .build()
     );
+    public static final Supplier<AttachmentType<ChunkPathAffinityProvider>> CHUNK_AFFINITY_HANDLER = ATTACHMENT_TYPES.register(
+            "chunk_affinity_handler",()->AttachmentType.builder(
+                            holder-> new ChunkPathAffinityProvider()
+                    )
+                    .build()
+    );
+
     public static final Supplier<AttachmentType<Double>> ENTITY_QI = ATTACHMENT_TYPES.register(
             "entity_qi", () -> AttachmentType.builder((holder)->{
                         if(!(holder instanceof LivingEntity entity)) return 0.0;

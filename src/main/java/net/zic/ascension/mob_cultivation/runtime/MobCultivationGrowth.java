@@ -12,8 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHandler;
-import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHelper;
-import net.zic.ascension.common.data_attachements.AscensionAttachments;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkHelper;
 import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.mob_cultivation.MobCultivationManager;
 import net.zic.ascension.mob_cultivation.generation.MobCultivationGenerator;
@@ -52,7 +51,7 @@ public final class MobCultivationGrowth {
             return 0.0D;
         }
         ChunkAccess chunk = mob.level().getChunk(position);
-        ChunkQiHandler qi = ChunkQiHelper.getQiHandler(chunk);
+        ChunkQiHandler qi = ChunkHelper.getQiHandler(chunk);
         double cap = qi.getCapacity();
         if (cap <= 0.0D) {
             return 0.0D;

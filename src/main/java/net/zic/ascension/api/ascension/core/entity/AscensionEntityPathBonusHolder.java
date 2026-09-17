@@ -52,7 +52,7 @@ public class AscensionEntityPathBonusHolder implements PathBonusProvider {
     public Collection<Identifier> getAllPathBonusesInCategory(Identifier category) {
         return cachedHolder.getAllPathBonusesInCategory(category);
     }
-
+    //TODO consider updating modifier id like such containerid+modifierid
     public void updatePathBonus(PathBonus bonus){
 
         ValueContainer container = new ValueContainer(bonus.path(),0);
