@@ -1,8 +1,6 @@
 package net.zic.ascension.configuration;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.DimensionTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -13,8 +11,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.configuration.biome.v2.BiomeConfiguration;
-import net.zic.ascension.configuration.dimension.v2.DimensionConfiguration;
+import net.zic.ascension.configuration.biome.BiomeConfiguration;
+import net.zic.ascension.configuration.dimension.DimensionConfiguration;
 import net.zic.ascension.configuration.item.qi_capacity.TierCapacityDefinition;
 import net.zic.ascension.configuration.mobs.MobConfiguration;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)

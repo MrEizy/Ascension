@@ -1,0 +1,11 @@
+{
+  "values": {
+    "#minecraft:is_overworld": {
+      "capacity": 100,
+      "regen_rate": 2,
+      "affinities":{
+        "ascension:water": 2
+      }
+    }
+  }
+}

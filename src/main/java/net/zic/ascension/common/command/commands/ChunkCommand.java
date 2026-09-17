@@ -8,7 +8,8 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHandler;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHelper;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.util.PathInteractionUtil;
 
@@ -23,15 +24,18 @@ public class ChunkCommand {
 
         ServerPlayer player = context.getSource().getPlayer();
 
-        ChunkQiContainer chunkQiContainer = player.level().getChunk(player.blockPosition()).getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
+        ChunkQiHandler qiHandler = ChunkQiHelper.getQiHandler(player.level().getChunk(player.blockPosition()));
 
         player.sendSystemMessage(Component.literal("===Chunk==="));
-        player.sendSystemMessage(Component.literal(chunkQiContainer.getEnergy()+"/"+chunkQiContainer.getEnergyCap()));
-        player.sendSystemMessage(Component.literal(chunkQiContainer.getEnergyRegenRate()+"/s"));
+        player.sendSystemMessage(Component.literal(qiHandler.getQi()+"/"+qiHandler.getCapacity()));
+        player.sendSystemMessage(Component.literal(qiHandler.getRegenRate()+"/s"));
         player.sendSystemMessage(Component.literal("Affinities:"));
+        /*TODO update with Chunk Affinity Provider
         for(Identifier id : chunkQiContainer.getAllPathBonusesInCategory(PathInteractionUtil.AFFINITY_CATEGORY)){
             player.sendSystemMessage(Component.literal(id +":"+chunkQiContainer.getPathBonus(PathInteractionUtil.AFFINITY_CATEGORY,id)));
         }
+
+         */
 
         return 1;
     }

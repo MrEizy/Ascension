@@ -1,6 +1,7 @@
 package net.zic.ascension.common.herbs;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -9,12 +10,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
-import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHandler;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHelper;
+import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.configuration.ConfigurationDataMaps;
 import net.zic.ascension.configuration.biome.BiomeConfiguration;
-import net.zic.ascension.configuration.biome.BiomeConfigurations;
 import net.zic.ascension.configuration.dimension.DimensionConfiguration;
-import net.zic.ascension.configuration.dimension.DimensionConfigurations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -201,6 +204,7 @@ public final class HerbDefinition {
         }
 
         if (!qualityAffinityIdeals.isEmpty()) {
+            /* TODO update with new affinity provider
             ChunkQiContainer qi = ChunkQiContainer.getContainer(level.getChunk(pos));
             double bestAffinityBonus = 0.0D;
             for (Map.Entry<Identifier, Double> entry : qualityAffinityIdeals.entrySet()) {
@@ -214,6 +218,8 @@ public final class HerbDefinition {
                 );
             }
             multiplier *= 1.0D + bestAffinityBonus;
+             */
+
         }
 
         return Math.min(1.0D, multiplier / qualityGrowthTicks[tier]);
@@ -245,8 +251,8 @@ public final class HerbDefinition {
         }
 
         var chunk = level.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
-        ChunkQiContainer qi = ChunkQiContainer.getContainer(chunk);
-        if (!qi.tryConsumeEnergy(atmosphericQiCost)) {
+        ChunkQiHandler qi = ChunkQiHelper.getQiHandler(chunk);
+        if (!qi.tryConsume((int) atmosphericQiCost)) {
             return false;
         }
 
@@ -373,24 +379,26 @@ public final class HerbDefinition {
         }
 
         public double growthMultiplier(ServerLevel level, BlockPos pos) {
-            ChunkQiContainer qi = ChunkQiContainer.getContainer(level.getChunk(pos));
 
-            double multiplier = capacity.suitability(qi.getEnergyCap());
+            ChunkQiHandler qi = ChunkQiHelper.getQiHandler(level.getChunk(pos));
+            double multiplier = capacity.suitability(qi.getCapacity());
             if (multiplier <= 0.0D) {
                 return 0.0D;
             }
 
-            multiplier = Math.min(multiplier, availableFraction.suitability(qi.getEnergyFraction()));
+            multiplier = Math.min(multiplier, availableFraction.suitability(qi.getRegenRate()));
             if (multiplier <= 0.0D) {
                 return 0.0D;
             }
-
+            /* TODO update when we get new Affinity Provider
             for (Map.Entry<Identifier, QiRequirement> entry : affinities.entrySet()) {
                 multiplier = Math.min(multiplier, entry.getValue().suitability(qi.getAffinity(entry.getKey())));
                 if (multiplier <= 0.0D) {
                     return 0.0D;
                 }
             }
+
+             */
 
             return multiplier;
         }
@@ -411,38 +419,41 @@ public final class HerbDefinition {
         }
 
         private static WorldgenQi resolveWorldgenQi(WorldGenLevel level, BlockPos pos) {
-            ChunkQiContainer container = ChunkQiContainer.getContainer(level.getChunk(pos));
-            if (container.hasAtmosphericConfiguration()) {
+            ChunkAccess chunk = level.getChunk(pos);
+            if(chunk.hasData(AscensionAttachments.CHUNK_QI_HANDLER)){
+                ChunkQiHandler qiHandler = ChunkQiHelper.getQiHandler(level.getChunk(pos));
+
+                /*TODO udpate with chunk affinity provider
+                      if (container.hasAtmosphericConfiguration()) {
                 Map<Identifier, Double> affinities = new LinkedHashMap<>();
-                for (Identifier path : container.getAllAffinities()) {
-                    affinities.put(path, container.getAffinity(path));
+                  for (Identifier path : container.getAllAffinities()) {
+                        affinities.put(path, container.getAffinity(path));
+                    }
+                    return new WorldgenQi(container.getEnergyCap(), affinities);
                 }
-                return new WorldgenQi(container.getEnergyCap(), affinities);
+
+                 */
             }
+
 
             double capacity = 0.0D;
             Map<Identifier, Double> affinities = new LinkedHashMap<>();
+            BiomeConfiguration configuration = level.getBiome(pos).getData(ConfigurationDataMaps.BIOME_CONFIGURATION);
+            if(configuration != null){
+                capacity += configuration.capacity();
+                configuration.affinities().forEach((path, value) -> affinities.merge(path, value, Double::sum));
 
-            BiomeConfigurations biomeConfigurations = BiomeConfigurations.getInstance();
-            if (biomeConfigurations != null) {
-                BiomeConfiguration biome = biomeConfigurations.getConfiguration(level.getBiome(pos));
-                if (biome != null) {
-                    capacity += biome.energyCap();
-                    biome.affinities().forEach((path, value) -> affinities.merge(path, value, Double::sum));
-                }
             }
 
-            DimensionConfigurations dimensionConfigurations = DimensionConfigurations.getInstance();
-            if (dimensionConfigurations != null) {
-                DimensionConfiguration dimension = dimensionConfigurations.getConfiguration(
-                        level.getLevel().dimension().identifier()
-                );
-                if (dimension != null) {
-                    capacity += dimension.energyCap();
-                    dimension.affinities().forEach((path, value) -> affinities.merge(path, value, Double::sum));
-                }
-            }
+            DimensionConfiguration dimensionConfiguration = level.registryAccess().lookupOrThrow(Registries.DIMENSION).getData(
+                    ConfigurationDataMaps.DIMENSION_CONFIGURATION,
+                    level.getLevel().dimension()
+            );
+            if(dimensionConfiguration != null) {
+                capacity += dimensionConfiguration.capacity();
+                dimensionConfiguration.affinities().forEach((path, value) -> affinities.merge(path, value, Double::sum));
 
+            }
             return new WorldgenQi(capacity, affinities);
         }
 

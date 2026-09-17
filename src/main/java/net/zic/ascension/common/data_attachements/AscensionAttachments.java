@@ -13,7 +13,6 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHandler;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
@@ -79,13 +78,7 @@ public class AscensionAttachments {
                     .copyOnDeath()
                     .build()
     );
-    public static final Supplier<AttachmentType<ChunkQiContainer>> ASCENSION_CHUNK_QI_CONTAINER = ATTACHMENT_TYPES.register(
-            "ascension_chunk_qi_container",()->AttachmentType.builder(
-                holder-> new ChunkQiContainer(0,0,0)
-            )
-                    .serialize(new ChunkQiContainer.Provider())
-                    .build()
-    );
+
     public static final Supplier<AttachmentType<ChunkQiHandler>> CHUNK_QI_HANDLER = ATTACHMENT_TYPES.register(
             "chunk_qi_handler",()->AttachmentType.builder(
                             holder-> new ChunkQiHandler(0,0,0)

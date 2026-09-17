@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.qi;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.core.qi.QiHandler;
 import net.zic.ascension.common.item.components.AscensionComponents;
@@ -14,6 +15,7 @@ public class SimpleItemQiHandler implements QiHandler {
     public SimpleItemQiHandler(ItemStack itemStack, long capacity){
         this.itemStack = itemStack;
         CAPACITY = capacity;
+
     }
 
     @Override

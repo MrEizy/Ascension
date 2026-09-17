@@ -1,39 +1,33 @@
 package net.zic.ascension.configuration.dimension;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMaps;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
+import net.zic.ascension.configuration.ConfigurationDataMaps;
 
-/**
- * Holds configuration details for a dimension,
- * these are not configurations that effect world gen
- * @param energyCap the influence this dimension has on the max energy of a chunk
- * @param energyRegen the influence this dimension has on the energy Regen of a chunk
- * @param affinities the affinities this dimension gives a chunk
- */
-@Deprecated
-public record DimensionConfiguration(double energyCap, double energyRegen, Object2DoubleMap<Identifier> affinities){
-    /**
-     *  because multiple configurations can influence the same dimension we use a builder pattern
-     *
-     */
-    public static class Builder{
-        private double energyCap;
-        private double energyRegen;
-        private final Object2DoubleMap<Identifier> affinities =  new Object2DoubleOpenHashMap<>();
+import java.util.Map;
+//TODO add extra modifiers like a distance from center modifier
+public record DimensionConfiguration(long capacity, long regenRate, Object2DoubleMap<Identifier> affinities){
+    public static final Codec<DimensionConfiguration> CODEC = RecordCodecBuilder.create(
+            instance->instance.group(
+                    Codec.LONG.fieldOf("capacity").forGetter(DimensionConfiguration::capacity),
+                    Codec.LONG.fieldOf("regen_rate").forGetter(DimensionConfiguration::regenRate),
+                    Codec.unboundedMap(Identifier.CODEC,Codec.DOUBLE).optionalFieldOf("affinities", Map.of()).xmap(
+                            map-> Object2DoubleMaps.unmodifiable(
+                                    new Object2DoubleOpenHashMap<>(map)
+                            ),
+                            Map::copyOf
 
-        public void setEnergyCap(double energyCap) {
-            this.energyCap = Math.max(energyCap, this.energyCap);
-        }
-        public void setEnergyRegen(double energyRegen) {
-            this.energyRegen = Math.max(energyRegen, this.energyRegen);
-        }
-        public void addAffinity(Identifier affinity,double value){
-            affinities.put(affinity,Math.max(affinities.getOrDefault(affinity,Double.MIN_VALUE),value));
-        }
+                    ).forGetter(DimensionConfiguration::affinities)
+            ).apply(instance, DimensionConfiguration::new)
+    );
 
-        public DimensionConfiguration build(){
-            return new DimensionConfiguration(energyCap, energyRegen, affinities);
-        }
+    public static DimensionConfiguration getConfiguration(Level level){
+        return level.registryAccess().lookupOrThrow(Registries.DIMENSION).getData(ConfigurationDataMaps.DIMENSION_CONFIGURATION,level.dimension());
     }
 }
