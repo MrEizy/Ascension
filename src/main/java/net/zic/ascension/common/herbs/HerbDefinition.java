@@ -12,7 +12,7 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHandler;
-import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHelper;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkHelper;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.configuration.ConfigurationDataMaps;
@@ -251,7 +251,7 @@ public final class HerbDefinition {
         }
 
         var chunk = level.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
-        ChunkQiHandler qi = ChunkQiHelper.getQiHandler(chunk);
+        ChunkQiHandler qi = ChunkHelper.getQiHandler(chunk);
         if (!qi.tryConsume((int) atmosphericQiCost)) {
             return false;
         }
@@ -380,7 +380,7 @@ public final class HerbDefinition {
 
         public double growthMultiplier(ServerLevel level, BlockPos pos) {
 
-            ChunkQiHandler qi = ChunkQiHelper.getQiHandler(level.getChunk(pos));
+            ChunkQiHandler qi = ChunkHelper.getQiHandler(level.getChunk(pos));
             double multiplier = capacity.suitability(qi.getCapacity());
             if (multiplier <= 0.0D) {
                 return 0.0D;
@@ -421,7 +421,7 @@ public final class HerbDefinition {
         private static WorldgenQi resolveWorldgenQi(WorldGenLevel level, BlockPos pos) {
             ChunkAccess chunk = level.getChunk(pos);
             if(chunk.hasData(AscensionAttachments.CHUNK_QI_HANDLER)){
-                ChunkQiHandler qiHandler = ChunkQiHelper.getQiHandler(level.getChunk(pos));
+                ChunkQiHandler qiHandler = ChunkHelper.getQiHandler(level.getChunk(pos));
 
                 /*TODO udpate with chunk affinity provider
                       if (container.hasAtmosphericConfiguration()) {

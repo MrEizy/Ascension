@@ -6,12 +6,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHandler;
-import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHelper;
-import net.zic.ascension.common.data_attachements.AscensionAttachments;
-import net.zic.ascension.util.PathInteractionUtil;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkHelper;
 
 public class ChunkCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> build() {
@@ -24,7 +21,7 @@ public class ChunkCommand {
 
         ServerPlayer player = context.getSource().getPlayer();
 
-        ChunkQiHandler qiHandler = ChunkQiHelper.getQiHandler(player.level().getChunk(player.blockPosition()));
+        ChunkQiHandler qiHandler = ChunkHelper.getQiHandler(player.level().getChunk(player.blockPosition()));
 
         player.sendSystemMessage(Component.literal("===Chunk==="));
         player.sendSystemMessage(Component.literal(qiHandler.getQi()+"/"+qiHandler.getCapacity()));
