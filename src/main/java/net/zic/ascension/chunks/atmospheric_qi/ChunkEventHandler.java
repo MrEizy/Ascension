@@ -3,8 +3,6 @@ package net.zic.ascension.chunks.atmospheric_qi;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
@@ -19,8 +17,8 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.configuration.ConfigurationDataMaps;
-import net.zic.ascension.configuration.biome.v2.BiomeConfiguration;
-import net.zic.ascension.configuration.dimension.v2.DimensionConfiguration;
+import net.zic.ascension.configuration.biome.BiomeConfiguration;
+import net.zic.ascension.configuration.dimension.DimensionConfiguration;
 
 
 import java.util.stream.Stream;

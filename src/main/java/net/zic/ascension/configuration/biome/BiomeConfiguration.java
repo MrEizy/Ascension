@@ -1,41 +1,27 @@
 package net.zic.ascension.configuration.biome;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMaps;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.resources.Identifier;
 
-/**
- * //TODO update to long for energy cap and regen rate
- * Holds configuration details for a biome,
- * these are not configurations that effect world gen
- * @param energyCap the influence this biome has on the max energy of a chunk
- * @param energyRegen the influence this biome has on the energy Regen of a chunk
- * @param affinities the affinities this biome gives a chunk
- */
-@Deprecated
-public record BiomeConfiguration(double energyCap, double energyRegen, Object2DoubleMap<Identifier> affinities) {
+import java.util.Map;
 
-    /**
-     *  because multiple configurations can influence the same Biome we use a builder pattern
-     *
-     */
-    public static class Builder{
-        private double energyCap;
-        private double energyRegen;
-        private final Object2DoubleMap<Identifier> affinities =  new Object2DoubleOpenHashMap<>();
+//TODO setup a merger for data map
+public record BiomeConfiguration(long capacity, long regenRate, Object2DoubleMap<Identifier> affinities){
+    public static final Codec<BiomeConfiguration> CODEC = RecordCodecBuilder.create(
+            instance->instance.group(
+                     Codec.LONG.fieldOf("capacity").forGetter(BiomeConfiguration::capacity),
+                    Codec.LONG.fieldOf("regen_rate").forGetter(BiomeConfiguration::regenRate),
+                    Codec.unboundedMap(Identifier.CODEC,Codec.DOUBLE).optionalFieldOf("affinities", Map.of()).xmap(
+                            map-> Object2DoubleMaps.unmodifiable(
+                                    new Object2DoubleOpenHashMap<>(map)
+                            ),
+                            Map::copyOf
 
-        public void setEnergyCap(double energyCap) {
-            this.energyCap = Math.max(energyCap, this.energyCap);
-        }
-        public void setEnergyRegen(double energyRegen) {
-            this.energyRegen = Math.max(energyRegen, this.energyRegen);
-        }
-        public void addAffinity(Identifier affinity,double value){
-            affinities.put(affinity,Math.max(affinities.getOrDefault(affinity,Double.MIN_VALUE),value));
-        }
-
-        public BiomeConfiguration build(){
-            return new BiomeConfiguration(energyCap, energyRegen, affinities);
-        }
-    }
+                    ).forGetter(BiomeConfiguration::affinities)
+            ).apply(instance, BiomeConfiguration::new)
+    );
 }

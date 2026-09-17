@@ -1,0 +1,11 @@
+{
+  "values": {
+    "minecraft:overworld": {
+      "capacity": 1000,
+      "regen_rate": 2,
+      "affinities":{
+        "ascension:essence": 2
+      }
+    }
+  }
+}
