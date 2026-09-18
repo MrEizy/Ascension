@@ -20,6 +20,7 @@ import java.util.Optional;
 public class ModRenderPipelines {
 
     public static final String DIVINE_SENSE_UNIFORM = "DivineSenseWave";
+    public static final String SPHERICAL_DESTRUCTION_UNIFORM = "SphericalDestructionWave";
     public static final String WORLD_DEPTH_SAMPLER = "WorldDepth";
 
     public static RenderPipeline LINES_NO_DEPTH;
@@ -29,6 +30,7 @@ public class ModRenderPipelines {
     public static RenderPipeline AURA_SURFACE;
     public static RenderPipeline AURA_SURFACE_NO_DEPTH;
     public static RenderPipeline DIVINE_SENSE_WAVE;
+    public static RenderPipeline SPHERICAL_DESTRUCTION_WAVE;
 
     @SubscribeEvent
     public static void onRegisterRenderPipelines(RegisterRenderPipelinesEvent event) {
@@ -94,5 +96,18 @@ public class ModRenderPipelines {
         event.registerPipeline(AURA_SURFACE);
         event.registerPipeline(AURA_SURFACE_NO_DEPTH);
         event.registerPipeline(DIVINE_SENSE_WAVE);
+
+        SPHERICAL_DESTRUCTION_WAVE = RenderPipeline.builder()
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/spherical_destruction_wave"))
+                .withVertexShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/screen_effect"))
+                .withFragmentShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/spherical_destruction_wave"))
+                .withSampler(WORLD_DEPTH_SAMPLER)
+                .withUniform(SPHERICAL_DESTRUCTION_UNIFORM, UniformType.UNIFORM_BUFFER)
+                .withVertexFormat(DefaultVertexFormat.POSITION, VertexFormat.Mode.TRIANGLES)
+                .withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE))
+                .withDepthStencilState(Optional.empty())
+                .withCull(false)
+                .build();
+        event.registerPipeline(SPHERICAL_DESTRUCTION_WAVE);
     }
 }

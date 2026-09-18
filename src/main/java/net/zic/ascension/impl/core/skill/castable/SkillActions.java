@@ -1339,6 +1339,43 @@ public final class SkillActions {
         }
     }
 
+    public record SphericalDestruction(
+            int radius,
+            ScaledValue damage,
+            double soundRange,
+            boolean destroyUnbreakable,
+            double projectileSpeed,
+            double startRadius,
+            double growthDistance,
+            double maxDistance
+    ) implements SkillAction {
+        public static final MapCodec<SphericalDestruction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Codec.intRange(1, 64).optionalFieldOf("radius", 8).forGetter(SphericalDestruction::radius),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("damage", ScaledValue.constant(0.0D)).forGetter(SphericalDestruction::damage),
+                Codec.DOUBLE.optionalFieldOf("sound_range", 64.0D).forGetter(SphericalDestruction::soundRange),
+                Codec.BOOL.optionalFieldOf("destroy_unbreakable", false).forGetter(SphericalDestruction::destroyUnbreakable),
+                Codec.DOUBLE.optionalFieldOf("projectile_speed", 0.8D).forGetter(SphericalDestruction::projectileSpeed),
+                Codec.DOUBLE.optionalFieldOf("start_radius", 0.3D).forGetter(SphericalDestruction::startRadius),
+                Codec.DOUBLE.optionalFieldOf("growth_distance", 12.0D).forGetter(SphericalDestruction::growthDistance),
+                Codec.DOUBLE.optionalFieldOf("max_distance", 32.0D).forGetter(SphericalDestruction::maxDistance)
+        ).apply(instance, SphericalDestruction::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.SPHERICAL_DESTRUCTION.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.POSITION;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            SphericalDestructionService.launch(context, this);
+        }
+    }
+
     public enum PersistentVisualAction implements StringRepresentable {
         APPLY("apply"), REMOVE("remove");
 

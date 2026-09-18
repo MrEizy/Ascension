@@ -1,0 +1,37 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.spherical_devastation.name"
+  },
+  "description": {
+    "translate": "ascension.skill.spherical_devastation.desc"
+  },
+  "cast": {
+    "mode": "instant"
+  },
+  "cooldown": {
+    "base": 1.0
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 150.0
+    }
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:spherical_destruction",
+      "radius": 8,
+      "damage": {
+        "base": 40.0
+      },
+      "sound_range": 64.0,
+      "destroy_unbreakable": false,
+      "projectile_speed": 0.8,
+      "start_radius": 0.3,
+      "growth_distance": 12.0,
+      "max_distance": 32.0
+    }
+  ]
+}

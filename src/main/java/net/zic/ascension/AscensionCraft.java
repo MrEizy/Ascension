@@ -205,7 +205,7 @@ public class AscensionCraft {
 
 
 
-   @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
+    @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
     public static class ModEvents {
 
         @SubscribeEvent
@@ -318,6 +318,17 @@ public class AscensionCraft {
                     ChooseStarterOptionPacket.TYPE,
                     ChooseStarterOptionPacket.STREAM_CODEC,
                     ChooseStarterOptionPacket::handle
+            );
+
+            registrar.playToClient(
+                    SphericalDestructionPayload.TYPE,
+                    SphericalDestructionPayload.CODEC,
+                    SphericalDestructionPayload::handle
+            );
+            registrar.playToClient(
+                    SphericalProjectilePayload.TYPE,
+                    SphericalProjectilePayload.CODEC,
+                    SphericalProjectilePayload::handle
             );
 
         }
