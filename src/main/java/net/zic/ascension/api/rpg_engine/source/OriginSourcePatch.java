@@ -12,15 +12,16 @@ import java.util.Collection;
 import java.util.Map;
 
 public record OriginSourcePatch(
-        Map<Identifier, DataSourceInstance> dirtyDataSources,
+        Map<Identifier, DataSourceHolder<?>> dirtyDataSources,
         Collection<Identifier> toRemoveDataSources,
         Collection<ValueContainer<Double>> dirtyStats){
 
 
     private static void encode(OriginSourcePatch patch,ByteBuf buf,RegistryAccess access,boolean fullPatch){
+        buf.writeBoolean(fullPatch);
         ByteBufHelpers.encodeCollection(patch.dirtyDataSources().entrySet(), buf, (pair, byteBuf) -> {
             ByteBufHelpers.encodeIdentifier(pair.getKey(), byteBuf);
-            pair.getValue().getDataSource().encodeInstance(pair.getValue(),byteBuf,access,fullPatch);
+            pair.getValue().encode(byteBuf,access,fullPatch);
         });
         ByteBufHelpers.encodeCollection(patch.toRemoveDataSources(), buf, ByteBufHelpers::encodeIdentifier);
 

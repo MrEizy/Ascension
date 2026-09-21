@@ -1,4 +1,4 @@
-package net.zic.ascension.api.rpg_engine.source.data_source.v2.util;
+package net.zic.ascension.api.rpg_engine.source.data_source.util;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;

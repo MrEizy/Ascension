@@ -1,4 +1,4 @@
-package net.zic.ascension.api.rpg_engine.source.data_source.v2;
+package net.zic.ascension.api.rpg_engine.source.data_source;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
@@ -8,7 +8,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 public class DataSourceHolder<T extends DataSourceInstance>{
@@ -23,13 +22,13 @@ public class DataSourceHolder<T extends DataSourceInstance>{
     public DataSource<T> getDataSource(){
         return dataSource;
     }
+    public T getDataSourceInstance(){return dataSourceInstance;}
     public Identifier getDataSourceKey(){
-        //TODO update after changing registry to use new value
-        return Identifier.parse("none");
+        return RPGEngineRegistries.DATA_SOURCE_REGISTRY.getKey(dataSource);
+
     }
     public static DataSource<?> getDataSource(Identifier key){
-        return null;
-        //TODO return RPGEngineRegistries.DATA_SOURCE_REGISTRY.containsKey(key) ? RPGEngineRegistries.DATA_SOURCE_REGISTRY.getValue(key) : null;
+        return RPGEngineRegistries.DATA_SOURCE_REGISTRY.containsKey(key) ? RPGEngineRegistries.DATA_SOURCE_REGISTRY.getValue(key) : null;
     }
 
 
@@ -76,13 +75,12 @@ public class DataSourceHolder<T extends DataSourceInstance>{
         dataSource.removeFromEntity(entity,dataSourceInstance);
     }
 
-    public void writeInstance(ValueOutput output, RegistryAccess access){
-        output.putString("data_source",getDataSourceKey().toString());
-        dataSource.serializerHandler().write(dataSourceInstance,output.child("instance"),access);
+    public void write(ValueOutput output, RegistryAccess access){
+        output.putString("source_id",getDataSourceKey().toString());
+        dataSource.serializerHandler().write(dataSourceInstance,output.child("data"),access);
     };
 
-    public void encodeInstance(ByteBuf buf, RegistryAccess access, boolean fullPatch){
-        ByteBufHelpers.encodeIdentifier(getDataSourceKey(),buf);
+    public void encode(ByteBuf buf, RegistryAccess access, boolean fullPatch){
         dataSource.syncHandler(fullPatch).encode(dataSourceInstance,buf,access);
     }
 
@@ -91,15 +89,15 @@ public class DataSourceHolder<T extends DataSourceInstance>{
         Identifier id = ByteBufHelpers.decodeIdentifier(buf);
         dataSource.syncHandler(fullPatch).decode(dataSourceInstance,buf,access);
     }
-    public static DataSourceHolder<?> decode(ByteBuf buf,RegistryAccess access){
-        DataSource<?> dataSource = getDataSource(ByteBufHelpers.decodeIdentifier(buf));
+    public static DataSourceHolder<?> decode(Identifier identifier,ByteBuf buf,RegistryAccess access){
+        DataSource<?> dataSource = getDataSource(identifier);
         if(dataSource == null) return null;
 
-        return dataSource.createFormationInstance(buf,access);
+        return dataSource.createHolder(buf,access);
     }
     public static DataSourceHolder<?> load(ValueInput input,RegistryAccess access){
-        DataSource<?> dataSource = getDataSource(Identifier.parse(input.getStringOr("data_source","none")));
+        DataSource<?> dataSource = getDataSource(Identifier.parse(input.getStringOr("source_id","none")));
         if(dataSource ==null) return null;
-        return dataSource.createFormationInstance(input,access);
+        return dataSource.createHolder(input.childOrEmpty("data"),access);
     }
 }

@@ -14,7 +14,9 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
+import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceHolder;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
 import net.zic.zenithlib.common.ZenithAttachments;
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
 //TODO ensure that when adding new Data sources they properly have add to entity called
 //TODO then do the same for stuff like physique bloodline etc
 public class OriginSource implements StatProvider {
-    private final HashMap<Identifier, DataSourceInstance> dataSources = new HashMap<>();
+    private final HashMap<Identifier, DataSourceHolder<?>> dataSources = new HashMap<>();
 
     private final HashSet<Identifier> dirtyDataSources = new HashSet<>();
     private final HashSet<Identifier> removedDataSources = new HashSet<>();
@@ -108,13 +110,13 @@ public class OriginSource implements StatProvider {
         if (entity == null || attachedEntities.contains(entity)) { return; }
         attachedEntities.add(entity);
         entity.getData(ZenithAttachments.STAT_HOLDER).registerStatProvider(this);
-        for (DataSourceInstance instance : dataSources.values()) { instance.getDataSource().applyToEntity(entity, instance); }
+        for (DataSourceHolder<?> instance : dataSources.values()) { instance.applyToEntity(entity); }
     }
     public void detachFromEntity(LivingEntity entity){
         if(!attachedEntities.contains(entity)) return;
         attachedEntities.remove(entity);
 
-        for (DataSourceInstance instance : dataSources.values()) instance.getDataSource().removeFromEntity(entity,instance);
+        for (DataSourceHolder<?> instance : dataSources.values()) { instance.removeFromEntity(entity); }
 
         entity.getData(ZenithAttachments.STAT_HOLDER).removeStatProvider(this);
     }
@@ -126,26 +128,30 @@ public class OriginSource implements StatProvider {
         return attachedEntities.contains(entity);
     }
     //──Data Sources────────────────────────────────────────────────────────
-
-    public boolean addDataSource(Identifier dataSource, DataSourceInstance instance){
+    public boolean addDataSource(Identifier dataSource,DataSourceHolder<?> holder){
         if(dataSources.containsKey(dataSource)) return false;
-        dataSources.put(dataSource,instance);
-        instance.getDataSource().onAdded(this,instance);
+        dataSources.put(dataSource,holder);
+        holder.onAdded(this);
         markDataSourceDirty(dataSource);
         return true;
     }
+
 
     public boolean hasDataSource(Identifier dataSource){
         return dataSources.containsKey(dataSource);
     }
 
-    public DataSourceInstance getDataSource(Identifier dataSource){
+    public DataSourceHolder<?> getDataSourceHolder(Identifier dataSource){
         return dataSources.get(dataSource);
     }
 
-    public DataSourceInstance removeDataSource(Identifier dataSource){
+    public <T extends DataSourceInstance> T getDataSource(Identifier dataSource,Class<T> clazz){
+        DataSourceHolder<?> holder = getDataSourceHolder(dataSource);
+        return holder != null && clazz.isInstance(holder.getDataSourceInstance()) ? clazz.cast(holder.getDataSourceInstance()) : null;
+    }
+    public DataSourceHolder<?> removeDataSourceHolder(Identifier dataSource){
         if(!dataSources.containsKey(dataSource)) return null;
-        dataSources.get(dataSource).getDataSource().onRemoved(this,dataSources.get(dataSource));
+        dataSources.get(dataSource).onRemoved(this);
         removedDataSources.add(dataSource);
         return dataSources.remove(dataSource);
     }
@@ -204,26 +210,18 @@ public class OriginSource implements StatProvider {
 
     private static final Identifier NONE_IDENTIFIER = Identifier.parse("none");
 
-    private DataSourceInstance loadDataSource(ValueInput input,RegistryAccess access){
-        Identifier identifier = Identifier.parse(input.getStringOr("source_id","none"));
-
-        if(identifier.equals(NONE_IDENTIFIER)){
-            AscensionCraft.LOGGER.debug("tried loading non-existent data source");
-            return null;
+    private DataSourceHolder<?> loadDataSource(ValueInput input,RegistryAccess access){
+        DataSourceHolder<?> holder = DataSourceHolder.load(input,access);
+        if(holder == null){
+            AscensionCraft.LOGGER.debug("ERROR LOADING DATA SOURCE");
         }
+        return holder;
 
-        try{
-            return DataSource.getInstance(identifier).loadInstance(input.childOrEmpty("data"),access);
-        }catch (Exception e){
-            AscensionCraft.LOGGER.debug("error trying to load data source {}",identifier);
-        }
-        return null;
     }
 
-    private void writeDataSource(Identifier dataSource, DataSourceInstance instance, ValueOutput output, RegistryAccess access){
-        if(instance == null) return;
-        output.putString("source_id",dataSource.toString());
-        instance.getDataSource().writeInstance(instance,output.child("data"),access);
+    private void writeDataSource(Identifier dataSource, DataSourceHolder<?> holder, ValueOutput output, RegistryAccess access){
+        if(holder == null) return;
+        holder.write(output,access);
     }
 
     public OriginSourcePatch load(){
@@ -240,31 +238,30 @@ public class OriginSource implements StatProvider {
     }
 
     public void loadOriginSourceData(ValueInput input){
-        HashMap<LoadPriority,ArrayList<DataSourceInstance>> loadMap = new HashMap<>();
+        HashMap<LoadPriority,ArrayList<DataSourceHolder<?>>> loadMap = new HashMap<>();
         ValueInput.ValueInputList inputList = input.childrenListOrEmpty("data_sources");
         for(ValueInput dataSourceInput : inputList){
-            DataSourceInstance instance = loadDataSource(dataSourceInput,getRegistryAccess());
-            if(instance == null) continue;
+            DataSourceHolder<?> holder = loadDataSource(dataSourceInput,getRegistryAccess());
+            if(holder == null) continue;
 
-            dataSources.put(DataSource.getId(instance.getDataSource()),instance);
-            if(instance.getDataSource().loadPriority() == LoadPriority.NO_LOAD) continue;
+            dataSources.put(holder.getDataSourceKey(),holder);
+            if(holder.loadPriority() == LoadPriority.NO_LOAD) continue;
 
-            loadMap.computeIfAbsent(instance.getDataSource().loadPriority(),key->new ArrayList<>());
-
-            loadMap.get(instance.getDataSource().loadPriority()).add(instance);
+            loadMap.computeIfAbsent(holder.loadPriority(),key->new ArrayList<>()).add(holder);
 
         }
 
         for(LoadPriority priority : LoadPriority.values()){
             if(!loadMap.containsKey(priority)) continue;
-            List<DataSourceInstance> instances = loadMap.get(priority);
+            List<DataSourceHolder<?>> holders = loadMap.get(priority);
 
-            for(DataSourceInstance instance : instances){
-                instance.getDataSource().onAdded(this,instance);
+            for(DataSourceHolder<?> holder : holders){
+                holder.onAdded(this);
             }
         }
+        for(DataSourceHolder<?> holder : dataSources.values()) holder.preFinishedLoading(this);
         finishLoading();
-        for(DataSourceInstance instance : dataSources.values()) instance.getDataSource().finishedLoading(this,instance);
+        for(DataSourceHolder<?> holder : dataSources.values()) holder.finishedLoading(this);
     }
 
     public void writeOriginSourceData(ValueOutput output){
@@ -278,10 +275,13 @@ public class OriginSource implements StatProvider {
 
 
     public void applyPatch(ByteBuf buf){
+        boolean fullPatch = buf.readBoolean();
         ByteBufHelpers.decodeArray(buf, byteBuf -> {
             Identifier identifier = ByteBufHelpers.decodeIdentifier(byteBuf);
-            DataSourceInstance data = DataSource.getInstance(identifier).loadInstance(getDataSource(identifier),byteBuf,getRegistryAccess());
-            return new Pair<>(identifier, data);
+            DataSourceHolder<?> holder = getDataSourceHolder(identifier);
+            if (holder != null) holder.decode(buf,getRegistryAccess(),fullPatch);
+            else holder= DataSourceHolder.decode(identifier,buf,getRegistryAccess());
+            return new Pair<>(identifier, holder);
         }).forEach(pair->dataSources.put(pair.getFirst(),pair.getSecond()));
 
         ByteBufHelpers.decodeArray(buf, ByteBufHelpers::decodeIdentifier).forEach(dataSources::remove);
