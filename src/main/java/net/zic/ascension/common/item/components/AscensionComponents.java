@@ -58,7 +58,7 @@ public class AscensionComponents {
                     .build()
     );
 
-    public record PillData(Identifier rank, int purity) {
+    public record PillData(Identifier rank, int purity, double amplifier) {
         public static final Identifier ORDINARY = AscensionCraft.prefix("ordinary");
         public static final Identifier PROFOUND = AscensionCraft.prefix("profound");
         public static final Identifier HEAVEN = AscensionCraft.prefix("heaven");
@@ -66,12 +66,13 @@ public class AscensionComponents {
         public static final Identifier GOD = AscensionCraft.prefix("god");
         public static final Identifier HEAVENS_PATH = AscensionCraft.prefix("heavens_path");
 
-        public static final PillData DEFAULT = new PillData(ORDINARY, 75);
-        public static final PillData MAXIMUM = new PillData(HEAVENS_PATH, 100);
+        public static final PillData DEFAULT = new PillData(ORDINARY, 75, 1.0D);
+        public static final PillData MAXIMUM = new PillData(HEAVENS_PATH, 100, 1.0D);
 
         public static final Codec<PillData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("rank").forGetter(PillData::rank),
-                Codec.intRange(0, 100).fieldOf("purity").forGetter(PillData::purity)
+                Codec.intRange(0, 100).fieldOf("purity").forGetter(PillData::purity),
+                Codec.DOUBLE.optionalFieldOf("amplifier", 1.0D).forGetter(PillData::amplifier)
         ).apply(instance, PillData::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, PillData> STREAM_CODEC = new StreamCodec<>() {
@@ -79,7 +80,8 @@ public class AscensionComponents {
             public PillData decode(RegistryFriendlyByteBuf buf) {
                 return new PillData(
                         Identifier.STREAM_CODEC.decode(buf),
-                        buf.readVarInt()
+                        buf.readVarInt(),
+                        buf.readDouble()
                 );
             }
 
@@ -87,12 +89,14 @@ public class AscensionComponents {
             public void encode(RegistryFriendlyByteBuf buf, PillData data) {
                 Identifier.STREAM_CODEC.encode(buf, data.rank());
                 buf.writeVarInt(data.purity());
+                buf.writeDouble(data.amplifier());
             }
         };
 
         public PillData {
             rank = rank == null ? ORDINARY : rank;
             purity = Math.max(0, Math.min(100, purity));
+            amplifier = Double.isFinite(amplifier) ? Math.max(0.0D, amplifier) : 1.0D;
         }
 
         public static Identifier rankForTier(int tier) {
@@ -118,7 +122,7 @@ public class AscensionComponents {
         public double strengthMultiplier() {
             double rankMultiplier = 1.0D + rankTier(rank) * 0.5D;
             double purityMultiplier = 0.5D + purity / 200.0D;
-            return rankMultiplier * purityMultiplier;
+            return rankMultiplier * purityMultiplier * amplifier;
         }
     }
 

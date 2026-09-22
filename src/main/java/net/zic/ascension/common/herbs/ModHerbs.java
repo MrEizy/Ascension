@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyAffinities;
-import net.zic.ascension.api.ascension.core.alchemy.AlchemyProperties;
 import net.zic.ascension.common.blocks.ModBlocks;
 
 import java.util.Collections;
@@ -38,10 +37,6 @@ public final class ModHerbs {
                     .wildAgeWeights(1000, 180, 24, 3, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(BlockTags.GRASS_BLOCKS))
                     .spawnRule((level, pos, random) -> random.nextInt(6) == 0)
-                    .alchemyProperty(AlchemyProperties.CLEANSING, 1.5D)
-                    .alchemyProperty(AlchemyProperties.RESTORATION, 0.5D)
-                    .alchemyAffinity(AlchemyAffinities.WATER, 0.5D)
-                    .alchemy(0.9D, 0.03D, 0.5D)
                     .build()
     );
     public static final HerbDefinition PEACH = register(
@@ -61,11 +56,6 @@ public final class ModHerbs {
                     )
                     .wildAgeWeights(1000, 180, 24, 3, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(ModBlocks.PEACH_LEAVES.get()))
-                    .alchemyProperty(AlchemyProperties.CLEANSING, 7.0D)
-                    .alchemyProperty(AlchemyProperties.NOURISHMENT, 3.0D)
-                    .alchemyProperty(AlchemyProperties.RESTORATION, 2.0D)
-                    .alchemyAffinity(AlchemyAffinities.LIFE, 3.0D)
-                    .alchemy(0.88D, 0.12D, 1.4D)
                     .build()
     );
 
@@ -111,11 +101,6 @@ public final class ModHerbs {
                         }
                         return multiplier;
                     })
-                    .alchemyProperty(AlchemyProperties.REINFORCEMENT, 4.0D)
-                    .alchemyProperty(AlchemyProperties.CIRCULATION, 3.0D)
-                    .alchemyAffinity(AlchemyAffinities.FIRE, 6.0D)
-                    .alchemyAffinity(AlchemyAffinities.YANG, 2.0D)
-                    .alchemy(0.82D, 0.22D, 2.0D)
                     .build()
     );
 
@@ -170,13 +155,6 @@ public final class ModHerbs {
                         }
                         return multiplier;
                     })
-                    .alchemyProperty(AlchemyProperties.CLEANSING, 4.0D)
-                    .alchemyProperty(AlchemyProperties.NOURISHMENT, 4.0D)
-                    .alchemyProperty(AlchemyProperties.RESTORATION, 3.0D)
-                    .alchemyAffinity(AlchemyAffinities.WATER, 4.0D)
-                    .alchemyAffinity(AlchemyAffinities.MOON, 2.0D)
-                    .alchemyAffinity(AlchemyAffinities.YIN, 1.0D)
-                    .alchemy(0.92D, 0.08D, 1.6D)
                     .build()
     );
 
@@ -227,12 +205,6 @@ public final class ModHerbs {
                         }
                         return multiplier;
                     })
-                    .alchemyProperty(AlchemyProperties.CIRCULATION, 5.0D)
-                    .alchemyProperty(AlchemyProperties.REINFORCEMENT, 3.0D)
-                    .alchemyProperty(AlchemyProperties.NOURISHMENT, 3.0D)
-                    .alchemyAffinity(AlchemyAffinities.LIGHTNING, 6.0D)
-                    .alchemyAffinity(AlchemyAffinities.YANG, 1.5D)
-                    .alchemy(0.84D, 0.3D, 2.4D)
                     .build()
     );
 
@@ -258,12 +230,6 @@ public final class ModHerbs {
                     .qualityAffinity(AlchemyAffinities.WOOD, 6.0D)
                     .naturalSupport(state -> state.is(BlockTags.GRASS_BLOCKS))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
-                    .alchemyProperty(AlchemyProperties.REINFORCEMENT, 6.0D)
-                    .alchemyProperty(AlchemyProperties.CLEANSING, 4.0D)
-                    .alchemyProperty(AlchemyProperties.NOURISHMENT, 2.0D)
-                    .alchemyAffinity(AlchemyAffinities.WOOD, 3.0D)
-                    .alchemyAffinity(AlchemyAffinities.LIFE, 1.0D)
-                    .alchemy(0.86D, 0.08D, 1.0D)
                     .build()
     );
     public static final HerbDefinition FIRE_GINSENG = register(
@@ -288,11 +254,6 @@ public final class ModHerbs {
                     .qualityAffinity(AlchemyAffinities.FIRE, 6.0D)
                     .naturalSupport(state -> state.is(Blocks.SAND))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
-                    .alchemyProperty(AlchemyProperties.CIRCULATION, 5.0D)
-                    .alchemyProperty(AlchemyProperties.CLEANSING, 5.0D)
-                    .alchemyAffinity(AlchemyAffinities.FIRE, 4.0D)
-                    .alchemyAffinity(AlchemyAffinities.YANG, 1.0D)
-                    .alchemy(0.84D, 0.15D, 1.25D)
                     .build()
     );
     public static final HerbDefinition SNOW_GINSENG = register(
@@ -316,12 +277,6 @@ public final class ModHerbs {
                     .qualityAffinity(AlchemyAffinities.ICE, 6.0D)
                     .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.SNOW_BLOCK))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
-                    .alchemyProperty(AlchemyProperties.CIRCULATION, 4.0D)
-                    .alchemyProperty(AlchemyProperties.NOURISHMENT, 3.0D)
-                    .alchemyProperty(AlchemyProperties.CLEANSING, 6.0D)
-                    .alchemyAffinity(AlchemyAffinities.ICE, 4.0D)
-                    .alchemyAffinity(AlchemyAffinities.YIN, 1.0D)
-                    .alchemy(0.88D, 0.12D, 1.25D)
                     .build()
     );
     public static final HerbDefinition WHITE_JADE_ORCHID = register(
@@ -342,9 +297,6 @@ public final class ModHerbs {
                     .wildAgeWeights(1200, 220, 28, 4, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK))
                     .spawnRule((level, pos, random) -> random.nextInt(10) == 0)
-                    .alchemyProperty(AlchemyProperties.CLEANSING, 13.0D)
-                    .alchemyAffinity(AlchemyAffinities.METAL, 2.0D)
-                    .alchemy(0.95D, 0.04D, 1.1D)
                     .build()
     );
 
@@ -366,11 +318,6 @@ public final class ModHerbs {
                     )
                     .wildAgeWeights(1400, 180, 20, 2, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(BlockTags.LOGS))
-                    .alchemyProperty(AlchemyProperties.RESTORATION, 5.0D)
-                    .alchemyProperty(AlchemyProperties.NOURISHMENT, 6.0D)
-                    .alchemyAffinity(AlchemyAffinities.LIFE, 3.0D)
-                    .alchemyAffinity(AlchemyAffinities.WOOD, 1.0D)
-                    .alchemy(0.86D, 0.06D, 1.0D)
                     .build()
     );
 
@@ -391,11 +338,6 @@ public final class ModHerbs {
                     )
                     .wildAgeWeights(1600, 160, 16, 2, 1, 1, 1, 1)
                     .naturalSupport(state -> state.is(Blocks.BONE_BLOCK))
-                    .alchemyProperty(AlchemyProperties.NOURISHMENT, 11.0D)
-                    .alchemyProperty(AlchemyProperties.REINFORCEMENT, 3.0D)
-                    .alchemyAffinity(AlchemyAffinities.BLOOD, 5.0D)
-                    .alchemyAffinity(AlchemyAffinities.LIFE, 1.0D)
-                    .alchemy(0.8D, 0.18D, 1.5D)
                     .build()
     );
 

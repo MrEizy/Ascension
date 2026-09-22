@@ -29,6 +29,7 @@ import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
+import net.zic.ascension.impl.datapack.alchemy.AlchemyMaterialProviders;
 import net.zic.ascension.network.*;
 import net.zic.ascension.impl.core.entity.AscensionStats;
 
@@ -93,6 +94,7 @@ public class AscensionCraft {
         CoreAttachments.register(modEventBus);
 
         AscensionPhysiqueTypes.register(modEventBus);
+        AlchemyMaterialProviders.register(modEventBus);
         AscensionAttachments.register(modEventBus);
         AscensionComponents.register(modEventBus);
         AscensionParticles.register(modEventBus);

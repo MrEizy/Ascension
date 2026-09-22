@@ -1,16 +1,16 @@
 package net.zic.ascension.common.blocks.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyBatch;
-import net.zic.ascension.api.ascension.core.alchemy.AlchemySubstance;
-import net.zic.ascension.common.item.artifacts.pills.ModPills;
-
-import java.util.Optional;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyContext;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterial;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyMergeResolver;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementResolver;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyFormulaResolver;
 
 public class AlchemyFurnaceBlockEntity extends BlockEntity {
     public static final int MAX_INGREDIENTS = 12;
@@ -33,18 +33,24 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity {
         return batch.ingredientCount();
     }
 
-    public boolean insert(AlchemySubstance substance) {
-        if (substance == null || substance.isEmpty() || !canInsert()) {
-            return false;
+    public AlchemyMergeResolver.MergeResult insert(AlchemyMaterial material, AlchemyContext context) {
+        if (material == null || material.isEmpty() || !canInsert()) {
+            return null;
         }
 
-        batch = batch.merge(substance, Double.MAX_VALUE, Double.MAX_VALUE).batch();
+        AlchemyRefinementResolver.RefinementResult refinement = AlchemyRefinementResolver.refine(material, context);
+        if (refinement.isEmpty()) {
+            return null;
+        }
+
+        AlchemyMergeResolver.MergeResult result = AlchemyMergeResolver.merge(batch, refinement.substance(), context);
+        batch = result.outcome() == AlchemyMergeResolver.Outcome.CATASTROPHIC ? AlchemyBatch.EMPTY : result.batch();
         setChanged();
-        return true;
+        return result;
     }
 
-    public Optional<ItemStack> condense() {
-        Optional<ItemStack> result = ModPills.condense(batch);
+    public AlchemyFormulaResolver.CondensationResult condense(AlchemyContext context) {
+        AlchemyFormulaResolver.CondensationResult result = AlchemyFormulaResolver.condense(batch, context);
         batch = AlchemyBatch.EMPTY;
         setChanged();
         return result;

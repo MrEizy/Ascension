@@ -9,40 +9,30 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public record AlchemySubstance(
+public record AlchemyEssence(
         Map<Identifier, Double> properties,
         Map<Identifier, Double> affinities,
         int rankTier,
-        double amplifier,
-        double purity,
-        double instability
+        double amplifier
 ) {
-    public static final Codec<AlchemySubstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.unboundedMap(Identifier.CODEC, Codec.DOUBLE).optionalFieldOf("properties", Map.of()).forGetter(AlchemySubstance::properties),
-            Codec.unboundedMap(Identifier.CODEC, Codec.DOUBLE).optionalFieldOf("affinities", Map.of()).forGetter(AlchemySubstance::affinities),
-            Codec.INT.optionalFieldOf("rank_tier", 0).forGetter(AlchemySubstance::rankTier),
-            Codec.DOUBLE.optionalFieldOf("amplifier", 1.0D).forGetter(AlchemySubstance::amplifier),
-            Codec.DOUBLE.optionalFieldOf("purity", 1.0D).forGetter(AlchemySubstance::purity),
-            Codec.DOUBLE.optionalFieldOf("instability", 0.0D).forGetter(AlchemySubstance::instability)
-    ).apply(instance, AlchemySubstance::new));
+    public static final Codec<AlchemyEssence> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.unboundedMap(Identifier.CODEC, Codec.DOUBLE).optionalFieldOf("properties", Map.of()).forGetter(AlchemyEssence::properties),
+            Codec.unboundedMap(Identifier.CODEC, Codec.DOUBLE).optionalFieldOf("affinities", Map.of()).forGetter(AlchemyEssence::affinities),
+            Codec.INT.optionalFieldOf("rank_tier", 0).forGetter(AlchemyEssence::rankTier),
+            Codec.DOUBLE.optionalFieldOf("amplifier", 1.0D).forGetter(AlchemyEssence::amplifier)
+    ).apply(instance, AlchemyEssence::new));
 
-    public static final AlchemySubstance EMPTY = new AlchemySubstance(Map.of(), Map.of(), 0, 1.0D, 1.0D, 0.0D);
+    public static final AlchemyEssence EMPTY = new AlchemyEssence(Map.of(), Map.of(), 0, 1.0D);
 
-    public AlchemySubstance {
+    public AlchemyEssence {
         properties = sanitize(properties);
         affinities = sanitize(affinities);
         rankTier = Mth.clamp(rankTier, 0, 5);
         amplifier = finiteNonNegative(amplifier, 1.0D);
-        purity = Mth.clamp(Double.isFinite(purity) ? purity : 1.0D, 0.0D, 1.0D);
-        instability = finiteNonNegative(instability, 0.0D);
     }
 
     public boolean isEmpty() {
         return properties.isEmpty() && affinities.isEmpty();
-    }
-
-    public AlchemyEssence essence() {
-        return isEmpty() ? AlchemyEssence.EMPTY : new AlchemyEssence(properties, affinities, rankTier, amplifier);
     }
 
     private static Map<Identifier, Double> sanitize(Map<Identifier, Double> values) {

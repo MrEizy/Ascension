@@ -118,6 +118,8 @@ public class AscLangProvider extends LanguageProvider {
 
         add("block.ascension.alchemy_furnace", "Alchemy Furnace");
         add("ascension.alchemy_furnace.inserted", "Material added (%s/%s)");
+        add("ascension.alchemy_furnace.unstable", "The batch is unstable (%s/%s materials).");
+        add("ascension.alchemy_furnace.catastrophic", "The batch destabilized and collapsed.");
         add("ascension.alchemy_furnace.full", "The alchemy furnace cannot hold any more materials.");
         add("ascension.alchemy_furnace.condensed", "Condensed %s");
         add("ascension.alchemy_furnace.residue", "The batch failed to form a pill and collapsed into residue.");

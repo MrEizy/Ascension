@@ -1,0 +1,19 @@
+{
+  "output": "ascension:regeneration_pill",
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/reinforcement": 9.0,
+      "ascension:alchemy/cleansing": 4.0,
+      "ascension:alchemy/nourishment": 19.0,
+      "ascension:alchemy/restoration": 5.0
+    },
+    "affinities": {
+      "ascension:elemental/wood": 4.0,
+      "ascension:elemental/life": 5.0,
+      "ascension:elemental/blood": 5.0
+    }
+  },
+  "base_yield": 1,
+  "maximum_yield": 4,
+  "amplifier_per_bonus": 0.5
+}

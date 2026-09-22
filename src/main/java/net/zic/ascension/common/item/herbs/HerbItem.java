@@ -11,7 +11,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.zic.ascension.api.ascension.core.alchemy.AlchemySubstance;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
@@ -19,7 +18,7 @@ import net.zic.ascension.common.util.ModTags;
 
 import java.util.function.Supplier;
 
-public class HerbItem extends Item implements AlchemySubstance.Provider {
+public class HerbItem extends Item {
     private final HerbDefinition definition;
     private final Supplier<? extends Block> crop;
 
@@ -43,11 +42,6 @@ public class HerbItem extends Item implements AlchemySubstance.Provider {
 
     public void applyHerbEffects(LivingEntity entity, ItemStack stack) {
         definition.applyEffects(entity, stack, data(stack));
-    }
-
-    @Override
-    public AlchemySubstance.Material alchemyMaterial(ItemStack stack) {
-        return new AlchemySubstance.Material(definition.alchemySubstance(data(stack)), definition.alchemyRefinementDifficulty());
     }
 
     @Override

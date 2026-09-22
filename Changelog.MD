@@ -16,9 +16,12 @@
 * Ported Most blocks from 1.21.1
 * Added Datapack support for Paths, Bloodlines, Physiques, Techniques, Skills, Tribulations and Atmospheric Qi Density.  
 * Starter Bloodline and Physique Selection on first world/server join
-* [W.I.P] A growing Mob Cultivation System
+* [W.I.P] A growth-based Mob Cultivation System
 * Added a Stamina system for movement and physical actions  
 * Added Mastery to active skills   
+* Added tons of new skills and skill types
+* Added in Alchemy
+* Added in Formations
 
 ### Removed
 * Vanilla Health overlay
@@ -34,6 +37,7 @@
 * Can possess multiple techniques per path
 
 ### Fixes
+
 
 ### Technical Changes
 * Merged all active skills into one active_skill type

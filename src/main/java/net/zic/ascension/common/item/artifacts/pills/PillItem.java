@@ -2,7 +2,6 @@ package net.zic.ascension.common.item.artifacts.pills;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,11 +10,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.level.Level;
-import net.zic.ascension.api.ascension.core.alchemy.AlchemySubstance;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class PillItem extends Item {
@@ -64,16 +60,11 @@ public class PillItem extends Item {
         return super.finishUsingItem(stack, level, entity);
     }
 
-    public record Definition(Formula formula, CanConsume canConsume, Effect effect, EffectDescription effectDescription) {
+    public record Definition(CanConsume canConsume, Effect effect, EffectDescription effectDescription) {
         public Definition {
-            formula = Objects.requireNonNull(formula);
             canConsume = Objects.requireNonNull(canConsume);
             effect = Objects.requireNonNull(effect);
             effectDescription = Objects.requireNonNull(effectDescription);
-        }
-
-        public boolean matches(AlchemySubstance substance) {
-            return formula.matches(substance);
         }
 
         public Component effectDescription(AscensionComponents.PillData data) {
@@ -86,30 +77,11 @@ public class PillItem extends Item {
 
         public static final class Builder {
             private final Effect effect;
-            private final Map<Identifier, Double> properties = new LinkedHashMap<>();
-            private final Map<Identifier, Double> affinities = new LinkedHashMap<>();
             private CanConsume canConsume = (level, player, stack, data) -> true;
             private EffectDescription effectDescription = data -> Component.empty();
 
             private Builder(Effect effect) {
                 this.effect = Objects.requireNonNull(effect);
-            }
-
-            public Builder property(Identifier property, double amount) {
-                properties.put(Objects.requireNonNull(property), formulaAmount(amount));
-                return this;
-            }
-
-            public Builder affinity(Identifier affinity, double amount) {
-                affinities.put(Objects.requireNonNull(affinity), formulaAmount(amount));
-                return this;
-            }
-
-            private static double formulaAmount(double amount) {
-                if (!Double.isFinite(amount) || amount <= 0.0D) {
-                    throw new IllegalArgumentException("Pill formula amounts must be positive and finite");
-                }
-                return amount;
             }
 
             public Builder canConsume(CanConsume canConsume) {
@@ -123,35 +95,8 @@ public class PillItem extends Item {
             }
 
             public Definition build() {
-                return new Definition(new Formula(properties, affinities), canConsume, effect, effectDescription);
+                return new Definition(canConsume, effect, effectDescription);
             }
-        }
-    }
-
-    public record Formula(Map<Identifier, Double> properties, Map<Identifier, Double> affinities) {
-        public Formula {
-            properties = Map.copyOf(properties == null ? Map.of() : properties);
-            affinities = Map.copyOf(affinities == null ? Map.of() : affinities);
-        }
-
-        public boolean matches(AlchemySubstance substance) {
-            return substance != null
-                    && exactMap(properties, substance.properties())
-                    && exactMap(affinities, substance.affinities());
-        }
-
-        private static boolean exactMap(Map<Identifier, Double> expected, Map<Identifier, Double> actual) {
-            if (expected.size() != actual.size()) {
-                return false;
-            }
-
-            for (Map.Entry<Identifier, Double> entry : expected.entrySet()) {
-                Double value = actual.get(entry.getKey());
-                if (value == null || !Double.isFinite(value) || Math.abs(value - entry.getValue()) > 1.0E-6D) {
-                    return false;
-                }
-            }
-            return true;
         }
     }
 

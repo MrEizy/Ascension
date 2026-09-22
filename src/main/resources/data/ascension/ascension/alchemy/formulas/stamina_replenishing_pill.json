@@ -1,0 +1,21 @@
+{
+  "output": "ascension:stamina_replenishing_pill",
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/circulation": 5.0,
+      "ascension:alchemy/reinforcement": 9.0,
+      "ascension:alchemy/nourishment": 11.0,
+      "ascension:alchemy/cleansing": 4.0,
+      "ascension:alchemy/restoration": 5.0
+    },
+    "affinities": {
+      "ascension:elemental/lightning": 6.0,
+      "ascension:elemental/yang": 1.5,
+      "ascension:elemental/wood": 4.0,
+      "ascension:elemental/life": 4.0
+    }
+  },
+  "base_yield": 1,
+  "maximum_yield": 4,
+  "amplifier_per_bonus": 0.5
+}

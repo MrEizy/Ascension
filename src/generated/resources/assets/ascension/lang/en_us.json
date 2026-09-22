@@ -1,4 +1,5 @@
 {
+  "ascension.alchemy_furnace.catastrophic": "The batch destabilized and collapsed.",
   "ascension.alchemy_furnace.cleared": "Alchemy batch cleared.",
   "ascension.alchemy_furnace.condensed": "Condensed %s",
   "ascension.alchemy_furnace.empty": "The alchemy furnace is empty.",
@@ -6,6 +7,7 @@
   "ascension.alchemy_furnace.inserted": "Material added (%s/%s)",
   "ascension.alchemy_furnace.residue": "The batch failed to form a pill and collapsed into residue.",
   "ascension.alchemy_furnace.status": "Alchemy furnace: %s/%s materials",
+  "ascension.alchemy_furnace.unstable": "The batch is unstable (%s/%s materials).",
   "ascension.bloodline.azure_thunder_dragon.desc": "A rare draconic inheritance in which storm and deep water mingle in the blood.",
   "ascension.bloodline.azure_thunder_dragon.name": "Azure Thunder Dragon Bloodline",
   "ascension.bloodline.barbarian.desc": "Descendants of the untamed tribes beyond the sect lands, their bodies honed by hardship into raw, unyielding power",
