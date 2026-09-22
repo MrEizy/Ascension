@@ -13,16 +13,11 @@ import net.zic.ascension.client.visual.SphericalDestructionClientState;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
-/**
- * Mirrors DivineSenseRenderer's shape exactly: same UBO layout (2 mat4 + 4
- * vec4), same MappableRingBuffer + FullscreenEffectPass call, just feeding
- * spherical_destruction_wave.fsh instead of divine_sense_wave.fsh.
- */
 public enum SphericalDestructionRenderer {
     INSTANCE;
 
-    private static final float TRAIL_WIDTH = 3.0F;
-    private static final float FRONT_WIDTH = 0.6F;
+    private static final float TRAIL_WIDTH = 4.5F;
+    private static final float FRONT_WIDTH = 0.72F;
 
     private final MappableRingBuffer waveUniform = new MappableRingBuffer(
             () -> "Spherical Destruction Wave UBO",
@@ -30,6 +25,7 @@ public enum SphericalDestructionRenderer {
             new Std140SizeCalculator()
                     .putMat4f()
                     .putMat4f()
+                    .putVec4()
                     .putVec4()
                     .putVec4()
                     .putVec4()
@@ -49,9 +45,8 @@ public enum SphericalDestructionRenderer {
 
         Vec3 camera = Minecraft.getInstance().gameRenderer.getMainCamera().position();
         Vec3 center = state.center();
+        Vec3 direction = state.direction();
         float[] color = HexColorCodec.toFloats(state.color());
-        float progress = state.waveProgress();
-        float radius = state.waveRadius();
 
         CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
 
@@ -70,10 +65,21 @@ public enum SphericalDestructionRenderer {
                             (float) center.x,
                             (float) center.y,
                             (float) center.z,
-                            radius
+                            state.waveRadius()
                     ))
-                    .putVec4(new Vector4f(color[0], color[1], color[2], progress))
-                    .putVec4(new Vector4f(state.elapsedSeconds(), TRAIL_WIDTH, FRONT_WIDTH, state.radius()));
+                    .putVec4(new Vector4f(color[0], color[1], color[2], state.waveProgress()))
+                    .putVec4(new Vector4f(
+                            state.shaderTimeSeconds(),
+                            TRAIL_WIDTH,
+                            FRONT_WIDTH,
+                            state.isImpactPhase() ? 1.0F : 0.0F
+                    ))
+                    .putVec4(new Vector4f(
+                            (float) direction.x,
+                            (float) direction.y,
+                            (float) direction.z,
+                            state.trailLength()
+                    ));
         }
 
         FullscreenEffectPass.drawDepthEffect(

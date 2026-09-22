@@ -5,10 +5,9 @@ import net.minecraft.world.phys.Vec3;
 
 public final class SphericalDestructionClientState {
     private static final SphericalDestructionClientState INSTANCE = new SphericalDestructionClientState();
-    private static final float IMPACT_WAVE_SECONDS = 0.6F;
-
-    public void start(Vec3 center, int radius, int i) {
-    }
+    private static final float IMPACT_SETTLE_SECONDS = 0.06F;
+    private static final float IMPACT_EFFECT_SECONDS = 1.35F;
+    private static final double MAX_TRAVEL_RADIUS = 2.5D;
 
     private enum Phase { NONE, TRAVELING, IMPACT }
 
@@ -16,17 +15,17 @@ public final class SphericalDestructionClientState {
     private long phaseStartNanos;
     private int color = 0xFF6A1B;
 
-    // ── Travel phase state ──
     private Vec3 origin = Vec3.ZERO;
-    private Vec3 direction = Vec3.ZERO;
+    private Vec3 direction = new Vec3(0, 0, 1);
     private double speed;
     private double startRadius;
     private double targetRadius;
     private double growthDistance;
     private double maxDistance;
 
-    // ── Impact phase state ──
+    private Vec3 impactStartCenter = Vec3.ZERO;
     private Vec3 impactCenter = Vec3.ZERO;
+    private float impactStartRadius;
     private float impactRadius;
 
     private SphericalDestructionClientState() {
@@ -36,25 +35,27 @@ public final class SphericalDestructionClientState {
         return INSTANCE;
     }
 
-    /** Starts the client-simulated travel visual — see SphericalProjectilePayload. */
     public void launch(Vec3 origin, Vec3 direction, double speed, double startRadius,
                        double targetRadius, double growthDistance, double maxDistance, int color) {
-        this.origin = origin;
         this.direction = direction.lengthSqr() > 1.0E-6 ? direction.normalize() : new Vec3(0, 0, 1);
+        this.origin = origin;
         this.speed = Math.max(0.01, speed);
-        this.startRadius = startRadius;
-        this.targetRadius = targetRadius;
+        this.startRadius = Math.max(0.05, startRadius);
+        this.targetRadius = Math.max(this.startRadius, targetRadius);
         this.growthDistance = Math.max(0.01, growthDistance);
-        this.maxDistance = maxDistance;
+        this.maxDistance = Math.max(0.01, maxDistance);
         this.color = color;
         this.phase = Phase.TRAVELING;
         this.phaseStartNanos = System.nanoTime();
     }
 
-    /** Starts the impact shockwave — see SphericalDestructionPayload. Ends travel if still active. */
     public void impact(Vec3 center, float radius, int color) {
+        Vec3 currentCenter = phase == Phase.TRAVELING ? center() : center;
+        float currentRadius = phase == Phase.TRAVELING ? radius() : impactCoreRadius(radius);
+        this.impactStartCenter = currentCenter;
         this.impactCenter = center;
-        this.impactRadius = radius;
+        this.impactStartRadius = currentRadius;
+        this.impactRadius = Math.max(radius, 0.1F);
         this.color = color;
         this.phase = Phase.IMPACT;
         this.phaseStartNanos = System.nanoTime();
@@ -64,53 +65,90 @@ public final class SphericalDestructionClientState {
         return switch (phase) {
             case NONE -> false;
             case TRAVELING -> traveledDistance() < maxDistance;
-            case IMPACT -> impactProgress() < 1.0F;
+            case IMPACT -> elapsedSeconds() < IMPACT_SETTLE_SECONDS + IMPACT_EFFECT_SECONDS;
         };
     }
 
-    /** Current sphere center for this frame — traveling position or the fixed impact point. */
+    public boolean isImpactPhase() {
+        return phase == Phase.IMPACT && elapsedSeconds() >= IMPACT_SETTLE_SECONDS;
+    }
+
     public Vec3 center() {
         if (phase == Phase.TRAVELING) {
             double distance = Math.min(traveledDistance(), maxDistance);
             return origin.add(direction.scale(distance));
         }
+        if (phase == Phase.IMPACT) {
+            float settle = settleProgress();
+            double eased = settle * settle * (3.0D - 2.0D * settle);
+            return impactStartCenter.lerp(impactCenter, eased);
+        }
         return impactCenter;
     }
 
-    /** Current sphere radius for this frame — growing-while-traveling or the impact wave radius. */
     public float radius() {
         if (phase == Phase.TRAVELING) {
             double growth = Mth.clamp(traveledDistance() / growthDistance, 0.0, 1.0);
-            return (float) Mth.lerp(growth, startRadius, targetRadius);
+            growth = growth * growth * (3.0D - 2.0D * growth);
+            return (float) Mth.lerp(growth, startRadius, travelTargetRadius());
         }
-        return impactRadius;
+        if (phase == Phase.IMPACT && !isImpactPhase()) {
+            float settle = settleProgress();
+            double eased = settle * settle * (3.0D - 2.0D * settle);
+            return (float) Mth.lerp(eased, impactStartRadius, impactCoreRadius(impactRadius));
+        }
+        return impactCoreRadius(impactRadius);
     }
 
-    /** waveRadius/waveProgress feed the shader the same way regardless of phase. */
     public float waveRadius() {
-        if (phase == Phase.IMPACT) {
-            return impactRadius * impactProgress();
-        }
-        return radius();
+        return isImpactPhase() ? impactRadius : radius();
     }
 
     public float waveProgress() {
-        return phase == Phase.IMPACT ? impactProgress() : (float) Mth.clamp(traveledDistance() / Math.max(maxDistance, 0.01), 0.0, 1.0);
+        if (phase == Phase.IMPACT) {
+            return Mth.clamp((elapsedSeconds() - IMPACT_SETTLE_SECONDS) / IMPACT_EFFECT_SECONDS, 0.0F, 1.0F);
+        }
+        return (float) Mth.clamp(traveledDistance() / Math.max(maxDistance, 0.01), 0.0, 1.0);
+    }
+
+    public float shaderTimeSeconds() {
+        float elapsed = elapsedSeconds();
+        if (phase == Phase.IMPACT && elapsed >= IMPACT_SETTLE_SECONDS) {
+            return elapsed - IMPACT_SETTLE_SECONDS;
+        }
+        return elapsed;
+    }
+
+    public Vec3 direction() {
+        return direction;
+    }
+
+    public float trailLength() {
+        return (float) Math.max(1.6D, radius() * 1.85D + speed * 1.5D);
     }
 
     public int color() {
         return color;
     }
 
-    public float elapsedSeconds() {
-        return (System.nanoTime() - phaseStartNanos) / 1_000_000_000.0F;
+    private double travelTargetRadius() {
+        double resolved = 0.65D + Math.sqrt(Math.max(targetRadius, 1.0D)) * 0.35D;
+        return Math.min(MAX_TRAVEL_RADIUS, Math.max(startRadius, resolved));
+    }
+
+    private static float impactCoreRadius(float radius) {
+        return (float) Math.min(3.25D, Math.max(0.85D, Math.sqrt(Math.max(radius, 0.1F)) * 0.55D));
     }
 
     private double traveledDistance() {
-        return speed * 20.0 * elapsedSeconds(); // speed is blocks/tick, 20 ticks/sec
+        return speed * 20.0D * elapsedSeconds();
     }
 
-    private float impactProgress() {
-        return Mth.clamp(elapsedSeconds() / IMPACT_WAVE_SECONDS, 0.0F, 1.0F);
+    private float elapsedSeconds() {
+        return (System.nanoTime() - phaseStartNanos) / 1_000_000_000.0F;
+    }
+
+    private float settleProgress() {
+        return Mth.clamp(elapsedSeconds() / IMPACT_SETTLE_SECONDS, 0.0F, 1.0F);
     }
 }

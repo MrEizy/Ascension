@@ -28,9 +28,9 @@
       },
       "sound_range": 64.0,
       "destroy_unbreakable": false,
-      "projectile_speed": 0.8,
-      "start_radius": 0.3,
-      "growth_distance": 12.0,
+      "projectile_speed": 0.65,
+      "start_radius": 0.4,
+      "growth_distance": 10.0,
       "max_distance": 32.0
     }
   ]

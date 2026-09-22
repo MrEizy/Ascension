@@ -104,7 +104,7 @@ public class ModRenderPipelines {
                 .withSampler(WORLD_DEPTH_SAMPLER)
                 .withUniform(SPHERICAL_DESTRUCTION_UNIFORM, UniformType.UNIFORM_BUFFER)
                 .withVertexFormat(DefaultVertexFormat.POSITION, VertexFormat.Mode.TRIANGLES)
-                .withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE))
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
                 .withDepthStencilState(Optional.empty())
                 .withCull(false)
                 .build();
