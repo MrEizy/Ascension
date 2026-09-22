@@ -293,6 +293,16 @@ public class AscLangProvider extends LanguageProvider {
 
 
 
+        // Toasts
+        add("toast.ascension.physique_changed", "Physique Changed");
+        add("toast.ascension.bloodline_gained", "Bloodline Gained");
+        add("toast.ascension.technique_learned", "Technique Learned");
+        add("toast.ascension.realm_advanced", "Realm Advanced");
+        add("toast.ascension.realm_regressed", "Realm Regressed");
+        add("toast.ascension.realm_change_message", "%s: %s");
+
+
+
         // Starter Screen Lang
         add("gui.ascension.starter.title", "Starting Selection");
         add("gui.ascension.starter.choose_bloodline", "Choose Your Bloodline");
