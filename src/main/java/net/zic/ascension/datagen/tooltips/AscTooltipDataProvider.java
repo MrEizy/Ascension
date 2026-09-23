@@ -46,10 +46,11 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                                 ZenithTooltipColor.TEXT
                         ))
                         .add(divider())
-                        .add(dynamicBar(
-                                translated("ascension.pill.tooltip.purity"),
-                                id("pill_purity"),
-                                ZenithTooltipColor.POSITIVE
+                        .add(row(
+                                translated("ascension.pill.tooltip.grade"),
+                                sourced("ascension:pill_grade"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
                         ))
                         .add(divider())
                         .add(header(translated("ascension.pill.tooltip.effect"), ZenithTooltipColor.ACCENT))

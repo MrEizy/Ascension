@@ -33,12 +33,13 @@
           "type": "zenithlib:divider"
         },
         {
-          "type": "zenithlib:bar",
-          "color": "positive",
-          "label": {
-            "translate": "ascension.pill.tooltip.purity"
+          "type": "zenithlib:row",
+          "left": {
+            "translate": "ascension.pill.tooltip.grade"
           },
-          "source": "ascension:pill_purity"
+          "right": {
+            "source": "ascension:pill_grade"
+          }
         },
         {
           "type": "zenithlib:divider"

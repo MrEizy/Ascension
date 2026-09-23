@@ -16,6 +16,7 @@ import java.util.Map;
 
 public final class AlchemyFormulaResolver {
     private static final int MAX_PASSES = 64;
+    private static final double QUALITY_EPSILON = 1.0E-9D;
 
     private AlchemyFormulaResolver() {
     }
@@ -99,11 +100,21 @@ public final class AlchemyFormulaResolver {
     }
 
     private static AscensionComponents.PillData createPillData(AlchemySubstance substance, double matchQuality) {
-        int purity = Math.max(0, Math.min(100, (int) Math.round(matchQuality * 100.0D)));
+        int rankTier = Math.max(0, Math.min(5, substance.rankTier()));
+        double quality = Math.max(0.0D, matchQuality) * Math.max(0.0D, substance.amplifier());
+
+        while (quality > 1.0D + QUALITY_EPSILON && rankTier < 5) {
+            quality -= 1.0D;
+            rankTier++;
+        }
+
+        if (rankTier >= 5 && quality > 1.0D) {
+            quality = 1.0D;
+        }
+
         return new AscensionComponents.PillData(
-                AscensionComponents.PillData.rankForTier(substance.rankTier()),
-                purity,
-                substance.amplifier()
+                AscensionComponents.PillData.rankForTier(rankTier),
+                PillGrade.fromQuality(quality)
         );
     }
 

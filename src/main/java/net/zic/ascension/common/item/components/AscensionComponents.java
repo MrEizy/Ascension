@@ -11,6 +11,7 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.alchemy.PillGrade;
 
 import java.util.function.Supplier;
 
@@ -58,7 +59,7 @@ public class AscensionComponents {
                     .build()
     );
 
-    public record PillData(Identifier rank, int purity, double amplifier) {
+    public record PillData(Identifier rank, PillGrade grade) {
         public static final Identifier ORDINARY = AscensionCraft.prefix("ordinary");
         public static final Identifier PROFOUND = AscensionCraft.prefix("profound");
         public static final Identifier HEAVEN = AscensionCraft.prefix("heaven");
@@ -66,13 +67,12 @@ public class AscensionComponents {
         public static final Identifier GOD = AscensionCraft.prefix("god");
         public static final Identifier HEAVENS_PATH = AscensionCraft.prefix("heavens_path");
 
-        public static final PillData DEFAULT = new PillData(ORDINARY, 75, 1.0D);
-        public static final PillData MAXIMUM = new PillData(HEAVENS_PATH, 100, 1.0D);
+        public static final PillData DEFAULT = new PillData(ORDINARY, PillGrade.PEAK);
+        public static final PillData MAXIMUM = new PillData(HEAVENS_PATH, PillGrade.SUPREME);
 
         public static final Codec<PillData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("rank").forGetter(PillData::rank),
-                Codec.intRange(0, 100).fieldOf("purity").forGetter(PillData::purity),
-                Codec.DOUBLE.optionalFieldOf("amplifier", 1.0D).forGetter(PillData::amplifier)
+                PillGrade.CODEC.optionalFieldOf("grade", PillGrade.PEAK).forGetter(PillData::grade)
         ).apply(instance, PillData::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, PillData> STREAM_CODEC = new StreamCodec<>() {
@@ -80,23 +80,20 @@ public class AscensionComponents {
             public PillData decode(RegistryFriendlyByteBuf buf) {
                 return new PillData(
                         Identifier.STREAM_CODEC.decode(buf),
-                        buf.readVarInt(),
-                        buf.readDouble()
+                        buf.readEnum(PillGrade.class)
                 );
             }
 
             @Override
             public void encode(RegistryFriendlyByteBuf buf, PillData data) {
                 Identifier.STREAM_CODEC.encode(buf, data.rank());
-                buf.writeVarInt(data.purity());
-                buf.writeDouble(data.amplifier());
+                buf.writeEnum(data.grade());
             }
         };
 
         public PillData {
             rank = rank == null ? ORDINARY : rank;
-            purity = Math.max(0, Math.min(100, purity));
-            amplifier = Double.isFinite(amplifier) ? Math.max(0.0D, amplifier) : 1.0D;
+            grade = grade == null ? PillGrade.LOW : grade;
         }
 
         public static Identifier rankForTier(int tier) {
@@ -120,9 +117,7 @@ public class AscensionComponents {
         }
 
         public double strengthMultiplier() {
-            double rankMultiplier = 1.0D + rankTier(rank) * 0.5D;
-            double purityMultiplier = 0.5D + purity / 200.0D;
-            return rankMultiplier * purityMultiplier * amplifier;
+            return 0.6D + (rankTier(rank) * 5 + grade.step()) * 0.1D;
         }
     }
 

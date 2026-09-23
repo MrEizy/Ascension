@@ -84,7 +84,7 @@ public final class AscensionTooltipValueSources {
     public static final Identifier HERB_RELATED_TYPE_BADGE = AscensionCraft.prefix("herb_related_type_badge");
     public static final Identifier HERB_RELATED_TARGET_ROW = AscensionCraft.prefix("herb_related_target_row");
 
-    public static final Identifier PILL_PURITY = AscensionCraft.prefix("pill_purity");
+    public static final Identifier PILL_GRADE = AscensionCraft.prefix("pill_grade");
     public static final Identifier PILL_EFFECT = AscensionCraft.prefix("pill_effect");
 
     private static final int TECHNIQUE_REVEAL_LOOKAHEAD = 3;
@@ -121,7 +121,7 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerValue(HERB_QUALITY, AscensionTooltipValueSources::herbQuality);
         ZenithTooltipSources.registerValue(HERB_ORIGIN, AscensionTooltipValueSources::herbOrigin);
 
-        ZenithTooltipSources.registerValue(PILL_PURITY, AscensionTooltipValueSources::pillPurity);
+        ZenithTooltipSources.registerValue(PILL_GRADE, AscensionTooltipValueSources::pillGrade);
         ZenithTooltipSources.registerValue(PILL_EFFECT, AscensionTooltipValueSources::pillEffect);
 
         ZenithTooltipSources.registerElement(PHYSIQUE_PATHS, context -> badges(PHYSIQUE_PATHS, context, ZenithTooltipColor.ACCENT));
@@ -706,11 +706,9 @@ public final class AscensionTooltipValueSources {
                 .orElseGet(List::of);
     }
 
-    private static Optional<ZenithTooltipValue> pillPurity(ZenithTooltipContext context) {
-        return pillContext(context).map(pill -> ZenithTooltipValue.progress(
-                pill.data().purity(),
-                100,
-                Component.translatable("ascension.tooltip.value.percent", pill.data().purity())
+    private static Optional<ZenithTooltipValue> pillGrade(ZenithTooltipContext context) {
+        return pillContext(context).map(pill -> ZenithTooltipValue.text(
+                Component.translatable(pill.data().grade().translationKey())
         ));
     }
 
