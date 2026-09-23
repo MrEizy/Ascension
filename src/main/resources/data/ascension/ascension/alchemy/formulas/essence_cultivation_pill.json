@@ -1,0 +1,17 @@
+{
+  "output": "ascension:essence_cultivation_pill",
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/circulation": 5.0,
+      "ascension:alchemy/cleansing": 18.0
+    },
+    "affinities": {
+      "ascension:elemental/fire": 4.0,
+      "ascension:elemental/yang": 1.0,
+      "ascension:elemental/metal": 2.0
+    }
+  },
+  "base_yield": 1,
+  "maximum_yield": 4,
+  "amplifier_per_bonus": 0.5
+}

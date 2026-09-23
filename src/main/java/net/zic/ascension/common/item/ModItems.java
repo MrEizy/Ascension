@@ -89,6 +89,12 @@ public class ModItems {
             properties -> new PillItem(properties.stacksTo(16), ModPills.REGENERATION));
     public static final DeferredItem<Item> STAMINA_REPLENISHING_PILL = ITEMS.registerItem("stamina_replenishing_pill",
             properties -> new PillItem(properties.stacksTo(16), ModPills.STAMINA_REPLENISHING));
+    public static final DeferredItem<Item> BODY_CULTIVATION_PILL = ITEMS.registerItem("body_cultivation_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/body"))));
+    public static final DeferredItem<Item> SOUL_CULTIVATION_PILL = ITEMS.registerItem("soul_cultivation_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/soul"))));
+    public static final DeferredItem<Item> ESSENCE_CULTIVATION_PILL = ITEMS.registerItem("essence_cultivation_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/essence"))));
 
 
 

@@ -110,6 +110,14 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.pill.stamina_replenishing_pill.description", "A vigorous pill that restores the body's spent physical energy.");
         add("ascension.pill.stamina_replenishing_pill.effect", "Restores %s%% of maximum Stamina.");
 
+        add("item.ascension.body_cultivation_pill", "Body Cultivation Pill");
+        add("ascension.pill.body_cultivation_pill.description", "A strengthening pill refined to accelerate cultivation of the body.");
+        add("item.ascension.soul_cultivation_pill", "Soul Cultivation Pill");
+        add("ascension.pill.soul_cultivation_pill.description", "A tranquil pill refined to nourish and advance cultivation of the soul.");
+        add("item.ascension.essence_cultivation_pill", "Essence Cultivation Pill");
+        add("ascension.pill.essence_cultivation_pill.description", "A concentrated pill refined to accelerate cultivation of spiritual essence.");
+        add("ascension.pill.cultivation.effect", "Grants %s%% of the current realm's required cultivation progress.");
+
 
         // Pill Tooltip
         add("ascension.pill.tooltip.type", "Pill");

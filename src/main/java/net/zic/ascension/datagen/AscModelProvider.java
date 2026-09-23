@@ -51,6 +51,9 @@ public class AscModelProvider extends ModelProvider {
         pillItemModel(itemModels, ModItems.QI_REPLENISHING_PILL.get(), "qi_replenishing_pill");
         pillItemModel(itemModels, ModItems.REGENERATION_PILL.get(), "regeneration_pill");
         pillItemModel(itemModels, ModItems.STAMINA_REPLENISHING_PILL.get(), "inner_reinforcement_pill");
+        pillItemModel(itemModels, ModItems.BODY_CULTIVATION_PILL.get(), "inner_reinforcement_pill");
+        pillItemModel(itemModels, ModItems.SOUL_CULTIVATION_PILL.get(), "fasting_pill_t1");
+        pillItemModel(itemModels, ModItems.ESSENCE_CULTIVATION_PILL.get(), "qi_replenishing_pill");
 
 
         //Key Items
