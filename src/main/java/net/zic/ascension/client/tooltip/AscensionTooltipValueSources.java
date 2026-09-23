@@ -86,6 +86,7 @@ public final class AscensionTooltipValueSources {
 
     public static final Identifier PILL_GRADE = AscensionCraft.prefix("pill_grade");
     public static final Identifier PILL_EFFECT = AscensionCraft.prefix("pill_effect");
+    public static final Identifier PILL_BADGES = AscensionCraft.prefix("pill_badges");
 
     private static final int TECHNIQUE_REVEAL_LOOKAHEAD = 3;
 
@@ -132,6 +133,7 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerElement(HERB_QUALITY_BADGE, AscensionTooltipValueSources::herbQualityBadge);
         ZenithTooltipSources.registerElement(HERB_RELATED_TYPE_BADGE, AscensionTooltipValueSources::herbRelatedTypeBadge);
         ZenithTooltipSources.registerElement(HERB_RELATED_TARGET_ROW, AscensionTooltipValueSources::herbRelatedTargetRow);
+        ZenithTooltipSources.registerElement(PILL_BADGES, AscensionTooltipValueSources::pillBadges);
     }
 
     private static List<ZenithTooltipElement> badges(
@@ -703,6 +705,52 @@ public final class AscensionTooltipValueSources {
                         ZenithTooltipColor.TEXT,
                         ZenithTooltipColor.ACCENT
                 )))
+                .orElseGet(List::of);
+    }
+
+    private static List<ZenithTooltipElement> pillBadges(ZenithTooltipContext context) {
+        return pillContext(context)
+                .map(pill -> {
+                    AscensionComponents.PillData data = pill.data();
+                    Component rankName = Component.translatable(
+                            "zenith." + data.rank().getNamespace() + ".tier." + data.rank().getPath()
+                    );
+
+                    BadgeElement rankBadge = new BadgeElement(
+                            ZenithTooltipText.resolved(Component.translatable(
+                                    "ascension.pill.tooltip.rank_badge",
+                                    rankName
+                            )),
+                            ZenithTooltipColor.ACCENT,
+                            ZenithTooltipColor.BACKGROUND,
+                            ZenithTooltipColor.ACCENT
+                    ).withBackgroundGradient(
+                            BadgeElement.GradientDirection.HORIZONTAL,
+                            ZenithTooltipColor.BACKGROUND,
+                            ZenithTooltipColor.BORDER_BOTTOM
+                    );
+
+                    ZenithTooltipColor gradeColor = switch (data.grade()) {
+                        case LOW -> ZenithTooltipColor.MUTED;
+                        case MID -> ZenithTooltipColor.TEXT;
+                        case HIGH -> ZenithTooltipColor.POSITIVE;
+                        case PEAK -> ZenithTooltipColor.ACCENT;
+                        case SUPREME -> ZenithTooltipColor.WARNING;
+                    };
+
+                    BadgeElement gradeBadge = new BadgeElement(
+                            ZenithTooltipText.resolved(Component.translatable(data.grade().translationKey())),
+                            gradeColor,
+                            ZenithTooltipColor.BACKGROUND,
+                            gradeColor
+                    ).withBackgroundGradient(
+                            BadgeElement.GradientDirection.HORIZONTAL,
+                            ZenithTooltipColor.BACKGROUND,
+                            ZenithTooltipColor.BORDER_BOTTOM
+                    );
+
+                    return List.<ZenithTooltipElement>of(new BadgeRowElement(List.of(rankBadge, gradeBadge)));
+                })
                 .orElseGet(List::of);
     }
 

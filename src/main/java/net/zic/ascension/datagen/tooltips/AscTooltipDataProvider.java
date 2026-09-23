@@ -29,6 +29,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
         addDefaultHerbTooltip();
         addDefaultHerbRelatedTooltip();
         addDefaultPillTooltip();
+        addDefaultAlchemyMaterialTooltip();
     }
 
     private void addDefaultPillTooltip() {
@@ -39,24 +40,37 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                                 sourced("zenithlib:subject_name"),
                                 translated("ascension.pill.tooltip.type")
                         ).withOnAllPages(true))
-                        .add(classification(false, true, ClassificationElement.Style.BADGE))
+                        .add(dynamic(id("pill_badges")))
                         .add(divider())
                         .add(text(
                                 sourced("zenithlib:subject_description"),
                                 ZenithTooltipColor.TEXT
                         ))
                         .add(divider())
-                        .add(row(
-                                translated("ascension.pill.tooltip.grade"),
-                                sourced("ascension:pill_grade"),
-                                ZenithTooltipColor.TEXT,
-                                ZenithTooltipColor.ACCENT
-                        ))
-                        .add(divider())
                         .add(header(translated("ascension.pill.tooltip.effect"), ZenithTooltipColor.ACCENT))
                         .add(text(
                                 sourced("ascension:pill_effect"),
                                 ZenithTooltipColor.POSITIVE
+                        )));
+    }
+
+    private void addDefaultAlchemyMaterialTooltip() {
+        template(id("default_alchemy_material"))
+                .animationPreset(ZenithTooltipPresets.LIVING)
+                .page(page(sourced("zenithlib:subject_name"))
+                        .add(titleIcon(
+                                sourced("zenithlib:subject_name")
+                        ).withOnAllPages(true))
+                        .add(badge(
+                                translated("ascension.alchemy_material.tooltip.type"),
+                                ZenithTooltipColor.ACCENT,
+                                ZenithTooltipColor.BACKGROUND,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(divider())
+                        .add(text(
+                                translated("ascension.alchemy_material.tooltip.note"),
+                                ZenithTooltipColor.MUTED
                         )));
     }
 

@@ -153,6 +153,162 @@
       "purity": 0.8,
       "instability": 0.18,
       "refinement_difficulty": 1.5
+    },
+    "minecraft:blaze_powder": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/circulation": 3.0,
+            "ascension:alchemy/reinforcement": 2.0,
+            "ascension:alchemy/cleansing": 1.0
+          },
+          "affinities": {
+            "ascension:elemental/fire": 4.0,
+            "ascension:elemental/yang": 1.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.72,
+        "instability": 0.28,
+        "refinement_difficulty": 1.0
+      }
+    },
+    "minecraft:spider_eye": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/circulation": 1.5,
+            "ascension:alchemy/nourishment": 1.5
+          },
+          "affinities": {
+            "ascension:elemental/poison": 3.0,
+            "ascension:elemental/dark": 1.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.55,
+        "instability": 0.4,
+        "refinement_difficulty": 0.9
+      }
+    },
+    "minecraft:ghast_tear": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/restoration": 4.0,
+            "ascension:alchemy/nourishment": 2.0,
+            "ascension:alchemy/cleansing": 2.0
+          },
+          "affinities": {
+            "ascension:elemental/water": 2.0,
+            "ascension:elemental/life": 2.0
+          },
+          "rank_tier": 1
+        },
+        "purity": 0.92,
+        "instability": 0.05,
+        "refinement_difficulty": 1.3
+      }
+    },
+    "minecraft:lily_pad": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/nourishment": 2.0,
+            "ascension:alchemy/restoration": 1.0,
+            "ascension:alchemy/cleansing": 1.0
+          },
+          "affinities": {
+            "ascension:elemental/water": 2.0,
+            "ascension:elemental/wood": 2.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.86,
+        "instability": 0.06,
+        "refinement_difficulty": 0.6
+      }
+    },
+    "minecraft:nether_wart": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/circulation": 2.0,
+            "ascension:alchemy/cleansing": 2.0,
+            "ascension:alchemy/reinforcement": 1.0
+          },
+          "affinities": {
+            "ascension:elemental/fire": 2.0,
+            "ascension:elemental/dark": 2.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.68,
+        "instability": 0.22,
+        "refinement_difficulty": 0.9
+      }
+    },
+    "minecraft:chorus_fruit": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/circulation": 3.0,
+            "ascension:alchemy/cleansing": 2.0
+          },
+          "affinities": {
+            "ascension:elemental/space": 4.0,
+            "ascension:elemental/chaos": 2.0
+          },
+          "rank_tier": 1
+        },
+        "purity": 0.72,
+        "instability": 0.45,
+        "refinement_difficulty": 1.4
+      }
+    },
+    "minecraft:honeycomb": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/nourishment": 3.0,
+            "ascension:alchemy/restoration": 2.0
+          },
+          "affinities": {
+            "ascension:elemental/life": 2.0,
+            "ascension:elemental/wood": 1.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.9,
+        "instability": 0.04,
+        "refinement_difficulty": 0.5
+      }
+    },
+    "minecraft:poisonous_potato": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/nourishment": 2.0,
+            "ascension:alchemy/circulation": 1.0
+          },
+          "affinities": {
+            "ascension:elemental/poison": 4.0,
+            "ascension:elemental/earth": 1.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.48,
+        "instability": 0.5,
+        "refinement_difficulty": 0.7
+      }
     }
   }
 }

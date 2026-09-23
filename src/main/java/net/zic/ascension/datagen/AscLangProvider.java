@@ -122,12 +122,15 @@ public class AscLangProvider extends LanguageProvider {
         // Pill Tooltip
         add("ascension.pill.tooltip.type", "Pill");
         add("ascension.pill.tooltip.grade", "Grade");
+        add("ascension.pill.tooltip.rank_badge", "%s Rank");
         add("ascension.pill.tooltip.effect", "Effect");
         add("ascension.pill.grade.low", "Low-grade");
         add("ascension.pill.grade.mid", "Mid-grade");
         add("ascension.pill.grade.high", "High-grade");
         add("ascension.pill.grade.peak", "Peak-grade");
         add("ascension.pill.grade.supreme", "Supreme-grade");
+        add("ascension.alchemy_material.tooltip.type", "Alchemical Material");
+        add("ascension.alchemy_material.tooltip.note", "Usable as a material in alchemy.");
 
         add("block.ascension.alchemy_furnace", "Alchemy Furnace");
         add("ascension.alchemy_furnace.inserted", "Material added (%s/%s)");

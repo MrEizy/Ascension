@@ -16,9 +16,8 @@
           }
         },
         {
-          "type": "zenithlib:classification",
-          "show_category": false,
-          "style": "badge"
+          "type": "zenithlib:dynamic",
+          "source": "ascension:pill_badges"
         },
         {
           "type": "zenithlib:divider"
@@ -27,18 +26,6 @@
           "type": "zenithlib:text",
           "text": {
             "source": "zenithlib:subject_description"
-          }
-        },
-        {
-          "type": "zenithlib:divider"
-        },
-        {
-          "type": "zenithlib:row",
-          "left": {
-            "translate": "ascension.pill.tooltip.grade"
-          },
-          "right": {
-            "source": "ascension:pill_grade"
           }
         },
         {

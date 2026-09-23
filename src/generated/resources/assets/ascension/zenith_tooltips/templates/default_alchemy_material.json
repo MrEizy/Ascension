@@ -1,0 +1,37 @@
+{
+  "animation_presets": [
+    "zenithlib:living"
+  ],
+  "pages": [
+    {
+      "elements": [
+        {
+          "type": "zenithlib:title_icon",
+          "on_all_pages": true,
+          "title": {
+            "source": "zenithlib:subject_name"
+          }
+        },
+        {
+          "type": "zenithlib:badge",
+          "text": {
+            "translate": "ascension.alchemy_material.tooltip.type"
+          }
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "muted",
+          "text": {
+            "translate": "ascension.alchemy_material.tooltip.note"
+          }
+        }
+      ],
+      "title": {
+        "source": "zenithlib:subject_name"
+      }
+    }
+  ]
+}
