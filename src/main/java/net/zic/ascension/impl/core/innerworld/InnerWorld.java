@@ -103,7 +103,7 @@ public final class InnerWorld {
         if (tier > plot.tier) {
             plot.tier = tier;
             InnerWorldPlots.save();
-            player.sendSystemMessage(Component.translatable("ascension.inner_world.expanding"));
+            player.sendOverlayMessage(Component.translatable("ascension.inner_world.expanding"));
         }
         InnerWorldGrowth.ensureQueued(server, player.getUUID(), plot);
     }
