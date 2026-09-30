@@ -31,6 +31,31 @@ and stat scaling, visual pulse mathematics, resonance and flare styling, and
 entity highlighting are Ascension-specific and are no longer fully derived from
 Scannable.
 
+---
+
+## Graveless
+
+- **Source:** https://github.com/MightyPirates/Scannable
+- **CurseForge:** https://www.curseforge.com/minecraft/mc-mods/graveless
+- **Version referenced:** 26.1.2 branch
+- **License:** MIT
+
+Portions of the Inner World rendering implementation are adapted from, or
+were developed with reference to, Graveless:
+
+- The Ghost Player Renderer remains substantially derived from
+  graveless's ` ghost.fsh`.
+- The render-pass strategy (rendering into Minecraft's main color target
+  while sampling the completed world depth texture, with no depth attachment
+  on the effect pass) was developed from studying Graveless's
+  `GhostRenderer`. The surrounding renderer infrastructure has since been
+  substantially rewritten around Ascension's own architecture.
+
+The fullscreen geometry and vertex shader, propagation equation, pulse timing
+and stat scaling, visual pulse mathematics, resonance and flare styling, and
+entity highlighting are Ascension-specific and are no longer fully derived from
+Graveless.
+
 Full license text:
 
 ```
