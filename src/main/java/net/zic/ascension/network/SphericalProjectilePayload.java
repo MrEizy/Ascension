@@ -10,23 +10,20 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.client.visual.SphericalDestructionClientState;
 
-/**
- * Launch payload for the traveling spherical projectile. Sent once, server to
- * nearby clients, at cast time. The client does NOT wait for per-tick position
- * updates — it simulates the same origin+direction*speed*distanceTraveled and
- * radius-growth-over-distance formula the server itself uses for collision
- * (see SphericalDestructionService), so the visual tracks the real projectile
- * without any further network traffic. The server sends the real detonation
- * (SphericalDestructionPayload) separately once it actually hits something.
- */
+import java.util.UUID;
+
 public record SphericalProjectilePayload(
+        UUID projectileId,
+        Identifier dimension,
         Vec3 origin,
         Vec3 direction,
         double speed,
         double startRadius,
         double targetRadius,
         double growthDistance,
-        double maxDistance
+        double maxDistance,
+        double traveled,
+        int color
 ) implements CustomPacketPayload {
 
     public static final Type<SphericalProjectilePayload> TYPE =
@@ -34,26 +31,30 @@ public record SphericalProjectilePayload(
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SphericalProjectilePayload> CODEC = StreamCodec.of(
             (buf, payload) -> {
-                buf.writeDouble(payload.origin.x);
-                buf.writeDouble(payload.origin.y);
-                buf.writeDouble(payload.origin.z);
-                buf.writeDouble(payload.direction.x);
-                buf.writeDouble(payload.direction.y);
-                buf.writeDouble(payload.direction.z);
+                buf.writeUUID(payload.projectileId);
+                buf.writeIdentifier(payload.dimension);
+                writeVec3(buf, payload.origin);
+                writeVec3(buf, payload.direction);
                 buf.writeDouble(payload.speed);
                 buf.writeDouble(payload.startRadius);
                 buf.writeDouble(payload.targetRadius);
                 buf.writeDouble(payload.growthDistance);
                 buf.writeDouble(payload.maxDistance);
+                buf.writeDouble(payload.traveled);
+                buf.writeInt(payload.color);
             },
             buf -> new SphericalProjectilePayload(
-                    new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble()),
-                    new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble()),
+                    buf.readUUID(),
+                    buf.readIdentifier(),
+                    readVec3(buf),
+                    readVec3(buf),
                     buf.readDouble(),
                     buf.readDouble(),
                     buf.readDouble(),
                     buf.readDouble(),
-                    buf.readDouble()
+                    buf.readDouble(),
+                    buf.readDouble(),
+                    buf.readInt()
             )
     );
 
@@ -62,22 +63,27 @@ public record SphericalProjectilePayload(
         return TYPE;
     }
 
-    /** Runs on the client that received it — starts the local travel simulation. */
     public static void handle(SphericalProjectilePayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
-            if (Minecraft.getInstance().level == null) {
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.level == null || !minecraft.level.dimension().identifier().equals(payload.dimension())) {
                 return;
             }
             SphericalDestructionClientState.get().launch(
-                    payload.origin(),
-                    payload.direction(),
-                    payload.speed(),
-                    payload.startRadius(),
-                    payload.targetRadius(),
-                    payload.growthDistance(),
-                    payload.maxDistance(),
-                    0xFF6A1B
+                    payload.projectileId(), payload.dimension(), payload.origin(), payload.direction(),
+                    payload.speed(), payload.startRadius(), payload.targetRadius(),
+                    payload.growthDistance(), payload.maxDistance(), payload.traveled(), payload.color()
             );
         });
+    }
+
+    private static void writeVec3(RegistryFriendlyByteBuf buf, Vec3 vec) {
+        buf.writeDouble(vec.x);
+        buf.writeDouble(vec.y);
+        buf.writeDouble(vec.z);
+    }
+
+    private static Vec3 readVec3(RegistryFriendlyByteBuf buf) {
+        return new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 }

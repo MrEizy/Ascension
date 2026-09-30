@@ -1,7 +1,6 @@
 package net.zic.ascension.impl.core.skill.castable;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,7 +20,9 @@ import net.zic.ascension.configuration.RealmEffectivenessConfiguration;
 import net.zic.ascension.network.SphericalDestructionPayload;
 import net.zic.ascension.network.SphericalProjectilePayload;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,8 +38,10 @@ public final class SphericalDestructionService {
     private static final double MAX_RANGE_MULTIPLIER = 6.0D;
     private static final int MAX_EFFECT_RADIUS = 64;
     private static final int DETONATION_DELAY_TICKS = 12;
+    private static final int IMPACT_VISUAL_TICKS = 30;
+    private static final double VISUAL_TRACKING_RANGE = 384.0D;
+    private static final int EFFECT_COLOR = 0xFF6A1B;
 
-    /** Called by SkillActions.SphericalDestruction.apply() — fires the traveling sphere. */
     public static void launch(SkillActionContext context, SkillActions.SphericalDestruction config) {
         if (!(context.level() instanceof ServerLevel serverLevel) || context.caster() == null) {
             return;
@@ -56,46 +59,85 @@ public final class SphericalDestructionService {
         double scaledMaxDistance = Math.max(config.growthDistance(), config.maxDistance() * rangeScale);
 
         ProjectileState state = new ProjectileState();
+        state.id = UUID.randomUUID();
         state.level = serverLevel;
         state.caster = caster;
         state.origin = origin;
         state.direction = direction;
-        state.speed = Math.max(0.05, config.projectileSpeed());
-        state.startRadius = Math.max(0.05, config.startRadius());
+        state.speed = Math.max(0.05D, config.projectileSpeed());
+        state.startRadius = Math.max(0.05D, config.startRadius());
         state.targetRadius = scaledRadius;
-        state.growthDistance = Math.max(0.5, config.growthDistance());
+        state.growthDistance = Math.max(0.5D, config.growthDistance());
         state.maxDistance = scaledMaxDistance;
         state.damage = resolvedDamage;
         state.destroyUnbreakable = config.destroyUnbreakable();
         state.soundRange = config.soundRange();
 
-        ACTIVE.put(UUID.randomUUID(), state);
+        ACTIVE.put(state.id, state);
+        syncNearbyObservers(state);
+    }
 
-        broadcastToNearby(serverLevel, origin, config.soundRange(), new SphericalProjectilePayload(
-                origin,
-                direction,
-                state.speed,
-                state.startRadius,
-                state.targetRadius,
-                state.growthDistance,
-                state.maxDistance
-        ));
+    private static SphericalProjectilePayload launchSnapshot(ProjectileState state) {
+        return new SphericalProjectilePayload(
+                state.id, state.level.dimension().identifier(), state.origin, state.direction,
+                state.speed, state.startRadius, state.targetRadius, state.growthDistance,
+                state.maxDistance, state.traveled, EFFECT_COLOR
+        );
+    }
+
+    private static SphericalDestructionPayload impactSnapshot(ProjectileState state) {
+        return new SphericalDestructionPayload(
+                state.id, state.impactPos, (int) Math.round(state.targetRadius),
+                state.impactTravelRadius, state.impactAgeTicks, state.soundRange,
+                EFFECT_COLOR, state.level.dimension().identifier()
+        );
+    }
+
+    private static void syncNearbyObservers(ProjectileState state) {
+        Vec3 center = state.detonating ? state.impactPos : state.origin.add(state.direction.scale(state.traveled));
+        double range = VISUAL_TRACKING_RANGE + (state.detonating ? state.targetRadius : 2.5D);
+        double rangeSquared = range * range;
+        SphericalProjectilePayload launchPacket = null;
+        SphericalDestructionPayload impactPacket = null;
+
+        for (ServerPlayer player : state.level.players()) {
+            if (state.seenPlayers.contains(player.getUUID()) || player.position().distanceToSqr(center) > rangeSquared) {
+                continue;
+            }
+            if (launchPacket == null) {
+                launchPacket = launchSnapshot(state);
+            }
+            PacketDistributor.sendToPlayer(player, launchPacket);
+            state.seenPlayers.add(player.getUUID());
+            if (state.detonating) {
+                if (impactPacket == null) {
+                    impactPacket = impactSnapshot(state);
+                }
+                PacketDistributor.sendToPlayer(player, impactPacket);
+            }
+        }
     }
 
     private static void beginDetonation(ProjectileState state, Vec3 impactPos) {
-        state.detonating = true;
         state.impactPos = impactPos;
-        state.detonationTicks = DETONATION_DELAY_TICKS;
-        SphericalDestructionPayload payload = new SphericalDestructionPayload(
-                impactPos,
-                (int) Math.round(state.targetRadius),
-                state.level.dimension().identifier()
-        );
-        broadcastToNearby(state.level, impactPos, state.soundRange, payload);
-        if (state.caster instanceof ServerPlayer casterPlayer
-                && casterPlayer.position().distanceToSqr(impactPos) > state.soundRange * state.soundRange) {
-            PacketDistributor.sendToPlayer(casterPlayer, payload);
+        state.impactTravelRadius = travelRadius(state);
+        state.detonating = true;
+        state.impactAgeTicks = 0;
+        SphericalDestructionPayload payload = impactSnapshot(state);
+        for (ServerPlayer player : state.level.players()) {
+            if (state.seenPlayers.contains(player.getUUID())) {
+                PacketDistributor.sendToPlayer(player, payload);
+            }
         }
+        syncNearbyObservers(state);
+    }
+
+    private static float travelRadius(ProjectileState state) {
+        double progress = Math.clamp(state.traveled / state.growthDistance, 0.0D, 1.0D);
+        progress = progress * progress * (3.0D - 2.0D * progress);
+        double radius = 0.65D + Math.sqrt(Math.max(state.targetRadius, 1.0D)) * 0.35D;
+        radius = Math.min(2.5D, Math.max(state.startRadius, radius));
+        return (float) (state.startRadius + (radius - state.startRadius) * progress);
     }
 
     private static void completeDetonation(ProjectileState state) {
@@ -122,7 +164,6 @@ public final class SphericalDestructionService {
         }
     }
 
-    /** True sphere via distance test — every block within `radius` of center. */
     private static void clearSphere(ServerLevel level, BlockPos center, int radius, boolean destroyUnbreakable) {
         int radiusSqr = radius * radius;
         for (int x = -radius; x <= radius; x++) {
@@ -145,16 +186,8 @@ public final class SphericalDestructionService {
         }
     }
 
-    private static void broadcastToNearby(ServerLevel level, Vec3 center, double range, CustomPacketPayload payload) {
-        double rangeSqr = range * range;
-        for (ServerPlayer player : level.players()) {
-            if (player.position().distanceToSqr(center) <= rangeSqr) {
-                PacketDistributor.sendToPlayer(player, payload);
-            }
-        }
-    }
-
     private static final class ProjectileState {
+        UUID id;
         ServerLevel level;
         LivingEntity caster;
         Vec3 origin;
@@ -169,11 +202,14 @@ public final class SphericalDestructionService {
         double soundRange;
         boolean destroyUnbreakable;
         boolean detonating;
-        int detonationTicks;
+        boolean destructionApplied;
+        int impactAgeTicks;
+        int syncTicks;
         Vec3 impactPos;
+        float impactTravelRadius;
+        final Set<UUID> seenPlayers = new HashSet<>();
     }
 
-    /** Server-authoritative travel + block collision, 20 times a second. */
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
     public static final class ServerTick {
         @SubscribeEvent
@@ -185,26 +221,28 @@ public final class SphericalDestructionService {
                 ProjectileState state = iterator.next().getValue();
 
                 if (state.detonating) {
-                    state.detonationTicks--;
-                    if (state.detonationTicks <= 0) {
+                    state.impactAgeTicks++;
+                    if (!state.destructionApplied && state.impactAgeTicks >= DETONATION_DELAY_TICKS) {
                         completeDetonation(state);
-                        iterator.remove();
+                        state.destructionApplied = true;
                     }
-                    continue;
+                    if (state.impactAgeTicks >= IMPACT_VISUAL_TICKS) {
+                        iterator.remove();
+                        continue;
+                    }
+                } else {
+                    Vec3 from = state.origin.add(state.direction.scale(state.traveled));
+                    state.traveled = Math.min(state.maxDistance, state.traveled + state.speed);
+                    Vec3 to = state.origin.add(state.direction.scale(state.traveled));
+                    HitResult hit = state.level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, state.caster));
+                    if (hit instanceof BlockHitResult blockHit && hit.getType() != HitResult.Type.MISS) {
+                        beginDetonation(state, blockHit.getLocation());
+                    } else if (state.traveled >= state.maxDistance) {
+                        beginDetonation(state, to);
+                    }
                 }
-
-                Vec3 from = state.origin.add(state.direction.scale(state.traveled));
-                state.traveled += state.speed;
-                Vec3 to = state.origin.add(state.direction.scale(state.traveled));
-
-                HitResult hit = state.level.clip(new ClipContext(
-                        from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, state.caster
-                ));
-
-                if (hit instanceof BlockHitResult blockHit && hit.getType() != HitResult.Type.MISS) {
-                    beginDetonation(state, blockHit.getLocation());
-                } else if (state.traveled >= state.maxDistance) {
-                    beginDetonation(state, to);
+                if (++state.syncTicks % 4 == 0) {
+                    syncNearbyObservers(state);
                 }
             }
         }
