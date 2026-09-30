@@ -35,7 +35,7 @@ Scannable.
 
 ## Graveless
 
-- **Source:** https://github.com/MightyPirates/Scannable
+- **Source:** https://github.com/breakinblocks/Graveless
 - **CurseForge:** https://www.curseforge.com/minecraft/mc-mods/graveless
 - **Version referenced:** 26.1.2 branch
 - **License:** MIT
