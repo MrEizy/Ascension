@@ -879,8 +879,24 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.abyssal_culling.desc", "Charge the abyss behind a single blade and release it as one culling stroke, paid for in the cultivator's own held-back blood.");
         add("ascension.skill.sword_flight.name", "Sword Flight");
         add("ascension.skill.sword_flight.desc", "Bind spirit to steel and ride the blade itself through the sky, steering with nothing but where the eyes fall.");
+        add("ascension.skill.spherical_devastation.name", "Spherical Devastation");
+        add("ascension.skill.spherical_devastation.desc", "Unleash a rotating sphere of annihilating force, scouring everything caught within it and shaking the ground for all who stand nearby.");
+        add("ascension.skill.inner_world.name", "Inner World");
+        add("ascension.skill.inner_world.desc", "Withdraw into a private inner world, leaving your body behind. If your body is destroyed you are dragged back, badly weakened.");
 
         // Mob Cultivation
         add("ascension.mob_cultivation.presence", "Spiritual Qi shifts through the air Something unnerving is nearby");
+
+
+
+        //Inner Worlds
+        add("ascension.inner_world.entered", "You withdraw into your inner world.");
+        add("ascension.inner_world.exited", "You return to your body.");
+        add("ascension.inner_world.forced_return", "Your body was destroyed — you are violently pulled back!");
+        add("ascension.inner_world.no_session", "You are not connected to an inner world right now.");
+        add("ascension.inner_world.unavailable", "Your inner world is not ready yet.");
+        add("ascension.inner_world.border", "An unseen wall holds you within your inner world.");
+        add("ascension.inner_world.expanding", "Your inner world begins to expand...");
+        add("ascension.inner_world.expanded", "Your inner world has grown to a %s-chunk radius.");
     }
 }

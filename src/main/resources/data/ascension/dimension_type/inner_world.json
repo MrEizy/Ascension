@@ -16,6 +16,7 @@
   "height": 448,
   "infiniburn": "#minecraft:infiniburn_overworld",
   "effects": "minecraft:overworld",
+  "skybox": "overworld",
   "monster_spawn_light_level": {
     "type": "minecraft:uniform",
     "min_inclusive": 0,
