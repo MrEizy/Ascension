@@ -13,11 +13,6 @@ import net.zic.ascension.impl.core.innerworld.InnerWorldGhost;
 /**
  * Renders the body left behind in the overworld, translucent, wearing the owner's real skin.
  *
- * Confidence note (unchanged from last pass): using plain HumanoidModel + HumanoidRenderState
- * rather than your PlayerModel/AvatarRenderState pipeline, since that one looked tied to your
- * Avatar interface for real players in the Graveless sources you shared. This compiles cleanly
- * against LivingEntityRenderer's actual contract in your build — getTextureLocation(S) turned
- * out to be the required abstract hook, not getRenderType (I'd guessed wrong on that).
  *
  * The skin texture lookup goes through InnerWorldSkinTexture (reflection stopgap) since
  * PlayerSkin's real accessor name in your build is still unconfirmed.

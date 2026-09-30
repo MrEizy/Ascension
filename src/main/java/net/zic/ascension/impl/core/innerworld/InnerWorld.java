@@ -93,16 +93,10 @@ public final class InnerWorld {
         );
     }
 
-    /**
-     * TODO: return the player's current MAJOR REALM (0 = first realm). This is the ONE integration
-     * point I couldn't fill in without your realm accessor. Until it's wired the inner world stays at
-     * tier 0 (or use /innerworld tier <player> <n>, or call raiseTier() from your realm-up event).
-     */
     public static int majorRealm(ServerPlayer player) {
         return 0;
     }
 
-    /** Raise (never lower) a player's tier and queue the new rings. Safe to call from a realm-up event. */
     public static void raiseTier(ServerPlayer player, int tier) {
         MinecraftServer server = player.level().getServer();
         InnerWorldPlots.Plot plot = InnerWorldPlots.getOrCreate(player.getUUID());

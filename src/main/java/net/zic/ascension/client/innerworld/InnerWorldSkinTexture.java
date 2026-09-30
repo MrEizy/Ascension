@@ -11,8 +11,6 @@ import java.lang.reflect.Method;
  * guess a third time I'm resolving the accessor once via reflection (tries the common candidate
  * names) and caching whichever one actually exists on your PlayerSkin class.
  *
- * If you paste PlayerSkin.java (or just tell me the real field/method name), I'll replace this
- * whole file with a direct, non-reflective call — reflection here is a stopgap, not the fix.
  */
 final class InnerWorldSkinTexture {
     private InnerWorldSkinTexture() {
