@@ -18,6 +18,7 @@ import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.entity.AscBlockEntities;
+import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.common.fluids.AscFluidTypes;
 import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.gui.menus.AscMenuTypes;
@@ -106,6 +107,7 @@ public class AscensionCraft {
         AscFluids.register(modEventBus);
 
 
+        AscEntities.register(modEventBus);
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
@@ -137,6 +139,8 @@ public class AscensionCraft {
         AscensionProjectileBehaviorTypes.register(modEventBus);
 
         AscensionAttributes.register(modEventBus);
+
+
 
     }
 

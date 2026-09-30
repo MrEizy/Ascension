@@ -17,6 +17,7 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import net.zic.ascension.client.innerworld.InnerWorldGhostRenderer;
 import net.zic.ascension.client.keybind.*;
 import net.zic.ascension.client.particle.ParticleFieldController;
 import net.zic.ascension.client.particle.ParticleFieldParticle;
@@ -29,6 +30,7 @@ import net.zic.ascension.client.visual.runtime.GuardianDharmaVisualController;
 import net.zic.ascension.client.visual.runtime.WeaponSwingVisualController;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 import net.zic.ascension.common.AscensionCreativeSections;
+import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.common.fluids.AscFluidTypes;
 import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.gui.menus.AscMenuTypes;
@@ -127,6 +129,7 @@ public class AscensionCraftClient {
 
         @SubscribeEvent
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerEntityRenderer(AscEntities.GHOST.get(), InnerWorldGhostRenderer::new);
 
 
 

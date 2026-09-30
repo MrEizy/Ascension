@@ -52,6 +52,7 @@ import net.zic.ascension.impl.core.damage.AscensionDamageService;
 import net.zic.ascension.impl.core.effect.AscensionBuildupChannels;
 import net.zic.ascension.impl.core.effect.SkillEffectService;
 import net.zic.ascension.impl.core.movement.MovementService;
+import net.zic.ascension.impl.core.innerworld.InnerWorldSessions;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillActionTypes;
 import net.zic.ascension.impl.runtime.object.Barriers;
 import net.zic.ascension.impl.runtime.object.AnchorNetworks;
@@ -1373,6 +1374,30 @@ public final class SkillActions {
         @Override
         public void apply(SkillActionContext context) {
             SphericalDestructionService.launch(context, this);
+        }
+    }
+
+    /**
+     * Casting this while outside the inner world sends you in (leaving a ghost behind);
+     * casting it again while already inside brings you back out peacefully. The forced,
+     * 50%-health return only happens if the ghost is actually killed — see
+     * InnerWorldSessions.onGhostDeath.
+     */
+    public record InnerWorld(ActionSubject subject) implements SkillAction {
+        public static final MapCodec<InnerWorld> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(InnerWorld::subject)
+        ).apply(instance, InnerWorld::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.INNER_WORLD.get();
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            if (context.caster() instanceof ServerPlayer player) {
+                InnerWorldSessions.toggle(player);
+            }
         }
     }
 
