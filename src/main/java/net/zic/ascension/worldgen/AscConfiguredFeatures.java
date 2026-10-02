@@ -87,7 +87,7 @@ public class AscConfiguredFeatures {
                         3),
                 new TwoLayersFeatureSize(1, 0, 2))
                 .ignoreVines()
-                .decorators(List.of(new PodCropDecorator(0.15f)))
+                .decorators(List.of(new PodCropDecorator(0.01f)))
                 .build());
 
         // Ores
@@ -97,19 +97,19 @@ public class AscConfiguredFeatures {
 
         // Herbs
         register(context, JADE_DEW_GRASS, AscFeatures.HERB.get(),
-                new HerbFeature.Configuration(ModBlocks.JADE_DEW_GRASS_CROP.get(), 6, 3));
+                new HerbFeature.Configuration(ModBlocks.JADE_DEW_GRASS_CROP.get(), 2, 3));
         register(context, GINSENG, AscFeatures.HERB.get(),
-                new HerbFeature.Configuration(ModBlocks.GINSENG_CROP.get(), 4, 3));
+                new HerbFeature.Configuration(ModBlocks.GINSENG_CROP.get(), 1, 3));
         register(context, FIRE_GINSENG, AscFeatures.HERB.get(),
-                new HerbFeature.Configuration(ModBlocks.FIRE_GINSENG_CROP.get(), 4, 3));
+                new HerbFeature.Configuration(ModBlocks.FIRE_GINSENG_CROP.get(), 1, 3));
         register(context, SNOW_GINSENG, AscFeatures.HERB.get(),
-                new HerbFeature.Configuration(ModBlocks.SNOW_GINSENG_CROP.get(), 4, 3));
+                new HerbFeature.Configuration(ModBlocks.SNOW_GINSENG_CROP.get(), 1, 3));
         register(context, WHITE_JADE_ORCHID, AscFeatures.HERB.get(),
-                new HerbFeature.Configuration(ModBlocks.WHITE_JADE_ORCHID_CROP.get(), 4, 3));
+                new HerbFeature.Configuration(ModBlocks.WHITE_JADE_ORCHID_CROP.get(), 1, 3));
         register(context, NINE_SUN_FIRE_ROOT, AscFeatures.HERB.get(),
-                new HerbFeature.Configuration(ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get(), 5, 4));
+                new HerbFeature.Configuration(ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get(), 1, 4));
         register(context, MOONWELL_JADE_LOTUS, AscFeatures.HERB.get(),
-                new HerbFeature.Configuration(ModBlocks.MOONWELL_JADE_LOTUS_CROP.get(), 5, 4));
+                new HerbFeature.Configuration(ModBlocks.MOONWELL_JADE_LOTUS_CROP.get(), 1, 4));
         register(context, LINGZHI_MUSHROOM, AscFeatures.LINGZHI_MUSHROOM.get(),
                 new LingzhiMushroomConfiguration(ModBlocks.LINGZHI_MUSHROOM_B.get(), blocks.getOrThrow(BlockTags.LOGS)));
         register(context, BLOOD_LINGZHI_MUSHROOM, AscFeatures.LINGZHI_MUSHROOM.get(),

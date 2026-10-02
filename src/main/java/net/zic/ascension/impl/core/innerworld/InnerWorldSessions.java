@@ -37,7 +37,7 @@ public final class InnerWorldSessions {
         MinecraftServer server = player.level().getServer();
         ServerLevel innerLevel = server.getLevel(InnerWorld.DIMENSION);
         if (innerLevel == null) {
-            player.sendSystemMessage(Component.translatable("ascension.inner_world.unavailable"));
+            player.sendOverlayMessage(Component.translatable("ascension.inner_world.unavailable"));
             return;
         }
 
@@ -78,7 +78,7 @@ public final class InnerWorldSessions {
         InnerWorldPlots.save();
 
         teleportIn(player, innerLevel, plot);
-        player.sendSystemMessage(Component.translatable("ascension.inner_world.entered"));
+        player.sendOverlayMessage(Component.translatable("ascension.inner_world.entered"));
     }
 
     private static void teleportIn(ServerPlayer player, ServerLevel innerLevel, InnerWorldPlots.Plot plot) {
@@ -90,7 +90,7 @@ public final class InnerWorldSessions {
     public static void exitVoluntarily(ServerPlayer player) {
         InnerWorldPlots.Plot plot = InnerWorldPlots.get(player.getUUID());
         if (plot == null || plot.session == null) {
-            player.sendSystemMessage(Component.translatable("ascension.inner_world.no_session"));
+            player.sendOverlayMessage(Component.translatable("ascension.inner_world.no_session"));
             return;
         }
         returnPlayer(player, plot, false);
@@ -137,9 +137,9 @@ public final class InnerWorldSessions {
         if (halfHealth) {
             double maxHealth = player.getAttributeValue(Attributes.MAX_HEALTH);
             player.setHealth((float) (maxHealth * 0.5));
-            player.sendSystemMessage(Component.translatable("ascension.inner_world.forced_return"));
+            player.sendOverlayMessage(Component.translatable("ascension.inner_world.forced_return"));
         } else {
-            player.sendSystemMessage(Component.translatable("ascension.inner_world.exited"));
+            player.sendOverlayMessage(Component.translatable("ascension.inner_world.exited"));
         }
     }
 
@@ -168,7 +168,7 @@ public final class InnerWorldSessions {
         }
         double maxHealth = player.getAttributeValue(Attributes.MAX_HEALTH);
         player.setHealth((float) (maxHealth * 0.5));
-        player.sendSystemMessage(Component.translatable("ascension.inner_world.forced_return"));
+        player.sendOverlayMessage(Component.translatable("ascension.inner_world.forced_return"));
     }
 
     public static boolean isGhostValid(UUID ownerId, UUID ghostId) {
@@ -198,7 +198,7 @@ public final class InnerWorldSessions {
             } else {
                 InnerWorldTeleport.to(player, (ServerLevel) player.level(), x, pos.y, z, player.getYRot(), player.getXRot());
             }
-            player.sendSystemMessage(Component.translatable("ascension.inner_world.border"));
+            player.sendOverlayMessage(Component.translatable("ascension.inner_world.border"));
         }
     }
 }

@@ -28,10 +28,9 @@ run-data
 
 repo
 
+
 ### Minecraft Modding ###
 run/
-run-2/
-run-3/
 !**/src/**/run/
 repo/
 !**/src/**/repo/

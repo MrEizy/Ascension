@@ -87,43 +87,43 @@ public class AscPlacedFeatures {
         register(context, PEACH_TREE_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.PEACH_TREE_KEY),
                 VegetationPlacements.treePlacement(
-                        PlacementUtils.countExtra(3, 0.1f, 2),
+                        PlacementUtils.countExtra(1, 0.01f, 1),
                         ModBlocks.PEACH_SAPLING.get()
                 ));
 
         // Herbs
         register(context, JADE_DEW_GRASS_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.JADE_DEW_GRASS),
-                List.of(CountPlacement.of(12), InSquarePlacement.spread(), BiomeFilter.biome()));
+                List.of(CountPlacement.of(4), InSquarePlacement.spread(), BiomeFilter.biome()));
 
         register(context, GINSENG_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.GINSENG),
-                List.of(CountPlacement.of(6), InSquarePlacement.spread(), BiomeFilter.biome()));
+                List.of(CountPlacement.of(2), InSquarePlacement.spread(), BiomeFilter.biome()));
 
         register(context, FIRE_GINSENG_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.FIRE_GINSENG),
-                List.of(CountPlacement.of(6), InSquarePlacement.spread(), BiomeFilter.biome()));
+                List.of(CountPlacement.of(2), InSquarePlacement.spread(), BiomeFilter.biome()));
 
         register(context, SNOW_GINSENG_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.SNOW_GINSENG),
-                List.of(CountPlacement.of(6), InSquarePlacement.spread(), BiomeFilter.biome()));
+                List.of(CountPlacement.of(2), InSquarePlacement.spread(), BiomeFilter.biome()));
 
         register(context, WHITE_JADE_ORCHID_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.WHITE_JADE_ORCHID),
-                List.of(CountPlacement.of(6), InSquarePlacement.spread(), BiomeFilter.biome()));
+                List.of(CountPlacement.of(2), InSquarePlacement.spread(), BiomeFilter.biome()));
 
         register(context, NINE_SUN_FIRE_ROOT_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.NINE_SUN_FIRE_ROOT),
-                List.of(CountPlacement.of(8), InSquarePlacement.spread(), BiomeFilter.biome()));
+                List.of(CountPlacement.of(1), InSquarePlacement.spread(), BiomeFilter.biome()));
 
         register(context, MOONWELL_JADE_LOTUS_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.MOONWELL_JADE_LOTUS),
-                List.of(CountPlacement.of(8), InSquarePlacement.spread(), BiomeFilter.biome()));
+                List.of(CountPlacement.of(1), InSquarePlacement.spread(), BiomeFilter.biome()));
 
         register(context, LINGZHI_MUSHROOM_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.LINGZHI_MUSHROOM),
                 List.of(
-                        CountPlacement.of(8),
+                        CountPlacement.of(4),
                         InSquarePlacement.spread(),
                         HeightRangePlacement.uniform(
                                 VerticalAnchor.absolute(58),
@@ -135,7 +135,7 @@ public class AscPlacedFeatures {
         register(context, BLOOD_LINGZHI_MUSHROOM_PLACED_KEY,
                 configuredFeatures.getOrThrow(AscConfiguredFeatures.BLOOD_LINGZHI_MUSHROOM),
                 List.of(
-                        CountPlacement.of(14),
+                        CountPlacement.of(8),
                         InSquarePlacement.spread(),
                         HeightRangePlacement.uniform(
                                 VerticalAnchor.absolute(0),

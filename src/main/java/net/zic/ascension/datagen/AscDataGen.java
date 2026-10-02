@@ -12,6 +12,7 @@ import net.zic.ascension.datagen.mob_cultivation.MobCultivationLootDataProvider;
 import net.zic.ascension.datagen.mob_cultivation.MobCultivationProfileDataProvider;
 import net.zic.ascension.datagen.tooltips.AscClassificationDataProvider;
 import net.zic.ascension.datagen.tooltips.AscTooltipDataProvider;
+import net.zic.ascension.datagen.villager.AscVillagerTradeTags;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,6 +44,7 @@ public class AscDataGen {
         generator.addProvider(true, new MobCultivationLootDataProvider(packOutput));
         generator.addProvider(true, new AscTooltipDataProvider(packOutput, AscensionCraft.MOD_ID));
         generator.addProvider(true, new AscClassificationDataProvider(packOutput, AscensionCraft.MOD_ID));
+        generator.addProvider(true, new AscVillagerTradeTags(packOutput, lookupProvider));
     }
 
 

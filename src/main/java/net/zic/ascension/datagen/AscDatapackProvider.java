@@ -7,6 +7,7 @@ import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.datagen.villager.AscVillagerTrades;
 import net.zic.ascension.worldgen.AscBiomeModifier;
 import net.zic.ascension.worldgen.AscConfiguredFeatures;
 import net.zic.ascension.worldgen.AscPlacedFeatures;
@@ -31,6 +32,7 @@ public class AscDatapackProvider extends DatapackBuiltinEntriesProvider {
             .add(Registries.DIMENSION_TYPE, AscDimensionTypes::bootstrap)
             .add(Registries.NOISE_SETTINGS, AscNoiseSettings::bootstrap)
             .add(Registries.WORLD_PRESET, AscWorldPresets::bootstrap)
+            .add(Registries.VILLAGER_TRADE, AscVillagerTrades::bootStrap)
             .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, AscBiomeModifier::bootstrap);
 
     public AscDatapackProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {

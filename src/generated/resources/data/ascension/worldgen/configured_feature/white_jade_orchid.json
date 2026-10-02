@@ -2,6 +2,6 @@
   "type": "ascension:herb",
   "config": {
     "herb_block": "ascension:white_jade_orchid_crop",
-    "tries": 4
+    "tries": 1
   }
 }
