@@ -10,13 +10,6 @@ import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.impl.core.innerworld.InnerWorldGhost;
 
-/**
- * Renders the body left behind in the overworld, translucent, wearing the owner's real skin.
- *
- *
- * The skin texture lookup goes through InnerWorldSkinTexture (reflection stopgap) since
- * PlayerSkin's real accessor name in your build is still unconfirmed.
- */
 public final class InnerWorldGhostRenderer extends LivingEntityRenderer<InnerWorldGhost, InnerWorldGhostRenderState, HumanoidModel<InnerWorldGhostRenderState>> {
 
     public InnerWorldGhostRenderer(EntityRendererProvider.Context context) {
@@ -28,6 +21,9 @@ public final class InnerWorldGhostRenderer extends LivingEntityRenderer<InnerWor
         return new InnerWorldGhostRenderState();
     }
 
+    /** Vanilla's own Steve texture — guaranteed to exist in every build. Last-resort only. */
+    private static final Identifier FALLBACK_SKIN = Identifier.withDefaultNamespace("textures/entity/player/wide/steve.png");
+
     @Override
     public void extractRenderState(InnerWorldGhost entity, InnerWorldGhostRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
@@ -36,7 +32,9 @@ public final class InnerWorldGhostRenderer extends LivingEntityRenderer<InnerWor
         if (texture == null) {
             texture = InnerWorldSkinTexture.resolve(DefaultPlayerSkin.get(entity.ownerId()));
         }
-        state.skinTexture = texture;
+        // Never let a null through — a null Identifier here is a hard render-thread crash, not a
+        // graceful failure. Worst case you briefly see Steve instead of the real skin.
+        state.skinTexture = texture != null ? texture : FALLBACK_SKIN;
     }
 
     @Override
