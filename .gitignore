@@ -20,15 +20,13 @@ build
 # other
 eclipse
 run
+run-2
+run-3
 runs
 run-data
 *.cache
 
 repo
-
-# claude code
-.claude
-docs/superpowers
 
 
 ### Minecraft Modding ###

@@ -2,7 +2,7 @@
   "given_item_modifiers": [
     {
       "components": {
-        "ascension:registry_id_holder": "ascension:ascension/techniques/1_ordinary/eagle_claw_palm_technique"
+        "ascension:registry_id_holder": "ascension:1_ordinary/eagle_claw_palm_technique"
       },
       "function": "minecraft:set_components"
     }

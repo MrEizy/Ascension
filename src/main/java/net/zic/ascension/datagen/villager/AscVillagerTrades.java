@@ -39,30 +39,26 @@ public class AscVillagerTrades {
     public static final ResourceKey<VillagerTrade> LIBRARIAN_3_SWORD_DRAW_MANUAL =
             createKey("librarian/3/sword_draw_manual");
 
-    // -----------------------------------------------------------------
-    // CHANGE THESE STRINGS to match whatever the registry prints.
-    // Current guess: "ascension/techniques/1_ordinary/<name>"
-    // -----------------------------------------------------------------
     private static final Identifier ID_EAGLE_CLAW_PALM =
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "ascension/techniques/1_ordinary/eagle_claw_palm_technique");
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/eagle_claw_palm_technique");
     private static final Identifier ID_GRASPING_SAND =
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "ascension/techniques/1_ordinary/grasping_sand_technique");
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/grasping_sand_technique");
     private static final Identifier ID_IMPERIAL_SEVEN_STANCES =
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "ascension/techniques/1_ordinary/imperial_seven_stances");
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/imperial_seven_stances");
     private static final Identifier ID_IRON_FIST_TEMPERING =
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "ascension/techniques/1_ordinary/iron_fist_tempering_manual");
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/iron_fist_tempering_manual");
     private static final Identifier ID_LIGHTNESS =
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "ascension/techniques/1_ordinary/lightness_technique");
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/lightness_technique");
     private static final Identifier ID_MARTIAL_TRANSCENDENCE_VOL_1 =
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "ascension/techniques/1_ordinary/martial_transcendence_vol_1");
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/martial_transcendence_vol_1");
     private static final Identifier ID_NINE_PATHS_OF_TRUTH =
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "ascension/techniques/1_ordinary/nine_paths_of_truth");
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/nine_paths_of_truth");
     private static final Identifier ID_SHADOWLESS_ART =
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "ascension/techniques/1_ordinary/shadowless_art");
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/shadowless_art");
     private static final Identifier ID_SUSTAINED_SPIRIT_ART =
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "ascension/techniques/1_ordinary/sustained_spirit_art");
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/sustained_spirit_art");
     private static final Identifier ID_SWORD_DRAW =
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "ascension/techniques/1_ordinary/sword_draw_manual");
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/sword_draw_manual");
 
     public static void bootStrap(BootstrapContext<VillagerTrade> context) {
 
