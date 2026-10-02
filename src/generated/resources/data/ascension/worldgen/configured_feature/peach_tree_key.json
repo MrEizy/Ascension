@@ -24,7 +24,7 @@
     "decorators": [
       {
         "type": "ascension:peach_pod",
-        "probability": 0.15
+        "probability": 0.01
       }
     ],
     "foliage_placer": {
