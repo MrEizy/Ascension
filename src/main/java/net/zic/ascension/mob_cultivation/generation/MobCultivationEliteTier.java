@@ -1,5 +1,7 @@
 package net.zic.ascension.mob_cultivation.generation;
 
+import net.minecraft.world.entity.Mob;
+
 import java.util.Locale;
 
 public enum MobCultivationEliteTier {
@@ -22,6 +24,7 @@ public enum MobCultivationEliteTier {
             int majorRealmBonus,
             int minorRealmBonus
     ) {
+
         this.statMultiplier = statMultiplier;
         this.growthMultiplier = growthMultiplier;
         this.lootMultiplier = lootMultiplier;
