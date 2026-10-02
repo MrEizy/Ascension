@@ -2,7 +2,9 @@ package net.zic.ascension.api.ascension.core.skill.particle_field;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
+import net.zic.ascension.AscensionCraft;
 
 import java.util.List;
 
@@ -21,9 +23,9 @@ public record ParticleFieldDefinition(
     public static final ParticleFieldStyle DEFAULT_STYLE = ParticleFieldStyle.INWARD_FLOW;
 
     public static final List<ParticleFieldParticleEntry> DEFAULT_PARTICLES = List.of(
-            new ParticleFieldParticleEntry(ParticleFieldParticleKind.WISP, 6),
-            new ParticleFieldParticleEntry(ParticleFieldParticleKind.MOTE, 4),
-            new ParticleFieldParticleEntry(ParticleFieldParticleKind.SPARK, 1)
+            new ParticleFieldParticleEntry(AscensionCraft.prefix("particle_field_wisp"), 6),
+            new ParticleFieldParticleEntry(AscensionCraft.prefix("particle_field_mote"), 4),
+            new ParticleFieldParticleEntry(AscensionCraft.prefix("particle_field_spark"), 1)
     );
 
     public static final List<ParticleFieldColour> DEFAULT_COLOURS = List.of(
@@ -63,22 +65,27 @@ public record ParticleFieldDefinition(
         height = height == null ? DEFAULT_HEIGHT : height;
         speed = sanitizeNonNegative(speed, DEFAULT_SPEED);
         size = sanitizeNonNegative(size, DEFAULT_SIZE);
-        lifetime = lifetime == null ? DEFAULT_LIFETIME : new ParticleFieldIntRange(Math.max(1, lifetime.min()), Math.max(1, lifetime.max()));
+        lifetime = lifetime == null
+                ? DEFAULT_LIFETIME
+                : new ParticleFieldIntRange(Math.max(1, lifetime.min()), Math.max(1, lifetime.max()));
     }
 
-    public ParticleFieldParticleKind randomParticle(RandomSource random) {
+    public Identifier randomParticle(RandomSource random) {
         int totalWeight = particles.stream().mapToInt(ParticleFieldParticleEntry::weight).sum();
         int selection = random.nextInt(Math.max(1, totalWeight));
         for (ParticleFieldParticleEntry entry : particles) {
             selection -= entry.weight();
             if (selection < 0) {
-                return entry.type();
+                return entry.particle();
             }
         }
-        return particles.getLast().type();
+        return particles.getLast().particle();
     }
 
-    private static ParticleFieldDoubleRange sanitizeNonNegative(ParticleFieldDoubleRange range, ParticleFieldDoubleRange fallback) {
+    private static ParticleFieldDoubleRange sanitizeNonNegative(
+            ParticleFieldDoubleRange range,
+            ParticleFieldDoubleRange fallback
+    ) {
         if (range == null) {
             return fallback;
         }

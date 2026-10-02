@@ -79,7 +79,7 @@ public class LightningTribulationType extends TribulationType {
 
             manager.finishTribulation(uuid);
 
-            System.out.println("entity survived");
+
             if(instance.getFinalizationConsumer() != null)instance.getFinalizationConsumer().accept(instance.getTribulation(),instance.getData());
             return;
         }

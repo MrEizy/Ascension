@@ -1,0 +1,27 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.inner_world.name"
+  },
+  "description": {
+    "translate": "ascension.skill.inner_world.desc"
+  },
+  "cast": {
+    "mode": "instant"
+  },
+  "cooldown": {
+    "base": 40.0
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 20.0
+    }
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:inner_world"
+    }
+  ]
+}

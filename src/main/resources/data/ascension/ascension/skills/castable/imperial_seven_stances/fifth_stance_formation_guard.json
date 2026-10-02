@@ -1,18 +1,15 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.imperial_fifth_stance.name"
   },
   "description": {
     "translate": "ascension.skill.imperial_fifth_stance.desc"
   },
-  "default_accessible_level": 1,
   "definitions": {
     "barriers": {
       "formation_guard": {
-        "duration": {
-          "base": 60
-        },
+        "duration": 60,
         "durability": {
           "base": 4.0,
           "terms": [
@@ -21,16 +18,13 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.08
             }
           ],
           "minimum": 4.0,
           "maximum": 10.0
         },
-        "absorption": {
-          "base": 0.45
-        },
+        "absorption": 0.45,
         "overflow": true,
         "priority": 5,
         "replace_existing": true,
@@ -39,15 +33,9 @@
           {
             "type": "ascension:particles",
             "particle": "minecraft:crit",
-            "count": {
-              "base": 4
-            },
-            "spread": {
-              "base": 0.25
-            },
-            "speed": {
-              "base": 0.02
-            },
+            "count": 4,
+            "spread": 0.25,
+            "speed": 0.02,
             "subject": "target"
           }
         ],
@@ -55,23 +43,15 @@
           {
             "type": "ascension:sound",
             "sound": "minecraft:item.shield.break",
-            "volume": {
-              "base": 0.35
-            },
-            "pitch": {
-              "base": 1.35
-            },
+            "volume": 0.35,
+            "pitch": 1.35,
             "subject": "target"
           }
         ]
       }
     }
   },
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:barrier",
       "action": "apply",
@@ -81,40 +61,22 @@
     {
       "type": "ascension:particles",
       "particle": "minecraft:crit",
-      "count": {
-        "base": 10
-      },
-      "spread": {
-        "base": 0.6
-      },
-      "speed": {
-        "base": 0.025
-      },
+      "count": 10,
+      "spread": 0.6,
+      "speed": 0.025,
       "subject": "caster"
     },
     {
       "type": "ascension:sound",
       "sound": "minecraft:item.shield.block",
-      "volume": {
-        "base": 0.45
-      },
-      "pitch": {
-        "base": 1.1
-      },
+      "volume": 0.45,
+      "pitch": 1.1,
       "subject": "caster"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:stamina",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 2.0
-      },
-      "operation": "ascension:consume"
-    }
-  ],
-  "cooldown": {
-    "base": 120
-  }
+  "cost": {
+    "resource": "ascension:stamina",
+    "amount": 2.0
+  },
+  "cooldown": 120
 }

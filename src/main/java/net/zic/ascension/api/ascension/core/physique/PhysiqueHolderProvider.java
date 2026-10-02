@@ -11,7 +11,6 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
-import net.zic.zenithlib.network.ByteBufHelpers;
 
 public class PhysiqueHolderProvider implements DataSource {
 
@@ -35,7 +34,7 @@ public class PhysiqueHolderProvider implements DataSource {
         Identifier physique = holder.getPhysique();
         PhysiqueData data = holder.getData();
         holder.setPhysique(null,null);
-        AscensionOriginSourceHelper.setPhysique(source,physique,data);
+        AscensionOriginSourceHelper.setPhysique(source,physique,data,false);
         //TODO fix other holders to do this
     }
 
@@ -62,14 +61,32 @@ public class PhysiqueHolderProvider implements DataSource {
     public void applyToEntity(LivingEntity entity, DataSourceInstance instance) {
         PhysiqueHolder holder = getHolder(instance);
 
-        holder.getPhysique(entity.level().registryAccess()).applyToEntity(entity,holder.getData());
+        if (holder.getPhysique() == null || holder.getData() == null) {
+            return;
+        }
+
+        Physique physique = holder.getPhysique(entity.level().registryAccess());
+        if (physique == null) {
+            return;
+        }
+
+        physique.applyToEntity(entity, holder.getData());
     }
 
     @Override
     public void removeFromEntity(LivingEntity entity, DataSourceInstance instance) {
         PhysiqueHolder holder = getHolder(instance);
 
-        holder.getPhysique(entity.level().registryAccess()).removeFromEntity(entity,holder.getData());
+        if (holder.getPhysique() == null || holder.getData() == null) {
+            return;
+        }
+
+        Physique physique = holder.getPhysique(entity.level().registryAccess());
+        if (physique == null) {
+            return;
+        }
+
+        physique.removeFromEntity(entity, holder.getData());
 
     }
 

@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "minecraft:block/crop",
   "textures": {
-    "cross": "ascension:block/herbs/ginseng_stage3"
+    "crop": "ascension:block/herbs/ginseng_stage3"
   }
 }

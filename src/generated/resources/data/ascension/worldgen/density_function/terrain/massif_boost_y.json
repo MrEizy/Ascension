@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:mul",
+  "argument1": "ascension:terrain/core_mask",
+  "argument2": "ascension:terrain/massif_boost_raw_y"
+}

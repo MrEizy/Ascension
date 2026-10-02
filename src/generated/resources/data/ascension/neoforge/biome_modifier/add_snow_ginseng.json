@@ -4,7 +4,9 @@
     "minecraft:snowy_taiga",
     "minecraft:snowy_beach",
     "minecraft:snowy_slopes",
-    "minecraft:snowy_plains"
+    "minecraft:snowy_plains",
+    "ascension:azure_cloud_range",
+    "ascension:heavenreach_peaks"
   ],
   "features": "ascension:snow_ginseng_placed",
   "step": "vegetal_decoration"

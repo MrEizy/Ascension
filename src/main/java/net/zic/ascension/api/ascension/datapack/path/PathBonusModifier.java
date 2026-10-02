@@ -29,7 +29,7 @@ public record PathBonusModifier(Identifier category,Identifier path,ValueContain
 
                 for(PathBonusModifier modifier : rawInput){
                     outputMap.computeIfAbsent(modifier.category,key->new HashMap<>())
-                            .computeIfAbsent(modifier.category,key->new ArrayList<>())
+                            .computeIfAbsent(modifier.path,key->new ArrayList<>())
                             .add(modifier.modifier);
                 }
                 return outputMap;

@@ -42,6 +42,11 @@ public final class AscensionResourceSources {
             AscensionCraft.prefix("damage"),
             ResourceSourceIdentity.Tags.COMBAT
     );
+    public static final ResourceSourceIdentity LIFESTEAL = ResourceSourceIdentity.of(
+            AscensionCraft.prefix("lifesteal"),
+            ResourceSourceIdentity.Tags.COMBAT,
+            ResourceSourceIdentity.Tags.SKILL
+    );
     public static final ResourceSourceIdentity NATURAL_REGENERATION = ResourceSourceIdentity.of(
             AscensionCraft.prefix("natural_regeneration"),
             ResourceSourceIdentity.Tags.REGENERATION,
@@ -53,6 +58,11 @@ public final class AscensionResourceSources {
     );
     public static final ResourceSourceIdentity CULTIVATION = ResourceSourceIdentity.of(
             AscensionCraft.prefix("cultivation"),
+            ResourceSourceIdentity.Tags.CULTIVATION,
+            ResourceSourceIdentity.Tags.SKILL
+    );
+    public static final ResourceSourceIdentity BODY_CULTIVATION = ResourceSourceIdentity.of(
+            AscensionCraft.prefix("body_cultivation"),
             ResourceSourceIdentity.Tags.CULTIVATION,
             ResourceSourceIdentity.Tags.SKILL
     );
@@ -77,11 +87,17 @@ public final class AscensionResourceSources {
     }
 
     public static ResourceSourceIdentity movementSource(Player player) {
+        if (player.isFallFlying()) {
+            return ELYTRA;
+        }
         if (player.isSwimming()) {
             return SWIMMING;
         }
-        if (player.isFallFlying()) {
-            return ELYTRA;
+        if (player.onClimbable()) {
+            return CLIMBING;
+        }
+        if (player.isVisuallyCrawling()) {
+            return CRAWLING;
         }
         if (player.isSprinting()) {
             return SPRINTING;

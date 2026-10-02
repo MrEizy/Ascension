@@ -1,0 +1,217 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.bloodline.eternal_tribulation_ancestral_dragon.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.eternal_tribulation_ancestral_dragon.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/lightning",
+    "ascension:elemental/chaos"
+  ],
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 0.95
+            },
+            {
+              "id": "ascension:strength",
+              "value": 0.9
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.7
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.5
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:foundation/body": 0.1,
+              "ascension:elemental/lightning": 0.2,
+              "ascension:elemental/chaos": 0.16,
+              "ascension:elemental/fate": 0.08,
+              "ascension:elemental/order": 0.08
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 10,
+        "end": 10
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 10.0
+            },
+            {
+              "id": "ascension:strength",
+              "value": 10.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 25,
+        "end": 25
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 15.0
+            },
+            {
+              "id": "ascension:agility",
+              "value": 10.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/lightning": 3.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 50,
+        "end": 50
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 20.0
+            },
+            {
+              "id": "ascension:strength",
+              "value": 20.0
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 15.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/chaos": 4.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 75,
+        "end": 75
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:agility",
+              "value": 20.0
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 20.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/fate": 3.0,
+              "ascension:elemental/order": 3.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 100,
+        "end": 100
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 35.0
+            },
+            {
+              "id": "ascension:strength",
+              "value": 35.0
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 30.0
+            },
+            {
+              "id": "ascension:agility",
+              "value": 25.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/lightning": 6.0,
+              "ascension:elemental/chaos": 6.0,
+              "ascension:elemental/fate": 4.0,
+              "ascension:elemental/order": 4.0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:heavens_path"
+  }
+}

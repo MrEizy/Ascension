@@ -21,12 +21,6 @@
   "base_stats": {
     "ascension:vitality": 2
   },
-  "base_affinity": {
-    "ascension:body": 3,
-    "ascension:earth": 2.5,
-    "ascension:metal": 2,
-    "ascension:mace": 2.5
-  },
   "stat_modifiers": {
     "ascension:vitality": [
       {
@@ -36,13 +30,23 @@
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:water": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:trembling_earth_body_unstable_physique_earth_modifier"
-      }
-    ]
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 3,
+      "ascension:elemental/earth": 2.5,
+      "ascension:elemental/metal": 2,
+      "ascension:weapon/mace": 2.5
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/water": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:trembling_earth_body_unstable_physique_earth_modifier"
+        }
+      ]
+    }
   }
 }

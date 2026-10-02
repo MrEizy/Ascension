@@ -1,0 +1,57 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.divine_sense.name"
+  },
+  "description": {
+    "translate": "ascension.skill.divine_sense.desc"
+  },
+  "target": {
+    "type": "ascension:self"
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:divine_sense",
+      "radius": {
+        "base": 20.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.025
+          }
+        ],
+        "maximum": 72.0
+      },
+      "speed": {
+        "base": 12.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ],
+        "maximum": 36.0
+      },
+      "duration": 120.0,
+      "color": "#bf00ff"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "operation": "ascension:consume",
+    "source": "ascension:skill_casting",
+    "amount": {
+      "base": 30.0
+    }
+  },
+  "cooldown": {
+    "base": 200.0
+  }
+}

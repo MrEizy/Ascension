@@ -69,9 +69,11 @@ public final class SkillEffectManager {
                 sourceSkill
         );
         if (existing != null) {
+            int previousStacks = existing.stacks();
+            double previousPotency = existing.potency();
             updateExisting(existing, definition, duration, potency);
             for (SkillEffectModule module : definition.modules()) {
-                module.onUpdate(target, existing);
+                module.onUpdate(target, existing, previousStacks, previousPotency);
             }
             NeoForge.EVENT_BUS.post(new SkillEffectEvent.Updated(target, existing));
             return true;
@@ -173,7 +175,15 @@ public final class SkillEffectManager {
                 removeInstance(entity, active, resolve(entity, active.definition(), active.sourceSkill()), removalReason);
                 iterator.remove();
             } else {
+                int previousStacks = active.stacks();
+                double previousPotency = active.potency();
                 active.setStacks(remaining);
+                SkillEffectDefinition definition = resolve(entity, active.definition(), active.sourceSkill());
+                if (definition != null) {
+                    for (SkillEffectModule module : definition.modules()) {
+                        module.onUpdate(entity, active, previousStacks, previousPotency);
+                    }
+                }
                 NeoForge.EVENT_BUS.post(new SkillEffectEvent.Updated(entity, active));
             }
             return consumed;

@@ -1,0 +1,87 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.bloodline.moon_white_crane.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.moon_white_crane.desc"
+  },
+  "paths": [
+    "ascension:elemental/moon",
+    "ascension:elemental/wind"
+  ],
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:agility",
+              "value": 0.1
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.08
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/moon": 0.018,
+              "ascension:elemental/wind": 0.012
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 50,
+        "end": 50
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:agility",
+              "value": 2.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 100,
+        "end": 100
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:agility",
+              "value": 2.0
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 2.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:profound"
+  }
+}

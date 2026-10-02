@@ -1,0 +1,17 @@
+{
+  "output": "ascension:fasting_pill",
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/cleansing": 7.0,
+      "ascension:alchemy/nourishment": 9.0,
+      "ascension:alchemy/restoration": 7.0
+    },
+    "affinities": {
+      "ascension:elemental/life": 6.0,
+      "ascension:elemental/wood": 1.0
+    }
+  },
+  "base_yield": 1,
+  "maximum_yield": 4,
+  "amplifier_per_bonus": 0.5
+}

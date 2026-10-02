@@ -1,0 +1,17 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.sheathed_edge.name"
+  },
+  "description": {
+    "translate": "ascension.skill.sheathed_edge.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:weapon_damage",
+      "weapon_tag": "minecraft:swords",
+      "match": "held_weapon",
+      "multiplier": 1.08
+    }
+  ]
+}

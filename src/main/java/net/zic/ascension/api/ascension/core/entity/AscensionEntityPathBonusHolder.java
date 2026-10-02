@@ -54,8 +54,7 @@ public class AscensionEntityPathBonusHolder implements PathBonusProvider {
     }
 
     public void updatePathBonus(PathBonus bonus){
-        //temp
-        if(! (attachedEntity instanceof Player)) return;
+
         ValueContainer container = new ValueContainer(bonus.path(),0);
         for(PathBonusProvider provider : providers){
             ValueContainer providerContainer = provider.getPathBonusContainer(bonus.category(),bonus.path());

@@ -1,8 +1,7 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Pack Howl",
   "description": "A Wolf fortifies itself and nearby allies with a brief shared ward.",
-  "default_accessible_level": 1,
   "definitions": {
     "barriers": {
       "pack_guard": {
@@ -15,7 +14,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:spirit"
               },
-              "operation": "add",
               "scale": 0.22
             }
           ],
@@ -30,22 +28,19 @@
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:radial",
     "radius": 6,
     "maximum_targets": 5,
-    "sort": "nearest",
     "filter": {
       "relations": [
         "self",
         "ally"
       ],
-      "include_players": true,
       "line_of_sight": false
     }
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:barrier",
       "action": "apply",
@@ -68,6 +63,5 @@
       "subject": "caster"
     }
   ],
-  "costs": [],
   "cooldown": 220
 }

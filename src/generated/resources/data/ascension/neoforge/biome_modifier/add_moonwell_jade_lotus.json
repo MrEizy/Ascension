@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "minecraft:swamp",
+    "minecraft:mangrove_swamp",
+    "minecraft:river"
+  ],
+  "features": "ascension:moonwell_jade_lotus_placed",
+  "step": "vegetal_decoration"
+}

@@ -1,64 +1,102 @@
 {
-  "type": "ascension:resource_modifier_passive",
+  "type": "ascension:passive",
   "name": "Axe Mastery",
   "description": "Turns axe swings into broad, heavy qi arcs.",
-  "default_accessible_level": 1,
-  "modules": [
-    {
-      "type": "ascension:weapon_swing",
-      "path": "ascension:weapon/axe",
-      "weapon_tag": "minecraft:axes",
-      "vfx_type": "axe_particle",
-      "fallback_color": "simple_blue",
-      "technique_colors": {
-        "ascension:2_profound/mount_hua_sword_manual": "simple_red",
-        "ascension:1_ordinary/sustained_spirit_art": "simple_purple",
-        "ascension:3_heaven/celestial_constellation_circulation": "simple_blue",
-        "ascension:3_heaven/guardian_dharma_manual": "simple_king",
-        "ascension:bug_tester_manual": "simple_blue",
-        "ascension:example_technique": "simple_green"
-      },
-      "radius": [
-        3.0,
-        2.0,
-        3.0
-      ],
-      "base_damage": 7.0,
-      "knockback": 1.0,
-      "duration": 10,
-      "rotation_z": -15.0,
-      "movement": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "qi_cost": 2.0,
-      "minimum_interval": 1,
-      "realm_scaling": {
-        "base_bonus": 0.1,
-        "bonus_per_major_realm": 0.22,
-        "bonus_per_minor_realm": 0.025,
-        "maximum_bonus": 5.0
-      },
-      "classifications": [
-        "ascension:skill",
-        "ascension:melee",
-        "ascension:weapon",
-        "ascension:axe"
-      ],
-      "hit_shape": "area",
-      "priority": 0
-    },
+  "modifiers": [
     {
       "type": "ascension:weapon_damage",
-      "path": "ascension:weapon/axe",
       "weapon_tag": "minecraft:axes",
       "match": "held_weapon",
-      "realm_scaling": {
-        "base_bonus": 0.1,
-        "bonus_per_major_realm": 0.22,
-        "bonus_per_minor_realm": 0.025,
-        "maximum_bonus": 5.0
+      "multiplier": {
+        "base": 1.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:path_realm_multiplier",
+              "path": "ascension:weapon/axe",
+              "base_bonus": 0.1,
+              "bonus_per_major_realm": 0.22,
+              "bonus_per_minor_realm": 0.025,
+              "maximum_bonus": 5.0
+            },
+            "operation": "multiply"
+          }
+        ]
+      }
+    }
+  ],
+  "triggers": [
+    {
+      "event": "attack",
+      "weapon_tag": "minecraft:axes",
+      "cooldown": 1,
+      "actions": [
+        {
+          "type": "ascension:weapon_swing",
+          "vfx_type": "axe_particle",
+          "color": "simple_blue",
+          "technique_colors": {
+            "ascension:2_profound/mount_hua_sword_manual": "simple_red",
+            "ascension:1_ordinary/sustained_spirit_art": "simple_purple",
+            "ascension:3_heaven/celestial_constellation_circulation": "simple_blue",
+            "ascension:3_heaven/guardian_dharma_manual": "simple_king",
+            "ascension:bug_tester_manual": "simple_blue",
+            "ascension:example_technique": "simple_green"
+          },
+          "radius": [
+            3.0,
+            2.0,
+            3.0
+          ],
+          "damage": {
+            "base": {
+              "base": 7.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:path_realm_multiplier",
+                    "path": "ascension:weapon/axe",
+                    "base_bonus": 0.1,
+                    "bonus_per_major_realm": 0.22,
+                    "bonus_per_minor_realm": 0.025,
+                    "maximum_bonus": 5.0
+                  },
+                  "operation": "multiply"
+                }
+              ]
+            },
+            "weapon": 0.5
+          },
+          "rotation_z": -15.0,
+          "path": "ascension:weapon/axe",
+          "weapon_tag": "minecraft:axes",
+          "classifications": [
+            "ascension:skill",
+            "ascension:melee",
+            "ascension:weapon",
+            "ascension:axe"
+          ],
+          "hit_shape": "area"
+        }
+      ],
+      "cost": {
+        "resource": "ascension:qi",
+        "amount": {
+          "base": 2.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:path_realm_multiplier",
+                "path": "ascension:weapon/axe",
+                "base_bonus": 0.1,
+                "bonus_per_major_realm": 0.22,
+                "bonus_per_minor_realm": 0.025,
+                "maximum_bonus": 5.0
+              },
+              "operation": "multiply"
+            }
+          ]
+        }
       }
     }
   ]

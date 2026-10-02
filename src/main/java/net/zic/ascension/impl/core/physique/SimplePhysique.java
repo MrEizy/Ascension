@@ -7,10 +7,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
 import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
@@ -23,18 +23,16 @@ import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public record SimplePhysique(Component name, Component description, List<Identifier> unlockedPaths,
                              List<Identifier> skills, List<ValueContainer.BaseModifier> baseStats,
                              Map<Identifier, List<ValueContainerModifier>> statModifiers,
                              List<PathBonusBase> basePathBonuses,
                              List<PathBonusModifier> pathBonusModifiers,
-                             Optional<AscensionItemTooltipDefinition> itemTooltip) implements Physique {
-
+                             Optional<AscensionItemTooltipDefinition> itemTooltip,
+                             RequirementHolder requirements
+                            ) implements Physique {
 
     public SimplePhysique(
             Component name,
@@ -45,7 +43,8 @@ public record SimplePhysique(Component name, Component description, List<Identif
             Map<Identifier, List<ValueContainerModifier>> statModifiers,
             List<PathBonusBase> basePathBonuses,
             List<PathBonusModifier> pathBonusModifiers,
-            Optional<AscensionItemTooltipDefinition> itemTooltip
+            Optional<AscensionItemTooltipDefinition> itemTooltip,
+            RequirementHolder requirements
     ) {
         this.name = name;
         this.description = description;
@@ -56,7 +55,8 @@ public record SimplePhysique(Component name, Component description, List<Identif
         this.statModifiers = statModifiers;
         this.pathBonusModifiers = pathBonusModifiers;
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
-        AscensionCraft.LOGGER.info("created Simple Physique {}", name);
+        this.requirements = requirements == null ? RequirementHolder.EMPTY : requirements;
+
     }
 
     @Override
@@ -145,11 +145,11 @@ public record SimplePhysique(Component name, Component description, List<Identif
         }
 
         @Override
-        public void write(ValueOutput output) {
+        public void write(ValueOutput output,RegistryAccess access) {
         }
 
         @Override
-        public void encode(ByteBuf buf) {
+        public void encode(ByteBuf buf,RegistryAccess access) {
         }
     }
 }

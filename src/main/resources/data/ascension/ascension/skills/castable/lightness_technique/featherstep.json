@@ -1,0 +1,41 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.featherstep.name"
+  },
+  "description": {
+    "translate": "ascension.skill.featherstep.desc"
+  },
+  "actions": [
+    {
+      "type": "ascension:move",
+      "mode": "directional",
+      "direction": "look",
+      "distance": {
+        "base": 3.0,
+        "per_mastery": 0.45
+      },
+      "include_vertical": false,
+      "collision": "stop_before_collision",
+      "preserve_velocity": false,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:cloud",
+      "count": 8,
+      "spread": 0.35,
+      "speed": 0.03,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:stamina",
+    "amount": 1.2
+  },
+  "cooldown": {
+    "base": 32,
+    "per_mastery": -2,
+    "minimum": 20
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.blood_thirst.name"
+  },
+  "description": {
+    "translate": "ascension.skill.blood_thirst.desc"
+  },
+  "triggers": [
+    {
+      "event": "kill",
+      "priority": 0,
+      "cooldown": 0,
+      "actions": [
+        {
+          "type": "ascension:effect",
+          "subject": "caster",
+          "definition": "kill_thirst",
+          "duration": 300,
+          "potency": 1.0
+        }
+      ]
+    },
+    {
+      "event": "damage_dealt",
+      "priority": 0,
+      "cooldown": 20,
+      "actions": [
+        {
+          "type": "ascension:effect",
+          "subject": "caster",
+          "definition": "wound_thirst",
+          "duration": 100,
+          "potency": 1.0
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "effects": {
+      "kill_thirst": {
+        "stacking": "stack",
+        "stacking_scope": "source_skill",
+        "max_stacks": 5,
+        "modules": [
+          {
+            "type": "ascension:base_stats",
+            "stats": [
+              {
+                "id": "ascension:strength",
+                "value": 0.08
+              },
+              {
+                "id": "ascension:spirit",
+                "value": 0.05
+              }
+            ]
+          }
+        ]
+      },
+      "wound_thirst": {
+        "stacking": "stack",
+        "stacking_scope": "source_skill",
+        "max_stacks": 3,
+        "modules": [
+          {
+            "type": "ascension:base_stats",
+            "stats": [
+              {
+                "id": "ascension:strength",
+                "value": 0.04
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.cold_spring_dantian.name"
+  },
+  "description": {
+    "translate": "ascension.physique.cold_spring_dantian.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/water",
+    "ascension:elemental/ice"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 3.0,
+    "ascension:vitality": 2.0,
+    "ascension:agility": 1.0
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.12,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:cold_spring_dantian_spirit_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": 1.25,
+      "ascension:elemental/water": 2.0,
+      "ascension:elemental/ice": 1.25
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/water": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:cold_spring_dantian_water_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/ice": [
+        {
+          "value": 0.1,
+          "operation": "ADD_BASE",
+          "id": "ascension:cold_spring_dantian_ice_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:profound"
+  }
+}

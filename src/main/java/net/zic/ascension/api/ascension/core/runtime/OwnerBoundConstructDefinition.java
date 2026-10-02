@@ -4,8 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
-import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 
@@ -20,26 +19,22 @@ public record OwnerBoundConstructDefinition(
         ScaledValue stability,
         Vec3 offset,
         boolean rotateWithOwner,
-        Optional<DefinitionRef<RuntimeVisualDefinition>> visual,
+        Optional<Identifier> visual,
         List<VisualStage> visualStages,
         Optional<Interception> interception,
-        List<SkillExecutionFeature> onBreak,
-        List<SkillExecutionFeature> onExpire
+        List<SkillAction> onBreak,
+        List<SkillAction> onExpire
 ) {
     public static final Codec<OwnerBoundConstructDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ScaledValue.COMPACT_CODEC.fieldOf("duration").forGetter(OwnerBoundConstructDefinition::duration),
             ScaledValue.COMPACT_CODEC.fieldOf("stability").forGetter(OwnerBoundConstructDefinition::stability),
             CodecHelpers.VEC3.optionalFieldOf("offset", Vec3.ZERO).forGetter(OwnerBoundConstructDefinition::offset),
-            Codec.BOOL.optionalFieldOf("rotate_with_owner", true)
-                    .forGetter(OwnerBoundConstructDefinition::rotateWithOwner),
-            DefinitionRef.codec(RuntimeVisualDefinition.CODEC).optionalFieldOf("visual").forGetter(OwnerBoundConstructDefinition::visual),
-            VisualStage.CODEC.listOf().optionalFieldOf("visual_stages", List.of())
-                    .forGetter(OwnerBoundConstructDefinition::visualStages),
+            Codec.BOOL.optionalFieldOf("rotate_with_owner", true).forGetter(OwnerBoundConstructDefinition::rotateWithOwner),
+            Identifier.CODEC.optionalFieldOf("visual").forGetter(OwnerBoundConstructDefinition::visual),
+            VisualStage.CODEC.listOf().optionalFieldOf("visual_stages", List.of()).forGetter(OwnerBoundConstructDefinition::visualStages),
             Interception.CODEC.optionalFieldOf("interception").forGetter(OwnerBoundConstructDefinition::interception),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_break", List.of())
-                    .forGetter(OwnerBoundConstructDefinition::onBreak),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_expire", List.of())
-                    .forGetter(OwnerBoundConstructDefinition::onExpire)
+            SkillAction.CODEC.listOf().optionalFieldOf("on_break", List.of()).forGetter(OwnerBoundConstructDefinition::onBreak),
+            SkillAction.CODEC.listOf().optionalFieldOf("on_expire", List.of()).forGetter(OwnerBoundConstructDefinition::onExpire)
     ).apply(instance, OwnerBoundConstructDefinition::new));
 
     public OwnerBoundConstructDefinition {
@@ -54,11 +49,10 @@ public record OwnerBoundConstructDefinition(
         onExpire = onExpire == null ? List.of() : List.copyOf(onExpire);
     }
 
-    public record VisualStage(double maximumStabilityFraction, DefinitionRef<RuntimeVisualDefinition> visual) {
+    public record VisualStage(double maximumStabilityFraction, Identifier visual) {
         public static final Codec<VisualStage> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.doubleRange(0.0D, 1.0D).fieldOf("maximum_stability_fraction")
-                        .forGetter(VisualStage::maximumStabilityFraction),
-                DefinitionRef.codec(RuntimeVisualDefinition.CODEC).fieldOf("visual").forGetter(VisualStage::visual)
+                Codec.doubleRange(0.0D, 1.0D).fieldOf("maximum_stability_fraction").forGetter(VisualStage::maximumStabilityFraction),
+                Identifier.CODEC.fieldOf("visual").forGetter(VisualStage::visual)
         ).apply(instance, VisualStage::new));
     }
 
@@ -69,21 +63,16 @@ public record OwnerBoundConstructDefinition(
             int priority,
             BarrierDefinition.DamageFilter filter,
             NormalProjectileDefinition.ImpactResponse projectileResponse,
-            List<SkillExecutionFeature> onIntercept
+            List<SkillAction> onIntercept
     ) {
         public static final Codec<Interception> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                ScaledValue.COMPACT_CODEC.optionalFieldOf("absorption", ScaledValue.constant(1.0D))
-                        .forGetter(Interception::absorption),
-                ScaledValue.COMPACT_CODEC.optionalFieldOf("stability_cost", ScaledValue.constant(1.0D))
-                        .forGetter(Interception::stabilityCost),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("absorption", ScaledValue.constant(1.0D)).forGetter(Interception::absorption),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("stability_cost", ScaledValue.constant(1.0D)).forGetter(Interception::stabilityCost),
                 Codec.BOOL.optionalFieldOf("overflow", true).forGetter(Interception::overflow),
                 Codec.INT.optionalFieldOf("priority", 0).forGetter(Interception::priority),
-                BarrierDefinition.DamageFilter.CODEC.optionalFieldOf("filter", BarrierDefinition.DamageFilter.EMPTY)
-                        .forGetter(Interception::filter),
-                NormalProjectileDefinition.ImpactResponse.CODEC.optionalFieldOf("projectile_response", NormalProjectileDefinition.ImpactResponse.DEFLECT)
-                        .forGetter(Interception::projectileResponse),
-                SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_intercept", List.of())
-                        .forGetter(Interception::onIntercept)
+                BarrierDefinition.DamageFilter.CODEC.optionalFieldOf("filter", BarrierDefinition.DamageFilter.EMPTY).forGetter(Interception::filter),
+                NormalProjectileDefinition.ImpactResponse.CODEC.optionalFieldOf("projectile_response", NormalProjectileDefinition.ImpactResponse.DEFLECT).forGetter(Interception::projectileResponse),
+                SkillAction.CODEC.listOf().optionalFieldOf("on_intercept", List.of()).forGetter(Interception::onIntercept)
         ).apply(instance, Interception::new));
 
         public Interception {

@@ -1,51 +1,10 @@
 {
-  "type": "ascension:held_cast",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.frostbound_stillness.name"
   },
   "description": {
     "translate": "ascension.skill.frostbound_stillness.desc"
-  },
-  "cast": {
-    "minimum_charge": 20,
-    "maximum_charge": 80,
-    "cooldown": 100,
-    "cost": {
-      "resource": "ascension:qi",
-      "source": "ascension:skill_casting",
-      "release_on_failure": true,
-      "cumulative_cost": {
-        "base": 4.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:charge"
-            },
-            "operation": "add",
-            "power": 2.0,
-            "scale": 18.0
-          }
-        ]
-      },
-      "operation": "ascension:consume"
-    },
-    "movement": {
-      "horizontal_drag": {
-        "base": 0.65
-      },
-      "vertical_drag": {
-        "base": 1.0
-      },
-      "disable_sprinting": true
-    },
-    "interruption": {
-      "damage_threshold": {
-        "base": 8.0
-      },
-      "accumulation_window": 20,
-      "release_after_minimum": false
-    },
-    "stages": []
   },
   "definitions": {
     "effects": {
@@ -62,7 +21,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": 0.22
                 }
               ],
@@ -76,7 +34,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": 0.17
                 }
               ],
@@ -114,7 +71,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": 0.15
                 }
               ],
@@ -126,91 +82,78 @@
       }
     }
   },
-  "targeting": {
+  "cast": {
+    "mode": "charge",
+    "minimum_ticks": 20,
+    "maximum_ticks": 80,
+    "cost": {
+      "resource": "ascension:qi",
+      "cumulative_cost": {
+        "base": 4.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "power": 2.0,
+            "scale": 18.0
+          }
+        ]
+      }
+    },
+    "movement": {
+      "horizontal_drag": 0.65,
+      "disable_sprinting": true
+    },
+    "interruption": {
+      "damage_threshold": 8.0,
+      "accumulation_window": 20,
+      "release_after_minimum": false
+    }
+  },
+  "target": {
     "type": "ascension:radial",
     "radius": {
       "base": 3.5,
-      "terms": [
-        {
-          "source": {
-            "type": "ascension:charge"
-          },
-          "operation": "add",
-          "scale": 3.5
-        }
-      ],
-      "maximum": 7.0
+      "maximum": 7.0,
+      "charge": 3.5
     },
-    "maximum_targets": 0,
-    "sort": "nearest",
     "filter": {
       "relations": [
         "neutral",
         "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
+      ]
     }
   },
   "require_targets": false,
-  "features": [
+  "actions": [
     {
       "type": "ascension:particles",
       "particle": "minecraft:snowflake",
       "count": {
         "base": 30.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:charge"
-            },
-            "operation": "add",
-            "scale": 50.0
-          }
-        ]
+        "charge": 50.0
       },
       "spread": {
         "base": 1.5,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:charge"
-            },
-            "operation": "add",
-            "scale": 2.0
-          }
-        ]
+        "charge": 2.0
       },
-      "speed": {
-        "base": 0.08
-      },
+      "speed": 0.08,
       "subject": "caster"
     },
     {
       "type": "ascension:sound",
       "sound": "minecraft:block.glass.break",
-      "volume": {
-        "base": 0.6
-      },
-      "pitch": {
-        "base": 0.75
-      },
+      "volume": 0.6,
+      "pitch": 0.75,
       "subject": "caster"
     },
     {
       "type": "ascension:buildup",
       "amount": {
         "base": 0.25,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:charge"
-            },
-            "operation": "add",
-            "scale": 0.4
-          }
-        ],
-        "maximum": 0.65
+        "maximum": 0.65,
+        "charge": 0.4
       },
       "decay_delay": 50,
       "channel": "ascension:frozen",
@@ -220,32 +163,17 @@
       "type": "ascension:effect",
       "duration": {
         "base": 60.0,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:charge"
-            },
-            "operation": "add",
-            "scale": 80.0
-          }
-        ],
-        "maximum": 140.0
+        "maximum": 140.0,
+        "charge": 80.0
       },
       "potency": {
         "base": 0.55,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:charge"
-            },
-            "operation": "add",
-            "scale": 0.45
-          }
-        ],
-        "maximum": 1.0
+        "maximum": 1.0,
+        "charge": 0.45
       },
       "definition": "#frozen_form",
       "subject": "target"
     }
-  ]
+  ],
+  "cooldown": 100
 }

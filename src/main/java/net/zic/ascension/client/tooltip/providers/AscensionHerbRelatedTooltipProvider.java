@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
+import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.common.blocks.crops.mushrooms.LingzhiMushroomBlock;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.herbs.HerbItem;
@@ -64,13 +65,22 @@ public final class AscensionHerbRelatedTooltipProvider implements ZenithTooltipP
             }
         }
 
-        if (stack.getItem() instanceof BlockItem blockItem
-                && blockItem.getBlock() instanceof LingzhiMushroomBlock mushroom) {
-            return Optional.of(new RelatedHerbInfo(
-                    mushroom.definition(),
-                    mushroom.harvestItem(),
-                    RelatedHerbKind.PLANT
-            ));
+        if (stack.getItem() instanceof BlockItem blockItem) {
+            if (blockItem.getBlock() instanceof LingzhiMushroomBlock mushroom) {
+                return Optional.of(new RelatedHerbInfo(
+                        mushroom.definition(),
+                        mushroom.harvestItem(),
+                        RelatedHerbKind.PLANT
+                ));
+            }
+
+            if (blockItem.getBlock() instanceof PodHerbBlock podHerb) {
+                return Optional.of(new RelatedHerbInfo(
+                        podHerb.definition(),
+                        podHerb.harvestItem(),
+                        RelatedHerbKind.PLANT
+                ));
+            }
         }
 
         return Optional.empty();

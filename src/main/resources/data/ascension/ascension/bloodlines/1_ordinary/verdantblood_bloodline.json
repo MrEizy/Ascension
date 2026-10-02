@@ -1,0 +1,47 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.bloodline.verdantblood.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.verdantblood.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/wood"
+  ],
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 0.08
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.03
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:foundation/body": 0.005,
+              "ascension:elemental/wood": 0.01
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:ordinary"
+  }
+}

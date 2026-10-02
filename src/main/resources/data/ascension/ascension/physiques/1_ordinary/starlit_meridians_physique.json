@@ -1,0 +1,49 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.starlit_meridians.name"
+  },
+  "description": {
+    "translate": "ascension.physique.starlit_meridians.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/star"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:agility": 1.5,
+    "ascension:spirit": 1.5
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.08,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:starlit_meridians_spirit_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": 0.5,
+      "ascension:elemental/star": 1.5
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/star": [
+        {
+          "value": 0.1,
+          "operation": "ADD_BASE",
+          "id": "ascension:starlit_meridians_star_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:ordinary"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "type": "ascension:body_cultivation",
+  "name": {
+    "translate": "ascension.skill.burning_bone_tempering.name"
+  },
+  "description": {
+    "translate": "ascension.skill.burning_bone_tempering.desc"
+  },
+  "path": "ascension:foundation/body",
+  "priority": 210,
+  "stimuli": [
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "gain": 1.25
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:attacking"
+        ]
+      },
+      "gain": 0.25
+    }
+  ],
+  "maximum_tempering": 180.0,
+  "conversion": {
+    "rate": 1.1,
+    "progress_per_tempering": 1.55,
+    "interval": 2,
+    "costs": [
+      {
+        "resource": "ascension:qi",
+        "amount": 1.0
+      },
+      {
+        "resource": "ascension:stamina",
+        "amount": 0.45
+      }
+    ]
+  },
+  "multipliers": [
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "condition": {
+        "on_fire": true
+      },
+      "multiplier": 1.6
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "condition": {
+        "effect": "minecraft:fire_resistance"
+      },
+      "multiplier": 1.2
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "condition": {
+        "unarmored": true
+      },
+      "multiplier": 1.2
+    }
+  ]
+}

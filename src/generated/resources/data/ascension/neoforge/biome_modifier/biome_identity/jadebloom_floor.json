@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "ascension:jadebloom_forest",
+  "features": "ascension:jadebloom_floor_scatter",
+  "step": "vegetal_decoration"
+}

@@ -50,7 +50,7 @@ public class PhysiqueHolder implements DataSourceInstance {
             AscensionCraft.LOGGER.debug("Writing physique {}",getPhysique());
             NbtHelpers.writeIdentifier(output,"physique",getPhysique());
             ValueOutput data = output.child("data");
-            if(getData() != null) getData().write(data);
+            if(getData() != null) getData().write(data,access);
             else throw new Exception("no physique data for physique "+physique);
         }catch (Exception e){
             AscensionCraft.LOGGER.error("Error writing physique {}",getPhysique());
@@ -73,7 +73,6 @@ public class PhysiqueHolder implements DataSourceInstance {
             AscensionCraft.LOGGER.info("Loaded physique {}",id);
         }catch (Exception e){
             AscensionCraft.LOGGER.error("Error loading physique");
-            AscensionCraft.LOGGER.error("stacktrace : ",e);
             //TODO set technique to default or keep null
         }
     }
@@ -81,7 +80,7 @@ public class PhysiqueHolder implements DataSourceInstance {
         buf.writeBoolean( physique != null);
         if(physique == null) return;
         ByteBufHelpers.encodeIdentifier(physique,buf);
-        getData().encode(buf);
+        getData().encode(buf,access);
     }
     public void decode(ByteBuf buf,RegistryAccess access){
         if(!buf.readBoolean()){

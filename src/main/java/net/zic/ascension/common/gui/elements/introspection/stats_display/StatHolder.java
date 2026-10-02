@@ -7,10 +7,13 @@ import net.lucent.easygui.gui.layout.positioning.rules.PositioningRules;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.core.entity.AscensionStats;
+import net.zic.zenithlib.stats.Stat;
 
 import java.text.DecimalFormat;
 
@@ -29,10 +32,10 @@ public class StatHolder extends RenderableElement {
         getPositioning().setX(-getWidth() / 2);
         getPositioning().setY(-getHeight() / 2);
 
-        addStat(frame, AscensionStats.VITALITY.get(), 0);
-        addStat(frame, AscensionStats.AGILITY.get(), 20);
-        addStat(frame, AscensionStats.STRENGTH.get(), 40);
-        addStat(frame, AscensionStats.SPIRIT.get(), 60);
+        addStat(frame, AscensionCraft.prefix("vitality"), AscensionStats.VITALITY.get(), 0);
+        addStat(frame, AscensionCraft.prefix("agility"), AscensionStats.AGILITY.get(), 20);
+        addStat(frame, AscensionCraft.prefix("strength"), AscensionStats.STRENGTH.get(), 40);
+        addStat(frame, AscensionCraft.prefix("spirit"), AscensionStats.SPIRIT.get(), 60);
 
         EasyLabel recoveryLabel = new EasyLabel(frame);
         recoveryLabel.setText(Component.translatable("gui.ascension.introspection.recovery"));
@@ -64,8 +67,8 @@ public class StatHolder extends RenderableElement {
         updateRecoveryRates();
     }
 
-    private void addStat(UIFrame frame, net.zic.zenithlib.stats.Stat stat, int y) {
-        StatsDisplay display = new StatsDisplay(frame, stat, stat.getName());
+    private void addStat(UIFrame frame, Identifier statId, Stat stat, int y) {
+        StatsDisplay display = new StatsDisplay(frame, statId, stat, stat.getName());
         display.getPositioning().setX(10);
         display.getPositioning().setY(y);
         addChild(display);

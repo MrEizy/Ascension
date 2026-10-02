@@ -1,8 +1,14 @@
 package net.zic.ascension.api.ascension.core.technique;
 
-import net.zic.ascension.api.ascension.core.RegistryObjectData;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.world.level.storage.ValueOutput;
 
-public interface TechniqueData extends RegistryObjectData {
+public interface TechniqueData {
 
 
+    public void write(ValueOutput output);
+
+
+    public void encode(ByteBuf buf);
 }

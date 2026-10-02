@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:clamp",
+    "input": {
+      "type": "minecraft:min",
+      "argument1": "ascension:terrain/mountain_land_gate",
+      "argument2": {
+        "type": "minecraft:min",
+        "argument1": "ascension:terrain/mountain_province",
+        "argument2": "ascension:terrain/core_profile"
+      }
+    },
+    "max": 1.0,
+    "min": 0.0
+  }
+}

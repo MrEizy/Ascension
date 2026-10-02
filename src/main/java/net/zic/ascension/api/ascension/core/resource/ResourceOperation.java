@@ -37,10 +37,12 @@ public final class ResourceOperation {
     ) {
         double before = resource.getAmount(entity);
         double resolved = resource.normalizeAmount(amount);
-        if (resolved > before) {
+        double minimum = Math.max(0.0D, resource.getMinimum(entity));
+        double available = Math.max(0.0D, before - minimum);
+        if (resolved > available) {
             return Application.rejected(before);
         }
-        double after = Math.max(0.0D, before - resolved);
+        double after = Math.max(minimum, before - resolved);
         Application result = new Application(ResourceTransactionService.Status.SUCCESS, before, after, resolved);
         apply(resource, entity, operation, result, simulate);
         return result;
@@ -55,8 +57,9 @@ public final class ResourceOperation {
     ) {
         double before = resource.getAmount(entity);
         double resolved = resource.normalizeAmount(amount);
-        double applied = Math.min(before, resolved);
-        double after = Math.max(0.0D, before - applied);
+        double minimum = Math.max(0.0D, resource.getMinimum(entity));
+        double applied = Math.min(Math.max(0.0D, before - minimum), resolved);
+        double after = Math.max(minimum, before - applied);
         Application result = new Application(
                 applied < resolved ? ResourceTransactionService.Status.PARTIAL : ResourceTransactionService.Status.SUCCESS,
                 before,

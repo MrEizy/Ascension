@@ -6,7 +6,12 @@
     "minecraft:forest",
     "minecraft:birch_forest",
     "minecraft:dark_forest",
-    "minecraft:birch_forest"
+    "minecraft:birch_forest",
+    "ascension:greystone_foothills",
+    "ascension:ancient_grove",
+    "ascension:jadebloom_forest",
+    "ascension:misty_woods",
+    "ascension:verdant_moor"
   ],
   "features": "ascension:ginseng_placed",
   "step": "vegetal_decoration"

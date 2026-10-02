@@ -6,16 +6,15 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastVisualState;
 import net.zic.ascension.api.ascension.core.skill.castable.CastData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastData;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
-import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
 import net.zic.ascension.impl.core.control.StaggerService;
+import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 public class CastingInstance {
@@ -37,18 +36,15 @@ public class CastingInstance {
         return castData;
     }
 
-    public HeldCastVisualState getHeldVisualState(Player caster) {
-        if (skill == null || !(castData instanceof HeldCastData heldData)) {
-            return null;
-        }
-        if (!(CoreRegistries.safeAccess(
+    public ActiveCastVisualState getActiveCastVisualState(Player caster) {
+        if (skill == null || !(CoreRegistries.safeAccess(
                 CoreRegistries.SKILL_REGISTRY,
                 skill,
                 caster.level().registryAccess()
-        ) instanceof HeldCastSkill heldSkill)) {
+        ) instanceof ActiveSkill activeSkill)) {
             return null;
         }
-        return heldSkill.visualState(caster, heldData);
+        return activeSkill.visualState(caster, castData);
     }
 
     public void startCast(Player caster, Identifier skill, PreCastData preCastData) {
@@ -161,17 +157,14 @@ public class CastingInstance {
     }
 
     public void recordDamage(Player caster, double damage) {
-        if (skill == null || !(castData instanceof HeldCastData heldData)) {
-            return;
-        }
-        if (!(CoreRegistries.safeAccess(
+        if (skill == null || !(CoreRegistries.safeAccess(
                 CoreRegistries.SKILL_REGISTRY,
                 skill,
                 caster.level().registryAccess()
-        ) instanceof HeldCastSkill heldSkill)) {
+        ) instanceof ActiveSkill activeSkill)) {
             return;
         }
-        if (heldSkill.shouldInterrupt(caster, heldData, ticksElapsed, damage)) {
+        if (activeSkill.shouldInterrupt(caster, castData, ticksElapsed, damage)) {
             endCast(caster, CastStatus.Reason.INTERRUPTED);
         }
     }

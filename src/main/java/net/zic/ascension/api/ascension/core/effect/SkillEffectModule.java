@@ -19,6 +19,10 @@ public interface SkillEffectModule {
     default void onUpdate(LivingEntity entity, SkillEffectContext context) {
     }
 
+    default void onUpdate(LivingEntity entity, SkillEffectContext context, int previousStacks, double previousPotency) {
+        onUpdate(entity, context);
+    }
+
     default void tick(LivingEntity entity, SkillEffectContext context) {
     }
 

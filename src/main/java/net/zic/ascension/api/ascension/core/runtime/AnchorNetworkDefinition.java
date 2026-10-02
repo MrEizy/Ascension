@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
+import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public record AnchorNetworkDefinition(
         List<Link> links,
         boolean rotateWithCaster,
         Optional<DefinitionRef<AreaFieldDefinition>> field,
-        Optional<DefinitionRef<RuntimeVisualDefinition>> visual
+        Optional<Identifier> visual
 ) {
     public static final Codec<AnchorNetworkDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ScaledValue.COMPACT_CODEC.fieldOf("duration").forGetter(AnchorNetworkDefinition::duration),
@@ -28,7 +28,7 @@ public record AnchorNetworkDefinition(
             Codec.BOOL.optionalFieldOf("rotate_with_caster", true)
                     .forGetter(AnchorNetworkDefinition::rotateWithCaster),
             DefinitionRef.codec(AreaFieldDefinition.CODEC).optionalFieldOf("field").forGetter(AnchorNetworkDefinition::field),
-            DefinitionRef.codec(RuntimeVisualDefinition.CODEC).optionalFieldOf("visual").forGetter(AnchorNetworkDefinition::visual)
+            Identifier.CODEC.optionalFieldOf("visual").forGetter(AnchorNetworkDefinition::visual)
     ).apply(instance, AnchorNetworkDefinition::new));
 
     public AnchorNetworkDefinition {

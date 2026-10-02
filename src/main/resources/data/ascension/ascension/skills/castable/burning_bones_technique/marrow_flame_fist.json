@@ -1,0 +1,85 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.marrow_flame_fist.name"
+  },
+  "description": {
+    "translate": "ascension.skill.marrow_flame_fist.desc"
+  },
+  "target": {
+    "type": "ascension:ray",
+    "range": 4.5,
+    "width": 0.75,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 4.5,
+        "per_mastery": 0.9
+      },
+      "stats": {
+        "ascension:strength": 0.14
+      },
+      "minimum": 2.0,
+      "maximum": 28.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:body",
+        "ascension:fire"
+      ],
+      "path": "ascension:foundation/body",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:effect",
+      "duration": {
+        "base": 60,
+        "per_mastery": 10
+      },
+      "potency": {
+        "base": 1.0,
+        "per_mastery": 0.25
+      },
+      "definition": "ascension:burning",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:flame",
+      "count": 16,
+      "spread": 0.45,
+      "speed": 0.05,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:item.firecharge.use",
+      "volume": 0.55,
+      "pitch": 0.85,
+      "subject": "target"
+    }
+  ],
+  "cost": [
+    {
+      "resource": "ascension:stamina",
+      "amount": 3.0
+    },
+    {
+      "resource": "ascension:qi",
+      "amount": 4.0
+    }
+  ],
+  "cooldown": {
+    "base": 70,
+    "per_mastery": -5,
+    "minimum": 42
+  }
+}

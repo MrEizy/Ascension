@@ -1,0 +1,49 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.hundred_venom_dantian.name"
+  },
+  "description": {
+    "translate": "ascension.physique.hundred_venom_dantian.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/poison"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 3.0,
+    "ascension:vitality": 2.0
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.12,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:hundred_venom_dantian_spirit_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": 1.25,
+      "ascension:elemental/poison": 2.25
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/poison": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:hundred_venom_dantian_poison_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:profound"
+  }
+}

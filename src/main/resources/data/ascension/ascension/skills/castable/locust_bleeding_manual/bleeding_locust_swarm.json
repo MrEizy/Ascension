@@ -1,12 +1,11 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.bleeding_locust_swarm.name"
   },
   "description": {
     "translate": "ascension.skill.bleeding_locust_swarm.desc"
   },
-  "default_accessible_level": 1,
   "definitions": {
     "effects": {
       "swarm": {
@@ -24,7 +23,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": 0.25
                 },
                 {
@@ -32,7 +30,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.008
                 }
               ],
@@ -62,7 +59,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": 0.35
                 }
               ],
@@ -89,183 +85,80 @@
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:ray",
-    "range": {
-      "base": 14.0
-    },
-    "width": {
-      "base": 0.5
-    },
+    "range": 14.0,
+    "width": 0.5,
     "filter": {
       "relations": [
         "neutral",
         "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
+      ]
     }
   },
-  "require_targets": true,
-  "levels": [
+  "actions": [
     {
-      "features": [
-        {
-          "type": "ascension:effect",
-          "duration": {
-            "base": 80
-          },
-          "potency": {
-            "base": 1.0
-          },
-          "definition": "#swarm",
-          "subject": "target"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:spore_blossom_air",
-          "count": {
-            "base": 18
-          },
-          "spread": {
-            "base": 0.55
-          },
-          "speed": {
-            "base": 0.025
-          },
-          "subject": "target"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:entity.silverfish.ambient",
-          "volume": {
-            "base": 0.7
-          },
-          "pitch": {
-            "base": 0.75
-          },
-          "subject": "target"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 5.0
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 100
-      }
+      "type": "ascension:effect",
+      "duration": {
+        "base": 80,
+        "per_mastery": 15.0
+      },
+      "potency": {
+        "base": 1.0,
+        "per_mastery": 0.2
+      },
+      "definition": "#swarm",
+      "subject": "target"
     },
     {
-      "features": [
-        {
-          "type": "ascension:effect",
-          "duration": {
-            "base": 95
-          },
-          "potency": {
-            "base": 1.2
-          },
-          "definition": "#swarm",
-          "subject": "target"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:spore_blossom_air",
-          "count": {
-            "base": 22
-          },
-          "spread": {
-            "base": 0.65
-          },
-          "speed": {
-            "base": 0.03
-          },
-          "subject": "target"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:entity.silverfish.ambient",
-          "volume": {
-            "base": 0.75
-          },
-          "pitch": {
-            "base": 0.68
-          },
-          "subject": "target"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 6.5
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 90
-      }
+      "type": "ascension:particles",
+      "particle": "minecraft:spore_blossom_air",
+      "count": {
+        "base": 18,
+        "per_mastery": 4.0
+      },
+      "spread": {
+        "base": 0.55,
+        "per_mastery": 0.1
+      },
+      "speed": {
+        "base": 0.025,
+        "per_mastery": 0.005
+      },
+      "subject": "target"
     },
     {
-      "features": [
-        {
-          "type": "ascension:effect",
-          "duration": {
-            "base": 110
-          },
-          "potency": {
-            "base": 1.4
-          },
-          "definition": "#swarm",
-          "subject": "target"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:spore_blossom_air",
-          "count": {
-            "base": 26
-          },
-          "spread": {
-            "base": 0.75
-          },
-          "speed": {
-            "base": 0.035
-          },
-          "subject": "target"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:entity.silverfish.ambient",
-          "volume": {
-            "base": 0.8
-          },
-          "pitch": {
-            "base": 0.62
-          },
-          "subject": "target"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 8.0
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 80
-      }
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.silverfish.ambient",
+      "volume": {
+        "base": 0.7,
+        "per_mastery": 0.05
+      },
+      "pitch": {
+        "base": 0.83,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:mastery"
+            },
+            "scale": 0.005,
+            "power": 2.0
+          }
+        ],
+        "mastery": -0.085
+      },
+      "subject": "target"
     }
-  ]
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 5.0,
+      "per_mastery": 1.5
+    }
+  },
+  "cooldown": {
+    "base": 100,
+    "per_mastery": -10.0
+  }
 }

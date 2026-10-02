@@ -1,0 +1,94 @@
+{
+  "elements": [
+    {
+      "type": "ascension:decal",
+      "offset": [
+        0,
+        0.025,
+        0
+      ],
+      "tint": [
+        90,
+        4,
+        8,
+        110
+      ],
+      "secondary_tint": [
+        235,
+        55,
+        28,
+        220
+      ],
+      "line_width": 2.2,
+      "no_depth": false,
+      "radius": 4.8,
+      "segments": 36,
+      "spin": 1.8,
+      "pulse": 0.1,
+      "pulse_speed": 0.25
+    },
+    {
+      "type": "ascension:ring",
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "tint": [
+        70,
+        2,
+        5,
+        90
+      ],
+      "secondary_tint": [
+        240,
+        60,
+        30,
+        205
+      ],
+      "line_width": 2.3,
+      "no_depth": false,
+      "radius": 4.2,
+      "segments": 28,
+      "spin": -2.5,
+      "pulse": 0.1,
+      "pulse_speed": 0.35
+    },
+    {
+      "type": "ascension:ring",
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "tint": [
+        240,
+        135,
+        55,
+        80
+      ],
+      "secondary_tint": [
+        255,
+        215,
+        135,
+        190
+      ],
+      "line_width": 1.6,
+      "no_depth": false,
+      "radius": 2.8,
+      "segments": 28,
+      "spin": 3.8,
+      "pulse": 0.1,
+      "pulse_speed": 0.35
+    },
+    {
+      "type": "ascension:particles",
+      "radius": 4.0,
+      "height": 0.25,
+      "length": 0.04,
+      "count": 4,
+      "interval": 2,
+      "particle": "minecraft:crit"
+    }
+  ]
+}

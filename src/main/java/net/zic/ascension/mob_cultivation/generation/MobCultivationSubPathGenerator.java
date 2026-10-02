@@ -8,7 +8,7 @@ import net.minecraft.world.level.Level;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.impl.core.path.foundation.FoundationPath;
+
 import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.mob_cultivation.MobCultivationManager;
 import net.zic.ascension.mob_cultivation.profile.ResolvedMobCultivationProfile;
@@ -61,7 +61,7 @@ public final class MobCultivationSubPathGenerator {
 
     public static boolean isValidSubPath(Mob mob, Identifier id) {
         Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, id, mob.registryAccess());
-        return path != null && !(path instanceof FoundationPath);
+        return path != null;
     }
 
     private static void addFoundationDefaults(Identifier foundation, Map<Identifier, Double> weights) {

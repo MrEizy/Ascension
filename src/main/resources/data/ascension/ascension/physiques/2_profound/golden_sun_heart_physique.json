@@ -1,0 +1,51 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.golden_sun_heart.name"
+  },
+  "description": {
+    "translate": "ascension.physique.golden_sun_heart.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/sun",
+    "ascension:elemental/yang"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:strength": 3.0,
+    "ascension:vitality": 2.0
+  },
+  "stat_modifiers": {
+    "ascension:strength": [
+      {
+        "value": 0.12,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:golden_sun_heart_strength_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 1.0,
+      "ascension:elemental/sun": 2.0,
+      "ascension:elemental/yang": 1.25
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/sun": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:golden_sun_heart_sun_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:profound"
+  }
+}

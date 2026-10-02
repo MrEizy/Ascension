@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:clamp",
+    "input": {
+      "type": "minecraft:max",
+      "argument1": {
+        "type": "minecraft:add",
+        "argument1": {
+          "type": "minecraft:add",
+          "argument1": "ascension:terrain/mountain_target_base_y",
+          "argument2": "ascension:terrain/ridge_boost_y"
+        },
+        "argument2": "ascension:terrain/massif_boost_y"
+      },
+      "argument2": "ascension:terrain/hero_target_y"
+    },
+    "max": 400.0,
+    "min": -64.0
+  }
+}

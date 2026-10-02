@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "ascension:verdant_moor",
+  "features": "ascension:verdant_moor_floor_scatter",
+  "step": "vegetal_decoration"
+}

@@ -33,8 +33,8 @@ public class PhysiqueTransferItem extends Item {
 
         AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
 
-        if(holder == null || holder.getData(player) == null) return InteractionResult.FAIL;
-        OriginSource source = holder.getData(player).getSource();
+        if(holder == null || holder.getData() == null) return InteractionResult.FAIL;
+        OriginSource source = holder.getData().getSource();
         if(!AscensionOriginSourceHelper.setPhysique(source,targetPhysique)){
             //TODO return error message to player here
             return InteractionResult.FAIL;

@@ -21,19 +21,23 @@
   "base_stats": {
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:essence": 1.5,
-    "ascension:soul": 2,
-    "ascension:wood": 2.5,
-    "ascension:sound": 2.5
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": 1.5,
+      "ascension:foundation/soul": 2,
+      "ascension:elemental/wood": 2.5,
+      "ascension:elemental/sound": 2.5
+    }
   },
-  "affinity_modifiers": {
-    "ascension:water": [
-      {
-        "value": 0.2,
-        "operation": "ADD_BASE",
-        "id": "ascension:tidecaller_root_water_modifier"
-      }
-    ]
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/water": [
+        {
+          "value": 0.2,
+          "operation": "ADD_BASE",
+          "id": "ascension:tidecaller_root_water_modifier"
+        }
+      ]
+    }
   }
 }

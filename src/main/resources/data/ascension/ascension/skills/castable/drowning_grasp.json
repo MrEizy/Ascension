@@ -1,75 +1,45 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Drowning Grasp",
   "description": "Crushes the air from a target's lungs, draining their breath before drowning them from within.",
-  "default_accessible_level": 1,
-  "targeting": {
+  "target": {
     "type": "ascension:ray",
-    "range": {
-      "base": 10.0
-    },
-    "width": {
-      "base": 0.45
-    },
+    "range": 10.0,
+    "width": 0.45,
     "filter": {
       "relations": [
         "neutral",
         "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
+      ]
     }
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:effect",
-      "duration": {
-        "base": 120.0
-      },
-      "potency": {
-        "base": 1.0
-      },
+      "duration": 120.0,
+      "potency": 1.0,
       "definition": "ascension:drowning",
       "subject": "target"
     },
     {
       "type": "ascension:particles",
       "particle": "minecraft:bubble",
-      "count": {
-        "base": 14.0
-      },
-      "spread": {
-        "base": 0.4
-      },
-      "speed": {
-        "base": 0.04
-      },
+      "count": 14.0,
+      "spread": 0.4,
+      "speed": 0.04,
       "subject": "target"
     },
     {
       "type": "ascension:sound",
       "sound": "minecraft:entity.player.splash.high_speed",
-      "volume": {
-        "base": 0.45
-      },
-      "pitch": {
-        "base": 0.65
-      },
+      "volume": 0.45,
+      "pitch": 0.65,
       "subject": "target"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:qi",
-      "operation": "ascension:consume",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 10.0
-      }
-    }
-  ],
-  "cooldown": {
-    "base": 100.0
-  }
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 10.0
+  },
+  "cooldown": 100.0
 }

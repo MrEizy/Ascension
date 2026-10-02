@@ -75,7 +75,7 @@ public record UpdateSkillSlotPacket(int slot, Identifier skill) implements Custo
                 return;
             }
 
-            OriginSource source = dataHolder.getData(player).getSource();
+            OriginSource source = dataHolder.getData().getSource();
             if (!AscensionOriginSourceHelper.hasSkill(source,skillId)) {
                 return;
             }

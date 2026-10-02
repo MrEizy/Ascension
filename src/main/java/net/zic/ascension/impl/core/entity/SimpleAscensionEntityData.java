@@ -13,7 +13,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
-import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
@@ -25,31 +24,48 @@ import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.starter.StarterSelectionStage;
 import net.zic.ascension.common.util.AscensionAttributes;
+import net.zic.ascension.configuration.RealmEffectivenessConfiguration;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.ZenithAttribute;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.network.ByteBufHelpers;
-import net.zic.zenithlib.stats.Stat;
-import net.zic.zenithlib.stats.StatInstance;
-import net.zic.zenithlib.stats.StatSheet;
-import net.zic.zenithlib.stats.event.StatsUpdatedEvent;
+import net.zic.zenithlib.stats.*;
 import net.zic.zenithlib.value_containers.ValueContainer;
 import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class SimpleAscensionEntityData implements AscensionEntityData {
 
+    /*
+     * Realm effectiveness can be large so gameplay
+     * attributes use deliberately exponent values
+     */
+    private static final double HEALTH_RESPONSE = 0.30D;
+    private static final double DAMAGE_RESPONSE = 0.30D;
+    private static final double RESOURCE_CAPACITY_RESPONSE = 0.30D;
+    private static final double STAMINA_CAPACITY_RESPONSE = 0.25D;
+    private static final double REGEN_RESPONSE = 0.20D;
+    private static final double MINING_RESPONSE = 0.15D;
+    private static final double FALL_RESPONSE = 0.08D;
+    private static final double JUMP_RESPONSE = 0.08D;
+    private static final double MOVEMENT_RESPONSE = 0.04D;
+    private static final double STEP_HEIGHT_RESPONSE = 0.04D;
+    private static final double ATTACK_SPEED_RESPONSE = 0.025D;
+
     private final StatSheet statSheet = new StatSheet();
+    private final Set<Stat> dirtyStats = new HashSet<>();
+
     private final PathBonusHolder pathBonusHolder = new PathBonusHolder();
     private final PathBonusHolder cachedPathBonusHolder = new PathBonusHolder();
 
+
     private final OriginSource source;
     private final LivingEntity attachedEntity;
+
+    private float cachedHealth;
 
     private boolean fullPatch;
     private OriginSourcePatch patch;
@@ -63,10 +79,31 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private Identifier selectedStarterPhysique;
     private boolean starterSelectionComplete;
 
+    private final Random random = new Random();
+
+    private String process = null;
     public SimpleAscensionEntityData(OriginSource source, LivingEntity entity) {
         this.source = source;
         this.attachedEntity = entity;
+        this.cachedHealth = Math.max(0.0F, entity.getHealth());
         this.source.setRegistryAccess(entity.registryAccess());
+    }
+    public void startProcess(String process){
+        if(this.process == null) this.process = process;
+    }
+    public boolean resolveProcess(String process){
+
+        if(this.process == null) return false;
+        if(!this.process.equals(process)) return false;
+        this.process = null;
+        resolve();
+        return true;
+    }
+
+    protected void resolve(){
+        if(!dirtyStats.isEmpty()) attachedEntity.getData(ZenithAttachments.STAT_HOLDER).updateStats(dirtyStats);
+        dirtyStats.clear();
+        //TODO add path bonus values here as well
     }
 
     public void initializeAttributes() {
@@ -74,107 +111,120 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                 ZenithAttachments.ATTRIBUTE_HOLDER
         );
 
-        // WIll BE BALANCED OVER TIME HOPEFULLY
-        addAttributeWithStatScaling(attributeHolder, Attributes.MAX_HEALTH,
-                AscensionStats.VITALITY.get(), "base_scaling", 2.0D);
-
-
-        addSuppressedAttributeWithStatScaling(attributeHolder,Attributes.ATTACK_DAMAGE,
-                AscensionStats.STRENGTH.get(), "strength_damage_scaling", 1.0D);
-
-        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.JUMP_STRENGTH,
-                AscensionStats.STRENGTH.get(), "strength_jump_scaling", 0.005D);
-
-        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
-                AscensionStats.STRENGTH.get(), "strength_movement_scaling", 0.00005D);
-
-        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
-                AscensionStats.AGILITY.get(), "agility_movement_scaling", 0.002D);
-
-        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.STEP_HEIGHT,
-                AscensionStats.AGILITY.get(), "agility_step_height_scaling", 0.05D);
+        applyAttributeStatScalings(attributeHolder, true);
 
         attributeHolder.addAttribute(Attributes.ARMOR);
         attributeHolder.addAttribute(Attributes.ARMOR_TOUGHNESS);
-
-        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
-                AscensionStats.STRENGTH.get(), "strength_attack_speed_scaling", 0.001D);
-
-        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
-                AscensionStats.AGILITY.get(), "agility_attack_speed_scaling", 0.001D);
-
         attributeHolder.addAttribute(Attributes.LUCK);
-
-        addSuppressedAttributeWithStatScaling(attributeHolder, Attributes.MINING_EFFICIENCY,
-                AscensionStats.STRENGTH.get(), "strength_mining_scaling", 0.001D);
-
-        addAttributeWithStatScaling(attributeHolder, Attributes.SAFE_FALL_DISTANCE,
-                AscensionStats.STRENGTH.get(), "strength_safe_fall_scaling", 0.1D);
-
-        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.MAX_QI,
-                AscensionStats.SPIRIT.get(), "spirit_max_qi_scaling", 10.0D);
-
-        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.QI_REGEN_RATE,
-                AscensionStats.SPIRIT.get(), "spirit_qi_regen_scaling", 0.25D);
-
         attributeHolder.addAttribute(AscensionAttributes.HEALTH_REGEN_RATE);
-
-        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
-                AscensionStats.VITALITY.get(), "vitality_max_stamina_scaling", 5.0D);
-
-        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
-                AscensionStats.STRENGTH.get(), "strength_max_stamina_scaling", 2.0D);
-
-        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
-                AscensionStats.VITALITY.get(), "vitality_stamina_regen_scaling", 0.4D);
-
-        addAttributeWithStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
-                AscensionStats.AGILITY.get(), "agility_stamina_regen_scaling", 0.2D);
-
         attributeHolder.addAttribute(AscensionAttributes.STAMINA_REGEN_DELAY);
     }
 
-    private void addSuppressedAttributeWithStatScaling(
-            ZenithAttributeHolder holder,
-            Holder<Attribute> attributeHolder,
-            Stat stat,
-            String scalingName,
-            double value){
-        Identifier scalingId = Identifier.fromNamespaceAndPath(
-                AscensionCraft.MOD_ID,
-                scalingName
-        );
+    private void applyAttributeStatScalings(ZenithAttributeHolder attributeHolder, boolean initializeAttributes) {
+        // WIll BE BALANCED OVER TIME HOPEFULLY
+        configureAttributeStatScaling(attributeHolder, Attributes.MAX_HEALTH,
+                AscensionStats.VITALITY.get(), "base_scaling", 2.0D, HEALTH_RESPONSE, false, initializeAttributes);
 
-        holder.addSuppressedAttribute(attributeHolder);
+        configureAttributeStatScaling(attributeHolder, Attributes.ATTACK_DAMAGE,
+                AscensionStats.STRENGTH.get(), "strength_damage_scaling", 1.0D, DAMAGE_RESPONSE, true, initializeAttributes);
 
-        ZenithAttribute zenithAttribute = holder.getAttribute(attributeHolder);
-        if (zenithAttribute == null) {
-            return;
-        }
+        configureAttributeStatScaling(attributeHolder, Attributes.JUMP_STRENGTH,
+                AscensionStats.STRENGTH.get(), "strength_jump_scaling", 0.005D, JUMP_RESPONSE, true, initializeAttributes);
 
-        zenithAttribute.removeScaling(stat, scalingId);
-        zenithAttribute.addStatScaling(stat, scalingId, value);
+        configureAttributeStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
+                AscensionStats.STRENGTH.get(), "strength_movement_scaling", 0.00005D, MOVEMENT_RESPONSE, true, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
+                AscensionStats.AGILITY.get(), "agility_movement_scaling", 0.002D, MOVEMENT_RESPONSE, true, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, Attributes.STEP_HEIGHT,
+                AscensionStats.AGILITY.get(), "agility_step_height_scaling", 0.05D, STEP_HEIGHT_RESPONSE, true, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
+                AscensionStats.STRENGTH.get(), "strength_attack_speed_scaling", 0.001D, ATTACK_SPEED_RESPONSE, true, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
+                AscensionStats.AGILITY.get(), "agility_attack_speed_scaling", 0.001D, ATTACK_SPEED_RESPONSE, true, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, Attributes.MINING_EFFICIENCY,
+                AscensionStats.STRENGTH.get(), "strength_mining_scaling", 0.001D, MINING_RESPONSE, true, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, Attributes.SAFE_FALL_DISTANCE,
+                AscensionStats.STRENGTH.get(), "strength_safe_fall_scaling", 0.1D, FALL_RESPONSE, false, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, AscensionAttributes.MAX_QI,
+                AscensionStats.SPIRIT.get(), "spirit_max_qi_scaling", 10.0D, RESOURCE_CAPACITY_RESPONSE, false, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, AscensionAttributes.QI_REGEN_RATE,
+                AscensionStats.SPIRIT.get(), "spirit_qi_regen_scaling", 0.25D, REGEN_RESPONSE, false, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
+                AscensionStats.VITALITY.get(), "vitality_max_stamina_scaling", 5.0D, STAMINA_CAPACITY_RESPONSE, false, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
+                AscensionStats.STRENGTH.get(), "strength_max_stamina_scaling", 2.0D, STAMINA_CAPACITY_RESPONSE, false, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
+                AscensionStats.VITALITY.get(), "vitality_stamina_regen_scaling", 0.4D, REGEN_RESPONSE, false, initializeAttributes);
+
+        configureAttributeStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
+                AscensionStats.AGILITY.get(), "agility_stamina_regen_scaling", 0.2D, REGEN_RESPONSE, false, initializeAttributes);
     }
-    private void addAttributeWithStatScaling(
+
+    private void configureAttributeStatScaling(
             ZenithAttributeHolder holder,
             Holder<Attribute> attributeHolder,
             Stat stat,
             String scalingName,
-            double value){
-        Identifier scalingId = Identifier.fromNamespaceAndPath(
-                AscensionCraft.MOD_ID,
-                scalingName
-        );
-
-        holder.addAttribute(attributeHolder);
+            double baseScaling,
+            double realmResponseExponent,
+            boolean suppressed,
+            boolean initializeAttribute) {
+        if (initializeAttribute) {
+            if (suppressed) {
+                holder.addSuppressedAttribute(attributeHolder);
+            } else {
+                holder.addAttribute(attributeHolder);
+            }
+        }
 
         ZenithAttribute zenithAttribute = holder.getAttribute(attributeHolder);
         if (zenithAttribute == null) {
             return;
         }
 
+        Identifier scalingId = Identifier.fromNamespaceAndPath(
+                AscensionCraft.MOD_ID,
+                scalingName
+        );
+        double realmResponse = RealmEffectivenessConfiguration.getGameplayMultiplier(
+                source,
+                realmResponseExponent
+        );
+        double effectiveScaling = baseScaling * realmResponse;
+        if (!Double.isFinite(effectiveScaling)) {
+            effectiveScaling = baseScaling;
+        }
+
         zenithAttribute.removeScaling(stat, scalingId);
-        zenithAttribute.addStatScaling(stat, scalingId, value);
+        zenithAttribute.addStatScaling(stat, scalingId, effectiveScaling);
+    }
+
+    public void refreshRealmEffectiveness() {
+        if (attachedEntity == null) {
+            return;
+        }
+
+        ZenithAttributeHolder attributeHolder = attachedEntity.getData(
+                ZenithAttachments.ATTRIBUTE_HOLDER
+        );
+        applyAttributeStatScalings(attributeHolder, false);
+        attachedEntity.getData(ZenithAttachments.STAT_HOLDER).updateStats(Set.of(
+                AscensionStats.VITALITY.get(),
+                AscensionStats.STRENGTH.get(),
+                AscensionStats.AGILITY.get(),
+                AscensionStats.SPIRIT.get()
+        ));
     }
 
 
@@ -190,12 +240,33 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
     @Override
     public void initialize() {
+        initializeInternal(false);
+    }
+
+    @Override
+    public void initializeAfterRespawn() {
+        initializeInternal(true);
+    }
+
+    private void initializeInternal(boolean fullHealth) {
         AscensionEntityData.super.initialize();
-        OriginSourcePatch loadedPatch = getSource().load();
+        ZenithAttributeHolder attributeHolder = attachedEntity.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
+        ZenithStatHolder statHolder = attachedEntity.getData(ZenithAttachments.STAT_HOLDER);
+        statHolder.startProcess("initialize_on_entity");
+        attributeHolder.startProcess("initialize_on_entity");
         initializeAttributes();
-        getSource().attachToEntity(getEntity());
+
+
+        markDirty(getSource().load(),true);
         initializePathBonuses();
-        markDirty(loadedPatch, true);
+        getSource().attachToEntity(getEntity());
+        refreshRealmEffectiveness();
+        statHolder.resolveProcess("initialize_on_entity");
+        attributeHolder.resolveProcess("initialize_on_entity");
+
+        float restoredHealth = fullHealth ? attachedEntity.getMaxHealth() : Math.min(cachedHealth, attachedEntity.getMaxHealth());
+        attachedEntity.setHealth(Math.max(0.0F, restoredHealth));
+        cachedHealth = attachedEntity.getHealth();
     }
 
 
@@ -261,6 +332,11 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         getEntity().syncData(CoreAttachments.PATH_BONUS_HOLDER);
     }
 
+    @Override
+    public void updatePathBonuses(Collection<PathBonus> bonuses) {
+        //TODO
+    }
+
     public void initializePathBonuses(){
         Collection<PathBonus> bonuses = AscensionOriginSourceHelper.getAllPathBonuses(source);
         Collection<PathBonus> selfBonuses = pathBonusHolder.getAllPathBonuses();
@@ -317,12 +393,17 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         statSheet.getStatInstance(stat).removeModifier(modifier);
         updateStatHolder(stat);
     }
-    //TODO add a process system like patching for bulk updates
-    public void updateStatHolder(Stat stat) {
-        if (getEntity() == null || stat == null) {
-            return;
-        }
-        NeoForge.EVENT_BUS.post(new StatsUpdatedEvent(getEntity(), List.of(stat)));
+
+
+
+
+
+    public void updateStatHolder(Stat stat){
+        if(getEntity() == null) return;
+        String processId = "singel_stat_update"+random.nextLong();
+        startProcess(processId);
+        dirtyStats.add(stat);
+        resolveProcess(process);
     }
 
     @Override
@@ -333,19 +414,6 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
         this.patch = patch;
         this.fullPatch = fullPatch;
-
-        if (patch == null) {
-            return;
-        }
-
-        if (!patch.dirtyStats().isEmpty()) {NeoForge.EVENT_BUS.post(
-                new StatsUpdatedEvent(attachedEntity, patch.dirtyStats()
-                        .stream()
-                        .map(StatInstance::getStat)
-                        .toList()
-                ));
-        }
-
         attachedEntity.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
     }
 
@@ -588,7 +656,10 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             originSource.setCachedData(input.childOrEmpty("source_data"));
 
 
+
             SimpleAscensionEntityData data = new SimpleAscensionEntityData(originSource, entity);
+            float savedHealth = input.getFloatOr("cached_health", entity.getHealth());
+            data.cachedHealth = Float.isFinite(savedHealth) ? Math.max(0.0F, savedHealth) : Math.max(0.0F, entity.getHealth());
 
             data.setCultivationSuppressed(
                     input.getBooleanOr("cultivation_suppressed", false)
@@ -613,7 +684,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         @Override
         public boolean write(SimpleAscensionEntityData attachment, ValueOutput output) {
             attachment.source.writeOriginSourceData(output.child("source_data"));
-
+            output.putFloat("cached_health", Math.max(0.0F, attachment.getEntity().getHealth()));
             output.putBoolean(
                     "cultivation_suppressed",
                     attachment.isCultivationSuppressed()

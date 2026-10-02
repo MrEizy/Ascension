@@ -1,0 +1,82 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.great_sun_sacred_body.name"
+  },
+  "description": {
+    "translate": "ascension.physique.great_sun_sacred_body.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/sun",
+    "ascension:elemental/yang"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:vitality": 12.0,
+    "ascension:strength": 10.0,
+    "ascension:spirit": 6.0,
+    "ascension:agility": 3.0
+  },
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.35,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:great_sun_sacred_body_vitality_modifier"
+      }
+    ],
+    "ascension:strength": [
+      {
+        "value": 0.3,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:great_sun_sacred_body_strength_modifier"
+      }
+    ],
+    "ascension:spirit": [
+      {
+        "value": 0.15,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:great_sun_sacred_body_spirit_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 3.0,
+      "ascension:elemental/sun": 5.0,
+      "ascension:elemental/yang": 4.0,
+      "ascension:elemental/fire": 2.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/sun": [
+        {
+          "value": 0.3,
+          "operation": "ADD_BASE",
+          "id": "ascension:great_sun_sacred_body_sun_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/yang": [
+        {
+          "value": 0.25,
+          "operation": "ADD_BASE",
+          "id": "ascension:great_sun_sacred_body_yang_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/fire": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:great_sun_sacred_body_fire_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:saint"
+  }
+}

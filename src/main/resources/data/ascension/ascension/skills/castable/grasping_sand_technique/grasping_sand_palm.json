@@ -1,0 +1,67 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.grasping_sand_palm.name"
+  },
+  "description": {
+    "translate": "ascension.skill.grasping_sand_palm.desc"
+  },
+  "target": {
+    "type": "ascension:cone",
+    "range": 4.5,
+    "angle": 38.0,
+    "maximum_targets": 3,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ],
+      "line_of_sight": true
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 2.0,
+        "per_mastery": 0.4
+      },
+      "stats": {
+        "ascension:strength": 0.06
+      },
+      "minimum": 1.0,
+      "maximum": 12.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:body"
+      ],
+      "path": "ascension:foundation/body"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:ash",
+      "count": 12,
+      "spread": 0.45,
+      "speed": 0.035,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.sand.break",
+      "volume": 0.55,
+      "pitch": 0.8,
+      "subject": "target"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:stamina",
+    "amount": 1.3
+  },
+  "cooldown": {
+    "base": 38,
+    "per_mastery": -3,
+    "minimum": 24
+  }
+}

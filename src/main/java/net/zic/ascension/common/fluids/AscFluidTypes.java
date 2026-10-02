@@ -22,15 +22,10 @@ public class AscFluidTypes {
     public static final Supplier<FluidType> LIQUIFIED_SPIRITUAL_QI_TYPE = FLUID_TYPES.register(
             "liquified_spiritual_qi_type",
             () -> new FluidType(FluidType.Properties.create()
+                    .isWaterLike(true)
                     .canSwim(true)
                     .canDrown(true)
                     .canPushEntity(true)
-                    .canExtinguish(true)
-                    .motionScale(0.014D)
-                    .fallDistanceModifier(0.0F)
-                    .density(1000)
-                    .viscosity(1000)
-                    .temperature(300)
                     .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
                     .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
             ));

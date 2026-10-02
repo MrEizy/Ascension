@@ -22,12 +22,6 @@
     "ascension:strength": 1,
     "ascension:vitality": 1
   },
-  "base_affinity": {
-    "ascension:body": 3,
-    "ascension:ice": 2.5,
-    "ascension:yin": 2,
-    "ascension:fan": 2.3
-  },
   "stat_modifiers": {
     "ascension:strength": [
       {
@@ -37,13 +31,23 @@
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:fan": [
-      {
-        "value": 0.2,
-        "operation": "ADD_BASE",
-        "id": "ascension:frostbitten_vein_body_physique_fan_modifier"
-      }
-    ]
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 3,
+      "ascension:elemental/ice": 2.5,
+      "ascension:elemental/yin": 2,
+      "ascension:weapon/fan": 2.3
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:weapon/fan": [
+        {
+          "value": 0.2,
+          "operation": "ADD_BASE",
+          "id": "ascension:frostbitten_vein_body_physique_fan_modifier"
+        }
+      ]
+    }
   }
 }

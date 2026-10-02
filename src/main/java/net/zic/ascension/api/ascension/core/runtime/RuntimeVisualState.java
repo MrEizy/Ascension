@@ -21,10 +21,15 @@ public record RuntimeVisualState(
         long seed,
         double primaryValue,
         double secondaryValue,
+        float scale,
+        double spin,
+        int tint,
+        int secondaryTint,
         RuntimeVisualDefinition definition
 ) {
     public static final int OWNER_RELATIVE = 1;
     public static final int ROTATE_WITH_OWNER = 1 << 1;
+    public static final int WHITE_TINT = 0xFFFFFFFF;
 
     public RuntimeVisualState {
         position = position == null ? Vec3.ZERO : position;
@@ -33,8 +38,30 @@ public record RuntimeVisualState(
         links = links == null ? List.of() : List.copyOf(links);
         stage = Math.max(0, stage);
         progress = Math.clamp(progress, 0.0F, 1.0F);
+        scale = Float.isFinite(scale) ? Math.max(0.0001F, scale) : 1.0F;
+        spin = Double.isFinite(spin) ? spin : 0.0D;
     }
 
+    public RuntimeVisualState(
+            UUID runtimeId,
+            Identifier visual,
+            UUID ownerId,
+            Vec3 position,
+            Vec3 offset,
+            List<Vec3> points,
+            List<Link> links,
+            long expiresAt,
+            int stage,
+            int flags,
+            float progress,
+            long seed,
+            double primaryValue,
+            double secondaryValue,
+            RuntimeVisualDefinition definition
+    ) {
+        this(runtimeId, visual, ownerId, position, offset, points, links, expiresAt, stage, flags, progress, seed,
+                primaryValue, secondaryValue, 1.0F, 0.0D, WHITE_TINT, WHITE_TINT, definition);
+    }
 
     public RuntimeVisualState(
             UUID runtimeId,
@@ -52,7 +79,8 @@ public record RuntimeVisualState(
             double primaryValue,
             double secondaryValue
     ) {
-        this(runtimeId, visual, ownerId, position, offset, points, links, expiresAt, stage, flags, progress, seed, primaryValue, secondaryValue, null);
+        this(runtimeId, visual, ownerId, position, offset, points, links, expiresAt, stage, flags, progress, seed,
+                primaryValue, secondaryValue, 1.0F, 0.0D, WHITE_TINT, WHITE_TINT, null);
     }
 
     public boolean hasFlag(int flag) {

@@ -2,20 +2,21 @@ package net.zic.ascension.client.particle;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastVisualState;
+import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldColour;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
-import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldStyle;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
-import net.zic.ascension.impl.core.skill.castable.cultivation.SimpleCultivationSkill;
-import net.zic.ascension.impl.core.skill.castable.held.HeldCastSkill;
-import net.zic.ascension.api.ascension.core.skill.castable.held.HeldCastVisualState;
 import net.zic.ascension.skill_casting.AscensionSkillListener;
 import net.zic.zenithlib.common.ZenithAttachments;
 
@@ -32,7 +33,7 @@ public final class ParticleFieldController {
     private static final double MAX_RENDER_DISTANCE_SQR = 48.0D * 48.0D;
     private static final long REMOTE_TIMEOUT_TICKS = 60L;
     private static final Map<List<ParticleFieldColour>, int[]> PALETTE_CACHE = new HashMap<>();
-    private static final Map<UUID, RemoteFieldState> REMOTE_FIELDS = new HashMap<>();
+    private static final Map<UUID, SyncedFieldState> SYNCED_FIELDS = new HashMap<>();
     private static final EmitterState LOCAL_EMITTER = new EmitterState();
 
     private static ClientLevel activeLevel;
@@ -61,44 +62,20 @@ public final class ParticleFieldController {
         tickRemote(level, localPlayer);
     }
 
-    public static void updateRemote(UUID playerId, Identifier skillId) {
+    public static void updateCast(UUID playerId, Identifier skillId, int stage, double progress) {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level != null && level != activeLevel) {
             clear();
             activeLevel = level;
         }
-        if (minecraft.player != null && minecraft.player.getUUID().equals(playerId)) {
-            return;
-        }
-
         if (skillId == null) {
-            REMOTE_FIELDS.remove(playerId);
+            SYNCED_FIELDS.remove(playerId);
             return;
         }
 
-        RemoteFieldState state = REMOTE_FIELDS.computeIfAbsent(playerId, ignored -> new RemoteFieldState());
-        state.setSkill(skillId, 0, 1.0D, false);
-        state.lastSyncTick = clientTicks;
-    }
-
-    public static void updateRemoteHeld(
-            UUID playerId,
-            Identifier skillId,
-            HeldCastVisualState.Phase phase,
-            int stage,
-            double charge
-    ) {
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player != null && minecraft.player.getUUID().equals(playerId)) {
-            return;
-        }
-        if (skillId == null || phase == HeldCastVisualState.Phase.STOPPED) {
-            REMOTE_FIELDS.remove(playerId);
-            return;
-        }
-        RemoteFieldState state = REMOTE_FIELDS.computeIfAbsent(playerId, ignored -> new RemoteFieldState());
-        state.setSkill(skillId, stage, charge, true);
+        SyncedFieldState state = SYNCED_FIELDS.computeIfAbsent(playerId, ignored -> new SyncedFieldState());
+        state.setSkill(skillId, stage, progress);
         state.lastSyncTick = clientTicks;
     }
 
@@ -108,35 +85,41 @@ public final class ParticleFieldController {
             return;
         }
 
-        var handler = player.getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER);
-        HeldCastVisualState heldState = handler.getHeldCastVisualState();
-        if (heldState != null) {
-            if (!tickEmitter(
-                    level,
-                    player,
-                    heldState.skill(),
-                    heldState.stage(),
-                    heldState.charge(),
-                    1.0D,
-                    LOCAL_EMITTER
-            )) {
-                LOCAL_EMITTER.reset();
-            }
+        SyncedFieldState synced = SYNCED_FIELDS.get(player.getUUID());
+        if (synced != null
+                && clientTicks - synced.lastSyncTick <= REMOTE_TIMEOUT_TICKS
+                && tickEmitter(
+                level,
+                player,
+                synced.skillId,
+                synced.stage,
+                synced.progress,
+                1.0D,
+                LOCAL_EMITTER
+        )) {
             return;
         }
 
-        Identifier castingSkill = handler.getCastingSkill();
-        Identifier skillId = castingSkill != null ? castingSkill : handler.getSkill(handler.getSelectedSlot());
-        if (skillId == null || !tickEmitter(level, player, skillId, 0, 1.0D, 1.0D, LOCAL_EMITTER)) {
+        var handler = player.getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER);
+        ActiveCastVisualState state = handler.getActiveCastVisualState();
+        if (state == null || !tickEmitter(
+                level,
+                player,
+                state.skill(),
+                state.stage(),
+                state.progress(),
+                1.0D,
+                LOCAL_EMITTER
+        )) {
             LOCAL_EMITTER.reset();
         }
     }
 
     private static void tickRemote(ClientLevel level, Player localPlayer) {
-        Iterator<Map.Entry<UUID, RemoteFieldState>> iterator = REMOTE_FIELDS.entrySet().iterator();
+        Iterator<Map.Entry<UUID, SyncedFieldState>> iterator = SYNCED_FIELDS.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<UUID, RemoteFieldState> entry = iterator.next();
-            RemoteFieldState state = entry.getValue();
+            Map.Entry<UUID, SyncedFieldState> entry = iterator.next();
+            SyncedFieldState state = entry.getValue();
             if (clientTicks - state.lastSyncTick > REMOTE_TIMEOUT_TICKS) {
                 iterator.remove();
                 continue;
@@ -157,7 +140,7 @@ public final class ParticleFieldController {
                     remotePlayer,
                     state.skillId,
                     state.stage,
-                    state.charge,
+                    state.progress,
                     densityMultiplier,
                     state.emitter
             )) {
@@ -176,14 +159,10 @@ public final class ParticleFieldController {
             EmitterState state
     ) {
         Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, player.registryAccess());
-        ParticleFieldDefinition definition;
-        if (skill instanceof SimpleCultivationSkill cultivationSkill && cultivationSkill.particleField().isPresent()) {
-            definition = cultivationSkill.particleField().get();
-        } else if (skill instanceof HeldCastSkill heldSkill && heldSkill.particleField(stage).isPresent()) {
-            definition = heldSkill.particleField(stage).get();
-        } else {
+        if (!(skill instanceof ActiveSkill activeSkill) || activeSkill.particleField(stage).isEmpty()) {
             return false;
         }
+        ParticleFieldDefinition definition = activeSkill.particleField(stage).get();
 
         state.activate(skillId, stage);
         state.activeTicks++;
@@ -236,13 +215,13 @@ public final class ParticleFieldController {
                 spawnPoint.orbitDirection(),
                 random
         );
-        ParticleFieldParticleKind kind = definition.randomParticle(random);
+        Identifier particleId = definition.randomParticle(random);
         int colour = randomPaletteColour(definition.colours(), random);
         float size = (float) definition.size().random(random);
         int lifetime = definition.lifetime().random(random);
 
         ParticleFieldParticle particle = ParticleFieldParticle.create(
-                kind,
+                particleId,
                 level,
                 spawnPoint.x(),
                 spawnPoint.y(),
@@ -266,6 +245,20 @@ public final class ParticleFieldController {
         );
         if (particle != null) {
             Minecraft.getInstance().particleEngine.add(particle);
+            return;
+        }
+
+        ParticleType<?> type = BuiltInRegistries.PARTICLE_TYPE.getValue(particleId);
+        if (type instanceof SimpleParticleType simple) {
+            level.addParticle(
+                    simple,
+                    spawnPoint.x(),
+                    spawnPoint.y(),
+                    spawnPoint.z(),
+                    velocity[0],
+                    velocity[1],
+                    velocity[2]
+            );
         }
     }
 
@@ -513,7 +506,7 @@ public final class ParticleFieldController {
 
     private static void clear() {
         LOCAL_EMITTER.reset();
-        REMOTE_FIELDS.clear();
+        SYNCED_FIELDS.clear();
         clientTicks = 0L;
     }
 
@@ -544,22 +537,20 @@ public final class ParticleFieldController {
         }
     }
 
-    private static final class RemoteFieldState {
+    private static final class SyncedFieldState {
         private Identifier skillId;
         private int stage;
-        private double charge = 1.0D;
-        private boolean held;
+        private double progress;
         private long lastSyncTick;
         private final EmitterState emitter = new EmitterState();
 
-        private void setSkill(Identifier newSkillId, int newStage, double newCharge, boolean newHeld) {
-            if (!newSkillId.equals(skillId) || stage != newStage || held != newHeld) {
+        private void setSkill(Identifier newSkillId, int newStage, double newProgress) {
+            if (!newSkillId.equals(skillId) || stage != newStage) {
                 emitter.reset();
             }
             skillId = newSkillId;
             stage = Math.max(0, newStage);
-            charge = Double.isFinite(newCharge) ? Math.clamp(newCharge, 0.0D, 1.0D) : 0.0D;
-            held = newHeld;
+            progress = Double.isFinite(newProgress) ? Math.clamp(newProgress, 0.0D, 1.0D) : 0.0D;
         }
     }
 }

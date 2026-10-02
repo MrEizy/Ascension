@@ -23,21 +23,25 @@
   "base_stats": {
     "ascension:vitality": 2
   },
-  "base_affinity": {
-    "ascension:essence": 2,
-    "ascension:water": 0.75,
-    "ascension:wood": 0.75,
-    "ascension:fire": 0.75,
-    "ascension:metal": 0.75,
-    "ascension:earth": 0.75
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": 2,
+      "ascension:elemental/water": 0.75,
+      "ascension:elemental/wood": 0.75,
+      "ascension:elemental/fire": 0.75,
+      "ascension:elemental/metal": 0.75,
+      "ascension:elemental/earth": 0.75
+    }
   },
-  "affinity_modifiers": {
-    "ascension:dark": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:five_elements_imbalance_modifier"
-      }
-    ]
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/dark": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:five_elements_imbalance_modifier"
+        }
+      ]
+    }
   }
 }

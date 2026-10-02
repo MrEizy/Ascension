@@ -5,7 +5,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionContext;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 
 import java.util.Set;
 import java.util.UUID;
@@ -37,7 +37,7 @@ public interface ProjectileBehavior {
             LivingEntity owner,
             LivingEntity target,
             Access projectile,
-            SkillExecutionContext execution
+            SkillActionContext execution
     ) {
     }
 

@@ -9,6 +9,10 @@ public interface ResourceType {
 
     double getMaximum(LivingEntity entity);
 
+    default double getMinimum(LivingEntity entity) {
+        return 0.0D;
+    }
+
     void setAmount(LivingEntity entity, double amount);
 
     default double normalizeAmount(double amount) {

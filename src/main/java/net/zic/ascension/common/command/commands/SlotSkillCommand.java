@@ -41,7 +41,7 @@ public class SlotSkillCommand {
                                     }
 
                                     Set<Identifier> validSkills = new HashSet<>();
-                                    for (Identifier skill : AscensionOriginSourceHelper.getSkills(holder.getData(player)
+                                    for (Identifier skill : AscensionOriginSourceHelper.getSkills(holder.getData()
                                             .getSource())) {
                                         if (CoreRegistries.safeAccess(
                                                 CoreRegistries.SKILL_REGISTRY,
@@ -99,7 +99,7 @@ public class SlotSkillCommand {
             return 0;
         }
 
-        OriginSource source = holder.getData(player).getSource();
+        OriginSource source = holder.getData().getSource();
         SkillCastHandler handler = player.getData(
                 AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER
         );

@@ -61,7 +61,10 @@ public class LingzhiMushroomFeature extends Feature<LingzhiMushroomConfiguration
 
                 BlockState state;
                 if (config.mushroomBlock() instanceof LingzhiMushroomBlock lingzhi) {
-                    state = lingzhi.wildState(lingzhi.definition().chooseWildAgeTier(random)).setValue(HorizontalDirectionalBlock.FACING, dir);
+                    state = lingzhi.wildState(
+                            lingzhi.definition().chooseWildAgeTier(random),
+                            lingzhi.definition().chooseWildQualityTier(random)
+                    ).setValue(HorizontalDirectionalBlock.FACING, dir);
                 } else {
                     state = config.mushroomBlock().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, dir);
                 }

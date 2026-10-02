@@ -1,0 +1,80 @@
+{
+  "type": "ascension:body_cultivation",
+  "name": {
+    "translate": "ascension.skill.iron_fist_tempering.name"
+  },
+  "description": {
+    "translate": "ascension.skill.iron_fist_tempering.desc"
+  },
+  "path": "ascension:foundation/body",
+  "priority": 100,
+  "stimuli": [
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "gain": 1.0
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:attacking"
+        ]
+      },
+      "gain": 0.35
+    }
+  ],
+  "maximum_tempering": 80.0,
+  "conversion": {
+    "rate": 0.55,
+    "progress_per_tempering": 1.0,
+    "interval": 2,
+    "costs": [
+      {
+        "resource": "ascension:qi",
+        "amount": 0.7
+      },
+      {
+        "resource": "ascension:stamina",
+        "amount": 0.3
+      }
+    ]
+  },
+  "multipliers": [
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "condition": {
+        "unarmored": true
+      },
+      "multiplier": 1.35
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:attacking"
+        ]
+      },
+      "condition": {
+        "effect": "minecraft:strength"
+      },
+      "multiplier": 1.15
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "condition": {
+        "maximum_health_fraction": 0.5
+      },
+      "multiplier": 1.15
+    }
+  ]
+}

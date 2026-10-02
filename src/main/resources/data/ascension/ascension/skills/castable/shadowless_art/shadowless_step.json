@@ -1,0 +1,48 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.shadowless_step.name"
+  },
+  "description": {
+    "translate": "ascension.skill.shadowless_step.desc"
+  },
+  "actions": [
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:smoke",
+      "count": 12,
+      "spread": 0.35,
+      "speed": 0.02,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:move",
+      "mode": "directional",
+      "direction": "look",
+      "distance": {
+        "base": 4.5,
+        "per_mastery": 0.65
+      },
+      "include_vertical": false,
+      "collision": "stop_before_collision",
+      "preserve_velocity": false,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.enderman.teleport",
+      "volume": 0.25,
+      "pitch": 1.45,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 3.0
+  },
+  "cooldown": {
+    "base": 42,
+    "per_mastery": -3,
+    "minimum": 24
+  }
+}

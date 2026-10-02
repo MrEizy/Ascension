@@ -1,0 +1,8 @@
+{
+  "type": "ascension:herb",
+  "config": {
+    "herb_block": "ascension:moonwell_jade_lotus_crop",
+    "spread": 4,
+    "tries": 5
+  }
+}

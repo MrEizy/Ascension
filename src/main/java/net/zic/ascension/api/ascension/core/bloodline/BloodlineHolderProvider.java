@@ -6,16 +6,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BloodlineHolderProvider implements DataSource {
@@ -36,7 +32,7 @@ public class BloodlineHolderProvider implements DataSource {
         holder.clearContainer();
 
         for(Identifier bloodline : bloodlines.keySet()){
-            AscensionOriginSourceHelper.addBloodline(source,bloodline,bloodlines.get(bloodline));
+            AscensionOriginSourceHelper.addBloodline(source,bloodline,bloodlines.get(bloodline),false);
         }
     }
 

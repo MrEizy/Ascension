@@ -1,0 +1,96 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.heaven_breaking_fist.name"
+  },
+  "description": {
+    "translate": "ascension.skill.heaven_breaking_fist.desc"
+  },
+  "cast": {
+    "mode": "charge",
+    "minimum_ticks": 10,
+    "maximum_ticks": 50,
+    "movement": {
+      "horizontal_drag": 0.4,
+      "disable_sprinting": true
+    },
+    "interruption": {
+      "damage_threshold": 18,
+      "accumulation_window": 20,
+      "release_after_minimum": true
+    }
+  },
+  "target": {
+    "type": "ascension:ray",
+    "range": 5.0,
+    "width": 0.9,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 9.0,
+        "per_mastery": 1.5,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "scale": 12.0
+          }
+        ]
+      },
+      "stats": {
+        "ascension:strength": {
+          "base": 0.28,
+          "per_mastery": 0.02
+        },
+        "ascension:vitality": 0.08
+      },
+      "minimum": 5.0,
+      "maximum": 70.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:body"
+      ],
+      "path": "ascension:foundation/body"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:end_rod",
+      "count": 20,
+      "spread": 0.55,
+      "speed": 0.08,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.player.attack.knockback",
+      "volume": 0.8,
+      "pitch": 0.65,
+      "subject": "target"
+    }
+  ],
+  "cost": [
+    {
+      "resource": "ascension:stamina",
+      "amount": 10.0
+    },
+    {
+      "resource": "ascension:qi",
+      "amount": 10.0
+    }
+  ],
+  "cooldown": {
+    "base": 180,
+    "per_mastery": -10,
+    "minimum": 120
+  }
+}

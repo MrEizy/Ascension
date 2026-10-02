@@ -1,7 +1,0 @@
-consider removing these all together, and instead make a static class that we use
-this static class would have all the same methods, but also include an origin source
-
-this removes all coupling to this specific OriginSource superclass, and lets stuff be used anywhere
-
-this would also allow me to front a lot of server side code, since the regular origin source already handles normal functions with interactions.
-and no changes should be made on the client

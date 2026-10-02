@@ -7,6 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
@@ -95,6 +96,9 @@ public interface Technique {
     TechniqueData loadData(ValueInput input);
     TechniqueData loadData(ByteBuf buf);
 
+    default RequirementHolder requirements() {
+        return RequirementHolder.EMPTY;
+    }
     default Optional<AscensionItemTooltipDefinition> itemTooltip() {
         return Optional.empty();
     }

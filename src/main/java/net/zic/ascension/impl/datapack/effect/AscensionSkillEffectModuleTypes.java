@@ -29,6 +29,8 @@ public final class AscensionSkillEffectModuleTypes {
             TYPES.add("particle_aura", SkillEffectModules.ParticleAura.CODEC);
     public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> RESOURCE_MODIFIER =
             TYPES.add("resource_modifier", SkillEffectModules.ResourceModifierModule.CODEC);
+    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> BASE_STATS =
+            TYPES.add("base_stats", SkillEffectModules.BaseStats.CODEC);
 
     private AscensionSkillEffectModuleTypes() {
     }

@@ -2,7 +2,7 @@ package net.zic.ascension.api.ascension.core.control;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.zic.ascension.api.ascension.core.skill.castable.feature.SkillExecutionFeature;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public record StaggerDefinition(
         ScaledValue immunityDuration,
         double movementMultiplier,
         boolean interruptHeldCasts,
-        List<SkillExecutionFeature> onGuardBreak
+        List<SkillAction> onGuardBreak
 ) {
     public static final Codec<StaggerDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ScaledValue.COMPACT_CODEC.optionalFieldOf("threshold", ScaledValue.constant(100.0D))
@@ -35,7 +35,7 @@ public record StaggerDefinition(
                     .forGetter(StaggerDefinition::movementMultiplier),
             Codec.BOOL.optionalFieldOf("interrupt_held_casts", true)
                     .forGetter(StaggerDefinition::interruptHeldCasts),
-            SkillExecutionFeature.CODEC.listOf().optionalFieldOf("on_guard_break", List.of())
+            SkillAction.CODEC.listOf().optionalFieldOf("on_guard_break", List.of())
                     .forGetter(StaggerDefinition::onGuardBreak)
     ).apply(instance, StaggerDefinition::new));
 

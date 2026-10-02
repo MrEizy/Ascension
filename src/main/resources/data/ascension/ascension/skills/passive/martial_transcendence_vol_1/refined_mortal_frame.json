@@ -1,0 +1,30 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.refined_mortal_frame.name"
+  },
+  "description": {
+    "translate": "ascension.skill.refined_mortal_frame.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:strength": [
+          {
+            "value": 0.06,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:refined_mortal_frame_strength"
+          }
+        ],
+        "ascension:vitality": [
+          {
+            "value": 0.06,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:refined_mortal_frame_vitality"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:add",
+  "argument1": {
+    "type": "ascension:height_target",
+    "baseline_y": 0.0,
+    "target_y": "ascension:terrain/surface_target_y"
+  },
+  "argument2": {
+    "type": "minecraft:y_clamped_gradient",
+    "from_value": 1.0,
+    "from_y": -64,
+    "to_value": -6.5,
+    "to_y": 416
+  }
+}

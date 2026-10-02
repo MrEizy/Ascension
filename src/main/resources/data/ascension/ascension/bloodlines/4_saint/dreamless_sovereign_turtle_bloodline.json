@@ -1,0 +1,181 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.bloodline.dreamless_sovereign_turtle.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.dreamless_sovereign_turtle.desc"
+  },
+  "paths": [
+    "ascension:foundation/soul",
+    "ascension:elemental/water",
+    "ascension:elemental/yin"
+  ],
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 0.3
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.24
+            },
+            {
+              "id": "ascension:strength",
+              "value": 0.13
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:foundation/soul": 0.04,
+              "ascension:elemental/water": 0.06,
+              "ascension:elemental/yin": 0.05,
+              "ascension:elemental/earth": 0.025,
+              "ascension:elemental/order": 0.015
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 25,
+        "end": 25
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 4.0
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 3.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 50,
+        "end": 50
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 5.0
+            },
+            {
+              "id": "ascension:strength",
+              "value": 4.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/water": 1.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 75,
+        "end": 75
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 5.0
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 4.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/yin": 1.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 100,
+        "end": 100
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 10.0
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 8.0
+            },
+            {
+              "id": "ascension:strength",
+              "value": 6.0
+            },
+            {
+              "id": "ascension:agility",
+              "value": 3.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:elemental/water": 2.0,
+              "ascension:elemental/yin": 2.0,
+              "ascension:elemental/earth": 1.0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:saint"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.thunder_spirit_veins.name"
+  },
+  "description": {
+    "translate": "ascension.physique.thunder_spirit_veins.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/lightning"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:agility": 3.0,
+    "ascension:strength": 2.0,
+    "ascension:vitality": 1.0
+  },
+  "stat_modifiers": {
+    "ascension:agility": [
+      {
+        "value": 0.12,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:thunder_spirit_veins_agility_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 1.0,
+      "ascension:elemental/lightning": 2.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/lightning": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:thunder_spirit_veins_lightning_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:profound"
+  }
+}

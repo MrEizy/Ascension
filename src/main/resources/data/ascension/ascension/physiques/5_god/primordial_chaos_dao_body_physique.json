@@ -1,0 +1,105 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.primordial_chaos_dao_body.name"
+  },
+  "description": {
+    "translate": "ascension.physique.primordial_chaos_dao_body.desc"
+  },
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/chaos",
+    "ascension:elemental/order"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 18.0,
+    "ascension:vitality": 15.0,
+    "ascension:strength": 12.0,
+    "ascension:agility": 12.0
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.5,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:primordial_chaos_dao_body_spirit_modifier"
+      }
+    ],
+    "ascension:vitality": [
+      {
+        "value": 0.4,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:primordial_chaos_dao_body_vitality_modifier"
+      }
+    ],
+    "ascension:strength": [
+      {
+        "value": 0.3,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:primordial_chaos_dao_body_strength_modifier"
+      }
+    ],
+    "ascension:agility": [
+      {
+        "value": 0.3,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:primordial_chaos_dao_body_agility_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": 5.0,
+      "ascension:elemental/chaos": 8.0,
+      "ascension:elemental/order": 7.0,
+      "ascension:elemental/space": 4.0,
+      "ascension:elemental/time": 4.0,
+      "ascension:elemental/fate": 3.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/chaos": [
+        {
+          "value": 0.45,
+          "operation": "ADD_BASE",
+          "id": "ascension:primordial_chaos_dao_body_chaos_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/order": [
+        {
+          "value": 0.4,
+          "operation": "ADD_BASE",
+          "id": "ascension:primordial_chaos_dao_body_order_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/space": [
+        {
+          "value": 0.25,
+          "operation": "ADD_BASE",
+          "id": "ascension:primordial_chaos_dao_body_space_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/time": [
+        {
+          "value": 0.25,
+          "operation": "ADD_BASE",
+          "id": "ascension:primordial_chaos_dao_body_time_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/fate": [
+        {
+          "value": 0.2,
+          "operation": "ADD_BASE",
+          "id": "ascension:primordial_chaos_dao_body_fate_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:god"
+  }
+}

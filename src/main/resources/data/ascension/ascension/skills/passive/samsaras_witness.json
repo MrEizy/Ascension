@@ -1,25 +1,30 @@
 {
-  "type": "ascension:simple_passive",
+  "type": "ascension:passive",
   "name": {
     "translate": "ascension.skill.samsaras_witness.name"
   },
   "description": {
     "translate": "ascension.skill.samsaras_witness.desc"
   },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.15,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:samsaras_witness_spirit"
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:spirit": [
+          {
+            "value": 0.15,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:samsaras_witness_spirit"
+          }
+        ],
+        "ascension:vitality": [
+          {
+            "value": 0.05,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:samsaras_witness_vitality"
+          }
+        ]
       }
-    ],
-    "ascension:vitality": [
-      {
-        "value": 0.05,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:samsaras_witness_vitality"
-      }
-    ]
-  }
+    }
+  ]
 }

@@ -1,12 +1,11 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.ninefold_carnage_circuit.name"
   },
   "description": {
     "translate": "ascension.skill.ninefold_carnage_circuit.desc"
   },
-  "default_accessible_level": 1,
   "definitions": {
     "fields": {
       "circuit": {
@@ -16,11 +15,9 @@
           "terms": [
             {
               "source": {
-                "type": "ascension:skill_level",
+                "type": "ascension:mastery",
                 "skill": "ascension:castable/ninefold_carnage_circuit"
-              },
-              "operation": "add",
-              "scale": 1.0
+              }
             }
           ],
           "maximum": 7.0
@@ -30,10 +27,9 @@
           "terms": [
             {
               "source": {
-                "type": "ascension:skill_level",
+                "type": "ascension:mastery",
                 "skill": "ascension:castable/ninefold_carnage_circuit"
               },
-              "operation": "add",
               "scale": 0.75
             }
           ],
@@ -44,10 +40,9 @@
           "terms": [
             {
               "source": {
-                "type": "ascension:skill_level",
+                "type": "ascension:mastery",
                 "skill": "ascension:castable/ninefold_carnage_circuit"
               },
-              "operation": "add",
               "scale": 40
             }
           ],
@@ -59,67 +54,26 @@
             "neutral",
             "hostile"
           ],
-          "include_players": true,
           "line_of_sight": false
         },
         "on_enter": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:crit",
-            "count": {
-              "base": 20
-            },
-            "spread": {
-              "base": 0.8
-            },
-            "speed": {
-              "base": 0.08
-            }
+            "count": 20,
+            "spread": 0.8,
+            "speed": 0.08
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.respawn_anchor.charge",
-            "volume": {
-              "base": 0.55
-            },
-            "pitch": {
-              "base": 0.62
-            }
+            "volume": 0.55,
+            "pitch": 0.62
           }
         ],
         "on_tick": [
           {
             "type": "ascension:damage",
-            "amount": {
-              "base": 1.8,
-              "terms": [
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:strength"
-                  },
-                  "operation": "add",
-                  "scale": 0.12
-                },
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:spirit"
-                  },
-                  "operation": "add",
-                  "scale": 0.1
-                },
-                {
-                  "source": {
-                    "type": "ascension:skill_level"
-                  },
-                  "operation": "add",
-                  "scale": 0.8
-                }
-              ],
-              "minimum": 1.0,
-              "maximum": 24.0
-            },
             "damage_type": "minecraft:magic",
             "classifications": [
               "ascension:skill",
@@ -128,7 +82,17 @@
               "ascension:slaughter",
               "ascension:wheel"
             ],
-            "path": "ascension:foundation/essence"
+            "path": "ascension:foundation/essence",
+            "base": {
+              "base": 1.8,
+              "mastery": 0.8
+            },
+            "stats": {
+              "ascension:strength": 0.12,
+              "ascension:spirit": 0.1
+            },
+            "minimum": 1.0,
+            "maximum": 24.0
           },
           {
             "type": "ascension:stagger",
@@ -140,7 +104,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:strength"
                   },
-                  "operation": "add",
                   "scale": 0.04
                 },
                 {
@@ -148,85 +111,36 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.03
-                },
-                {
-                  "source": {
-                    "type": "ascension:skill_level"
-                  },
-                  "operation": "add",
-                  "scale": 1.5
                 }
               ],
               "minimum": 1.0,
-              "maximum": 20.0
+              "maximum": 20.0,
+              "mastery": 1.5
             },
             "definition": "#circuit_pressure"
           },
           {
             "type": "ascension:particles",
             "particle": "minecraft:crit",
-            "count": {
-              "base": 5
-            },
-            "spread": {
-              "base": 0.3
-            },
-            "speed": {
-              "base": 0.04
-            }
+            "count": 5,
+            "spread": 0.3,
+            "speed": 0.04
           }
         ],
         "on_exit": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:smoke",
-            "count": {
-              "base": 8
-            },
-            "spread": {
-              "base": 0.35
-            },
-            "speed": {
-              "base": 0.025
-            }
+            "count": 8,
+            "spread": 0.35,
+            "speed": 0.025
           }
         ],
-        "visual": "#circuit_visual",
+        "visual": "ascension:skill/castable/ninefold_carnage_circuit/visual/circuit_visual",
         "on_expire": [
           {
             "type": "ascension:damage",
-            "amount": {
-              "base": 6.0,
-              "terms": [
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:strength"
-                  },
-                  "operation": "add",
-                  "scale": 0.26
-                },
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:spirit"
-                  },
-                  "operation": "add",
-                  "scale": 0.22
-                },
-                {
-                  "source": {
-                    "type": "ascension:skill_level"
-                  },
-                  "operation": "add",
-                  "scale": 3.5
-                }
-              ],
-              "minimum": 4.0,
-              "maximum": 58.0
-            },
             "damage_type": "minecraft:magic",
             "classifications": [
               "ascension:skill",
@@ -235,7 +149,17 @@
               "ascension:slaughter",
               "ascension:wheel"
             ],
-            "path": "ascension:foundation/essence"
+            "path": "ascension:foundation/essence",
+            "base": {
+              "base": 6.0,
+              "mastery": 3.5
+            },
+            "stats": {
+              "ascension:strength": 0.26,
+              "ascension:spirit": 0.22
+            },
+            "minimum": 4.0,
+            "maximum": 58.0
           },
           {
             "type": "ascension:stagger",
@@ -247,7 +171,6 @@
                     "type": "ascension:stat",
                     "stat": "ascension:strength"
                   },
-                  "operation": "add",
                   "scale": 0.12
                 },
                 {
@@ -255,57 +178,34 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.08
-                },
-                {
-                  "source": {
-                    "type": "ascension:skill_level"
-                  },
-                  "operation": "add",
-                  "scale": 5.0
                 }
               ],
               "minimum": 10.0,
-              "maximum": 62.0
+              "maximum": 62.0,
+              "mastery": 5.0
             },
             "definition": "#circuit_pressure"
           },
           {
             "type": "ascension:particles",
             "particle": "minecraft:flash",
-            "count": {
-              "base": 1
-            },
-            "spread": {
-              "base": 0.0
-            },
-            "speed": {
-              "base": 0.0
-            }
+            "count": 1,
+            "spread": 0.0,
+            "speed": 0.0
           },
           {
             "type": "ascension:particles",
             "particle": "minecraft:crit",
-            "count": {
-              "base": 34
-            },
-            "spread": {
-              "base": 1.1
-            },
-            "speed": {
-              "base": 0.13
-            }
+            "count": 34,
+            "spread": 1.1,
+            "speed": 0.13
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:entity.generic.explode",
-            "volume": {
-              "base": 0.72
-            },
-            "pitch": {
-              "base": 0.8
-            }
+            "volume": 0.72,
+            "pitch": 0.8
           }
         ]
       }
@@ -320,7 +220,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 2.0
             },
             {
@@ -328,21 +227,18 @@
                 "type": "ascension:stat",
                 "stat": "ascension:strength"
               },
-              "operation": "add",
               "scale": 1.1
             }
           ],
           "minimum": 50.0
         },
         "resistance": {
-          "base": 0.0,
           "terms": [
             {
               "source": {
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.0045
             }
           ],
@@ -357,376 +253,82 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.14
             }
           ],
           "minimum": 1.0
         },
         "decay_delay": 40,
-        "guard_break_duration": {
-          "base": 42.0
-        },
-        "immunity_duration": {
-          "base": 68.0
-        },
+        "guard_break_duration": 42.0,
+        "immunity_duration": 68.0,
         "movement_multiplier": 0.14,
         "interrupt_held_casts": true,
         "on_guard_break": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:crit",
-            "count": {
-              "base": 28
-            },
-            "spread": {
-              "base": 0.75
-            },
-            "speed": {
-              "base": 0.12
-            }
+            "count": 28,
+            "spread": 0.75,
+            "speed": 0.12
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:item.shield.break",
-            "volume": {
-              "base": 1.0
-            },
-            "pitch": {
-              "base": 0.72
-            }
-          }
-        ]
-      }
-    },
-    "visuals": {
-      "circuit_visual": {
-        "layers": [
-          {
-            "type": "ascension:ground_glyph",
-            "transform": {
-              "offset": [
-                0,
-                0.025,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                90,
-                4,
-                8,
-                110
-              ],
-              "secondary_color": [
-                235,
-                55,
-                28,
-                220
-              ],
-              "line_width": 2.2,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 4.8,
-              "segments": 36
-            },
-            "motion": {
-              "spin": 1.8,
-              "pulse": 0.1,
-              "pulse_speed": 0.25
-            }
-          },
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                70,
-                2,
-                5,
-                90
-              ],
-              "secondary_color": [
-                240,
-                60,
-                30,
-                205
-              ],
-              "line_width": 2.3,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 4.2,
-              "segments": 28
-            },
-            "motion": {
-              "spin": -2.5,
-              "pulse": 0.1,
-              "pulse_speed": 0.35
-            }
-          },
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                240,
-                135,
-                55,
-                80
-              ],
-              "secondary_color": [
-                255,
-                215,
-                135,
-                190
-              ],
-              "line_width": 1.6,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 2.8,
-              "segments": 28
-            },
-            "motion": {
-              "spin": 3.8,
-              "pulse": 0.1,
-              "pulse_speed": 0.35
-            }
-          },
-          {
-            "type": "ascension:particle_emitter",
-            "geometry": {
-              "radius": 4.0,
-              "height": 0.25,
-              "length": 0.04,
-              "count": 4
-            },
-            "motion": {
-              "interval": 2
-            },
-            "resources": {
-              "particle": "minecraft:crit"
-            }
-          }
-        ]
-      },
-      "cast": {
-        "layers": [
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "rotation": [
-                90,
-                0,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                80,
-                3,
-                8,
-                100
-              ],
-              "secondary_color": [
-                245,
-                70,
-                30,
-                230
-              ],
-              "line_width": 2.7,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 1.2,
-              "segments": 28
-            },
-            "motion": {
-              "spin": 7.0,
-              "pulse": 0.1,
-              "pulse_speed": 0.35
-            }
-          },
-          {
-            "type": "ascension:shell",
-            "appearance": {
-              "color": [
-                60,
-                0,
-                4,
-                8
-              ],
-              "secondary_color": [
-                220,
-                45,
-                20,
-                70
-              ],
-              "line_width": 1.7,
-              "filled": true,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 0.8,
-              "height": 1.8,
-              "segments": 24
-            },
-            "motion": {
-              "spin": 2.2,
-              "pulse": 0.08,
-              "pulse_speed": 0.4
-            }
+            "volume": 1.0,
+            "pitch": 0.72
           }
         ]
       }
     }
   },
-  "levels": [
+  "target": {
+    "type": "ascension:look_position",
+    "range": {
+      "base": 15,
+      "per_mastery": 5.0
+    },
+    "include_fluids": false,
+    "fallback_to_maximum_range": true
+  },
+  "actions": [
     {
-      "targeting": {
-        "type": "ascension:look_position",
-        "range": {
-          "base": 15
-        },
-        "include_fluids": false,
-        "fallback_to_maximum_range": true
-      },
-      "require_targets": true,
-      "features": [
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 18
-          },
-          "follow": true,
-          "definition": "#cast",
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:field",
-          "action": "apply",
-          "definition": "#circuit",
-          "subject": "position"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:crit",
-          "count": {
-            "base": 38
-          },
-          "spread": {
-            "base": 1.4
-          },
-          "speed": {
-            "base": 0.07
-          },
-          "subject": "position"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:block.respawn_anchor.set_spawn",
-          "volume": {
-            "base": 0.9
-          },
-          "pitch": {
-            "base": 0.62
-          },
-          "subject": "position"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 30
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 360
-      }
+      "type": "ascension:visual",
+      "duration": 18,
+      "follow": true,
+      "subject": "caster",
+      "visual": "ascension:skill/castable/ninefold_carnage_circuit/visual/cast"
     },
     {
-      "targeting": {
-        "type": "ascension:look_position",
-        "range": {
-          "base": 20
-        },
-        "include_fluids": false,
-        "fallback_to_maximum_range": true
-      },
-      "require_targets": true,
-      "features": [
-        {
-          "type": "ascension:visual",
-          "duration": {
-            "base": 18
-          },
-          "follow": true,
-          "definition": "#cast",
-          "subject": "caster"
-        },
-        {
-          "type": "ascension:field",
-          "action": "apply",
-          "definition": "#circuit",
-          "subject": "position"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:crit",
-          "count": {
-            "base": 38
-          },
-          "spread": {
-            "base": 1.4
-          },
-          "speed": {
-            "base": 0.07
-          },
-          "subject": "position"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:block.respawn_anchor.set_spawn",
-          "volume": {
-            "base": 0.9
-          },
-          "pitch": {
-            "base": 0.62
-          },
-          "subject": "position"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 38
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 300
-      }
+      "type": "ascension:field",
+      "action": "apply",
+      "definition": "#circuit",
+      "subject": "position"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:crit",
+      "count": 38,
+      "spread": 1.4,
+      "speed": 0.07,
+      "subject": "position"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.respawn_anchor.set_spawn",
+      "volume": 0.9,
+      "pitch": 0.62,
+      "subject": "position"
     }
-  ]
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 30,
+      "per_mastery": 8.0
+    }
+  },
+  "cooldown": {
+    "base": 360,
+    "per_mastery": -60.0
+  }
 }

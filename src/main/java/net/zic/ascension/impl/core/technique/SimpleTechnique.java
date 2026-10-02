@@ -9,12 +9,14 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
+import net.zic.ascension.api.ascension.core.technique.TechniqueSkillDefinition;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationManager;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
@@ -24,48 +26,24 @@ import net.zic.ascension.impl.core.technique.realm.MajorRealmDefinitionOverride;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
 import org.jspecify.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class SimpleTechnique implements Technique {
     private final Component name;
     private final Component description;
     private final Identifier path;
-
     private final List<Integer> milestoneRealms;
-    //{2,6}
-    //technique 1 at realm 4
-    //swap with technique 2.
-    // resetting to realm 4 -> 2
-    // real was 8 -> 6
-
-    //technique 2 had a min requirement of 3
-    //in the attempt to swap realm 4->2, 2 <3 fail to set
-    //add warning
     private final List<String> techniqueFamilies;
-    //bloodfeast
-    //standard_demonic
-
-    //enhance bloodfeast
-    //standard_demonic
-
-    //budhist technique
-    //standard_budisht
-
-    //demonic bodvista technique
-    //standard_demonic,standard_budhist
-
-    //technique compatible, if not compatible try force learn. it would reset cultivation. learn it
-    //add warning
     private final Integer maxMajorRealm;
     private final Integer maxMinorRealm;
     private final int minMajorRealm;
-
+    private final Map<Identifier, TechniqueSkillDefinition> skills;
     private final ProgressActionHolder holder;
-
-    private final Map<Integer,MajorRealmDefinitionOverride> majorRealmOverrides;
-
+    private final Map<Integer, MajorRealmDefinitionOverride> majorRealmOverrides;
     private final Optional<AscensionItemTooltipDefinition> itemTooltip;
-
+    private final RequirementHolder requirements;
 
     public SimpleTechnique(
             Component name,
@@ -77,40 +55,55 @@ public class SimpleTechnique implements Technique {
             Integer maxMinorRealm,
             int minMajorRealm,
             Optional<AscensionItemTooltipDefinition> itemTooltip,
+            Map<Identifier, TechniqueSkillDefinition> skills,
             ProgressActionHolder holder,
-            Map<Integer, MajorRealmDefinitionOverride> majorRealmOverrides) {
+            Map<Integer, MajorRealmDefinitionOverride> majorRealmOverrides,
+            RequirementHolder requirements
+    ) {
         this.name = name;
         this.description = description;
         this.path = path;
-        this.holder = holder;
-        this.milestoneRealms = milestoneRealms;
-        this.techniqueFamilies = techniqueFamilies;
-        this.majorRealmOverrides = majorRealmOverrides;
+        this.milestoneRealms = milestoneRealms == null ? List.of() : List.copyOf(milestoneRealms);
+        this.techniqueFamilies = techniqueFamilies == null ? List.of() : List.copyOf(techniqueFamilies);
         this.maxMajorRealm = maxMajorRealm;
         this.maxMinorRealm = maxMinorRealm;
         this.minMajorRealm = minMajorRealm;
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
+        this.skills = skills == null ? Map.of() : Map.copyOf(skills);
+        this.holder = holder;
+        this.majorRealmOverrides = majorRealmOverrides == null ? Map.of() : Map.copyOf(majorRealmOverrides);
+        this.requirements = requirements == null ? RequirementHolder.EMPTY : requirements;
     }
 
-
-
-    public ProgressActionHolder getHolder(){
+    public ProgressActionHolder getHolder() {
         return holder;
     }
-    public Map<Integer,MajorRealmDefinitionOverride> getMajorRealmOverrides(){
+
+    public Map<Identifier, TechniqueSkillDefinition> getSkills() {
+        return skills;
+    }
+
+    public Map<Integer, MajorRealmDefinitionOverride> getMajorRealmOverrides() {
         return majorRealmOverrides;
     }
 
-    public Optional<Integer> getHardCodedMaxMajorRealm(){
-        return Optional.of(maxMajorRealm);
+    public Optional<Integer> getHardCodedMaxMajorRealm() {
+        return Optional.ofNullable(maxMajorRealm);
     }
-    public Optional<Integer> getHardCodedMaxMinorRealm(){
-        return Optional.of(maxMinorRealm);
+
+    public Optional<Integer> getHardCodedMaxMinorRealm() {
+        return Optional.ofNullable(maxMinorRealm);
     }
-    public Optional<Integer> getHardCodedMinMajorRealm(){
+
+    public Optional<Integer> getHardCodedMinMajorRealm() {
         return Optional.of(minMajorRealm);
     }
 
+
+    @Override
+    public RequirementHolder requirements() {
+        return requirements;
+    }
 
     @Override
     public TechniqueType getType() {
@@ -122,12 +115,10 @@ public class SimpleTechnique implements Technique {
         return name;
     }
 
-
     @Override
     public Component getDescription(@Nullable TechniqueData techniqueData) {
         return description;
     }
-
 
     @Override
     public Identifier getPath() {
@@ -141,16 +132,28 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public void onAdded(OriginSource source, TechniqueData data) {
-
-        holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data,ProgressDirection.UP);
+        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
+        Identifier techniqueId = techniqueId(source);
+        if (pathInstance == null || techniqueId == null) {
+            return;
+        }
+        TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
+        holder.run(source, techniqueId, pathInstance, ProgressDirection.UP);
+        TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
     }
-    //TODO UPDATE PROGRESSION TEST TO TAKE IN A TYPE CALLED REGISTRY_OBJECT_DATA AS CONTEXT DATA
+
     @Override
     public void onRemoved(OriginSource source, TechniqueData data) {
-        holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data,ProgressDirection.DOWN);
+        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
+        Identifier techniqueId = techniqueId(source);
+        if (techniqueId == null) {
+            return;
+        }
+        if (pathInstance != null) {
+            holder.run(source, techniqueId, pathInstance, ProgressDirection.DOWN);
+        }
+        TechniqueSkillService.remove(source, techniqueId, skills);
     }
-
-
 
     @Override
     public List<Integer> getMilestoneRealms() {
@@ -164,47 +167,49 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public Component getMajorRealmName(int majorRealm, @Nullable TechniqueData techniqueData, RegistryAccess registryAccess) {
-        if(majorRealmOverrides.containsKey(majorRealm) && majorRealmOverrides.get(majorRealm).hasNameOverride()){
+        if (majorRealmOverrides.containsKey(majorRealm) && majorRealmOverrides.get(majorRealm).hasNameOverride()) {
             return majorRealmOverrides.get(majorRealm).getName();
         }
-        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,registryAccess);
-        return pathInstance == null ? Component.empty() : pathInstance.getMajorRealmName(majorRealm);
+        Path pathDefinition = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, path, registryAccess);
+        return pathDefinition == null ? Component.empty() : pathDefinition.getMajorRealmName(majorRealm);
     }
 
     @Override
     public Component getMinorRealmName(int majorRealm, int minorRealm, @Nullable TechniqueData techniqueData, RegistryAccess registryAccess) {
-        if(majorRealmOverrides.containsKey(majorRealm) &&
-                majorRealmOverrides.get(majorRealm).hasRealmOverride(minorRealm) &&
-                majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).hasNameOverride()){
+        if (majorRealmOverrides.containsKey(majorRealm)
+                && majorRealmOverrides.get(majorRealm).hasRealmOverride(minorRealm)
+                && majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).hasNameOverride()) {
             return majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).getName();
         }
-        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,registryAccess);
-
-        return pathInstance == null ? Component.empty() : pathInstance.getMinorRealmName(majorRealm,minorRealm);
+        Path pathDefinition = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, path, registryAccess);
+        return pathDefinition == null ? Component.empty() : pathDefinition.getMinorRealmName(majorRealm, minorRealm);
     }
 
     @Override
     public Component getRealmName(int majorRealm, int minorRealm, @Nullable TechniqueData techniqueData, RegistryAccess registryAccess) {
         return Component.empty()
-                .append(getMajorRealmName(majorRealm,techniqueData,registryAccess))
+                .append(getMajorRealmName(majorRealm, techniqueData, registryAccess))
                 .append("(")
-                .append(getMinorRealmName(majorRealm,minorRealm,techniqueData,registryAccess))
+                .append(getMinorRealmName(majorRealm, minorRealm, techniqueData, registryAccess))
                 .append(")");
     }
 
     @Override
     public int getMaxMajorRealm(@Nullable TechniqueData techniqueData, RegistryAccess registryAccess) {
-        if(maxMajorRealm != null)return maxMajorRealm;
-        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,registryAccess);
-
-        return pathInstance == null ? 9: pathInstance.getMaxMajorRealm();
+        if (maxMajorRealm != null) {
+            return maxMajorRealm;
+        }
+        Path pathDefinition = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, path, registryAccess);
+        return pathDefinition == null ? 9 : pathDefinition.getMaxMajorRealm();
     }
 
     @Override
     public int getMaxMinorRealm(int majorRealm, @Nullable TechniqueData techniqueData, RegistryAccess registryAccess) {
-        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,registryAccess);
-        if(majorRealm == getMaxMajorRealm(techniqueData,registryAccess)) return maxMinorRealm;
-        return pathInstance == null ? 9: pathInstance.getMaxMinorRealm(majorRealm);
+        Path pathDefinition = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, path, registryAccess);
+        if (majorRealm == getMaxMajorRealm(techniqueData, registryAccess) && maxMinorRealm != null) {
+            return maxMinorRealm;
+        }
+        return pathDefinition == null ? 9 : pathDefinition.getMaxMinorRealm(majorRealm);
     }
 
     @Override
@@ -214,71 +219,55 @@ public class SimpleTechnique implements Technique {
 
     @Override
     public double getMaxProgress(int majorRealm, int minorRealm, @Nullable TechniqueData techniqueData, RegistryAccess registryAccess) {
-        if(majorRealmOverrides.containsKey(majorRealm) &&
-                majorRealmOverrides.get(majorRealm).hasRealmOverride(minorRealm) &&
-                majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).hasProgressOverride()){
+        if (majorRealmOverrides.containsKey(majorRealm)
+                && majorRealmOverrides.get(majorRealm).hasRealmOverride(minorRealm)
+                && majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).hasProgressOverride()) {
             return majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).getProgress();
         }
-        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,registryAccess);
-
-        return pathInstance == null ? 100 : pathInstance.getMaxProgress(majorRealm,minorRealm);
+        Path pathDefinition = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, path, registryAccess);
+        return pathDefinition == null ? 100 : pathDefinition.getMaxProgress(majorRealm, minorRealm);
     }
 
     @Override
     public TribulationDefinition getTribulation(int majorRealm, int minorRealm, RegistryAccess access) {
-        if(majorRealmOverrides.containsKey(majorRealm) &&
-                majorRealmOverrides.get(majorRealm).hasRealmOverride(minorRealm) &&
-                majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).hasTribulationOverride()){
-            return majorRealmOverrides.get(majorRealm).getRealmOverride(minorRealm).getTribulation(access);
-        }
-        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,access);
-
-        return pathInstance == null ? null : pathInstance.getTribulationDefinition(majorRealm,minorRealm,access);
+        return null;
     }
 
     @Override
-    public boolean tryBreakthrough(LivingEntity entity, OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData) {
-        if(AscensionOriginSourceHelper.getPathData(source,getPath()).isBreakingThrough()) return false;
-        double maxProgress = getMaxProgress(majorRealm,minorRealm,techniqueData,source.getRegistryAccess());
-        double maxMajorRealm = getMaxMajorRealm(techniqueData,source.getRegistryAccess());
-        double maxMinorRealm = getMaxMinorRealm(majorRealm,techniqueData,source.getRegistryAccess());
-        //TODO trigger breakthrough here
+    public boolean tryBreakthrough(
+            LivingEntity entity,
+            OriginSource source,
+            int majorRealm,
+            int minorRealm,
+            double progress,
+            @Nullable TechniqueData techniqueData
+    ) {
+        double maxProgress = getMaxProgress(majorRealm, minorRealm, techniqueData, source.getRegistryAccess());
+        double maxMajor = getMaxMajorRealm(techniqueData, source.getRegistryAccess());
+        double maxMinor = getMaxMinorRealm(majorRealm, techniqueData, source.getRegistryAccess());
+        boolean canBreakthrough = maxProgress <= progress
+                && ((maxMinor > minorRealm && maxMajor >= majorRealm)
+                || (maxMinor <= minorRealm && maxMajor > majorRealm));
+        if (!canBreakthrough) {
+            return false;
+        }
 
-        boolean canBreakthrough = maxProgress <= progress &&
-                (
-                        (maxMinorRealm > minorRealm && maxMajorRealm >= majorRealm) ||
-                                (maxMinorRealm <= minorRealm && maxMajorRealm > majorRealm) );
-        if(!canBreakthrough) return false;
-
-
-        TribulationDefinition definition = getTribulation(majorRealm,minorRealm,source.getRegistryAccess());
-        if(definition == null) return true;
-        UUID id =   TribulationManager.getInstance().triggerTribulation(definition,entity);
-        AscensionOriginSourceHelper.getPathData(source,getPath()).setBreakthroughTribulation(
-                id,
-                source.getRegistryAccess()
-        );
-
-        TribulationManager.getInstance().setTribulationConsumer(id,(tribulationDefinition,data)->{
-            PathData pathData = AscensionOriginSourceHelper.getPathData(source,getPath());
-
-            pathData.handleRealmChange(
-                source,pathData.getMajorRealm()+1,0);
-            pathData.setProgress(0);
-            pathData.setCompletedTribulation(source,pathData.getMajorRealm(),pathData.getMinorRealm(),tribulationDefinition,data);
-        });
+        TribulationDefinition definition = getTribulation(majorRealm, minorRealm, source.getRegistryAccess());
+        if (definition == null) {
+            return true;
+        }
+        TribulationManager.getInstance().triggerTribulation(definition, entity);
         return false;
-
     }
 
     @Override
     public void onRealmUp(OriginSource source, TechniqueData techniqueData) {
-        holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),techniqueData,ProgressDirection.UP);
+        reconcileRealm(source, ProgressDirection.UP);
     }
 
     @Override
     public void onRealmDown(OriginSource source, TechniqueData techniqueData) {
-        holder.run(source,CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this),techniqueData,ProgressDirection.DOWN);
+        reconcileRealm(source, ProgressDirection.DOWN);
     }
 
     @Override
@@ -294,6 +283,21 @@ public class SimpleTechnique implements Technique {
     @Override
     public TechniqueData loadData(ByteBuf buf) {
         return new EmptyData();
+    }
+
+    private void reconcileRealm(OriginSource source, ProgressDirection direction) {
+        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
+        Identifier techniqueId = techniqueId(source);
+        if (pathInstance == null || techniqueId == null) {
+            return;
+        }
+        TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
+        holder.run(source, techniqueId, pathInstance, direction);
+        TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
+    }
+
+    private Identifier techniqueId(OriginSource source) {
+        return CoreRegistries.TECHNIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
     }
 
     public static final class EmptyData implements TechniqueData {

@@ -5,37 +5,17 @@
   "path": "ascension:foundation/essence",
   "max_realm": 2,
   "max_minor_realm": 2,
-  "realm_change_handler": [
-    {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [1]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/test_cast"
-          ]
-        }
-      ]
+  "skills": {
+    "ascension:castable/test_cast": {
+      "unlock": 1
     },
-
+    "ascension:castable/cultivation/true_breath": {}
+  },
+  "realm_change_handler": [
     {
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         "ascension:generic_give_stats"
-      ]
-    },
-    {
-      "condition": "ascension:realm_change/on_gained",
-      "actions": [
-        {
-          "type": "ascension:give_skills",
-          "skills": [
-            "ascension:castable/cultivation/true_breath"
-          ]
-        }
       ]
     }
   ],
@@ -43,7 +23,7 @@
     "0": {
       "name": "test realm",
       "realm_overrides": {
-        "2":{
+        "2": {
           "progress": 100
         }
       }
@@ -51,7 +31,7 @@
   },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
-    "template": "ascension:default_technique_manual",
+    "template": "ascension:default_cultivation_technique",
     "rank": "ascension:human"
   }
 }

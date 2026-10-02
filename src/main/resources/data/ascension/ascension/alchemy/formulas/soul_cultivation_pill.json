@@ -1,0 +1,20 @@
+{
+  "output": "ascension:soul_cultivation_pill",
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/circulation": 4.0,
+      "ascension:alchemy/nourishment": 7.0,
+      "ascension:alchemy/cleansing": 10.0,
+      "ascension:alchemy/restoration": 3.0
+    },
+    "affinities": {
+      "ascension:elemental/ice": 4.0,
+      "ascension:elemental/yin": 2.0,
+      "ascension:elemental/water": 4.0,
+      "ascension:elemental/moon": 2.0
+    }
+  },
+  "base_yield": 1,
+  "maximum_yield": 4,
+  "amplifier_per_bonus": 0.5
+}

@@ -9,6 +9,8 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.worldgen.features.HerbFeature;
 import net.zic.ascension.worldgen.features.LingzhiMushroomConfiguration;
 import net.zic.ascension.worldgen.features.LingzhiMushroomFeature;
+import net.zic.ascension.worldgen.features.SurfaceRockFeature;
+import net.zic.ascension.worldgen.features.SurfaceScatterFeature;
 
 public class AscFeatures {
     public static final DeferredRegister<Feature<?>> FEATURES =
@@ -19,6 +21,12 @@ public class AscFeatures {
 
     public static final DeferredHolder<Feature<?>, Feature<LingzhiMushroomConfiguration>> LINGZHI_MUSHROOM =
             FEATURES.register("lingzhi_mushroom", () -> new LingzhiMushroomFeature(LingzhiMushroomConfiguration.CODEC));
+
+    public static final DeferredHolder<Feature<?>, Feature<SurfaceRockFeature.Configuration>> SURFACE_ROCK =
+            FEATURES.register("surface_rock", () -> new SurfaceRockFeature(SurfaceRockFeature.Configuration.CODEC));
+
+    public static final DeferredHolder<Feature<?>, Feature<SurfaceScatterFeature.Configuration>> SURFACE_SCATTER =
+            FEATURES.register("surface_scatter", () -> new SurfaceScatterFeature(SurfaceScatterFeature.Configuration.CODEC));
 
 
     public static void register(IEventBus eventBus) {

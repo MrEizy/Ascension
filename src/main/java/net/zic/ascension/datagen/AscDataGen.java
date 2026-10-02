@@ -30,12 +30,15 @@ public class AscDataGen {
 
         generator.addProvider(true, new AscRecipeProvider.Runner(packOutput, lookupProvider));
 
-        generator.addProvider(true, new AscDatapackProvider(packOutput, lookupProvider));
+        AscDatapackProvider datapackProvider = new AscDatapackProvider(packOutput, lookupProvider);
+        generator.addProvider(true, datapackProvider);
 
         generator.addProvider(true, new AscModelProvider(packOutput));
         generator.addProvider(true, new AscBlockTagProvider(packOutput, lookupProvider));
         generator.addProvider(true, new AscItemTagProvider(packOutput, lookupProvider));
         generator.addProvider(true, new AscEntityTypeTagProvider(packOutput, lookupProvider));
+        generator.addProvider(true, new AscBiomeTagProvider(packOutput, datapackProvider.getRegistryProvider()));
+        generator.addProvider(true, new AscWorldPresetTagProvider(packOutput));
         generator.addProvider(true, new MobCultivationProfileDataProvider(packOutput));
         generator.addProvider(true, new MobCultivationLootDataProvider(packOutput));
         generator.addProvider(true, new AscTooltipDataProvider(packOutput, AscensionCraft.MOD_ID));

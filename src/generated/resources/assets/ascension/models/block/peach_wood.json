@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "ascension:block/peach_log",
+    "side": "ascension:block/peach_log"
+  }
+}

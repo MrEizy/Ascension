@@ -1,0 +1,51 @@
+{
+  "type": "ascension:hermite_spline",
+  "coordinate": "ascension:terrain/continents",
+  "points": [
+    {
+      "derivative": 0.0,
+      "location": -1.0,
+      "value": -18.0
+    },
+    {
+      "derivative": 45.0,
+      "location": -0.72,
+      "value": 10.0
+    },
+    {
+      "derivative": 90.0,
+      "location": -0.5,
+      "value": 32.0
+    },
+    {
+      "derivative": 70.0,
+      "location": -0.3,
+      "value": 51.0
+    },
+    {
+      "derivative": 40.0,
+      "location": -0.16,
+      "value": 59.5
+    },
+    {
+      "derivative": 22.0,
+      "location": -0.06,
+      "value": 64.0
+    },
+    {
+      "derivative": 7.0,
+      "location": 0.1,
+      "value": 66.0
+    },
+    {
+      "derivative": 3.0,
+      "location": 0.4,
+      "value": 68.0
+    },
+    {
+      "derivative": 0.0,
+      "location": 1.0,
+      "value": 69.0
+    }
+  ]
+}

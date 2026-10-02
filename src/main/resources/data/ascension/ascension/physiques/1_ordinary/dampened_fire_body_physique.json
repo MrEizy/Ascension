@@ -22,13 +22,6 @@
   "base_stats": {
     "ascension:strength": 2
   },
-  "base_affinity": {
-    "ascension:body": 1,
-    "ascension:essence": 1.5,
-    "ascension:water": 1,
-    "ascension:wood": 1,
-    "ascension:fan": 2
-  },
   "stat_modifiers": {
     "ascension:strength": [
       {
@@ -38,13 +31,24 @@
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:fan": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:dampened_fire_body_physique_fan_modifier"
-      }
-    ]
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 1,
+      "ascension:foundation/essence": 1.5,
+      "ascension:elemental/water": 1,
+      "ascension:elemental/wood": 1,
+      "ascension:weapon/fan": 2
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:weapon/fan": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:dampened_fire_body_physique_fan_modifier"
+        }
+      ]
+    }
   }
 }

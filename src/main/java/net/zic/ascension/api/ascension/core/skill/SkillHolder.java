@@ -8,8 +8,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.nbt.NbtHelpers;
@@ -51,7 +49,15 @@ public class SkillHolder implements DataSourceInstance {
 
         return true;
     }
-
+    public boolean addSkill(Identifier skill,SkillData data,Identifier owner, boolean overwrite){
+        if((hasSkill(skill) && overwrite) || !hasSkill(skill)) {
+            if(hasCachedSkill(skill)) data = removeCachedSkill(skill);
+            skills.put(skill,data);
+            skillOwners.computeIfAbsent(skill,key->new HashSet<>());
+        }
+        skillOwners.get(skill).add(owner);
+        return true;
+    }
     /**
      * removes a skill only if the ownerIdMap is empty
      * @param skill the skill we want to remove
@@ -147,7 +153,7 @@ public class SkillHolder implements DataSourceInstance {
                 NbtHelpers.writeIdentifier(skillOutput,"skill",skill);
 
                 ValueOutput skillData = skillOutput.child("data");
-                if(getSkillData(skill) != null) getSkillData(skill).write(skillData);
+                if(getSkillData(skill) != null) getSkillData(skill).write(skillData,access);
                 else throw new Exception("no skill data for skill "+skillData);
             }catch (Exception e){
                 AscensionCraft.LOGGER.debug("Error writing Skill {}",skill);
@@ -190,14 +196,14 @@ public class SkillHolder implements DataSourceInstance {
         buf.writeInt(skills.size());
         for(Identifier skill : skills.keySet()){
             ByteBufHelpers.encodeIdentifier(skill,buf);
-            getSkillData(skill).encode(buf);
+            getSkillData(skill).encode(buf,access);
         }
     }
     protected void encodePartialPatch(ByteBuf buf, RegistryAccess access){
         buf.writeInt(dirtySkills.size());
         for(Identifier dirtySkill : dirtySkills){
             ByteBufHelpers.encodeIdentifier(dirtySkill,buf);
-            getSkillData(dirtySkill).encode(buf);
+            getSkillData(dirtySkill).encode(buf,access);
         }
         ByteBufHelpers.encodeCollection(toRemoveSkills,buf,ByteBufHelpers::encodeIdentifier);
     }

@@ -12,6 +12,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
+import net.zic.ascension.common.item.artifacts.pills.ModPills;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
 import java.util.function.Supplier;
@@ -49,6 +50,8 @@ public class ModCreativeModeTabs {
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.BLACK_IRON_BLOCK.get()))
                     .title(Component.translatable("creativetab.ascension.blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModBlocks.SPIRITUAL_STONE_CLUSTER);
+                        output.accept(ModBlocks.SPIRIT_VEIN);
                         output.accept(ModBlocks.JADE_BLOCK);
                         output.accept(ModBlocks.JADE_ORE);
                         output.accept(ModBlocks.BLACK_IRON_BLOCK);
@@ -58,6 +61,18 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.AUCTION_HOUSE_CORE);
                         output.accept(ModBlocks.AUCTION_BIDDER);
 
+                        output.accept(ModBlocks.PEACH_LOG);
+                        output.accept(ModBlocks.PEACH_WOOD);
+                        output.accept(ModBlocks.STRIPPED_PEACH_LOG);
+                        output.accept(ModBlocks.STRIPPED_PEACH_WOOD);
+
+                        output.accept(ModBlocks.PEACH_PLANKS);
+                        output.accept(ModBlocks.PEACH_LEAVES);
+
+                        output.accept(ModBlocks.PEACH_SAPLING);
+
+                        output.accept(ModBlocks.FERMENTING_BARREL);
+
 
                     }).build());
 
@@ -66,15 +81,29 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("creativetab.ascension.alchemy"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.CULTIVATION_SOIL);
+                        output.accept(ModBlocks.ALCHEMY_FURNACE);
                         output.accept(ModItems.JADE_DEW_GRASS);
                         output.accept(ModItems.JADE_DEW_GRASS_SEEDS);
                         output.accept(ModItems.GINSENG);
                         output.accept(ModItems.FIRE_GINSENG);
                         output.accept(ModItems.SNOW_GINSENG);
+                        output.accept(ModItems.NINE_SUN_FIRE_ROOT);
+                        output.accept(ModItems.MOONWELL_JADE_LOTUS);
+                        output.accept(ModItems.HEAVENLY_THUNDER_PEACH);
                         output.accept(ModBlocks.LINGZHI_MUSHROOM_B);
                         output.accept(ModItems.LINGZHI_MUSHROOM);
                         output.accept(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B);
                         output.accept(ModItems.BLOOD_LINGZHI_MUSHROOM);
+                        output.accept(ModItems.WHITE_JADE_ORCHID);
+                        output.accept(ModItems.PEACH);
+                        output.accept(ModItems.PILL_RESIDUE);
+                        output.accept(ModPills.maximumStack(ModItems.FASTING_PILL.get()));
+                        output.accept(ModPills.maximumStack(ModItems.QI_REPLENISHING_PILL.get()));
+                        output.accept(ModPills.maximumStack(ModItems.REGENERATION_PILL.get()));
+                        output.accept(ModPills.maximumStack(ModItems.STAMINA_REPLENISHING_PILL.get()));
+                        output.accept(ModPills.maximumStack(ModItems.BODY_CULTIVATION_PILL.get()));
+                        output.accept(ModPills.maximumStack(ModItems.SOUL_CULTIVATION_PILL.get()));
+                        output.accept(ModPills.maximumStack(ModItems.ESSENCE_CULTIVATION_PILL.get()));
 
 
                     }).build());

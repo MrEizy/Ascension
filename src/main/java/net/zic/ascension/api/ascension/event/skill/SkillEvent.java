@@ -5,10 +5,10 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.skill.LevelledSkillData;
+import net.zic.ascension.api.ascension.core.skill.ProgressingSkillData;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
-import net.zic.ascension.api.ascension.core.skill.SkillLevelSnapshot;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionSnapshot;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public abstract class SkillEvent extends Event {
@@ -74,23 +74,30 @@ public abstract class SkillEvent extends Event {
         }
     }
 
-    public static final class LevelChanged extends SkillEvent {
-        private final SkillLevelSnapshot previous;
-        private final SkillLevelSnapshot current;
+    public static final class ProgressionChanged extends SkillEvent {
+        private final SkillProgressionSnapshot previous;
+        private final SkillProgressionSnapshot current;
         private final Reason reason;
 
-        public LevelChanged(OriginSource source, Identifier skill, LevelledSkillData skillData, SkillLevelSnapshot previous, SkillLevelSnapshot current, Reason reason) {
+        public ProgressionChanged(
+                OriginSource source,
+                Identifier skill,
+                ProgressingSkillData skillData,
+                SkillProgressionSnapshot previous,
+                SkillProgressionSnapshot current,
+                Reason reason
+        ) {
             super(source, skill, skillData);
             this.previous = previous;
             this.current = current;
             this.reason = reason;
         }
 
-        public SkillLevelSnapshot getPrevious() {
+        public SkillProgressionSnapshot getPrevious() {
             return previous;
         }
 
-        public SkillLevelSnapshot getCurrent() {
+        public SkillProgressionSnapshot getCurrent() {
             return current;
         }
 
@@ -99,63 +106,68 @@ public abstract class SkillEvent extends Event {
         }
 
         public enum Reason {
-            TRAINED_LEVEL,
+            TRAINED_PROGRESSION,
             EXPERIENCE,
-            LEVEL_FLOOR,
-            LEVEL_CAP,
-            LEVEL_CONTRIBUTION,
-            CONTRIBUTION_REMOVED
+            CAP,
+            CAP_REMOVED
         }
     }
 
-    public static final class LevelResolve extends SkillEvent {
-        private final int permanentLevel;
-        private final int absoluteMaximumLevel;
+    public static final class ProgressionResolve extends SkillEvent {
+        private final int permanentProgression;
+        private final int absoluteMaximumProgression;
         private int additiveModifier;
-        private int minimumLevel;
-        private int maximumLevel;
+        private int minimumProgression;
+        private int maximumProgression;
 
-        public LevelResolve(OriginSource source, Identifier skill, LevelledSkillData skillData, int permanentLevel, int maximumLevel) {
+        public ProgressionResolve(
+                OriginSource source,
+                Identifier skill,
+                ProgressingSkillData skillData,
+                int permanentProgression,
+                int maximumProgression
+        ) {
             super(source, skill, skillData);
-            this.permanentLevel = permanentLevel;
-            this.absoluteMaximumLevel = Math.max(0, maximumLevel);
-            this.maximumLevel = this.absoluteMaximumLevel;
+            this.permanentProgression = permanentProgression;
+            this.absoluteMaximumProgression = Math.max(1, maximumProgression);
+            this.minimumProgression = 1;
+            this.maximumProgression = this.absoluteMaximumProgression;
         }
 
-        public int getPermanentLevel() {
-            return permanentLevel;
+        public int getPermanentProgression() {
+            return permanentProgression;
         }
 
         public int getAdditiveModifier() {
             return additiveModifier;
         }
 
-        public void addLevels(int levels) {
-            additiveModifier += levels;
+        public void addProgression(int progression) {
+            additiveModifier += progression;
         }
 
-        public int getMinimumLevel() {
-            return minimumLevel;
+        public int getMinimumProgression() {
+            return minimumProgression;
         }
 
-        public void raiseMinimumLevel(int minimumLevel) {
-            int clampedLevel = Math.max(0, Math.min(maximumLevel, minimumLevel));
-            this.minimumLevel = Math.max(this.minimumLevel, clampedLevel);
+        public void raiseMinimumProgression(int progression) {
+            int resolved = Math.max(1, Math.min(maximumProgression, progression));
+            minimumProgression = Math.max(minimumProgression, resolved);
         }
 
-        public int getMaximumLevel() {
-            return maximumLevel;
+        public int getMaximumProgression() {
+            return maximumProgression;
         }
 
-        public void lowerMaximumLevel(int maximumLevel) {
-            int clampedLevel = Math.max(0, Math.min(absoluteMaximumLevel, maximumLevel));
-            this.maximumLevel = Math.min(this.maximumLevel, clampedLevel);
-            minimumLevel = Math.min(minimumLevel, this.maximumLevel);
+        public void lowerMaximumProgression(int progression) {
+            int resolved = Math.max(1, Math.min(absoluteMaximumProgression, progression));
+            maximumProgression = Math.min(maximumProgression, resolved);
+            minimumProgression = Math.min(minimumProgression, maximumProgression);
         }
 
         public int resolve() {
-            int modifiedLevel = permanentLevel + additiveModifier;
-            return Math.max(minimumLevel, Math.min(maximumLevel, modifiedLevel));
+            int modified = permanentProgression + additiveModifier;
+            return Math.max(minimumProgression, Math.min(maximumProgression, modified));
         }
     }
 }

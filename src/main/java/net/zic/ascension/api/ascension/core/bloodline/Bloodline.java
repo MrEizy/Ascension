@@ -7,6 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
@@ -56,12 +57,12 @@ public interface Bloodline {
             for(int purity = data.getPurity();purity>newPurity;purity--){
                 data.setPurity(purity);
                 purityDown(source,data);
+                data.setPurity(purity - 1);
             }
         }else{
 
             //purity increased
             for(int purity = data.getPurity()+1;purity<=newPurity;purity++){
-                System.out.println(purity);
                 data.setPurity(purity);
                 purityUp(source,data);
             }
@@ -79,6 +80,9 @@ public interface Bloodline {
     BloodlineData loadData(ValueInput input,RegistryAccess access);
     BloodlineData loadData(ByteBuf buf);
 
+    default RequirementHolder requirements() {
+        return RequirementHolder.EMPTY;
+    }
     default Optional<AscensionItemTooltipDefinition> itemTooltip() {
         return Optional.empty();
     }

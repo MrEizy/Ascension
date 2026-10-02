@@ -1,0 +1,252 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage0"
+      },
+      "when": {
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage1"
+      },
+      "when": {
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage2"
+      },
+      "when": {
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "5"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "6"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "7"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "8"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "9"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "10"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "11"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "12"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "13"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "14"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "15"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "16"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "17"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "18"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "19"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "20"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "21"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "22"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "23"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "24"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "25"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "26"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "27"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "28"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "29"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/white_jade_orchid_stage3"
+      },
+      "when": {
+        "stage": "30"
+      }
+    }
+  ]
+}

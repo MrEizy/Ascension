@@ -1,0 +1,10 @@
+{
+  "type": "ascension:surface_scatter",
+  "config": {
+    "blocks": [
+      "minecraft:fern",
+      "minecraft:moss_carpet"
+    ],
+    "tries": 18
+  }
+}

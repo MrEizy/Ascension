@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "ascension:block/herbs/white_jade_orchid_stage0"
+  }
+}

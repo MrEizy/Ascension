@@ -47,6 +47,7 @@ public final class AscensionResourceTypes {
     );
 
     public static final DeferredHolder<ResourceType, ResourceType> QI = RESOURCE_TYPES.register("qi", Qi::new);
+    public static final DeferredHolder<ResourceType, ResourceType> HEALTH = RESOURCE_TYPES.register("health", Health::new);
     public static final DeferredHolder<ResourceType, ResourceType> STAMINA = RESOURCE_TYPES.register("stamina", Stamina::new);
     public static final DeferredHolder<ResourceType, ResourceType> EXHAUSTION = RESOURCE_TYPES.register("exhaustion", Exhaustion::new);
     public static final DeferredHolder<ResourceType, ResourceType> HUNGER = RESOURCE_TYPES.register("hunger", Hunger::new);
@@ -83,6 +84,35 @@ public final class AscensionResourceTypes {
             EntityQiProvider provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
             if (provider != null) {
                 provider.setQi(amount);
+            }
+        }
+    }
+
+    private static final class Health implements ResourceType {
+        @Override
+        public boolean supports(LivingEntity entity) {
+            return entity != null;
+        }
+
+        @Override
+        public double getAmount(LivingEntity entity) {
+            return entity == null ? 0.0D : entity.getHealth();
+        }
+
+        @Override
+        public double getMaximum(LivingEntity entity) {
+            return entity == null ? 0.0D : entity.getMaxHealth();
+        }
+
+        @Override
+        public double getMinimum(LivingEntity entity) {
+            return entity == null ? 0.0D : Math.min(1.0D, entity.getMaxHealth());
+        }
+
+        @Override
+        public void setAmount(LivingEntity entity, double amount) {
+            if (entity != null) {
+                entity.setHealth((float) Math.clamp(amount, 0.0D, getMaximum(entity)));
             }
         }
     }

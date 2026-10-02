@@ -1,21 +1,14 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.imperial_sixth_stance.name"
   },
   "description": {
     "translate": "ascension.skill.imperial_sixth_stance.desc"
   },
-  "default_accessible_level": 1,
-  "targeting": {
-    "type": "ascension:self"
-  },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:weapon_swing",
-      "subject": "caster",
-      "vfx_type": "sword_swing",
       "color": "gold",
       "radius": [
         2.65,
@@ -24,31 +17,15 @@
       ],
       "damage": {
         "base": 1.9,
-        "terms": [
-          {
-            "source": {
-              "type": "ascension:stat",
-              "stat": "ascension:strength"
-            },
-            "operation": "add",
-            "scale": 0.035
-          }
-        ],
+        "stats": {
+          "ascension:strength": 0.035
+        },
         "minimum": 1.0,
-        "maximum": 6.0
+        "maximum": 6.0,
+        "weapon": 1.0
       },
-      "knockback": {
-        "base": 0.35
-      },
-      "duration": {
-        "base": 10
-      },
+      "knockback": 0.35,
       "rotation_z": 90.0,
-      "movement": [
-        0.0,
-        0.0,
-        0.0
-      ],
       "path": "ascension:weapon/sword",
       "weapon_tag": "minecraft:swords",
       "hit_shape": "area",
@@ -63,26 +40,14 @@
     {
       "type": "ascension:sound",
       "sound": "minecraft:entity.player.attack.sweep",
-      "volume": {
-        "base": 0.45
-      },
-      "pitch": {
-        "base": 1.05
-      },
+      "volume": 0.45,
+      "pitch": 1.05,
       "subject": "caster"
     }
   ],
-  "costs": [
-    {
-      "resource": "ascension:stamina",
-      "source": "ascension:skill_casting",
-      "amount": {
-        "base": 2.2
-      },
-      "operation": "ascension:consume"
-    }
-  ],
-  "cooldown": {
-    "base": 50
-  }
+  "cost": {
+    "resource": "ascension:stamina",
+    "amount": 2.2
+  },
+  "cooldown": 50
 }

@@ -22,12 +22,6 @@
     "ascension:vitality": 1,
     "ascension:strength": 1
   },
-  "base_affinity": {
-    "ascension:soul": 3,
-    "ascension:fire": 2,
-    "ascension:yang": 2.5,
-    "ascension:fist": 2
-  },
   "stat_modifiers": {
     "ascension:strength": [
       {
@@ -37,13 +31,23 @@
       }
     ]
   },
-  "affinity_modifiers": {
-    "ascension:blood": [
-      {
-        "value": 0.15,
-        "operation": "ADD_BASE",
-        "id": "ascension:fire_spirit_body_unstable_physique_yang_modifier"
-      }
-    ]
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": 3,
+      "ascension:elemental/fire": 2,
+      "ascension:elemental/yang": 2.5,
+      "ascension:weapon/fist": 2
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/blood": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:fire_spirit_body_unstable_physique_yang_modifier"
+        }
+      ]
+    }
   }
 }

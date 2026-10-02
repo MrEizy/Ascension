@@ -1,0 +1,14 @@
+{
+  "type": "ascension:surface_scatter",
+  "config": {
+    "blocks": [
+      "minecraft:dandelion",
+      "minecraft:poppy",
+      "minecraft:cornflower",
+      "minecraft:oxeye_daisy",
+      "minecraft:azure_bluet"
+    ],
+    "spread": 7,
+    "tries": 22
+  }
+}

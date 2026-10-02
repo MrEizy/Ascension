@@ -1,0 +1,10 @@
+{
+  "elements": [
+    {
+      "type": "ascension:sprite",
+      "texture": "ascension:vfx/orb_01",
+      "width": 1.0,
+      "height": 1.0
+    }
+  ]
+}

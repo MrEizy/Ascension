@@ -1,0 +1,60 @@
+{
+  "elements": [
+    {
+      "type": "ascension:beam",
+      "tint": [
+        90,
+        155,
+        255,
+        100
+      ],
+      "secondary_tint": [
+        255,
+        230,
+        125,
+        245
+      ],
+      "line_width": 4.5,
+      "no_depth": false
+    },
+    {
+      "type": "ascension:beam",
+      "tint": [
+        230,
+        245,
+        255,
+        220
+      ],
+      "secondary_tint": [
+        255,
+        255,
+        220,
+        255
+      ],
+      "line_width": 1.4,
+      "no_depth": false
+    },
+    {
+      "type": "ascension:sprite",
+      "position": "each_point",
+      "tint": [
+        130,
+        200,
+        255,
+        170
+      ],
+      "secondary_tint": [
+        255,
+        235,
+        145,
+        240
+      ],
+      "width": 0.96,
+      "height": 0.96,
+      "spin": 4.0,
+      "pulse": 0.12,
+      "pulse_speed": 0.4,
+      "texture": "ascension:vfx/impact_ring_01"
+    }
+  ]
+}

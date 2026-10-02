@@ -2,6 +2,7 @@ package net.zic.ascension.common.gui.elements.introspection.main;
 
 import net.lucent.easygui.gui.RenderableElement;
 import net.lucent.easygui.gui.UIFrame;
+import net.lucent.easygui.gui.elements.built_in.EasyLabel;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -38,6 +39,8 @@ public class MainContainer extends RenderableElement {
     );
 
     private final DescriptionDisplayContainer informationDisplay;
+    private final EasyLabel usernameLabel;
+    private final PlayerViewer playerViewer;
     private final PhysiqueOpenButton physiqueButton;
     private final BloodlineOpenButton bloodlineButton;
 
@@ -45,6 +48,7 @@ public class MainContainer extends RenderableElement {
     private OriginSource observedSource;
     private long observedRevision = Long.MIN_VALUE;
     private String observedIdentitySignature;
+    private String observedUsername;
 
     public MainContainer(UIFrame frame) {
         super(frame);
@@ -52,6 +56,41 @@ public class MainContainer extends RenderableElement {
         setHeight(BACKGROUND.getHeight());
         getPositioning().setX(-getWidth() / 2);
         getPositioning().setY(-getHeight() / 2);
+
+        usernameLabel = new EasyLabel(frame);
+        usernameLabel.setText(Component.empty());
+        usernameLabel.setTextColor(0xFFFFFFFF);
+        usernameLabel.setWidth(67);
+        usernameLabel.setHeight(8);
+        usernameLabel.setScaleToFit(true);
+        usernameLabel.setTextPositioningX(EasyLabel.TextPositionRule.CENTER);
+        usernameLabel.setTextPositioningY(EasyLabel.TextPositionRule.CENTER);
+        usernameLabel.getPositioning().setX(7);
+        usernameLabel.getPositioning().setY(12);
+        addChild(usernameLabel);
+
+        playerViewer = new PlayerViewer(frame);
+        playerViewer.getPositioning().setX(14);
+        playerViewer.getPositioning().setY(32);
+        addChild(playerViewer);
+
+        PlayerRotationButton leftRotation = new PlayerRotationButton(
+                frame,
+                playerViewer,
+                PlayerRotationButton.Direction.LEFT
+        );
+        leftRotation.getPositioning().setX(13);
+        leftRotation.getPositioning().setY(118);
+        addChild(leftRotation);
+
+        PlayerRotationButton rightRotation = new PlayerRotationButton(
+                frame,
+                playerViewer,
+                PlayerRotationButton.Direction.RIGHT
+        );
+        rightRotation.getPositioning().setX(50);
+        rightRotation.getPositioning().setY(118);
+        addChild(rightRotation);
 
         informationDisplay = new DescriptionDisplayContainer(
                 frame,
@@ -92,6 +131,7 @@ public class MainContainer extends RenderableElement {
     }
 
     private void refreshSynchronizedState() {
+        refreshUsername();
         OriginSource source = ClientAscensionData.getSource().orElse(null);
 
         observedSource = source;
@@ -110,6 +150,19 @@ public class MainContainer extends RenderableElement {
             case PHYSIQUE -> showPhysiqueInformation();
             case BLOODLINES -> showBloodlineInformation();
         }
+    }
+
+    private void refreshUsername() {
+        Component username = ClientAscensionData.getPlayer()
+                .map(player -> player.getName())
+                .orElse(Component.empty());
+        String usernameText = username.getString();
+        if (usernameText.equals(observedUsername)) {
+            return;
+        }
+        observedUsername = usernameText;
+        usernameLabel.setText(username);
+        usernameLabel.setTextScale(1.0F);
     }
 
     private static String createIdentitySignature(OriginSource source) {

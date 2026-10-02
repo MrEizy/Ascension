@@ -1,0 +1,50 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.lion_roar_chest.name"
+  },
+  "description": {
+    "translate": "ascension.physique.lion_roar_chest.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/sound"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:vitality": 3.0,
+    "ascension:spirit": 2.0,
+    "ascension:strength": 1.0
+  },
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.12,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:lion_roar_chest_vitality_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 1.25,
+      "ascension:elemental/sound": 2.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/sound": [
+        {
+          "value": 0.15,
+          "operation": "ADD_BASE",
+          "id": "ascension:lion_roar_chest_sound_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:profound"
+  }
+}

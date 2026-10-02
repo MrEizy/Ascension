@@ -1,0 +1,18 @@
+{
+  "output": "ascension:body_cultivation_pill",
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/reinforcement": 9.0,
+      "ascension:alchemy/cleansing": 4.0,
+      "ascension:alchemy/nourishment": 13.0
+    },
+    "affinities": {
+      "ascension:elemental/wood": 3.0,
+      "ascension:elemental/life": 2.0,
+      "ascension:elemental/blood": 5.0
+    }
+  },
+  "base_yield": 1,
+  "maximum_yield": 4,
+  "amplifier_per_bonus": 0.5
+}

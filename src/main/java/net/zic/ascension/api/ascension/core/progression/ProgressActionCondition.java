@@ -1,21 +1,31 @@
 package net.zic.ascension.api.ascension.core.progression;
 
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.RegistryObjectData;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+
+import java.util.OptionalInt;
 
 public interface ProgressActionCondition {
     /**
      *
      * @param source the origin source this condition is called on
      * @param contextIdentifier the Identifier of the registry object this action is being queried for(e.g a path, technique, bloodline, physique etc)
-     * @param  contextData the data for the contextIdentifier RegistryObject (e.g technique data or bloodline data)
+     * @param  contextData the data for the contextIdentifier Object (e.g technique data or bloodline data)
      * @param direction is the expected progression gained/up or lost/down
      * @return true -> run all actions, false -> do not run actins
      */
-    boolean test(OriginSource source, Identifier contextIdentifier, RegistryObjectData contextData, ProgressDirection direction);
+    boolean test(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction);
 
+    default Component getDescription(RegistryAccess access) {
+        return Component.translatable("ascension.tooltip.progression.condition.conditional");
+    }
+
+    default OptionalInt getEarliestMajorRealm() {
+        return OptionalInt.empty();
+    }
 
     ProgressActionConditionType getType();
 }

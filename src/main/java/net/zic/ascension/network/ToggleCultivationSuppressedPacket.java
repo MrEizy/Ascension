@@ -48,7 +48,7 @@ public record ToggleCultivationSuppressedPacket(boolean suppressed) implements C
                 return;
             }
 
-            holder.getData(player).setCultivationSuppressed(packet.suppressed());
+            holder.getData().setCultivationSuppressed(packet.suppressed());
 
             player.syncData(AscensionAttachments.SIMPLE_ENTITY_DATA);
         });

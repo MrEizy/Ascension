@@ -1,0 +1,36 @@
+{
+  "type": "ascension:hermite_spline",
+  "coordinate": "ascension:terrain/land_mask",
+  "points": [
+    {
+      "derivative": 0.0,
+      "location": 0.0,
+      "value": 0.0
+    },
+    {
+      "derivative": 0.0,
+      "location": 0.18,
+      "value": 0.0
+    },
+    {
+      "derivative": 3.0,
+      "location": 0.28,
+      "value": 0.34
+    },
+    {
+      "derivative": 3.2,
+      "location": 0.38,
+      "value": 0.78
+    },
+    {
+      "derivative": 0.0,
+      "location": 0.48,
+      "value": 1.0
+    },
+    {
+      "derivative": 0.0,
+      "location": 1.0,
+      "value": 1.0
+    }
+  ]
+}

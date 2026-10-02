@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "ascension:golden_steppe",
+  "features": "ascension:golden_steppe_floor_scatter",
+  "step": "vegetal_decoration"
+}

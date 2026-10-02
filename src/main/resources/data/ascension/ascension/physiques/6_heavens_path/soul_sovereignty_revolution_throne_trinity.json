@@ -1,0 +1,81 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.soul_sovereignty_revolution_throne_trinity.name"
+  },
+  "description": {
+    "translate": "ascension.physique.soul_sovereignty_revolution_throne_trinity.desc"
+  },
+  "paths": [
+    "ascension:foundation/soul",
+    "ascension:elemental/dream",
+    "ascension:elemental/fate"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:vitality": 14.0,
+    "ascension:strength": 9.0,
+    "ascension:spirit": 72.0,
+    "ascension:agility": 13.0
+  },
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.20,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:soul_sovereignty_revolution_throne_trinity_vitality_modifier"
+      }
+    ],
+    "ascension:strength": [
+      {
+        "value": 0.25,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:soul_sovereignty_revolution_throne_trinity_strength_modifier"
+      }
+    ],
+    "ascension:spirit": [
+      {
+        "value": 1.75,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:soul_sovereignty_revolution_throne_trinity_spirit_modifier"
+      }
+    ],
+    "ascension:agility": [
+      {
+        "value": 0.40,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:soul_sovereignty_revolution_throne_trinity_agility_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": 36.0,
+      "ascension:elemental/dream": 19.0,
+      "ascension:elemental/fate": 10.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/fate": [
+        {
+          "value": 0.5,
+          "operation": "ADD_BASE",
+          "id": "ascension:soul_sovereignty_revolution_throne_trinity_fate_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/dream": [
+        {
+          "value": 0.75,
+          "operation": "ADD_BASE",
+          "id": "ascension:soul_sovereignty_revolution_throne_trinity_dream_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:heavens_path"
+  }
+}

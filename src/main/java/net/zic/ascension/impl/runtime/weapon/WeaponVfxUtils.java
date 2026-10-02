@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.runtime.weapon;
 
 import net.minecraft.core.registries.Registries;
+import net.zic.ascension.api.ascension.core.damage.AscensionDamageProfile;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -24,7 +25,7 @@ public final class WeaponVfxUtils {
             float xRotOffset,
             float rotationZ,
             Vec3 radius,
-            double damage,
+            AscensionDamageProfile damage,
             double knockback,
             int duration,
             String vfxType,
@@ -70,7 +71,7 @@ public final class WeaponVfxUtils {
             LivingEntity owner,
             float rotationZ,
             Vec3 radius,
-            double damage,
+            AscensionDamageProfile damage,
             double knockback,
             int duration,
             String vfxType,

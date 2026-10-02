@@ -1,0 +1,314 @@
+{
+  "values": {
+    "ascension:jade_dew_grass": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/cleansing": 1.5,
+        "ascension:alchemy/restoration": 0.5
+      },
+      "affinities": {
+        "ascension:elemental/water": 0.5
+      },
+      "purity": 0.9,
+      "instability": 0.03,
+      "refinement_difficulty": 0.5
+    },
+    "ascension:peach": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/cleansing": 7.0,
+        "ascension:alchemy/nourishment": 3.0,
+        "ascension:alchemy/restoration": 2.0
+      },
+      "affinities": {
+        "ascension:elemental/life": 3.0
+      },
+      "purity": 0.88,
+      "instability": 0.12,
+      "refinement_difficulty": 1.4
+    },
+    "ascension:nine_sun_fire_root": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/reinforcement": 4.0,
+        "ascension:alchemy/circulation": 3.0
+      },
+      "affinities": {
+        "ascension:elemental/fire": 6.0,
+        "ascension:elemental/yang": 2.0
+      },
+      "purity": 0.82,
+      "instability": 0.22,
+      "refinement_difficulty": 2.0
+    },
+    "ascension:moonwell_jade_lotus": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/cleansing": 4.0,
+        "ascension:alchemy/nourishment": 4.0,
+        "ascension:alchemy/restoration": 3.0
+      },
+      "affinities": {
+        "ascension:elemental/water": 4.0,
+        "ascension:elemental/moon": 2.0,
+        "ascension:elemental/yin": 1.0
+      },
+      "purity": 0.92,
+      "instability": 0.08,
+      "refinement_difficulty": 1.6
+    },
+    "ascension:heavenly_thunder_peach": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/circulation": 5.0,
+        "ascension:alchemy/reinforcement": 3.0,
+        "ascension:alchemy/nourishment": 3.0
+      },
+      "affinities": {
+        "ascension:elemental/lightning": 6.0,
+        "ascension:elemental/yang": 1.5
+      },
+      "purity": 0.84,
+      "instability": 0.3,
+      "refinement_difficulty": 2.4
+    },
+    "ascension:ginseng": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/reinforcement": 6.0,
+        "ascension:alchemy/cleansing": 4.0,
+        "ascension:alchemy/nourishment": 2.0
+      },
+      "affinities": {
+        "ascension:elemental/wood": 3.0,
+        "ascension:elemental/life": 1.0
+      },
+      "purity": 0.86,
+      "instability": 0.08
+    },
+    "ascension:fire_ginseng": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/circulation": 5.0,
+        "ascension:alchemy/cleansing": 5.0
+      },
+      "affinities": {
+        "ascension:elemental/fire": 4.0,
+        "ascension:elemental/yang": 1.0
+      },
+      "purity": 0.84,
+      "instability": 0.15,
+      "refinement_difficulty": 1.25
+    },
+    "ascension:snow_ginseng": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/circulation": 4.0,
+        "ascension:alchemy/nourishment": 3.0,
+        "ascension:alchemy/cleansing": 6.0
+      },
+      "affinities": {
+        "ascension:elemental/ice": 4.0,
+        "ascension:elemental/yin": 1.0
+      },
+      "purity": 0.88,
+      "instability": 0.12,
+      "refinement_difficulty": 1.25
+    },
+    "ascension:white_jade_orchid": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/cleansing": 13.0
+      },
+      "affinities": {
+        "ascension:elemental/metal": 2.0
+      },
+      "purity": 0.95,
+      "instability": 0.04,
+      "refinement_difficulty": 1.1
+    },
+    "ascension:lingzhi_mushroom": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/restoration": 5.0,
+        "ascension:alchemy/nourishment": 6.0
+      },
+      "affinities": {
+        "ascension:elemental/life": 3.0,
+        "ascension:elemental/wood": 1.0
+      },
+      "purity": 0.86,
+      "instability": 0.06
+    },
+    "ascension:blood_lingzhi_mushroom": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/nourishment": 11.0,
+        "ascension:alchemy/reinforcement": 3.0
+      },
+      "affinities": {
+        "ascension:elemental/blood": 5.0,
+        "ascension:elemental/life": 1.0
+      },
+      "purity": 0.8,
+      "instability": 0.18,
+      "refinement_difficulty": 1.5
+    },
+    "minecraft:blaze_powder": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/circulation": 3.0,
+            "ascension:alchemy/reinforcement": 2.0,
+            "ascension:alchemy/cleansing": 1.0
+          },
+          "affinities": {
+            "ascension:elemental/fire": 4.0,
+            "ascension:elemental/yang": 1.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.72,
+        "instability": 0.28,
+        "refinement_difficulty": 1.0
+      }
+    },
+    "minecraft:spider_eye": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/circulation": 1.5,
+            "ascension:alchemy/nourishment": 1.5
+          },
+          "affinities": {
+            "ascension:elemental/poison": 3.0,
+            "ascension:elemental/dark": 1.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.55,
+        "instability": 0.4,
+        "refinement_difficulty": 0.9
+      }
+    },
+    "minecraft:ghast_tear": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/restoration": 4.0,
+            "ascension:alchemy/nourishment": 2.0,
+            "ascension:alchemy/cleansing": 2.0
+          },
+          "affinities": {
+            "ascension:elemental/water": 2.0,
+            "ascension:elemental/life": 2.0
+          },
+          "rank_tier": 1
+        },
+        "purity": 0.92,
+        "instability": 0.05,
+        "refinement_difficulty": 1.3
+      }
+    },
+    "minecraft:lily_pad": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/nourishment": 2.0,
+            "ascension:alchemy/restoration": 1.0,
+            "ascension:alchemy/cleansing": 1.0
+          },
+          "affinities": {
+            "ascension:elemental/water": 2.0,
+            "ascension:elemental/wood": 2.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.86,
+        "instability": 0.06,
+        "refinement_difficulty": 0.6
+      }
+    },
+    "minecraft:nether_wart": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/circulation": 2.0,
+            "ascension:alchemy/cleansing": 2.0,
+            "ascension:alchemy/reinforcement": 1.0
+          },
+          "affinities": {
+            "ascension:elemental/fire": 2.0,
+            "ascension:elemental/dark": 2.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.68,
+        "instability": 0.22,
+        "refinement_difficulty": 0.9
+      }
+    },
+    "minecraft:chorus_fruit": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/circulation": 3.0,
+            "ascension:alchemy/cleansing": 2.0
+          },
+          "affinities": {
+            "ascension:elemental/space": 4.0,
+            "ascension:elemental/chaos": 2.0
+          },
+          "rank_tier": 1
+        },
+        "purity": 0.72,
+        "instability": 0.45,
+        "refinement_difficulty": 1.4
+      }
+    },
+    "minecraft:honeycomb": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/nourishment": 3.0,
+            "ascension:alchemy/restoration": 2.0
+          },
+          "affinities": {
+            "ascension:elemental/life": 2.0,
+            "ascension:elemental/wood": 1.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.9,
+        "instability": 0.04,
+        "refinement_difficulty": 0.5
+      }
+    },
+    "minecraft:poisonous_potato": {
+      "type": "ascension:fixed",
+      "material": {
+        "essence": {
+          "properties": {
+            "ascension:alchemy/nourishment": 2.0,
+            "ascension:alchemy/circulation": 1.0
+          },
+          "affinities": {
+            "ascension:elemental/poison": 4.0,
+            "ascension:elemental/earth": 1.0
+          },
+          "rank_tier": 0
+        },
+        "purity": 0.48,
+        "instability": 0.5,
+        "refinement_difficulty": 0.7
+      }
+    }
+  }
+}

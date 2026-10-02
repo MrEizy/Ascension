@@ -1,39 +1,67 @@
 {
-  "type": "ascension:simple_cultivation_skill",
+  "type": "ascension:active",
   "name": "true_breath",
   "description": "breath in the essence, let it settle",
-  "path": "ascension:foundation/essence",
-  "rate": 2,
-  "particle_field": {
-    "style": "meridian_flow",
-    "particles": [
+  "cast": {
+    "mode": "channel",
+    "stages": [
       {
-        "type": "thread",
-        "weight": 7
-      },
-      {
-        "type": "wisp",
-        "weight": 4
-      },
-      {
-        "type": "mote",
-        "weight": 3
-      },
-      {
-        "type": "rune",
-        "weight": 1
+        "particle_field": {
+          "style": "meridian_flow",
+          "particles": [
+            {
+              "weight": 7,
+              "particle": "ascension:particle_field_thread"
+            },
+            {
+              "weight": 4,
+              "particle": "ascension:particle_field_wisp"
+            },
+            {
+              "weight": 3,
+              "particle": "ascension:particle_field_mote"
+            },
+            {
+              "weight": 1,
+              "particle": "ascension:particle_field_rune"
+            }
+          ],
+          "colours": [
+            "#A9DFFF",
+            "#E8F8FF"
+          ],
+          "density": 20,
+          "radius": {
+            "min": 0.42,
+            "max": 1.05
+          },
+          "height": {
+            "min": 0.08,
+            "max": 1.72
+          },
+          "speed": {
+            "min": 0.045,
+            "max": 0.072
+          },
+          "size": {
+            "min": 0.04,
+            "max": 0.1
+          },
+          "lifetime": {
+            "min": 18,
+            "max": 30
+          },
+          "full_bright": true
+        }
       }
-    ],
-    "colours": [
-      "#A9DFFF",
-      "#E8F8FF"
-    ],
-    "density": 20,
-    "radius": {"min": 0.42, "max": 1.05},
-    "height": {"min": 0.08, "max": 1.72},
-    "speed": {"min": 0.045, "max": 0.072},
-    "size": {"min": 0.04, "max": 0.1},
-    "lifetime": {"min": 18, "max": 30},
-    "full_bright": true
-  }
+    ]
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:cultivate",
+      "path": "ascension:foundation/essence",
+      "rate": 2
+    }
+  ]
 }

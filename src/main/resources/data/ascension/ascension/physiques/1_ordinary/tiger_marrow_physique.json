@@ -1,0 +1,49 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.tiger_marrow.name"
+  },
+  "description": {
+    "translate": "ascension.physique.tiger_marrow.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/metal"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:strength": 2.0,
+    "ascension:vitality": 1.0
+  },
+  "stat_modifiers": {
+    "ascension:strength": [
+      {
+        "value": 0.08,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:tiger_marrow_strength_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 0.75,
+      "ascension:elemental/metal": 1.25
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/metal": [
+        {
+          "value": 0.1,
+          "operation": "ADD_BASE",
+          "id": "ascension:tiger_marrow_metal_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:ordinary"
+  }
+}

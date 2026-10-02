@@ -1,8 +1,7 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": "Qi Projectile",
   "description": "Launches a compact bolt of cultivated essence.",
-  "default_accessible_level": 1,
   "definitions": {
     "projectiles": {
       "bolt": {
@@ -11,31 +10,9 @@
         "gravity": 0,
         "hit_radius": 0.35,
         "pierces": 0,
-        "filter": {
-          "relations": [
-            "hostile"
-          ],
-          "include_players": true,
-          "line_of_sight": true
-        },
         "on_entity_hit": [
           {
             "type": "ascension:damage",
-            "amount": {
-              "base": 4.5,
-              "terms": [
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:spirit"
-                  },
-                  "operation": "add",
-                  "scale": 0.28
-                }
-              ],
-              "minimum": 0.0,
-              "maximum": 20.0
-            },
             "damage_type": "minecraft:indirect_magic",
             "classifications": [
               "ascension:skill",
@@ -43,7 +20,13 @@
               "ascension:essence"
             ],
             "path": "ascension:foundation/essence",
-            "subject": "target"
+            "subject": "target",
+            "base": 4.5,
+            "stats": {
+              "ascension:spirit": 0.28
+            },
+            "minimum": 0.0,
+            "maximum": 20.0
           },
           {
             "type": "ascension:particles",
@@ -67,21 +50,12 @@
       }
     }
   },
-  "targeting": {
+  "target": {
     "type": "ascension:radial",
     "radius": 16,
-    "maximum_targets": 1,
-    "sort": "nearest",
-    "filter": {
-      "relations": [
-        "hostile"
-      ],
-      "include_players": true,
-      "line_of_sight": true
-    }
+    "maximum_targets": 1
   },
-  "require_targets": true,
-  "features": [
+  "actions": [
     {
       "type": "ascension:sound",
       "sound": "minecraft:entity.arrow.shoot",
@@ -104,6 +78,5 @@
       "subject": "target"
     }
   ],
-  "costs": [],
   "cooldown": 90
 }

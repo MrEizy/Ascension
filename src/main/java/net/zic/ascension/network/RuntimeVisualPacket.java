@@ -60,6 +60,10 @@ public record RuntimeVisualPacket(
                     buf.readLong(),
                     buf.readDouble(),
                     buf.readDouble(),
+                    buf.readFloat(),
+                    buf.readDouble(),
+                    buf.readInt(),
+                    buf.readInt(),
                     readDefinition(buf)
             );
             return new RuntimeVisualPacket(action, state);
@@ -99,6 +103,10 @@ public record RuntimeVisualPacket(
             buf.writeLong(state.seed());
             buf.writeDouble(state.primaryValue());
             buf.writeDouble(state.secondaryValue());
+            buf.writeFloat(state.scale());
+            buf.writeDouble(state.spin());
+            buf.writeInt(state.tint());
+            buf.writeInt(state.secondaryTint());
             writeDefinition(buf, state.definition());
         }
 

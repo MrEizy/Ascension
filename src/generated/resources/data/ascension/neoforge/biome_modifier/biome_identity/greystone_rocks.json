@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "ascension:greystone_foothills",
+  "features": "ascension:greystone_rocks",
+  "step": "local_modifications"
+}

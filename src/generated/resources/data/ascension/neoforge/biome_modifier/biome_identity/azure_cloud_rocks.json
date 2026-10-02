@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "ascension:azure_cloud_range",
+  "features": "ascension:azure_cloud_rocks",
+  "step": "local_modifications"
+}

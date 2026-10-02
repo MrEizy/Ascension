@@ -1,5 +1,7 @@
 package net.zic.ascension.api.ascension.core.skill.castable;
 
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
@@ -10,6 +12,7 @@ import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
@@ -26,6 +29,13 @@ public record ActiveSkillCostDefinition(
             Identifier.CODEC.optionalFieldOf("source", AscensionCraft.prefix("skill_casting")).forGetter(ActiveSkillCostDefinition::source),
             ScaledValue.COMPACT_CODEC.fieldOf("amount").forGetter(ActiveSkillCostDefinition::amount)
     ).apply(instance, ActiveSkillCostDefinition::new));
+    public static final Codec<List<ActiveSkillCostDefinition>> LIST_CODEC = Codec.either(
+            CODEC.codec(),
+            CODEC.codec().listOf()
+    ).xmap(
+            value -> value.map(List::of, values -> List.copyOf(values)),
+            values -> values.size() == 1 ? Either.left(values.getFirst()) : Either.right(List.copyOf(values))
+    );
 
     public boolean canPay(
             LivingEntity caster,

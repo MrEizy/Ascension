@@ -1,12 +1,12 @@
 {
-  "type": "ascension:resource_modifier_passive",
+  "type": "ascension:passive",
   "name": {
     "translate": "ascension.skill.unending_revolution.name"
   },
   "description": {
     "translate": "ascension.skill.unending_revolution.desc"
   },
-  "modules": [
+  "modifiers": [
     {
       "type": "ascension:stats",
       "stat_modifiers": {
@@ -43,7 +43,6 @@
               "type": "ascension:stat",
               "stat": "ascension:strength"
             },
-            "operation": "add",
             "scale": 0.012
           },
           {
@@ -51,7 +50,6 @@
               "type": "ascension:stat",
               "stat": "ascension:spirit"
             },
-            "operation": "add",
             "scale": 0.008
           }
         ],
@@ -66,7 +64,6 @@
               "type": "ascension:stat",
               "stat": "ascension:vitality"
             },
-            "operation": "add",
             "scale": 0.0006
           },
           {
@@ -74,7 +71,6 @@
               "type": "ascension:stat",
               "stat": "ascension:spirit"
             },
-            "operation": "add",
             "scale": 0.00035
           }
         ],
@@ -89,7 +85,6 @@
               "type": "ascension:stat",
               "stat": "ascension:strength"
             },
-            "operation": "add",
             "scale": 0.0008
           },
           {
@@ -97,7 +92,6 @@
               "type": "ascension:stat",
               "stat": "ascension:vitality"
             },
-            "operation": "add",
             "scale": 0.001
           }
         ],

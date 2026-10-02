@@ -5,126 +5,164 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
-import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionHolder;
-import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionType;
+import net.zic.ascension.api.ascension.core.path.interaction.PathInteraction;
+import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionType;
+import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
-import net.zic.ascension.impl.core.path.PathRelationship;
-import net.zic.ascension.impl.core.path.MajorRealmDefinition;
+import net.zic.ascension.configuration.interactions.PathInteractions;
+import net.zic.ascension.impl.core.path.realms.MajorRealmDefinition;
 import net.zic.ascension.impl.datapack.path.AscensionPathTypes;
 
 import java.util.Collection;
 import java.util.List;
 
-public record SimplePath(Component name, Component description, List<MajorRealmDefinition> realms, List<PathRelationship> pathRelationships) implements Path {
+public class SimplePath implements Path {
 
+    private final Component name;
+    private final Component description;
+    private final List<MajorRealmDefinition> realmDefinitions;
+    private final ProgressActionHolder actions;
 
+    public SimplePath(Component name, Component description, List<MajorRealmDefinition> realmDefinitions, ProgressActionHolder actions) {
+        this.name = name;
+        this.description = description;
+        this.realmDefinitions = realmDefinitions;
+        this.actions = actions;
+    }
+    public List<MajorRealmDefinition> getMajorRealmDefinitions(){
+        return realmDefinitions;
+    }
+    public ProgressActionHolder getProgressActionHolder(){
+        return actions;
+    }
     @Override
     public PathType getType() {
         return AscensionPathTypes.SIMPLE_PATH_TYPE.get();
     }
 
     @Override
-    public Component getMajorRealmName(int majorRealm) {
+    public Component name() {
+        return name;
+    }
 
-        return realms.size() < majorRealm ? Component.empty() : realms.get(majorRealm).name();
+    @Override
+    public Component description() {
+        return description;
+    }
+
+    //──Realms────────────────────────────────────────────────────────
+
+    @Override
+    public int getMaxMajorRealm() {
+        return realmDefinitions.size();
+    }
+
+    @Override
+    public int getMaxMinorRealm(int majorRealm) {
+        return getRealmDefinition(majorRealm).getMaxRealm();
+    }
+
+    @Override
+    public Component getMajorRealmName(int majorRealm) {
+        return getRealmDefinition(majorRealm).getName();
     }
 
     @Override
     public Component getMinorRealmName(int majorRealm, int minorRealm) {
-        return realms.size() < majorRealm ?
-                Component.empty() :
-                (realms.get(majorRealm).minorRealms().size() < minorRealm ?
-                        Component.empty() :
-                        realms.get(majorRealm).minorRealms().get(minorRealm).name());
+        return getRealmDefinition(majorRealm).getMinorRealmName(minorRealm);
     }
 
     @Override
     public Component getRealmName(int majorRealm, int minorRealm) {
-
-        return Component.empty()
-                .append(getMajorRealmName(majorRealm))
-                .append("(")
-                .append(getMinorRealmName(majorRealm, minorRealm))
-                .append(")");
+        return majorRealm < 0 ? Component.literal("Mortal") :getRealmDefinition(majorRealm).getCompositeRealmName(minorRealm);
     }
 
-    //returns the INDEX of the max major realm
     @Override
-    public int getMaxMajorRealm() {
-        return realms.size() - 1;
-    }
+    public MajorRealmDefinition getRealmDefinition(int majorRealm) {
 
-    //returns the INDEX of the max minor realm
-    @Override
-    public int getMaxMinorRealm(int majorRealm) {
-        if (majorRealm > getMaxMajorRealm()) return 0;
-        return realms.get(majorRealm).minorRealms().size() - 1;
+        return realmDefinitions.isEmpty() ? null : realmDefinitions.get(majorRealm);
     }
 
     @Override
     public double getMaxProgress(int majorRealm, int minorRealm) {
-        if(majorRealm > getMaxMajorRealm()) return 100;
-        if(realms.get(majorRealm).minorRealms().size() <= minorRealm) return 100;
-        return realms.get(majorRealm).minorRealms().get(minorRealm).progress();
+        return getRealmDefinition(majorRealm).getMaxProgress(minorRealm);
     }
-
+    //──Tribulation────────────────────────────────────────────────────────
     @Override
-    public TribulationDefinition getTribulationDefinition(int majorRealm, int minorRealm,RegistryAccess access) {
-
-        return hasTribulation(majorRealm,minorRealm) ? realms.get(majorRealm).minorRealms().get(majorRealm).tribulationReference().resolve(access) :null;
+    public TribulationDefinition getTribulation(int majorRealm, int minorRealm, RegistryAccess access) {
+        return hasTribulation(majorRealm,minorRealm) ? getRealmDefinition(majorRealm).getRealmTribulation(minorRealm).resolve(access) : null;
     }
 
     @Override
     public boolean hasTribulation(int majorRealm, int minorRealm) {
-        if(majorRealm>=realms.size())return false;
-        if(minorRealm>= realms.get(majorRealm).minorRealms().size()) return false;
+        return getRealmDefinition(majorRealm).getRealmTribulation(minorRealm) != null;
+    }
 
-        return realms.get(majorRealm).minorRealms().get(minorRealm).tribulationReference() != null;
+    //──Path Interactions────────────────────────────────────────────────────────
+
+
+
+    @Override
+    public boolean hasSourceInteraction(Identifier target, RegistryAccess access) {
+        return PathInteractions.hasInteraction(getId(access),target);
     }
 
     @Override
-    public double getInteractionValue(Identifier path) {
-        return 0; //TODO
+    public boolean hasSourceInteraction(Identifier target, PathInteractionType type, RegistryAccess access) {
+        return PathInteractions.hasInteraction(getId(access),target,type);
     }
 
     @Override
-    public PathInteractionType getInteractionType(Identifier path) {
-        return null; //TODO
+    public boolean hasTargetInteraction(Identifier source, RegistryAccess access) {
+        return PathInteractions.hasInteraction(source,getId(access));
     }
 
     @Override
-    public Collection<Identifier> getPathsOfInteraction(PathInteractionType type) {
-        return List.of(); //TODO
+    public boolean hasTargetInteraction(Identifier source, PathInteractionType type, RegistryAccess access) {
+        return PathInteractions.hasInteraction(source,getId(access),type);
     }
 
     @Override
-    public void registerInteractions(PathInteractionHolder holder,RegistryAccess access) {
-        Identifier selfIdentifier = CoreRegistries.PATH_REGISTRY.get(access).getKey(this);
-        for(PathRelationship relationship : pathRelationships){
-            holder.registerInteraction(relationship.asInteraction(selfIdentifier));
-        }
+    public PathInteraction getSourceInteraction(Identifier target, RegistryAccess access) {
+        return PathInteractions.getInteraction(getId(access),target);
     }
 
     @Override
-    public PathData newData(RegistryAccess access) {
-        return new SimplePathData(CoreRegistries.PATH_REGISTRY.get(access).getKey(this));
+    public PathInteraction getTargetInteraction(Identifier source, RegistryAccess access) {
+        return PathInteractions.getInteraction(source,getId(access));
     }
 
     @Override
-    public PathData loadData(ValueInput input, RegistryAccess access) {
-        SimplePathData pathData = new SimplePathData(CoreRegistries.PATH_REGISTRY.get(access).getKey(this));
-        pathData.load(input, access);
-        return pathData;
+    public Collection<PathInteraction> getAllSourceInteractions(RegistryAccess access) {
+        return PathInteractions.getInteractionsForSource(getId(access));
     }
 
     @Override
-    public PathData loadData(ByteBuf buf, RegistryAccess access) {
-        SimplePathData pathData = new SimplePathData(CoreRegistries.PATH_REGISTRY.get(access).getKey(this));
-        pathData.decode(buf,access);
-        return pathData;
+    public Collection<PathInteraction> getAllTargetInteractions(RegistryAccess access) {
+        return PathInteractions.getInteractionsForTarget(getId(access));
+    }
+
+
+    //──Data────────────────────────────────────────────────────────
+
+    @Override
+    public SimplePathInstance newInstance(RegistryAccess access) {
+        return new SimplePathInstance(this);
+    }
+
+    @Override
+    public SimplePathInstance loadInstance(ValueInput input, RegistryAccess access) {
+        SimplePathInstance pathInstance = newInstance(access);
+        pathInstance.read(input,access);
+        return pathInstance; //TODO
+    }
+
+    @Override
+    public SimplePathInstance loadInstance(ByteBuf buf, RegistryAccess access) {
+        SimplePathInstance instance = newInstance(access);
+        instance.decode(buf,access);
+        return instance;
     }
 }

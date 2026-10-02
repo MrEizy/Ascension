@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "ascension:heavenreach_peaks",
+  "features": "ascension:heavenreach_crags",
+  "step": "local_modifications"
+}

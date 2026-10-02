@@ -1,0 +1,46 @@
+{
+  "type": "ascension:hermite_spline",
+  "coordinate": "ascension:terrain/macro_regions",
+  "points": [
+    {
+      "derivative": 0.0,
+      "location": -1.0,
+      "value": 0.0
+    },
+    {
+      "derivative": 0.0,
+      "location": -0.65,
+      "value": 0.0
+    },
+    {
+      "derivative": 1.0,
+      "location": -0.44,
+      "value": 0.18
+    },
+    {
+      "derivative": 1.0,
+      "location": -0.18,
+      "value": 0.88
+    },
+    {
+      "derivative": -0.6,
+      "location": 0.1,
+      "value": 0.72
+    },
+    {
+      "derivative": -1.0,
+      "location": 0.3,
+      "value": 0.1
+    },
+    {
+      "derivative": 0.0,
+      "location": 0.42,
+      "value": 0.0
+    },
+    {
+      "derivative": 0.0,
+      "location": 1.0,
+      "value": 0.0
+    }
+  ]
+}

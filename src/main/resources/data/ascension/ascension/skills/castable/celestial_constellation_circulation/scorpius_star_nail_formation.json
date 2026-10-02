@@ -1,12 +1,11 @@
 {
-  "type": "ascension:active_skill",
+  "type": "ascension:active",
   "name": {
     "translate": "ascension.skill.scorpius_star_nail_formation.name"
   },
   "description": {
     "translate": "ascension.skill.scorpius_star_nail_formation.desc"
   },
-  "default_accessible_level": 0,
   "definitions": {
     "effects": {
       "star_nail_drag": {
@@ -40,7 +39,6 @@
                     "type": "ascension:context",
                     "key": "ascension:effect_potency"
                   },
-                  "operation": "add",
                   "scale": 0.1
                 }
               ],
@@ -56,32 +54,14 @@
         "shape": "cylinder",
         "radius": {
           "base": 4.0,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:skill_level"
-              },
-              "operation": "add",
-              "scale": 1.0
-            }
-          ],
-          "maximum": 6.5
+          "maximum": 6.5,
+          "mastery": 1.0
         },
-        "height": {
-          "base": 4.0
-        },
+        "height": 4.0,
         "duration": {
           "base": 100,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:skill_level"
-              },
-              "operation": "add",
-              "scale": 40
-            }
-          ],
-          "maximum": 220
+          "maximum": 220,
+          "mastery": 40.0
         },
         "tick_interval": 10,
         "filter": {
@@ -89,78 +69,26 @@
             "neutral",
             "hostile"
           ],
-          "include_players": true,
           "line_of_sight": false
         },
         "on_enter": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:witch",
-            "count": {
-              "base": 10
-            },
-            "spread": {
-              "base": 0.4
-            },
-            "speed": {
-              "base": 0.03
-            }
+            "count": 10,
+            "spread": 0.4,
+            "speed": 0.03
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.chain.hit",
-            "volume": {
-              "base": 0.6
-            },
-            "pitch": {
-              "base": 1.3
-            }
+            "volume": 0.6,
+            "pitch": 1.3
           }
         ],
         "on_tick": [
           {
             "type": "ascension:damage",
-            "amount": {
-              "base": 1.0,
-              "terms": [
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:spirit"
-                  },
-                  "operation": "add",
-                  "scale": 0.08
-                },
-                {
-                  "source": {
-                    "type": "ascension:stat",
-                    "stat": "ascension:agility"
-                  },
-                  "operation": "add",
-                  "scale": 0.03
-                },
-                {
-                  "source": {
-                    "type": "ascension:skill_level"
-                  },
-                  "operation": "add",
-                  "scale": 0.75
-                },
-                {
-                  "source": {
-                    "type": "ascension:skill_effect",
-                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
-                    "owner_scoped": true,
-                    "metric": "stacks",
-                    "aggregation": "sum"
-                  },
-                  "operation": "add",
-                  "scale": 0.4
-                }
-              ],
-              "minimum": 1.0,
-              "maximum": 12.0
-            },
             "damage_type": "minecraft:magic",
             "classifications": [
               "ascension:skill",
@@ -169,7 +97,29 @@
               "ascension:star"
             ],
             "path": "ascension:foundation/soul",
-            "technique": "ascension:3_heaven/celestial_constellation_circulation"
+            "technique": "ascension:3_heaven/celestial_constellation_circulation",
+            "base": {
+              "base": 1.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:skill_effect",
+                    "effect": "ascension:skill/castable/celestial_constellation_circulation/hound_star_pursuit/effect/hound_star_mark",
+                    "owner_scoped": true,
+                    "metric": "stacks",
+                    "aggregation": "sum"
+                  },
+                  "scale": 0.4
+                }
+              ],
+              "mastery": 0.75
+            },
+            "stats": {
+              "ascension:spirit": 0.08,
+              "ascension:agility": 0.03
+            },
+            "minimum": 1.0,
+            "maximum": 12.0
           },
           {
             "type": "ascension:stagger",
@@ -181,78 +131,47 @@
                     "type": "ascension:stat",
                     "stat": "ascension:spirit"
                   },
-                  "operation": "add",
                   "scale": 0.04
-                },
-                {
-                  "source": {
-                    "type": "ascension:skill_level"
-                  },
-                  "operation": "add",
-                  "scale": 2.0
                 }
               ],
               "minimum": 1.0,
-              "maximum": 20.0
+              "maximum": 20.0,
+              "mastery": 2.0
             },
             "definition": "#formation_pressure"
           },
           {
             "type": "ascension:effect",
-            "duration": {
-              "base": 30
-            },
-            "potency": {
-              "base": 1
-            },
+            "duration": 30,
+            "potency": 1,
             "definition": "#star_nail_drag"
           },
           {
             "type": "ascension:particles",
             "particle": "minecraft:end_rod",
-            "count": {
-              "base": 4
-            },
-            "spread": {
-              "base": 0.25
-            },
-            "speed": {
-              "base": 0.01
-            }
+            "count": 4,
+            "spread": 0.25,
+            "speed": 0.01
           }
         ],
         "on_exit": [
           {
             "type": "ascension:particles",
             "particle": "minecraft:smoke",
-            "count": {
-              "base": 8
-            },
-            "spread": {
-              "base": 0.3
-            },
-            "speed": {
-              "base": 0.02
-            }
+            "count": 8,
+            "spread": 0.3,
+            "speed": 0.02
           }
         ],
-        "visual": "#field_visual"
+        "visual": "ascension:skill/castable/celestial_constellation_circulation/scorpius_star_nail_formation/visual/field_visual"
       }
     },
     "networks": {
       "network": {
         "duration": {
           "base": 100,
-          "terms": [
-            {
-              "source": {
-                "type": "ascension:skill_level"
-              },
-              "operation": "add",
-              "scale": 40
-            }
-          ],
-          "maximum": 220
+          "maximum": 220,
+          "mastery": 40.0
         },
         "nodes": [
           {
@@ -296,7 +215,7 @@
         ],
         "rotate_with_caster": true,
         "field": "#field",
-        "visual": "#network_visual"
+        "visual": "ascension:skill/castable/celestial_constellation_circulation/scorpius_star_nail_formation/visual/network_visual"
       }
     },
     "stagger": {
@@ -309,7 +228,6 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 1.8
             },
             {
@@ -317,21 +235,18 @@
                 "type": "ascension:stat",
                 "stat": "ascension:strength"
               },
-              "operation": "add",
               "scale": 0.8
             }
           ],
           "minimum": 40.0
         },
         "resistance": {
-          "base": 0.0,
           "terms": [
             {
               "source": {
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.004
             }
           ],
@@ -346,340 +261,89 @@
                 "type": "ascension:stat",
                 "stat": "ascension:vitality"
               },
-              "operation": "add",
               "scale": 0.12
             }
           ],
           "minimum": 1.0
         },
         "decay_delay": 36,
-        "guard_break_duration": {
-          "base": 32.0
-        },
-        "immunity_duration": {
-          "base": 55.0
-        },
+        "guard_break_duration": 32.0,
+        "immunity_duration": 55.0,
         "movement_multiplier": 0.12,
         "interrupt_held_casts": true,
         "on_guard_break": [
           {
             "type": "ascension:visual",
-            "duration": {
-              "base": 18
-            },
-            "definition": "ascension:skill/castable/celestial_constellation_circulation/sevenfold_celestial_hunt/visual/collapse",
-            "subject": "target"
+            "duration": 18,
+            "subject": "target",
+            "visual": "ascension:skill/castable/celestial_constellation_circulation/sevenfold_celestial_hunt/visual/collapse"
           },
           {
             "type": "ascension:sound",
             "sound": "minecraft:block.chain.break",
-            "volume": {
-              "base": 0.8
-            },
-            "pitch": {
-              "base": 1.2
-            }
-          }
-        ]
-      }
-    },
-    "visuals": {
-      "network_visual": {
-        "layers": [
-          {
-            "type": "ascension:beam",
-            "appearance": {
-              "color": [
-                135,
-                80,
-                225,
-                190
-              ],
-              "secondary_color": [
-                235,
-                165,
-                255,
-                245
-              ],
-              "line_width": 3.1,
-              "no_depth": false
-            }
-          },
-          {
-            "type": "ascension:ground_glyph",
-            "position": "each_point",
-            "transform": {
-              "offset": [
-                0,
-                0.03,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                100,
-                55,
-                190,
-                165
-              ],
-              "secondary_color": [
-                225,
-                150,
-                255,
-                230
-              ],
-              "line_width": 2.1,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": 0.48,
-              "inner_radius": 0.22,
-              "segments": 28,
-              "count": 8
-            },
-            "motion": {
-              "spin": 0.9,
-              "pulse": 0.07,
-              "pulse_speed": 0.14
-            }
-          },
-          {
-            "type": "ascension:particle_emitter",
-            "position": "each_point",
-            "geometry": {
-              "radius": 0.22,
-              "height": 0.45,
-              "length": 0.018,
-              "count": 1
-            },
-            "motion": {
-              "interval": 3
-            },
-            "resources": {
-              "particle": "minecraft:end_rod"
-            }
-          }
-        ]
-      },
-      "field_visual": {
-        "layers": [
-          {
-            "type": "ascension:ground_glyph",
-            "transform": {
-              "offset": [
-                0,
-                0.035,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                92,
-                55,
-                175,
-                145
-              ],
-              "secondary_color": [
-                180,
-                95,
-                255,
-                210
-              ],
-              "line_width": 2.3,
-              "filled": true,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": {
-                "source": "primary",
-                "scale": 1.0,
-                "minimum": 0.5
-              },
-              "inner_radius": {
-                "source": "primary",
-                "scale": 0.72
-              },
-              "segments": 48,
-              "count": 12
-            },
-            "motion": {
-              "spin": 0.22,
-              "pulse": 0.018,
-              "pulse_speed": 0.11
-            }
-          },
-          {
-            "type": "ascension:ring",
-            "transform": {
-              "offset": [
-                0,
-                0.1,
-                0
-              ]
-            },
-            "appearance": {
-              "color": [
-                105,
-                65,
-                205,
-                190
-              ],
-              "secondary_color": [
-                215,
-                145,
-                255,
-                235
-              ],
-              "line_width": 1.7,
-              "no_depth": false
-            },
-            "geometry": {
-              "radius": {
-                "source": "primary",
-                "scale": 0.92
-              },
-              "segments": 36
-            },
-            "motion": {
-              "spin": -0.5
-            }
-          },
-          {
-            "type": "ascension:particle_emitter",
-            "geometry": {
-              "radius": {
-                "source": "primary",
-                "scale": 0.85
-              },
-              "height": 0.5,
-              "length": 0.02,
-              "count": 2
-            },
-            "motion": {
-              "interval": 4
-            },
-            "resources": {
-              "particle": "minecraft:witch"
-            }
+            "volume": 0.8,
+            "pitch": 1.2
           }
         ]
       }
     }
   },
-  "levels": [
+  "target": {
+    "type": "ascension:look_position",
+    "range": {
+      "base": 18,
+      "per_mastery": 6.0
+    },
+    "include_fluids": false,
+    "fallback_to_maximum_range": true
+  },
+  "actions": [
     {
-      "targeting": {
-        "type": "ascension:look_position",
-        "range": {
-          "base": 18
-        },
-        "include_fluids": false,
-        "fallback_to_maximum_range": true
-      },
-      "require_targets": true,
-      "features": [
-        {
-          "type": "ascension:network",
-          "action": "apply",
-          "definition": "#network",
-          "subject": "position"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:end_rod",
-          "count": {
-            "base": 42
-          },
-          "spread": {
-            "base": 1.5
-          },
-          "speed": {
-            "base": 0.04
-          },
-          "subject": "position"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:block.amethyst_cluster.place",
-          "volume": {
-            "base": 0.9
-          },
-          "pitch": {
-            "base": 0.9
-          },
-          "subject": "target"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 24
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 360
-      }
+      "type": "ascension:network",
+      "action": "apply",
+      "definition": "#network",
+      "subject": "position"
     },
     {
-      "targeting": {
-        "type": "ascension:look_position",
-        "range": {
-          "base": 24
-        },
-        "include_fluids": false,
-        "fallback_to_maximum_range": true
+      "type": "ascension:particles",
+      "particle": "minecraft:end_rod",
+      "count": {
+        "base": 42,
+        "per_mastery": 14.0
       },
-      "require_targets": true,
-      "features": [
-        {
-          "type": "ascension:network",
-          "action": "apply",
-          "definition": "#network",
-          "subject": "position"
-        },
-        {
-          "type": "ascension:particles",
-          "particle": "minecraft:end_rod",
-          "count": {
-            "base": 56
-          },
-          "spread": {
-            "base": 1.9
-          },
-          "speed": {
-            "base": 0.05
-          },
-          "subject": "position"
-        },
-        {
-          "type": "ascension:sound",
-          "sound": "minecraft:block.amethyst_cluster.place",
-          "volume": {
-            "base": 1.0
-          },
-          "pitch": {
-            "base": 0.8
-          },
-          "subject": "target"
-        }
-      ],
-      "costs": [
-        {
-          "resource": "ascension:qi",
-          "source": "ascension:skill_casting",
-          "amount": {
-            "base": 28
-          },
-          "operation": "ascension:consume"
-        }
-      ],
-      "cooldown": {
-        "base": 300
-      }
+      "spread": {
+        "base": 1.5,
+        "per_mastery": 0.4
+      },
+      "speed": {
+        "base": 0.04,
+        "per_mastery": 0.01
+      },
+      "subject": "position"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.amethyst_cluster.place",
+      "volume": {
+        "base": 0.9,
+        "per_mastery": 0.1
+      },
+      "pitch": {
+        "base": 0.9,
+        "per_mastery": -0.1
+      },
+      "subject": "target"
     }
-  ]
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 24,
+      "per_mastery": 4.0
+    }
+  },
+  "cooldown": {
+    "base": 360,
+    "per_mastery": -60.0
+  }
 }

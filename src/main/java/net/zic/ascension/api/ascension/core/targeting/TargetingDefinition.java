@@ -116,21 +116,21 @@ public interface TargetingDefinition {
             ServerLevel level,
             LivingEntity caster,
             Identifier skill,
-            int effectiveLevel,
+            int effectiveProgression,
             double charge,
             Map<Identifier, Double> variables
     ) {
-        public static final Identifier EFFECTIVE_LEVEL = AscensionCraft.prefix("skill/effective_level");
+        public static final Identifier EFFECTIVE_PROGRESSION = AscensionCraft.prefix("skill/effective_progression");
 
         public Context {
-            effectiveLevel = Math.max(0, effectiveLevel);
+            effectiveProgression = Math.max(0, effectiveProgression);
             charge = Double.isFinite(charge) ? Math.clamp(charge, 0.0D, 1.0D) : 0.0D;
             variables = variables == null ? Map.of() : Map.copyOf(variables);
         }
 
         public ScaledValue.Context scaledValueContext(LivingEntity target) {
             Map<Identifier, Double> resolved = new HashMap<>(variables);
-            resolved.put(EFFECTIVE_LEVEL, (double) effectiveLevel);
+            resolved.put(EFFECTIVE_PROGRESSION, (double) effectiveProgression);
             return new ScaledValue.Context(originSource(), skill, caster, target, charge, resolved);
         }
 

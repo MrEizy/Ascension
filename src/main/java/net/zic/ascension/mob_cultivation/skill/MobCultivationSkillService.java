@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/** Temporarily adapts mob skill ownership to the shared skill progression API while mob cultivation is being refactored. */
 public final class MobCultivationSkillService {
     private MobCultivationSkillService() {
     }
@@ -41,7 +42,7 @@ public final class MobCultivationSkillService {
             if (desired.contains(existing)) {
                 continue;
             }
-            SkillProgressionService.removeContribution(source, existing, MobCultivationManager.MOB_CULTIVATION_OWNER);
+            SkillProgressionService.removeCap(source, existing, MobCultivationManager.MOB_CULTIVATION_OWNER);
             AscensionOriginSourceHelper.removeSkill(source, existing, MobCultivationManager.MOB_CULTIVATION_OWNER);
         }
 
@@ -49,13 +50,11 @@ public final class MobCultivationSkillService {
             if (!AscensionOriginSourceHelper.hasSkill(source, skill)) {
                 AscensionOriginSourceHelper.addSkill(source, skill, MobCultivationManager.MOB_CULTIVATION_OWNER);
             }
-            SkillProgressionService.setLevelContribution(
+            SkillProgressionService.setCap(
                     source,
                     skill,
                     MobCultivationManager.MOB_CULTIVATION_OWNER,
-                    1,
-                    true,
-                    true
+                    1
             );
         }
         data.setAssignedSkills(desired);
@@ -63,7 +62,7 @@ public final class MobCultivationSkillService {
 
     public static void clear(MobCultivationData data, OriginSource source) {
         for (Identifier skill : data.getAssignedSkills()) {
-            SkillProgressionService.removeContribution(source, skill, MobCultivationManager.MOB_CULTIVATION_OWNER);
+            SkillProgressionService.removeCap(source, skill, MobCultivationManager.MOB_CULTIVATION_OWNER);
             AscensionOriginSourceHelper.removeSkill(source, skill, MobCultivationManager.MOB_CULTIVATION_OWNER);
         }
         data.setAssignedSkills(Set.of());

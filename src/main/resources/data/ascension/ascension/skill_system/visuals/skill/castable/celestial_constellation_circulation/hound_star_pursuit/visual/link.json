@@ -1,0 +1,66 @@
+{
+  "elements": [
+    {
+      "type": "ascension:beam",
+      "tint": [
+        80,
+        145,
+        255,
+        90
+      ],
+      "secondary_tint": [
+        255,
+        225,
+        130,
+        230
+      ],
+      "line_width": 3.0,
+      "no_depth": false
+    },
+    {
+      "type": "ascension:beam",
+      "tint": [
+        220,
+        240,
+        255,
+        185
+      ],
+      "secondary_tint": [
+        255,
+        250,
+        205,
+        250
+      ],
+      "line_width": 1.1,
+      "no_depth": false
+    },
+    {
+      "type": "ascension:ring",
+      "position": "each_point",
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "tint": [
+        100,
+        175,
+        255,
+        150
+      ],
+      "secondary_tint": [
+        255,
+        230,
+        145,
+        235
+      ],
+      "line_width": 1.8,
+      "no_depth": false,
+      "radius": 0.34,
+      "segments": 20,
+      "spin": 2.2,
+      "pulse": 0.08,
+      "pulse_speed": 0.3
+    }
+  ]
+}

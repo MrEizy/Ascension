@@ -1,0 +1,59 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.physique.seven_star_bones.name"
+  },
+  "description": {
+    "translate": "ascension.physique.seven_star_bones.desc"
+  },
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/star",
+    "ascension:elemental/gravity"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:vitality": 5.0,
+    "ascension:strength": 4.0,
+    "ascension:spirit": 1.0
+  },
+  "stat_modifiers": {
+    "ascension:vitality": [
+      {
+        "value": 0.2,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:seven_star_bones_vitality_modifier"
+      }
+    ]
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 1.5,
+      "ascension:elemental/star": 3.0,
+      "ascension:elemental/gravity": 2.0
+    }
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/star": [
+        {
+          "value": 0.2,
+          "operation": "ADD_BASE",
+          "id": "ascension:seven_star_bones_star_affinity_modifier"
+        }
+      ],
+      "ascension:elemental/gravity": [
+        {
+          "value": 0.1,
+          "operation": "ADD_BASE",
+          "id": "ascension:seven_star_bones_gravity_affinity_modifier"
+        }
+      ]
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:heaven"
+  }
+}

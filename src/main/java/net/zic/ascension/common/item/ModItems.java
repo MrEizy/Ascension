@@ -4,6 +4,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -16,6 +17,8 @@ import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHuman;
 import net.zic.ascension.common.item.artifacts.pills.JadeBottleItem;
+import net.zic.ascension.common.item.artifacts.pills.ModPills;
+import net.zic.ascension.common.item.artifacts.pills.PillItem;
 import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.transfer_item.BloodlineTransferItem;
 import net.zic.ascension.common.item.transfer_item.PhysiqueTransferItem;
@@ -43,6 +46,8 @@ public class ModItems {
                     .setId(RegistryHelper.key(Registries.ITEM,AscensionCraft.MOD_ID,"technique_manual"))
                     .stacksTo(1)
             ));
+
+
 
 
 
@@ -74,6 +79,23 @@ public class ModItems {
             () -> new JadeBottleItem(new Item.Properties()
                     .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "jade_bottle"))));
 
+    // Pills
+    public static final DeferredItem<Item> PILL_RESIDUE = ITEMS.registerSimpleItem("pill_residue");
+    public static final DeferredItem<Item> FASTING_PILL = ITEMS.registerItem("fasting_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.FASTING));
+    public static final DeferredItem<Item> QI_REPLENISHING_PILL = ITEMS.registerItem("qi_replenishing_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.QI_REPLENISHING));
+    public static final DeferredItem<Item> REGENERATION_PILL = ITEMS.registerItem("regeneration_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.REGENERATION));
+    public static final DeferredItem<Item> STAMINA_REPLENISHING_PILL = ITEMS.registerItem("stamina_replenishing_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.STAMINA_REPLENISHING));
+    public static final DeferredItem<Item> BODY_CULTIVATION_PILL = ITEMS.registerItem("body_cultivation_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/body"))));
+    public static final DeferredItem<Item> SOUL_CULTIVATION_PILL = ITEMS.registerItem("soul_cultivation_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/soul"))));
+    public static final DeferredItem<Item> ESSENCE_CULTIVATION_PILL = ITEMS.registerItem("essence_cultivation_pill",
+            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/essence"))));
+
 
 
 
@@ -92,6 +114,10 @@ public class ModItems {
     public static final DeferredItem<Item> FROST_SILVER_INGOT = ITEMS.registerSimpleItem("frost_silver_ingot");
 
 
+    public static final DeferredItem<Item> SPIRITUAL_STONE = ITEMS.register("spiritual_stone",
+            () -> new Item(new Item.Properties().rarity(Rarity.EPIC).setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "spiritual_stone"))));
+
+
     //Herbs Items
     public static final DeferredItem<Item> JADE_DEW_GRASS = ITEMS.registerItem("jade_dew_grass",
             properties -> new HerbItem(properties, ModHerbs.JADE_DEW_GRASS, () -> ModBlocks.JADE_DEW_GRASS_CROP.get()));
@@ -100,17 +126,28 @@ public class ModItems {
 
 
     public static final DeferredItem<Item> GINSENG = ITEMS.registerItem("ginseng",
-            properties -> new HerbItem(properties, ModHerbs.GINSENG, () -> ModBlocks.GINSENG_CROP.get()));
+            properties -> new HerbItem(properties.food(AscFoodProperties.GINSENG), ModHerbs.GINSENG, () -> ModBlocks.GINSENG_CROP.get()));
     public static final DeferredItem<Item> FIRE_GINSENG = ITEMS.registerItem("fire_ginseng",
-            properties -> new HerbItem(properties, ModHerbs.FIRE_GINSENG, () -> ModBlocks.FIRE_GINSENG_CROP.get()));
+            properties -> new HerbItem(properties.food(AscFoodProperties.GINSENG), ModHerbs.FIRE_GINSENG, () -> ModBlocks.FIRE_GINSENG_CROP.get()));
     public static final DeferredItem<Item> SNOW_GINSENG = ITEMS.registerItem("snow_ginseng",
-            properties -> new HerbItem(properties, ModHerbs.SNOW_GINSENG, () -> ModBlocks.SNOW_GINSENG_CROP.get()));
+            properties -> new HerbItem(properties.food(AscFoodProperties.GINSENG), ModHerbs.SNOW_GINSENG, () -> ModBlocks.SNOW_GINSENG_CROP.get()));
+    public static final DeferredItem<Item> NINE_SUN_FIRE_ROOT = ITEMS.registerItem("nine_sun_fire_root",
+            properties -> new HerbItem(properties.food(AscFoodProperties.GINSENG), ModHerbs.NINE_SUN_FIRE_ROOT, () -> ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get()));
+    public static final DeferredItem<Item> MOONWELL_JADE_LOTUS = ITEMS.registerItem("moonwell_jade_lotus",
+            properties -> new HerbItem(properties.food(AscFoodProperties.ORCHID), ModHerbs.MOONWELL_JADE_LOTUS, () -> ModBlocks.MOONWELL_JADE_LOTUS_CROP.get()));
+    public static final DeferredItem<Item> WHITE_JADE_ORCHID = ITEMS.registerItem("white_jade_orchid",
+            properties -> new HerbItem(properties.food(AscFoodProperties.ORCHID), ModHerbs.WHITE_JADE_ORCHID, () -> ModBlocks.WHITE_JADE_ORCHID_CROP.get()));
 
 
     public static final DeferredItem<Item> LINGZHI_MUSHROOM = ITEMS.registerItem("lingzhi_mushroom",
-            properties -> new HerbItem(properties, ModHerbs.LINGZHI_MUSHROOM));
+            properties -> new HerbItem(properties.food(AscFoodProperties.MUSHROOM), ModHerbs.LINGZHI_MUSHROOM));
     public static final DeferredItem<Item> BLOOD_LINGZHI_MUSHROOM = ITEMS.registerItem("blood_lingzhi_mushroom",
-            properties -> new HerbItem(properties, ModHerbs.BLOOD_LINGZHI_MUSHROOM));
+            properties -> new HerbItem(properties.food(AscFoodProperties.MUSHROOM), ModHerbs.BLOOD_LINGZHI_MUSHROOM));
+    public static final DeferredItem<Item> PEACH = ITEMS.registerItem("peach",
+            properties -> new HerbItem(properties.food(AscFoodProperties.PEACH), ModHerbs.PEACH));
+
+    public static final DeferredItem<Item> HEAVENLY_THUNDER_PEACH = ITEMS.registerItem("heavenly_thunder_peach",
+            properties -> new HerbItem(properties.food(AscFoodProperties.PEACH), ModHerbs.HEAVENLY_THUNDER_PEACH));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

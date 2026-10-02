@@ -15,9 +15,10 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
-import net.zic.ascension.api.ascension.core.path.interactions.PathInteractionHolder;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.blocks.ModBlocks;
+import net.zic.ascension.common.blocks.entity.AscBlockEntities;
+import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.common.fluids.AscFluidTypes;
 import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.gui.menus.AscMenuTypes;
@@ -30,6 +31,7 @@ import net.zic.ascension.common.command.commands.AuctionCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
+import net.zic.ascension.impl.datapack.alchemy.AlchemyMaterialProviders;
 import net.zic.ascension.network.*;
 import net.zic.ascension.impl.core.entity.AscensionStats;
 
@@ -37,16 +39,19 @@ import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
 import net.zic.ascension.impl.datapack.path.AscensionPathTypes;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionConditionTypes;
+import net.zic.ascension.impl.datapack.requirement.AscensionRequirementTypes;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
 import net.zic.ascension.impl.value.source.AscensionScaledValueSourceTypes;
 import net.zic.ascension.impl.resource.AscensionResourceTypes;
-import net.zic.ascension.impl.datapack.skill.AscensionSkillExecutionFeatureTypes;
+import net.zic.ascension.impl.datapack.skill.AscensionSkillActionTypes;
 import net.zic.ascension.impl.datapack.targeting.AscensionTargetingTypes;
 import net.zic.ascension.impl.datapack.effect.AscensionSkillEffectModuleTypes;
 import net.zic.ascension.impl.datapack.projectile.AscensionProjectileBehaviorTypes;
 import net.zic.ascension.worldgen.AscFeatures;
+import net.zic.ascension.worldgen.density.AscDensityFunctionTypes;
+import net.zic.ascension.worldgen.AscTreeDecoratorTypes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -67,12 +72,12 @@ import java.util.Map;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 @Mod(AscensionCraft.MOD_ID)
 public class AscensionCraft {
+
     public static float hue;
     public static final String MOD_ID = "ascension";
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final Map<String, String> SECT_DATA = new HashMap<>();
 
- private static final PathInteractionHolder pathInteractionHolder = new PathInteractionHolder();
     public static Identifier prefix(String name){
         return Identifier.fromNamespaceAndPath(MOD_ID, name);
     }
@@ -87,11 +92,11 @@ public class AscensionCraft {
     public void register(IEventBus modEventBus){
         COMPONENTS.register(modEventBus);
         RECIPES.register(modEventBus);
-
         CoreHolderProviders.register(modEventBus);
         CoreAttachments.register(modEventBus);
 
         AscensionPhysiqueTypes.register(modEventBus);
+        AlchemyMaterialProviders.register(modEventBus);
         AscensionAttachments.register(modEventBus);
         AscensionComponents.register(modEventBus);
         AscensionParticles.register(modEventBus);
@@ -103,11 +108,15 @@ public class AscensionCraft {
         AscFluids.register(modEventBus);
 
 
+        AscEntities.register(modEventBus);
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        AscBlockEntities.register(modEventBus);
 
+        AscDensityFunctionTypes.register(modEventBus);
         AscFeatures.register(modEventBus);
+        AscTreeDecoratorTypes.register(modEventBus);
 
         ModCreativeModeTabs.register(modEventBus);
 
@@ -117,6 +126,7 @@ public class AscensionCraft {
         AscensionBloodlineTypes.register(modEventBus);
         AscensionProgressActionTypes.register(modEventBus);
         AscensionProgressActionConditionTypes.register(modEventBus);
+        AscensionRequirementTypes.register(modEventBus);
         AscensionSkillTypes.register(modEventBus);
         AscensionTechniqueTypes.register(modEventBus);
         AscensionPathTypes.register(modEventBus);
@@ -124,12 +134,14 @@ public class AscensionCraft {
 
         AscensionScaledValueSourceTypes.register(modEventBus);
         AscensionResourceTypes.register(modEventBus);
-        AscensionSkillExecutionFeatureTypes.register(modEventBus);
+        AscensionSkillActionTypes.register(modEventBus);
         AscensionTargetingTypes.register(modEventBus);
         AscensionSkillEffectModuleTypes.register(modEventBus);
         AscensionProjectileBehaviorTypes.register(modEventBus);
 
         AscensionAttributes.register(modEventBus);
+
+
 
     }
 
@@ -201,7 +213,6 @@ public class AscensionCraft {
 
 
 
-    public static PathInteractionHolder getPathInteractionHolder(){return pathInteractionHolder;}
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
     public static class ModEvents {
 
@@ -291,25 +302,41 @@ public class AscensionCraft {
             );
 
             registrar.playToClient(
-                    ParticleFieldStatePacket.TYPE,
-                    ParticleFieldStatePacket.STREAM_CODEC,
-                    ParticleFieldStatePacket::handle
-            );
-            registrar.playToClient(
-                    HeldCastVisualStatePacket.TYPE,
-                    HeldCastVisualStatePacket.STREAM_CODEC,
-                    HeldCastVisualStatePacket::handle
+                    ActiveCastVisualStatePacket.TYPE,
+                    ActiveCastVisualStatePacket.STREAM_CODEC,
+                    ActiveCastVisualStatePacket::handle
             );
             registrar.playToClient(
                     RuntimeVisualPacket.TYPE,
                     RuntimeVisualPacket.STREAM_CODEC,
                     RuntimeVisualPacket::handle
             );
+            registrar.playToClient(
+                    ClientboundDivineSensePacket.TYPE,
+                    ClientboundDivineSensePacket.STREAM_CODEC,
+                    ClientboundDivineSensePacket::handle
+            );
+            registrar.playToClient(
+                    SwordFlightStatePacket.TYPE,
+                    SwordFlightStatePacket.STREAM_CODEC,
+                    SwordFlightStatePacket::handle
+            );
 
             registrar.playToServer(
                     ChooseStarterOptionPacket.TYPE,
                     ChooseStarterOptionPacket.STREAM_CODEC,
                     ChooseStarterOptionPacket::handle
+            );
+
+            registrar.playToClient(
+                    SphericalDestructionPayload.TYPE,
+                    SphericalDestructionPayload.CODEC,
+                    SphericalDestructionPayload::handle
+            );
+            registrar.playToClient(
+                    SphericalProjectilePayload.TYPE,
+                    SphericalProjectilePayload.CODEC,
+                    SphericalProjectilePayload::handle
             );
 
             registrar.playToClient(

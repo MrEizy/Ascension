@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:clamp",
+    "input": {
+      "type": "minecraft:min",
+      "argument1": "ascension:terrain/core_mask",
+      "argument2": "ascension:terrain/ridge_combined"
+    },
+    "max": 1.0,
+    "min": 0.0
+  }
+}

@@ -20,7 +20,6 @@ public class ScrollBox extends RenderableElement {
         addEventListener(EasyEvents.MOUSE_SCROLL_EVENT, this::onMouseScroll);
     }
 
-
     @Override
     public void createCullRegion(GuiGraphicsExtractor graphics) {
         graphics.enableScissor(0, 0, getWidth(), getHeight());
@@ -30,20 +29,21 @@ public class ScrollBox extends RenderableElement {
         if (event.isCanceled() || !(event instanceof EasyMouseEvent mouseEvent)) {
             return;
         }
-        if (mouseEvent.getScrollY() == 0.0D) {
+        if (mouseEvent.getScrollY() == 0.0D
+                || !isPointBounded(mouseEvent.getMouseX(), mouseEvent.getMouseY())) {
             return;
         }
 
+        int previousOffset = yOffset;
         scroll(mouseEvent.getScrollY() < 0.0D ? -1 : 1);
-        event.setCanceled(true);
+        if (previousOffset != yOffset) {
+            event.setCanceled(true);
+        }
     }
 
     public int getMaxYScroll() {
         int bottom = 0;
         for (RenderableElement child : getChildren()) {
-            if (!child.isActive()) {
-                continue;
-            }
             bottom = Math.max(
                     bottom,
                     child.getPositioning().getRawY() + child.getHeight() + yOffset
@@ -117,10 +117,20 @@ public class ScrollBox extends RenderableElement {
     }
 
     public void scroll(int amount) {
+        int maximum = getMaxYScroll();
+        if (maximum <= 0) {
+            if (yOffset != 0) {
+                int oldYOffset = yOffset;
+                yOffset = 0;
+                updateChildrenY(oldYOffset);
+            }
+            return;
+        }
+
         int change = Math.abs(amount) * scrollRate;
         int oldYOffset = yOffset;
         if (amount < 0) {
-            yOffset = Math.min(yOffset + change, getMaxYScroll());
+            yOffset = Math.min(yOffset + change, maximum);
         } else {
             yOffset = Math.max(0, yOffset - change);
         }

@@ -28,6 +28,50 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
         addArtifactsRules();
         addDefaultHerbTooltip();
         addDefaultHerbRelatedTooltip();
+        addDefaultPillTooltip();
+        addDefaultAlchemyMaterialTooltip();
+    }
+
+    private void addDefaultPillTooltip() {
+        template(id("default_pill"))
+                .animationPreset(ZenithTooltipPresets.LIVING)
+                .page(page(sourced("zenithlib:subject_name"))
+                        .add(titleIcon(
+                                sourced("zenithlib:subject_name"),
+                                translated("ascension.pill.tooltip.type")
+                        ).withOnAllPages(true))
+                        .add(dynamic(id("pill_badges")))
+                        .add(divider())
+                        .add(text(
+                                sourced("zenithlib:subject_description"),
+                                ZenithTooltipColor.TEXT
+                        ))
+                        .add(divider())
+                        .add(header(translated("ascension.pill.tooltip.effect"), ZenithTooltipColor.ACCENT))
+                        .add(text(
+                                sourced("ascension:pill_effect"),
+                                ZenithTooltipColor.POSITIVE
+                        )));
+    }
+
+    private void addDefaultAlchemyMaterialTooltip() {
+        template(id("default_alchemy_material"))
+                .animationPreset(ZenithTooltipPresets.LIVING)
+                .page(page(sourced("zenithlib:subject_name"))
+                        .add(titleIcon(
+                                sourced("zenithlib:subject_name")
+                        ).withOnAllPages(true))
+                        .add(badge(
+                                translated("ascension.alchemy_material.tooltip.type"),
+                                ZenithTooltipColor.ACCENT,
+                                ZenithTooltipColor.BACKGROUND,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(divider())
+                        .add(text(
+                                translated("ascension.alchemy_material.tooltip.note"),
+                                ZenithTooltipColor.MUTED
+                        )));
     }
 
     private void addDefaultHerbRelatedTooltip() {
@@ -79,7 +123,8 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
     private void addDefaultTransferItemTooltips() {
         addDefaultBloodlineEssenceTooltip();
         addDefaultPhysiqueEssenceTooltip();
-        addDefaultTechniqueManualTooltip();
+        addDefaultCultivationTechniqueTooltip();
+        addDefaultBattleStyleTooltip();
     }
 
     private void addDefaultBloodlineEssenceTooltip() {
@@ -88,12 +133,12 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                 .page(page(sourced("zenithlib:subject_name"))
                         .add(titleIcon(
                                 sourced("zenithlib:subject_name"),
-                                literal("Bloodline Essence")
+                                translated("item.ascension.bloodline_essence")
                         ).withOnAllPages(true))
                         .add(classification(false, true, ClassificationElement.Style.BADGE))
                         .add(divider())
                         .add(dynamicBar(
-                                literal("Purity"),
+                                translated("ascension.tooltip.bloodline.purity"),
                                 id("bloodline_purity"),
                                 ZenithTooltipColor.NEGATIVE
                         ))
@@ -102,8 +147,8 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                                 ZenithTooltipColor.TEXT,
                                 shimmer(2400, 0.14F, 0.45F)
                         )))
-                .page(page(literal("Purity Growth"))
-                        .add(header(literal("Purity Growth"), ZenithTooltipColor.ACCENT).withEffect(shimmer()))
+                .page(page(translated("ascension.tooltip.bloodline.purity_growth"))
+                        .add(header(translated("ascension.tooltip.bloodline.purity_growth"), ZenithTooltipColor.ACCENT).withEffect(shimmer()))
                         .add(dynamic(id("bloodline_purity_gains"))));
     }
 
@@ -113,7 +158,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                 .page(page(sourced("zenithlib:subject_name"))
                         .add(titleIcon(
                                 sourced("zenithlib:subject_name"),
-                                literal("Physique Essence")
+                                translated("item.ascension.physique_essence")
                         ).withOnAllPages(true))
                         .add(classification(false, true, ClassificationElement.Style.BADGE))
                         .add(divider())
@@ -123,22 +168,22 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                                 sourced("zenithlib:subject_description"),
                                 ZenithTooltipColor.TEXT
                         )))
-                .page(page(literal("Attributes"))
-                        .add(header(literal("Statistics"), ZenithTooltipColor.POSITIVE))
+                .page(page(translated("ascension.tooltip.physique.stats_affinities"))
+                        .add(header(translated("ascension.tooltip.physique.stats"), ZenithTooltipColor.POSITIVE))
                         .add(dynamic(id("physique_stats")))
                         .add(divider())
-                        .add(header(literal("Affinities"), ZenithTooltipColor.ACCENT))
+                        .add(header(translated("ascension.tooltip.physique.affinities"), ZenithTooltipColor.ACCENT))
                         .add(dynamic(id("physique_affinities"))));
     }
 
-    private void addDefaultTechniqueManualTooltip() {
-        template(id("default_technique_manual"))
+    private void addDefaultCultivationTechniqueTooltip() {
+        template(id("default_cultivation_technique"))
                 .animationPreset(ZenithTooltipPresets.RUNIC)
                 .animationPreset(ZenithTooltipPresets.MECHANICAL)
                 .page(page(sourced("zenithlib:subject_name"))
                         .add(titleIcon(
                                 sourced("zenithlib:subject_name"),
-                                literal("Technique Manual")
+                                translated("item.ascension.technique_manual.cultivation_technique")
                         ).withOnAllPages(true))
                         .add(classification(false, true, ClassificationElement.Style.BADGE))
                         .add(divider())
@@ -156,13 +201,48 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                         ))
                         .add(divider())
                         .add(row(
-                                literal("Max Realm"),
+                                translated("ascension.tooltip.technique.max_realm"),
                                 sourced("ascension:technique_max_realm"),
                                 ZenithTooltipColor.TEXT,
                                 ZenithTooltipColor.ACCENT
                         )))
-                .page(page(literal("Realm Growth"))
-                        .add(header(literal("Realm Growth"), ZenithTooltipColor.ACCENT))
+                .page(page(translated("ascension.tooltip.technique.realm_growth"))
+                        .add(header(translated("ascension.tooltip.technique.realm_growth"), ZenithTooltipColor.ACCENT))
+                        .add(dynamic(id("technique_progression_gains"))));
+    }
+
+    private void addDefaultBattleStyleTooltip() {
+        template(id("default_battle_style"))
+                .animationPreset(ZenithTooltipPresets.RUNIC)
+                .animationPreset(ZenithTooltipPresets.MECHANICAL)
+                .page(page(sourced("zenithlib:subject_name"))
+                        .add(titleIcon(
+                                sourced("zenithlib:subject_name"),
+                                translated("item.ascension.technique_manual.battle_style")
+                        ).withOnAllPages(true))
+                        .add(classification(false, true, ClassificationElement.Style.BADGE))
+                        .add(divider())
+                        .add(badge(
+                                sourced("ascension:technique_path"),
+                                ZenithTooltipColor.BACKGROUND,
+                                ZenithTooltipColor.ACCENT,
+                                ZenithTooltipColor.ACCENT
+                        ))
+                        .add(divider())
+                        .add(text(
+                                sourced("zenithlib:subject_description"),
+                                ZenithTooltipColor.TEXT,
+                                typewriter(760, 80)
+                        ))
+                        .add(divider())
+                        .add(row(
+                                translated("ascension.tooltip.technique.max_realm"),
+                                sourced("ascension:technique_max_realm"),
+                                ZenithTooltipColor.TEXT,
+                                ZenithTooltipColor.ACCENT
+                        )))
+                .page(page(translated("ascension.tooltip.technique.realm_growth"))
+                        .add(header(translated("ascension.tooltip.technique.realm_growth"), ZenithTooltipColor.ACCENT))
                         .add(dynamic(id("technique_progression_gains"))));
     }
 

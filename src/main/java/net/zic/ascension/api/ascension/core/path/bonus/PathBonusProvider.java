@@ -15,4 +15,6 @@ public interface PathBonusProvider {
 
     Collection<PathBonus> getAllPathBonuses();
     Collection<Identifier> getAllPathBonusesInCategory(Identifier category);
+
+
 }

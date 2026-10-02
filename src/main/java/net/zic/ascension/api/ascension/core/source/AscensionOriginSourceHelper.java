@@ -12,8 +12,9 @@ import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolder;
 import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathData;
+
 import net.zic.ascension.api.ascension.core.path.PathHolder;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
 import net.zic.ascension.api.ascension.core.physique.Physique;
@@ -26,7 +27,8 @@ import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.core.technique.TechniqueHolder;
 import net.zic.ascension.api.ascension.event.bloodline.BloodlineEvent;
-import net.zic.ascension.api.ascension.event.path.PathEvent;
+import net.zic.ascension.api.ascension.event.path.PathAddedEvent;
+import net.zic.ascension.api.ascension.event.path.PathRemovedEvent;
 import net.zic.ascension.api.ascension.event.physique.PhysiqueChangedEvent;
 import net.zic.ascension.api.ascension.event.skill.SkillEvent;
 import net.zic.ascension.api.ascension.event.technique.TechniqueEvent;
@@ -46,7 +48,7 @@ import java.util.Random;
  * Contains methods to interact with an origin source.
  * These methods are specific to Ascension DataSources
  * includes a combination of getters and setters
- */
+  */
 public class AscensionOriginSourceHelper {
 
     private static Random random=  new Random();
@@ -61,7 +63,7 @@ public class AscensionOriginSourceHelper {
                 CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
         );
         if (provider != null) {
-            return provider.getData(entity).getSource();
+            return provider.getData().getSource();
         }
         return entity.getData(AscensionAttachments.SIMPLE_ENTITY_DATA).getSource();
     }
@@ -111,14 +113,15 @@ public class AscensionOriginSourceHelper {
         return getPhysiqueHolder(source).getData();
     }
     public static boolean setPhysique(OriginSource source,Identifier physique){
-        if (physique == null) {
-            return setPhysique(source, null, null);
-        }
+        if (physique == null) return setPhysique(source, null, null, true);
         Physique physiqueInstance = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,physique,source.getRegistryAccess());
         if(physiqueInstance == null) return false;
-        return setPhysique(source,physique, physiqueInstance.newData(source.getRegistryAccess()));
+        return setPhysique(source,physique, physiqueInstance.newData(source.getRegistryAccess()), true);
     }
     public static boolean setPhysique(OriginSource source, Identifier physique, PhysiqueData physiqueData) {
+        return setPhysique(source, physique, physiqueData, true);
+    }
+    public static boolean setPhysique(OriginSource source, Identifier physique, PhysiqueData physiqueData, boolean checkRequirements) {
 
         PhysiqueHolder holder = getPhysiqueHolder(source);
 
@@ -135,6 +138,9 @@ public class AscensionOriginSourceHelper {
         Physique newPhysiqueDefinition = pre.getNewPhysique(source.getRegistryAccess());
 
         if (newPhysique != null && (newPhysiqueDefinition == null || newPhysiqueData == null)) {
+            return false;
+        }
+        if (checkRequirements && newPhysiqueDefinition != null && !newPhysiqueDefinition.requirements().test(source)) {
             return false;
         }
 
@@ -160,10 +166,8 @@ public class AscensionOriginSourceHelper {
                 newPhysiqueDefinition.applyToEntity(entity,newPhysiqueData);
             }
         }
-        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,newPhysique,newPhysiqueData,source);
+        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData(),source);
         NeoForge.EVENT_BUS.post(post);
-
-
         //first add all new paths with the new physique as owner, this ensures that if there is path overlap there is owners >1
 
         for(Identifier path : toAdd){
@@ -172,6 +176,7 @@ public class AscensionOriginSourceHelper {
         for(Identifier path : toRemove){
             removePath(source,path,oldPhysique);
         }
+
         resolveProcess(source,"set_physique");
         return true;
     }
@@ -202,7 +207,7 @@ public class AscensionOriginSourceHelper {
         if(bloodline == null)return false;
         Bloodline bloodlineInstance = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodline,source.getRegistryAccess());
         if(bloodlineInstance == null) return false;
-        return addBloodline(source,bloodline,bloodlineInstance.newData(source.getRegistryAccess()));
+        return addBloodline(source,bloodline,bloodlineInstance.newData(source.getRegistryAccess()), true);
     }
     public static void mergeBloodline(OriginSource source,Identifier bloodline,BloodlineData data){
 
@@ -219,6 +224,9 @@ public class AscensionOriginSourceHelper {
     }
     //TODO consider creating a replace bloodline event as well
     public static boolean addBloodline(OriginSource source,Identifier bloodline, BloodlineData data ) {
+        return addBloodline(source, bloodline, data, true);
+    }
+    public static boolean addBloodline(OriginSource source,Identifier bloodline, BloodlineData data, boolean checkRequirements) {
         if(bloodline == null) return false;
         if(getBloodlineHolder(source).hasBloodline(bloodline)) {
             source.startProcess("merge_bloodline");
@@ -230,6 +238,8 @@ public class AscensionOriginSourceHelper {
         BloodlineEvent.Added.Pre pre = new BloodlineEvent.Added.Pre(bloodline,data,source);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
+        Bloodline bloodlineDefinition = pre.getBloodline(source.getRegistryAccess());
+        if (bloodlineDefinition == null || checkRequirements && !bloodlineDefinition.requirements().test(source)) return false;
 
         boolean result = getBloodlineHolder(source).addBloodline(bloodline, data);
         if(!result) return false;
@@ -237,14 +247,14 @@ public class AscensionOriginSourceHelper {
         source.startProcess("add_bloodline");
         int purity = data.getPurity();
         data.setPurity(1);
-        Collection<Identifier> toAdd = pre.getBloodline(source.getRegistryAccess()).onAdded(source,pre.getBloodlineData());
+        Collection<Identifier> toAdd = bloodlineDefinition.onAdded(source,pre.getBloodlineData());
 
-        if(pre.getBloodline(source.getRegistryAccess()) != null){
+        if(bloodlineDefinition != null){
             for(LivingEntity entity : source.getAttachedEntities()){
-                pre.getBloodline(source.getRegistryAccess()).applyToEntity(entity,pre.getBloodlineData());
+                bloodlineDefinition.applyToEntity(entity,pre.getBloodlineData());
             }
         }
-        pre.getBloodline(source.getRegistryAccess()).handlePurityChange(source,data,purity);
+        bloodlineDefinition.handlePurityChange(source,data,purity);
 
         for(Identifier path : toAdd){
             addPath(source,path,pre.getBloodlineIdentifier());
@@ -310,7 +320,7 @@ public class AscensionOriginSourceHelper {
     public static boolean hasPath(OriginSource source,Identifier path){
         return getPathHolder(source).hasPath(path);
     }
-    public static PathData getPathData(OriginSource source,Identifier path){
+    public static PathInstance getPathInstance(OriginSource source, Identifier path){
         return getPathHolder(source).getPath(path);
     }
 
@@ -322,26 +332,42 @@ public class AscensionOriginSourceHelper {
     }
 
     /**
-     * Adds a path, creating a fresh pathData instance
+     * Adds a path, creating a fresh PathInstance instance
      * @param path the path to add
      * @param owner the source of this addition
      * @return true-> added, false -> not added
      */
     public static boolean addPath(OriginSource source,Identifier path,Identifier owner){
         if(path == null) return false;
+        if(getPathHolder(source).hasPath(path)){
+            getPathHolder(source).addPath(path,getPathHolder(source).getPath(path),owner);
+            return true;
+        }
         Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,source.getRegistryAccess());
         if(pathInstance == null) return false;
-        return addPath(source,path,pathInstance.newData(source.getRegistryAccess()),owner);
+        return addPath(source,path,pathInstance.newInstance(source.getRegistryAccess()),owner);
     }
 
-    public static boolean addPath(OriginSource source,Identifier path, PathData existingData, Identifier owner) {
+    public static boolean addPath(OriginSource source,Identifier path, PathInstance existingData, Identifier owner) {
+        boolean usedCachedResult = false;
+        if(path == null) return false;
+        if(getPathHolder(source).hasPath(path)){
+            getPathHolder(source).addPath(path,existingData,owner);
 
-        if(path == null || existingData == null) return false;
+            return true;
+        }
+        if(existingData == null) return false;
+
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
-        if(getPathHolder(source).hasCachedPath(path)) existingData = getPathHolder(source).removeCachedPath(path);
+        if(getPathHolder(source).hasCachedPath(path)) {
+            existingData = getPathHolder(source).removeCachedPath(path);
+            usedCachedResult = true;
+        }
 
 
-        PathEvent.Added.Pre pre = new PathEvent.Added.Pre(path,existingData,source);
+        if(existingData == null) return false;
+
+        PathAddedEvent.Pre pre = new PathAddedEvent.Pre(path,existingData,source);
 
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
@@ -351,8 +377,8 @@ public class AscensionOriginSourceHelper {
 
         source.startProcess("add_path");
 
-        existingData.simulateProgression(source);
-        PathEvent.Added.Post post = new PathEvent.Added.Post(path,existingData,source);
+        if(!usedCachedResult) existingData.simulateProgression(source);
+        PathAddedEvent.Post post = new PathAddedEvent.Post(path,existingData,source);
         NeoForge.EVENT_BUS.post(post);
 
         source.markDataSourceDirty(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
@@ -364,9 +390,10 @@ public class AscensionOriginSourceHelper {
 
     public static boolean removePath(OriginSource source,Identifier path,Identifier owner) {
         if(path == null || !getPathHolder(source).hasPath(path)) return false;
+
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
-        PathData data = getPathHolder(source).getPath(path);
-        PathEvent.Removed.Pre pre = new PathEvent.Removed.Pre(path,data,source);
+        PathInstance data = getPathHolder(source).getPath(path);
+        PathRemovedEvent.Pre pre = new PathRemovedEvent.Pre(path,data,source);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
@@ -375,7 +402,7 @@ public class AscensionOriginSourceHelper {
 
         source.startProcess("remove_path");
         data.removeFromSource(source);
-        PathEvent.Removed.Post post = new PathEvent.Removed.Post(path,data,source);
+        PathRemovedEvent.Post post = new PathRemovedEvent.Post(path,data,source);
         NeoForge.EVENT_BUS.post(post);
 
         source.markDataSourceDirty(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
@@ -385,7 +412,7 @@ public class AscensionOriginSourceHelper {
         return true;
     }
 
-    //should be used if you changed a paths pathData
+    //should be used if you changed a paths PathInstance
     public static void markPathDirty(OriginSource source,Identifier path){
         long id = random.nextLong();
         source.startProcess("modified_path"+id);
@@ -414,6 +441,10 @@ public class AscensionOriginSourceHelper {
      */
     public static boolean addSkill(OriginSource source,Identifier skill,Identifier owner){
         if(skill == null) return false;
+        if(getSkillHolder(source).hasSkill(skill)){
+            getSkillHolder(source).addSkill(skill,getSkillHolder(source).getSkillData(skill),owner);
+            return true;
+        }
         Skill skillInstance = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,source.getRegistryAccess());
         if(skillInstance == null) return false;
         return addSkill(source,skill,skillInstance.newData(source.getRegistryAccess()),owner);
@@ -422,6 +453,10 @@ public class AscensionOriginSourceHelper {
     public static boolean addSkill(OriginSource source,Identifier skill, SkillData data, Identifier owner) {
 
         if(skill == null) return false;
+        if(getSkillHolder(source).hasSkill(skill)){
+            getSkillHolder(source).addSkill(skill,data,owner);
+            return true;
+        }
         if(!CoreRegistries.SKILL_REGISTRY.get(source.getRegistryAccess()).containsKey(skill)) return false;
         if(getSkillHolder(source).hasCachedSkill(skill))  data = getSkillHolder(source).removeCachedSkill(skill);
 
@@ -510,10 +545,13 @@ public class AscensionOriginSourceHelper {
         Technique techniqueInstance = CoreRegistries.safeAccess(
                 CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
         );
-        return techniqueInstance != null && addTechnique(source, technique, techniqueInstance.newData());
+        return techniqueInstance != null && addTechnique(source, technique, techniqueInstance.newData(), true);
     }
 
     public static boolean addTechnique(OriginSource source, Identifier technique, TechniqueData data) {
+        return addTechnique(source, technique, data, true);
+    }
+    public static boolean addTechnique(OriginSource source, Identifier technique, TechniqueData data, boolean checkRequirements) {
         if (technique == null || data == null || hasTechnique(source, technique)) {
             return false;
         }
@@ -521,6 +559,9 @@ public class AscensionOriginSourceHelper {
                 CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
         );
         if (techniqueInstance == null || !broadcastTechniqueAddedAttempt(source, technique, data)) {
+            return false;
+        }
+        if (checkRequirements && !techniqueInstance.requirements().test(source)) {
             return false;
         }
         if (!getTechniqueHolder(source).addTechnique(technique, data)) {
@@ -656,7 +697,7 @@ public class AscensionOriginSourceHelper {
         for(LivingEntity entity : source.getAttachedEntities()){
             AscensionEntityDataProvider provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(provider == null) continue;
-            provider.getData(entity).updatePathBonus(category,path);
+            provider.getData().updatePathBonus(category,path);
         }
     }
     //──Affinity Quick Access────────────────────────────────────────────────────────
@@ -694,7 +735,7 @@ public class AscensionOriginSourceHelper {
         for(LivingEntity entity : source.getAttachedEntities()){
             AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
             if(holder == null) continue;
-            holder.getData(entity).markDirty(patch,false);
+            holder.getData().markDirty(patch,false);
         }
 
     }

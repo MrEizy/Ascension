@@ -1,64 +1,100 @@
 {
-  "type": "ascension:resource_modifier_passive",
+  "type": "ascension:passive",
   "name": "Sword Mastery",
   "description": "Projects sword qi through each swing.",
-  "default_accessible_level": 1,
-  "modules": [
-    {
-      "type": "ascension:weapon_swing",
-      "path": "ascension:weapon/sword",
-      "weapon_tag": "minecraft:swords",
-      "vfx_type": "sword_swing",
-      "fallback_color": "blue",
-      "technique_colors": {
-        "ascension:2_profound/mount_hua_sword_manual": "red",
-        "ascension:1_ordinary/sustained_spirit_art": "purple",
-        "ascension:3_heaven/celestial_constellation_circulation": "holy",
-        "ascension:3_heaven/guardian_dharma_manual": "gold",
-        "ascension:bug_tester_manual": "blue",
-        "ascension:example_technique": "green"
-      },
-      "radius": [
-        2.5,
-        1.5,
-        2.5
-      ],
-      "base_damage": 5.0,
-      "knockback": 1.0,
-      "duration": 8,
-      "rotation_z": 0.0,
-      "movement": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "qi_cost": 2.0,
-      "minimum_interval": 1,
-      "realm_scaling": {
-        "base_bonus": 0.1,
-        "bonus_per_major_realm": 0.22,
-        "bonus_per_minor_realm": 0.025,
-        "maximum_bonus": 5.0
-      },
-      "classifications": [
-        "ascension:skill",
-        "ascension:melee",
-        "ascension:weapon",
-        "ascension:sword"
-      ],
-      "hit_shape": "area",
-      "priority": 0
-    },
+  "modifiers": [
     {
       "type": "ascension:weapon_damage",
-      "path": "ascension:weapon/sword",
       "weapon_tag": "minecraft:swords",
       "match": "held_weapon",
-      "realm_scaling": {
-        "base_bonus": 0.1,
-        "bonus_per_major_realm": 0.22,
-        "bonus_per_minor_realm": 0.025,
-        "maximum_bonus": 5.0
+      "multiplier": {
+        "base": 1.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:path_realm_multiplier",
+              "path": "ascension:weapon/sword",
+              "base_bonus": 0.1,
+              "bonus_per_major_realm": 0.22,
+              "bonus_per_minor_realm": 0.025,
+              "maximum_bonus": 5.0
+            },
+            "operation": "multiply"
+          }
+        ]
+      }
+    }
+  ],
+  "triggers": [
+    {
+      "event": "attack",
+      "weapon_tag": "minecraft:swords",
+      "cooldown": 1,
+      "actions": [
+        {
+          "type": "ascension:weapon_swing",
+          "technique_colors": {
+            "ascension:2_profound/mount_hua_sword_manual": "red",
+            "ascension:1_ordinary/sustained_spirit_art": "purple",
+            "ascension:3_heaven/celestial_constellation_circulation": "holy",
+            "ascension:3_heaven/guardian_dharma_manual": "gold",
+            "ascension:bug_tester_manual": "blue",
+            "ascension:example_technique": "green"
+          },
+          "radius": [
+            2.5,
+            1.5,
+            2.5
+          ],
+          "damage": {
+            "base": {
+              "base": 5.0,
+              "terms": [
+                {
+                  "source": {
+                    "type": "ascension:path_realm_multiplier",
+                    "path": "ascension:weapon/sword",
+                    "base_bonus": 0.1,
+                    "bonus_per_major_realm": 0.22,
+                    "bonus_per_minor_realm": 0.025,
+                    "maximum_bonus": 5.0
+                  },
+                  "operation": "multiply"
+                }
+              ]
+            },
+            "weapon": 0.5
+          },
+          "duration": 8,
+          "path": "ascension:weapon/sword",
+          "weapon_tag": "minecraft:swords",
+          "classifications": [
+            "ascension:skill",
+            "ascension:melee",
+            "ascension:weapon",
+            "ascension:sword"
+          ],
+          "hit_shape": "area"
+        }
+      ],
+      "cost": {
+        "resource": "ascension:qi",
+        "amount": {
+          "base": 2.0,
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:path_realm_multiplier",
+                "path": "ascension:weapon/sword",
+                "base_bonus": 0.1,
+                "bonus_per_major_realm": 0.22,
+                "bonus_per_minor_realm": 0.025,
+                "maximum_bonus": 5.0
+              },
+              "operation": "multiply"
+            }
+          ]
+        }
       }
     }
   ]

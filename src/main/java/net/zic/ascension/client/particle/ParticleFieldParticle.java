@@ -6,14 +6,14 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldParticleKind;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldStyle;
 import org.jspecify.annotations.Nullable;
 
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ParticleFieldParticle extends SingleQuadParticle {
@@ -84,7 +84,7 @@ public class ParticleFieldParticle extends SingleQuadParticle {
     }
 
     public static @Nullable ParticleFieldParticle create(
-            ParticleFieldParticleKind kind,
+            Identifier particle,
             ClientLevel level,
             double x,
             double y,
@@ -106,7 +106,7 @@ public class ParticleFieldParticle extends SingleQuadParticle {
             int colour,
             boolean fullBright
     ) {
-        SpriteSet sprites = Provider.spriteSet(kind);
+        SpriteSet sprites = Provider.spriteSet(particle);
         if (sprites == null) {
             return null;
         }
@@ -340,13 +340,13 @@ public class ParticleFieldParticle extends SingleQuadParticle {
     }
 
     public static final class Provider implements ParticleProvider<SimpleParticleType> {
-        private static final Map<ParticleFieldParticleKind, SpriteSet> SPRITES = new EnumMap<>(ParticleFieldParticleKind.class);
+        private static final Map<Identifier, SpriteSet> SPRITES = new HashMap<>();
 
         private final SpriteSet sprites;
 
-        public Provider(ParticleFieldParticleKind kind, SpriteSet sprites) {
+        public Provider(Identifier particle, SpriteSet sprites) {
             this.sprites = sprites;
-            SPRITES.put(kind, sprites);
+            SPRITES.put(particle, sprites);
         }
 
         @Override
@@ -388,8 +388,8 @@ public class ParticleFieldParticle extends SingleQuadParticle {
             );
         }
 
-        private static @Nullable SpriteSet spriteSet(ParticleFieldParticleKind kind) {
-            return SPRITES.get(kind);
+        private static @Nullable SpriteSet spriteSet(Identifier particle) {
+            return SPRITES.get(particle);
         }
     }
 }

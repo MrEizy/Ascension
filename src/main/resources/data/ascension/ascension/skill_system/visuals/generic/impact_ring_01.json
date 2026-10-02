@@ -1,0 +1,10 @@
+{
+  "elements": [
+    {
+      "type": "ascension:sprite",
+      "texture": "ascension:vfx/impact_ring_01",
+      "width": 2.0,
+      "height": 2.0
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "ascension:ancient_grove",
+  "features": "ascension:ancient_grove_floor_scatter",
+  "step": "vegetal_decoration"
+}

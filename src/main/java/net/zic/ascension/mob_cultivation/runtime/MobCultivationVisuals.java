@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Mob;
-import net.zic.ascension.api.ascension.core.path.PathData;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.mob_cultivation.MobCultivationData;
 import net.zic.ascension.mob_cultivation.MobCultivationManager;
 import net.zic.ascension.mob_cultivation.generation.MobCultivationEliteTier;
@@ -39,7 +39,7 @@ public final class MobCultivationVisuals {
             clearDebugName(mob);
             return;
         }
-        PathData pathData = MobCultivationManager.getPathData(mob);
+        PathInstance pathData = MobCultivationManager.getPathInstance(mob);
         if (pathData == null) return;
         MutableComponent name = Component.empty();
         if (data.getEliteTier().isElite()) {
@@ -47,7 +47,7 @@ public final class MobCultivationVisuals {
         }
         name.append(mob.getType().getDescription())
                 .append(" • ")
-                .append(pathData.getRealmName(pathData.getMajorRealm(), pathData.getMinorRealm(), mob.registryAccess()));
+                .append(pathData.getPath().getRealmName(pathData.getCurrentMajorRealm(), pathData.getCurrentMinorRealm()));
         String generatedName = name.getString();
 
         if (data.isDebugNameApplied()) {

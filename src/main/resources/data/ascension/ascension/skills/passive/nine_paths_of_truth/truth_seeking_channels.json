@@ -1,0 +1,30 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.truth_seeking_channels.name"
+  },
+  "description": {
+    "translate": "ascension.skill.truth_seeking_channels.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:spirit": [
+          {
+            "value": 0.08,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:truth_seeking_channels_spirit"
+          }
+        ],
+        "ascension:vitality": [
+          {
+            "value": 0.04,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:truth_seeking_channels_vitality"
+          }
+        ]
+      }
+    }
+  ]
+}

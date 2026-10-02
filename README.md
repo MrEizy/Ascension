@@ -15,3 +15,5 @@ Download Link : [src](https://legacy.curseforge.com/minecraft/mc-mods/perfect-as
 [[Futureazoo/TextureRepository](https://github.com/Futureazoo/TextureRepository)] <br/>
 
 </details>
+
+This project includes third-party code; see **THIRD_PARTY_LICENSES.md**.

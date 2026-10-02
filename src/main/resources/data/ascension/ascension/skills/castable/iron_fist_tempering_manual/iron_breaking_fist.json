@@ -1,0 +1,66 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.iron_breaking_fist.name"
+  },
+  "description": {
+    "translate": "ascension.skill.iron_breaking_fist.desc"
+  },
+  "actions": [
+    {
+      "type": "ascension:weapon_swing",
+      "vfx_type": "fist_punch",
+      "color": "simple_gray",
+      "radius": [
+        1.35,
+        1.2,
+        2.45
+      ],
+      "damage": {
+        "base": {
+          "base": 2.4,
+          "per_mastery": 0.45
+        },
+        "stats": {
+          "ascension:strength": 0.055
+        },
+        "weapon": 0.4,
+        "minimum": 1.0,
+        "maximum": 13.0
+      },
+      "knockback": 0.55,
+      "duration": 9,
+      "movement": [
+        0.0,
+        0.0,
+        0.32
+      ],
+      "path": "ascension:foundation/body",
+      "weapon_tag": "ascension:weapon/fists",
+      "allow_empty_hand": true,
+      "hit_shape": "area",
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:body",
+        "ascension:fist"
+      ]
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.player.attack.knockback",
+      "volume": 0.6,
+      "pitch": 0.8,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:stamina",
+    "amount": 1.8
+  },
+  "cooldown": {
+    "base": 46,
+    "per_mastery": -3,
+    "minimum": 30
+  }
+}

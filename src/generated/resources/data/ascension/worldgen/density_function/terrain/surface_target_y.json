@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:clamp",
+    "input": {
+      "type": "minecraft:max",
+      "argument1": "ascension:terrain/lowland_target_y",
+      "argument2": {
+        "type": "minecraft:max",
+        "argument1": "ascension:terrain/plateau_target_y",
+        "argument2": "ascension:terrain/mountain_eroded_y"
+      }
+    },
+    "max": 400.0,
+    "min": -24.0
+  }
+}
