@@ -103,29 +103,6 @@ public class AscModelProvider extends ModelProvider {
         podHerbModel(blockModels, ModBlocks.PEACH_POD.get(), "peach");
         podHerbModel(blockModels, ModBlocks.HEAVENLY_THUNDER_PEACH_POD.get(), "heavenly_thunder_peach");
 
-
-        ItemModel.Unbaked spiritualStoneSmall = ItemModelUtils.plainModel(
-                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/spiritual_stone_small")
-        );
-        ItemModel.Unbaked spiritualStoneMedium = ItemModelUtils.plainModel(
-                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/spiritual_stone_medium")
-        );
-        ItemModel.Unbaked spiritualStoneLarge = ItemModelUtils.plainModel(
-                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/spiritual_stone_large")
-        );
-        itemModels.itemModelOutput.accept(
-                ModItems.SPIRITUAL_STONE.get(),
-                ItemModelUtils.rangeSelect(
-                        new Count(false),
-                        List.of(
-                                ItemModelUtils.override(spiritualStoneSmall, 1.0F),
-                                ItemModelUtils.override(spiritualStoneMedium, 16.0F),
-                                ItemModelUtils.override(spiritualStoneLarge, 32.0F)
-                        )
-                )
-        );
-
-
         //Ore Models
         itemModels.generateFlatItem(ModItems.JADE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.RAW_FROST_SILVER.get(), ModelTemplates.FLAT_ITEM);

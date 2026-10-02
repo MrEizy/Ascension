@@ -97,11 +97,6 @@ public class ModItems {
             properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/essence"))));
 
 
-
-
-    public static final DeferredItem<Item> SPIRITUAL_STONE = ITEMS.registerSimpleItem("spiritual_stone");
-
-
     //Ores
     public static final DeferredItem<Item> JADE = ITEMS.registerSimpleItem("jade");
 

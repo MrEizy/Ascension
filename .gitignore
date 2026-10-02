@@ -28,11 +28,6 @@ run-data
 
 repo
 
-# claude code
-.claude
-docs/superpowers
-
-
 ### Minecraft Modding ###
 run/
 run-2/
