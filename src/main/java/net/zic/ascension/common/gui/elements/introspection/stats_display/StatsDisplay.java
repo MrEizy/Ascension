@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.AscensionTooltip;
-import net.zic.ascension.configuration.RealmEffectivenessConfiguration;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.Stat;
 

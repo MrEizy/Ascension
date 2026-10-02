@@ -24,7 +24,6 @@ import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.starter.StarterSelectionStage;
 import net.zic.ascension.common.util.AscensionAttributes;
-import net.zic.ascension.configuration.RealmEffectivenessConfiguration;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.ZenithAttribute;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
@@ -38,22 +37,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 public class SimpleAscensionEntityData implements AscensionEntityData {
-
-    /*
-     * Realm effectiveness can be large so gameplay
-     * attributes use deliberately exponent values
-     */
-    private static final double HEALTH_RESPONSE = 0.30D;
-    private static final double DAMAGE_RESPONSE = 0.30D;
-    private static final double RESOURCE_CAPACITY_RESPONSE = 0.30D;
-    private static final double STAMINA_CAPACITY_RESPONSE = 0.25D;
-    private static final double REGEN_RESPONSE = 0.20D;
-    private static final double MINING_RESPONSE = 0.15D;
-    private static final double FALL_RESPONSE = 0.08D;
-    private static final double JUMP_RESPONSE = 0.08D;
-    private static final double MOVEMENT_RESPONSE = 0.04D;
-    private static final double STEP_HEIGHT_RESPONSE = 0.04D;
-    private static final double ATTACK_SPEED_RESPONSE = 0.025D;
 
     private final StatSheet statSheet = new StatSheet();
     private final Set<Stat> dirtyStats = new HashSet<>();
@@ -106,126 +89,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         //TODO add path bonus values here as well
     }
 
-    public void initializeAttributes() {
-        ZenithAttributeHolder attributeHolder = attachedEntity.getData(
-                ZenithAttachments.ATTRIBUTE_HOLDER
-        );
 
-        applyAttributeStatScalings(attributeHolder, true);
-
-        attributeHolder.addAttribute(Attributes.ARMOR);
-        attributeHolder.addAttribute(Attributes.ARMOR_TOUGHNESS);
-        attributeHolder.addAttribute(Attributes.LUCK);
-        attributeHolder.addAttribute(AscensionAttributes.HEALTH_REGEN_RATE);
-        attributeHolder.addAttribute(AscensionAttributes.STAMINA_REGEN_DELAY);
-    }
-
-    private void applyAttributeStatScalings(ZenithAttributeHolder attributeHolder, boolean initializeAttributes) {
-        // WIll BE BALANCED OVER TIME HOPEFULLY
-        configureAttributeStatScaling(attributeHolder, Attributes.MAX_HEALTH,
-                AscensionStats.VITALITY.get(), "base_scaling", 2.0D, HEALTH_RESPONSE, false, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, Attributes.ATTACK_DAMAGE,
-                AscensionStats.STRENGTH.get(), "strength_damage_scaling", 1.0D, DAMAGE_RESPONSE, true, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, Attributes.JUMP_STRENGTH,
-                AscensionStats.STRENGTH.get(), "strength_jump_scaling", 0.005D, JUMP_RESPONSE, true, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
-                AscensionStats.STRENGTH.get(), "strength_movement_scaling", 0.00005D, MOVEMENT_RESPONSE, true, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, Attributes.MOVEMENT_SPEED,
-                AscensionStats.AGILITY.get(), "agility_movement_scaling", 0.002D, MOVEMENT_RESPONSE, true, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, Attributes.STEP_HEIGHT,
-                AscensionStats.AGILITY.get(), "agility_step_height_scaling", 0.05D, STEP_HEIGHT_RESPONSE, true, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
-                AscensionStats.STRENGTH.get(), "strength_attack_speed_scaling", 0.001D, ATTACK_SPEED_RESPONSE, true, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, Attributes.ATTACK_SPEED,
-                AscensionStats.AGILITY.get(), "agility_attack_speed_scaling", 0.001D, ATTACK_SPEED_RESPONSE, true, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, Attributes.MINING_EFFICIENCY,
-                AscensionStats.STRENGTH.get(), "strength_mining_scaling", 0.001D, MINING_RESPONSE, true, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, Attributes.SAFE_FALL_DISTANCE,
-                AscensionStats.STRENGTH.get(), "strength_safe_fall_scaling", 0.1D, FALL_RESPONSE, false, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, AscensionAttributes.MAX_QI,
-                AscensionStats.SPIRIT.get(), "spirit_max_qi_scaling", 10.0D, RESOURCE_CAPACITY_RESPONSE, false, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, AscensionAttributes.QI_REGEN_RATE,
-                AscensionStats.SPIRIT.get(), "spirit_qi_regen_scaling", 0.25D, REGEN_RESPONSE, false, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
-                AscensionStats.VITALITY.get(), "vitality_max_stamina_scaling", 5.0D, STAMINA_CAPACITY_RESPONSE, false, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, AscensionAttributes.MAX_STAMINA,
-                AscensionStats.STRENGTH.get(), "strength_max_stamina_scaling", 2.0D, STAMINA_CAPACITY_RESPONSE, false, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
-                AscensionStats.VITALITY.get(), "vitality_stamina_regen_scaling", 0.4D, REGEN_RESPONSE, false, initializeAttributes);
-
-        configureAttributeStatScaling(attributeHolder, AscensionAttributes.STAMINA_REGEN_RATE,
-                AscensionStats.AGILITY.get(), "agility_stamina_regen_scaling", 0.2D, REGEN_RESPONSE, false, initializeAttributes);
-    }
-
-    private void configureAttributeStatScaling(
-            ZenithAttributeHolder holder,
-            Holder<Attribute> attributeHolder,
-            Stat stat,
-            String scalingName,
-            double baseScaling,
-            double realmResponseExponent,
-            boolean suppressed,
-            boolean initializeAttribute) {
-        if (initializeAttribute) {
-            if (suppressed) {
-                holder.addSuppressedAttribute(attributeHolder);
-            } else {
-                holder.addAttribute(attributeHolder);
-            }
-        }
-
-        ZenithAttribute zenithAttribute = holder.getAttribute(attributeHolder);
-        if (zenithAttribute == null) {
-            return;
-        }
-
-        Identifier scalingId = Identifier.fromNamespaceAndPath(
-                AscensionCraft.MOD_ID,
-                scalingName
-        );
-        double realmResponse = RealmEffectivenessConfiguration.getGameplayMultiplier(
-                source,
-                realmResponseExponent
-        );
-        double effectiveScaling = baseScaling * realmResponse;
-        if (!Double.isFinite(effectiveScaling)) {
-            effectiveScaling = baseScaling;
-        }
-
-        zenithAttribute.removeScaling(stat, scalingId);
-        zenithAttribute.addStatScaling(stat, scalingId, effectiveScaling);
-    }
-
-    public void refreshRealmEffectiveness() {
-        if (attachedEntity == null) {
-            return;
-        }
-
-        ZenithAttributeHolder attributeHolder = attachedEntity.getData(
-                ZenithAttachments.ATTRIBUTE_HOLDER
-        );
-        applyAttributeStatScalings(attributeHolder, false);
-        attachedEntity.getData(ZenithAttachments.STAT_HOLDER).updateStats(Set.of(
-                AscensionStats.VITALITY.get(),
-                AscensionStats.STRENGTH.get(),
-                AscensionStats.AGILITY.get(),
-                AscensionStats.SPIRIT.get()
-        ));
-    }
 
 
     @Override
@@ -252,15 +116,15 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         AscensionEntityData.super.initialize();
         ZenithAttributeHolder attributeHolder = attachedEntity.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
         ZenithStatHolder statHolder = attachedEntity.getData(ZenithAttachments.STAT_HOLDER);
-        statHolder.startProcess("initialize_on_entity");
         attributeHolder.startProcess("initialize_on_entity");
-        initializeAttributes();
+        statHolder.startProcess("initialize_on_entity");
 
 
         markDirty(getSource().load(),true);
         initializePathBonuses();
         getSource().attachToEntity(getEntity());
-        refreshRealmEffectiveness();
+
+
         statHolder.resolveProcess("initialize_on_entity");
         attributeHolder.resolveProcess("initialize_on_entity");
 
@@ -637,7 +501,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
                 data.source.applyPatch(buf);
             }
 
-            data.initializeAttributes();
+
             return data;
         }
     }

@@ -1,0 +1,14 @@
+{
+  "values": {
+    "minecraft:player": {
+      "minecraft:max_health": {
+        "ascension:vitality": {
+          "multiplier": {
+            "id": "ascension:base_scaling",
+            "value": 2
+          }
+        }
+      }
+    }
+  }
+}

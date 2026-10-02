@@ -6,10 +6,7 @@ import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.common.damagesource.IReductionFunction;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.zenithlib.value_containers.typed.BonusModifier;
-import net.zic.zenithlib.value_containers.typed.MultiplierModifier;
-import net.zic.zenithlib.value_containers.typed.ValueContainer;
-import net.zic.zenithlib.value_containers.typed.ValueContainerHelpers;
+import net.zic.zenithlib.value_containers.typed.*;
 
 
 public abstract class RPGEngineEntityDamagedEvent extends LivingEvent {
@@ -29,8 +26,8 @@ public abstract class RPGEngineEntityDamagedEvent extends LivingEvent {
             super(entity, container,source);
 
         }
-        public void addBonusModifier(BonusModifier<Double> modifier) {damageContainer.addBonusModifier(modifier);}
-        public void addMultiplierModifier(MultiplierModifier modifier){damageContainer.addMultiplierModifier(modifier);}
+        public void addFlatModifier(Modifier<Double> modifier) {damageContainer.addFlatModifier(modifier);}
+        public void addMultiplierModifier(Modifier<Double> modifier){damageContainer.addMultiplierModifier(modifier);}
 
         public void removeModifier(Identifier identifier){
             damageContainer.removeModifier(identifier);

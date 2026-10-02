@@ -1,6 +1,7 @@
 package net.zic.ascension.api.rpg_engine.source;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
@@ -18,10 +19,11 @@ import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.stats.Stat;
-import net.zic.zenithlib.stats.StatInstance;
 import net.zic.zenithlib.stats.StatProvider;
 import net.zic.zenithlib.stats.StatSheet;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import net.zic.zenithlib.stats.ZenithStatHelper;
+import net.zic.zenithlib.value_containers.typed.Modifier;
+import net.zic.zenithlib.value_containers.typed.ValueContainer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -76,7 +78,9 @@ public class OriginSource implements StatProvider {
                                 Map.Entry::getValue
                         )),
                 Set.copyOf(removedDataSources),
-                statSheet.getAllInstances().stream().filter(instance->dirtyStats.contains(instance.getStat())).toList()
+                statSheet.getAllInstances().stream().filter(instance->dirtyStats.contains(
+                        ZenithStatHelper.stat(instance)
+                )).toList()
         );
         dirtyDataSources.clear();
         removedDataSources.clear();
@@ -158,26 +162,34 @@ public class OriginSource implements StatProvider {
     //──Stat Sheet────────────────────────────────────────────────────────
     //TODO add methods for adding stats and multipliers
 
-
-    public void addStat(Stat stat, double val){
-        statSheet.addStat(stat,val);
+    public void addFlatStatModifier(Stat stat, Modifier<Double> modifier){
+        addFlatStatModifier(stat,modifier,true);
+        dirtyStats.add(stat);
+    }
+    public void addFlatStatModifier(Stat stat, Modifier<Double> modifier,boolean update){
+        statSheet.getStatInstance(stat).addFlatModifier(modifier,update);
         dirtyStats.add(stat);
     }
 
-    public void removeStat(Stat stat, double val){
-        addStat(stat,-val);
+    public void addMultiplierStatModifier(Stat stat, Modifier<Double> modifier){
+        addMultiplierStatModifier(stat,modifier,true);
+        dirtyStats.add(stat);
+    }
+    public void addMultiplierStatModifier(Stat stat, Modifier<Double> modifier,boolean update){
+        statSheet.getStatInstance(stat).addMultiplierModifier(modifier,update);
+        dirtyStats.add(stat);
     }
 
-    public void addStatModifier(Stat stat, ValueContainerModifier modifier){
-        statSheet.addStat(stat,0); //makes sure the stat is present
-        statSheet.getStatInstance(stat).addModifier(modifier);
+
+    public void removeStatModifier(Stat stat, Identifier modifier){
+        removeStatModifier(stat,modifier,true);
         dirtyStats.add(stat);
     }
-    public void removeStatModifier(Stat stat,Identifier identifier){
-        if(statSheet.getStatInstance(stat) == null) return;
-        statSheet.getStatInstance(stat).removeModifier(identifier);
+    public void removeStatModifier(Stat stat, Identifier modifier,boolean update){
+        statSheet.getStatInstance(stat).removeModifier(modifier,update);
         dirtyStats.add(stat);
     }
+
 
     public void updateEntityStatHolder(){
         if(dirtyStats.isEmpty()) return;
@@ -196,7 +208,7 @@ public class OriginSource implements StatProvider {
     }
 
     @Override
-    public StatInstance getStatInstance(Stat stat) {
+    public ValueContainer<Double> getStatInstance(Stat stat) {
         return statSheet.getStatInstance(stat);
     }
 
@@ -289,7 +301,11 @@ public class OriginSource implements StatProvider {
         }).forEach(pair->dataSources.put(pair.getFirst(),pair.getSecond()));
 
         ByteBufHelpers.decodeArray(buf, ByteBufHelpers::decodeIdentifier).forEach(dataSources::remove);
-        ByteBufHelpers.decodeArray(buf, StatInstance::decode).forEach(statSheet::setStat);
+        ByteBufHelpers.decodeArray(buf, (byteBuf)->ValueContainer.decode(
+                id->ZenithStatHelper.statInstance(ZenithStatHelper.stat(id)),
+                byteBuf,
+                Codec.DOUBLE
+        )).forEach(statSheet::setStat);
     }
 
 }

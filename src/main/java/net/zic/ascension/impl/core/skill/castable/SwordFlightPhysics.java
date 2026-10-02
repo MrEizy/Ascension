@@ -20,7 +20,6 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.configuration.RealmEffectivenessConfiguration;
 import net.zic.ascension.network.SwordFlightStatePacket;
 
 import java.util.Map;
