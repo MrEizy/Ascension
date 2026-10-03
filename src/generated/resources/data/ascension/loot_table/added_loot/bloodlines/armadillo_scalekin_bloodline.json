@@ -1,0 +1,120 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/scalekin_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 8
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/scalekin_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 9
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/scalekin_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 10
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/scalekin_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 11
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/scalekin_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 12
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/scalekin_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 13
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ascension:added_loot/bloodlines/armadillo_scalekin_bloodline"
+}

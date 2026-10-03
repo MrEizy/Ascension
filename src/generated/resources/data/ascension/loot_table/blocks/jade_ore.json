@@ -55,6 +55,126 @@
         }
       ],
       "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "predicates": {
+                "minecraft:enchantments": [
+                  {
+                    "enchantments": "minecraft:silk_touch",
+                    "levels": {
+                      "min": 1
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "chance": 0.005,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/jade_cicada_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 5
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/jade_cicada_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 6
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/jade_cicada_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 7
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/jade_cicada_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 8
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/jade_cicada_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 9
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        }
+      ],
+      "rolls": 1.0
     }
   ],
   "random_sequence": "ascension:blocks/jade_ore"

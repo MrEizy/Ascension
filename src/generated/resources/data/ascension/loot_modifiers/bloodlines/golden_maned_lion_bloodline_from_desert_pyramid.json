@@ -1,0 +1,14 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/desert_pyramid"
+    },
+    {
+      "chance": 0.18,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "table": "ascension:added_loot/bloodlines/desert_pyramid_golden_maned_lion_bloodline"
+}

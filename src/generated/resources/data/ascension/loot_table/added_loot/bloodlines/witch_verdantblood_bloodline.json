@@ -1,0 +1,84 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/verdantblood_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 3
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/verdantblood_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 4
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/verdantblood_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 5
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/verdantblood_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 6
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ascension:added_loot/bloodlines/witch_verdantblood_bloodline"
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/lion_roar_chest_physique"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 100
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:physique_essence"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ascension:added_loot/physiques/llama_lion_roar_chest_physique"
+}

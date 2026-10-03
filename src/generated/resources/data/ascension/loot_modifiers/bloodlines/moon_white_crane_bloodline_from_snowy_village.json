@@ -1,0 +1,14 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/village/village_snowy_house"
+    },
+    {
+      "chance": 0.04,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "table": "ascension:added_loot/bloodlines/snowy_village_moon_white_crane_bloodline"
+}

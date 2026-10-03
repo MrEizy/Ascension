@@ -1,0 +1,54 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/thunder_body_unstable_physique"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 100
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:physique_essence",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/thunder_spirit_veins_physique"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 100
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:physique_essence",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 80
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ascension:added_loot/physiques/charged_creeper_thunder_physiques"
+}

@@ -1,0 +1,282 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 11
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 12
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 13
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 14
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 15
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 16
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 17
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 18
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 19
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 20
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 21
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 22
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 23
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 24
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/golden_maned_lion_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 25
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ascension:added_loot/bloodlines/desert_pyramid_golden_maned_lion_bloodline"
+}

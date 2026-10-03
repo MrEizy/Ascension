@@ -1,0 +1,20 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/shipwreck_supply"
+    },
+    {
+      "condition": "minecraft:location_check",
+      "predicate": {
+        "structures": "minecraft:shipwreck_beached"
+      }
+    },
+    {
+      "chance": 0.2,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "table": "ascension:added_loot/physiques/beached_shipwreck_five_elements_imbalance_physique"
+}

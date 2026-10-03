@@ -1,0 +1,408 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 18
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 19
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 20
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 21
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 22
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 23
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 24
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 25
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 26
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 27
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 28
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 29
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 30
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 31
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 32
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 33
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 34
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 35
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 36
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 37
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 38
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/raven_bloodline"
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "ascension:purity": 39
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:bloodline_essence"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ascension:added_loot/bloodlines/cold_chicken_raven_bloodline"
+}

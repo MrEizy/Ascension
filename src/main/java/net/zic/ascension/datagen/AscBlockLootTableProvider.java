@@ -10,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -23,15 +22,18 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.common.item.ModItems;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@NullMarked
 public class AscBlockLootTableProvider extends BlockLootSubProvider {
     public AscBlockLootTableProvider(HolderLookup.Provider registries) {
         super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
@@ -53,7 +55,11 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         add(ModBlocks.FROST_SILVER_ORE.get(),
                 createOreDrop(ModBlocks.FROST_SILVER_ORE.get(), ModItems.RAW_FROST_SILVER.get()));
         add(ModBlocks.JADE_ORE.get(),
-                createMultipleOreDrops(ModBlocks.JADE_ORE.get(), ModItems.JADE.get(), 1, 4));
+                createMultipleOreDrops(ModBlocks.JADE_ORE.get(), ModItems.JADE.get(), 1, 4)
+                        // Rare secondary drop; no silk touch so the ore can't be re-placed and re-mined for rolls
+                        .withPool(AscAddedLootTableProvider.bloodlinePool(AscensionCraft.prefix("2_profound/jade_cicada_bloodline"), 5, 9)
+                                .when(doesNotHaveSilkTouch())
+                                .when(LootItemRandomChanceCondition.randomChance(0.005f))));
 
         add(ModBlocks.SPIRITUAL_STONE_CLUSTER.get(),
                 createMultipleOreDrops(ModBlocks.SPIRITUAL_STONE_CLUSTER.get(), ModItems.SPIRITUAL_STONE.get(), 1, 3));
@@ -139,6 +145,7 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         add(ModBlocks.PEACH_LEAVES.get(), block -> createLeavesDrops(block, ModBlocks.PEACH_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
     }
 
+    @SuppressWarnings("SameParameterValue") // reusable helper; drop amounts vary per herb
     protected LootTable.Builder createPodHerbDrops(PodHerbBlock block, float minCount, float maxCount) {
         return LootTable.lootTable().withPool(
                 LootPool.lootPool()
@@ -163,6 +170,7 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         return AnyOfCondition.anyOf(matureStages.toArray(LootItemCondition.Builder[]::new));
     }
 
+    @SuppressWarnings("SameParameterValue") // reusable helper; drop amounts vary per herb
     protected LootTable.Builder createSeedHerbDrops(HerbCropBlock block, Item herb, Item seeds, float minHerbs, float maxHerbs, int baseSeeds, float bonusSeedChance) {
         LootTable.Builder table = LootTable.lootTable()
                 .withPool(immaturePlantingPool(block, seeds))
@@ -178,6 +186,7 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         return table;
     }
 
+    @SuppressWarnings("SameParameterValue") // reusable helper; drop amounts vary per herb
     protected LootTable.Builder createDirectHerbDrops(HerbCropBlock block, Item herb, float minHerbs, float maxHerbs, float bonusHerbChance) {
         LootTable.Builder table = LootTable.lootTable()
                 .withPool(immaturePlantingPool(block, herb))
@@ -228,6 +237,7 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         return AnyOfCondition.anyOf(matureStages.toArray(LootItemCondition.Builder[]::new));
     }
 
+    @SuppressWarnings("SameParameterValue") // reusable helper; drop amounts vary per ore
     protected LootTable.Builder createMultipleOreDrops(Block block, Item item, float minDrops, float maxDrops) {
         HolderLookup.RegistryLookup<Enchantment> enchantments = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
         return this.createSilkTouchDispatchTable(block, this.applyExplosionDecay(block,

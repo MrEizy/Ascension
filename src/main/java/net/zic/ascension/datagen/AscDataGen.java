@@ -30,7 +30,8 @@ public class AscDataGen {
                 List.of(
                         new LootTableProvider.SubProviderEntry(AscBlockLootTableProvider::new, LootContextParamSets.BLOCK),
                         new LootTableProvider.SubProviderEntry(AscEntityLootTableProvider::new, LootContextParamSets.ENTITY),
-                        new LootTableProvider.SubProviderEntry(AscChestLootTableProvider::new, LootContextParamSets.CHEST)),
+                        new LootTableProvider.SubProviderEntry(_ -> new AscChestLootTableProvider(), LootContextParamSets.CHEST),
+                        new LootTableProvider.SubProviderEntry(_ -> new AscAddedLootTableProvider(), LootContextParamSets.ENTITY)),
                 lookupProvider));
         generator.addProvider(true, new AscGlobalLootModifierProvider(packOutput, lookupProvider));
 
