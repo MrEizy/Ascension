@@ -44,6 +44,32 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.LIQUIFIED_SPIRITUAL_QI_BUCKET);
 
 
+                        output.accept(ModItems.BLACK_IRON_SWORD);
+                        output.accept(ModItems.BLACK_IRON_BLADE);
+                        output.accept(ModItems.BLACK_IRON_PICKAXE);
+                        output.accept(ModItems.BLACK_IRON_SHOVEL);
+                        output.accept(ModItems.BLACK_IRON_AXE);
+                        output.accept(ModItems.BLACK_IRON_HOE);
+                        output.accept(ModItems.BLACK_IRON_SPEAR);
+
+                        output.accept(ModItems.FROST_SILVER_SWORD);
+                        output.accept(ModItems.FROST_SILVER_BLADE);
+                        output.accept(ModItems.FROST_SILVER_PICKAXE);
+                        output.accept(ModItems.FROST_SILVER_SHOVEL);
+                        output.accept(ModItems.FROST_SILVER_AXE);
+                        output.accept(ModItems.FROST_SILVER_HOE);
+                        output.accept(ModItems.FROST_SILVER_SPEAR);
+
+
+                        output.accept(ModItems.SPIRITUAL_STONE_SWORD);
+                        output.accept(ModItems.SPIRITUAL_STONE_BLADE);
+                        output.accept(ModItems.SPIRITUAL_STONE_PICKAXE);
+                        output.accept(ModItems.SPIRITUAL_STONE_SHOVEL);
+                        output.accept(ModItems.SPIRITUAL_STONE_AXE);
+                        output.accept(ModItems.SPIRITUAL_STONE_HOE);
+                        output.accept(ModItems.SPIRITUAL_STONE_SPEAR);
+
+
                     }).build());
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ASCENSION_BLOCKS_TAB = CREATIVE_MODE_TABS.register("ascension_blocks_tab",
