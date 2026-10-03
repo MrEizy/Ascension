@@ -27,7 +27,12 @@ public class AscDataGen {
 
         generator.addProvider(true, new AscLangProvider(packOutput));
         generator.addProvider(true, new LootTableProvider(packOutput, Collections.emptySet(),
-                List.of(new LootTableProvider.SubProviderEntry(AscBlockLootTableProvider::new, LootContextParamSets.BLOCK)), lookupProvider));
+                List.of(
+                        new LootTableProvider.SubProviderEntry(AscBlockLootTableProvider::new, LootContextParamSets.BLOCK),
+                        new LootTableProvider.SubProviderEntry(AscEntityLootTableProvider::new, LootContextParamSets.ENTITY),
+                        new LootTableProvider.SubProviderEntry(AscChestLootTableProvider::new, LootContextParamSets.CHEST)),
+                lookupProvider));
+        generator.addProvider(true, new AscGlobalLootModifierProvider(packOutput, lookupProvider));
 
         generator.addProvider(true, new AscRecipeProvider.Runner(packOutput, lookupProvider));
 
