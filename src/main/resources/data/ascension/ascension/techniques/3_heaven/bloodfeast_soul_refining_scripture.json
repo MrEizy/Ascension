@@ -1,0 +1,62 @@
+{
+  "type": "ascension:simple_technique",
+  "name": "Bloodfeast Soul-Refining Scripture",
+  "description": "A heretical Essence scripture that refines killing intent and stolen vitality into crimson cultivation force.",
+  "path": "ascension:foundation/essence",
+  "milestone_realms": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "technique_families": [
+    "essence",
+    "blood"
+  ],
+  "max_realm": 6,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/cultivation/crimson_refinement": {},
+    "ascension:passive/bloodfeast_soul_refining_scripture/crimson_appetite": {
+      "unlock": 1
+    },
+    "ascension:castable/bloodfeast_soul_refining_scripture/bloodfeast_banquet": {
+      "unlock": 3,
+      "caps": {
+        "6": "major_mastery"
+      }
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 1.2
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.8
+            },
+            {
+              "id": "ascension:strength",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:heaven"
+  }
+}

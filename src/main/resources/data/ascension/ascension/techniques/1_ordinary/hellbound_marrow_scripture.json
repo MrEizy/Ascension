@@ -1,0 +1,53 @@
+{
+  "type": "ascension:simple_technique",
+  "name": "Hellbound Marrow Scripture",
+  "description": "A brutal body scripture that burns qi through bone and marrow, treating pain, violence, and survival as fuel for tempering.",
+  "path": "ascension:foundation/body",
+  "milestone_realms": [
+    0,
+    1,
+    2
+  ],
+  "technique_families": [
+    "body"
+  ],
+  "max_realm": 2,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:body_cultivation/hellbound_marrow_refinement": {},
+    "ascension:passive/hellbound_marrow_scripture/marrow_furnace": {
+      "unlock": 1
+    },
+    "ascension:castable/hellbound_marrow_scripture/body_flash_step": {
+      "unlock": 2,
+      "caps": {
+        "2": "minor_mastery"
+      }
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 0.22
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.18
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:ordinary"
+  }
+}

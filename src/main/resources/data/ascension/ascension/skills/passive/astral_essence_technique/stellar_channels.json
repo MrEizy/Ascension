@@ -1,0 +1,26 @@
+{
+  "type": "ascension:passive",
+  "name": "Stellar Channels",
+  "description": "Repeated circulation engraves star-like channels through the meridian network.",
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:spirit": [
+          {
+            "value": 0.12,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:astral_essence_channels_spirit"
+          }
+        ],
+        "ascension:agility": [
+          {
+            "value": 0.04,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:astral_essence_channels_agility"
+          }
+        ]
+      }
+    }
+  ]
+}

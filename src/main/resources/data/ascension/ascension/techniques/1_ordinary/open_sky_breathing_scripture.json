@@ -1,0 +1,54 @@
+{
+  "type": "ascension:simple_technique",
+  "name": "Open Sky Breathing Scripture",
+  "description": "A simple Essence scripture that imitates the breadth of the open heavens, drawing qi through steady circulation.",
+  "path": "ascension:foundation/essence",
+  "milestone_realms": [
+    0,
+    1,
+    2
+  ],
+  "technique_families": [
+    "essence",
+    "wind"
+  ],
+  "max_realm": 2,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/cultivation/open_sky_breathing": {},
+    "ascension:passive/open_sky_breathing_scripture/heavens_breath": {
+      "unlock": 1
+    },
+    "ascension:castable/open_sky_breathing_scripture/skyward_pulse": {
+      "unlock": 2,
+      "caps": {
+        "2": "minor_mastery"
+      }
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 0.25
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:ordinary"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "ascension:passive",
+  "name": "Harmony Guard",
+  "description": "When the five currents settle into balance, force disperses through the whole body instead of one point.",
+  "modifiers": [
+    {
+      "type": "ascension:defense",
+      "flat_reduction": 0.75,
+      "percentage_reduction": 0.07,
+      "stagger_resistance": 0.16
+    }
+  ]
+}

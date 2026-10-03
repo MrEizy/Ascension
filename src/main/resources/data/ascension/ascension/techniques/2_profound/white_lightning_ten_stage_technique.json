@@ -1,0 +1,62 @@
+{
+  "type": "ascension:simple_technique",
+  "name": "White Lightning Ten Stages",
+  "description": "A body method that drives white martial lightning through the nervous system, burning away sluggishness while sharpening unarmed combat.",
+  "path": "ascension:foundation/body",
+  "milestone_realms": [
+    0,
+    2,
+    5
+  ],
+  "technique_families": [
+    "body",
+    "lightning",
+    "fist"
+  ],
+  "max_realm": 5,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:body_cultivation/white_lightning_cultivation": {},
+    "ascension:passive/white_lightning_ten_stage_technique/lightning_nerves": {
+      "unlock": 2
+    },
+    "ascension:castable/white_lightning_ten_stage_technique/white_lightning_fist": {
+      "unlock": 3,
+      "caps": {
+        "5": "minor_mastery"
+      }
+    },
+    "ascension:castable/white_lightning_ten_stage_technique/lightning_flash_step": {
+      "unlock": 5
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 0.45
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.35
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:profound"
+  }
+}

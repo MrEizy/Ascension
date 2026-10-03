@@ -1,0 +1,64 @@
+{
+  "type": "ascension:simple_technique",
+  "name": "Five Harmony Body Method",
+  "description": "A high body-cultivation method that tempers flesh through the five harmonies of wood, fire, earth, metal, and water until the body becomes their meeting point.",
+  "path": "ascension:foundation/body",
+  "milestone_realms": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "technique_families": [
+    "body"
+  ],
+  "max_realm": 6,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:body_cultivation/five_harmony_tempering": {},
+    "ascension:passive/five_element_body_technique/fivefold_vessel": {
+      "unlock": 1
+    },
+    "ascension:castable/five_element_body_technique/fivefold_palm": {
+      "unlock": 3,
+      "caps": {
+        "6": "minor_mastery"
+      }
+    },
+    "ascension:passive/five_element_body_technique/harmony_guard": {
+      "unlock": 5
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 1.4
+            },
+            {
+              "id": "ascension:strength",
+              "value": 1.1
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:heaven"
+  }
+}

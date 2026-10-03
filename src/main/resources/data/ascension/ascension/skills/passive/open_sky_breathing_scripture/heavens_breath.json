@@ -1,0 +1,19 @@
+{
+  "type": "ascension:passive",
+  "name": "Heaven’s Breath",
+  "description": "Broad circulation steadies the spirit and makes Essence easier to command.",
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:spirit": [
+          {
+            "value": 0.06,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:heavens_breath_spirit"
+          }
+        ]
+      }
+    }
+  ]
+}

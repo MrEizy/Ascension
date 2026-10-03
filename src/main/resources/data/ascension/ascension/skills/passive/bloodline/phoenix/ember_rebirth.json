@@ -1,0 +1,53 @@
+{
+  "type": "ascension:passive",
+  "name": "Ember Rebirth",
+  "description": "When brought near death, phoenix embers flare and drag the body back from the brink.",
+  "triggers": [
+    {
+      "event": "damage_taken",
+      "cooldown": 1200,
+      "conditions": [
+        {
+          "type": "ascension:health",
+          "subject": "caster",
+          "comparison": "at_most",
+          "value": 0.25,
+          "percentage": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "ascension:resource",
+          "resource": "ascension:health",
+          "operation": "ascension:restore",
+          "source": "ascension:skill_casting",
+          "amount": 8.0,
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:resource",
+          "resource": "ascension:qi",
+          "operation": "ascension:restore",
+          "source": "ascension:skill_casting",
+          "amount": 10.0,
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:particles",
+          "particle": "minecraft:flame",
+          "count": 30,
+          "spread": 0.8,
+          "speed": 0.08,
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:sound",
+          "sound": "minecraft:entity.blaze.shoot",
+          "volume": 0.8,
+          "pitch": 1.2,
+          "subject": "caster"
+        }
+      ]
+    }
+  ]
+}

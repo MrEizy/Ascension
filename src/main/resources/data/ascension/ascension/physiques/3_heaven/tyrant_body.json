@@ -1,0 +1,44 @@
+{
+  "type": "ascension:simple",
+  "name": "Tyrant Body",
+  "description": "Strong as an ox and domineering as a warlord.",
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:weapon/fist",
+    "ascension:elemental/yang"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:strength": 6.0,
+    "ascension:vitality": 3.0,
+    "ascension:agility": 1.0
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 2.5,
+      "ascension:weapon/fist": 4.0,
+      "ascension:elemental/yang": 1.5
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:heaven"
+  },
+  "stat_modifiers": {
+    "ascension:strength": [
+      {
+        "value": 0.15,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:tyrant_body_strength_modifier"
+      }
+    ],
+    "ascension:vitality": [
+      {
+        "value": 0.08,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:tyrant_body_vitality_modifier"
+      }
+    ]
+  }
+}

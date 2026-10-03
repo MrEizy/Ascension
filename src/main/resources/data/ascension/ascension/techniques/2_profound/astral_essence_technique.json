@@ -1,0 +1,54 @@
+{
+  "type": "ascension:simple_technique",
+  "name": "Astral Essence Technique",
+  "description": "A stellar Essence method that maps the meridians onto imagined constellations and circulates qi along their celestial routes.",
+  "path": "ascension:foundation/essence",
+  "milestone_realms": [
+    0,
+    2,
+    5
+  ],
+  "technique_families": [
+    "essence",
+    "star"
+  ],
+  "max_realm": 5,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/cultivation/astral_essence": {},
+    "ascension:passive/astral_essence_technique/stellar_channels": {
+      "unlock": 2
+    },
+    "ascension:castable/astral_essence_technique/starfall_burst": {
+      "unlock": 5,
+      "caps": {
+        "5": "minor_mastery"
+      }
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 0.55
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:profound"
+  }
+}

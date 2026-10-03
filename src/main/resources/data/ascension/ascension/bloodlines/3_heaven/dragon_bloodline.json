@@ -1,0 +1,135 @@
+{
+  "type": "ascension:simple",
+  "name": "Dragon Bloodline",
+  "description": "A rare bloodline carrying traces of ancient draconic ancestry, marked by overwhelming physical authority.",
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/earth",
+    "ascension:elemental/yang"
+  ],
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 0.18
+            },
+            {
+              "id": "ascension:strength",
+              "value": 0.16
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 0.08
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:foundation/body": 0.02,
+              "ascension:elemental/earth": 0.025,
+              "ascension:elemental/yang": 0.02
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 25,
+        "end": 25
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 2.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 50,
+        "end": 50
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 2.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 75,
+        "end": 75
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 2.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:grant_skills",
+          "skills": [
+            "ascension:passive/bloodline/dragon/draconic_frame"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 100,
+        "end": 100
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 5.0
+            },
+            {
+              "id": "ascension:strength",
+              "value": 4.0
+            },
+            {
+              "id": "ascension:spirit",
+              "value": 2.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:heaven"
+  }
+}

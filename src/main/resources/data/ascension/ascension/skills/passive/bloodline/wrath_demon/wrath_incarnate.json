@@ -1,0 +1,13 @@
+{
+  "type": "ascension:passive",
+  "name": "Wrath Incarnate",
+  "description": "Rage turns pain into momentum, making every exchange more dangerous.",
+  "modifiers": [
+    {
+      "type": "ascension:combat",
+      "outgoing_damage": 0.12,
+      "incoming_damage": 0.05,
+      "lifesteal": 0.03
+    }
+  ]
+}

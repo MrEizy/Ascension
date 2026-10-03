@@ -1,0 +1,60 @@
+{
+  "type": "ascension:simple_technique",
+  "name": "Pale Moon Scripture",
+  "description": "A quiet soul scripture patterned after moon-lit meditation, refining cold spiritual clarity into precise soul arts.",
+  "path": "ascension:foundation/soul",
+  "milestone_realms": [
+    0,
+    1,
+    2
+  ],
+  "technique_families": [
+    "soul",
+    "yin"
+  ],
+  "max_realm": 2,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/cultivation/pale_moon": {},
+    "ascension:passive/pale_moon_scripture/lunar_spirit": {
+      "unlock": 1
+    },
+    "ascension:castable/pale_moon_scripture/soul_shift": {
+      "unlock": 1
+    },
+    "ascension:castable/pale_moon_scripture/soul_needle": {
+      "unlock": 2,
+      "caps": {
+        "2": "minor_mastery"
+      }
+    },
+    "ascension:castable/pale_moon_scripture/soul_suppression": {
+      "unlock": 2
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 0.28
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.08
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:ordinary"
+  }
+}

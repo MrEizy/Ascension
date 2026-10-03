@@ -1,0 +1,32 @@
+{
+  "type": "ascension:passive",
+  "name": "Soul-Tempered Edge",
+  "description": "Weapon intent bleeds into each attack, reinforcing your physical force with soul pressure.",
+  "modifiers": [
+    {
+      "type": "ascension:combat",
+      "outgoing_damage": 0.1,
+      "incoming_damage": -0.02,
+      "lifesteal": 0.0
+    },
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:spirit": [
+          {
+            "value": 0.08,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:soul_tempered_edge_spirit"
+          }
+        ],
+        "ascension:strength": [
+          {
+            "value": 0.05,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:soul_tempered_edge_strength"
+          }
+        ]
+      }
+    }
+  ]
+}

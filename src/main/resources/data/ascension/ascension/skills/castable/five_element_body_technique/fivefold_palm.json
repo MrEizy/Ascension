@@ -1,0 +1,69 @@
+{
+  "type": "ascension:active",
+  "name": "Fivefold Palm",
+  "description": "Strike with five harmonized currents layered through a single palm.",
+  "target": {
+    "type": "ascension:ray",
+    "range": 5.5,
+    "width": 0.9,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 11.0,
+        "per_mastery": 1.5
+      },
+      "stats": {
+        "ascension:strength": 0.22,
+        "ascension:vitality": 0.08,
+        "ascension:spirit": 0.05
+      },
+      "minimum": 1.0,
+      "maximum": 77.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:body"
+      ],
+      "path": "ascension:foundation/body",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:crit",
+      "count": 16,
+      "spread": 0.4,
+      "speed": 0.05,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.player.attack.strong",
+      "volume": 0.6,
+      "pitch": 1.0,
+      "subject": "target"
+    }
+  ],
+  "cost": [
+    {
+      "resource": "ascension:stamina",
+      "amount": 6.0
+    },
+    {
+      "resource": "ascension:qi",
+      "amount": 7.0
+    }
+  ],
+  "cooldown": {
+    "base": 82,
+    "per_mastery": -4,
+    "minimum": 50
+  }
+}

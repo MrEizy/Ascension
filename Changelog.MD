@@ -6,13 +6,13 @@
 
 ### Added
 * Added 47 new Paths - Foundation Paths (3) Elemental Paths (29) Weapon Paths (15)
-* Added 46 new Physiques
-* Added 30 new bloodlines
-* Added 21 new techniques
+* Added 44 new Physiques
+* Added 39 new bloodlines
+* Added 20 new techniques
 * Added 11 new Herb
 * Added 5 new Artifacts
-* [W.I.P] Added New World Type -> Jianghu with overhauled terrain generation and increased world height (416)
-* [W.I.P] Added 8 new biomes; Heavenreach Peak, Graystone Foothills, Azure Cloud Range, Ancient Grove, Jadebloom Forest, Misty Woods, Verdant Moor, Golden Steppe
+* [**W.I.P**] [**Extremely Bugged**] Added New World Type -> Jianghu with overhauled terrain generation and increased world height (416)
+* [**W.I.P**] [Needs Decoration] Added 8 new biomes; Heavenreach Peak, Graystone Foothills, Azure Cloud Range, Ancient Grove, Jadebloom Forest, Misty Woods, Verdant Moor, Golden Steppe
 * Ported Most blocks from 1.21.1
 * Added Datapack support for Paths, Bloodlines, Physiques, Techniques, Skills, Tribulations and Atmospheric Qi Density.  
 * Starter Bloodline and Physique Selection on first world/server join
@@ -35,6 +35,7 @@
 * Sprinting, swimming, climbing, crawling, jumping, attacking and elytra movement can now consume Stamina  
 * Stamina regeneration is slower while hungry and stops at zero hunger
 * Can possess multiple techniques per path
+* Moved Marble into Builders-Zenith
 
 ### Fixes
 

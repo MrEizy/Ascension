@@ -1,0 +1,43 @@
+{
+  "type": "ascension:active",
+  "name": "Body Flash Step",
+  "description": "Explode forward using nothing but tempered flesh, qi, and unreasonable amounts of confidence.",
+  "actions": [
+    {
+      "type": "ascension:move",
+      "mode": "directional",
+      "direction": "look",
+      "distance": {
+        "base": 4.0,
+        "per_mastery": 0.4
+      },
+      "include_vertical": false,
+      "collision": "stop_before_collision",
+      "preserve_velocity": false,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:poof",
+      "count": 10,
+      "spread": 0.35,
+      "speed": 0.05,
+      "subject": "caster"
+    }
+  ],
+  "cost": [
+    {
+      "resource": "ascension:stamina",
+      "amount": 2.5
+    },
+    {
+      "resource": "ascension:qi",
+      "amount": 1.5
+    }
+  ],
+  "cooldown": {
+    "base": 42,
+    "per_mastery": -2,
+    "minimum": 26
+  }
+}

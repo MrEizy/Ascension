@@ -1,0 +1,70 @@
+{
+  "type": "ascension:simple_technique",
+  "name": "Soul Forged Weapon Manual",
+  "description": "A soul-forging manual that tempers intent into weapon-like spiritual force.",
+  "path": "ascension:foundation/soul",
+  "milestone_realms": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "technique_families": [
+    "soul"
+  ],
+  "max_realm": 6,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/cultivation/soul_forged_meditation": {},
+    "ascension:passive/soul_forged_weapon_manual/soul_tempered_edge": {
+      "unlock": 1
+    },
+    "ascension:castable/soul_forged_weapon_manual/soul_shift": {
+      "unlock": 2
+    },
+    "ascension:castable/soul_forged_weapon_manual/soul_implement": {
+      "unlock": 3,
+      "caps": {
+        "5": "minor_mastery"
+      }
+    },
+    "ascension:castable/soul_forged_weapon_manual/soul_weapon_immolation": {
+      "unlock": 5,
+      "caps": {
+        "6": "major_mastery"
+      }
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 1.2
+            },
+            {
+              "id": "ascension:strength",
+              "value": 0.7
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:heaven"
+  }
+}

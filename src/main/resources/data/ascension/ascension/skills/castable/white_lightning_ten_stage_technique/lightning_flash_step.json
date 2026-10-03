@@ -1,0 +1,50 @@
+{
+  "type": "ascension:active",
+  "name": "Lightning Flash Step",
+  "description": "Flash across the battlefield on a violent burst of white lightning.",
+  "actions": [
+    {
+      "type": "ascension:move",
+      "mode": "directional",
+      "direction": "look",
+      "distance": {
+        "base": 5.5,
+        "per_mastery": 0.5
+      },
+      "include_vertical": false,
+      "collision": "stop_before_collision",
+      "preserve_velocity": false,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:electric_spark",
+      "count": 18,
+      "spread": 0.45,
+      "speed": 0.08,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.lightning_bolt.impact",
+      "volume": 0.45,
+      "pitch": 1.5,
+      "subject": "caster"
+    }
+  ],
+  "cost": [
+    {
+      "resource": "ascension:stamina",
+      "amount": 3.5
+    },
+    {
+      "resource": "ascension:qi",
+      "amount": 3.0
+    }
+  ],
+  "cooldown": {
+    "base": 38,
+    "per_mastery": -2,
+    "minimum": 22
+  }
+}

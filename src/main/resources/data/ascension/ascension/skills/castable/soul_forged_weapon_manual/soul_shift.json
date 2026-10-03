@@ -1,0 +1,37 @@
+{
+  "type": "ascension:active",
+  "name": "Soul Shift",
+  "description": "Drag body and soul through a brief discontinuity to reposition before the next strike.",
+  "actions": [
+    {
+      "type": "ascension:move",
+      "mode": "directional",
+      "direction": "look",
+      "distance": {
+        "base": 5.0,
+        "per_mastery": 0.45
+      },
+      "include_vertical": true,
+      "collision": "stop_before_collision",
+      "preserve_velocity": false,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:soul_fire_flame",
+      "count": 14,
+      "spread": 0.45,
+      "speed": 0.05,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 5.0
+  },
+  "cooldown": {
+    "base": 44,
+    "per_mastery": -2,
+    "minimum": 26
+  }
+}

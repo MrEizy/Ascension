@@ -1,0 +1,29 @@
+{
+  "type": "ascension:passive",
+  "name": "Predator Instinct",
+  "description": "Violence wakes an old survival instinct.",
+  "triggers": [
+    {
+      "event": "kill",
+      "cooldown": 10,
+      "actions": [
+        {
+          "type": "ascension:resource",
+          "resource": "ascension:health",
+          "operation": "ascension:restore",
+          "source": "ascension:skill_casting",
+          "amount": 2.0,
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:resource",
+          "resource": "ascension:stamina",
+          "operation": "ascension:restore",
+          "source": "ascension:skill_casting",
+          "amount": 4.0,
+          "subject": "caster"
+        }
+      ]
+    }
+  ]
+}

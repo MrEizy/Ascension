@@ -1,0 +1,71 @@
+{
+  "type": "ascension:active",
+  "name": "Soul Weapon Immolation",
+  "description": "Burn the forged soul-weapon into a single violent release, sacrificing efficiency for overwhelming spiritual force.",
+  "target": {
+    "type": "ascension:radial",
+    "radius": 6.0,
+    "maximum_targets": 0,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 15.0,
+        "per_mastery": 2.0
+      },
+      "stats": {
+        "ascension:spirit": 0.3,
+        "ascension:strength": 0.12
+      },
+      "minimum": 1.0,
+      "maximum": 105.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:area",
+        "ascension:soul",
+        "ascension:weapon"
+      ],
+      "path": "ascension:foundation/soul",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:soul_fire_flame",
+      "count": 20,
+      "spread": 0.8,
+      "speed": 0.07,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.warden.sonic_boom",
+      "volume": 0.65,
+      "pitch": 0.9,
+      "subject": "caster"
+    }
+  ],
+  "cost": [
+    {
+      "resource": "ascension:qi",
+      "amount": 16.0
+    },
+    {
+      "resource": "ascension:health",
+      "amount": 2.0
+    }
+  ],
+  "cooldown": {
+    "base": 220,
+    "per_mastery": -10,
+    "minimum": 140
+  }
+}

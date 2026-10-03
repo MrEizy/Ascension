@@ -1,0 +1,63 @@
+{
+  "type": "ascension:active",
+  "name": "Soul Implement",
+  "description": "Shape soul force into a temporary weapon-edge and drive it through the target.",
+  "target": {
+    "type": "ascension:ray",
+    "range": 7.0,
+    "width": 0.7,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 10.0,
+        "per_mastery": 1.5
+      },
+      "stats": {
+        "ascension:spirit": 0.24,
+        "ascension:strength": 0.12
+      },
+      "minimum": 1.0,
+      "maximum": 70.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:soul",
+        "ascension:weapon"
+      ],
+      "path": "ascension:foundation/soul",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:soul_fire_flame",
+      "count": 16,
+      "spread": 0.4,
+      "speed": 0.05,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.player.attack.sweep",
+      "volume": 0.6,
+      "pitch": 1.0,
+      "subject": "target"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 9.0
+  },
+  "cooldown": {
+    "base": 76,
+    "per_mastery": -4,
+    "minimum": 48
+  }
+}

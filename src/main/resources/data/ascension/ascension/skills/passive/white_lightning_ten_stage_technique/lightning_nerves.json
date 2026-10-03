@@ -1,0 +1,26 @@
+{
+  "type": "ascension:passive",
+  "name": "Lightning Nerves",
+  "description": "White lightning shortens the gap between intent and motion.",
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:agility": [
+          {
+            "value": 0.12,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:lightning_nerves_agility"
+          }
+        ],
+        "ascension:strength": [
+          {
+            "value": 0.05,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:lightning_nerves_strength"
+          }
+        ]
+      }
+    }
+  ]
+}

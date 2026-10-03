@@ -1,0 +1,36 @@
+{
+  "type": "ascension:simple",
+  "name": "Dreaming Soul",
+  "description": "Your soul drifts close to the border of dream and waking, sensing patterns that conscious minds often miss.",
+  "paths": [
+    "ascension:foundation/soul",
+    "ascension:elemental/illusion",
+    "ascension:elemental/moon"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 2.0,
+    "ascension:agility": 1.0
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": 1.5,
+      "ascension:elemental/illusion": 1.0,
+      "ascension:elemental/moon": 0.5
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:ordinary"
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.08,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:dreaming_soul_spirit_modifier"
+      }
+    ]
+  }
+}

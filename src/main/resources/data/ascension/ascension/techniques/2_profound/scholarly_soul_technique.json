@@ -1,0 +1,56 @@
+{
+  "type": "ascension:simple_technique",
+  "name": "Scholar’s Soul Transcendence",
+  "description": "An academic soul method that advances through observation, contemplation, and the orderly reconstruction of spiritual principles.",
+  "path": "ascension:foundation/soul",
+  "milestone_realms": [
+    0,
+    2,
+    5
+  ],
+  "technique_families": [
+    "soul"
+  ],
+  "max_realm": 5,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:castable/cultivation/scholarly_soul": {},
+    "ascension:passive/scholarly_soul_technique/refined_understanding": {
+      "unlock": 2
+    },
+    "ascension:castable/scholarly_soul_technique/sages_observation": {
+      "unlock": 3
+    },
+    "ascension:castable/scholarly_soul_technique/mandate_of_the_sage": {
+      "unlock": 5,
+      "caps": {
+        "5": "minor_mastery"
+      }
+    }
+  },
+  "realm_change_handler": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:spirit",
+              "value": 0.65
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:profound"
+  }
+}

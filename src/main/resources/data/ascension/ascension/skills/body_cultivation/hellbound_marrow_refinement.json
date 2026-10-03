@@ -1,0 +1,60 @@
+{
+  "type": "ascension:body_cultivation",
+  "name": "Hellbound Marrow Refinement",
+  "description": "Burn qi through bone and marrow. Pain and combat become the furnace that tempers the body.",
+  "path": "ascension:foundation/body",
+  "priority": 100,
+  "stimuli": [
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "gain": 1.15
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:attacking"
+        ]
+      },
+      "gain": 0.35
+    }
+  ],
+  "maximum_tempering": 100.0,
+  "conversion": {
+    "rate": 0.68,
+    "progress_per_tempering": 1.1,
+    "interval": 2,
+    "costs": [
+      {
+        "resource": "ascension:qi",
+        "amount": 0.8
+      },
+      {
+        "resource": "ascension:stamina",
+        "amount": 0.35
+      }
+    ]
+  },
+  "multipliers": [
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "condition": {
+        "maximum_health_fraction": 0.5
+      },
+      "multiplier": 1.25
+    },
+    {
+      "condition": {
+        "unarmored": true
+      },
+      "multiplier": 1.12
+    }
+  ]
+}

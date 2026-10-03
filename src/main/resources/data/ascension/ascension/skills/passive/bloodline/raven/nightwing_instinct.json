@@ -1,0 +1,19 @@
+{
+  "type": "ascension:passive",
+  "name": "Nightwing Instinct",
+  "description": "Raven blood sharpens footwork and reaction into quiet, economical motion.",
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:agility": [
+          {
+            "value": 0.09,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:nightwing_instinct_agility"
+          }
+        ]
+      }
+    }
+  ]
+}

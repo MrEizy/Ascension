@@ -1,0 +1,26 @@
+{
+  "type": "ascension:passive",
+  "name": "Featherlight Grace",
+  "description": "A tranquil bloodline carries the body with the poise of a crane riding clear air.",
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:agility": [
+          {
+            "value": 0.1,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:featherlight_grace_agility"
+          }
+        ],
+        "ascension:spirit": [
+          {
+            "value": 0.05,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:featherlight_grace_spirit"
+          }
+        ]
+      }
+    }
+  ]
+}

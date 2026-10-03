@@ -135,11 +135,10 @@ dependencies {
     //runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
 
     //implementation "maven.modrinth:jade:${project.jade_version}"
+    implementation('com.github.OliverHesse:EasyGui:d71b1e115c')
+    implementation('com.github.MrEizy:Builders-Zenith:24f728b6e5')
 
-   implementation('com.github.OliverHesse:EasyGui:d71b1e115c')
-    //implementation 'com.github.MrEizy:Builders-Zenith:ae34247ef0'
-
-   // implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    //implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     //compileOnly "net.favouriteless.modopedia:modopedia-neoforge-${minecraft_version}:${modopedia_version}"
     //localRuntime "net.favouriteless.modopedia:modopedia-neoforge-${minecraft_version}:${modopedia_version}"

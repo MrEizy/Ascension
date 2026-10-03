@@ -1,0 +1,38 @@
+{
+  "type": "ascension:passive",
+  "name": "Fivefold Vessel",
+  "description": "Balanced elemental tempering makes the body harder to disturb and easier to reinforce.",
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:strength": [
+          {
+            "value": 0.08,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:fivefold_vessel_strength"
+          }
+        ],
+        "ascension:vitality": [
+          {
+            "value": 0.1,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:fivefold_vessel_vitality"
+          }
+        ],
+        "ascension:spirit": [
+          {
+            "value": 0.05,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:fivefold_vessel_spirit"
+          }
+        ]
+      }
+    },
+    {
+      "type": "ascension:defense",
+      "percentage_reduction": 0.04,
+      "stagger_resistance": 0.1
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "ascension:passive",
+  "name": "Draconic Frame",
+  "description": "Ancient draconic blood hardens flesh, bone, and resolve.",
+  "modifiers": [
+    {
+      "type": "ascension:defense",
+      "flat_reduction": 0.6,
+      "percentage_reduction": 0.06,
+      "stagger_resistance": 0.15
+    }
+  ]
+}

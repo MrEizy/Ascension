@@ -1,0 +1,55 @@
+{
+  "type": "ascension:simple",
+  "name": "Myriad Poison Vessel",
+  "description": "A cursed and coveted constitution that hungers for venomous qi, turning poisonous influence into fuel for an increasingly inhuman vessel.",
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/poison",
+    "ascension:elemental/death"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 5.0,
+    "ascension:vitality": 4.0,
+    "ascension:agility": 1.0
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": 2.0,
+      "ascension:elemental/poison": 4.0,
+      "ascension:elemental/death": 1.5
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:heaven"
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.1,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:myriad_poison_vessel_spirit_modifier"
+      }
+    ],
+    "ascension:vitality": [
+      {
+        "value": 0.1,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:myriad_poison_vessel_vitality_modifier"
+      }
+    ]
+  },
+  "path_bonus_modifiers": {
+    "ascension:affinity": {
+      "ascension:elemental/poison": [
+        {
+          "value": 0.2,
+          "operation": "ADD_BASE",
+          "id": "ascension:myriad_poison_vessel_poison_affinity_modifier"
+        }
+      ]
+    }
+  }
+}

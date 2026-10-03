@@ -1,0 +1,37 @@
+{
+  "type": "ascension:simple",
+  "name": "Stone Monkey",
+  "description": "Born from stone and wild heaven, this physique is grounded in earth yet unnervingly quick and limber.",
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/earth",
+    "ascension:weapon/fist"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:strength": 1.5,
+    "ascension:vitality": 1.0,
+    "ascension:agility": 0.5
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 1.0,
+      "ascension:elemental/earth": 1.5,
+      "ascension:weapon/fist": 1.0
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:ordinary"
+  },
+  "stat_modifiers": {
+    "ascension:agility": [
+      {
+        "value": 0.08,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:stone_monkey_agility_modifier"
+      }
+    ]
+  }
+}

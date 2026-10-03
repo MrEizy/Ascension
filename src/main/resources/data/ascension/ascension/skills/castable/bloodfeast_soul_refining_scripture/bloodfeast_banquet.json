@@ -1,0 +1,87 @@
+{
+  "type": "ascension:active",
+  "name": "Bloodfeast Banquet",
+  "description": "Tear at the vitality of nearby enemies and refine what's stolen into qi and flesh.",
+  "target": {
+    "type": "ascension:radial",
+    "radius": 5.0,
+    "maximum_targets": 8,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 8.0,
+        "per_mastery": 1.2
+      },
+      "stats": {
+        "ascension:spirit": 0.22,
+        "ascension:strength": 0.08
+      },
+      "minimum": 1.0,
+      "maximum": 56.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:area",
+        "ascension:essence",
+        "ascension:blood"
+      ],
+      "path": "ascension:foundation/essence",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:resource",
+      "resource": "ascension:health",
+      "operation": "ascension:restore",
+      "source": "ascension:skill_casting",
+      "amount": 1.25,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:resource",
+      "resource": "ascension:qi",
+      "operation": "ascension:restore",
+      "source": "ascension:skill_casting",
+      "amount": 2.0,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:witch",
+      "count": 20,
+      "spread": 0.8,
+      "speed": 0.07,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.evoker.cast_spell",
+      "volume": 0.65,
+      "pitch": 0.9,
+      "subject": "caster"
+    }
+  ],
+  "cost": [
+    {
+      "resource": "ascension:qi",
+      "amount": 12.0
+    },
+    {
+      "resource": "ascension:health",
+      "amount": 2.0
+    }
+  ],
+  "cooldown": {
+    "base": 170,
+    "per_mastery": -8,
+    "minimum": 110
+  }
+}

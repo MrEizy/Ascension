@@ -1,0 +1,44 @@
+{
+  "type": "ascension:simple",
+  "name": "Crystal Soul",
+  "description": "A soul of exceptional clarity and purity, crystalline in structure and unusually resistant to spiritual turbulence.",
+  "paths": [
+    "ascension:foundation/soul",
+    "ascension:elemental/light",
+    "ascension:elemental/order"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:spirit": 7.0,
+    "ascension:vitality": 2.0,
+    "ascension:agility": 1.0
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": 3.0,
+      "ascension:elemental/light": 2.5,
+      "ascension:elemental/order": 2.5
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:heaven"
+  },
+  "stat_modifiers": {
+    "ascension:spirit": [
+      {
+        "value": 0.15,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:crystal_soul_spirit_modifier"
+      }
+    ],
+    "ascension:vitality": [
+      {
+        "value": 0.06,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:crystal_soul_vitality_modifier"
+      }
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "type": "ascension:active",
+  "name": "Sage’s Observation",
+  "description": "Unfurl divine sense in a sweep and read the surrounding world as a page.",
+  "target": {
+    "type": "ascension:self"
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:divine_sense",
+      "radius": {
+        "base": 24.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.03
+          }
+        ],
+        "maximum": 80.0
+      },
+      "speed": {
+        "base": 14.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.015
+          }
+        ],
+        "maximum": 40.0
+      },
+      "duration": 120.0,
+      "color": "#d8cba3"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "operation": "ascension:consume",
+    "source": "ascension:skill_casting",
+    "amount": {
+      "base": 24.0
+    }
+  },
+  "cooldown": {
+    "base": 180.0
+  }
+}

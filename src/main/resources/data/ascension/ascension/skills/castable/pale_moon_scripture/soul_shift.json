@@ -1,0 +1,37 @@
+{
+  "type": "ascension:active",
+  "name": "Soul Shift",
+  "description": "Slip a short distance as the soul briefly pulls the body around.",
+  "actions": [
+    {
+      "type": "ascension:move",
+      "mode": "directional",
+      "direction": "look",
+      "distance": {
+        "base": 4.0,
+        "per_mastery": 0.35
+      },
+      "include_vertical": true,
+      "collision": "stop_before_collision",
+      "preserve_velocity": false,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:soul",
+      "count": 12,
+      "spread": 0.4,
+      "speed": 0.04,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 4.0
+  },
+  "cooldown": {
+    "base": 48,
+    "per_mastery": -2,
+    "minimum": 30
+  }
+}

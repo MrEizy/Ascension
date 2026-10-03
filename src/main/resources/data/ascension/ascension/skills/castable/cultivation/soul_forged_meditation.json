@@ -1,0 +1,37 @@
+{
+  "type": "ascension:active",
+  "name": "Soul-Forged Meditation",
+  "description": "Temper soul force until intent itself takes on the edge, weight, and permanence of a weapon.",
+  "cast": {
+    "mode": "channel",
+    "stages": [
+      {
+        "particle_field": {
+          "style": "spiral",
+          "particles": [
+            "minecraft:soul_fire_flame",
+            "minecraft:crit"
+          ],
+          "density": 14,
+          "radius": {
+            "min": 0.65,
+            "max": 1.35
+          },
+          "height": {
+            "min": 0.0,
+            "max": 1.7
+          },
+          "full_bright": true
+        }
+      }
+    ]
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:cultivate",
+      "path": "ascension:foundation/soul",
+      "rate": 1.9
+    }
+  ]
+}

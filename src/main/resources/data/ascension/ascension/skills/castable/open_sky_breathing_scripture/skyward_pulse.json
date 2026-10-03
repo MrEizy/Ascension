@@ -1,0 +1,63 @@
+{
+  "type": "ascension:active",
+  "name": "Skyward Pulse",
+  "description": "Release a sudden ring of heaven-drawn qi to drive nearby enemies away.",
+  "target": {
+    "type": "ascension:radial",
+    "radius": 3.5,
+    "maximum_targets": 0,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 4.0,
+        "per_mastery": 0.6
+      },
+      "stats": {
+        "ascension:spirit": 0.14
+      },
+      "minimum": 1.0,
+      "maximum": 28.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:essence",
+        "ascension:area"
+      ],
+      "path": "ascension:foundation/essence",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:cloud",
+      "count": 20,
+      "spread": 0.8,
+      "speed": 0.07,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.breeze.wind_burst",
+      "volume": 0.65,
+      "pitch": 0.9,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 5.0
+  },
+  "cooldown": {
+    "base": 70,
+    "per_mastery": -4,
+    "minimum": 46
+  }
+}

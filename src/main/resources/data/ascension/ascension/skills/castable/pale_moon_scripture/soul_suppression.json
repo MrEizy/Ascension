@@ -1,0 +1,71 @@
+{
+  "type": "ascension:active",
+  "name": "Soul Suppression",
+  "description": "Press outward with spiritual pressure, bruising hostile souls and draining their stamina.",
+  "target": {
+    "type": "ascension:radial",
+    "radius": 4.5,
+    "maximum_targets": 0,
+    "sort": "nearest",
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 4.5,
+        "per_mastery": 0.7
+      },
+      "stats": {
+        "ascension:spirit": 0.16
+      },
+      "minimum": 1.0,
+      "maximum": 31.5,
+      "classifications": [
+        "ascension:skill",
+        "ascension:area",
+        "ascension:soul"
+      ],
+      "path": "ascension:foundation/soul",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:resource",
+      "resource": "ascension:stamina",
+      "operation": "ascension:drain",
+      "source": "ascension:skill_casting",
+      "amount": 3.0,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:soul",
+      "count": 20,
+      "spread": 0.8,
+      "speed": 0.07,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.respawn_anchor.deplete",
+      "volume": 0.65,
+      "pitch": 0.9,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 8.0
+  },
+  "cooldown": {
+    "base": 110,
+    "per_mastery": -5,
+    "minimum": 72
+  }
+}

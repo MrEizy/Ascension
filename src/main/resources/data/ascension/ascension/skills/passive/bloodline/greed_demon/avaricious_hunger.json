@@ -1,0 +1,21 @@
+{
+  "type": "ascension:passive",
+  "name": "Avaricious Hunger",
+  "description": "Every defeated foe becomes another scrap of essence to hoard.",
+  "triggers": [
+    {
+      "event": "kill",
+      "cooldown": 10,
+      "actions": [
+        {
+          "type": "ascension:resource",
+          "resource": "ascension:qi",
+          "operation": "ascension:restore",
+          "source": "ascension:skill_casting",
+          "amount": 5.0,
+          "subject": "caster"
+        }
+      ]
+    }
+  ]
+}

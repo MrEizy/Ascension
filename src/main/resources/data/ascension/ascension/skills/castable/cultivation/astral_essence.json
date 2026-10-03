@@ -1,0 +1,37 @@
+{
+  "type": "ascension:active",
+  "name": "Astral Essence Circulation",
+  "description": "Circulate Essence along imagined stellar routes, condensing distant celestial resonance into the dantian.",
+  "cast": {
+    "mode": "channel",
+    "stages": [
+      {
+        "particle_field": {
+          "style": "spiral",
+          "particles": [
+            "minecraft:enchant",
+            "minecraft:end_rod"
+          ],
+          "density": 14,
+          "radius": {
+            "min": 0.65,
+            "max": 1.35
+          },
+          "height": {
+            "min": 0.0,
+            "max": 1.7
+          },
+          "full_bright": true
+        }
+      }
+    ]
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:cultivate",
+      "path": "ascension:foundation/essence",
+      "rate": 1.65
+    }
+  ]
+}

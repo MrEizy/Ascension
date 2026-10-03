@@ -1,0 +1,61 @@
+{
+  "type": "ascension:active",
+  "name": "Soul Needle",
+  "description": "Compress soul force into a needle-thin spiritual attack.",
+  "target": {
+    "type": "ascension:ray",
+    "range": 12.0,
+    "width": 0.3,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 5.0,
+        "per_mastery": 0.9
+      },
+      "stats": {
+        "ascension:spirit": 0.24
+      },
+      "minimum": 1.0,
+      "maximum": 35.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:ranged",
+        "ascension:soul"
+      ],
+      "path": "ascension:foundation/soul",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:soul_fire_flame",
+      "count": 16,
+      "spread": 0.4,
+      "speed": 0.05,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.amethyst_block.hit",
+      "volume": 0.6,
+      "pitch": 1.0,
+      "subject": "target"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 5.0
+  },
+  "cooldown": {
+    "base": 58,
+    "per_mastery": -3,
+    "minimum": 36
+  }
+}

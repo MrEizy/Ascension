@@ -1,0 +1,25 @@
+{
+  "type": "ascension:passive",
+  "name": "Marrow Furnace",
+  "description": "Tempered marrow turns repeated punishment into a denser, harder skeleton.",
+  "modifiers": [
+    {
+      "type": "ascension:defense",
+      "flat_reduction": 0.35,
+      "percentage_reduction": 0.035,
+      "stagger_resistance": 0.08
+    },
+    {
+      "type": "ascension:stats",
+      "stat_modifiers": {
+        "ascension:vitality": [
+          {
+            "value": 0.05,
+            "operation": "MULTIPLY_FINAL",
+            "id": "ascension:marrow_furnace_vitality"
+          }
+        ]
+      }
+    }
+  ]
+}

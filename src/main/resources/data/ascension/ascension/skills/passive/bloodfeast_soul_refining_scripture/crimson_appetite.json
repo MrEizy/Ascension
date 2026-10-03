@@ -1,0 +1,29 @@
+{
+  "type": "ascension:passive",
+  "name": "Crimson Appetite",
+  "description": "Freshly ended life stirs the scripture’s circulation, returning a portion of qi to the cultivator.",
+  "triggers": [
+    {
+      "event": "kill",
+      "cooldown": 5,
+      "actions": [
+        {
+          "type": "ascension:resource",
+          "resource": "ascension:qi",
+          "operation": "ascension:restore",
+          "source": "ascension:skill_casting",
+          "amount": 7.0,
+          "subject": "caster"
+        },
+        {
+          "type": "ascension:resource",
+          "resource": "ascension:health",
+          "operation": "ascension:restore",
+          "source": "ascension:skill_casting",
+          "amount": 1.0,
+          "subject": "caster"
+        }
+      ]
+    }
+  ]
+}

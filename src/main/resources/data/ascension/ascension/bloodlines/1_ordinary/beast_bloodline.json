@@ -1,0 +1,91 @@
+{
+  "type": "ascension:simple",
+  "name": "Beast Bloodline",
+  "description": "A savage bloodline that grows stronger through conflict and survival.",
+  "paths": [
+    "ascension:foundation/body"
+  ],
+  "purity_handler": [
+    {
+      "condition": "ascension:all_purity",
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 0.06
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 0.08
+            },
+            {
+              "id": "ascension:agility",
+              "value": 0.02
+            }
+          ]
+        },
+        {
+          "type": "ascension:give_path_bonuses",
+          "bonuses": {
+            "ascension:affinity": {
+              "ascension:foundation/body": 0.008
+            }
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 50,
+        "end": 50
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:vitality",
+              "value": 1.0
+            }
+          ]
+        },
+        {
+          "type": "ascension:grant_skills",
+          "skills": [
+            "ascension:passive/bloodline/beast/predator_instinct"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "ascension:on_purity_in_range",
+        "start": 100,
+        "end": 100
+      },
+      "actions": [
+        {
+          "type": "ascension:give_base_stats",
+          "stats": [
+            {
+              "id": "ascension:strength",
+              "value": 2.0
+            },
+            {
+              "id": "ascension:vitality",
+              "value": 2.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:ordinary"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "ascension:simple",
+  "name": "Thunderforged Body",
+  "description": "Lightning courses through every muscle and tendon. Violent currents forge the body instead of tearing it apart.",
+  "paths": [
+    "ascension:foundation/body",
+    "ascension:elemental/lightning",
+    "ascension:weapon/fist"
+  ],
+  "skills": [],
+  "base_stats": {
+    "ascension:strength": 2.0,
+    "ascension:vitality": 1.0,
+    "ascension:agility": 3.0
+  },
+  "base_path_bonuses": {
+    "ascension:affinity": {
+      "ascension:foundation/body": 1.5,
+      "ascension:elemental/lightning": 3.0,
+      "ascension:weapon/fist": 1.5
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:profound"
+  },
+  "stat_modifiers": {
+    "ascension:strength": [
+      {
+        "value": 0.08,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:thunderforged_body_strength_modifier"
+      }
+    ],
+    "ascension:agility": [
+      {
+        "value": 0.1,
+        "operation": "MULTIPLY_FINAL",
+        "id": "ascension:thunderforged_body_agility_modifier"
+      }
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "type": "ascension:body_cultivation",
+  "name": "Five Harmony Tempering",
+  "description": "Temper the body as a meeting place for wood, fire, earth, metal, and water, forcing them into one circulating whole.",
+  "path": "ascension:foundation/body",
+  "priority": 160,
+  "stimuli": [
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "gain": 1.0
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:attacking"
+        ]
+      },
+      "gain": 0.5
+    },
+    {
+      "source": {
+        "source_tags": [
+          "ascension:movement"
+        ]
+      },
+      "gain": 0.04
+    }
+  ],
+  "maximum_tempering": 190.0,
+  "conversion": {
+    "rate": 1.1,
+    "progress_per_tempering": 1.55,
+    "interval": 2,
+    "costs": [
+      {
+        "resource": "ascension:qi",
+        "amount": 1.1
+      },
+      {
+        "resource": "ascension:stamina",
+        "amount": 0.55
+      }
+    ]
+  },
+  "multipliers": [
+    {
+      "condition": {
+        "in_water": true
+      },
+      "multiplier": 1.2
+    },
+    {
+      "condition": {
+        "on_fire": true
+      },
+      "multiplier": 1.2
+    },
+    {
+      "condition": {
+        "unarmored": true
+      },
+      "multiplier": 1.1
+    }
+  ]
+}

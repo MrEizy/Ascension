@@ -1,0 +1,69 @@
+{
+  "type": "ascension:active",
+  "name": "White Lightning Fist",
+  "description": "Punch a compressed discharge of white martial lightning through the target.",
+  "target": {
+    "type": "ascension:ray",
+    "range": 5.0,
+    "width": 0.75,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 8.0,
+        "per_mastery": 1.25
+      },
+      "stats": {
+        "ascension:strength": 0.18,
+        "ascension:agility": 0.12
+      },
+      "minimum": 1.0,
+      "maximum": 56.0,
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:body",
+        "ascension:lightning"
+      ],
+      "path": "ascension:foundation/body",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:electric_spark",
+      "count": 16,
+      "spread": 0.4,
+      "speed": 0.05,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.lightning_bolt.impact",
+      "volume": 0.6,
+      "pitch": 1.0,
+      "subject": "target"
+    }
+  ],
+  "cost": [
+    {
+      "resource": "ascension:stamina",
+      "amount": 4.0
+    },
+    {
+      "resource": "ascension:qi",
+      "amount": 5.0
+    }
+  ],
+  "cooldown": {
+    "base": 72,
+    "per_mastery": -4,
+    "minimum": 44
+  }
+}
