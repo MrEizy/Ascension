@@ -52,6 +52,14 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BLACK_IRON_HOE);
                         output.accept(ModItems.BLACK_IRON_SPEAR);
 
+                        output.accept(ModItems.FROST_SILVER_SWORD);
+                        output.accept(ModItems.FROST_SILVER_BLADE);
+                        output.accept(ModItems.FROST_SILVER_PICKAXE);
+                        output.accept(ModItems.FROST_SILVER_SHOVEL);
+                        output.accept(ModItems.FROST_SILVER_AXE);
+                        output.accept(ModItems.FROST_SILVER_HOE);
+                        output.accept(ModItems.FROST_SILVER_SPEAR);
+
 
                         output.accept(ModItems.SPIRITUAL_STONE_SWORD);
                         output.accept(ModItems.SPIRITUAL_STONE_BLADE);

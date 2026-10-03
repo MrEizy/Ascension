@@ -76,6 +76,13 @@ public class AscBlockTagProvider extends BlockTagsProvider {
                 .addTag(BlockTags.INCORRECT_FOR_IRON_TOOL)
                 .remove(ModTags.Blocks.NEEDS_BLACK_IRON_TOOL);
 
+        tag(ModTags.Blocks.NEEDS_FROST_SILVER_TOOL)
+                .addTag(BlockTags.NEEDS_IRON_TOOL);
+
+        tag(ModTags.Blocks.INCORRECT_FOR_FROST_SILVER_TOOL)
+                .addTag(BlockTags.INCORRECT_FOR_IRON_TOOL)
+                .remove(ModTags.Blocks.NEEDS_FROST_SILVER_TOOL);
+
 
         tag(ModTags.Blocks.NEEDS_SPIRITUAL_STONE_TOOL)
                 .addTag(BlockTags.NEEDS_DIAMOND_TOOL);

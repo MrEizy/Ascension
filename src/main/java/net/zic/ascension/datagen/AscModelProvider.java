@@ -55,6 +55,14 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.BLACK_IRON_HOE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateSpear(ModItems.BLACK_IRON_SPEAR.get());
 
+        itemModels.generateFlatItem(ModItems.FROST_SILVER_SWORD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.FROST_SILVER_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.FROST_SILVER_PICKAXE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.FROST_SILVER_SHOVEL.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.FROST_SILVER_AXE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.FROST_SILVER_HOE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateSpear(ModItems.FROST_SILVER_SPEAR.get());
+
 
         itemModels.generateFlatItem(ModItems.SPIRITUAL_STONE_SWORD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(ModItems.SPIRITUAL_STONE_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);

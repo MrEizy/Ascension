@@ -58,9 +58,25 @@ public class ModItems {
     public static final DeferredItem<Item> BLACK_IRON_SHOVEL = ITEMS.registerItem("black_iron_shovel",
             properties -> new ShovelItem(AscToolTiers.BLACK_IRON, 1.5f, -3.0f, properties));
     public static final DeferredItem<Item> BLACK_IRON_HOE = ITEMS.registerItem("black_iron_hoe",
-            properties -> new HoeItem(AscToolTiers.BLACK_IRON, -1.2f, -3.0f, properties));
+            properties -> new HoeItem(AscToolTiers.BLACK_IRON, -4f, -3.0f, properties));
     public static final DeferredItem<Item> BLACK_IRON_SPEAR = ITEMS.registerItem("black_iron_spear",
             properties -> new Item(properties.spear(AscToolTiers.BLACK_IRON, 0.95f, 0.7f, 0.7f,
+                    3-5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
+
+    public static final DeferredItem<Item> FROST_SILVER_SWORD = ITEMS.registerItem("frost_silver_sword",
+            properties -> new Item(properties.sword(AscToolTiers.FROST_SILVER, 2.9f, -2.5f)));
+    public static final DeferredItem<Item> FROST_SILVER_BLADE = ITEMS.registerItem("frost_silver_blade",
+            properties -> new Item(properties.sword(AscToolTiers.FROST_SILVER, 2.6f, -1.8f)));
+    public static final DeferredItem<Item> FROST_SILVER_AXE = ITEMS.registerItem("frost_silver_axe",
+            properties -> new AxeItem(AscToolTiers.FROST_SILVER, 4f, -3.0f, properties));
+    public static final DeferredItem<Item> FROST_SILVER_PICKAXE = ITEMS.registerItem("frost_silver_pickaxe",
+            properties -> new Item(properties.pickaxe(AscToolTiers.BLACK_IRON, 1f, -2.8f)));
+    public static final DeferredItem<Item> FROST_SILVER_SHOVEL = ITEMS.registerItem("frost_silver_shovel",
+            properties -> new ShovelItem(AscToolTiers.FROST_SILVER, 1f, -3.0f, properties));
+    public static final DeferredItem<Item> FROST_SILVER_HOE = ITEMS.registerItem("frost_silver_hoe",
+            properties -> new HoeItem(AscToolTiers.FROST_SILVER, -4f, -3.0f, properties));
+    public static final DeferredItem<Item> FROST_SILVER_SPEAR = ITEMS.registerItem("frost_silver_spear",
+            properties -> new Item(properties.spear(AscToolTiers.FROST_SILVER, 1.0f, 0.7f, 0.7f,
                     3-5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
 
     public static final DeferredItem<Item> SPIRITUAL_STONE_SWORD = ITEMS.registerItem("spiritual_stone_sword",

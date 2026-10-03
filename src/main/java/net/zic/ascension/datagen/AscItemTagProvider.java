@@ -41,28 +41,38 @@ public class AscItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.BLACK_IRON_REPAIRABLE)
                 .add(ModItems.BLACK_IRON_INGOT.get());
 
+        tag(ModTags.Items.FROST_SILVER_REPAIRABLE)
+                .add(ModItems.FROST_SILVER_INGOT.get());
+
         tag(ModTags.Items.SPIRITUAL_STONE_REPAIRABLE)
                 .add(ModItems.SPIRITUAL_STONE.get());
 
         tag(ItemTags.SWORDS)
                 .add(ModItems.BLACK_IRON_SWORD.get())
                 .add(ModItems.BLACK_IRON_BLADE.get())
+                .add(ModItems.FROST_SILVER_SWORD.get())
+                .add(ModItems.FROST_SILVER_BLADE.get())
                 .add(ModItems.SPIRITUAL_STONE_SWORD.get())
                 .add(ModItems.SPIRITUAL_STONE_BLADE.get());
         tag(ItemTags.PICKAXES)
                 .add(ModItems.BLACK_IRON_PICKAXE.get())
+                .add(ModItems.FROST_SILVER_PICKAXE.get())
                 .add(ModItems.SPIRITUAL_STONE_PICKAXE.get());
         tag(ItemTags.AXES)
                 .add(ModItems.BLACK_IRON_AXE.get())
+                .add(ModItems.FROST_SILVER_AXE.get())
                 .add(ModItems.SPIRITUAL_STONE_AXE.get());
         tag(ItemTags.SHOVELS)
                 .add(ModItems.BLACK_IRON_SHOVEL.get())
+                .add(ModItems.FROST_SILVER_SHOVEL.get())
                 .add(ModItems.SPIRITUAL_STONE_SHOVEL.get());
         tag(ItemTags.HOES)
                 .add(ModItems.BLACK_IRON_HOE.get())
+                .add(ModItems.FROST_SILVER_HOE.get())
                 .add(ModItems.SPIRITUAL_STONE_HOE.get());
         tag(ItemTags.SPEARS)
                 .add(ModItems.BLACK_IRON_SPEAR.get())
+                .add(ModItems.FROST_SILVER_SPEAR.get())
                 .add(ModItems.SPIRITUAL_STONE_SPEAR.get());
 
 

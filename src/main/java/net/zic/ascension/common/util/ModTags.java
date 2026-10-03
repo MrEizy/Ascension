@@ -21,6 +21,9 @@ public class ModTags {
         public static final  TagKey<Block> NEEDS_BLACK_IRON_TOOL = createTag("needs_black_iron_tool");
         public static final  TagKey<Block> INCORRECT_FOR_BLACK_IRON_TOOL = createTag("incorrect_for_black_iron_tool");
 
+        public static final  TagKey<Block> NEEDS_FROST_SILVER_TOOL = createTag("needs_frost_silver_tool");
+        public static final  TagKey<Block> INCORRECT_FOR_FROST_SILVER_TOOL = createTag("incorrect_for_frost_silver_tool");
+
         public static final  TagKey<Block> NEEDS_SPIRITUAL_STONE_TOOL = createTag("needs_spiritual_stone_tool");
         public static final  TagKey<Block> INCORRECT_FOR_SPIRITUAL_STONE_TOOL = createTag("incorrect_for_spiritual_stone_tool");
 
@@ -47,6 +50,7 @@ public class ModTags {
 
 
         public static final TagKey<Item> BLACK_IRON_REPAIRABLE = createItemTag("black_iron_repairable");
+        public static final TagKey<Item> FROST_SILVER_REPAIRABLE = createItemTag("frost_silver_repairable");
         public static final TagKey<Item> SPIRITUAL_STONE_REPAIRABLE = createItemTag("spiritual_stone_repairable");
 
         public static final TagKey<Item> WEAPON_BLADES = createItemTag("weapon/blades");

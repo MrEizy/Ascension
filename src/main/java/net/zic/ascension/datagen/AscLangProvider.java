@@ -165,6 +165,14 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.black_iron_hoe", "Black Iron Hoe");
         add("item.ascension.black_iron_spear", "Black Iron Spear");
 
+        add("item.ascension.frost_silver_sword", "Frost Silver Sword");
+        add("item.ascension.frost_silver_blade", "Frost Silver Blade");
+        add("item.ascension.frost_silver_pickaxe", "Frost Silver Pickaxe");
+        add("item.ascension.frost_silver_shovel", "Frost Silver Shovel");
+        add("item.ascension.frost_silver_axe", "Frost Silver Axe");
+        add("item.ascension.frost_silver_hoe", "Frost Silver Hoe");
+        add("item.ascension.frost_silver_spear", "Frost Silver Spear");
+
         add("item.ascension.spiritual_stone_sword", "Spiritual Stone Sword");
         add("item.ascension.spiritual_stone_blade", "Spiritual Stone Blade");
         add("item.ascension.spiritual_stone_pickaxe", "Spiritual Stone Pickaxe");
