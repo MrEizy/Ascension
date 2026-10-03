@@ -11,6 +11,7 @@ import net.zic.ascension.datagen.villager.AscVillagerTrades;
 import net.zic.ascension.worldgen.AscBiomeModifier;
 import net.zic.ascension.worldgen.AscConfiguredFeatures;
 import net.zic.ascension.worldgen.AscPlacedFeatures;
+import net.zic.ascension.worldgen.AscStructures;
 import net.zic.ascension.worldgen.biome.AscBiomes;
 import net.zic.ascension.worldgen.density.AscDensityFunctions;
 import net.zic.ascension.worldgen.dimension.AscDimensionTypes;
@@ -28,6 +29,9 @@ public class AscDatapackProvider extends DatapackBuiltinEntriesProvider {
             .add(Registries.DENSITY_FUNCTION, AscDensityFunctions::bootstrap)
             .add(Registries.CONFIGURED_FEATURE, AscConfiguredFeatures::bootstrap)
             .add(Registries.PLACED_FEATURE, AscPlacedFeatures::bootstrap)
+            .add(Registries.TEMPLATE_POOL, AscStructures::bootstrapPools)
+            .add(Registries.STRUCTURE, AscStructures::bootstrapStructures)
+            .add(Registries.STRUCTURE_SET, AscStructures::bootstrapStructureSets)
             .add(Registries.BIOME, AscBiomes::bootstrap)
             .add(Registries.DIMENSION_TYPE, AscDimensionTypes::bootstrap)
             .add(Registries.NOISE_SETTINGS, AscNoiseSettings::bootstrap)
