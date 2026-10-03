@@ -152,6 +152,26 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.frost_silver_ingot", "Frost Silver Ingot");
         add("item.ascension.frost_silver_nugget", "Frost Silver Nugget");
         add("item.ascension.jade", "Jade");
+        add("item.ascension.spiritual_stone", "Spiritual Stone");
+
+
+
+        //Item Tools & Weapons
+        add("item.ascension.black_iron_sword", "Black Iron Sword");
+        add("item.ascension.black_iron_blade", "Black Iron Blade");
+        add("item.ascension.black_iron_pickaxe", "Black Iron Pickaxe");
+        add("item.ascension.black_iron_shovel", "Black Iron Shovel");
+        add("item.ascension.black_iron_axe", "Black Iron Axe");
+        add("item.ascension.black_iron_hoe", "Black Iron Hoe");
+        add("item.ascension.black_iron_spear", "Black Iron Spear");
+
+        add("item.ascension.spiritual_stone_sword", "Spiritual Stone Sword");
+        add("item.ascension.spiritual_stone_blade", "Spiritual Stone Blade");
+        add("item.ascension.spiritual_stone_pickaxe", "Spiritual Stone Pickaxe");
+        add("item.ascension.spiritual_stone_shovel", "Spiritual Stone Shovel");
+        add("item.ascension.spiritual_stone_axe", "Spiritual Stone Axe");
+        add("item.ascension.spiritual_stone_hoe", "Spiritual Stone Hoe");
+        add("item.ascension.spiritual_stone_spear", "Spiritual Stone Spear");
 
 
 
@@ -213,6 +233,9 @@ public class AscLangProvider extends LanguageProvider {
 
         add("block.ascension.jade_ore", "Jade Ore");
         add("block.ascension.jade_block", "Jade Block");
+
+        add("block.ascension.spirit_vein", "Spirit Vein");
+        add("block.ascension.spiritual_stone_cluster", "Spiritual Stone Cluster");
 
 
         //Fluids

@@ -1,10 +1,7 @@
 package net.zic.ascension.common.item;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -46,6 +43,41 @@ public class ModItems {
                     .setId(RegistryHelper.key(Registries.ITEM,AscensionCraft.MOD_ID,"technique_manual"))
                     .stacksTo(1)
             ));
+
+
+
+    //Tools & Weapons
+    public static final DeferredItem<Item> BLACK_IRON_SWORD = ITEMS.registerItem("black_iron_sword",
+            properties -> new Item(properties.sword(AscToolTiers.BLACK_IRON, 3f, -2.5f)));
+    public static final DeferredItem<Item> BLACK_IRON_BLADE = ITEMS.registerItem("black_iron_blade",
+            properties -> new Item(properties.sword(AscToolTiers.BLACK_IRON, 2.8f, -2f)));
+    public static final DeferredItem<Item> BLACK_IRON_AXE = ITEMS.registerItem("black_iron_axe",
+            properties -> new AxeItem(AscToolTiers.BLACK_IRON, 5f, -3.2f, properties));
+    public static final DeferredItem<Item> BLACK_IRON_PICKAXE = ITEMS.registerItem("black_iron_pickaxe",
+            properties -> new Item(properties.pickaxe(AscToolTiers.BLACK_IRON, 1f, -2.8f)));
+    public static final DeferredItem<Item> BLACK_IRON_SHOVEL = ITEMS.registerItem("black_iron_shovel",
+            properties -> new ShovelItem(AscToolTiers.BLACK_IRON, 1.5f, -3.0f, properties));
+    public static final DeferredItem<Item> BLACK_IRON_HOE = ITEMS.registerItem("black_iron_hoe",
+            properties -> new HoeItem(AscToolTiers.BLACK_IRON, -1.2f, -3.0f, properties));
+    public static final DeferredItem<Item> BLACK_IRON_SPEAR = ITEMS.registerItem("black_iron_spear",
+            properties -> new Item(properties.spear(AscToolTiers.BLACK_IRON, 0.95f, 0.7f, 0.7f,
+                    3-5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
+
+    public static final DeferredItem<Item> SPIRITUAL_STONE_SWORD = ITEMS.registerItem("spiritual_stone_sword",
+            properties -> new Item(properties.sword(AscToolTiers.SPIRITUAL_STONE, 6f, -2.3f)));
+    public static final DeferredItem<Item> SPIRITUAL_STONE_BLADE = ITEMS.registerItem("spiritual_stone_blade",
+            properties -> new Item(properties.sword(AscToolTiers.SPIRITUAL_STONE, 5.6f, -1.8f)));
+    public static final DeferredItem<Item> SPIRITUAL_STONE_AXE = ITEMS.registerItem("spiritual_stone_axe",
+            properties -> new AxeItem(AscToolTiers.SPIRITUAL_STONE, 6f, -2.8f, properties));
+    public static final DeferredItem<Item> SPIRITUAL_STONE_PICKAXE = ITEMS.registerItem("spiritual_stone_pickaxe",
+            properties -> new Item(properties.pickaxe(AscToolTiers.SPIRITUAL_STONE, 2f, -2.8f)));
+    public static final DeferredItem<Item> SPIRITUAL_STONE_SHOVEL = ITEMS.registerItem("spiritual_stone_shovel",
+            properties -> new ShovelItem(AscToolTiers.SPIRITUAL_STONE, 2.5f, -3.0f, properties));
+    public static final DeferredItem<Item> SPIRITUAL_STONE_HOE = ITEMS.registerItem("spiritual_stone_hoe",
+            properties -> new HoeItem(AscToolTiers.SPIRITUAL_STONE, -1.2f, -3.0f, properties));
+    public static final DeferredItem<Item> SPIRITUAL_STONE_SPEAR = ITEMS.registerItem("spiritual_stone_spear",
+            properties -> new Item(properties.spear(AscToolTiers.SPIRITUAL_STONE, 2.5f, 0.7f, 0.7f,
+                    3-5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
 
 
 

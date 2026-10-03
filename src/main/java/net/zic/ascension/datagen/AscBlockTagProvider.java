@@ -68,6 +68,22 @@ public class AscBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.BLACK_IRON_BLOCK.get())
                 .add(ModBlocks.BLACK_IRON_ORE.get());
 
+        tag(ModTags.Blocks.NEEDS_BLACK_IRON_TOOL)
+                .add(ModBlocks.ALCHEMY_FURNACE.get())
+                .addTag(BlockTags.NEEDS_IRON_TOOL);
+
+        tag(ModTags.Blocks.INCORRECT_FOR_BLACK_IRON_TOOL)
+                .addTag(BlockTags.INCORRECT_FOR_IRON_TOOL)
+                .remove(ModTags.Blocks.NEEDS_BLACK_IRON_TOOL);
+
+
+        tag(ModTags.Blocks.NEEDS_SPIRITUAL_STONE_TOOL)
+                .addTag(BlockTags.NEEDS_DIAMOND_TOOL);
+
+        tag(ModTags.Blocks.INCORRECT_FOR_SPIRITUAL_STONE_TOOL)
+                .addTag(BlockTags.INCORRECT_FOR_IRON_TOOL)
+                .remove(ModTags.Blocks.NEEDS_SPIRITUAL_STONE_TOOL);
+
 
 
         tag(ModTags.Blocks.DESTRUCTIBLE_BLOCKS)

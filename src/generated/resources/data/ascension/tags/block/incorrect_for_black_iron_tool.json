@@ -1,0 +1,8 @@
+{
+  "remove": [
+    "#ascension:needs_black_iron_tool"
+  ],
+  "values": [
+    "#minecraft:incorrect_for_iron_tool"
+  ]
+}
