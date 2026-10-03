@@ -6,7 +6,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolderProvider;
 import net.zic.ascension.api.ascension.core.path.PathHolderProvider;
-import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolderProvider;
+import net.zic.ascension.api.ascension.core.path.bonus.data_source.PathBonusHolderProvider;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolderProvider;
 import net.zic.ascension.api.ascension.core.skill.SkillHolderProvider;
 import net.zic.ascension.api.ascension.core.technique.TechniqueHolderProvider;
