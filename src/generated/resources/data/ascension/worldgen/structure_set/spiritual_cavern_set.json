@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1234567890,
+    "separation": 12,
+    "spacing": 20
+  },
+  "structures": [
+    {
+      "structure": "ascension:spiritual_cavern",
+      "weight": 1
+    }
+  ]
+}
