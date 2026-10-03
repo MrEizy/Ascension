@@ -13,6 +13,7 @@
 * Added 5 new Artifacts
 * [**W.I.P**] [**Extremely Bugged**] Added New World Type -> Jianghu with overhauled terrain generation and increased world height (416)
 * [**W.I.P**] [Needs Decoration] Added 8 new biomes; Heavenreach Peak, Graystone Foothills, Azure Cloud Range, Ancient Grove, Jadebloom Forest, Misty Woods, Verdant Moor, Golden Steppe
+* Added 3 new Tool sets + Weapons Black Iron, Frost Silver, Spiritual Stone
 * Ported Most blocks from 1.21.1
 * Added Datapack support for Paths, Bloodlines, Physiques, Techniques, Skills, Tribulations and Atmospheric Qi Density.  
 * Starter Bloodline and Physique Selection on first world/server join
