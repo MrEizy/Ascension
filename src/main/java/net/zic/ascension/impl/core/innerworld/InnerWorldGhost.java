@@ -30,6 +30,12 @@ public final class InnerWorldGhost extends LivingEntity {
         this.setNoGravity(true);
     }
 
+
+    @Override
+    public boolean isCurrentlyGlowing() {
+        return true;
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
@@ -40,6 +46,8 @@ public final class InnerWorldGhost extends LivingEntity {
     public void setOwner(UUID id, String name) {
         this.entityData.set(OWNER_ID, id.toString());
         this.entityData.set(OWNER_NAME, name);
+        this.setCustomName(net.minecraft.network.chat.Component.literal(name));
+        this.setCustomNameVisible(true);
     }
 
     public UUID ownerId() {

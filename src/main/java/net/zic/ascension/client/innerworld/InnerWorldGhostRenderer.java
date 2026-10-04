@@ -10,6 +10,9 @@ import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.impl.core.innerworld.InnerWorldGhost;
 
+import java.util.UUID;
+
+
 public final class InnerWorldGhostRenderer extends LivingEntityRenderer<InnerWorldGhost, InnerWorldGhostRenderState, HumanoidModel<InnerWorldGhostRenderState>> {
 
     public InnerWorldGhostRenderer(EntityRendererProvider.Context context) {
@@ -24,17 +27,24 @@ public final class InnerWorldGhostRenderer extends LivingEntityRenderer<InnerWor
     /** Vanilla's own Steve texture — guaranteed to exist in every build. Last-resort only. */
     private static final Identifier FALLBACK_SKIN = Identifier.withDefaultNamespace("textures/entity/player/wide/steve.png");
 
+
     @Override
     public void extractRenderState(InnerWorldGhost entity, InnerWorldGhostRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
-        var skin = InnerWorldSkinCache.get(entity.ownerId(), entity.ownerName());
-        Identifier texture = InnerWorldSkinTexture.resolve(skin);
-        if (texture == null) {
-            texture = InnerWorldSkinTexture.resolve(DefaultPlayerSkin.get(entity.ownerId()));
+        state.skinTexture = FALLBACK_SKIN;
+        try {
+            UUID ownerId = entity.ownerId();
+            var skin = InnerWorldSkinCache.get(ownerId, entity.ownerName());
+            Identifier texture = InnerWorldSkinTexture.resolve(skin);
+            if (texture == null && ownerId != null) {
+                texture = InnerWorldSkinTexture.resolve(DefaultPlayerSkin.get(ownerId));
+            }
+            if (texture != null) {
+                state.skinTexture = texture;
+            }
+        } catch (Exception e) {
+
         }
-        // Never let a null through — a null Identifier here is a hard render-thread crash, not a
-        // graceful failure. Worst case you briefly see Steve instead of the real skin.
-        state.skinTexture = texture != null ? texture : FALLBACK_SKIN;
     }
 
     @Override
@@ -44,6 +54,13 @@ public final class InnerWorldGhostRenderer extends LivingEntityRenderer<InnerWor
 
     @Override
     public RenderType getRenderType(InnerWorldGhostRenderState state, boolean isVisible, boolean isVisibleToPlayer, boolean isGlowing) {
-        return RenderTypes.entityTranslucent(state.skinTexture);
+        Identifier texture = state.skinTexture;
+        if (isVisible) {
+            return RenderTypes.entityTranslucent(texture);
+        }
+        if (isVisibleToPlayer || isGlowing) {
+            return RenderTypes.outline(texture);
+        }
+        return null;
     }
 }
