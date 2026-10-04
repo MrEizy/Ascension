@@ -129,6 +129,51 @@ public class AscRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(ModItems.BLACK_IRON_INGOT.get()), has(ModItems.BLACK_IRON_INGOT))
                 .group("black_iron")
                 .save(output, "ascension:shaped/alchemy_furnace");
+        shapeless(RecipeCategory.MISC, ModBlocks.CULTIVATION_SOIL.get(), 2)
+                .requires(ModItems.SPIRITUAL_STONE, 2)
+                .requires(Items.DIRT, 2)
+                .unlockedBy(getHasName(ModItems.SPIRITUAL_STONE.get()), has(ModItems.SPIRITUAL_STONE))
+                .group("cultivation_soil")
+                .save(output, "ascension:shapeless/cultivation_soil");
+
+
+        //Artifacts
+        shaped(RecipeCategory.MISC, ModItems.TABLET_OF_DESTRUCTION_HUMAN.get(), 8)
+                .pattern("GBG")
+                .pattern("BGB")
+                .pattern("GBG")
+                .define('G', Items.IRON_INGOT)
+                .define('B', ModItems.BLACK_IRON_INGOT.get())
+                .unlockedBy(getHasName(ModItems.BLACK_IRON_INGOT.get()), has(ModItems.BLACK_IRON_INGOT))
+                .group("TODH")
+                .save(output, "ascension:shapeless/tablet_of_destruction_human");
+        shaped(RecipeCategory.MISC, ModItems.TABLET_OF_DESTRUCTION_EARTH.get(), 4)
+                .pattern("TTT")
+                .pattern("THT")
+                .pattern("TTT")
+                .define('T', Items.GUNPOWDER)
+                .define('H', ModItems.TABLET_OF_DESTRUCTION_HUMAN.get())
+                .unlockedBy(getHasName(ModItems.TABLET_OF_DESTRUCTION_HUMAN.get()), has(ModItems.TABLET_OF_DESTRUCTION_HUMAN))
+                .group("TODE")
+                .save(output, "ascension:shapeless/tablet_of_destruction_earth");
+        shaped(RecipeCategory.MISC, ModItems.TABLET_OF_DESTRUCTION_HEAVEN.get(), 4)
+                .pattern("TTT")
+                .pattern("THT")
+                .pattern("TTT")
+                .define('T', Items.GUNPOWDER)
+                .define('H', ModItems.TABLET_OF_DESTRUCTION_EARTH.get())
+                .unlockedBy(getHasName(ModItems.TABLET_OF_DESTRUCTION_EARTH.get()), has(ModItems.TABLET_OF_DESTRUCTION_EARTH))
+                .group("TODHE")
+                .save(output, "ascension:shapeless/tablet_of_destruction_heaven");
+        shaped(RecipeCategory.MISC, ModItems.TABLET_OF_DESTRUCTION_ASCENDANT.get(), 4)
+                .pattern("TTT")
+                .pattern("THT")
+                .pattern("TTT")
+                .define('T', Items.GUNPOWDER)
+                .define('H', ModItems.TABLET_OF_DESTRUCTION_HEAVEN.get())
+                .unlockedBy(getHasName(ModItems.TABLET_OF_DESTRUCTION_HEAVEN.get()), has(ModItems.TABLET_OF_DESTRUCTION_HEAVEN))
+                .group("TODA")
+                .save(output, "ascension:shapeless/tablet_of_destruction_ascendant");
 
 
         //Items
