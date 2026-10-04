@@ -84,6 +84,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.BLACK_IRON_ORE);
                         output.accept(ModBlocks.FROST_SILVER_BLOCK);
                         output.accept(ModBlocks.FROST_SILVER_ORE);
+                        output.accept(ModBlocks.AUCTION_HOUSE_CORE);
+                        output.accept(ModBlocks.AUCTION_BIDDER);
 
                         output.accept(ModBlocks.PEACH_LOG);
                         output.accept(ModBlocks.PEACH_WOOD);

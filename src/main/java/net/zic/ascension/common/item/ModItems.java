@@ -145,8 +145,6 @@ public class ModItems {
             properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/essence"))));
 
 
-
-
     //Ores
     public static final DeferredItem<Item> JADE = ITEMS.registerSimpleItem("jade");
 

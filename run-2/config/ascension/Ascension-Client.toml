@@ -1,0 +1,3 @@
+[HUD]
+	#Show current and maximum values on the health, qi, and stamina bars. [Default: true]
+	showExactValues = true

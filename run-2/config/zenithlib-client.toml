@@ -1,0 +1,21 @@
+[tooltips]
+	#Whether ZenithLib replaces vanilla item tooltips with themed Zenith tooltips.
+	enabled = true
+	#Whether Zenith tooltips render entity previews for spawn eggs.
+	spawnEggEntityPreviews = true
+
+	[tooltips.animations]
+		#Whether Zenith tooltip animations and procedural effects are enabled.
+		enabled = true
+		#Reduces large or continuous motion while preserving readable fades and static decoration.
+		reduceMotion = false
+		#Whether ambient procedural background effects such as stars and mist are drawn.
+		ambientEffects = true
+		#Tooltip animation intensity percentage. 0 disables most optional effects, 100 is the authored default.
+		# Default: 100
+		# Range: 0 ~ 100
+		intensity = 100
+		#Maximum tiny procedural particles or motes drawn per tooltip frame.
+		# Default: 32
+		# Range: 0 ~ 128
+		particleBudget = 32

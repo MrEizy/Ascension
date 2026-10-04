@@ -24,6 +24,8 @@ import net.zic.ascension.common.blocks.alchemy.AlchemyFurnaceBlock;
 import net.zic.ascension.common.blocks.custom.SpiritVeinBlock;
 import net.zic.ascension.common.blocks.custom.SpiritualStoneClusterBlock;
 import net.zic.ascension.common.blocks.entity.FermentingBarrelBlock;
+import net.zic.ascension.common.blocks.auction.AuctionBidderBlock;
+import net.zic.ascension.common.blocks.auction.AuctionHouseCoreBlock;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.HerbStemCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
@@ -74,6 +76,24 @@ public class ModBlocks {
 
 
 
+
+
+    //Auction Blocks
+    public static final DeferredBlock<AuctionHouseCoreBlock> AUCTION_HOUSE_CORE = registerBlock("auction_house_core",
+            properties -> new AuctionHouseCoreBlock(properties
+                    .strength(5.0f)
+                    .explosionResistance(1200.0f)
+                    .pushReaction(PushReaction.BLOCK)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
+
+    public static final DeferredBlock<AuctionBidderBlock> AUCTION_BIDDER = registerBlock("auction_bidder",
+            properties -> new AuctionBidderBlock(properties
+                    .strength(3.5f)
+                    .explosionResistance(6.0f)
+                    .pushReaction(PushReaction.BLOCK)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
 
 
     //Fluids

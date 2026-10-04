@@ -241,6 +241,8 @@ public class AscLangProvider extends LanguageProvider {
 
         add("block.ascension.jade_ore", "Jade Ore");
         add("block.ascension.jade_block", "Jade Block");
+        add("block.ascension.auction_house_core", "Auction House Core");
+        add("block.ascension.auction_bidder", "Auction Bidder");
 
         add("block.ascension.spirit_vein", "Spirit Vein");
         add("block.ascension.spiritual_stone_cluster", "Spiritual Stone Cluster");
@@ -279,6 +281,72 @@ public class AscLangProvider extends LanguageProvider {
         add("block.ascension.peach_pod", "Peach Pod");
         add("block.ascension.white_jade_orchid_crop", "White Jade Orchid");
 
+
+
+        // Auction GUI / messages
+        add("gui.ascension.auction.title", "Auction House");
+        add("gui.ascension.auction.owner", "%s's Auction House");
+        add("gui.ascension.auction.create", "Create Auction");
+        add("gui.ascension.auction.inbox", "Auction Inbox");
+        add("gui.ascension.auction.bidder", "Nearby Auction Houses");
+        add("gui.ascension.auction.no_houses", "No active auction houses are in range.");
+        add("gui.ascension.auction.no_auctions", "No active auctions.");
+        add("gui.ascension.auction.current_bid", "Current: %s Spiritual Stones");
+        add("gui.ascension.auction.starting_bid", "Starting: %s Spiritual Stones");
+        add("gui.ascension.auction.highest_bidder", "Highest bidder: %s");
+        add("gui.ascension.auction.time_left", "Time left: %s");
+        add("gui.ascension.auction.quantity", "Quantity: %s");
+        add("gui.ascension.auction.bid", "Bid: %s");
+        add("gui.ascension.auction.duration", "Duration: %s");
+        add("gui.ascension.auction.confirm", "Confirm");
+        add("gui.ascension.auction.back", "Back");
+        add("gui.ascension.auction.open_inbox", "Inbox (%s)");
+        add("gui.ascension.auction.claim_stones", "Claim %s Spiritual Stones");
+        add("gui.ascension.auction.inbox_hint", "Click an item to claim it.");
+        add("gui.ascension.auction.select_item", "Select an inventory stack below.");
+        add("gui.ascension.auction.auctions_count", "%s active auctions");
+        add("gui.ascension.auction.bid_now", "Place Bid");
+        add("gui.ascension.auction.minimum_bid", "Minimum bid: %s");
+        add("gui.ascension.auction.current_bids", "Current Bids");
+        add("gui.ascension.auction.no_current_bids", "You have no active bids.");
+        add("gui.ascension.auction.bid_winning", "Winning");
+        add("gui.ascension.auction.bid_outbid", "Outbid");
+        add("gui.ascension.auction.inbox_empty", "Inbox empty");
+        add("gui.ascension.auction.my_auctions", "My Auctions");
+        add("gui.ascension.auction.cancel", "Cancel Auction");
+        add("gui.ascension.auction.cancel_hint", "You can cancel this auction until the first bid is placed.");
+        add("gui.ascension.auction.cancel_locked", "This auction is locked because a bid has been placed.");
+        add("gui.ascension.auction.notifications_on", "Notify: ON");
+        add("gui.ascension.auction.notifications_off", "Notify: OFF");
+
+        add("auction.ascension.not_owner", "This Auction House belongs to %s.");
+        add("auction.ascension.create_success", "Auction created.");
+        add("auction.ascension.invalid_access", "That auction terminal is no longer valid or in range.");
+        add("auction.ascension.invalid_item", "That item stack is no longer available.");
+        add("auction.ascension.invalid_values", "Those auction values are invalid.");
+        add("auction.ascension.bid_success", "Bid placed.");
+        add("auction.ascension.auction_ended", "That auction has already ended.");
+        add("auction.ascension.seller_cannot_bid", "You cannot bid on your own auction.");
+        add("auction.ascension.bid_too_low", "Your bid is too low.");
+        add("auction.ascension.not_enough_stones", "You do not have enough Spiritual Stones.");
+        add("auction.ascension.currency_unavailable", "Spiritual Stones are not registered on this server.");
+        add("auction.ascension.outbid", "You were outbid on %s.");
+        add("auction.ascension.ended_no_bid", "%s received no bids and was returned to your Auction Inbox.");
+        add("auction.ascension.won", "You won %s. It is waiting in your Auction Inbox.");
+        add("auction.ascension.sold", "%s sold for %s Spiritual Stones. Your payment is waiting in your Auction Inbox.");
+        add("auction.ascension.inbox_waiting", "You have unclaimed auction contents. Use /auction inbox to collect them.");
+        add("auction.ascension.core_has_active", "This Auction House Core cannot be broken while it has active auctions.");
+        add("auction.ascension.claimed_stones", "Claimed %s Spiritual Stones.");
+        add("auction.ascension.cancel_success", "Auction cancelled. The item was returned to your Auction Inbox.");
+        add("auction.ascension.cancel_has_bids", "You cannot cancel an auction after a bid has been placed.");
+        add("auction.ascension.notifications_enabled", "Auction notifications enabled.");
+        add("auction.ascension.notifications_disabled", "Auction notifications disabled.");
+        add("auction.ascension.five_minutes", "%s has 5 minutes remaining.");
+        add("auction.ascension.lost", "You lost the auction for %s. Your %s Spiritual Stones were returned to your Auction Inbox.");
+        add("auction.ascension.ended_watching", "The auction for %s has ended.");
+        add("auction.ascension.cancelled_watching", "The auction for %s was cancelled.");
+        add("auction.ascension.admin_cancelled_bidder", "An administrator cancelled the auction for %s. Your %s Spiritual Stones were returned to your Auction Inbox.");
+        add("auction.ascension.admin_cancelled_seller", "An administrator cancelled your auction for %s. The item was returned to your Auction Inbox.");
 
 
         // GUI
@@ -368,6 +436,10 @@ public class AscLangProvider extends LanguageProvider {
         add("stat.ascension.strength", "Strength");
         add("stat.ascension.spirit", "Spirit");
 
+
+
+        //Economy
+        add("item.ascension.spiritual_stone", "Spiritual Stone");
 
 
         //Key Items
