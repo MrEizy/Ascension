@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "minecraft:netherite_ingot",
+  "base": "ascension:diamond_blade",
+  "result": {
+    "id": "ascension:netherite_blade"
+  },
+  "template": "minecraft:netherite_upgrade_smithing_template"
+}

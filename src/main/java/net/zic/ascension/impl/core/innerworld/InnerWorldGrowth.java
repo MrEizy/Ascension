@@ -17,11 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Grows inner worlds ring by ring, chunk by chunk, spread across ticks. The invisible border only
- * advances when a whole ring has finished, so players never see (or stand on) half-built land.
- * Terrain is a deterministic function of world coordinates, so re-running a ring is harmless.
- */
+
 public final class InnerWorldGrowth {
     private InnerWorldGrowth() {
     }
@@ -116,11 +112,12 @@ public final class InnerWorldGrowth {
                 continue;
             }
             long seed = seedFor(plot.index);
+            Theme theme = themeFor(seed);
             BlockPos center = InnerWorld.plotCenter(plot.index);
             int baseX = current.cx() * 16;
             int baseZ = current.cz() * 16;
             while (budget > 0 && nextColumn < 256) {
-                fillColumn(level, seed, baseX + (nextColumn & 15), baseZ + (nextColumn >> 4), center.getX(), center.getZ());
+                fillColumn(level, seed, theme, baseX + (nextColumn & 15), baseZ + (nextColumn >> 4), center.getX(), center.getZ());
                 nextColumn++;
                 budget--;
             }
@@ -145,17 +142,63 @@ public final class InnerWorldGrowth {
         }
     }
 
-    private static long seedFor(int plotIndex) {
-        return 0x5DEECE66DL * (plotIndex + 1L) ^ 0xA5CE1FL;
+
+    private enum Theme {
+        GRASSLAND(Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.STONE, 28.0, 1.0,
+                new Object[]{0.07, Blocks.SHORT_GRASS, 0.075, Blocks.DANDELION, 0.08, Blocks.POPPY, 0.084, Blocks.AZURE_BLUET}),
+        AUTUMN(Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.STONE, 26.0, 1.15,
+                new Object[]{0.08, Blocks.SHORT_GRASS, 0.085, Blocks.FERN, 0.09, Blocks.BROWN_MUSHROOM, 0.094, Blocks.RED_MUSHROOM}),
+        SNOWY(Blocks.SNOW_BLOCK, Blocks.PACKED_ICE, Blocks.STONE, 14.0, 0.7,
+                new Object[]{0.05, Blocks.SNOW}),
+        MESA(Blocks.RED_SAND, Blocks.TERRACOTTA, Blocks.TERRACOTTA, 40.0, 1.4,
+                new Object[]{0.015, Blocks.DEAD_BUSH}),
+        MOSSY(Blocks.MOSS_BLOCK, Blocks.DIRT, Blocks.STONE, 22.0, 0.85,
+                new Object[]{0.09, Blocks.FERN, 0.1, Blocks.SHORT_GRASS, 0.105, Blocks.AZALEA});
+
+        final Block top;
+        final Block sub;
+        final Block stone;
+        final double amplitude;
+        final double freqScale;
+        final Object[] decor;
+
+        Theme(Block top, Block sub, Block stone, double amplitude, double freqScale, Object[] decor) {
+            this.top = top;
+            this.sub = sub;
+            this.stone = stone;
+            this.amplitude = amplitude;
+            this.freqScale = freqScale;
+            this.decor = decor;
+        }
     }
 
-    private static void fillColumn(ServerLevel level, long seed, int x, int z, int centerX, int centerZ) {
+    /** SplitMix64-style scramble — adjacent plot indices must NOT produce correlated noise fields. */
+    private static long seedFor(int plotIndex) {
+        long h = (plotIndex + 1L) * 0x9E3779B97F4A7C15L;
+        h ^= (h >>> 30);
+        h *= 0xBF58476D1CE4E5B9L;
+        h ^= (h >>> 27);
+        h *= 0x94D049BB133111EBL;
+        h ^= (h >>> 31);
+        return h;
+    }
+
+    private static Theme themeFor(long seed) {
+        Theme[] values = Theme.values();
+        int index = (int) (Long.remainderUnsigned(seed ^ (seed >>> 17), values.length));
+        return values[index];
+    }
+
+    private static void fillColumn(ServerLevel level, long seed, Theme theme, int x, int z, int centerX, int centerZ) {
         double dist = Math.sqrt((double) (x - centerX) * (x - centerX) + (double) (z - centerZ) * (z - centerZ));
         boolean dais = dist <= DAIS_RADIUS;
+        double freq = theme.freqScale;
 
-        double n = noise(seed, x / 48.0, z / 48.0) * 0.6 + noise(seed + 1, x / 20.0, z / 20.0) * 0.3 + noise(seed + 2, x / 7.0, z / 7.0) * 0.1;
+        double n = noise(seed, x / (48.0 / freq), z / (48.0 / freq)) * 0.6
+                + noise(seed + 1, x / (20.0 / freq), z / (20.0 / freq)) * 0.3
+                + noise(seed + 2, x / (7.0 / freq), z / (7.0 / freq)) * 0.1;
         double blend = smoothstep(6.0, 18.0, dist);
-        int top = InnerWorld.SURFACE_Y + (int) Math.round((n - 0.5) * 28.0 * blend);
+        int top = InnerWorld.SURFACE_Y + (int) Math.round((n - 0.5) * theme.amplitude * blend);
         int thickness = 24 + (int) (noise(seed + 3, x / 30.0, z / 30.0) * 10.0);
         int bottom = top - thickness;
 
@@ -164,11 +207,19 @@ public final class InnerWorldGrowth {
             BlockState state;
             if (y >= top - 3) {
                 state = dais ? Blocks.SMOOTH_QUARTZ.defaultBlockState()
-                        : (y == top ? Blocks.GRASS_BLOCK.defaultBlockState() : Blocks.DIRT.defaultBlockState());
+                        : (y == top ? theme.top.defaultBlockState() : theme.sub.defaultBlockState());
             } else if (y <= bottom + 5) {
                 state = Blocks.DEEPSLATE.defaultBlockState();
+            } else if (theme == Theme.MESA) {
+                // Cheap badlands banding: alternate terracotta colors by height, no extra noise cost.
+                state = switch (Math.floorMod(y, 4)) {
+                    case 0 -> Blocks.RED_TERRACOTTA.defaultBlockState();
+                    case 1 -> Blocks.ORANGE_TERRACOTTA.defaultBlockState();
+                    case 2 -> Blocks.YELLOW_TERRACOTTA.defaultBlockState();
+                    default -> Blocks.TERRACOTTA.defaultBlockState();
+                };
             } else {
-                state = Blocks.STONE.defaultBlockState();
+                state = theme.stone.defaultBlockState();
             }
             level.setBlock(pos.set(x, y, z), state, SET_FLAGS);
         }
@@ -176,14 +227,11 @@ public final class InnerWorldGrowth {
         if (!dais) {
             double roll = hash(seed + 7, x, z);
             Block decor = null;
-            if (roll < 0.07) {
-                decor = Blocks.SHORT_GRASS;
-            } else if (roll < 0.075) {
-                decor = Blocks.DANDELION;
-            } else if (roll < 0.08) {
-                decor = Blocks.POPPY;
-            } else if (roll < 0.084) {
-                decor = Blocks.AZURE_BLUET;
+            for (int i = 0; i < theme.decor.length; i += 2) {
+                if (roll < (Double) theme.decor[i]) {
+                    decor = (Block) theme.decor[i + 1];
+                    break;
+                }
             }
             if (decor != null) {
                 level.setBlock(pos.set(x, top + 1, z), decor.defaultBlockState(), SET_FLAGS);

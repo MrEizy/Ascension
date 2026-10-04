@@ -46,6 +46,13 @@ public class ModItems {
 
 
 
+
+
+    public static final DeferredItem<Item> SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE = ITEMS.registerItem("spiritual_stone_upgrade_smithing_template",
+            properties -> new Item(properties.rarity(Rarity.EPIC)));
+
+
+
     //Tools & Weapons
     public static final DeferredItem<Item> BLACK_IRON_SWORD = ITEMS.registerItem("black_iron_sword",
             properties -> new Item(properties.sword(AscToolTiers.BLACK_IRON, 3f, -2.5f)));
@@ -95,6 +102,23 @@ public class ModItems {
             properties -> new Item(properties.spear(AscToolTiers.SPIRITUAL_STONE, 2.5f, 0.7f, 0.7f,
                     3-5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
 
+
+
+    //Vanilla-tier Blades
+    public static final DeferredItem<Item> WOODEN_BLADE = ITEMS.registerItem("wooden_blade",
+            properties -> new Item(properties.sword(ToolMaterial.WOOD, 2f, -2f)));
+    public static final DeferredItem<Item> STONE_BLADE = ITEMS.registerItem("stone_blade",
+            properties -> new Item(properties.sword(ToolMaterial.STONE, 2f, -2f)));
+    public static final DeferredItem<Item> COPPER_BLADE = ITEMS.registerItem("copper_blade",
+            properties -> new Item(properties.sword(ToolMaterial.COPPER, 2f, -2f)));
+    public static final DeferredItem<Item> IRON_BLADE = ITEMS.registerItem("iron_blade",
+            properties -> new Item(properties.sword(ToolMaterial.IRON, 2f, -2f)));
+    public static final DeferredItem<Item> GOLD_BLADE = ITEMS.registerItem("gold_blade",
+            properties -> new Item(properties.sword(ToolMaterial.GOLD, 2f, -2f)));
+    public static final DeferredItem<Item> DIAMOND_BLADE = ITEMS.registerItem("diamond_blade",
+            properties -> new Item(properties.sword(ToolMaterial.DIAMOND, 2f, -2f)));
+    public static final DeferredItem<Item> NETHERITE_BLADE = ITEMS.registerItem("netherite_blade",
+            properties -> new Item(properties.sword(ToolMaterial.NETHERITE, 2f, -2f)));
 
 
 

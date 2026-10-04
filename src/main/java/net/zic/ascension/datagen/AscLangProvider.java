@@ -153,6 +153,7 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.frost_silver_nugget", "Frost Silver Nugget");
         add("item.ascension.jade", "Jade");
         add("item.ascension.spiritual_stone", "Spiritual Stone");
+        add("item.ascension.spiritual_stone_upgrade_smithing_template", "Spiritual Stone Upgrade");
 
 
 
@@ -180,6 +181,15 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.spiritual_stone_axe", "Spiritual Stone Axe");
         add("item.ascension.spiritual_stone_hoe", "Spiritual Stone Hoe");
         add("item.ascension.spiritual_stone_spear", "Spiritual Stone Spear");
+
+        add("item.ascension.wooden_blade", "Wooden Blade");
+        add("item.ascension.stone_blade", "Stone Blade");
+        add("item.ascension.copper_blade", "Copper Blade");
+        add("item.ascension.iron_blade", "Iron Blade");
+        add("item.ascension.gold_blade", "Gold Blade");
+        add("item.ascension.diamond_blade", "Diamond Blade");
+        add("item.ascension.netherite_blade", "Netherite Blade");
+
 
 
 

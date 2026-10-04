@@ -4,8 +4,12 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
@@ -32,6 +36,7 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.JADE_BOTTLE);
 
+                        output.accept(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE);
                         output.accept(ModItems.SPIRITUAL_STONE);
                         output.accept(ModItems.JADE);
                         output.accept(ModItems.RAW_FROST_SILVER);
@@ -159,7 +164,19 @@ public class ModCreativeModeTabs {
 
 
 
+    @SubscribeEvent
+    public static void buildCreativeModeTabContents(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.COMBAT) {
+            event.insertAfter(Items.WOODEN_SWORD.getDefaultInstance(), ModItems.WOODEN_BLADE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(Items.STONE_SWORD.getDefaultInstance(), ModItems.STONE_BLADE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(Items.COPPER_SWORD.getDefaultInstance(), ModItems.COPPER_BLADE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(Items.IRON_SWORD.getDefaultInstance(), ModItems.IRON_BLADE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(Items.GOLDEN_SWORD.getDefaultInstance(), ModItems.GOLD_BLADE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(Items.DIAMOND_SWORD.getDefaultInstance(), ModItems.DIAMOND_BLADE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(Items.NETHERITE_SWORD.getDefaultInstance(), ModItems.NETHERITE_BLADE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
 
+        }
+    }
 
 
 
@@ -223,5 +240,7 @@ public class ModCreativeModeTabs {
 
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
+
+        eventBus.addListener(ModCreativeModeTabs::buildCreativeModeTabContents);
     }
 }

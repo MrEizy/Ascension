@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "black_iron",
+  "key": {
+    "S": "minecraft:stick",
+    "T": "ascension:black_iron_ingot"
+  },
+  "pattern": [
+    "TTT",
+    " S ",
+    " S "
+  ],
+  "result": {
+    "id": "ascension:black_iron_pickaxe"
+  }
+}

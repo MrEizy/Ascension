@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "frost_silver",
+  "key": {
+    "S": "minecraft:stick",
+    "T": "ascension:frost_silver_ingot"
+  },
+  "pattern": [
+    " T ",
+    "TT ",
+    " S "
+  ],
+  "result": {
+    "id": "ascension:frost_silver_blade"
+  }
+}

@@ -50,6 +50,7 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.TABLET_OF_DESTRUCTION_ASCENDANT.get(), tabletTexture, ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(ModItems.JADE_BOTTLE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE.get(), ModelTemplates.FLAT_ITEM);
 
 
         //Items Tools & Weapons
@@ -77,6 +78,15 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.SPIRITUAL_STONE_AXE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(ModItems.SPIRITUAL_STONE_HOE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateSpear(ModItems.SPIRITUAL_STONE_SPEAR.get());
+
+
+        itemModels.generateFlatItem(ModItems.WOODEN_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.STONE_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.COPPER_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.IRON_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.GOLD_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.DIAMOND_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.NETHERITE_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
 
         // Pills
         pillItemModel(itemModels, ModItems.PILL_RESIDUE.get(), "pill_residue");

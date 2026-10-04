@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "ascension:spiritual_stone",
+  "base": "ascension:netherite_blade",
+  "result": {
+    "id": "ascension:spiritual_stone_blade"
+  },
+  "template": "ascension:spiritual_stone_upgrade_smithing_template"
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "blade",
+  "key": {
+    "S": "minecraft:stick",
+    "T": "minecraft:copper_ingot"
+  },
+  "pattern": [
+    " T ",
+    "TT ",
+    " S "
+  ],
+  "result": {
+    "id": "ascension:copper_blade"
+  }
+}
