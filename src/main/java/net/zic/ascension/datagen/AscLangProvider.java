@@ -438,10 +438,6 @@ public class AscLangProvider extends LanguageProvider {
 
 
 
-        //Economy
-        add("item.ascension.spiritual_stone", "Spiritual Stone");
-
-
         //Key Items
         add("item.ascension.physique_essence", "Physique Essence");
         add("item.ascension.bloodline_essence", "Bloodline Essence");
