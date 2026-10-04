@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "TODA",
+  "key": {
+    "H": "ascension:tablet_of_destruction_heaven",
+    "T": "minecraft:gunpowder"
+  },
+  "pattern": [
+    "TTT",
+    "THT",
+    "TTT"
+  ],
+  "result": {
+    "count": 4,
+    "id": "ascension:tablet_of_destruction_ascendant"
+  }
+}

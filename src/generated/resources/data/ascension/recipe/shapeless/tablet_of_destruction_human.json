@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "TODH",
+  "key": {
+    "B": "ascension:black_iron_ingot",
+    "G": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "GBG",
+    "BGB",
+    "GBG"
+  ],
+  "result": {
+    "count": 8,
+    "id": "ascension:tablet_of_destruction_human"
+  }
+}

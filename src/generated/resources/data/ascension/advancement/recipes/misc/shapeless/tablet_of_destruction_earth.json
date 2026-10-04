@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_tablet_of_destruction_human": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:tablet_of_destruction_human"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:shapeless/tablet_of_destruction_earth"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tablet_of_destruction_human"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:shapeless/tablet_of_destruction_earth"
+    ]
+  }
+}
