@@ -121,7 +121,14 @@ public class AscRecipeProvider extends RecipeProvider {
                 .save(output, "ascension:shapeless/black_iron_nugget_from_ingot");
 
 
-
+        shaped(RecipeCategory.MISC, ModBlocks.ALCHEMY_FURNACE.get())
+                .pattern("B B")
+                .pattern("B B")
+                .pattern("BBB")
+                .define('B', ModItems.BLACK_IRON_INGOT.get())
+                .unlockedBy(getHasName(ModItems.BLACK_IRON_INGOT.get()), has(ModItems.BLACK_IRON_INGOT))
+                .group("black_iron")
+                .save(output, "ascension:shaped/alchemy_furnace");
 
 
         //Items

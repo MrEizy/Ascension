@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "black_iron",
+  "key": {
+    "B": "ascension:black_iron_ingot"
+  },
+  "pattern": [
+    "B B",
+    "B B",
+    "BBB"
+  ],
+  "result": {
+    "id": "ascension:alchemy_furnace"
+  }
+}
