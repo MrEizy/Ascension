@@ -25,9 +25,6 @@ import java.util.Random;
  */
 public class PodCropDecorator extends TreeDecorator {
 
-    private static final int HEAVENLY_THUNDER_MIN_Y = 90;
-    private static final int HEAVENLY_THUNDER_CHANCE = 16;
-
     public static final MapCodec<PodCropDecorator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.floatRange(0f, 1f).fieldOf("probability").forGetter(d -> d.probability)
     ).apply(instance, PodCropDecorator::new));
@@ -66,9 +63,7 @@ public class PodCropDecorator extends TreeDecorator {
                     continue;
                 }
 
-                boolean heavenlyThunder = leafPos.getY() >= HEAVENLY_THUNDER_MIN_Y && random.nextInt(HEAVENLY_THUNDER_CHANCE) == 0;
-                PodHerbBlock pod = heavenlyThunder ? ModBlocks.HEAVENLY_THUNDER_PEACH_POD.get() : ModBlocks.PEACH_POD.get();
-
+                PodHerbBlock pod = ModBlocks.PEACH_POD.get();
                 BlockState state = pod.wildState(dir.getOpposite(), random);
 
                 if (state.canSurvive(context.level(), podPos)) {
