@@ -41,18 +41,21 @@ public class AscStructures {
     public static final ResourceKey<Structure> SWORD_TOMB1 = structureKey("sword_tomb1");
     public static final ResourceKey<Structure> SWORD_TOMB2 = structureKey("sword_tomb2");
     public static final ResourceKey<Structure> SWORD_TOMB3 = structureKey("sword_tomb3");
+    public static final ResourceKey<Structure> FLOATING_IRONWOOD_ISLAND = structureKey("floating_ironwood_island");
 
 
     public static final ResourceKey<StructureSet> SPIRITUAL_CAVERN_SET = structureSetKey("spiritual_cavern_set");
     public static final ResourceKey<StructureSet> SWORD_TOMB1_SET = structureSetKey("sword_tomb1_set");
     public static final ResourceKey<StructureSet> SWORD_TOMB2_SET = structureSetKey("sword_tomb2_set");
     public static final ResourceKey<StructureSet> SWORD_TOMB3_SET = structureSetKey("sword_tomb3_set");
+    public static final ResourceKey<StructureSet> FLOATING_IRONWOOD_ISLAND_SET = structureSetKey("floating_ironwood_island_set");
 
 
     public static final ResourceKey<StructureTemplatePool> SPIRITUAL_CAVERN_POOL = poolKey("spiritual_caverns/spiritual_cavern_pool");
     public static final ResourceKey<StructureTemplatePool> SWORD_TOMB1_POOL = poolKey("sword_tombs/sword_tomb1_pool");
     public static final ResourceKey<StructureTemplatePool> SWORD_TOMB2_POOL = poolKey("sword_tombs/sword_tomb2_pool");
     public static final ResourceKey<StructureTemplatePool> SWORD_TOMB3_POOL = poolKey("sword_tombs/sword_tomb3_pool");
+    public static final ResourceKey<StructureTemplatePool> FLOATING_IRONWOOD_ISLAND_POOL = poolKey("floating_ironwood_island/floating_ironwood_island_pool");
 
     public static void bootstrapStructures(BootstrapContext<Structure> context) {
         HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
@@ -83,6 +86,23 @@ public class AscStructures {
                 UniformHeight.of(VerticalAnchor.absolute(-58), VerticalAnchor.absolute(0)),
                 false
         ));
+
+        context.register(FLOATING_IRONWOOD_ISLAND, new JigsawStructure(
+                new Structure.StructureSettings(
+                        HolderSet.direct(biomes::getOrThrow,
+                                Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS, Biomes.FOREST, Biomes.BIRCH_FOREST,
+                                Biomes.OLD_GROWTH_BIRCH_FOREST, Biomes.DARK_FOREST, Biomes.FLOWER_FOREST,
+                                Biomes.TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.OLD_GROWTH_SPRUCE_TAIGA,
+                                Biomes.WINDSWEPT_FOREST, Biomes.CHERRY_GROVE, Biomes.GROVE, Biomes.MEADOW),
+                        Map.of(),
+                        GenerationStep.Decoration.SURFACE_STRUCTURES,
+                        TerrainAdjustment.NONE
+                ),
+                pools.getOrThrow(FLOATING_IRONWOOD_ISLAND_POOL),
+                1,
+                UniformHeight.of(VerticalAnchor.absolute(90), VerticalAnchor.absolute(250)),
+                false
+        ));
     }
 
     public static void bootstrapStructureSets(BootstrapContext<StructureSet> context) {
@@ -104,6 +124,10 @@ public class AscStructures {
                 structures.getOrThrow(SWORD_TOMB3),
                 new RandomSpreadStructurePlacement(20, 12, RandomSpreadType.LINEAR, 12244328)
         ));
+        context.register(FLOATING_IRONWOOD_ISLAND_SET, new StructureSet(
+                structures.getOrThrow(FLOATING_IRONWOOD_ISLAND),
+                new RandomSpreadStructurePlacement(40, 16, RandomSpreadType.LINEAR, 12244329)
+        ));
     }
 
     public static void bootstrapPools(BootstrapContext<StructureTemplatePool> context) {
@@ -116,6 +140,7 @@ public class AscStructures {
         context.register(SWORD_TOMB1_POOL, singleTemplatePool(emptyPool, "sword_tomb1", emptyProcessors));
         context.register(SWORD_TOMB2_POOL, singleTemplatePool(emptyPool, "sword_tomb2", emptyProcessors));
         context.register(SWORD_TOMB3_POOL, singleTemplatePool(emptyPool, "sword_tomb3", emptyProcessors));
+        context.register(FLOATING_IRONWOOD_ISLAND_POOL, singleTemplatePool(emptyPool, "floating_ironwood_island", emptyProcessors));
     }
 
     private static JigsawStructure surfaceTomb(Holder<StructureTemplatePool> pool, HolderSet<Biome> biomes) {

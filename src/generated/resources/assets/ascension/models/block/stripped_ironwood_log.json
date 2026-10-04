@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "ascension:block/stripped_ironwood_log_top",
+    "side": "ascension:block/stripped_ironwood_log"
+  }
+}

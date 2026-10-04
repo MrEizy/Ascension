@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "wooden_pressure_plate",
+  "key": {
+    "#": "ascension:ironwood_planks"
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "id": "ascension:ironwood_pressure_plate"
+  }
+}

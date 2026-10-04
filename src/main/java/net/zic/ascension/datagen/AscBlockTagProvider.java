@@ -8,9 +8,11 @@ import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.util.ModTags;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.concurrent.CompletableFuture;
 
+@NullMarked
 public class AscBlockTagProvider extends BlockTagsProvider {
     public AscBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, AscensionCraft.MOD_ID);
@@ -37,7 +39,20 @@ public class AscBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.PEACH_WOOD.get())
                 .add(ModBlocks.STRIPPED_PEACH_LOG.get())
                 .add(ModBlocks.STRIPPED_PEACH_WOOD.get())
-                .add(ModBlocks.PEACH_PLANKS.get());
+                .add(ModBlocks.PEACH_PLANKS.get())
+                .add(ModBlocks.IRONWOOD_LOG.get())
+                .add(ModBlocks.IRONWOOD_WOOD.get())
+                .add(ModBlocks.STRIPPED_IRONWOOD_LOG.get())
+                .add(ModBlocks.STRIPPED_IRONWOOD_WOOD.get())
+                .add(ModBlocks.IRONWOOD_PLANKS.get())
+                .add(ModBlocks.IRONWOOD_STAIRS.get())
+                .add(ModBlocks.IRONWOOD_SLAB.get())
+                .add(ModBlocks.IRONWOOD_FENCE.get())
+                .add(ModBlocks.IRONWOOD_FENCE_GATE.get())
+                .add(ModBlocks.IRONWOOD_DOOR.get())
+                .add(ModBlocks.IRONWOOD_TRAPDOOR.get())
+                .add(ModBlocks.IRONWOOD_PRESSURE_PLATE.get())
+                .add(ModBlocks.IRONWOOD_BUTTON.get());
 
         tag(BlockTags.MINEABLE_WITH_HOE)
                 .add(ModBlocks.LINGZHI_MUSHROOM_B.get())
@@ -50,16 +65,32 @@ public class AscBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.PEACH_LOG.get())
                 .add(ModBlocks.PEACH_WOOD.get())
                 .add(ModBlocks.STRIPPED_PEACH_LOG.get())
-                .add(ModBlocks.STRIPPED_PEACH_WOOD.get());
+                .add(ModBlocks.STRIPPED_PEACH_WOOD.get())
+                .add(ModBlocks.IRONWOOD_LOG.get())
+                .add(ModBlocks.IRONWOOD_WOOD.get())
+                .add(ModBlocks.STRIPPED_IRONWOOD_LOG.get())
+                .add(ModBlocks.STRIPPED_IRONWOOD_WOOD.get());
 
         tag(BlockTags.LEAVES)
-                .add(ModBlocks.PEACH_LEAVES.get());
+                .add(ModBlocks.PEACH_LEAVES.get())
+                .add(ModBlocks.IRONWOOD_LEAVES.get());
 
         tag(BlockTags.SAPLINGS)
-                .add(ModBlocks.PEACH_SAPLING.get());
+                .add(ModBlocks.PEACH_SAPLING.get())
+                .add(ModBlocks.IRONWOOD_SAPLING.get());
 
         tag(BlockTags.PLANKS)
-                .add(ModBlocks.PEACH_PLANKS.get());
+                .add(ModBlocks.PEACH_PLANKS.get())
+                .add(ModBlocks.IRONWOOD_PLANKS.get());
+
+        tag(BlockTags.WOODEN_STAIRS).add(ModBlocks.IRONWOOD_STAIRS.get());
+        tag(BlockTags.WOODEN_SLABS).add(ModBlocks.IRONWOOD_SLAB.get());
+        tag(BlockTags.WOODEN_FENCES).add(ModBlocks.IRONWOOD_FENCE.get());
+        tag(BlockTags.FENCE_GATES).add(ModBlocks.IRONWOOD_FENCE_GATE.get());
+        tag(BlockTags.WOODEN_DOORS).add(ModBlocks.IRONWOOD_DOOR.get());
+        tag(BlockTags.WOODEN_TRAPDOORS).add(ModBlocks.IRONWOOD_TRAPDOOR.get());
+        tag(BlockTags.WOODEN_PRESSURE_PLATES).add(ModBlocks.IRONWOOD_PRESSURE_PLATE.get());
+        tag(BlockTags.WOODEN_BUTTONS).add(ModBlocks.IRONWOOD_BUTTON.get());
 
 
         tag(BlockTags.NEEDS_IRON_TOOL)

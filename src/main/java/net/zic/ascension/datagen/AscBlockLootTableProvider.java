@@ -153,9 +153,27 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
 
         add(ModBlocks.POTTED_PEACH_SAPLING.get(), createPotFlowerItemTable(ModBlocks.PEACH_SAPLING.get()));
         add(ModBlocks.PEACH_LEAVES.get(), block -> createLeavesDrops(block, ModBlocks.PEACH_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
+
+        dropSelf(ModBlocks.IRONWOOD_LOG.get());
+        dropSelf(ModBlocks.IRONWOOD_WOOD.get());
+        dropSelf(ModBlocks.STRIPPED_IRONWOOD_LOG.get());
+        dropSelf(ModBlocks.STRIPPED_IRONWOOD_WOOD.get());
+
+        dropSelf(ModBlocks.IRONWOOD_PLANKS.get());
+        dropSelf(ModBlocks.IRONWOOD_STAIRS.get());
+        add(ModBlocks.IRONWOOD_SLAB.get(), createSlabItemTable(ModBlocks.IRONWOOD_SLAB.get()));
+        dropSelf(ModBlocks.IRONWOOD_FENCE.get());
+        dropSelf(ModBlocks.IRONWOOD_FENCE_GATE.get());
+        add(ModBlocks.IRONWOOD_DOOR.get(), createDoorTable(ModBlocks.IRONWOOD_DOOR.get()));
+        dropSelf(ModBlocks.IRONWOOD_TRAPDOOR.get());
+        dropSelf(ModBlocks.IRONWOOD_PRESSURE_PLATE.get());
+        dropSelf(ModBlocks.IRONWOOD_BUTTON.get());
+
+        dropSelf(ModBlocks.IRONWOOD_SAPLING.get());
+        add(ModBlocks.IRONWOOD_LEAVES.get(), block -> createLeavesDrops(block, ModBlocks.IRONWOOD_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
     }
 
-    @SuppressWarnings("SameParameterValue") // reusable helper; drop amounts vary per herb
+    @SuppressWarnings("SameParameterValue")
     protected LootTable.Builder createPodHerbDrops(PodHerbBlock block, float minCount, float maxCount) {
         return LootTable.lootTable().withPool(
                 LootPool.lootPool()
@@ -180,7 +198,7 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         return AnyOfCondition.anyOf(matureStages.toArray(LootItemCondition.Builder[]::new));
     }
 
-    @SuppressWarnings("SameParameterValue") // reusable helper; drop amounts vary per herb
+    @SuppressWarnings("SameParameterValue")
     protected LootTable.Builder createSeedHerbDrops(HerbCropBlock block, Item herb, Item seeds, float minHerbs, float maxHerbs, int baseSeeds, float bonusSeedChance) {
         LootTable.Builder table = LootTable.lootTable()
                 .withPool(immaturePlantingPool(block, seeds))
@@ -196,7 +214,7 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         return table;
     }
 
-    @SuppressWarnings("SameParameterValue") // reusable helper; drop amounts vary per herb
+    @SuppressWarnings("SameParameterValue")
     protected LootTable.Builder createDirectHerbDrops(HerbCropBlock block, Item herb, float minHerbs, float maxHerbs, float bonusHerbChance) {
         LootTable.Builder table = LootTable.lootTable()
                 .withPool(immaturePlantingPool(block, herb))
@@ -209,6 +227,7 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         return table;
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected LootTable.Builder createVariantDirectHerbDrops(LilyPadHerbCropBlock block, Item normalHerb, Item rareHerb, float minHerbs, float maxHerbs, float bonusHerbChance) {
         LootTable.Builder table = LootTable.lootTable()
                 .withPool(immaturePlantingPool(block, normalHerb))
@@ -232,6 +251,7 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(minCount, maxCount)))));
     }
 
+    @SuppressWarnings("SameParameterValue")
     private LootPool.Builder matureVariantChancePool(LilyPadHerbCropBlock block, Item item, float chance, boolean rareVariant) {
         return LootPool.lootPool()
                 .setRolls(ConstantValue.exactly(1.0F))

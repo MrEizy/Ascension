@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_stripped_ironwood_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:stripped_ironwood_log"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:shapeless/ironwood_planks_from_stripped_ironwood_log"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_stripped_ironwood_log"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:shapeless/ironwood_planks_from_stripped_ironwood_log"
+    ]
+  }
+}

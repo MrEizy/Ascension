@@ -1,6 +1,7 @@
 package net.zic.ascension.worldgen;
 
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
@@ -15,7 +16,9 @@ import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguratio
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.DarkOakFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.DarkOakTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
@@ -38,6 +41,7 @@ public class AscConfiguredFeatures {
 
     // Trees
     public static final ResourceKey<ConfiguredFeature<?, ?>> PEACH_TREE_KEY = registerKey("peach_tree_key");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> IRONWOOD_TREE_KEY = registerKey("ironwood_tree_key");
 
     // Herbs
     public static final ResourceKey<ConfiguredFeature<?, ?>> JADE_DEW_GRASS = registerKey("jade_dew_grass");
@@ -90,6 +94,15 @@ public class AscConfiguredFeatures {
                 .decorators(List.of(new PodCropDecorator(0.01f)))
                 .build());
 
+        register(context, IRONWOOD_TREE_KEY, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(ModBlocks.IRONWOOD_LOG.get()),
+                new DarkOakTrunkPlacer(6, 2, 0),
+                BlockStateProvider.simple(ModBlocks.IRONWOOD_LEAVES.get()),
+                new DarkOakFoliagePlacer(ConstantInt.of(0), ConstantInt.of(0)),
+                new TwoLayersFeatureSize(1, 0, 2))
+                .ignoreVines()
+                .build());
+
         // Ores
         register(context, OVERWORLD_JADE_ORE_KEY, Feature.ORE, new OreConfiguration(overworldJadeOres, 4));
         register(context, OVERWORLD_BLACK_IRON_ORE_KEY, Feature.ORE, new OreConfiguration(overworldBlackIronOres, 4));
@@ -114,7 +127,7 @@ public class AscConfiguredFeatures {
                 new LingzhiMushroomConfiguration(ModBlocks.LINGZHI_MUSHROOM_B.get(), blocks.getOrThrow(BlockTags.LOGS)));
         register(context, BLOOD_LINGZHI_MUSHROOM, AscFeatures.LINGZHI_MUSHROOM.get(),
                 new LingzhiMushroomConfiguration(ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get(),
-                        HolderSet.direct(Blocks.BONE_BLOCK.builtInRegistryHolder())));
+                        HolderSet.direct(BuiltInRegistries.BLOCK.wrapAsHolder(Blocks.BONE_BLOCK))));
 
         // surface rocks
         register(context, GREYSTONE_ROCKS, AscFeatures.SURFACE_ROCK.get(),

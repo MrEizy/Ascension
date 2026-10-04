@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "wooden_button",
+  "ingredients": [
+    "ascension:ironwood_planks"
+  ],
+  "result": {
+    "id": "ascension:ironwood_button"
+  }
+}

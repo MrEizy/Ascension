@@ -31,7 +31,9 @@ import net.zic.ascension.common.blocks.crops.herbs.LilyPadHerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.common.blocks.custom.SpiritualStoneClusterBlock;
 import net.zic.ascension.common.item.ModItems;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class AscModelProvider extends ModelProvider {
     public AscModelProvider(PackOutput output) {
         super(output, AscensionCraft.MOD_ID);
@@ -169,6 +171,12 @@ public class AscModelProvider extends ModelProvider {
         blockModels.createTintedLeaves(ModBlocks.PEACH_LEAVES.get(), TexturedModel.LEAVES, -12012255);
         blockModels.createPlantWithDefaultItem(ModBlocks.PEACH_SAPLING.get(), ModBlocks.POTTED_PEACH_SAPLING.get(), BlockModelGenerators.PlantType.TINTED);
 
+        blockModels.family(ModBlocks.IRONWOOD_PLANKS.get()).generateFor(AscBlockFamilies.IRONWOOD_PLANKS);
+        blockModels.woodProvider(ModBlocks.IRONWOOD_LOG.get()).logWithHorizontal(ModBlocks.IRONWOOD_LOG.get()).wood(ModBlocks.IRONWOOD_WOOD.get());
+        blockModels.woodProvider(ModBlocks.STRIPPED_IRONWOOD_LOG.get()).logWithHorizontal(ModBlocks.STRIPPED_IRONWOOD_LOG.get()).wood(ModBlocks.STRIPPED_IRONWOOD_WOOD.get());
+        blockModels.createTrivialBlock(ModBlocks.IRONWOOD_LEAVES.get(), TexturedModel.LEAVES);
+        blockModels.createCrossBlockWithDefaultItem(ModBlocks.IRONWOOD_SAPLING.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+
 
 
 
@@ -196,6 +204,7 @@ public class AscModelProvider extends ModelProvider {
     }
 
 
+    @SuppressWarnings("SameParameterValue")
     private void stackCountItemModel(ItemModelGenerators itemModels, Item item, String fallbackSuffix, StackTier... tiers) {
         String itemPath = BuiltInRegistries.ITEM.getKey(item).getPath();
         ItemModel.Unbaked fallback = flatTierModel(itemModels, itemPath, fallbackSuffix);
@@ -410,6 +419,7 @@ public class AscModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(blockState);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void lilyPadHerbCropModel(BlockModelGenerators blockModels, LilyPadHerbCropBlock block, String texturePath, String rareTexturePath) {
         int growthStages = block.definition().growthStages();
         Identifier[] stageModels = new Identifier[growthStages];
@@ -444,51 +454,6 @@ public class AscModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(blockState);
     }
 
-    private void herbCrossCropModel(BlockModelGenerators blockModels, HerbCropBlock block) {
-        herbCrossCropModel(blockModels, block, block.definition().id().getPath());
-    }
-
-    private void herbCrossCropModel(BlockModelGenerators blockModels, HerbCropBlock block, String texturePath) {
-        int growthStages = block.definition().growthStages();
-        Identifier[] stageModels = new Identifier[growthStages];
-        String herbPath = block.definition().id().getPath();
-
-        for (int visualStage = 0; visualStage < growthStages; visualStage++) {
-            Identifier model = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/herbs/" + herbPath + "_stage" + visualStage);
-            Material texture = new Material(Identifier.fromNamespaceAndPath(
-                    AscensionCraft.MOD_ID,
-                    "block/herbs/" + texturePath + "_stage" + visualStage
-            ));
-            stageModels[visualStage] = ModelTemplates.CROSS.create(
-                    model,
-                    TextureMapping.cross(texture),
-                    blockModels.modelOutput
-            );
-        }
-
-        MultiPartGenerator blockState = MultiPartGenerator.multiPart(block);
-
-        for (int stage = 0; stage <= HerbCropBlock.MAX_STAGE; stage++) {
-            int visualStage = Math.min(stage, block.definition().maxGrowthStage());
-            blockState.with(
-                    BlockModelGenerators.condition().term(HerbCropBlock.STAGE, stage),
-                    BlockModelGenerators.plainVariant(stageModels[visualStage])
-            );
-        }
-
-        blockModels.blockStateOutput.accept(blockState);
-    }
-
-    private Material herbItemTexture(Item item) {
-        String name = BuiltInRegistries.ITEM.getKey(item).getPath();
-        return new Material(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/herbs/" + name));
-    }
-
-    private Material herbBlockTexture(Block block) {
-        String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
-        return new Material(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/herbs/" + name));
-    }
-
 
     private void pillItemModel(ItemModelGenerators itemModels, Item item, String texturePath) {
         Identifier model = ModelTemplates.FLAT_ITEM.create(
@@ -514,15 +479,6 @@ public class AscModelProvider extends ModelProvider {
                 ))),
                 itemModels.modelOutput);
         itemModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(model));
-    }
-
-    private void herbBlockModel(BlockModelGenerators blockModels, Block block) {
-        Identifier model = ModelTemplates.CUBE_ALL.create(
-                ModelLocationUtils.getModelLocation(block),
-                TextureMapping.cube(herbBlockTexture(block)),
-                blockModels.modelOutput);
-        blockModels.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, BlockModelGenerators.plainVariant(model)));
-        blockModels.registerSimpleItemModel(block, model);
     }
 
     private void herbBlockModelRotated(BlockModelGenerators blockModels, Block block) {

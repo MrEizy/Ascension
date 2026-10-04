@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    "ascension:stripped_ironwood_log"
+  ],
+  "result": {
+    "count": 4,
+    "id": "ascension:ironwood_planks"
+  }
+}

@@ -6,11 +6,14 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.util.ModTags;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.concurrent.CompletableFuture;
 
+@NullMarked
 public class AscItemTagProvider extends ItemTagsProvider {
 
     public AscItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
@@ -74,6 +77,24 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BLACK_IRON_SPEAR.get())
                 .add(ModItems.FROST_SILVER_SPEAR.get())
                 .add(ModItems.SPIRITUAL_STONE_SPEAR.get());
+
+
+        tag(ItemTags.LOGS_THAT_BURN)
+                .add(ModBlocks.IRONWOOD_LOG.asItem())
+                .add(ModBlocks.IRONWOOD_WOOD.asItem())
+                .add(ModBlocks.STRIPPED_IRONWOOD_LOG.asItem())
+                .add(ModBlocks.STRIPPED_IRONWOOD_WOOD.asItem());
+        tag(ItemTags.PLANKS).add(ModBlocks.IRONWOOD_PLANKS.asItem());
+        tag(ItemTags.LEAVES).add(ModBlocks.IRONWOOD_LEAVES.asItem());
+        tag(ItemTags.SAPLINGS).add(ModBlocks.IRONWOOD_SAPLING.asItem());
+        tag(ItemTags.WOODEN_STAIRS).add(ModBlocks.IRONWOOD_STAIRS.asItem());
+        tag(ItemTags.WOODEN_SLABS).add(ModBlocks.IRONWOOD_SLAB.asItem());
+        tag(ItemTags.WOODEN_FENCES).add(ModBlocks.IRONWOOD_FENCE.asItem());
+        tag(ItemTags.FENCE_GATES).add(ModBlocks.IRONWOOD_FENCE_GATE.asItem());
+        tag(ItemTags.WOODEN_DOORS).add(ModBlocks.IRONWOOD_DOOR.asItem());
+        tag(ItemTags.WOODEN_TRAPDOORS).add(ModBlocks.IRONWOOD_TRAPDOOR.asItem());
+        tag(ItemTags.WOODEN_PRESSURE_PLATES).add(ModBlocks.IRONWOOD_PRESSURE_PLATE.asItem());
+        tag(ItemTags.WOODEN_BUTTONS).add(ModBlocks.IRONWOOD_BUTTON.asItem());
 
 
         tag(ModTags.Items.HERBS)

@@ -28,7 +28,7 @@ public class ModCreativeModeTabs {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ASCENSION_ITEMS_TAB = CREATIVE_MODE_TABS.register("ascension_items_tab",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.TABLET_OF_DESTRUCTION_EARTH.get()))
                     .title(Component.translatable("creativetab.ascension.items"))
-                    .displayItems((itemDisplayParameters, output) -> {
+                    .displayItems((_, output) -> {
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_HUMAN);
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_EARTH);
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_HEAVEN);
@@ -77,10 +77,11 @@ public class ModCreativeModeTabs {
 
                     }).build());
 
+    @SuppressWarnings("unused")
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ASCENSION_BLOCKS_TAB = CREATIVE_MODE_TABS.register("ascension_blocks_tab",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.BLACK_IRON_BLOCK.get()))
                     .title(Component.translatable("creativetab.ascension.blocks"))
-                    .displayItems((itemDisplayParameters, output) -> {
+                    .displayItems((_, output) -> {
                         output.accept(ModBlocks.SPIRITUAL_STONE_CLUSTER);
                         output.accept(ModBlocks.SPIRIT_VEIN);
                         output.accept(ModBlocks.JADE_BLOCK);
@@ -102,15 +103,34 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModBlocks.PEACH_SAPLING);
 
+                        output.accept(ModBlocks.IRONWOOD_LOG);
+                        output.accept(ModBlocks.IRONWOOD_WOOD);
+                        output.accept(ModBlocks.STRIPPED_IRONWOOD_LOG);
+                        output.accept(ModBlocks.STRIPPED_IRONWOOD_WOOD);
+
+                        output.accept(ModBlocks.IRONWOOD_PLANKS);
+                        output.accept(ModBlocks.IRONWOOD_STAIRS);
+                        output.accept(ModBlocks.IRONWOOD_SLAB);
+                        output.accept(ModBlocks.IRONWOOD_FENCE);
+                        output.accept(ModBlocks.IRONWOOD_FENCE_GATE);
+                        output.accept(ModBlocks.IRONWOOD_DOOR);
+                        output.accept(ModBlocks.IRONWOOD_TRAPDOOR);
+                        output.accept(ModBlocks.IRONWOOD_PRESSURE_PLATE);
+                        output.accept(ModBlocks.IRONWOOD_BUTTON);
+                        output.accept(ModBlocks.IRONWOOD_LEAVES);
+
+                        output.accept(ModBlocks.IRONWOOD_SAPLING);
+
                         output.accept(ModBlocks.FERMENTING_BARREL);
 
 
                     }).build());
 
+    @SuppressWarnings("unused")
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ASCENSION_ALCHEMY_TAB = CREATIVE_MODE_TABS.register("ascension_alchemy_tab",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.LINGZHI_MUSHROOM.get()))
                     .title(Component.translatable("creativetab.ascension.alchemy"))
-                    .displayItems((itemDisplayParameters, output) -> {
+                    .displayItems((_, output) -> {
                         output.accept(ModBlocks.CULTIVATION_SOIL);
                         output.accept(ModBlocks.ALCHEMY_FURNACE);
                         output.accept(ModItems.JADE_DEW_GRASS);
@@ -189,6 +209,7 @@ public class ModCreativeModeTabs {
 
 
 
+    @SuppressWarnings("unused")
     public static final Supplier<CreativeModeTab> PHYSIQUE_TRANSFERS_TAB = CREATIVE_MODE_TABS.register("physique_transfers_tab",
             () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModItems.PHYSIQUE_ESSENCE.get()))
@@ -205,6 +226,7 @@ public class ModCreativeModeTabs {
                                     }))
                     .build());
 
+    @SuppressWarnings("unused")
     public static final Supplier<CreativeModeTab> BLOODLINE_TRANSFERS_TAB = CREATIVE_MODE_TABS.register("bloodline_transfers_tab",
             () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModItems.BLOODLINE_ESSENCE.get()))
@@ -222,6 +244,7 @@ public class ModCreativeModeTabs {
                                     }))
                     .build());
 
+    @SuppressWarnings("unused")
     public static final Supplier<CreativeModeTab> TECHNIQUE_TRANSFERS_TAB = CREATIVE_MODE_TABS.register("technique_transfers_tab",
             () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModItems.TECHNIQUE_MANUAL.get()))

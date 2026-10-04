@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "ascension:block/ironwood_pressure_plate"
+    },
+    "powered=true": {
+      "model": "ascension:block/ironwood_pressure_plate_down"
+    }
+  }
+}

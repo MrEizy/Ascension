@@ -3,17 +3,14 @@ package net.zic.ascension.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
@@ -36,10 +33,12 @@ import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.worldgen.tree.AscTreeGrowers;
+import org.jspecify.annotations.NullMarked;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
+@NullMarked
+@SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(AscensionCraft.MOD_ID);
 
@@ -74,7 +73,7 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops().sound(SoundType.AMETHYST).noOcclusion(), UniformInt.of(2, 4)));
 
     public static final DeferredBlock<Block> SPIRIT_VEIN = registerBlock("spirit_vein",
-            properties -> new SpiritVeinBlock(properties));
+            SpiritVeinBlock::new);
 
 
 
@@ -258,10 +257,10 @@ public class ModBlocks {
     //Trees
     public static final DeferredBlock<Block> PEACH_LOG = registerBlock("peach_log",
             properties -> new AscFlammableRotatedPillarBlock(properties.sound(SoundType.WOOD).strength(2f)
-                    .ignitedByLava()));
+                    .ignitedByLava(), ModBlocks.STRIPPED_PEACH_LOG));
     public static final DeferredBlock<Block> PEACH_WOOD = registerBlock("peach_wood",
             properties -> new AscFlammableRotatedPillarBlock(properties.sound(SoundType.WOOD).strength(2f)
-                    .ignitedByLava()));
+                    .ignitedByLava(), ModBlocks.STRIPPED_PEACH_WOOD));
     public static final DeferredBlock<Block> STRIPPED_PEACH_LOG = registerBlock("stripped_peach_log",
             properties -> new AscFlammableRotatedPillarBlock(properties.sound(SoundType.WOOD).strength(2f)
                     .ignitedByLava()));
@@ -292,10 +291,10 @@ public class ModBlocks {
                     properties.mapColor(MapColor.PLANT).strength(0.2F)
                             .randomTicks().sound(SoundType.CHERRY_LEAVES)
                             .noOcclusion().isValidSpawn(Blocks::ocelotOrParrot)
-                            .isSuffocating((state, level, pos) -> false)
-                            .isViewBlocking((state, level, pos) -> false)
+                            .isSuffocating((_, _, _) -> false)
+                            .isViewBlocking((_, _, _) -> false)
                             .ignitedByLava().pushReaction(PushReaction.DESTROY)
-                            .isRedstoneConductor((state, level, pos) -> false)) {
+                            .isRedstoneConductor((_, _, _) -> false)) {
                 @Override
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
@@ -321,6 +320,94 @@ public class ModBlocks {
             properties -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, PEACH_SAPLING,
                     properties.noOcclusion().instabreak().pushReaction(PushReaction.DESTROY)));
 
+    //Ironwood
+    public static final DeferredBlock<Block> IRONWOOD_LOG = registerBlock("ironwood_log",
+            properties -> new AscFlammableRotatedPillarBlock(properties.mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2f)
+                    .ignitedByLava(), ModBlocks.STRIPPED_IRONWOOD_LOG));
+    public static final DeferredBlock<Block> IRONWOOD_WOOD = registerBlock("ironwood_wood",
+            properties -> new AscFlammableRotatedPillarBlock(properties.mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2f)
+                    .ignitedByLava(), ModBlocks.STRIPPED_IRONWOOD_WOOD));
+    public static final DeferredBlock<Block> STRIPPED_IRONWOOD_LOG = registerBlock("stripped_ironwood_log",
+            properties -> new AscFlammableRotatedPillarBlock(properties.mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2f)
+                    .ignitedByLava()));
+    public static final DeferredBlock<Block> STRIPPED_IRONWOOD_WOOD = registerBlock("stripped_ironwood_wood",
+            properties -> new AscFlammableRotatedPillarBlock(properties.mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2f)
+                    .ignitedByLava()));
+
+    public static final DeferredBlock<Block> IRONWOOD_PLANKS = registerBlock("ironwood_planks",
+            properties -> new Block(properties.mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2f, 3f).ignitedByLava()) {
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+
+                @Override
+                public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 5;
+                }
+            });
+
+    public static final DeferredBlock<StairBlock> IRONWOOD_STAIRS = registerBlock("ironwood_stairs",
+            properties -> new StairBlock(ModBlocks.IRONWOOD_PLANKS.get().defaultBlockState(),
+                    properties.mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2f, 3f).ignitedByLava()));
+    public static final DeferredBlock<SlabBlock> IRONWOOD_SLAB = registerBlock("ironwood_slab",
+            properties -> new SlabBlock(properties.mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2f, 3f).ignitedByLava()));
+
+    public static final DeferredBlock<FenceBlock> IRONWOOD_FENCE = registerBlock("ironwood_fence",
+            properties -> new FenceBlock(properties.mapColor(MapColor.WOOD).forceSolidOn().sound(SoundType.WOOD)
+                    .strength(2f, 3f).ignitedByLava()));
+    public static final DeferredBlock<FenceGateBlock> IRONWOOD_FENCE_GATE = registerBlock("ironwood_fence_gate",
+            properties -> new FenceGateBlock(WoodType.OAK, properties.mapColor(MapColor.WOOD).forceSolidOn()
+                    .strength(2f, 3f).ignitedByLava()));
+
+    public static final DeferredBlock<DoorBlock> IRONWOOD_DOOR = registerBlock("ironwood_door",
+            properties -> new DoorBlock(BlockSetType.OAK, properties.mapColor(MapColor.WOOD).strength(3f)
+                    .noOcclusion().ignitedByLava().pushReaction(PushReaction.DESTROY)));
+    public static final DeferredBlock<TrapDoorBlock> IRONWOOD_TRAPDOOR = registerBlock("ironwood_trapdoor",
+            properties -> new TrapDoorBlock(BlockSetType.OAK, properties.mapColor(MapColor.WOOD).strength(3f)
+                    .noOcclusion().isValidSpawn(Blocks::never).ignitedByLava()));
+
+    public static final DeferredBlock<PressurePlateBlock> IRONWOOD_PRESSURE_PLATE = registerBlock("ironwood_pressure_plate",
+            properties -> new PressurePlateBlock(BlockSetType.OAK, properties.mapColor(MapColor.WOOD).forceSolidOn()
+                    .noCollision().strength(0.5f).ignitedByLava().pushReaction(PushReaction.DESTROY)));
+    public static final DeferredBlock<ButtonBlock> IRONWOOD_BUTTON = registerBlock("ironwood_button",
+            properties -> new ButtonBlock(BlockSetType.OAK, 30, properties.noCollision().strength(0.5f)
+                    .pushReaction(PushReaction.DESTROY)));
+
+    public static final DeferredBlock<Block> IRONWOOD_LEAVES = registerBlock("ironwood_leaves",
+            properties -> new TintedParticleLeavesBlock(0.01f,
+                    properties.mapColor(MapColor.PLANT).strength(0.2F)
+                            .randomTicks().sound(SoundType.GRASS)
+                            .noOcclusion().isValidSpawn(Blocks::ocelotOrParrot)
+                            .isSuffocating((_, _, _) -> false)
+                            .isViewBlocking((_, _, _) -> false)
+                            .ignitedByLava().pushReaction(PushReaction.DESTROY)
+                            .isRedstoneConductor((_, _, _) -> false)) {
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 60;
+                }
+
+                @Override
+                public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 30;
+                }
+            });
+
+    public static final DeferredBlock<Block> IRONWOOD_SAPLING = registerBlock("ironwood_sapling",
+            properties -> new SaplingBlock(AscTreeGrowers.IRONWOOD, properties.mapColor(MapColor.PLANT).noCollision()
+                    .randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+
 
 
 
@@ -335,25 +422,6 @@ public class ModBlocks {
 
 
 
-
-
-    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> function, Component... components) {
-        DeferredBlock<T> toReturn = BLOCKS.registerBlock(name, function);
-        registerBlockItem(name, toReturn, components);
-        return toReturn;
-    }
-
-    private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block, Component... components) {
-        ModItems.ITEMS.registerItem(name, properties -> new BlockItem(block.get(), properties.useBlockDescriptionPrefix()) {
-            @Override
-            public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
-                for(var component : components) {
-                    builder.accept(component);
-                }
-                super.appendHoverText(itemStack, context, display, builder, tooltipFlag);
-            }
-        });
-    }
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> function) {
         DeferredBlock<T> toReturn = BLOCKS.registerBlock(name, function);

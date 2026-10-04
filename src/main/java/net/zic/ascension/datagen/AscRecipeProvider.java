@@ -4,6 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
@@ -13,11 +14,13 @@ import net.minecraft.world.level.ItemLike;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 
+@NullMarked
 public class AscRecipeProvider extends RecipeProvider {
     public AscRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
         super(registries, output);
@@ -42,6 +45,19 @@ public class AscRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes() {
 
+
+        //Trees
+        generateRecipes(AscBlockFamilies.IRONWOOD_PLANKS, FeatureFlags.VANILLA_SET);
+        woodFromLogs(ModBlocks.IRONWOOD_WOOD.get(), ModBlocks.IRONWOOD_LOG.get());
+        woodFromLogs(ModBlocks.STRIPPED_IRONWOOD_WOOD.get(), ModBlocks.STRIPPED_IRONWOOD_LOG.get());
+        for (ItemLike log : List.of(ModBlocks.IRONWOOD_LOG.get(), ModBlocks.IRONWOOD_WOOD.get(),
+                ModBlocks.STRIPPED_IRONWOOD_LOG.get(), ModBlocks.STRIPPED_IRONWOOD_WOOD.get())) {
+            shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.IRONWOOD_PLANKS.get(), 4)
+                    .requires(log)
+                    .unlockedBy(getHasName(log), has(log))
+                    .group("planks")
+                    .save(output, "ascension:shapeless/ironwood_planks_from_" + getItemName(log));
+        }
 
 
         //Ores
@@ -419,6 +435,7 @@ public class AscRecipeProvider extends RecipeProvider {
     }
 
 
+    @SuppressWarnings("SameParameterValue")
     protected void smithingTransform(Item template, Item base, Ingredient addition,
                                      RecipeCategory category, Item result) {
         SmithingTransformRecipeBuilder.smithing(

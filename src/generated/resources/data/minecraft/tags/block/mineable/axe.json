@@ -4,6 +4,19 @@
     "ascension:peach_wood",
     "ascension:stripped_peach_log",
     "ascension:stripped_peach_wood",
-    "ascension:peach_planks"
+    "ascension:peach_planks",
+    "ascension:ironwood_log",
+    "ascension:ironwood_wood",
+    "ascension:stripped_ironwood_log",
+    "ascension:stripped_ironwood_wood",
+    "ascension:ironwood_planks",
+    "ascension:ironwood_stairs",
+    "ascension:ironwood_slab",
+    "ascension:ironwood_fence",
+    "ascension:ironwood_fence_gate",
+    "ascension:ironwood_door",
+    "ascension:ironwood_trapdoor",
+    "ascension:ironwood_pressure_plate",
+    "ascension:ironwood_button"
   ]
 }

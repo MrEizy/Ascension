@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "ascension:block/ironwood_slab"
+    },
+    "type=double": {
+      "model": "ascension:block/ironwood_planks"
+    },
+    "type=top": {
+      "model": "ascension:block/ironwood_slab_top"
+    }
+  }
+}

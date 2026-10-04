@@ -9,4 +9,6 @@ import java.util.Optional;
 public class AscTreeGrowers {
     public static final TreeGrower PEACH = new TreeGrower(AscensionCraft.MOD_ID + ":peach",
             Optional.empty(), Optional.of(AscConfiguredFeatures.PEACH_TREE_KEY), Optional.empty());
+    public static final TreeGrower IRONWOOD = new TreeGrower(AscensionCraft.MOD_ID + ":ironwood",
+            Optional.empty(), Optional.of(AscConfiguredFeatures.IRONWOOD_TREE_KEY), Optional.empty());
 }

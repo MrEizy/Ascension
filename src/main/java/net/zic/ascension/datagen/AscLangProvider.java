@@ -275,6 +275,22 @@ public class AscLangProvider extends LanguageProvider {
         add("block.ascension.peach_sapling", "Peach Sapling");
         add("block.ascension.potted_peach_sapling", "Potted Peach Sapling");
 
+        add("block.ascension.ironwood_log", "Ironwood Log");
+        add("block.ascension.ironwood_wood", "Ironwood Wood");
+        add("block.ascension.stripped_ironwood_log", "Stripped Ironwood Log");
+        add("block.ascension.stripped_ironwood_wood", "Stripped Ironwood Wood");
+        add("block.ascension.ironwood_planks", "Ironwood Planks");
+        add("block.ascension.ironwood_stairs", "Ironwood Stairs");
+        add("block.ascension.ironwood_slab", "Ironwood Slab");
+        add("block.ascension.ironwood_fence", "Ironwood Fence");
+        add("block.ascension.ironwood_fence_gate", "Ironwood Fence Gate");
+        add("block.ascension.ironwood_door", "Ironwood Door");
+        add("block.ascension.ironwood_trapdoor", "Ironwood Trapdoor");
+        add("block.ascension.ironwood_pressure_plate", "Ironwood Pressure Plate");
+        add("block.ascension.ironwood_button", "Ironwood Button");
+        add("block.ascension.ironwood_leaves", "Ironwood Leaves");
+        add("block.ascension.ironwood_sapling", "Ironwood Sapling");
+
         //Block Entity
         add("block.ascension.fermenting_barrel", "Fermenting Barrel");
 

@@ -3,6 +3,10 @@
     "ascension:peach_log",
     "ascension:peach_wood",
     "ascension:stripped_peach_log",
-    "ascension:stripped_peach_wood"
+    "ascension:stripped_peach_wood",
+    "ascension:ironwood_log",
+    "ascension:ironwood_wood",
+    "ascension:stripped_ironwood_log",
+    "ascension:stripped_ironwood_wood"
   ]
 }
