@@ -7,25 +7,21 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
-import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
-import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.MultiSourcePathBonusHolder;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.starter.StarterSelectionStage;
-import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.custom_attributes.ZenithAttribute;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.stats.*;
@@ -41,8 +37,8 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     private final StatSheet statSheet = new StatSheet();
     private final Set<Stat> dirtyStats = new HashSet<>();
 
-    private final PathBonusHolder pathBonusHolder = new PathBonusHolder();
-    private final PathBonusHolder cachedPathBonusHolder = new PathBonusHolder();
+    private final MultiSourcePathBonusHolder pathBonusHolder = new MultiSourcePathBonusHolder();
+    private final MultiSourcePathBonusHolder cachedPathBonusHolder = new MultiSourcePathBonusHolder();
 
 
     private final OriginSource source;

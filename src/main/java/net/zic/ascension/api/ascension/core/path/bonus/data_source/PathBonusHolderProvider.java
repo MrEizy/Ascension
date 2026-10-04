@@ -5,12 +5,13 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
+import net.zic.ascension.common.data_attachements.AscensionAttachments;
 
+//TODO on attach supply as a source to the data attachment
 public class PathBonusHolderProvider implements DataSource {
     @Override
     public LoadPriority loadPriority() {
@@ -37,12 +38,12 @@ public class PathBonusHolderProvider implements DataSource {
 
     @Override
     public void applyToEntity(LivingEntity entity, DataSourceInstance instance) {
-
+        entity.getData(AscensionAttachments.PATH_BONUS_HOLDER).registerPathBonusProvider(getHolder(instance));
     }
 
     @Override
     public void removeFromEntity(LivingEntity entity, DataSourceInstance instance) {
-
+        entity.getData(AscensionAttachments.PATH_BONUS_HOLDER).removePathBonusProvider(getHolder(instance));
     }
 
     @Override

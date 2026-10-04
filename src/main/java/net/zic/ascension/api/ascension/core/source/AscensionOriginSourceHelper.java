@@ -16,7 +16,7 @@ import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
-import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.data_source.DataSourcePathBonusHolder;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
@@ -37,12 +37,14 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+
+import net.zic.zenithlib.value_containers.typed.Modifier;
+import net.zic.zenithlib.value_containers.typed.ValueContainer;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Contains methods to interact with an origin source.
@@ -95,8 +97,8 @@ public class AscensionOriginSourceHelper {
     protected static TechniqueHolder getTechniqueHolder(OriginSource source){
         return (TechniqueHolder) getOrCreate(source,CoreHolderProviders.TECHNIQUE_HOLDER_PROVIDER.getId());
     }
-    protected static PathBonusHolder getPathBonusHolder(OriginSource source){
-        return (PathBonusHolder) getOrCreate(source,CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.getId());
+    protected static DataSourcePathBonusHolder getPathBonusHolder(OriginSource source){
+        return (DataSourcePathBonusHolder) getOrCreate(source,CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.getId());
     }
 
     //TODO add the methods that dont take in data and create a fresh instance instead
@@ -646,32 +648,30 @@ public class AscensionOriginSourceHelper {
     }
     //──Path Bonus Access────────────────────────────────────────────────────────
 
-    public static void addBonus(OriginSource source,Identifier category,Identifier path,double val){
-        getPathBonusHolder(source).addBonus(category,path,val);
-        markPathBonusHolderDirty(source);
-        updateEntityPathBonus(source,category,path);
-    }
-    public static void addBonusModifier(OriginSource source,Identifier category, Identifier path, ValueContainerModifier modifier){
-        getPathBonusHolder(source).addBonusModifier(category,path,modifier);
-        markPathBonusHolderDirty(source);
-        updateEntityPathBonus(source,category,path);
-    }
+    /*
+        If you start a process by yourself, ensure you keep track of the PathBonuses(category+path) that you modified
+        so you can properly update them on the entity later
+     */
 
-    public static void removeBonus(OriginSource source,Identifier category,Identifier path,double val){
-        getPathBonusHolder(source).removeBonus(category,path,val);
+    public static void addBonusFlatModifier(OriginSource source, Identifier category, Identifier path, Modifier<Double> modifier){
+        getPathBonusHolder(source).addFlatModifier(category,path,modifier);
         markPathBonusHolderDirty(source);
-        updateEntityPathBonus(source,category,path);
+        if(getPathBonusHolder(source).startAndResolveProcess()) updateEntityPathBonus(source,category,path);
     }
-
+    public static void addBonusMultiplierModifier(OriginSource source,Identifier category,Identifier path,Modifier<Double> modifier){
+        getPathBonusHolder(source).addMultiplierModifier(category,path,modifier);
+        markPathBonusHolderDirty(source);
+        if(getPathBonusHolder(source).startAndResolveProcess()) updateEntityPathBonus(source,category,path);
+    }
     public static void removeBonusModifier(OriginSource source,Identifier category,Identifier path,Identifier modifier){
-        getPathBonusHolder(source).removeBonusModifier(category,path,modifier);
+        getPathBonusHolder(source).removeModifier(category,path,modifier);
         markPathBonusHolderDirty(source);
-        updateEntityPathBonus(source,category,path);
+        if(getPathBonusHolder(source).startAndResolveProcess()) updateEntityPathBonus(source,category,path);
+
     }
 
 
-
-    public static ValueContainer getPathBonusContainer(OriginSource source,Identifier category, Identifier path) {
+    public static ValueContainer<Double> getPathBonusContainer(OriginSource source, Identifier category, Identifier path) {
         return getPathBonusHolder(source).getPathBonusContainer(category,path);
     }
 
@@ -688,11 +688,12 @@ public class AscensionOriginSourceHelper {
 
 
     public static void markPathBonusHolderDirty(OriginSource source){
-        long id = random.nextLong();
-        source.startProcess("modified_path_bonus"+id);
+        String id = "modified_path_bonus"+ UUID.randomUUID();
+        source.startProcess(id);
         source.markDataSourceDirty(CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.getId());
-        resolveProcess(source,"modified_path_bonus"+id);
+        resolveProcess(source,id);
     }
+    //TODO update to utilize the new data attachment
     public static void updateEntityPathBonus(OriginSource source,Identifier category,Identifier path){
         for(LivingEntity entity : source.getAttachedEntities()){
             AscensionEntityDataProvider provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
@@ -703,17 +704,12 @@ public class AscensionOriginSourceHelper {
     //──Affinity Quick Access────────────────────────────────────────────────────────
     public static final Identifier AFFINITY_CATEGORY = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"affinity");
 
-    public static void addAffinity(OriginSource source,Identifier path,double val){
-        addBonus(source,AFFINITY_CATEGORY,path,val);
+    public static void addAffinityFlatModifier(OriginSource source,Identifier path,Modifier<Double> modifier){
+        addBonusFlatModifier(source,AFFINITY_CATEGORY,path,modifier);
     }
-    public static void addAffinityModifier(OriginSource source,Identifier path, ValueContainerModifier modifier){
-        addBonusModifier(source,AFFINITY_CATEGORY,path,modifier);
+    public static void addAffinityMultiplierModifier(OriginSource source,Identifier path,Modifier<Double> moifier){
+        addBonusMultiplierModifier(source,AFFINITY_CATEGORY,path,moifier);
     }
-
-    public static void removeAffinity(OriginSource source,Identifier path,double val){
-        removeBonus(source,AFFINITY_CATEGORY,path,val);
-    }
-
     public static void removeAffinityModifier(OriginSource source,Identifier path,Identifier modifier){
         removeBonusModifier(source,AFFINITY_CATEGORY,path,modifier);
     }

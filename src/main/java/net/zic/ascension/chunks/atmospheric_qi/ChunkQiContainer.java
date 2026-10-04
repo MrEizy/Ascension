@@ -12,7 +12,7 @@ import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.AscensionCraft;
 
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
-import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.MultiSourcePathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.util.PathInteractionUtil;
@@ -34,7 +34,7 @@ public class ChunkQiContainer implements PathBonusProvider {
 
     private boolean loaded;
 
-    private final PathBonusHolder affinities = new PathBonusHolder();
+    private final MultiSourcePathBonusHolder affinities = new MultiSourcePathBonusHolder();
     public ChunkQiContainer(double energy, double baseEnergyCap,double baseEnergyRegenRate) {
         this(energy,baseEnergyCap,baseEnergyRegenRate,false);
     }

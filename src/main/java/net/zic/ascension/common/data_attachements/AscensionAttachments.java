@@ -11,7 +11,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
-import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.MultiSourcePathBonusHolder;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
 import net.zic.ascension.common.util.AscensionAttributes;
@@ -54,9 +54,9 @@ public class AscensionAttachments {
                     .build()
     );
 
-    public static final Supplier<AttachmentType<PathBonusHolder>> PATH_BONUS_HOLDER = ATTACHMENT_TYPES.register(
-            "path_bonus_holder", () -> AttachmentType.builder(holder -> new PathBonusHolder((LivingEntity) holder))
-                    .sync(new PathBonusHolder.SyncHandler())
+    public static final Supplier<AttachmentType<MultiSourcePathBonusHolder>> PATH_BONUS_HOLDER = ATTACHMENT_TYPES.register(
+            "path_bonus_holder", () -> AttachmentType.builder(holder -> new MultiSourcePathBonusHolder((LivingEntity) holder))
+                    .sync(new MultiSourcePathBonusHolder.SyncHandler())
                     .build()
     );
 

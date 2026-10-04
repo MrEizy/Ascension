@@ -5,24 +5,29 @@ import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusCategoryHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.network.ByteBufHelpers;
+import net.zic.zenithlib.util.Processable;
 import net.zic.zenithlib.value_containers.typed.Modifier;
 import net.zic.zenithlib.value_containers.typed.RangedValueContainer;
 import net.zic.zenithlib.value_containers.typed.ValueContainer;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
-public class DataSourcePathBonusHolder implements DataSourceInstance {
+//by istelsf the processable wont do anything, only when accessed through
+//AscensionOriginSourceHelper does it properly update the path bonus
+public class DataSourcePathBonusHolder extends Processable implements DataSourceInstance, PathBonusProvider {
 
 
     //maps a category -> category bonus holder
     private final HashMap<Identifier, PathBonusCategoryHolder> categories = new HashMap<>();
 
-    private final HashSet<Identifier> dirtyCategories = new HashSet<>();
+
+    private final Set<PathBonus> dirtyBonuses = new HashSet<>();
+
+    private final Set<Identifier> dirtyCategories = new HashSet<>();
 
     protected PathBonusCategoryHolder getCategoryHolder(Identifier category){
         categories.computeIfAbsent(category,key->new PathBonusCategoryHolder());
@@ -32,16 +37,19 @@ public class DataSourcePathBonusHolder implements DataSourceInstance {
     public void addFlatModifier(Identifier category,Identifier path, Modifier<Double> modifier){
         getCategoryHolder(category).addFlatModifier(path,modifier);
         dirtyCategories.add(category);
+        dirtyBonuses.add(new PathBonus(category,path));
     }
     public void addMultiplierModifier(Identifier category,Identifier path,Modifier<Double> modifier){
         getCategoryHolder(category).addMultiplierModifier(path,modifier);
         dirtyCategories.add(category);
+        dirtyBonuses.add(new PathBonus(category,path));
     }
     public void removeModifier(Identifier category,Identifier path,Identifier modifier){
         if(!categories.containsKey(category)) return;
 
         getCategoryHolder(category).removeModifier(path,modifier);
         dirtyCategories.add(category);
+        dirtyBonuses.add(new PathBonus(category,path));
     }
 
 
@@ -50,13 +58,15 @@ public class DataSourcePathBonusHolder implements DataSourceInstance {
         return categories.containsKey(category) ? getCategoryHolder(category).getBonus(path) : 0;
     }
 
-    public void setPathBonusContainer(Identifier category, Identifier path, ValueContainer<Double> container){
-        getCategoryHolder(category).setPathBonusContainer(path,container);
-    }
 
 
     public ValueContainer<Double> getPathBonusContainer(Identifier category, Identifier path){
         return getCategoryHolder(category).getPathBonusContainer(path);
+    }
+
+    @Override
+    public double getPathBonus(Identifier category, Identifier path) {
+        return getBonus(category,path);
     }
 
     public Collection<PathBonus> getAllPathBonuses(){
