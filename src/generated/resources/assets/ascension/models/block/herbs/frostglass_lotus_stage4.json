@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "ascension:block/herbs/frostglass_lotus_stage4"
+  }
+}

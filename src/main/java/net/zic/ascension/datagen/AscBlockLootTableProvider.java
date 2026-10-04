@@ -7,6 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
+import net.zic.ascension.common.blocks.crops.herbs.LilyPadHerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.common.item.ModItems;
 import org.jspecify.annotations.NullMarked;
@@ -108,11 +110,17 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
                 1, 1,
                 0.15F
         ));
-        add(ModBlocks.MOONWELL_JADE_LOTUS_CROP.get(), createDirectHerbDrops(
+        add(ModBlocks.MOONWELL_JADE_LOTUS_CROP.get(), createVariantDirectHerbDrops(
                 ModBlocks.MOONWELL_JADE_LOTUS_CROP.get(),
                 ModItems.MOONWELL_JADE_LOTUS.get(),
+                ModItems.FROSTGLASS_LOTUS.get(),
                 1, 1,
                 0.10F
+        ));
+        add(ModBlocks.LOTUS_PAD_SUPPORT.get(), LootTable.lootTable().withPool(
+                LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(Items.LILY_PAD))
         ));
         add(ModBlocks.WHITE_JADE_ORCHID_CROP.get(), createDirectHerbDrops(
                 ModBlocks.WHITE_JADE_ORCHID_CROP.get(),
@@ -199,6 +207,44 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         }
 
         return table;
+    }
+
+    protected LootTable.Builder createVariantDirectHerbDrops(LilyPadHerbCropBlock block, Item normalHerb, Item rareHerb, float minHerbs, float maxHerbs, float bonusHerbChance) {
+        LootTable.Builder table = LootTable.lootTable()
+                .withPool(immaturePlantingPool(block, normalHerb))
+                .withPool(matureVariantCountPool(block, normalHerb, minHerbs, maxHerbs, false))
+                .withPool(matureVariantCountPool(block, rareHerb, minHerbs, maxHerbs, true));
+
+        if (bonusHerbChance > 0.0F) {
+            table.withPool(matureVariantChancePool(block, normalHerb, bonusHerbChance, false));
+        }
+
+        return table;
+    }
+
+    private LootPool.Builder matureVariantCountPool(LilyPadHerbCropBlock block, Item item, float minCount, float maxCount, boolean rareVariant) {
+        return LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1.0F))
+                .when(matureCondition(block))
+                .when(rareVariantCondition(block, rareVariant))
+                .add(applyExplosionDecay(block,
+                        LootItem.lootTableItem(item)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(minCount, maxCount)))));
+    }
+
+    private LootPool.Builder matureVariantChancePool(LilyPadHerbCropBlock block, Item item, float chance, boolean rareVariant) {
+        return LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1.0F))
+                .when(matureCondition(block))
+                .when(rareVariantCondition(block, rareVariant))
+                .when(LootItemRandomChanceCondition.randomChance(chance))
+                .add(applyExplosionDecay(block, LootItem.lootTableItem(item)));
+    }
+
+    private LootItemCondition.Builder rareVariantCondition(LilyPadHerbCropBlock block, boolean rareVariant) {
+        return LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                .setProperties(StatePropertiesPredicate.Builder.properties()
+                        .hasProperty(LilyPadHerbCropBlock.RARE_VARIANT, rareVariant));
     }
 
     private LootPool.Builder immaturePlantingPool(HerbCropBlock block, Item plantingItem) {

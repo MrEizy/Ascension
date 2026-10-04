@@ -139,7 +139,7 @@ public class AscBiomeModifier {
                         biomes.getOrThrow(Biomes.RIVER)
                 ),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.MOONWELL_JADE_LOTUS_PLACED_KEY)),
-                GenerationStep.Decoration.VEGETAL_DECORATION));
+                GenerationStep.Decoration.TOP_LAYER_MODIFICATION));
 
         context.register(ADD_LINGZHI_MUSHROOM, new BiomeModifiers.AddFeaturesBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_FOREST),

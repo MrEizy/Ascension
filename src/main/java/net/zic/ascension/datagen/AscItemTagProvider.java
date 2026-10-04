@@ -83,6 +83,7 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SNOW_GINSENG.get())
                 .add(ModItems.NINE_SUN_FIRE_ROOT.get())
                 .add(ModItems.MOONWELL_JADE_LOTUS.get())
+                .add(ModItems.FROSTGLASS_LOTUS.get())
                 .add(ModItems.HEAVENLY_THUNDER_PEACH.get())
                 .add(ModItems.LINGZHI_MUSHROOM.get())
                 .add(ModItems.PEACH.get())

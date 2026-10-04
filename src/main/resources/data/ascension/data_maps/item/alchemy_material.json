@@ -57,6 +57,23 @@
       "instability": 0.08,
       "refinement_difficulty": 1.6
     },
+    "ascension:frostglass_lotus": {
+      "type": "ascension:herb",
+      "properties": {
+        "ascension:alchemy/cleansing": 6.0,
+        "ascension:alchemy/nourishment": 5.0,
+        "ascension:alchemy/restoration": 4.0
+      },
+      "affinities": {
+        "ascension:elemental/water": 5.0,
+        "ascension:elemental/ice": 5.0,
+        "ascension:elemental/moon": 3.0,
+        "ascension:elemental/yin": 2.0
+      },
+      "purity": 0.98,
+      "instability": 0.03,
+      "refinement_difficulty": 2.4
+    },
     "ascension:heavenly_thunder_peach": {
       "type": "ascension:herb",
       "properties": {

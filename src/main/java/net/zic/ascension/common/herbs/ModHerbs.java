@@ -106,7 +106,7 @@ public final class ModHerbs {
 
     public static final HerbDefinition MOONWELL_JADE_LOTUS = register(
             HerbDefinition.builder(AscensionCraft.prefix("moonwell_jade_lotus"))
-                    .growthStages(4)
+                    .growthStages(5)
                     .baseGrowthChance(0.14F)
                     .planting(HerbDefinition.PlantingType.DIRECT)
                     .ageThresholds(
@@ -127,8 +127,8 @@ public final class ModHerbs {
                     .qualityAffinity(AlchemyAffinities.WATER, 2.0D)
                     .availableQiFraction(0.02D, 0.12D)
                     .atmosphericQiCost(2.0D)
-                    .naturalSupport(state -> state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.MUD) || state.is(Blocks.CLAY))
-                    .spawnRule((level, pos, random) -> level.canSeeSky(pos) && hasFluidNearby(level, pos, FluidTags.WATER, 3, 1) && random.nextInt(5) == 0)
+                    .naturalSupport(state -> state.is(Blocks.LILY_PAD))
+                    .spawnRule((level, pos, random) -> level.canSeeSky(pos) && random.nextInt(5) == 0)
                     .growthModifier((level, pos, state) -> {
                         long time = Math.floorMod(level.getGameTime(), 24000L);
                         boolean night = time >= 13000L && time <= 23000L;
@@ -155,6 +155,27 @@ public final class ModHerbs {
                         }
                         return multiplier;
                     })
+                    .build()
+    );
+
+    public static final HerbDefinition FROSTGLASS_LOTUS = register(
+            HerbDefinition.builder(AscensionCraft.prefix("frostglass_lotus"))
+                    .growthStages(1)
+                    .baseGrowthChance(0.0F)
+                    .planting(HerbDefinition.PlantingType.NONE)
+                    .ageThresholds(
+                            new HerbDefinition.AgeThreshold(1, 18),
+                            new HerbDefinition.AgeThreshold(10, 72),
+                            new HerbDefinition.AgeThreshold(100, 288),
+                            new HerbDefinition.AgeThreshold(500, 1152),
+                            new HerbDefinition.AgeThreshold(1000, 11520),
+                            new HerbDefinition.AgeThreshold(10000, 115200),
+                            new HerbDefinition.AgeThreshold(100000, 1152000),
+                            new HerbDefinition.AgeThreshold(1000000, 0)
+                    )
+                    .wildAgeWeights(1000, 210, 35, 6, 2, 1, 1, 1)
+                    .qualityGrowth(18, 72, 288, 1152)
+                    .wildQualityWeights(8, 650, 260, 70, 12)
                     .build()
     );
 

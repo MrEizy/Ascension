@@ -6,5 +6,5 @@
     "minecraft:river"
   ],
   "features": "ascension:moonwell_jade_lotus_placed",
-  "step": "vegetal_decoration"
+  "step": "top_layer_modification"
 }

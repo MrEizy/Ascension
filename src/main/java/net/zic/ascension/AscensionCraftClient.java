@@ -1,5 +1,6 @@
 package net.zic.ascension;
 
+import net.minecraft.client.color.block.BlockTintSources;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
@@ -30,6 +31,7 @@ import net.zic.ascension.client.visual.runtime.GuardianDharmaVisualController;
 import net.zic.ascension.client.visual.runtime.WeaponSwingVisualController;
 import net.zic.ascension.client.tooltip.AscensionClientTooltipProviders;
 import net.zic.ascension.common.AscensionCreativeSections;
+import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.common.fluids.AscFluidTypes;
 import net.zic.ascension.common.fluids.AscFluids;
@@ -37,6 +39,8 @@ import net.zic.ascension.common.gui.menus.AscMenuTypes;
 import net.zic.ascension.common.gui.menus.jade_bottle.JadeBottleScreen;
 import net.zic.ascension.common.particle.AscensionParticles;
 import net.zic.ascension.network.WeaponSwingRequestPacket;
+
+import java.util.List;
 
 
 @Mod(value = AscensionCraft.MOD_ID,dist = Dist.CLIENT)
@@ -114,6 +118,14 @@ public class AscensionCraftClient {
             event.registerFluidType(AscFluidTypes.LIQUIFIED_SPIRITUAL_QI_EXTENSION, AscFluidTypes.LIQUIFIED_SPIRITUAL_QI_TYPE.get());
         }
 
+
+        @SubscribeEvent
+        public static void registerBlockTintSources(RegisterColorHandlersEvent.BlockTintSources event) {
+            event.register(
+                    List.of(BlockTintSources.constant(0xFF208030)),
+                    ModBlocks.LOTUS_PAD_SUPPORT.get()
+            );
+        }
 
         @SubscribeEvent
         public static void registerFluidModelsEvent(RegisterFluidModelsEvent event) {

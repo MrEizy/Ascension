@@ -178,6 +178,8 @@ public class ModItems {
             properties -> new HerbItem(properties.food(AscFoodProperties.GINSENG), ModHerbs.NINE_SUN_FIRE_ROOT, () -> ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get()));
     public static final DeferredItem<Item> MOONWELL_JADE_LOTUS = ITEMS.registerItem("moonwell_jade_lotus",
             properties -> new HerbItem(properties.food(AscFoodProperties.ORCHID), ModHerbs.MOONWELL_JADE_LOTUS, () -> ModBlocks.MOONWELL_JADE_LOTUS_CROP.get()));
+    public static final DeferredItem<Item> FROSTGLASS_LOTUS = ITEMS.registerItem("frostglass_lotus",
+            properties -> new HerbItem(properties.food(AscFoodProperties.ORCHID), ModHerbs.FROSTGLASS_LOTUS));
     public static final DeferredItem<Item> WHITE_JADE_ORCHID = ITEMS.registerItem("white_jade_orchid",
             properties -> new HerbItem(properties.food(AscFoodProperties.ORCHID), ModHerbs.WHITE_JADE_ORCHID, () -> ModBlocks.WHITE_JADE_ORCHID_CROP.get()));
 

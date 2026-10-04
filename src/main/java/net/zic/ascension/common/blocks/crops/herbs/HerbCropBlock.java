@@ -71,6 +71,10 @@ public class HerbCropBlock extends Block {
         return harvestItem.get();
     }
 
+    protected Item harvestItem(BlockState state) {
+        return harvestItem();
+    }
+
     public int growthStage(BlockState state) {
         return Math.min(state.getValue(STAGE), definition.maxGrowthStage());
     }
@@ -254,8 +258,9 @@ public class HerbCropBlock extends Block {
                 wild
         );
 
+        Item stateHarvestItem = harvestItem(state);
         for (ItemStack drop : drops) {
-            if (drop.getItem() == harvestItem.get()) {
+            if (drop.getItem() == stateHarvestItem) {
                 drop.set(AscensionComponents.HERB_DATA.get(), herbData);
             }
         }

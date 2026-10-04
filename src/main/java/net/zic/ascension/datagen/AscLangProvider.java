@@ -191,6 +191,7 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.snow_ginseng", "Snow Ginseng");
         add("item.ascension.nine_sun_fire_root", "Nine-Sun Fire Root");
         add("item.ascension.moonwell_jade_lotus", "Moonwell Jade Lotus");
+        add("item.ascension.frostglass_lotus", "Frostglass Lotus");
         add("item.ascension.heavenly_thunder_peach", "Heavenly Thunder Peach");
         add("item.ascension.lingzhi_mushroom", "Lingzhi");
         add("item.ascension.blood_lingzhi_mushroom", "Blood Lingzhi");
@@ -226,6 +227,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.herb.snow_ginseng.description", "A frozen ginseng root adapted to cold and snowy lands.");
         add("ascension.herb.nine_sun_fire_root.description", "A sun-fed root that thrives in scorching lands and holds heat within its flesh.");
         add("ascension.herb.moonwell_jade_lotus.description", "A pale jade lotus nourished by water Qi, rain, and the cold radiance of the night sky.");
+        add("ascension.herb.frostglass_lotus.description", "A Moonwell Lotus transformed into translucent frostglass by an exceptionally rare convergence of moonlight and spiritual Qi.");
         add("ascension.herb.heavenly_thunder_peach.description", "A rare peach whose flesh ripens slowly until storms and thunder drive its spiritual nature awake.");
         add("ascension.herb.lingzhi_mushroom.description", "A medicinal fungus that grows from old wood.");
         add("ascension.herb.blood_lingzhi_mushroom.description", "A crimson Lingzhi that devoured the blood from dead Ghast rending it nothing but bones.");

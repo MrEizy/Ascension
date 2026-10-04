@@ -5,6 +5,16 @@
         "model": "ascension:block/herbs/moonwell_jade_lotus_stage0"
       },
       "when": {
+        "rare_variant": "false",
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage0"
+      },
+      "when": {
+        "rare_variant": "true",
         "stage": "0"
       }
     },
@@ -13,6 +23,16 @@
         "model": "ascension:block/herbs/moonwell_jade_lotus_stage1"
       },
       "when": {
+        "rare_variant": "false",
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage1"
+      },
+      "when": {
+        "rare_variant": "true",
         "stage": "1"
       }
     },
@@ -21,6 +41,16 @@
         "model": "ascension:block/herbs/moonwell_jade_lotus_stage2"
       },
       "when": {
+        "rare_variant": "false",
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage2"
+      },
+      "when": {
+        "rare_variant": "true",
         "stage": "2"
       }
     },
@@ -29,6 +59,7 @@
         "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
       },
       "when": {
+        "rare_variant": "false",
         "stage": "3"
       }
     },
@@ -37,214 +68,493 @@
         "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "4"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "5"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "5"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "6"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "6"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "7"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "7"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "8"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "8"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "9"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "9"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "10"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "10"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "11"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "11"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "12"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "12"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "13"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "13"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "14"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "14"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "15"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "15"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "16"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "16"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "17"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "17"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "18"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "18"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "19"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "19"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "20"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "20"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "21"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "21"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "22"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "22"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "23"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "23"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "24"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "24"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "25"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "25"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "26"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "26"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "27"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "27"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "28"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "28"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
         "stage": "29"
       }
     },
     {
       "apply": {
-        "model": "ascension:block/herbs/moonwell_jade_lotus_stage3"
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
       },
       "when": {
+        "rare_variant": "true",
+        "stage": "29"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "false",
+        "stage": "30"
+      }
+    },
+    {
+      "apply": {
+        "model": "ascension:block/herbs/frostglass_lotus_stage4"
+      },
+      "when": {
+        "rare_variant": "true",
         "stage": "30"
       }
     }

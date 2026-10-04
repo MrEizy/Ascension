@@ -15,9 +15,6 @@ import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
-import net.minecraft.client.renderer.block.dispatch.Variant;
-import net.minecraft.client.renderer.item.ItemModel;
-import net.minecraft.client.renderer.item.properties.numeric.Count;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -26,15 +23,15 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
+import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
+import net.zic.ascension.common.blocks.crops.herbs.LilyPadHerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.common.blocks.custom.SpiritualStoneClusterBlock;
 import net.zic.ascension.common.item.ModItems;
 
-
-import java.util.List;
 public class AscModelProvider extends ModelProvider {
     public AscModelProvider(PackOutput output) {
         super(output, AscensionCraft.MOD_ID);
@@ -105,6 +102,7 @@ public class AscModelProvider extends ModelProvider {
         herbItemModel(itemModels, ModItems.FIRE_GINSENG.get(), "fire_ginseng");
         herbItemModel(itemModels, ModItems.SNOW_GINSENG.get(), "snow_ginseng");
         herbItemModel(itemModels, ModItems.MOONWELL_JADE_LOTUS.get());
+        herbItemModel(itemModels, ModItems.FROSTGLASS_LOTUS.get());
         herbItemModel(itemModels, ModItems.LINGZHI_MUSHROOM.get());
         herbItemModel(itemModels, ModItems.BLOOD_LINGZHI_MUSHROOM.get());
         herbItemModel(itemModels, ModItems.WHITE_JADE_ORCHID.get());
@@ -117,11 +115,12 @@ public class AscModelProvider extends ModelProvider {
         herbBlockModelRotated(blockModels, ModBlocks.LINGZHI_MUSHROOM_B.get());
         herbBlockModelRotated(blockModels, ModBlocks.BLOOD_LINGZHI_MUSHROOM_B.get());
         cultivationSoilModel(blockModels);
+        lotusPadSupportModel(blockModels);
         herbCutoutCropModel(blockModels, ModBlocks.JADE_DEW_GRASS_CROP.get());
         herbCutoutCropModel(blockModels, ModBlocks.GINSENG_CROP.get(), "ginseng");
         herbCutoutCropModel(blockModels, ModBlocks.FIRE_GINSENG_CROP.get(), "hundred_year_fire_ginseng");
         herbCutoutCropModel(blockModels, ModBlocks.SNOW_GINSENG_CROP.get(), "hundred_year_snow_ginseng");
-        herbCutoutCropModel(blockModels, ModBlocks.MOONWELL_JADE_LOTUS_CROP.get());
+        lilyPadHerbCropModel(blockModels, ModBlocks.MOONWELL_JADE_LOTUS_CROP.get(), "moonwell_jade_lotus", "frostglass_lotus");
 
         herbCutoutCropModel(blockModels, ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get(), "nine_sun_root");
         herbCutoutCropModel(blockModels, ModBlocks.WHITE_JADE_ORCHID_CROP.get(), "white_jade_orchid");
@@ -325,6 +324,46 @@ public class AscModelProvider extends ModelProvider {
         blockModels.registerSimpleItemModel(block, farmlandModel);
     }
 
+    private void lotusPadSupportModel(BlockModelGenerators blockModels) {
+        Block block = ModBlocks.LOTUS_PAD_SUPPORT.get();
+        Material lilyPadTexture = new Material(Identifier.fromNamespaceAndPath("minecraft", "block/lily_pad"));
+
+        ModelTemplate template = ExtendedModelTemplateBuilder.builder()
+                .requiredTextureSlot(TextureSlot.ALL)
+                .ambientOcclusion(false)
+                .element(element -> element
+                        .from(1.0F, 15.0F, 1.0F)
+                        .to(15.0F, 15.75F, 15.0F)
+                        .face(Direction.DOWN, face -> face
+                                .texture(TextureSlot.ALL)
+                                .uvs(1.0F, 1.0F, 15.0F, 15.0F)
+                                .tintindex(0))
+                        .face(Direction.UP, face -> face
+                                .texture(TextureSlot.ALL)
+                                .uvs(1.0F, 1.0F, 15.0F, 15.0F)
+                                .tintindex(0))
+                        .face(Direction.NORTH, face -> face
+                                .texture(TextureSlot.ALL)
+                                .uvs(1.0F, 15.0F, 15.0F, 15.75F)
+                                .tintindex(0))
+                        .face(Direction.SOUTH, face -> face
+                                .texture(TextureSlot.ALL)
+                                .uvs(1.0F, 15.0F, 15.0F, 15.75F)
+                                .tintindex(0))
+                        .face(Direction.WEST, face -> face
+                                .texture(TextureSlot.ALL)
+                                .uvs(1.0F, 15.0F, 15.0F, 15.75F)
+                                .tintindex(0))
+                        .face(Direction.EAST, face -> face
+                                .texture(TextureSlot.ALL)
+                                .uvs(1.0F, 15.0F, 15.0F, 15.75F)
+                                .tintindex(0)))
+                .build();
+
+        Identifier model = template.create(ModelLocationUtils.getModelLocation(block), TextureMapping.cube(lilyPadTexture), blockModels.modelOutput);
+        blockModels.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, BlockModelGenerators.plainVariant(model)));
+    }
+
 
     private void herbCutoutCropModel(BlockModelGenerators blockModels, HerbCropBlock block) {
         herbCutoutCropModel(blockModels, block, block.definition().id().getPath());
@@ -361,8 +400,42 @@ public class AscModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(blockState);
     }
 
+    private void lilyPadHerbCropModel(BlockModelGenerators blockModels, LilyPadHerbCropBlock block, String texturePath, String rareTexturePath) {
+        int growthStages = block.definition().growthStages();
+        Identifier[] stageModels = new Identifier[growthStages];
+        String herbPath = block.definition().id().getPath();
+
+        for (int visualStage = 0; visualStage < growthStages; visualStage++) {
+            Identifier model = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/herbs/" + herbPath + "_stage" + visualStage);
+            Material texture = new Material(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/herbs/" + texturePath + "_stage" + visualStage));
+            stageModels[visualStage] = ModelTemplates.CROSS.create(model, TextureMapping.cross(texture), blockModels.modelOutput);
+        }
+
+        int matureStage = block.definition().maxGrowthStage();
+        Identifier rareModel = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/herbs/" + rareTexturePath + "_stage" + matureStage);
+        Material rareTexture = new Material(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/herbs/" + rareTexturePath + "_stage" + matureStage));
+        ModelTemplates.CROSS.create(rareModel, TextureMapping.cross(rareTexture), blockModels.modelOutput);
+
+        MultiPartGenerator blockState = MultiPartGenerator.multiPart(block);
+
+        for (int stage = 0; stage <= HerbCropBlock.MAX_STAGE; stage++) {
+            int visualStage = Math.min(stage, matureStage);
+
+            blockState.with(
+                    BlockModelGenerators.condition().term(HerbCropBlock.STAGE, stage).term(LilyPadHerbCropBlock.RARE_VARIANT, false),
+                    BlockModelGenerators.plainVariant(stageModels[visualStage])
+            );
+            blockState.with(
+                    BlockModelGenerators.condition().term(HerbCropBlock.STAGE, stage).term(LilyPadHerbCropBlock.RARE_VARIANT, true),
+                    BlockModelGenerators.plainVariant(stage >= matureStage ? rareModel : stageModels[visualStage])
+            );
+        }
+
+        blockModels.blockStateOutput.accept(blockState);
+    }
+
     private void herbCrossCropModel(BlockModelGenerators blockModels, HerbCropBlock block) {
-        herbCutoutCropModel(blockModels, block, block.definition().id().getPath());
+        herbCrossCropModel(blockModels, block, block.definition().id().getPath());
     }
 
     private void herbCrossCropModel(BlockModelGenerators blockModels, HerbCropBlock block, String texturePath) {
@@ -376,9 +449,9 @@ public class AscModelProvider extends ModelProvider {
                     AscensionCraft.MOD_ID,
                     "block/herbs/" + texturePath + "_stage" + visualStage
             ));
-            stageModels[visualStage] = ModelTemplates.CROP.create(
+            stageModels[visualStage] = ModelTemplates.CROSS.create(
                     model,
-                    TextureMapping.crop(texture),
+                    TextureMapping.cross(texture),
                     blockModels.modelOutput
             );
         }

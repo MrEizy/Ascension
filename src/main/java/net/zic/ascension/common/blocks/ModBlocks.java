@@ -28,6 +28,8 @@ import net.zic.ascension.common.blocks.auction.AuctionBidderBlock;
 import net.zic.ascension.common.blocks.auction.AuctionHouseCoreBlock;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.HerbStemCropBlock;
+import net.zic.ascension.common.blocks.crops.herbs.LilyPadHerbCropBlock;
+import net.zic.ascension.common.blocks.crops.herbs.LotusPadSupportBlock;
 import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.common.blocks.crops.mushrooms.LingzhiMushroomBlock;
 import net.zic.ascension.common.fluids.AscFluids;
@@ -170,8 +172,19 @@ public class ModBlocks {
                     () -> ModItems.NINE_SUN_FIRE_ROOT.get()
             ));
 
-    public static final DeferredBlock<HerbCropBlock> MOONWELL_JADE_LOTUS_CROP = BLOCKS.registerBlock("moonwell_jade_lotus_crop",
-            properties -> new HerbCropBlock(
+    public static final DeferredBlock<LotusPadSupportBlock> LOTUS_PAD_SUPPORT = BLOCKS.registerBlock("lotus_pad_support",
+            properties -> new LotusPadSupportBlock(
+                    properties
+                            .strength(0.0f)
+                            .sound(SoundType.GRASS)
+                            .noCollision()
+                            .noOcclusion()
+                            .pushReaction(PushReaction.DESTROY)
+                            .mapColor(MapColor.PLANT)
+            ));
+
+    public static final DeferredBlock<LilyPadHerbCropBlock> MOONWELL_JADE_LOTUS_CROP = BLOCKS.registerBlock("moonwell_jade_lotus_crop",
+            properties -> new LilyPadHerbCropBlock(
                     properties
                             .strength(0.0f)
                             .sound(SoundType.GRASS)
@@ -179,7 +192,9 @@ public class ModBlocks {
                             .randomTicks()
                             .pushReaction(PushReaction.DESTROY),
                     ModHerbs.MOONWELL_JADE_LOTUS,
-                    () -> ModItems.MOONWELL_JADE_LOTUS.get()
+                    () -> ModItems.MOONWELL_JADE_LOTUS.get(),
+                    () -> ModItems.FROSTGLASS_LOTUS.get(),
+                    64
             ));
 
     public static final DeferredBlock<HerbCropBlock> WHITE_JADE_ORCHID_CROP = BLOCKS.registerBlock("white_jade_orchid_crop",

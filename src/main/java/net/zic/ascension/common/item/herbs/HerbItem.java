@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zic.ascension.common.blocks.crops.herbs.HerbCropBlock;
+import net.zic.ascension.common.blocks.crops.herbs.LilyPadHerbCropBlock;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.ModTags;
@@ -57,6 +58,11 @@ public class HerbItem extends Item {
             return InteractionResult.PASS;
         }
 
+        Block block = crop.get();
+        if (block instanceof LilyPadHerbCropBlock lilyPadHerb) {
+            return plantOnLilyPad(context, lilyPadHerb);
+        }
+
         Level level = context.getLevel();
         BlockPos soilPos = context.getClickedPos();
         BlockPos plantPos = soilPos.above();
@@ -64,10 +70,9 @@ public class HerbItem extends Item {
             return InteractionResult.PASS;
         }
 
-        Block block = crop.get();
         BlockState state = block.defaultBlockState();
-        if (block instanceof HerbCropBlock) {
-            state = ((HerbCropBlock) block).plantedState();
+        if (block instanceof HerbCropBlock herbCrop) {
+            state = herbCrop.plantedState();
         }
 
         if (!state.canSurvive(level, plantPos)) {
@@ -80,6 +85,35 @@ public class HerbItem extends Item {
             if (player == null || !player.getAbilities().instabuild) {
                 context.getItemInHand().shrink(1);
             }
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    private static InteractionResult plantOnLilyPad(UseOnContext context, LilyPadHerbCropBlock crop) {
+        Level level = context.getLevel();
+        BlockPos clickedPos = context.getClickedPos();
+        BlockState plantedState = crop.plantedState();
+
+        boolean vanillaLilyPad = crop.canConvertLilyPad(level, clickedPos);
+        boolean convertedSupport = crop.canPlantAboveSupport(level, clickedPos);
+        if (!vanillaLilyPad && !convertedSupport) {
+            return InteractionResult.PASS;
+        }
+
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+
+        boolean placed = vanillaLilyPad
+                ? crop.placeOnLilyPad(level, clickedPos, plantedState)
+                : crop.placeAboveSupport(level, clickedPos, plantedState);
+        if (!placed) {
+            return InteractionResult.FAIL;
+        }
+
+        Player player = context.getPlayer();
+        if (player == null || !player.getAbilities().instabuild) {
+            context.getItemInHand().shrink(1);
         }
         return InteractionResult.SUCCESS;
     }

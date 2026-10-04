@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/crop",
+  "parent": "minecraft:block/cross",
   "textures": {
-    "crop": "ascension:block/herbs/moonwell_jade_lotus_stage1"
+    "cross": "ascension:block/herbs/moonwell_jade_lotus_stage1"
   }
 }

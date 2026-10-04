@@ -1,0 +1,70 @@
+{
+  "ambientocclusion": false,
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#all",
+          "tintindex": 0
+        },
+        "east": {
+          "texture": "#all",
+          "tintindex": 0,
+          "uv": [
+            1.0,
+            15.0,
+            15.0,
+            15.75
+          ]
+        },
+        "north": {
+          "texture": "#all",
+          "tintindex": 0,
+          "uv": [
+            1.0,
+            15.0,
+            15.0,
+            15.75
+          ]
+        },
+        "south": {
+          "texture": "#all",
+          "tintindex": 0,
+          "uv": [
+            1.0,
+            15.0,
+            15.0,
+            15.75
+          ]
+        },
+        "up": {
+          "texture": "#all",
+          "tintindex": 0
+        },
+        "west": {
+          "texture": "#all",
+          "tintindex": 0,
+          "uv": [
+            1.0,
+            15.0,
+            15.0,
+            15.75
+          ]
+        }
+      },
+      "from": [
+        1,
+        15,
+        1
+      ],
+      "to": [
+        15,
+        15.75,
+        15
+      ]
+    }
+  ],
+  "textures": {
+    "all": "minecraft:block/lily_pad"
+  }
+}

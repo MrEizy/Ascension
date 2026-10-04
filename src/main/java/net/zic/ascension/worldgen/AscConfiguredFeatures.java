@@ -109,7 +109,7 @@ public class AscConfiguredFeatures {
         register(context, NINE_SUN_FIRE_ROOT, AscFeatures.HERB.get(),
                 new HerbFeature.Configuration(ModBlocks.NINE_SUN_FIRE_ROOT_CROP.get(), 1, 4));
         register(context, MOONWELL_JADE_LOTUS, AscFeatures.HERB.get(),
-                new HerbFeature.Configuration(ModBlocks.MOONWELL_JADE_LOTUS_CROP.get(), 1, 4));
+                new HerbFeature.Configuration(ModBlocks.MOONWELL_JADE_LOTUS_CROP.get(), 1, 8));
         register(context, LINGZHI_MUSHROOM, AscFeatures.LINGZHI_MUSHROOM.get(),
                 new LingzhiMushroomConfiguration(ModBlocks.LINGZHI_MUSHROOM_B.get(), blocks.getOrThrow(BlockTags.LOGS)));
         register(context, BLOOD_LINGZHI_MUSHROOM, AscFeatures.LINGZHI_MUSHROOM.get(),

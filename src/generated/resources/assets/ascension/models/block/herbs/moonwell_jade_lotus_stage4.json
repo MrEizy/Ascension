@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "ascension:block/herbs/moonwell_jade_lotus_stage4"
+  }
+}
