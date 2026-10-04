@@ -144,11 +144,11 @@ dependencies {
        Curseforge or Modrinth, and comment out the other set */
     //jarJar(implementation('com.github.MrEizy:ZenithLib:d0f2829dfa'))
     //jarJar(implementation('com.github.OliverHesse:EasyGui:d71b1e115c'))
-    //jarJar(implementation('com.github.MrEizy:Builders-Zenith:24f728b6e5'))
+    //jarJar(implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0'))
 
     implementation 'com.github.MrEizy:ZenithLib:d0f2829dfa'
     implementation('com.github.OliverHesse:EasyGui:d71b1e115c')
-    implementation('com.github.MrEizy:Builders-Zenith:24f728b6e5')
+    implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0')
 
 
     // compile against the JEI API but do not include it at runtime
