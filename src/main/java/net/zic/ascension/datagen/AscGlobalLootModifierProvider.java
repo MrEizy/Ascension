@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.animal.chicken.ChickenVariant;
 import net.minecraft.world.entity.animal.chicken.ChickenVariants;
 import net.minecraft.world.entity.animal.fox.Fox;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
@@ -32,6 +33,8 @@ import net.neoforged.neoforge.common.loot.AddTableLootModifier;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.item.ModItems;
+import net.zic.ascension.datagen.loot.AddItemStackModifier;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -478,6 +481,21 @@ public class AscGlobalLootModifierProvider extends GlobalLootModifierProvider {
                 IGlobalLootModifier.DEFAULT_PRIORITY,
                 AscAddedLootTableProvider.BABY_ZOMBIE_WRATH_DEMON_BLOODLINE
         ));
+
+
+
+
+        //Items
+        add("template_from_jungle_temple",
+                new AddItemStackModifier(new LootItemCondition[]{
+                        new LootTableIdCondition.Builder(Identifier.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                        LootItemRandomChanceCondition.randomChance(0.13f).build()},
+                        new ItemStackTemplate(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE.get())));
+        add("template_from_end_city",
+                new AddItemStackModifier(new LootItemCondition[]{
+                        new LootTableIdCondition.Builder(Identifier.withDefaultNamespace("chests/end_city_treasure")).build(),
+                        LootItemRandomChanceCondition.randomChance(0.24f).build()},
+                        new ItemStackTemplate(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE.get())));
     }
 
     private LootItemCondition.Builder chickenVariant(ResourceKey<ChickenVariant> variant) {

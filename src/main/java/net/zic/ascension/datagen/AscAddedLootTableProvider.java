@@ -71,6 +71,7 @@ public class AscAddedLootTableProvider implements LootTableSubProvider {
     public static final ResourceKey<LootTable> DUNGEON_SHALLOW_CORE_BODY_PHYSIQUE = key("added_loot/physiques/dungeon_shallow_core_body_physique");
     public static final ResourceKey<LootTable> WANDERING_TRADER_WEAK_SPIRIT_BODY_PHYSIQUE = key("added_loot/physiques/wandering_trader_weak_spirit_body_physique");
 
+
     /** Physiques don't use purity yet, so every physique essence is generated at full purity. */
     static final int PHYSIQUE_PURITY = 100;
 

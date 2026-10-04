@@ -30,6 +30,7 @@ import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.command.commands.AuctionCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.AscensionAttributes;
+import net.zic.ascension.datagen.loot.ModLootModifiers;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 import net.zic.ascension.impl.datapack.alchemy.AlchemyMaterialProviders;
 import net.zic.ascension.network.*;
@@ -140,6 +141,9 @@ public class AscensionCraft {
         AscensionProjectileBehaviorTypes.register(modEventBus);
 
         AscensionAttributes.register(modEventBus);
+
+        ModLootModifiers.register(modEventBus);
+
 
 
 

@@ -1,0 +1,16 @@
+{
+  "type": "ascension:add_itemstack",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/abandoned_mineshaft"
+    },
+    {
+      "chance": 0.13,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "stack": {
+    "id": "ascension:spiritual_stone_upgrade_smithing_template"
+  }
+}
