@@ -120,7 +120,7 @@ public class ChunkQiContainer implements PathBonusProvider {
     }
 
     public boolean hasAtmosphericConfiguration() {
-        return getEnergyCap() > 0.0D || !getAllAffinities().isEmpty();
+        return energyCap.getBaseValue() != 0.0D || energyRegenRate.getBaseValue() != 0.0D || !getAllAffinities().isEmpty();
     }
 
     public void regenEnergy(){
@@ -153,7 +153,7 @@ public class ChunkQiContainer implements PathBonusProvider {
         @Override
         public void write(RegistryFriendlyByteBuf buf, ChunkQiContainer attachment, boolean initialSync) {
             buf.writeDouble(attachment.energy);
-      }
+        } // this annoyed me because it was missing a single space...
 
         @Override
         public @Nullable ChunkQiContainer read(IAttachmentHolder holder, RegistryFriendlyByteBuf buf, @Nullable ChunkQiContainer previousValue) {
