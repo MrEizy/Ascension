@@ -596,10 +596,13 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
             encodeOptionalIdentifier(buf, attachment.selectedStarterPhysique);
 
 
-            buf.writeBoolean(attachment.patch != null);
-            if(attachment.patch != null){
-                if(attachment.fullPatch) OriginSourcePatch.fullEncode(attachment.patch,buf,attachment.getEntity().registryAccess());
-                else OriginSourcePatch.encodePatch(attachment.patch,buf,attachment.getEntity().registryAccess());
+            // initial syncs (login, respawn, dimension change) start from an empty client copy, so always send everything
+            OriginSourcePatch toSend = initialSync ? attachment.getSource().resolveFullPatch() : attachment.patch;
+            boolean full = initialSync || attachment.fullPatch;
+            buf.writeBoolean(toSend != null);
+            if(toSend != null){
+                if(full) OriginSourcePatch.fullEncode(toSend,buf,attachment.getEntity().registryAccess());
+                else OriginSourcePatch.encodePatch(toSend,buf,attachment.getEntity().registryAccess());
                 attachment.patch = null;
             }
         }

@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
@@ -115,6 +116,41 @@ public final class InnerWorldSessions {
             plot.pendingReturn = plot.session.origin;
             plot.session = null;
             InnerWorldPlots.save();
+        }
+    }
+
+    /**
+     * The owner died (inside the inner world, or anywhere while a session is open). They respawn
+     * normally, so the session is over — drop it and the ghost, otherwise killing the stale ghost
+     * later would yank them back to the old cast spot at half health.
+     */
+    public static void onOwnerDeath(ServerPlayer player) {
+        InnerWorldPlots.Plot plot = InnerWorldPlots.get(player.getUUID());
+        if (plot == null || (plot.session == null && plot.pendingReturn == null)) {
+            return;
+        }
+        InnerWorldPlots.Session session = plot.session;
+        plot.session = null;
+        plot.pendingReturn = null;
+        InnerWorldPlots.save();
+
+        if (session == null) {
+            return;
+        }
+        // Remove the ghost now if its chunk is loaded; if not, its own validity check discards it on next load.
+        MinecraftServer server = player.level().getServer();
+        ServerLevel originLevel = server.getLevel(net.minecraft.resources.ResourceKey.create(
+                net.minecraft.core.registries.Registries.DIMENSION,
+                net.minecraft.resources.Identifier.parse(session.origin.dimension)
+        ));
+        if (originLevel != null) {
+            try {
+                Entity ghost = originLevel.getEntity(UUID.fromString(session.ghost));
+                if (ghost instanceof InnerWorldGhost) {
+                    ghost.discard();
+                }
+            } catch (IllegalArgumentException ignored) {
+            }
         }
     }
 
