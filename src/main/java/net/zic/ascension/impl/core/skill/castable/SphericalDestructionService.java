@@ -50,9 +50,9 @@ public final class SphericalDestructionService {
         Vec3 origin = caster.getEyePosition(1.0F);
         Vec3 direction = caster.getViewVector(1.0F).normalize();
 
-        double damageScale = RealmEffectivenessConfiguration.getGameplayMultiplier(caster, DAMAGE_REALM_EXPONENT);
-        double radiusScale = Math.min(MAX_RADIUS_MULTIPLIER, RealmEffectivenessConfiguration.getGameplayMultiplier(caster, RADIUS_REALM_EXPONENT));
-        double rangeScale = Math.min(MAX_RANGE_MULTIPLIER, RealmEffectivenessConfiguration.getGameplayMultiplier(caster, RANGE_REALM_EXPONENT));
+        double damageScale = 1;
+        double radiusScale = 1;
+        double rangeScale = 1;
         double resolvedDamage = config.damage().resolve(context.scaledValueContext()) * damageScale;
         int scaledRadius = Math.clamp((int) Math.round(config.radius() * radiusScale), 1, MAX_EFFECT_RADIUS);
         double scaledMaxDistance = Math.max(config.growthDistance(), config.maxDistance() * rangeScale);
