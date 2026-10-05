@@ -13,14 +13,17 @@ import net.zic.ascension.AscensionCraft;
 
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.MultiSourcePathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.util.PathInteractionUtil;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import net.zic.zenithlib.value_containers.typed.Modifier;
+import net.zic.zenithlib.value_containers.typed.ValueContainer;
+import net.zic.zenithlib.value_containers.typed.ValueContainerHelpers;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Holds the qi of a chunk.
@@ -29,40 +32,40 @@ import java.util.Collection;
  */
 public class ChunkQiContainer implements PathBonusProvider {
     private double energy;
-    final ValueContainer energyRegenRate;
-    final ValueContainer energyCap;
+    final ValueContainer<Double> energyRegenRate;
+    final ValueContainer<Double> energyCap;
 
     private boolean loaded;
 
-    private final MultiSourcePathBonusHolder affinities = new MultiSourcePathBonusHolder();
+    private final PathBonusHolder affinities = new PathBonusHolder();
     public ChunkQiContainer(double energy, double baseEnergyCap,double baseEnergyRegenRate) {
         this(energy,baseEnergyCap,baseEnergyRegenRate,false);
     }
     public ChunkQiContainer(double energy, double baseEnergyCap,double baseEnergyRegenRate,boolean loaded){
         this.energy = energy;
-        this.energyCap = new ValueContainer(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"energy_cap"),baseEnergyCap);
-        this.energyRegenRate = new ValueContainer(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"energy_cap"),baseEnergyRegenRate);
+        this.energyCap = ValueContainerHelpers.doubleValueContainer(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"energy_cap"),baseEnergyCap);
+        this.energyRegenRate = ValueContainerHelpers.doubleValueContainer(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"regen_rate"),baseEnergyRegenRate);
         this.loaded = loaded;
     }
 
     public static ChunkQiContainer getContainer(ChunkAccess access){
         return access.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
     }
+    public void addFlatAffinityModifier(Identifier path, Modifier<Double> modifier) {
+        affinities.addFlatModifier(PathInteractionUtil.AFFINITY_CATEGORY,path,modifier);
+    }
+    public void addMultiplierAffinityModifier(Identifier path, Modifier<Double> modifier) {
+        affinities.addMultiplierModifier(PathInteractionUtil.AFFINITY_CATEGORY,path,modifier);
+    }
 
-    public void addAffinity(Identifier path, double val) {
-        affinities.addBonus(PathInteractionUtil.AFFINITY_CATEGORY,path,val);
-    }
-    public void addAffinityModifier(Identifier path, ValueContainerModifier modifier) {
-        affinities.addBonusModifier(PathInteractionUtil.AFFINITY_CATEGORY,path,modifier);
-    }
     public void removeAffinityModifier(Identifier path,Identifier modifier) {
-        affinities.removeBonusModifier(PathInteractionUtil.AFFINITY_CATEGORY,path,modifier);
+        affinities.removeModifier(PathInteractionUtil.AFFINITY_CATEGORY,path,modifier);
     }
+    //TODO ACTUALLY IMPLEMENT THESE AFTER THE MERGE IS DONE
+    public void addFlatEnergyCapModifier(Modifier<Double> modifier) {}
+     public void removeEnergyCapModifier(Identifier modifier) {}
 
-    public void addEnergyCapModifier(ValueContainerModifier modifier) {}
-    public void removeEnergyCapModifier(Identifier modifier) {}
-
-    public void addEnergyRegenRateModifier(ValueContainerModifier modifier) {}
+    public void addEnergyRegenRateModifier(Modifier<Double> modifier) {}
     public void removeEnergyRegenRateModifier(Identifier modifier) {}
 
     public double getEnergy() {
@@ -93,7 +96,7 @@ public class ChunkQiContainer implements PathBonusProvider {
     }
 
     public double getAffinity(Identifier path) {
-        double direct = affinities.getBonus(PathInteractionUtil.AFFINITY_CATEGORY, path);
+        double direct = affinities.getPathBonus(PathInteractionUtil.AFFINITY_CATEGORY, path);
         if (direct != 0.0D) {
             return direct;
         }
@@ -105,18 +108,18 @@ public class ChunkQiContainer implements PathBonusProvider {
                     path.getNamespace(),
                     pathName.substring(slash + 1)
             );
-            return affinities.getBonus(PathInteractionUtil.AFFINITY_CATEGORY, shorthand);
+            return affinities.getPathBonus(PathInteractionUtil.AFFINITY_CATEGORY, shorthand);
         }
 
         return direct;
     }
 
-    public ValueContainer getAffinityContainer(Identifier path) {
-        return affinities.getPathBonusContainer(PathInteractionUtil.AFFINITY_CATEGORY, path);
+    public ValueContainer<Double> getAffinityContainer(Identifier path) {
+        return affinities.getContainer(PathInteractionUtil.AFFINITY_CATEGORY, path);
     }
 
     public Collection<Identifier> getAllAffinities() {
-        return affinities.getAllPathBonusesInCategory(PathInteractionUtil.AFFINITY_CATEGORY);
+        return affinities.getPathBonuses().stream().filter(bonus->bonus.category().equals(PathInteractionUtil.AFFINITY_CATEGORY)).map(PathBonus::path).collect(Collectors.toSet());
     }
 
     public boolean hasAtmosphericConfiguration() {
@@ -128,23 +131,24 @@ public class ChunkQiContainer implements PathBonusProvider {
     }
 
     @Override
-    public ValueContainer getPathBonusContainer(Identifier category, Identifier path) {
-        return affinities.getPathBonusContainer(category,path);
+    public ValueContainer<Double> getPathBonusContainer(Identifier category, Identifier path) {
+        return affinities.getContainer(category,path);
     }
 
     @Override
     public double getPathBonus(Identifier category, Identifier path) {
-        return affinities.getBonus(category,path);
+        return affinities.getPathBonus(category,path);
     }
 
     @Override
     public Collection<PathBonus> getAllPathBonuses() {
-        return affinities.getAllPathBonuses();
+        return affinities.getPathBonuses();
     }
 
     @Override
     public Collection<Identifier> getAllPathBonusesInCategory(Identifier category) {
-        return affinities.getAllPathBonusesInCategory(category);
+        return getAllPathBonuses().stream().filter(bonus->bonus.category().equals(category)).map(PathBonus::path).collect(Collectors.toSet());
+
     }
 
 

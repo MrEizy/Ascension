@@ -7,7 +7,8 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.custom_attributes.SuppressedZenithAttribute;
+import net.zic.zenithlib.custom_attributes.SuppressedAttributeHelper;
+
 
 public class SuppressibleAttributeDisplayContainer extends AttributeDisplayContainer {
     private final Holder<Attribute> attribute;
@@ -30,8 +31,8 @@ public class SuppressibleAttributeDisplayContainer extends AttributeDisplayConta
     private boolean isSuppressed() {
         if(!Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).isSuppressable(attribute)) return false;
 
-        return  ((SuppressedZenithAttribute)Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).getAttribute(attribute))
-                .getSuppression() < 1;
+        return  SuppressedAttributeHelper.getSuppression(Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).getAttribute(attribute)) < 1;
+
     }
 
     @Override

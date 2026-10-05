@@ -6,7 +6,6 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
 import net.zic.ascension.api.ascension.core.resource.DatapackResourceData;
 

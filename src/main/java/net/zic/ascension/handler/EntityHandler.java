@@ -56,42 +56,4 @@ public class EntityHandler {
 
     }
 
-    @SubscribeEvent
-    public static void onPathRealmUp(PathRealmChangeEvent.PathRealmUpEvent event) {
-        if (event.getOldRealm().majorRealm() == event.getRealm().majorRealm()) {
-            return;
-        }
-        refreshRealmEffectiveness(event.getSource(), event.getPathId());
-    }
-
-    @SubscribeEvent
-    public static void onPathRealmDown(PathRealmChangeEvent.PathRealmDownEvent event) {
-        if (event.getOldRealm().majorRealm() == event.getRealm().majorRealm()) {
-            return;
-        }
-        refreshRealmEffectiveness(event.getSource(), event.getPathId());
-    }
-
-    @SubscribeEvent
-    public static void onPathAdded(PathAddedEvent.Post event) {
-        refreshRealmEffectiveness(event.getSource(), event.getPathIdentifier());
-    }
-
-    @SubscribeEvent
-    public static void onPathRemoved(PathRemovedEvent.Post event) {
-        refreshRealmEffectiveness(event.getSource(), event.getPathIdentifier());
-    }
-
-    private static void refreshRealmEffectiveness(OriginSource source, Identifier changedPath) {
-        if (source == null || changedPath == null || !changedPath.getPath().startsWith(FOUNDATION_PATH_PREFIX)) {
-            return;
-        }
-
-        for (LivingEntity entity : source.getAttachedEntities()) {
-            SimpleAscensionEntityData data = entity.getData(AscensionAttachments.SIMPLE_ENTITY_DATA);
-            if (data != null) {
-                data.refreshRealmEffectiveness();
-            }
-        }
-    }
 }

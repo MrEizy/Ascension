@@ -63,7 +63,7 @@ public final class AscensionDamageHandler {
         if (finishIfResolved(event, trace)) {
             return;
         }
-
+        /*TODO FIX AFTER SORTOF EXPLAINS IT TO ME
         double beforeProjectile = event.getDamage();
         event.setDamage(NormalProjectileService.resolveDamage(event, beforeProjectile));
         trace.transition("Projectile", beforeProjectile, event.getDamage());
@@ -99,6 +99,8 @@ public final class AscensionDamageHandler {
             return;
         }
 
+
+         */
         double beforeBarriers = event.getDamage();
         Barriers.applyDamage(event);
         trace.transition("Barriers", beforeBarriers, event.getDamage());
@@ -109,11 +111,8 @@ public final class AscensionDamageHandler {
         if (!(event.getSource().getEntity() instanceof LivingEntity attacker)) {
             return;
         }
-
-        double relativeEffectiveness = RealmEffectivenessConfiguration.getRelativeEffectiveness(
-                attacker,
-                event.getEntity()
-        );
+        //TODO SORTOF FIX THIS PLEASE :)
+        double relativeEffectiveness = 0;
         if (!Double.isFinite(relativeEffectiveness) || relativeEffectiveness <= 0.0D) {
             return;
         }
@@ -128,7 +127,7 @@ public final class AscensionDamageHandler {
             return;
         }
 
-        event.setDamage(event.getDamage() * pressure);
+        //event.setDamage(event.getDamage() * pressure);
         trace.multiply("Realm pressure", pressure);
     }
 

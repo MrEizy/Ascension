@@ -18,7 +18,6 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.path.simple.SimplePathInstance;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.Stat;
-import net.zic.zenithlib.stats.ZenithStatHolder;
 
 public class StatDisplayCommand {
 
@@ -35,11 +34,7 @@ public class StatDisplayCommand {
 
                             OriginSource originSource =holder.getData().getSource();
 
-                            ZenithStatHolder statHolder = player.getData(ZenithAttachments.STAT_HOLDER);
-                            player.sendSystemMessage(Component.literal("===Stats==="));
-                            for(Stat stat: statHolder.getStats()){
-                                player.sendSystemMessage(Component.literal(stat.getName()+":"+statHolder.getStat(stat)));
-                            }
+
                             player.sendSystemMessage(Component.literal("===Data==="));
                             player.sendSystemMessage(Component.literal("Physique :" +(AscensionOriginSourceHelper.getPhysiqueId(originSource) == null ? "none":AscensionOriginSourceHelper.getPhysiqueId(originSource))));
                             for(Identifier bloodline : AscensionOriginSourceHelper.getBloodlines(originSource)){

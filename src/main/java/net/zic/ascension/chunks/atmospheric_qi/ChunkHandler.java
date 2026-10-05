@@ -24,13 +24,15 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
-import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
 import net.zic.ascension.configuration.biome.BiomeConfiguration;
 import net.zic.ascension.configuration.biome.BiomeConfigurations;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.configuration.dimension.DimensionConfiguration;
 import net.zic.ascension.configuration.dimension.DimensionConfigurations;
+import net.zic.zenithlib.value_containers.typed.Modifier;
 
+import java.util.UUID;
 import java.util.stream.Stream;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
@@ -59,10 +61,10 @@ public class ChunkHandler {
                 if(processed.contains(biome)) return;
                 //DO smth here
                 BiomeConfiguration configuration = BiomeConfigurations.getInstance().getConfiguration(biome);
-                chunkQiContainer.energyCap.setBaseValue(chunkQiContainer.energyCap.getBaseValue()+configuration.energyCap());
-                chunkQiContainer.energyRegenRate.setBaseValue(chunkQiContainer.energyRegenRate.getBaseValue()+configuration.energyRegen());
+                chunkQiContainer.energyCap.addFlatModifier(Modifier.base(biome.getKey().identifier(),configuration.energyCap()));
+                chunkQiContainer.energyRegenRate.addFlatModifier(Modifier.base(biome.getKey().identifier(),configuration.energyRegen()));
                 for(Identifier path : configuration.affinities().keySet()){
-                    chunkQiContainer.addAffinity(path, configuration.affinities().getDouble(path));
+                    chunkQiContainer.addFlatAffinityModifier(path, Modifier.base(biome.getKey().identifier(),configuration.affinities().getDouble(path)));
                   }
                 processed.add(biome);
             });
@@ -71,10 +73,10 @@ public class ChunkHandler {
 
         if(dimensionConfiguration == null) return;
 
-        chunkQiContainer.energyCap.setBaseValue(chunkQiContainer.energyCap.getBaseValue()+dimensionConfiguration.energyCap());
-        chunkQiContainer.energyRegenRate.setBaseValue(chunkQiContainer.energyRegenRate.getBaseValue()+dimensionConfiguration.energyRegen());
+        chunkQiContainer.energyCap.addFlatModifier(Modifier.base(event.getChunk().getLevel().dimension().identifier(),dimensionConfiguration.energyCap()));
+        chunkQiContainer.energyRegenRate.addFlatModifier(Modifier.base(event.getChunk().getLevel().dimension().identifier(),dimensionConfiguration.energyRegen()));
         for(Identifier path : dimensionConfiguration.affinities().keySet()){
-            chunkQiContainer.addAffinity(path, dimensionConfiguration.affinities().getDouble(path));
+            chunkQiContainer.addFlatAffinityModifier(path, Modifier.base(event.getChunk().getLevel().dimension().identifier(),dimensionConfiguration.affinities().getDouble(path)));
         }
         //no need to mark unsaved
         //chunk.syncData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER);
@@ -86,16 +88,16 @@ public class ChunkHandler {
         if(!(event.getEntity() instanceof LivingEntity entity)) return;
 
 
-        AscensionEntityPathBonusHolder bonusHolder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
+        EntityPathBonusHolder bonusHolder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
 
         ChunkPos oldPos = event.getOldPos().chunk();
         ChunkPos pos = event.getNewPos().chunk();
         LevelChunk chunk = entity.level().getChunk(pos.x(),pos.z());
         LevelChunk oldChunk = entity.level().getChunk(oldPos.x(),oldPos.z());
-
-        bonusHolder.removePathBonusProvider(oldChunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
-        bonusHolder.registerPathBonusProvider(chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
-
+        bonusHolder.startProcess("updating_chunk_path_bonuses");
+        bonusHolder.removeProvider(oldChunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
+        bonusHolder.registerProvider(chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
+        bonusHolder.resolveProcess("updating_chunk_path_bonuses");
     }
 
 
@@ -106,11 +108,11 @@ public class ChunkHandler {
 
 
 
-        AscensionEntityPathBonusHolder bonusHolder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
+        EntityPathBonusHolder bonusHolder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
 
         ChunkAccess chunk = entity.level().getChunk(entity.blockPosition());
 
-        bonusHolder.registerPathBonusProvider(chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
+        bonusHolder.registerProvider(chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
 
 
 
@@ -120,11 +122,11 @@ public class ChunkHandler {
         if(!(event.getEntity() instanceof LivingEntity entity)) return;
         AscensionEntityDataProvider holder = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY, null);
         if(holder == null) return;
-        AscensionEntityPathBonusHolder bonusHolder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
+        EntityPathBonusHolder bonusHolder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
 
         ChunkAccess chunk = entity.level().getChunk(entity.blockPosition());
 
-        bonusHolder.removePathBonusProvider(chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
+        bonusHolder.removeProvider(chunk.getData(AscensionAttachments.ASCENSION_CHUNK_QI_CONTAINER));
 
     }
 

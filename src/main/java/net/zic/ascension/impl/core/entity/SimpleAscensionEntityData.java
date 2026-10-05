@@ -14,6 +14,7 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.MultiSourcePathBonusHolder;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
@@ -25,8 +26,7 @@ import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.stats.*;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -34,11 +34,6 @@ import java.util.*;
 
 public class SimpleAscensionEntityData implements AscensionEntityData {
 
-    private final StatSheet statSheet = new StatSheet();
-    private final Set<Stat> dirtyStats = new HashSet<>();
-
-    private final MultiSourcePathBonusHolder pathBonusHolder = new MultiSourcePathBonusHolder();
-    private final MultiSourcePathBonusHolder cachedPathBonusHolder = new MultiSourcePathBonusHolder();
 
 
     private final OriginSource source;
@@ -67,23 +62,6 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         this.cachedHealth = Math.max(0.0F, entity.getHealth());
         this.source.setRegistryAccess(entity.registryAccess());
     }
-    public void startProcess(String process){
-        if(this.process == null) this.process = process;
-    }
-    public boolean resolveProcess(String process){
-
-        if(this.process == null) return false;
-        if(!this.process.equals(process)) return false;
-        this.process = null;
-        resolve();
-        return true;
-    }
-
-    protected void resolve(){
-        if(!dirtyStats.isEmpty()) attachedEntity.getData(ZenithAttachments.STAT_HOLDER).updateStats(dirtyStats);
-        dirtyStats.clear();
-        //TODO add path bonus values here as well
-    }
 
 
 
@@ -110,17 +88,19 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
 
     private void initializeInternal(boolean fullHealth) {
         AscensionEntityData.super.initialize();
+
         ZenithAttributeHolder attributeHolder = attachedEntity.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
-        ZenithStatHolder statHolder = attachedEntity.getData(ZenithAttachments.STAT_HOLDER);
+        EntityStatHolder statHolder = attachedEntity.getData(ZenithAttachments.STAT_HOLDER);
+        EntityPathBonusHolder pathBonusHolder = attachedEntity.getData(CoreAttachments.PATH_BONUS_HOLDER);
+
         attributeHolder.startProcess("initialize_on_entity");
         statHolder.startProcess("initialize_on_entity");
-
+        pathBonusHolder.startProcess("initialize_on_entity");
 
         markDirty(getSource().load(),true);
-        initializePathBonuses();
         getSource().attachToEntity(getEntity());
 
-
+        pathBonusHolder.resolveProcess("initialize_on_entity");
         statHolder.resolveProcess("initialize_on_entity");
         attributeHolder.resolveProcess("initialize_on_entity");
 
@@ -130,141 +110,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
     }
 
 
-    //──Path Bonus────────────────────────────────────────────────────────
-    //TODO trigger path bonus update
-    @Override
-    public ValueContainer getPathBonusContainer(Identifier category, Identifier path) {
-        return cachedPathBonusHolder.getPathBonusContainer(category,path);
-    }
 
-    @Override
-    public double getPathBonus(Identifier category, Identifier path) {
-        return cachedPathBonusHolder.getBonus(category,path);
-    }
-
-    @Override
-    public Collection<PathBonus> getAllPathBonuses() {
-        return cachedPathBonusHolder.getAllPathBonuses();
-    }
-
-    @Override
-    public Collection<Identifier> getAllPathBonusesInCategory(Identifier category) {
-        return cachedPathBonusHolder.getAllPathBonusesInCategory(category);
-    }
-
-    @Override
-    public void addBonus(Identifier category, Identifier path, double val) {
-        pathBonusHolder.addBonus(category,path,val);
-        updatePathBonus(category,path);
-    }
-
-    @Override
-    public void addBonusModifier(Identifier category, Identifier path, ValueContainerModifier modifier) {
-        pathBonusHolder.addBonusModifier(category,path,modifier);
-        updatePathBonus(category,path);
-    }
-
-    @Override
-    public void removeBonus(Identifier category, Identifier path, double val) {
-        pathBonusHolder.removeBonus(category,path,val);
-        updatePathBonus(category,path);
-    }
-
-    @Override
-    public void removeBonusModifier(Identifier category, Identifier path, Identifier modifier) {
-        pathBonusHolder.removeBonusModifier(category,path,modifier);
-        updatePathBonus(category,path);
-    }
-
-    @Override
-    public void updatePathBonus(Identifier category, Identifier path) {
-        ValueContainer local = pathBonusHolder.getPathBonusContainer(category,path);
-        ValueContainer sourceContainer = AscensionOriginSourceHelper.getPathBonusContainer(source,category,path);
-        double baseValue = (local == null ? 0 : local.getBaseValue())+(sourceContainer == null ? 0: sourceContainer.getBaseValue());
-
-        ValueContainer newContainer = new ValueContainer(path,baseValue);
-        if(local != null) for(ValueContainerModifier modifier : local.getAllModifiers()) newContainer.addModifierNoCacheUpdate(modifier);
-        if(sourceContainer != null) for(ValueContainerModifier modifier : sourceContainer.getAllModifiers()) newContainer.addModifierNoCacheUpdate(modifier);
-
-        if(attachedEntity == null) return;
-        cachedPathBonusHolder.setPathBonusContainer(category,path,newContainer);
-        getEntity().getData(CoreAttachments.PATH_BONUS_HOLDER).updatePathBonus(new PathBonus(category,path));
-        getEntity().syncData(CoreAttachments.PATH_BONUS_HOLDER);
-    }
-
-    @Override
-    public void updatePathBonuses(Collection<PathBonus> bonuses) {
-        //TODO
-    }
-
-    public void initializePathBonuses(){
-        Collection<PathBonus> bonuses = AscensionOriginSourceHelper.getAllPathBonuses(source);
-        Collection<PathBonus> selfBonuses = pathBonusHolder.getAllPathBonuses();
-
-        for(PathBonus bonus : bonuses) updatePathBonus(bonus.category(),bonus.path());
-        for(PathBonus bonus : selfBonuses) updatePathBonus(bonus.category(),bonus.path());
-    }
-
-    //──Stats────────────────────────────────────────────────────────
-    //TODO trigger stat update
-
-    @Override
-    public Collection<Stat> getStats() {
-        return statSheet.getAllStats();
-    }
-
-    @Override
-    public StatInstance getStatInstance(Stat stat) {
-        return statSheet.getStatInstance(stat);
-    }
-
-    @Override
-    public double getStat(Stat stat) {
-        return statSheet.getStatInstance(stat) == null ? 0 : statSheet.getStatInstance(stat).getValue();
-    }
-
-    @Override
-    public double getBaseStat(Stat stat) {
-        return statSheet.getStatInstance(stat) == null ? 0 : statSheet.getStatInstance(stat).getBaseValue();
-    }
-
-    @Override
-    public void addStat(Stat stat, double val) {
-        statSheet.addStat(stat,val);
-        updateStatHolder(stat);
-    }
-
-    @Override
-    public void removeStat(Stat stat, double val) {
-        statSheet.removeStat(stat,val);
-        updateStatHolder(stat);
-    }
-
-    @Override
-    public void addStatModifier(Stat stat, ValueContainerModifier modifier) {
-        if(statSheet.getStatInstance(stat) == null) return;
-        statSheet.getStatInstance(stat).addModifier(modifier);
-        updateStatHolder(stat);
-    }
-
-    @Override
-    public void removeStatModifier(Stat stat, Identifier modifier) {
-        if(statSheet.getStatInstance(stat) == null) return;
-        statSheet.getStatInstance(stat).removeModifier(modifier);
-        updateStatHolder(stat);
-    }
-
-
-
-
-
-    public void updateStatHolder(Stat stat){
-        if(getEntity() == null) return;
-        String processId = "singel_stat_update"+random.nextLong();
-        startProcess(processId);
-        dirtyStats.add(stat);
-        resolveProcess(process);
-    }
 
     @Override
     public void markDirty(OriginSourcePatch patch, boolean fullPatch) {

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
@@ -20,16 +21,16 @@ import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
 
 import net.zic.zenithlib.common.ZenithRegistries;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import net.zic.zenithlib.stats.Stat;
+import net.zic.zenithlib.stats.ZenithStatHelper;
+import net.zic.zenithlib.value_containers.typed.Modifier;
+import net.zic.zenithlib.value_containers.typed.ModifierHolder;
 
 import java.util.*;
 
-public record SimplePhysique(Component name, Component description, List<Identifier> unlockedPaths,
-                             List<Identifier> skills, List<ValueContainer.BaseModifier> baseStats,
-                             Map<Identifier, List<ValueContainerModifier>> statModifiers,
-                             List<PathBonusBase> basePathBonuses,
-                             List<PathBonusModifier> pathBonusModifiers,
+public record SimplePhysique(Component name, Component description, List<Identifier> unlockedPaths, List<Identifier> skills,
+                             Map<Identifier,ModifierHolder<Double>> statModifiers,
+                             Map<PathBonus,ModifierHolder<Double>> pathBonusModifiers,
                              Optional<AscensionItemTooltipDefinition> itemTooltip,
                              RequirementHolder requirements
                             ) implements Physique {
@@ -39,10 +40,8 @@ public record SimplePhysique(Component name, Component description, List<Identif
             Component description,
             List<Identifier> unlockedPaths,
             List<Identifier> skills,
-            List<ValueContainer.BaseModifier> baseStats,
-            Map<Identifier, List<ValueContainerModifier>> statModifiers,
-            List<PathBonusBase> basePathBonuses,
-            List<PathBonusModifier> pathBonusModifiers,
+            Map<Identifier,ModifierHolder<Double>> statModifiers,
+            Map<PathBonus,ModifierHolder<Double>> pathBonusModifiers,
             Optional<AscensionItemTooltipDefinition> itemTooltip,
             RequirementHolder requirements
     ) {
@@ -50,8 +49,6 @@ public record SimplePhysique(Component name, Component description, List<Identif
         this.description = description;
         this.unlockedPaths = unlockedPaths;
         this.skills = skills;
-        this.baseStats = baseStats;
-        this.basePathBonuses = basePathBonuses;
         this.statModifiers = statModifiers;
         this.pathBonusModifiers = pathBonusModifiers;
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
@@ -69,18 +66,34 @@ public record SimplePhysique(Component name, Component description, List<Identif
 
         Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
 
-        for (ValueContainer.BaseModifier baseModifier : baseStats) {
-            source.addStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()), baseModifier.val());
-        }
-        for (Identifier stat : statModifiers.keySet()) {
-            for (ValueContainerModifier modifier : statModifiers.get(stat)) {
-                source.addStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat), modifier);
+        for(Map.Entry<Identifier,ModifierHolder<Double>> modifiers : statModifiers.entrySet()){
+            Stat stat = ZenithStatHelper.stat(modifiers.getKey());
+            for(Modifier<Double> modifier : modifiers.getValue().flat()){
+                source.addFlatStatModifier(stat,modifier);
+            }
+            for(Modifier<Double> modifier : modifiers.getValue().multiplier()){
+                source.addMultiplierStatModifier(stat,modifier);
             }
         }
-
-        for(PathBonusBase base : basePathBonuses) AscensionOriginSourceHelper.addBonus(source,base.category(),base.path(), base.value());
-        for(PathBonusModifier modifier : pathBonusModifiers) AscensionOriginSourceHelper.addBonusModifier(source,modifier.category(),modifier.path(),modifier.modifier());
-
+        for(Map.Entry<PathBonus,ModifierHolder<Double>> modifiers : pathBonusModifiers.entrySet()){
+            PathBonus bonus = modifiers.getKey();
+            for(Modifier<Double> modifier : modifiers.getValue().flat()){
+                AscensionOriginSourceHelper.addBonusFlatModifier(
+                        source,
+                        bonus.category(),
+                        bonus.path(),
+                        modifier
+                );
+            }
+            for(Modifier<Double> modifier : modifiers.getValue().multiplier()){
+                AscensionOriginSourceHelper.addBonusMultiplierModifier(
+                        source,
+                        bonus.category(),
+                        bonus.path(),
+                        modifier
+                );
+            }
+        }
 
         for (Identifier skill : skills) {
             AscensionOriginSourceHelper.addSkill(source,skill,physiqueId);
@@ -93,18 +106,34 @@ public record SimplePhysique(Component name, Component description, List<Identif
     public Collection<Identifier> onRemoved(OriginSource source, PhysiqueData data) {
         Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
 
-        for (ValueContainer.BaseModifier baseModifier : baseStats) {
-            source.removeStat(ZenithRegistries.STAT_REGISTRY.getValue(baseModifier.container()), baseModifier.val());
-        }
-        for (Identifier stat : statModifiers.keySet()) {
-            for (ValueContainerModifier modifier : statModifiers.get(stat)) {
-
-                source.removeStatModifier(ZenithRegistries.STAT_REGISTRY.getValue(stat), modifier.getIdentifier());
+        for(Map.Entry<Identifier,ModifierHolder<Double>> modifiers : statModifiers.entrySet()){
+            Stat stat = ZenithStatHelper.stat(modifiers.getKey());
+            for(Modifier<Double> modifier : modifiers.getValue().flat()){
+                source.removeStatModifier(stat,modifier.id());
+            }
+            for(Modifier<Double> modifier : modifiers.getValue().multiplier()){
+                source.removeStatModifier(stat,modifier.id());
             }
         }
-
-        for(PathBonusBase base : basePathBonuses) AscensionOriginSourceHelper.removeBonus(source,base.category(),base.path(), base.value());
-        for(PathBonusModifier modifier : pathBonusModifiers) AscensionOriginSourceHelper.removeBonusModifier(source,modifier.category(),modifier.path(),modifier.modifier().getIdentifier());
+        for(Map.Entry<PathBonus,ModifierHolder<Double>> modifiers : pathBonusModifiers.entrySet()){
+            PathBonus bonus = modifiers.getKey();
+            for(Modifier<Double> modifier : modifiers.getValue().flat()){
+                AscensionOriginSourceHelper.removeBonusModifier(
+                        source,
+                        bonus.category(),
+                        bonus.path(),
+                        modifier.id()
+                );
+            }
+            for(Modifier<Double> modifier : modifiers.getValue().multiplier()){
+                AscensionOriginSourceHelper.removeBonusModifier(
+                        source,
+                        bonus.category(),
+                        bonus.path(),
+                        modifier.id()
+                );
+            }
+        }
 
         for (Identifier skill : skills) {
             AscensionOriginSourceHelper.removeSkill(source,skill,physiqueId);

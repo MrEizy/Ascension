@@ -162,31 +162,19 @@ public class OriginSource implements StatProvider {
     //──Stat Sheet────────────────────────────────────────────────────────
     //TODO add methods for adding stats and multipliers
 
-    public void addFlatStatModifier(Stat stat, Modifier<Double> modifier){
-        addFlatStatModifier(stat,modifier,true);
-        dirtyStats.add(stat);
-    }
-    public void addFlatStatModifier(Stat stat, Modifier<Double> modifier,boolean update){
-        statSheet.getStatInstance(stat).addFlatModifier(modifier,update);
-        dirtyStats.add(stat);
-    }
 
-    public void addMultiplierStatModifier(Stat stat, Modifier<Double> modifier){
-        addMultiplierStatModifier(stat,modifier,true);
+    public void addFlatStatModifier(Stat stat, Modifier<Double> modifier){
+        statSheet.getStatInstance(stat).addFlatModifier(modifier);
         dirtyStats.add(stat);
     }
-    public void addMultiplierStatModifier(Stat stat, Modifier<Double> modifier,boolean update){
-        statSheet.getStatInstance(stat).addMultiplierModifier(modifier,update);
+    public void addMultiplierStatModifier(Stat stat, Modifier<Double> modifier){
+        statSheet.getStatInstance(stat).addMultiplierModifier(modifier);
         dirtyStats.add(stat);
     }
 
 
     public void removeStatModifier(Stat stat, Identifier modifier){
-        removeStatModifier(stat,modifier,true);
-        dirtyStats.add(stat);
-    }
-    public void removeStatModifier(Stat stat, Identifier modifier,boolean update){
-        statSheet.getStatInstance(stat).removeModifier(modifier,update);
+        statSheet.getStatInstance(stat).removeModifier(modifier);
         dirtyStats.add(stat);
     }
 

@@ -55,7 +55,7 @@ public class MultiSourcePathBonusHolder extends Processable implements PathBonus
     }
 
 
-    //====================== INTERNAL SHEET ======================
+    //====================== INTERNAL HOLDER ======================
     public void addFlatModifier(Identifier category, Identifier path, Modifier<Double> modifier){
         internalHolder.addFlatModifier(category,path,modifier);
         startAndResolveProcess();

@@ -117,6 +117,15 @@ public class TribulationManager extends SavedData {
         manager.setDirty();
     }
 
+    @SubscribeEvent
+    public static void onTick(ServerTickEvent.Post event){
+        for(Map.Entry<UUID,TribulationInstance> entry : getInstance().tribulations.entrySet()){
+            entry.getValue().getTribulation().getType().tick(
+                    getInstance(),entry.getKey(),entry.getValue()
+                    );
+        }
+        getInstance().resolveFinishedTribulations();
+    }
     private final HashMap<UUID,TribulationInstance> tribulations = new HashMap<>();
     private final ArrayList<UUID> toRemoveUUID = new ArrayList<>();
     private final HashMap<UUID, HashSet<UUID>> entityTribulations = new HashMap<>();
@@ -190,4 +199,7 @@ public class TribulationManager extends SavedData {
     public static void onServerStopped(ServerStoppedEvent event) {
         instance = null;
     }
+
+
+
 }

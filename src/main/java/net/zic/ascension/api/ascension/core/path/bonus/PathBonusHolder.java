@@ -1,15 +1,33 @@
 package net.zic.ascension.api.ascension.core.path.bonus;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.resources.Identifier;
 import net.zic.zenithlib.util.Processable;
-import net.zic.zenithlib.value_containers.typed.Modifier;
-import net.zic.zenithlib.value_containers.typed.ValueContainer;
-import net.zic.zenithlib.value_containers.typed.ValueContainerHelpers;
+import net.zic.zenithlib.value_containers.typed.*;
 
 import java.util.*;
 
 public class PathBonusHolder{
-
+    public static final Codec<Map<PathBonus, ModifierHolder<Double>>> MODIFIER_CODEC =
+            Codec.unboundedMap(Identifier.CODEC, ValueContainerCodecHelper.containersCodec(Codec.DOUBLE)).xmap(
+            map->{
+                Map<PathBonus, ModifierHolder<Double>> modifiers = new HashMap<>();
+                for(Identifier category : map.keySet()){
+                    for(Identifier path : map.get(category).keySet()){
+                        modifiers.put(PathBonus.of(category,path),map.get(category).get(path));
+                    }
+                }
+                return modifiers;
+            },
+            modifiers->{
+                Map<Identifier,Map<Identifier,ModifierHolder<Double>>> map = new HashMap<>();
+                for(PathBonus bonus : modifiers.keySet()){
+                    Map<Identifier,ModifierHolder<Double>> subMap = map.computeIfAbsent(bonus.category(),key->new HashMap<>());
+                    subMap.put(bonus.path(),modifiers.get(bonus));
+                }
+                return map;
+            }
+    );
     private final Map<PathBonus, ValueContainer<Double>> pathBonuses = new HashMap<>();
 
     private final Set<PathBonus> dirtyBonuses = new HashSet<>();

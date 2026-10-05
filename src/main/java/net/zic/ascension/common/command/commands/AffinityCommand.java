@@ -10,7 +10,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
-import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
 import net.zic.ascension.util.PathInteractionUtil;
 
 public class AffinityCommand {
@@ -29,7 +30,7 @@ public class AffinityCommand {
     private static int viewAffinity(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var players = EntityArgument.getPlayers(context, "target");
         for(ServerPlayer player : players){
-            AscensionEntityPathBonusHolder pathBonusHolder = player.getData(CoreAttachments.PATH_BONUS_HOLDER);
+            EntityPathBonusHolder pathBonusHolder = player.getData(CoreAttachments.PATH_BONUS_HOLDER);
             player.sendSystemMessage(Component.literal("===Affinities (").append(player.getName()).append(Component.literal(")===")));
             for(Identifier path : pathBonusHolder.getAllPathBonusesInCategory(PathInteractionUtil.AFFINITY_CATEGORY)){
                 player.sendSystemMessage(Component.literal(path+": "+pathBonusHolder.getPathBonus(PathInteractionUtil.AFFINITY_CATEGORY,path)));

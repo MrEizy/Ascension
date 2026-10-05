@@ -6,6 +6,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
@@ -15,6 +16,7 @@ import net.zic.ascension.api.ascension.core.path.Path;
 
 import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.data_source.DataSourcePathBonusHolder;
 import net.zic.ascension.api.ascension.core.physique.Physique;
@@ -653,6 +655,7 @@ public class AscensionOriginSourceHelper {
         so you can properly update them on the entity later
      */
 
+
     public static void addBonusFlatModifier(OriginSource source, Identifier category, Identifier path, Modifier<Double> modifier){
         getPathBonusHolder(source).addFlatModifier(category,path,modifier);
         markPathBonusHolderDirty(source);
@@ -677,7 +680,7 @@ public class AscensionOriginSourceHelper {
 
 
     public static double getPathBonus(OriginSource source,Identifier category, Identifier path) {
-        return getPathBonusHolder(source).getBonus(category,path);
+        return getPathBonusHolder(source).getPathBonus(category,path);
     }
 
 
@@ -696,9 +699,8 @@ public class AscensionOriginSourceHelper {
     //TODO update to utilize the new data attachment
     public static void updateEntityPathBonus(OriginSource source,Identifier category,Identifier path){
         for(LivingEntity entity : source.getAttachedEntities()){
-            AscensionEntityDataProvider provider = entity.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-            if(provider == null) continue;
-            provider.getData().updatePathBonus(category,path);
+            EntityPathBonusHolder holder = entity.getData(CoreAttachments.PATH_BONUS_HOLDER);
+            holder.updatePathBonus(PathBonus.of(category,path));
         }
     }
     //──Affinity Quick Access────────────────────────────────────────────────────────

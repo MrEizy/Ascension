@@ -32,7 +32,8 @@ import net.zic.ascension.impl.datapack.effect.AscensionSkillEffectModuleTypes;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
-import net.zic.zenithlib.value_containers.ValueContainer;
+import net.zic.zenithlib.value_containers.typed.Modifier;
+import net.zic.zenithlib.value_containers.typed.ValueContainerCodecHelper;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -403,10 +404,10 @@ public final class SkillEffectModules {
             );
         }
     }
-
-    public record BaseStats(List<ValueContainer.BaseModifier> stats) implements SkillEffectModule {
+    //TODO redo to fit new system
+    public record BaseStats(List<Modifier<Double>> stats) implements SkillEffectModule {
         public static final MapCodec<BaseStats> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ValueContainer.BASE_MODIFIER_CODEC.listOf().fieldOf("stats").forGetter(BaseStats::stats)
+                ValueContainerCodecHelper.flatModifierCodec(Codec.DOUBLE).listOf().fieldOf("stats").forGetter(BaseStats::stats)
         ).apply(instance, BaseStats::new));
 
         public BaseStats {
@@ -443,10 +444,10 @@ public final class SkillEffectModules {
             if (source == null) {
                 return;
             }
-            for (ValueContainer.BaseModifier modifier : stats) {
-                Stat stat = ZenithRegistries.STAT_REGISTRY.getValue(modifier.container());
+            for (Modifier<Double> modifier : stats) {
+                Stat stat = ZenithRegistries.STAT_REGISTRY.getValue(modifier.id());
                 if (stat != null) {
-                    source.addStat(stat, modifier.val() * multiplier);
+                    source.addFlatStatModifier(stat, modifier);
                 }
             }
         }
