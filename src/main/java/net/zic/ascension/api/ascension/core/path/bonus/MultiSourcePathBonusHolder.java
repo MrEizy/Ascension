@@ -8,149 +8,141 @@ import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
+import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.network.ByteBufHelpers;
-import net.zic.zenithlib.stats.ZenithStatHolder;
+import net.zic.zenithlib.stats.Stat;
+import net.zic.zenithlib.stats.StatProvider;
+
 import net.zic.zenithlib.util.Processable;
+import net.zic.zenithlib.value_containers.typed.Modifier;
 import net.zic.zenithlib.value_containers.typed.ValueContainer;
 import net.zic.zenithlib.value_containers.typed.ValueContainerHelpers;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 //TODO:
 // Consider adding a calculatedCategories and a categories.
 // doing it as such lets us attach bonuses directly to an entity
 // without going through ascension entity data.(also removes bloat, do something similar with stats)
 
-public class MultiSourcePathBonusHolder extends Processable {
-    private final LivingEntity attachedEntity;
-    private final HashSet<PathBonusProvider> providers = new HashSet<>();
+public class MultiSourcePathBonusHolder extends Processable implements PathBonusProvider {
 
-    //maps a category -> category bonus holder
-    private final HashMap<Identifier,PathBonusCategoryHolder> categories = new HashMap<>();
+    private final PathBonusHolder internalHolder = new PathBonusHolder();
+    private final PathBonusHolder cachedPathBonusHolder = new PathBonusHolder();
 
-    private final HashSet<Identifier> dirtyCategories = new HashSet<>();
+    private final Set<PathBonusProvider> providers = new HashSet<>();
 
+    private boolean cachedHolderDirty = false;
 
-    public MultiSourcePathBonusHolder(LivingEntity attachedEntity) {
-        this.attachedEntity = attachedEntity;
-        setOnResolved(this::sync);
+    public MultiSourcePathBonusHolder(){
+        setOnResolved(this::onUpdate);
     }
-    public void registerPathBonusProvider(PathBonusProvider provider){
+
+    public void onUpdate(){
+
+        if(cachedHolderDirty){
+            cachedHolderUpdated();
+            cachedHolderDirty = false;
+        }else{
+            Collection<PathBonus> toUpdate = new ArrayList<>(internalHolder.dirtyBonuses());
+            toUpdate.addAll(internalHolder.removedBonuses());
+            updatePathBonuses(toUpdate);
+            internalHolder.clearCache();
+        }
+    }
+
+
+    //====================== INTERNAL SHEET ======================
+    public void addFlatModifier(Identifier category, Identifier path, Modifier<Double> modifier){
+        internalHolder.addFlatModifier(category,path,modifier);
+        startAndResolveProcess();
+    }
+    public void addMultiplierModifier(Identifier category,Identifier path,Modifier<Double> modifier){
+        internalHolder.addMultiplierModifier(category,path,modifier);
+        startAndResolveProcess();
+
+    }
+    public void removeModifier(Identifier category,Identifier path,Identifier modifier){
+        internalHolder.removeModifier(category,path,modifier);
+        startAndResolveProcess();
+
+    }
+
+
+
+    //====================== CACHED HOLDER ======================
+    public void registerProvider(PathBonusProvider provider){
         providers.add(provider);
-        updateBonuses(provider.getAllPathBonuses());
+        updatePathBonuses(provider.getAllPathBonuses());
 
     }
-    public void removePathBonusProvider(PathBonusProvider provider){
+    public void removeProvider(PathBonusProvider provider){
         providers.remove(provider);
-        updateBonuses(provider.getAllPathBonuses());
+        updatePathBonuses(provider.getAllPathBonuses());
     }
 
-    public void sync(){
-        if(attachedEntity == null) return;
-        attachedEntity.syncData(AscensionAttachments.PATH_BONUS_HOLDER);
+    public void cachedHolderUpdated(){
+        //TODO run some code in here mainly sync
     }
-    public void updateBonus(PathBonus bonus){
-        String processId = "small_path_bonus_update"+UUID.randomUUID();
+
+    public void updatePathBonus(PathBonus bonus){
+        cachedHolderDirty = true;
+        String processId = String.valueOf(UUID.randomUUID());
         startProcess(processId);
+
         List<ValueContainer<Double>> containers = new ArrayList<>();
+        ValueContainer<Double> internal = internalHolder.getContainer(bonus.category(),bonus.path());
+        if(internal != null) containers.add(internal);
+
         for(PathBonusProvider provider : providers){
             ValueContainer<Double> instance = provider.getPathBonusContainer(bonus.category(),bonus.path());
             if(instance == null) continue;
             containers.add(instance);
         }
         ValueContainer<Double> container = ValueContainer.from(
-                base->ValueContainerHelpers.doubleValueContainer(bonus.path(),base),
+                ()-> ValueContainerHelpers.doubleValueContainer(bonus.path()),
                 containers
         );
-        if(container == null && !categories.containsKey(bonus.category())) getCategoryHolder(bonus.category()).removePath(bonus.path());
-        else getCategoryHolder(bonus.category()).setPathBonusContainer(bonus.path(),container);
-
+        if(container == null) cachedPathBonusHolder.removePathBonusContainer(bonus.category(),bonus.path());
+        else cachedPathBonusHolder.setPathBonusContainer(bonus.category(),container);
         resolveProcess(processId);
     }
-
-    public void updateBonuses(Collection<PathBonus> pathBonuses){
-        String processId = "bulk_path_bonus_update"+UUID.randomUUID();
+    public void updatePathBonuses(Collection<PathBonus> bonuses){
+        String processId = String.valueOf(UUID.randomUUID());
         startProcess(processId);
-        for(PathBonus pathBonus:pathBonuses) updateBonus(pathBonus);
+
+        for(PathBonus bonus : bonuses) updatePathBonus(bonus);
+        cachedHolderDirty = true;
         resolveProcess(processId);
     }
 
-    protected PathBonusCategoryHolder getCategoryHolder(Identifier category){
-        categories.computeIfAbsent(category,key->new PathBonusCategoryHolder());
-        return categories.get(category);
+    protected PathBonusHolder getCachedPathBonusHolder(){
+        return cachedPathBonusHolder;
+    }
+    //====================== PATH BONUS PROVIDER ======================
+
+    @Override
+    public ValueContainer<Double> getPathBonusContainer(Identifier category, Identifier path) {
+        return cachedPathBonusHolder.getContainer(category,path);
+    }
+
+    @Override
+    public double getPathBonus(Identifier category, Identifier path) {
+        return cachedPathBonusHolder.getPathBonus(category,path);
+    }
+
+    @Override
+    public Collection<PathBonus> getAllPathBonuses() {
+        return cachedPathBonusHolder.getPathBonuses();
+    }
+
+    @Override
+    public Collection<Identifier> getAllPathBonusesInCategory(Identifier category) {
+        return getAllPathBonuses().stream().filter(bonus->bonus.category().equals(category)).map(PathBonus::path).collect(Collectors.toSet());
     }
 
 
-
-    public double getBonus(Identifier category,Identifier path){
-        return categories.containsKey(category) ? getCategoryHolder(category).getBonus(path) : 0;
-    }
-
-
-
-    public Collection<PathBonus> getAllPathBonuses(){
-        HashSet<PathBonus> pathBonuses = new HashSet<>();
-        for(Identifier category:categories.keySet()){
-            getCategoryHolder(category).getAllPaths().forEach(
-                    path->pathBonuses.add(new PathBonus(category,path))
-            );
-        }
-        return pathBonuses;
-    }
-    public Collection<Identifier> getAllPathBonusesInCategory(Identifier category){
-        return getCategoryHolder(category).getAllPaths();
-    }
-    public Collection<PathBonus> getDirtyPathBonuses(){
-        HashSet<PathBonus> pathBonuses = new HashSet<>();
-        for(Identifier category:categories.keySet()){
-            getCategoryHolder(category).getDirtyPaths().forEach(
-                    path->pathBonuses.add(new PathBonus(category,path))
-            );
-        }
-        return pathBonuses;
-    }
-
-    protected void encode(ByteBuf buf){
-        buf.writeInt(categories.size());
-        for(Identifier category : categories.keySet()){
-            ByteBufHelpers.encodeIdentifier(category,buf);
-            categories.get(category).encode(buf,true);
-        }
-    }
-    public void decode(ByteBuf buf){
-
-        if(buf.readBoolean()) categories.clear();
-        int size = buf.readInt();
-        for(int i = 0;i<size; i++){
-            Identifier category = ByteBufHelpers.decodeIdentifier(buf);
-            PathBonusCategoryHolder holder = getCategoryHolder(category);
-            holder.decode(buf);
-        }
-        dirtyCategories.clear();
-
-    }
-
-    public static class SyncHandler implements AttachmentSyncHandler<MultiSourcePathBonusHolder> {
-
-        @Override
-        public void write(@NonNull RegistryFriendlyByteBuf buf, MultiSourcePathBonusHolder attachment, boolean initialSync) {
-
-            attachment.encode(buf);
-        }
-
-        @Override
-        public @Nullable MultiSourcePathBonusHolder read(@NonNull IAttachmentHolder holder, @NonNull RegistryFriendlyByteBuf buf, @Nullable MultiSourcePathBonusHolder previousValue) {
-            if(!(holder instanceof LivingEntity entity)) return null;
-            if(previousValue == null) previousValue = new MultiSourcePathBonusHolder(entity);
-            previousValue.decode(buf);
-            return previousValue;
-        }
-
-        @Override
-        public boolean sendToPlayer(@NonNull IAttachmentHolder holder, @NonNull ServerPlayer to) {
-            return true;
-        }
-    }
 }

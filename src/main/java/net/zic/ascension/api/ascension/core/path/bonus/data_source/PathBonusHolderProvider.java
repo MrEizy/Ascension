@@ -5,6 +5,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
@@ -38,12 +39,12 @@ public class PathBonusHolderProvider implements DataSource {
 
     @Override
     public void applyToEntity(LivingEntity entity, DataSourceInstance instance) {
-        entity.getData(AscensionAttachments.PATH_BONUS_HOLDER).registerPathBonusProvider(getHolder(instance));
+        if(!entity.level().isClientSide())entity.getData(CoreAttachments.PATH_BONUS_HOLDER).registerProvider(getHolder(instance));
     }
 
     @Override
     public void removeFromEntity(LivingEntity entity, DataSourceInstance instance) {
-        entity.getData(AscensionAttachments.PATH_BONUS_HOLDER).removePathBonusProvider(getHolder(instance));
+        if(!entity.level().isClientSide()) entity.getData(CoreAttachments.PATH_BONUS_HOLDER).removeProvider(getHolder(instance));
     }
 
     @Override
@@ -58,11 +59,7 @@ public class PathBonusHolderProvider implements DataSource {
 
     @Override
     public DataSourceInstance loadInstance(DataSourceInstance previous,ByteBuf buf, RegistryAccess access) {
-        DataSourcePathBonusHolder holder;
-        if(previous==null) holder = new DataSourcePathBonusHolder();
-        else holder = getHolder(previous);
-        holder.decode(buf);
-        return holder;
+        return new DataSourcePathBonusHolder();
     }
 
     @Override
@@ -72,6 +69,6 @@ public class PathBonusHolderProvider implements DataSource {
 
     @Override
     public void encodeInstance(DataSourceInstance instance, ByteBuf buf, RegistryAccess access,boolean fullPatch) {
-        getHolder(instance).encode(buf,fullPatch);
+
     }
 }

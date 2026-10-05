@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityPathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
 import net.zic.ascension.api.ascension.core.resource.DatapackResourceData;
 
 import java.util.function.Supplier;
@@ -21,11 +22,11 @@ public class CoreAttachments {
                     .build()
     );
 
-    public static final Supplier<AttachmentType<AscensionEntityPathBonusHolder>> PATH_BONUS_HOLDER = ATTACHMENT_TYPES.register(
+    public static final Supplier<AttachmentType<EntityPathBonusHolder>> PATH_BONUS_HOLDER = ATTACHMENT_TYPES.register(
             "path_bonus_holder",()-> AttachmentType.builder(
-                            (holder)-> new AscensionEntityPathBonusHolder((LivingEntity) holder)
+                            (holder)-> new EntityPathBonusHolder((LivingEntity) holder)
                     )
-                    .sync(new AscensionEntityPathBonusHolder.SyncHandler())
+                    .sync(new EntityPathBonusHolder.SyncHandler())
                     .build()
     );
 

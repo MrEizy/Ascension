@@ -54,11 +54,6 @@ public class AscensionAttachments {
                     .build()
     );
 
-    public static final Supplier<AttachmentType<MultiSourcePathBonusHolder>> PATH_BONUS_HOLDER = ATTACHMENT_TYPES.register(
-            "path_bonus_holder", () -> AttachmentType.builder(holder -> new MultiSourcePathBonusHolder((LivingEntity) holder))
-                    .sync(new MultiSourcePathBonusHolder.SyncHandler())
-                    .build()
-    );
 
 
 
