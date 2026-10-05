@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.core.innerworld;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -49,10 +50,15 @@ public final class InnerWorldEvents {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingDeath(LivingDeathEvent event) {
+        if (event.isCanceled()) {
+            return;
+        }
         if (event.getEntity() instanceof InnerWorldGhost ghost) {
             InnerWorldSessions.onGhostDeath(ghost);
+        } else if (event.getEntity() instanceof ServerPlayer player) {
+            InnerWorldSessions.onOwnerDeath(player);
         }
     }
 }

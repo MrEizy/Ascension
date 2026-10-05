@@ -201,7 +201,7 @@ public class CastingInstance {
             return;
         }
 
-        Identifier decodedSkill = buf.readIdentifier();
+        Identifier decodedSkill = ByteBufHelpers.decodeIdentifier(buf);
         if (!(CoreRegistries.safeAccess(
                 CoreRegistries.SKILL_REGISTRY,
                 decodedSkill,
