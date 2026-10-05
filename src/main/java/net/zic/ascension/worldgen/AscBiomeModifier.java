@@ -6,6 +6,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.neoforged.neoforge.common.world.BiomeModifier;
@@ -98,7 +99,13 @@ public class AscBiomeModifier {
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
         context.register(ADD_FIRE_GINSENG, new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.BEACH), biomes.getOrThrow(Biomes.DESERT)),
+                HolderSet.direct(
+                        biomes.getOrThrow(Biomes.BEACH),
+                        biomes.getOrThrow(Biomes.DESERT),
+                        biomes.getOrThrow(Biomes.BADLANDS),
+                        biomes.getOrThrow(Biomes.ERODED_BADLANDS),
+                        biomes.getOrThrow(Biomes.WOODED_BADLANDS)
+                ),
                 HolderSet.direct(placedFeatures.getOrThrow(AscPlacedFeatures.FIRE_GINSENG_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
         context.register(ADD_SNOW_GINSENG, new BiomeModifiers.AddFeaturesBiomeModifier(

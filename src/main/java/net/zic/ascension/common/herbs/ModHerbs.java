@@ -6,8 +6,10 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyAffinities;
 import net.zic.ascension.common.blocks.ModBlocks;
@@ -78,11 +80,11 @@ public final class ModHerbs {
                     .qualityGrowth(32, 128, 512, 2048)
                     .wildQualityWeights(15, 900, 180, 20, 2)
                     .qualityAffinity(AlchemyAffinities.FIRE, 6.0D)
-                    .qiCapacity(100.0D, 900.0D)
+                    //.qiCapacity(100.0D, 900.0D)
                     .availableQiFraction(0.02D, 0.15D)
                     .atmosphericQiCost(3.0D)
                     .naturalSupport(state -> state.is(Blocks.SAND) || state.is(Blocks.RED_SAND) || state.is(Blocks.TERRACOTTA))
-                    .spawnRule((level, pos, random) -> pos.getY() >= 62 && level.canSeeSky(pos) && random.nextInt(8) == 0)
+                    .spawnRule((level, pos, random) -> pos.getY() >= 62 && random.nextInt(8) == 0)
                     .growthModifier((level, pos, state) -> {
                         boolean nearLava = hasFluidNearby(level, pos, FluidTags.LAVA, 4, 2);
                         long time = Math.floorMod(level.getGameTime(), 24000L);
@@ -122,13 +124,13 @@ public final class ModHerbs {
                     .wildAgeWeights(1000, 210, 35, 6, 2, 1, 1, 1)
                     .qualityGrowth(18, 72, 288, 1152)
                     .wildQualityWeights(8, 650, 260, 70, 12)
-                    .qiCapacity(100.0D, 800.0D)
-                    .qiAffinity(AlchemyAffinities.WATER, 0.5D, 2.0D)
+                    //.qiCapacity(100.0D, 800.0D)
+                    //.qiAffinity(AlchemyAffinities.WATER, 0.5D, 2.0D)
                     .qualityAffinity(AlchemyAffinities.WATER, 2.0D)
                     .availableQiFraction(0.02D, 0.12D)
                     .atmosphericQiCost(2.0D)
                     .naturalSupport(state -> state.is(Blocks.LILY_PAD))
-                    .spawnRule((level, pos, random) -> level.canSeeSky(pos) && random.nextInt(5) == 0)
+                    .spawnRule((level, pos, random) -> random.nextInt(5) == 0)
                     .growthModifier((level, pos, state) -> {
                         long time = Math.floorMod(level.getGameTime(), 24000L);
                         boolean night = time >= 13000L && time <= 23000L;
