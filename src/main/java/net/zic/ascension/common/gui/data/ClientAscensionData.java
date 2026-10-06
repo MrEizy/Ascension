@@ -13,11 +13,13 @@ import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.resource.stamina.StaminaService;
 import net.zic.ascension.skill_casting.SkillCastHandler;
+import net.zic.zenithlib.Config;
 import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.custom_attributes.SuppressedZenithAttribute;
-import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
-import net.zic.zenithlib.stats.ZenithStatHolder;
 
+import net.zic.zenithlib.custom_attributes.SuppressedAttributeHelper;
+import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
+
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public final class ClientAscensionData {
@@ -83,8 +85,8 @@ public final class ClientAscensionData {
                 return 0.0D;
             }
 
-            return ((SuppressedZenithAttribute) holder.getAttribute(attributeHolder)).getUnsuppressedValue();
-        }).orElse(0.0D);
+            return (holder.getAttribute(attributeHolder)).calculateValue(_ -> true, modifier -> modifier.operationGroup() != Config.SUPPRESSION_OPERATION_GROUP.get()).getFirst();
+        }).orElse(0D);
     }
 
     public static double getSuppression(Holder<Attribute> attributeHolder) {
@@ -95,8 +97,7 @@ public final class ClientAscensionData {
                     || !holder.isSuppressable(attributeHolder)) {
                 return 1.0D;
             }
-
-            return ((SuppressedZenithAttribute) holder.getAttribute(attributeHolder)).getSuppression();
+            return SuppressedAttributeHelper.getSuppression(holder.getAttribute(attributeHolder));
         }).orElse(1.0D);
     }
 

@@ -18,35 +18,69 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:ordinary"
   },
-  "base_stats": {
-    "ascension:vitality": 2
-  },
-  "stat_modifiers": {
-    "ascension:vitality": [
-      {
-        "value": 0.15,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:trembling_earth_body_unstable_physique_vitality_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/body": 3,
-      "ascension:elemental/earth": 2.5,
-      "ascension:elemental/metal": 2,
-      "ascension:weapon/mace": 2.5
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/water": [
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
         {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:trembling_earth_body_unstable_physique_earth_modifier"
+          "id": "ascension:2_profound_trembling_earth_body_unstable_physique_vitality_base",
+          "value": 2
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:trembling_earth_body_unstable_physique_vitality_modifier",
+          "value": 0.15
         }
       ]
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_trembling_earth_body_unstable_physique_affinity_foundation_body_base",
+            "value": 3
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/earth": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_trembling_earth_body_unstable_physique_affinity_elemental_earth_base",
+            "value": 2.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/metal": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_trembling_earth_body_unstable_physique_affinity_elemental_metal_base",
+            "value": 2
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/mace": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_trembling_earth_body_unstable_physique_affinity_weapon_mace_base",
+            "value": 2.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/water": {
+        "flat": [
+          {
+            "id": "ascension:trembling_earth_body_unstable_physique_earth_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      }
     }
   }
 }

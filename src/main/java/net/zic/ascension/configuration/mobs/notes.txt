@@ -1,3 +1,0 @@
-Consider going back to traits, but modify how they function.
-
-trait holds a name, a chance per tier, and a set of skills, this might also contain other things but i am not sure yet

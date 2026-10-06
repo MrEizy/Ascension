@@ -18,36 +18,73 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:ordinary"
   },
-  "base_stats": {
-    "ascension:strength": 1,
-    "ascension:vitality": 1
-  },
-  "stat_modifiers": {
-    "ascension:strength": [
-      {
-        "value": 0.15,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:frostbitten_vein_body_physique_strength_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/body": 3,
-      "ascension:elemental/ice": 2.5,
-      "ascension:elemental/yin": 2,
-      "ascension:weapon/fan": 2.3
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:weapon/fan": [
+  "stats": {
+    "ascension:strength": {
+      "flat": [
         {
-          "value": 0.2,
-          "operation": "ADD_BASE",
-          "id": "ascension:frostbitten_vein_body_physique_fan_modifier"
+          "id": "ascension:1_ordinary_frostbitten_vein_body_physique_strength_base",
+          "value": 1
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:frostbitten_vein_body_physique_strength_modifier",
+          "value": 0.15
         }
       ]
+    },
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:1_ordinary_frostbitten_vein_body_physique_vitality_base",
+          "value": 1
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_frostbitten_vein_body_physique_affinity_foundation_body_base",
+            "value": 3
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/ice": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_frostbitten_vein_body_physique_affinity_elemental_ice_base",
+            "value": 2.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/yin": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_frostbitten_vein_body_physique_affinity_elemental_yin_base",
+            "value": 2
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/fan": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_frostbitten_vein_body_physique_affinity_weapon_fan_base",
+            "value": 2.3
+          },
+          {
+            "id": "ascension:frostbitten_vein_body_physique_fan_modifier",
+            "value": 0.2
+          }
+        ],
+        "multiplier": []
+      }
     }
   }
 }

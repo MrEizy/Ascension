@@ -12,42 +12,68 @@
     "ascension:elemental/earth"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:vitality": 4.0,
-    "ascension:strength": 2.0
-  },
-  "stat_modifiers": {
-    "ascension:vitality": [
-      {
-        "value": 0.15,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:jade_furnace_vitality_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/body": 1.5,
-      "ascension:elemental/fire": 2.0,
-      "ascension:elemental/earth": 1.25
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:foundation/body": [
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
         {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:jade_furnace_body_affinity_modifier"
+          "id": "ascension:2_profound_jade_furnace_physique_vitality_base",
+          "value": 4.0
         }
       ],
-      "ascension:elemental/fire": [
+      "multiplier": [
         {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:jade_furnace_fire_affinity_modifier"
+          "id": "ascension:jade_furnace_vitality_modifier",
+          "value": 0.15
         }
       ]
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_jade_furnace_physique_strength_base",
+          "value": 2.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_jade_furnace_physique_affinity_foundation_body_base",
+            "value": 1.5
+          },
+          {
+            "id": "ascension:jade_furnace_body_affinity_modifier",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/fire": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_jade_furnace_physique_affinity_elemental_fire_base",
+            "value": 2.0
+          },
+          {
+            "id": "ascension:jade_furnace_fire_affinity_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/earth": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_jade_furnace_physique_affinity_elemental_earth_base",
+            "value": 1.25
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

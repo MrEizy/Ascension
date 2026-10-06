@@ -19,27 +19,68 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:ordinary"
   },
-  "base_stats": {
-    "ascension:vitality": 1
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/essence": 0.8,
-      "ascension:foundation/body": 3,
-      "ascension:elemental/wind": 1.75,
-      "ascension:elemental/metal": 1.8,
-      "ascension:weapon/staff": 3.2
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:1_ordinary_weak_spirit_body_physique_vitality_base",
+          "value": 1
+        }
+      ],
+      "multiplier": []
     }
   },
-  "path_bonus_modifiers": {
+  "path_bonus": {
     "ascension:affinity": {
-      "ascension:elemental/wind": [
-        {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:weak_spirit_body_physique_wind_modifier"
-        }
-      ]
+      "ascension:foundation/essence": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_weak_spirit_body_physique_affinity_foundation_essence_base",
+            "value": 0.8
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_weak_spirit_body_physique_affinity_foundation_body_base",
+            "value": 3
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/wind": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_weak_spirit_body_physique_affinity_elemental_wind_base",
+            "value": 1.75
+          },
+          {
+            "id": "ascension:weak_spirit_body_physique_wind_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/metal": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_weak_spirit_body_physique_affinity_elemental_metal_base",
+            "value": 1.8
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/staff": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_weak_spirit_body_physique_affinity_weapon_staff_base",
+            "value": 3.2
+          }
+        ],
+        "multiplier": []
+      }
     }
   }
 }

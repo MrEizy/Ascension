@@ -16,35 +16,95 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 0.24
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a1",
+                  "value": 0.24
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.2
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a1",
+                  "value": 0.2
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.18
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_vitality_a1",
+                  "value": 0.18
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 0.06
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_strength_a1",
+                  "value": 0.06
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/essence": 0.035,
-              "ascension:elemental/water": 0.07,
-              "ascension:elemental/space": 0.045,
-              "ascension:elemental/wind": 0.02,
-              "ascension:elemental/yin": 0.015
+              "ascension:foundation/essence": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_formless_river_dragon_bloodline_affinity_foundation_essence_a2",
+                    "value": 0.035
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/water": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_formless_river_dragon_bloodline_affinity_elemental_water_a2",
+                    "value": 0.07
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/space": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_formless_river_dragon_bloodline_affinity_elemental_space_a2",
+                    "value": 0.045
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/wind": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_formless_river_dragon_bloodline_affinity_elemental_wind_a2",
+                    "value": 0.02
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/yin": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_formless_river_dragon_bloodline_affinity_elemental_yin_a2",
+                    "value": 0.015
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -58,17 +118,27 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 4.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a3",
+                  "value": 4.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 3.0
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a3",
+                  "value": 3.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     },
@@ -80,23 +150,41 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:vitality",
-              "value": 5.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_vitality_a4",
+                  "value": 5.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 4.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a4",
+                  "value": 4.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/water": 1.0
+              "ascension:elemental/water": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_formless_river_dragon_bloodline_affinity_elemental_water_a5",
+                    "value": 1.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -110,23 +198,41 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 5.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a6",
+                  "value": 5.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 3.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a6",
+                  "value": 3.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/space": 1.0
+              "ascension:elemental/space": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_formless_river_dragon_bloodline_affinity_elemental_space_a7",
+                    "value": 1.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -140,33 +246,77 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 9.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_spirit_a8",
+                  "value": 9.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 8.0
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_agility_a8",
+                  "value": 8.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 7.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_vitality_a8",
+                  "value": 7.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 3.0
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_formless_river_dragon_bloodline_strength_a8",
+                  "value": 3.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/water": 2.0,
-              "ascension:elemental/space": 2.0,
-              "ascension:elemental/wind": 1.0
+              "ascension:elemental/water": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_formless_river_dragon_bloodline_affinity_elemental_water_a9",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/space": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_formless_river_dragon_bloodline_affinity_elemental_space_a9",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/wind": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_formless_river_dragon_bloodline_affinity_elemental_wind_a9",
+                    "value": 1.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }

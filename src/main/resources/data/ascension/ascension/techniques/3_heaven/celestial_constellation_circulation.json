@@ -57,21 +57,31 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_celestial_constellation_circulation_spirit_a1",
+                  "value": 2.0
+                },
+                {
+                  "id": "ascension:3_heaven_celestial_constellation_circulation_spirit_a1_2",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 2.0
-            },
-            {
-              "id": "ascension:agility",
-              "value": 1.0
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_celestial_constellation_circulation_agility_a1",
+                  "value": 1.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

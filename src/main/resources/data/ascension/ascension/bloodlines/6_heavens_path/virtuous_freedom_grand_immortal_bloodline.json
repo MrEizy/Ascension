@@ -16,36 +16,104 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 0.9
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a1",
+                  "value": 0.9
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.85
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a1",
+                  "value": 0.85
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.8
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a1",
+                  "value": 0.8
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 0.65
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a1",
+                  "value": 0.65
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/soul": 0.1,
-              "ascension:elemental/space": 0.18,
-              "ascension:elemental/karma": 0.16,
-              "ascension:elemental/wind": 0.08,
-              "ascension:elemental/fate": 0.06,
-              "ascension:elemental/order": 0.06
+              "ascension:foundation/soul": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_foundation_soul_a2",
+                    "value": 0.1
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/space": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_space_a2",
+                    "value": 0.18
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/karma": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_karma_a2",
+                    "value": 0.16
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/wind": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_wind_a2",
+                    "value": 0.08
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/fate": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_fate_a2",
+                    "value": 0.06
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/order": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_order_a2",
+                    "value": 0.06
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -59,17 +127,27 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 10.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a3",
+                  "value": 10.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 10.0
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a3",
+                  "value": 10.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     },
@@ -81,23 +159,41 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:vitality",
-              "value": 12.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a4",
+                  "value": 12.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 12.0
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a4",
+                  "value": 12.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/space": 3.0
+              "ascension:elemental/space": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_space_a5",
+                    "value": 3.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -111,27 +207,50 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 14.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a6",
+                  "value": 14.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 18.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a6",
+                  "value": 18.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 18.0
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a6",
+                  "value": 18.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/karma": 4.0
+              "ascension:elemental/karma": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_karma_a7",
+                    "value": 4.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -145,24 +264,50 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 20.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a8",
+                  "value": 20.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 20.0
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a8",
+                  "value": 20.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/fate": 3.0,
-              "ascension:elemental/order": 3.0
+              "ascension:elemental/fate": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_fate_a9",
+                    "value": 3.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/order": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_order_a9",
+                    "value": 3.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -176,35 +321,95 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 32.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_spirit_a10",
+                  "value": 32.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 30.0
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_agility_a10",
+                  "value": 30.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 30.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_vitality_a10",
+                  "value": 30.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 28.0
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_strength_a10",
+                  "value": 28.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/space": 6.0,
-              "ascension:elemental/karma": 6.0,
-              "ascension:elemental/wind": 4.0,
-              "ascension:elemental/fate": 2.0,
-              "ascension:elemental/order": 2.0
+              "ascension:elemental/space": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_space_a11",
+                    "value": 6.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/karma": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_karma_a11",
+                    "value": 6.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/wind": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_wind_a11",
+                    "value": 4.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/fate": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_fate_a11",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/order": {
+                "flat": [
+                  {
+                    "id": "ascension:6_heavens_path_virtuous_freedom_grand_immortal_bloodline_affinity_elemental_order_a11",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }

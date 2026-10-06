@@ -211,27 +211,47 @@
   "actions": [
     {
       "condition": "ascension:realm_change/on_gained",
-      "actions":[
+      "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_spirit_a1",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 8.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_vitality_a1",
+                  "value": 8.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 10.0
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_strength_a1",
+                  "value": 10.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 1.0
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_agility_a1",
+                  "value": 1.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     },
@@ -239,25 +259,45 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 0.2
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_spirit_a2",
+                  "value": 0.2
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.8
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_vitality_a2",
+                  "value": 0.8
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 1.0
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_strength_a2",
+                  "value": 1.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.1
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:foundation_body_agility_a2",
+                  "value": 0.1
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

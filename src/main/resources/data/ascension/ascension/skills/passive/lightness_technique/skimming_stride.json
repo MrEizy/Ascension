@@ -9,14 +9,16 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:agility": [
-          {
-            "value": 0.08,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:skimming_stride_agility"
-          }
-        ]
+      "stats": {
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:skimming_stride_agility",
+              "value": 0.08
+            }
+          ]
+        }
       }
     }
   ]

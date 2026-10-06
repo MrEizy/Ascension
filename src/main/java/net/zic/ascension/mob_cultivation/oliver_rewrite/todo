@@ -1,0 +1,6 @@
+currently health does not adjust to new value on mob spawning
+
+this is inline with the current problem of minecrafts load order, such that health is refilled before we can adjust max hp.
+
+for this reason I will go back to some sort of custom cached resource system, that overrides caches minecraft uses.
+This can then be applied, where if no cache exists use max

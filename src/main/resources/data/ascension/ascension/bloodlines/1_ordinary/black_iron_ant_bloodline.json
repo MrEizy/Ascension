@@ -15,24 +15,50 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 0.09
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_black_iron_ant_bloodline_strength_a1",
+                  "value": 0.09
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.05
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_black_iron_ant_bloodline_vitality_a1",
+                  "value": 0.05
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/body": 0.005,
-              "ascension:elemental/earth": 0.008
+              "ascension:foundation/body": {
+                "flat": [
+                  {
+                    "id": "ascension:1_ordinary_black_iron_ant_bloodline_affinity_foundation_body_a2",
+                    "value": 0.005
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/earth": {
+                "flat": [
+                  {
+                    "id": "ascension:1_ordinary_black_iron_ant_bloodline_affinity_elemental_earth_a2",
+                    "value": 0.008
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -46,13 +72,18 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_black_iron_ant_bloodline_strength_a3",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

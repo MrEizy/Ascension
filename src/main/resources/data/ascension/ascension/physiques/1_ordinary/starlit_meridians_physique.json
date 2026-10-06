@@ -11,34 +11,55 @@
     "ascension:elemental/star"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:agility": 1.5,
-    "ascension:spirit": 1.5
-  },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.08,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:starlit_meridians_spirit_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/essence": 0.5,
-      "ascension:elemental/star": 1.5
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/star": [
+  "stats": {
+    "ascension:agility": {
+      "flat": [
         {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:starlit_meridians_star_affinity_modifier"
+          "id": "ascension:1_ordinary_starlit_meridians_physique_agility_base",
+          "value": 1.5
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:1_ordinary_starlit_meridians_physique_spirit_base",
+          "value": 1.5
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:starlit_meridians_spirit_modifier",
+          "value": 0.08
         }
       ]
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_starlit_meridians_physique_affinity_foundation_essence_base",
+            "value": 0.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/star": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_starlit_meridians_physique_affinity_elemental_star_base",
+            "value": 1.5
+          },
+          {
+            "id": "ascension:starlit_meridians_star_affinity_modifier",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

@@ -15,24 +15,50 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 0.1
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_moon_white_crane_bloodline_agility_a1",
+                  "value": 0.1
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 0.08
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_moon_white_crane_bloodline_spirit_a1",
+                  "value": 0.08
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/moon": 0.018,
-              "ascension:elemental/wind": 0.012
+              "ascension:elemental/moon": {
+                "flat": [
+                  {
+                    "id": "ascension:2_profound_moon_white_crane_bloodline_affinity_elemental_moon_a2",
+                    "value": 0.018
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/wind": {
+                "flat": [
+                  {
+                    "id": "ascension:2_profound_moon_white_crane_bloodline_affinity_elemental_wind_a2",
+                    "value": 0.012
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -46,13 +72,18 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_moon_white_crane_bloodline_agility_a3",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     },
@@ -64,17 +95,27 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_moon_white_crane_bloodline_agility_a4",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 2.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_moon_white_crane_bloodline_spirit_a4",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

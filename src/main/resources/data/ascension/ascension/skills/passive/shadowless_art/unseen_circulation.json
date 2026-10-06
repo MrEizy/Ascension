@@ -9,21 +9,25 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:agility": [
-          {
-            "value": 0.08,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:unseen_circulation_agility"
-          }
-        ],
-        "ascension:spirit": [
-          {
-            "value": 0.03,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:unseen_circulation_spirit"
-          }
-        ]
+      "stats": {
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:unseen_circulation_agility",
+              "value": 0.08
+            }
+          ]
+        },
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:unseen_circulation_spirit",
+              "value": 0.03
+            }
+          ]
+        }
       }
     }
   ]

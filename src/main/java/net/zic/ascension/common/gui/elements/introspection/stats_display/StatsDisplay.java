@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.AscensionTooltip;
-import net.zic.ascension.configuration.RealmEffectivenessConfiguration;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.Stat;
 
@@ -68,17 +67,12 @@ public class StatsDisplay extends RenderableElement {
 
     private void updateTooltip() {
         ClientAscensionData.getSource().ifPresent(source -> {
-            double multiplier = RealmEffectivenessConfiguration.getMultiplier(source);
-            double effectiveValue = rawValue * multiplier;
+            double effectiveValue = rawValue;
 
             tooltip.setText(Component.empty()
                     .append(Component.translatable(
                             "gui.ascension.introspection.stat_tooltip.raw",
                             FORMAT.format(rawValue)
-                    ))
-                    .append(Component.translatable(
-                            "gui.ascension.introspection.stat_tooltip.realm_effectiveness",
-                            FORMAT.format(multiplier)
                     ))
                     .append(Component.translatable(
                             "gui.ascension.introspection.stat_tooltip.effective",

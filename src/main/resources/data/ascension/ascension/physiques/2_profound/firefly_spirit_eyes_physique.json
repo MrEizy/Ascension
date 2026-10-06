@@ -11,35 +11,64 @@
     "ascension:elemental/light"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:spirit": 3.5,
-    "ascension:agility": 1.5
-  },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.12,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:firefly_spirit_eyes_spirit_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/soul": 1.25,
-      "ascension:elemental/light": 2.0,
-      "ascension:elemental/illusion": 0.75
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/light": [
+  "stats": {
+    "ascension:spirit": {
+      "flat": [
         {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:firefly_spirit_eyes_light_affinity_modifier"
+          "id": "ascension:2_profound_firefly_spirit_eyes_physique_spirit_base",
+          "value": 3.5
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:firefly_spirit_eyes_spirit_modifier",
+          "value": 0.12
         }
       ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_firefly_spirit_eyes_physique_agility_base",
+          "value": 1.5
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_firefly_spirit_eyes_physique_affinity_foundation_soul_base",
+            "value": 1.25
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/light": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_firefly_spirit_eyes_physique_affinity_elemental_light_base",
+            "value": 2.0
+          },
+          {
+            "id": "ascension:firefly_spirit_eyes_light_affinity_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/illusion": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_firefly_spirit_eyes_physique_affinity_elemental_illusion_base",
+            "value": 0.75
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

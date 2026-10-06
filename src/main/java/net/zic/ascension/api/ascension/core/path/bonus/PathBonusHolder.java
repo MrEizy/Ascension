@@ -1,127 +1,104 @@
 package net.zic.ascension.api.ascension.core.path.bonus;
 
-import io.netty.buffer.ByteBuf;
+import com.mojang.serialization.Codec;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.CoreHolderProviders;
-import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
-import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
-import net.zic.zenithlib.network.ByteBufHelpers;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import net.zic.zenithlib.util.Processable;
+import net.zic.zenithlib.value_containers.typed.*;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-//TODO:
-// set up such that on changes we notify attached entities
-// then those entities trigger an update, and use a combined value container
-public class PathBonusHolder implements DataSourceInstance {
+import java.util.*;
 
+public class PathBonusHolder{
+    public static final Codec<Map<PathBonus, ModifierHolder<Double>>> MODIFIER_CODEC =
+            Codec.unboundedMap(Identifier.CODEC, ValueContainerCodecHelper.containersCodec(Codec.DOUBLE)).xmap(
+            map->{
+                Map<PathBonus, ModifierHolder<Double>> modifiers = new HashMap<>();
+                for(Identifier category : map.keySet()){
+                    for(Identifier path : map.get(category).keySet()){
+                        modifiers.put(PathBonus.of(category,path),map.get(category).get(path));
+                    }
+                }
+                return modifiers;
+            },
+            modifiers->{
+                Map<Identifier,Map<Identifier,ModifierHolder<Double>>> map = new HashMap<>();
+                for(PathBonus bonus : modifiers.keySet()){
+                    Map<Identifier,ModifierHolder<Double>> subMap = map.computeIfAbsent(bonus.category(),key->new HashMap<>());
+                    subMap.put(bonus.path(),modifiers.get(bonus));
+                }
+                return map;
+            }
+    );
+    private final Map<PathBonus, ValueContainer<Double>> pathBonuses = new HashMap<>();
 
-    //maps a category -> category bonus holder
-    private final HashMap<Identifier,PathBonusCategoryHolder> categories = new HashMap<>();
+    private final Set<PathBonus> dirtyBonuses = new HashSet<>();
+    private final Set<PathBonus> removedBonuses = new HashSet<>();
 
-    private final HashSet<Identifier> dirtyCategories = new HashSet<>();
-
-    protected PathBonusCategoryHolder getCategoryHolder(Identifier category){
-        categories.computeIfAbsent(category,key->new PathBonusCategoryHolder());
-        return categories.get(category);
+    public ValueContainer<Double> getContainer(Identifier category,Identifier path){
+        return pathBonuses.get(PathBonus.of(category,path));
     }
 
-    public void addBonus(Identifier category,Identifier path,double val){
-        getCategoryHolder(category).addBonus(path,val);
-        dirtyCategories.add(category);
-    }
-    public void addBonusModifier(Identifier category, Identifier path, ValueContainerModifier modifier){
-        getCategoryHolder(category).addBonusModifier(path,modifier);
-        dirtyCategories.add(category);
+    private ValueContainer<Double> getOrCreateContainer(Identifier category,Identifier path){
+        return pathBonuses.computeIfAbsent(PathBonus.of(category,path), key->
+                    ValueContainerHelpers.doubleValueContainer(key.path())
+                );
     }
 
-    public void removeBonus(Identifier category,Identifier path,double val){
-        if(!categories.containsKey(category)) return;
-        getCategoryHolder(category).removeBonus(path,val);
-        dirtyCategories.add(category);
+    public boolean hasPathBonus(Identifier category,Identifier path){
+        return pathBonuses.containsKey(PathBonus.of(category,path));
     }
 
-    public void removeBonusModifier(Identifier category,Identifier path,Identifier modifier){
-        if(!categories.containsKey(category)) return;
-        getCategoryHolder(category).removeBonusModifier(path,modifier);
-        dirtyCategories.add(category);
-    }
-
-
-    public double getBonus(Identifier category,Identifier path){
-        return categories.containsKey(category) ? getCategoryHolder(category).getBonus(path) : 0;
-    }
-
-    public void setPathBonusContainer(Identifier category,Identifier path,ValueContainer container){
-        getCategoryHolder(category).setPathBonusContainer(path,container);
-    }
-
-
-    public ValueContainer getPathBonusContainer(Identifier category,Identifier path){
-        return getCategoryHolder(category).getPathBonusContainer(path);
-    }
-
-    public Collection<PathBonus> getAllPathBonuses(){
-        HashSet<PathBonus> pathBonuses = new HashSet<>();
-        for(Identifier category:categories.keySet()){
-            getCategoryHolder(category).getAllPaths().forEach(
-                    path->pathBonuses.add(new PathBonus(category,path))
-            );
-        }
-        return pathBonuses;
-    }
-    public Collection<Identifier> getAllPathBonusesInCategory(Identifier category){
-        return getCategoryHolder(category).getAllPaths();
-    }
-    public Collection<PathBonus> getDirtyPathBonuses(){
-        HashSet<PathBonus> pathBonuses = new HashSet<>();
-        for(Identifier category:categories.keySet()){
-            getCategoryHolder(category).getDirtyPaths().forEach(
-                    path->pathBonuses.add(new PathBonus(category,path))
-            );
-        }
-        return pathBonuses;
-    }
-    public void encode(ByteBuf buf,boolean fullPatch){
-
-        buf.writeBoolean(fullPatch);
-        if(fullPatch) encodeFullPatch(buf);
-        else encodePartialPatch(buf);
-
-        dirtyCategories.clear();
-
-    }
-    protected void encodeFullPatch(ByteBuf buf){
-        buf.writeInt(categories.size());
-        for(Identifier category : categories.keySet()){
-            ByteBufHelpers.encodeIdentifier(category,buf);
-            categories.get(category).encode(buf,true);
-        }
-    }
-    protected void encodePartialPatch(ByteBuf buf){
-        buf.writeInt(dirtyCategories.size());
-        for(Identifier dirtyCategory : dirtyCategories){
-            ByteBufHelpers.encodeIdentifier(dirtyCategory,buf);
-            categories.get(dirtyCategory).encode(buf,false);
-        }
-    }
-    public void decode(ByteBuf buf){
-
-        if(buf.readBoolean()) categories.clear();
-        int size = buf.readInt();
-        for(int i = 0;i<size; i++){
-            Identifier category = ByteBufHelpers.decodeIdentifier(buf);
-            PathBonusCategoryHolder holder = getCategoryHolder(category);
-            holder.decode(buf);
-        }
-        dirtyCategories.clear();
+    public void addFlatModifier(Identifier category, Identifier path, Modifier<Double> modifier){
+        getOrCreateContainer(category,path).addFlatModifier(modifier);
+        dirtyBonuses.add(PathBonus.of(category,path));
 
     }
 
-    @Override
-    public DataSource getDataSource() {
-        return CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.get();
+    public void addMultiplierModifier(Identifier category,Identifier path,Modifier<Double> modifier){
+        getOrCreateContainer(category,path).addMultiplierModifier(modifier);
+        dirtyBonuses.add(PathBonus.of(category,path));
+
     }
+    public void removeModifier(Identifier category,Identifier path,Identifier modifier){
+        if(!hasPathBonus(category,path)) return;
+        PathBonus bonus = PathBonus.of(category,path);
+        getContainer(category,path).removeModifier(modifier);
+        if(getContainer(category,path).isEmpty()) pathBonuses.remove(bonus);
+        removedBonuses.add(bonus);
+
+    }
+    public double getPathBonus(Identifier category,Identifier path){
+        return getContainer(category,path)  == null ? 0 : getContainer(category,path).getValue();
+    }
+
+    public void removePathBonusContainer(Identifier category,Identifier path){
+        PathBonus bonus = PathBonus.of(category,path);
+        pathBonuses.remove(bonus);
+        removedBonuses.add(bonus);
+    }
+
+    //assumes container ID is the path
+    public void setPathBonusContainer(Identifier category,ValueContainer<Double> container){
+        PathBonus bonus = PathBonus.of(category,container.getContainerId());
+        pathBonuses.put(bonus,container);
+        dirtyBonuses.add(bonus);
+    }
+
+    public Collection<PathBonus> getPathBonuses(){
+        return pathBonuses.keySet();
+    }
+
+    public Collection<PathBonus> dirtyBonuses(){
+        return dirtyBonuses;
+    }
+    public Collection<PathBonus> removedBonuses(){
+        return removedBonuses;
+    }
+    public void clearCache(){
+        dirtyBonuses.clear();
+        removedBonuses.clear();
+    }
+
+
+
+
 }

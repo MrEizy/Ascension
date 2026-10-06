@@ -1,10 +1,13 @@
 package net.zic.ascension.api.ascension.capabilities;
 
 import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.EntityCapability;
 import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.damage_provider.AscensionDamageSourceProvider;
+import net.zic.ascension.api.ascension.core.qi.ItemQiHandler;
+import net.zic.ascension.api.ascension.core.qi.QiHandler;
 
 public class CoreCapabilities {
 
@@ -35,4 +38,16 @@ public class CoreCapabilities {
                     Void.class
             );
 
+    public static final ItemCapability<ItemQiHandler,Void> ITEM_QI_HANDLER =
+            ItemCapability.create(
+                    Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"item_qi_handler"),
+                    ItemQiHandler.class,
+                    Void.class
+            );
+    public static final BlockCapability<QiHandler,Void> BLOCK_QI_HANDLER =
+            BlockCapability.create(
+                    Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"block_qi_handler"),
+                    QiHandler.class,
+                    Void.class
+            );
 }

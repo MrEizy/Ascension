@@ -12,43 +12,77 @@
     "ascension:elemental/wood"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:vitality": 6.0,
-    "ascension:spirit": 3.0,
-    "ascension:strength": 1.0
-  },
-  "stat_modifiers": {
-    "ascension:vitality": [
-      {
-        "value": 0.22,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:jade_cocoon_body_vitality_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/body": 2.0,
-      "ascension:elemental/life": 2.5,
-      "ascension:elemental/wood": 2.0
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/life": [
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
         {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:jade_cocoon_body_life_affinity_modifier"
+          "id": "ascension:3_heaven_jade_cocoon_body_physique_vitality_base",
+          "value": 6.0
         }
       ],
-      "ascension:elemental/wood": [
+      "multiplier": [
         {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:jade_cocoon_body_wood_affinity_modifier"
+          "id": "ascension:jade_cocoon_body_vitality_modifier",
+          "value": 0.22
         }
       ]
+    },
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:3_heaven_jade_cocoon_body_physique_spirit_base",
+          "value": 3.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:3_heaven_jade_cocoon_body_physique_strength_base",
+          "value": 1.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_jade_cocoon_body_physique_affinity_foundation_body_base",
+            "value": 2.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/life": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_jade_cocoon_body_physique_affinity_elemental_life_base",
+            "value": 2.5
+          },
+          {
+            "id": "ascension:jade_cocoon_body_life_affinity_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/wood": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_jade_cocoon_body_physique_affinity_elemental_wood_base",
+            "value": 2.0
+          },
+          {
+            "id": "ascension:jade_cocoon_body_wood_affinity_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

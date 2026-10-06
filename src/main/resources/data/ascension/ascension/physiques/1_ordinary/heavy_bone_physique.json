@@ -18,33 +18,68 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:ordinary"
   },
-  "base_stats": {
-    "ascension:vitality": 1
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/body": 3,
-      "ascension:elemental/fire": 1,
-      "ascension:elemental/metal": 1,
-      "ascension:weapon/hammer": 2
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:weapon/hammer": [
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
         {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:heavy_bone_physique_hammer_modifier"
+          "id": "ascension:1_ordinary_heavy_bone_physique_vitality_base",
+          "value": 1
         }
       ],
-      "ascension:elemental/wind": [
-        {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:heavy_bone_physique_metal_modifier"
-        }
-      ]
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_heavy_bone_physique_affinity_foundation_body_base",
+            "value": 3
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/fire": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_heavy_bone_physique_affinity_elemental_fire_base",
+            "value": 1
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/metal": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_heavy_bone_physique_affinity_elemental_metal_base",
+            "value": 1
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/hammer": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_heavy_bone_physique_affinity_weapon_hammer_base",
+            "value": 2
+          },
+          {
+            "id": "ascension:heavy_bone_physique_hammer_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/wind": {
+        "flat": [
+          {
+            "id": "ascension:heavy_bone_physique_metal_modifier",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      }
     }
   }
 }

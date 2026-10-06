@@ -9,28 +9,34 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:strength": [
-          {
-            "value": 0.12,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:unending_revolution_strength"
-          }
-        ],
-        "ascension:spirit": [
-          {
-            "value": 0.12,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:unending_revolution_spirit"
-          }
-        ],
-        "ascension:vitality": [
-          {
-            "value": 0.08,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:unending_revolution_vitality"
-          }
-        ]
+      "stats": {
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:unending_revolution_strength",
+              "value": 0.12
+            }
+          ]
+        },
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:unending_revolution_spirit",
+              "value": 0.12
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:unending_revolution_vitality",
+              "value": 0.08
+            }
+          ]
+        }
       }
     },
     {

@@ -134,8 +134,6 @@ public class SuppressedAttribute extends RenderableElement {
                 new UpdateAttributeSuppressionPacket(attributeId, next)
         );
 
-        Minecraft.getInstance().player.getData(ZenithAttachments.ATTRIBUTE_HOLDER).setSuppression(attribute,next);
-
     }
 
     private double getPercentage() {

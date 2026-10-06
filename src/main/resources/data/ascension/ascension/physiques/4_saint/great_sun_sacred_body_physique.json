@@ -12,66 +12,109 @@
     "ascension:elemental/yang"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:vitality": 12.0,
-    "ascension:strength": 10.0,
-    "ascension:spirit": 6.0,
-    "ascension:agility": 3.0
-  },
-  "stat_modifiers": {
-    "ascension:vitality": [
-      {
-        "value": 0.35,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:great_sun_sacred_body_vitality_modifier"
-      }
-    ],
-    "ascension:strength": [
-      {
-        "value": 0.3,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:great_sun_sacred_body_strength_modifier"
-      }
-    ],
-    "ascension:spirit": [
-      {
-        "value": 0.15,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:great_sun_sacred_body_spirit_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/body": 3.0,
-      "ascension:elemental/sun": 5.0,
-      "ascension:elemental/yang": 4.0,
-      "ascension:elemental/fire": 2.0
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/sun": [
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
         {
-          "value": 0.3,
-          "operation": "ADD_BASE",
-          "id": "ascension:great_sun_sacred_body_sun_affinity_modifier"
+          "id": "ascension:4_saint_great_sun_sacred_body_physique_vitality_base",
+          "value": 12.0
         }
       ],
-      "ascension:elemental/yang": [
+      "multiplier": [
         {
-          "value": 0.25,
-          "operation": "ADD_BASE",
-          "id": "ascension:great_sun_sacred_body_yang_affinity_modifier"
-        }
-      ],
-      "ascension:elemental/fire": [
-        {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:great_sun_sacred_body_fire_affinity_modifier"
+          "id": "ascension:great_sun_sacred_body_vitality_modifier",
+          "value": 0.35
         }
       ]
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:4_saint_great_sun_sacred_body_physique_strength_base",
+          "value": 10.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:great_sun_sacred_body_strength_modifier",
+          "value": 0.3
+        }
+      ]
+    },
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:4_saint_great_sun_sacred_body_physique_spirit_base",
+          "value": 6.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:great_sun_sacred_body_spirit_modifier",
+          "value": 0.15
+        }
+      ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:4_saint_great_sun_sacred_body_physique_agility_base",
+          "value": 3.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:4_saint_great_sun_sacred_body_physique_affinity_foundation_body_base",
+            "value": 3.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/sun": {
+        "flat": [
+          {
+            "id": "ascension:4_saint_great_sun_sacred_body_physique_affinity_elemental_sun_base",
+            "value": 5.0
+          },
+          {
+            "id": "ascension:great_sun_sacred_body_sun_affinity_modifier",
+            "value": 0.3
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/yang": {
+        "flat": [
+          {
+            "id": "ascension:4_saint_great_sun_sacred_body_physique_affinity_elemental_yang_base",
+            "value": 4.0
+          },
+          {
+            "id": "ascension:great_sun_sacred_body_yang_affinity_modifier",
+            "value": 0.25
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/fire": {
+        "flat": [
+          {
+            "id": "ascension:4_saint_great_sun_sacred_body_physique_affinity_elemental_fire_base",
+            "value": 2.0
+          },
+          {
+            "id": "ascension:great_sun_sacred_body_fire_affinity_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

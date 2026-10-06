@@ -18,26 +18,59 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:profound"
   },
-  "base_stats": {
-    "ascension:vitality": 1
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/soul": 2.5,
-      "ascension:elemental/ice": 2,
-      "ascension:elemental/yin": 3,
-      "ascension:weapon/fist": 1.75
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_ice_soul_body_flawed_physique_vitality_base",
+          "value": 1
+        }
+      ],
+      "multiplier": []
     }
   },
-  "path_bonus_modifiers": {
+  "path_bonus": {
     "ascension:affinity": {
-      "ascension:weapon/fist": [
-        {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:ice_soul_body_flawed_physique_fist_modifier"
-        }
-      ]
+      "ascension:foundation/soul": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_ice_soul_body_flawed_physique_affinity_foundation_soul_base",
+            "value": 2.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/ice": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_ice_soul_body_flawed_physique_affinity_elemental_ice_base",
+            "value": 2
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/yin": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_ice_soul_body_flawed_physique_affinity_elemental_yin_base",
+            "value": 3
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/fist": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_ice_soul_body_flawed_physique_affinity_weapon_fist_base",
+            "value": 1.75
+          },
+          {
+            "id": "ascension:ice_soul_body_flawed_physique_fist_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      }
     }
   }
 }

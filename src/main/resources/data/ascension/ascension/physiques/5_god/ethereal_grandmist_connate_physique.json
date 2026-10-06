@@ -12,65 +12,101 @@
     "ascension:elemental/star"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:spirit": 22.0,
-    "ascension:vitality": 11.0,
-    "ascension:strength": 8.0,
-    "ascension:agility": 13.0
-  },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.5,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:ethereal_grandmist_connate_physique_spirit_modifier"
-      }
-    ],
-    "ascension:vitality": [
-      {
-        "value": 0.2,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:ethereal_grandmist_connate_physique_vitality_modifier"
-      }
-    ],
-    "ascension:strength": [
-      {
-        "value": 0.2,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:ethereal_grandmist_connate_physique_strength_modifier"
-      }
-    ],
-    "ascension:agility": [
-      {
-        "value": 0.3,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:ethereal_grandmist_connate_physique_agility_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/soul": 5.0,
-      "ascension:elemental/gravity": 8.0,
-      "ascension:elemental/star": 7.0
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/gravity": [
+  "stats": {
+    "ascension:spirit": {
+      "flat": [
         {
-          "value": 0.45,
-          "operation": "ADD_BASE",
-          "id": "ascension:ethereal_grandmist_connate_physique_gravity_affinity_modifier"
+          "id": "ascension:5_god_ethereal_grandmist_connate_physique_spirit_base",
+          "value": 22.0
         }
       ],
-      "ascension:elemental/star": [
+      "multiplier": [
         {
-          "value": 0.3,
-          "operation": "ADD_BASE",
-          "id": "ascension:ethereal_grandmist_connate_physique_star_affinity_modifier"
+          "id": "ascension:ethereal_grandmist_connate_physique_spirit_modifier",
+          "value": 0.5
         }
       ]
+    },
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:5_god_ethereal_grandmist_connate_physique_vitality_base",
+          "value": 11.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:ethereal_grandmist_connate_physique_vitality_modifier",
+          "value": 0.2
+        }
+      ]
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:5_god_ethereal_grandmist_connate_physique_strength_base",
+          "value": 8.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:ethereal_grandmist_connate_physique_strength_modifier",
+          "value": 0.2
+        }
+      ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:5_god_ethereal_grandmist_connate_physique_agility_base",
+          "value": 13.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:ethereal_grandmist_connate_physique_agility_modifier",
+          "value": 0.3
+        }
+      ]
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": {
+        "flat": [
+          {
+            "id": "ascension:5_god_ethereal_grandmist_connate_physique_affinity_foundation_soul_base",
+            "value": 5.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/gravity": {
+        "flat": [
+          {
+            "id": "ascension:5_god_ethereal_grandmist_connate_physique_affinity_elemental_gravity_base",
+            "value": 8.0
+          },
+          {
+            "id": "ascension:ethereal_grandmist_connate_physique_gravity_affinity_modifier",
+            "value": 0.45
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/star": {
+        "flat": [
+          {
+            "id": "ascension:5_god_ethereal_grandmist_connate_physique_affinity_elemental_star_base",
+            "value": 7.0
+          },
+          {
+            "id": "ascension:ethereal_grandmist_connate_physique_star_affinity_modifier",
+            "value": 0.3
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

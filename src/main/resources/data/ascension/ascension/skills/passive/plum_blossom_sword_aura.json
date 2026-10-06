@@ -5,21 +5,25 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:strength": [
-          {
-            "value": 0.5,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:plum_blossom_sword_aura_strength"
-          }
-        ],
-        "ascension:agility": [
-          {
-            "value": 0.5,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:plum_blossom_sword_aura_agility"
-          }
-        ]
+      "stats": {
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:plum_blossom_sword_aura_strength",
+              "value": 0.5
+            }
+          ]
+        },
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:plum_blossom_sword_aura_agility",
+              "value": 0.5
+            }
+          ]
+        }
       }
     }
   ],

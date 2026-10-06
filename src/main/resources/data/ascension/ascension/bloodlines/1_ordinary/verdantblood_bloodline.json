@@ -15,24 +15,50 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:vitality",
-              "value": 0.08
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_verdantblood_bloodline_vitality_a1",
+                  "value": 0.08
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 0.03
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_verdantblood_bloodline_spirit_a1",
+                  "value": 0.03
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/body": 0.005,
-              "ascension:elemental/wood": 0.01
+              "ascension:foundation/body": {
+                "flat": [
+                  {
+                    "id": "ascension:1_ordinary_verdantblood_bloodline_affinity_foundation_body_a2",
+                    "value": 0.005
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/wood": {
+                "flat": [
+                  {
+                    "id": "ascension:1_ordinary_verdantblood_bloodline_affinity_elemental_wood_a2",
+                    "value": 0.01
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }

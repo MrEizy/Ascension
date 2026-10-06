@@ -18,42 +18,68 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:profound"
   },
-  "base_stats": {
-    "ascension:strength": 2
-  },
-  "stat_modifiers": {
-    "ascension:strength": [
-      {
-        "value": 0.2,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:sword_body_flawed_strength_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/body": 0.1,
-      "ascension:foundation/essence": 1.5,
-      "ascension:weapon/sword": 3,
-      "ascension:elemental/metal": 2
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:weapon/sword": [
+  "stats": {
+    "ascension:strength": {
+      "flat": [
         {
-          "value": 0.2,
-          "operation": "ADD_BASE",
-          "id": "ascension:sword_body_flawed_sword_modifier"
+          "id": "ascension:2_profound_sword_body_flawed_physique_strength_base",
+          "value": 2
         }
       ],
-      "ascension:elemental/metal": [
+      "multiplier": [
         {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:sword_body_flawed_metal_modifier"
+          "id": "ascension:sword_body_flawed_strength_modifier",
+          "value": 0.2
         }
       ]
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_sword_body_flawed_physique_affinity_foundation_body_base",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:foundation/essence": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_sword_body_flawed_physique_affinity_foundation_essence_base",
+            "value": 1.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/sword": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_sword_body_flawed_physique_affinity_weapon_sword_base",
+            "value": 3
+          },
+          {
+            "id": "ascension:sword_body_flawed_sword_modifier",
+            "value": 0.2
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/metal": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_sword_body_flawed_physique_affinity_elemental_metal_base",
+            "value": 2
+          },
+          {
+            "id": "ascension:sword_body_flawed_metal_modifier",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      }
     }
   }
 }

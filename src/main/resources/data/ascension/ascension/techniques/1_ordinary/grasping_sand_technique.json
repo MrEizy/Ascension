@@ -34,17 +34,27 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:vitality",
-              "value": 0.16
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_grasping_sand_technique_vitality_a1",
+                  "value": 0.16
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 0.14
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_grasping_sand_technique_strength_a1",
+                  "value": 0.14
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

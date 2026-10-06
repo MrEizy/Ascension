@@ -177,6 +177,7 @@ public final class Barriers {
     }
 
     public static void applyDamage(RPGEngineEntityDamagedEvent.Pre event) {
+        /* TODO FIX
         if (!(event.getEntity().level() instanceof ServerLevel level)) {
             return;
         }
@@ -228,6 +229,8 @@ public final class Barriers {
         }
 
         event.setDamage(remaining);
+
+         */
     }
 
     @SubscribeEvent

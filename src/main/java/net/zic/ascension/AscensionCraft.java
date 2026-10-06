@@ -31,6 +31,7 @@ import net.zic.ascension.common.command.commands.AuctionCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.datagen.loot.ModLootModifiers;
+import net.zic.ascension.configuration.mob_traits.traits.AscensionTraitTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 import net.zic.ascension.impl.datapack.alchemy.AlchemyMaterialProviders;
 import net.zic.ascension.network.*;
@@ -149,13 +150,15 @@ public class AscensionCraft {
 
 
 
+
+        AscensionTraitTypes.register(modEventBus);
     }
 
     public AscensionCraft(IEventBus modEventBus, ModContainer modContainer) {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::onLoadComplete);
-        
+
 
 
 
@@ -166,7 +169,6 @@ public class AscensionCraft {
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC, "ascension/Ascension-Common.toml");
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.CULTIVATION_SPEC, "ascension/Ascension-Cultivation.toml");
-        modContainer.registerConfig(ModConfig.Type.SERVER, Config.MOB_CULTIVATION_SPEC, "ascension/Ascension-MobCultivation.toml");
         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC, "ascension/Ascension-Client.toml");
 
     }
@@ -344,32 +346,6 @@ public class AscensionCraft {
                     SphericalProjectilePayload.TYPE,
                     SphericalProjectilePayload.CODEC,
                     SphericalProjectilePayload::handle
-            );
-
-            registrar.playToClient(
-                    net.zic.ascension.network.auction.AuctionScreenPacket.TYPE,
-                    net.zic.ascension.network.auction.AuctionScreenPacket.STREAM_CODEC,
-                    net.zic.ascension.network.auction.AuctionScreenPacket::handle
-            );
-            registrar.playToServer(
-                    net.zic.ascension.network.auction.CreateAuctionPacket.TYPE,
-                    net.zic.ascension.network.auction.CreateAuctionPacket.STREAM_CODEC,
-                    net.zic.ascension.network.auction.CreateAuctionPacket::handle
-            );
-            registrar.playToServer(
-                    net.zic.ascension.network.auction.BidAuctionPacket.TYPE,
-                    net.zic.ascension.network.auction.BidAuctionPacket.STREAM_CODEC,
-                    net.zic.ascension.network.auction.BidAuctionPacket::handle
-            );
-            registrar.playToServer(
-                    net.zic.ascension.network.auction.AuctionInboxActionPacket.TYPE,
-                    net.zic.ascension.network.auction.AuctionInboxActionPacket.STREAM_CODEC,
-                    net.zic.ascension.network.auction.AuctionInboxActionPacket::handle
-            );
-            registrar.playToServer(
-                    net.zic.ascension.network.auction.AuctionActionPacket.TYPE,
-                    net.zic.ascension.network.auction.AuctionActionPacket.STREAM_CODEC,
-                    net.zic.ascension.network.auction.AuctionActionPacket::handle
             );
 
         }

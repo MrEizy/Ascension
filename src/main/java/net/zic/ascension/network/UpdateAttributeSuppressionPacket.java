@@ -11,7 +11,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
 import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.custom_attributes.SuppressedZenithAttribute;
+
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
@@ -56,8 +56,7 @@ public record UpdateAttributeSuppressionPacket(
 
             Holder<Attribute> attributeHolder = BuiltInRegistries.ATTRIBUTE.get(packet.attribute).get();
 
-            holder.setSuppression(attributeHolder,packet.percentage);
-
+            holder.suppress(attributeHolder, packet.percentage);
             player.syncData(ZenithAttachments.ATTRIBUTE_HOLDER);
 
         });

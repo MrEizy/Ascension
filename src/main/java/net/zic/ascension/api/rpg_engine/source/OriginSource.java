@@ -1,7 +1,9 @@
 package net.zic.ascension.api.rpg_engine.source;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,10 +20,11 @@ import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.stats.Stat;
-import net.zic.zenithlib.stats.StatInstance;
 import net.zic.zenithlib.stats.StatProvider;
 import net.zic.zenithlib.stats.StatSheet;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import net.zic.zenithlib.stats.ZenithStatHelper;
+import net.zic.zenithlib.value_containers.typed.Modifier;
+import net.zic.zenithlib.value_containers.typed.ValueContainer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,7 +38,6 @@ public class OriginSource implements StatProvider {
     private final HashSet<Identifier> removedDataSources = new HashSet<>();
 
     private ValueInput cachedData; //used in situations where we cannot easily have registry access
-    private RegistryAccess registryAccess;
 
     private final StatSheet statSheet = new StatSheet();
 
@@ -46,19 +48,11 @@ public class OriginSource implements StatProvider {
     private String process;
 
     public RegistryAccess getRegistryAccess(){
-        if (registryAccess != null) {
-            return registryAccess;
-        }
-        if (!attachedEntities.isEmpty()) {
-            return attachedEntities.iterator().next().registryAccess();
-        }
         return ServerLifecycleHooks.getCurrentServer() == null
-                ? null
+                ? (Minecraft.getInstance().getConnection() == null ? null : Minecraft.getInstance().getConnection().registryAccess())
                 : ServerLifecycleHooks.getCurrentServer().registryAccess();
     }
-    public void setRegistryAccess(RegistryAccess registryAccess){
-        this.registryAccess = registryAccess;
-    }
+
     public void setCachedData(ValueInput cachedData){this.cachedData =cachedData;}
 
     //──Source State────────────────────────────────────────────────────────
@@ -76,7 +70,9 @@ public class OriginSource implements StatProvider {
                                 Map.Entry::getValue
                         )),
                 Set.copyOf(removedDataSources),
-                statSheet.getAllInstances().stream().filter(instance->dirtyStats.contains(instance.getStat())).toList()
+                statSheet.getAllInstances().stream().filter(instance->dirtyStats.contains(
+                        ZenithStatHelper.stat(instance)
+                )).toList()
         );
         dirtyDataSources.clear();
         removedDataSources.clear();
@@ -110,7 +106,6 @@ public class OriginSource implements StatProvider {
 
     public void attachToEntity(LivingEntity entity) {
         if (entity == null || attachedEntities.contains(entity)) { return; }
-        setRegistryAccess(entity.registryAccess());
         attachedEntities.add(entity);
         entity.getData(ZenithAttachments.STAT_HOLDER).registerStatProvider(this);
         for (DataSourceInstance instance : dataSources.values()) { instance.getDataSource().applyToEntity(entity, instance); }
@@ -159,25 +154,21 @@ public class OriginSource implements StatProvider {
     //TODO add methods for adding stats and multipliers
 
 
-    public void addStat(Stat stat, double val){
-        statSheet.addStat(stat,val);
+    public void addFlatStatModifier(Stat stat, Modifier<Double> modifier){
+        statSheet.getStatInstance(stat).addFlatModifier(modifier);
+        dirtyStats.add(stat);
+    }
+    public void addMultiplierStatModifier(Stat stat, Modifier<Double> modifier){
+        statSheet.getStatInstance(stat).addMultiplierModifier(modifier);
         dirtyStats.add(stat);
     }
 
-    public void removeStat(Stat stat, double val){
-        addStat(stat,-val);
+
+    public void removeStatModifier(Stat stat, Identifier modifier){
+        statSheet.getStatInstance(stat).removeModifier(modifier);
+        dirtyStats.add(stat);
     }
 
-    public void addStatModifier(Stat stat, ValueContainerModifier modifier){
-        statSheet.addStat(stat,0); //makes sure the stat is present
-        statSheet.getStatInstance(stat).addModifier(modifier);
-        dirtyStats.add(stat);
-    }
-    public void removeStatModifier(Stat stat,Identifier identifier){
-        if(statSheet.getStatInstance(stat) == null) return;
-        statSheet.getStatInstance(stat).removeModifier(identifier);
-        dirtyStats.add(stat);
-    }
 
     public void updateEntityStatHolder(){
         if(dirtyStats.isEmpty()) return;
@@ -196,7 +187,7 @@ public class OriginSource implements StatProvider {
     }
 
     @Override
-    public StatInstance getStatInstance(Stat stat) {
+    public ValueContainer<Double> getStatInstance(Stat stat) {
         return statSheet.getStatInstance(stat);
     }
 
@@ -236,15 +227,20 @@ public class OriginSource implements StatProvider {
     }
 
     public OriginSourcePatch load(){
-        if(cachedData == null) return null;
+        if(cachedData == null) {
+            finishLoading();
+            return null;
+        };
         loadOriginSourceData(cachedData);
         cachedData = null;
         return resolveFullPatch();
     }
+    public void finishLoading(){
+        NeoForge.EVENT_BUS.post(new OriginSourceEvent.OriginSourceFinishedLoadingEvent(this));
+    }
 
     public void loadOriginSourceData(ValueInput input){
         HashMap<LoadPriority,ArrayList<DataSourceInstance>> loadMap = new HashMap<>();
-
         ValueInput.ValueInputList inputList = input.childrenListOrEmpty("data_sources");
         for(ValueInput dataSourceInput : inputList){
             DataSourceInstance instance = loadDataSource(dataSourceInput,getRegistryAccess());
@@ -267,7 +263,7 @@ public class OriginSource implements StatProvider {
                 instance.getDataSource().onAdded(this,instance);
             }
         }
-        NeoForge.EVENT_BUS.post(new OriginSourceEvent.OriginSourceFinishedLoadingEvent(this));
+        finishLoading();
         for(DataSourceInstance instance : dataSources.values()) instance.getDataSource().finishedLoading(this,instance);
     }
 
@@ -289,7 +285,11 @@ public class OriginSource implements StatProvider {
         }).forEach(pair->dataSources.put(pair.getFirst(),pair.getSecond()));
 
         ByteBufHelpers.decodeArray(buf, ByteBufHelpers::decodeIdentifier).forEach(dataSources::remove);
-        ByteBufHelpers.decodeArray(buf, StatInstance::decode).forEach(statSheet::setStat);
+        ByteBufHelpers.decodeArray(buf, (byteBuf)->ValueContainer.decode(
+                id->ZenithStatHelper.statInstance(ZenithStatHelper.stat(id)),
+                byteBuf,
+                Codec.DOUBLE
+        )).forEach(statSheet::setStat);
     }
 
 }

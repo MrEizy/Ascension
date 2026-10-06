@@ -13,9 +13,10 @@ import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.impl.core.effect.SkillEffectService;
+import net.zic.ascension.util.PathInteractionUtil;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
-import net.zic.zenithlib.value_containers.ValueContainer;
+import net.zic.zenithlib.value_containers.typed.ValueContainer;
 
 import java.util.List;
 import java.util.Optional;
@@ -163,16 +164,13 @@ public final class ScaledValueSources {
         }
     }
 
-    public record Affinity(Identifier path, Optional<Identifier> category, boolean base) implements ScaledValue.Source {
+    public record Affinity(Identifier path, boolean base) implements ScaledValue.Source {
         public static final MapCodec<Affinity> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Identifier.CODEC.fieldOf("path").forGetter(Affinity::path),
-                Identifier.CODEC.optionalFieldOf("category").forGetter(Affinity::category),
+
                 Codec.BOOL.optionalFieldOf("base", false).forGetter(Affinity::base)
         ).apply(instance, Affinity::new));
 
-        public Affinity {
-            category = category == null ? Optional.empty() : category;
-        }
 
         @Override
         public CodecType<ScaledValue.Source> getType() {
@@ -184,11 +182,10 @@ public final class ScaledValueSources {
             if (context.source() == null) {
                 return 0.0D;
             }
-            Identifier resolvedCategory = category
-                    .orElse(AscensionOriginSourceHelper.AFFINITY_CATEGORY);
-            ValueContainer container = AscensionOriginSourceHelper.getPathBonusContainer(
+
+            ValueContainer<Double> container = AscensionOriginSourceHelper.getPathBonusContainer(
                     context.source(),
-                    resolvedCategory,
+                    PathInteractionUtil.AFFINITY_CATEGORY,
                     path
             );
             return container == null ? 0.0D : base ? container.getBaseValue() : container.getValue();

@@ -6,19 +6,19 @@ import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.common.damagesource.IReductionFunction;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.zic.ascension.AscensionCraft;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import net.zic.zenithlib.value_containers.typed.*;
+
 
 public abstract class RPGEngineEntityDamagedEvent extends LivingEvent {
     protected final DamageContainer container;
     protected final RPGEngineDamageSource source;
-    protected ValueContainer damageContainer;
+    protected ValueContainer<Double> damageContainer;
     protected static final Identifier CONTAINER_ID = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"rpg_engine_damage_instance");
 
     public RPGEngineEntityDamagedEvent(LivingEntity entity, DamageContainer container, RPGEngineDamageSource source) {
         super(entity);
         this.container = container;
-        damageContainer = new ValueContainer(CONTAINER_ID,container.getNewDamage());
+        damageContainer = ValueContainerHelpers.doubleValueContainer(CONTAINER_ID,container.getNewDamage());
         this.source = source;
     }
     public static class Pre extends RPGEngineEntityDamagedEvent  {
@@ -26,10 +26,10 @@ public abstract class RPGEngineEntityDamagedEvent extends LivingEvent {
             super(entity, container,source);
 
         }
-        public void addDamageModifier(ValueContainerModifier modifier){
-            damageContainer.addModifier(modifier);
-        }
-        public void removeDamageModifier(Identifier identifier){
+        public void addFlatModifier(Modifier<Double> modifier) {damageContainer.addFlatModifier(modifier);}
+        public void addMultiplierModifier(Modifier<Double> modifier){damageContainer.addMultiplierModifier(modifier);}
+
+        public void removeModifier(Identifier identifier){
             damageContainer.removeModifier(identifier);
         }
 
@@ -39,16 +39,13 @@ public abstract class RPGEngineEntityDamagedEvent extends LivingEvent {
         public void setPostAttackInvulnerabilityTicks(int ticks) {
             container.setPostAttackInvulnerabilityTicks(ticks);
         }
-        public void setDamage(double damage) {
-            damageContainer = new ValueContainer(CONTAINER_ID, Math.max(0.0D, damage));
-        }
 
     }
     public static class Post extends RPGEngineEntityDamagedEvent {
         public Post(Pre event){
             this(event.getEntity(),event.container,event.damageContainer,event.source);
         }
-        public Post(LivingEntity entity, DamageContainer container,ValueContainer valueContainer, RPGEngineDamageSource source) {
+        public Post(LivingEntity entity, DamageContainer container,ValueContainer<Double> valueContainer, RPGEngineDamageSource source) {
             super(entity, container,source);
             this.damageContainer = valueContainer;
         }

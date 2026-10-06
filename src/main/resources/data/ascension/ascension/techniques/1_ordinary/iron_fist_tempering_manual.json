@@ -35,17 +35,27 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 0.25
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_iron_fist_tempering_manual_strength_a1",
+                  "value": 0.25
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.15
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_iron_fist_tempering_manual_vitality_a1",
+                  "value": 0.15
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

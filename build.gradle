@@ -147,7 +147,7 @@ dependencies {
     //jarJar(implementation('com.github.OliverHesse:EasyGui:d71b1e115c'))
     //jarJar(implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0'))
 
-    implementation 'com.github.MrEizy:ZenithLib:d0f2829dfa'
+    implementation 'com.github.MrEizy:ZenithLib:6d2eeb0334'
     implementation('com.github.OliverHesse:EasyGui:d71b1e115c')
     implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0')
 
@@ -159,7 +159,6 @@ dependencies {
 
     //implementation "maven.modrinth:jade:${project.jade_version}"
 
-    //implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     //compileOnly "net.favouriteless.modopedia:modopedia-neoforge-${minecraft_version}:${modopedia_version}"
     //localRuntime "net.favouriteless.modopedia:modopedia-neoforge-${minecraft_version}:${modopedia_version}"

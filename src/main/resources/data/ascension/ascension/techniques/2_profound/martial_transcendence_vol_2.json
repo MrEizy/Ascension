@@ -35,25 +35,45 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 0.7
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_martial_transcendence_vol_2_strength_a1",
+                  "value": 0.7
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.6
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_martial_transcendence_vol_2_vitality_a1",
+                  "value": 0.6
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.2
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_martial_transcendence_vol_2_agility_a1",
+                  "value": 0.2
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 0.1
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_martial_transcendence_vol_2_spirit_a1",
+                  "value": 0.1
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

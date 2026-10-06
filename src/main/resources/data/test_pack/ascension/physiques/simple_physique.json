@@ -18,18 +18,55 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:ordinary"
   },
-  "base_stats": {
-    "ascension:vitality": 1
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "test_pack:simple_physique_vitality_base",
+          "value": 1
+        }
+      ],
+      "multiplier": []
+    }
   },
-
-
-  "base_path_bonuses": {
+  "path_bonus": {
     "ascension:affinity": {
-      "ascension:essence": 1,
-      "ascension:wood": 0.5,
-      "ascension:blood": 0.5,
-      "ascension:wind": 0.5
+      "ascension:essence": {
+        "flat": [
+          {
+            "id": "test_pack:simple_physique_affinity_essence_base",
+            "value": 1
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:wood": {
+        "flat": [
+          {
+            "id": "test_pack:simple_physique_affinity_wood_base",
+            "value": 0.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:blood": {
+        "flat": [
+          {
+            "id": "test_pack:simple_physique_affinity_blood_base",
+            "value": 0.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:wind": {
+        "flat": [
+          {
+            "id": "test_pack:simple_physique_affinity_wind_base",
+            "value": 0.5
+          }
+        ],
+        "multiplier": []
+      }
     }
   }
-
 }

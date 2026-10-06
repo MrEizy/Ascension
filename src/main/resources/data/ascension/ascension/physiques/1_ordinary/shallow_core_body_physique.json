@@ -18,26 +18,64 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:ordinary"
   },
-  "base_stats": {
-    "ascension:vitality": 1
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/essence": 1.5,
-      "ascension:foundation/soul": 2,
-      "ascension:elemental/wood": 2.5,
-      "ascension:elemental/sound": 2.5
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:1_ordinary_shallow_core_body_physique_vitality_base",
+          "value": 1
+        }
+      ],
+      "multiplier": []
     }
   },
-  "path_bonus_modifiers": {
+  "path_bonus": {
     "ascension:affinity": {
-      "ascension:elemental/water": [
-        {
-          "value": 0.2,
-          "operation": "ADD_BASE",
-          "id": "ascension:tidecaller_root_water_modifier"
-        }
-      ]
+      "ascension:foundation/essence": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_shallow_core_body_physique_affinity_foundation_essence_base",
+            "value": 1.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:foundation/soul": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_shallow_core_body_physique_affinity_foundation_soul_base",
+            "value": 2
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/wood": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_shallow_core_body_physique_affinity_elemental_wood_base",
+            "value": 2.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/sound": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_shallow_core_body_physique_affinity_elemental_sound_base",
+            "value": 2.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/water": {
+        "flat": [
+          {
+            "id": "ascension:tidecaller_root_water_modifier",
+            "value": 0.2
+          }
+        ],
+        "multiplier": []
+      }
     }
   }
 }

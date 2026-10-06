@@ -11,35 +11,64 @@
     "ascension:elemental/lightning"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:agility": 3.0,
-    "ascension:strength": 2.0,
-    "ascension:vitality": 1.0
-  },
-  "stat_modifiers": {
-    "ascension:agility": [
-      {
-        "value": 0.12,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:thunder_spirit_veins_agility_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/body": 1.0,
-      "ascension:elemental/lightning": 2.0
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/lightning": [
+  "stats": {
+    "ascension:agility": {
+      "flat": [
         {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:thunder_spirit_veins_lightning_affinity_modifier"
+          "id": "ascension:2_profound_thunder_spirit_veins_physique_agility_base",
+          "value": 3.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:thunder_spirit_veins_agility_modifier",
+          "value": 0.12
         }
       ]
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_thunder_spirit_veins_physique_strength_base",
+          "value": 2.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_thunder_spirit_veins_physique_vitality_base",
+          "value": 1.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_thunder_spirit_veins_physique_affinity_foundation_body_base",
+            "value": 1.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/lightning": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_thunder_spirit_veins_physique_affinity_elemental_lightning_base",
+            "value": 2.0
+          },
+          {
+            "id": "ascension:thunder_spirit_veins_lightning_affinity_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

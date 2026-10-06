@@ -16,34 +16,86 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 0.26
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a1",
+                  "value": 0.26
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.2
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a1",
+                  "value": 0.2
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.16
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a1",
+                  "value": 0.16
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 0.08
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a1",
+                  "value": 0.08
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/body": 0.035,
-              "ascension:elemental/metal": 0.065,
-              "ascension:elemental/yang": 0.045,
-              "ascension:elemental/sound": 0.025
+              "ascension:foundation/body": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_celestial_war_tiger_bloodline_affinity_foundation_body_a2",
+                    "value": 0.035
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/metal": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_celestial_war_tiger_bloodline_affinity_elemental_metal_a2",
+                    "value": 0.065
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/yang": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_celestial_war_tiger_bloodline_affinity_elemental_yang_a2",
+                    "value": 0.045
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/sound": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_celestial_war_tiger_bloodline_affinity_elemental_sound_a2",
+                    "value": 0.025
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -57,17 +109,27 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 4.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a3",
+                  "value": 4.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 3.0
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a3",
+                  "value": 3.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     },
@@ -79,23 +141,41 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 5.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a4",
+                  "value": 5.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 4.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a4",
+                  "value": 4.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/metal": 1.0
+              "ascension:elemental/metal": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_celestial_war_tiger_bloodline_affinity_elemental_metal_a5",
+                    "value": 1.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -109,23 +189,41 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 4.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a6",
+                  "value": 4.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 3.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a6",
+                  "value": 3.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/yang": 1.0
+              "ascension:elemental/yang": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_celestial_war_tiger_bloodline_affinity_elemental_yang_a7",
+                    "value": 1.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -139,33 +237,77 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 9.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_strength_a8",
+                  "value": 9.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 7.0
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_agility_a8",
+                  "value": 7.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 7.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_vitality_a8",
+                  "value": 7.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 4.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_celestial_war_tiger_bloodline_spirit_a8",
+                  "value": 4.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/metal": 2.0,
-              "ascension:elemental/yang": 2.0,
-              "ascension:elemental/sound": 1.0
+              "ascension:elemental/metal": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_celestial_war_tiger_bloodline_affinity_elemental_metal_a9",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/yang": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_celestial_war_tiger_bloodline_affinity_elemental_yang_a9",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/sound": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_celestial_war_tiger_bloodline_affinity_elemental_sound_a9",
+                    "value": 1.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }

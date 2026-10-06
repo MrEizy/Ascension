@@ -16,41 +16,59 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:ordinary"
   },
-  "base_stats": {
-    "ascension:vitality": 2,
-    "ascension:strength": 1
-  },
-  "stat_modifiers": {
-    "ascension:vitality": [
-      {
-        "value": 0.2,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:physique_vitality_multiplier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/essence": 1,
-      "ascension:weapon/sword": 2
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:foundation/essence": [
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
         {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:physique_affinity_modifier"
+          "id": "ascension:1_ordinary_sword_bone_physique_vitality_base",
+          "value": 2
         }
       ],
-      "ascension:weapon/sword": [
+      "multiplier": [
         {
-          "value": 0.2,
-          "operation": "ADD_BASE",
-          "id": "ascension:physique_sword_modifier"
+          "id": "ascension:physique_vitality_multiplier",
+          "value": 0.2
         }
       ]
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:1_ordinary_sword_bone_physique_strength_base",
+          "value": 1
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_sword_bone_physique_affinity_foundation_essence_base",
+            "value": 1
+          },
+          {
+            "id": "ascension:physique_affinity_modifier",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/sword": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_sword_bone_physique_affinity_weapon_sword_base",
+            "value": 2
+          },
+          {
+            "id": "ascension:physique_sword_modifier",
+            "value": 0.2
+          }
+        ],
+        "multiplier": []
+      }
     }
   }
 }

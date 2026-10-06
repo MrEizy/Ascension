@@ -5,7 +5,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
 import net.zic.ascension.common.command.commands.*;
-import net.zic.ascension.mob_cultivation.command.MobCultivationCommands;
+import net.zic.ascension.common.command.commands.mob.MobCommands;
 
 public final class AscensionCommand {
     private AscensionCommand() {
@@ -21,6 +21,10 @@ public final class AscensionCommand {
                         .then(SlotSkillCommand.buildDisplay())
                         .then(SkillMasteryCommand.build())
                 )
+                .then(Commands.literal("mobs")
+                        .then(MobCommands.build())
+                )
+                .then(ViewStats.build())
                 .then(TribulationCommand.build())
                 .then(ChunkCommand.build())
                 .then(WorldgenDebugCommand.build())
@@ -30,7 +34,6 @@ public final class AscensionCommand {
                 .then(RealmTravelCommand.buildDescend())
                 .then(AlchemyCommand.build())
                 .then(AscensionGive.build())
-                .then(MobCultivationCommands.build())
         );
     }
 }

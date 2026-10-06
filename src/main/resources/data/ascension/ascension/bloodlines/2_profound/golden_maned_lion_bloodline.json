@@ -16,29 +16,68 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 0.09
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_golden_maned_lion_bloodline_strength_a1",
+                  "value": 0.09
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.08
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_golden_maned_lion_bloodline_vitality_a1",
+                  "value": 0.08
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 0.04
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_golden_maned_lion_bloodline_spirit_a1",
+                  "value": 0.04
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/body": 0.008,
-              "ascension:elemental/sound": 0.018,
-              "ascension:elemental/yang": 0.012
+              "ascension:foundation/body": {
+                "flat": [
+                  {
+                    "id": "ascension:2_profound_golden_maned_lion_bloodline_affinity_foundation_body_a2",
+                    "value": 0.008
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/sound": {
+                "flat": [
+                  {
+                    "id": "ascension:2_profound_golden_maned_lion_bloodline_affinity_elemental_sound_a2",
+                    "value": 0.018
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/yang": {
+                "flat": [
+                  {
+                    "id": "ascension:2_profound_golden_maned_lion_bloodline_affinity_elemental_yang_a2",
+                    "value": 0.012
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -52,13 +91,18 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_golden_maned_lion_bloodline_strength_a3",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     },
@@ -70,17 +114,27 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:vitality",
-              "value": 3.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_golden_maned_lion_bloodline_vitality_a4",
+                  "value": 3.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 1.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_golden_maned_lion_bloodline_spirit_a4",
+                  "value": 1.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

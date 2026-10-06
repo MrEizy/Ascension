@@ -9,6 +9,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionDescription;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
@@ -20,8 +21,6 @@ import net.zic.ascension.api.ascension.core.technique.TechniqueSkillCap;
 import net.zic.ascension.api.ascension.core.technique.TechniqueSkillDefinition;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
-import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
@@ -33,7 +32,6 @@ import net.zic.ascension.impl.core.physique.SimplePhysique;
 import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
 
-import net.zic.ascension.util.PathInteractionUtil;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
@@ -48,8 +46,8 @@ import net.zic.zenithlib.tooltip.api.element.TextElement;
 import net.zic.zenithlib.tooltip.api.element.ZenithTooltipElement;
 import net.zic.zenithlib.tooltip.api.value.ZenithTooltipSources;
 import net.zic.zenithlib.tooltip.api.value.ZenithTooltipValue;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import net.zic.zenithlib.value_containers.typed.Modifier;
+import net.zic.zenithlib.value_containers.typed.ModifierHolder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -221,12 +219,7 @@ public final class AscensionTooltipValueSources {
             ZenithTooltipContext context
     ) {
         return context.subject(SimplePhysique.class).map(physique ->
-                ZenithTooltipValue.rows(
-                        combinedStatRows(
-                                physique.baseStats(),
-                                physique.statModifiers()
-                        )
-                )
+                ZenithTooltipValue.rows(combinedStatRows(physique.statModifiers()))
         );
     }
 
@@ -238,25 +231,9 @@ public final class AscensionTooltipValueSources {
         }
 
         RegistryAccess access = context.registryAccess().orElseThrow();
-        return context.subject(SimplePhysique.class).map(physique -> {
-            List<PathBonusBase> baseAffinities = physique.basePathBonuses()
-                    .stream()
-                    .filter(value -> value.category().equals(PathInteractionUtil.AFFINITY_CATEGORY))
-                    .toList();
-
-            List<PathBonusModifier> affinityModifiers = physique.pathBonusModifiers()
-                    .stream()
-                    .filter(value -> value.category().equals(PathInteractionUtil.AFFINITY_CATEGORY))
-                    .toList();
-
-            return ZenithTooltipValue.rows(
-                    combinedAffinityRows(
-                            baseAffinities,
-                            affinityModifiers,
-                            access
-                    )
-            );
-        });
+        return context.subject(SimplePhysique.class).map(physique ->
+                ZenithTooltipValue.rows(combinedAffinityRows(physique.pathBonusModifiers(), access))
+        );
     }
 
     private static Optional<ZenithTooltipValue> techniquePath(
@@ -330,28 +307,14 @@ public final class AscensionTooltipValueSources {
         );
     }
 
-    private static List<ZenithTooltipValue.Row> combinedStatRows(
-            Collection<ValueContainer.BaseModifier> baseStats,
-            Map<Identifier, List<ValueContainerModifier>> modifiers
-    ) {
-        Map<Identifier, List<String>> values = new java.util.TreeMap<>(
-                Comparator.comparing(Identifier::toString)
-        );
+    private static List<ZenithTooltipValue.Row> combinedStatRows(Map<Identifier, ModifierHolder<Double>> modifiers) {
+        Map<Identifier, List<String>> values = new TreeMap<>(Comparator.comparing(Identifier::toString));
         Map<Identifier, Double> tones = new java.util.HashMap<>();
 
-        for (ValueContainer.BaseModifier base : baseStats) {
-            values.computeIfAbsent(base.container(), ignored -> new ArrayList<>())
-                    .add(signedNumber(base.val()));
-            tones.merge(base.container(), base.val(), AscensionTooltipValueSources::mergeTone);
-        }
-
-        modifiers.forEach((stat, statModifiers) -> statModifiers.stream()
-                .sorted(Comparator.comparing(modifier -> modifier.getIdentifier().toString()))
-                .forEach(modifier -> {
-                    values.computeIfAbsent(stat, ignored -> new ArrayList<>())
-                            .add(formatModifier(modifier));
-                    tones.merge(stat, modifier.getVal(), AscensionTooltipValueSources::mergeTone);
-                }));
+        modifiers.forEach((stat, holder) -> {
+            addModifiers(values, tones, stat, holder.flat(), false);
+            addModifiers(values, tones, stat, holder.multiplier(), true);
+        });
 
         return values.entrySet().stream()
                 .map(entry -> ZenithTooltipValue.row(
@@ -362,34 +325,18 @@ public final class AscensionTooltipValueSources {
                 .toList();
     }
 
-    private static List<ZenithTooltipValue.Row> combinedAffinityRows(
-            Collection<PathBonusBase> baseAffinities,
-            Collection<PathBonusModifier> modifiers,
-            RegistryAccess access
-    ) {
-        Map<Identifier, List<String>> values = new java.util.TreeMap<>(
-                Comparator.comparing(Identifier::toString)
-        );
+    private static List<ZenithTooltipValue.Row> combinedAffinityRows(Map<PathBonus, ModifierHolder<Double>> modifiers, RegistryAccess access) {
+        Map<Identifier, List<String>> values = new TreeMap<>(Comparator.comparing(Identifier::toString));
         Map<Identifier, Double> tones = new java.util.HashMap<>();
 
-        for (PathBonusBase base : baseAffinities) {
-            values.computeIfAbsent(base.path(), ignored -> new ArrayList<>())
-                    .add(signedNumber(base.value()));
-            tones.merge(base.path(), base.value(), AscensionTooltipValueSources::mergeTone);
-        }
-
-        modifiers.stream()
-                .sorted(Comparator.comparing(
-                        modifier -> modifier.path() + "|" + modifier.modifier().getIdentifier()
-                ))
-                .forEach(modifier -> {
-                    values.computeIfAbsent(modifier.path(), ignored -> new ArrayList<>())
-                            .add(formatModifier(modifier.modifier()));
-                    tones.merge(
-                            modifier.path(),
-                            modifier.modifier().getVal(),
-                            AscensionTooltipValueSources::mergeTone
-                    );
+        modifiers.entrySet().stream()
+                .filter(entry -> entry.getKey().category().equals(AscensionOriginSourceHelper.AFFINITY_CATEGORY))
+                .sorted(Comparator.comparing(entry -> entry.getKey().path().toString()))
+                .forEach(entry -> {
+                    Identifier path = entry.getKey().path();
+                    ModifierHolder<Double> holder = entry.getValue();
+                    addModifiers(values, tones, path, holder.flat(), false);
+                    addModifiers(values, tones, path, holder.multiplier(), true);
                 });
 
         return values.entrySet().stream()
@@ -399,6 +346,21 @@ public final class AscensionTooltipValueSources {
                         tone(tones.getOrDefault(entry.getKey(), 0.0))
                 ))
                 .toList();
+    }
+
+    private static void addModifiers(
+            Map<Identifier, List<String>> values,
+            Map<Identifier, Double> tones,
+            Identifier key,
+            Collection<Modifier<Double>> modifiers,
+            boolean multiplier
+    ) {
+        modifiers.stream()
+                .sorted(Comparator.comparing(modifier -> modifier.id().toString()))
+                .forEach(modifier -> {
+                    values.computeIfAbsent(key, ignored -> new ArrayList<>()).add(formatModifier(modifier, multiplier));
+                    tones.merge(key, modifier.value(), AscensionTooltipValueSources::mergeTone);
+                });
     }
 
     private static double mergeTone(double current, double next) {
@@ -811,16 +773,8 @@ public final class AscensionTooltipValueSources {
                 : path.name();
     }
 
-    private static String formatModifier(
-            ValueContainerModifier modifier
-    ) {
-        return switch (modifier.getOperation()) {
-            case MULTIPLY_BASE, MULTIPLY_FINAL ->
-                    signedNumber(modifier.getVal() * 100.0) + "%";
-
-            case ADD_BASE, ADD_FINAL ->
-                    signedNumber(modifier.getVal());
-        };
+    private static String formatModifier(Modifier<Double> modifier, boolean multiplier) {
+        return multiplier ? signedNumber(modifier.value() * 100.0) + "%" : signedNumber(modifier.value());
     }
 
     private static String signedNumber(double value) {

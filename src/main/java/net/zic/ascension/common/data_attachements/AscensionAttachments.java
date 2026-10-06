@@ -3,7 +3,9 @@ package net.zic.ascension.common.data_attachements;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -11,11 +13,13 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
+import net.zic.ascension.api.ascension.core.path.bonus.MultiSourcePathBonusHolder;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.chunks.atmospheric_qi.ChunkQiContainer;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkPathAffinityProvider;
+import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHandler;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
-import net.zic.ascension.mob_cultivation.MobCultivationData;
+import net.zic.ascension.mob_cultivation.oliver_rewrite.MobConfigurationHolder;
 import net.zic.ascension.skill_casting.SkillCastHandler;
 
 import java.util.function.Supplier;
@@ -25,6 +29,7 @@ import net.zic.ascension.impl.core.movement.MovementService;
 import net.zic.ascension.impl.runtime.projectile.NormalProjectileService;
 import net.zic.ascension.impl.core.effect.SkillEffectManager;
 
+//TODO go thorough and clean up what we are no longer using
 public class AscensionAttachments {
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, AscensionCraft.MOD_ID);
 
@@ -47,9 +52,10 @@ public class AscensionAttachments {
     );
 
 
-    public static final Supplier<AttachmentType<MobCultivationData>> MOB_CULTIVATION_DATA = ATTACHMENT_TYPES.register(
-            "mob_cultivation_data", () -> AttachmentType.builder(holder -> new MobCultivationData())
-                    .serialize(new MobCultivationData.Provider())
+
+    public static final Supplier<AttachmentType<MobConfigurationHolder>> MOB_CONFIG_HOLDER = ATTACHMENT_TYPES.register(
+            "mob_config_holder", () -> AttachmentType.builder(holder -> new MobConfigurationHolder((Mob) holder))
+                    .serialize(new MobConfigurationHolder.Provider())
                     .build()
     );
 
@@ -70,13 +76,21 @@ public class AscensionAttachments {
                     .copyOnDeath()
                     .build()
     );
-    public static final Supplier<AttachmentType<ChunkQiContainer>> ASCENSION_CHUNK_QI_CONTAINER = ATTACHMENT_TYPES.register(
-            "ascension_chunk_qi_container",()->AttachmentType.builder(
-                holder-> new ChunkQiContainer(0,0,0)
-            )
-                    .serialize(new ChunkQiContainer.Provider())
+
+    public static final Supplier<AttachmentType<ChunkQiHandler>> CHUNK_QI_HANDLER = ATTACHMENT_TYPES.register(
+            "chunk_qi_handler",()->AttachmentType.builder(
+                            holder-> new ChunkQiHandler(0,0,0)
+                    )
+                    .serialize(new ChunkQiHandler.Provider())
                     .build()
     );
+    public static final Supplier<AttachmentType<ChunkPathAffinityProvider>> CHUNK_AFFINITY_HANDLER = ATTACHMENT_TYPES.register(
+            "chunk_affinity_handler",()->AttachmentType.builder(
+                            holder-> new ChunkPathAffinityProvider((ChunkAccess) holder)
+                    )
+                    .build()
+    );
+
     public static final Supplier<AttachmentType<Double>> ENTITY_QI = ATTACHMENT_TYPES.register(
             "entity_qi", () -> AttachmentType.builder((holder)->{
                         if(!(holder instanceof LivingEntity entity)) return 0.0;

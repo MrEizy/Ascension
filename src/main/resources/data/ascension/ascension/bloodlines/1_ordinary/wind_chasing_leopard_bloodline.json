@@ -15,24 +15,50 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 0.08
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_wind_chasing_leopard_bloodline_agility_a1",
+                  "value": 0.08
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 0.04
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_wind_chasing_leopard_bloodline_strength_a1",
+                  "value": 0.04
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/body": 0.006,
-              "ascension:elemental/wind": 0.012
+              "ascension:foundation/body": {
+                "flat": [
+                  {
+                    "id": "ascension:1_ordinary_wind_chasing_leopard_bloodline_affinity_foundation_body_a2",
+                    "value": 0.006
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/wind": {
+                "flat": [
+                  {
+                    "id": "ascension:1_ordinary_wind_chasing_leopard_bloodline_affinity_elemental_wind_a2",
+                    "value": 0.012
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -46,13 +72,18 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_wind_chasing_leopard_bloodline_agility_a3",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }
