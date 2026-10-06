@@ -5,7 +5,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
 import net.zic.ascension.common.command.commands.*;
-import net.zic.ascension.mob_cultivation.command.MobCultivationCommands;
 
 public final class AscensionCommand {
     private AscensionCommand() {
@@ -27,7 +26,6 @@ public final class AscensionCommand {
                 .then(AffinityCommand.build())
                 .then(AlchemyCommand.build())
                 .then(AscensionGive.build())
-                .then(MobCultivationCommands.build())
         );
     }
 }

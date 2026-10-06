@@ -153,8 +153,8 @@ public final class SwordFlightPhysics {
             desired = look.add(right.scale(strafe * 0.6)).normalize();
         }
 
-        double speedMultiplier = RealmEffectivenessConfiguration.getGameplayMultiplier(entity, SPEED_REALM_EXPONENT);
-        double accelerationMultiplier = RealmEffectivenessConfiguration.getGameplayMultiplier(entity, ACCELERATION_REALM_EXPONENT);
+        double speedMultiplier = 1; //TODO fix
+        double accelerationMultiplier = 1; //TODO fix
         double maxSpeed = boosting ? BOOST_MAX_SPEED : MAX_SPEED;
         double pitchFactor = Mth.clamp(entity.getXRot() / 90.0, -1.0, 1.0);
         maxSpeed += pitchFactor > 0 ? DIVE_SPEED_BONUS * pitchFactor : CLIMB_SPEED_PENALTY * pitchFactor;

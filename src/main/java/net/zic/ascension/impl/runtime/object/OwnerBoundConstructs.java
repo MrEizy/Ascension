@@ -172,6 +172,7 @@ public final class OwnerBoundConstructs {
     }
 
     public static void applyDamage(RPGEngineEntityDamagedEvent.Pre event) {
+        /* TODO fix damage calcs
         if (!(event.getEntity().level() instanceof ServerLevel level)) {
             return;
         }
@@ -247,6 +248,8 @@ public final class OwnerBoundConstructs {
         }
 
         event.setDamage(remaining);
+        
+         */
     }
 
     @SubscribeEvent

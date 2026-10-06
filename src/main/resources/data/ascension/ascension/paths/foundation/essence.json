@@ -22,6 +22,7 @@
           "name": "high",
           "progress": 100000,
           "tribulation": {
+            "trigger_type": "conditional",
             "type": "ascension:lightning",
             "strikes": 4,
             "damage": 2.0,

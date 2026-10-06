@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.skill.passive;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
@@ -17,6 +18,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
 import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
 import net.zic.ascension.api.ascension.core.resource.ResourceModifiers;
 import net.zic.ascension.api.ascension.core.runtime.BarrierDefinition;
@@ -28,9 +31,14 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.registry.RegistryHelper;
 import net.zic.zenithlib.stats.Stat;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
+import net.zic.zenithlib.stats.ZenithStatHelper;
+import net.zic.zenithlib.value_containers.typed.Modifier;
+import net.zic.zenithlib.value_containers.typed.ModifierHolder;
+import net.zic.zenithlib.value_containers.typed.ValueContainerCodecHelper;
+import net.zic.zenithlib.value_containers.typed.ValueContainerHelpers;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -74,23 +82,18 @@ public final class PassiveModifiers {
     }
 
     public record Stats(
-            List<ValueContainer.BaseModifier> baseStats,
-            Map<Identifier, List<ValueContainerModifier>> statModifiers,
-            List<ValueContainer.BaseModifier> baseAffinities,
-            Map<Identifier, List<ValueContainerModifier>> affinityModifiers
+            Map<Identifier, ModifierHolder<Double>> statModifiers,
+            Map<PathBonus, ModifierHolder<Double>> pathBonusModifiers
     ) implements PassiveModifier {
         public static final MapCodec<Stats> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ValueContainer.BASE_MODIFIER_CODEC.listOf().optionalFieldOf("base_stats", List.of()).forGetter(Stats::baseStats),
-                ValueContainerModifier.MAP_CODEC.optionalFieldOf("stat_modifiers", Map.of()).forGetter(Stats::statModifiers),
-                ValueContainer.BASE_MODIFIER_CODEC.listOf().optionalFieldOf("base_affinities", List.of()).forGetter(Stats::baseAffinities),
-                ValueContainerModifier.MAP_CODEC.optionalFieldOf("affinity_modifiers", Map.of()).forGetter(Stats::affinityModifiers)
+                ValueContainerCodecHelper.containersCodec(Codec.DOUBLE).optionalFieldOf("stats", Map.of()).forGetter(Stats::statModifiers),
+                PathBonusHolder.MODIFIER_CODEC.optionalFieldOf("path_bonuses", Map.of()).forGetter(Stats::pathBonusModifiers)
         ).apply(instance, Stats::new));
 
         public Stats {
-            baseStats = baseStats == null ? List.of() : List.copyOf(baseStats);
+
             statModifiers = statModifiers == null ? Map.of() : Map.copyOf(statModifiers);
-            baseAffinities = baseAffinities == null ? List.of() : List.copyOf(baseAffinities);
-            affinityModifiers = affinityModifiers == null ? Map.of() : Map.copyOf(affinityModifiers);
+            pathBonusModifiers = pathBonusModifiers == null ? Map.of() : Map.copyOf(pathBonusModifiers);
         }
 
         @Override
@@ -100,49 +103,68 @@ public final class PassiveModifiers {
 
         @Override
         public void apply(OriginSource source, Identifier skillId) {
-            for (ValueContainer.BaseModifier modifier : baseStats) {
-                Stat stat = ZenithRegistries.STAT_REGISTRY.getValue(modifier.container());
-                if (stat != null) {
-                    source.addStat(stat, modifier.val());
+            for (Map.Entry<Identifier, ModifierHolder<Double>> modifiers : statModifiers.entrySet()) {
+                Stat stat = ZenithStatHelper.stat(modifiers.getKey());
+                for (Modifier<Double> modifier : modifiers.getValue().flat()) {
+                    source.addFlatStatModifier(stat, modifier);
+                }
+                for (Modifier<Double> modifier : modifiers.getValue().multiplier()) {
+                    source.addMultiplierStatModifier(stat, modifier);
                 }
             }
-            statModifiers.forEach((statId, modifiers) -> {
-                Stat stat = ZenithRegistries.STAT_REGISTRY.getValue(statId);
-                if (stat != null) {
-                    modifiers.forEach(modifier -> source.addStatModifier(stat, modifier));
+            for (Map.Entry<PathBonus, ModifierHolder<Double>> modifiers : pathBonusModifiers.entrySet()) {
+                PathBonus bonus = modifiers.getKey();
+                for (Modifier<Double> modifier : modifiers.getValue().flat()) {
+                    AscensionOriginSourceHelper.addBonusFlatModifier(
+                            source,
+                            bonus.category(),
+                            bonus.path(),
+                            modifier
+                    );
                 }
-            });
-            for (ValueContainer.BaseModifier modifier : baseAffinities) {
-                AscensionOriginSourceHelper.addAffinity(source, modifier.container(), modifier.val());
+                for (Modifier<Double> modifier : modifiers.getValue().multiplier()) {
+                    AscensionOriginSourceHelper.addBonusMultiplierModifier(
+                            source,
+                            bonus.category(),
+                            bonus.path(),
+                            modifier
+                    );
+                }
             }
-            affinityModifiers.forEach((path, modifiers) -> modifiers.forEach(
-                    modifier -> AscensionOriginSourceHelper.addAffinityModifier(source, path, modifier)
-            ));
         }
 
         @Override
         public void remove(OriginSource source, Identifier skillId) {
-            for (ValueContainer.BaseModifier modifier : baseStats) {
-                Stat stat = ZenithRegistries.STAT_REGISTRY.getValue(modifier.container());
-                if (stat != null) {
-                    source.removeStat(stat, modifier.val());
+            for (Map.Entry<Identifier, ModifierHolder<Double>> modifiers : statModifiers.entrySet()) {
+                Stat stat = ZenithStatHelper.stat(modifiers.getKey());
+                for (Modifier<Double> modifier : modifiers.getValue().flat()) {
+                    source.removeStatModifier(stat, modifier.id());
+                }
+                for (Modifier<Double> modifier : modifiers.getValue().multiplier()) {
+                    source.removeStatModifier(stat, modifier.id());
                 }
             }
-            statModifiers.forEach((statId, modifiers) -> {
-                Stat stat = ZenithRegistries.STAT_REGISTRY.getValue(statId);
-                if (stat != null) {
-                    modifiers.forEach(modifier -> source.removeStatModifier(stat, modifier.getIdentifier()));
+            for (Map.Entry<PathBonus, ModifierHolder<Double>> modifiers : pathBonusModifiers.entrySet()) {
+                PathBonus bonus = modifiers.getKey();
+                for (Modifier<Double> modifier : modifiers.getValue().flat()) {
+                    AscensionOriginSourceHelper.removeBonusModifier(
+                            source,
+                            bonus.category(),
+                            bonus.path(),
+                            modifier.id()
+                    );
                 }
-            });
-            for (ValueContainer.BaseModifier modifier : baseAffinities) {
-                AscensionOriginSourceHelper.removeAffinity(source, modifier.container(), modifier.val());
+                for (Modifier<Double> modifier : modifiers.getValue().multiplier()) {
+                    AscensionOriginSourceHelper.removeBonusModifier(
+                            source,
+                            bonus.category(),
+                            bonus.path(),
+                            modifier.id()
+                    );
+                }
             }
-            affinityModifiers.forEach((path, modifiers) -> modifiers.forEach(
-                    modifier -> AscensionOriginSourceHelper.removeAffinityModifier(source, path, modifier.getIdentifier())
-            ));
         }
     }
-
     public record Defense(
             ScaledValue flatReduction,
             ScaledValue percentageReduction,

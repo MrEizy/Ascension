@@ -3,7 +3,8 @@ package net.zic.ascension.configuration.mobs;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionType;
-import net.zic.ascension.mob_cultivation.generation.MobCultivationEliteTier;
+import net.zic.ascension.mob_cultivation.oliver_rewrite.MobCultivationEliteTier;
+
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.mob_cultivation.generation.MobCultivationEliteTier;
+import net.zic.ascension.mob_cultivation.oliver_rewrite.MobCultivationEliteTier;
 
 import java.util.List;
 import java.util.Map;
