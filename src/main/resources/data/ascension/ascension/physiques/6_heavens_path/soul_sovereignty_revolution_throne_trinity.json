@@ -12,65 +12,101 @@
     "ascension:elemental/fate"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:vitality": 14.0,
-    "ascension:strength": 9.0,
-    "ascension:spirit": 72.0,
-    "ascension:agility": 13.0
-  },
-  "stat_modifiers": {
-    "ascension:vitality": [
-      {
-        "value": 0.20,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:soul_sovereignty_revolution_throne_trinity_vitality_modifier"
-      }
-    ],
-    "ascension:strength": [
-      {
-        "value": 0.25,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:soul_sovereignty_revolution_throne_trinity_strength_modifier"
-      }
-    ],
-    "ascension:spirit": [
-      {
-        "value": 1.75,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:soul_sovereignty_revolution_throne_trinity_spirit_modifier"
-      }
-    ],
-    "ascension:agility": [
-      {
-        "value": 0.40,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:soul_sovereignty_revolution_throne_trinity_agility_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/soul": 36.0,
-      "ascension:elemental/dream": 19.0,
-      "ascension:elemental/fate": 10.0
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/fate": [
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
         {
-          "value": 0.5,
-          "operation": "ADD_BASE",
-          "id": "ascension:soul_sovereignty_revolution_throne_trinity_fate_affinity_modifier"
+          "id": "ascension:6_heavens_path_soul_sovereignty_revolution_throne_trinity_vitality_base",
+          "value": 14.0
         }
       ],
-      "ascension:elemental/dream": [
+      "multiplier": [
         {
-          "value": 0.75,
-          "operation": "ADD_BASE",
-          "id": "ascension:soul_sovereignty_revolution_throne_trinity_dream_affinity_modifier"
+          "id": "ascension:soul_sovereignty_revolution_throne_trinity_vitality_modifier",
+          "value": 0.2
         }
       ]
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:6_heavens_path_soul_sovereignty_revolution_throne_trinity_strength_base",
+          "value": 9.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:soul_sovereignty_revolution_throne_trinity_strength_modifier",
+          "value": 0.25
+        }
+      ]
+    },
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:6_heavens_path_soul_sovereignty_revolution_throne_trinity_spirit_base",
+          "value": 72.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:soul_sovereignty_revolution_throne_trinity_spirit_modifier",
+          "value": 1.75
+        }
+      ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:6_heavens_path_soul_sovereignty_revolution_throne_trinity_agility_base",
+          "value": 13.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:soul_sovereignty_revolution_throne_trinity_agility_modifier",
+          "value": 0.4
+        }
+      ]
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": {
+        "flat": [
+          {
+            "id": "ascension:6_heavens_path_soul_sovereignty_revolution_throne_trinity_affinity_foundation_soul_base",
+            "value": 36.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/dream": {
+        "flat": [
+          {
+            "id": "ascension:6_heavens_path_soul_sovereignty_revolution_throne_trinity_affinity_elemental_dream_base",
+            "value": 19.0
+          },
+          {
+            "id": "ascension:soul_sovereignty_revolution_throne_trinity_dream_affinity_modifier",
+            "value": 0.75
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/fate": {
+        "flat": [
+          {
+            "id": "ascension:6_heavens_path_soul_sovereignty_revolution_throne_trinity_affinity_elemental_fate_base",
+            "value": 10.0
+          },
+          {
+            "id": "ascension:soul_sovereignty_revolution_throne_trinity_fate_affinity_modifier",
+            "value": 0.5
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

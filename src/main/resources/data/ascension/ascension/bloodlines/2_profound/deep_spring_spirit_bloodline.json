@@ -16,29 +16,68 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 0.08
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_deep_spring_spirit_bloodline_spirit_a1",
+                  "value": 0.08
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.07
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_deep_spring_spirit_bloodline_vitality_a1",
+                  "value": 0.07
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.04
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_deep_spring_spirit_bloodline_agility_a1",
+                  "value": 0.04
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/essence": 0.008,
-              "ascension:elemental/water": 0.018,
-              "ascension:elemental/life": 0.012
+              "ascension:foundation/essence": {
+                "flat": [
+                  {
+                    "id": "ascension:2_profound_deep_spring_spirit_bloodline_affinity_foundation_essence_a2",
+                    "value": 0.008
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/water": {
+                "flat": [
+                  {
+                    "id": "ascension:2_profound_deep_spring_spirit_bloodline_affinity_elemental_water_a2",
+                    "value": 0.018
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/life": {
+                "flat": [
+                  {
+                    "id": "ascension:2_profound_deep_spring_spirit_bloodline_affinity_elemental_life_a2",
+                    "value": 0.012
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -52,13 +91,18 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:vitality",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_deep_spring_spirit_bloodline_vitality_a3",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     },
@@ -70,17 +114,27 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_deep_spring_spirit_bloodline_spirit_a4",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 2.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_deep_spring_spirit_bloodline_vitality_a4",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

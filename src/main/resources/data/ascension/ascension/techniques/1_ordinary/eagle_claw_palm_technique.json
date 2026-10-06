@@ -33,17 +33,27 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 0.22
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_eagle_claw_palm_technique_strength_a1",
+                  "value": 0.22
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.08
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_eagle_claw_palm_technique_agility_a1",
+                  "value": 0.08
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

@@ -58,25 +58,45 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 2.25
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_nine_revolutions_slaughter_wheel_strength_a1",
+                  "value": 2.25
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 2.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_nine_revolutions_slaughter_wheel_spirit_a1",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 1.25
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_nine_revolutions_slaughter_wheel_vitality_a1",
+                  "value": 1.25
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.5
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_nine_revolutions_slaughter_wheel_agility_a1",
+                  "value": 0.5
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

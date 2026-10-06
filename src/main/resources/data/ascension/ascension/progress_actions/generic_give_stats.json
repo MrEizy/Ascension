@@ -1,9 +1,14 @@
 {
-  "type": "ascension:give_base_stats",
-  "stats": [
-    {
-      "id": "ascension:vitality",
-      "value": 0.1
+  "type": "ascension:give_stats",
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:generic_give_stats_vitality_a1",
+          "value": 0.1
+        }
+      ],
+      "multiplier": []
     }
-  ]
+  }
 }

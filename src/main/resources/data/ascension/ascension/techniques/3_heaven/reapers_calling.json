@@ -35,21 +35,36 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 2.5
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_reapers_calling_spirit_a1",
+                  "value": 2.5
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.75
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_reapers_calling_vitality_a1",
+                  "value": 0.75
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.5
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_reapers_calling_agility_a1",
+                  "value": 0.5
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

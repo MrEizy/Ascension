@@ -18,8 +18,9 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.common.command.commands.mob.MobCommands;
 import net.zic.zenithlib.common.ZenithAttachments;
+import net.zic.zenithlib.stats.EntityStatHolder;
 import net.zic.zenithlib.stats.Stat;
-import net.zic.zenithlib.stats.ZenithStatHolder;
+
 
 public class ViewStats {
     private static final double MAX_INSPECTION_RANGE = 10;
@@ -53,7 +54,7 @@ public class ViewStats {
             return 0;
         };
 
-        ZenithStatHolder holder = hitResult.getEntity().getData(ZenithAttachments.STAT_HOLDER);
+        EntityStatHolder holder = hitResult.getEntity().getData(ZenithAttachments.STAT_HOLDER);
 
 
 
@@ -62,12 +63,12 @@ public class ViewStats {
     }
     private static int viewEntityTargetDetails(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Entity entity = EntityArgument.getEntity(context, "entity");
-        ZenithStatHolder holder = entity.getData(ZenithAttachments.STAT_HOLDER);
+        EntityStatHolder holder = entity.getData(ZenithAttachments.STAT_HOLDER);
         context.getSource().sendSuccess(() -> buildResponse(holder), false);
         return Command.SINGLE_SUCCESS;
     }
 
-    private static Component buildResponse(ZenithStatHolder holder){
+    private static Component buildResponse(EntityStatHolder holder){
         MutableComponent response = Component.literal("=== STATS ===");
         for(Stat stat : holder.getStats()){
             response.append("\n");

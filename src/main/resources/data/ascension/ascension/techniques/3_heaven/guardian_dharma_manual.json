@@ -49,21 +49,36 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_guardian_dharma_manual_spirit_a1",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 3.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_guardian_dharma_manual_vitality_a1",
+                  "value": 3.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 1.0
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_guardian_dharma_manual_strength_a1",
+                  "value": 1.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

@@ -9,7 +9,8 @@ import net.zic.ascension.configuration.mob_traits.MobTraitReference;
 import net.zic.ascension.configuration.mobs.condition.MobConfigurationCondition;
 import net.zic.ascension.configuration.mobs.condition.MobConfigurationConditionType;
 import net.zic.ascension.configuration.mobs.condition.TierCondition;
-import net.zic.ascension.mob_cultivation.generation.MobCultivationEliteTier;
+import net.zic.ascension.mob_cultivation.oliver_rewrite.MobCultivationEliteTier;
+
 
 import java.util.ArrayList;
 import java.util.List;

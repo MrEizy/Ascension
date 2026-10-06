@@ -13,43 +13,77 @@
     "ascension:elemental/illusion"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:spirit": 6.0,
-    "ascension:agility": 2.0
-  },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.25,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:lunar_dream_eyes_spirit_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/soul": 2.0,
-      "ascension:elemental/moon": 3.0,
-      "ascension:elemental/yin": 2.0,
-      "ascension:elemental/illusion": 3.0
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/moon": [
+  "stats": {
+    "ascension:spirit": {
+      "flat": [
         {
-          "value": 0.2,
-          "operation": "ADD_BASE",
-          "id": "ascension:lunar_dream_eyes_moon_affinity_modifier"
+          "id": "ascension:3_heaven_lunar_dream_eyes_physique_spirit_base",
+          "value": 6.0
         }
       ],
-      "ascension:elemental/illusion": [
+      "multiplier": [
         {
-          "value": 0.2,
-          "operation": "ADD_BASE",
-          "id": "ascension:lunar_dream_eyes_illusion_affinity_modifier"
+          "id": "ascension:lunar_dream_eyes_spirit_modifier",
+          "value": 0.25
         }
       ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:3_heaven_lunar_dream_eyes_physique_agility_base",
+          "value": 2.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_lunar_dream_eyes_physique_affinity_foundation_soul_base",
+            "value": 2.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/moon": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_lunar_dream_eyes_physique_affinity_elemental_moon_base",
+            "value": 3.0
+          },
+          {
+            "id": "ascension:lunar_dream_eyes_moon_affinity_modifier",
+            "value": 0.2
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/yin": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_lunar_dream_eyes_physique_affinity_elemental_yin_base",
+            "value": 2.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/illusion": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_lunar_dream_eyes_physique_affinity_elemental_illusion_base",
+            "value": 3.0
+          },
+          {
+            "id": "ascension:lunar_dream_eyes_illusion_affinity_modifier",
+            "value": 0.2
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

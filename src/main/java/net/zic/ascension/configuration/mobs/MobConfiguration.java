@@ -2,8 +2,7 @@ package net.zic.ascension.configuration.mobs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.zic.ascension.configuration.mob_traits.MobTraitDefinitionV1;
-import net.zic.ascension.configuration.mobs.cultivation.PotentialPathDefinition;
+
 import net.zic.ascension.mob_cultivation.oliver_rewrite.MobCultivationEliteTier;
 import net.minecraft.world.entity.Mob;
 

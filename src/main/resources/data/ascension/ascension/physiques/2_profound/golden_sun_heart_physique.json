@@ -12,35 +12,64 @@
     "ascension:elemental/yang"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:strength": 3.0,
-    "ascension:vitality": 2.0
-  },
-  "stat_modifiers": {
-    "ascension:strength": [
-      {
-        "value": 0.12,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:golden_sun_heart_strength_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/body": 1.0,
-      "ascension:elemental/sun": 2.0,
-      "ascension:elemental/yang": 1.25
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/sun": [
+  "stats": {
+    "ascension:strength": {
+      "flat": [
         {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:golden_sun_heart_sun_affinity_modifier"
+          "id": "ascension:2_profound_golden_sun_heart_physique_strength_base",
+          "value": 3.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:golden_sun_heart_strength_modifier",
+          "value": 0.12
         }
       ]
+    },
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_golden_sun_heart_physique_vitality_base",
+          "value": 2.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_golden_sun_heart_physique_affinity_foundation_body_base",
+            "value": 1.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/sun": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_golden_sun_heart_physique_affinity_elemental_sun_base",
+            "value": 2.0
+          },
+          {
+            "id": "ascension:golden_sun_heart_sun_affinity_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/yang": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_golden_sun_heart_physique_affinity_elemental_yang_base",
+            "value": 1.25
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

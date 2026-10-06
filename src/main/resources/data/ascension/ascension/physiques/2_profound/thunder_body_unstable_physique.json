@@ -18,15 +18,55 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:profound"
   },
-  "base_stats": {
-    "ascension:vitality": 1
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_thunder_body_unstable_physique_vitality_base",
+          "value": 1
+        }
+      ],
+      "multiplier": []
+    }
   },
-  "base_path_bonuses": {
+  "path_bonus": {
     "ascension:affinity": {
-      "ascension:foundation/body": 3,
-      "ascension:elemental/lightning": 2.5,
-      "ascension:elemental/metal": 1.5,
-      "ascension:weapon/blade": 2
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_thunder_body_unstable_physique_affinity_foundation_body_base",
+            "value": 3
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/lightning": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_thunder_body_unstable_physique_affinity_elemental_lightning_base",
+            "value": 2.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/metal": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_thunder_body_unstable_physique_affinity_elemental_metal_base",
+            "value": 1.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/blade": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_thunder_body_unstable_physique_affinity_weapon_blade_base",
+            "value": 2
+          }
+        ],
+        "multiplier": []
+      }
     }
   }
 }

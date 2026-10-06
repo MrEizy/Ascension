@@ -17,35 +17,64 @@
     "template": "ascension:default_physique_essence",
     "rank": "ascension:ordinary"
   },
-  "base_stats": {
-    "ascension:vitality": 1,
-    "ascension:strength": 0.5
-  },
-  "stat_modifiers": {
-    "ascension:vitality": [
-      {
-        "value": 0.1,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:brittle_bone_body_vitality_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/soul": 3,
-      "ascension:elemental/wood": 1,
-      "ascension:weapon/staff": 2
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:weapon/staff": [
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
         {
-          "value": 0.15,
-          "operation": "ADD_BASE",
-          "id": "ascension:brittle_bone_body_staff_modifier"
+          "id": "ascension:1_ordinary_brittle_bone_body_physique_vitality_base",
+          "value": 1
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:brittle_bone_body_vitality_modifier",
+          "value": 0.1
         }
       ]
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:1_ordinary_brittle_bone_body_physique_strength_base",
+          "value": 0.5
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/soul": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_brittle_bone_body_physique_affinity_foundation_soul_base",
+            "value": 3
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/wood": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_brittle_bone_body_physique_affinity_elemental_wood_base",
+            "value": 1
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/staff": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_brittle_bone_body_physique_affinity_weapon_staff_base",
+            "value": 2
+          },
+          {
+            "id": "ascension:brittle_bone_body_staff_modifier",
+            "value": 0.15
+          }
+        ],
+        "multiplier": []
+      }
     }
   }
 }

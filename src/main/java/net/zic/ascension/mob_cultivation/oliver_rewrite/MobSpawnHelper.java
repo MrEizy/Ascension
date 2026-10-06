@@ -8,7 +8,7 @@ import net.zic.ascension.configuration.mobs.MobConfiguration;
 import net.zic.ascension.configuration.mobs.PotentialTier;
 import net.zic.ascension.configuration.mobs.PotentialTrait;
 import net.zic.ascension.configuration.mobs.condition.TierCondition;
-import net.zic.ascension.mob_cultivation.generation.MobCultivationEliteTier;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;

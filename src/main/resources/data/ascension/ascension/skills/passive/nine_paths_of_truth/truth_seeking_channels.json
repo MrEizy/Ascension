@@ -9,21 +9,25 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:spirit": [
-          {
-            "value": 0.08,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:truth_seeking_channels_spirit"
-          }
-        ],
-        "ascension:vitality": [
-          {
-            "value": 0.04,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:truth_seeking_channels_vitality"
-          }
-        ]
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:truth_seeking_channels_spirit",
+              "value": 0.08
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:truth_seeking_channels_vitality",
+              "value": 0.04
+            }
+          ]
+        }
       }
     }
   ]

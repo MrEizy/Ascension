@@ -11,34 +11,55 @@
     "ascension:elemental/fire"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:spirit": 2.0,
-    "ascension:agility": 1.0
-  },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.08,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:ember_touched_meridians_spirit_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/essence": 0.75,
-      "ascension:elemental/fire": 1.25
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/fire": [
+  "stats": {
+    "ascension:spirit": {
+      "flat": [
         {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:ember_touched_meridians_fire_affinity_modifier"
+          "id": "ascension:1_ordinary_ember_touched_meridians_physique_spirit_base",
+          "value": 2.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:ember_touched_meridians_spirit_modifier",
+          "value": 0.08
         }
       ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:1_ordinary_ember_touched_meridians_physique_agility_base",
+          "value": 1.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_ember_touched_meridians_physique_affinity_foundation_essence_base",
+            "value": 0.75
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/fire": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_ember_touched_meridians_physique_affinity_elemental_fire_base",
+            "value": 1.25
+          },
+          {
+            "id": "ascension:ember_touched_meridians_fire_affinity_modifier",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

@@ -24,17 +24,27 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 0.06
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_nine_paths_of_truth_spirit_a1",
+                  "value": 0.06
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.04
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_nine_paths_of_truth_vitality_a1",
+                  "value": 0.04
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

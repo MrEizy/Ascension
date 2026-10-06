@@ -34,7 +34,7 @@ public class ConfigurationDataMaps {
     ).build();
 
     public static final DataMapType<Level, DimensionConfiguration> DIMENSION_CONFIGURATION = DataMapType.builder(
-            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"dimension_configuration"),
+            Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID,"dimension_configuration.json"),
             Registries.DIMENSION,
             DimensionConfiguration.CODEC
     ).build();

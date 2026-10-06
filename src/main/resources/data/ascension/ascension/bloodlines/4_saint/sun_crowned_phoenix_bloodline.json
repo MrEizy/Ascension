@@ -16,31 +16,86 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 0.28
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a1",
+                  "value": 0.28
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.24
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a1",
+                  "value": 0.24
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.12
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_agility_a1",
+                  "value": 0.12
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/essence": 0.04,
-              "ascension:elemental/fire": 0.07,
-              "ascension:elemental/reincarnation": 0.05,
-              "ascension:elemental/life": 0.03,
-              "ascension:elemental/sun": 0.025
+              "ascension:foundation/essence": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_affinity_foundation_essence_a2",
+                    "value": 0.04
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/fire": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_affinity_elemental_fire_a2",
+                    "value": 0.07
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/reincarnation": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_affinity_elemental_reincarnation_a2",
+                    "value": 0.05
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/life": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_affinity_elemental_life_a2",
+                    "value": 0.03
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/sun": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_affinity_elemental_sun_a2",
+                    "value": 0.025
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -54,17 +109,27 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 4.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a3",
+                  "value": 4.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 3.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a3",
+                  "value": 3.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     },
@@ -76,23 +141,41 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 5.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a4",
+                  "value": 5.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 5.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a4",
+                  "value": 5.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/fire": 1.0
+              "ascension:elemental/fire": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_affinity_elemental_fire_a5",
+                    "value": 1.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -106,23 +189,41 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 5.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_agility_a6",
+                  "value": 5.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 5.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a6",
+                  "value": 5.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/reincarnation": 1.0
+              "ascension:elemental/reincarnation": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_affinity_elemental_reincarnation_a7",
+                    "value": 1.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -136,29 +237,68 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 10.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_spirit_a8",
+                  "value": 10.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 10.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_vitality_a8",
+                  "value": 10.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 6.0
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_agility_a8",
+                  "value": 6.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/fire": 2.0,
-              "ascension:elemental/reincarnation": 2.0,
-              "ascension:elemental/life": 1.0
+              "ascension:elemental/fire": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_affinity_elemental_fire_a9",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/reincarnation": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_affinity_elemental_reincarnation_a9",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/life": {
+                "flat": [
+                  {
+                    "id": "ascension:4_saint_sun_crowned_phoenix_bloodline_affinity_elemental_life_a9",
+                    "value": 1.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }

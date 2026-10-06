@@ -61,7 +61,7 @@ public class SimpleAscensionEntityData implements AscensionEntityData {
         this.source = source;
         this.attachedEntity = entity;
         this.cachedHealth = Math.max(0.0F, entity.getHealth());
-        this.source.setRegistryAccess(entity.registryAccess());
+
     }
 
 

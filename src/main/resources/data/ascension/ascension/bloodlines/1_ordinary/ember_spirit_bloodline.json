@@ -15,24 +15,50 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 0.06
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_ember_spirit_bloodline_spirit_a1",
+                  "value": 0.06
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.04
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_ember_spirit_bloodline_vitality_a1",
+                  "value": 0.04
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/essence": 0.006,
-              "ascension:elemental/fire": 0.012
+              "ascension:foundation/essence": {
+                "flat": [
+                  {
+                    "id": "ascension:1_ordinary_ember_spirit_bloodline_affinity_foundation_essence_a2",
+                    "value": 0.006
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/fire": {
+                "flat": [
+                  {
+                    "id": "ascension:1_ordinary_ember_spirit_bloodline_affinity_elemental_fire_a2",
+                    "value": 0.012
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -46,13 +72,18 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_ember_spirit_bloodline_spirit_a3",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

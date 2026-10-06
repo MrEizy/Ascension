@@ -11,17 +11,27 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:vitality",
-              "value": 0.1
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_frostkin_bloodline_vitality_a1",
+                  "value": 0.1
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 0.05
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_frostkin_bloodline_strength_a1",
+                  "value": 0.05
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

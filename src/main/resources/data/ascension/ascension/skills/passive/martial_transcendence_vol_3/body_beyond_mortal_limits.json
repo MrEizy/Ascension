@@ -9,35 +9,43 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:strength": [
-          {
-            "value": 0.2,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:body_beyond_mortal_limits_strength"
-          }
-        ],
-        "ascension:vitality": [
-          {
-            "value": 0.2,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:body_beyond_mortal_limits_vitality"
-          }
-        ],
-        "ascension:agility": [
-          {
-            "value": 0.1,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:body_beyond_mortal_limits_agility"
-          }
-        ],
-        "ascension:spirit": [
-          {
-            "value": 0.08,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:body_beyond_mortal_limits_spirit"
-          }
-        ]
+      "stats": {
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:body_beyond_mortal_limits_strength",
+              "value": 0.2
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:body_beyond_mortal_limits_vitality",
+              "value": 0.2
+            }
+          ]
+        },
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:body_beyond_mortal_limits_agility",
+              "value": 0.1
+            }
+          ]
+        },
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:body_beyond_mortal_limits_spirit",
+              "value": 0.08
+            }
+          ]
+        }
       }
     },
     {

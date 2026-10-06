@@ -23,8 +23,7 @@ import net.zic.ascension.configuration.ConfigurationDataMaps;
 import net.zic.ascension.configuration.mob_traits.MobTraitReference;
 import net.zic.ascension.configuration.mobs.MobConfiguration;
 import net.zic.ascension.configuration.mobs.PotentialTrait;
-import net.zic.ascension.mob_cultivation.MobCultivationManager;
-import net.zic.ascension.mob_cultivation.oliver_rewrite.MobConfigurationHolder;
+
 import net.zic.ascension.mob_cultivation.oliver_rewrite.MobConfigurationInstance;
 
 public class MobCommands {
@@ -71,7 +70,7 @@ public class MobCommands {
         return Command.SINGLE_SUCCESS;
     }
     public static Component buildMobDetails(MobConfigurationInstance configurationInstance, RegistryAccess access){
-        MutableComponent tier = Component.literal("==="+configurationInstance.getTier().name()+"===");
+        MutableComponent tier = Component.literal("==="+configurationInstance.getTier()+"===");
         MutableComponent traits = Component.empty();
         for(MobTraitReference reference : configurationInstance.getTraits()){
             if(!reference.isValid(access)) continue;

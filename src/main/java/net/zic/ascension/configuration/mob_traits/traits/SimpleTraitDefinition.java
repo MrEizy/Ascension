@@ -9,8 +9,11 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
+import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -21,10 +24,14 @@ import net.zic.ascension.configuration.mob_traits.MobTraitDefinition;
 import net.zic.ascension.configuration.mob_traits.MobTraitDefinitionType;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.common.ZenithRegistries;
+import net.zic.zenithlib.custom_attributes.SuppressedAttributeHelper;
+import net.zic.zenithlib.custom_attributes.ZenithAttribute;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
+import net.zic.zenithlib.stats.EntityStatHolder;
 import net.zic.zenithlib.stats.Stat;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
+import net.zic.zenithlib.stats.ZenithStatHelper;
+import net.zic.zenithlib.value_containers.typed.Modifier;
+import net.zic.zenithlib.value_containers.typed.ModifierHolder;
 
 import java.util.List;
 import java.util.Map;
@@ -35,19 +42,19 @@ public record SimpleTraitDefinition (UUID traitId,
                                      Component name,
                                      Component prefix,
                                      List<PathDefinition> paths,
-                                     List<ValueContainer.BaseModifier> baseStats,
-                                     Map<Identifier, List<ValueContainerModifier>> statModifiers,
-                                     Map<Identifier, List<ValueContainerModifier>> attributeModifiers,
+                                     Map<Identifier, ModifierHolder<Double>> statModifiers,
+                                     Map<Identifier,ModifierHolder<Double>> attributeModifiers,
+                                     Map<PathBonus,ModifierHolder<Double>> pathBonusModifiers,
                                      List<Identifier> skills) implements MobTraitDefinition {
 
     public SimpleTraitDefinition(Component name,
                                  Component prefix,
                                  List<PathDefinition> paths,
-                                 List<ValueContainer.BaseModifier> baseStats,
-                                 Map<Identifier, List<ValueContainerModifier>> statModifiers,
-                                 Map<Identifier, List<ValueContainerModifier>> attributeModifiers,
+                                 Map<Identifier, ModifierHolder<Double>> statModifiers,
+                                 Map<Identifier,ModifierHolder<Double>> attributeModifiers,
+                                 Map<PathBonus,ModifierHolder<Double>> pathBonusModifiers,
                                  List<Identifier> skills) {
-        this(UUID.randomUUID(), name, prefix, paths, baseStats, statModifiers, attributeModifiers, skills);
+        this(UUID.randomUUID(), name, prefix, paths, statModifiers, attributeModifiers, pathBonusModifiers, skills);
 
     }
 
@@ -72,28 +79,55 @@ public record SimpleTraitDefinition (UUID traitId,
 
     @Override
     public void applyToMob(Mob mob) {
-        AscensionEntityDataProvider provider = mob.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
-        if(provider == null) return;
+        EntityStatHolder statHolder = mob.getData(ZenithAttachments.STAT_HOLDER);
 
-        AscensionEntityData data = provider.getData();
-        if(data == null) return;
-
-        for(ValueContainer.BaseModifier baseStat : baseStats) data.addStat(ZenithRegistries.STAT_REGISTRY.getValue(baseStat.container()),baseStat.val());
-        for(Identifier stat : statModifiers.keySet()){
-            Stat statObj = ZenithRegistries.STAT_REGISTRY.getValue(stat);
-            for(ValueContainerModifier modifier : statModifiers.get(stat)) data.addStatModifier(statObj,modifier);
+        statHolder.startProcess("bulk_stat_gain");
+        for(Map.Entry<Identifier, ModifierHolder<Double>> modifiers : statModifiers.entrySet()){
+            Stat stat = ZenithStatHelper.stat(modifiers.getKey());
+            for(Modifier<Double> modifier : modifiers.getValue().flat()){
+                statHolder.addFlatModifier(stat,modifier);
+            }
+            for(Modifier<Double> modifier : modifiers.getValue().multiplier()){
+                statHolder.addMultiplierModifier(stat,modifier);
+            }
         }
+        statHolder.resolveProcess("bulk_stat_gain");
 
-        ZenithAttributeHolder holder = mob.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
-
-        holder.startProcess("mob_trait_process"+traitId);
-        for(Identifier attributeId : attributeModifiers.keySet()){
-            if(!BuiltInRegistries.ATTRIBUTE.containsKey(attributeId)) continue;
-            Holder<Attribute> attributeHolder =    BuiltInRegistries.ATTRIBUTE.wrapAsHolder(BuiltInRegistries.ATTRIBUTE.getValue(attributeId));
-            for(ValueContainerModifier modifier : attributeModifiers.get(attributeId)) holder.getAttribute(attributeHolder).addModifierNoCacheUpdate(modifier);
+        ZenithAttributeHolder attributeHolder = mob.getData(ZenithAttachments.ATTRIBUTE_HOLDER);
+        attributeHolder.startProcess("bulk_attribute_modification");
+        for(Map.Entry<Identifier, ModifierHolder<Double>> modifiers : attributeModifiers.entrySet()){
+            ZenithAttribute attribute = attributeHolder.getAttribute(SuppressedAttributeHelper.getAttribute(modifiers.getKey()));
+            attribute.startProcess("bulk_attribute_modification");
+            for(Modifier<Double> modifier : modifiers.getValue().flat()){
+                attribute.addFlatModifier(modifier);
+            }
+            for(Modifier<Double> modifier : modifiers.getValue().multiplier()){
+                attribute.addMultiplierModifier(modifier);
+            }
+            attribute.resolveProcess("bulk_attribute_modification");
         }
+        attributeHolder.resolveProcess("bulk_attribute_modification");
 
-        holder.resolveProcess("mob_trait_process"+traitId);
+        EntityPathBonusHolder pathBonusHolder = mob.getData(CoreAttachments.PATH_BONUS_HOLDER);
+        pathBonusHolder.startProcess("bulk_bonus_gain");
+        for(Map.Entry<PathBonus,ModifierHolder<Double>> modifiers : pathBonusModifiers.entrySet()){
+            PathBonus bonus = modifiers.getKey();
+            for(Modifier<Double> modifier : modifiers.getValue().flat()){
+                pathBonusHolder.addFlatModifier(
+                        bonus.category(),
+                        bonus.path(),
+                        modifier
+                );
+            }
+            for(Modifier<Double> modifier : modifiers.getValue().multiplier()){
+                pathBonusHolder.addMultiplierModifier(
+                        bonus.category(),
+                        bonus.path(),
+                        modifier
+                );
+            }
+        }
+        pathBonusHolder.resolveProcess("bulk_bonus_gain");
 
 
     }

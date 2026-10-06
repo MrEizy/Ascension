@@ -16,35 +16,95 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 0.52
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a1",
+                  "value": 0.52
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 0.42
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a1",
+                  "value": 0.42
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.28
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_vitality_a1",
+                  "value": 0.28
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 0.18
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_strength_a1",
+                  "value": 0.18
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/soul": 0.045,
-              "ascension:elemental/star": 0.1,
-              "ascension:elemental/wind": 0.08,
-              "ascension:elemental/fate": 0.05,
-              "ascension:elemental/light": 0.035
+              "ascension:foundation/soul": {
+                "flat": [
+                  {
+                    "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_affinity_foundation_soul_a2",
+                    "value": 0.045
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/star": {
+                "flat": [
+                  {
+                    "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_affinity_elemental_star_a2",
+                    "value": 0.1
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/wind": {
+                "flat": [
+                  {
+                    "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_affinity_elemental_wind_a2",
+                    "value": 0.08
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/fate": {
+                "flat": [
+                  {
+                    "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_affinity_elemental_fate_a2",
+                    "value": 0.05
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/light": {
+                "flat": [
+                  {
+                    "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_affinity_elemental_light_a2",
+                    "value": 0.035
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -58,17 +118,27 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 8.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a3",
+                  "value": 8.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 5.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a3",
+                  "value": 5.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     },
@@ -80,23 +150,41 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 8.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a4",
+                  "value": 8.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 8.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a4",
+                  "value": 8.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/wind": 2.0
+              "ascension:elemental/wind": {
+                "flat": [
+                  {
+                    "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_affinity_elemental_wind_a5",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -110,23 +198,41 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 9.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a6",
+                  "value": 9.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 7.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_vitality_a6",
+                  "value": 7.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/star": 2.0
+              "ascension:elemental/star": {
+                "flat": [
+                  {
+                    "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_affinity_elemental_star_a7",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -140,23 +246,41 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 12.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a8",
+                  "value": 12.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 10.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a8",
+                  "value": 10.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/fate": 2.0
+              "ascension:elemental/fate": {
+                "flat": [
+                  {
+                    "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_affinity_elemental_fate_a9",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -170,33 +294,77 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 18.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_agility_a10",
+                  "value": 18.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 16.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_spirit_a10",
+                  "value": 16.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 12.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_vitality_a10",
+                  "value": 12.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 10.0
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_strength_a10",
+                  "value": 10.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:elemental/star": 4.0,
-              "ascension:elemental/wind": 3.0,
-              "ascension:elemental/light": 2.0
+              "ascension:elemental/star": {
+                "flat": [
+                  {
+                    "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_affinity_elemental_star_a11",
+                    "value": 4.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/wind": {
+                "flat": [
+                  {
+                    "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_affinity_elemental_wind_a11",
+                    "value": 3.0
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/light": {
+                "flat": [
+                  {
+                    "id": "ascension:5_god_stargazing_virtuous_roc_bloodline_affinity_elemental_light_a11",
+                    "value": 2.0
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }

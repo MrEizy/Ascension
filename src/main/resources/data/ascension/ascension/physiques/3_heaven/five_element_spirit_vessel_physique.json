@@ -10,67 +10,116 @@
     "ascension:foundation/essence"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:spirit": 5.0,
-    "ascension:vitality": 3.0,
-    "ascension:agility": 2.0
-  },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.18,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:five_element_spirit_vessel_spirit_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/essence": 2.0,
-      "ascension:elemental/wood": 1.5,
-      "ascension:elemental/fire": 1.5,
-      "ascension:elemental/earth": 1.5,
-      "ascension:elemental/metal": 1.5,
-      "ascension:elemental/water": 1.5
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/wood": [
+  "stats": {
+    "ascension:spirit": {
+      "flat": [
         {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:five_element_spirit_vessel_wood_affinity_modifier"
+          "id": "ascension:3_heaven_five_element_spirit_vessel_physique_spirit_base",
+          "value": 5.0
         }
       ],
-      "ascension:elemental/fire": [
+      "multiplier": [
         {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:five_element_spirit_vessel_fire_affinity_modifier"
-        }
-      ],
-      "ascension:elemental/earth": [
-        {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:five_element_spirit_vessel_earth_affinity_modifier"
-        }
-      ],
-      "ascension:elemental/metal": [
-        {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:five_element_spirit_vessel_metal_affinity_modifier"
-        }
-      ],
-      "ascension:elemental/water": [
-        {
-          "value": 0.1,
-          "operation": "ADD_BASE",
-          "id": "ascension:five_element_spirit_vessel_water_affinity_modifier"
+          "id": "ascension:five_element_spirit_vessel_spirit_modifier",
+          "value": 0.18
         }
       ]
+    },
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:3_heaven_five_element_spirit_vessel_physique_vitality_base",
+          "value": 3.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:3_heaven_five_element_spirit_vessel_physique_agility_base",
+          "value": 2.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_five_element_spirit_vessel_physique_affinity_foundation_essence_base",
+            "value": 2.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/wood": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_five_element_spirit_vessel_physique_affinity_elemental_wood_base",
+            "value": 1.5
+          },
+          {
+            "id": "ascension:five_element_spirit_vessel_wood_affinity_modifier",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/fire": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_five_element_spirit_vessel_physique_affinity_elemental_fire_base",
+            "value": 1.5
+          },
+          {
+            "id": "ascension:five_element_spirit_vessel_fire_affinity_modifier",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/earth": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_five_element_spirit_vessel_physique_affinity_elemental_earth_base",
+            "value": 1.5
+          },
+          {
+            "id": "ascension:five_element_spirit_vessel_earth_affinity_modifier",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/metal": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_five_element_spirit_vessel_physique_affinity_elemental_metal_base",
+            "value": 1.5
+          },
+          {
+            "id": "ascension:five_element_spirit_vessel_metal_affinity_modifier",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/water": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_five_element_spirit_vessel_physique_affinity_elemental_water_base",
+            "value": 1.5
+          },
+          {
+            "id": "ascension:five_element_spirit_vessel_water_affinity_modifier",
+            "value": 0.1
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

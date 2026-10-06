@@ -28,41 +28,25 @@ public class ChunkQiHandler implements QiHandler {
         REGEN_RATE = ValueContainerHelpers.longValueContainer(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "regen_rate"), baseRegenRate);
     }
     //============= Container Handlers ==========
-
-    void setBaseCapacity(long capacity){
-        CAPACITY.setBaseValue(capacity);
+    public void addCapacityFlatModifier(Modifier<Long> modifier){
+        CAPACITY.addFlatModifier(modifier);
     }
-    void setBaseRegenRate(long regenRate){
-        REGEN_RATE.setBaseValue(regenRate);
-    }
-    void addCapacityBaseValue(long capacity){
-        CAPACITY.setBaseValue(CAPACITY.getBaseValue()+capacity);
-    }
-    void addRegenRateBaseValue(long regenRate){
-        REGEN_RATE.setBaseValue(REGEN_RATE.getBaseValue()+regenRate);
-    }
-
-    public void addCapacityBonus(BonusModifier<Long> modifier){
-        CAPACITY.addBonusModifier(modifier);
-    }
-    public void addCapacityMultiplier(MultiplierModifier modifier){
+    public void addCapacityMultiplierModifier(Modifier<Double> modifier){
         CAPACITY.addMultiplierModifier(modifier);
     }
-    public Modifier removeCapacityModifier(Identifier modifier){
-        return CAPACITY.removeModifier(modifier);
+    public void removeCapacityModifier(Identifier modifier){
+        CAPACITY.removeModifier(modifier);
     }
 
-
-    public void addRegenRateBonus(BonusModifier<Long> modifier){
-        REGEN_RATE.addBonusModifier(modifier);
+    public void addRegenFlatModifier(Modifier<Long> modifier){
+        REGEN_RATE.addFlatModifier(modifier);
     }
-    public void addRegenRateMultiplier(MultiplierModifier modifier){
+    public void addRegenMultiplierModifier(Modifier<Double> modifier){
         REGEN_RATE.addMultiplierModifier(modifier);
     }
-    public Modifier removeRegenRateMultiplier(Identifier modifier){
-        return REGEN_RATE.removeModifier(modifier);
+    public void removeRegenModifier(Identifier modifier){
+        REGEN_RATE.removeModifier(modifier);
     }
-
     //============= Qi methods ============
 
     @Override

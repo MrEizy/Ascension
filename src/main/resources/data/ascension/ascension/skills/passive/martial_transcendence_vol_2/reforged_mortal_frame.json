@@ -9,28 +9,34 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:strength": [
-          {
-            "value": 0.12,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:reforged_mortal_frame_strength"
-          }
-        ],
-        "ascension:vitality": [
-          {
-            "value": 0.12,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:reforged_mortal_frame_vitality"
-          }
-        ],
-        "ascension:agility": [
-          {
-            "value": 0.05,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:reforged_mortal_frame_agility"
-          }
-        ]
+      "stats": {
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:reforged_mortal_frame_strength",
+              "value": 0.12
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:reforged_mortal_frame_vitality",
+              "value": 0.12
+            }
+          ]
+        },
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:reforged_mortal_frame_agility",
+              "value": 0.05
+            }
+          ]
+        }
       }
     }
   ]

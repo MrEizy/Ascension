@@ -5,14 +5,16 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:vitality": [
-          {
-            "value": 10,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:iron_skin_vitality_multiplier"
-          }
-        ]
+      "stats": {
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:iron_skin_vitality_multiplier",
+              "value": 10
+            }
+          ]
+        }
       }
     }
   ]

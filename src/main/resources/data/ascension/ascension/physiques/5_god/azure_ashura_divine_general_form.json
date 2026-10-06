@@ -13,73 +13,114 @@
     "ascension:weapon/fist"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:spirit": 11.0,
-    "ascension:vitality": 21.0,
-    "ascension:strength": 19.0,
-    "ascension:agility": 15.0
-  },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.2,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:azure_ashura_divine_general_form_spirit_modifier"
-      }
-    ],
-    "ascension:vitality": [
-      {
-        "value": 0.5,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:azure_ashura_divine_general_form_vitality_modifier"
-      }
-    ],
-    "ascension:strength": [
-      {
-        "value": 0.5,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:azure_ashura_divine_general_form_strength_modifier"
-      }
-    ],
-    "ascension:agility": [
-      {
-        "value": 0.4,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:azure_ashura_divine_general_form_agility_modifier"
-      }
-    ]
-  },
-  "base_path_bonuses": {
-    "ascension:affinity": {
-      "ascension:foundation/body": 5.0,
-      "ascension:elemental/blood": 8.0,
-      "ascension:elemental/water": 7.0,
-      "ascension:weapon/fist": 4.0
-    }
-  },
-  "path_bonus_modifiers": {
-    "ascension:affinity": {
-      "ascension:elemental/blood": [
+  "stats": {
+    "ascension:spirit": {
+      "flat": [
         {
-          "value": 0.45,
-          "operation": "ADD_BASE",
-          "id": "ascension:azure_ashura_divine_general_form_blood_affinity_modifier"
+          "id": "ascension:5_god_azure_ashura_divine_general_form_spirit_base",
+          "value": 11.0
         }
       ],
-      "ascension:elemental/water": [
+      "multiplier": [
         {
-          "value": 0.45,
-          "operation": "ADD_BASE",
-          "id": "ascension:azure_ashura_divine_general_form_water_affinity_modifier"
-        }
-      ],
-      "ascension:weapon/fist": [
-        {
-          "value": 0.35,
-          "operation": "ADD_BASE",
-          "id": "ascension:azure_ashura_divine_general_form_fist_affinity_modifier"
+          "id": "ascension:azure_ashura_divine_general_form_spirit_modifier",
+          "value": 0.2
         }
       ]
+    },
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:5_god_azure_ashura_divine_general_form_vitality_base",
+          "value": 21.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:azure_ashura_divine_general_form_vitality_modifier",
+          "value": 0.5
+        }
+      ]
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:5_god_azure_ashura_divine_general_form_strength_base",
+          "value": 19.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:azure_ashura_divine_general_form_strength_modifier",
+          "value": 0.5
+        }
+      ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:5_god_azure_ashura_divine_general_form_agility_base",
+          "value": 15.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:azure_ashura_divine_general_form_agility_modifier",
+          "value": 0.4
+        }
+      ]
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:5_god_azure_ashura_divine_general_form_affinity_foundation_body_base",
+            "value": 5.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/blood": {
+        "flat": [
+          {
+            "id": "ascension:5_god_azure_ashura_divine_general_form_affinity_elemental_blood_base",
+            "value": 8.0
+          },
+          {
+            "id": "ascension:azure_ashura_divine_general_form_blood_affinity_modifier",
+            "value": 0.45
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/water": {
+        "flat": [
+          {
+            "id": "ascension:5_god_azure_ashura_divine_general_form_affinity_elemental_water_base",
+            "value": 7.0
+          },
+          {
+            "id": "ascension:azure_ashura_divine_general_form_water_affinity_modifier",
+            "value": 0.45
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/fist": {
+        "flat": [
+          {
+            "id": "ascension:5_god_azure_ashura_divine_general_form_affinity_weapon_fist_base",
+            "value": 4.0
+          },
+          {
+            "id": "ascension:azure_ashura_divine_general_form_fist_affinity_modifier",
+            "value": 0.35
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {

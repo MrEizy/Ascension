@@ -34,17 +34,27 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 0.18
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_sword_draw_manual_agility_a1",
+                  "value": 0.18
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 0.14
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_sword_draw_manual_strength_a1",
+                  "value": 0.14
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

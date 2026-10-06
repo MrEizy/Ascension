@@ -10,7 +10,7 @@ import net.zic.ascension.configuration.mob_traits.MobTraitReference;
 import net.zic.ascension.configuration.mobs.MobConfiguration;
 import net.zic.ascension.configuration.mobs.MobTierDefinition;
 import net.zic.ascension.configuration.mobs.PotentialTrait;
-import net.zic.ascension.mob_cultivation.generation.MobCultivationEliteTier;
+
 
 import java.util.ArrayList;
 import java.util.List;

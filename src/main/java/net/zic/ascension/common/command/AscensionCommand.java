@@ -5,6 +5,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
 import net.zic.ascension.common.command.commands.*;
+import net.zic.ascension.common.command.commands.mob.MobCommands;
 
 public final class AscensionCommand {
     private AscensionCommand() {
