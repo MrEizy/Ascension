@@ -6,6 +6,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.worldgen.features.ContainedLakeFeature;
 import net.zic.ascension.worldgen.features.HerbFeature;
 import net.zic.ascension.worldgen.features.LingzhiMushroomConfiguration;
 import net.zic.ascension.worldgen.features.LingzhiMushroomFeature;
@@ -27,6 +28,9 @@ public class AscFeatures {
 
     public static final DeferredHolder<Feature<?>, Feature<SurfaceScatterFeature.Configuration>> SURFACE_SCATTER =
             FEATURES.register("surface_scatter", () -> new SurfaceScatterFeature(SurfaceScatterFeature.Configuration.CODEC));
+
+    public static final DeferredHolder<Feature<?>, Feature<ContainedLakeFeature.Configuration>> CONTAINED_LAKE =
+            FEATURES.register("contained_lake", () -> new ContainedLakeFeature(ContainedLakeFeature.Configuration.CODEC));
 
 
     public static void register(IEventBus eventBus) {

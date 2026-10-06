@@ -464,6 +464,27 @@ public class AscLangProvider extends LanguageProvider {
         add("stat.ascension.strength", "Strength");
         add("stat.ascension.spirit", "Spirit");
 
+        add("effect.ascension.rejection", "Rejection");
+        add("effect.ascension.oppression", "Oppression");
+        add("effect.ascension.suppression", "Suppression");
+
+        add("biome.ascension.floating_realm.ice_spikes", "Floating Ice Spikes");
+        add("biome.ascension.floating_realm.snowy_plains", "Floating Snowy Plains");
+        add("biome.ascension.floating_realm.snowy_taiga", "Floating Snowy Taiga");
+        add("biome.ascension.floating_realm.grove", "Floating Grove");
+        add("biome.ascension.floating_realm.taiga", "Floating Taiga");
+        add("biome.ascension.floating_realm.pale_garden", "Floating Pale Garden");
+        add("biome.ascension.floating_realm.birch_forest", "Floating Birch Forest");
+        add("biome.ascension.floating_realm.cherry_grove", "Floating Cherry Grove");
+        add("biome.ascension.floating_realm.dark_forest", "Floating Dark Forest");
+        add("biome.ascension.floating_realm.meadow", "Floating Meadow");
+        add("biome.ascension.floating_realm.forest", "Floating Forest");
+        add("biome.ascension.floating_realm.mangrove_swamp", "Floating Mangrove Swamp");
+        add("biome.ascension.floating_realm.desert", "Floating Desert");
+        add("biome.ascension.floating_realm.savanna", "Floating Savanna");
+        add("biome.ascension.floating_realm.jungle", "Floating Jungle");
+        add("biome.ascension.floating_realm.bamboo_grove", "Floating Bamboo Grove");
+
 
 
         //Key Items

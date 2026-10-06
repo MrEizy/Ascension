@@ -122,7 +122,7 @@ public final class MobCultivationGrowth {
                 break;
             }
             int maxMinor = pathData.getMaxMinorRealm(major);
-            int maxMajor = pathData.getPath().getMaxMajorRealm();
+            int maxMajor = pathData.getPath().getMaxMajorRealm() - 1;
             progress -= needed;
             /*
             if (minor < maxMinor) {

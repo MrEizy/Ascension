@@ -7,6 +7,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
@@ -31,6 +33,7 @@ import net.zic.ascension.api.ascension.event.skill.SkillEvent;
 import net.zic.ascension.api.ascension.event.technique.TechniqueEvent;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.common.effects.ModEffects;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.impl.core.effect.FrozenStateService;
 import net.zic.ascension.impl.core.effect.SkillEffectManager;
@@ -86,6 +89,28 @@ public final class SkillRuntimeEvents {
         }
         if (killer != null && killer != event.getEntity()) {
             PassiveTriggerService.trigger(killer, PassiveTrigger.Event.KILL, event.getEntity(), Map.of());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMobEffectRemoved(MobEffectEvent.Remove event) {
+        //keep skill effect icons from being stripped by milk, totems or /effect clear while the skill effect is active
+        LivingEntity entity = event.getEntity();
+        if (entity.level().isClientSide()
+                || !(event.getEffect().value() instanceof ModEffects.DisplayOnlyEffect)
+                || SkillEffectModules.StatusIcon.isRemovingOwnIcon()) {
+            return;
+        }
+        if (SkillEffectModules.StatusIcon.isShownByActiveEffect(entity, event.getEffect())) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        //respawning creates a new player without mob effects, but skill effects are copied over
+        if (SkillEffectManager.hasActiveEffects(event.getEntity())) {
+            SkillEffectModules.StatusIcon.syncAll(event.getEntity());
         }
     }
 

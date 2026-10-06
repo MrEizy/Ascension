@@ -23,6 +23,8 @@ public final class AscDensityFunctionTypes {
         TYPES.register("clamp", () -> ClampDensityFunction.DATA_CODEC);
         TYPES.register("mapped", () -> MappedDensityFunction.DATA_CODEC);
         TYPES.register("range_choice", () -> RangeChoiceDensityFunction.DATA_CODEC);
+        TYPES.register("outer_end_islands", () -> OuterEndIslandsDensityFunction.DATA_CODEC);
+        TYPES.register("island_peaks", () -> IslandPeaksDensityFunction.DATA_CODEC);
     }
 
     private AscDensityFunctionTypes() {

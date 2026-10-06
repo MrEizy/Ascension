@@ -276,6 +276,28 @@ public final class SkillEffectManager {
                 && !entity.getData(AscensionAttachments.ACTIVE_SKILL_EFFECTS).isEmpty();
     }
 
+    /**
+     * Runs the consumer for every module of every active effect on the entity.
+     */
+    public static void forEachActiveModule(LivingEntity entity, java.util.function.BiConsumer<SkillEffectModule, Instance> consumer) {
+        if (entity == null) {
+            return;
+        }
+        Container container = entity.getData(AscensionAttachments.ACTIVE_SKILL_EFFECTS);
+        if (container.isEmpty()) {
+            return;
+        }
+        for (Instance active : List.copyOf(container.instances())) {
+            SkillEffectDefinition definition = resolve(entity, active.definition(), active.sourceSkill());
+            if (definition == null) {
+                continue;
+            }
+            for (SkillEffectModule module : definition.modules()) {
+                consumer.accept(module, active);
+            }
+        }
+    }
+
     private static SkillEffectDefinition resolve(
             LivingEntity entity,
             Identifier definitionId,

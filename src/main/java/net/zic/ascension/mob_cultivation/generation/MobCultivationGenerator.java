@@ -88,7 +88,7 @@ public final class MobCultivationGenerator {
             return;
         }
 
-        int majorRealm = Math.clamp(data.getMajorRealm(), 0, pathData.getPath().getMaxMajorRealm());
+        int majorRealm = Math.clamp(data.getMajorRealm(), 0, pathData.getPath().getMaxMajorRealm() - 1);
         int minorRealm = Math.clamp(data.getMinorRealm(), 0, pathData.getMaxMinorRealm(majorRealm));
         //TODO handle realm change
         //TODO ouble maximumProgress = pathData.getMaxProgress(majorRealm, minorRealm, source.getRegistryAccess());
@@ -260,7 +260,7 @@ public final class MobCultivationGenerator {
         }
         majorRealm += data.getEliteTier().majorRealmBonus();
         minorRealm += data.getEliteTier().minorRealmBonus();
-        majorRealm = Math.clamp(majorRealm, 0, pathData.getPath().getMaxMajorRealm());
+        majorRealm = Math.clamp(majorRealm, 0, pathData.getPath().getMaxMajorRealm() - 1);
         minorRealm = Math.clamp(minorRealm, 0, pathData.getMaxMinorRealm(majorRealm));
         return new int[]{majorRealm, minorRealm};
     }

@@ -3,6 +3,7 @@ package net.zic.ascension.impl.core.effect;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,6 +11,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,7 +35,9 @@ import net.zic.ascension.impl.datapack.effect.AscensionSkillEffectModuleTypes;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
+import net.zic.zenithlib.value_containers.ModifierOperation;
 import net.zic.zenithlib.value_containers.ValueContainer;
+import net.zic.zenithlib.value_containers.ValueContainerModifier;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -449,6 +454,223 @@ public final class SkillEffectModules {
                     source.addStat(stat, modifier.val() * multiplier);
                 }
             }
+        }
+    }
+
+    /**
+     * Suppresses stats by a percentage (0.25 = -25%) for as long as the effect is active.
+     * An empty "stats" list targets every registered stat.
+     * All suppression effects share one multiplier group, so they add together (25% + 25% = 50%) and cap at 100%.
+     */
+    public record StatSuppression(List<Identifier> stats, ScaledValue suppression) implements SkillEffectModule {
+        public static final MapCodec<StatSuppression> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Identifier.CODEC.listOf().optionalFieldOf("stats", List.of()).forGetter(StatSuppression::stats),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("suppression", ScaledValue.constant(0.0D))
+                        .forGetter(StatSuppression::suppression)
+        ).apply(instance, StatSuppression::new));
+
+        private static final Identifier GROUP = AscensionCraft.prefix("skill_effect_stat_suppression");
+        private static final int REAPPLY_INTERVAL = 20;
+
+        public StatSuppression {
+            stats = stats == null ? List.of() : List.copyOf(stats);
+            suppression = suppression == null ? ScaledValue.constant(0.0D) : suppression;
+        }
+
+        @Override
+        public CodecType<SkillEffectModule> getType() {
+            return AscensionSkillEffectModuleTypes.STAT_SUPPRESSION.get();
+        }
+
+        @Override
+        public void onApply(LivingEntity entity, SkillEffectContext context) {
+            apply(entity, context);
+        }
+
+        @Override
+        public void onUpdate(LivingEntity entity, SkillEffectContext context, int previousStacks, double previousPotency) {
+            //same modifier id, so this replaces the previous value
+            apply(entity, context);
+        }
+
+        @Override
+        public void tick(LivingEntity entity, SkillEffectContext context) {
+            //the stat sheet is rebuilt on load but active effects are not re-applied, so restore the modifier if it went missing
+            if (entity.level().isClientSide() || entity.tickCount % REAPPLY_INTERVAL != 0) {
+                return;
+            }
+            OriginSource source = AscensionOriginSourceHelper.getEntitySource(entity);
+            if (source == null) {
+                return;
+            }
+            Identifier modifierId = modifierId(context);
+            for (Stat stat : targetStats()) {
+                var instance = source.getStatInstance(stat);
+                if (instance == null || instance.getAllModifiers().stream().noneMatch(modifier -> modifier.getIdentifier().equals(modifierId))) {
+                    apply(entity, context);
+                    return;
+                }
+            }
+        }
+
+        @Override
+        public void onRemove(LivingEntity entity, SkillEffectContext context) {
+            OriginSource source = AscensionOriginSourceHelper.getEntitySource(entity);
+            if (source == null) {
+                return;
+            }
+            Identifier modifierId = modifierId(context);
+            for (Stat stat : targetStats()) {
+                source.removeStatModifier(stat, modifierId);
+            }
+            source.updateEntityStatHolder();
+        }
+
+        private void apply(LivingEntity entity, SkillEffectContext context) {
+            OriginSource source = AscensionOriginSourceHelper.getEntitySource(entity);
+            if (source == null) {
+                return;
+            }
+            double amount = suppression.resolve(effectContext(entity, context));
+            if (!Double.isFinite(amount)) {
+                amount = 0.0D;
+            }
+            amount = Math.clamp(amount, 0.0D, 1.0D);
+
+            Identifier modifierId = modifierId(context);
+            for (Stat stat : targetStats()) {
+                source.addStatModifier(stat, new ValueContainerModifier(-amount, ModifierOperation.MULTIPLY_FINAL, modifierId, GROUP));
+            }
+            source.updateEntityStatHolder();
+        }
+
+        private List<Stat> targetStats() {
+            if (stats.isEmpty()) {
+                List<Stat> all = new ArrayList<>();
+                ZenithRegistries.STAT_REGISTRY.forEach(all::add);
+                return all;
+            }
+            List<Stat> resolved = new ArrayList<>();
+            for (Identifier id : stats) {
+                Stat stat = ZenithRegistries.STAT_REGISTRY.getValue(id);
+                if (stat != null) {
+                    resolved.add(stat);
+                }
+            }
+            return resolved;
+        }
+
+        private static Identifier modifierId(SkillEffectContext context) {
+            return AscensionCraft.prefix("skill_effect/" + context.instanceId() + "/stat_suppression");
+        }
+    }
+
+    /**
+     * Shows a vanilla mob effect icon (inventory + HUD) for as long as the skill effect is active.
+     * Outside removals (milk, totems, /effect clear) are cancelled in SkillRuntimeEvents while the skill effect is active,
+     * and the icon is restored on respawn, so the periodic sync is only a rare safety net.
+     */
+    public record StatusIcon(Identifier effect) implements SkillEffectModule {
+        public static final MapCodec<StatusIcon> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Identifier.CODEC.fieldOf("effect").forGetter(StatusIcon::effect)
+        ).apply(instance, StatusIcon::new));
+
+        private static final int SYNC_INTERVAL = 100;
+        private static final int DURATION_TOLERANCE = 20;
+
+        //true while this module removes its own icon, so the removal event is not cancelled
+        private static boolean removingOwnIcon;
+
+        public static boolean isRemovingOwnIcon() {
+            return removingOwnIcon;
+        }
+
+        /**
+         * @return true if an active skill effect on the entity is showing this mob effect as its icon
+         */
+        public static boolean isShownByActiveEffect(LivingEntity entity, Holder<MobEffect> mobEffect) {
+            Identifier id = BuiltInRegistries.MOB_EFFECT.getKey(mobEffect.value());
+            if (id == null) {
+                return false;
+            }
+            boolean[] shown = {false};
+            SkillEffectManager.forEachActiveModule(entity, (module, active) -> {
+                if (module instanceof StatusIcon icon && icon.effect().equals(id) && active.remainingDuration() > 0) {
+                    shown[0] = true;
+                }
+            });
+            return shown[0];
+        }
+
+        /**
+         * Re-adds every icon for the entity's active skill effects, e.g. after respawning.
+         */
+        public static void syncAll(LivingEntity entity) {
+            SkillEffectManager.forEachActiveModule(entity, (module, active) -> {
+                if (module instanceof StatusIcon icon) {
+                    icon.sync(entity, active);
+                }
+            });
+        }
+
+        @Override
+        public CodecType<SkillEffectModule> getType() {
+            return AscensionSkillEffectModuleTypes.STATUS_ICON.get();
+        }
+
+        @Override
+        public void onApply(LivingEntity entity, SkillEffectContext context) {
+            sync(entity, context);
+        }
+
+        @Override
+        public void onUpdate(LivingEntity entity, SkillEffectContext context, int previousStacks, double previousPotency) {
+            sync(entity, context);
+        }
+
+        @Override
+        public void tick(LivingEntity entity, SkillEffectContext context) {
+            if (entity.tickCount % SYNC_INTERVAL == 0) {
+                sync(entity, context);
+            }
+        }
+
+        @Override
+        public void onRemove(LivingEntity entity, SkillEffectContext context) {
+            Holder<MobEffect> holder = holder();
+            if (holder != null && !entity.level().isClientSide() && entity.hasEffect(holder)) {
+                removeOwnIcon(entity, holder);
+            }
+        }
+
+        private static void removeOwnIcon(LivingEntity entity, Holder<MobEffect> holder) {
+            removingOwnIcon = true;
+            try {
+                entity.removeEffect(holder);
+            } finally {
+                removingOwnIcon = false;
+            }
+        }
+
+        private void sync(LivingEntity entity, SkillEffectContext context) {
+            Holder<MobEffect> holder = holder();
+            if (holder == null || entity.level().isClientSide()) {
+                return;
+            }
+            int duration = context.remainingDuration();
+            MobEffectInstance current = entity.getEffect(holder);
+            if (current != null && Math.abs(current.getDuration() - duration) <= DURATION_TOLERANCE) {
+                return;
+            }
+            //addEffect only ever extends, so remove first to also allow shortening
+            if (current != null) {
+                removeOwnIcon(entity, holder);
+            }
+            entity.addEffect(new MobEffectInstance(holder, duration, 0, false, false, true));
+        }
+
+        private Holder<MobEffect> holder() {
+            return BuiltInRegistries.MOB_EFFECT.get(effect).orElse(null);
         }
     }
 

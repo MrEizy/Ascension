@@ -31,6 +31,10 @@ public final class AscensionSkillEffectModuleTypes {
             TYPES.add("resource_modifier", SkillEffectModules.ResourceModifierModule.CODEC);
     public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> BASE_STATS =
             TYPES.add("base_stats", SkillEffectModules.BaseStats.CODEC);
+    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> STAT_SUPPRESSION =
+            TYPES.add("stat_suppression", SkillEffectModules.StatSuppression.CODEC);
+    public static final DeferredHolder<CodecType<SkillEffectModule>, CodecType<SkillEffectModule>> STATUS_ICON =
+            TYPES.add("status_icon", SkillEffectModules.StatusIcon.CODEC);
 
     private AscensionSkillEffectModuleTypes() {
     }

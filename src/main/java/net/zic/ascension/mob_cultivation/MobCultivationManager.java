@@ -172,7 +172,7 @@ public final class MobCultivationManager {
             return false;
         }
 
-        int majorRealm = Math.clamp(requestedMajorRealm, 0, path.getMaxMajorRealm());
+        int majorRealm = Math.clamp(requestedMajorRealm, 0, path.getMaxMajorRealm() - 1);
         int minorRealm = Math.clamp(
                 requestedMinorRealm,
                 0,

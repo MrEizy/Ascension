@@ -100,7 +100,7 @@ public class SimplePathInstance implements PathInstance {
         int minorRealm = currentRealm.getCurrentRealm();
 
         boolean isProgressFull = currentRealm.definition().getMaxProgress(minorRealm) <= progress;
-        boolean maxMajorRealm = path.getMaxMajorRealm() == getCurrentMajorRealm();
+        boolean maxMajorRealm = path.getMaxMajorRealm() - 1 == getCurrentMajorRealm();
         boolean maxMinorRealm = getMaxMinorRealm(getCurrentMajorRealm()) == getCurrentMinorRealm();
 
         return !isProgressFull && !isBreakingThrough()  && !(maxMinorRealm && maxMajorRealm);
@@ -112,7 +112,7 @@ public class SimplePathInstance implements PathInstance {
         int minorRealm = currentRealm.getCurrentRealm();
 
         boolean isProgressFull = currentRealm.definition().getMaxProgress(minorRealm) <= progress;
-        boolean maxMajorRealm = path.getMaxMajorRealm() == getCurrentMajorRealm();
+        boolean maxMajorRealm = path.getMaxMajorRealm() - 1 == getCurrentMajorRealm();
         boolean maxMinorRealm = getMaxMinorRealm(getCurrentMajorRealm()) == getCurrentMinorRealm();
 
 

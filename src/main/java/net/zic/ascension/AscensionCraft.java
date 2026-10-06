@@ -49,6 +49,7 @@ import net.zic.ascension.impl.resource.AscensionResourceTypes;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillActionTypes;
 import net.zic.ascension.impl.datapack.targeting.AscensionTargetingTypes;
 import net.zic.ascension.impl.datapack.effect.AscensionSkillEffectModuleTypes;
+import net.zic.ascension.common.effects.ModEffects;
 import net.zic.ascension.impl.datapack.projectile.AscensionProjectileBehaviorTypes;
 import net.zic.ascension.worldgen.AscFeatures;
 import net.zic.ascension.worldgen.density.AscDensityFunctionTypes;
@@ -138,6 +139,7 @@ public class AscensionCraft {
         AscensionSkillActionTypes.register(modEventBus);
         AscensionTargetingTypes.register(modEventBus);
         AscensionSkillEffectModuleTypes.register(modEventBus);
+        ModEffects.register(modEventBus);
         AscensionProjectileBehaviorTypes.register(modEventBus);
 
         AscensionAttributes.register(modEventBus);

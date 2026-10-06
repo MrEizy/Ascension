@@ -61,6 +61,7 @@ neoForge {
         client {
             client()
             gameDirectory = project.file('run')
+            jvmArguments.add '-Xmx9G'
             systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
         }
 
