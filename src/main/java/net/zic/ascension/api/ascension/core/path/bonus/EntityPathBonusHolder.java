@@ -59,14 +59,14 @@ public class EntityPathBonusHolder extends MultiSourcePathBonusHolder{
             PathBonusHolder cachedHolder = previousValue.getCachedPathBonusHolder();
             int size = buf.readInt();
             for(int i = 0;i<size;i++){
-                Identifier category = buf.readIdentifier();
+                Identifier category = ByteBufHelpers.decodeIdentifier(buf);
                 ValueContainer<Double> container = ValueContainer.normalDecode(ValueContainerHelpers::doubleValueContainer,buf,Codec.DOUBLE);
                 cachedHolder.setPathBonusContainer(category,container);
             }
             size = buf.readInt();
             for(int i = 0;i<size;i++){
-                Identifier category = buf.readIdentifier();
-                Identifier path = buf.readIdentifier();
+                Identifier category = ByteBufHelpers.decodeIdentifier(buf);
+                Identifier path = ByteBufHelpers.decodeIdentifier(buf);
                 cachedHolder.removePathBonusContainer(category,path);
             }
 

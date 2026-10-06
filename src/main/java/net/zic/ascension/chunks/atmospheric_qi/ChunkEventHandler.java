@@ -60,7 +60,7 @@ public class ChunkEventHandler {
                 if(processed.contains(biome)) return;
 
                 qiHandler.addCapacityFlatModifier(Modifier.base(modifierId,configuration.capacity()));
-                qiHandler.addCapacityFlatModifier(Modifier.base(modifierId,configuration.regenRate()));
+                qiHandler.addRegenFlatModifier(Modifier.base(modifierId,configuration.regenRate()));
                 affinityProvider.startProcess("updating_base_affinities");
                 for(Identifier path : configuration.affinities().keySet()){
                     affinityProvider.addFlatModifier(path,Modifier.base(modifierId,configuration.affinities().getDouble(path)));
