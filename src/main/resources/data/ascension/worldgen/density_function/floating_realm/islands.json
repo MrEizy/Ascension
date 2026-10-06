@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:cache_2d",
+  "argument": {
+    "type": "ascension:outer_end_islands",
+    "input": {
+      "type": "minecraft:end_islands"
+    },
+    "offset_x": 100000,
+    "offset_z": 0,
+    "xz_scale": 0.35
+  }
+}

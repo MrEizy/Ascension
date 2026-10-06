@@ -1,0 +1,8 @@
+{
+  "dimensions": ["ascension:floating_realm"],
+  "energy_cap": 1000,
+  "energy_regen": 2,
+  "affinities": {
+    "ascension:essence": 2
+  }
+}

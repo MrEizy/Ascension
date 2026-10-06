@@ -1,0 +1,12 @@
+{
+  "feature": "ascension:floating_realm/lake_water",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 4
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

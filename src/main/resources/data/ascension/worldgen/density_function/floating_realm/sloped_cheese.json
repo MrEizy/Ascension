@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:add",
+  "argument1": "ascension:floating_realm/islands",
+  "argument2": "minecraft:end/base_3d_noise"
+}

@@ -1,0 +1,73 @@
+{
+  "type": "minecraft:cache_2d",
+  "argument": {
+    "type": "ascension:domain_warp",
+    "amplitude": 30,
+    "shift_x": {
+      "type": "minecraft:noise",
+      "noise": "ascension:floating_realm/mountain_warp_x",
+      "xz_scale": 1,
+      "y_scale": 0
+    },
+    "shift_z": {
+      "type": "minecraft:noise",
+      "noise": "ascension:floating_realm/mountain_warp_z",
+      "xz_scale": 1,
+      "y_scale": 0
+    },
+    "input": {
+      "type": "ascension:island_peaks",
+      "input": {
+        "type": "minecraft:end_islands"
+      },
+      "offset_x": 100000,
+      "offset_z": 0,
+      "xz_scale": 0.35,
+      "edge_margin": 0.3,
+      "profile_exponent": 1.6,
+      "flat_tops": {
+        "chance": 0.35,
+        "min_level": 0.65,
+        "max_level": 0.85
+      },
+      "tiers": [
+        {
+          "chance": 0.04,
+          "height": 170,
+          "shape": "range",
+          "max_island_size": 13
+        },
+        {
+          "chance": 0.1,
+          "height": 160
+        },
+        {
+          "chance": 0.35,
+          "height": 70
+        }
+      ],
+      "modifier": {
+        "type": "minecraft:clamp",
+        "input": {
+          "type": "minecraft:add",
+          "argument1": 1.35,
+          "argument2": {
+            "type": "minecraft:mul",
+            "argument1": -1.1,
+            "argument2": {
+              "type": "minecraft:abs",
+              "argument": {
+                "type": "minecraft:noise",
+                "noise": "ascension:floating_realm/mountain_ridges",
+                "xz_scale": 1,
+                "y_scale": 0
+              }
+            }
+          }
+        },
+        "min": 0.3,
+        "max": 1.35
+      }
+    }
+  }
+}

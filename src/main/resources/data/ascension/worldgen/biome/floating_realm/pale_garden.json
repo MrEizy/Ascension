@@ -1,0 +1,151 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": {},
+    "minecraft:audio/music_volume": 0,
+    "minecraft:visual/fog_color": "#817770",
+    "minecraft:visual/sky_color": "#b9b9b9",
+    "minecraft:visual/water_fog_color": "#556980"
+  },
+  "carvers": [
+    "ascension:floating_realm/cave"
+  ],
+  "downfall": 0.8,
+  "effects": {
+    "dry_foliage_color": "#a0a69c",
+    "foliage_color": "#878d76",
+    "grass_color": "#778272",
+    "water_color": "#76889d"
+  },
+  "features": [
+    [],
+    [
+      "ascension:floating_realm/lake_water"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "ascension:floating_realm/ore/andesite_lower",
+      "ascension:floating_realm/ore/andesite_upper",
+      "ascension:floating_realm/ore/black_iron",
+      "ascension:floating_realm/ore/coal_lower",
+      "ascension:floating_realm/ore/coal_upper",
+      "ascension:floating_realm/ore/copper",
+      "ascension:floating_realm/ore/diamond",
+      "ascension:floating_realm/ore/diamond_buried",
+      "ascension:floating_realm/ore/diamond_large",
+      "ascension:floating_realm/ore/diamond_medium",
+      "ascension:floating_realm/ore/diorite_lower",
+      "ascension:floating_realm/ore/diorite_upper",
+      "ascension:floating_realm/ore/dirt",
+      "ascension:floating_realm/ore/emerald",
+      "ascension:floating_realm/ore/gold",
+      "ascension:floating_realm/ore/granite_lower",
+      "ascension:floating_realm/ore/granite_upper",
+      "ascension:floating_realm/ore/gravel",
+      "ascension:floating_realm/ore/iron_middle",
+      "ascension:floating_realm/ore/iron_small",
+      "ascension:floating_realm/ore/iron_upper",
+      "ascension:floating_realm/ore/jade",
+      "ascension:floating_realm/ore/lapis",
+      "ascension:floating_realm/ore/lapis_buried",
+      "ascension:floating_realm/ore/redstone",
+      "ascension:floating_realm/ore/tuff"
+    ],
+    [],
+    [],
+    [
+      "minecraft:glow_lichen",
+      "minecraft:pale_garden_vegetation",
+      "minecraft:pale_moss_patch",
+      "minecraft:pale_garden_flowers",
+      "minecraft:flower_pale_garden",
+      "minecraft:patch_grass_forest",
+      "minecraft:patch_pumpkin",
+      "minecraft:patch_sugar_cane",
+      "minecraft:patch_firefly_bush_near_water",
+      "ascension:floating_realm/peach_trees",
+      "ascension:jade_dew_grass_placed",
+      "ascension:lingzhi_mushroom_placed",
+      "ascension:white_jade_orchid_placed"
+    ],
+    []
+  ],
+  "has_precipitation": true,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [
+      {
+        "type": "minecraft:bat",
+        "maxCount": 8,
+        "minCount": 8,
+        "weight": 10
+      }
+    ],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "minecraft:spider",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "minecraft:zombie",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 95
+      },
+      {
+        "type": "minecraft:zombie_villager",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 5
+      },
+      {
+        "type": "minecraft:skeleton",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "minecraft:creeper",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "minecraft:slime",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "minecraft:enderman",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:witch",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 5
+      }
+    ],
+    "underground_water_creature": [
+      {
+        "type": "minecraft:glow_squid",
+        "maxCount": 6,
+        "minCount": 4,
+        "weight": 10
+      }
+    ],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.7
+}

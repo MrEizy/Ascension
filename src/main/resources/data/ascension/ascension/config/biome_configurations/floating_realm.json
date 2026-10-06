@@ -1,0 +1,8 @@
+{
+  "biomes": "#ascension:floating_realm",
+  "energy_cap": 100,
+  "energy_regen": 2,
+  "affinities": {
+    "ascension:water": 2
+  }
+}

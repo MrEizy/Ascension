@@ -1,0 +1,186 @@
+{
+  "attributes": {
+    "minecraft:visual/sky_color": "#7da3ff"
+  },
+  "carvers": [
+    "ascension:floating_realm/cave"
+  ],
+  "downfall": 0.8,
+  "effects": {
+    "water_color": "#3f76e4"
+  },
+  "features": [
+    [],
+    [
+      "ascension:floating_realm/lake_water"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "ascension:floating_realm/ore/andesite_lower",
+      "ascension:floating_realm/ore/andesite_upper",
+      "ascension:floating_realm/ore/black_iron",
+      "ascension:floating_realm/ore/coal_lower",
+      "ascension:floating_realm/ore/coal_upper",
+      "ascension:floating_realm/ore/copper",
+      "ascension:floating_realm/ore/diamond",
+      "ascension:floating_realm/ore/diamond_buried",
+      "ascension:floating_realm/ore/diamond_large",
+      "ascension:floating_realm/ore/diamond_medium",
+      "ascension:floating_realm/ore/diorite_lower",
+      "ascension:floating_realm/ore/diorite_upper",
+      "ascension:floating_realm/ore/dirt",
+      "ascension:floating_realm/ore/emerald",
+      "ascension:floating_realm/ore/gold",
+      "ascension:floating_realm/ore/granite_lower",
+      "ascension:floating_realm/ore/granite_upper",
+      "ascension:floating_realm/ore/gravel",
+      "ascension:floating_realm/ore/iron_middle",
+      "ascension:floating_realm/ore/iron_small",
+      "ascension:floating_realm/ore/iron_upper",
+      "ascension:floating_realm/ore/jade",
+      "ascension:floating_realm/ore/lapis",
+      "ascension:floating_realm/ore/lapis_buried",
+      "ascension:floating_realm/ore/redstone",
+      "ascension:floating_realm/ore/tuff"
+    ],
+    [],
+    [],
+    [
+      "minecraft:glow_lichen",
+      "minecraft:patch_large_fern",
+      "minecraft:trees_taiga",
+      "minecraft:flower_default",
+      "minecraft:patch_grass_taiga_2",
+      "minecraft:brown_mushroom_taiga",
+      "minecraft:red_mushroom_taiga",
+      "minecraft:patch_pumpkin",
+      "minecraft:patch_sugar_cane",
+      "minecraft:patch_firefly_bush_near_water",
+      "minecraft:patch_berry_common",
+      "ascension:floating_realm/peach_trees"
+    ],
+    []
+  ],
+  "has_precipitation": true,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [
+      {
+        "type": "minecraft:bat",
+        "maxCount": 8,
+        "minCount": 8,
+        "weight": 10
+      }
+    ],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "minecraft:sheep",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 12
+      },
+      {
+        "type": "minecraft:pig",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:chicken",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:cow",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:wolf",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:rabbit",
+        "maxCount": 3,
+        "minCount": 2,
+        "weight": 4
+      },
+      {
+        "type": "minecraft:fox",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 8
+      }
+    ],
+    "misc": [],
+    "monster": [
+      {
+        "type": "minecraft:spider",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "minecraft:zombie",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 95
+      },
+      {
+        "type": "minecraft:zombie_villager",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 5
+      },
+      {
+        "type": "minecraft:skeleton",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "minecraft:creeper",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "minecraft:slime",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "minecraft:enderman",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:witch",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 5
+      }
+    ],
+    "underground_water_creature": [
+      {
+        "type": "minecraft:glow_squid",
+        "maxCount": 6,
+        "minCount": 4,
+        "weight": 10
+      }
+    ],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.25
+}

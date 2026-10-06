@@ -1,0 +1,27 @@
+{
+  "type": "ascension:contained_lake",
+  "config": {
+    "fluid": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:water",
+        "Properties": {
+          "level": "0"
+        }
+      }
+    },
+    "shore": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:dirt"
+      }
+    },
+    "width": 24,
+    "depth": 4,
+    "spots": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 5,
+      "max_inclusive": 9
+    }
+  }
+}

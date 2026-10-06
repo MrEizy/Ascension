@@ -1,0 +1,300 @@
+{
+  "type": "ascension:floating_realm",
+  "generator": {
+    "type": "minecraft:noise",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "ascension:floating_realm/ice_spikes",
+          "parameters": {
+            "temperature": [
+              -1,
+              -0.31
+            ],
+            "humidity": [
+              -1,
+              -0.27
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/snowy_plains",
+          "parameters": {
+            "temperature": [
+              -1,
+              -0.31
+            ],
+            "humidity": [
+              -0.27,
+              -0.03
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/snowy_taiga",
+          "parameters": {
+            "temperature": [
+              -1,
+              -0.31
+            ],
+            "humidity": [
+              -0.03,
+              0.18
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/grove",
+          "parameters": {
+            "temperature": [
+              -1,
+              -0.31
+            ],
+            "humidity": [
+              0.18,
+              1
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/taiga",
+          "parameters": {
+            "temperature": [
+              -0.31,
+              -0.09
+            ],
+            "humidity": [
+              -1,
+              0.11
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/pale_garden",
+          "parameters": {
+            "temperature": [
+              -0.31,
+              -0.09
+            ],
+            "humidity": [
+              0.11,
+              1
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/birch_forest",
+          "parameters": {
+            "temperature": [
+              -0.09,
+              0.1
+            ],
+            "humidity": [
+              -1,
+              -0.11
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/cherry_grove",
+          "parameters": {
+            "temperature": [
+              -0.09,
+              0.1
+            ],
+            "humidity": [
+              -0.11,
+              0.11
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/dark_forest",
+          "parameters": {
+            "temperature": [
+              -0.09,
+              0.1
+            ],
+            "humidity": [
+              0.11,
+              1
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/meadow",
+          "parameters": {
+            "temperature": [
+              0.1,
+              0.32
+            ],
+            "humidity": [
+              -1,
+              -0.11
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/forest",
+          "parameters": {
+            "temperature": [
+              0.1,
+              0.32
+            ],
+            "humidity": [
+              -0.11,
+              0.11
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/mangrove_swamp",
+          "parameters": {
+            "temperature": [
+              0.1,
+              0.32
+            ],
+            "humidity": [
+              0.11,
+              1
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/desert",
+          "parameters": {
+            "temperature": [
+              0.32,
+              1
+            ],
+            "humidity": [
+              -1,
+              -0.18
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/savanna",
+          "parameters": {
+            "temperature": [
+              0.32,
+              1
+            ],
+            "humidity": [
+              -0.18,
+              0
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/jungle",
+          "parameters": {
+            "temperature": [
+              0.32,
+              1
+            ],
+            "humidity": [
+              0,
+              0.18
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "ascension:floating_realm/bamboo_grove",
+          "parameters": {
+            "temperature": [
+              0.32,
+              1
+            ],
+            "humidity": [
+              0.18,
+              1
+            ],
+            "continentalness": 0,
+            "erosion": 0,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        }
+      ]
+    },
+    "settings": "ascension:floating_realm"
+  }
+}

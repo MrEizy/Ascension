@@ -1,0 +1,18 @@
+{
+  "stacking": "stronger_replaces",
+  "stacking_scope": "definition",
+  "max_stacks": 1,
+  "modules": [
+    {
+      "type": "ascension:stat_suppression",
+      "stats": [],
+      "suppression": {
+        "base": 0.25
+      }
+    },
+    {
+      "type": "ascension:status_icon",
+      "effect": "ascension:rejection"
+    }
+  ]
+}
