@@ -18,6 +18,7 @@
       "actions": [
         {
           "type": "ascension:give_stats",
+          "per_purity": true,
           "stats": {
             "ascension:spirit": {
               "flat": [
@@ -41,6 +42,7 @@
         },
         {
           "type": "ascension:give_path_bonuses",
+          "per_purity": true,
           "bonuses": {
             "ascension:affinity": {
               "ascension:foundation/soul": {

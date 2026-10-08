@@ -15,12 +15,13 @@
       "actions": [
         {
           "type": "ascension:give_stats",
+          "per_purity": true,
           "stats": {
             "ascension:agility": {
               "flat": [
                 {
                   "id": "ascension:1_ordinary_falling_star_bloodline_agility_a1",
-                  "value": 0.07
+                  "value": 0.06
                 }
               ],
               "multiplier": []
@@ -29,7 +30,7 @@
               "flat": [
                 {
                   "id": "ascension:1_ordinary_falling_star_bloodline_spirit_a1",
-                  "value": 0.05
+                  "value": 0.04
                 }
               ],
               "multiplier": []
@@ -38,6 +39,7 @@
         },
         {
           "type": "ascension:give_path_bonuses",
+          "per_purity": true,
           "bonuses": {
             "ascension:affinity": {
               "ascension:elemental/star": {

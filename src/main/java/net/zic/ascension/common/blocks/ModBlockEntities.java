@@ -13,13 +13,13 @@ public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
             DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, AscensionCraft.MOD_ID);
 
-//    public static final Supplier<BlockEntityType<SpiritStoneClusterBE>> SPIRIT_STONE_CLUSTER = BLOCK_ENTITY_TYPES.register(
-//            "spirit_stone_cluster",
-//            // The block entity type.
-//            () -> new BlockEntityType<>(
-//                    SpiritStoneClusterBE::new,
-//                    false,
-//                    ModBlocks.SPIRIT_STONE_CLUSTER.get()
-//            )
-//    );
+    public static final Supplier<BlockEntityType<SpiritStoneClusterBE>> SPIRIT_STONE_CLUSTER = BLOCK_ENTITY_TYPES.register(
+            "spirit_stone_cluster",
+            // The block entity type.
+            () -> new BlockEntityType<>(
+                    SpiritStoneClusterBE::new,
+                    false,
+                    ModBlocks.SPIRIT_STONE_CLUSTER.get()
+            )
+    );
 }

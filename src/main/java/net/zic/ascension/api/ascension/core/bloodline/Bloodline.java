@@ -51,13 +51,11 @@ public interface Bloodline {
     default void handlePurityChange(OriginSource source, BloodlineData data, int newPurity){
 
         newPurity = Math.clamp(newPurity,1,100);
-        int oldPurity = data.getPurity();
         if(newPurity < data.getPurity()){
             //purity decreased
             for(int purity = data.getPurity();purity>newPurity;purity--){
-                data.setPurity(purity);
-                purityDown(source,data);
                 data.setPurity(purity - 1);
+                purityDown(source,data);
             }
         }else{
 

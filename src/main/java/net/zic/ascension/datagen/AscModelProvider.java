@@ -155,6 +155,10 @@ public class AscModelProvider extends ModelProvider {
                 new StackTier(16, "_medium"),
                 new StackTier(32, "_large"));
 
+        stackCountItemModel(itemModels, ModItems.SPIRIT_STONE.get(), "_small",
+                new StackTier(16, "_medium"),
+                new StackTier(32, "_large"));
+
 
 
         //Fluids
@@ -197,6 +201,7 @@ public class AscModelProvider extends ModelProvider {
         //Block Entities
         fermentingBarrelModel(blockModels);
         spiritualStoneClusterModel(blockModels);
+        spiritualStoneClusterModel2(blockModels);
         blockModels.createNonTemplateModelBlock(ModBlocks.ALCHEMY_FURNACE.get());
 
         //Fluids
@@ -234,6 +239,24 @@ public class AscModelProvider extends ModelProvider {
 
     private void spiritualStoneClusterModel(BlockModelGenerators blockModels) {
         Block block = ModBlocks.SPIRITUAL_STONE_CLUSTER.get();
+        Identifier model = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/spiritual_stone_cluster");
+        MultiVariant base = BlockModelGenerators.plainVariant(model);
+
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(block, base)
+                        .with(PropertyDispatch.modify(SpiritualStoneClusterBlock.FACING)
+                                .select(Direction.UP, BlockModelGenerators.NOP)
+                                .select(Direction.DOWN, BlockModelGenerators.X_ROT_180)
+                                .select(Direction.NORTH, BlockModelGenerators.X_ROT_90)
+                                .select(Direction.SOUTH, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_180))
+                                .select(Direction.EAST, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_90))
+                                .select(Direction.WEST, BlockModelGenerators.X_ROT_90.then(BlockModelGenerators.Y_ROT_270))));
+
+        blockModels.registerSimpleItemModel(block, model);
+    }
+
+    private void spiritualStoneClusterModel2(BlockModelGenerators blockModels) {
+        Block block = ModBlocks.SPIRIT_STONE_CLUSTER.get();
         Identifier model = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "block/spiritual_stone_cluster");
         MultiVariant base = BlockModelGenerators.plainVariant(model);
 

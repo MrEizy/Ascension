@@ -68,6 +68,8 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         add(ModBlocks.SPIRITUAL_STONE_CLUSTER.get(),
                 createMultipleOreDrops(ModBlocks.SPIRITUAL_STONE_CLUSTER.get(), ModItems.SPIRITUAL_STONE.get(), 1, 3));
 
+        add(ModBlocks.SPIRIT_STONE_CLUSTER.get(), LootTable.lootTable());
+
 
 
         //Key Blocks

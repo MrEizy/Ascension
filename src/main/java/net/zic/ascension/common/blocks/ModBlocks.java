@@ -68,8 +68,9 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops().sound(SoundType.METAL)));
 
     //Energy
-//    public static final DeferredBlock<Block> SPIRIT_STONE_CLUSTER  = registerBlock("spirit_stone_cluster",
-//            properties -> new Block(properties.sound(SoundType.AMETHYST)));
+    public static final DeferredBlock<Block> SPIRIT_STONE_CLUSTER  = registerBlock("spirit_stone_cluster",
+            properties -> new SpiritualStoneClusterBlock(properties.strength(6.5f, 5.5f)
+                    .requiresCorrectToolForDrops().sound(SoundType.AMETHYST).noOcclusion(), UniformInt.of(2, 4)));
 
     public static final DeferredBlock<Block> SPIRITUAL_STONE_CLUSTER = registerBlock("spiritual_stone_cluster",
             properties -> new SpiritualStoneClusterBlock(properties.strength(6.5f, 5.5f)

@@ -12,6 +12,7 @@
       "actions": [
         {
           "type": "ascension:give_stats",
+          "per_purity": true,
           "stats": {
             "ascension:vitality": {
               "flat": [

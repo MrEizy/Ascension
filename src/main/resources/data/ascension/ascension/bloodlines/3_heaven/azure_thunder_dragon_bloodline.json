@@ -17,6 +17,7 @@
       "actions": [
         {
           "type": "ascension:give_stats",
+          "per_purity": true,
           "stats": {
             "ascension:vitality": {
               "flat": [
@@ -49,6 +50,7 @@
         },
         {
           "type": "ascension:give_path_bonuses",
+          "per_purity": true,
           "bonuses": {
             "ascension:affinity": {
               "ascension:foundation/body": {
@@ -166,7 +168,7 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_vitality_a6",
-                  "value": 3.0
+                  "value": 4.0
                 }
               ],
               "multiplier": []
@@ -175,7 +177,7 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_strength_a6",
-                  "value": 3.0
+                  "value": 4.0
                 }
               ],
               "multiplier": []
@@ -184,7 +186,7 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_azure_thunder_dragon_bloodline_spirit_a6",
-                  "value": 3.0
+                  "value": 4.0
                 }
               ],
               "multiplier": []

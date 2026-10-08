@@ -3,15 +3,15 @@ package net.zic.ascension.impl.core.progression;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionDescription;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
+import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.ZenithStatHelper;
-import net.zic.zenithlib.value_containers.ValueContainer;
-import net.zic.zenithlib.value_containers.typed.Modifier;
 import net.zic.zenithlib.value_containers.typed.ModifierHolder;
 
 import java.util.Collection;
@@ -19,10 +19,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public record GiveStatsAction(UUID uuid, Map<Identifier,ModifierHolder<Double>> stats) implements ProgressAction {
+public record GiveStatsAction(UUID uuid, Map<Identifier,ModifierHolder<Double>> stats, boolean perPurity, ModifierMergeMode mergeMode) implements ProgressAction {
 
-    public static GiveStatsAction from(Map<Identifier,ModifierHolder<Double>> stats){
-        return new GiveStatsAction(UUID.randomUUID(),stats);
+    public static GiveStatsAction from(Map<Identifier,ModifierHolder<Double>> stats, boolean perPurity, ModifierMergeMode mergeMode){
+        if (perPurity && mergeMode.resolve(true) != ModifierMergeMode.REPLACE) {
+            throw new IllegalArgumentException("Per-purity modifiers require replace mode");
+        }
+        return new GiveStatsAction(UUID.randomUUID(), Map.copyOf(stats), perPurity, mergeMode);
     }
     @Override
     public UUID getUniqueId() {
@@ -31,17 +34,19 @@ public record GiveStatsAction(UUID uuid, Map<Identifier,ModifierHolder<Double>> 
 
     @Override
     public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction) {
+        if (perPurity && !(contextData instanceof BloodlineData)) return;
+        int purity = perPurity ? Math.max(0, Math.min(100, ((BloodlineData) contextData).getPurity())) : 1;
 
-        for(Map.Entry<Identifier,ModifierHolder<Double>> modifiers : stats.entrySet()){
+        for (Map.Entry<Identifier, ModifierHolder<Double>> modifiers : stats.entrySet()) {
             Stat stat = ZenithStatHelper.stat(modifiers.getKey());
-            for(Modifier<Double> modifier : modifiers.getValue().flat()){
-                if(direction == ProgressDirection.UP) source.addFlatStatModifier(stat,modifier);
-                else source.removeStatModifier(stat,modifier.id());
-            }
-            for(Modifier<Double> modifier : modifiers.getValue().multiplier()){
-                if(direction == ProgressDirection.UP) source.addMultiplierStatModifier(stat,modifier);
-                else source.removeStatModifier(stat,modifier.id());
-            }
+            ModifierActionHelper.apply(
+                    modifiers.getValue(),
+                    () -> source.getStatInstance(stat),
+                    modifier -> source.addFlatStatModifier(stat, modifier),
+                    modifier -> source.addMultiplierStatModifier(stat, modifier),
+                    id -> source.removeStatModifier(stat, id),
+                    direction, mergeMode, perPurity, purity
+            );
         }
     }
 
@@ -60,6 +65,6 @@ public record GiveStatsAction(UUID uuid, Map<Identifier,ModifierHolder<Double>> 
 
     @Override
     public ProgressActionType getType() {
-        return null;
+        return AscensionProgressActionTypes.GIVE_STATS_ACTION.get();
     }
 }

@@ -16,12 +16,13 @@
       "actions": [
         {
           "type": "ascension:give_stats",
+          "per_purity": true,
           "stats": {
             "ascension:vitality": {
               "flat": [
                 {
                   "id": "ascension:1_ordinary_verdantblood_bloodline_vitality_a1",
-                  "value": 0.09
+                  "value": 0.08
                 }
               ],
               "multiplier": []
@@ -30,7 +31,7 @@
               "flat": [
                 {
                   "id": "ascension:1_ordinary_verdantblood_bloodline_spirit_a1",
-                  "value": 0.04
+                  "value": 0.03
                 }
               ],
               "multiplier": []
@@ -39,6 +40,7 @@
         },
         {
           "type": "ascension:give_path_bonuses",
+          "per_purity": true,
           "bonuses": {
             "ascension:affinity": {
               "ascension:foundation/body": {

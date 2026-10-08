@@ -89,7 +89,7 @@ public class SimpleBloodline implements Bloodline {
     public Collection<Identifier> onRemoved(OriginSource source, BloodlineData data) {
         Identifier bloodlineId = CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
         for (int purity = data.getPurity(); purity >= 1; purity--) {
-            data.setPurity(purity);
+            data.setPurity(purity - 1);
             holder.run(source, bloodlineId, data, ProgressDirection.DOWN);
         }
         data.setPurity(0);

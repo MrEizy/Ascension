@@ -10,7 +10,21 @@
     {
       "condition": "ascension:all_purity",
       "actions": [
-        "ascension:generic_give_stats"
+        {
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_human_bloodline_vitality_a1",
+                  "value": 0.1
+                }
+              ],
+              "multiplier": []
+            }
+          },
+          "per_purity": true
+        }
       ]
     }
   ],

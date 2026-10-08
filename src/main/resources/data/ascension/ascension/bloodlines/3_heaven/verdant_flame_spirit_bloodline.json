@@ -17,6 +17,7 @@
       "actions": [
         {
           "type": "ascension:give_stats",
+          "per_purity": true,
           "stats": {
             "ascension:spirit": {
               "flat": [
@@ -49,6 +50,7 @@
         },
         {
           "type": "ascension:give_path_bonuses",
+          "per_purity": true,
           "bonuses": {
             "ascension:affinity": {
               "ascension:foundation/essence": {
@@ -97,7 +99,7 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_spirit_a3",
-                  "value": 3.0
+                  "value": 2.0
                 }
               ],
               "multiplier": []
@@ -120,7 +122,7 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_vitality_a4",
-                  "value": 3.0
+                  "value": 2.0
                 }
               ],
               "multiplier": []
@@ -166,7 +168,7 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_spirit_a6",
-                  "value": 5.0
+                  "value": 4.0
                 }
               ],
               "multiplier": []
@@ -175,7 +177,7 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_verdant_flame_spirit_bloodline_vitality_a6",
-                  "value": 4.0
+                  "value": 3.0
                 }
               ],
               "multiplier": []

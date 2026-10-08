@@ -12,12 +12,13 @@
       "actions": [
         {
           "type": "ascension:give_stats",
+          "per_purity": true,
           "stats": {
             "ascension:strength": {
               "flat": [
                 {
                   "id": "ascension:1_ordinary_barbarian_bloodline_strength_a1",
-                  "value": 0.17
+                  "value": 0.2
                 }
               ],
               "multiplier": []
