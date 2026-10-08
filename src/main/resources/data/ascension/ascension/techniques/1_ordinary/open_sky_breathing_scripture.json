@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple_technique",
-  "name": "Open Sky Breathing Scripture",
-  "description": "A simple Essence scripture that imitates the breadth of the open heavens, drawing qi through steady circulation.",
+  "name": {"translate": "ascension.technique.open_sky_breathing_scripture.name"},
+  "description": {"translate": "ascension.technique.open_sky_breathing_scripture.desc"},
   "path": "ascension:foundation/essence",
   "milestone_realms": [
     0,

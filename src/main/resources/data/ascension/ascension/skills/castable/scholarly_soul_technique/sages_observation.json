@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Sage’s Observation",
-  "description": "Unfurl divine sense in a sweep and read the surrounding world as a page.",
+  "name": {"translate": "ascension.skill.sages_observation.name"},
+  "description": {"translate": "ascension.skill.sages_observation.desc"},
   "target": {
     "type": "ascension:self"
   },

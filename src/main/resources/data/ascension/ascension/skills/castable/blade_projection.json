@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Blade Projection",
-  "description": "Sends a swift red blade crescent forward.",
+  "name": {"translate": "ascension.skill.blade_projection.name"},
+  "description": {"translate": "ascension.skill.blade_projection.desc"},
   "actions": [
     {
       "type": "ascension:weapon_swing",

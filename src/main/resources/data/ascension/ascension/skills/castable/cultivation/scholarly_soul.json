@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Scholarly Soul Contemplation",
-  "description": "Refine the soul through contemplation, observation, and the repeated reconstruction of truths.",
+  "name": {"translate": "ascension.skill.scholarly_soul.name"},
+  "description": {"translate": "ascension.skill.scholarly_soul.desc"},
   "cast": {
     "mode": "channel",
     "stages": [

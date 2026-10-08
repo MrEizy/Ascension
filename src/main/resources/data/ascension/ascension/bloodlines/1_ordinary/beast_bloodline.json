@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Beast Bloodline",
-  "description": "A savage bloodline that grows stronger through conflict and survival.",
+  "name": {"translate": "ascension.bloodline.beast_bloodline.name"},
+  "description": {"translate": "ascension.bloodline.beast_bloodline.desc"},
   "paths": [
     "ascension:foundation/body"
   ],

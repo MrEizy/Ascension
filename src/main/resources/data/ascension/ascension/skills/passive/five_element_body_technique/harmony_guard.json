@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Harmony Guard",
-  "description": "When the five currents settle into balance, force disperses through the whole body instead of one point.",
+  "name": {"translate": "ascension.skill.harmony_guard.name"},
+  "description": {"translate": "ascension.skill.harmony_guard.desc"},
   "modifiers": [
     {
       "type": "ascension:defense",

@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Refined Understanding",
-  "description": "Each completed cycle leaves the soul more comprehensive, deliberate, and difficult to shake.",
+  "name": {"translate": "ascension.skill.refined_understanding.name"},
+  "description": {"translate": "ascension.skill.refined_understanding.desc"},
   "modifiers": [
     {
       "type": "ascension:stats",

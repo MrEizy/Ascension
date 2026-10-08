@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Bow Mastery",
-  "description": "Strengthens arrow damage.",
+  "name": {"translate": "ascension.skill.bow_mastery.name"},
+  "description": {"translate": "ascension.skill.bow_mastery.desc"},
   "modifiers": [
     {
       "type": "ascension:weapon_damage",

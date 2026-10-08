@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple_technique",
-  "name": "White Lightning Ten Stages",
-  "description": "A body method that drives white martial lightning through the nervous system, burning away sluggishness while sharpening unarmed combat.",
+  "name": {"translate": "ascension.technique.white_lightning_ten_stage_technique.name"},
+  "description": {"translate": "ascension.technique.white_lightning_ten_stage_technique.desc"},
   "path": "ascension:foundation/body",
   "milestone_realms": [
     0,

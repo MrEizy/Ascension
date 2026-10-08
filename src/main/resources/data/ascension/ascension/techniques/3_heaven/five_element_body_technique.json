@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple_technique",
-  "name": "Five Harmony Body Method",
-  "description": "A high body-cultivation method that tempers flesh through the five harmonies of wood, fire, earth, metal, and water until the body becomes their meeting point.",
+  "name": {"translate": "ascension.technique.five_element_body_technique.name"},
+  "description": {"translate": "ascension.technique.five_element_body_technique.desc"},
   "path": "ascension:foundation/body",
   "milestone_realms": [
     0,

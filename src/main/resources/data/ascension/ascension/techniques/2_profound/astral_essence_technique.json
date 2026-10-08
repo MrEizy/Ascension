@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple_technique",
-  "name": "Astral Essence Technique",
-  "description": "A stellar Essence method that maps the meridians onto imagined constellations and circulates qi along their celestial routes.",
+  "name": {"translate": "ascension.technique.astral_essence_technique.name"},
+  "description": {"translate": "ascension.technique.astral_essence_technique.desc"},
   "path": "ascension:foundation/essence",
   "milestone_realms": [
     0,

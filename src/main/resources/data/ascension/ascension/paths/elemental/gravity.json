@@ -8,154 +8,154 @@
   },
   "realms": [
     {
-      "name": "Gravitic Pull",
+      "name": {"translate": "ascension.path.elemental.gravity.realm.0.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 1000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 10000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000
         }
       ]
     },
     {
-      "name": "Weighted Field",
+      "name": {"translate": "ascension.path.elemental.gravity.realm.1.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 100000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 1000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 10000000
         }
       ]
     },
     {
-      "name": "Crushing Force",
+      "name": {"translate": "ascension.path.elemental.gravity.realm.2.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 10000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 100000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 1000000000
         }
       ]
     },
     {
-      "name": "Gravity Well",
+      "name": {"translate": "ascension.path.elemental.gravity.realm.3.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 1000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 10000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000000000
         }
       ]
     },
     {
-      "name": "Singular Collapse",
+      "name": {"translate": "ascension.path.elemental.gravity.realm.4.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 100000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 1000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 10000000000000
         }
       ]
     },
     {
-      "name": "Event Horizon",
+      "name": {"translate": "ascension.path.elemental.gravity.realm.5.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 10000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 100000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 1000000000000000
         }
       ]
     },
     {
-      "name": "Gravitational Dominion",
+      "name": {"translate": "ascension.path.elemental.gravity.realm.6.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 1000000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 10000000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000000000000000
         }
       ]
     },
     {
-      "name": "Celestial Anchor",
+      "name": {"translate": "ascension.path.elemental.gravity.realm.7.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 100000000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 1000000000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 10000000000000000000
         }
       ]
     },
     {
-      "name": "Eternal Gravity",
+      "name": {"translate": "ascension.path.elemental.gravity.realm.8.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 10000000000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 100000000000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 1000000000000000000000
         }
       ]

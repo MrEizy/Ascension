@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Body Reinforcement",
-  "description": "Briefly braces the body against incoming attacks.",
+  "name": {"translate": "ascension.skill.body_reinforcement.name"},
+  "description": {"translate": "ascension.skill.body_reinforcement.desc"},
   "definitions": {
     "barriers": {
       "guard": {

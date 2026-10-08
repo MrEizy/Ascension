@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Astral Essence Circulation",
-  "description": "Circulate Essence along imagined stellar routes, condensing distant celestial resonance into the dantian.",
+  "name": {"translate": "ascension.skill.astral_essence.name"},
+  "description": {"translate": "ascension.skill.astral_essence.desc"},
   "cast": {
     "mode": "channel",
     "stages": [

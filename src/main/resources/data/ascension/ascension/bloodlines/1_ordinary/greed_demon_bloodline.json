@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Greed Demon Bloodline",
-  "description": "A demonic bloodline driven by endless desire and accumulation.",
+  "name": {"translate": "ascension.bloodline.greed_demon_bloodline.name"},
+  "description": {"translate": "ascension.bloodline.greed_demon_bloodline.desc"},
   "paths": [
     "ascension:foundation/essence"
   ],

@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Body Flash Step",
-  "description": "Explode forward using nothing but tempered flesh, qi, and unreasonable amounts of confidence.",
+  "name": {"translate": "ascension.skill.body_flash_step.name"},
+  "description": {"translate": "ascension.skill.body_flash_step.desc"},
   "actions": [
     {
       "type": "ascension:move",

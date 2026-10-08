@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Raven Bloodline",
-  "description": "A hidden bloodline associated with shadows, cunning, and night.",
+  "name": {"translate": "ascension.bloodline.raven_bloodline.name"},
+  "description": {"translate": "ascension.bloodline.raven_bloodline.desc"},
   "paths": [
     "ascension:foundation/soul",
     "ascension:elemental/dark"

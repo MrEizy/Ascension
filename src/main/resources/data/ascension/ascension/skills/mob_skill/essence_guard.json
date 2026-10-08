@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Essence Guard",
-  "description": "Condenses essence into a short-lived defensive veil.",
+  "name": {"translate": "ascension.skill.essence_guard.name"},
+  "description": {"translate": "ascension.skill.essence_guard.desc"},
   "definitions": {
     "barriers": {
       "guard": {

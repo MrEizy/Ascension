@@ -8,154 +8,154 @@
   },
   "realms": [
     {
-      "name": "Mirage",
+      "name": {"translate": "ascension.path.elemental.illusion.realm.0.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 1000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 10000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000
         }
       ]
     },
     {
-      "name": "Phantom Image",
+      "name": {"translate": "ascension.path.elemental.illusion.realm.1.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 100000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 1000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 10000000
         }
       ]
     },
     {
-      "name": "Illusive Veil",
+      "name": {"translate": "ascension.path.elemental.illusion.realm.2.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 10000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 100000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 1000000000
         }
       ]
     },
     {
-      "name": "Dreamscape",
+      "name": {"translate": "ascension.path.elemental.illusion.realm.3.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 1000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 10000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000000000
         }
       ]
     },
     {
-      "name": "Mind Maze",
+      "name": {"translate": "ascension.path.elemental.illusion.realm.4.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 100000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 1000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 10000000000000
         }
       ]
     },
     {
-      "name": "Phantasmal Realm",
+      "name": {"translate": "ascension.path.elemental.illusion.realm.5.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 10000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 100000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 1000000000000000
         }
       ]
     },
     {
-      "name": "Illusion Sovereign",
+      "name": {"translate": "ascension.path.elemental.illusion.realm.6.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 1000000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 10000000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000000000000000
         }
       ]
     },
     {
-      "name": "World Within a Dream",
+      "name": {"translate": "ascension.path.elemental.illusion.realm.7.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 100000000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 1000000000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 10000000000000000000
         }
       ]
     },
     {
-      "name": "Eternal Illusion",
+      "name": {"translate": "ascension.path.elemental.illusion.realm.8.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 10000000000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 100000000000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 1000000000000000000000
         }
       ]

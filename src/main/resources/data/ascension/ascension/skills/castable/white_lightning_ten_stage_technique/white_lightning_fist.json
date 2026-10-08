@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "White Lightning Fist",
-  "description": "Punch a compressed discharge of white martial lightning through the target.",
+  "name": {"translate": "ascension.skill.white_lightning_fist.name"},
+  "description": {"translate": "ascension.skill.white_lightning_fist.desc"},
   "target": {
     "type": "ascension:ray",
     "range": 5.0,

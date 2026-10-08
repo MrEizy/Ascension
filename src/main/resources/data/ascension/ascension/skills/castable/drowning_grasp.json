@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Drowning Grasp",
-  "description": "Crushes the air from a target's lungs, draining their breath before drowning them from within.",
+  "name": {"translate": "ascension.skill.drowning_grasp.name"},
+  "description": {"translate": "ascension.skill.drowning_grasp.desc"},
   "target": {
     "type": "ascension:ray",
     "range": 10.0,

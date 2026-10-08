@@ -8,103 +8,103 @@
   },
   "realms": [
     {
-      "name": "First Edge",
+      "name": {"translate": "ascension.path.weapon.blade.realm.0.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 1000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 10000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000
         }
       ]
     },
     {
-      "name": "Honed Edge",
+      "name": {"translate": "ascension.path.weapon.blade.realm.1.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 100000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 1000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 10000000
         }
       ]
     },
     {
-      "name": "Flowing Blade",
+      "name": {"translate": "ascension.path.weapon.blade.realm.2.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 10000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 100000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 1000000000
         }
       ]
     },
     {
-      "name": "Blade Intent",
+      "name": {"translate": "ascension.path.weapon.blade.realm.3.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 1000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 10000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000000000
         }
       ]
     },
     {
-      "name": "Cleaving Storm",
+      "name": {"translate": "ascension.path.weapon.blade.realm.4.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 100000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 1000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 10000000000000
         }
       ]
     },
     {
-      "name": "Unbroken Edge",
+      "name": {"translate": "ascension.path.weapon.blade.realm.5.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 10000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 100000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 1000000000000000
         }
       ]

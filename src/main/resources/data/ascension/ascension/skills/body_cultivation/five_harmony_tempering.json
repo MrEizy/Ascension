@@ -1,7 +1,7 @@
 {
   "type": "ascension:body_cultivation",
-  "name": "Five Harmony Tempering",
-  "description": "Temper the body as a meeting place for wood, fire, earth, metal, and water, forcing them into one circulating whole.",
+  "name": {"translate": "ascension.skill.five_harmony_tempering.name"},
+  "description": {"translate": "ascension.skill.five_harmony_tempering.desc"},
   "path": "ascension:foundation/body",
   "priority": 160,
   "stimuli": [

@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Axe Mastery",
-  "description": "Turns axe swings into broad, heavy qi arcs.",
+  "name": {"translate": "ascension.skill.axe_mastery.name"},
+  "description": {"translate": "ascension.skill.axe_mastery.desc"},
   "modifiers": [
     {
       "type": "ascension:weapon_damage",

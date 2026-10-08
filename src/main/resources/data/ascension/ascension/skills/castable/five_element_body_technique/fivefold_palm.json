@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Fivefold Palm",
-  "description": "Strike with five harmonized currents layered through a single palm.",
+  "name": {"translate": "ascension.skill.fivefold_palm.name"},
+  "description": {"translate": "ascension.skill.fivefold_palm.desc"},
   "target": {
     "type": "ascension:ray",
     "range": 5.5,

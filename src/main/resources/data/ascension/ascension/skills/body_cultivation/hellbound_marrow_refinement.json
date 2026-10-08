@@ -1,7 +1,7 @@
 {
   "type": "ascension:body_cultivation",
-  "name": "Hellbound Marrow Refinement",
-  "description": "Burn qi through bone and marrow. Pain and combat become the furnace that tempers the body.",
+  "name": {"translate": "ascension.skill.hellbound_marrow_refinement.name"},
+  "description": {"translate": "ascension.skill.hellbound_marrow_refinement.desc"},
   "path": "ascension:foundation/body",
   "priority": 100,
   "stimuli": [

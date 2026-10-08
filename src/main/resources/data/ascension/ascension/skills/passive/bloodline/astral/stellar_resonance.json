@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Stellar Resonance",
-  "description": "Your channels answer naturally to distant celestial currents.",
+  "name": {"translate": "ascension.skill.stellar_resonance.name"},
+  "description": {"translate": "ascension.skill.stellar_resonance.desc"},
   "modifiers": [
     {
       "type": "ascension:stats",

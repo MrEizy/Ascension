@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Avaricious Hunger",
-  "description": "Every defeated foe becomes another scrap of essence to hoard.",
+  "name": {"translate": "ascension.skill.avaricious_hunger.name"},
+  "description": {"translate": "ascension.skill.avaricious_hunger.desc"},
   "triggers": [
     {
       "event": "kill",

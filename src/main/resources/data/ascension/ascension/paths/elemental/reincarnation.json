@@ -8,154 +8,154 @@
   },
   "realms": [
     {
-      "name": "Fading Echo",
+      "name": {"translate": "ascension.path.elemental.reincarnation.realm.0.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 1000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 10000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000
         }
       ]
     },
     {
-      "name": "Soul Drift",
+      "name": {"translate": "ascension.path.elemental.reincarnation.realm.1.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 100000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 1000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 10000000
         }
       ]
     },
     {
-      "name": "Cyclic Whisper",
+      "name": {"translate": "ascension.path.elemental.reincarnation.realm.2.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 10000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 100000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 1000000000
         }
       ]
     },
     {
-      "name": "Wheel Binding",
+      "name": {"translate": "ascension.path.elemental.reincarnation.realm.3.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 1000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 10000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000000000
         }
       ]
     },
     {
-      "name": "Samsara's Grasp",
+      "name": {"translate": "ascension.path.elemental.reincarnation.realm.4.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 100000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 1000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 10000000000000
         }
       ]
     },
     {
-      "name": "Cyclic Convergence",
+      "name": {"translate": "ascension.path.elemental.reincarnation.realm.5.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 10000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 100000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 1000000000000000
         }
       ]
     },
     {
-      "name": "Reincarnation Sovereign",
+      "name": {"translate": "ascension.path.elemental.reincarnation.realm.6.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 1000000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 10000000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000000000000000
         }
       ]
     },
     {
-      "name": "Beyond the Wheel",
+      "name": {"translate": "ascension.path.elemental.reincarnation.realm.7.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 100000000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 1000000000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 10000000000000000000
         }
       ]
     },
     {
-      "name": "Eternal Cycle",
+      "name": {"translate": "ascension.path.elemental.reincarnation.realm.8.name"},
       "minor_realms": [
         {
-          "name": "low",
+          "name": {"translate": "ascension.realm.minor.low"},
           "progress": 10000000000000000000
         },
         {
-          "name": "mid",
+          "name": {"translate": "ascension.realm.minor.mid"},
           "progress": 100000000000000000000
         },
         {
-          "name": "high",
+          "name": {"translate": "ascension.realm.minor.high"},
           "progress": 1000000000000000000000
         }
       ]

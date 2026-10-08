@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Fear Pulse",
-  "description": "Projects a short soul pulse that shakes nearby opponents.",
+  "name": {"translate": "ascension.skill.fear_pulse.name"},
+  "description": {"translate": "ascension.skill.fear_pulse.desc"},
   "definitions": {
     "stagger": {
       "shock": {

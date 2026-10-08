@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Soul Suppression",
-  "description": "Press outward with spiritual pressure, bruising hostile souls and draining their stamina.",
+  "name": {"translate": "ascension.skill.soul_suppression.name"},
+  "description": {"translate": "ascension.skill.soul_suppression.desc"},
   "target": {
     "type": "ascension:radial",
     "radius": 4.5,

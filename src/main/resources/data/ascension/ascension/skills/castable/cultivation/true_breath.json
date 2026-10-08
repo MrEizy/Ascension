@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "true_breath",
-  "description": "breath in the essence, let it settle",
+  "name": {"translate": "ascension.skill.true_breath.name"},
+  "description": {"translate": "ascension.skill.true_breath.desc"},
   "cast": {
     "mode": "channel",
     "stages": [

@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Skyward Pulse",
-  "description": "Release a sudden ring of heaven-drawn qi to drive nearby enemies away.",
+  "name": {"translate": "ascension.skill.skyward_pulse.name"},
+  "description": {"translate": "ascension.skill.skyward_pulse.desc"},
   "target": {
     "type": "ascension:radial",
     "radius": 3.5,

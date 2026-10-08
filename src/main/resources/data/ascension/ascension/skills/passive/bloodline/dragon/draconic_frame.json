@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Draconic Frame",
-  "description": "Ancient draconic blood hardens flesh, bone, and resolve.",
+  "name": {"translate": "ascension.skill.draconic_frame.name"},
+  "description": {"translate": "ascension.skill.draconic_frame.desc"},
   "modifiers": [
     {
       "type": "ascension:defense",

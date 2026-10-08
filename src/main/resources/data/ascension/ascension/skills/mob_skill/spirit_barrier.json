@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Spirit Barrier",
-  "description": "Wraps the caster in a brief barrier of spiritual force.",
+  "name": {"translate": "ascension.skill.spirit_barrier.name"},
+  "description": {"translate": "ascension.skill.spirit_barrier.desc"},
   "definitions": {
     "barriers": {
       "guard": {

@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Wrath Demon Bloodline",
-  "description": "A fierce demonic lineage consumed by endless rage and battle.",
+  "name": {"translate": "ascension.bloodline.wrath_demon_bloodline.name"},
+  "description": {"translate": "ascension.bloodline.wrath_demon_bloodline.desc"},
   "paths": [
     "ascension:foundation/body",
     "ascension:elemental/fire",

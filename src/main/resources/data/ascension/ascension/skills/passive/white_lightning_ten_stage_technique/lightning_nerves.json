@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Lightning Nerves",
-  "description": "White lightning shortens the gap between intent and motion.",
+  "name": {"translate": "ascension.skill.lightning_nerves.name"},
+  "description": {"translate": "ascension.skill.lightning_nerves.desc"},
   "modifiers": [
     {
       "type": "ascension:stats",

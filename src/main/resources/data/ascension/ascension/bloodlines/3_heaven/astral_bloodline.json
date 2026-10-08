@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Astral Bloodline",
-  "description": "A mysterious lineage said to resonate with the heavens above, drawing strength from stars and the spaces between them.",
+  "name": {"translate": "ascension.bloodline.astral_bloodline.name"},
+  "description": {"translate": "ascension.bloodline.astral_bloodline.desc"},
   "paths": [
     "ascension:foundation/essence",
     "ascension:elemental/star",

@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Thunderforged Body",
-  "description": "Lightning courses through every muscle and tendon. Violent currents forge the body instead of tearing it apart.",
+  "name": {"translate": "ascension.physique.thunderforged_body.name"},
+  "description": {"translate": "ascension.physique.thunderforged_body.desc"},
   "paths": [
     "ascension:foundation/body",
     "ascension:elemental/lightning",

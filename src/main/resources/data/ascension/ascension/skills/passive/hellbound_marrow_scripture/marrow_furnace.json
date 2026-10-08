@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Marrow Furnace",
-  "description": "Tempered marrow turns repeated punishment into a denser, harder skeleton.",
+  "name": {"translate": "ascension.skill.marrow_furnace.name"},
+  "description": {"translate": "ascension.skill.marrow_furnace.desc"},
   "modifiers": [
     {
       "type": "ascension:defense",

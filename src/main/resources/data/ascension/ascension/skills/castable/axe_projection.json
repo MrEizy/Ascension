@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Axe Projection",
-  "description": "Hurls a broad axe wave ",
+  "name": {"translate": "ascension.skill.axe_projection.name"},
+  "description": {"translate": "ascension.skill.axe_projection.desc"},
   "actions": [
     {
       "type": "ascension:weapon_swing",

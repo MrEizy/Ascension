@@ -1,11 +1,11 @@
 {
   "type": "ascension:active",
-  "name": "Test Cast",
-  "description": "Developer test cast.",
+  "name": {"translate": "ascension.skill.test_cast.name"},
+  "description": {"translate": "ascension.skill.test_cast.desc"},
   "actions": [
     {
       "type": "ascension:message",
-      "message": "this was cast"
+      "message": {"translate": "ascension.skill.test_cast.message"}
     }
   ],
   "cooldown": 20

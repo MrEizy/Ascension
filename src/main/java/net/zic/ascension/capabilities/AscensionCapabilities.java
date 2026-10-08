@@ -56,11 +56,11 @@ public class AscensionCapabilities {
                 EntityType.PLAYER,
                 (entity,nul)->new SimpleEntityQiProvider(entity)
         );
-        event.registerBlock(
-                CoreCapabilities.BLOCK_QI_HANDLER,
-                (level,pos,state,entity,c)->new SpiritStoneClusterQiHandler(level,pos,state,entity),
-                ModBlocks.SPIRIT_STONE_CLUSTER.get()
-        );
+//        event.registerBlock(
+//                CoreCapabilities.BLOCK_QI_HANDLER,
+//                (level,pos,state,entity,c)->new SpiritStoneClusterQiHandler(level,pos,state,entity),
+//                ModBlocks.SPIRIT_STONE_CLUSTER.get()
+//        );
 
         event.registerItem(
                 CoreCapabilities.ITEM_QI_HANDLER,

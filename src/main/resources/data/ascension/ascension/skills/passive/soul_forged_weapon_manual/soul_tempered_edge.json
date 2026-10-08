@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Soul-Tempered Edge",
-  "description": "Weapon intent bleeds into each attack, reinforcing your physical force with soul pressure.",
+  "name": {"translate": "ascension.skill.soul_tempered_edge.name"},
+  "description": {"translate": "ascension.skill.soul_tempered_edge.desc"},
   "modifiers": [
     {
       "type": "ascension:combat",

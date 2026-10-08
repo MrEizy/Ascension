@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple_technique",
-  "name": "Scholar’s Soul Transcendence",
-  "description": "An academic soul method that advances through observation, contemplation, and the orderly reconstruction of spiritual principles.",
+  "name": {"translate": "ascension.technique.scholarly_soul_technique.name"},
+  "description": {"translate": "ascension.technique.scholarly_soul_technique.desc"},
   "path": "ascension:foundation/soul",
   "milestone_realms": [
     0,

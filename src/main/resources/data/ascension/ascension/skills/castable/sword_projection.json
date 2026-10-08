@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Sword Projection",
-  "description": "Launches a arc of sword qi",
+  "name": {"translate": "ascension.skill.sword_projection.name"},
+  "description": {"translate": "ascension.skill.sword_projection.desc"},
   "actions": [
     {
       "type": "ascension:weapon_swing",

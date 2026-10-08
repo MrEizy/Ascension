@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Qi Projectile",
-  "description": "Launches a compact bolt of cultivated essence.",
+  "name": {"translate": "ascension.skill.qi_projectile.name"},
+  "description": {"translate": "ascension.skill.qi_projectile.desc"},
   "definitions": {
     "projectiles": {
       "bolt": {

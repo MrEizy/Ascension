@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "dev_cultivate",
-  "description": "breath in the essence, let it settle",
+  "name": {"translate": "ascension.skill.dev_cultivate.name"},
+  "description": {"translate": "ascension.skill.dev_cultivate.desc"},
   "cast": {
     "mode": "channel",
     "stages": [

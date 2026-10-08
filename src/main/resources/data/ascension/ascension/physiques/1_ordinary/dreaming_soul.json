@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Dreaming Soul",
-  "description": "Your soul drifts close to the border of dream and waking, sensing patterns that conscious minds often miss.",
+  "name": {"translate": "ascension.physique.dreaming_soul.name"},
+  "description": {"translate": "ascension.physique.dreaming_soul.desc"},
   "paths": [
     "ascension:foundation/soul",
     "ascension:elemental/illusion",

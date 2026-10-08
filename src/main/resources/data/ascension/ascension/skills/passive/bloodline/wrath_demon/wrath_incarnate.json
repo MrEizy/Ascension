@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Wrath Incarnate",
-  "description": "Rage turns pain into momentum, making every exchange more dangerous.",
+  "name": {"translate": "ascension.skill.wrath_incarnate.name"},
+  "description": {"translate": "ascension.skill.wrath_incarnate.desc"},
   "modifiers": [
     {
       "type": "ascension:combat",

@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple_technique",
-  "name": "Hellbound Marrow Scripture",
-  "description": "A brutal body scripture that burns qi through bone and marrow, treating pain, violence, and survival as fuel for tempering.",
+  "name": {"translate": "ascension.technique.hellbound_marrow_scripture.name"},
+  "description": {"translate": "ascension.technique.hellbound_marrow_scripture.desc"},
   "path": "ascension:foundation/body",
   "milestone_realms": [
     0,

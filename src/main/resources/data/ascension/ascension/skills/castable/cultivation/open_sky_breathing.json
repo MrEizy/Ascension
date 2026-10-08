@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Open Sky Breathing",
-  "description": "Open the meridians and circulate Essence in broad, skyward cycles.",
+  "name": {"translate": "ascension.skill.open_sky_breathing.name"},
+  "description": {"translate": "ascension.skill.open_sky_breathing.desc"},
   "cast": {
     "mode": "channel",
     "stages": [

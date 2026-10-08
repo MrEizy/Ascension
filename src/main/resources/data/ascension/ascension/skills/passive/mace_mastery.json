@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Mace Mastery",
-  "description": "Projects a crushing mace wave",
+  "name": {"translate": "ascension.skill.mace_mastery.name"},
+  "description": {"translate": "ascension.skill.mace_mastery.desc"},
   "modifiers": [
     {
       "type": "ascension:weapon_damage",

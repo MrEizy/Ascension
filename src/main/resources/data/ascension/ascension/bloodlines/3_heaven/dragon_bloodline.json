@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Dragon Bloodline",
-  "description": "A rare bloodline carrying traces of ancient draconic ancestry, marked by overwhelming physical authority.",
+  "name": {"translate": "ascension.bloodline.dragon_bloodline.name"},
+  "description": {"translate": "ascension.bloodline.dragon_bloodline.desc"},
   "paths": [
     "ascension:foundation/body",
     "ascension:elemental/earth",
@@ -139,7 +139,7 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_dragon_bloodline_vitality_a5",
-                  "value": 2.0
+                  "value": 1.0
                 }
               ],
               "multiplier": []
@@ -168,7 +168,7 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_dragon_bloodline_vitality_a6",
-                  "value": 5.0
+                  "value": 4.0
                 }
               ],
               "multiplier": []
@@ -177,7 +177,7 @@
               "flat": [
                 {
                   "id": "ascension:3_heaven_dragon_bloodline_strength_a6",
-                  "value": 4.0
+                  "value": 3.0
                 }
               ],
               "multiplier": []

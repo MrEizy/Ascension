@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Stone Monkey",
-  "description": "Born from stone and wild heaven, this physique is grounded in earth yet unnervingly quick and limber.",
+  "name": {"translate": "ascension.physique.stone_monkey.name"},
+  "description": {"translate": "ascension.physique.stone_monkey.desc"},
   "paths": [
     "ascension:foundation/body",
     "ascension:elemental/earth",

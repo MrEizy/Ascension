@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Ninefold Glamour",
-  "description": "An ancient fox spirit lends supernatural presence, perception, and evasive grace.",
+  "name": {"translate": "ascension.skill.ninefold_glamour.name"},
+  "description": {"translate": "ascension.skill.ninefold_glamour.desc"},
   "modifiers": [
     {
       "type": "ascension:stats",

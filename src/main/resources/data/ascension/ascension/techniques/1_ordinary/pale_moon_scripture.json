@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple_technique",
-  "name": "Pale Moon Scripture",
-  "description": "A quiet soul scripture patterned after moon-lit meditation, refining cold spiritual clarity into precise soul arts.",
+  "name": {"translate": "ascension.technique.pale_moon_scripture.name"},
+  "description": {"translate": "ascension.technique.pale_moon_scripture.desc"},
   "path": "ascension:foundation/soul",
   "milestone_realms": [
     0,

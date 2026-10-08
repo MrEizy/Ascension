@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Soul Weapon Immolation",
-  "description": "Burn the forged soul-weapon into a single violent release, sacrificing efficiency for overwhelming spiritual force.",
+  "name": {"translate": "ascension.skill.soul_weapon_immolation.name"},
+  "description": {"translate": "ascension.skill.soul_weapon_immolation.desc"},
   "target": {
     "type": "ascension:radial",
     "radius": 6.0,

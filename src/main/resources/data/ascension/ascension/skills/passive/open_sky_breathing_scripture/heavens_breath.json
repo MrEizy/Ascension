@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Heaven’s Breath",
-  "description": "Broad circulation steadies the spirit and makes Essence easier to command.",
+  "name": {"translate": "ascension.skill.heavens_breath.name"},
+  "description": {"translate": "ascension.skill.heavens_breath.desc"},
   "modifiers": [
     {
       "type": "ascension:stats",

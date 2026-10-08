@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Burning Touch",
-  "description": "Ignites a target with an flame that deals burns them well.",
+  "name": {"translate": "ascension.skill.burning_touch.name"},
+  "description": {"translate": "ascension.skill.burning_touch.desc"},
   "target": {
     "type": "ascension:ray",
     "range": 10.0,

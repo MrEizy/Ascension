@@ -103,31 +103,31 @@
   ],
   "realm_overrides": {
     "0": {
-      "name": "First Revolution: Seeded Wheel"
+      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.0.name"}
     },
     "1": {
-      "name": "Second Revolution: Blood-Iron Circuits"
+      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.1.name"}
     },
     "2": {
-      "name": "Third Revolution: Butcher Orbiting"
+      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.2.name"}
     },
     "3": {
-      "name": "Fourth Revolution: Crimson Mandala"
+      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.3.name"}
     },
     "4": {
-      "name": "Fifth Revolution: Corpse-Grinding Rotation"
+      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.4.name"}
     },
     "5": {
-      "name": "Sixth Revolution: Slaughterers Domain"
+      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.5.name"}
     },
     "6": {
-      "name": "Seventh Revolution: Heaven-Rending Cycle"
+      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.6.name"}
     },
     "7": {
-      "name": "Eighth Revolution: Calamity Wheel"
+      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.7.name"}
     },
     "8": {
-      "name": "Ninth Revolution: Slaughter Wheel Incarnate"
+      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.8.name"}
     }
   },
   "item_tooltip": {

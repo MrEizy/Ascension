@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Spatial Crossing",
-  "description": "An Enderman folds a short distance and strikes its target.",
+  "name": {"translate": "ascension.skill.spatial_crossing.name"},
+  "description": {"translate": "ascension.skill.spatial_crossing.desc"},
   "target": {
     "type": "ascension:radial",
     "radius": 12,

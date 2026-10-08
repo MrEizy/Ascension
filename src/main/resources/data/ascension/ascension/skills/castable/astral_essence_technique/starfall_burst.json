@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Starfall Burst",
-  "description": "Condense astral Essence into a piercing bolt that bursts against the first foe it reaches.",
+  "name": {"translate": "ascension.skill.starfall_burst.name"},
+  "description": {"translate": "ascension.skill.starfall_burst.desc"},
   "target": {
     "type": "ascension:ray",
     "range": 14.0,

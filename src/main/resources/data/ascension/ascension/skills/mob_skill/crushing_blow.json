@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Crushing Blow",
-  "description": "A heavy close-range strike that builds stagger.",
+  "name": {"translate": "ascension.skill.crushing_blow.name"},
+  "description": {"translate": "ascension.skill.crushing_blow.desc"},
   "definitions": {
     "stagger": {
       "impact": {

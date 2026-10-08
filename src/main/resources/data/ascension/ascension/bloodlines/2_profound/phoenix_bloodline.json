@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Phoenix Bloodline",
-  "description": "A rare bloodline carrying traces of an ancient phoenix, rich with blazing essence and stubborn vitality.",
+  "name": {"translate": "ascension.bloodline.phoenix_bloodline.name"},
+  "description": {"translate": "ascension.bloodline.phoenix_bloodline.desc"},
   "paths": [
     "ascension:foundation/essence",
     "ascension:elemental/fire",

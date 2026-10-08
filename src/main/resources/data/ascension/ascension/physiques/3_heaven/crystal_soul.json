@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Crystal Soul",
-  "description": "A soul of exceptional clarity and purity, crystalline in structure and unusually resistant to spiritual turbulence.",
+  "name": {"translate": "ascension.physique.crystal_soul.name"},
+  "description": {"translate": "ascension.physique.crystal_soul.desc"},
   "paths": [
     "ascension:foundation/soul",
     "ascension:elemental/light",

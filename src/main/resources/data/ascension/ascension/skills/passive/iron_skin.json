@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Iron Skin",
-  "description": "deal {x} fire damage",
+  "name": {"translate": "ascension.skill.iron_skin.name"},
+  "description": {"translate": "ascension.skill.iron_skin.desc"},
   "modifiers": [
     {
       "type": "ascension:stats",
@@ -12,7 +12,7 @@
             {
               "id": "ascension:iron_skin_vitality_multiplier",
               "operation_group": 0,
-              "value": 4
+              "value": 0.04
             }
           ]
         }

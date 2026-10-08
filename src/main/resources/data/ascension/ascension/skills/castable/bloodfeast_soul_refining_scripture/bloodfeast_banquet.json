@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Bloodfeast Banquet",
-  "description": "Tear at the vitality of nearby enemies and refine what's stolen into qi and flesh.",
+  "name": {"translate": "ascension.skill.bloodfeast_banquet.name"},
+  "description": {"translate": "ascension.skill.bloodfeast_banquet.desc"},
   "target": {
     "type": "ascension:radial",
     "radius": 5.0,

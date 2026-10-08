@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Sword Mastery",
-  "description": "Projects sword qi through each swing.",
+  "name": {"translate": "ascension.skill.sword_mastery.name"},
+  "description": {"translate": "ascension.skill.sword_mastery.desc"},
   "modifiers": [
     {
       "type": "ascension:weapon_damage",

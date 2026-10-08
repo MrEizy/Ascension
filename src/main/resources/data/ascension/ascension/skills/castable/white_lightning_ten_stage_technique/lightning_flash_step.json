@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Lightning Flash Step",
-  "description": "Flash across the battlefield on a violent burst of white lightning.",
+  "name": {"translate": "ascension.skill.lightning_flash_step.name"},
+  "description": {"translate": "ascension.skill.lightning_flash_step.desc"},
   "actions": [
     {
       "type": "ascension:move",

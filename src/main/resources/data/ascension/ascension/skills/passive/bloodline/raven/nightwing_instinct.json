@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Nightwing Instinct",
-  "description": "Raven blood sharpens footwork and reaction into quiet, economical motion.",
+  "name": {"translate": "ascension.skill.nightwing_instinct.name"},
+  "description": {"translate": "ascension.skill.nightwing_instinct.desc"},
   "modifiers": [
     {
       "type": "ascension:stats",

@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple_technique",
-  "name": "Bloodfeast Soul-Refining Scripture",
-  "description": "A heretical Essence scripture that refines killing intent and stolen vitality into crimson cultivation force.",
+  "name": {"translate": "ascension.technique.bloodfeast_soul_refining_scripture.name"},
+  "description": {"translate": "ascension.technique.bloodfeast_soul_refining_scripture.desc"},
   "path": "ascension:foundation/essence",
   "milestone_realms": [
     0,

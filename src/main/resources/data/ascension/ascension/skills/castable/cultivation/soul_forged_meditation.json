@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Soul-Forged Meditation",
-  "description": "Temper soul force until intent itself takes on the edge, weight, and permanence of a weapon.",
+  "name": {"translate": "ascension.skill.soul_forged_meditation.name"},
+  "description": {"translate": "ascension.skill.soul_forged_meditation.desc"},
   "cast": {
     "mode": "channel",
     "stages": [

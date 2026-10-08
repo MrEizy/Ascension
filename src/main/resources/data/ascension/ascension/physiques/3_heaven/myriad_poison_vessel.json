@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Myriad Poison Vessel",
-  "description": "A cursed and coveted constitution that hungers for venomous qi, turning poisonous influence into fuel for an increasingly inhuman vessel.",
+  "name": {"translate": "ascension.physique.myriad_poison_vessel.name"},
+  "description": {"translate": "ascension.physique.myriad_poison_vessel.desc"},
   "paths": [
     "ascension:foundation/essence",
     "ascension:elemental/poison",

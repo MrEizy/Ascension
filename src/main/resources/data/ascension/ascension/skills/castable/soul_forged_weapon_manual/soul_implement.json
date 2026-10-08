@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Soul Implement",
-  "description": "Shape soul force into a temporary weapon-edge and drive it through the target.",
+  "name": {"translate": "ascension.skill.soul_implement.name"},
+  "description": {"translate": "ascension.skill.soul_implement.desc"},
   "target": {
     "type": "ascension:ray",
     "range": 7.0,

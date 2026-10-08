@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Nine-Tailed Fox Bloodline",
-  "description": "A legendary spiritual lineage famed for elegance, cunning, illusion, and overwhelming spiritual charm. WILL BE REDONE IN THE FUTURE, AS IT IS A DONOR BLOODLINE.",
+  "name": {"translate": "ascension.bloodline.nine_tailed_fox_bloodline.name"},
+  "description": {"translate": "ascension.bloodline.nine_tailed_fox_bloodline.desc"},
   "paths": [
     "ascension:foundation/soul",
     "ascension:elemental/illusion",

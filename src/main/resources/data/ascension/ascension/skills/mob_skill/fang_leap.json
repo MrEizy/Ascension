@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Fang Leap",
-  "description": "A Spider lunges forward and bites with cultivated force.",
+  "name": {"translate": "ascension.skill.fang_leap.name"},
+  "description": {"translate": "ascension.skill.fang_leap.desc"},
   "target": {
     "type": "ascension:radial",
     "radius": 8,

@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Predator Instinct",
-  "description": "Violence wakes an old survival instinct.",
+  "name": {"translate": "ascension.skill.predator_instinct.name"},
+  "description": {"translate": "ascension.skill.predator_instinct.desc"},
   "triggers": [
     {
       "event": "kill",

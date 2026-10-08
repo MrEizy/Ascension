@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Ember Rebirth",
-  "description": "When brought near death, phoenix embers flare and drag the body back from the brink.",
+  "name": {"translate": "ascension.skill.ember_rebirth.name"},
+  "description": {"translate": "ascension.skill.ember_rebirth.desc"},
   "triggers": [
     {
       "event": "damage_taken",

@@ -20,7 +20,7 @@
               "flat": [
                 {
                   "id": "ascension:1_ordinary_falling_star_bloodline_agility_a1",
-                  "value": 0.06
+                  "value": 0.07
                 }
               ],
               "multiplier": []
@@ -29,7 +29,7 @@
               "flat": [
                 {
                   "id": "ascension:1_ordinary_falling_star_bloodline_spirit_a1",
-                  "value": 0.04
+                  "value": 0.05
                 }
               ],
               "multiplier": []

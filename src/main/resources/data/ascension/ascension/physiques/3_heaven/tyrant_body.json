@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Tyrant Body",
-  "description": "Strong as an ox and domineering as a warlord.",
+  "name": {"translate": "ascension.physique.tyrant_body.name"},
+  "description": {"translate": "ascension.physique.tyrant_body.desc"},
   "paths": [
     "ascension:foundation/body",
     "ascension:weapon/fist",

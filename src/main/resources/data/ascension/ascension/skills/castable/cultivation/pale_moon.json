@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Pale Moon Meditation",
-  "description": "Circulate soul force in cool lunar cycles.",
+  "name": {"translate": "ascension.skill.pale_moon.name"},
+  "description": {"translate": "ascension.skill.pale_moon.desc"},
   "cast": {
     "mode": "channel",
     "stages": [

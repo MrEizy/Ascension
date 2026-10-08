@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Bow Projection",
-  "description": "Releases a long-ranged qi arrow",
+  "name": {"translate": "ascension.skill.bow_projection.name"},
+  "description": {"translate": "ascension.skill.bow_projection.desc"},
   "actions": [
     {
       "type": "ascension:weapon_swing",

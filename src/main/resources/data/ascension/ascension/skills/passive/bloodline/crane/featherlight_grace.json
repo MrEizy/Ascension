@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Featherlight Grace",
-  "description": "A tranquil bloodline carries the body with the poise of a crane riding clear air.",
+  "name": {"translate": "ascension.skill.featherlight_grace.name"},
+  "description": {"translate": "ascension.skill.featherlight_grace.desc"},
   "modifiers": [
     {
       "type": "ascension:stats",

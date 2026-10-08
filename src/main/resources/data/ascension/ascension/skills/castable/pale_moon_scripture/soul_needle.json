@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Soul Needle",
-  "description": "Compress soul force into a needle-thin spiritual attack.",
+  "name": {"translate": "ascension.skill.soul_needle.name"},
+  "description": {"translate": "ascension.skill.soul_needle.desc"},
   "target": {
     "type": "ascension:ray",
     "range": 12.0,

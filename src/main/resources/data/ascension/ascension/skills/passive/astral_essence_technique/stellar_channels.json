@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Stellar Channels",
-  "description": "Repeated circulation engraves star-like channels through the meridian network.",
+  "name": {"translate": "ascension.skill.stellar_channels.name"},
+  "description": {"translate": "ascension.skill.stellar_channels.desc"},
   "modifiers": [
     {
       "type": "ascension:stats",

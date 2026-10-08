@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Dual Soul",
-  "description": "Two beings were conceived, but only one was born. A spiritual echo entwines with the remaining.",
+  "name": {"translate": "ascension.physique.dual_soul.name"},
+  "description": {"translate": "ascension.physique.dual_soul.desc"},
   "paths": [
     "ascension:foundation/soul",
     "ascension:elemental/reincarnation",

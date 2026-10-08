@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Flame Body Transformation",
-  "description": "A Blaze condenses its spiritual fire into a temporary ward.",
+  "name": {"translate": "ascension.skill.flame_body_transformation.name"},
+  "description": {"translate": "ascension.skill.flame_body_transformation.desc"},
   "definitions": {
     "barriers": {
       "flame_guard": {

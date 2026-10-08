@@ -1,7 +1,7 @@
 {
   "type": "ascension:body_cultivation",
-  "name": "White Lightning Ten-Stage Cultivation",
-  "description": "Drive martial lightning through nerves, muscles, and marrow until the body itself becomes the circuit.",
+  "name": {"translate": "ascension.skill.white_lightning_cultivation.name"},
+  "description": {"translate": "ascension.skill.white_lightning_cultivation.desc"},
   "path": "ascension:foundation/body",
   "priority": 130,
   "stimuli": [

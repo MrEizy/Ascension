@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Mandate of the Sage",
-  "description": "Impose a field of spiritual pressure on every hostile mind nearby.",
+  "name": {"translate": "ascension.skill.mandate_of_the_sage.name"},
+  "description": {"translate": "ascension.skill.mandate_of_the_sage.desc"},
   "target": {
     "type": "ascension:radial",
     "radius": 5.5,

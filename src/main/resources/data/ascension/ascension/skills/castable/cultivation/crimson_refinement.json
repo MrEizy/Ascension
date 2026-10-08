@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Crimson Refinement",
-  "description": "A bloody circulation that treats vitality and killing intent as impurities to be burned into usable Essence.",
+  "name": {"translate": "ascension.skill.crimson_refinement.name"},
+  "description": {"translate": "ascension.skill.crimson_refinement.desc"},
   "cast": {
     "mode": "channel",
     "stages": [

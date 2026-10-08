@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Lunar Spirit",
-  "description": "Quiet lunar circulation steadies the soul and sharpens spiritual control.",
+  "name": {"translate": "ascension.skill.lunar_spirit.name"},
+  "description": {"translate": "ascension.skill.lunar_spirit.desc"},
   "modifiers": [
     {
       "type": "ascension:stats",

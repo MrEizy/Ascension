@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Charging Strike",
-  "description": "Closes the distance and delivers a cultivated body strike.",
+  "name": {"translate": "ascension.skill.charging_strike.name"},
+  "description": {"translate": "ascension.skill.charging_strike.desc"},
   "target": {
     "type": "ascension:radial",
     "radius": 7,

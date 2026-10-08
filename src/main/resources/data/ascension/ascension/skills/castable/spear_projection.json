@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Spear Projection",
-  "description": "Projects a narrow spear line",
+  "name": {"translate": "ascension.skill.spear_projection.name"},
+  "description": {"translate": "ascension.skill.spear_projection.desc"},
   "actions": [
     {
       "type": "ascension:weapon_swing",

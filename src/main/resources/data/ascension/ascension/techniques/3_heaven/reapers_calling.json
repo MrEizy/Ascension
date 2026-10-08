@@ -71,25 +71,25 @@
   ],
   "realm_overrides": {
     "0": {
-      "name": "Hell's Entryway"
+      "name": {"translate": "ascension.technique.reapers_calling.realm_override.0.name"}
     },
     "1": {
-      "name": "Hungry Ghost Road"
+      "name": {"translate": "ascension.technique.reapers_calling.realm_override.1.name"}
     },
     "2": {
-      "name": "Beast Road"
+      "name": {"translate": "ascension.technique.reapers_calling.realm_override.2.name"}
     },
     "3": {
-      "name": "Human Road"
+      "name": {"translate": "ascension.technique.reapers_calling.realm_override.3.name"}
     },
     "4": {
-      "name": "Asura Road"
+      "name": {"translate": "ascension.technique.reapers_calling.realm_override.4.name"}
     },
     "5": {
-      "name": "Heavenly Road"
+      "name": {"translate": "ascension.technique.reapers_calling.realm_override.5.name"}
     },
     "6": {
-      "name": "Revolved Samsara"
+      "name": {"translate": "ascension.technique.reapers_calling.realm_override.6.name"}
     }
   },
   "item_tooltip": {

@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Blade Mastery",
-  "description": "Shapes saber and blade intent.",
+  "name": {"translate": "ascension.skill.blade_mastery.name"},
+  "description": {"translate": "ascension.skill.blade_mastery.desc"},
   "modifiers": [
     {
       "type": "ascension:weapon_damage",

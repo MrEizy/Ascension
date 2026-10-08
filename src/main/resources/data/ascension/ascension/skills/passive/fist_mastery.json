@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Fist Mastery",
-  "description": "Projects condensed fist force",
+  "name": {"translate": "ascension.skill.fist_mastery.name"},
+  "description": {"translate": "ascension.skill.fist_mastery.desc"},
   "modifiers": [
     {
       "type": "ascension:weapon_damage",

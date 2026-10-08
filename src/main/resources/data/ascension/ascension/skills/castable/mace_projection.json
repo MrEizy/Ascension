@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Mace Projection",
-  "description": "Launches a crushing mace wave",
+  "name": {"translate": "ascension.skill.mace_projection.name"},
+  "description": {"translate": "ascension.skill.mace_projection.desc"},
   "definitions": {
     "effects": {
       "crushing_slow": {

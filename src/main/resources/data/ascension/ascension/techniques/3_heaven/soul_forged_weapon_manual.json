@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple_technique",
-  "name": "Soul Forged Weapon Manual",
-  "description": "A soul-forging manual that tempers intent into weapon-like spiritual force.",
+  "name": {"translate": "ascension.technique.soul_forged_weapon_manual.name"},
+  "description": {"translate": "ascension.technique.soul_forged_weapon_manual.desc"},
   "path": "ascension:foundation/soul",
   "milestone_realms": [
     0,

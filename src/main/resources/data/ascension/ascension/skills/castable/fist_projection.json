@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Fist Projection",
-  "description": "Fires condensed fist force",
+  "name": {"translate": "ascension.skill.fist_projection.name"},
+  "description": {"translate": "ascension.skill.fist_projection.desc"},
   "actions": [
     {
       "type": "ascension:weapon_swing",

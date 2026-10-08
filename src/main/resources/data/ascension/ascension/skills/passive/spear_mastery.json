@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Spear Mastery",
-  "description": "Extends spear intent into a narrow piercing line.",
+  "name": {"translate": "ascension.skill.spear_mastery.name"},
+  "description": {"translate": "ascension.skill.spear_mastery.desc"},
   "modifiers": [
     {
       "type": "ascension:weapon_damage",

@@ -1,7 +1,7 @@
 {
   "type": "ascension:active",
-  "name": "Paralyzing Touch",
-  "description": "Disrupts a target's movement for a brief moment using paralysis.",
+  "name": {"translate": "ascension.skill.paralyzing_touch.name"},
+  "description": {"translate": "ascension.skill.paralyzing_touch.desc"},
   "target": {
     "type": "ascension:ray",
     "range": 8.0,

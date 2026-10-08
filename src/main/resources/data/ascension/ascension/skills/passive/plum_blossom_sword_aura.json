@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Plum Blossom Sword Aura",
-  "description": "Circulates sword qi through the limbs, increasing strength and agility while steadily consuming qi.",
+  "name": {"translate": "ascension.skill.plum_blossom_sword_aura.name"},
+  "description": {"translate": "ascension.skill.plum_blossom_sword_aura.desc"},
   "modifiers": [
     {
       "type": "ascension:stats",
@@ -12,7 +12,8 @@
             {
               "id": "ascension:plum_blossom_sword_aura_strength",
               "operation_group": 0,
-              "value": 0.5
+              "value": 0.5,
+              "group": "ascension:temporary"
             }
           ]
         },
@@ -22,7 +23,8 @@
             {
               "id": "ascension:plum_blossom_sword_aura_agility",
               "operation_group": 0,
-              "value": 0.5
+              "value": 0.5,
+              "group": "ascension:temporary"
             }
           ]
         }

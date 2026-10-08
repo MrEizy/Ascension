@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Crane Bloodline",
-  "description": "A refined bloodline associated with balance, grace, and clear skies.",
+  "name": {"translate": "ascension.bloodline.crane_bloodline.name"},
+  "description": {"translate": "ascension.bloodline.crane_bloodline.desc"},
   "paths": [
     "ascension:foundation/soul",
     "ascension:elemental/wind",

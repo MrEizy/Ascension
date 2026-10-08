@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Twisted Meridians",
-  "description": "Meridians born twisted and coiled around themselves. Qi circulates awkwardly, yet the same warped channels seem able to contain startling spiritual pressure.",
+  "name": {"translate": "ascension.physique.twisted_vessels.name"},
+  "description": {"translate": "ascension.physique.twisted_vessels.desc"},
   "paths": [
     "ascension:foundation/essence",
     "ascension:elemental/chaos"

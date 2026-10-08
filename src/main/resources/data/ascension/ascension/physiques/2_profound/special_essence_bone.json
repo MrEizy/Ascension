@@ -1,7 +1,7 @@
 {
   "type": "ascension:simple",
-  "name": "Special Essence Bone",
-  "description": "You possess a Special Essence Bone, granting extraordinary sensitivity to Essence and a natural talent for drawing it inward.",
+  "name": {"translate": "ascension.physique.special_essence_bone.name"},
+  "description": {"translate": "ascension.physique.special_essence_bone.desc"},
   "paths": [
     "ascension:foundation/essence"
   ],

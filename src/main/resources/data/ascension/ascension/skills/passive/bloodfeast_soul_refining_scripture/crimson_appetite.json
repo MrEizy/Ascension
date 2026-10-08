@@ -1,7 +1,7 @@
 {
   "type": "ascension:passive",
-  "name": "Crimson Appetite",
-  "description": "Freshly ended life stirs the scripture’s circulation, returning a portion of qi to the cultivator.",
+  "name": {"translate": "ascension.skill.crimson_appetite.name"},
+  "description": {"translate": "ascension.skill.crimson_appetite.desc"},
   "triggers": [
     {
       "event": "kill",
