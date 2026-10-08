@@ -31,7 +31,8 @@ public class AscBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.BLACK_IRON_BLOCK.get())
                 .add(ModBlocks.BLACK_IRON_ORE.get())
                 .add(ModBlocks.AUCTION_HOUSE_CORE.get())
-                .add(ModBlocks.AUCTION_BIDDER.get());
+                .add(ModBlocks.AUCTION_BIDDER.get())
+                .add(ModBlocks.SPIRITUAL_STONE_CLUSTER.get());
 
 
         tag(BlockTags.MINEABLE_WITH_AXE)
@@ -100,6 +101,9 @@ public class AscBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.FROST_SILVER_ORE.get())
                 .add(ModBlocks.BLACK_IRON_BLOCK.get())
                 .add(ModBlocks.BLACK_IRON_ORE.get());
+
+        tag(BlockTags.NEEDS_DIAMOND_TOOL)
+                .add(ModBlocks.SPIRITUAL_STONE_CLUSTER.get());
 
         tag(ModTags.Blocks.NEEDS_BLACK_IRON_TOOL)
                 .add(ModBlocks.ALCHEMY_FURNACE.get())
