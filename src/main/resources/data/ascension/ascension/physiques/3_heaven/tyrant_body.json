@@ -8,37 +8,81 @@
     "ascension:elemental/yang"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:strength": 6.0,
-    "ascension:vitality": 3.0,
-    "ascension:agility": 1.0
+  "stats": {
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:3_heaven_tyrant_body_strength_base",
+          "value": 6.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:tyrant_body_strength_modifier",
+          "operation_group": 0,
+          "value": 0.15
+        }
+      ]
+    },
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:3_heaven_tyrant_body_vitality_base",
+          "value": 3.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:tyrant_body_vitality_modifier",
+          "operation_group": 0,
+          "value": 0.08
+        }
+      ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:3_heaven_tyrant_body_agility_base",
+          "value": 1.0
+        }
+      ],
+      "multiplier": []
+    }
   },
-  "base_path_bonuses": {
+  "path_bonus": {
     "ascension:affinity": {
-      "ascension:foundation/body": 2.5,
-      "ascension:weapon/fist": 4.0,
-      "ascension:elemental/yang": 1.5
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_tyrant_body_affinity_foundation_body_base",
+            "value": 2.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/fist": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_tyrant_body_affinity_weapon_fist_base",
+            "value": 4.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/yang": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_tyrant_body_affinity_elemental_yang_base",
+            "value": 1.5
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {
     "theme": "ascension:physique_essence",
     "template": "ascension:default_physique_essence",
     "rank": "ascension:heaven"
-  },
-  "stat_modifiers": {
-    "ascension:strength": [
-      {
-        "value": 0.15,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:tyrant_body_strength_modifier"
-      }
-    ],
-    "ascension:vitality": [
-      {
-        "value": 0.08,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:tyrant_body_vitality_modifier"
-      }
-    ]
   }
 }

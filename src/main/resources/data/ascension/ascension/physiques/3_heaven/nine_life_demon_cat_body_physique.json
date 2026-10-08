@@ -32,6 +32,7 @@
       "multiplier": [
         {
           "id": "ascension:nine_life_demon_cat_body_vitality_modifier",
+          "operation_group": 0,
           "value": 0.18
         }
       ]

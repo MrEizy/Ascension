@@ -23,6 +23,7 @@
       "multiplier": [
         {
           "id": "ascension:cold_spring_dantian_spirit_modifier",
+          "operation_group": 0,
           "value": 0.12
         }
       ]

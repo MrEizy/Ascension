@@ -6,28 +6,57 @@
     "ascension:foundation/essence"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:spirit": 4.0,
-    "ascension:vitality": 1.0,
-    "ascension:agility": 1.0
+  "stats": {
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_special_essence_bone_spirit_base",
+          "value": 4.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:special_essence_bone_spirit_modifier",
+          "operation_group": 0,
+          "value": 0.12
+        }
+      ]
+    },
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_special_essence_bone_vitality_base",
+          "value": 1.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_special_essence_bone_agility_base",
+          "value": 1.0
+        }
+      ],
+      "multiplier": []
+    }
   },
-  "base_path_bonuses": {
+  "path_bonus": {
     "ascension:affinity": {
-      "ascension:foundation/essence": 2.5
+      "ascension:foundation/essence": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_special_essence_bone_affinity_foundation_essence_base",
+            "value": 2.5
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {
     "theme": "ascension:physique_essence",
     "template": "ascension:default_physique_essence",
     "rank": "ascension:profound"
-  },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.12,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:special_essence_bone_spirit_modifier"
-      }
-    ]
   }
 }

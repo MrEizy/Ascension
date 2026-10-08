@@ -22,6 +22,7 @@
       "multiplier": [
         {
           "id": "ascension:lion_roar_chest_vitality_modifier",
+          "operation_group": 0,
           "value": 0.12
         }
       ]

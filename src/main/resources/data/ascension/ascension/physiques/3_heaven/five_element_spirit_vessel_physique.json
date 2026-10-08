@@ -21,6 +21,7 @@
       "multiplier": [
         {
           "id": "ascension:five_element_spirit_vessel_spirit_modifier",
+          "operation_group": 0,
           "value": 0.18
         }
       ]

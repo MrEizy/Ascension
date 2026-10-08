@@ -24,6 +24,7 @@
       "multiplier": [
         {
           "id": "ascension:lunar_dream_eyes_spirit_modifier",
+          "operation_group": 0,
           "value": 0.25
         }
       ]

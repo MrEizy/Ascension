@@ -23,6 +23,7 @@
       "multiplier": [
         {
           "id": "ascension:mantis_blade_agility_modifier",
+          "operation_group": 0,
           "value": 0.2
         }
       ]

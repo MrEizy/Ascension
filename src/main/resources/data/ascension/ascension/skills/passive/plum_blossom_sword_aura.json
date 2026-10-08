@@ -11,6 +11,7 @@
           "multiplier": [
             {
               "id": "ascension:plum_blossom_sword_aura_strength",
+              "operation_group": 0,
               "value": 0.5
             }
           ]
@@ -20,6 +21,7 @@
           "multiplier": [
             {
               "id": "ascension:plum_blossom_sword_aura_agility",
+              "operation_group": 0,
               "value": 0.5
             }
           ]

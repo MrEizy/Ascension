@@ -5,14 +5,17 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:spirit": [
-          {
-            "value": 0.06,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:heavens_breath_spirit"
-          }
-        ]
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:heavens_breath_spirit",
+              "operation_group": 0,
+              "value": 0.06
+            }
+          ]
+        }
       }
     }
   ]

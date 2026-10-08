@@ -29,6 +29,7 @@
       "multiplier": [
         {
           "id": "ascension:warblood_body_strength_modifier",
+          "operation_group": 0,
           "value": 0.15
         }
       ]

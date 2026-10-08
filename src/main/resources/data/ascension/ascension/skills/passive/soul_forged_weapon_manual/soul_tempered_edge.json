@@ -11,21 +11,27 @@
     },
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:spirit": [
-          {
-            "value": 0.08,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:soul_tempered_edge_spirit"
-          }
-        ],
-        "ascension:strength": [
-          {
-            "value": 0.05,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:soul_tempered_edge_strength"
-          }
-        ]
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:soul_tempered_edge_spirit",
+              "operation_group": 0,
+              "value": 0.08
+            }
+          ]
+        },
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:soul_tempered_edge_strength",
+              "operation_group": 0,
+              "value": 0.05
+            }
+          ]
+        }
       }
     }
   ]

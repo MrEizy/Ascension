@@ -23,6 +23,7 @@
       "multiplier": [
         {
           "id": "ascension:golden_sun_heart_strength_modifier",
+          "operation_group": 0,
           "value": 0.12
         }
       ]

@@ -25,6 +25,7 @@
       "multiplier": [
         {
           "id": "ascension:thousand_edge_agility_modifier",
+          "operation_group": 0,
           "value": 0.15
         }
       ]

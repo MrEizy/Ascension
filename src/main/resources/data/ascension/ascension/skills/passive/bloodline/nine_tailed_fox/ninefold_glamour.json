@@ -5,21 +5,27 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:spirit": [
-          {
-            "value": 0.14,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:ninefold_glamour_spirit"
-          }
-        ],
-        "ascension:agility": [
-          {
-            "value": 0.1,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:ninefold_glamour_agility"
-          }
-        ]
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:ninefold_glamour_spirit",
+              "operation_group": 0,
+              "value": 0.14
+            }
+          ]
+        },
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:ninefold_glamour_agility",
+              "operation_group": 0,
+              "value": 0.1
+            }
+          ]
+        }
       }
     }
   ]

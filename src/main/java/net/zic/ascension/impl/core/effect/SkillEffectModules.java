@@ -19,6 +19,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.fml.common.Mod;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectContext;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectModule;
@@ -505,7 +506,7 @@ public final class SkillEffectModules {
             Identifier modifierId = modifierId(context);
             for (Stat stat : targetStats()) {
                 var instance = source.getStatInstance(stat);
-                if (instance == null || instance.getAllModifiers().stream().noneMatch(modifier -> modifier.getIdentifier().equals(modifierId))) {
+                if (instance == null || instance.getMultiplierModifiers().stream().noneMatch(modifier -> modifier.id().equals(modifierId))) {
                     apply(entity, context);
                     return;
                 }
@@ -538,7 +539,8 @@ public final class SkillEffectModules {
 
             Identifier modifierId = modifierId(context);
             for (Stat stat : targetStats()) {
-                source.addStatModifier(stat, new ValueContainerModifier(-amount, ModifierOperation.MULTIPLY_FINAL, modifierId, GROUP));
+
+                source.addMultiplierStatModifier(stat, Modifier.multiplier(modifierId,GROUP,-amount));
             }
             source.updateEntityStatHolder();
         }

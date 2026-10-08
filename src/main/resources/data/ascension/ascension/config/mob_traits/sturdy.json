@@ -1,26 +1,34 @@
 {
   "type": "ascension:simple_trait",
   "name": "Sturdy",
-  "base_stats": {
-    "ascension:vitality": 20
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:mob_traits_sturdy_vitality_base",
+          "value": 20
+        }
+      ],
+      "multiplier": []
+    }
   },
   "paths": {
     "ascension:essence": [
       {
         "major_realm": 0,
-        "min_realm":0,
+        "min_realm": 0,
         "max_realm": 9,
         "weight": 20
       },
       {
         "major_realm": 1,
-        "min_realm":0,
+        "min_realm": 0,
         "max_realm": 9,
         "weight": 10
       },
       {
         "major_realm": 1,
-        "min_realm":0,
+        "min_realm": 0,
         "max_realm": 9,
         "weight": 1
       }

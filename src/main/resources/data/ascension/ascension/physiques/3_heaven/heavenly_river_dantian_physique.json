@@ -23,6 +23,7 @@
       "multiplier": [
         {
           "id": "ascension:heavenly_river_dantian_spirit_modifier",
+          "operation_group": 0,
           "value": 0.22
         }
       ]

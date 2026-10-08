@@ -15,6 +15,7 @@
           "multiplier": [
             {
               "id": "ascension:refined_mortal_frame_strength",
+              "operation_group": 0,
               "value": 0.06
             }
           ]
@@ -24,6 +25,7 @@
           "multiplier": [
             {
               "id": "ascension:refined_mortal_frame_vitality",
+              "operation_group": 0,
               "value": 0.06
             }
           ]

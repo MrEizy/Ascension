@@ -5,21 +5,27 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:agility": [
-          {
-            "value": 0.12,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:lightning_nerves_agility"
-          }
-        ],
-        "ascension:strength": [
-          {
-            "value": 0.05,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:lightning_nerves_strength"
-          }
-        ]
+      "stats": {
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:lightning_nerves_agility",
+              "operation_group": 0,
+              "value": 0.12
+            }
+          ]
+        },
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:lightning_nerves_strength",
+              "operation_group": 0,
+              "value": 0.05
+            }
+          ]
+        }
       }
     }
   ]

@@ -23,6 +23,7 @@
       "multiplier": [
         {
           "id": "ascension:soul_sovereignty_revolution_throne_trinity_vitality_modifier",
+          "operation_group": 0,
           "value": 0.2
         }
       ]
@@ -37,6 +38,7 @@
       "multiplier": [
         {
           "id": "ascension:soul_sovereignty_revolution_throne_trinity_strength_modifier",
+          "operation_group": 0,
           "value": 0.25
         }
       ]
@@ -51,6 +53,7 @@
       "multiplier": [
         {
           "id": "ascension:soul_sovereignty_revolution_throne_trinity_spirit_modifier",
+          "operation_group": 0,
           "value": 1.75
         }
       ]
@@ -65,6 +68,7 @@
       "multiplier": [
         {
           "id": "ascension:soul_sovereignty_revolution_throne_trinity_agility_modifier",
+          "operation_group": 0,
           "value": 0.4
         }
       ]

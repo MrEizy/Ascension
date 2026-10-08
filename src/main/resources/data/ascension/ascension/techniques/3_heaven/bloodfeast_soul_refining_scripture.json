@@ -35,21 +35,36 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 1.2
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_bloodfeast_soul_refining_scripture_spirit_a1",
+                  "value": 1.2
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.8
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_bloodfeast_soul_refining_scripture_vitality_a1",
+                  "value": 0.8
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:strength",
-              "value": 0.4
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_bloodfeast_soul_refining_scripture_strength_a1",
+                  "value": 0.4
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

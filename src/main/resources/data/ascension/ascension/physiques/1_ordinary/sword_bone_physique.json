@@ -27,6 +27,7 @@
       "multiplier": [
         {
           "id": "ascension:physique_vitality_multiplier",
+          "operation_group": 0,
           "value": 0.2
         }
       ]

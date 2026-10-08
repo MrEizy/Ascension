@@ -8,29 +8,66 @@
     "ascension:elemental/moon"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:spirit": 2.0,
-    "ascension:agility": 1.0
+  "stats": {
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:1_ordinary_dreaming_soul_spirit_base",
+          "value": 2.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:dreaming_soul_spirit_modifier",
+          "operation_group": 0,
+          "value": 0.08
+        }
+      ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:1_ordinary_dreaming_soul_agility_base",
+          "value": 1.0
+        }
+      ],
+      "multiplier": []
+    }
   },
-  "base_path_bonuses": {
+  "path_bonus": {
     "ascension:affinity": {
-      "ascension:foundation/soul": 1.5,
-      "ascension:elemental/illusion": 1.0,
-      "ascension:elemental/moon": 0.5
+      "ascension:foundation/soul": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_dreaming_soul_affinity_foundation_soul_base",
+            "value": 1.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/illusion": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_dreaming_soul_affinity_elemental_illusion_base",
+            "value": 1.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/moon": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_dreaming_soul_affinity_elemental_moon_base",
+            "value": 0.5
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {
     "theme": "ascension:physique_essence",
     "template": "ascension:default_physique_essence",
     "rank": "ascension:ordinary"
-  },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.08,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:dreaming_soul_spirit_modifier"
-      }
-    ]
   }
 }

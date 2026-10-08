@@ -5,21 +5,27 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:spirit": [
-          {
-            "value": 0.12,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:stellar_resonance_spirit"
-          }
-        ],
-        "ascension:agility": [
-          {
-            "value": 0.05,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:stellar_resonance_agility"
-          }
-        ]
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:stellar_resonance_spirit",
+              "operation_group": 0,
+              "value": 0.12
+            }
+          ]
+        },
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:stellar_resonance_agility",
+              "operation_group": 0,
+              "value": 0.05
+            }
+          ]
+        }
       }
     }
   ]

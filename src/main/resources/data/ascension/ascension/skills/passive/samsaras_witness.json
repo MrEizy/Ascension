@@ -15,6 +15,7 @@
           "multiplier": [
             {
               "id": "ascension:samsaras_witness_spirit",
+              "operation_group": 0,
               "value": 0.15
             }
           ]
@@ -24,6 +25,7 @@
           "multiplier": [
             {
               "id": "ascension:samsaras_witness_vitality",
+              "operation_group": 0,
               "value": 0.05
             }
           ]

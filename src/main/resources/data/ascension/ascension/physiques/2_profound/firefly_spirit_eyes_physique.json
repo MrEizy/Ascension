@@ -22,6 +22,7 @@
       "multiplier": [
         {
           "id": "ascension:firefly_spirit_eyes_spirit_modifier",
+          "operation_group": 0,
           "value": 0.12
         }
       ]

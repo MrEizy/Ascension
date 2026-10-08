@@ -22,6 +22,7 @@
       "multiplier": [
         {
           "id": "ascension:ember_touched_meridians_spirit_modifier",
+          "operation_group": 0,
           "value": 0.08
         }
       ]

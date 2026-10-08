@@ -23,6 +23,7 @@
       "multiplier": [
         {
           "id": "ascension:seven_star_bones_vitality_modifier",
+          "operation_group": 0,
           "value": 0.2
         }
       ]

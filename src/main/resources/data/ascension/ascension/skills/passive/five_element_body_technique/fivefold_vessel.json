@@ -5,28 +5,37 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:strength": [
-          {
-            "value": 0.08,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:fivefold_vessel_strength"
-          }
-        ],
-        "ascension:vitality": [
-          {
-            "value": 0.1,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:fivefold_vessel_vitality"
-          }
-        ],
-        "ascension:spirit": [
-          {
-            "value": 0.05,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:fivefold_vessel_spirit"
-          }
-        ]
+      "stats": {
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:fivefold_vessel_strength",
+              "operation_group": 0,
+              "value": 0.08
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:fivefold_vessel_vitality",
+              "operation_group": 0,
+              "value": 0.1
+            }
+          ]
+        },
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:fivefold_vessel_spirit",
+              "operation_group": 0,
+              "value": 0.05
+            }
+          ]
+        }
       }
     },
     {

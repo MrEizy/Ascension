@@ -5,21 +5,27 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:spirit": [
-          {
-            "value": 0.11,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:refined_understanding_spirit"
-          }
-        ],
-        "ascension:vitality": [
-          {
-            "value": 0.04,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:refined_understanding_vitality"
-          }
-        ]
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:refined_understanding_spirit",
+              "operation_group": 0,
+              "value": 0.11
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:refined_understanding_vitality",
+              "operation_group": 0,
+              "value": 0.04
+            }
+          ]
+        }
       }
     }
   ]

@@ -22,6 +22,7 @@
       "multiplier": [
         {
           "id": "ascension:thunder_spirit_veins_agility_modifier",
+          "operation_group": 0,
           "value": 0.12
         }
       ]

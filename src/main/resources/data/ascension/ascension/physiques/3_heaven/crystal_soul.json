@@ -8,37 +8,81 @@
     "ascension:elemental/order"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:spirit": 7.0,
-    "ascension:vitality": 2.0,
-    "ascension:agility": 1.0
+  "stats": {
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:3_heaven_crystal_soul_spirit_base",
+          "value": 7.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:crystal_soul_spirit_modifier",
+          "operation_group": 0,
+          "value": 0.15
+        }
+      ]
+    },
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:3_heaven_crystal_soul_vitality_base",
+          "value": 2.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:crystal_soul_vitality_modifier",
+          "operation_group": 0,
+          "value": 0.06
+        }
+      ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:3_heaven_crystal_soul_agility_base",
+          "value": 1.0
+        }
+      ],
+      "multiplier": []
+    }
   },
-  "base_path_bonuses": {
+  "path_bonus": {
     "ascension:affinity": {
-      "ascension:foundation/soul": 3.0,
-      "ascension:elemental/light": 2.5,
-      "ascension:elemental/order": 2.5
+      "ascension:foundation/soul": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_crystal_soul_affinity_foundation_soul_base",
+            "value": 3.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/light": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_crystal_soul_affinity_elemental_light_base",
+            "value": 2.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/order": {
+        "flat": [
+          {
+            "id": "ascension:3_heaven_crystal_soul_affinity_elemental_order_base",
+            "value": 2.5
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {
     "theme": "ascension:physique_essence",
     "template": "ascension:default_physique_essence",
     "rank": "ascension:heaven"
-  },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.15,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:crystal_soul_spirit_modifier"
-      }
-    ],
-    "ascension:vitality": [
-      {
-        "value": 0.06,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:crystal_soul_vitality_modifier"
-      }
-    ]
   }
 }

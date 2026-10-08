@@ -15,6 +15,7 @@
           "multiplier": [
             {
               "id": "ascension:unending_revolution_strength",
+              "operation_group": 0,
               "value": 0.12
             }
           ]
@@ -24,6 +25,7 @@
           "multiplier": [
             {
               "id": "ascension:unending_revolution_spirit",
+              "operation_group": 0,
               "value": 0.12
             }
           ]
@@ -33,6 +35,7 @@
           "multiplier": [
             {
               "id": "ascension:unending_revolution_vitality",
+              "operation_group": 0,
               "value": 0.08
             }
           ]

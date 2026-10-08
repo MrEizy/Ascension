@@ -5,14 +5,17 @@
   "modifiers": [
     {
       "type": "ascension:stats",
-      "stat_modifiers": {
-        "ascension:agility": [
-          {
-            "value": 0.09,
-            "operation": "MULTIPLY_FINAL",
-            "id": "ascension:nightwing_instinct_agility"
-          }
-        ]
+      "stats": {
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:nightwing_instinct_agility",
+              "operation_group": 0,
+              "value": 0.09
+            }
+          ]
+        }
       }
     }
   ]

@@ -31,17 +31,27 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 0.25
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_open_sky_breathing_scripture_spirit_a1",
+                  "value": 0.25
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.05
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_open_sky_breathing_scripture_agility_a1",
+                  "value": 0.05
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

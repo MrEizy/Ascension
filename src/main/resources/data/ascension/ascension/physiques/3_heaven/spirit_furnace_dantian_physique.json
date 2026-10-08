@@ -22,6 +22,7 @@
       "multiplier": [
         {
           "id": "ascension:spirit_furnace_dantian_spirit_modifier",
+          "operation_group": 0,
           "value": 0.18
         }
       ]
@@ -36,6 +37,7 @@
       "multiplier": [
         {
           "id": "ascension:spirit_furnace_dantian_vitality_modifier",
+          "operation_group": 0,
           "value": 0.1
         }
       ]

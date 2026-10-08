@@ -35,21 +35,36 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 0.45
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_white_lightning_ten_stage_technique_strength_a1",
+                  "value": 0.45
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.35
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_white_lightning_ten_stage_technique_agility_a1",
+                  "value": 0.35
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.2
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:2_profound_white_lightning_ten_stage_technique_vitality_a1",
+                  "value": 0.2
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

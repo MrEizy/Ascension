@@ -7,28 +7,57 @@
     "ascension:elemental/chaos"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:spirit": 2.5,
-    "ascension:agility": 0.5
+  "stats": {
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:1_ordinary_twisted_vessels_spirit_base",
+          "value": 2.5
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:twisted_vessels_spirit_modifier",
+          "operation_group": 0,
+          "value": 0.08
+        }
+      ]
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:1_ordinary_twisted_vessels_agility_base",
+          "value": 0.5
+        }
+      ],
+      "multiplier": []
+    }
   },
-  "base_path_bonuses": {
+  "path_bonus": {
     "ascension:affinity": {
-      "ascension:foundation/essence": 1.25,
-      "ascension:elemental/chaos": 0.5
+      "ascension:foundation/essence": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_twisted_vessels_affinity_foundation_essence_base",
+            "value": 1.25
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/chaos": {
+        "flat": [
+          {
+            "id": "ascension:1_ordinary_twisted_vessels_affinity_elemental_chaos_base",
+            "value": 0.5
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {
     "theme": "ascension:physique_essence",
     "template": "ascension:default_physique_essence",
     "rank": "ascension:ordinary"
-  },
-  "stat_modifiers": {
-    "ascension:spirit": [
-      {
-        "value": 0.08,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:twisted_vessels_spirit_modifier"
-      }
-    ]
   }
 }

@@ -22,6 +22,7 @@
       "multiplier": [
         {
           "id": "ascension:iron_ant_bones_strength_modifier",
+          "operation_group": 0,
           "value": 0.08
         }
       ]

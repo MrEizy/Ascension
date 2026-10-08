@@ -15,6 +15,7 @@
           "multiplier": [
             {
               "id": "ascension:truth_seeking_channels_spirit",
+              "operation_group": 0,
               "value": 0.08
             }
           ]
@@ -24,6 +25,7 @@
           "multiplier": [
             {
               "id": "ascension:truth_seeking_channels_vitality",
+              "operation_group": 0,
               "value": 0.04
             }
           ]

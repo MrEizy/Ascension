@@ -8,37 +8,81 @@
     "ascension:weapon/fist"
   ],
   "skills": [],
-  "base_stats": {
-    "ascension:strength": 2.0,
-    "ascension:vitality": 1.0,
-    "ascension:agility": 3.0
+  "stats": {
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_thunderforged_body_strength_base",
+          "value": 2.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:thunderforged_body_strength_modifier",
+          "operation_group": 0,
+          "value": 0.08
+        }
+      ]
+    },
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_thunderforged_body_vitality_base",
+          "value": 1.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_thunderforged_body_agility_base",
+          "value": 3.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:thunderforged_body_agility_modifier",
+          "operation_group": 0,
+          "value": 0.1
+        }
+      ]
+    }
   },
-  "base_path_bonuses": {
+  "path_bonus": {
     "ascension:affinity": {
-      "ascension:foundation/body": 1.5,
-      "ascension:elemental/lightning": 3.0,
-      "ascension:weapon/fist": 1.5
+      "ascension:foundation/body": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_thunderforged_body_affinity_foundation_body_base",
+            "value": 1.5
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/lightning": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_thunderforged_body_affinity_elemental_lightning_base",
+            "value": 3.0
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:weapon/fist": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_thunderforged_body_affinity_weapon_fist_base",
+            "value": 1.5
+          }
+        ],
+        "multiplier": []
+      }
     }
   },
   "item_tooltip": {
     "theme": "ascension:physique_essence",
     "template": "ascension:default_physique_essence",
     "rank": "ascension:profound"
-  },
-  "stat_modifiers": {
-    "ascension:strength": [
-      {
-        "value": 0.08,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:thunderforged_body_strength_modifier"
-      }
-    ],
-    "ascension:agility": [
-      {
-        "value": 0.1,
-        "operation": "MULTIPLY_FINAL",
-        "id": "ascension:thunderforged_body_agility_modifier"
-      }
-    ]
   }
 }

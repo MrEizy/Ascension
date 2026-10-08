@@ -11,6 +11,7 @@
           "multiplier": [
             {
               "id": "ascension:iron_skin_vitality_multiplier",
+              "operation_group": 0,
               "value": 10
             }
           ]

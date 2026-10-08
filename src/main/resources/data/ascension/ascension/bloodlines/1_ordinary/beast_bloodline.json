@@ -10,27 +10,50 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 0.06
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_beast_bloodline_strength_a1",
+                  "value": 0.06
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.08
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_beast_bloodline_vitality_a1",
+                  "value": 0.08
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.02
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_beast_bloodline_agility_a1",
+                  "value": 0.02
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/body": 0.008
+              "ascension:foundation/body": {
+                "flat": [
+                  {
+                    "id": "ascension:1_ordinary_beast_bloodline_affinity_foundation_body_a2",
+                    "value": 0.008
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -44,13 +67,18 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:vitality",
-              "value": 1.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_beast_bloodline_vitality_a3",
+                  "value": 1.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:grant_skills",
@@ -68,17 +96,27 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_beast_bloodline_strength_a4",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 2.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_beast_bloodline_vitality_a4",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

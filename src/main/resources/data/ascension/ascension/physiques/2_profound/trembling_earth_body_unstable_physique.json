@@ -29,6 +29,7 @@
       "multiplier": [
         {
           "id": "ascension:trembling_earth_body_unstable_physique_vitality_modifier",
+          "operation_group": 0,
           "value": 0.15
         }
       ]

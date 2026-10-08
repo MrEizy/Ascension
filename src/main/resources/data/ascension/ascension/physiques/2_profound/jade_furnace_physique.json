@@ -23,6 +23,7 @@
       "multiplier": [
         {
           "id": "ascension:jade_furnace_vitality_modifier",
+          "operation_group": 0,
           "value": 0.15
         }
       ]

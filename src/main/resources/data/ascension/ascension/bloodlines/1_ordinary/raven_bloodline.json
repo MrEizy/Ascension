@@ -11,24 +11,50 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 0.07
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_raven_bloodline_agility_a1",
+                  "value": 0.07
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 0.04
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_raven_bloodline_spirit_a1",
+                  "value": 0.04
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/soul": 0.005,
-              "ascension:elemental/dark": 0.01
+              "ascension:foundation/soul": {
+                "flat": [
+                  {
+                    "id": "ascension:1_ordinary_raven_bloodline_affinity_foundation_soul_a2",
+                    "value": 0.005
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/dark": {
+                "flat": [
+                  {
+                    "id": "ascension:1_ordinary_raven_bloodline_affinity_elemental_dark_a2",
+                    "value": 0.01
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -42,13 +68,18 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 1.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_raven_bloodline_agility_a3",
+                  "value": 1.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:grant_skills",
@@ -66,17 +97,27 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_raven_bloodline_agility_a4",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:spirit",
-              "value": 1.0
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_raven_bloodline_spirit_a4",
+                  "value": 1.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

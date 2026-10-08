@@ -30,17 +30,27 @@
       "condition": "ascension:realm_change/all_realms",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:strength",
-              "value": 0.22
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:strength": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_hellbound_marrow_scripture_strength_a1",
+                  "value": 0.22
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.18
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:1_ordinary_hellbound_marrow_scripture_vitality_a1",
+                  "value": 0.18
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

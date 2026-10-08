@@ -23,6 +23,7 @@
       "multiplier": [
         {
           "id": "ascension:shadow_leopard_veins_agility_modifier",
+          "operation_group": 0,
           "value": 0.22
         }
       ]

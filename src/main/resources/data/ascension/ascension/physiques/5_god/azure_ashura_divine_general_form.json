@@ -24,6 +24,7 @@
       "multiplier": [
         {
           "id": "ascension:azure_ashura_divine_general_form_spirit_modifier",
+          "operation_group": 0,
           "value": 0.2
         }
       ]
@@ -38,6 +39,7 @@
       "multiplier": [
         {
           "id": "ascension:azure_ashura_divine_general_form_vitality_modifier",
+          "operation_group": 0,
           "value": 0.5
         }
       ]
@@ -52,6 +54,7 @@
       "multiplier": [
         {
           "id": "ascension:azure_ashura_divine_general_form_strength_modifier",
+          "operation_group": 0,
           "value": 0.5
         }
       ]
@@ -66,6 +69,7 @@
       "multiplier": [
         {
           "id": "ascension:azure_ashura_divine_general_form_agility_modifier",
+          "operation_group": 0,
           "value": 0.4
         }
       ]

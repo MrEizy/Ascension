@@ -12,29 +12,68 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 0.16
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_astral_bloodline_spirit_a1",
+                  "value": 0.16
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 0.1
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_astral_bloodline_agility_a1",
+                  "value": 0.1
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 0.06
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_astral_bloodline_vitality_a1",
+                  "value": 0.06
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:give_path_bonuses",
           "bonuses": {
             "ascension:affinity": {
-              "ascension:foundation/essence": 0.02,
-              "ascension:elemental/star": 0.03,
-              "ascension:elemental/space": 0.02
+              "ascension:foundation/essence": {
+                "flat": [
+                  {
+                    "id": "ascension:3_heaven_astral_bloodline_affinity_foundation_essence_a2",
+                    "value": 0.02
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/star": {
+                "flat": [
+                  {
+                    "id": "ascension:3_heaven_astral_bloodline_affinity_elemental_star_a2",
+                    "value": 0.03
+                  }
+                ],
+                "multiplier": []
+              },
+              "ascension:elemental/space": {
+                "flat": [
+                  {
+                    "id": "ascension:3_heaven_astral_bloodline_affinity_elemental_space_a2",
+                    "value": 0.02
+                  }
+                ],
+                "multiplier": []
+              }
             }
           }
         }
@@ -48,13 +87,18 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_astral_bloodline_spirit_a3",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     },
@@ -66,13 +110,18 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:agility",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_astral_bloodline_agility_a4",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     },
@@ -84,13 +133,18 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 2.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_astral_bloodline_spirit_a5",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         },
         {
           "type": "ascension:grant_skills",
@@ -108,21 +162,36 @@
       },
       "actions": [
         {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            {
-              "id": "ascension:spirit",
-              "value": 4.0
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:spirit": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_astral_bloodline_spirit_a6",
+                  "value": 4.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:agility",
-              "value": 3.0
+            "ascension:agility": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_astral_bloodline_agility_a6",
+                  "value": 3.0
+                }
+              ],
+              "multiplier": []
             },
-            {
-              "id": "ascension:vitality",
-              "value": 2.0
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:3_heaven_astral_bloodline_vitality_a6",
+                  "value": 2.0
+                }
+              ],
+              "multiplier": []
             }
-          ]
+          }
         }
       ]
     }

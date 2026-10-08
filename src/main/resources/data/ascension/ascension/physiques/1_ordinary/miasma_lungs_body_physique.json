@@ -29,6 +29,7 @@
       "multiplier": [
         {
           "id": "ascension:winter_root_vitality_modifier",
+          "operation_group": 0,
           "value": 0.1
         }
       ]

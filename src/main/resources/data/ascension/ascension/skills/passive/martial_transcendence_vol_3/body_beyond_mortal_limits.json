@@ -15,6 +15,7 @@
           "multiplier": [
             {
               "id": "ascension:body_beyond_mortal_limits_strength",
+              "operation_group": 0,
               "value": 0.2
             }
           ]
@@ -24,6 +25,7 @@
           "multiplier": [
             {
               "id": "ascension:body_beyond_mortal_limits_vitality",
+              "operation_group": 0,
               "value": 0.2
             }
           ]
@@ -33,6 +35,7 @@
           "multiplier": [
             {
               "id": "ascension:body_beyond_mortal_limits_agility",
+              "operation_group": 0,
               "value": 0.1
             }
           ]
@@ -42,6 +45,7 @@
           "multiplier": [
             {
               "id": "ascension:body_beyond_mortal_limits_spirit",
+              "operation_group": 0,
               "value": 0.08
             }
           ]
