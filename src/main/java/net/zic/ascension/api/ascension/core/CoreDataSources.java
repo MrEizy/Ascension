@@ -7,20 +7,20 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolderProvider;
 import net.zic.ascension.api.ascension.core.path.PathHolderProvider;
 import net.zic.ascension.api.ascension.core.path.bonus.data_source.PathBonusHolderProvider;
-import net.zic.ascension.api.ascension.core.physique.PhysiqueHolderProvider;
+import net.zic.ascension.api.ascension.core.physique.PhysiqueDataSource;
 import net.zic.ascension.api.ascension.core.skill.SkillHolderProvider;
 import net.zic.ascension.api.ascension.core.technique.TechniqueHolderProvider;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 
-public class CoreHolderProviders {
+public class CoreDataSources {
 
-    public static final DeferredRegister<DataSource> DATA_SOURCES =
+    public static final DeferredRegister<DataSource<?>> DATA_SOURCES =
             DeferredRegister.create(RPGEngineRegistries.DATA_SOURCE_REGISTRY, AscensionCraft.MOD_ID);
 
-    public static final DeferredHolder<DataSource,DataSource> PHYSIQUE_HOLDER_PROVIDER = DATA_SOURCES.register(
-            "physique_holder_provider",
-            PhysiqueHolderProvider::new
+    public static final DeferredHolder<DataSource<?>, PhysiqueDataSource> PHYSIQUE_DATA_SOURCE = DATA_SOURCES.register(
+            "physique_data_source",
+            PhysiqueDataSource::new
     );
     public static final DeferredHolder<DataSource,DataSource> BLOODLINE_HOLDER_PROVIDER = DATA_SOURCES.register(
             "bloodline_holder_provider",

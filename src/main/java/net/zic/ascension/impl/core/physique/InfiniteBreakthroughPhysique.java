@@ -264,7 +264,7 @@ public record InfiniteBreakthroughPhysique(Component name, Component description
     }
 
     @Override
-    public PhysiqueData loadData(ByteBuf buf) {
+    public PhysiqueData loadData(ByteBuf buf,RegistryAccess access) {
         return new EmptyPhysiqueData();
     }
 }

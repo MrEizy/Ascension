@@ -6,15 +6,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreHolderProviders;
+import net.zic.ascension.api.ascension.core.CoreDataSources;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
-import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
-import oshi.util.tuples.Pair;
 
 import java.util.*;
 
@@ -59,7 +56,7 @@ public class BloodlineHolder implements DataSourceInstance {
     }
     @Override
     public DataSource getDataSource() {
-        return CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.get();
+        return CoreDataSources.BLOODLINE_HOLDER_PROVIDER.get();
     }
 
     public Map<Identifier,BloodlineData> getRawData(){

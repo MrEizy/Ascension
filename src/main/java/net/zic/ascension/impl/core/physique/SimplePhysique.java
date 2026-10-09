@@ -163,7 +163,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
     }
 
     @Override
-    public PhysiqueData loadData(ByteBuf buf) {
+    public PhysiqueData loadData(ByteBuf buf,RegistryAccess access) {
         return new EmptyData();
     }
 

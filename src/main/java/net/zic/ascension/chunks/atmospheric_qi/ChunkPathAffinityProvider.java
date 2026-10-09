@@ -5,13 +5,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
-import net.zic.ascension.api.ascension.core.CoreHolderProviders;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
-import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.zenithlib.util.Processable;
-import net.zic.zenithlib.value_containers.ValueContainerModifier;
 import net.zic.zenithlib.value_containers.typed.Modifier;
 import net.zic.zenithlib.value_containers.typed.ValueContainer;
 

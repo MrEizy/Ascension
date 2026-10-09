@@ -6,7 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreHolderProviders;
+import net.zic.ascension.api.ascension.core.CoreDataSources;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
@@ -69,7 +69,7 @@ public class TechniqueHolder implements DataSourceInstance {
 
     @Override
     public DataSource getDataSource() {
-        return CoreHolderProviders.TECHNIQUE_HOLDER_PROVIDER.get();
+        return CoreDataSources.TECHNIQUE_HOLDER_PROVIDER.get();
     }
 
     public Map<Identifier, TechniqueData> getRawData() {

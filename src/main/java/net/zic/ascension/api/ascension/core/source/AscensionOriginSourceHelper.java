@@ -7,7 +7,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
-import net.zic.ascension.api.ascension.core.CoreHolderProviders;
+import net.zic.ascension.api.ascension.core.CoreDataSources;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
@@ -37,6 +37,7 @@ import net.zic.ascension.api.ascension.event.technique.TechniqueEvent;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.OriginSourcePatch;
+import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 
@@ -73,7 +74,13 @@ public class AscensionOriginSourceHelper {
     }
 
     //──Holder Access────────────────────────────────────────────────────────
-
+    protected static <T extends DataSourceInstance<? extends DataSource<T>>> T getOrCreate(OriginSource source,DataSource<T> dataSource){
+        source.addDataSource(dataSource);//if a holder does not exist creates one
+        return source.getDataSource(dataSource);
+    }
+    protected static PhysiqueHolder getPhysiqueHolder(OriginSource source){
+        return getOrCreate(source,CoreDataSources.PHYSIQUE_DATA_SOURCE.get());
+    }
     /**
      * attempts to get a DataSource instance, creating a new one if it is not present
      * @param source the source we want to get the instance of
@@ -84,23 +91,21 @@ public class AscensionOriginSourceHelper {
         DataSourceInstance instance = RPGEngineRegistries.DATA_SOURCE_REGISTRY.getValue(dataSource).newInstance(source.getRegistryAccess());
         return source.addDataSource(dataSource,instance)? instance:null;
     }
-    protected static PhysiqueHolder getPhysiqueHolder(OriginSource source){
-        return (PhysiqueHolder) getOrCreate(source,CoreHolderProviders.PHYSIQUE_HOLDER_PROVIDER.getId());
-    }
+
     protected static BloodlineHolder getBloodlineHolder(OriginSource source){
-        return (BloodlineHolder)  getOrCreate(source,CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
+        return (BloodlineHolder)  getOrCreate(source, CoreDataSources.BLOODLINE_HOLDER_PROVIDER.getId());
     }
     protected static PathHolder getPathHolder(OriginSource source){
-        return (PathHolder) getOrCreate(source,CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
+        return (PathHolder) getOrCreate(source, CoreDataSources.PATH_HOLDER_PROVIDER.getId());
     }
     protected static SkillHolder getSkillHolder(OriginSource source){
-        return (SkillHolder) getOrCreate(source,CoreHolderProviders.SKILL_HOLDER_PROVIDER.getId());
+        return (SkillHolder) getOrCreate(source, CoreDataSources.SKILL_HOLDER_PROVIDER.getId());
     }
     protected static TechniqueHolder getTechniqueHolder(OriginSource source){
-        return (TechniqueHolder) getOrCreate(source,CoreHolderProviders.TECHNIQUE_HOLDER_PROVIDER.getId());
+        return (TechniqueHolder) getOrCreate(source, CoreDataSources.TECHNIQUE_HOLDER_PROVIDER.getId());
     }
     protected static DataSourcePathBonusHolder getPathBonusHolder(OriginSource source){
-        return (DataSourcePathBonusHolder) getOrCreate(source,CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.getId());
+        return (DataSourcePathBonusHolder) getOrCreate(source, CoreDataSources.PATH_BONUS_HOLDER_PROVIDER.getId());
     }
 
     //TODO add the methods that dont take in data and create a fresh instance instead
@@ -151,7 +156,7 @@ public class AscensionOriginSourceHelper {
         boolean result = holder.setPhysique(newPhysique,newPhysiqueData);
         if(!result) return false;
 
-        source.markDataSourceDirty(CoreHolderProviders.PHYSIQUE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.PHYSIQUE_DATA_SOURCE.getId());
 
         source.startProcess("set_physique");
 
@@ -189,7 +194,7 @@ public class AscensionOriginSourceHelper {
     public static void markPhysiqueDirty(OriginSource source,Identifier bloodline){
         long id = random.nextLong();
         source.startProcess("modified_physique"+id);
-        source.markDataSourceDirty(CoreHolderProviders.PHYSIQUE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.PHYSIQUE_DATA_SOURCE.getId());
         resolveProcess(source,"modified_physique"+id);
     }
     //──Bloodline Access────────────────────────────────────────────────────────
@@ -223,7 +228,7 @@ public class AscensionOriginSourceHelper {
         );
 
         getBloodlineHolder(source).markBloodlineDirty(bloodline);
-        source.markDataSourceDirty(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.BLOODLINE_HOLDER_PROVIDER.getId());
         resolveProcess(source,"merge_bloodline");
     }
     //TODO consider creating a replace bloodline event as well
@@ -268,7 +273,7 @@ public class AscensionOriginSourceHelper {
 
         BloodlineEvent.Added.Post post= new BloodlineEvent.Added.Post(bloodline,data,source);
         NeoForge.EVENT_BUS.post(post);
-        source.markDataSourceDirty(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.BLOODLINE_HOLDER_PROVIDER.getId());
 
         resolveProcess(source,"add_bloodline");
         return true;
@@ -304,7 +309,7 @@ public class AscensionOriginSourceHelper {
         BloodlineEvent.Removed.Post post= new BloodlineEvent.Removed.Post(bloodline,data,source);
         NeoForge.EVENT_BUS.post(post);
 
-        source.markDataSourceDirty(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.BLOODLINE_HOLDER_PROVIDER.getId());
 
         resolveProcess(source,"remove_bloodline");
         return true;
@@ -314,7 +319,7 @@ public class AscensionOriginSourceHelper {
     public static void markBloodlineDirty(OriginSource source,Identifier bloodline){
         long id = random.nextLong();
         source.startProcess("modified_bloodline"+id);
-        source.markDataSourceDirty(CoreHolderProviders.BLOODLINE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.BLOODLINE_HOLDER_PROVIDER.getId());
         getBloodlineHolder(source).markBloodlineDirty(bloodline);
         resolveProcess(source,"modified_bloodline"+id);
     }
@@ -385,7 +390,7 @@ public class AscensionOriginSourceHelper {
         PathAddedEvent.Post post = new PathAddedEvent.Post(path,existingData,source);
         NeoForge.EVENT_BUS.post(post);
 
-        source.markDataSourceDirty(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.PATH_HOLDER_PROVIDER.getId());
 
         resolveProcess(source,"add_path");
         return true;
@@ -409,7 +414,7 @@ public class AscensionOriginSourceHelper {
         PathRemovedEvent.Post post = new PathRemovedEvent.Post(path,data,source);
         NeoForge.EVENT_BUS.post(post);
 
-        source.markDataSourceDirty(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.PATH_HOLDER_PROVIDER.getId());
 
 
         resolveProcess(source,"remove_path");
@@ -420,7 +425,7 @@ public class AscensionOriginSourceHelper {
     public static void markPathDirty(OriginSource source,Identifier path){
         long id = random.nextLong();
         source.startProcess("modified_path"+id);
-        source.markDataSourceDirty(CoreHolderProviders.PATH_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.PATH_HOLDER_PROVIDER.getId());
         getPathHolder(source).markPathDirty(path);
         resolveProcess(source,"modified_path"+id);
 
@@ -483,7 +488,7 @@ public class AscensionOriginSourceHelper {
 
         NeoForge.EVENT_BUS.post(post);
 
-        source.markDataSourceDirty(CoreHolderProviders.SKILL_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.SKILL_HOLDER_PROVIDER.getId());
         resolveProcess(source,"add_skill");
         return true;
     }
@@ -511,7 +516,7 @@ public class AscensionOriginSourceHelper {
         SkillEvent.Removed.Post post = new SkillEvent.Removed.Post(source,skill,data);
         NeoForge.EVENT_BUS.post(post);
 
-        source.markDataSourceDirty(CoreHolderProviders.SKILL_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.SKILL_HOLDER_PROVIDER.getId());
         resolveProcess(source,"remove_skill");
         return true;
     }
@@ -519,7 +524,7 @@ public class AscensionOriginSourceHelper {
     public static void markSkillDirty(OriginSource source,Identifier skill){
         long id = random.nextLong();
         source.startProcess("modified_skill"+id);
-        source.markDataSourceDirty(CoreHolderProviders.SKILL_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.SKILL_HOLDER_PROVIDER.getId());
         getSkillHolder(source).markSkillDirty(skill);
         resolveProcess(source,"modified_skill"+id);
     }//should be used if you changed a skills skilLData
@@ -575,7 +580,7 @@ public class AscensionOriginSourceHelper {
         source.startProcess("add_technique");
         techniqueInstance.onAdded(source, data);
         broadcastTechniqueAdded(source, technique, data);
-        source.markDataSourceDirty(CoreHolderProviders.TECHNIQUE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.TECHNIQUE_HOLDER_PROVIDER.getId());
         resolveProcess(source, "add_technique");
         return true;
     }
@@ -598,7 +603,7 @@ public class AscensionOriginSourceHelper {
         source.startProcess("remove_technique");
         techniqueInstance.onRemoved(source, data);
         broadcastTechniqueRemoved(source, technique, data);
-        source.markDataSourceDirty(CoreHolderProviders.TECHNIQUE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.TECHNIQUE_HOLDER_PROVIDER.getId());
         resolveProcess(source, "remove_technique");
         return true;
     }
@@ -607,7 +612,7 @@ public class AscensionOriginSourceHelper {
         long id = random.nextLong();
         source.startProcess("modified_technique" + id);
         getTechniqueHolder(source).markTechniqueDirty(technique);
-        source.markDataSourceDirty(CoreHolderProviders.TECHNIQUE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.TECHNIQUE_HOLDER_PROVIDER.getId());
         resolveProcess(source, "modified_technique" + id);
     }
 
@@ -693,7 +698,7 @@ public class AscensionOriginSourceHelper {
     public static void markPathBonusHolderDirty(OriginSource source){
         String id = "modified_path_bonus"+ UUID.randomUUID();
         source.startProcess(id);
-        source.markDataSourceDirty(CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.PATH_BONUS_HOLDER_PROVIDER.getId());
         resolveProcess(source,id);
     }
     //TODO update to utilize the new data attachment

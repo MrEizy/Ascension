@@ -49,7 +49,7 @@ public interface  Physique {
 
     PhysiqueData newData(RegistryAccess access);
     PhysiqueData loadData(ValueInput input, RegistryAccess access);
-    PhysiqueData loadData(ByteBuf buf);
+    PhysiqueData loadData(ByteBuf buf,RegistryAccess access);
 
     default Collection<Identifier> unlockedPaths() {return List.of();}
 

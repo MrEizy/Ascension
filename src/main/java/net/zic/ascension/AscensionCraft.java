@@ -14,7 +14,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
-import net.zic.ascension.api.ascension.core.CoreHolderProviders;
+import net.zic.ascension.api.ascension.core.CoreDataSources;
 import net.zic.ascension.common.ModCreativeModeTabs;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.blocks.entity.AscBlockEntities;
@@ -95,7 +95,7 @@ public class AscensionCraft {
     public void register(IEventBus modEventBus){
         COMPONENTS.register(modEventBus);
         RECIPES.register(modEventBus);
-        CoreHolderProviders.register(modEventBus);
+        CoreDataSources.register(modEventBus);
         CoreAttachments.register(modEventBus);
 
         AscensionPhysiqueTypes.register(modEventBus);

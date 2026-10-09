@@ -1,18 +1,14 @@
 package net.zic.ascension.api.ascension.core.path.bonus.data_source;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.CoreHolderProviders;
+import net.zic.ascension.api.ascension.core.CoreDataSources;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
-import net.zic.ascension.api.ascension.core.path.bonus.PathBonusCategoryHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
-import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.util.Processable;
 import net.zic.zenithlib.value_containers.typed.Modifier;
-import net.zic.zenithlib.value_containers.typed.RangedValueContainer;
 import net.zic.zenithlib.value_containers.typed.ValueContainer;
 
 import java.util.*;
@@ -42,7 +38,7 @@ public class DataSourcePathBonusHolder extends Processable implements DataSource
 
     @Override
     public DataSource getDataSource() {
-        return CoreHolderProviders.PATH_BONUS_HOLDER_PROVIDER.get();
+        return CoreDataSources.PATH_BONUS_HOLDER_PROVIDER.get();
     }
 
     @Override
