@@ -15,6 +15,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceHolder;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
@@ -135,19 +136,36 @@ public class OriginSource implements StatProvider {
         markDataSourceDirty(dataSource);
         return true;
     }
+    public boolean addDataSource(Identifier dataSource){
+        if(!RPGEngineRegistries.DATA_SOURCE_REGISTRY.containsKey(dataSource)) return false;
+        return addDataSource(dataSource,RPGEngineRegistries.DATA_SOURCE_REGISTRY.getValue(dataSource).createHolder(getRegistryAccess()));
+    }
+    public boolean addDataSource(DataSource<?> dataSource){
+        return addDataSource(RPGEngineRegistries.DATA_SOURCE_REGISTRY.getKey(dataSource),dataSource.createHolder(getRegistryAccess()));
+    }
 
 
     public boolean hasDataSource(Identifier dataSource){
         return dataSources.containsKey(dataSource);
     }
+    public boolean hasDataSource(DataSource<?> dataSource){
+        return dataSources.containsKey(RPGEngineRegistries.DATA_SOURCE_REGISTRY.getKey(dataSource));
+    }
 
+    public DataSourceHolder<?> getDataSourceHolder(DataSource<?> dataSource){
+        return dataSources.get(RPGEngineRegistries.DATA_SOURCE_REGISTRY.getKey(dataSource));
+    }
     public DataSourceHolder<?> getDataSourceHolder(Identifier dataSource){
         return dataSources.get(dataSource);
     }
 
-    public <T extends DataSourceInstance> T getDataSource(Identifier dataSource,Class<T> clazz){
+    public <T extends DataSourceInstance<? extends DataSource<T>>> T getDataSource(Identifier dataSource,Class<T> clazz){
         DataSourceHolder<?> holder = getDataSourceHolder(dataSource);
         return holder != null && clazz.isInstance(holder.getDataSourceInstance()) ? clazz.cast(holder.getDataSourceInstance()) : null;
+    }
+    public <T extends DataSourceInstance<? extends DataSource<T>>> T getDataSource(DataSource<T> dataSource){
+        DataSourceHolder<?> holder = getDataSourceHolder(dataSource);
+        return holder != null && dataSource.getInstanceClass().isInstance(holder.getDataSourceInstance()) ? dataSource.getInstanceClass().cast(holder.getDataSourceInstance()) : null;
     }
     public DataSourceHolder<?> removeDataSourceHolder(Identifier dataSource){
         if(!dataSources.containsKey(dataSource)) return null;
@@ -280,7 +298,7 @@ public class OriginSource implements StatProvider {
             Identifier identifier = ByteBufHelpers.decodeIdentifier(byteBuf);
             DataSourceHolder<?> holder = getDataSourceHolder(identifier);
             if (holder != null) holder.decode(buf,getRegistryAccess(),fullPatch);
-            else holder= DataSourceHolder.decode(identifier,buf,getRegistryAccess());
+            else holder= DataSourceHolder.decode(identifier,buf,getRegistryAccess(),fullPatch);
             return new Pair<>(identifier, holder);
         }).forEach(pair->dataSources.put(pair.getFirst(),pair.getSecond()));
 

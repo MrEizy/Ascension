@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceHolder;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.network.ByteBufHelpers;
 import net.zic.zenithlib.value_containers.typed.ValueContainer;
@@ -12,7 +13,7 @@ import java.util.Collection;
 import java.util.Map;
 
 public record OriginSourcePatch(
-        Map<Identifier, DataSourceHolder<?>> dirtyDataSources,
+        Map<Identifier, DataSourceHolder<? extends DataSourceInstance>> dirtyDataSources,
         Collection<Identifier> toRemoveDataSources,
         Collection<ValueContainer<Double>> dirtyStats){
 

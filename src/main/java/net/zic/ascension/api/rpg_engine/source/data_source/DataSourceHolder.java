@@ -10,7 +10,7 @@ import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
-public class DataSourceHolder<T extends DataSourceInstance>{
+public class DataSourceHolder<T extends DataSourceInstance<? extends DataSource<T>>>{
     private final DataSource<T> dataSource;
     private T dataSourceInstance;
 
@@ -89,11 +89,11 @@ public class DataSourceHolder<T extends DataSourceInstance>{
         Identifier id = ByteBufHelpers.decodeIdentifier(buf);
         dataSource.syncHandler(fullPatch).decode(dataSourceInstance,buf,access);
     }
-    public static DataSourceHolder<?> decode(Identifier identifier,ByteBuf buf,RegistryAccess access){
+    public static DataSourceHolder<?> decode(Identifier identifier,ByteBuf buf,RegistryAccess access,boolean fullPatch){
         DataSource<?> dataSource = getDataSource(identifier);
         if(dataSource == null) return null;
 
-        return dataSource.createHolder(buf,access);
+        return dataSource.createHolder(buf,access,fullPatch);
     }
     public static DataSourceHolder<?> load(ValueInput input,RegistryAccess access){
         DataSource<?> dataSource = getDataSource(Identifier.parse(input.getStringOr("source_id","none")));

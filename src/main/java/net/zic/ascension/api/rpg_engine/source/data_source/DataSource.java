@@ -8,7 +8,7 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
 import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 
-public interface DataSource<T extends DataSourceInstance>{
+public interface DataSource<T extends DataSourceInstance<? extends DataSource<T>>>{
 
 
 
@@ -16,6 +16,9 @@ public interface DataSource<T extends DataSourceInstance>{
 
     /**
      * called when the data source is added to an origin source
+     * be aware that in most scenarios your instance will be empty when added in a non-loading context,
+     * so you can use this knowledge to properly leverage methods like preFinishedLoading if you need to conditionally access
+     * other Data sources (this is only if you defined created holders to be empty)
      * @param source the origin source it is being added to
      * @param instance the instance for this data source
      */
@@ -45,6 +48,7 @@ public interface DataSource<T extends DataSourceInstance>{
     void removeFromEntity(LivingEntity entity, T instance);
 
     T newInstance(RegistryAccess access);
+    Class<T> getInstanceClass();
     SerializerHandler<T> serializerHandler();
     /**
      * returns a sync handler, allowing for different handlers depending on the type of syncing
@@ -56,8 +60,10 @@ public interface DataSource<T extends DataSourceInstance>{
     default DataSourceHolder<T> createHolder(RegistryAccess access){
         return new DataSourceHolder<>(this,newInstance(access));
     }
-    default DataSourceHolder<T> createHolder(ByteBuf buf, RegistryAccess access){
-        return new DataSourceHolder<>(this,syncHandler(false).decode(buf,access));
+    default DataSourceHolder<T> createHolder(ByteBuf buf, RegistryAccess access,boolean fullPatch){
+        T instance = newInstance(access);
+        syncHandler(fullPatch).decode(instance,buf,access);
+        return new DataSourceHolder<>(this,instance);
     }
     default DataSourceHolder<T> createHolder(ValueInput input, RegistryAccess access){
         return new DataSourceHolder<>(this, serializerHandler().read(input,access));

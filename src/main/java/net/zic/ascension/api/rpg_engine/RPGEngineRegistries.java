@@ -11,7 +11,7 @@ import net.zic.zenithlib.registry.RegistryHelper;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class RPGEngineRegistries {
-    public static final Registry<DataSource> DATA_SOURCE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"data_source");
+    public static final Registry<DataSource<?>> DATA_SOURCE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID,"data_source");
     @SubscribeEvent
     public static void registerRegistries(NewRegistryEvent event){
         event.register(DATA_SOURCE_REGISTRY);
