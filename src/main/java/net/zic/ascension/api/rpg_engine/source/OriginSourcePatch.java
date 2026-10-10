@@ -21,6 +21,8 @@ public record OriginSourcePatch(
     private static void encode(OriginSourcePatch patch,ByteBuf buf,RegistryAccess access,boolean fullPatch){
         buf.writeBoolean(fullPatch);
         ByteBufHelpers.encodeCollection(patch.dirtyDataSources().entrySet(), buf, (pair, byteBuf) -> {
+            buf.writeBoolean(pair.getValue().dataSource().syncHandler(fullPatch) != null);
+            if(pair.getValue().dataSource().syncHandler(fullPatch) == null) return;
             ByteBufHelpers.encodeIdentifier(pair.getKey(), byteBuf);
             pair.getValue().encode(byteBuf,access,fullPatch);
         });

@@ -69,11 +69,14 @@ public interface DataSource<T extends DataSourceInstance<? extends DataSource<T>
         return new DataSourceHolder<>(this,newInstance(access));
     }
     default DataSourceHolder<T> createHolder(ByteBuf buf, RegistryAccess access,boolean fullPatch){
+        if(syncHandler(fullPatch) == null) return createHolder(access);
+
         T instance = newInstance(access);
         syncHandler(fullPatch).decode(instance,buf,access);
         return new DataSourceHolder<>(this,instance);
     }
     default DataSourceHolder<T> createHolder(ValueInput input, RegistryAccess access){
-        return new DataSourceHolder<>(this, serializerHandler().read(input,access));
+
+        return serializerHandler() == null? createHolder(access): new DataSourceHolder<>(this, serializerHandler().read(input,access));
     }
 }

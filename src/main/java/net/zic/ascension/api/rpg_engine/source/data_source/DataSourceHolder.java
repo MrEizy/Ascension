@@ -10,24 +10,13 @@ import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
-public class DataSourceHolder<T extends DataSourceInstance<? extends DataSource<T>>>{
-    private final DataSource<T> dataSource;
-    private T dataSourceInstance;
-
-    public DataSourceHolder(DataSource<T> dataSource,T dataSourceInstance) {
-        this.dataSource = dataSource;
-    }
-
-
-    public DataSource<T> getDataSource(){
-        return dataSource;
-    }
-    public T getDataSourceInstance(){return dataSourceInstance;}
-    public Identifier getDataSourceKey(){
+public record DataSourceHolder<T extends DataSourceInstance<? extends DataSource<T>>>(DataSource<T> dataSource, T dataSourceInstance) {
+    public Identifier getDataSourceKey() {
         return RPGEngineRegistries.DATA_SOURCE_REGISTRY.getKey(dataSource);
 
     }
-    public static DataSource<?> getDataSource(Identifier key){
+
+    public static DataSource<?> getDataSource(Identifier key) {
         return RPGEngineRegistries.DATA_SOURCE_REGISTRY.containsKey(key) ? RPGEngineRegistries.DATA_SOURCE_REGISTRY.getValue(key) : null;
     }
 
@@ -38,66 +27,75 @@ public class DataSourceHolder<T extends DataSourceInstance<? extends DataSource<
 
     /**
      * called when the data source is added to an origin source
+     *
      * @param source the origin source it is being added to
      */
-    public void onAdded(OriginSource source){
-        dataSource.onAdded(source,dataSourceInstance);
+    public void onAdded(OriginSource source) {
+        dataSource.onAdded(source, dataSourceInstance);
     }
 
     /**
      * Called when the data source is removed from a source
+     *
      * @param source the source it is removed from
      */
-    public void onRemoved(OriginSource source){
-        dataSource.onRemoved(source,dataSourceInstance);
+    public void onRemoved(OriginSource source) {
+        dataSource.onRemoved(source, dataSourceInstance);
     }
 
     //called before finished loading, can safely be used for any finalized operations on other data sources
-    public void preFinishedLoading(OriginSource source){
-        dataSource.preFinishedLoading(source,dataSourceInstance);
+    public void preFinishedLoading(OriginSource source) {
+        dataSource.preFinishedLoading(source, dataSourceInstance);
     }
+
     /**
      * mainly used for cache clearing
      * Called when all data sources are finished being read
+     *
      * @param source the source it is loaded on
      */
-    public void finishedLoading(OriginSource source){
-        dataSource.finishedLoading(source,dataSourceInstance);
+    public void finishedLoading(OriginSource source) {
+        dataSource.finishedLoading(source, dataSourceInstance);
     }
 
     //called when the data source is added to the origin source, or a new entity holds the origin
-    public void applyToEntity(LivingEntity entity){
-        dataSource.applyToEntity(entity,dataSourceInstance);
+    public void applyToEntity(LivingEntity entity) {
+        dataSource.applyToEntity(entity, dataSourceInstance);
     }
 
     //called when either an entity is detached from an origin or the data source is removed from the origin
-    public void removeFromEntity(LivingEntity entity){
-        dataSource.removeFromEntity(entity,dataSourceInstance);
+    public void removeFromEntity(LivingEntity entity) {
+        dataSource.removeFromEntity(entity, dataSourceInstance);
     }
 
-    public void write(ValueOutput output, RegistryAccess access){
-        output.putString("source_id",getDataSourceKey().toString());
-        dataSource.serializerHandler().write(dataSourceInstance,output.child("data"),access);
-    };
+    public void write(ValueOutput output, RegistryAccess access) {
+        output.putString("source_id", getDataSourceKey().toString());
+        dataSource.serializerHandler().write(dataSourceInstance, output.child("data"), access);
+    }
 
-    public void encode(ByteBuf buf, RegistryAccess access, boolean fullPatch){
-        dataSource.syncHandler(fullPatch).encode(dataSourceInstance,buf,access);
+    ;
+
+    public void encode(ByteBuf buf, RegistryAccess access, boolean fullPatch) {
+        if(dataSource.syncHandler(fullPatch) == null) return;
+        dataSource.syncHandler(fullPatch).encode(dataSourceInstance, buf, access);
     }
 
 
-    public void decode(ByteBuf buf,RegistryAccess access,boolean fullPatch){
+    public void decode(ByteBuf buf, RegistryAccess access, boolean fullPatch) {
         Identifier id = ByteBufHelpers.decodeIdentifier(buf);
-        dataSource.syncHandler(fullPatch).decode(dataSourceInstance,buf,access);
+        dataSource.syncHandler(fullPatch).decode(dataSourceInstance, buf, access);
     }
-    public static DataSourceHolder<?> decode(Identifier identifier,ByteBuf buf,RegistryAccess access,boolean fullPatch){
-        DataSource<?> dataSource = getDataSource(identifier);
-        if(dataSource == null) return null;
 
-        return dataSource.createHolder(buf,access,fullPatch);
+    public static DataSourceHolder<?> decode(Identifier identifier, ByteBuf buf, RegistryAccess access, boolean fullPatch) {
+        DataSource<?> dataSource = getDataSource(identifier);
+        if (dataSource == null) return null;
+
+        return dataSource.createHolder(buf, access, fullPatch);
     }
-    public static DataSourceHolder<?> load(ValueInput input,RegistryAccess access){
-        DataSource<?> dataSource = getDataSource(Identifier.parse(input.getStringOr("source_id","none")));
-        if(dataSource ==null) return null;
-        return dataSource.createHolder(input.childOrEmpty("data"),access);
+
+    public static DataSourceHolder<?> load(ValueInput input, RegistryAccess access) {
+        DataSource<?> dataSource = getDataSource(Identifier.parse(input.getStringOr("source_id", "none")));
+        if (dataSource == null) return null;
+        return dataSource.createHolder(input.childOrEmpty("data"), access);
     }
 }

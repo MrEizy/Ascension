@@ -63,11 +63,11 @@ public class PathBonusDataSource implements DataSource<DataSourcePathBonusHolder
 
     @Override
     public SerializerHandler<DataSourcePathBonusHolder> serializerHandler() {
-        return SERIALIZER_HANDLER;
+        return null;
     }
 
     @Override
     public SyncHandler<DataSourcePathBonusHolder> syncHandler(boolean fullPatch) {
-        return SYNC_HANDLER;
+        return null;
     }
 }

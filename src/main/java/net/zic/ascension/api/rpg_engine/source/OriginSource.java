@@ -14,7 +14,6 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceHolder;
@@ -165,11 +164,11 @@ public class OriginSource implements StatProvider {
 
     public <T extends DataSourceInstance<? extends DataSource<T>>> T getDataSource(Identifier dataSource,Class<T> clazz){
         DataSourceHolder<?> holder = getDataSourceHolder(dataSource);
-        return holder != null && clazz.isInstance(holder.getDataSourceInstance()) ? clazz.cast(holder.getDataSourceInstance()) : null;
+        return holder != null && clazz.isInstance(holder.dataSourceInstance()) ? clazz.cast(holder.dataSourceInstance()) : null;
     }
     public <T extends DataSourceInstance<? extends DataSource<T>>> T getDataSource(DataSource<T> dataSource){
         DataSourceHolder<?> holder = getDataSourceHolder(dataSource);
-        return holder != null && dataSource.getInstanceClass().isInstance(holder.getDataSourceInstance()) ? dataSource.getInstanceClass().cast(holder.getDataSourceInstance()) : null;
+        return holder != null && dataSource.getInstanceClass().isInstance(holder.dataSourceInstance()) ? dataSource.getInstanceClass().cast(holder.dataSourceInstance()) : null;
     }
     public DataSourceHolder<?> removeDataSourceHolder(Identifier dataSource){
         if(!dataSources.containsKey(dataSource)) return null;
@@ -241,8 +240,7 @@ public class OriginSource implements StatProvider {
 
     }
 
-    private void writeDataSource(Identifier dataSource, DataSourceHolder<?> holder, ValueOutput output, RegistryAccess access){
-        if(holder == null) return;
+    private void writeDataSource(DataSourceHolder<?> holder, ValueOutput output, RegistryAccess access){
         holder.write(output,access);
     }
 
@@ -290,7 +288,8 @@ public class OriginSource implements StatProvider {
 
         ValueOutput.ValueOutputList outputList = output.childrenList("data_sources");
         for(Identifier dataSource : dataSources.keySet()){
-            writeDataSource(dataSource,dataSources.get(dataSource),outputList.addChild(),getRegistryAccess());
+            if(dataSources.get(dataSource).dataSource().serializerHandler() == null)continue;
+            writeDataSource(dataSources.get(dataSource),outputList.addChild(),getRegistryAccess());
         }
     }
 
@@ -299,12 +298,15 @@ public class OriginSource implements StatProvider {
     public void applyPatch(ByteBuf buf){
         boolean fullPatch = buf.readBoolean();
         ByteBufHelpers.decodeArray(buf, byteBuf -> {
+            if(!buf.readBoolean()) return null;
             Identifier identifier = ByteBufHelpers.decodeIdentifier(byteBuf);
             DataSourceHolder<?> holder = getDataSourceHolder(identifier);
             if (holder != null) holder.decode(buf,getRegistryAccess(),fullPatch);
             else holder= DataSourceHolder.decode(identifier,buf,getRegistryAccess(),fullPatch);
             return new Pair<>(identifier, holder);
-        }).forEach(pair->dataSources.put(pair.getFirst(),pair.getSecond()));
+        }).forEach(pair->{
+            if(pair != null) dataSources.put(pair.getFirst(),pair.getSecond());
+        });
 
         ByteBufHelpers.decodeArray(buf, ByteBufHelpers::decodeIdentifier).forEach(dataSources::remove);
         ByteBufHelpers.decodeArray(buf, (byteBuf)->ValueContainer.decode(
