@@ -103,7 +103,7 @@ public class AscensionOriginSourceHelper {
         return getOrCreate(source, CoreDataSources.TECHNIQUE_DATA_SOURCE.get());
     }
     protected static DataSourcePathBonusHolder getPathBonusHolder(OriginSource source){
-        return (DataSourcePathBonusHolder) getOrCreate(source, CoreDataSources.PATH_BONUS_HOLDER_PROVIDER.get());
+        return getOrCreate(source, CoreDataSources.PATH_BONUS_DATA_SOURCE.get());
     }
 
     //TODO add the methods that dont take in data and create a fresh instance instead
@@ -696,7 +696,7 @@ public class AscensionOriginSourceHelper {
     public static void markPathBonusHolderDirty(OriginSource source){
         String id = "modified_path_bonus"+ UUID.randomUUID();
         source.startProcess(id);
-        source.markDataSourceDirty(CoreDataSources.PATH_BONUS_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.PATH_BONUS_DATA_SOURCE.getId());
         resolveProcess(source,id);
     }
     //TODO update to utilize the new data attachment

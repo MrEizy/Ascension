@@ -24,7 +24,7 @@ public interface SyncHandler<T>{
         }
     }
     //does nothing. used for things that do not sync
-    record UnitSyncHandler<T>() implements SyncHandler<T>{
+    final class UnitSyncHandler<T> implements SyncHandler<T>{
 
 
         @Override

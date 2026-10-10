@@ -19,4 +19,16 @@ public interface SerializerHandler<T>{
         @Override
         public void write(T writable, ValueOutput output, RegistryAccess access) {output.store("codec",codec,writable);}
     }
+    final class UnitSerializerHandler<T> implements SerializerHandler<T>{
+
+        @Override
+        public T read(ValueInput input, RegistryAccess access) {
+            return null;
+        }
+
+        @Override
+        public void write(T writable, ValueOutput output, RegistryAccess access) {
+
+        }
+    }
 }

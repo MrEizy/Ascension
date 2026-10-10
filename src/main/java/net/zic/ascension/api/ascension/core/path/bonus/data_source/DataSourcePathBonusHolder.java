@@ -5,21 +5,17 @@ import net.zic.ascension.api.ascension.core.CoreDataSources;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
-import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.zenithlib.util.Processable;
 import net.zic.zenithlib.value_containers.typed.Modifier;
 import net.zic.zenithlib.value_containers.typed.ValueContainer;
 
-import java.util.*;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
-//by istelsf the processable wont do anything, only when accessed through
-//AscensionOriginSourceHelper does it properly update the path bonus
-//TODO for now this will not sync, primarily because it is not "needed" on the client(it is all linked to entity bonus holder)
-public class DataSourcePathBonusHolder extends Processable implements DataSourceInstance, PathBonusProvider {
-
+public class DataSourcePathBonusHolder extends Processable implements DataSourceInstance<PathBonusDataSource>, PathBonusProvider {
     private final PathBonusHolder internalHolder = new PathBonusHolder();
+
 
     public void addFlatModifier(Identifier category, Identifier path, Modifier<Double> modifier){
         internalHolder.addFlatModifier(category,path,modifier);
@@ -37,10 +33,9 @@ public class DataSourcePathBonusHolder extends Processable implements DataSource
     }
 
     @Override
-    public DataSource getDataSource() {
-        return CoreDataSources.PATH_BONUS_HOLDER_PROVIDER.get();
+    public PathBonusDataSource getDataSource() {
+        return CoreDataSources.PATH_BONUS_DATA_SOURCE.get();
     }
-
     @Override
     public ValueContainer<Double> getPathBonusContainer(Identifier category, Identifier path) {
         return internalHolder.getContainer(category,path);

@@ -5,8 +5,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineDataSource;
-import net.zic.ascension.api.ascension.core.path.bonus.data_source.PathBonusHolderProvider;
 import net.zic.ascension.api.ascension.core.path.PathDataSource;
+import net.zic.ascension.api.ascension.core.path.bonus.data_source.PathBonusDataSource;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueDataSource;
 import net.zic.ascension.api.ascension.core.skill.data_source.SkillDataSource;
 import net.zic.ascension.api.ascension.core.technique.TechniqueDataSource;
@@ -38,9 +38,9 @@ public class CoreDataSources {
             "skill_data_source",
             SkillDataSource::new
     );
-    public static final DeferredHolder<DataSource<?>,DataSource> PATH_BONUS_HOLDER_PROVIDER = DATA_SOURCES.register(
+    public static final DeferredHolder<DataSource<?>, PathBonusDataSource> PATH_BONUS_DATA_SOURCE = DATA_SOURCES.register(
             "path_bonus_data_source",
-            PathBonusHolderProvider::new
+            PathBonusDataSource::new
     );
     public static void register(IEventBus eventBus){
 
