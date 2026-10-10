@@ -9,6 +9,7 @@ import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class BloodlineHolder implements DataSourceInstance<BloodlineDataSource> {
 
@@ -47,6 +48,20 @@ public class BloodlineHolder implements DataSourceInstance<BloodlineDataSource> 
 
     public void markBloodlineDirty(Identifier bloodline){
         if(hasBloodline(bloodline)) dirtyBloodlines.add(bloodline);
+    }
+
+
+    public Map<Identifier,BloodlineData> getRawData(){
+        return Map.copyOf(bloodlines);
+    }
+    public void setRawData(Map<Identifier,BloodlineData> rawData){
+        bloodlines.clear();
+        for(Map.Entry<Identifier,BloodlineData> entry : rawData.entrySet()) addBloodline(entry.getKey(),entry.getValue());
+    }
+    public void clearContainer(){
+        bloodlines.clear();;
+        dirtyBloodlines.clear();
+        toRemoveBloodlines.clear();
     }
     @Override
     public BloodlineDataSource getDataSource() {
