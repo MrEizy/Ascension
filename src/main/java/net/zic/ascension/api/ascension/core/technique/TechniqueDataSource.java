@@ -1,33 +1,29 @@
 package net.zic.ascension.api.ascension.core.technique;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
-import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 
 import java.util.Map;
 
-public class TechniqueHolderProvider implements DataSource {
+public class TechniqueDataSource implements DataSource<TechniqueHolder> {
+    public static final SerializerHandler<TechniqueHolder> SERIALIZER_HANDLER = new TechniqueSerializerHandler();
+    public static final SyncHandler<TechniqueHolder> FULL_PATCH_SYNC_HANDLER = new TechniqueSyncHandlers.FullPatchSyncHandler();
+    public static final SyncHandler<TechniqueHolder> PARTIAL_PATCH_SYNC_HANDLER = new TechniqueSyncHandlers.PartialPatchSyncHandler();
 
     @Override
     public LoadPriority loadPriority() {
         return LoadPriority.HIGH;
     }
 
-    protected TechniqueHolder getHolder(DataSourceInstance instance) {
-        return (TechniqueHolder) instance;
-    }
-
     @Override
-    public void onAdded(OriginSource source, DataSourceInstance instance) {
-        TechniqueHolder holder = getHolder(instance);
+    public void onAdded(OriginSource source, TechniqueHolder holder) {
         Map<Identifier, TechniqueData> techniques = holder.getRawData();
 
         holder.clearContainer();
@@ -37,8 +33,7 @@ public class TechniqueHolderProvider implements DataSource {
     }
 
     @Override
-    public void onRemoved(OriginSource source, DataSourceInstance instance) {
-        TechniqueHolder holder = getHolder(instance);
+    public void onRemoved(OriginSource source, TechniqueHolder holder) {
         Map<Identifier, TechniqueData> techniques = holder.getRawData();
 
         for (Identifier techniqueId : techniques.keySet()) {
@@ -48,12 +43,17 @@ public class TechniqueHolderProvider implements DataSource {
     }
 
     @Override
-    public void finishedLoading(OriginSource source, DataSourceInstance instance) {
+    public void preFinishedLoading(OriginSource source, TechniqueHolder holder) {
+
     }
 
     @Override
-    public void applyToEntity(LivingEntity entity, DataSourceInstance instance) {
-        TechniqueHolder holder = getHolder(instance);
+    public void finishedLoading(OriginSource source, TechniqueHolder holder) {
+
+    }
+
+    @Override
+    public void applyToEntity(LivingEntity entity, TechniqueHolder holder) {
         for (Identifier techniqueId : holder.getTechniques()) {
             Technique technique = holder.getTechnique(techniqueId, entity.level().registryAccess());
             if (technique != null) {
@@ -63,8 +63,7 @@ public class TechniqueHolderProvider implements DataSource {
     }
 
     @Override
-    public void removeFromEntity(LivingEntity entity, DataSourceInstance instance) {
-        TechniqueHolder holder = getHolder(instance);
+    public void removeFromEntity(LivingEntity entity, TechniqueHolder holder) {
         for (Identifier techniqueId : holder.getTechniques()) {
             Technique technique = holder.getTechnique(techniqueId, entity.level().registryAccess());
             if (technique != null) {
@@ -74,31 +73,22 @@ public class TechniqueHolderProvider implements DataSource {
     }
 
     @Override
-    public DataSourceInstance newInstance(RegistryAccess access) {
+    public TechniqueHolder newInstance(RegistryAccess access) {
         return new TechniqueHolder();
     }
 
     @Override
-    public DataSourceInstance loadInstance(ValueInput input, RegistryAccess access) {
-        TechniqueHolder holder = new TechniqueHolder();
-        holder.read(input, access);
-        return holder;
+    public Class<TechniqueHolder> getInstanceClass() {
+        return TechniqueHolder.class;
     }
 
     @Override
-    public DataSourceInstance loadInstance(DataSourceInstance previous, ByteBuf buffer, RegistryAccess access) {
-        TechniqueHolder holder = previous == null ? new TechniqueHolder() : getHolder(previous);
-        holder.decode(buffer, access);
-        return holder;
+    public SerializerHandler<TechniqueHolder> serializerHandler() {
+        return SERIALIZER_HANDLER;
     }
 
     @Override
-    public void writeInstance(DataSourceInstance instance, ValueOutput output, RegistryAccess access) {
-        getHolder(instance).write(output, access);
-    }
-
-    @Override
-    public void encodeInstance(DataSourceInstance instance, ByteBuf buffer, RegistryAccess access, boolean fullPatch) {
-        getHolder(instance).encode(buffer, access, fullPatch);
+    public SyncHandler<TechniqueHolder> syncHandler(boolean fullPatch) {
+        return fullPatch ? FULL_PATCH_SYNC_HANDLER : PARTIAL_PATCH_SYNC_HANDLER;
     }
 }
