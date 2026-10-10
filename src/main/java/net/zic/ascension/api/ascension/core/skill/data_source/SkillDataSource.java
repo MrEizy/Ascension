@@ -1,32 +1,31 @@
-package net.zic.ascension.api.ascension.core.skill;
+package net.zic.ascension.api.ascension.core.skill.data_source;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
-import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 
 import java.util.HashSet;
 import java.util.Map;
 
-public class SkillHolderProvider implements DataSource {
+public class SkillDataSource implements DataSource<SkillHolder> {
+    public static final SerializerHandler<SkillHolder> SERIALIZER_HANDLER = new SkillSerializerHandler();
+    public static final SyncHandler<SkillHolder> FULL_PATCH_SYNC_HANDLER = new SkillSyncHandlers.FullPatchSyncHandler();
+    public static final SyncHandler<SkillHolder> PARTIAL_PATCH_SYNC_HANDLER = new SkillSyncHandlers.PartialPatchSyncHandler();
+
     @Override
     public LoadPriority loadPriority() {
         return LoadPriority.NO_LOAD;
     }
-    protected SkillHolder getHolder(DataSourceInstance instance){
-        return (SkillHolder) instance;
-        //we want to throw an error for now
-    }
+
     @Override
-    public void onAdded(OriginSource source, DataSourceInstance instance) {
-        SkillHolder holder = getHolder(instance);
+    public void onAdded(OriginSource source, SkillHolder holder) {
         Map<Identifier, SkillData> rawSkillData = holder.getRawSkillData();
         Map<Identifier, HashSet<Identifier>> rawOwners = holder.getRawSkillOwnerData();
 
@@ -39,8 +38,7 @@ public class SkillHolderProvider implements DataSource {
     }
 
     @Override
-    public void onRemoved(OriginSource source, DataSourceInstance instance) {
-        SkillHolder holder = getHolder(instance);
+    public void onRemoved(OriginSource source, SkillHolder holder) {
         Map<Identifier, SkillData> rawSkillData = holder.getRawSkillData();
         Map<Identifier, HashSet<Identifier>> rawOwners = holder.getRawSkillOwnerData();
 
@@ -54,54 +52,46 @@ public class SkillHolderProvider implements DataSource {
     }
 
     @Override
-    public void finishedLoading(OriginSource source, DataSourceInstance instance) {
-        getHolder(instance).clearCache();
+    public void preFinishedLoading(OriginSource source, SkillHolder holder) {
+
     }
 
     @Override
-    public void applyToEntity(LivingEntity entity, DataSourceInstance instance) {
-        SkillHolder holder = getHolder(instance);
+    public void finishedLoading(OriginSource source, SkillHolder holder) {
+        holder.clearCache();
+    }
+
+    @Override
+    public void applyToEntity(LivingEntity entity, SkillHolder holder) {
         for(Identifier skill : holder.getSkills()){
             holder.getSkill(skill,entity.level().registryAccess()).applyToEntity(entity,holder.getSkillData(skill));
         }
     }
 
     @Override
-    public void removeFromEntity(LivingEntity entity, DataSourceInstance instance) {
-        SkillHolder holder = getHolder(instance);
+    public void removeFromEntity(LivingEntity entity, SkillHolder holder) {
         for(Identifier skill : holder.getSkills()){
             holder.getSkill(skill,entity.level().registryAccess()).removeFromEntity(entity,holder.getSkillData(skill));
         }
     }
 
     @Override
-    public DataSourceInstance newInstance(RegistryAccess access) {
+    public SkillHolder newInstance(RegistryAccess access) {
         return new SkillHolder();
     }
 
     @Override
-    public DataSourceInstance loadInstance(ValueInput input, RegistryAccess access) {
-        SkillHolder holder = new SkillHolder();
-        holder.read(input,access);
-        return holder;
+    public Class<SkillHolder> getInstanceClass() {
+        return SkillHolder.class;
     }
 
     @Override
-    public DataSourceInstance loadInstance(DataSourceInstance previous,ByteBuf buf, RegistryAccess access) {
-        SkillHolder holder;
-        if(previous==null) holder = new SkillHolder();
-        else holder = getHolder(previous);
-        holder.decode(buf,access);
-        return holder;
+    public SerializerHandler<SkillHolder> serializerHandler() {
+        return SERIALIZER_HANDLER;
     }
 
     @Override
-    public void writeInstance(DataSourceInstance instance, ValueOutput output, RegistryAccess access) {
-        getHolder(instance).write(output,access);
-    }
-
-    @Override
-    public void encodeInstance(DataSourceInstance instance, ByteBuf buf, RegistryAccess access,boolean fullPatch) {
-        getHolder(instance).encode(buf,access,fullPatch);
+    public SyncHandler<SkillHolder> syncHandler(boolean fullPatch) {
+        return fullPatch ? FULL_PATCH_SYNC_HANDLER : PARTIAL_PATCH_SYNC_HANDLER;
     }
 }

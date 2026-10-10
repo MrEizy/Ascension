@@ -5,11 +5,11 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineDataSource;
-import net.zic.ascension.api.ascension.core.path.PathHolderProvider;
 import net.zic.ascension.api.ascension.core.path.bonus.data_source.PathBonusHolderProvider;
+import net.zic.ascension.api.ascension.core.path.PathDataSource;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueDataSource;
-import net.zic.ascension.api.ascension.core.skill.SkillHolderProvider;
-import net.zic.ascension.api.ascension.core.technique.TechniqueHolderProvider;
+import net.zic.ascension.api.ascension.core.skill.data_source.SkillDataSource;
+import net.zic.ascension.api.ascension.core.technique.TechniqueDataSource;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 
@@ -23,23 +23,23 @@ public class CoreDataSources {
             PhysiqueDataSource::new
     );
     public static final DeferredHolder<DataSource<?>,BloodlineDataSource> BLOODLINE_DATA_SOURCE = DATA_SOURCES.register(
-            "bloodline_holder_provider",
+            "bloodline_data_source",
             BloodlineDataSource::new
     );
-    public static final DeferredHolder<DataSource,DataSource> TECHNIQUE_HOLDER_PROVIDER = DATA_SOURCES.register(
-            "technique_holder_provider",
-            TechniqueHolderProvider::new
+    public static final DeferredHolder<DataSource<?>, TechniqueDataSource> TECHNIQUE_DATA_SOURCE = DATA_SOURCES.register(
+            "technique_data_source",
+            TechniqueDataSource::new
     );
-    public static final DeferredHolder<DataSource,DataSource> PATH_HOLDER_PROVIDER = DATA_SOURCES.register(
-            "path_holder_provider",
-            PathHolderProvider::new
+    public static final DeferredHolder<DataSource<?>, PathDataSource> PATH_DATA_SOURCE = DATA_SOURCES.register(
+            "path_data_source",
+            PathDataSource::new
     );
-    public static final DeferredHolder<DataSource,DataSource> SKILL_HOLDER_PROVIDER = DATA_SOURCES.register(
-            "skill_holder_provider",
-            SkillHolderProvider::new
+    public static final DeferredHolder<DataSource<?>, SkillDataSource> SKILL_DATA_SOURCE = DATA_SOURCES.register(
+            "skill_data_source",
+            SkillDataSource::new
     );
-    public static final DeferredHolder<DataSource,DataSource> PATH_BONUS_HOLDER_PROVIDER = DATA_SOURCES.register(
-            "path_bonus_holder_provider",
+    public static final DeferredHolder<DataSource<?>,DataSource> PATH_BONUS_HOLDER_PROVIDER = DATA_SOURCES.register(
+            "path_bonus_data_source",
             PathBonusHolderProvider::new
     );
     public static void register(IEventBus eventBus){

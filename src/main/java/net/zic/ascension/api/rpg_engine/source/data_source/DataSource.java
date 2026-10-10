@@ -7,7 +7,15 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
 import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
-
+/*
+    TODO:
+        I may be able to simplify this process even further, instead of requiring a data source the DataSource instance IS the data source.
+        then when registering the data source they do so using a constructor, passing data like load prio and anynomus classes for methods onAdded etc
+        There would still be an underlying registry but instead of creating a data source that provides instances, they define a type that provides a data source
+        (AKA LIKE FULLY WHAT ATTACHMENTS ARE DOING IM JUST ERMAKING ECS HAHAHAHAHAHAHAHAHA i swear im not crazy)
+        the main benifit is it further abstracts some of the details away from the user.
+        I dont even need to change anything right now could just make a SimpleDataSource class that comes with a constructor
+ */
 public interface DataSource<T extends DataSourceInstance<? extends DataSource<T>>>{
 
 

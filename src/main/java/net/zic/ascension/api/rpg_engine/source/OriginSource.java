@@ -32,8 +32,12 @@ import net.zic.zenithlib.value_containers.typed.ValueContainer;
 import java.util.*;
 import java.util.stream.Collectors;
 
-//TODO ensure that when adding new Data sources they properly have add to entity called
-//TODO then do the same for stuff like physique bloodline etc
+/*TODO Origin source ideas
+    this may be further modified in the future to support a dual source system.
+    The idea behind an origins source is you might want to have data that is shared between entities.
+    stuff like cultivation should affect both the body and the soul as long as they are linked (the origin source being the link)
+
+ */
 public class OriginSource implements StatProvider {
     private final HashMap<Identifier, DataSourceHolder<?>> dataSources = new HashMap<>();
 
