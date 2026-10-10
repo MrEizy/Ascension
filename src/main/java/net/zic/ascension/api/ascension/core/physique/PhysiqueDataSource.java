@@ -18,6 +18,66 @@ import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
 
 public class PhysiqueDataSource implements DataSource<PhysiqueHolder> {
+    //TODO move these over to their own class
+    public static final SyncHandler<PhysiqueHolder> SYNC_HANDLER = new SyncHandler<>() {
+        @Override
+        public void decode(PhysiqueHolder existingEncodable, ByteBuf buf, RegistryAccess access) {
+            if(!buf.readBoolean()){
+                existingEncodable.physique = null;
+                existingEncodable.data = null;
+                return;
+            }
+            existingEncodable.physique = ByteBufHelpers.decodeIdentifier(buf);
+            existingEncodable.data = existingEncodable.getPhysique(access).loadData(buf,access);
+        }
+
+        @Override
+        public void encode(PhysiqueHolder encodable, ByteBuf buf, RegistryAccess access) {
+            buf.writeBoolean(encodable.physique != null);
+            if(encodable.physique == null) return;
+
+            ByteBufHelpers.encodeIdentifier(encodable.physique,buf);
+            encodable.data.encode(buf,access);
+        }
+    };
+    public static final SerializerHandler<PhysiqueHolder> SERIALIZER_HANDLER = new SerializerHandler<PhysiqueHolder>() {
+        @Override
+        public PhysiqueHolder read(ValueInput input, RegistryAccess access) {
+            PhysiqueHolder holder = new PhysiqueHolder();
+            try{
+                Identifier id = NbtHelpers.readIdentifier(input,"physique");
+                Physique physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,id,access);
+                if(physique == null) throw new Exception("physique "+id+" does not exist");
+
+                PhysiqueData physiqueData = input.child("data")
+                        .map(valueInput -> physique.loadData(valueInput,access))
+                        .orElse(physique.newData(access));
+
+                holder.setPhysique(id,physiqueData);
+
+                AscensionCraft.LOGGER.info("Loaded physique {}",id);
+            }catch (Exception e){
+                AscensionCraft.LOGGER.info("Error loading physique");
+            }
+            return holder;
+        }
+
+        @Override
+        public void write(PhysiqueHolder writable, ValueOutput output, RegistryAccess access) {
+            if(writable.getPhysique() == null || writable.getData() == null) return;
+            try{
+
+                AscensionCraft.LOGGER.debug("Writing physique {}",writable.getPhysique());
+                NbtHelpers.writeIdentifier(output,"physique",writable.getPhysique());
+
+                writable.getData().write(output.child("data"),access);
+
+            }catch (Exception e){
+                AscensionCraft.LOGGER.warn("Error writing physique {}",writable.getPhysique());
+                AscensionCraft.LOGGER.warn("stacktrace: ",e);
+            }
+        }
+    };
     @Override
     public LoadPriority loadPriority() {
         return LoadPriority.HIGHEST;
@@ -96,68 +156,11 @@ public class PhysiqueDataSource implements DataSource<PhysiqueHolder> {
 
     @Override
     public SerializerHandler<PhysiqueHolder> serializerHandler() {
-        return new SerializerHandler<PhysiqueHolder>() {
-            @Override
-            public PhysiqueHolder read(ValueInput input, RegistryAccess access) {
-                PhysiqueHolder holder = new PhysiqueHolder();
-                try{
-                    Identifier id = NbtHelpers.readIdentifier(input,"physique");
-                    Physique physique = CoreRegistries.PHYSIQUE_REGISTRY.get(access).getValue(id);
-                    if(physique == null) throw new Exception("physique "+id+" does not exist");
-
-                    PhysiqueData physiqueData = input.child("data")
-                            .map(valueInput -> physique.loadData(valueInput,access))
-                            .orElse(physique.newData(access));
-
-                    holder.setPhysique(id,physiqueData);
-
-                    AscensionCraft.LOGGER.info("Loaded physique {}",id);
-                }catch (Exception e){
-                    AscensionCraft.LOGGER.info("Error loading physique");
-                }
-                return holder;
-            }
-
-            @Override
-            public void write(PhysiqueHolder writable, ValueOutput output, RegistryAccess access) {
-                if(writable.getPhysique() == null || writable.getData() == null) return;
-                try{
-
-                    AscensionCraft.LOGGER.debug("Writing physique {}",writable.getPhysique());
-                    NbtHelpers.writeIdentifier(output,"physique",writable.getPhysique());
-
-                    writable.getData().write(output.child("data"),access);
-
-                }catch (Exception e){
-                    AscensionCraft.LOGGER.warn("Error writing physique {}",writable.getPhysique());
-                    AscensionCraft.LOGGER.warn("stacktrace: ",e);
-                }
-            }
-        };
+        return SERIALIZER_HANDLER;
     }
 
     @Override
     public SyncHandler<PhysiqueHolder> syncHandler(boolean fullPatch) {
-        return new SyncHandler<>() {
-            @Override
-            public void decode(PhysiqueHolder existingEncodable, ByteBuf buf, RegistryAccess access) {
-                if(!buf.readBoolean()){
-                    existingEncodable.physique = null;
-                    existingEncodable.data = null;
-                    return;
-                }
-                existingEncodable.physique = ByteBufHelpers.decodeIdentifier(buf);
-                existingEncodable.data = existingEncodable.getPhysique(access).loadData(buf,access);
-            }
-
-            @Override
-            public void encode(PhysiqueHolder encodable, ByteBuf buf, RegistryAccess access) {
-                buf.writeBoolean(encodable.physique != null);
-                if(encodable.physique == null) return;
-
-                ByteBufHelpers.encodeIdentifier(encodable.physique,buf);
-                encodable.data.encode(buf,access);
-            }
-        };
+        return SYNC_HANDLER;
     }
 }

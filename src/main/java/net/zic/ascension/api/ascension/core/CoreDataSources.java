@@ -4,7 +4,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolderProvider;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineDataSource;
 import net.zic.ascension.api.ascension.core.path.PathHolderProvider;
 import net.zic.ascension.api.ascension.core.path.bonus.data_source.PathBonusHolderProvider;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueDataSource;
@@ -22,9 +22,9 @@ public class CoreDataSources {
             "physique_data_source",
             PhysiqueDataSource::new
     );
-    public static final DeferredHolder<DataSource,DataSource> BLOODLINE_HOLDER_PROVIDER = DATA_SOURCES.register(
+    public static final DeferredHolder<DataSource<?>,BloodlineDataSource> BLOODLINE_DATA_SOURCE = DATA_SOURCES.register(
             "bloodline_holder_provider",
-            BloodlineHolderProvider::new
+            BloodlineDataSource::new
     );
     public static final DeferredHolder<DataSource,DataSource> TECHNIQUE_HOLDER_PROVIDER = DATA_SOURCES.register(
             "technique_holder_provider",

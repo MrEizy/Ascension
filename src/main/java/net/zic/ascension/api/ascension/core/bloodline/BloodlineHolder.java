@@ -1,27 +1,21 @@
 package net.zic.ascension.api.ascension.core.bloodline;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreDataSources;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
-import net.zic.zenithlib.nbt.NbtHelpers;
-import net.zic.zenithlib.network.ByteBufHelpers;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 
-//TODO add logic to handle a max number of bloodlines
-public class BloodlineHolder implements DataSourceInstance {
+public class BloodlineHolder implements DataSourceInstance<BloodlineDataSource> {
 
-    private final HashMap<Identifier,BloodlineData> bloodlines = new HashMap<>();
+    final HashMap<Identifier, BloodlineData> bloodlines = new HashMap<>();
 
-    private final HashSet<Identifier> dirtyBloodlines = new HashSet<>();
-    private final HashSet<Identifier> toRemoveBloodlines = new HashSet<>();
+    final HashSet<Identifier> dirtyBloodlines = new HashSet<>();
+    final HashSet<Identifier> toRemoveBloodlines = new HashSet<>();
     public boolean addBloodline(Identifier bloodline,BloodlineData data){
         if(hasBloodline(bloodline)) return false;
         bloodlines.put(bloodline,data);
@@ -44,7 +38,7 @@ public class BloodlineHolder implements DataSourceInstance {
     public BloodlineData getBloodline(Identifier bloodline){
         return bloodlines.get(bloodline);
     }
-    public Bloodline getBloodline(Identifier bloodline,RegistryAccess access){
+    public Bloodline getBloodline(Identifier bloodline, RegistryAccess access){
         return CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodline,access);
     }
     public Collection<Identifier> getBloodlines(){
@@ -55,121 +49,8 @@ public class BloodlineHolder implements DataSourceInstance {
         if(hasBloodline(bloodline)) dirtyBloodlines.add(bloodline);
     }
     @Override
-    public DataSource getDataSource() {
-        return CoreDataSources.BLOODLINE_HOLDER_PROVIDER.get();
+    public BloodlineDataSource getDataSource() {
+        return CoreDataSources.BLOODLINE_DATA_SOURCE.get();
     }
 
-    public Map<Identifier,BloodlineData> getRawData(){
-        return Map.copyOf(bloodlines);
-    }
-    public void setRawData(Map<Identifier,BloodlineData> rawData){
-        bloodlines.clear();
-        for(Map.Entry<Identifier,BloodlineData> entry : rawData.entrySet()) addBloodline(entry.getKey(),entry.getValue());
-    }
-    public void clearContainer(){
-        bloodlines.clear();;
-        dirtyBloodlines.clear();
-        toRemoveBloodlines.clear();
-    }
-
-    public void write(ValueOutput output, RegistryAccess access){
-
-        ValueOutput.ValueOutputList bloodlineOutputList = output.childrenList("bloodlines");
-        for(Identifier bloodline : getBloodlines()){
-            AscensionCraft.LOGGER.debug("Writing Bloodline {}",bloodline);
-            try{
-                ValueOutput bloodlineOutput = bloodlineOutputList.addChild();
-                NbtHelpers.writeIdentifier(bloodlineOutput,"id",bloodline);
-                ValueOutput dataOutput = bloodlineOutput.child("data");
-                getBloodline(bloodline).write(dataOutput,access);
-            } catch (Exception e){
-                AscensionCraft.LOGGER.error("Error writing bloodline {}",bloodline);
-                AscensionCraft.LOGGER.error("stacktrace: ",e);
-            }
-
-        }
-
-    }
-    public void read(ValueInput input, RegistryAccess access){
-        try {
-            ValueInput.ValueInputList bloodlinesInput = input.childrenListOrEmpty("bloodlines");
-
-            for(ValueInput bloodlineInput : bloodlinesInput.stream().toList()){
-                try {
-                    Identifier id = NbtHelpers.readIdentifier(bloodlineInput,"id");
-                    //AscensionCraft.LOGGER.debug("Reading Bloodline {}",id);
-
-                    Optional<ValueInput> data = bloodlineInput.child("data");
-                    Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,id,access);
-
-                    if(data.isEmpty()) throw new Exception("no bloodline data present for bloodline "+id);
-                    else addBloodline(id,bloodline.loadData(data.get(),access));
-                } catch (Exception e){
-                    AscensionCraft.LOGGER.error("error loading bloodline");
-                    AscensionCraft.LOGGER.error("stacktrace : ",e);
-                }
-
-            }
-        } catch (Exception e){
-            AscensionCraft.LOGGER.error("Error loading all bloodlines");
-            AscensionCraft.LOGGER.error("stacktrace : ",e);
-        }
-
-    }
-
-    public void encode(ByteBuf buf, RegistryAccess access,boolean fullPatch){
-
-        buf.writeBoolean(fullPatch);
-        if(fullPatch) encodeFullPatch(buf,access);
-        else encodePartialPatch(buf,access);
-
-        dirtyBloodlines.clear();
-        toRemoveBloodlines.clear();
-    }
-    protected void encodeFullPatch(ByteBuf buf,RegistryAccess registryAccess){
-        buf.writeInt(bloodlines.size());
-        for(Identifier bloodline : bloodlines.keySet()){
-            ByteBufHelpers.encodeIdentifier(bloodline,buf);
-            getBloodline(bloodline).encode(buf,registryAccess);
-        }
-    }
-    protected void encodePartialPatch(ByteBuf buf,RegistryAccess registryAccess){
-        buf.writeInt(dirtyBloodlines.size());
-        for(Identifier dirtyBloodline : dirtyBloodlines){
-            ByteBufHelpers.encodeIdentifier(dirtyBloodline,buf);
-            getBloodline(dirtyBloodline).encode(buf,registryAccess);
-        }
-        ByteBufHelpers.encodeCollection(toRemoveBloodlines,buf,ByteBufHelpers::encodeIdentifier);
-
-    }
-
-    public void decode(ByteBuf buf,RegistryAccess access){
-        if(buf.readBoolean()) decodeFullPatch(buf,access);
-        else decodePartialPatch(buf,access);
-
-        dirtyBloodlines.clear();
-        toRemoveBloodlines.clear();
-    }
-    protected void decodeFullPatch(ByteBuf buf,RegistryAccess access){
-        bloodlines.clear();
-        int size = buf.readInt();
-        for(int i = 0;i<size;i++){
-            Identifier bloodlineId = ByteBufHelpers.decodeIdentifier(buf);
-            Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodlineId,access);
-            BloodlineData data = bloodline.loadData(buf);
-            bloodlines.put(bloodlineId,data);
-        }
-    }
-    protected void decodePartialPatch(ByteBuf buf,RegistryAccess access){
-        int size = buf.readInt();
-        for(int i = 0;i<size;i++){
-            Identifier bloodlineId = ByteBufHelpers.decodeIdentifier(buf);
-            Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodlineId,access);
-            BloodlineData data = bloodline.loadData(buf);
-            bloodlines.put(bloodlineId,data);
-        }
-        ByteBufHelpers.decodeArray(buf,ByteBufHelpers::decodeIdentifier).forEach(this::removeBloodline);
-
-
-    }
 }

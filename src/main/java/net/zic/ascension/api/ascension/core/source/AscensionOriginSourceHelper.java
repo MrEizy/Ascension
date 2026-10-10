@@ -74,6 +74,14 @@ public class AscensionOriginSourceHelper {
     }
 
     //──Holder Access────────────────────────────────────────────────────────
+
+    /**
+     * returns a DataSource instance, if one is not present creates a new one
+     * @param source the source we are trying to get the instance from
+     * @param dataSource the data source we want the instance of
+     * @return the instance, new or old
+     * @param <T> the data source instance type, which is recursively bound
+     */
     protected static <T extends DataSourceInstance<? extends DataSource<T>>> T getOrCreate(OriginSource source,DataSource<T> dataSource){
         source.addDataSource(dataSource);//if a holder does not exist creates one
         return source.getDataSource(dataSource);
@@ -81,31 +89,22 @@ public class AscensionOriginSourceHelper {
     protected static PhysiqueHolder getPhysiqueHolder(OriginSource source){
         return getOrCreate(source,CoreDataSources.PHYSIQUE_DATA_SOURCE.get());
     }
-    /**
-     * attempts to get a DataSource instance, creating a new one if it is not present
-     * @param source the source we want to get the instance of
-     * @return either an existing instance or a fresh one
-     */
-    protected static DataSourceInstance getOrCreate(OriginSource source,Identifier dataSource){
-        if(source.hasDataSource(dataSource)) return source.getDataSource(dataSource);
-        DataSourceInstance instance = RPGEngineRegistries.DATA_SOURCE_REGISTRY.getValue(dataSource).newInstance(source.getRegistryAccess());
-        return source.addDataSource(dataSource,instance)? instance:null;
-    }
+
 
     protected static BloodlineHolder getBloodlineHolder(OriginSource source){
-        return (BloodlineHolder)  getOrCreate(source, CoreDataSources.BLOODLINE_HOLDER_PROVIDER.getId());
+        return getOrCreate(source,CoreDataSources.BLOODLINE_DATA_SOURCE.get());
     }
     protected static PathHolder getPathHolder(OriginSource source){
-        return (PathHolder) getOrCreate(source, CoreDataSources.PATH_HOLDER_PROVIDER.getId());
+        return (PathHolder) getOrCreate(source, CoreDataSources.PATH_HOLDER_PROVIDER.get());
     }
     protected static SkillHolder getSkillHolder(OriginSource source){
-        return (SkillHolder) getOrCreate(source, CoreDataSources.SKILL_HOLDER_PROVIDER.getId());
+        return (SkillHolder) getOrCreate(source, CoreDataSources.SKILL_HOLDER_PROVIDER.get());
     }
     protected static TechniqueHolder getTechniqueHolder(OriginSource source){
-        return (TechniqueHolder) getOrCreate(source, CoreDataSources.TECHNIQUE_HOLDER_PROVIDER.getId());
+        return (TechniqueHolder) getOrCreate(source, CoreDataSources.TECHNIQUE_HOLDER_PROVIDER.get());
     }
     protected static DataSourcePathBonusHolder getPathBonusHolder(OriginSource source){
-        return (DataSourcePathBonusHolder) getOrCreate(source, CoreDataSources.PATH_BONUS_HOLDER_PROVIDER.getId());
+        return (DataSourcePathBonusHolder) getOrCreate(source, CoreDataSources.PATH_BONUS_HOLDER_PROVIDER.get());
     }
 
     //TODO add the methods that dont take in data and create a fresh instance instead
@@ -228,7 +227,7 @@ public class AscensionOriginSourceHelper {
         );
 
         getBloodlineHolder(source).markBloodlineDirty(bloodline);
-        source.markDataSourceDirty(CoreDataSources.BLOODLINE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.BLOODLINE_DATA_SOURCE.getId());
         resolveProcess(source,"merge_bloodline");
     }
     //TODO consider creating a replace bloodline event as well
@@ -273,7 +272,7 @@ public class AscensionOriginSourceHelper {
 
         BloodlineEvent.Added.Post post= new BloodlineEvent.Added.Post(bloodline,data,source);
         NeoForge.EVENT_BUS.post(post);
-        source.markDataSourceDirty(CoreDataSources.BLOODLINE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.BLOODLINE_DATA_SOURCE.getId());
 
         resolveProcess(source,"add_bloodline");
         return true;
@@ -309,7 +308,7 @@ public class AscensionOriginSourceHelper {
         BloodlineEvent.Removed.Post post= new BloodlineEvent.Removed.Post(bloodline,data,source);
         NeoForge.EVENT_BUS.post(post);
 
-        source.markDataSourceDirty(CoreDataSources.BLOODLINE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.BLOODLINE_DATA_SOURCE.getId());
 
         resolveProcess(source,"remove_bloodline");
         return true;
@@ -319,7 +318,7 @@ public class AscensionOriginSourceHelper {
     public static void markBloodlineDirty(OriginSource source,Identifier bloodline){
         long id = random.nextLong();
         source.startProcess("modified_bloodline"+id);
-        source.markDataSourceDirty(CoreDataSources.BLOODLINE_HOLDER_PROVIDER.getId());
+        source.markDataSourceDirty(CoreDataSources.BLOODLINE_DATA_SOURCE.getId());
         getBloodlineHolder(source).markBloodlineDirty(bloodline);
         resolveProcess(source,"modified_bloodline"+id);
     }
