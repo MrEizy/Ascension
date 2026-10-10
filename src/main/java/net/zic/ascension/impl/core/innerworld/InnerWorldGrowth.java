@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
 public final class InnerWorldGrowth {
     private InnerWorldGrowth() {
     }
@@ -172,7 +171,6 @@ public final class InnerWorldGrowth {
         }
     }
 
-    /** SplitMix64-style scramble — adjacent plot indices must NOT produce correlated noise fields. */
     private static long seedFor(int plotIndex) {
         long h = (plotIndex + 1L) * 0x9E3779B97F4A7C15L;
         h ^= (h >>> 30);
@@ -192,13 +190,30 @@ public final class InnerWorldGrowth {
     private static void fillColumn(ServerLevel level, long seed, Theme theme, int x, int z, int centerX, int centerZ) {
         double dist = Math.sqrt((double) (x - centerX) * (x - centerX) + (double) (z - centerZ) * (z - centerZ));
         boolean dais = dist <= DAIS_RADIUS;
-        double freq = theme.freqScale;
+
+        double ampJitter = 0.7 + hash(seed + 101, 1, 1) * 0.6;      // 0.7 .. 1.3
+        double freqJitter = 0.75 + hash(seed + 102, 2, 2) * 0.6;    // 0.75 .. 1.35
+        double decorDensity = 0.4 + hash(seed + 103, 3, 3) * 1.4;   // 0.4 .. 1.8
+        double pondBias = hash(seed + 104, 4, 4);                   // how pond-heavy this plot is
+        double freq = theme.freqScale * freqJitter;
 
         double n = noise(seed, x / (48.0 / freq), z / (48.0 / freq)) * 0.6
                 + noise(seed + 1, x / (20.0 / freq), z / (20.0 / freq)) * 0.3
                 + noise(seed + 2, x / (7.0 / freq), z / (7.0 / freq)) * 0.1;
         double blend = smoothstep(6.0, 18.0, dist);
-        int top = InnerWorld.SURFACE_Y + (int) Math.round((n - 0.5) * theme.amplitude * blend);
+        int top = InnerWorld.SURFACE_Y + (int) Math.round((n - 0.5) * theme.amplitude * ampJitter * blend);
+
+        final int waterLevel = InnerWorld.SURFACE_Y - 2;
+        boolean pond = false;
+        if (!dais && dist > 16.0 && theme != Theme.MESA) {
+            double pondNoise = noise(seed + 50, x / (26.0 / freq), z / (26.0 / freq));
+            double threshold = 0.80 - pondBias * 0.12;              // pond-heavy plots flood more
+            if (pondNoise > threshold) {
+                pond = true;
+                top = Math.min(top, waterLevel - 2);
+            }
+        }
+
         int thickness = 24 + (int) (noise(seed + 3, x / 30.0, z / 30.0) * 10.0);
         int bottom = top - thickness;
 
@@ -211,7 +226,6 @@ public final class InnerWorldGrowth {
             } else if (y <= bottom + 5) {
                 state = Blocks.DEEPSLATE.defaultBlockState();
             } else if (theme == Theme.MESA) {
-                // Cheap badlands banding: alternate terracotta colors by height, no extra noise cost.
                 state = switch (Math.floorMod(y, 4)) {
                     case 0 -> Blocks.RED_TERRACOTTA.defaultBlockState();
                     case 1 -> Blocks.ORANGE_TERRACOTTA.defaultBlockState();
@@ -224,8 +238,25 @@ public final class InnerWorldGrowth {
             level.setBlock(pos.set(x, y, z), state, SET_FLAGS);
         }
 
+        if (pond) {
+            BlockState fluid = theme == Theme.SNOWY ? Blocks.ICE.defaultBlockState() : Blocks.WATER.defaultBlockState();
+            for (int y = top + 1; y <= waterLevel; y++) {
+                level.setBlock(pos.set(x, y, z), fluid, SET_FLAGS);
+            }
+            return;
+        }
+
         if (!dais) {
-            double roll = hash(seed + 7, x, z);
+            double boulderRoll = hash(seed + 9, x, z);
+            if (boulderRoll < 0.0018 * decorDensity) {
+                BlockState rock = (theme == Theme.MESA ? Blocks.RED_SANDSTONE : Blocks.COBBLESTONE).defaultBlockState();
+                level.setBlock(pos.set(x, top + 1, z), rock, SET_FLAGS);
+                if (boulderRoll < 0.0009 * decorDensity) {
+                    level.setBlock(pos.set(x, top + 2, z), rock, SET_FLAGS);
+                }
+                return;
+            }
+            double roll = hash(seed + 7, x, z) / decorDensity;
             Block decor = null;
             for (int i = 0; i < theme.decor.length; i += 2) {
                 if (roll < (Double) theme.decor[i]) {

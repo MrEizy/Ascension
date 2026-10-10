@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/** Ported from Graveless's GhostSkins.java (MIT) — same problem, same solution. */
+
 public final class InnerWorldSkinCache {
     private InnerWorldSkinCache() {
     }
@@ -21,6 +21,9 @@ public final class InnerWorldSkinCache {
     private static final Set<UUID> PENDING = ConcurrentHashMap.newKeySet();
 
     public static PlayerSkin get(UUID ownerId, String ownerName) {
+        if (ownerId == null) {
+            return null;
+        }
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != null) {
             Player online = minecraft.level.getPlayerByUUID(ownerId);

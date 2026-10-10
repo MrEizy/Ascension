@@ -14,11 +14,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.UUID;
 
-/**
- * The body left behind in the overworld while its owner is inside their inner world. A real
- * LivingEntity so it has health, can be hit by anything, and fires a death event we intercept.
- * Anchored in place (no gravity, no pushing) so the return spot is always exactly where you cast.
- */
+
 public final class InnerWorldGhost extends LivingEntity {
     private static final EntityDataAccessor<String> OWNER_ID =
             SynchedEntityData.defineId(InnerWorldGhost.class, EntityDataSerializers.STRING);
@@ -29,7 +25,6 @@ public final class InnerWorldGhost extends LivingEntity {
         super(type, level);
         this.setNoGravity(true);
     }
-
 
     @Override
     public boolean isCurrentlyGlowing() {

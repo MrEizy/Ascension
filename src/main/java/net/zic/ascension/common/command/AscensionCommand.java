@@ -34,6 +34,8 @@ public final class AscensionCommand {
                 .then(RealmTravelCommand.buildDescend())
                 .then(AlchemyCommand.build())
                 .then(AscensionGive.build())
+                .then(MobCultivationCommands.build())
+                .then(InnerWorldCommand.build())
         );
     }
 }

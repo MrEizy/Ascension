@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Relative;
 
 import java.util.Set;
 
+
 final class InnerWorldTeleport {
     private InnerWorldTeleport() {
     }

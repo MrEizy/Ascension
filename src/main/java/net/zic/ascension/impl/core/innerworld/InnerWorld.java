@@ -10,10 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.zic.ascension.AscensionCraft;
 
-/**
- * Constants + geometry for the shared "Inner World" dimension. One void dimension, one plot per
- * player, plots laid out on a spiral grid so no two plots can ever be closer than MIN_GAP_BLOCKS.
- */
+
 public final class InnerWorld {
     private InnerWorld() {
     }
@@ -22,18 +19,12 @@ public final class InnerWorld {
     public static final ResourceKey<Level> DIMENSION =
             ResourceKey.create(Registries.DIMENSION, AscensionCraft.prefix("inner_world"));
 
-    /** Distance between plot CENTERS. Must be a multiple of 16. */
     public static final int PLOT_SPACING_BLOCKS = 8192;
-    /** Radius (in chunks) of a brand-new inner world. */
     public static final int BASE_RADIUS_CHUNKS = 4;
-    /** Extra radius (in chunks) gained per major realm. */
     public static final int CHUNKS_PER_REALM = 6;
-    /** Hard cap so plots can never grow into each other. */
     public static final int MAX_RADIUS_CHUNKS = 96;
-    /** Guaranteed minimum void between two plots' borders. */
     public static final int MIN_GAP_BLOCKS = 5000;
     public static final int SURFACE_Y = 64;
-    /** Falling below this in the inner world rescues you to the spawn dais. */
     public static final int VOID_RESCUE_Y = 0;
 
     static {
@@ -50,7 +41,6 @@ public final class InnerWorld {
         return Math.min(MAX_RADIUS_CHUNKS, BASE_RADIUS_CHUNKS + Math.max(0, tier) * CHUNKS_PER_REALM);
     }
 
-    /** Ulam-spiral: plot 0 at the origin, then rings outward. */
     public static int[] plotGrid(int index) {
         if (index <= 0) {
             return new int[]{0, 0};
@@ -94,7 +84,7 @@ public final class InnerWorld {
     }
 
     public static int majorRealm(ServerPlayer player) {
-        return 0;
+        return InnerWorldRealm.highestRealm(player);
     }
 
     public static void raiseTier(ServerPlayer player, int tier) {
@@ -103,7 +93,7 @@ public final class InnerWorld {
         if (tier > plot.tier) {
             plot.tier = tier;
             InnerWorldPlots.save();
-            player.sendOverlayMessage(Component.translatable("ascension.inner_world.expanding"));
+            player.sendSystemMessage(Component.translatable("ascension.inner_world.expanding"));
         }
         InnerWorldGrowth.ensureQueued(server, player.getUUID(), plot);
     }

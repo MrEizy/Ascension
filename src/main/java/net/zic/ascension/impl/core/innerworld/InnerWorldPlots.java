@@ -15,10 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Persistent plot registry, stored as JSON in the world folder (ascension_inner_worlds.json) so it
- * doesn't depend on the SavedData API. Server thread only.
- */
 public final class InnerWorldPlots {
     private InnerWorldPlots() {
     }
@@ -52,10 +48,8 @@ public final class InnerWorldPlots {
     public static final class Plot {
         public int index;
         public int tier;
-        /** Largest fully generated ring (in chunks); the invisible border sits here. -1 = nothing yet. */
         public int generatedRadius = -1;
         public Session session;
-        /** Set when the ghost died while the owner was offline; applied on next login. */
         public Origin pendingReturn;
     }
 

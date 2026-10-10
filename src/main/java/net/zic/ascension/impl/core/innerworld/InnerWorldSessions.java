@@ -4,7 +4,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.AscensionCraft;
@@ -12,11 +11,7 @@ import net.zic.ascension.common.entities.AscEntities;
 
 import java.util.UUID;
 
-/**
- * Everything that happens when a player casts Inner World, when their ghost is killed, and the
- * invisible border that keeps everyone inside their own plot. All server-side; nothing here runs
- * on the client.
- */
+
 public final class InnerWorldSessions {
     private InnerWorldSessions() {
     }
@@ -25,7 +20,6 @@ public final class InnerWorldSessions {
         return player.level().dimension().equals(InnerWorld.DIMENSION);
     }
 
-    /** Cast while outside → enter. Cast again while inside → leave peacefully. */
     public static void toggle(ServerPlayer player) {
         if (isInside(player)) {
             exitVoluntarily(player);
@@ -38,14 +32,12 @@ public final class InnerWorldSessions {
         MinecraftServer server = player.level().getServer();
         ServerLevel innerLevel = server.getLevel(InnerWorld.DIMENSION);
         if (innerLevel == null) {
-            player.sendOverlayMessage(Component.translatable("ascension.inner_world.unavailable"));
+            player.sendSystemMessage(Component.translatable("ascension.inner_world.unavailable"));
             return;
         }
 
         InnerWorldPlots.Plot plot = InnerWorldPlots.getOrCreate(player.getUUID());
         if (plot.session != null) {
-            // A ghost already exists (e.g. server restarted while they were inside) — just
-            // send them back in rather than spawning a second ghost.
             teleportIn(player, innerLevel, plot);
             return;
         }
@@ -79,7 +71,7 @@ public final class InnerWorldSessions {
         InnerWorldPlots.save();
 
         teleportIn(player, innerLevel, plot);
-        player.sendOverlayMessage(Component.translatable("ascension.inner_world.entered"));
+        player.sendSystemMessage(Component.translatable("ascension.inner_world.entered"));
     }
 
     private static void teleportIn(ServerPlayer player, ServerLevel innerLevel, InnerWorldPlots.Plot plot) {
@@ -87,17 +79,15 @@ public final class InnerWorldSessions {
         InnerWorldTeleport.to(player, innerLevel, center.getX() + 0.5, center.getY() + 1.0, center.getZ() + 0.5, player.getYRot(), player.getXRot());
     }
 
-    /** Voluntary, healthy return — re-casting the skill while already inside. */
     public static void exitVoluntarily(ServerPlayer player) {
         InnerWorldPlots.Plot plot = InnerWorldPlots.get(player.getUUID());
         if (plot == null || plot.session == null) {
-            player.sendOverlayMessage(Component.translatable("ascension.inner_world.no_session"));
+            player.sendSystemMessage(Component.translatable("ascension.inner_world.no_session"));
             return;
         }
         returnPlayer(player, plot, false);
     }
 
-    /** Ghost was actually killed — forced return at 50% max health. Called from InnerWorldEvents. */
     public static void onGhostDeath(InnerWorldGhost ghost) {
         UUID ownerId = ghost.ownerId();
         if (ownerId == null) {
@@ -112,45 +102,9 @@ public final class InnerWorldSessions {
         if (player != null) {
             returnPlayer(player, plot, true);
         } else {
-            // They're offline — stash the return so it applies the moment they log back in.
             plot.pendingReturn = plot.session.origin;
             plot.session = null;
             InnerWorldPlots.save();
-        }
-    }
-
-    /**
-     * The owner died (inside the inner world, or anywhere while a session is open). They respawn
-     * normally, so the session is over — drop it and the ghost, otherwise killing the stale ghost
-     * later would yank them back to the old cast spot at half health.
-     */
-    public static void onOwnerDeath(ServerPlayer player) {
-        InnerWorldPlots.Plot plot = InnerWorldPlots.get(player.getUUID());
-        if (plot == null || (plot.session == null && plot.pendingReturn == null)) {
-            return;
-        }
-        InnerWorldPlots.Session session = plot.session;
-        plot.session = null;
-        plot.pendingReturn = null;
-        InnerWorldPlots.save();
-
-        if (session == null) {
-            return;
-        }
-        // Remove the ghost now if its chunk is loaded; if not, its own validity check discards it on next load.
-        MinecraftServer server = player.level().getServer();
-        ServerLevel originLevel = server.getLevel(net.minecraft.resources.ResourceKey.create(
-                net.minecraft.core.registries.Registries.DIMENSION,
-                net.minecraft.resources.Identifier.parse(session.origin.dimension)
-        ));
-        if (originLevel != null) {
-            try {
-                Entity ghost = originLevel.getEntity(UUID.fromString(session.ghost));
-                if (ghost instanceof InnerWorldGhost) {
-                    ghost.discard();
-                }
-            } catch (IllegalArgumentException ignored) {
-            }
         }
     }
 
@@ -173,13 +127,40 @@ public final class InnerWorldSessions {
         if (halfHealth) {
             double maxHealth = player.getAttributeValue(Attributes.MAX_HEALTH);
             player.setHealth((float) (maxHealth * 0.5));
-            player.sendOverlayMessage(Component.translatable("ascension.inner_world.forced_return"));
+            player.sendSystemMessage(Component.translatable("ascension.inner_world.forced_return"));
         } else {
-            player.sendOverlayMessage(Component.translatable("ascension.inner_world.exited"));
+            player.sendSystemMessage(Component.translatable("ascension.inner_world.exited"));
         }
     }
 
-    /** Applied on login — if the ghost died while this player was offline. */
+    public static void onPlayerDiedInside(ServerPlayer player) {
+        InnerWorldPlots.Plot plot = InnerWorldPlots.get(player.getUUID());
+        if (plot == null || plot.session == null) {
+            return;
+        }
+        InnerWorldPlots.Origin origin = plot.session.origin;
+        String ghostIdRaw = plot.session.ghost;
+        plot.session = null;
+        InnerWorldPlots.save();
+
+        try {
+            UUID ghostId = UUID.fromString(ghostIdRaw);
+            MinecraftServer server = player.level().getServer();
+            var key = net.minecraft.resources.ResourceKey.create(
+                    net.minecraft.core.registries.Registries.DIMENSION,
+                    net.minecraft.resources.Identifier.parse(origin.dimension)
+            );
+            ServerLevel originLevel = server.getLevel(key);
+            if (originLevel != null) {
+                net.minecraft.world.entity.Entity ghost = originLevel.getEntity(ghostId);
+                if (ghost != null) {
+                    ghost.discard();
+                }
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
     public static void onPlayerLogin(ServerPlayer player) {
         InnerWorldPlots.Plot plot = InnerWorldPlots.get(player.getUUID());
         if (plot == null || plot.pendingReturn == null) {
@@ -188,8 +169,7 @@ public final class InnerWorldSessions {
         InnerWorldPlots.Origin origin = plot.pendingReturn;
         plot.pendingReturn = null;
         InnerWorldPlots.save();
-        // Login already places them somewhere; if that somewhere is still the inner world
-        // (e.g. respawn logic put them back at their last position), move them to the saved spot.
+
         if (isInside(player)) {
             MinecraftServer server = player.level().getServer();
             var key = net.minecraft.resources.ResourceKey.create(
@@ -204,7 +184,7 @@ public final class InnerWorldSessions {
         }
         double maxHealth = player.getAttributeValue(Attributes.MAX_HEALTH);
         player.setHealth((float) (maxHealth * 0.5));
-        player.sendOverlayMessage(Component.translatable("ascension.inner_world.forced_return"));
+        player.sendSystemMessage(Component.translatable("ascension.inner_world.forced_return"));
     }
 
     public static boolean isGhostValid(UUID ownerId, UUID ghostId) {
@@ -212,7 +192,6 @@ public final class InnerWorldSessions {
         return plot != null && plot.session != null && ghostId.toString().equals(plot.session.ghost);
     }
 
-    /** Called every player tick while inside the inner world — keeps them off other people's plots. */
     public static void enforceBorder(ServerPlayer player) {
         InnerWorldPlots.Plot plot = InnerWorldPlots.get(player.getUUID());
         if (plot == null) {
@@ -234,7 +213,7 @@ public final class InnerWorldSessions {
             } else {
                 InnerWorldTeleport.to(player, (ServerLevel) player.level(), x, pos.y, z, player.getYRot(), player.getXRot());
             }
-            player.sendOverlayMessage(Component.translatable("ascension.inner_world.border"));
+            player.sendSystemMessage(Component.translatable("ascension.inner_world.border"));
         }
     }
 }
