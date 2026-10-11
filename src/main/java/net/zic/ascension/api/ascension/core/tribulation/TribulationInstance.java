@@ -1,99 +1,287 @@
 package net.zic.ascension.api.ascension.core.tribulation;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.Decoder;
+import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.BlockPos;
+import com.mojang.serialization.RecordBuilder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
-import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
+import net.minecraft.world.phys.Vec3;
+import net.zic.ascension.api.ascension.datapack.tribulation.TribulationResolutionActionType;
+import org.jspecify.annotations.Nullable;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
-public class TribulationInstance {
-    private final TribulationDefinition definition;
-    private final TribulationData data;
-    private final UUID entityId;
-    private LivingEntity entityReference;
-    private BlockPos lastKnownBlockBos;
-    private BiConsumer<TribulationDefinition,TribulationData> finalizationConsumer;
-    private final static BiConsumer<TribulationDefinition,TribulationData> EMPTY_CONSUMER = (definition,data)->{};
-    public final static TribulationInstance INVALID = new TribulationInstance(null,null,null,null);
+/**
+ * A running tribulation, created and owned by the {@link TribulationManager}.
+ * Wraps a Tribulation, its data, where it is, who it targets and what to do once it is finished.
+ */
+public final class TribulationInstance {
+    public enum State implements StringRepresentable {
+        ACTIVE("active"),
+        SUCCEEDED("succeeded"),
+        FAILED("failed");
 
-    public TribulationInstance(TribulationDefinition definition,TribulationData data,LivingEntity entity){
+        public static final Codec<State> CODEC = StringRepresentable.fromEnum(State::values);
+        private final String name;
+
+        State(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return name;
+        }
+    }
+
+    private static final Codec<List<TribulationResolutionAction>> ACTIONS_CODEC = TribulationResolutionActionType.CODEC.listOf();
+
+    private final UUID id;
+    private final Identifier tribulationId;
+    private final Tribulation tribulation;
+    private TribulationData data;
+    private ResourceKey<Level> dimension;
+    private Vec3 position;
+    private final @Nullable TribulationTarget target;
+    private final List<TribulationResolutionAction> onSuccess;
+    private final List<TribulationResolutionAction> onFailure;
+    private State state;
+    private long age;
+
+    //cached since they are accessed multiple times per tick, only updated when the position changes
+    private BlockPos blockPosition;
+    private ChunkPos chunkPos;
+    private final boolean successRequiresTarget;
+    private final boolean failureRequiresTarget;
+
+    //manager state, not saved
+    private boolean queuedForRemoval;
+    private boolean discarded;
+    private boolean awaitingTarget;
+
+    //sync state, not saved
+    private boolean dataDirty;
+    private @Nullable ResourceKey<Level> syncedDimension;
+    private @Nullable ChunkPos syncedChunk;
+    private @Nullable Vec3 syncedPosition;
+
+    TribulationInstance(
+            UUID id,
+            Identifier tribulationId,
+            Tribulation tribulation,
+            ResourceKey<Level> dimension,
+            Vec3 position,
+            @Nullable TribulationTarget target,
+            List<TribulationResolutionAction> onSuccess,
+            List<TribulationResolutionAction> onFailure,
+            State state,
+            long age
+    ) {
+        this.id = id;
+        this.tribulationId = tribulationId;
+        this.tribulation = tribulation;
+        this.dimension = dimension;
+        this.position = position;
+        this.target = target;
+        this.onSuccess = List.copyOf(onSuccess);
+        this.onFailure = List.copyOf(onFailure);
+        this.state = state;
+        this.age = age;
+        this.blockPosition = BlockPos.containing(position);
+        this.chunkPos = ChunkPos.containing(blockPosition);
+        this.successRequiresTarget = this.onSuccess.stream().anyMatch(TribulationResolutionAction::requiresLoadedTarget);
+        this.failureRequiresTarget = this.onFailure.stream().anyMatch(TribulationResolutionAction::requiresLoadedTarget);
+    }
+
+    //──Getters────────────────────────────────────────────────────────
+    public UUID getId() {return id;}
+    public Identifier getTribulationId() {return tribulationId;}
+    public Tribulation getTribulation() {return tribulation;}
+    public TribulationData getData() {return data;}
+    public ResourceKey<Level> getDimension() {return dimension;}
+    public Vec3 getPosition() {return position;}
+    public BlockPos getBlockPosition() {return blockPosition;}
+    public ChunkPos getChunkPos() {return chunkPos;}
+    public @Nullable TribulationTarget getTarget() {return target;}
+    public List<TribulationResolutionAction> getSuccessActions() {return onSuccess;}
+    public List<TribulationResolutionAction> getFailureActions() {return onFailure;}
+    public State getState() {return state;}
+    public long getAge() {return age;}
+
+    public boolean hasTarget() {
+        return target != null;
+    }
+
+    public @Nullable LivingEntity getTargetEntity() {
+        return target == null ? null : target.getEntity();
+    }
+
+    public boolean isActive() {
+        return state == State.ACTIVE;
+    }
+
+    public boolean isFinished() {
+        return state != State.ACTIVE;
+    }
+
+    //──State────────────────────────────────────────────────────────
+
+    public void succeed() {
+        finish(State.SUCCEEDED, TribulationOutcome.SUCCESS);
+    }
+
+    public void fail() {
+        finish(State.FAILED, TribulationOutcome.FAILURE);
+    }
+
+    private void finish(State newState, TribulationOutcome outcome) {
+        if (isFinished()) return;
+        state = newState;
+        tribulation.onFinished(this, outcome);
+    }
+
+    public @Nullable TribulationOutcome getOutcome() {
+        return switch (state) {
+            case ACTIVE -> null;
+            case SUCCEEDED -> TribulationOutcome.SUCCESS;
+            case FAILED -> TribulationOutcome.FAILURE;
+        };
+    }
+
+    public void moveTo(ResourceKey<Level> dimension, Vec3 position) {
+        this.dimension = dimension;
+        if (this.position.equals(position)) return;
+        this.position = position;
+        BlockPos newBlockPosition = BlockPos.containing(position);
+        if (newBlockPosition.equals(blockPosition)) return;
+        blockPosition = newBlockPosition;
+        if (chunkPos.x() != SectionPos.blockToSectionCoord(blockPosition.getX()) || chunkPos.z() != SectionPos.blockToSectionCoord(blockPosition.getZ())) {
+            chunkPos = ChunkPos.containing(blockPosition);
+        }
+    }
+
+    //call when the TribulationData has changed, so it is resent to tracking clients
+    public void markDataDirty() {
+        dataDirty = true;
+    }
+
+    void setData(TribulationData data) {
         this.data = data;
-        this.definition = definition;
-        this.entityId = entity.getUUID();
-        this.entityReference = entity;
-    }
-    public TribulationInstance(TribulationDefinition definition,UUID entityId,BlockPos lastPos,TribulationData data){
-        this.definition = definition;
-        this.data = data;
-        this.entityId = entityId;
-        this.lastKnownBlockBos = lastPos;
-    }
-    public TribulationDefinition getTribulation(){return definition;}
-    public TribulationData getData(){
-        return data;
-    }
-    public UUID getEntityId(){
-        return entityId;
     }
 
-    public LivingEntity getEntity(){
-        return entityReference;
+    void incrementAge() {
+        age++;
     }
 
-    public boolean isEntityLoaded(){
-        return entityReference != null;
+    void setTargetEntity(@Nullable LivingEntity entity) {
+        if (target != null) target.setEntity(entity);
     }
 
-    public void setEntityReference(LivingEntity entity){
-        if(entity == null && !isEntityLoaded()) return;
-        if(entity == null) lastKnownBlockBos = entityReference.blockPosition();
-
-        entityReference = entity;
+    //whether the resolution actions for the current outcome need the target to be loaded
+    boolean resolutionRequiresTarget() {
+        return state == State.SUCCEEDED ? successRequiresTarget : failureRequiresTarget;
     }
 
-    public void setFinalizationConsumer(BiConsumer<TribulationDefinition,TribulationData> consumer){
-        this.finalizationConsumer =consumer;
+    //──Manager State────────────────────────────────────────────────────────
+
+    boolean isQueuedForRemoval() {return queuedForRemoval;}
+    void setQueuedForRemoval(boolean queuedForRemoval) {this.queuedForRemoval = queuedForRemoval;}
+    boolean isDiscarded() {return discarded;}
+    void markDiscarded() {this.discarded = true;}
+    boolean isAwaitingTarget() {return awaitingTarget;}
+    void setAwaitingTarget(boolean awaitingTarget) {this.awaitingTarget = awaitingTarget;}
+
+    //──Sync────────────────────────────────────────────────────────
+
+    boolean consumeDataDirty() {
+        boolean dirty = dataDirty;
+        dataDirty = false;
+        return dirty;
     }
-    public BiConsumer<TribulationDefinition,TribulationData> getFinalizationConsumer(){
-        return finalizationConsumer == null ? EMPTY_CONSUMER : finalizationConsumer;
+
+    @Nullable ResourceKey<Level> getSyncedDimension() {return syncedDimension;}
+    @Nullable ChunkPos getSyncedChunk() {return syncedChunk;}
+    @Nullable Vec3 getSyncedPosition() {return syncedPosition;}
+
+    void setSynced(@Nullable ResourceKey<Level> dimension, @Nullable ChunkPos chunk, @Nullable Vec3 position) {
+        this.syncedDimension = dimension;
+        this.syncedChunk = chunk;
+        this.syncedPosition = position;
     }
 
-    public BlockPos getPosition(){
-        return entityReference == null ? lastKnownBlockBos : entityReference.blockPosition();
+    //──Serialization────────────────────────────────────────────────────────
+
+    @SuppressWarnings("unchecked")
+    <T> DataResult<T> encode(DynamicOps<T> ops) {
+        Codec<TribulationData> dataCodec = (Codec<TribulationData>) tribulation.getType().dataCodec();
+
+        RecordBuilder<T> builder = ops.mapBuilder();
+        builder.add("id", UUIDUtil.CODEC.encodeStart(ops, id));
+        builder.add("tribulation", Identifier.CODEC.encodeStart(ops, tribulationId));
+        builder.add("data", dataCodec.encodeStart(ops, data));
+        builder.add("dimension", Level.RESOURCE_KEY_CODEC.encodeStart(ops, dimension));
+        builder.add("pos", Vec3.CODEC.encodeStart(ops, position));
+        if (target != null) builder.add("target", TribulationTarget.CODEC.encodeStart(ops, target));
+        builder.add("on_success", ACTIONS_CODEC.encodeStart(ops, onSuccess));
+        builder.add("on_failure", ACTIONS_CODEC.encodeStart(ops, onFailure));
+        builder.add("state", State.CODEC.encodeStart(ops, state));
+        builder.add("age", ops.createLong(age));
+        return builder.build(ops.empty());
     }
 
+    /**
+     * loads a saved instance, returns an error if the tribulation no longer exists or any part fails to load,
+     * in which case the instance is expected to be discarded.
+     */
+    static <T> DataResult<TribulationInstance> decode(Dynamic<T> input, Registry<Tribulation> registry) {
+        DataResult<UUID> id = input.get("id").read(UUIDUtil.CODEC);
+        DataResult<Identifier> tribulationId = input.get("tribulation").read(Identifier.CODEC);
+        if (id.isError() || tribulationId.isError()) return DataResult.error(() -> "invalid tribulation id");
 
+        Optional<Tribulation> tribulation = registry.getOptional(tribulationId.getOrThrow());
+        if (tribulation.isEmpty()) return DataResult.error(() -> "unknown tribulation " + tribulationId.getOrThrow());
 
-    public static final Codec<TribulationInstance> RAW_CODEC = RecordCodecBuilder.<TribulationInstance>create(
-            instance->
-                    instance.group(
-                        TribulationType.TRIBULATION_CODEC.fieldOf("definition").forGetter(TribulationInstance::getTribulation),
-                        Codec.STRING.xmap(UUID::fromString, UUID::toString).fieldOf("entity").forGetter(TribulationInstance::getEntityId),
-                        BlockPos.CODEC.optionalFieldOf("last_post",new BlockPos(0,0,0)).forGetter(TribulationInstance::getPosition),
-                        TribulationType.TRIBULATION_DATA_CODEC.fieldOf("data").forGetter(TribulationInstance::getData)
-                    ).apply(instance,TribulationInstance::new)
-    );
+        DataResult<? extends TribulationData> data = input.get("data").read(tribulation.get().getType().dataCodec());
+        DataResult<ResourceKey<Level>> dimension = input.get("dimension").read(Level.RESOURCE_KEY_CODEC);
+        DataResult<Vec3> position = input.get("pos").read(Vec3.CODEC);
+        Optional<DataResult<TribulationTarget>> target = input.get("target").result().map(dynamic -> dynamic.read(TribulationTarget.CODEC));
+        DataResult<List<TribulationResolutionAction>> onSuccess = input.get("on_success").read(ACTIONS_CODEC);
+        DataResult<List<TribulationResolutionAction>> onFailure = input.get("on_failure").read(ACTIONS_CODEC);
+        DataResult<State> state = input.get("state").read(State.CODEC);
 
+        if (data.isError() || dimension.isError() || position.isError() || onSuccess.isError()
+                || onFailure.isError() || state.isError() || (target.isPresent() && target.get().isError())) {
+            return DataResult.error(() -> "failed to load tribulation " + tribulationId.getOrThrow());
+        }
 
-    public static final Codec<TribulationInstance> CODEC = Codec.of(
-            RAW_CODEC,
-            new Decoder<TribulationInstance>() {
-                @Override
-                public <T> DataResult<Pair<TribulationInstance, T>> decode(DynamicOps<T> ops, T input) {
-                    DataResult<Pair<TribulationInstance,T>> result = RAW_CODEC.decode(ops, input);
-                    if(result.isError()){
-                        return DataResult.success(Pair.of(INVALID, ops.empty()));
-                    }
-                    return result;
+        TribulationData validatedData = tribulation.get().validateLoadedData(data.getOrThrow());
+        if (validatedData == null) return DataResult.error(() -> "tribulation data rejected for " + tribulationId.getOrThrow());
 
-
-                }
-            });
+        TribulationInstance instance = new TribulationInstance(
+                id.getOrThrow(),
+                tribulationId.getOrThrow(),
+                tribulation.get(),
+                dimension.getOrThrow(),
+                position.getOrThrow(),
+                target.map(DataResult::getOrThrow).orElse(null),
+                onSuccess.getOrThrow(),
+                onFailure.getOrThrow(),
+                state.getOrThrow(),
+                input.get("age").asLong(0)
+        );
+        instance.setData(validatedData);
+        return DataResult.success(instance);
+    }
 }

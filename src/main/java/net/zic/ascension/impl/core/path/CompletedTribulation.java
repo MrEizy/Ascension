@@ -1,8 +1,9 @@
 package net.zic.ascension.impl.core.path;
 
+import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.ascension.core.tribulation.Tribulation;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 
-public record CompletedTribulation(TribulationDefinition definition, TribulationData data) {
+public record CompletedTribulation(Identifier id, Tribulation tribulation, TribulationData data) {
 
 }

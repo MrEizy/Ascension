@@ -5,11 +5,12 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.interaction.PathInteraction;
 import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionType;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
+import net.zic.ascension.api.ascension.core.tribulation.Tribulation;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.configuration.interactions.PathInteractions;
 import net.zic.ascension.impl.core.path.realms.MajorRealmDefinition;
@@ -91,13 +92,18 @@ public class SimplePath implements Path {
     }
     //──Tribulation────────────────────────────────────────────────────────
     @Override
-    public TribulationDefinition getTribulation(int majorRealm, int minorRealm, RegistryAccess access) {
-        return hasTribulation(majorRealm,minorRealm) ? getRealmDefinition(majorRealm).getRealmTribulation(minorRealm).resolve(access) : null;
+    public Identifier getTribulationId(int majorRealm, int minorRealm) {
+        return getRealmDefinition(majorRealm).getRealmTribulationId(minorRealm);
+    }
+
+    @Override
+    public Tribulation getTribulation(int majorRealm, int minorRealm, RegistryAccess access) {
+        return CoreRegistries.safeAccess(CoreRegistries.TRIBULATION_REGISTRY, getTribulationId(majorRealm, minorRealm), access);
     }
 
     @Override
     public boolean hasTribulation(int majorRealm, int minorRealm) {
-        return getRealmDefinition(majorRealm).getRealmTribulation(minorRealm) != null;
+        return getTribulationId(majorRealm, minorRealm) != null;
     }
 
     //──Path Interactions────────────────────────────────────────────────────────

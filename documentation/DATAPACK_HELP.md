@@ -39,7 +39,7 @@ Common registries:
 | Paths | `data/<namespace>/ascension/paths/...` |
 | Progress actions | `data/<namespace>/ascension/progress_actions/...` |
 | Progress conditions | `data/<namespace>/ascension/progress_action_conditions/...` |
-| Tribulations | `data/<namespace>/ascension/tribulation_definitions/...` |
+| Tribulations | `data/<namespace>/ascension/tribulations/...` |
 | Runtime visuals | `data/<namespace>/ascension/skill_system/visuals/...` |
 | Beam definitions | `data/<namespace>/ascension/skill_system/runtime/beams/...` |
 | Datapack resources | `data/<namespace>/ascension/skill_system/resources/...` |
@@ -409,7 +409,7 @@ Physiques:                 data/<namespace>/ascension/physiques/
 Paths:                     data/<namespace>/ascension/paths/
 Progress actions:          data/<namespace>/ascension/progress_actions/
 Progress conditions:       data/<namespace>/ascension/progress_action_conditions/
-Tribulation definitions:   data/<namespace>/ascension/tribulation_definitions/
+Tribulations:              data/<namespace>/ascension/tribulations/
 Runtime visuals:           data/<namespace>/ascension/skill_system/visuals/
 Beam definitions:           data/<namespace>/ascension/skill_system/runtime/beams/
 Datapack resources:         data/<namespace>/ascension/skill_system/resources/

@@ -8,9 +8,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinitionReference;
-import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 import net.zic.ascension.configuration.ConfigurationRegistries;
 
 public record MobTraitReference(Identifier id){

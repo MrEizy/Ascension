@@ -9,8 +9,9 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.interaction.PathInteraction;
 import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionType;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealmDefinition;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
+import net.zic.ascension.api.ascension.core.tribulation.Tribulation;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
+import org.jspecify.annotations.Nullable;
 import org.apache.logging.log4j.core.Core;
 
 import java.util.Collection;
@@ -40,7 +41,9 @@ public interface Path {
 
 
 
-    TribulationDefinition getTribulation(int majorRealm, int minorRealm, RegistryAccess access);
+    //id of the tribulation in the tribulation registry, null if there is none
+    @Nullable Identifier getTribulationId(int majorRealm, int minorRealm);
+    @Nullable Tribulation getTribulation(int majorRealm, int minorRealm, RegistryAccess access);
     boolean hasTribulation(int majorRealm, int minorRealm);
 
     //──Path Interactions────────────────────────────────────────────────────────

@@ -14,15 +14,18 @@ import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealm;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import com.mojang.serialization.Codec;
+import net.zic.ascension.api.ascension.core.tribulation.Tribulation;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationInstance;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationManager;
 import net.zic.ascension.api.ascension.datapack.path.realm.PathRealmChangeEvent;
-import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.path.CompletedTribulation;
 import net.zic.ascension.impl.core.path.realms.BreakthroughBehaviour;
 import net.zic.ascension.impl.core.path.realms.MajorRealm;
+import net.zic.ascension.impl.core.tribulation.action.EndBreakthroughResolutionAction;
+import net.zic.ascension.impl.core.tribulation.action.RealmChangeResolutionAction;
 
 import java.util.*;
 
@@ -155,70 +158,72 @@ public class SimplePathInstance implements PathInstance {
 
     //──Tribulations────────────────────────────────────────────────────────
 
-    public void setCompletedTribulation(OriginSource source, int majorRealm, int minorRealm, TribulationDefinition definition, TribulationData data) {
-        completedTribulations.put(Realm.of(majorRealm,minorRealm),new CompletedTribulation(definition,data));
+    //clears the active tribulation if the manager no longer has it(e.g. it was discarded while loading)
+    public void validateActiveTribulation(){
+        TribulationManager manager = TribulationManager.getInstance();
+        if(activeTribulationId == null || manager == null) return;
+        if(!manager.has(activeTribulationId)) activeTribulationId = null;
     }
-    public void continueTribulation(UUID tribulationUUID, OriginSource source){
-        if(!TribulationManager.getInstance().hasTribulation(tribulationUUID)) {
-            activeTribulationId = null;
-            return;
-        };
-        TribulationDefinition definition = TribulationManager.getInstance().getTribulation(tribulationUUID);
-
-        TribulationDefinition expected = path.getTribulation(getCurrentMajorRealm(),getCurrentMinorRealm(),source.getRegistryAccess());
-        if(!definition.equals(expected)){
-            TribulationManager.getInstance().finishTribulation(tribulationUUID);
-            activeTribulationId = null;
-            return;
-        }
-
-
-        this.activeTribulationId = tribulationUUID;
-    }
-    public void startTribulation(OriginSource source, TribulationDefinition definition, LivingEntity target){
+    public void startTribulation(OriginSource source, Identifier tribulation, LivingEntity target){
         if(activeTribulationId != null) return;
-        activeTribulationId = TribulationManager.getInstance().triggerTribulation(definition,target);
-        TribulationManager.getInstance().setTribulationConsumer(activeTribulationId,(finishedDefinition,data)->{
-            SimplePathInstance pathInstance = this;
-
-            pathInstance.setCompletedTribulation(source,pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm(),finishedDefinition,data);
-
-            if(getCurrentRealmInstance().isLimitBroken()){
-                handleRealmChange(Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()+1),source);
-            }else  handleRealmChange(Realm.getNext(Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()),path),source);
-            pathInstance.progress = 0;
-            pathInstance.activeTribulationId = null;
-
-        });
+        TribulationManager manager = TribulationManager.getInstance();
+        if(manager == null) return;
+        Identifier pathId = getPathId(source.getRegistryAccess());
+        activeTribulationId = manager.create(tribulation)
+                .targeting(target)
+                .onSuccess(new RealmChangeResolutionAction(pathId, getCurrentRealm(), 1))
+                .onFailure(new EndBreakthroughResolutionAction(pathId))
+                .start();
     }
 
+    /**
+     * called when a breakthrough tribulation succeeds, verifies we are still at the realm the tribulation was started at
+     * and that the realm still expects this tribulation
+     */
+    public void completeBreakthrough(OriginSource source, Realm realm, TribulationInstance tribulation, int realmChange){
+        endBreakthrough(tribulation.getId());
+        if(!getCurrentRealm().equals(realm)) return;
+        if(!tribulation.getTribulationId().equals(path.getTribulationId(realm.majorRealm(), realm.minorRealm()))) return;
+
+        completedTribulations.put(realm, new CompletedTribulation(tribulation.getTribulationId(), tribulation.getTribulation(), tribulation.getData()));
+
+        Realm target = realm;
+        for(int i = 0; i < realmChange; i++){
+            target = target.majorRealm() == getCurrentMajorRealm() && getCurrentRealmInstance().isLimitBroken()
+                    ? Realm.of(target.majorRealm(), target.minorRealm()+1)
+                    : Realm.getNext(target, path);
+        }
+        handleRealmChange(target, source);
+        progress = 0;
+    }
+    public void endBreakthrough(UUID tribulation){
+        if(tribulation.equals(activeTribulationId)) activeTribulationId = null;
+    }
 
     public void completeTribulationForRealm(Realm realm,OriginSource source){
         if(realm.majorRealm() < 0) return;
         CompletedTribulation completedTribulation = completedTribulations.get(realm);
-        TribulationDefinition definition = path.getTribulation(realm.majorRealm(),realm.minorRealm(),source.getRegistryAccess());
-        if(completedTribulation == null && definition == null) return;
-        if(definition == null){
+        Identifier tribulationId = path.getTribulationId(realm.majorRealm(),realm.minorRealm());
+        Tribulation tribulation = CoreRegistries.safeAccess(CoreRegistries.TRIBULATION_REGISTRY, tribulationId, source.getRegistryAccess());
+        if(tribulation == null){
             completedTribulations.remove(realm);
             return;
         }
-        if(completedTribulation == null){
-            //no data present, create new data
-            completedTribulation = new CompletedTribulation(definition,definition.getType().newData(definition));
-            completedTribulations.put(realm, completedTribulation);
+        if(completedTribulation == null || !completedTribulation.id().equals(tribulationId)){
+            //no data present for this tribulation, create new data
+            completedTribulation = new CompletedTribulation(tribulationId, tribulation, tribulation.newData());
         }else{
-            //data already present, try convert
-            TribulationData data = definition.getType().validateAndCovert(definition,completedTribulation.definition(), completedTribulation.data());
-            completedTribulation = new CompletedTribulation(definition,data);
-            completedTribulations.put(realm, completedTribulation);
+            TribulationData data = tribulation.validateLoadedData(completedTribulation.data());
+            completedTribulation = new CompletedTribulation(tribulationId, tribulation, data == null ? tribulation.newData() : data);
         }
+        completedTribulations.put(realm, completedTribulation);
 
-        definition.getType().onAdded(source,definition,completedTribulation.data());
+        tribulation.onAdded(source,completedTribulation.data());
     }
     public void removeTribulationForRealm(Realm realm,OriginSource source){
         CompletedTribulation completedTribulation = completedTribulations.remove(realm);
         if(completedTribulation == null) return;
-        completedTribulation.definition().getType().onRemoved(source,completedTribulation.definition(),completedTribulation.data());
+        completedTribulation.tribulation().onRemoved(source,completedTribulation.data());
     }
 
 
@@ -238,12 +243,13 @@ public class SimplePathInstance implements PathInstance {
 
     public void tryBreakthrough(OriginSource source,LivingEntity entitySource){
 
-        if(getCurrentRealmInstance().definition().getRealmTribulation(getCurrentMinorRealm()) == null){
+        Identifier tribulation = path.getTribulationId(getCurrentMajorRealm(),getCurrentMinorRealm());
+        if(tribulation == null){
             if(getCurrentRealmInstance().isLimitBroken()){
                 handleRealmChange(Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()+1),source);
             }else  handleRealmChange(Realm.getNext(Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()),path),source);
         }else{
-            startTribulation(source,path.getTribulation(getCurrentMajorRealm(),getCurrentMinorRealm(),source.getRegistryAccess()),entitySource);
+            startTribulation(source,tribulation,entitySource);
         }
     }
 
@@ -382,11 +388,13 @@ public class SimplePathInstance implements PathInstance {
         cachedRealms.clear();
         progress = cachedProgress;
 
-        if(!realmsDiscarded && activeTribulationId != null){
-            continueTribulation(activeTribulationId,source);
-        }else if (activeTribulationId != null){
-            TribulationManager.getInstance().finishTribulation(activeTribulationId);
+        if(realmsDiscarded && activeTribulationId != null){
+            //the realm the tribulation was for no longer exists
+            TribulationManager manager = TribulationManager.getInstance();
+            if(manager != null) manager.cancel(activeTribulationId);
+            activeTribulationId = null;
         }
+        validateActiveTribulation();
     }
 
     @Override
@@ -426,8 +434,9 @@ public class SimplePathInstance implements PathInstance {
             ValueOutput completedTribulationOutput = completedTribulationsOutput.addChild();
             completedTribulationOutput.putInt("major_realm",realm.majorRealm());
             completedTribulationOutput.putInt("minor_realm",realm.minorRealm());
-            completedTribulationOutput.store("definition", TribulationType.TRIBULATION_CODEC,completedTribulations.get(realm).definition());
-            completedTribulationOutput.store("data", TribulationType.TRIBULATION_DATA_CODEC,completedTribulations.get(realm).data());
+            CompletedTribulation completedTribulation = completedTribulations.get(realm);
+            completedTribulationOutput.store("tribulation", Identifier.CODEC, completedTribulation.id());
+            completedTribulationOutput.store("data", dataCodec(completedTribulation.tribulation()), completedTribulation.data());
         }
         if(activeTribulationId != null) output.putString("tribulation",activeTribulationId.toString());
 
@@ -444,16 +453,22 @@ public class SimplePathInstance implements PathInstance {
         ValueInput.ValueInputList completedTribulationsInput = input.childrenListOrEmpty("completed_tribulations");
         for(ValueInput completedTribulationInput : completedTribulationsInput){
             Realm realm = Realm.of(completedTribulationInput.getIntOr("major_realm",0),completedTribulationInput.getIntOr("minor_realm",0));
-            TribulationDefinition definition = completedTribulationInput.read("definition",TribulationType.TRIBULATION_CODEC).orElse(null);
-            TribulationData data = completedTribulationInput.read("data", TribulationType.TRIBULATION_DATA_CODEC).orElse(null);
-            if(data == null || definition == null){
-                AscensionCraft.LOGGER.debug("Invalid Tribulation Type discarding");
+            Identifier tribulationId = completedTribulationInput.read("tribulation", Identifier.CODEC).orElse(null);
+            Tribulation tribulation = CoreRegistries.safeAccess(CoreRegistries.TRIBULATION_REGISTRY, tribulationId, access);
+            TribulationData data = tribulation == null ? null : completedTribulationInput.read("data", dataCodec(tribulation)).map(tribulation::validateLoadedData).orElse(null);
+            if(data == null){
+                AscensionCraft.LOGGER.debug("Invalid completed tribulation {} discarding", tribulationId);
                 continue;
             }
-            completedTribulations.put(realm,new CompletedTribulation(definition,data));
+            completedTribulations.put(realm,new CompletedTribulation(tribulationId,tribulation,data));
         }
         Optional<String> tribulationId = input.getString("tribulation");
         tribulationId.ifPresent(s ->activeTribulationId = UUID.fromString(s));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Codec<TribulationData> dataCodec(Tribulation tribulation){
+        return (Codec<TribulationData>) tribulation.getType().dataCodec();
     }
 
      @Override

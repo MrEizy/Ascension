@@ -32,7 +32,11 @@ import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.datagen.loot.ModLootModifiers;
 import net.zic.ascension.configuration.mob_traits.traits.AscensionTraitTypes;
+import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationResolutionActionTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
+import net.zic.ascension.network.tribulation.ClientboundTribulationAddPacket;
+import net.zic.ascension.network.tribulation.ClientboundTribulationRemovePacket;
+import net.zic.ascension.network.tribulation.ClientboundTribulationUpdatePacket;
 import net.zic.ascension.impl.datapack.alchemy.AlchemyMaterialProviders;
 import net.zic.ascension.network.*;
 import net.zic.ascension.impl.core.entity.AscensionStats;
@@ -134,6 +138,7 @@ public class AscensionCraft {
         AscensionTechniqueTypes.register(modEventBus);
         AscensionPathTypes.register(modEventBus);
         AscensionTribulationTypes.register(modEventBus);
+        AscensionTribulationResolutionActionTypes.register(modEventBus);
 
         AscensionScaledValueSourceTypes.register(modEventBus);
         AscensionResourceTypes.register(modEventBus);
@@ -346,6 +351,21 @@ public class AscensionCraft {
                     SphericalProjectilePayload.TYPE,
                     SphericalProjectilePayload.CODEC,
                     SphericalProjectilePayload::handle
+            );
+            registrar.playToClient(
+                    ClientboundTribulationAddPacket.TYPE,
+                    ClientboundTribulationAddPacket.STREAM_CODEC,
+                    ClientboundTribulationAddPacket::handle
+            );
+            registrar.playToClient(
+                    ClientboundTribulationUpdatePacket.TYPE,
+                    ClientboundTribulationUpdatePacket.STREAM_CODEC,
+                    ClientboundTribulationUpdatePacket::handle
+            );
+            registrar.playToClient(
+                    ClientboundTribulationRemovePacket.TYPE,
+                    ClientboundTribulationRemovePacket.STREAM_CODEC,
+                    ClientboundTribulationRemovePacket::handle
             );
 
         }

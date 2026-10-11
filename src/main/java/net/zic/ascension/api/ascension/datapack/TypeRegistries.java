@@ -13,6 +13,7 @@ import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.api.ascension.datapack.requirement.RequirementType;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
+import net.zic.ascension.api.ascension.datapack.tribulation.TribulationResolutionActionType;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectModule;
 import net.zic.ascension.api.ascension.core.projectile.ProjectileBehavior;
@@ -30,6 +31,7 @@ public final class TypeRegistries {
     public static final Registry<TechniqueType> TECHNIQUE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "technique_type");
     public static final Registry<PathType> PATH_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "path_type");
     public static final Registry<TribulationType> TRIBULATION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "tribulation_type");
+    public static final Registry<TribulationResolutionActionType> TRIBULATION_RESOLUTION_ACTION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "tribulation_resolution_action_type");
     public static final Registry<ProgressActionType> PROGRESS_ACTION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "progression_action_type");
     public static final Registry<ProgressActionConditionType> PROGRESS_ACTION_CONDITION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "progression_action_condition_type");
     public static final Registry<RequirementType> REQUIREMENT_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "requirement_type");
@@ -53,6 +55,7 @@ public final class TypeRegistries {
         event.register(TECHNIQUE_TYPE_REGISTRY);
         event.register(PATH_TYPE_REGISTRY);
         event.register(TRIBULATION_TYPE_REGISTRY);
+        event.register(TRIBULATION_RESOLUTION_ACTION_TYPE_REGISTRY);
         event.register(PROGRESS_ACTION_TYPE_REGISTRY);
         event.register(PROGRESS_ACTION_CONDITION_TYPE_REGISTRY);
         event.register(REQUIREMENT_TYPE_REGISTRY);
