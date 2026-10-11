@@ -69,7 +69,7 @@ public final class TribulationInstance {
     //manager state, not saved
     private boolean queuedForRemoval;
     private boolean discarded;
-    private boolean awaitingTarget;
+    private boolean awaitingResolution;
 
     //sync state, not saved
     private boolean dataDirty;
@@ -122,6 +122,10 @@ public final class TribulationInstance {
 
     public boolean hasTarget() {
         return target != null;
+    }
+
+    public boolean isTargeting(UUID entity) {
+        return target != null && target.getEntityId().equals(entity);
     }
 
     public @Nullable LivingEntity getTargetEntity() {
@@ -200,8 +204,9 @@ public final class TribulationInstance {
     void setQueuedForRemoval(boolean queuedForRemoval) {this.queuedForRemoval = queuedForRemoval;}
     boolean isDiscarded() {return discarded;}
     void markDiscarded() {this.discarded = true;}
-    boolean isAwaitingTarget() {return awaitingTarget;}
-    void setAwaitingTarget(boolean awaitingTarget) {this.awaitingTarget = awaitingTarget;}
+    //only set on finished instances whose resolution actions are waiting for the target to load
+    boolean isAwaitingResolution() {return awaitingResolution;}
+    void setAwaitingResolution(boolean awaitingResolution) {this.awaitingResolution = awaitingResolution;}
 
     //──Sync────────────────────────────────────────────────────────
 

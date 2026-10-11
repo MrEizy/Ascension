@@ -72,12 +72,11 @@ public class TribulationManager extends SavedData {
 
     private final List<Dynamic<?>> pending = new ArrayList<>();
     private final LinkedHashMap<UUID, TribulationInstance> tribulations = new LinkedHashMap<>();
-    private final HashMap<UUID, HashSet<UUID>> entityTribulations = new HashMap<>();
     private final HashMap<ResourceKey<Level>, HashMap<Long, HashSet<UUID>>> chunkTribulations = new HashMap<>();
     private @Nullable MinecraftServer server;
 
-    //structural changes made while ticking are deferred to these, they are reused every tick to avoid allocations
-    private boolean ticking;
+    //structural changes made while iterating tribulations are deferred to these, they are reused every tick to avoid allocations
+    private boolean deferring;
     private final ArrayList<TribulationInstance> toRemove = new ArrayList<>();
     private final ArrayList<TribulationInstance> toAdd = new ArrayList<>();
 
@@ -148,7 +147,7 @@ public class TribulationManager extends SavedData {
                 0
         );
         instance.setData(tribulation.newData());
-        if (ticking) toAdd.add(instance);
+        if (deferring) toAdd.add(instance);
         else addInstance(instance);
         tribulation.onStart(instance, builder.level);
         syncInstance(instance);
@@ -158,21 +157,11 @@ public class TribulationManager extends SavedData {
 
     private void addInstance(TribulationInstance instance) {
         tribulations.put(instance.getId(), instance);
-        if (instance.getTarget() != null) {
-            entityTribulations.computeIfAbsent(instance.getTarget().getEntityId(), key -> new HashSet<>()).add(instance.getId());
-        }
         indexChunk(instance, instance.getDimension(), instance.getChunkPos());
     }
 
     private void removeInstance(TribulationInstance instance) {
         tribulations.remove(instance.getId());
-        if (instance.getTarget() != null) {
-            HashSet<UUID> ids = entityTribulations.get(instance.getTarget().getEntityId());
-            if (ids != null) {
-                ids.remove(instance.getId());
-                if (ids.isEmpty()) entityTribulations.remove(instance.getTarget().getEntityId());
-            }
-        }
         unindexChunk(instance, instance.getDimension(), instance.getChunkPos());
         sendRemove(instance);
         setDirty();
@@ -199,9 +188,11 @@ public class TribulationManager extends SavedData {
     }
 
     public List<TribulationInstance> getForEntity(UUID entity) {
-        HashSet<UUID> ids = entityTribulations.get(entity);
-        if (ids == null) return List.of();
-        return ids.stream().map(tribulations::get).filter(Objects::nonNull).toList();
+        List<TribulationInstance> result = new ArrayList<>();
+        for (TribulationInstance instance : tribulations.values()) {
+            if (instance.isTargeting(entity)) result.add(instance);
+        }
+        return result;
     }
 
     //fails the tribulation, running failure actions
@@ -216,7 +207,7 @@ public class TribulationManager extends SavedData {
     public void discard(UUID id) {
         TribulationInstance instance = tribulations.get(id);
         if (instance == null) return;
-        if (ticking) {
+        if (deferring) {
             instance.markDiscarded();
             queueRemoval(instance);
             return;
@@ -230,7 +221,6 @@ public class TribulationManager extends SavedData {
             sendRemove(instance);
         }
         tribulations.clear();
-        entityTribulations.clear();
         chunkTribulations.clear();
         toRemove.clear();
         toAdd.clear();
@@ -240,32 +230,46 @@ public class TribulationManager extends SavedData {
     //──Ticking────────────────────────────────────────────────────────
 
     private void tick(MinecraftServer server) {
-        ticking = true;
-        try {
-            for (TribulationInstance instance : tribulations.values()) {
-                if (instance.isQueuedForRemoval() || instance.isAwaitingTarget()) continue;
-                if (instance.isActive()) {
-                    ServerLevel level = server.getLevel(instance.getDimension());
-                    if (level == null) continue;
+        boolean started = beginDeferring();
+        for (TribulationInstance instance : tribulations.values()) {
+            if (instance.isQueuedForRemoval()) continue;
+            if (instance.isActive()) {
+                //ticked whether or not the target is present, the tribulation decides what to do
+                ServerLevel level = server.getLevel(instance.getDimension());
+                if (level == null) continue;
 
-                    followTarget(instance);
-                    if (!level.isLoaded(instance.getBlockPosition())) continue;
+                followTarget(instance);
+                if (!level.isLoaded(instance.getBlockPosition())) continue;
 
-                    instance.getTribulation().tick(instance, level);
-                    instance.incrementAge();
-                    setDirty();
-                }
-                if (instance.isFinished()) {
-                    queueRemoval(instance);
-                } else {
-                    syncInstance(instance);
-                }
+                instance.getTribulation().tick(instance, level);
+                instance.incrementAge();
+                setDirty();
             }
-        } finally {
-            ticking = false;
+            if (instance.isFinished()) {
+                //only finished instances can be waiting, for their target to load before resolving
+                if (!instance.isAwaitingResolution()) queueRemoval(instance);
+            } else {
+                syncInstance(instance);
+            }
         }
+        endDeferring(started);
+    }
 
-        //resolution happens outside the loop, so actions are free to start or discard tribulations
+    /**
+     * defers adding/removing tribulations until {@link #endDeferring} so we can safely iterate them.
+     * returns false if we were already deferring, in which case the outer call handles applying changes
+     */
+    private boolean beginDeferring() {
+        if (deferring) return false;
+        deferring = true;
+        return true;
+    }
+
+    private void endDeferring(boolean started) {
+        if (!started) return;
+        deferring = false;
+
+        //resolution happens outside of iteration, so actions are free to start or discard tribulations
         for (int i = 0; i < toRemove.size(); i++) {
             TribulationInstance instance = toRemove.get(i);
             instance.setQueuedForRemoval(false);
@@ -336,7 +340,7 @@ public class TribulationManager extends SavedData {
 
         //wait for the target to be loaded again, it is not checked again until the target joins
         if (instance.hasTarget() && target == null && instance.resolutionRequiresTarget()) {
-            instance.setAwaitingTarget(true);
+            instance.setAwaitingResolution(true);
             return;
         }
 
@@ -499,8 +503,10 @@ public class TribulationManager extends SavedData {
 
     @SubscribeEvent
     public static void onJoinLevel(EntityJoinLevelEvent event) {
-        if (instance == null || event.getLevel().isClientSide() || !(event.getEntity() instanceof LivingEntity entity)) return;
-        for (TribulationInstance tribulation : instance.getForEntity(entity.getUUID())) {
+        if (instance == null || instance.tribulations.isEmpty() || event.getLevel().isClientSide() || !(event.getEntity() instanceof LivingEntity entity)) return;
+        boolean started = instance.beginDeferring();
+        for (TribulationInstance tribulation : instance.tribulations.values()) {
+            if (!tribulation.isTargeting(entity.getUUID())) continue;
             if (entity.level().dimension().equals(tribulation.getDimension())) {
                 tribulation.setTargetEntity(entity);
             } else if (tribulation.isActive()) {
@@ -509,30 +515,31 @@ public class TribulationManager extends SavedData {
                 //finished tribulations only need the target to resolve, resolved on the next tick once the entity is fully loaded
                 tribulation.setTargetEntity(entity);
             }
-            tribulation.setAwaitingTarget(false);
+            tribulation.setAwaitingResolution(false);
         }
+        instance.endDeferring(started);
     }
 
     @SubscribeEvent
     public static void onLeaveLevel(EntityLeaveLevelEvent event) {
-        if (instance == null || event.getLevel().isClientSide()) return;
-        for (TribulationInstance tribulation : instance.getForEntity(event.getEntity().getUUID())) {
+        if (instance == null || instance.tribulations.isEmpty() || event.getLevel().isClientSide()) return;
+        for (TribulationInstance tribulation : instance.tribulations.values()) {
             if (tribulation.getTargetEntity() == event.getEntity()) tribulation.setTargetEntity(null);
         }
     }
 
     @SubscribeEvent
     public static void onEntityDeath(LivingDeathEvent event) {
-        if (instance == null || event.getEntity().level().isClientSide()) return;
-        for (TribulationInstance tribulation : instance.getForEntity(event.getEntity().getUUID())) {
-            if (!tribulation.isActive()) continue;
+        if (instance == null || instance.tribulations.isEmpty() || event.getEntity().level().isClientSide()) return;
+        //if we are not already ticking, this resolves immediately while the entity is still present
+        boolean started = instance.beginDeferring();
+        for (TribulationInstance tribulation : instance.tribulations.values()) {
+            if (!tribulation.isActive() || !tribulation.isTargeting(event.getEntity().getUUID())) continue;
             tribulation.setTargetEntity(event.getEntity());
             tribulation.getTribulation().onTargetDeath(tribulation);
-            if (!tribulation.isFinished()) continue;
-            //resolve while the entity is still present, if we are ticking it is resolved at the end of this tick
-            if (instance.ticking) instance.queueRemoval(tribulation);
-            else instance.tryResolve(tribulation);
+            if (tribulation.isFinished()) instance.queueRemoval(tribulation);
         }
+        instance.endDeferring(started);
     }
 
     //──Builder────────────────────────────────────────────────────────

@@ -76,6 +76,7 @@ public class TribulationCommand {
             context.getSource().sendSystemMessage(Component.literal(
                     instance.getId() + " : (tribulation: " + instance.getTribulationId()
                             + ", state: " + instance.getState().getSerializedName()
+                            + ", age: " + instance.getAge()
                             + ", dimension: " + instance.getDimension().identifier()
                             + ", pos: " + instance.getBlockPosition().toShortString()
                             + (instance.hasTarget() ? ", target: " + instance.getTarget().getEntityId() : "") + ")"

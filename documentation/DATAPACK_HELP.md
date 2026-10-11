@@ -82,14 +82,18 @@ Names and descriptions use Minecraft Components.
 Literal:
 
 ```json
-"name": "Example"
+{
+  "name": "Example"
+}
 ```
 
 Translatable:
 
 ```json
-"name": {
-  "translate": "example.content.name"
+{
+  "name": {
+    "translate": "example.content.name"
+  }
 }
 ```
 
@@ -99,9 +103,11 @@ Use translation keys for shipped content so text can be localized.
 Physiques use a direct stat-to-value map:
 
 ```json
-"base_stats": {
-  "ascension:vitality": 2.0,
-  "ascension:strength": 1.0
+{
+  "base_stats": {
+    "ascension:vitality": 2.0,
+    "ascension:strength": 1.0
+  }
 }
 ```
 
