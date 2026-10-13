@@ -1,4 +1,4 @@
-package net.zic.ascension.client.tribulation;
+package net.zic.ascension.api.ascension.core.tribulation.client;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
@@ -65,9 +65,10 @@ public final class ClientTribulation<T extends TribulationData> {
         return previousPosition.lerp(position, partialTick);
     }
 
-    //keeps the old data if the new data fails to decode
-    void update(Vec3 position, ByteBuf data, RegistryAccess access) {
-        this.position = position;
+    //only the parts that changed are sent, keeps the old data if the new data fails to decode
+    void update(@Nullable Vec3 position, @Nullable ByteBuf data, RegistryAccess access) {
+        if (position != null) this.position = position;
+        if (data == null) return;
         try {
             this.data = TribulationSyncHelper.decode(tribulation, data, access);
         } catch (Exception exception) {

@@ -1,4 +1,4 @@
-package net.zic.ascension.client.tribulation;
+package net.zic.ascension.api.ascension.core.tribulation.client;
 
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.zic.ascension.api.ascension.core.tribulation.Tribulation;

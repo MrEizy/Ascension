@@ -3,7 +3,7 @@ package net.zic.ascension.api.ascension.core.tribulation;
 import net.minecraft.server.level.ServerLevel;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.client.tribulation.TribulationRenderer;
+import net.zic.ascension.api.ascension.core.tribulation.client.TribulationRenderer;
 import org.jspecify.annotations.Nullable;
 
 /**

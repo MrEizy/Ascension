@@ -6,7 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.client.tribulation.ClientTribulationManager;
+import net.zic.ascension.api.ascension.core.tribulation.client.ClientTribulationManager;
 
 import java.util.UUID;
 

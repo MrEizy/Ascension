@@ -72,10 +72,12 @@ public final class TribulationInstance<T extends TribulationData> {
     private boolean discarded;
 
     //sync state, not saved
+    //never synced, so the first sync sends it to everyone tracking it
+    private boolean positionDirty = true;
     private boolean dataDirty;
-    private @Nullable ResourceKey<Level> syncedDimension;
-    private @Nullable ChunkPos syncedChunk;
-    private @Nullable Vec3 syncedPosition;
+    //the position from our last move, null until it first moves
+    private @Nullable ResourceKey<Level> oldDimension;
+    private @Nullable ChunkPos oldChunk;
 
     TribulationInstance(
             UUID id,
@@ -179,8 +181,14 @@ public final class TribulationInstance<T extends TribulationData> {
     }
 
     public void moveTo(ResourceKey<Level> dimension, Vec3 position) {
+        if (this.dimension.equals(dimension) && this.position.equals(position)) return;
+        //the first move since the last sync records where clients last saw it, further moves before the next sync keep it
+        if (!positionDirty) {
+            oldDimension = this.dimension;
+            oldChunk = chunkPos;
+        }
+        positionDirty = true;
         this.dimension = dimension;
-        if (this.position.equals(position)) return;
         this.position = position;
         BlockPos newBlockPosition = BlockPos.containing(position);
         if (newBlockPosition.equals(blockPosition)) return;
@@ -232,21 +240,18 @@ public final class TribulationInstance<T extends TribulationData> {
 
     //──Sync────────────────────────────────────────────────────────
 
-    boolean consumeDataDirty() {
-        boolean dirty = dataDirty;
+    boolean isDirty() {return positionDirty || dataDirty;}
+    boolean isPositionDirty() {return positionDirty;}
+    boolean isDataDirty() {return dataDirty;}
+
+    //called once the current state has been sent, only clears the flags, the old position is handled by moveTo
+    void markSynced() {
+        positionDirty = false;
         dataDirty = false;
-        return dirty;
     }
 
-    @Nullable ResourceKey<Level> getSyncedDimension() {return syncedDimension;}
-    @Nullable ChunkPos getSyncedChunk() {return syncedChunk;}
-    @Nullable Vec3 getSyncedPosition() {return syncedPosition;}
-
-    void setSynced(@Nullable ResourceKey<Level> dimension, @Nullable ChunkPos chunk, @Nullable Vec3 position) {
-        this.syncedDimension = dimension;
-        this.syncedChunk = chunk;
-        this.syncedPosition = position;
-    }
+    @Nullable ResourceKey<Level> getOldDimension() {return oldDimension;}
+    @Nullable ChunkPos getOldChunk() {return oldChunk;}
 
     //──Serialization────────────────────────────────────────────────────────
 

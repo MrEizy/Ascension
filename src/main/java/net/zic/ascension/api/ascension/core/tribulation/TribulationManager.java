@@ -387,36 +387,19 @@ public class TribulationManager extends SavedData {
         return level.getChunkSource().chunkMap.getPlayers(chunk, false);
     }
 
-    //sends any changes since the last sync to tracking players
-    //TODO this is the method i want to simplify SIGNIFICANTLY since i believe it to be overcomplicating it
+    //sends any changes since the last sync, players tracking the old chunk but not the new one get a remove
     private void syncInstance(TribulationInstance<?> instance) {
-        ResourceKey<Level> dimension = instance.getDimension();
-        ChunkPos chunk = instance.getChunkPos();
-        Vec3 position = instance.getPosition();
-        boolean dataDirty = instance.consumeDataDirty();
+        if (!instance.isDirty()) return;
+        List<ServerPlayer> newPlayers = getTrackingPlayers(instance.getDimension(), instance.getChunkPos());
+        //the old position is only meaningful if it moved since the last sync, otherwise it is where clients already see it
+        List<ServerPlayer> oldPlayers = new ArrayList<>(instance.isPositionDirty()
+                ? getTrackingPlayers(instance.getOldDimension(), instance.getOldChunk())
+                : newPlayers);
 
-        if (dimension.equals(instance.getSyncedDimension()) && chunk.equals(instance.getSyncedChunk())) {
-            if (dataDirty || !position.equals(instance.getSyncedPosition())) {
-                ServerLevel level = server == null ? null : server.getLevel(dimension);
-                if (level != null) PacketDistributor.sendToPlayersTrackingChunk(level, chunk, createUpdatePacket(instance, level.registryAccess()));
-                instance.setSynced(dimension, chunk, position);
-            }
-            return;
-        }
-
-        //tribulation changed chunk, send add to tracking players and remove to non tracking
-        List<ServerPlayer> oldPlayers = getTrackingPlayers(instance.getSyncedDimension(), instance.getSyncedChunk());
-        List<ServerPlayer> newPlayers = getTrackingPlayers(dimension, chunk);
-        boolean sameDimension = dimension.equals(instance.getSyncedDimension());
-
-        ClientboundTribulationRemovePacket remove = new ClientboundTribulationRemovePacket(instance.getId());
-        for (ServerPlayer player : oldPlayers) {
-            if (!sameDimension || !newPlayers.contains(player)) PacketDistributor.sendToPlayer(player, remove);
-        }
         ClientboundTribulationAddPacket add = null;
         ClientboundTribulationUpdatePacket update = null;
         for (ServerPlayer player : newPlayers) {
-            if (sameDimension && oldPlayers.contains(player)) {
+            if (oldPlayers.remove(player)) {
                 if (update == null) update = createUpdatePacket(instance, player.registryAccess());
                 PacketDistributor.sendToPlayer(player, update);
             } else {
@@ -424,12 +407,21 @@ public class TribulationManager extends SavedData {
                 PacketDistributor.sendToPlayer(player, add);
             }
         }
-        instance.setSynced(dimension, chunk, position);
+
+        if (!oldPlayers.isEmpty()) {
+            ClientboundTribulationRemovePacket remove = new ClientboundTribulationRemovePacket(instance.getId());
+            for (ServerPlayer player : oldPlayers) PacketDistributor.sendToPlayer(player, remove);
+        }
+        instance.markSynced();
     }
 
+    //sent to players based on where they were last told the tribulation was
     private void sendRemove(TribulationInstance<?> instance) {
         ClientboundTribulationRemovePacket remove = new ClientboundTribulationRemovePacket(instance.getId());
-        for (ServerPlayer player : getTrackingPlayers(instance.getSyncedDimension(), instance.getSyncedChunk())) {
+        List<ServerPlayer> players = instance.isPositionDirty()
+                ? getTrackingPlayers(instance.getOldDimension(), instance.getOldChunk())
+                : getTrackingPlayers(instance.getDimension(), instance.getChunkPos());
+        for (ServerPlayer player : players) {
             PacketDistributor.sendToPlayer(player, remove);
         }
     }
@@ -445,7 +437,11 @@ public class TribulationManager extends SavedData {
     }
 
     private ClientboundTribulationUpdatePacket createUpdatePacket(TribulationInstance<?> instance, RegistryAccess access) {
-        return new ClientboundTribulationUpdatePacket(instance.getId(), instance.getPosition(), instance.encodeData(access));
+        return new ClientboundTribulationUpdatePacket(
+                instance.getId(),
+                instance.isPositionDirty() ? instance.getPosition() : null,
+                instance.isDataDirty() ? instance.encodeData(access) : null
+        );
     }
 
     //──Events────────────────────────────────────────────────────────

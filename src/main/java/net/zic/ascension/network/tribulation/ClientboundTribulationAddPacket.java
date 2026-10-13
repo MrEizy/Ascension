@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.client.tribulation.ClientTribulationManager;
+import net.zic.ascension.api.ascension.core.tribulation.client.ClientTribulationManager;
 
 import java.util.UUID;
 

@@ -1,8 +1,7 @@
-package net.zic.ascension.client.tribulation;
+package net.zic.ascension.api.ascension.core.tribulation.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.core.RegistryAccess;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
