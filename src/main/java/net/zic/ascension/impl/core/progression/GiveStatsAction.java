@@ -7,9 +7,11 @@ import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionDescription;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.zenithlib.stats.EntityStatHolder;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.ZenithStatHelper;
 import net.zic.zenithlib.value_containers.typed.ModifierHolder;
@@ -36,7 +38,6 @@ public record GiveStatsAction(UUID uuid, Map<Identifier,ModifierHolder<Double>> 
     public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction) {
         if (perPurity && !(contextData instanceof BloodlineData)) return;
         int purity = perPurity ? Math.max(0, Math.min(100, ((BloodlineData) contextData).getPurity())) : 1;
-
         for (Map.Entry<Identifier, ModifierHolder<Double>> modifiers : stats.entrySet()) {
             Stat stat = ZenithStatHelper.stat(modifiers.getKey());
             ModifierActionHelper.apply(
@@ -47,7 +48,10 @@ public record GiveStatsAction(UUID uuid, Map<Identifier,ModifierHolder<Double>> 
                     id -> source.removeStatModifier(stat, id),
                     direction, mergeMode, perPurity, purity
             );
+
         }
+        source.updateEntityStatHolder();
+
     }
 
     @Override
