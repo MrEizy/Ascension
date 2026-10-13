@@ -97,6 +97,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         super.addAdditionalSaveData(output);
         output.putString("NpcSkin", getSkin());
         output.putString("NpcName", entityData.get(GENERATED_NAME));
+        if (challengedBy != null) output.putString("NpcChallenger", challengedBy.toString());
     }
 
     @Override
@@ -104,6 +105,12 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         super.readAdditionalSaveData(input);
         setSkin(input.getStringOr("NpcSkin", "default"));
         setGeneratedName(input.getStringOr("NpcName", ""));
+        try {
+            String storedChallenger = input.getStringOr("NpcChallenger", "");
+            challengedBy = storedChallenger.isBlank() ? null : UUID.fromString(storedChallenger);
+        } catch (IllegalArgumentException exception) {
+            challengedBy = null;
+        }
     }
 
     @Override
@@ -129,11 +136,13 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         if (challengedBy != null) {
             Player challenger = server.getPlayerByUUID(challengedBy);
             if (challenger == null || !challenger.isAlive() || challenger.isSpectator()
-                    || distanceToSqr(challenger) > 48 * 48) {
-                challengedBy = null;
-                setTarget(null);
-                setAggressive(false);
-            } else if (getTarget() != challenger) setTarget(challenger);
+                    || challenger.getAbilities().instabuild || distanceToSqr(challenger) > 48 * 48) {
+                if (getTarget() != null) setTarget(null);
+                if (isAggressive()) setAggressive(false);
+            } else {
+                if (getTarget() != challenger) setTarget(challenger);
+                if (!isAggressive()) setAggressive(true);
+            }
         }
     }
 
@@ -142,29 +151,49 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         if (hand != InteractionHand.MAIN_HAND || player.getItemInHand(hand).is(Items.NAME_TAG))
             return InteractionResult.PASS;
         if (player instanceof ServerPlayer serverPlayer && level() instanceof ServerLevel server) {
-            if (challengedBy == null) {
-                triggerAnim("actions", "greet");
+            if (isChallenger(serverPlayer) && player.isShiftKeyDown()) {
+                withdraw(serverPlayer);
+            } else if (challengedBy == null || isChallenger(serverPlayer)) {
+                if (challengedBy == null) triggerAnim("actions", "greet");
                 PacketDistributor.sendToPlayer(serverPlayer, new NpcDialoguePacket(getId(), getUUID(),
-                        getName().getString(), NpcProfile.load(server, getNpcType()).greeting()));
+                        getName().getString(), NpcProfile.load(server, getNpcType()).greeting(),
+                        isChallenger(serverPlayer)));
             } else serverPlayer.sendSystemMessage(Component.translatable("gui.ascension.npc.aggressive"));
         }
         return InteractionResult.SUCCESS;
     }
 
     public void speak(ServerPlayer player) {
-        if (!(level() instanceof ServerLevel server)) return;
+        if (!(level() instanceof ServerLevel server) || (challengedBy != null && !isChallenger(player))) return;
         NpcProfile profile = NpcProfile.load(server, getNpcType());
         PacketDistributor.sendToPlayer(player, new NpcDialoguePacket(getId(), getUUID(),
-                getName().getString(), profile.randomDialogue(random)));
+                getName().getString(), profile.randomDialogue(random), isChallenger(player)));
+    }
+
+    public boolean isChallenger(Player player) {
+        return challengedBy != null && challengedBy.equals(player.getUUID());
     }
 
     public void challenge(ServerPlayer player) {
         if (challengedBy != null || !isAlive()) return;
+        if (player.getAbilities().instabuild) {
+            player.sendSystemMessage(Component.translatable("gui.ascension.npc.survival_required"));
+            return;
+        }
         challengedBy = player.getUUID();
         setTarget(player);
         setAggressive(true);
         triggerAnim("actions", "greet");
         player.sendSystemMessage(Component.translatable("gui.ascension.npc.challenge_started"));
+    }
+
+    public void withdraw(ServerPlayer player) {
+        if (!isChallenger(player)) return;
+        challengedBy = null;
+        setTarget(null);
+        setAggressive(false);
+        getNavigation().stop();
+        player.sendSystemMessage(Component.translatable("gui.ascension.npc.challenge_ended"));
     }
 
     @Override

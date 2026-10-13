@@ -29,8 +29,9 @@ public class NpcDialogueScreen extends Screen {
         int y = height / 2 + 16;
         addRenderableWidget(Button.builder(Component.translatable("gui.ascension.npc.talk"),
                 b -> send(NpcActionPacket.Action.TALK)).bounds(x, y, 192, 20).build());
-        addRenderableWidget(Button.builder(Component.translatable("gui.ascension.npc.challenge"), b -> {
-            send(NpcActionPacket.Action.CHALLENGE);
+        addRenderableWidget(Button.builder(Component.translatable(packet.challenged()
+                ? "gui.ascension.npc.withdraw" : "gui.ascension.npc.challenge"), b -> {
+            send(packet.challenged() ? NpcActionPacket.Action.WITHDRAW : NpcActionPacket.Action.CHALLENGE);
             onClose();
         }).bounds(x, y + 25, 192, 20).build());
         addRenderableWidget(Button.builder(Component.translatable("gui.ascension.npc.leave"),

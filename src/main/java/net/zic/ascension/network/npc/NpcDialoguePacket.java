@@ -9,12 +9,12 @@ import net.zic.ascension.client.gui.NpcDialogueScreen;
 
 import java.util.UUID;
 
-public record NpcDialoguePacket(int entityId, UUID uuid, String name, String message) implements CustomPacketPayload {
+public record NpcDialoguePacket(int entityId, UUID uuid, String name, String message, boolean challenged) implements CustomPacketPayload {
     public static final Type<NpcDialoguePacket> TYPE = new Type<>(AscensionCraft.prefix("npc_dialogue"));
     public static final StreamCodec<FriendlyByteBuf, NpcDialoguePacket> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public NpcDialoguePacket decode(FriendlyByteBuf buf) {
-            return new NpcDialoguePacket(buf.readVarInt(), buf.readUUID(), buf.readUtf(128), buf.readUtf(512));
+            return new NpcDialoguePacket(buf.readVarInt(), buf.readUUID(), buf.readUtf(128), buf.readUtf(512), buf.readBoolean());
         }
         @Override
         public void encode(FriendlyByteBuf buf, NpcDialoguePacket packet) {
@@ -22,6 +22,7 @@ public record NpcDialoguePacket(int entityId, UUID uuid, String name, String mes
             buf.writeUUID(packet.uuid());
             buf.writeUtf(packet.name(), 128);
             buf.writeUtf(packet.message(), 512);
+            buf.writeBoolean(packet.challenged());
         }
     };
     @Override

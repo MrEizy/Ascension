@@ -11,7 +11,7 @@ import net.zic.ascension.common.entities.npc.CultivatorNpcEntity;
 import java.util.UUID;
 
 public record NpcActionPacket(int entityId, UUID uuid, Action action) implements CustomPacketPayload {
-    public enum Action { TALK, CHALLENGE }
+    public enum Action { TALK, CHALLENGE, WITHDRAW }
     public static final Type<NpcActionPacket> TYPE = new Type<>(AscensionCraft.prefix("npc_action"));
     public static final StreamCodec<FriendlyByteBuf, NpcActionPacket> STREAM_CODEC = new StreamCodec<>() {
         @Override
@@ -36,6 +36,7 @@ public record NpcActionPacket(int entityId, UUID uuid, Action action) implements
             switch (packet.action()) {
                 case TALK -> npc.speak(player);
                 case CHALLENGE -> npc.challenge(player);
+                case WITHDRAW -> npc.withdraw(player);
             }
         });
     }

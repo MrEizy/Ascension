@@ -55,22 +55,27 @@ public class AscLangProvider extends LanguageProvider {
 
 
 
-
+        // NPC Things
         add("entity.ascension.male_cultivator", "Male Cultivator");
         add("entity.ascension.female_cultivator", "Female Cultivator");
         add("entity.ascension.sect_elder", "Sect Elder");
         add("entity.ascension.sect_master", "Sect Master");
         add("entity.ascension.young_master", "Young Master");
+
         add("item.ascension.male_cultivator_spawn_egg", "Male Cultivator Spawn Egg");
         add("item.ascension.female_cultivator_spawn_egg", "Female Cultivator Spawn Egg");
         add("item.ascension.sect_elder_spawn_egg", "Sect Elder Spawn Egg");
         add("item.ascension.sect_master_spawn_egg", "Sect Master Spawn Egg");
         add("item.ascension.young_master_spawn_egg", "Young Master Spawn Egg");
+
         add("gui.ascension.npc.talk", "Speak");
         add("gui.ascension.npc.challenge", "Challenge");
         add("gui.ascension.npc.leave", "Leave");
         add("gui.ascension.npc.aggressive", "You have already challenged this cultivator.");
         add("gui.ascension.npc.challenge_started", "Very well. Defend yourself!");
+        add("gui.ascension.npc.withdraw", "Forfeit Challenge");
+        add("gui.ascension.npc.challenge_ended", "The challenge has ended.");
+        add("gui.ascension.npc.survival_required", "Switch to Survival or Adventure mode before challenging a cultivator.");
         add("gui.ascension.npc.too_far", "You must approach the cultivator.");
 
         add("entity.ascension.treasure_rat", "Treasure Rat");
