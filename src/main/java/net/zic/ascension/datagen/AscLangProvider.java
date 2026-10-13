@@ -1029,6 +1029,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.sword_flight.desc", "Bind spirit to steel and ride the blade itself through the sky, steering with nothing but where the eyes fall.");
         add("ascension.skill.spherical_devastation.name", "Spherical Devastation");
         add("ascension.skill.spherical_devastation.desc", "Unleash a rotating sphere of annihilating force, scouring everything caught within it and shaking the ground for all who stand nearby.");
+        add("ascension.skill.void_pocket.name", "Void Pocket");
+        add("ascension.skill.void_pocket.desc", "Strike the air before you until space caves in and tears open, revealing the void where your ender chest is kept.");
         add("ascension.skill.inner_world.name", "Inner World");
         add("ascension.skill.inner_world.desc", "Withdraw into a private inner world, leaving your body behind. If your body is destroyed you are dragged back, badly weakened.");
 

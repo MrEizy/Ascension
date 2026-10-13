@@ -21,7 +21,11 @@ public class ModRenderPipelines {
 
     public static final String DIVINE_SENSE_UNIFORM = "DivineSenseWave";
     public static final String SPHERICAL_DESTRUCTION_UNIFORM = "SphericalDestructionWave";
+    public static final String SPACE_RIFT_UNIFORM = "SpaceRift";
     public static final String WORLD_DEPTH_SAMPLER = "WorldDepth";
+    public static final String END_SKY_SAMPLER = "EndSky";
+    public static final String END_PORTAL_SAMPLER = "EndPortal";
+    public static final String SCENE_COLOR_SAMPLER = "SceneColor";
 
     public static RenderPipeline LINES_NO_DEPTH;
     public static RenderPipeline ENERGY_LINES;
@@ -31,6 +35,7 @@ public class ModRenderPipelines {
     public static RenderPipeline AURA_SURFACE_NO_DEPTH;
     public static RenderPipeline DIVINE_SENSE_WAVE;
     public static RenderPipeline SPHERICAL_DESTRUCTION_WAVE;
+    public static RenderPipeline SPACE_RIFT;
 
     @SubscribeEvent
     public static void onRegisterRenderPipelines(RegisterRenderPipelinesEvent event) {
@@ -109,5 +114,21 @@ public class ModRenderPipelines {
                 .withCull(false)
                 .build();
         event.registerPipeline(SPHERICAL_DESTRUCTION_WAVE);
+
+        SPACE_RIFT = RenderPipeline.builder()
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/space_rift"))
+                .withVertexShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/screen_effect"))
+                .withFragmentShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/space_rift"))
+                .withSampler(WORLD_DEPTH_SAMPLER)
+                .withSampler(END_SKY_SAMPLER)
+                .withSampler(END_PORTAL_SAMPLER)
+                .withSampler(SCENE_COLOR_SAMPLER)
+                .withUniform(SPACE_RIFT_UNIFORM, UniformType.UNIFORM_BUFFER)
+                .withVertexFormat(DefaultVertexFormat.POSITION, VertexFormat.Mode.TRIANGLES)
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                .withDepthStencilState(Optional.empty())
+                .withCull(false)
+                .build();
+        event.registerPipeline(SPACE_RIFT);
     }
 }

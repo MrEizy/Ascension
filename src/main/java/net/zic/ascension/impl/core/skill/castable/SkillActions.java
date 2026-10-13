@@ -1378,6 +1378,45 @@ public final class SkillActions {
     }
 
     /**
+     * Punches a rift into the space in front of the caster; clicking into it once open reaches their ender chest.
+     * See {@link VoidPocketService}.
+     */
+    public record VoidPocket(
+            float radius,
+            double distance,
+            double heightOffset,
+            int openDelayTicks,
+            int idleSeconds,
+            double maxReach,
+            int maxSeconds
+    ) implements SkillAction {
+        public static final MapCodec<VoidPocket> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Codec.floatRange(0.25F, 8.0F).optionalFieldOf("radius", 1.0F).forGetter(VoidPocket::radius),
+                Codec.DOUBLE.optionalFieldOf("distance", 2.5D).forGetter(VoidPocket::distance),
+                Codec.DOUBLE.optionalFieldOf("height_offset", 0.0D).forGetter(VoidPocket::heightOffset),
+                Codec.intRange(0, 200).optionalFieldOf("open_delay_ticks", 30).forGetter(VoidPocket::openDelayTicks),
+                Codec.intRange(1, 600).optionalFieldOf("idle_seconds", 30).forGetter(VoidPocket::idleSeconds),
+                Codec.DOUBLE.optionalFieldOf("max_reach", 6.0D).forGetter(VoidPocket::maxReach),
+                Codec.intRange(5, 3600).optionalFieldOf("max_seconds", 300).forGetter(VoidPocket::maxSeconds)
+        ).apply(instance, VoidPocket::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.VOID_POCKET.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            VoidPocketService.open(context, this);
+        }
+    }
+
+    /**
      * Casting this while outside the inner world sends you in (leaving a ghost behind);
      * casting it again while already inside brings you back out peacefully. The forced,
      * 50%-health return only happens if the ghost is actually killed — see

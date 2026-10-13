@@ -367,6 +367,21 @@ public class AscensionCraft {
                     ClientboundTribulationRemovePacket.STREAM_CODEC,
                     ClientboundTribulationRemovePacket::handle
             );
+            registrar.playToClient(
+                    SpaceRiftPayload.TYPE,
+                    SpaceRiftPayload.CODEC,
+                    SpaceRiftPayload::handle
+            );
+            registrar.playToClient(
+                    SpaceRiftClosePayload.TYPE,
+                    SpaceRiftClosePayload.CODEC,
+                    SpaceRiftClosePayload::handle
+            );
+            registrar.playToServer(
+                    SpaceRiftInteractPayload.TYPE,
+                    SpaceRiftInteractPayload.CODEC,
+                    SpaceRiftInteractPayload::handle
+            );
 
         }
     }

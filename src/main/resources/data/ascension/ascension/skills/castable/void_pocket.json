@@ -1,0 +1,33 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.void_pocket.name"
+  },
+  "description": {
+    "translate": "ascension.skill.void_pocket.desc"
+  },
+  "cast": {
+    "mode": "instant"
+  },
+  "cooldown": {
+    "base": 3.0
+  },
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": {
+      "base": 20.0
+    }
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:void_pocket",
+      "radius": 1.0,
+      "distance": 2.5,
+      "height_offset": 0.0,
+      "open_delay_ticks": 30,
+      "idle_seconds": 30,
+      "max_reach": 6.0
+    }
+  ]
+}

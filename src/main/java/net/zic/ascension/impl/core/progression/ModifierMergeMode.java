@@ -31,6 +31,6 @@ public enum ModifierMergeMode {
     }
 
     public ModifierMergeMode resolve(boolean perPurity) {
-        return this == AUTO ? (perPurity ? REPLACE : KEEP) : this;
+        return this == AUTO ? (perPurity ? REPLACE : ACCUMULATE) : this;
     }
 }

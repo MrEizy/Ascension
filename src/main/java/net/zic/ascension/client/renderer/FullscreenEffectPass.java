@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.CommandEncoder;
 import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.blaze3d.textures.GpuSampler;
 import com.mojang.blaze3d.textures.GpuTextureView;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
@@ -25,12 +26,16 @@ public final class FullscreenEffectPass {
     private FullscreenEffectPass() {
     }
 
+    public record SamplerBinding(String name, GpuTextureView texture, GpuSampler sampler) {
+    }
+
     public static void drawDepthEffect(
             CommandEncoder encoder,
             RenderPipeline pipeline,
             String uniformName,
             GpuBuffer uniformBuffer,
-            String depthSampler
+            String depthSampler,
+            SamplerBinding... extraSamplers
     ) {
         RenderTarget target = Minecraft.getInstance().getMainRenderTarget();
         GpuTextureView depth = target.getDepthTextureView();
@@ -58,6 +63,9 @@ public final class FullscreenEffectPass {
                     depth,
                     RenderSystem.getSamplerCache().getClampToEdge(FilterMode.NEAREST)
             );
+            for (SamplerBinding binding : extraSamplers) {
+                pass.bindTexture(binding.name(), binding.texture(), binding.sampler());
+            }
             pass.setVertexBuffer(0, vertexBuffer);
             pass.draw(0, 6);
         }
