@@ -4,13 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.UUIDUtil;
-import net.zic.ascension.api.ascension.core.tribulation.Tribulation;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 import net.zic.ascension.impl.core.tribulation.LightningTribulation;
 import net.zic.ascension.impl.core.tribulation.LightningTribulationData;
 
-public class LightningTribulationType extends TribulationType {
+public class LightningTribulationType extends TribulationType<LightningTribulationData> {
     private static final MapCodec<LightningTribulation> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     Codec.INT.fieldOf("strikes").forGetter(LightningTribulation::strikes),
@@ -28,12 +26,12 @@ public class LightningTribulationType extends TribulationType {
     );
 
     @Override
-    public MapCodec<? extends Tribulation> codec() {
+    public MapCodec<LightningTribulation> codec() {
         return CODEC;
     }
 
     @Override
-    public Codec<? extends TribulationData> dataCodec() {
+    public Codec<LightningTribulationData> dataCodec() {
         return DATA_CODEC;
     }
 }

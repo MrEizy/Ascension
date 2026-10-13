@@ -3,11 +3,9 @@ package net.zic.ascension.api.ascension.core.tribulation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
-import io.netty.buffer.Unpooled;
 import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -71,14 +69,14 @@ public class TribulationManager extends SavedData {
     }
 
     private final List<Dynamic<?>> pending = new ArrayList<>();
-    private final LinkedHashMap<UUID, TribulationInstance> tribulations = new LinkedHashMap<>();
+    private final LinkedHashMap<UUID, TribulationInstance<?>> tribulations = new LinkedHashMap<>();
     private final HashMap<ResourceKey<Level>, HashMap<Long, HashSet<UUID>>> chunkTribulations = new HashMap<>();
     private @Nullable MinecraftServer server;
 
     //structural changes made while iterating tribulations are deferred to these, they are reused every tick to avoid allocations
     private boolean deferring;
-    private final ArrayList<TribulationInstance> toRemove = new ArrayList<>();
-    private final ArrayList<TribulationInstance> toAdd = new ArrayList<>();
+    private final ArrayList<TribulationInstance<?>> toRemove = new ArrayList<>();
+    private final ArrayList<TribulationInstance<?>> toAdd = new ArrayList<>();
 
     public TribulationManager() {
     }
@@ -89,7 +87,7 @@ public class TribulationManager extends SavedData {
 
     private List<Dynamic<?>> encodeInstances() {
         List<Dynamic<?>> encoded = new ArrayList<>(pending);
-        for (TribulationInstance tribulation : tribulations.values()) {
+        for (TribulationInstance<?> tribulation : tribulations.values()) {
             DataResult<?> result = tribulation.encode(NbtOps.INSTANCE);
             result.resultOrPartial(error -> AscensionCraft.LOGGER.error("Failed to save tribulation {}: {}", tribulation.getId(), error))
                     .ifPresent(tag -> encoded.add(new Dynamic<>(NbtOps.INSTANCE, (net.minecraft.nbt.Tag) tag)));
@@ -99,9 +97,9 @@ public class TribulationManager extends SavedData {
 
     private void loadPending(MinecraftServer server) {
         if (pending.isEmpty()) return;
-        Registry<Tribulation> registry = CoreRegistries.TRIBULATION_REGISTRY.get(server.registryAccess());
+        Registry<Tribulation<?>> registry = CoreRegistries.TRIBULATION_REGISTRY.get(server.registryAccess());
         for (Dynamic<?> saved : pending) {
-            DataResult<TribulationInstance> result = TribulationInstance.decode(saved, registry);
+            DataResult<TribulationInstance<?>> result = TribulationInstance.decode(saved, registry);
             if (result.isError()) {
                 //treat it as if it never existed
                 AscensionCraft.LOGGER.debug("Discarding tribulation: {}", result.error().map(DataResult.Error::message).orElse(""));
@@ -121,8 +119,8 @@ public class TribulationManager extends SavedData {
 
     private @Nullable UUID start(Builder builder) {
         if (server == null || builder.level == null || builder.position == null) return null;
-        Registry<Tribulation> registry = CoreRegistries.TRIBULATION_REGISTRY.get(server.registryAccess());
-        Tribulation tribulation = registry.getOptional(builder.tribulationId).orElse(null);
+        Registry<Tribulation<?>> registry = CoreRegistries.TRIBULATION_REGISTRY.get(server.registryAccess());
+        Tribulation<?> tribulation = registry.getOptional(builder.tribulationId).orElse(null);
         if (tribulation == null) {
             AscensionCraft.LOGGER.warn("Tried to start unknown tribulation {}", builder.tribulationId);
             return null;
@@ -134,7 +132,7 @@ public class TribulationManager extends SavedData {
             target.setEntity(builder.target);
         }
 
-        TribulationInstance instance = new TribulationInstance(
+        TribulationInstance<?> instance = TribulationInstance.create(
                 UUID.randomUUID(),
                 builder.tribulationId,
                 tribulation,
@@ -142,25 +140,22 @@ public class TribulationManager extends SavedData {
                 builder.position,
                 target,
                 builder.onSuccess,
-                builder.onFailure,
-                TribulationInstance.State.ACTIVE,
-                0
+                builder.onFailure
         );
-        instance.setData(tribulation.newData());
         if (deferring) toAdd.add(instance);
         else addInstance(instance);
-        tribulation.onStart(instance, builder.level);
+        instance.start(builder.level);
         syncInstance(instance);
         setDirty();
         return instance.getId();
     }
 
-    private void addInstance(TribulationInstance instance) {
+    private void addInstance(TribulationInstance<?> instance) {
         tribulations.put(instance.getId(), instance);
         indexChunk(instance, instance.getDimension(), instance.getChunkPos());
     }
 
-    private void removeInstance(TribulationInstance instance) {
+    private void removeInstance(TribulationInstance<?> instance) {
         tribulations.remove(instance.getId());
         unindexChunk(instance, instance.getDimension(), instance.getChunkPos());
         sendRemove(instance);
@@ -173,8 +168,8 @@ public class TribulationManager extends SavedData {
         return get(id) != null;
     }
 
-    public @Nullable TribulationInstance get(UUID id) {
-        TribulationInstance instance = tribulations.get(id);
+    public @Nullable TribulationInstance<?> get(UUID id) {
+        TribulationInstance<?> instance = tribulations.get(id);
         if (instance != null) return instance;
         //started this tick, added to the map once the tick ends
         for (int i = 0; i < toAdd.size(); i++) {
@@ -183,13 +178,13 @@ public class TribulationManager extends SavedData {
         return null;
     }
 
-    public Collection<TribulationInstance> getAll() {
+    public Collection<TribulationInstance<?>> getAll() {
         return Collections.unmodifiableCollection(tribulations.values());
     }
 
-    public List<TribulationInstance> getForEntity(UUID entity) {
-        List<TribulationInstance> result = new ArrayList<>();
-        for (TribulationInstance instance : tribulations.values()) {
+    public List<TribulationInstance<?>> getForEntity(UUID entity) {
+        List<TribulationInstance<?>> result = new ArrayList<>();
+        for (TribulationInstance<?> instance : tribulations.values()) {
             if (instance.isTargeting(entity)) result.add(instance);
         }
         return result;
@@ -197,7 +192,7 @@ public class TribulationManager extends SavedData {
 
     //fails the tribulation, running failure actions
     public void cancel(UUID id) {
-        TribulationInstance instance = tribulations.get(id);
+        TribulationInstance<?> instance = tribulations.get(id);
         if (instance == null) return;
         instance.fail();
         setDirty();
@@ -205,7 +200,7 @@ public class TribulationManager extends SavedData {
 
     //removes the tribulation without running any resolution logic
     public void discard(UUID id) {
-        TribulationInstance instance = tribulations.get(id);
+        TribulationInstance<?> instance = tribulations.get(id);
         if (instance == null) return;
         if (deferring) {
             instance.markDiscarded();
@@ -217,7 +212,7 @@ public class TribulationManager extends SavedData {
 
     //removes every tribulation without running any resolution logic
     public void discardAll() {
-        for (TribulationInstance instance : tribulations.values()) {
+        for (TribulationInstance<?> instance : tribulations.values()) {
             sendRemove(instance);
         }
         tribulations.clear();
@@ -231,7 +226,7 @@ public class TribulationManager extends SavedData {
 
     private void tick(MinecraftServer server) {
         boolean started = beginDeferring();
-        for (TribulationInstance instance : tribulations.values()) {
+        for (TribulationInstance<?> instance : tribulations.values()) {
             if (instance.isQueuedForRemoval()) continue;
             if (instance.isActive()) {
                 //ticked whether or not the target is present, the tribulation decides what to do
@@ -241,7 +236,7 @@ public class TribulationManager extends SavedData {
                 followTarget(instance);
                 if (!level.isLoaded(instance.getBlockPosition())) continue;
 
-                instance.getTribulation().tick(instance, level);
+                instance.tick(level);
                 instance.incrementAge();
                 setDirty();
             }
@@ -271,7 +266,7 @@ public class TribulationManager extends SavedData {
 
         //resolution happens outside of iteration, so actions are free to start or discard tribulations
         for (int i = 0; i < toRemove.size(); i++) {
-            TribulationInstance instance = toRemove.get(i);
+            TribulationInstance<?> instance = toRemove.get(i);
             instance.setQueuedForRemoval(false);
             if (!tribulations.containsKey(instance.getId())) continue;
             if (instance.isDiscarded()) removeInstance(instance);
@@ -285,14 +280,14 @@ public class TribulationManager extends SavedData {
         toAdd.clear();
     }
 
-    private void queueRemoval(TribulationInstance instance) {
+    private void queueRemoval(TribulationInstance<?> instance) {
         if (instance.isQueuedForRemoval()) return;
         instance.setQueuedForRemoval(true);
         toRemove.add(instance);
     }
 
     //moves the tribulation to the targets position
-    private void followTarget(TribulationInstance instance) {
+    private void followTarget(TribulationInstance<?> instance) {
         LivingEntity entity = instance.getTargetEntity();
         if (entity == null) return;
         if (entity.isRemoved()) {
@@ -306,7 +301,7 @@ public class TribulationManager extends SavedData {
         move(instance, instance.getDimension(), entity.position());
     }
 
-    private void onTargetChangedDimension(TribulationInstance instance, LivingEntity entity) {
+    private void onTargetChangedDimension(TribulationInstance<?> instance, LivingEntity entity) {
         switch (instance.getTarget().getDimensionChangeBehaviour()) {
             case FOLLOW -> {
                 instance.setTargetEntity(entity);
@@ -320,7 +315,7 @@ public class TribulationManager extends SavedData {
         }
     }
 
-    private void move(TribulationInstance instance, ResourceKey<Level> dimension, Vec3 position) {
+    private void move(TribulationInstance<?> instance, ResourceKey<Level> dimension, Vec3 position) {
         ResourceKey<Level> oldDimension = instance.getDimension();
         if (oldDimension.equals(dimension) && instance.getPosition().equals(position)) return;
         ChunkPos oldChunk = instance.getChunkPos();
@@ -332,7 +327,7 @@ public class TribulationManager extends SavedData {
         }
     }
 
-    private void tryResolve(TribulationInstance instance) {
+    private void tryResolve(TribulationInstance<?> instance) {
         if (server == null) return;
         TribulationOutcome outcome = instance.getOutcome();
         List<TribulationResolutionAction> actions = outcome == TribulationOutcome.SUCCESS ? instance.getSuccessActions() : instance.getFailureActions();
@@ -357,13 +352,13 @@ public class TribulationManager extends SavedData {
 
     //──Chunk Index────────────────────────────────────────────────────────
 
-    private void indexChunk(TribulationInstance instance, ResourceKey<Level> dimension, ChunkPos chunk) {
+    private void indexChunk(TribulationInstance<?> instance, ResourceKey<Level> dimension, ChunkPos chunk) {
         chunkTribulations.computeIfAbsent(dimension, key -> new HashMap<>())
                 .computeIfAbsent(chunk.pack(), key -> new HashSet<>())
                 .add(instance.getId());
     }
 
-    private void unindexChunk(TribulationInstance instance, ResourceKey<Level> dimension, ChunkPos chunk) {
+    private void unindexChunk(TribulationInstance<?> instance, ResourceKey<Level> dimension, ChunkPos chunk) {
         HashMap<Long, HashSet<UUID>> chunks = chunkTribulations.get(dimension);
         if (chunks == null) return;
         HashSet<UUID> ids = chunks.get(chunk.pack());
@@ -373,12 +368,20 @@ public class TribulationManager extends SavedData {
         if (chunks.isEmpty()) chunkTribulations.remove(dimension);
     }
 
-    private List<TribulationInstance> getInChunk(ResourceKey<Level> dimension, ChunkPos chunk) {
+    private List<TribulationInstance<?>> getInChunk(ResourceKey<Level> dimension, ChunkPos chunk) {
         HashMap<Long, HashSet<UUID>> chunks = chunkTribulations.get(dimension);
         if (chunks == null) return List.of();
         HashSet<UUID> ids = chunks.get(chunk.pack());
         if (ids == null) return List.of();
-        return ids.stream().map(tribulations::get).filter(Objects::nonNull).toList();
+
+        List<TribulationInstance<?>> list = new ArrayList<>();
+        for (UUID id : ids) {
+            TribulationInstance<?> tribulationInstance = tribulations.get(id);
+            if (tribulationInstance != null) {
+                list.add(tribulationInstance);
+            }
+        }
+        return list;
     }
 
     //──Sync────────────────────────────────────────────────────────
@@ -391,7 +394,8 @@ public class TribulationManager extends SavedData {
     }
 
     //sends any changes since the last sync to tracking players
-    private void syncInstance(TribulationInstance instance) {
+    //TODO this is the method i want to simplify SIGNIFICANTLY since i believe it to be overcomplicating it
+    private void syncInstance(TribulationInstance<?> instance) {
         ResourceKey<Level> dimension = instance.getDimension();
         ChunkPos chunk = instance.getChunkPos();
         Vec3 position = instance.getPosition();
@@ -400,7 +404,7 @@ public class TribulationManager extends SavedData {
         if (dimension.equals(instance.getSyncedDimension()) && chunk.equals(instance.getSyncedChunk())) {
             if (dataDirty || !position.equals(instance.getSyncedPosition())) {
                 ServerLevel level = server == null ? null : server.getLevel(dimension);
-                if (level != null) PacketDistributor.sendToPlayersTrackingChunk(level, chunk, createUpdatePacket(instance));
+                if (level != null) PacketDistributor.sendToPlayersTrackingChunk(level, chunk, createUpdatePacket(instance, level.registryAccess()));
                 instance.setSynced(dimension, chunk, position);
             }
             return;
@@ -419,51 +423,35 @@ public class TribulationManager extends SavedData {
         ClientboundTribulationUpdatePacket update = null;
         for (ServerPlayer player : newPlayers) {
             if (sameDimension && oldPlayers.contains(player)) {
-                if (update == null) update = createUpdatePacket(instance);
+                if (update == null) update = createUpdatePacket(instance, player.registryAccess());
                 PacketDistributor.sendToPlayer(player, update);
             } else {
-                if (add == null) add = createAddPacket(instance);
+                if (add == null) add = createAddPacket(instance, player.registryAccess());
                 PacketDistributor.sendToPlayer(player, add);
             }
         }
         instance.setSynced(dimension, chunk, position);
     }
 
-    private void sendRemove(TribulationInstance instance) {
+    private void sendRemove(TribulationInstance<?> instance) {
         ClientboundTribulationRemovePacket remove = new ClientboundTribulationRemovePacket(instance.getId());
         for (ServerPlayer player : getTrackingPlayers(instance.getSyncedDimension(), instance.getSyncedChunk())) {
             PacketDistributor.sendToPlayer(player, remove);
         }
     }
 
-    private ClientboundTribulationAddPacket createAddPacket(TribulationInstance instance) {
+    private ClientboundTribulationAddPacket createAddPacket(TribulationInstance<?> instance, RegistryAccess access) {
         return new ClientboundTribulationAddPacket(
                 instance.getId(),
                 instance.getTribulationId(),
                 instance.getDimension(),
                 instance.getPosition(),
-                encodeData(instance)
+                instance.encodeData(access)
         );
     }
 
-    private ClientboundTribulationUpdatePacket createUpdatePacket(TribulationInstance instance) {
-        return new ClientboundTribulationUpdatePacket(instance.getId(), instance.getPosition(), encodeData(instance));
-    }
-
-    @SuppressWarnings("unchecked")
-    private byte[] encodeData(TribulationInstance instance) {
-        StreamCodec<RegistryFriendlyByteBuf, TribulationData> codec = (StreamCodec<RegistryFriendlyByteBuf, TribulationData>) instance.getTribulation().getType().dataStreamCodec();
-        if (server == null) return new byte[0];
-
-        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), server.registryAccess());
-        try {
-            codec.encode(buf, instance.getData());
-            byte[] bytes = new byte[buf.readableBytes()];
-            buf.readBytes(bytes);
-            return bytes;
-        } finally {
-            buf.release();
-        }
+    private ClientboundTribulationUpdatePacket createUpdatePacket(TribulationInstance<?> instance, RegistryAccess access) {
+        return new ClientboundTribulationUpdatePacket(instance.getId(), instance.getPosition(), instance.encodeData(access));
     }
 
     //──Events────────────────────────────────────────────────────────
@@ -488,15 +476,15 @@ public class TribulationManager extends SavedData {
     @SubscribeEvent
     public static void onChunkSent(ChunkWatchEvent.Sent event) {
         if (instance == null) return;
-        for (TribulationInstance tribulation : instance.getInChunk(event.getLevel().dimension(), event.getPos())) {
-            PacketDistributor.sendToPlayer(event.getPlayer(), instance.createAddPacket(tribulation));
+        for (TribulationInstance<?> tribulation : instance.getInChunk(event.getLevel().dimension(), event.getPos())) {
+            PacketDistributor.sendToPlayer(event.getPlayer(), instance.createAddPacket(tribulation, event.getLevel().registryAccess()));
         }
     }
 
     @SubscribeEvent
     public static void onChunkUnWatch(ChunkWatchEvent.UnWatch event) {
         if (instance == null) return;
-        for (TribulationInstance tribulation : instance.getInChunk(event.getLevel().dimension(), event.getPos())) {
+        for (TribulationInstance<?> tribulation : instance.getInChunk(event.getLevel().dimension(), event.getPos())) {
             PacketDistributor.sendToPlayer(event.getPlayer(), new ClientboundTribulationRemovePacket(tribulation.getId()));
         }
     }
@@ -505,7 +493,7 @@ public class TribulationManager extends SavedData {
     public static void onJoinLevel(EntityJoinLevelEvent event) {
         if (instance == null || instance.tribulations.isEmpty() || event.getLevel().isClientSide() || !(event.getEntity() instanceof LivingEntity entity)) return;
         boolean started = instance.beginDeferring();
-        for (TribulationInstance tribulation : instance.tribulations.values()) {
+        for (TribulationInstance<?> tribulation : instance.tribulations.values()) {
             if (!tribulation.isTargeting(entity.getUUID())) continue;
             if (entity.level().dimension().equals(tribulation.getDimension())) {
                 tribulation.setTargetEntity(entity);
@@ -523,7 +511,7 @@ public class TribulationManager extends SavedData {
     @SubscribeEvent
     public static void onLeaveLevel(EntityLeaveLevelEvent event) {
         if (instance == null || instance.tribulations.isEmpty() || event.getLevel().isClientSide()) return;
-        for (TribulationInstance tribulation : instance.tribulations.values()) {
+        for (TribulationInstance<?> tribulation : instance.tribulations.values()) {
             if (tribulation.getTargetEntity() == event.getEntity()) tribulation.setTargetEntity(null);
         }
     }
@@ -533,10 +521,10 @@ public class TribulationManager extends SavedData {
         if (instance == null || instance.tribulations.isEmpty() || event.getEntity().level().isClientSide()) return;
         //if we are not already ticking, this resolves immediately while the entity is still present
         boolean started = instance.beginDeferring();
-        for (TribulationInstance tribulation : instance.tribulations.values()) {
+        for (TribulationInstance<?> tribulation : instance.tribulations.values()) {
             if (!tribulation.isActive() || !tribulation.isTargeting(event.getEntity().getUUID())) continue;
             tribulation.setTargetEntity(event.getEntity());
-            tribulation.getTribulation().onTargetDeath(tribulation);
+            tribulation.onTargetDeath();
             if (tribulation.isFinished()) instance.queueRemoval(tribulation);
         }
         instance.endDeferring(started);

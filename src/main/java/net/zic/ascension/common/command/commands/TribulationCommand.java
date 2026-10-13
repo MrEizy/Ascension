@@ -72,7 +72,7 @@ public class TribulationCommand {
 
     public static int viewTribulations(CommandContext<CommandSourceStack> context) {
         context.getSource().sendSystemMessage(Component.literal("===Tribulations==="));
-        for(TribulationInstance instance : getManager(context).getAll()){
+        for(TribulationInstance<?> instance : getManager(context).getAll()){
             context.getSource().sendSystemMessage(Component.literal(
                     instance.getId() + " : (tribulation: " + instance.getTribulationId()
                             + ", state: " + instance.getState().getSerializedName()

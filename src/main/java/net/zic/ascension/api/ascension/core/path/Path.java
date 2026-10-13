@@ -43,7 +43,7 @@ public interface Path {
 
     //id of the tribulation in the tribulation registry, null if there is none
     @Nullable Identifier getTribulationId(int majorRealm, int minorRealm);
-    @Nullable Tribulation getTribulation(int majorRealm, int minorRealm, RegistryAccess access);
+    @Nullable Tribulation<?> getTribulation(int majorRealm, int minorRealm, RegistryAccess access);
     boolean hasTribulation(int majorRealm, int minorRealm);
 
     //──Path Interactions────────────────────────────────────────────────────────

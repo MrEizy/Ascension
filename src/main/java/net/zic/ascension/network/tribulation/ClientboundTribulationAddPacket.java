@@ -1,5 +1,6 @@
 package net.zic.ascension.network.tribulation;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -20,7 +21,7 @@ public record ClientboundTribulationAddPacket(
         Identifier tribulation,
         ResourceKey<Level> dimension,
         Vec3 position,
-        byte[] data
+        ByteBuf data
 ) implements CustomPacketPayload {
     public static final Type<ClientboundTribulationAddPacket> TYPE = new Type<>(
             Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "tribulation_add")
@@ -32,14 +33,14 @@ public record ClientboundTribulationAddPacket(
                 buf.writeIdentifier(packet.tribulation());
                 buf.writeResourceKey(packet.dimension());
                 TribulationPacketHelper.writeVec3(buf, packet.position());
-                buf.writeByteArray(packet.data());
+                TribulationPacketHelper.writeData(buf, packet.data());
             },
             buf -> new ClientboundTribulationAddPacket(
                     buf.readUUID(),
                     buf.readIdentifier(),
                     buf.readResourceKey(Registries.DIMENSION),
                     TribulationPacketHelper.readVec3(buf),
-                    buf.readByteArray()
+                    TribulationPacketHelper.readData(buf)
             )
     );
 

@@ -14,9 +14,7 @@ import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealm;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
-import com.mojang.serialization.Codec;
 import net.zic.ascension.api.ascension.core.tribulation.Tribulation;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationInstance;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationManager;
 import net.zic.ascension.api.ascension.datapack.path.realm.PathRealmChangeEvent;
@@ -36,7 +34,7 @@ public class SimplePathInstance implements PathInstance {
     private final List<MajorRealm> realms = new ArrayList<>();
     private final List<MajorRealm> cachedRealms = new ArrayList<>();
 
-    private final Map<Realm, CompletedTribulation> completedTribulations = new HashMap<>();
+    private final Map<Realm, CompletedTribulation<?>> completedTribulations = new HashMap<>();
 
     private UUID activeTribulationId;
 
@@ -180,12 +178,12 @@ public class SimplePathInstance implements PathInstance {
      * called when a breakthrough tribulation succeeds, verifies we are still at the realm the tribulation was started at
      * and that the realm still expects this tribulation
      */
-    public void completeBreakthrough(OriginSource source, Realm realm, TribulationInstance tribulation, int realmChange){
+    public void completeBreakthrough(OriginSource source, Realm realm, TribulationInstance<?> tribulation, int realmChange){
         endBreakthrough(tribulation.getId());
         if(!getCurrentRealm().equals(realm)) return;
         if(!tribulation.getTribulationId().equals(path.getTribulationId(realm.majorRealm(), realm.minorRealm()))) return;
 
-        completedTribulations.put(realm, new CompletedTribulation(tribulation.getTribulationId(), tribulation.getTribulation(), tribulation.getData()));
+        completedTribulations.put(realm, CompletedTribulation.of(tribulation));
 
         Realm target = realm;
         for(int i = 0; i < realmChange; i++){
@@ -202,28 +200,27 @@ public class SimplePathInstance implements PathInstance {
 
     public void completeTribulationForRealm(Realm realm,OriginSource source){
         if(realm.majorRealm() < 0) return;
-        CompletedTribulation completedTribulation = completedTribulations.get(realm);
+        CompletedTribulation<?> completedTribulation = completedTribulations.get(realm);
         Identifier tribulationId = path.getTribulationId(realm.majorRealm(),realm.minorRealm());
-        Tribulation tribulation = CoreRegistries.safeAccess(CoreRegistries.TRIBULATION_REGISTRY, tribulationId, source.getRegistryAccess());
+        Tribulation<?> tribulation = CoreRegistries.safeAccess(CoreRegistries.TRIBULATION_REGISTRY, tribulationId, source.getRegistryAccess());
         if(tribulation == null){
             completedTribulations.remove(realm);
             return;
         }
         if(completedTribulation == null || !completedTribulation.id().equals(tribulationId)){
             //no data present for this tribulation, create new data
-            completedTribulation = new CompletedTribulation(tribulationId, tribulation, tribulation.newData());
+            completedTribulation = CompletedTribulation.fresh(tribulationId, tribulation);
         }else{
-            TribulationData data = tribulation.validateLoadedData(completedTribulation.data());
-            completedTribulation = new CompletedTribulation(tribulationId, tribulation, data == null ? tribulation.newData() : data);
+            completedTribulation = completedTribulation.revalidate();
         }
         completedTribulations.put(realm, completedTribulation);
 
-        tribulation.onAdded(source,completedTribulation.data());
+        completedTribulation.onAdded(source);
     }
     public void removeTribulationForRealm(Realm realm,OriginSource source){
-        CompletedTribulation completedTribulation = completedTribulations.remove(realm);
+        CompletedTribulation<?> completedTribulation = completedTribulations.remove(realm);
         if(completedTribulation == null) return;
-        completedTribulation.tribulation().onRemoved(source,completedTribulation.data());
+        completedTribulation.onRemoved(source);
     }
 
 
@@ -404,7 +401,7 @@ public class SimplePathInstance implements PathInstance {
         for(MajorRealm realm : realms){
             cachedRealms.add(MajorRealm.of(realm));
         }
-        Map<Realm, CompletedTribulation> cachedTribulations = new HashMap<>(completedTribulations);
+        Map<Realm, CompletedTribulation<?>> cachedTribulations = new HashMap<>(completedTribulations);
         double cachedProgress = progress;
 
         handleRealmChange(Realm.of(0,0),source);
@@ -415,8 +412,10 @@ public class SimplePathInstance implements PathInstance {
         realms.addAll(cachedRealms);
         cachedRealms.clear();
 
-        completedTribulations.clear();
+        completedTribulations.clear(); //just in case there are any stragglers
         completedTribulations.putAll(cachedTribulations);
+
+        progress = cachedProgress;
 
     }
 
@@ -434,9 +433,7 @@ public class SimplePathInstance implements PathInstance {
             ValueOutput completedTribulationOutput = completedTribulationsOutput.addChild();
             completedTribulationOutput.putInt("major_realm",realm.majorRealm());
             completedTribulationOutput.putInt("minor_realm",realm.minorRealm());
-            CompletedTribulation completedTribulation = completedTribulations.get(realm);
-            completedTribulationOutput.store("tribulation", Identifier.CODEC, completedTribulation.id());
-            completedTribulationOutput.store("data", dataCodec(completedTribulation.tribulation()), completedTribulation.data());
+            completedTribulations.get(realm).write(completedTribulationOutput);
         }
         if(activeTribulationId != null) output.putString("tribulation",activeTribulationId.toString());
 
@@ -454,22 +451,18 @@ public class SimplePathInstance implements PathInstance {
         for(ValueInput completedTribulationInput : completedTribulationsInput){
             Realm realm = Realm.of(completedTribulationInput.getIntOr("major_realm",0),completedTribulationInput.getIntOr("minor_realm",0));
             Identifier tribulationId = completedTribulationInput.read("tribulation", Identifier.CODEC).orElse(null);
-            Tribulation tribulation = CoreRegistries.safeAccess(CoreRegistries.TRIBULATION_REGISTRY, tribulationId, access);
-            TribulationData data = tribulation == null ? null : completedTribulationInput.read("data", dataCodec(tribulation)).map(tribulation::validateLoadedData).orElse(null);
-            if(data == null){
+            Tribulation<?> tribulation = CoreRegistries.safeAccess(CoreRegistries.TRIBULATION_REGISTRY, tribulationId, access);
+            CompletedTribulation<?> completedTribulation = tribulation == null ? null : CompletedTribulation.read(tribulationId, tribulation, completedTribulationInput);
+            if(completedTribulation == null){
                 AscensionCraft.LOGGER.debug("Invalid completed tribulation {} discarding", tribulationId);
                 continue;
             }
-            completedTribulations.put(realm,new CompletedTribulation(tribulationId,tribulation,data));
+            completedTribulations.put(realm,completedTribulation);
         }
         Optional<String> tribulationId = input.getString("tribulation");
         tribulationId.ifPresent(s ->activeTribulationId = UUID.fromString(s));
     }
 
-    @SuppressWarnings("unchecked")
-    private static Codec<TribulationData> dataCodec(Tribulation tribulation){
-        return (Codec<TribulationData>) tribulation.getType().dataCodec();
-    }
 
      @Override
     public void encode(ByteBuf buf, RegistryAccess access) {

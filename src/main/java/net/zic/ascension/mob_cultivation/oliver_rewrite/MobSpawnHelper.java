@@ -34,7 +34,7 @@ public class MobSpawnHelper {
     public static void buildConfigurationInstance(Mob mob){
         if(!hasConfig(mob)) return;
 
-        System.out.println("attaching config instance");
+
         MobConfiguration config = getConfig(mob);
         MobConfigurationInstance configInstance = generateInstance(config,mob);
 

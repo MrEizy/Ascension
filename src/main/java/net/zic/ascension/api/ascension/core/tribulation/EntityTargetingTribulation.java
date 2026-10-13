@@ -8,10 +8,10 @@ import net.minecraft.world.entity.LivingEntity;
  * Splits ticking into ticks where the target is loaded, and ticks where it is not.
  * The tribulation still ticks while its target is unloaded (as long as the chunk it is in is loaded)
  */
-public abstract class EntityTargetingTribulation implements Tribulation {
+public abstract class EntityTargetingTribulation<T extends TribulationData> implements Tribulation<T> {
 
     @Override
-    public final void tick(TribulationInstance instance, ServerLevel level) {
+    public final void tick(TribulationInstance<T> instance, ServerLevel level) {
         LivingEntity target = instance.getTargetEntity();
         if (target == null || target.isRemoved()) {
             tickWithoutTarget(instance, level);
@@ -20,8 +20,8 @@ public abstract class EntityTargetingTribulation implements Tribulation {
         tickWithTarget(instance, level, target);
     }
 
-    protected abstract void tickWithTarget(TribulationInstance instance, ServerLevel level, LivingEntity target);
+    protected abstract void tickWithTarget(TribulationInstance<T> instance, ServerLevel level, LivingEntity target);
 
     //by default nothing happens while the target is missing
-    protected void tickWithoutTarget(TribulationInstance instance, ServerLevel level) {}
+    protected void tickWithoutTarget(TribulationInstance<T> instance, ServerLevel level) {}
 }

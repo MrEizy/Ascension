@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
 
 public record TribulationResolutionContext(
         MinecraftServer server,
-        TribulationInstance instance,
+        TribulationInstance<?> instance,
         TribulationOutcome outcome,
         @Nullable LivingEntity target
 ) {

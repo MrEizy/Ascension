@@ -97,7 +97,7 @@ public class SimplePath implements Path {
     }
 
     @Override
-    public Tribulation getTribulation(int majorRealm, int minorRealm, RegistryAccess access) {
+    public Tribulation<?> getTribulation(int majorRealm, int minorRealm, RegistryAccess access) {
         return CoreRegistries.safeAccess(CoreRegistries.TRIBULATION_REGISTRY, getTribulationId(majorRealm, minorRealm), access);
     }
 

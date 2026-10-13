@@ -92,7 +92,7 @@ public final class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<ProgressActionCondition> PROGRESS_ACTION_CONDITION_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "progress_action_conditions", () -> ProgressActionConditionType.PROGRESS_ACTION_CONDITION_CODEC
     );
-    public static final RegistryHelper.DataPackRegistry<Tribulation> TRIBULATION_REGISTRY = RegistryHelper.dataPackRegistry(
+    public static final RegistryHelper.DataPackRegistry<Tribulation<?>> TRIBULATION_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "tribulations", () -> TribulationType.TRIBULATION_CODEC
     );
 

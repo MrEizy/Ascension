@@ -1,5 +1,6 @@
 package net.zic.ascension.network.tribulation;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -14,7 +15,7 @@ import java.util.UUID;
 public record ClientboundTribulationUpdatePacket(
         UUID id,
         Vec3 position,
-        byte[] data
+        ByteBuf data
 ) implements CustomPacketPayload {
     public static final Type<ClientboundTribulationUpdatePacket> TYPE = new Type<>(
             Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "tribulation_update")
@@ -24,12 +25,12 @@ public record ClientboundTribulationUpdatePacket(
             (buf, packet) -> {
                 buf.writeUUID(packet.id());
                 TribulationPacketHelper.writeVec3(buf, packet.position());
-                buf.writeByteArray(packet.data());
+                TribulationPacketHelper.writeData(buf, packet.data());
             },
             buf -> new ClientboundTribulationUpdatePacket(
                     buf.readUUID(),
                     TribulationPacketHelper.readVec3(buf),
-                    buf.readByteArray()
+                    TribulationPacketHelper.readData(buf)
             )
     );
 

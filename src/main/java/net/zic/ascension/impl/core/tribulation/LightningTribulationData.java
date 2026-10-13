@@ -40,7 +40,7 @@ public class LightningTribulationData implements TribulationData {
     }
 
     @Override
-    public TribulationType getType() {
+    public TribulationType<?> getType() {
         return AscensionTribulationTypes.LIGHTNING_TRIBULATION.get();
     }
 }
