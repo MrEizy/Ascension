@@ -1,6 +1,7 @@
 package net.zic.ascension.datagen;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.Identifier;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlags;
@@ -28,7 +29,7 @@ public class AscEntityLootTableProvider extends EntityLootSubProvider {
         npcLoot(AscEntities.FEMALE_CULTIVATOR.get());
         npcLoot(AscEntities.SECT_ELDER.get());
         npcLoot(AscEntities.SECT_MASTER.get());
-        npcLoot(AscEntities.YOUNG_MASTER.get());
+        youngMasterLoot(AscEntities.YOUNG_MASTER.get());
     }
 
     private void npcLoot(EntityType<?> type) {
@@ -36,6 +37,24 @@ public class AscEntityLootTableProvider extends EntityLootSubProvider {
                 .setRolls(ConstantValue.exactly(1))
                 .when(LootItemRandomChanceCondition.randomChance(0.2f))
                 .add(LootItem.lootTableItem(ModItems.JADE.get()))));
+    }
+
+    private void youngMasterLoot(EntityType<?> type) {
+        add(type, LootTable.lootTable()
+                .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                        .when(LootItemRandomChanceCondition.randomChance(0.75f))
+                        .add(LootItem.lootTableItem(ModItems.JADE.get())))
+                .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                        .when(LootItemRandomChanceCondition.randomChance(0.55f))
+                        .add(LootItem.lootTableItem(ModItems.SPIRITUAL_STONE.get())))
+                .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                        .when(LootItemRandomChanceCondition.randomChance(0.16f))
+                        .add(LootItem.lootTableItem(ModItems.TECHNIQUE_MANUAL.get())
+                                .apply(SetComponentsFunction.setComponent(AscensionComponents.REGISTRY_ID_HOLDER.get(),
+                                        Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/imperial_seven_stances"))))
+                        .add(LootItem.lootTableItem(ModItems.TECHNIQUE_MANUAL.get())
+                                .apply(SetComponentsFunction.setComponent(AscensionComponents.REGISTRY_ID_HOLDER.get(),
+                                        Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/shadowless_art"))))));
     }
 
     @Override

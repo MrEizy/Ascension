@@ -15,5 +15,15 @@
     "Do you even know whose presence you stand in?",
     "My cultivation is advancing splendidly.",
     "Try not to embarrass yourself in front of me."
-  ]
+  ],
+  "encounter": {
+    "summon_delay_ticks": 300,
+    "taunts": [
+      "Your lineage is so insignificant that even the heavens have forgotten its name.",
+      "Did your ancestors cultivate incompetence for ten generations?",
+      "An ant dares look upon this young master?",
+      "Elder! This fool needs a lesson in respect.",
+      "Your bloodline is weaker than the tea my servants discard."
+    ]
+  }
 }

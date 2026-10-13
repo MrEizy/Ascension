@@ -14,5 +14,17 @@
     "A sect is only as strong as its disciples.",
     "There is much you have yet to learn.",
     "Your determination will be tested by the heavens."
-  ]
+  ],
+  "guidance": {
+    "techniques": [
+      "ascension:1_ordinary/imperial_seven_stances",
+      "ascension:1_ordinary/nine_paths_of_truth",
+      "ascension:1_ordinary/shadowless_art",
+      "ascension:1_ordinary/martial_transcendence_vol_1",
+      "ascension:1_ordinary/open_sky_breathing_scripture"
+    ],
+    "offering_item": "ascension:spiritual_stone",
+    "offering_count": 12,
+    "kills": 8
+  }
 }

@@ -5,7 +5,7 @@
       "bonus_rolls": 0.0,
       "conditions": [
         {
-          "chance": 0.2,
+          "chance": 0.75,
           "condition": "minecraft:random_chance"
         }
       ],
@@ -13,6 +13,58 @@
         {
           "type": "minecraft:item",
           "name": "ascension:jade"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.55,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "ascension:spiritual_stone"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.16,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/imperial_seven_stances"
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:technique_manual"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/shadowless_art"
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:technique_manual"
         }
       ],
       "rolls": 1.0

@@ -77,6 +77,9 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.npc.challenge_ended", "The challenge has ended.");
         add("gui.ascension.npc.survival_required", "Switch to Survival or Adventure mode before challenging a cultivator.");
         add("gui.ascension.npc.too_far", "You must approach the cultivator.");
+        add("gui.ascension.npc.guidance", "Request Guidance / Check Trial");
+        add("gui.ascension.npc.enlightened", "Guidance Completed");
+        add("gui.ascension.npc.reinforcement", "The Young Master calls a Sect Elder to his defence!");
 
         add("entity.ascension.treasure_rat", "Treasure Rat");
         add("item.ascension.treasure_rat_spawn_egg", "Treasure Rat Spawn Egg");

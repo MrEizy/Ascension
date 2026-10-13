@@ -15,5 +15,17 @@
     "Patience is the foundation of every great technique.",
     "Our sect has endured many generations.",
     "A strong foundation outweighs a hasty breakthrough."
-  ]
+  ],
+  "guidance": {
+    "techniques": [
+      "ascension:1_ordinary/eagle_claw_palm_technique",
+      "ascension:1_ordinary/grasping_sand_technique",
+      "ascension:1_ordinary/iron_fist_tempering_manual",
+      "ascension:1_ordinary/lightness_technique",
+      "ascension:1_ordinary/sword_draw_manual"
+    ],
+    "offering_item": "ascension:spiritual_stone",
+    "offering_count": 4,
+    "kills": 3
+  }
 }
