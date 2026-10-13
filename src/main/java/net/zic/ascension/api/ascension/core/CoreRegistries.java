@@ -15,7 +15,7 @@ import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.ascension.core.resource.ResourceDefinition;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.technique.Technique;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
+import net.zic.ascension.api.ascension.core.tribulation.Tribulation;
 import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
@@ -92,8 +92,8 @@ public final class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<ProgressActionCondition> PROGRESS_ACTION_CONDITION_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "progress_action_conditions", () -> ProgressActionConditionType.PROGRESS_ACTION_CONDITION_CODEC
     );
-    public static final RegistryHelper.DataPackRegistry<TribulationDefinition> TRIBULATION_DEFINITION_REGISTRY = RegistryHelper.dataPackRegistry(
-            AscensionCraft.MOD_ID, "tribulation_definitions", () -> TribulationType.TRIBULATION_CODEC
+    public static final RegistryHelper.DataPackRegistry<Tribulation<?>> TRIBULATION_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "tribulations", () -> TribulationType.TRIBULATION_CODEC
     );
 
     private CoreRegistries() {
@@ -127,7 +127,7 @@ public final class CoreRegistries {
         register(event, STAGGER_REGISTRY);
         register(event, PROGRESS_ACTION_REGISTRY);
         register(event, PROGRESS_ACTION_CONDITION_REGISTRY);
-        register(event, TRIBULATION_DEFINITION_REGISTRY);
+        register(event, TRIBULATION_REGISTRY);
     }
 
     private static <T> void register(DataPackRegistryEvent.NewRegistry event, RegistryHelper.DataPackRegistry<T> registry) {

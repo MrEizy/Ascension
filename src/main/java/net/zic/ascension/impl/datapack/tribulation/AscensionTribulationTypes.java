@@ -8,11 +8,11 @@ import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 
 public class AscensionTribulationTypes {
-    public static final DeferredRegister<TribulationType> TRIBULATION_TYPES =
+    public static final DeferredRegister<TribulationType<?>> TRIBULATION_TYPES =
             DeferredRegister.create(TypeRegistries.TRIBULATION_TYPE_REGISTRY, AscensionCraft.MOD_ID);
 
 
-    public static final DeferredHolder<TribulationType,TribulationType> LIGHTNING_TRIBULATION = TRIBULATION_TYPES.register(
+    public static final DeferredHolder<TribulationType<?>, LightningTribulationType> LIGHTNING_TRIBULATION = TRIBULATION_TYPES.register(
             "lightning",
             LightningTribulationType::new
     );

@@ -7,14 +7,15 @@ import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 import java.util.UUID;
 
 public class LightningTribulationData implements TribulationData {
-    private UUID id;
+    private final UUID id;
     private int survived;
     private int ticks;
-    public LightningTribulationData(int number, UUID id) {
-        setLightningSurvived(number);
+
+    public LightningTribulationData(int survived, int ticks, UUID id) {
+        this.survived = survived;
+        this.ticks = ticks;
         this.id = id;
     }
-
 
     public boolean tick(int maxTicks){
         ticks++;
@@ -22,15 +23,16 @@ public class LightningTribulationData implements TribulationData {
 
         ticks = 0;
         return true;
-
     }
 
     public void setLightningSurvived(int number){
         this.survived = number;
-
     }
     public int getLightningSurvived(){
         return survived;
+    }
+    public int getTicks(){
+        return ticks;
     }
     @Override
     public UUID getUUID() {
@@ -38,7 +40,7 @@ public class LightningTribulationData implements TribulationData {
     }
 
     @Override
-    public TribulationType getType() {
+    public TribulationType<?> getType() {
         return AscensionTribulationTypes.LIGHTNING_TRIBULATION.get();
     }
 }

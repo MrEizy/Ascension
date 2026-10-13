@@ -14,7 +14,7 @@ that tell Minecraft how to decode a specific java file. this means 2 physiques c
 JSON formats, yet still produce a valid Physique object.
 
 If one of the built-in datapack types does not suit your use case you will have to make your own.
-This is the exact same for all Types except Tribulations, which we will get to later.
+This is the exact same for all Types except Tribulations, see [Tribulations](#tribulations).
 
 
 The basic process.
@@ -99,3 +99,40 @@ returns a fresh instance of the PhysiqueData
 two versions, one for decoding physique data from a byteBuffer, and the other from an ValueInput
 ##### ```itemTooltip()```
 handles the tooltip the physique transfer item should display
+### Tribulations
+Tribulations differ from other datapack types in that the registry entry holds the logic as well as the configuration.
+A tribulation is always defined in the tribulation registry (`data/<namespace>/ascension/tribulations/`) and is referenced by its registry id, it cannot be defined inline.
+
+A tribulation is split into 4 parts
+- `TribulationType` provides the codec for the Tribulation, the codec for its TribulationData, and the `StreamCodec` used to sync that data to clients
+- `Tribulation` the registry entry. Contains the configuration (strikes, damage, delay etc.) and the logic (`tick`, `onStart`, `onFinished`, `onTargetDeath`)
+- `TribulationData` created when a tribulation starts. It is saved with the active tribulation and can be kept after it is completed (paths keep it per realm, using `onAdded`/`onRemoved` to apply bonuses)
+- `TribulationInstance` created by the `TribulationManager`, wraps a Tribulation, its data, its position and an optional target. You never create these directly
+
+#### Starting a tribulation
+```java
+UUID id = TribulationManager.get(server)
+        .create(Identifier.parse("ascension:test_tribulation"))
+        .targeting(entity, DimensionChangeBehaviour.STAY) //optional, use at(level, pos) for a tribulation without a target
+        .onSuccess(new RealmChangeResolutionAction(pathId, realm, 1))
+        .onFailure(new EndBreakthroughResolutionAction(pathId))
+        .start();
+```
+Inside `tick` call `instance.succeed()` or `instance.fail()` to finish the tribulation.
+If the tribulation tracks an entity, extend `EntityTargetingTribulation`, which splits ticking into `tickWithTarget` and `tickWithoutTarget`.
+
+#### Resolution actions
+`TribulationResolutionAction`s are saved alongside the active tribulation, and run once it finishes, only the success or the failure list runs.
+Since the world or datapack may have changed between starting and finishing, an action should verify any state it depends on.
+For example `RealmChangeResolutionAction` checks the target is still at the realm the tribulation started at, and that the realm still has the same tribulation.
+Actions are registered in `TRIBULATION_RESOLUTION_ACTION_TYPE_REGISTRY` and need a codec.
+If an action `requiresLoadedTarget()` and the target is not loaded when the tribulation finishes, resolution waits for the target to join the world again.
+
+#### Lifecycle
+- tribulations stay in memory while the server runs, but only tick while the chunk they are in is loaded
+- an entity tracking tribulation follows its target, `DimensionChangeBehaviour` decides what happens when the target changes dimension (`STAY` by default, `FOLLOW` or `FAIL`)
+- on load an active tribulation is discarded without running any logic if its id is no longer in the registry, or its data/actions fail to load. `Tribulation.validateLoadedData` can also reject or adjust loaded data
+- `/reload` does not affect running tribulations, restart the server for datapack changes to apply
+
+#### Client
+Tribulations are synced to every player tracking the chunk they are in. Register a `TribulationRenderer` for your type with `TribulationRenderers.register(type, renderer)` during client setup to get `clientTick` and `render` hooks. Clients receive the same `TribulationData` as the server instance (`ClientTribulation.getData()`). It is encoded with `TribulationType.dataStreamCodec()`, which defaults to the data codec, override it for a more compact network format. Call `instance.markDataDirty()` when the data changes so it is resent.

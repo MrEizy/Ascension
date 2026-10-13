@@ -39,7 +39,7 @@ Common registries:
 | Paths | `data/<namespace>/ascension/paths/...` |
 | Progress actions | `data/<namespace>/ascension/progress_actions/...` |
 | Progress conditions | `data/<namespace>/ascension/progress_action_conditions/...` |
-| Tribulations | `data/<namespace>/ascension/tribulation_definitions/...` |
+| Tribulations | `data/<namespace>/ascension/tribulations/...` |
 | Runtime visuals | `data/<namespace>/ascension/skill_system/visuals/...` |
 | Beam definitions | `data/<namespace>/ascension/skill_system/runtime/beams/...` |
 | Datapack resources | `data/<namespace>/ascension/skill_system/resources/...` |
@@ -82,14 +82,18 @@ Names and descriptions use Minecraft Components.
 Literal:
 
 ```json
-"name": "Example"
+{
+  "name": "Example"
+}
 ```
 
 Translatable:
 
 ```json
-"name": {
-  "translate": "example.content.name"
+{
+  "name": {
+    "translate": "example.content.name"
+  }
 }
 ```
 
@@ -99,9 +103,11 @@ Use translation keys for shipped content so text can be localized.
 Physiques use a direct stat-to-value map:
 
 ```json
-"base_stats": {
-  "ascension:vitality": 2.0,
-  "ascension:strength": 1.0
+{
+  "base_stats": {
+    "ascension:vitality": 2.0,
+    "ascension:strength": 1.0
+  }
 }
 ```
 
@@ -409,7 +415,7 @@ Physiques:                 data/<namespace>/ascension/physiques/
 Paths:                     data/<namespace>/ascension/paths/
 Progress actions:          data/<namespace>/ascension/progress_actions/
 Progress conditions:       data/<namespace>/ascension/progress_action_conditions/
-Tribulation definitions:   data/<namespace>/ascension/tribulation_definitions/
+Tribulations:              data/<namespace>/ascension/tribulations/
 Runtime visuals:           data/<namespace>/ascension/skill_system/visuals/
 Beam definitions:           data/<namespace>/ascension/skill_system/runtime/beams/
 Datapack resources:         data/<namespace>/ascension/skill_system/resources/

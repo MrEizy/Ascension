@@ -17,7 +17,6 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.core.technique.TechniqueSkillDefinition;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationManager;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -229,7 +228,7 @@ public class SimpleTechnique implements Technique {
     }
 
     @Override
-    public TribulationDefinition getTribulation(int majorRealm, int minorRealm, RegistryAccess access) {
+    public Identifier getTribulationId(int majorRealm, int minorRealm, RegistryAccess access) {
         return null;
     }
 
@@ -252,11 +251,12 @@ public class SimpleTechnique implements Technique {
             return false;
         }
 
-        TribulationDefinition definition = getTribulation(majorRealm, minorRealm, source.getRegistryAccess());
-        if (definition == null) {
+        Identifier tribulation = getTribulationId(majorRealm, minorRealm, source.getRegistryAccess());
+        if (tribulation == null) {
             return true;
         }
-        TribulationManager.getInstance().triggerTribulation(definition, entity);
+        TribulationManager manager = TribulationManager.getInstance();
+        if (manager != null) manager.create(tribulation).targeting(entity).start();
         return false;
     }
 

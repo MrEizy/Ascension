@@ -1,7 +1,7 @@
 package net.zic.ascension.api.ascension.core.path.realm;
 
 import net.minecraft.network.chat.Component;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinitionReference;
+import net.minecraft.resources.Identifier;
 
 public interface CompositeRealmDefinition extends RealmDefinition{
 
@@ -9,7 +9,8 @@ public interface CompositeRealmDefinition extends RealmDefinition{
     Component getCompositeRealmName(int realm);
     Component getMinorRealmName(int realm);
 
-    TribulationDefinitionReference getRealmTribulation(int realm);
+    //returns the id of the tribulation in the tribulation registry, or null if there is none
+    Identifier getRealmTribulationId(int realm);
     double getMaxProgress(int realm);
 
     RealmDefinition realmDefinition(int realm);

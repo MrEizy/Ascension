@@ -82,7 +82,7 @@ public record DataSourceHolder<T extends DataSourceInstance<? extends DataSource
 
 
     public void decode(ByteBuf buf, RegistryAccess access, boolean fullPatch) {
-        Identifier id = ByteBufHelpers.decodeIdentifier(buf);
+
         dataSource.syncHandler(fullPatch).decode(dataSourceInstance, buf, access);
     }
 

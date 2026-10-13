@@ -6,14 +6,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.ascension.core.path.realm.RealmDefinition;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinitionReference;
+import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
 public record MinorRealmDefinition(
         Component name,
-        TribulationDefinitionReference tribulation,
+        Identifier tribulation,
         BreakthroughBehaviour breakthroughBehaviour,
         double maxProgress) implements RealmDefinition {
     @Override
@@ -22,7 +22,7 @@ public record MinorRealmDefinition(
     }
 
     @Override
-    public @Nullable TribulationDefinitionReference getTribulation() {
+    public @Nullable Identifier getTribulationId() {
         return tribulation;
     }
 
@@ -35,7 +35,7 @@ public record MinorRealmDefinition(
             RecordCodecBuilder.create(instance -> instance.group(
                             ComponentSerialization.CODEC.fieldOf("name").forGetter(MinorRealmDefinition::name),
                             Codec.DOUBLE.fieldOf("progress").forGetter(MinorRealmDefinition::maxProgress),
-                            TribulationDefinitionReference.CODEC.optionalFieldOf("tribulation").forGetter(
+                            Identifier.CODEC.optionalFieldOf("tribulation").forGetter(
                                     obj-> Optional.ofNullable(obj.tribulation)),
                             Codec.either(Codec.INT,Codec.STRING).optionalFieldOf("breakthrough_behaviour", Either.right("instant")).forGetter(
                                     obj->{

@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealmDefinition;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinitionReference;
+import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -28,8 +28,8 @@ public record MajorRealmDefinition(
     }
 
     @Override
-    public TribulationDefinitionReference getRealmTribulation(int realm) {
-        return realm >= minorRealms.size() ? null : minorRealms.get(realm).getTribulation();
+    public @Nullable Identifier getRealmTribulationId(int realm) {
+        return realm >= minorRealms.size() ? null : minorRealms.get(realm).getTribulationId();
     }
 
     public BreakthroughBehaviour getBreakthroughBehaviour(int realm){
@@ -56,7 +56,7 @@ public record MajorRealmDefinition(
     }
 
     @Override
-    public @Nullable TribulationDefinitionReference getTribulation() {
+    public @Nullable Identifier getTribulationId() {
         return null;
     }
 

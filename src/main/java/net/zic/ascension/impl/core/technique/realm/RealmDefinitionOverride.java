@@ -2,11 +2,9 @@ package net.zic.ascension.impl.core.technique.realm;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinition;
-import net.zic.ascension.api.ascension.core.tribulation.TribulationDefinitionReference;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -18,7 +16,7 @@ public class RealmDefinitionOverride {
     private final boolean progressOverride;
     private final double progress;
     private final boolean tribulationReferenceOverride;
-    private final TribulationDefinitionReference tribulation;
+    private final Identifier tribulation;
 
     public static Codec<RealmDefinitionOverride> CODEC =
             RecordCodecBuilder.create(instance -> instance.group(
@@ -27,12 +25,12 @@ public class RealmDefinitionOverride {
                     Codec.DOUBLE.optionalFieldOf("progress").forGetter(
                             obj->Optional.ofNullable(obj.hasProgressOverride()?obj.getProgress():null)
                     ),
-                    TribulationDefinitionReference.CODEC.optionalFieldOf("tribulation").forGetter(
+                    Identifier.CODEC.optionalFieldOf("tribulation").forGetter(
                             obj->Optional.ofNullable(obj.hasTribulationOverride()?obj.tribulation:null)
                         )
             ).apply(instance, RealmDefinitionOverride::new));
 
-    public RealmDefinitionOverride(@NotNull Optional<Component> name, @NotNull Optional<Double> progress, @NotNull Optional<TribulationDefinitionReference> tribulation) {
+    public RealmDefinitionOverride(@NotNull Optional<Component> name, @NotNull Optional<Double> progress, @NotNull Optional<Identifier> tribulation) {
         nameOverride = name.isPresent();
         this.name = name.orElse(Component.empty());
 
@@ -61,7 +59,7 @@ public class RealmDefinitionOverride {
     public double getProgress(){
         return progress;
     }
-    public TribulationDefinition getTribulation(RegistryAccess access){
-        return tribulation.resolve(access);
+    public Identifier getTribulationId(){
+        return tribulation;
     }
 }
