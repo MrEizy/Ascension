@@ -23,6 +23,8 @@
 * Added tons of new skills and skill types
 * Added in Alchemy
 * Added in Formations
+* Added In NPCs
+* Ported Treasure Rat Over
 
 ### Removed
 * Vanilla Health overlay

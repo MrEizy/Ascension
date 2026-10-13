@@ -39,6 +39,8 @@ import net.zic.ascension.network.tribulation.ClientboundTribulationRemovePacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationUpdatePacket;
 import net.zic.ascension.impl.datapack.alchemy.AlchemyMaterialProviders;
 import net.zic.ascension.network.*;
+import net.zic.ascension.network.npc.NpcDialoguePacket;
+import net.zic.ascension.network.npc.NpcActionPacket;
 import net.zic.ascension.impl.core.entity.AscensionStats;
 
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
@@ -265,6 +267,8 @@ public class AscensionCraft {
         @SubscribeEvent
         public static void registerPayloads(RegisterPayloadHandlersEvent event) {
             PayloadRegistrar registrar = event.registrar(AscensionCraft.MOD_ID);
+            registrar.playToServer(NpcActionPacket.TYPE, NpcActionPacket.STREAM_CODEC, NpcActionPacket::handle);
+            registrar.playToClient(NpcDialoguePacket.TYPE, NpcDialoguePacket.STREAM_CODEC, NpcDialoguePacket::handle);
 
             registrar.playToServer(
                     CycleDropModePacket.TYPE,

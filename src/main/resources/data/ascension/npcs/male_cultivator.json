@@ -1,0 +1,21 @@
+{
+  "names": [
+    "Li Wei",
+    "Chen Yu",
+    "Zhao Feng",
+    "Lin Tao",
+    "Mu Jian",
+    "Han Lei",
+    "Xu Ming",
+    "Bai Yun"
+  ],
+  "skins": [
+    "default"
+  ],
+  "greeting": "Greetings. Are you also travelling the path of cultivation?",
+  "dialogue": [
+    "I have been travelling for several days.",
+    "Strength without discipline leads nowhere.",
+    "Have you encountered any spirit herbs nearby?"
+  ]
+}

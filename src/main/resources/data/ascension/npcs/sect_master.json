@@ -1,0 +1,18 @@
+{
+  "names": [
+    "Sect Master Han",
+    "Sect Master Wei",
+    "Sect Master Jin",
+    "Sect Master Shen",
+    "Sect Master Zhen"
+  ],
+  "skins": [
+    "default"
+  ],
+  "greeting": "State your business, cultivator.",
+  "dialogue": [
+    "A sect is only as strong as its disciples.",
+    "There is much you have yet to learn.",
+    "Your determination will be tested by the heavens."
+  ]
+}

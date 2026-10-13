@@ -24,18 +24,23 @@ public class AscEntityLootTableProvider extends EntityLootSubProvider {
 
     @Override
     public void generate() {
-        add(AscEntities.TREASURE_RAT.get(), LootTable.lootTable()
-                .withPool(LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1))
-                        .when(LootItemRandomChanceCondition.randomChance(0.08f))
-                        .add(LootItem.lootTableItem(ModItems.TECHNIQUE_MANUAL.get())
-                                .apply(SetComponentsFunction.setComponent(
-                                        AscensionComponents.REGISTRY_ID_HOLDER.get(),
-                                        AscensionCraft.prefix("2_profound/white_lightning_ten_stage_technique"))))));
+        npcLoot(AscEntities.MALE_CULTIVATOR.get());
+        npcLoot(AscEntities.FEMALE_CULTIVATOR.get());
+        npcLoot(AscEntities.SECT_ELDER.get());
+        npcLoot(AscEntities.SECT_MASTER.get());
+        npcLoot(AscEntities.YOUNG_MASTER.get());
+    }
+
+    private void npcLoot(EntityType<?> type) {
+        add(type, LootTable.lootTable().withPool(LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .when(LootItemRandomChanceCondition.randomChance(0.2f))
+                .add(LootItem.lootTableItem(ModItems.JADE.get()))));
     }
 
     @Override
     protected Stream<EntityType<?>> getKnownEntityTypes() {
-        return Stream.of(AscEntities.TREASURE_RAT.get());
+        return Stream.of(AscEntities.MALE_CULTIVATOR.get(), AscEntities.FEMALE_CULTIVATOR.get(),
+                AscEntities.SECT_ELDER.get(), AscEntities.SECT_MASTER.get(), AscEntities.YOUNG_MASTER.get());
     }
 }

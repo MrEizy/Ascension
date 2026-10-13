@@ -20,6 +20,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.client.innerworld.InnerWorldGhostRenderer;
 import net.zic.ascension.client.renderer.rat.TreasureRatRenderer;
+import net.zic.ascension.client.renderer.npc.CultivatorNpcRenderer;
 import net.zic.ascension.client.keybind.*;
 import net.zic.ascension.client.particle.ParticleFieldController;
 import net.zic.ascension.client.particle.ParticleFieldParticle;
@@ -148,6 +149,11 @@ public class AscensionCraftClient {
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(AscEntities.GHOST.get(), InnerWorldGhostRenderer::new);
             event.registerEntityRenderer(AscEntities.TREASURE_RAT.get(), TreasureRatRenderer::new);
+            event.registerEntityRenderer(AscEntities.MALE_CULTIVATOR.get(), ctx -> new CultivatorNpcRenderer<>(ctx, "male_cultivator"));
+            event.registerEntityRenderer(AscEntities.FEMALE_CULTIVATOR.get(), ctx -> new CultivatorNpcRenderer<>(ctx, "female_cultivator"));
+            event.registerEntityRenderer(AscEntities.SECT_ELDER.get(), ctx -> new CultivatorNpcRenderer<>(ctx, "sect_elder"));
+            event.registerEntityRenderer(AscEntities.SECT_MASTER.get(), ctx -> new CultivatorNpcRenderer<>(ctx, "sect_master"));
+            event.registerEntityRenderer(AscEntities.YOUNG_MASTER.get(), ctx -> new CultivatorNpcRenderer<>(ctx, "young_master"));
 
 
 

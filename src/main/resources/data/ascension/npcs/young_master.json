@@ -1,0 +1,19 @@
+{
+  "names": [
+    "Jin Hao",
+    "Wei Jun",
+    "Luo Yan",
+    "Zhao Kai",
+    "Yun Fei",
+    "Liang Xu"
+  ],
+  "skins": [
+    "default"
+  ],
+  "greeting": "You have something to say to me?",
+  "dialogue": [
+    "Do you even know whose presence you stand in?",
+    "My cultivation is advancing splendidly.",
+    "Try not to embarrass yourself in front of me."
+  ]
+}

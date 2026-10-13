@@ -1,6 +1,7 @@
 package net.zic.ascension.common.item;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -33,6 +34,18 @@ public class ModItems {
     public static final DeferredItem<SpawnEggItem> TREASURE_RAT_SPAWN_EGG =
             ITEMS.registerItem("treasure_rat_spawn_egg",
                     properties -> new SpawnEggItem(properties.spawnEgg(AscEntities.TREASURE_RAT.get())));
+
+    public static final DeferredItem<SpawnEggItem> MALE_CULTIVATOR_SPAWN_EGG = npcEgg("male_cultivator", AscEntities.MALE_CULTIVATOR);
+    public static final DeferredItem<SpawnEggItem> FEMALE_CULTIVATOR_SPAWN_EGG = npcEgg("female_cultivator", AscEntities.FEMALE_CULTIVATOR);
+    public static final DeferredItem<SpawnEggItem> SECT_ELDER_SPAWN_EGG = npcEgg("sect_elder", AscEntities.SECT_ELDER);
+    public static final DeferredItem<SpawnEggItem> SECT_MASTER_SPAWN_EGG = npcEgg("sect_master", AscEntities.SECT_MASTER);
+    public static final DeferredItem<SpawnEggItem> YOUNG_MASTER_SPAWN_EGG = npcEgg("young_master", AscEntities.YOUNG_MASTER);
+
+    private static DeferredItem<SpawnEggItem> npcEgg(String name,
+            net.neoforged.neoforge.registries.DeferredHolder<EntityType<?>,
+                    EntityType<net.zic.ascension.common.entities.npc.CultivatorNpcEntity>> entity) {
+        return ITEMS.registerItem(name + "_spawn_egg", properties -> new SpawnEggItem(properties.spawnEgg(entity.get())));
+    }
 
     //Key Items
     public static final DeferredItem<Item> PHYSIQUE_ESSENCE = ITEMS.register("physique_essence",

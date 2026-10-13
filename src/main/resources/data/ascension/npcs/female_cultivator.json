@@ -1,0 +1,23 @@
+{
+  "names": [
+    "Mei Lin",
+    "Su Yan",
+    "Liu Xue",
+    "Qin Yue",
+    "Xiao Lan",
+    "Yun Qing",
+    "Shen Yue",
+    "Lan Yu",
+    "Lu Jianjia",
+    "Kevin"
+  ],
+  "skins": [
+    "default"
+  ],
+  "greeting": "Greetings, fellow cultivator. What brings you here?",
+  "dialogue": [
+    "The flow of spiritual qi is unusual today.",
+    "One should never neglect the foundation of cultivation.",
+    "I hope your travels are going well."
+  ]
+}

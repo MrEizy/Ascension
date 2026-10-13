@@ -1,0 +1,19 @@
+{
+  "names": [
+    "Elder Chen",
+    "Elder Wu",
+    "Elder Mu",
+    "Elder Bai",
+    "Elder Song",
+    "Elder Lin"
+  ],
+  "skins": [
+    "default"
+  ],
+  "greeting": "Young one, what matter brings you before this elder?",
+  "dialogue": [
+    "Patience is the foundation of every great technique.",
+    "Our sect has endured many generations.",
+    "A strong foundation outweighs a hasty breakthrough."
+  ]
+}
