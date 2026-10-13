@@ -11,12 +11,4 @@ public interface TribulationResolutionAction {
     TribulationResolutionActionType getType();
 
     void resolve(TribulationResolutionContext context);
-
-    /**
-     * if true the tribulation will wait for its target to be loaded before resolving.
-     * has no effect on tribulations without a target
-     */
-    default boolean requiresLoadedTarget() {
-        return true;
-    }
 }

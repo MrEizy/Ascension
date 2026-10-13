@@ -66,13 +66,10 @@ public final class TribulationInstance<T extends TribulationData> {
     //cached since they are accessed multiple times per tick, only updated when the position changes
     private BlockPos blockPosition;
     private ChunkPos chunkPos;
-    private final boolean successRequiresTarget; //TODO instance should not control this, it should be up to the trib
-    private final boolean failureRequiresTarget;
 
     //manager state, not saved
     private boolean queuedForRemoval;
     private boolean discarded;
-    private boolean awaitingResolution;
 
     //sync state, not saved
     private boolean dataDirty;
@@ -106,8 +103,6 @@ public final class TribulationInstance<T extends TribulationData> {
         this.data = data;
         this.blockPosition = BlockPos.containing(position);
         this.chunkPos = ChunkPos.containing(blockPosition);
-        this.successRequiresTarget = this.onSuccess.stream().anyMatch(TribulationResolutionAction::requiresLoadedTarget);
-        this.failureRequiresTarget = this.onFailure.stream().anyMatch(TribulationResolutionAction::requiresLoadedTarget);
     }
 
     //creates a fresh instance for a tribulation that is just starting
@@ -228,20 +223,12 @@ public final class TribulationInstance<T extends TribulationData> {
         if (target != null) target.setEntity(entity);
     }
 
-    //whether the resolution actions for the current outcome need the target to be loaded
-    boolean resolutionRequiresTarget() {
-        return state == State.SUCCEEDED ? successRequiresTarget : failureRequiresTarget;
-    }
-
     //──Manager State────────────────────────────────────────────────────────
 
     boolean isQueuedForRemoval() {return queuedForRemoval;}
     void setQueuedForRemoval(boolean queuedForRemoval) {this.queuedForRemoval = queuedForRemoval;}
     boolean isDiscarded() {return discarded;}
     void markDiscarded() {this.discarded = true;}
-    //only set on finished instances whose resolution actions are waiting for the target to load
-    boolean isAwaitingResolution() {return awaitingResolution;} //TODO remove, it is up to the tribulations to handle this
-    void setAwaitingResolution(boolean awaitingResolution) {this.awaitingResolution = awaitingResolution;}
 
     //──Sync────────────────────────────────────────────────────────
 

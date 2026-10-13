@@ -24,6 +24,7 @@ import net.zic.ascension.impl.core.path.realms.BreakthroughBehaviour;
 import net.zic.ascension.impl.core.path.realms.MajorRealm;
 import net.zic.ascension.impl.core.tribulation.action.EndBreakthroughResolutionAction;
 import net.zic.ascension.impl.core.tribulation.action.RealmChangeResolutionAction;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -122,7 +123,7 @@ public class SimplePathInstance implements PathInstance {
 
 
     public boolean isBreakingThrough(){
-        return activeTribulationId != null;
+        return getActiveTribulation() != null;
     }
 
 
@@ -156,14 +157,15 @@ public class SimplePathInstance implements PathInstance {
 
     //──Tribulations────────────────────────────────────────────────────────
 
-    //clears the active tribulation if the manager no longer has it(e.g. it was discarded while loading)
-    public void validateActiveTribulation(){
+    //the active breakthrough tribulation, cleared if the manager no longer has it (finished, discarded or failed to load)
+    public @Nullable UUID getActiveTribulation(){
+        if(activeTribulationId == null) return null;
         TribulationManager manager = TribulationManager.getInstance();
-        if(activeTribulationId == null || manager == null) return;
-        if(!manager.has(activeTribulationId)) activeTribulationId = null;
+        if(manager != null && !manager.has(activeTribulationId)) activeTribulationId = null;
+        return activeTribulationId;
     }
     public void startTribulation(OriginSource source, Identifier tribulation, LivingEntity target){
-        if(activeTribulationId != null) return;
+        if(getActiveTribulation() != null) return;
         TribulationManager manager = TribulationManager.getInstance();
         if(manager == null) return;
         Identifier pathId = getPathId(source.getRegistryAccess());
@@ -385,13 +387,13 @@ public class SimplePathInstance implements PathInstance {
         cachedRealms.clear();
         progress = cachedProgress;
 
-        if(realmsDiscarded && activeTribulationId != null){
+        UUID activeTribulation = getActiveTribulation();
+        if(realmsDiscarded && activeTribulation != null){
             //the realm the tribulation was for no longer exists
             TribulationManager manager = TribulationManager.getInstance();
-            if(manager != null) manager.cancel(activeTribulationId);
+            if(manager != null) manager.cancel(activeTribulation);
             activeTribulationId = null;
         }
-        validateActiveTribulation();
     }
 
     @Override

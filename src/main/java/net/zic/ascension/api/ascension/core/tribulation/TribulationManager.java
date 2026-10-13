@@ -241,8 +241,7 @@ public class TribulationManager extends SavedData {
                 setDirty();
             }
             if (instance.isFinished()) {
-                //only finished instances can be waiting, for their target to load before resolving
-                if (!instance.isAwaitingResolution()) queueRemoval(instance);
+                queueRemoval(instance);
             } else {
                 syncInstance(instance);
             }
@@ -331,13 +330,8 @@ public class TribulationManager extends SavedData {
         if (server == null) return;
         TribulationOutcome outcome = instance.getOutcome();
         List<TribulationResolutionAction> actions = outcome == TribulationOutcome.SUCCESS ? instance.getSuccessActions() : instance.getFailureActions();
+        //the target may not be loaded, actions are expected to handle that
         LivingEntity target = instance.getTargetEntity();
-
-        //wait for the target to be loaded again, it is not checked again until the target joins
-        if (instance.hasTarget() && target == null && instance.resolutionRequiresTarget()) {
-            instance.setAwaitingResolution(true);
-            return;
-        }
 
         removeInstance(instance);
         TribulationResolutionContext context = new TribulationResolutionContext(server, instance, outcome, target);
@@ -494,16 +488,12 @@ public class TribulationManager extends SavedData {
         if (instance == null || instance.tribulations.isEmpty() || event.getLevel().isClientSide() || !(event.getEntity() instanceof LivingEntity entity)) return;
         boolean started = instance.beginDeferring();
         for (TribulationInstance<?> tribulation : instance.tribulations.values()) {
-            if (!tribulation.isTargeting(entity.getUUID())) continue;
+            if (!tribulation.isActive() || !tribulation.isTargeting(entity.getUUID())) continue;
             if (entity.level().dimension().equals(tribulation.getDimension())) {
                 tribulation.setTargetEntity(entity);
-            } else if (tribulation.isActive()) {
-                instance.onTargetChangedDimension(tribulation, entity);
             } else {
-                //finished tribulations only need the target to resolve, resolved on the next tick once the entity is fully loaded
-                tribulation.setTargetEntity(entity);
+                instance.onTargetChangedDimension(tribulation, entity);
             }
-            tribulation.setAwaitingResolution(false);
         }
         instance.endDeferring(started);
     }
