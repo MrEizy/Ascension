@@ -22,7 +22,7 @@ public record GrantSkillsAction(UUID uuid, List<Identifier> skills) implements P
     }
 
     @Override
-    public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction) {
+    public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt) {
         for (Identifier skill : skills) {
             if (direction == ProgressDirection.UP) {
                 AscensionOriginSourceHelper.addSkill(source, skill, contextIdentifier);

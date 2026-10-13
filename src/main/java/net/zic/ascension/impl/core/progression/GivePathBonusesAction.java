@@ -42,7 +42,8 @@ public record GivePathBonusesAction(UUID uuid, Map<PathBonus, ModifierHolder<Dou
             OriginSource source,
             Identifier contextIdentifier,
             Object contextData,
-            ProgressDirection direction
+            ProgressDirection direction,
+            String salt
     ) {
         if (perPurity && !(contextData instanceof BloodlineData)) return;
         int purity = perPurity ? Math.max(0, Math.min(100, ((BloodlineData) contextData).getPurity())) : 1;

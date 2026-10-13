@@ -17,7 +17,7 @@ import java.util.UUID;
 public interface PurityChangeAction extends ProgressAction {
 
     @Override
-    default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction){
+    default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt){
         //first test to make sure context is a bloodline
         Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,contextIdentifier,source.getRegistryAccess());
         if(bloodline == null) return;

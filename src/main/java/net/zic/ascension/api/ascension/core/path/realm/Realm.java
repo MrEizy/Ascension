@@ -1,6 +1,7 @@
 package net.zic.ascension.api.ascension.core.path.realm;
 
 import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
@@ -55,14 +56,17 @@ public record Realm(int majorRealm, int minorRealm) implements Comparable<Realm>
                  Realm.of(realm.majorRealm(), realm.minorRealm()+1);
     }
 
+
     //returns if given ream is in between 2 realms inclusive
-    public boolean isInRange(Realm realm1,Realm realm2){
+    public boolean isInRange(Realm realm1, Realm realm2){
 
         Realm start = realm1.compareTo(realm2) <= 0 ? realm1 : realm2;
         Realm end = realm1.compareTo(realm2) <= 0 ? realm2 : realm1;
         return compareTo(start) >= 0 && compareTo(end) <= 0;
     }
-
+    public String asSalt(){
+        return majorRealm+"_"+minorRealm;
+    }
     @Override
     public int compareTo(@NonNull Realm other) {
         if(this.equals(other)) return 0;

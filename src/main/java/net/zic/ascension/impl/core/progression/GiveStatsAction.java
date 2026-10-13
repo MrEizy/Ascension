@@ -35,7 +35,7 @@ public record GiveStatsAction(UUID uuid, Map<Identifier,ModifierHolder<Double>> 
     }
 
     @Override
-    public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction) {
+    public void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt) {
         if (perPurity && !(contextData instanceof BloodlineData)) return;
         int purity = perPurity ? Math.max(0, Math.min(100, ((BloodlineData) contextData).getPurity())) : 1;
         for (Map.Entry<Identifier, ModifierHolder<Double>> modifiers : stats.entrySet()) {

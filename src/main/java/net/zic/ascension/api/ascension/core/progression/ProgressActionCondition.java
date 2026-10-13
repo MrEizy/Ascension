@@ -15,9 +15,10 @@ public interface ProgressActionCondition {
      * @param contextIdentifier the Identifier of the registry object this action is being queried for(e.g a path, technique, bloodline, physique etc)
      * @param  contextData the data for the contextIdentifier Object (e.g technique data or bloodline data)
      * @param direction is the expected progression gained/up or lost/down
+     * @param salt a deterministic string provided by whatever is calling this condition
      * @return true -> run all actions, false -> do not run actins
      */
-    boolean test(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction);
+    boolean test(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt);
 
     default Component getDescription(RegistryAccess access) {
         return Component.translatable("ascension.tooltip.progression.condition.conditional");
