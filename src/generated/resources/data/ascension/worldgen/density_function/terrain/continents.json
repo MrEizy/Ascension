@@ -4,7 +4,7 @@
     "type": "ascension:clamp",
     "input": {
       "type": "ascension:domain_warp",
-      "amplitude": 720.0,
+      "amplitude": 640.0,
       "input": {
         "type": "minecraft:noise",
         "noise": "ascension:terrain/continents",

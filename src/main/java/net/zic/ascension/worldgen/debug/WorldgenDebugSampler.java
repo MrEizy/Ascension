@@ -18,25 +18,34 @@ public final class WorldgenDebugSampler {
     private static final String[] SAMPLE_FIELDS = {
             "continents",
             "land_mask",
-            "mountain_land_gate",
             "orogeny",
+            "province_relief_y",
             "mountain_province",
             "mountain_axis_abs",
-            "foothill_mask",
-            "core_mask",
-            "ridge_score",
+            "range_profile",
+            "mountain_mask",
+            "rolling_hills_noise",
+            "lowland_detail_y",
             "massif_noise",
-            "hero_gate",
-            "hero_score",
+            "massif_score",
+            "fold_noise",
+            "fold_relief_y",
+            "ridge_primary",
+            "ridge_secondary",
+            "ridge_score",
+            "ridge_asymmetry",
             "valley_score",
-            "plateau_mask",
-            "rolling_mask",
-            "lowland_target_y",
-            "plateau_target_y",
-            "mountain_target_raw_y",
-            "mountain_target_uncarved_y",
-            "mountain_target_y",
-            "mountain_eroded_y",
+            "base_target_y",
+            "mountain_uplift_y",
+            "massif_boost_y",
+            "ridge_boost_y",
+            "mountain_relief_y",
+            "mountain_raw_y",
+            "valley_cut_y",
+            "structural_target_y",
+            "terrace_mask",
+            "terraced_target_y",
+            "weathering_relief_y",
             "surface_target_y"
     };
 
@@ -54,16 +63,19 @@ public final class WorldgenDebugSampler {
     private static final String[] SCAN_FIELDS = {
             "land_mask",
             "orogeny",
+            "province_relief_y",
             "mountain_province",
-            "mountain_axis_abs",
-            "foothill_mask",
-            "core_mask",
-            "massif_noise",
-            "hero_gate",
-            "hero_score",
-            "plateau_mask",
-            "rolling_mask",
-            "mountain_target_raw_y",
+            "range_profile",
+            "mountain_mask",
+            "massif_score",
+            "fold_relief_y",
+            "ridge_score",
+            "ridge_asymmetry",
+            "valley_score",
+            "valley_cut_y",
+            "terrace_mask",
+            "mountain_raw_y",
+            "structural_target_y",
             "surface_target_y"
     };
 
@@ -233,7 +245,6 @@ public final class WorldgenDebugSampler {
         }
     }
 
-
     public record BiomeClimateSample(Map<String, Double> values) {
         public double value(String id) {
             return values.getOrDefault(id, 0.0);
@@ -253,20 +264,17 @@ public final class WorldgenDebugSampler {
             if (value("land_mask") < 0.20) {
                 return "ocean/coast";
             }
-            if (value("hero_score") >= 0.50) {
-                return "hero massif";
+            if (value("mountain_mask") >= 0.58 && value("massif_score") >= 0.45) {
+                return "massif";
             }
-            if (value("core_mask") >= 0.50) {
+            if (value("mountain_mask") >= 0.5) {
                 return "mountain core";
             }
-            if (value("foothill_mask") >= 0.34) {
-                return "foothills";
+            if (value("mountain_mask") >= 0.26) {
+                return "mountain shoulder";
             }
-            if (value("plateau_mask") >= 0.40) {
-                return "plateau";
-            }
-            if (value("rolling_mask") >= 0.30) {
-                return "rolling upland";
+            if (value("province_relief_y") >= 16.0) {
+                return "upland province";
             }
             return "lowland";
         }

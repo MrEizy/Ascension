@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:mul",
+    "argument1": 3.75,
+    "argument2": {
+      "type": "minecraft:mul",
+      "argument1": "ascension:terrain/mountain_weathering_noise",
+      "argument2": "ascension:terrain/mountain_mask"
+    }
+  }
+}

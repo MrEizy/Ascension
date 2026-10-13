@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:clamp",
+    "input": {
+      "type": "minecraft:add",
+      "argument1": "ascension:terrain/base_target_y",
+      "argument2": "ascension:terrain/mountain_relief_y"
+    },
+    "max": 420.0,
+    "min": -34.0
+  }
+}

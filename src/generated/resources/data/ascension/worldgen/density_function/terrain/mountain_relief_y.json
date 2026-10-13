@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:add",
+    "argument1": {
+      "type": "minecraft:add",
+      "argument1": "ascension:terrain/mountain_uplift_y",
+      "argument2": "ascension:terrain/massif_boost_y"
+    },
+    "argument2": {
+      "type": "minecraft:add",
+      "argument1": "ascension:terrain/fold_relief_y",
+      "argument2": "ascension:terrain/ridge_boost_y"
+    }
+  }
+}

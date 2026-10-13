@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:add",
+    "argument1": {
+      "type": "ascension:terrace",
+      "input": "ascension:terrain/terrace_input_y",
+      "step_size": 9.0,
+      "strength": 0.62,
+      "transition": 0.34
+    },
+    "argument2": {
+      "type": "minecraft:mul",
+      "argument1": -1.0,
+      "argument2": "ascension:terrain/terrace_offset_y"
+    }
+  }
+}

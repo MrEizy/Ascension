@@ -4,15 +4,15 @@
     "type": "ascension:clamp",
     "input": {
       "type": "ascension:domain_warp",
-      "amplitude": 1450.0,
+      "amplitude": 980.0,
       "input": {
         "type": "minecraft:noise",
         "noise": "ascension:terrain/orogeny",
         "xz_scale": 1.0,
         "y_scale": 0.0
       },
-      "shift_x": "ascension:terrain/orogeny_warp_x",
-      "shift_z": "ascension:terrain/orogeny_warp_z"
+      "shift_x": "ascension:terrain/mountain_warp_x",
+      "shift_z": "ascension:terrain/mountain_warp_z"
     },
     "max": 1.0,
     "min": -1.0

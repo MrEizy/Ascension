@@ -3,15 +3,11 @@
   "argument": {
     "type": "ascension:clamp",
     "input": {
-      "type": "minecraft:max",
-      "argument1": "ascension:terrain/lowland_target_y",
-      "argument2": {
-        "type": "minecraft:max",
-        "argument1": "ascension:terrain/plateau_target_y",
-        "argument2": "ascension:terrain/mountain_eroded_y"
-      }
+      "type": "minecraft:add",
+      "argument1": "ascension:terrain/terraced_target_y",
+      "argument2": "ascension:terrain/weathering_relief_y"
     },
-    "max": 400.0,
-    "min": -24.0
+    "max": 396.0,
+    "min": -34.0
   }
 }

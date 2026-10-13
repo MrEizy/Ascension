@@ -4,8 +4,93 @@
     "type": "ascension:clamp",
     "input": {
       "type": "minecraft:min",
-      "argument1": "ascension:terrain/valley_mask",
-      "argument2": "ascension:terrain/foothill_mask"
+      "argument1": {
+        "type": "ascension:hermite_spline",
+        "coordinate": "ascension:terrain/mountain_mask",
+        "points": [
+          {
+            "derivative": 0.0,
+            "location": 0.0,
+            "value": 0.0
+          },
+          {
+            "derivative": 0.0,
+            "location": 0.2,
+            "value": 0.0
+          },
+          {
+            "derivative": 2.0,
+            "location": 0.3,
+            "value": 0.2
+          },
+          {
+            "derivative": 2.3,
+            "location": 0.42,
+            "value": 0.5
+          },
+          {
+            "derivative": 1.55,
+            "location": 0.56,
+            "value": 0.78
+          },
+          {
+            "derivative": 0.0,
+            "location": 0.7,
+            "value": 1.0
+          },
+          {
+            "derivative": 0.0,
+            "location": 1.0,
+            "value": 1.0
+          }
+        ]
+      },
+      "argument2": {
+        "type": "ascension:hermite_spline",
+        "coordinate": "ascension:terrain/valley_axis",
+        "points": [
+          {
+            "derivative": 0.0,
+            "location": 0.0,
+            "value": 1.0
+          },
+          {
+            "derivative": 0.0,
+            "location": 0.06,
+            "value": 1.0
+          },
+          {
+            "derivative": -2.2,
+            "location": 0.14,
+            "value": 0.88
+          },
+          {
+            "derivative": -3.2,
+            "location": 0.23,
+            "value": 0.55
+          },
+          {
+            "derivative": -2.5,
+            "location": 0.33,
+            "value": 0.22
+          },
+          {
+            "derivative": -0.75,
+            "location": 0.43,
+            "value": 0.02
+          },
+          {
+            "derivative": 0.0,
+            "location": 0.5,
+            "value": 0.0
+          },
+          {
+            "derivative": 0.0,
+            "location": 1.0,
+            "value": 0.0
+          }
+        ]
+      }
     },
     "max": 1.0,
     "min": 0.0

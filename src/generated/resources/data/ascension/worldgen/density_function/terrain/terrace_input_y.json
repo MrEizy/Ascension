@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:add",
+    "argument1": "ascension:terrain/structural_target_y",
+    "argument2": "ascension:terrain/terrace_offset_y"
+  }
+}

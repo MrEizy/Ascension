@@ -6,7 +6,7 @@
       "type": "ascension:clamp",
       "input": {
         "type": "ascension:domain_warp",
-        "amplitude": 820.0,
+        "amplitude": 760.0,
         "input": {
           "type": "minecraft:noise",
           "noise": "ascension:terrain/great_valleys",
@@ -16,12 +16,12 @@
         "shift_x": {
           "type": "minecraft:mul",
           "argument1": 0.62,
-          "argument2": "ascension:terrain/region_warp_x"
+          "argument2": "ascension:terrain/mountain_warp_x"
         },
         "shift_z": {
           "type": "minecraft:mul",
           "argument1": 0.62,
-          "argument2": "ascension:terrain/region_warp_z"
+          "argument2": "ascension:terrain/mountain_warp_z"
         }
       },
       "max": 1.0,

@@ -4,7 +4,7 @@
     "type": "ascension:clamp",
     "input": {
       "type": "ascension:domain_warp",
-      "amplitude": 1180.0,
+      "amplitude": 1120.0,
       "input": {
         "type": "minecraft:noise",
         "noise": "ascension:terrain/mountain_belts",

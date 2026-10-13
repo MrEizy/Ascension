@@ -1,0 +1,95 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:mul",
+    "argument1": "ascension:terrain/land_mask",
+    "argument2": {
+      "type": "minecraft:add",
+      "argument1": {
+        "type": "minecraft:mul",
+        "argument1": {
+          "type": "ascension:hermite_spline",
+          "coordinate": "ascension:terrain/rolling_hills_noise",
+          "points": [
+            {
+              "derivative": 0.0,
+              "location": -1.0,
+              "value": -6.0
+            },
+            {
+              "derivative": 8.0,
+              "location": -0.62,
+              "value": -3.0
+            },
+            {
+              "derivative": 6.0,
+              "location": -0.25,
+              "value": -1.0
+            },
+            {
+              "derivative": 11.0,
+              "location": 0.1,
+              "value": 2.0
+            },
+            {
+              "derivative": 18.0,
+              "location": 0.4,
+              "value": 7.0
+            },
+            {
+              "derivative": 20.0,
+              "location": 0.7,
+              "value": 13.0
+            },
+            {
+              "derivative": 0.0,
+              "location": 1.0,
+              "value": 18.0
+            }
+          ]
+        },
+        "argument2": {
+          "type": "ascension:hermite_spline",
+          "coordinate": "ascension:terrain/mountain_mask",
+          "points": [
+            {
+              "derivative": 0.0,
+              "location": 0.0,
+              "value": 1.0
+            },
+            {
+              "derivative": 0.0,
+              "location": 0.22,
+              "value": 1.0
+            },
+            {
+              "derivative": -1.0,
+              "location": 0.42,
+              "value": 0.82
+            },
+            {
+              "derivative": -1.2,
+              "location": 0.62,
+              "value": 0.56
+            },
+            {
+              "derivative": -0.8,
+              "location": 0.82,
+              "value": 0.32
+            },
+            {
+              "derivative": 0.0,
+              "location": 1.0,
+              "value": 0.2
+            }
+          ]
+        }
+      },
+      "argument2": {
+        "type": "minecraft:mul",
+        "argument1": 3.0,
+        "argument2": "ascension:terrain/local_detail_noise"
+      }
+    }
+  }
+}

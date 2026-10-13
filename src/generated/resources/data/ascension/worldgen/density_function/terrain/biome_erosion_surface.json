@@ -8,39 +8,31 @@
         "type": "minecraft:add",
         "argument1": {
           "type": "minecraft:add",
-          "argument1": {
-            "type": "minecraft:add",
-            "argument1": {
-              "type": "minecraft:add",
-              "argument1": 0.58,
-              "argument2": {
-                "type": "minecraft:mul",
-                "argument1": -0.95,
-                "argument2": "ascension:terrain/foothill_mask"
-              }
-            },
-            "argument2": {
-              "type": "minecraft:mul",
-              "argument1": -0.38,
-              "argument2": "ascension:terrain/core_mask"
-            }
-          },
+          "argument1": 0.6,
           "argument2": {
             "type": "minecraft:mul",
-            "argument1": -0.18,
-            "argument2": "ascension:terrain/ridge_score"
+            "argument1": -0.78,
+            "argument2": "ascension:terrain/mountain_mask"
           }
         },
         "argument2": {
           "type": "minecraft:mul",
-          "argument1": 0.38,
-          "argument2": "ascension:terrain/valley_score"
+          "argument1": -0.2,
+          "argument2": "ascension:terrain/ridge_score"
         }
       },
       "argument2": {
-        "type": "minecraft:mul",
-        "argument1": -0.25,
-        "argument2": "ascension:terrain/plateau_mask"
+        "type": "minecraft:add",
+        "argument1": {
+          "type": "minecraft:mul",
+          "argument1": -0.1,
+          "argument2": "ascension:terrain/massif_score"
+        },
+        "argument2": {
+          "type": "minecraft:mul",
+          "argument1": 0.36,
+          "argument2": "ascension:terrain/valley_score"
+        }
       }
     },
     "max": 1.0,

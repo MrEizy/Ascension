@@ -19,7 +19,8 @@
       "minecraft:lake_lava_surface"
     ],
     [
-      "minecraft:amethyst_geode"
+      "minecraft:amethyst_geode",
+      "ascension:golden_steppe_stones"
     ],
     [
       "minecraft:monster_room",
@@ -69,14 +70,7 @@
       "minecraft:trees_savanna",
       "minecraft:flower_warm",
       "minecraft:patch_grass_savanna",
-      "minecraft:brown_mushroom_normal",
-      "minecraft:red_mushroom_normal",
-      "minecraft:patch_pumpkin",
-      "minecraft:patch_sugar_cane",
-      "minecraft:patch_firefly_bush_near_water"
-    ],
-    [
-      "minecraft:freeze_top_layer"
+      "ascension:golden_steppe_floor_scatter"
     ]
   ],
   "has_precipitation": false,

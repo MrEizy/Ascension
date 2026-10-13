@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:add",
+    "argument1": "ascension:terrain/structural_target_y",
+    "argument2": {
+      "type": "minecraft:mul",
+      "argument1": "ascension:terrain/terrace_mask",
+      "argument2": {
+        "type": "minecraft:add",
+        "argument1": "ascension:terrain/terraced_raw_y",
+        "argument2": {
+          "type": "minecraft:mul",
+          "argument1": -1.0,
+          "argument2": "ascension:terrain/structural_target_y"
+        }
+      }
+    }
+  }
+}

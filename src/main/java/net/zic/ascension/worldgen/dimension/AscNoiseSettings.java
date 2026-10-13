@@ -220,7 +220,7 @@ public final class AscNoiseSettings {
                         Blocks.WATER.defaultBlockState(),
 
                         router,
-                        AscSurfaceRules.overworld(vanilla.surfaceRule()),
+                        AscSurfaceRules.overworld(vanilla.surfaceRule(), densityFunctions),
 
                         vanilla.spawnTarget(),
 

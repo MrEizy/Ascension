@@ -1,0 +1,46 @@
+{
+  "type": "ascension:hermite_spline",
+  "coordinate": "ascension:terrain/valley_score",
+  "points": [
+    {
+      "derivative": 0.0,
+      "location": 0.0,
+      "value": 0.0
+    },
+    {
+      "derivative": 0.0,
+      "location": 0.12,
+      "value": 0.0
+    },
+    {
+      "derivative": 58.0,
+      "location": 0.22,
+      "value": 6.0
+    },
+    {
+      "derivative": 82.0,
+      "location": 0.36,
+      "value": 17.0
+    },
+    {
+      "derivative": 94.0,
+      "location": 0.5,
+      "value": 31.0
+    },
+    {
+      "derivative": 88.0,
+      "location": 0.66,
+      "value": 46.0
+    },
+    {
+      "derivative": 58.0,
+      "location": 0.82,
+      "value": 58.0
+    },
+    {
+      "derivative": 0.0,
+      "location": 1.0,
+      "value": 68.0
+    }
+  ]
+}

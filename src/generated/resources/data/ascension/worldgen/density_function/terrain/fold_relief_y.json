@@ -1,0 +1,120 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:clamp",
+    "input": {
+      "type": "minecraft:mul",
+      "argument1": {
+        "type": "ascension:hermite_spline",
+        "coordinate": "ascension:terrain/fold_noise",
+        "points": [
+          {
+            "derivative": 0.0,
+            "location": -1.0,
+            "value": -13.0
+          },
+          {
+            "derivative": 10.0,
+            "location": -0.68,
+            "value": -9.0
+          },
+          {
+            "derivative": 14.0,
+            "location": -0.34,
+            "value": -4.0
+          },
+          {
+            "derivative": 12.0,
+            "location": -0.08,
+            "value": -1.0
+          },
+          {
+            "derivative": 22.0,
+            "location": 0.16,
+            "value": 3.0
+          },
+          {
+            "derivative": 30.0,
+            "location": 0.38,
+            "value": 9.0
+          },
+          {
+            "derivative": 31.0,
+            "location": 0.62,
+            "value": 17.0
+          },
+          {
+            "derivative": 20.0,
+            "location": 0.82,
+            "value": 23.0
+          },
+          {
+            "derivative": 0.0,
+            "location": 1.0,
+            "value": 26.0
+          }
+        ]
+      },
+      "argument2": {
+        "type": "minecraft:mul",
+        "argument1": {
+          "type": "ascension:hermite_spline",
+          "coordinate": "ascension:terrain/mountain_mask",
+          "points": [
+            {
+              "derivative": 0.0,
+              "location": 0.0,
+              "value": 0.0
+            },
+            {
+              "derivative": 0.0,
+              "location": 0.14,
+              "value": 0.0
+            },
+            {
+              "derivative": 2.3,
+              "location": 0.24,
+              "value": 0.22
+            },
+            {
+              "derivative": 2.7,
+              "location": 0.36,
+              "value": 0.56
+            },
+            {
+              "derivative": 1.65,
+              "location": 0.5,
+              "value": 0.84
+            },
+            {
+              "derivative": 0.0,
+              "location": 0.66,
+              "value": 1.0
+            },
+            {
+              "derivative": 0.0,
+              "location": 1.0,
+              "value": 1.0
+            }
+          ]
+        },
+        "argument2": {
+          "type": "ascension:clamp",
+          "input": {
+            "type": "minecraft:add",
+            "argument1": 1.0,
+            "argument2": {
+              "type": "minecraft:mul",
+              "argument1": -0.5,
+              "argument2": "ascension:terrain/valley_score"
+            }
+          },
+          "max": 1.0,
+          "min": 0.45
+        }
+      }
+    },
+    "max": 27.0,
+    "min": -14.0
+  }
+}

@@ -14,49 +14,49 @@
             "value": -0.95
           },
           {
-            "derivative": 0.7,
-            "location": -0.72,
-            "value": -0.78
+            "derivative": 0.65,
+            "location": -0.74,
+            "value": -0.8
           },
           {
             "derivative": 1.0,
-            "location": -0.5,
-            "value": -0.55
+            "location": -0.54,
+            "value": -0.58
           },
           {
             "derivative": 1.0,
-            "location": -0.3,
-            "value": -0.34
+            "location": -0.36,
+            "value": -0.36
           },
           {
             "derivative": 0.9,
-            "location": -0.18,
-            "value": -0.23
+            "location": -0.22,
+            "value": -0.24
           },
           {
             "derivative": 0.85,
-            "location": -0.1,
+            "location": -0.12,
             "value": -0.15
           },
           {
-            "derivative": 0.75,
-            "location": -0.06,
-            "value": -0.105
+            "derivative": 0.8,
+            "location": -0.04,
+            "value": -0.09
           },
           {
             "derivative": 0.85,
-            "location": 0.0,
-            "value": -0.02
+            "location": 0.04,
+            "value": 0.0
           },
           {
             "derivative": 0.9,
-            "location": 0.1,
-            "value": 0.12
+            "location": 0.16,
+            "value": 0.14
           },
           {
             "derivative": 0.7,
-            "location": 0.4,
-            "value": 0.42
+            "location": 0.42,
+            "value": 0.43
           },
           {
             "derivative": 0.0,
@@ -69,13 +69,13 @@
         "type": "minecraft:add",
         "argument1": {
           "type": "minecraft:mul",
-          "argument1": 0.28,
-          "argument2": "ascension:terrain/foothill_mask"
+          "argument1": 0.24,
+          "argument2": "ascension:terrain/mountain_mask"
         },
         "argument2": {
           "type": "minecraft:mul",
-          "argument1": 0.08,
-          "argument2": "ascension:terrain/plateau_mask"
+          "argument1": 0.05,
+          "argument2": "ascension:terrain/massif_score"
         }
       }
     },

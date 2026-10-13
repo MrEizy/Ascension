@@ -1,5 +1,46 @@
 {
-  "type": "minecraft:mul",
-  "argument1": "ascension:terrain/core_mask",
-  "argument2": "ascension:terrain/massif_boost_raw_y"
+  "type": "ascension:hermite_spline",
+  "coordinate": "ascension:terrain/massif_score",
+  "points": [
+    {
+      "derivative": 0.0,
+      "location": 0.0,
+      "value": 0.0
+    },
+    {
+      "derivative": 0.0,
+      "location": 0.12,
+      "value": 0.0
+    },
+    {
+      "derivative": 48.0,
+      "location": 0.25,
+      "value": 5.0
+    },
+    {
+      "derivative": 68.0,
+      "location": 0.4,
+      "value": 14.0
+    },
+    {
+      "derivative": 78.0,
+      "location": 0.55,
+      "value": 26.0
+    },
+    {
+      "derivative": 76.0,
+      "location": 0.7,
+      "value": 39.0
+    },
+    {
+      "derivative": 54.0,
+      "location": 0.84,
+      "value": 52.0
+    },
+    {
+      "derivative": 0.0,
+      "location": 1.0,
+      "value": 62.0
+    }
+  ]
 }

@@ -55,6 +55,7 @@ import net.zic.ascension.impl.datapack.projectile.AscensionProjectileBehaviorTyp
 import net.zic.ascension.worldgen.AscFeatures;
 import net.zic.ascension.worldgen.density.AscDensityFunctionTypes;
 import net.zic.ascension.worldgen.AscTreeDecoratorTypes;
+import net.zic.ascension.worldgen.surface.AscSurfaceConditionTypes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -118,6 +119,7 @@ public class AscensionCraft {
         AscBlockEntities.register(modEventBus);
 
         AscDensityFunctionTypes.register(modEventBus);
+        AscSurfaceConditionTypes.register(modEventBus);
         AscFeatures.register(modEventBus);
         AscTreeDecoratorTypes.register(modEventBus);
 

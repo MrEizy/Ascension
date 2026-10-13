@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "ascension:hermite_spline",
+    "coordinate": "ascension:terrain/mountain_mask",
+    "points": [
+      {
+        "derivative": 0.0,
+        "location": 0.0,
+        "value": 0.0
+      },
+      {
+        "derivative": 0.0,
+        "location": 0.12,
+        "value": 0.0
+      },
+      {
+        "derivative": 2.4,
+        "location": 0.22,
+        "value": 0.25
+      },
+      {
+        "derivative": 3.0,
+        "location": 0.34,
+        "value": 0.72
+      },
+      {
+        "derivative": 0.0,
+        "location": 0.48,
+        "value": 1.0
+      },
+      {
+        "derivative": -0.85,
+        "location": 0.62,
+        "value": 0.9
+      },
+      {
+        "derivative": -1.45,
+        "location": 0.78,
+        "value": 0.62
+      },
+      {
+        "derivative": 0.0,
+        "location": 1.0,
+        "value": 0.32
+      }
+    ]
+  }
+}
