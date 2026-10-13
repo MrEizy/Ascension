@@ -22,6 +22,7 @@ public abstract class RPGEngineEntityDamagedEvent extends LivingEvent {
         this.container = container;
         this.source = source;
         this.damageContainer = ValueContainerHelpers.doubleValueContainer(CONTAINER_ID, initialDamage);
+        this.damageContainer.calculateValue();
     }
 
     public static class Pre extends RPGEngineEntityDamagedEvent {
