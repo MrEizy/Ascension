@@ -13,26 +13,25 @@ import net.zic.ascension.api.rpg_engine.damage.RPGEngineGatherDamageTypesEvent;
 public class RPGEngineEventHandler {
 
     @SubscribeEvent
-    public static void onPreDamage(LivingDamageEvent.Pre event){
+    public static void onPreDamage(LivingDamageEvent.Pre event) {
+        RPGEngineDamageSource source = resolveSource(event.getSource());
+        NeoForge.EVENT_BUS.post(new RPGEngineGatherDamageTypesEvent(event.getEntity(), source));
 
-        RPGEngineDamageSource newSource;
-        if(event.getSource() instanceof RPGEngineDamageSource rpgEngineDamageSource) newSource = rpgEngineDamageSource;
-        else newSource = new RPGEngineDamageSource(event.getSource());
+        RPGEngineEntityDamagedEvent.Pre pre = new RPGEngineEntityDamagedEvent.Pre(event.getEntity(), event.getContainer(), source);
+        NeoForge.EVENT_BUS.post(pre);
 
-        RPGEngineGatherDamageTypesEvent damageTypesEvent = new RPGEngineGatherDamageTypesEvent(event.getEntity(),newSource);
-        NeoForge.EVENT_BUS.post(damageTypesEvent);
-
-        RPGEngineEntityDamagedEvent.Pre rpgEngineEntityDamagedEvent = new RPGEngineEntityDamagedEvent.Pre(event.getEntity(),event.getContainer(),newSource);
-
-        NeoForge.EVENT_BUS.post(rpgEngineEntityDamagedEvent);
-
-        event.setNewDamage((float) rpgEngineEntityDamagedEvent.getDamage());
-
-        /*TODO ideally replace source with new source
-        but there seems to be issues with access transformers for neoforge classes
-         */
-        RPGEngineEntityDamagedEvent.Post rpgEngineEntityDamagedEventPose = new RPGEngineEntityDamagedEvent.Post(rpgEngineEntityDamagedEvent);
-        NeoForge.EVENT_BUS.post(rpgEngineEntityDamagedEventPose);
+        double resolved = pre.getDamage();
+        event.setNewDamage(Double.isFinite(resolved) ? (float) Math.clamp(resolved, 0.0D, Float.MAX_VALUE) : 0.0F);
     }
 
+    @SubscribeEvent
+    public static void onPostDamage(LivingDamageEvent.Post event) {
+        RPGEngineDamageSource source = resolveSource(event.getSource());
+        NeoForge.EVENT_BUS.post(new RPGEngineGatherDamageTypesEvent(event.getEntity(), source));
+        NeoForge.EVENT_BUS.post(new RPGEngineEntityDamagedEvent.Post(event, source));
+    }
+
+    private static RPGEngineDamageSource resolveSource(net.minecraft.world.damagesource.DamageSource source) {
+        return source instanceof RPGEngineDamageSource rpgSource ? rpgSource : new RPGEngineDamageSource(source);
+    }
 }

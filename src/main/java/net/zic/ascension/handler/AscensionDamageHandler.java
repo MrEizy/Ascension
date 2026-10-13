@@ -20,9 +20,9 @@ import net.zic.ascension.impl.runtime.projectile.NormalProjectileService;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class AscensionDamageHandler {
-    private static final double REALM_PRESSURE_EXPONENT = 0.4D;
-    private static final double MIN_REALM_PRESSURE = 1.0E-4D;
-    private static final double MAX_REALM_PRESSURE = 10_000.0D;
+    private static final int PROJECTILE_GROUP = 10;
+    private static final int PASSIVE_OFFENSE_GROUP = 20;
+    private static final int PASSIVE_DEFENSE_GROUP = 30;
 
     private AscensionDamageHandler() {
     }
@@ -36,9 +36,8 @@ public final class AscensionDamageHandler {
 
         if (event.getSource().getEntity() != null && event.getSource().getEntity() == event.getSource().getDirectEntity()) {
             if (event.getSource().getEntity() instanceof LivingEntity livingEntity) {
-                ItemStack item = livingEntity.getActiveItem();
+                ItemStack item = livingEntity.getMainHandItem();
                 AscensionDamageSourceProvider provider = item.getCapability(CoreCapabilities.ASCENSION_ITEM_STACK_DAMAGE_SOURCE_PROVIDER);
-
                 if (provider != null) {
                     event.addTypeHolder(AscensionDamageTypeHolders.PATH, new AscensionDamageTypeHolders.Path(provider.getPath()));
                 }
@@ -48,7 +47,6 @@ public final class AscensionDamageHandler {
 
         if (event.getSource().getDirectEntity() != null && event.getSource().getEntity() != null && event.getSource().getEntity() != event.getSource().getDirectEntity()) {
             AscensionDamageSourceProvider provider = event.getSource().getDirectEntity().getCapability(CoreCapabilities.ASCENSION_ENTITY_DAMAGE_SOURCE_PROVIDER);
-
             if (provider != null) {
                 event.addTypeHolder(AscensionDamageTypeHolders.PATH, new AscensionDamageTypeHolders.Path(provider.getPath()));
             }
@@ -58,14 +56,13 @@ public final class AscensionDamageHandler {
     @SubscribeEvent
     public static void onRPGEngineDamage(RPGEngineEntityDamagedEvent.Pre event) {
         DamageTrace trace = DamageTrace.begin();
-
         applyProfile(event, trace);
         if (finishIfResolved(event, trace)) {
             return;
         }
-        /*TODO FIX AFTER SORTOF EXPLAINS IT TO ME
+
         double beforeProjectile = event.getDamage();
-        event.setDamage(NormalProjectileService.resolveDamage(event, beforeProjectile));
+        event.resolveDamage(AscensionCraft.prefix("damage_projectile"), PROJECTILE_GROUP, NormalProjectileService.resolveDamage(event, beforeProjectile));
         trace.transition("Projectile", beforeProjectile, event.getDamage());
         if (finishIfResolved(event, trace)) {
             return;
@@ -73,7 +70,7 @@ public final class AscensionDamageHandler {
 
         double outgoingMultiplier = PassiveCombatService.outgoingDamageMultiplier(event);
         if (Double.isFinite(outgoingMultiplier) && outgoingMultiplier >= 0.0D) {
-            event.setDamage(event.getDamage() * outgoingMultiplier);
+            event.multiplyDamage(AscensionCraft.prefix("damage_passive_offense"), PASSIVE_OFFENSE_GROUP, outgoingMultiplier);
             trace.multiply("Passive offense", outgoingMultiplier);
         }
         if (finishIfResolved(event, trace)) {
@@ -81,13 +78,8 @@ public final class AscensionDamageHandler {
         }
 
         double beforeDefense = event.getDamage();
-        event.setDamage(PassiveCombatService.incomingDamage(event, beforeDefense));
+        event.resolveDamage(AscensionCraft.prefix("damage_passive_defense"), PASSIVE_DEFENSE_GROUP, PassiveCombatService.incomingDamage(event, beforeDefense));
         trace.transition("Passive incoming damage", beforeDefense, event.getDamage());
-        if (finishIfResolved(event, trace)) {
-            return;
-        }
-
-        applyRealmPressure(event, trace);
         if (finishIfResolved(event, trace)) {
             return;
         }
@@ -99,36 +91,10 @@ public final class AscensionDamageHandler {
             return;
         }
 
-
-         */
         double beforeBarriers = event.getDamage();
         Barriers.applyDamage(event);
         trace.transition("Barriers", beforeBarriers, event.getDamage());
         trace.finish(event);
-    }
-
-    private static void applyRealmPressure(RPGEngineEntityDamagedEvent.Pre event, DamageTrace trace) {
-        if (!(event.getSource().getEntity() instanceof LivingEntity attacker)) {
-            return;
-        }
-        //TODO SORTOF FIX THIS PLEASE :)
-        double relativeEffectiveness = 0;
-        if (!Double.isFinite(relativeEffectiveness) || relativeEffectiveness <= 0.0D) {
-            return;
-        }
-
-        double pressure = Math.pow(relativeEffectiveness, REALM_PRESSURE_EXPONENT);
-        if (!Double.isFinite(pressure) || pressure <= 0.0D) {
-            pressure = relativeEffectiveness > 1.0D ? MAX_REALM_PRESSURE : MIN_REALM_PRESSURE;
-        }
-        pressure = Math.clamp(pressure, MIN_REALM_PRESSURE, MAX_REALM_PRESSURE);
-
-        if (Math.abs(pressure - 1.0D) <= 1.0E-10D) {
-            return;
-        }
-
-        //event.setDamage(event.getDamage() * pressure);
-        trace.multiply("Realm pressure", pressure);
     }
 
     private static void applyProfile(RPGEngineEntityDamagedEvent.Pre event, DamageTrace trace) {
@@ -174,7 +140,7 @@ public final class AscensionDamageHandler {
     }
 
     private static boolean finishIfResolved(RPGEngineEntityDamagedEvent.Pre event, DamageTrace trace) {
-        if (event.getDamage() > 0.0D) {
+        if (Double.isFinite(event.getDamage()) && event.getDamage() > 0.0D) {
             return false;
         }
         trace.finish(event);
