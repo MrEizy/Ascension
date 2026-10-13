@@ -5,7 +5,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -55,14 +54,10 @@ public final class SkillRuntimeEvents {
     }
 
     @SubscribeEvent
-    public static void onDamage(LivingDamageEvent.Pre event) {
-        if (event.getEntity() instanceof ServerPlayer player && event.getNewDamage() > 0.0F) {
-            player.getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER).recordDamage(event.getNewDamage());
-        }
-    }
-
-    @SubscribeEvent
     public static void onResolvedDamage(RPGEngineEntityDamagedEvent.Post event) {
+        if (event.getEntity() instanceof ServerPlayer player && event.getDamage() > 0.0D) {
+            player.getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER).recordDamage((float) event.getDamage());
+        }
         if (event.getDamage() <= 0.0D) {
             return;
         }
