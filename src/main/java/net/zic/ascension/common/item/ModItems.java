@@ -6,6 +6,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionAscendant;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionEarth;
@@ -28,6 +29,10 @@ public class ModItems {
 
 
 
+
+    public static final DeferredItem<SpawnEggItem> TREASURE_RAT_SPAWN_EGG =
+            ITEMS.registerItem("treasure_rat_spawn_egg",
+                    properties -> new SpawnEggItem(properties.spawnEgg(AscEntities.TREASURE_RAT.get())));
 
     //Key Items
     public static final DeferredItem<Item> PHYSIQUE_ESSENCE = ITEMS.register("physique_essence",

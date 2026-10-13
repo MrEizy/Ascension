@@ -39,6 +39,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE);
                         output.accept(ModItems.SPIRITUAL_STONE);
                         output.accept(ModItems.JADE);
+                        output.accept(ModItems.TREASURE_RAT_SPAWN_EGG);
                         output.accept(ModItems.RAW_FROST_SILVER);
                         output.accept(ModItems.FROST_SILVER_INGOT);
                         output.accept(ModItems.FROST_SILVER_NUGGET);

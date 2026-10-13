@@ -21,6 +21,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
@@ -206,6 +207,10 @@ public class AscModelProvider extends ModelProvider {
 
         //Fluids
         blockModels.createNonTemplateModelBlock(ModBlocks.LIQUIFIED_SPIRITUAL_QI_BLOCK.get());
+
+        //Spawn Eggs
+        itemModels.generateFlatItem(ModItems.TREASURE_RAT_SPAWN_EGG.get(), Items.RABBIT_SPAWN_EGG, ModelTemplates.FLAT_ITEM);
+
     }
 
 

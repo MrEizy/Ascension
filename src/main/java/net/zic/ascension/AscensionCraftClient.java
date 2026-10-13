@@ -19,6 +19,7 @@ import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.client.innerworld.InnerWorldGhostRenderer;
+import net.zic.ascension.client.renderer.rat.TreasureRatRenderer;
 import net.zic.ascension.client.keybind.*;
 import net.zic.ascension.client.particle.ParticleFieldController;
 import net.zic.ascension.client.particle.ParticleFieldParticle;
@@ -146,6 +147,7 @@ public class AscensionCraftClient {
         @SubscribeEvent
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(AscEntities.GHOST.get(), InnerWorldGhostRenderer::new);
+            event.registerEntityRenderer(AscEntities.TREASURE_RAT.get(), TreasureRatRenderer::new);
 
 
 

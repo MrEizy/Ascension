@@ -56,6 +56,9 @@ public class AscLangProvider extends LanguageProvider {
 
 
 
+        add("entity.ascension.treasure_rat", "Treasure Rat");
+        add("item.ascension.treasure_rat_spawn_egg", "Treasure Rat Spawn Egg");
+
         // Items
         add("item.ascension.tablet_of_destruction_human", "Tablet of Destruction - Human");
         add("item.ascension.tablet_of_destruction_earth", "Tablet of Destruction - Earth");
