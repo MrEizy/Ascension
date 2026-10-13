@@ -8,7 +8,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.zenithlib.network.ByteBufHelpers;
 
 public record DataSourceHolder<T extends DataSourceInstance<? extends DataSource<T>>>(DataSource<T> dataSource, T dataSourceInstance) {
     public Identifier getDataSourceKey() {
@@ -82,7 +81,6 @@ public record DataSourceHolder<T extends DataSourceInstance<? extends DataSource
 
 
     public void decode(ByteBuf buf, RegistryAccess access, boolean fullPatch) {
-
         dataSource.syncHandler(fullPatch).decode(dataSourceInstance, buf, access);
     }
 
