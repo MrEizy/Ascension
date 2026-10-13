@@ -39,6 +39,8 @@ import net.zic.ascension.common.gui.menus.AscMenuTypes;
 import net.zic.ascension.common.gui.menus.jade_bottle.JadeBottleScreen;
 import net.zic.ascension.common.particle.AscensionParticles;
 import net.zic.ascension.network.WeaponSwingRequestPacket;
+import net.zic.zenithlib.configuration.attribute_scaling.LivingEntityScaling;
+import net.zic.zenithlib.custom_attributes.ZenithAttribute;
 
 import java.util.List;
 
@@ -66,6 +68,8 @@ public class AscensionCraftClient {
         event.register(ModKeybinds.CYCLE_MODE);
         event.register(ModKeybinds.OPEN_INTROSPECTION);
         event.register(ModKeybinds.OPEN_SKILL_WHEEL);
+
+
     }
 
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID,value = Dist.CLIENT)
