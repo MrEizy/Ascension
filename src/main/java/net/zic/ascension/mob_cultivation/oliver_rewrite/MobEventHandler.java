@@ -6,7 +6,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
-import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
@@ -32,6 +31,18 @@ public class MobEventHandler {
         if(!(event.getEntity() instanceof Mob mob)) return;
         MobSpawnHelper.applyConfigurationInstance(mob);
 
+        if(event.getLevel().isClientSide() || !MobSpawnHelper.hasConfigHolder(mob)) return;
+
+        AscensionEntityDataProvider provider = mob.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+        if(provider == null) return;
+
+        var data = provider.getData();
+        if(data == null || data.getSource() == null || data.getSource().isAttachedTo(mob)) return;
+
+        data.initialize();
+        if(data.getSource().isAttachedTo(mob)) {
+            MobSpawnHelper.getConfigHolder(mob).applyConfigurationToSource();
+        }
     }
 
     @SubscribeEvent
