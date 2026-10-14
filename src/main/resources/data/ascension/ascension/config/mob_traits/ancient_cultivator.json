@@ -1,0 +1,53 @@
+{
+  "type": "ascension:simple_trait",
+  "name": "Ancient Cultivator",
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:npc_ancient_vitality",
+          "value": 16.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:npc_ancient_strength",
+          "value": 10.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:npc_ancient_spirit",
+          "value": 8.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "attributes": {
+    "minecraft:max_health": {
+      "flat": [
+        {
+          "id": "ascension:npc_ancient_max_health",
+          "value": 200.0
+        }
+      ],
+      "multiplier": []
+    },
+    "minecraft:attack_damage": {
+      "flat": [
+        {
+          "id": "ascension:npc_ancient_attack_damage",
+          "value": 40.0
+        }
+      ],
+      "multiplier": []
+    }
+  }
+}

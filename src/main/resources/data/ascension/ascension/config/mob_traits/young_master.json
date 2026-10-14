@@ -1,0 +1,84 @@
+{
+  "type": "ascension:simple_trait",
+  "name": "Young Master Cultivation",
+  "paths": {
+    "ascension:foundation/essence": [
+      {
+        "major_realm": 1,
+        "min_realm": 0,
+        "max_realm": 2,
+        "weight": 65
+      },
+      {
+        "major_realm": 2,
+        "min_realm": 0,
+        "max_realm": 2,
+        "weight": 30
+      },
+      {
+        "major_realm": 3,
+        "min_realm": 0,
+        "max_realm": 2,
+        "weight": 5
+      }
+    ]
+  },
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:npc_young_master_vitality",
+          "value": 11.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:npc_young_master_strength",
+          "value": 10.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:npc_young_master_agility",
+          "value": 7.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:npc_young_master_spirit",
+          "value": 10.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "attributes": {
+    "minecraft:max_health": {
+      "flat": [
+        {
+          "id": "ascension:npc_young_master_max_health",
+          "value": 10.0
+        }
+      ],
+      "multiplier": []
+    },
+    "minecraft:attack_damage": {
+      "flat": [
+        {
+          "id": "ascension:npc_young_master_attack_damage",
+          "value": 2.0
+        }
+      ],
+      "multiplier": []
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "type": "ascension:simple_trait",
+  "name": "Sect Master Cultivation",
+  "paths": {
+    "ascension:foundation/essence": [
+      {
+        "major_realm": 4,
+        "min_realm": 0,
+        "max_realm": 2,
+        "weight": 66
+      },
+      {
+        "major_realm": 5,
+        "min_realm": 0,
+        "max_realm": 2,
+        "weight": 29
+      },
+      {
+        "major_realm": 6,
+        "min_realm": 0,
+        "max_realm": 2,
+        "weight": 5
+      }
+    ]
+  },
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:npc_sect_master_vitality",
+          "value": 40.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:npc_sect_master_strength",
+          "value": 28.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:npc_sect_master_agility",
+          "value": 16.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:npc_sect_master_spirit",
+          "value": 36.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "attributes": {
+    "minecraft:max_health": {
+      "flat": [
+        {
+          "id": "ascension:npc_sect_master_max_health",
+          "value": 50.0
+        }
+      ],
+      "multiplier": []
+    },
+    "minecraft:attack_damage": {
+      "flat": [
+        {
+          "id": "ascension:npc_sect_master_attack_damage",
+          "value": 7.0
+        }
+      ],
+      "multiplier": []
+    }
+  }
+}
