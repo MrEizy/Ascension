@@ -21,7 +21,8 @@ import java.util.Optional;
 
 public record NpcProfile(List<String> names, List<String> skins, String greeting, List<String> dialogue,
                          List<String> teachings, String offeringItem, int offeringCount, int requiredKills,
-                         List<String> taunts, int summonDelayTicks, List<Personality> personalities, List<AffiliationWeight> affiliations) {
+                         List<String> taunts, int summonDelayTicks, List<Personality> personalities, List<AffiliationWeight> affiliations,
+                         CultivationRoutine cultivationRoutine) {
     private static ResourceManager cachedManager;
     private static Map<String, Personality> definitions = Map.of();
     private static final Map<String, NpcProfile> profiles = new HashMap<>();
@@ -39,7 +40,8 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
     private static NpcProfile loadProfile(ResourceManager manager, String type) {
         NpcProfile fallback = new NpcProfile(List.of("Wandering Cultivator"), List.of("default"),
                 "Greetings, fellow cultivator.", List.of("The path to immortality is long."),
-                List.of(), "ascension:spiritual_stone", 0, 0, List.of(), 240, List.of(Personality.DEFAULT), List.of(new AffiliationWeight(NpcAffiliation.ORTHODOX, 1)));
+                List.of(), "ascension:spiritual_stone", 0, 0, List.of(), 240, List.of(Personality.DEFAULT), List.of(new AffiliationWeight(NpcAffiliation.ORTHODOX, 1)),
+                CultivationRoutine.DEFAULT);
         var id = AscensionCraft.prefix("npcs/" + type + ".json");
         try {
             Optional<Resource> resource = manager.getResource(id);
@@ -59,12 +61,30 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                         strings(guidance, "techniques", List.of(), false), offeringItem,
                         bounded(guidance, "offering_count", 0, 64), bounded(guidance, "kills", 0, 64),
                         strings(encounter, "taunts", List.of(), false),
-                        bounded(encounter, "summon_delay_ticks", 240, 2400), personalities(json), affiliations(json));
+                        bounded(encounter, "summon_delay_ticks", 240, 2400), personalities(json), affiliations(json),
+                        cultivationRoutine(json));
             }
         } catch (Exception e) {
             AscensionCraft.LOGGER.warn("Failed to load NPC profile {}", id, e);
             return fallback;
         }
+    }
+
+    public record CultivationRoutine(int minIntervalTicks, int maxIntervalTicks, int meditationTicks,
+                                     int circulationTicks, int circulationChance) {
+        public static final CultivationRoutine DEFAULT = new CultivationRoutine(400, 900, 160, 120, 65);
+    }
+
+    private static CultivationRoutine cultivationRoutine(JsonObject json) {
+        if (!json.has("cultivation_routine") || !json.get("cultivation_routine").isJsonObject())
+            return CultivationRoutine.DEFAULT;
+        JsonObject settings = json.getAsJsonObject("cultivation_routine");
+        int minimum = Math.max(100, bounded(settings, "min_interval_ticks", 400, 72000));
+        int maximum = Math.max(minimum, bounded(settings, "max_interval_ticks", 900, 72000));
+        int meditation = Math.max(120, bounded(settings, "meditation_ticks", 160, 2400));
+        int circulation = Math.max(120, bounded(settings, "circulation_ticks", 120, 2400));
+        int chance = bounded(settings, "circulation_chance", 65, 100);
+        return new CultivationRoutine(minimum, maximum, meditation, circulation, chance);
     }
 
     private static Map<String, Personality> loadDefinitions(ResourceManager manager) {

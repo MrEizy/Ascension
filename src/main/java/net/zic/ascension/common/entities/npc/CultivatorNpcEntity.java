@@ -48,6 +48,7 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.common.entities.AscEntities;
+import net.zic.ascension.common.entities.npc.ai.NpcCultivationGoal;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.network.npc.NpcDialoguePacket;
@@ -65,6 +66,11 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("misc.idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("move.walk");
     private static final RawAnimation RUN = RawAnimation.begin().thenLoop("move.run");
+    private static final RawAnimation CULTIVATION_ENTER = RawAnimation.begin().thenPlay("cultivation.enter");
+    private static final RawAnimation MEDITATION = RawAnimation.begin().thenLoop("cultivation.meditate");
+    private static final RawAnimation QI_CIRCULATION = RawAnimation.begin().thenLoop("cultivation.qi_circulation");
+    private static final RawAnimation CULTIVATION_EXIT = RawAnimation.begin().thenPlay("cultivation.exit");
+    private static final EntityDataAccessor<Integer> DAILY_ACTIVITY = SynchedEntityData.defineId(CultivatorNpcEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final Map<UUID, TrialProgress> trials = new HashMap<>();
     private final NpcSocialState social = new NpcSocialState();
@@ -91,6 +97,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15, true));
+        goalSelector.addGoal(4, new NpcCultivationGoal(this));
         goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8));
         goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 9));
         goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -104,6 +111,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         super.defineSynchedData(builder);
         builder.define(SKIN, "default");
         builder.define(GENERATED_NAME, "");
+        builder.define(DAILY_ACTIVITY, NpcDailyActivity.NONE.ordinal());
     }
 
     public String getNpcType() { return BuiltInRegistries.ENTITY_TYPE.getKey(getType()).getPath(); }
@@ -133,6 +141,34 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
 
     private NpcProfile.Personality profilePersonality() {
         return NpcProfile.load((ServerLevel) level(), getNpcType()).personality(personalityId);
+    }
+
+    public NpcDailyActivity getDailyActivity() {
+        return NpcDailyActivity.fromId(entityData.get(DAILY_ACTIVITY));
+    }
+
+    public void setDailyActivity(NpcDailyActivity activity) {
+        if (!level().isClientSide()) entityData.set(DAILY_ACTIVITY, activity.ordinal());
+    }
+
+    public boolean isCultivating() { return getDailyActivity() != NpcDailyActivity.NONE; }
+
+    public NpcProfile.CultivationRoutine getDailyCultivationRoutine() {
+        return NpcProfile.load((ServerLevel) level(), getNpcType()).cultivationRoutine();
+    }
+
+    public boolean canContinueDailyCultivation() {
+        return isAlive() && !isNoAi() && !summonedGuard && challengedBy == null &&
+                getTarget() == null && !isAggressive() && hurtTime == 0 && !isOnFire() &&
+                !isInWaterOrRain() && !isInLava() && onGround() && !isPassenger();
+    }
+
+    public boolean canBeginDailyCultivation() {
+        return canContinueDailyCultivation() && getNavigation().isDone();
+    }
+
+    private void interruptDailyCultivation() {
+        if (isCultivating()) setDailyActivity(NpcDailyActivity.NONE);
     }
 
     public void setSummonedGuard(boolean value) { summonedGuard = value; }
@@ -206,6 +242,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty,
                                         EntitySpawnReason reason, @Nullable SpawnGroupData data) {
         SpawnGroupData result = super.finalizeSpawn(level, difficulty, reason, data);
@@ -260,7 +297,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
                 if (reinforcementTicks <= 0) summonReinforcement(server, challenger);
             }
         }
-        if (getNpcType().equals("young_master") && challengedBy == null && !summonedGuard) {
+        if (getNpcType().equals("young_master") && challengedBy == null && !summonedGuard && !isCultivating()) {
             if (++tauntTicks >= 440) {
                 tauntTicks = 0;
                 for (ServerPlayer nearby : server.players()) {
@@ -302,6 +339,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         if (hand != InteractionHand.MAIN_HAND || player.getItemInHand(hand).is(Items.NAME_TAG))
             return InteractionResult.PASS;
         if (player instanceof ServerPlayer serverPlayer && level() instanceof ServerLevel server) {
+            interruptDailyCultivation();
             if (isChallenger(serverPlayer) && player.isShiftKeyDown()) {
                 withdraw(serverPlayer);
             } else if (challengedBy == null || isChallenger(serverPlayer)) {
@@ -425,7 +463,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
             showDialogue(player, "I have heard quite enough from you for now.");
             return;
         }
-        triggerAnim("actions", "taunt");
+        if (getNpcType().equals("young_master")) triggerAnim("actions", "taunt");
         showDialogue(player, "Watch your tongue, cultivator. I will remember that insult.");
     }
 
@@ -544,6 +582,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
             player.sendSystemMessage(Component.translatable("gui.ascension.npc.survival_required"));
             return;
         }
+        interruptDailyCultivation();
         challengedBy = player.getUUID();
         NpcProfile.Personality personality = NpcProfile.load((ServerLevel) level(), getNpcType()).personality(personalityId);
         relationship(player, personality).challenged(personality.challengeRespect());
@@ -578,6 +617,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         boolean success = super.hurtServer(level, source, amount);
+        if (success) interruptDailyCultivation();
         if (success && isAlive()) {
             triggerAnim("actions", "hurt");
             if (source.getEntity() instanceof ServerPlayer attacker && !isChallenger(attacker) && !summonedGuard) {
@@ -596,8 +636,16 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>("movement", 5, state ->
-                state.setAndContinue(!state.isMoving() ? IDLE : isAggressive() ? RUN : WALK)));
+        controllers.add(new AnimationController<>("movement", 5, state -> {
+            RawAnimation animation = switch (getDailyActivity()) {
+                case CULTIVATION_ENTER -> CULTIVATION_ENTER;
+                case MEDITATION -> MEDITATION;
+                case QI_CIRCULATION -> QI_CIRCULATION;
+                case CULTIVATION_EXIT -> CULTIVATION_EXIT;
+                case NONE -> !state.isMoving() ? IDLE : isAggressive() ? RUN : WALK;
+            };
+            return state.setAndContinue(animation);
+        }));
         controllers.add(new AnimationController<>("actions", 0, state -> PlayState.STOP)
                 .triggerableAnim("greet", RawAnimation.begin().thenPlay("misc.greet"))
                 .triggerableAnim("attack", RawAnimation.begin().thenPlay("attack.palm_strike"))

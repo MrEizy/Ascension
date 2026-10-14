@@ -58,5 +58,12 @@
       "id": "unorthodox",
       "weight": 1
     }
-  ]
+  ],
+  "cultivation_routine": {
+    "min_interval_ticks": 250,
+    "max_interval_ticks": 600,
+    "meditation_ticks": 300,
+    "circulation_ticks": 240,
+    "circulation_chance": 90
+  }
 }

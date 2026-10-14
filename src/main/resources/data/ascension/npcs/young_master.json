@@ -57,5 +57,12 @@
       "id": "demonic",
       "weight": 1
     }
-  ]
+  ],
+  "cultivation_routine": {
+    "min_interval_ticks": 700,
+    "max_interval_ticks": 1300,
+    "meditation_ticks": 140,
+    "circulation_ticks": 120,
+    "circulation_chance": 45
+  }
 }
