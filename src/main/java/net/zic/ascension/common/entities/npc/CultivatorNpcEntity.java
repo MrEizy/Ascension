@@ -476,7 +476,9 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
                 return "Your deeds have earned recognition among the " + getAffiliation().label() + ".";
         }
         List<String> lines = List.of();
-        if (relation.guidance() > 0 && !personality.guided().isEmpty()) lines = personality.guided();
+        if (relation.respect() <= -40 && !personality.hostile().isEmpty()) lines = personality.hostile();
+        else if (relation.respect() >= 40 && !personality.friendly().isEmpty()) lines = personality.friendly();
+        else if (relation.guidance() > 0 && !personality.guided().isEmpty()) lines = personality.guided();
         else if (relation.respect() <= -20 && !personality.hostile().isEmpty()) lines = personality.hostile();
         else if (relation.respect() >= 25 && !personality.friendly().isEmpty()) lines = personality.friendly();
         else {
@@ -502,7 +504,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
                 canGuide() && !summonedGuard && !assignedTeachings.isEmpty(),
                 trials.containsKey(player.getUUID()) && trials.get(player.getUUID()).completed,
                 personality.name(), relation.standing(), relation.respect(), getAffiliation().label(),
-                NpcReputation.get(server.getServer()).value(player.getUUID(), getAffiliation())));
+                NpcReputation.get(server.getServer()).value(player.getUUID(), getAffiliation()),
+                personality.gifts().hint()));
     }
 
     public void speak(ServerPlayer player) {
@@ -524,16 +527,44 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
             showDialogue(player, "I have already accepted an offering from you recently.");
             return;
         }
-        Item offering = ModItems.SPIRITUAL_STONE.get();
-        if (countOffering(player, offering) < 1) {
-            showDialogue(player, "A Spiritual Stone would be a suitable gift, if you have one to spare.");
+        ItemStack offered = !player.getMainHandItem().isEmpty() ? player.getMainHandItem()
+                : !player.getOffhandItem().isEmpty() ? player.getOffhandItem() : ItemStack.EMPTY;
+        Item item = offered.isEmpty() ? ModItems.SPIRITUAL_STONE.get() : offered.getItem();
+        if (offered.isEmpty() && countOffering(player, item) == 0) {
+            showDialogue(player, "Hold something you wish to offer, or carry a Spiritual Stone with empty hands.");
             return;
         }
-        if (!relation.gifted(server.getGameTime(), personality.giftRespect())) return;
-        consumeOffering(player, offering, 1);
+        NpcGiftPreferences gifts = personality.gifts();
+        NpcGiftPreferences.Response response = gifts.response(item);
+        if (response == NpcGiftPreferences.Response.DISLIKED) {
+            showDialogue(player, gifts.dislikedReply());
+            return;
+        }
+        if (response == NpcGiftPreferences.Response.UNSUITABLE) {
+            showDialogue(player, gifts.refusedReply());
+            return;
+        }
+        boolean preferred = response == NpcGiftPreferences.Response.PREFERRED;
+        int respect = relation.respect();
+        if (respect <= -40 && !preferred) {
+            showDialogue(player, gifts.hostileReply());
+            return;
+        }
+        if (respect >= 40 && preferred && random.nextInt(100) < gifts.trustedRefusalChance()) {
+            showDialogue(player, gifts.trustedReply());
+            return;
+        }
+        int change = Math.max(1, personality.giftRespect() + (preferred ? gifts.preferredBonus() : 0));
+        if (respect <= -40) change = Math.max(1, change * gifts.hostilePercent() / 100);
+        else if (respect <= -15) change = Math.max(1, change * gifts.waryPercent() / 100);
+        if (!relation.gifted(server.getGameTime(), change)) return;
+        if (offered.isEmpty()) consumeOffering(player, item, 1);
+        else {
+            offered.shrink(1);
+            player.getInventory().setChanged();
+        }
         triggerAnim("actions", "greet");
-        showDialogue(player, "Your gift is received. " + (personality.giftRespect() > 0
-                ? "I will remember your generosity." : "Such gestures do not easily sway me."));
+        showDialogue(player, preferred ? gifts.preferredReply() : gifts.acceptedReply());
     }
 
     public void insult(ServerPlayer player) {

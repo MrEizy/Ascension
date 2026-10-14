@@ -51,6 +51,34 @@
         "senior": [
           "Honoured senior, may your cultivation flourish."
         ]
+      },
+      "gifts": {
+        "preferred": [
+          "ascension:ginseng",
+          "ascension:jade_dew_grass",
+          "minecraft:poppy",
+          "minecraft:dandelion"
+        ],
+        "accepted": [
+          "ascension:spiritual_stone",
+          "minecraft:bread",
+          "minecraft:honeycomb",
+          "minecraft:apple"
+        ],
+        "disliked": [
+          "minecraft:rotten_flesh",
+          "minecraft:poisonous_potato"
+        ],
+        "preferred_bonus": 7,
+        "wary_percent": 80,
+        "hostile_percent": 65,
+        "trusted_refusal_chance": 30,
+        "preferred_reply": "You remembered what I value. This kindness will not be forgotten.",
+        "accepted_reply": "Thank you. Small kindnesses make the cultivation road easier.",
+        "refused_reply": "I appreciate the thought, but perhaps someone else could use that more.",
+        "disliked_reply": "I would rather you kept that, thank you.",
+        "hostile_reply": "We have much to mend before I can accept an ordinary offering.",
+        "trusted_reply": "Your company is gift enough. Keep this for someone who needs it."
       }
     },
     "reserved": {
@@ -104,6 +132,33 @@
         "senior": [
           "Greetings, senior. I shall not disturb your practice."
         ]
+      },
+      "gifts": {
+        "preferred": [
+          "minecraft:book",
+          "minecraft:paper",
+          "minecraft:writable_book",
+          "minecraft:amethyst_shard"
+        ],
+        "accepted": [
+          "ascension:spiritual_stone",
+          "ascension:jade",
+          "minecraft:ink_sac"
+        ],
+        "disliked": [
+          "minecraft:rotten_flesh",
+          "minecraft:poisonous_potato"
+        ],
+        "preferred_bonus": 8,
+        "wary_percent": 65,
+        "hostile_percent": 40,
+        "trusted_refusal_chance": 35,
+        "preferred_reply": "A useful addition to my studies. You have my thanks.",
+        "accepted_reply": "I will put this to good use.",
+        "refused_reply": "No. That serves no purpose in my studies.",
+        "disliked_reply": "I prefer my possessions to remain clean.",
+        "hostile_reply": "I have no reason to accept that from you.",
+        "trusted_reply": "There is no need for another offering between us."
       }
     },
     "competitive": {
@@ -158,6 +213,32 @@
         "senior": [
           "Your cultivation is impressive. I intend to catch up."
         ]
+      },
+      "gifts": {
+        "preferred": [
+          "minecraft:iron_ingot",
+          "minecraft:blaze_powder",
+          "ascension:spiritual_stone"
+        ],
+        "accepted": [
+          "ascension:jade",
+          "minecraft:gold_ingot",
+          "minecraft:amethyst_shard"
+        ],
+        "disliked": [
+          "minecraft:rotten_flesh",
+          "minecraft:poisonous_potato"
+        ],
+        "preferred_bonus": 7,
+        "wary_percent": 85,
+        "hostile_percent": 60,
+        "trusted_refusal_chance": 10,
+        "preferred_reply": "Excellent! This will help with my next training session.",
+        "accepted_reply": "A practical offering. I will make good use of it.",
+        "refused_reply": "Bring something useful for training, not that.",
+        "disliked_reply": "Are you mocking my training with this?",
+        "hostile_reply": "If you want to make amends, bring something that shows real effort.",
+        "trusted_reply": "Save your supplies. I would rather test our strength."
       }
     },
     "arrogant": {
@@ -213,6 +294,33 @@
         "senior": [
           "I acknowledge your accomplishments, senior."
         ]
+      },
+      "gifts": {
+        "preferred": [
+          "ascension:jade",
+          "minecraft:diamond",
+          "minecraft:emerald",
+          "ascension:spiritual_stone"
+        ],
+        "accepted": [
+          "minecraft:gold_ingot",
+          "minecraft:amethyst_shard"
+        ],
+        "disliked": [
+          "minecraft:dirt",
+          "minecraft:rotten_flesh",
+          "minecraft:poisonous_potato"
+        ],
+        "preferred_bonus": 5,
+        "wary_percent": 55,
+        "hostile_percent": 35,
+        "trusted_refusal_chance": 5,
+        "preferred_reply": "At last, an offering suitable for someone of my standing.",
+        "accepted_reply": "Acceptable. You may consider yourself fortunate.",
+        "refused_reply": "You expect someone of my lineage to want that?",
+        "disliked_reply": "How dare you present that to me?",
+        "hostile_reply": "You will need far more than a trinket to regain my favour.",
+        "trusted_reply": "Hmph. Keep it. I am not short of treasures."
       }
     },
     "cautious": {
@@ -266,6 +374,33 @@
         "senior": [
           "Honoured senior, I intend no offence."
         ]
+      },
+      "gifts": {
+        "preferred": [
+          "ascension:regeneration_pill",
+          "ascension:qi_replenishing_pill",
+          "minecraft:honey_bottle"
+        ],
+        "accepted": [
+          "ascension:spiritual_stone",
+          "minecraft:bread",
+          "minecraft:golden_apple",
+          "ascension:ginseng"
+        ],
+        "disliked": [
+          "minecraft:rotten_flesh",
+          "minecraft:poisonous_potato"
+        ],
+        "preferred_bonus": 7,
+        "wary_percent": 55,
+        "hostile_percent": 30,
+        "trusted_refusal_chance": 25,
+        "preferred_reply": "A sensible provision. I can see you prepared carefully.",
+        "accepted_reply": "Useful. I will keep it for a difficult day.",
+        "refused_reply": "I have no need for that. Please keep it.",
+        "disliked_reply": "That looks unsafe. I will not touch it.",
+        "hostile_reply": "I cannot trust a common offering from you, not yet.",
+        "trusted_reply": "You have already earned my trust. Save your supplies."
       }
     },
     "stern": {
@@ -317,6 +452,32 @@
         "senior": [
           "Your accomplishments command respect, senior."
         ]
+      },
+      "gifts": {
+        "preferred": [
+          "minecraft:iron_ingot",
+          "minecraft:book",
+          "ascension:ginseng"
+        ],
+        "accepted": [
+          "ascension:spiritual_stone",
+          "minecraft:paper",
+          "minecraft:bread"
+        ],
+        "disliked": [
+          "minecraft:rotten_flesh",
+          "minecraft:poisonous_potato"
+        ],
+        "preferred_bonus": 7,
+        "wary_percent": 70,
+        "hostile_percent": 45,
+        "trusted_refusal_chance": 30,
+        "preferred_reply": "Practical and well chosen. Good judgement, cultivator.",
+        "accepted_reply": "An acceptable offering. Now return to your training.",
+        "refused_reply": "Spend your resources on useful preparations instead.",
+        "disliked_reply": "Do not waste my time with such nonsense.",
+        "hostile_reply": "Discipline and deeds must come before gifts.",
+        "trusted_reply": "Enough offerings. Show me what you have learned instead."
       }
     },
     "eccentric": {
@@ -369,6 +530,33 @@
         "senior": [
           "Senior, have you discovered any interesting mysteries lately?"
         ]
+      },
+      "gifts": {
+        "preferred": [
+          "minecraft:chorus_fruit",
+          "minecraft:fermented_spider_eye",
+          "minecraft:glow_berries",
+          "ascension:frostglass_lotus"
+        ],
+        "accepted": [
+          "ascension:spiritual_stone",
+          "minecraft:amethyst_shard",
+          "minecraft:spider_eye",
+          "ascension:jade"
+        ],
+        "disliked": [
+          "minecraft:poisonous_potato"
+        ],
+        "preferred_bonus": 9,
+        "wary_percent": 95,
+        "hostile_percent": 75,
+        "trusted_refusal_chance": 15,
+        "preferred_reply": "Magnificent! I wonder what secrets this little curiosity contains.",
+        "accepted_reply": "Oh, this could be interesting. Thank you!",
+        "refused_reply": "Curious, but not quite the curiosity I was looking for.",
+        "disliked_reply": "Even I would rather not experiment with that.",
+        "hostile_reply": "An intriguing peace offering. Perhaps you are not beyond hope.",
+        "trusted_reply": "Keep it! Bring me an interesting story next time."
       }
     }
   }

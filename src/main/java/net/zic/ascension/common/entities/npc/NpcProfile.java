@@ -224,7 +224,8 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                 strings(obj, "hostile", List.of(), false), strings(obj, "taunts", List.of(), false),
                 signed(obj, "gift_respect", 6), signed(obj, "insult_respect", -8),
                 signed(obj, "aid_respect", 8), signed(obj, "attack_respect", -12),
-                socialTraits(obj));
+                socialTraits(obj), NpcGiftPreferences.parse(obj.has("gifts") && obj.get("gifts").isJsonObject()
+                        ? obj.getAsJsonObject("gifts") : null));
     }
 
     public record SocialTraits(int interest, int focus, List<String> greetings, List<String> wary,
@@ -258,17 +259,17 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                               List<String> stronger, List<String> weaker, List<String> familiar,
                               List<String> challenged, List<String> guided, List<String> friendly,
                               List<String> hostile, List<String> taunts, int giftRespect, int insultRespect,
-                              int aidRespect, int attackRespect, SocialTraits social) {
+                              int aidRespect, int attackRespect, SocialTraits social, NpcGiftPreferences gifts) {
         Personality withWeight(int newWeight) {
             return new Personality(id, name, newWeight, initialRespect, challengeRespect,
                     withdrawRespect, guidanceRespect, greeting, dialogue, stronger, weaker,
                     familiar, challenged, guided, friendly, hostile, taunts,
-                    giftRespect, insultRespect, aidRespect, attackRespect, social);
+                    giftRespect, insultRespect, aidRespect, attackRespect, social, gifts);
         }
 
         private static final Personality DEFAULT = new Personality("neutral", "Neutral", 1, 0, -5, -2, 15,
                 "", List.of(), List.of(), List.of(), List.of(), List.of(), List.of(), List.of(),
-                List.of(), List.of(), 6, -8, 8, -12, SocialTraits.DEFAULT);
+                List.of(), List.of(), 6, -8, 8, -12, SocialTraits.DEFAULT, NpcGiftPreferences.DEFAULT);
     }
 
     public String randomName(RandomSource random) { return names.get(random.nextInt(names.size())); }

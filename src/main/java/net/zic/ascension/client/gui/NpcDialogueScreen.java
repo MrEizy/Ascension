@@ -36,7 +36,7 @@ public class NpcDialogueScreen extends Screen {
                     b -> send(NpcActionPacket.Action.GUIDANCE)).bounds(x, y + 25 * row++, 192, 20).build());
         }
         if (!packet.challenged()) {
-            addRenderableWidget(Button.builder(Component.literal("Offer Spiritual Stone"),
+            addRenderableWidget(Button.builder(Component.literal("Offer Gift"),
                     b -> send(NpcActionPacket.Action.GIFT)).bounds(x, y + 25 * row++, 192, 20).build());
             addRenderableWidget(Button.builder(Component.literal("Insult"),
                     b -> send(NpcActionPacket.Action.INSULT)).bounds(x, y + 25 * row++, 192, 20).build());
@@ -61,7 +61,7 @@ public class NpcDialogueScreen extends Screen {
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
         int left = width / 2 - 125;
         int top = height / 2 - 116;
-        graphics.fill(left - 6, top - 9, left + 256, height / 2 + 155, 0xCC15171C);
+        graphics.fill(left - 6, top - 9, left + 256, height / 2 + 178, 0xCC15171C);
         graphics.text(font, packet.name(), left, top, 0xFFFFD899, true);
         graphics.text(font, "Personality: " + packet.personality(), left, top + 13, 0xFFB5C5D0, false);
         graphics.text(font, "Standing: " + packet.standing() + " (" + packet.respect() + ")", left, top + 24, 0xFFB5C5D0, false);
@@ -69,6 +69,10 @@ public class NpcDialogueScreen extends Screen {
         var lines = font.split(Component.literal(packet.message()), 242);
         for (int i = 0; i < Math.min(5, lines.size()); i++) {
             graphics.text(font, lines.get(i), left, top + 50 + i * 11, 0xFFFFFFFF, false);
+        }
+        var hint = font.split(Component.literal(packet.giftHint()), 242);
+        for (int i = 0; i < Math.min(2, hint.size()); i++) {
+            graphics.text(font, hint.get(i), left, height / 2 + 139 + i * 11, 0xFFC3B6A0, false);
         }
         super.extractRenderState(graphics, mouseX, mouseY, delta);
     }
