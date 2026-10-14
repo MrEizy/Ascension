@@ -74,5 +74,10 @@
     "insult_talks": 2,
     "challenge_talks": 3,
     "guidance_talks": 4
+  },
+  "village_spawning": {
+    "weight": 6,
+    "max_per_village": 2,
+    "home_radius": 28
   }
 }

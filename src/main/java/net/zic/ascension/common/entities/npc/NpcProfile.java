@@ -22,7 +22,7 @@ import java.util.Optional;
 public record NpcProfile(List<String> names, List<String> skins, String greeting, List<String> dialogue,
                          List<String> teachings, String offeringItem, int offeringCount, int requiredKills,
                          List<String> taunts, int summonDelayTicks, List<Personality> personalities, List<AffiliationWeight> affiliations,
-                         CultivationRoutine cultivationRoutine, DailyLife dailyLife, DuelRules duelRules, DialogueUnlocks dialogueUnlocks) {
+                         CultivationRoutine cultivationRoutine, DailyLife dailyLife, DuelRules duelRules, DialogueUnlocks dialogueUnlocks, VillageSpawn villageSpawn) {
     private static ResourceManager cachedManager;
     private static Map<String, Personality> definitions = Map.of();
     private static final Map<String, NpcProfile> profiles = new HashMap<>();
@@ -41,7 +41,7 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
         NpcProfile fallback = new NpcProfile(List.of("Wandering Cultivator"), List.of("default"),
                 "Greetings, fellow cultivator.", List.of("The path to immortality is long."),
                 List.of(), "ascension:spiritual_stone", 0, 0, List.of(), 240, List.of(Personality.DEFAULT), List.of(new AffiliationWeight(NpcAffiliation.ORTHODOX, 1)),
-                CultivationRoutine.DEFAULT, DailyLife.DEFAULT, DuelRules.DEFAULT, DialogueUnlocks.DEFAULT);
+                CultivationRoutine.DEFAULT, DailyLife.DEFAULT, DuelRules.DEFAULT, DialogueUnlocks.DEFAULT, VillageSpawn.DEFAULT);
         var id = AscensionCraft.prefix("npcs/" + type + ".json");
         try {
             Optional<Resource> resource = manager.getResource(id);
@@ -62,12 +62,24 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                         bounded(guidance, "offering_count", 0, 64), bounded(guidance, "kills", 0, 64),
                         strings(encounter, "taunts", List.of(), false),
                         bounded(encounter, "summon_delay_ticks", 240, 2400), personalities(json), affiliations(json),
-                        cultivationRoutine(json), dailyLife(json), duelRules(json), dialogueUnlocks(json));
+                        cultivationRoutine(json), dailyLife(json), duelRules(json), dialogueUnlocks(json), villageSpawn(json));
             }
         } catch (Exception e) {
             AscensionCraft.LOGGER.warn("Failed to load NPC profile {}", id, e);
             return fallback;
         }
+    }
+
+    public record VillageSpawn(int weight, int maxPerVillage, int homeRadius) {
+        public static final VillageSpawn DEFAULT = new VillageSpawn(0, 0, 24);
+    }
+
+    private static VillageSpawn villageSpawn(JsonObject json) {
+        if (!json.has("village_spawning") || !json.get("village_spawning").isJsonObject()) return VillageSpawn.DEFAULT;
+        JsonObject settings = json.getAsJsonObject("village_spawning");
+        return new VillageSpawn(bounded(settings, "weight", 0, 100),
+                bounded(settings, "max_per_village", 0, 12),
+                Math.clamp(bounded(settings, "home_radius", 24, 64), 8, 64));
     }
 
     public record DuelRules(int finishHealthPercent, int maxDurationTicks, int maxDistance) {

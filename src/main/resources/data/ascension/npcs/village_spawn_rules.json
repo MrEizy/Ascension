@@ -1,0 +1,10 @@
+{
+  "interval_ticks": 1000,
+  "spawn_chance_percent": 65,
+  "max_per_village": 5,
+  "search_radius": 48,
+  "population_radius": 96,
+  "spawn_radius": 19,
+  "min_player_distance": 8,
+  "attempts_per_spawn": 16
+}

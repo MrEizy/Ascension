@@ -7,6 +7,7 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.PlayState;
 import com.geckolib.util.GeckoLibUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -30,7 +31,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -51,6 +51,8 @@ import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.common.entities.npc.ai.NpcCultivationGoal;
 import net.zic.ascension.common.entities.npc.ai.NpcSocialGoal;
+import net.zic.ascension.common.entities.npc.ai.NpcHomeWanderGoal;
+import net.zic.ascension.common.entities.npc.ai.NpcReturnHomeGoal;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.network.npc.NpcDialoguePacket;
@@ -90,6 +92,10 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     private int tauntTicks;
     private int guardLifetime = 1800;
     private boolean profileReady;
+    @Nullable private BlockPos homePos;
+    @Nullable private BlockPos villageAnchor;
+    private int homeRadius = 24;
+    private String homeDimension = "";
 
     public CultivatorNpcEntity(EntityType<? extends PathfinderMob> type, Level level) { super(type, level); }
 
@@ -103,11 +109,12 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15, true));
-        goalSelector.addGoal(3, new NpcSocialGoal(this));
-        goalSelector.addGoal(4, new NpcCultivationGoal(this));
-        goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8));
-        goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 9));
-        goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(3, new NpcReturnHomeGoal(this));
+        goalSelector.addGoal(4, new NpcSocialGoal(this));
+        goalSelector.addGoal(5, new NpcCultivationGoal(this));
+        goalSelector.addGoal(6, new NpcHomeWanderGoal(this, 0.8));
+        goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 9));
+        goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -134,6 +141,27 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     }
     public void setAffiliation(NpcAffiliation faction) {
         if (faction != null) affiliationId = faction.id();
+    }
+
+    @Nullable
+    public BlockPos getHomePos() { return homePos; }
+
+    @Nullable
+    public BlockPos getVillageAnchor() { return villageAnchor; }
+
+    public int getHomeRadius() { return homeRadius; }
+
+    public boolean canReturnHome() {
+        return !summonedGuard && !isNoAi() && challengedBy == null && getTarget() == null
+                && !isCultivating() && !isSocializing() && !isAggressive() && isAlive();
+    }
+
+    public void setVillageHome(BlockPos home, BlockPos village, int radius) {
+        if (!(level() instanceof ServerLevel server) || summonedGuard) return;
+        homePos = home.immutable();
+        villageAnchor = village.immutable();
+        homeRadius = Math.clamp(radius, 8, 64);
+        homeDimension = server.dimension().identifier().toString();
     }
 
     public String getPersonalityLabel() {
@@ -259,6 +287,18 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         output.putString("NpcTeachings", String.join(",", assignedTeachings));
         output.putString("NpcPersonality", personalityId);
         output.putString("NpcAffiliation", affiliationId);
+        if (homePos != null && !summonedGuard) {
+            output.putInt("NpcHomeX", homePos.getX());
+            output.putInt("NpcHomeY", homePos.getY());
+            output.putInt("NpcHomeZ", homePos.getZ());
+            output.putInt("NpcHomeRadius", homeRadius);
+            output.putString("NpcHomeDimension", homeDimension);
+            if (villageAnchor != null) {
+                output.putInt("NpcVillageX", villageAnchor.getX());
+                output.putInt("NpcVillageY", villageAnchor.getY());
+                output.putInt("NpcVillageZ", villageAnchor.getZ());
+            }
+        }
         if (habits != null) {
             output.putString("NpcHabitPeriod", habits.preferredPeriod().name());
             output.putInt("NpcHabitSocial", habits.sociability());
@@ -284,6 +324,14 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         setSkin(input.getStringOr("NpcSkin", "default"));
         setGeneratedName(input.getStringOr("NpcName", ""));
         profileReady = false;
+        homePos = input.getInt("NpcHomeX").isPresent() && input.getInt("NpcHomeY").isPresent()
+                && input.getInt("NpcHomeZ").isPresent()
+                ? new BlockPos(input.getIntOr("NpcHomeX", 0), input.getIntOr("NpcHomeY", 0), input.getIntOr("NpcHomeZ", 0)) : null;
+        villageAnchor = input.getInt("NpcVillageX").isPresent() && input.getInt("NpcVillageY").isPresent()
+                && input.getInt("NpcVillageZ").isPresent()
+                ? new BlockPos(input.getIntOr("NpcVillageX", 0), input.getIntOr("NpcVillageY", 0), input.getIntOr("NpcVillageZ", 0)) : null;
+        homeRadius = Math.clamp(input.getIntOr("NpcHomeRadius", 24), 8, 64);
+        homeDimension = input.getStringOr("NpcHomeDimension", "");
         personalityId = NpcProfile.canonicalPersonalityId(input.getStringOr("NpcPersonality", ""));
         affiliationId = input.getStringOr("NpcAffiliation", "");
         NpcHabits.Period period = NpcHabits.Period.parse(input.getStringOr("NpcHabitPeriod", ""));
@@ -314,6 +362,10 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         }
         summonedGuard = Boolean.parseBoolean(input.getStringOr("NpcSummonedGuard", "false"));
         guardLifetime = Math.max(0, input.getIntOr("NpcGuardLifetime", 1800));
+        if (summonedGuard) {
+            homePos = null;
+            villageAnchor = null;
+        }
         reinforcementSummoned = Boolean.parseBoolean(input.getStringOr("NpcReinforcementSent", "false"));
         reinforcementTicks = Math.max(0, input.getIntOr("NpcReinforcementTicks", 0));
     }
@@ -329,6 +381,16 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
 
     private void initializeProfile(ServerLevel server) {
         if (profileReady) return;
+        if (homePos != null && !homeDimension.isBlank() && !homeDimension.equals(server.dimension().identifier().toString())) {
+            homePos = null;
+            villageAnchor = null;
+        }
+        if (homePos == null && !summonedGuard) {
+            homePos = blockPosition().immutable();
+            homeRadius = 24;
+            villageAnchor = null;
+        }
+        homeDimension = server.dimension().identifier().toString();
         NpcProfile profile = NpcProfile.load(server, getNpcType());
         if (personalityId.isBlank()) personalityId = profile.randomPersonality(random).id();
         if (habits == null) habits = NpcHabits.roll(random, profile, profile.personality(personalityId));
