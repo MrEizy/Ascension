@@ -79,7 +79,9 @@
         "disliked_reply": "I would rather you kept that, thank you.",
         "hostile_reply": "We have much to mend before I can accept an ordinary offering.",
         "trusted_reply": "Your company is gift enough. Keep this for someone who needs it."
-      }
+      },
+      "duel_win_respect": 8,
+      "duel_loss_respect": 5
     },
     "reserved": {
       "name": "Reserved",
@@ -159,7 +161,9 @@
         "disliked_reply": "I prefer my possessions to remain clean.",
         "hostile_reply": "I have no reason to accept that from you.",
         "trusted_reply": "There is no need for another offering between us."
-      }
+      },
+      "duel_win_respect": 4,
+      "duel_loss_respect": 2
     },
     "competitive": {
       "name": "Competitive",
@@ -239,7 +243,9 @@
         "disliked_reply": "Are you mocking my training with this?",
         "hostile_reply": "If you want to make amends, bring something that shows real effort.",
         "trusted_reply": "Save your supplies. I would rather test our strength."
-      }
+      },
+      "duel_win_respect": 12,
+      "duel_loss_respect": 4
     },
     "arrogant": {
       "name": "Arrogant",
@@ -321,7 +327,9 @@
         "disliked_reply": "How dare you present that to me?",
         "hostile_reply": "You will need far more than a trinket to regain my favour.",
         "trusted_reply": "Hmph. Keep it. I am not short of treasures."
-      }
+      },
+      "duel_win_respect": -8,
+      "duel_loss_respect": -3
     },
     "cautious": {
       "name": "Cautious",
@@ -401,7 +409,9 @@
         "disliked_reply": "That looks unsafe. I will not touch it.",
         "hostile_reply": "I cannot trust a common offering from you, not yet.",
         "trusted_reply": "You have already earned my trust. Save your supplies."
-      }
+      },
+      "duel_win_respect": 3,
+      "duel_loss_respect": 2
     },
     "stern": {
       "name": "Stern",
@@ -478,7 +488,9 @@
         "disliked_reply": "Do not waste my time with such nonsense.",
         "hostile_reply": "Discipline and deeds must come before gifts.",
         "trusted_reply": "Enough offerings. Show me what you have learned instead."
-      }
+      },
+      "duel_win_respect": 7,
+      "duel_loss_respect": 3
     },
     "eccentric": {
       "name": "Eccentric",
@@ -557,7 +569,9 @@
         "disliked_reply": "Even I would rather not experiment with that.",
         "hostile_reply": "An intriguing peace offering. Perhaps you are not beyond hope.",
         "trusted_reply": "Keep it! Bring me an interesting story next time."
-      }
+      },
+      "duel_win_respect": 9,
+      "duel_loss_respect": 5
     }
   }
 }

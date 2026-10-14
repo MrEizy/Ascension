@@ -22,7 +22,7 @@ import java.util.Optional;
 public record NpcProfile(List<String> names, List<String> skins, String greeting, List<String> dialogue,
                          List<String> teachings, String offeringItem, int offeringCount, int requiredKills,
                          List<String> taunts, int summonDelayTicks, List<Personality> personalities, List<AffiliationWeight> affiliations,
-                         CultivationRoutine cultivationRoutine, DailyLife dailyLife) {
+                         CultivationRoutine cultivationRoutine, DailyLife dailyLife, DuelRules duelRules, DialogueUnlocks dialogueUnlocks) {
     private static ResourceManager cachedManager;
     private static Map<String, Personality> definitions = Map.of();
     private static final Map<String, NpcProfile> profiles = new HashMap<>();
@@ -41,7 +41,7 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
         NpcProfile fallback = new NpcProfile(List.of("Wandering Cultivator"), List.of("default"),
                 "Greetings, fellow cultivator.", List.of("The path to immortality is long."),
                 List.of(), "ascension:spiritual_stone", 0, 0, List.of(), 240, List.of(Personality.DEFAULT), List.of(new AffiliationWeight(NpcAffiliation.ORTHODOX, 1)),
-                CultivationRoutine.DEFAULT, DailyLife.DEFAULT);
+                CultivationRoutine.DEFAULT, DailyLife.DEFAULT, DuelRules.DEFAULT, DialogueUnlocks.DEFAULT);
         var id = AscensionCraft.prefix("npcs/" + type + ".json");
         try {
             Optional<Resource> resource = manager.getResource(id);
@@ -62,12 +62,37 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                         bounded(guidance, "offering_count", 0, 64), bounded(guidance, "kills", 0, 64),
                         strings(encounter, "taunts", List.of(), false),
                         bounded(encounter, "summon_delay_ticks", 240, 2400), personalities(json), affiliations(json),
-                        cultivationRoutine(json), dailyLife(json));
+                        cultivationRoutine(json), dailyLife(json), duelRules(json), dialogueUnlocks(json));
             }
         } catch (Exception e) {
             AscensionCraft.LOGGER.warn("Failed to load NPC profile {}", id, e);
             return fallback;
         }
+    }
+
+    public record DuelRules(int finishHealthPercent, int maxDurationTicks, int maxDistance) {
+        public static final DuelRules DEFAULT = new DuelRules(30, 2400, 32);
+    }
+
+    private static DuelRules duelRules(JsonObject json) {
+        if (!json.has("duel") || !json.get("duel").isJsonObject()) return DuelRules.DEFAULT;
+        JsonObject obj = json.getAsJsonObject("duel");
+        return new DuelRules(Math.clamp(bounded(obj, "finish_health_percent", 30, 90), 5, 90),
+                Math.max(200, bounded(obj, "max_duration_ticks", 2400, 12000)),
+                Math.clamp(bounded(obj, "max_distance", 32, 96), 8, 96));
+    }
+
+    public record DialogueUnlocks(int giftTalks, int insultTalks, int challengeTalks, int guidanceTalks) {
+        public static final DialogueUnlocks DEFAULT = new DialogueUnlocks(2, 2, 3, 4);
+    }
+
+    private static DialogueUnlocks dialogueUnlocks(JsonObject json) {
+        if (!json.has("dialogue_unlocks") || !json.get("dialogue_unlocks").isJsonObject()) return DialogueUnlocks.DEFAULT;
+        JsonObject obj = json.getAsJsonObject("dialogue_unlocks");
+        return new DialogueUnlocks(bounded(obj, "gift_talks", 2, 20),
+                bounded(obj, "insult_talks", 2, 20),
+                bounded(obj, "challenge_talks", 3, 20),
+                bounded(obj, "guidance_talks", 4, 20));
     }
 
     public record CultivationRoutine(int minIntervalTicks, int maxIntervalTicks, int meditationTicks,
@@ -224,6 +249,7 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                 strings(obj, "hostile", List.of(), false), strings(obj, "taunts", List.of(), false),
                 signed(obj, "gift_respect", 6), signed(obj, "insult_respect", -8),
                 signed(obj, "aid_respect", 8), signed(obj, "attack_respect", -12),
+                signed(obj, "duel_win_respect", 6), signed(obj, "duel_loss_respect", 2),
                 socialTraits(obj), NpcGiftPreferences.parse(obj.has("gifts") && obj.get("gifts").isJsonObject()
                         ? obj.getAsJsonObject("gifts") : null));
     }
@@ -259,17 +285,18 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                               List<String> stronger, List<String> weaker, List<String> familiar,
                               List<String> challenged, List<String> guided, List<String> friendly,
                               List<String> hostile, List<String> taunts, int giftRespect, int insultRespect,
-                              int aidRespect, int attackRespect, SocialTraits social, NpcGiftPreferences gifts) {
+                              int aidRespect, int attackRespect, int duelWinRespect, int duelLossRespect,
+                              SocialTraits social, NpcGiftPreferences gifts) {
         Personality withWeight(int newWeight) {
             return new Personality(id, name, newWeight, initialRespect, challengeRespect,
                     withdrawRespect, guidanceRespect, greeting, dialogue, stronger, weaker,
                     familiar, challenged, guided, friendly, hostile, taunts,
-                    giftRespect, insultRespect, aidRespect, attackRespect, social, gifts);
+                    giftRespect, insultRespect, aidRespect, attackRespect, duelWinRespect, duelLossRespect, social, gifts);
         }
 
         private static final Personality DEFAULT = new Personality("neutral", "Neutral", 1, 0, -5, -2, 15,
                 "", List.of(), List.of(), List.of(), List.of(), List.of(), List.of(), List.of(),
-                List.of(), List.of(), 6, -8, 8, -12, SocialTraits.DEFAULT, NpcGiftPreferences.DEFAULT);
+                List.of(), List.of(), 6, -8, 8, -12, 6, 2, SocialTraits.DEFAULT, NpcGiftPreferences.DEFAULT);
     }
 
     public String randomName(RandomSource random) { return names.get(random.nextInt(names.size())); }

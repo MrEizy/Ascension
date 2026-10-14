@@ -73,5 +73,16 @@
       "day",
       "night"
     ]
+  },
+  "duel": {
+    "finish_health_percent": 20,
+    "max_duration_ticks": 2400,
+    "max_distance": 32
+  },
+  "dialogue_unlocks": {
+    "gift_talks": 2,
+    "insult_talks": 2,
+    "challenge_talks": 3,
+    "guidance_talks": 4
   }
 }

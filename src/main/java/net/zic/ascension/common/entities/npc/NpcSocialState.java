@@ -28,7 +28,7 @@ final class NpcSocialState {
             serialized.append(entry.getKey()).append(',').append(r.respect).append(',').append(r.talks)
                     .append(',').append(r.challenges).append(',').append(r.withdrawals).append(',').append(r.guidance)
                     .append(',').append(r.lastGiftTick).append(',').append(r.lastInsultTick)
-                    .append(',').append(r.lastAttackTick);
+                    .append(',').append(r.lastAttackTick).append(',').append(r.wins).append(',').append(r.losses);
         }
         output.putString("NpcRelationships", serialized.toString());
     }
@@ -38,8 +38,8 @@ final class NpcSocialState {
         String serialized = input.getStringOr("NpcRelationships", "");
         if (serialized.length() > 16000) return;
         for (String row : serialized.split(";")) {
-            String[] parts = row.split(",", 9);
-            if (parts.length != 6 && parts.length != 9) continue;
+            String[] parts = row.split(",", 11);
+            if (parts.length != 6 && parts.length != 9 && parts.length != 11) continue;
             try {
                 UUID player = UUID.fromString(parts[0]);
                 Relationship r = new Relationship(Integer.parseInt(parts[1]));
@@ -51,6 +51,10 @@ final class NpcSocialState {
                     r.lastGiftTick = Long.parseLong(parts[6]);
                     r.lastInsultTick = Long.parseLong(parts[7]);
                     r.lastAttackTick = Long.parseLong(parts[8]);
+                }
+                if (parts.length == 11) {
+                    r.wins = count(Integer.parseInt(parts[9]));
+                    r.losses = count(Integer.parseInt(parts[10]));
                 }
                 relationships.put(player, r);
                 if (relationships.size() >= MAX_PLAYERS) break;
@@ -67,6 +71,8 @@ final class NpcSocialState {
         private int challenges;
         private int withdrawals;
         private int guidance;
+        private int wins;
+        private int losses;
         private long lastGiftTick = -1;
         private long lastInsultTick = -1;
         private long lastAttackTick = -1;
@@ -76,6 +82,8 @@ final class NpcSocialState {
         int talks() { return talks; }
         int challenges() { return challenges; }
         int guidance() { return guidance; }
+        int wins() { return wins; }
+        int losses() { return losses; }
         int respect() { return respect; }
         int setRespect(int value) { respect = Math.max(-100, Math.min(100, value)); return respect; }
         int addRespect(int value) { changeRespect(value); return respect; }
@@ -112,8 +120,10 @@ final class NpcSocialState {
 
         void talked() { talks = count(talks + 1); }
         void challenged(int change) { challenges = count(challenges + 1); changeRespect(change); }
-        void withdrew(int change) { withdrawals = count(withdrawals + 1); changeRespect(change); }
+        void withdrew(int change) { withdrawals = count(withdrawals + 1); losses = count(losses + 1); changeRespect(change); }
         void guided(int change) { guidance = count(guidance + 1); changeRespect(change); }
+        void won(int change) { wins = count(wins + 1); changeRespect(change); }
+        void lost(int change) { losses = count(losses + 1); changeRespect(change); }
 
         String standing() {
             if (respect <= -40) return "Hostile";

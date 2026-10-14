@@ -82,6 +82,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     @Nullable private CultivatorNpcEntity socialPartner;
     private List<String> assignedTeachings = List.of();
     @Nullable private UUID challengedBy;
+    private NpcEncounterType encounterType = NpcEncounterType.NONE;
+    private int encounterTicks;
     private boolean summonedGuard;
     private boolean reinforcementSummoned;
     private int reinforcementTicks;
@@ -254,7 +256,6 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         super.addAdditionalSaveData(output);
         output.putString("NpcSkin", getSkin());
         output.putString("NpcName", entityData.get(GENERATED_NAME));
-        if (challengedBy != null) output.putString("NpcChallenger", challengedBy.toString());
         output.putString("NpcTeachings", String.join(",", assignedTeachings));
         output.putString("NpcPersonality", personalityId);
         output.putString("NpcAffiliation", affiliationId);
@@ -291,12 +292,9 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
                 Math.clamp(input.getIntOr("NpcHabitDiscipline", 100), 25, 175));
         socialPartner = null;
         social.load(input);
-        try {
-            String storedChallenger = input.getStringOr("NpcChallenger", "");
-            challengedBy = storedChallenger.isBlank() ? null : UUID.fromString(storedChallenger);
-        } catch (IllegalArgumentException exception) {
-            challengedBy = null;
-        }
+        challengedBy = null;
+        encounterType = NpcEncounterType.NONE;
+        encounterTicks = 0;
         String storedTeachings = input.getStringOr("NpcTeachings", "");
         assignedTeachings = storedTeachings.isBlank() ? List.of() : List.of(storedTeachings.split(","));
         trials.clear();
@@ -364,17 +362,22 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
             discard();
             return;
         }
-        ServerPlayer challenger = challengedBy == null ? null : server.getServer().getPlayerList().getPlayer(challengedBy);
-        if (challenger == null || challenger.level() != server || !challenger.isAlive() || challenger.isSpectator()
-                || challenger.getAbilities().instabuild || distanceToSqr(challenger) > 48 * 48) {
-            if (getTarget() != null) setTarget(null);
-            if (isAggressive()) setAggressive(false);
-        } else {
-            if (getTarget() != challenger) setTarget(challenger);
-            if (!isAggressive()) setAggressive(true);
-            if (getNpcType().equals("young_master") && !reinforcementSummoned) {
-                if (reinforcementTicks > 0) reinforcementTicks--;
-                if (reinforcementTicks <= 0) summonReinforcement(server, challenger);
+        if (challengedBy != null) {
+            ServerPlayer challenger = server.getServer().getPlayerList().getPlayer(challengedBy);
+            NpcProfile.DuelRules rules = NpcProfile.load(server, getNpcType()).duelRules();
+            if (challenger == null || challenger.level() != server || !challenger.isAlive() || challenger.isSpectator()
+                    || challenger.getAbilities().instabuild || distanceToSqr(challenger) > rules.maxDistance() * rules.maxDistance()
+                    || ++encounterTicks >= rules.maxDurationTicks()) {
+                endEncounter();
+                if (challenger != null && challenger.isAlive())
+                    challenger.sendSystemMessage(Component.literal(getName().getString() + ": The encounter has ended."));
+            } else {
+                if (getTarget() != challenger) setTarget(challenger);
+                if (!isAggressive()) setAggressive(true);
+                if (encounterType == NpcEncounterType.MORTAL && getNpcType().equals("young_master") && !reinforcementSummoned) {
+                    if (reinforcementTicks > 0) reinforcementTicks--;
+                    if (reinforcementTicks <= 0) summonReinforcement(server, challenger);
+                }
             }
         }
         if (getNpcType().equals("young_master") && challengedBy == null && !summonedGuard && !isCultivating() && !isSocializing()) {
@@ -462,7 +465,6 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         NpcProfile.Personality personality = profile.personality(personalityId);
         NpcSocialState.Relationship relation = relationship(player, personality);
         String message = selectDialogue(player, profile, personality, relation, true);
-        relation.talked();
         return message;
     }
 
@@ -505,11 +507,17 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
                 trials.containsKey(player.getUUID()) && trials.get(player.getUUID()).completed,
                 personality.name(), relation.standing(), relation.respect(), getAffiliation().label(),
                 NpcReputation.get(server.getServer()).value(player.getUUID(), getAffiliation()),
-                personality.gifts().hint()));
+                personality.gifts().hint(), relation.talks(),
+                relation.talks() >= profile.dialogueUnlocks().giftTalks() && !summonedGuard,
+                relation.talks() >= profile.dialogueUnlocks().insultTalks() && !summonedGuard,
+                relation.talks() >= profile.dialogueUnlocks().challengeTalks() && !summonedGuard,
+                relation.talks() >= profile.dialogueUnlocks().guidanceTalks() && !summonedGuard,
+                relation.respect() <= -40, encounterType == NpcEncounterType.MORTAL,
+                relation.wins(), relation.losses()));
     }
 
     public void speak(ServerPlayer player) {
-        if (!(level() instanceof ServerLevel server) || (challengedBy != null && !isChallenger(player))) return;
+        if (!(level() instanceof ServerLevel server) || challengedBy != null) return;
         NpcProfile profile = NpcProfile.load(server, getNpcType());
         NpcProfile.Personality personality = profile.personality(personalityId);
         NpcSocialState.Relationship relation = relationship(player, personality);
@@ -520,7 +528,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     }
 
     public void gift(ServerPlayer player) {
-        if (!(level() instanceof ServerLevel server) || summonedGuard || challengedBy != null) return;
+        if (!(level() instanceof ServerLevel server) || !actionUnlocked(player, NpcAction.GIFT)
+                || summonedGuard || challengedBy != null) return;
         NpcProfile.Personality personality = profilePersonality();
         NpcSocialState.Relationship relation = relationship(player, personality);
         if (!relation.canGift(server.getGameTime())) {
@@ -568,7 +577,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     }
 
     public void insult(ServerPlayer player) {
-        if (!(level() instanceof ServerLevel server) || summonedGuard || challengedBy != null) return;
+        if (!(level() instanceof ServerLevel server) || !actionUnlocked(player, NpcAction.INSULT)
+                || summonedGuard || challengedBy != null) return;
         NpcProfile.Personality personality = profilePersonality();
         NpcSocialState.Relationship relation = relationship(player, personality);
         if (!relation.insulted(server.getGameTime(), personality.insultRespect())) {
@@ -586,8 +596,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     }
 
     public void guide(ServerPlayer player) {
-        if (!(level() instanceof ServerLevel server) || !canGuide() || summonedGuard ||
-                challengedBy != null || assignedTeachings.isEmpty()) return;
+        if (!(level() instanceof ServerLevel server) || !actionUnlocked(player, NpcAction.GUIDANCE)
+                || !canGuide() || summonedGuard || challengedBy != null || assignedTeachings.isEmpty()) return;
         NpcProfile profile = NpcProfile.load(server, getNpcType());
         TrialProgress progress = trials.get(player.getUUID());
         if (progress == null) {
@@ -688,35 +698,94 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         return challengedBy != null && challengedBy.equals(player.getUUID());
     }
 
-    public void challenge(ServerPlayer player) {
-        if (challengedBy != null || !isAlive()) return;
+    public enum NpcAction { GIFT, INSULT, GUIDANCE, CHALLENGE }
+
+    public boolean actionUnlocked(ServerPlayer player, NpcAction action) {
+        if (!(level() instanceof ServerLevel server) || summonedGuard) return false;
+        NpcProfile profile = NpcProfile.load(server, getNpcType());
+        int talks = relationship(player, profile.personality(personalityId)).talks();
+        return switch (action) {
+            case GIFT -> talks >= profile.dialogueUnlocks().giftTalks();
+            case INSULT -> talks >= profile.dialogueUnlocks().insultTalks();
+            case GUIDANCE -> talks >= profile.dialogueUnlocks().guidanceTalks();
+            case CHALLENGE -> talks >= profile.dialogueUnlocks().challengeTalks();
+        };
+    }
+
+    public NpcEncounterType getEncounterType() { return encounterType; }
+
+    public boolean isFriendlyDuelWith(ServerPlayer player) {
+        return isChallenger(player) && encounterType == NpcEncounterType.FRIENDLY;
+    }
+
+    public float duelFinishHealth(LivingEntity participant) {
+        if (!(level() instanceof ServerLevel server)) return 1.0F;
+        int percent = NpcProfile.load(server, getNpcType()).duelRules().finishHealthPercent();
+        return Math.max(1.0F, participant.getMaxHealth() * percent / 100.0F);
+    }
+
+    public void resolveFriendlyDuel(ServerPlayer player, boolean playerWon) {
+        if (!isFriendlyDuelWith(player)) return;
+        NpcProfile.Personality personality = profilePersonality();
+        NpcSocialState.Relationship relation = relationship(player, personality);
+        if (playerWon) relation.won(personality.duelWinRespect());
+        else relation.lost(personality.duelLossRespect());
+        endEncounter();
+        String outcome = playerWon ? "You won the sparring match." : "You lost the sparring match.";
+        player.sendSystemMessage(Component.literal(getName().getString() + ": " + outcome +
+                " Record: " + relation.wins() + " wins, " + relation.losses() + " losses."));
+    }
+
+    public void challenge(ServerPlayer player) { startEncounter(player, false); }
+
+    public void mortalConfrontation(ServerPlayer player) { startEncounter(player, true); }
+
+    private void startEncounter(ServerPlayer player, boolean requestedMortal) {
+        if (challengedBy != null || !isAlive() || !(level() instanceof ServerLevel server)) return;
+        if (!summonedGuard && !actionUnlocked(player, NpcAction.CHALLENGE)) return;
         if (player.getAbilities().instabuild) {
             player.sendSystemMessage(Component.translatable("gui.ascension.npc.survival_required"));
+            return;
+        }
+        NpcProfile.Personality personality = profilePersonality();
+        boolean mortal = summonedGuard || relationship(player, personality).respect() <= -40;
+        if (!summonedGuard && mortal != requestedMortal) {
+            showDialogue(player, mortal ? "There will be no friendly duel between us. This would be a fight to the death."
+                    : "Our differences do not warrant a mortal confrontation.");
             return;
         }
         interruptDailyCultivation();
         endSocialEncounter();
         challengedBy = player.getUUID();
-        NpcProfile.Personality personality = NpcProfile.load((ServerLevel) level(), getNpcType()).personality(personalityId);
-        relationship(player, personality).challenged(personality.challengeRespect());
+        encounterType = mortal ? NpcEncounterType.MORTAL : NpcEncounterType.FRIENDLY;
+        encounterTicks = 0;
+        if (!summonedGuard) relationship(player, personality).challenged(personality.challengeRespect());
         setTarget(player);
         setAggressive(true);
         triggerAnim("actions", "greet");
-        if (getNpcType().equals("young_master") && !reinforcementSummoned && level() instanceof ServerLevel server) {
+        if (mortal && getNpcType().equals("young_master") && !reinforcementSummoned) {
             reinforcementTicks = NpcProfile.load(server, getNpcType()).summonDelayTicks();
             taunt(player);
         }
-        player.sendSystemMessage(Component.translatable("gui.ascension.npc.challenge_started"));
+        player.sendSystemMessage(Component.literal(mortal
+                ? getName().getString() + ": This confrontation is to the death!"
+                : getName().getString() + ": An honourable duel begins. Surrender by sneaking and interacting."));
     }
 
-    public void withdraw(ServerPlayer player) {
-        if (!isChallenger(player)) return;
-        NpcProfile.Personality personality = NpcProfile.load((ServerLevel) level(), getNpcType()).personality(personalityId);
-        relationship(player, personality).withdrew(personality.withdrawRespect());
+    private void endEncounter() {
         challengedBy = null;
+        encounterType = NpcEncounterType.NONE;
+        encounterTicks = 0;
         setTarget(null);
         setAggressive(false);
         getNavigation().stop();
+    }
+
+    public void withdraw(ServerPlayer player) {
+        if (!isFriendlyDuelWith(player)) return;
+        NpcProfile.Personality personality = profilePersonality();
+        relationship(player, personality).withdrew(personality.withdrawRespect());
+        endEncounter();
         player.sendSystemMessage(Component.translatable("gui.ascension.npc.challenge_ended"));
     }
 
@@ -729,6 +798,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        boolean challengerAttack = source.getEntity() instanceof ServerPlayer attacker && isChallenger(attacker);
         boolean success = super.hurtServer(level, source, amount);
         if (success) {
             interruptDailyCultivation();
@@ -736,7 +806,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         }
         if (success && isAlive()) {
             triggerAnim("actions", "hurt");
-            if (source.getEntity() instanceof ServerPlayer attacker && !isChallenger(attacker) && !summonedGuard) {
+            if (source.getEntity() instanceof ServerPlayer attacker && !challengerAttack && !summonedGuard) {
                 NpcProfile.Personality personality = profilePersonality();
                 relationship(attacker, personality).attacked(level.getGameTime(), personality.attackRespect());
             }
@@ -786,4 +856,11 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
             this.completed = completed;
         }
     }
+
+    public enum NpcEncounterType {
+        NONE,
+        FRIENDLY,
+        MORTAL
+    }
+
 }
