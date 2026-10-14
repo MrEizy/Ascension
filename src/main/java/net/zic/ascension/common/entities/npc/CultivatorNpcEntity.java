@@ -513,7 +513,24 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
                 relation.talks() >= profile.dialogueUnlocks().challengeTalks() && !summonedGuard,
                 relation.talks() >= profile.dialogueUnlocks().guidanceTalks() && !summonedGuard,
                 relation.respect() <= -40, encounterType == NpcEncounterType.MORTAL,
-                relation.wins(), relation.losses()));
+                relation.wins(), relation.losses(), getNpcRealmLabel()));
+    }
+
+    private String getNpcRealmLabel() {
+        if (!(level() instanceof ServerLevel server)) return "Unawakened";
+        AscensionEntityDataProvider provider = getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+        if (provider == null || !provider.hasData() || provider.getData() == null) return "Unawakened";
+        var source = provider.getData().getSource();
+        if (source == null) return "Unawakened";
+        PathHolder paths = source.getDataSource(CoreDataSources.PATH_DATA_SOURCE.get());
+        if (paths == null) return "Unawakened";
+        for (Identifier pathId : paths.getPaths()) {
+            PathInstance instance = paths.getPath(pathId);
+            if (instance == null) continue;
+            var path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, pathId, server.registryAccess());
+            if (path != null) return path.getRealmName(instance.getCurrentMajorRealm(), instance.getCurrentMinorRealm()).getString();
+        }
+        return "Unawakened";
     }
 
     public void speak(ServerPlayer player) {
