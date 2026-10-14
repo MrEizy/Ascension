@@ -6,6 +6,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
 import net.zic.ascension.common.command.commands.*;
 import net.zic.ascension.common.command.commands.mob.MobCommands;
+import net.zic.ascension.common.command.commands.mob.NpcSocialCommands;
 
 public final class AscensionCommand {
     private AscensionCommand() {
@@ -23,6 +24,9 @@ public final class AscensionCommand {
                 )
                 .then(Commands.literal("mobs")
                         .then(MobCommands.build())
+                        .then(NpcSocialCommands.build())
+                        .then(NpcSocialCommands.affiliation())
+                        .then(NpcSocialCommands.reputation())
                 )
                 .then(ViewStats.build())
                 .then(TribulationCommand.build())

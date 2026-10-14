@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public record NpcProfile(List<String> names, List<String> skins, String greeting, List<String> dialogue,
                          List<String> teachings, String offeringItem, int offeringCount, int requiredKills,
-                         List<String> taunts, int summonDelayTicks, List<Personality> personalities) {
+                         List<String> taunts, int summonDelayTicks, List<Personality> personalities, List<AffiliationWeight> affiliations) {
     private static ResourceManager cachedManager;
     private static Map<String, Personality> definitions = Map.of();
     private static final Map<String, NpcProfile> profiles = new HashMap<>();
@@ -39,7 +39,7 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
     private static NpcProfile loadProfile(ResourceManager manager, String type) {
         NpcProfile fallback = new NpcProfile(List.of("Wandering Cultivator"), List.of("default"),
                 "Greetings, fellow cultivator.", List.of("The path to immortality is long."),
-                List.of(), "ascension:spiritual_stone", 0, 0, List.of(), 240, List.of(Personality.DEFAULT));
+                List.of(), "ascension:spiritual_stone", 0, 0, List.of(), 240, List.of(Personality.DEFAULT), List.of(new AffiliationWeight(NpcAffiliation.ORTHODOX, 1)));
         var id = AscensionCraft.prefix("npcs/" + type + ".json");
         try {
             Optional<Resource> resource = manager.getResource(id);
@@ -59,7 +59,7 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                         strings(guidance, "techniques", List.of(), false), offeringItem,
                         bounded(guidance, "offering_count", 0, 64), bounded(guidance, "kills", 0, 64),
                         strings(encounter, "taunts", List.of(), false),
-                        bounded(encounter, "summon_delay_ticks", 240, 2400), personalities(json));
+                        bounded(encounter, "summon_delay_ticks", 240, 2400), personalities(json), affiliations(json));
             }
         } catch (Exception e) {
             AscensionCraft.LOGGER.warn("Failed to load NPC profile {}", id, e);
@@ -90,6 +90,33 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
             AscensionCraft.LOGGER.warn("Failed to load global NPC personalities {}", id, e);
         }
         return Map.copyOf(loaded);
+    }
+
+    public record AffiliationWeight(NpcAffiliation affiliation, int weight) { }
+
+    private static List<AffiliationWeight> affiliations(JsonObject json) {
+        if (!json.has("affiliations") || !json.get("affiliations").isJsonArray())
+            return List.of(new AffiliationWeight(NpcAffiliation.ORTHODOX, 1));
+        List<AffiliationWeight> available = new ArrayList<>();
+        for (JsonElement value : json.getAsJsonArray("affiliations")) {
+            if (!value.isJsonObject()) continue;
+            JsonObject item = value.getAsJsonObject();
+            NpcAffiliation faction = NpcAffiliation.parse(string(item, "id", ""));
+            if (faction == null || available.stream().anyMatch(entry -> entry.affiliation() == faction)) continue;
+            available.add(new AffiliationWeight(faction, Math.max(1, bounded(item, "weight", 1, 100))));
+        }
+        return available.isEmpty() ? List.of(new AffiliationWeight(NpcAffiliation.ORTHODOX, 1)) : List.copyOf(available);
+    }
+
+    public NpcAffiliation randomAffiliation(RandomSource random) {
+        int total = 0;
+        for (AffiliationWeight entry : affiliations) total += entry.weight();
+        int roll = random.nextInt(total);
+        for (AffiliationWeight entry : affiliations) {
+            roll -= entry.weight();
+            if (roll < 0) return entry.affiliation();
+        }
+        return affiliations.getFirst().affiliation();
     }
 
     public Personality randomPersonality(RandomSource random) {
@@ -149,7 +176,9 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                 strings(obj, "stronger", List.of(), false), strings(obj, "weaker", List.of(), false),
                 strings(obj, "familiar", List.of(), false), strings(obj, "challenged", List.of(), false),
                 strings(obj, "guided", List.of(), false), strings(obj, "friendly", List.of(), false),
-                strings(obj, "hostile", List.of(), false), strings(obj, "taunts", List.of(), false));
+                strings(obj, "hostile", List.of(), false), strings(obj, "taunts", List.of(), false),
+                signed(obj, "gift_respect", 6), signed(obj, "insult_respect", -8),
+                signed(obj, "aid_respect", 8), signed(obj, "attack_respect", -12));
     }
 
     private static int signed(JsonObject json, String key, int fallback) {
@@ -164,16 +193,18 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                               int withdrawRespect, int guidanceRespect, String greeting, List<String> dialogue,
                               List<String> stronger, List<String> weaker, List<String> familiar,
                               List<String> challenged, List<String> guided, List<String> friendly,
-                              List<String> hostile, List<String> taunts) {
+                              List<String> hostile, List<String> taunts, int giftRespect, int insultRespect,
+                              int aidRespect, int attackRespect) {
         Personality withWeight(int newWeight) {
             return new Personality(id, name, newWeight, initialRespect, challengeRespect,
                     withdrawRespect, guidanceRespect, greeting, dialogue, stronger, weaker,
-                    familiar, challenged, guided, friendly, hostile, taunts);
+                    familiar, challenged, guided, friendly, hostile, taunts,
+                    giftRespect, insultRespect, aidRespect, attackRespect);
         }
 
         private static final Personality DEFAULT = new Personality("neutral", "Neutral", 1, 0, -5, -2, 15,
                 "", List.of(), List.of(), List.of(), List.of(), List.of(), List.of(), List.of(),
-                List.of(), List.of());
+                List.of(), List.of(), 6, -8, 8, -12);
     }
 
     public String randomName(RandomSource random) { return names.get(random.nextInt(names.size())); }

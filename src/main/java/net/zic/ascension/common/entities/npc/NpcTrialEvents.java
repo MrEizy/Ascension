@@ -18,9 +18,15 @@ public final class NpcTrialEvents {
     @SubscribeEvent
     public static void onKill(LivingDeathEvent event) {
         LivingEntity victim = event.getEntity();
-        if (!(victim.level() instanceof ServerLevel server) || !(victim instanceof Monster)) return;
+        if (!(victim.level() instanceof ServerLevel server)) return;
         ServerPlayer killer = victim.getKillCredit() instanceof ServerPlayer player ? player : event.getSource().getEntity() instanceof ServerPlayer player ? player : null;
         if (killer == null) return;
+        NpcAffiliation affiliation = NpcAffiliation.of(victim);
+        if (affiliation != null && (!(victim instanceof CultivatorNpcEntity npc) || !npc.isSummonedGuard())) {
+            NpcReputation.get(server.getServer()).recordKill(killer, affiliation);
+        }
+        if (!(victim instanceof Monster monster)) return;
+        if (monster.getTarget() instanceof CultivatorNpcEntity rescued) rescued.helpedBy(killer);
         for (CultivatorNpcEntity npc : server.getEntitiesOfClass(CultivatorNpcEntity.class,
                 victim.getBoundingBox().inflate(48), entity -> entity.hasActiveTrial(killer))) {
             npc.recordHostileKill(killer);

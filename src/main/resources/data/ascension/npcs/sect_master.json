@@ -48,5 +48,15 @@
       "id": "arrogant",
       "weight": 1
     }
+  ],
+  "affiliations": [
+    {
+      "id": "orthodox",
+      "weight": 9
+    },
+    {
+      "id": "unorthodox",
+      "weight": 1
+    }
   ]
 }

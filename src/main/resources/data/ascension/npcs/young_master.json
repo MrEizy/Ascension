@@ -43,5 +43,19 @@
       "id": "compassionate",
       "weight": 1
     }
+  ],
+  "affiliations": [
+    {
+      "id": "orthodox",
+      "weight": 6
+    },
+    {
+      "id": "unorthodox",
+      "weight": 3
+    },
+    {
+      "id": "demonic",
+      "weight": 1
+    }
   ]
 }

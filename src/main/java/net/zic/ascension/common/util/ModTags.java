@@ -105,6 +105,9 @@ public class ModTags {
         public static final TagKey<EntityType<?>> STAGGER_IMMUNE = createTag("stagger_immune");
         public static final TagKey<EntityType<?>> STAGGER_RESISTANT = createTag("stagger_resistant");
         public static final TagKey<EntityType<?>> STAGGER_BOSS_PROFILE = createTag("stagger_boss_profile");
+        public static final TagKey<EntityType<?>> ORTHODOX = createTag("orthodox");
+        public static final TagKey<EntityType<?>> UNORTHODOX = createTag("unorthodox");
+        public static final TagKey<EntityType<?>> DEMONIC = createTag("demonic");
         public static final TagKey<EntityType<?>> MOB_CULTIVATION_PASSIVE = createTag("mob_cultivation/passive");
         public static final TagKey<EntityType<?>> MOB_CULTIVATION_HOSTILE = createTag("mob_cultivation/hostile");
         public static final TagKey<EntityType<?>> MOB_CULTIVATION_BOSSES = createTag("mob_cultivation/bosses");

@@ -31,5 +31,19 @@
       "id": "competitive",
       "weight": 3
     }
+  ],
+  "affiliations": [
+    {
+      "id": "orthodox",
+      "weight": 8
+    },
+    {
+      "id": "unorthodox",
+      "weight": 2
+    },
+    {
+      "id": "demonic",
+      "weight": 1
+    }
   ]
 }
