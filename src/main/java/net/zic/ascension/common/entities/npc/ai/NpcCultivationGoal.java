@@ -75,7 +75,8 @@ public final class NpcCultivationGoal extends Goal {
         NpcProfile.CultivationRoutine routine = npc.getDailyCultivationRoutine();
         int minimum = completed ? routine.minIntervalTicks() : Math.min(200, routine.minIntervalTicks());
         int maximum = completed ? routine.maxIntervalTicks() : Math.min(400, routine.maxIntervalTicks());
-        cooldown = minimum + npc.getRandom().nextInt(Math.max(1, maximum - minimum + 1));
+        int interval = minimum + npc.getRandom().nextInt(Math.max(1, maximum - minimum + 1));
+        cooldown = npc.getHabits().cultivationCooldown(interval, npc.level().getGameTime());
         completed = false;
     }
 

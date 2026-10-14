@@ -38,7 +38,20 @@
       "gift_respect": 8,
       "insult_respect": -6,
       "aid_respect": 12,
-      "attack_respect": -14
+      "attack_respect": -14,
+      "social": {
+        "interest": 140,
+        "focus": 105,
+        "greetings": [
+          "It is good to see another traveller upon the path."
+        ],
+        "wary": [
+          "I hope we can find common ground despite our differences."
+        ],
+        "senior": [
+          "Honoured senior, may your cultivation flourish."
+        ]
+      }
     },
     "reserved": {
       "name": "Reserved",
@@ -78,7 +91,20 @@
       "gift_respect": 5,
       "insult_respect": -7,
       "aid_respect": 7,
-      "attack_respect": -12
+      "attack_respect": -12,
+      "social": {
+        "interest": 55,
+        "focus": 130,
+        "greetings": [
+          "A peaceful day for cultivation."
+        ],
+        "wary": [
+          "We need not agree to coexist."
+        ],
+        "senior": [
+          "Greetings, senior. I shall not disturb your practice."
+        ]
+      }
     },
     "competitive": {
       "name": "Competitive",
@@ -119,7 +145,20 @@
       "gift_respect": 5,
       "insult_respect": -10,
       "aid_respect": 8,
-      "attack_respect": -14
+      "attack_respect": -14,
+      "social": {
+        "interest": 115,
+        "focus": 110,
+        "greetings": [
+          "One day, we should compare our progress."
+        ],
+        "wary": [
+          "Our differences need not prevent a worthy contest."
+        ],
+        "senior": [
+          "Your cultivation is impressive. I intend to catch up."
+        ]
+      }
     },
     "arrogant": {
       "name": "Arrogant",
@@ -161,7 +200,20 @@
       "gift_respect": 2,
       "insult_respect": -13,
       "aid_respect": 4,
-      "attack_respect": -18
+      "attack_respect": -18,
+      "social": {
+        "interest": 90,
+        "focus": 65,
+        "greetings": [
+          "You may consider this meeting an honour."
+        ],
+        "wary": [
+          "Do not mistake my courtesy for agreement."
+        ],
+        "senior": [
+          "I acknowledge your accomplishments, senior."
+        ]
+      }
     },
     "cautious": {
       "name": "Cautious",
@@ -201,7 +253,20 @@
       "gift_respect": 4,
       "insult_respect": -9,
       "aid_respect": 7,
-      "attack_respect": -14
+      "attack_respect": -14,
+      "social": {
+        "interest": 65,
+        "focus": 110,
+        "greetings": [
+          "The road ahead is uncertain. Remain vigilant."
+        ],
+        "wary": [
+          "Our paths differ. I prefer to keep my distance."
+        ],
+        "senior": [
+          "Honoured senior, I intend no offence."
+        ]
+      }
     },
     "stern": {
       "name": "Stern",
@@ -239,7 +304,20 @@
       "gift_respect": 5,
       "insult_respect": -12,
       "aid_respect": 10,
-      "attack_respect": -16
+      "attack_respect": -16,
+      "social": {
+        "interest": 75,
+        "focus": 150,
+        "greetings": [
+          "Do not neglect your training."
+        ],
+        "wary": [
+          "Discipline is more important than the banner you carry."
+        ],
+        "senior": [
+          "Your accomplishments command respect, senior."
+        ]
+      }
     },
     "eccentric": {
       "name": "Eccentric",
@@ -278,7 +356,20 @@
       "gift_respect": 7,
       "insult_respect": -5,
       "aid_respect": 9,
-      "attack_respect": -10
+      "attack_respect": -10,
+      "social": {
+        "interest": 145,
+        "focus": 85,
+        "greetings": [
+          "Have you ever tried circulating qi upside down?"
+        ],
+        "wary": [
+          "Interesting. Two paths, yet the same heavens above."
+        ],
+        "senior": [
+          "Senior, have you discovered any interesting mysteries lately?"
+        ]
+      }
     }
   }
 }

@@ -64,5 +64,16 @@
     "meditation_ticks": 140,
     "circulation_ticks": 120,
     "circulation_chance": 45
+  },
+  "daily_life": {
+    "social_min_interval_ticks": 450,
+    "social_max_interval_ticks": 950,
+    "social_duration_ticks": 70,
+    "social_radius": 6,
+    "preferred_periods": [
+      "day",
+      "dusk",
+      "night"
+    ]
   }
 }

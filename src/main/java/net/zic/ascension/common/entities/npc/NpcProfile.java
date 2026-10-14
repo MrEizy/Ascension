@@ -22,7 +22,7 @@ import java.util.Optional;
 public record NpcProfile(List<String> names, List<String> skins, String greeting, List<String> dialogue,
                          List<String> teachings, String offeringItem, int offeringCount, int requiredKills,
                          List<String> taunts, int summonDelayTicks, List<Personality> personalities, List<AffiliationWeight> affiliations,
-                         CultivationRoutine cultivationRoutine) {
+                         CultivationRoutine cultivationRoutine, DailyLife dailyLife) {
     private static ResourceManager cachedManager;
     private static Map<String, Personality> definitions = Map.of();
     private static final Map<String, NpcProfile> profiles = new HashMap<>();
@@ -41,7 +41,7 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
         NpcProfile fallback = new NpcProfile(List.of("Wandering Cultivator"), List.of("default"),
                 "Greetings, fellow cultivator.", List.of("The path to immortality is long."),
                 List.of(), "ascension:spiritual_stone", 0, 0, List.of(), 240, List.of(Personality.DEFAULT), List.of(new AffiliationWeight(NpcAffiliation.ORTHODOX, 1)),
-                CultivationRoutine.DEFAULT);
+                CultivationRoutine.DEFAULT, DailyLife.DEFAULT);
         var id = AscensionCraft.prefix("npcs/" + type + ".json");
         try {
             Optional<Resource> resource = manager.getResource(id);
@@ -62,7 +62,7 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                         bounded(guidance, "offering_count", 0, 64), bounded(guidance, "kills", 0, 64),
                         strings(encounter, "taunts", List.of(), false),
                         bounded(encounter, "summon_delay_ticks", 240, 2400), personalities(json), affiliations(json),
-                        cultivationRoutine(json));
+                        cultivationRoutine(json), dailyLife(json));
             }
         } catch (Exception e) {
             AscensionCraft.LOGGER.warn("Failed to load NPC profile {}", id, e);
@@ -85,6 +85,31 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
         int circulation = Math.max(120, bounded(settings, "circulation_ticks", 120, 2400));
         int chance = bounded(settings, "circulation_chance", 65, 100);
         return new CultivationRoutine(minimum, maximum, meditation, circulation, chance);
+    }
+
+    public record DailyLife(int socialMinIntervalTicks, int socialMaxIntervalTicks, int socialDurationTicks,
+                            int socialRadius, List<NpcHabits.Period> preferredPeriods) {
+        public static final DailyLife DEFAULT = new DailyLife(600, 1200, 70, 6,
+                List.of(NpcHabits.Period.DAWN, NpcHabits.Period.DAY, NpcHabits.Period.NIGHT));
+    }
+
+    private static DailyLife dailyLife(JsonObject json) {
+        if (!json.has("daily_life") || !json.get("daily_life").isJsonObject()) return DailyLife.DEFAULT;
+        JsonObject obj = json.getAsJsonObject("daily_life");
+        int min = Math.max(200, bounded(obj, "social_min_interval_ticks", 600, 72000));
+        int max = Math.max(min, bounded(obj, "social_max_interval_ticks", 1200, 72000));
+        int duration = Math.max(40, bounded(obj, "social_duration_ticks", 70, 200));
+        int radius = Math.max(3, bounded(obj, "social_radius", 6, 12));
+        List<NpcHabits.Period> periods = new ArrayList<>();
+        if (obj.has("preferred_periods") && obj.get("preferred_periods").isJsonArray()) {
+            for (JsonElement entry : obj.getAsJsonArray("preferred_periods")) {
+                if (!entry.isJsonPrimitive() || !entry.getAsJsonPrimitive().isString()) continue;
+                NpcHabits.Period period = NpcHabits.Period.parse(entry.getAsString());
+                if (period != null && !periods.contains(period)) periods.add(period);
+            }
+        }
+        return new DailyLife(min, max, duration, radius,
+                periods.isEmpty() ? DailyLife.DEFAULT.preferredPeriods() : List.copyOf(periods));
     }
 
     private static Map<String, Personality> loadDefinitions(ResourceManager manager) {
@@ -198,7 +223,26 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                 strings(obj, "guided", List.of(), false), strings(obj, "friendly", List.of(), false),
                 strings(obj, "hostile", List.of(), false), strings(obj, "taunts", List.of(), false),
                 signed(obj, "gift_respect", 6), signed(obj, "insult_respect", -8),
-                signed(obj, "aid_respect", 8), signed(obj, "attack_respect", -12));
+                signed(obj, "aid_respect", 8), signed(obj, "attack_respect", -12),
+                socialTraits(obj));
+    }
+
+    public record SocialTraits(int interest, int focus, List<String> greetings, List<String> wary,
+                               List<String> senior) {
+        public static final SocialTraits DEFAULT = new SocialTraits(100, 100,
+                List.of("Greetings, fellow cultivator."),
+                List.of("Our paths appear to differ."),
+                List.of("Honoured senior, I offer my respects."));
+    }
+
+    private static SocialTraits socialTraits(JsonObject json) {
+        if (!json.has("social") || !json.get("social").isJsonObject()) return SocialTraits.DEFAULT;
+        JsonObject obj = json.getAsJsonObject("social");
+        return new SocialTraits(Math.max(25, bounded(obj, "interest", 100, 175)),
+                Math.max(25, bounded(obj, "focus", 100, 175)),
+                strings(obj, "greetings", SocialTraits.DEFAULT.greetings(), false),
+                strings(obj, "wary", SocialTraits.DEFAULT.wary(), false),
+                strings(obj, "senior", SocialTraits.DEFAULT.senior(), false));
     }
 
     private static int signed(JsonObject json, String key, int fallback) {
@@ -214,17 +258,17 @@ public record NpcProfile(List<String> names, List<String> skins, String greeting
                               List<String> stronger, List<String> weaker, List<String> familiar,
                               List<String> challenged, List<String> guided, List<String> friendly,
                               List<String> hostile, List<String> taunts, int giftRespect, int insultRespect,
-                              int aidRespect, int attackRespect) {
+                              int aidRespect, int attackRespect, SocialTraits social) {
         Personality withWeight(int newWeight) {
             return new Personality(id, name, newWeight, initialRespect, challengeRespect,
                     withdrawRespect, guidanceRespect, greeting, dialogue, stronger, weaker,
                     familiar, challenged, guided, friendly, hostile, taunts,
-                    giftRespect, insultRespect, aidRespect, attackRespect);
+                    giftRespect, insultRespect, aidRespect, attackRespect, social);
         }
 
         private static final Personality DEFAULT = new Personality("neutral", "Neutral", 1, 0, -5, -2, 15,
                 "", List.of(), List.of(), List.of(), List.of(), List.of(), List.of(), List.of(),
-                List.of(), List.of(), 6, -8, 8, -12);
+                List.of(), List.of(), 6, -8, 8, -12, SocialTraits.DEFAULT);
     }
 
     public String randomName(RandomSource random) { return names.get(random.nextInt(names.size())); }

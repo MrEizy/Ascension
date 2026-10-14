@@ -21,6 +21,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -49,6 +50,7 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.common.entities.npc.ai.NpcCultivationGoal;
+import net.zic.ascension.common.entities.npc.ai.NpcSocialGoal;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.network.npc.NpcDialoguePacket;
@@ -76,6 +78,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     private final NpcSocialState social = new NpcSocialState();
     private String personalityId = "";
     private String affiliationId = "";
+    private NpcHabits habits;
+    @Nullable private CultivatorNpcEntity socialPartner;
     private List<String> assignedTeachings = List.of();
     @Nullable private UUID challengedBy;
     private boolean summonedGuard;
@@ -97,6 +101,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15, true));
+        goalSelector.addGoal(3, new NpcSocialGoal(this));
         goalSelector.addGoal(4, new NpcCultivationGoal(this));
         goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8));
         goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 9));
@@ -153,12 +158,76 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
 
     public boolean isCultivating() { return getDailyActivity() != NpcDailyActivity.NONE; }
 
+    public NpcHabits getHabits() {
+        if (habits == null && level() instanceof ServerLevel server) initializeProfile(server);
+        return habits == null ? new NpcHabits(NpcHabits.Period.DAY, 100, 100) : habits;
+    }
+
+    public NpcProfile.DailyLife getDailyLife() {
+        return NpcProfile.load((ServerLevel) level(), getNpcType()).dailyLife();
+    }
+
+    @Nullable
+    public CultivatorNpcEntity getSocialPartner() { return socialPartner; }
+
+    public boolean canBeginSocialEncounter() {
+        return !isCultivating() && !isSocializing() && canActSocially() && getNavigation().isDone();
+    }
+
+    public boolean canContinueSocialEncounter() {
+        return isSocializing() && canActSocially() && socialPartner.canActSocially()
+                && distanceToSqr(socialPartner) <= 144.0;
+    }
+
+    public boolean isSocializing() { return socialPartner != null; }
+
+    private boolean canActSocially() {
+        return isAlive() && !isNoAi() && !summonedGuard && challengedBy == null
+                && getTarget() == null && !isAggressive() && hurtTime == 0
+                && !isOnFire() && !isInWaterOrRain() && !isInLava()
+                && onGround() && !isPassenger();
+    }
+
+    public boolean startSocialEncounter(CultivatorNpcEntity partner) {
+        if (partner == this || !canBeginSocialEncounter() || !partner.canBeginSocialEncounter()) return false;
+        if (partner.level() != level()) return false;
+        socialPartner = partner;
+        partner.socialPartner = this;
+        getNavigation().stop();
+        partner.getNavigation().stop();
+        return true;
+    }
+
+    public void endSocialEncounter() {
+        CultivatorNpcEntity partner = socialPartner;
+        socialPartner = null;
+        if (partner != null && partner.socialPartner == this) partner.socialPartner = null;
+    }
+
+    public void announceSocialEncounter(CultivatorNpcEntity partner) {
+        if (!(level() instanceof ServerLevel server)) return;
+        NpcProfile.SocialTraits disposition = profilePersonality().social();
+        List<String> lines;
+        if (getAffiliation() != partner.getAffiliation()) lines = disposition.wary();
+        else if (relativeRealm(partner) < 0) lines = disposition.senior();
+        else lines = disposition.greetings();
+        String message = lines.get(random.nextInt(lines.size()));
+        String broadcast = getName().getString() + " → " + partner.getName().getString() + ": " + message;
+        for (ServerPlayer player : server.players()) {
+            if (!player.isSpectator() &&
+                    (distanceToSqr(player) <= 12 * 12 || partner.distanceToSqr(player) <= 12 * 12))
+                player.sendSystemMessage(Component.literal(broadcast));
+        }
+        triggerAnim("actions", "greet");
+        partner.triggerAnim("actions", "greet");
+    }
+
     public NpcProfile.CultivationRoutine getDailyCultivationRoutine() {
         return NpcProfile.load((ServerLevel) level(), getNpcType()).cultivationRoutine();
     }
 
     public boolean canContinueDailyCultivation() {
-        return isAlive() && !isNoAi() && !summonedGuard && challengedBy == null &&
+        return isAlive() && !isNoAi() && !summonedGuard && !isSocializing() && challengedBy == null &&
                 getTarget() == null && !isAggressive() && hurtTime == 0 && !isOnFire() &&
                 !isInWaterOrRain() && !isInLava() && onGround() && !isPassenger();
     }
@@ -189,6 +258,11 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         output.putString("NpcTeachings", String.join(",", assignedTeachings));
         output.putString("NpcPersonality", personalityId);
         output.putString("NpcAffiliation", affiliationId);
+        if (habits != null) {
+            output.putString("NpcHabitPeriod", habits.preferredPeriod().name());
+            output.putInt("NpcHabitSocial", habits.sociability());
+            output.putInt("NpcHabitDiscipline", habits.discipline());
+        }
         social.save(output);
         StringBuilder progress = new StringBuilder();
         for (var entry : trials.entrySet()) {
@@ -211,6 +285,11 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         profileReady = false;
         personalityId = NpcProfile.canonicalPersonalityId(input.getStringOr("NpcPersonality", ""));
         affiliationId = input.getStringOr("NpcAffiliation", "");
+        NpcHabits.Period period = NpcHabits.Period.parse(input.getStringOr("NpcHabitPeriod", ""));
+        habits = period == null ? null : new NpcHabits(period,
+                Math.clamp(input.getIntOr("NpcHabitSocial", 100), 25, 175),
+                Math.clamp(input.getIntOr("NpcHabitDiscipline", 100), 25, 175));
+        socialPartner = null;
         social.load(input);
         try {
             String storedChallenger = input.getStringOr("NpcChallenger", "");
@@ -254,6 +333,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         if (profileReady) return;
         NpcProfile profile = NpcProfile.load(server, getNpcType());
         if (personalityId.isBlank()) personalityId = profile.randomPersonality(random).id();
+        if (habits == null) habits = NpcHabits.roll(random, profile, profile.personality(personalityId));
         if (NpcAffiliation.parse(affiliationId) == null) affiliationId = profile.randomAffiliation(random).id();
         if (entityData.get(GENERATED_NAME).isBlank()) {
             setGeneratedName(profile.randomName(random));
@@ -297,7 +377,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
                 if (reinforcementTicks <= 0) summonReinforcement(server, challenger);
             }
         }
-        if (getNpcType().equals("young_master") && challengedBy == null && !summonedGuard && !isCultivating()) {
+        if (getNpcType().equals("young_master") && challengedBy == null && !summonedGuard && !isCultivating() && !isSocializing()) {
             if (++tauntTicks >= 440) {
                 tauntTicks = 0;
                 for (ServerPlayer nearby : server.players()) {
@@ -340,6 +420,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
             return InteractionResult.PASS;
         if (player instanceof ServerPlayer serverPlayer && level() instanceof ServerLevel server) {
             interruptDailyCultivation();
+            endSocialEncounter();
             if (isChallenger(serverPlayer) && player.isShiftKeyDown()) {
                 withdraw(serverPlayer);
             } else if (challengedBy == null || isChallenger(serverPlayer)) {
@@ -354,7 +435,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         return social.get(player.getUUID(), personality.initialRespect());
     }
 
-    private int relativeRealm(ServerPlayer player) {
+    private int relativeRealm(LivingEntity player) {
         AscensionEntityDataProvider npcProvider = getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         AscensionEntityDataProvider playerProvider = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
         if (npcProvider == null || playerProvider == null || !npcProvider.hasData() || !playerProvider.hasData()
@@ -583,6 +664,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
             return;
         }
         interruptDailyCultivation();
+        endSocialEncounter();
         challengedBy = player.getUUID();
         NpcProfile.Personality personality = NpcProfile.load((ServerLevel) level(), getNpcType()).personality(personalityId);
         relationship(player, personality).challenged(personality.challengeRespect());
@@ -617,7 +699,10 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         boolean success = super.hurtServer(level, source, amount);
-        if (success) interruptDailyCultivation();
+        if (success) {
+            interruptDailyCultivation();
+            endSocialEncounter();
+        }
         if (success && isAlive()) {
             triggerAnim("actions", "hurt");
             if (source.getEntity() instanceof ServerPlayer attacker && !isChallenger(attacker) && !summonedGuard) {
