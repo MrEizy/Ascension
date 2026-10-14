@@ -27,5 +27,23 @@
     "offering_item": "ascension:spiritual_stone",
     "offering_count": 4,
     "kills": 3
-  }
+  },
+  "personalities": [
+    {
+      "id": "compassionate",
+      "weight": 6
+    },
+    {
+      "id": "stern",
+      "weight": 4
+    },
+    {
+      "id": "eccentric",
+      "weight": 2
+    },
+    {
+      "id": "reserved",
+      "weight": 1
+    }
+  ]
 }

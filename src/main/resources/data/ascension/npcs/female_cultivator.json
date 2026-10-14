@@ -19,5 +19,19 @@
     "The flow of spiritual qi is unusual today.",
     "One should never neglect the foundation of cultivation.",
     "I hope your travels are going well."
+  ],
+  "personalities": [
+    {
+      "id": "compassionate",
+      "weight": 6
+    },
+    {
+      "id": "reserved",
+      "weight": 4
+    },
+    {
+      "id": "competitive",
+      "weight": 3
+    }
   ]
 }

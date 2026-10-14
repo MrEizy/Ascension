@@ -17,5 +17,19 @@
     "I have been travelling for several days.",
     "Strength without discipline leads nowhere.",
     "Have you encountered any spirit herbs nearby?"
+  ],
+  "personalities": [
+    {
+      "id": "compassionate",
+      "weight": 5
+    },
+    {
+      "id": "reserved",
+      "weight": 4
+    },
+    {
+      "id": "competitive",
+      "weight": 3
+    }
   ]
 }

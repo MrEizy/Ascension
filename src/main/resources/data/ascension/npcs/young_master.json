@@ -25,5 +25,23 @@
       "Elder! This fool needs a lesson in respect.",
       "Your bloodline is weaker than the tea my servants discard."
     ]
-  }
+  },
+  "personalities": [
+    {
+      "id": "arrogant",
+      "weight": 8
+    },
+    {
+      "id": "competitive",
+      "weight": 3
+    },
+    {
+      "id": "cautious",
+      "weight": 2
+    },
+    {
+      "id": "compassionate",
+      "weight": 1
+    }
+  ]
 }

@@ -1,0 +1,256 @@
+{
+  "personalities": {
+    "compassionate": {
+      "name": "Compassionate",
+      "initial_respect": 10,
+      "challenge_respect": -2,
+      "withdraw_respect": 1,
+      "guidance_respect": 18,
+      "greeting": "Welcome, fellow cultivator. May your path be clear.",
+      "dialogue": [
+        "A firm foundation grows through patience, not haste.",
+        "There is strength in helping others rise.",
+        "A thousand small efforts surpass one reckless leap."
+      ],
+      "stronger": [
+        "Even a master can learn from someone who has climbed further.",
+        "Such cultivation! May your strength shelter those still beginning."
+      ],
+      "weaker": [
+        "Take your time. A good foundation cannot be hurried."
+      ],
+      "familiar": [
+        "It is good to see a familiar face again."
+      ],
+      "challenged": [
+        "Our contest need not diminish our mutual respect."
+      ],
+      "guided": [
+        "I have shared what I know. Now find your own understanding within it."
+      ],
+      "friendly": [
+        "Your presence is a comfort along this difficult path."
+      ],
+      "hostile": [
+        "I would rather we settled this without further bloodshed."
+      ],
+      "taunts": []
+    },
+    "reserved": {
+      "name": "Reserved",
+      "initial_respect": 0,
+      "challenge_respect": -3,
+      "withdraw_respect": -2,
+      "guidance_respect": 11,
+      "greeting": "Do you require something?",
+      "dialogue": [
+        "A quiet mind gathers more than a noisy crowd.",
+        "The movement of qi reveals more than words.",
+        "Power without restraint is merely destruction."
+      ],
+      "stronger": [
+        "Your spiritual presence is difficult to ignore.",
+        "Your realm is noteworthy. Perhaps we may speak as peers."
+      ],
+      "weaker": [
+        "Do not mistake silence for weakness."
+      ],
+      "familiar": [
+        "We have spoken before. Has anything changed?"
+      ],
+      "challenged": [
+        "I have not forgotten our previous challenge."
+      ],
+      "guided": [
+        "What I could impart, I have imparted. Seek answers within yourself."
+      ],
+      "friendly": [
+        "I find your company less distracting than most."
+      ],
+      "hostile": [
+        "This conversation is finished."
+      ],
+      "taunts": []
+    },
+    "competitive": {
+      "name": "Competitive",
+      "initial_respect": -3,
+      "challenge_respect": 2,
+      "withdraw_respect": -6,
+      "guidance_respect": 8,
+      "greeting": "Another cultivator. Perhaps a worthy rival.",
+      "dialogue": [
+        "The next realm is mine to conquer.",
+        "I refuse to bend before the first obstacle.",
+        "Every setback is a challenge to overcome."
+      ],
+      "stronger": [
+        "You have surpassed me. I will not remain behind forever."
+      ],
+      "weaker": [
+        "You have talent, but you lack experience."
+      ],
+      "familiar": [
+        "Still training? Good. So am I."
+      ],
+      "challenged": [
+        "Our last challenge taught me what I must improve."
+      ],
+      "guided": [
+        "I have learned from you once. Let us see how far I can go."
+      ],
+      "friendly": [
+        "A worthy rival is more valuable than a hundred flatterers."
+      ],
+      "hostile": [
+        "You have made this a personal contest."
+      ],
+      "taunts": [
+        "Do not expect me to hold back."
+      ]
+    },
+    "arrogant": {
+      "name": "Arrogant",
+      "initial_respect": -15,
+      "challenge_respect": -9,
+      "withdraw_respect": -8,
+      "guidance_respect": 4,
+      "greeting": "You may speak. Make it worth my time.",
+      "dialogue": [
+        "My lineage has cultivated for generations. What have yours accomplished?",
+        "You should count yourself fortunate to stand in my presence.",
+        "Surely you have heard of my latest breakthrough."
+      ],
+      "stronger": [
+        "That aura... Hmph. You must have stumbled upon some fortunate encounter."
+      ],
+      "weaker": [
+        "You are fortunate that I have chosen to acknowledge you."
+      ],
+      "familiar": [
+        "You again? Have you finally learned proper etiquette?"
+      ],
+      "challenged": [
+        "You had the audacity to challenge me. Such insults are not forgotten."
+      ],
+      "guided": [
+        "I have imparted wisdom enough. Do not squander it."
+      ],
+      "friendly": [
+        "I suppose your company is not entirely unbearable."
+      ],
+      "hostile": [
+        "Keep testing my patience and you will regret it."
+      ],
+      "taunts": [
+        "Even your ancestors would bow before my family name.",
+        "Do not confuse my patience with weakness."
+      ]
+    },
+    "cautious": {
+      "name": "Cautious",
+      "initial_respect": 0,
+      "challenge_respect": -4,
+      "withdraw_respect": -2,
+      "guidance_respect": 8,
+      "greeting": "State your business. Preferably without causing a scene.",
+      "dialogue": [
+        "Recklessness is for those without responsibilities.",
+        "A little caution keeps one alive long enough to reach the next realm."
+      ],
+      "stronger": [
+        "Honoured senior, I had not realised the depth of your cultivation."
+      ],
+      "weaker": [
+        "It would be wise for you to show restraint."
+      ],
+      "familiar": [
+        "We have met before. Let us avoid unnecessary trouble."
+      ],
+      "challenged": [
+        "Surely we can put our disagreement behind us."
+      ],
+      "guided": [
+        "The instruction is yours. Apply it carefully."
+      ],
+      "friendly": [
+        "A sensible ally is worth more than another enemy."
+      ],
+      "hostile": [
+        "I will remember your conduct."
+      ],
+      "taunts": [
+        "Think carefully before testing my patience."
+      ]
+    },
+    "stern": {
+      "name": "Stern",
+      "initial_respect": -2,
+      "challenge_respect": -6,
+      "withdraw_respect": -5,
+      "guidance_respect": 13,
+      "greeting": "Stand straight. What business brings you here?",
+      "dialogue": [
+        "Discipline precedes mastery.",
+        "There are no shortcuts around a weak foundation."
+      ],
+      "stronger": [
+        "Your cultivation is formidable. Do not let pride spoil it."
+      ],
+      "weaker": [
+        "Your realm is insufficient reason to neglect your manners."
+      ],
+      "familiar": [
+        "You return. I trust you have not neglected your training."
+      ],
+      "challenged": [
+        "A challenge is only meaningful when you learn from it."
+      ],
+      "guided": [
+        "I have taught you once. Demonstrate that the lesson was not wasted."
+      ],
+      "friendly": [
+        "Your diligence has earned a measure of my approval."
+      ],
+      "hostile": [
+        "Conduct yourself properly or depart."
+      ],
+      "taunts": []
+    },
+    "eccentric": {
+      "name": "Eccentric",
+      "initial_respect": 3,
+      "challenge_respect": 1,
+      "withdraw_respect": 1,
+      "guidance_respect": 16,
+      "greeting": "Hm? Oh! Another curious soul wandering past my meditation.",
+      "dialogue": [
+        "A falling leaf can teach more than a hundred scriptures.",
+        "Have you ever tried cultivating while listening to frogs?",
+        "A good question is sometimes worth more than a perfect answer."
+      ],
+      "stronger": [
+        "What an extraordinary aura! Perhaps the heavens are feeling playful."
+      ],
+      "weaker": [
+        "Do not be discouraged. Even the smallest seed can split stone."
+      ],
+      "familiar": [
+        "Back again? I had almost forgotten what we were discussing."
+      ],
+      "challenged": [
+        "Our last duel reminded me of a very interesting dream."
+      ],
+      "guided": [
+        "The technique is yours. What you discover within it is another matter."
+      ],
+      "friendly": [
+        "A kindred spirit! Come, tell me something unexpected."
+      ],
+      "hostile": [
+        "That was rather unnecessary, do you not think?"
+      ],
+      "taunts": []
+    }
+  }
+}

@@ -41,6 +41,9 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.CoreDataSources;
+import net.zic.ascension.api.ascension.core.path.PathHolder;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
@@ -64,6 +67,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     private static final RawAnimation RUN = RawAnimation.begin().thenLoop("move.run");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final Map<UUID, TrialProgress> trials = new HashMap<>();
+    private final NpcSocialState social = new NpcSocialState();
+    private String personalityId = "";
     private List<String> assignedTeachings = List.of();
     @Nullable private UUID challengedBy;
     private boolean summonedGuard;
@@ -123,6 +128,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         output.putString("NpcName", entityData.get(GENERATED_NAME));
         if (challengedBy != null) output.putString("NpcChallenger", challengedBy.toString());
         output.putString("NpcTeachings", String.join(",", assignedTeachings));
+        output.putString("NpcPersonality", personalityId);
+        social.save(output);
         StringBuilder progress = new StringBuilder();
         for (var entry : trials.entrySet()) {
             if (!progress.isEmpty()) progress.append(';');
@@ -142,6 +149,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         setSkin(input.getStringOr("NpcSkin", "default"));
         setGeneratedName(input.getStringOr("NpcName", ""));
         profileReady = false;
+        personalityId = NpcProfile.canonicalPersonalityId(input.getStringOr("NpcPersonality", ""));
+        social.load(input);
         try {
             String storedChallenger = input.getStringOr("NpcChallenger", "");
             challengedBy = storedChallenger.isBlank() ? null : UUID.fromString(storedChallenger);
@@ -182,6 +191,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     private void initializeProfile(ServerLevel server) {
         if (profileReady) return;
         NpcProfile profile = NpcProfile.load(server, getNpcType());
+        if (personalityId.isBlank()) personalityId = profile.randomPersonality(random).id();
         if (entityData.get(GENERATED_NAME).isBlank()) {
             setGeneratedName(profile.randomName(random));
             setSkin(profile.randomSkin(random));
@@ -239,10 +249,13 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
 
     private void taunt(ServerPlayer player) {
         NpcProfile profile = NpcProfile.load((ServerLevel) level(), getNpcType());
-        if (profile.taunts().isEmpty()) return;
-        String text = profile.taunts().get(random.nextInt(profile.taunts().size()));
+        NpcProfile.Personality personality = profile.personality(personalityId);
+        List<String> lines = relativeRealm(player) < 0 && !personality.stronger().isEmpty()
+                ? personality.stronger() : !personality.taunts().isEmpty() ? personality.taunts() : profile.taunts();
+        if (lines.isEmpty()) return;
+        String text = lines.get(random.nextInt(lines.size()));
         player.sendSystemMessage(Component.literal(getName().getString() + ": " + text));
-        triggerAnim("actions", "taunt");
+        triggerAnim("actions", relativeRealm(player) < 0 ? "greet" : "taunt");
     }
 
     private void summonReinforcement(ServerLevel server, ServerPlayer player) {
@@ -267,24 +280,86 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
                 withdraw(serverPlayer);
             } else if (challengedBy == null || isChallenger(serverPlayer)) {
                 if (challengedBy == null) triggerAnim("actions", "greet");
-                showDialogue(serverPlayer, NpcProfile.load(server, getNpcType()).greeting());
+                showDialogue(serverPlayer, greeting(serverPlayer));
             } else serverPlayer.sendSystemMessage(Component.translatable("gui.ascension.npc.aggressive"));
         }
         return InteractionResult.SUCCESS;
     }
 
+    private NpcSocialState.Relationship relationship(ServerPlayer player, NpcProfile.Personality personality) {
+        return social.get(player.getUUID(), personality.initialRespect());
+    }
+
+    private int relativeRealm(ServerPlayer player) {
+        AscensionEntityDataProvider npcProvider = getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+        AscensionEntityDataProvider playerProvider = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+        if (npcProvider == null || playerProvider == null || !npcProvider.hasData() || !playerProvider.hasData()
+                || npcProvider.getData() == null || playerProvider.getData() == null) return 0;
+        var npcSource = npcProvider.getData().getSource();
+        var playerSource = playerProvider.getData().getSource();
+        if (npcSource == null || playerSource == null) return 0;
+        PathHolder npcPaths = npcSource.getDataSource(CoreDataSources.PATH_DATA_SOURCE.get());
+        PathHolder playerPaths = playerSource.getDataSource(CoreDataSources.PATH_DATA_SOURCE.get());
+        if (npcPaths == null || playerPaths == null) return 0;
+        for (Identifier id : npcPaths.getPaths()) {
+            PathInstance npcPath = npcPaths.getPath(id);
+            PathInstance playerPath = playerPaths.getPath(id);
+            if (npcPath == null || playerPath == null) continue;
+            int result = Integer.compare(npcPath.getCurrentMajorRealm(), playerPath.getCurrentMajorRealm());
+            if (result == 0) result = Integer.compare(npcPath.getCurrentMinorRealm(), playerPath.getCurrentMinorRealm());
+            return result;
+        }
+        return 0;
+    }
+
+    private String greeting(ServerPlayer player) {
+        NpcProfile profile = NpcProfile.load((ServerLevel) level(), getNpcType());
+        NpcProfile.Personality personality = profile.personality(personalityId);
+        NpcSocialState.Relationship relation = relationship(player, personality);
+        String message = selectDialogue(player, profile, personality, relation, true);
+        relation.talked();
+        return message;
+    }
+
+    private String selectDialogue(ServerPlayer player, NpcProfile profile, NpcProfile.Personality personality,
+                                  NpcSocialState.Relationship relation, boolean greeting) {
+        List<String> lines = List.of();
+        if (relation.guidance() > 0 && !personality.guided().isEmpty()) lines = personality.guided();
+        else if (relation.respect() <= -20 && !personality.hostile().isEmpty()) lines = personality.hostile();
+        else if (relation.respect() >= 25 && !personality.friendly().isEmpty()) lines = personality.friendly();
+        else {
+            int relative = relativeRealm(player);
+            if (relative < 0 && !personality.stronger().isEmpty()) lines = personality.stronger();
+            else if (relative > 0 && !personality.weaker().isEmpty()) lines = personality.weaker();
+            else if (relation.challenges() > 0 && !personality.challenged().isEmpty() && random.nextBoolean()) lines = personality.challenged();
+            else if (relation.talks() > 0 && !personality.familiar().isEmpty() && random.nextBoolean()) lines = personality.familiar();
+        }
+        if (!lines.isEmpty()) return lines.get(random.nextInt(lines.size()));
+        if (greeting) return personality.greeting().isBlank() ? profile.greeting() : personality.greeting();
+        lines = personality.dialogue().isEmpty() || random.nextBoolean() ? profile.dialogue() : personality.dialogue();
+        return lines.get(random.nextInt(lines.size()));
+    }
+
     private void showDialogue(ServerPlayer player, String message) {
+        NpcProfile profile = NpcProfile.load((ServerLevel) level(), getNpcType());
+        NpcProfile.Personality personality = profile.personality(personalityId);
+        NpcSocialState.Relationship relation = relationship(player, personality);
         PacketDistributor.sendToPlayer(player, new NpcDialoguePacket(getId(), getUUID(),
                 getName().getString(), message, isChallenger(player),
                 canGuide() && !summonedGuard && !assignedTeachings.isEmpty(),
-                trials.containsKey(player.getUUID()) && trials.get(player.getUUID()).completed));
+                trials.containsKey(player.getUUID()) && trials.get(player.getUUID()).completed,
+                personality.name(), relation.standing()));
     }
 
     public void speak(ServerPlayer player) {
         if (!(level() instanceof ServerLevel server) || (challengedBy != null && !isChallenger(player))) return;
         NpcProfile profile = NpcProfile.load(server, getNpcType());
-        showDialogue(player, profile.randomDialogue(random));
-        if (getNpcType().equals("young_master")) triggerAnim("actions", "taunt");
+        NpcProfile.Personality personality = profile.personality(personalityId);
+        NpcSocialState.Relationship relation = relationship(player, personality);
+        String message = selectDialogue(player, profile, personality, relation, false);
+        relation.talked();
+        showDialogue(player, message);
+        if (getNpcType().equals("young_master") && relativeRealm(player) >= 0) triggerAnim("actions", "taunt");
     }
 
     public void guide(ServerPlayer player) {
@@ -343,6 +418,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         }
         consumeOffering(player, offering, required);
         progress.completed = true;
+        NpcProfile.Personality personality = profile.personality(personalityId);
+        relationship(player, personality).guided(personality.guidanceRespect());
         String taughtName = techniqueId.getPath();
         taughtName = taughtName.substring(taughtName.lastIndexOf('/') + 1).replace('_', ' ');
         triggerAnim("actions", getNpcType().equals("sect_master") ? "teach" : "greet");
@@ -395,6 +472,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
             return;
         }
         challengedBy = player.getUUID();
+        NpcProfile.Personality personality = NpcProfile.load((ServerLevel) level(), getNpcType()).personality(personalityId);
+        relationship(player, personality).challenged(personality.challengeRespect());
         setTarget(player);
         setAggressive(true);
         triggerAnim("actions", "greet");
@@ -407,6 +486,8 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
 
     public void withdraw(ServerPlayer player) {
         if (!isChallenger(player)) return;
+        NpcProfile.Personality personality = NpcProfile.load((ServerLevel) level(), getNpcType()).personality(personalityId);
+        relationship(player, personality).withdrew(personality.withdrawRespect());
         challengedBy = null;
         setTarget(null);
         setAggressive(false);
