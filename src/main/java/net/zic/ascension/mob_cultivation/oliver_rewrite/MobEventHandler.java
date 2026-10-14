@@ -14,6 +14,7 @@ import net.zic.ascension.common.data_attachements.AscensionAttachments;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class MobEventHandler {
+    private static final ThreadLocal<Mob> INITIALIZING_MOB = new ThreadLocal<>();
     /*
         TODO:
             remove initialize on entity, then handle everything in on join.
@@ -39,14 +40,25 @@ public class MobEventHandler {
         var data = provider.getData();
         if(data == null || data.getSource() == null || data.getSource().isAttachedTo(mob)) return;
 
-        data.initialize();
-        if(data.getSource().isAttachedTo(mob)) {
-            MobSpawnHelper.getConfigHolder(mob).applyConfigurationToSource();
+        Mob previous = INITIALIZING_MOB.get();
+        INITIALIZING_MOB.set(mob);
+        try {
+            data.initialize();
+        } finally {
+            if(previous == null) INITIALIZING_MOB.remove();
+            else INITIALIZING_MOB.set(previous);
         }
     }
 
     @SubscribeEvent
     public static void onSourceLoad(OriginSourceEvent.OriginSourceFinishedLoadingEvent event){
+        Mob initializing = INITIALIZING_MOB.get();
+        if(initializing != null && MobSpawnHelper.hasConfigHolder(initializing)) {
+            AscensionEntityDataProvider provider = initializing.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+            if(provider != null && provider.getData() != null && provider.getData().getSource() == event.getSource()) {
+                MobSpawnHelper.getConfigHolder(initializing).applyConfigurationToSource();
+            }
+        }
         for(LivingEntity attachedEntity : event.getSource().getAttachedEntities()){
             if(!attachedEntity.hasData(AscensionAttachments.MOB_CONFIG_HOLDER)) continue;
 
