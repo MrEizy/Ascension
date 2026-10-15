@@ -26,9 +26,9 @@ public interface PurityChangeAction extends ProgressAction {
         int purity = data.getPurity();
         if(direction == ProgressDirection.DOWN) purity++;
 
-        run(holderId,source,bloodline,data,purity,direction);
+        run(holderId,source,bloodline,data,purity,direction,salt);
     }
 
-    void run(UUID holderId, OriginSource source, Bloodline bloodline, BloodlineData data, int purity, ProgressDirection direction);
+    void run(UUID holderId, OriginSource source, Bloodline bloodline, BloodlineData data, int purity, ProgressDirection direction, String salt);
 
 }
