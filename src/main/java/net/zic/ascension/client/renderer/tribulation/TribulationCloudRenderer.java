@@ -63,6 +63,13 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     //1 in this chance per tick of a new flicker bolt somewhere in the cloud
     private static final int FLICKER_CHANCE = 6;
 
+    //coarser meshes for storms that look small on screen. each step must divide SEGMENTS so the seam still closes.
+    //a step is used while the storm's radius divided by its distance is at least the matching size
+    private static final int[] LOD_STEPS = {1, 2, 4};
+    private static final float[] LOD_SIZES = {0.5F, 0.2F, 0.0F};
+    //how far past a size the storm has to go before it switches level, so it does not flicker between two
+    private static final float LOD_HYSTERESIS = 0.1F;
+
     private final TribulationCloudSettings settings;
     private final ToIntFunction<T> strikeCounter;
     private final FormationProgress<T> formation;
@@ -202,11 +209,16 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         //from below the base the top sheet is always hidden behind the underside, and from above the storm the underside is hidden,
         //so only the sheet that can be seen is drawn. the shader discards, so hidden fragments would otherwise still be shaded
         double cameraHeight = -eye.y;
+        int step = lodStep(state, (float) (settings.radius() / Math.max(eye.length(), 1.0D)));
+        //the camera relative to the eye, for skipping the parts of a huge storm past the far end of the view
+        float cameraX = (float) -eye.x;
+        float cameraZ = (float) -eye.z;
+        float viewDistance = minecraft.options.getEffectiveRenderDistance() * 16.0F * 4.0F;
         if (cameraHeight < settings.radius() * THICKNESS * TOP_SHARE) {
-            drawSheet(buffers, ModRenderTypes.tribulationClouds(), pose, state, time, angle, tint, flash);
+            drawSheet(buffers, ModRenderTypes.tribulationClouds(), pose, state, time, angle, tint, flash, step, cameraX, cameraZ, viewDistance);
         }
         if (cameraHeight > 0.0D) {
-            drawSheet(buffers, ModRenderTypes.tribulationCloudsTop(), pose, state, time, angle, tint, flash);
+            drawSheet(buffers, ModRenderTypes.tribulationCloudsTop(), pose, state, time, angle, tint, flash, step, cameraX, cameraZ, viewDistance);
         }
 
         if (!state.bolts.isEmpty()) {
@@ -233,8 +245,21 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
 
     //──Clouds────────────────────────────────────────────────────────
 
+    //picks the mesh level from how big the storm looks, only moving to another level once it is clearly past it
+    private static int lodStep(CloudState state, float apparentSize) {
+        int level = state.lodLevel;
+        while (level > 0 && apparentSize >= LOD_SIZES[level - 1] * (1.0F + LOD_HYSTERESIS)) level--;
+        while (level < LOD_STEPS.length - 1 && apparentSize < LOD_SIZES[level] * (1.0F - LOD_HYSTERESIS)) level++;
+        state.lodLevel = level;
+        return LOD_STEPS[level];
+    }
+
+    /**
+     * @param step draws every nth ring and segment, coarser for storms that look small
+     * @param viewDistance quads further than this from the camera are past the end of the view and skipped
+     */
     private void drawSheet(MultiBufferSource.BufferSource buffers, RenderType renderType, PoseStack.Pose pose, CloudState state,
-                           float time, float angle, int tint, float flash) {
+                           float time, float angle, int tint, float flash, int step, float cameraX, float cameraZ, float viewDistance) {
         VertexConsumer consumer = buffers.getBuffer(renderType);
         float radius = settings.radius();
         //the part of the spiral coordinate that is the same for every vertex this frame
@@ -243,12 +268,24 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         boolean lit = flash > 0.0F || !state.bolts.isEmpty();
         int unlitColor = ARGB.color(0, tint);
 
-        for (int ring = 0; ring < RINGS - 1; ring++) {
-            for (int segment = 0; segment < SEGMENTS; segment++) {
+        for (int ring = 0; ring < RINGS - 1; ring += step) {
+            int nextRing = Math.min(ring + step, RINGS - 1);
+            //the middle of this ring's quads, and how far a corner can be from it, in blocks
+            float middleRn = (ringRn[ring] + ringRn[nextRing]) * 0.5F;
+            float middle = middleRn * radius;
+            float reach = (ringRn[nextRing] - ringRn[ring]) * radius + Mth.TWO_PI * middle * step / SEGMENTS;
+            float limit = viewDistance + reach;
+            for (int segment = 0; segment < SEGMENTS; segment += step) {
+                int nextSegment = segment + step;
+                //past the far end of the view, nothing of it would be drawn anyway
+                float dx = segmentCos[segment] * middle - cameraX;
+                float dz = segmentSin[segment] * middle - cameraZ;
+                if (dx * dx + dz * dz > limit * limit) continue;
+
                 vertex(consumer, pose, state, ring, segment, radius, spiralShift, tint, lit, unlitColor, flash);
-                vertex(consumer, pose, state, ring + 1, segment, radius, spiralShift, tint, lit, unlitColor, flash);
-                vertex(consumer, pose, state, ring + 1, segment + 1, radius, spiralShift, tint, lit, unlitColor, flash);
-                vertex(consumer, pose, state, ring, segment + 1, radius, spiralShift, tint, lit, unlitColor, flash);
+                vertex(consumer, pose, state, nextRing, segment, radius, spiralShift, tint, lit, unlitColor, flash);
+                vertex(consumer, pose, state, nextRing, nextSegment, radius, spiralShift, tint, lit, unlitColor, flash);
+                vertex(consumer, pose, state, ring, nextSegment, radius, spiralShift, tint, lit, unlitColor, flash);
             }
         }
         //read through the texture matrix when the batch is drawn, so it has to be set before ending it
@@ -396,6 +433,8 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         //the synced data last seen, and the ticks counted since it arrived
         private Object lastData;
         private int ticksSinceSync;
+        //the mesh level it is drawn at, an index into LOD_STEPS
+        private int lodLevel;
         //how far the storm has turned, and the render time it was last advanced at (-1 before the first frame)
         private float angle;
         private float lastTime = -1.0F;

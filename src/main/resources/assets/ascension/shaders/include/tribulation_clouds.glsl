@@ -65,16 +65,17 @@ float cloudFbm(vec2 p, float period) {
 float cloudCells(vec2 p, float period) {
     vec2 i = floor(p);
     vec2 f = fract(p);
-    float nearest = 8.0;
+    //squared distances while searching, so there is only one square root at the end
+    float nearest = 64.0;
     for (int y = -1; y <= 1; y++) {
         for (int x = -1; x <= 1; x++) {
             vec2 neighbour = vec2(float(x), float(y));
             vec2 key = vec2(mod(i.x + neighbour.x, period), i.y + neighbour.y);
-            vec2 point = neighbour + vec2(cloudHash(key), cloudHash(key + 19.19));
-            nearest = min(nearest, length(point - f));
+            vec2 offset = neighbour + vec2(cloudHash(key), cloudHash(key + 19.19)) - f;
+            nearest = min(nearest, dot(offset, offset));
         }
     }
-    return nearest;
+    return sqrt(nearest);
 }
 
 //where the outer edge starts breaking up
@@ -128,17 +129,38 @@ float cloudWobble(vec2 uv) {
  * how thick the storm is here, 0 to 1. takes noise uv.
  * the mass broken up into cumulus puffs. cellOffset only moves the puffs, so both sheets agree on where the bands are
  */
+//band sized puffs
+float cloudSmallPuffs(vec2 uv, vec2 cellOffset) {
+    return 1.0 - cloudCells(vec2(uv.x * CLOUD_PERIOD * 2.0, uv.y * 2.0) + cellOffset, CLOUD_PERIOD * 2.0);
+}
+
+//the broad towers on top of the eyewall, twice the size of the band puffs
+float cloudBigPuffs(vec2 uv, vec2 cellOffset) {
+    return 1.0 - cloudCells(vec2(uv.x * CLOUD_PERIOD, uv.y) + cellOffset, CLOUD_PERIOD);
+}
+
 float cloudThickness(vec2 uv, float rn, vec2 cellOffset, float wobble) {
+    //nothing inside the eye or past the rim, so there is no point working out the puffs
+    float edges = cloudEdges(rn);
+    if (edges <= 0.0) {
+        return 0.0;
+    }
     float eyewallWeight;
     float mass = cloudMass(uv, rn, 0.15, wobble, eyewallWeight);
 
-    float cells = 1.0 - cloudCells(vec2(uv.x * CLOUD_PERIOD * 2.0, uv.y * 2.0) + cellOffset, CLOUD_PERIOD * 2.0);
     //the eyewall is a solid wall with a few broad towers on top. its mass is the highest, so the band sized puffs
-    //would cut deep narrow spikes into it. it gets puffs twice the size and a third as deep instead
-    float bigCells = 1.0 - cloudCells(vec2(uv.x * CLOUD_PERIOD, uv.y) + cellOffset, CLOUD_PERIOD);
-    float puffs = mix(cells, bigCells, eyewallWeight);
+    //would cut deep narrow spikes into it. it gets puffs twice the size and a third as deep instead.
+    //almost everywhere one of the two puff sizes has no weight, so only the one that shows is worked out
+    float puffs;
+    if (eyewallWeight < 0.01) {
+        puffs = cloudSmallPuffs(uv, cellOffset);
+    } else if (eyewallWeight > 0.99) {
+        puffs = cloudBigPuffs(uv, cellOffset);
+    } else {
+        puffs = mix(cloudSmallPuffs(uv, cellOffset), cloudBigPuffs(uv, cellOffset), eyewallWeight);
+    }
     float puffDepth = mix(0.4, 0.15, eyewallWeight);
-    return clamp(mass * (1.0 - puffDepth + puffDepth * puffs), 0.0, 1.0) * cloudEdges(rn);
+    return clamp(mass * (1.0 - puffDepth + puffDepth * puffs), 0.0, 1.0) * edges;
 }
 
 float cloudThickness(vec2 uv, float rn, vec2 cellOffset) {
