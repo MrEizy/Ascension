@@ -3,6 +3,7 @@ package net.zic.ascension.api.ascension.core.path.realm.realm_change;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
@@ -18,7 +19,7 @@ import java.util.UUID;
  */
 public interface RealmChangeActionCondition extends ProgressActionCondition {
     @Override
-    default boolean test(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction){
+    default boolean test(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt){
         if(!(contextData instanceof PathInstance pathInstance)) return false;
 
 
@@ -28,13 +29,8 @@ public interface RealmChangeActionCondition extends ProgressActionCondition {
         if(direction == ProgressDirection.UP){
             return test(source,contextIdentifier,pathInstance,pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm(),direction);
         }
-
-        if(pathInstance.getCurrentMinorRealm() == pathInstance.getMaxMinorRealm(pathInstance.getCurrentMajorRealm())){
-            //we fell down a major realm
-            return test(source,contextIdentifier,pathInstance,pathInstance.getCurrentMajorRealm()+1,0,direction);
-        }
-
-        return test(source,contextIdentifier,pathInstance,pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm()+1,direction);
+        Realm realm = pathInstance.getNextRealm();
+        return test(source,contextIdentifier,pathInstance,realm.majorRealm(),realm.minorRealm(),direction);
     }
 
     /**
