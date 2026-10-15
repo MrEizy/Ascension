@@ -14,7 +14,8 @@ import net.zic.ascension.impl.datapack.tribulation.LightningTribulationType;
 
 import java.util.UUID;
 
-//strikes the target with lightning a set number of times, waits while the target is not loaded
+//gathers a storm, strikes the target with lightning a set number of times, then lets the storm break up before resolving.
+//waits while the target is not loaded, except while the storm is breaking up
 public class LightningTribulation extends EntityTargetingTribulation<LightningTribulationData> {
     private final int strikes;
     private final double damage;
@@ -48,8 +49,57 @@ public class LightningTribulation extends EntityTargetingTribulation<LightningTr
     protected void tickWithTarget(TribulationInstance<LightningTribulationData> instance, ServerLevel level, LivingEntity target) {
         LightningTribulationData data = instance.getData();
 
-        if (data.getLightningSurvived() >= strikes) {
+        switch (data.getPhase()) {
+            case FORMING -> {
+                //no strikes until the storm has gathered
+                if (data.tickPhase(clouds.forming().ticks())) {
+                    changePhase(instance, LightningTribulationData.Phase.ACTIVE);
+                }
+            }
+            case ACTIVE -> tickStrikes(instance, level, target);
+            case DISSIPATING -> tickDissipating(instance);
+        }
+    }
+
+    //the storm keeps breaking up even when the target has gone, so the tribulation still resolves
+    @Override
+    protected void tickWithoutTarget(TribulationInstance<LightningTribulationData> instance, ServerLevel level) {
+        if (instance.getData().getPhase() == LightningTribulationData.Phase.DISSIPATING) {
+            tickDissipating(instance);
+        }
+    }
+
+    //the storm breaks up before the failure resolves, instead of vanishing
+    @Override
+    public void onTargetDeath(TribulationInstance<LightningTribulationData> instance) {
+        LightningTribulationData data = instance.getData();
+        data.setFailing(true);
+        if (data.getPhase() != LightningTribulationData.Phase.DISSIPATING) {
+            changePhase(instance, LightningTribulationData.Phase.DISSIPATING);
+        }
+    }
+
+    private void tickDissipating(TribulationInstance<LightningTribulationData> instance) {
+        LightningTribulationData data = instance.getData();
+        if (!data.tickPhase(clouds.dissipating().ticks())) return;
+        if (data.isFailing()) {
+            instance.fail();
+        } else {
             instance.succeed();
+        }
+    }
+
+    //the client counts the phase ticks itself, so the data only has to be sent when the phase changes
+    private static void changePhase(TribulationInstance<LightningTribulationData> instance, LightningTribulationData.Phase phase) {
+        instance.getData().setPhase(phase);
+        instance.markDataDirty();
+    }
+
+    private void tickStrikes(TribulationInstance<LightningTribulationData> instance, ServerLevel level, LivingEntity target) {
+        LightningTribulationData data = instance.getData();
+
+        if (data.getLightningSurvived() >= strikes) {
+            changePhase(instance, LightningTribulationData.Phase.DISSIPATING);
             return;
         }
 
@@ -66,14 +116,33 @@ public class LightningTribulation extends EntityTargetingTribulation<LightningTr
 
     @Override
     public LightningTribulationData validateLoadedData(LightningTribulationData data) {
-        //the number of strikes may have been lowered since it was saved
+        //the number of strikes or the length of a phase may have been lowered since it was saved
         data.setLightningSurvived(Math.min(data.getLightningSurvived(), strikes));
+        data.clampPhaseTicks(switch (data.getPhase()) {
+            case FORMING -> clouds.forming().ticks();
+            case ACTIVE -> 0;
+            case DISSIPATING -> clouds.dissipating().ticks();
+        });
         return data;
     }
 
     @Override
     public TribulationRenderer<LightningTribulationData> getRenderer() {
-        if (renderer == null) renderer = new TribulationCloudRenderer<>(clouds, LightningTribulationData::getLightningSurvived);
+        if (renderer == null) {
+            renderer = new TribulationCloudRenderer<>(
+                    clouds,
+                    LightningTribulationData::getLightningSurvived,
+                    (data, ticksSinceSync) -> {
+                        float progress = data.transitionProgress(clouds.forming().ticks(), clouds.dissipating().ticks(), ticksSinceSync);
+                        return switch (data.getPhase()) {
+                            case FORMING -> new TribulationCloudRenderer.Formation(progress, clouds.forming());
+                            case ACTIVE -> TribulationCloudRenderer.Formation.FORMED;
+                            //dissipating plays its style backwards, from formed to clear sky
+                            case DISSIPATING -> new TribulationCloudRenderer.Formation(1.0F - progress, clouds.dissipating());
+                        };
+                    }
+            );
+        }
         return renderer;
     }
 }

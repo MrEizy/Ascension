@@ -12,10 +12,12 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationCloudPalette;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationCloudSettings;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationCloudTransition;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
 import net.zic.ascension.api.ascension.core.tribulation.client.ClientTribulation;
 import net.zic.ascension.api.ascension.core.tribulation.client.TribulationRenderer;
 import net.zic.ascension.client.renderer.ModRenderTypes;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +45,8 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     private static final float CENTER_LOG = (float) Math.log(0.001F);
     //full thickness of the storm at the eyewall, as a fraction of the radius
     private static final float THICKNESS = 0.3F;
+    //how much of the thickness rises above the base, must match TOP_SHARE in the tribulation_clouds vertex shader
+    private static final float TOP_SHARE = 0.65F;
     //radians the spiral arms turn per unit of log radius
     private static final float TWIST = 2.0F;
     //how fast the billows drift towards the eye, in noise cells per tick
@@ -61,22 +65,28 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
 
     private final TribulationCloudSettings settings;
     private final ToIntFunction<T> strikeCounter;
+    private final FormationProgress<T> formation;
     private final Map<UUID, CloudState> states = new HashMap<>();
 
     //the mesh only depends on the settings, so it is built once
     private final float[] ringRn = new float[RINGS];
     private final float[] ringLog = new float[RINGS];
+    //how far each ring is bent into the spiral, in turns
+    private final float[] ringTwist = new float[RINGS];
     private final float[] segmentCos = new float[SEGMENTS + 1];
     private final float[] segmentSin = new float[SEGMENTS + 1];
-    private final float[] segmentTheta = new float[SEGMENTS + 1];
+    //how far around the circle each segment is, in turns
+    private final float[] segmentTurns = new float[SEGMENTS + 1];
 
     /**
      * @param strikeCounter reads how many strikes have happened from the synced data,
      *                      the eye flashes whenever it goes up
+     * @param formation how far the storm has gathered and which transition it is in
      */
-    public TribulationCloudRenderer(TribulationCloudSettings settings, ToIntFunction<T> strikeCounter) {
+    public TribulationCloudRenderer(TribulationCloudSettings settings, ToIntFunction<T> strikeCounter, FormationProgress<T> formation) {
         this.settings = settings;
         this.strikeCounter = strikeCounter;
+        this.formation = formation;
 
         ringLog[0] = CENTER_LOG;
         for (int ring = 1; ring < RINGS; ring++) {
@@ -85,17 +95,38 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
             ringRn[ring] = rn;
             ringLog[ring] = (float) Math.log(rn);
         }
+        for (int ring = 0; ring < RINGS; ring++) {
+            ringTwist[ring] = TWIST * ringLog[ring] / Mth.TWO_PI;
+        }
         //the last segment repeats the first at 2π so the uv never wraps inside a quad
         for (int segment = 0; segment <= SEGMENTS; segment++) {
             float theta = segment * Mth.TWO_PI / SEGMENTS;
-            segmentTheta[segment] = theta;
+            segmentTurns[segment] = segment / (float) SEGMENTS;
             segmentCos[segment] = Mth.cos(theta);
             segmentSin[segment] = Mth.sin(theta);
         }
     }
 
+    public TribulationCloudRenderer(TribulationCloudSettings settings, ToIntFunction<T> strikeCounter) {
+        this(settings, strikeCounter, (data, ticksSinceSync) -> Formation.FORMED);
+    }
+
     public TribulationCloudRenderer(TribulationCloudSettings settings) {
         this(settings, data -> 0);
+    }
+
+    //the client only gets the data when it changes, so it counts the ticks since then itself
+    private void syncFormation(CloudState state, ClientTribulation<T> tribulation) {
+        T data = tribulation.getData();
+        if (data != state.lastData) {
+            state.lastData = data;
+            state.ticksSinceSync = 0;
+        }
+    }
+
+    private Formation formation(CloudState state, ClientTribulation<T> tribulation, float partialTick) {
+        syncFormation(state, tribulation);
+        return formation.progress(tribulation.getData(), state.ticksSinceSync + partialTick);
     }
 
     private CloudState state(ClientTribulation<T> tribulation) {
@@ -113,9 +144,12 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         }
         state.lastStrikes = strikes;
 
-        if (random.nextInt(FLICKER_CHANCE) == 0) {
-            float angle = tribulation.getAge() * settings.rotationSpeed() * Mth.DEG_TO_RAD;
-            state.bolts.add(createBolt(random, angle));
+        syncFormation(state, tribulation);
+        state.ticksSinceSync++;
+        Formation formation = formation(state, tribulation, 0.0F);
+        //lightning only crawls through a storm that has mostly gathered
+        if (formation.formed() > formation.lightningAt() && random.nextInt(FLICKER_CHANCE) == 0) {
+            state.bolts.add(createBolt(random, state.angle));
         }
 
         if (state.flashTicks > 0) state.flashTicks--;
@@ -130,6 +164,14 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
 
         float partialTick = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
         float time = tribulation.getAge() + partialTick;
+        Formation formation = formation(state, tribulation, partialTick);
+        float formed = formation.formed();
+        //the storm spins up as it gathers, so the angle is added up frame by frame instead of worked out from the time
+        float dt = state.lastTime < 0.0F ? 0.0F : Math.clamp(time - state.lastTime, 0.0F, 5.0F);
+        state.lastTime = time;
+        state.angle += dt * settings.rotationSpeed() * Mth.DEG_TO_RAD * Mth.lerp(formed, formation.spinStart(), 1.0F);
+        //nothing has gathered yet
+        if (formed <= 0.0F) return;
         Vec3 position = tribulation.getPosition(partialTick);
         Vec3 eye = new Vec3(position.x, settings.renderHeight(), position.z).subtract(minecraft.gameRenderer.getMainCamera().position());
 
@@ -141,6 +183,13 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         ModRenderTypes.tribulationCloudThickness = settings.radius() * THICKNESS;
         packColors(settings.cloudColors(), 0);
         packColors(settings.eyeColors(), 3);
+        ModRenderTypes.tribulationCloudFormation = formed;
+        //a fully formed storm has nothing left to gather, so any transition's settings do
+        TribulationCloudTransition transition = formation.transition() != null ? formation.transition() : settings.forming();
+        ModRenderTypes.tribulationCloudStyle = transition.style().ordinal();
+        ModRenderTypes.tribulationCloudPatchiness = transition.patchiness();
+        ModRenderTypes.tribulationCloudClosedAt = transition.closedAt();
+        ModRenderTypes.tribulationCloudEyeAt = transition.eyeAt();
 
         PoseStack poseStack = event.getPoseStack();
         poseStack.pushPose();
@@ -148,10 +197,17 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         PoseStack.Pose pose = poseStack.last();
         MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
 
-        float angle = time * settings.rotationSpeed() * Mth.DEG_TO_RAD;
-        //both sheets share the base surface, the shader pushes the underside down and the top up
-        drawSheet(buffers, ModRenderTypes.tribulationClouds(), pose, state, time, angle, tint, flash);
-        drawSheet(buffers, ModRenderTypes.tribulationCloudsTop(), pose, state, time, angle, tint, flash);
+        float angle = state.angle;
+        //both sheets share the base surface, the shader pushes the underside down and the top up.
+        //from below the base the top sheet is always hidden behind the underside, and from above the storm the underside is hidden,
+        //so only the sheet that can be seen is drawn. the shader discards, so hidden fragments would otherwise still be shaded
+        double cameraHeight = -eye.y;
+        if (cameraHeight < settings.radius() * THICKNESS * TOP_SHARE) {
+            drawSheet(buffers, ModRenderTypes.tribulationClouds(), pose, state, time, angle, tint, flash);
+        }
+        if (cameraHeight > 0.0D) {
+            drawSheet(buffers, ModRenderTypes.tribulationCloudsTop(), pose, state, time, angle, tint, flash);
+        }
 
         if (!state.bolts.isEmpty()) {
             VertexConsumer lightning = buffers.getBuffer(ModRenderTypes.tribulationLightning());
@@ -181,13 +237,18 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
                            float time, float angle, int tint, float flash) {
         VertexConsumer consumer = buffers.getBuffer(renderType);
         float radius = settings.radius();
+        //the part of the spiral coordinate that is the same for every vertex this frame
+        float spiralShift = state.spiralOffset - angle / Mth.TWO_PI;
+        //most frames have nothing lighting the clouds up, then every vertex gets the same colour
+        boolean lit = flash > 0.0F || !state.bolts.isEmpty();
+        int unlitColor = ARGB.color(0, tint);
 
         for (int ring = 0; ring < RINGS - 1; ring++) {
             for (int segment = 0; segment < SEGMENTS; segment++) {
-                vertex(consumer, pose, state, ring, segment, radius, angle, tint, flash);
-                vertex(consumer, pose, state, ring + 1, segment, radius, angle, tint, flash);
-                vertex(consumer, pose, state, ring + 1, segment + 1, radius, angle, tint, flash);
-                vertex(consumer, pose, state, ring, segment + 1, radius, angle, tint, flash);
+                vertex(consumer, pose, state, ring, segment, radius, spiralShift, tint, lit, unlitColor, flash);
+                vertex(consumer, pose, state, ring + 1, segment, radius, spiralShift, tint, lit, unlitColor, flash);
+                vertex(consumer, pose, state, ring + 1, segment + 1, radius, spiralShift, tint, lit, unlitColor, flash);
+                vertex(consumer, pose, state, ring, segment + 1, radius, spiralShift, tint, lit, unlitColor, flash);
             }
         }
         //read through the texture matrix when the batch is drawn, so it has to be set before ending it
@@ -196,29 +257,29 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     }
 
     private void vertex(VertexConsumer consumer, PoseStack.Pose pose, CloudState state, int ring, int segment, float radius,
-                        float angle, int tint, float flash) {
+                        float spiralShift, int tint, boolean lit, int unlitColor, float flash) {
         float rn = ringRn[ring];
         float x = segmentCos[segment] * rn * radius;
         //the flat cloud base, the shader pushes the sheets up and down from here
         float y = 0.0F;
         float z = segmentSin[segment] * rn * radius;
         //turns around the circle, bent into a spiral by the log radius
-        float spiral = (segmentTheta[segment] - angle + TWIST * ringLog[ring]) / Mth.TWO_PI + state.spiralOffset;
+        float spiral = segmentTurns[segment] + ringTwist[ring] + spiralShift;
         //uv carries the exact log radius, an 8 bit colour channel is too coarse for the shader's pixel grid.
         //rgb is the tint, alpha is how strongly lightning lights up this part of the cloud
+        int color = lit ? ARGB.color(Math.round(glow(state, rn, x, y, z, flash) * 255.0F), tint) : unlitColor;
         consumer.addVertex(pose, x, y, z)
                 .setUv(spiral, ringLog[ring])
-                .setColor(ARGB.color(Math.round(glow(state, rn, x, y, z, flash) * 255.0F), tint));
+                .setColor(color);
     }
 
     private static float glow(CloudState state, float rn, float x, float y, float z, float flash) {
         float glow = flash * Math.max(0.0F, 1.0F - rn / FLASH_RADIUS);
         for (FlickerBolt bolt : state.bolts) {
-            Vec3 middle = bolt.middle;
-            double dx = x - middle.x;
-            double dy = y - middle.y;
-            double dz = z - middle.z;
-            float falloff = 1.0F - (float) (dx * dx + dy * dy + dz * dz) / (BOLT_GLOW_RADIUS * BOLT_GLOW_RADIUS);
+            float dx = x - bolt.middleX;
+            float dy = y - bolt.middleY;
+            float dz = z - bolt.middleZ;
+            float falloff = 1.0F - (dx * dx + dy * dy + dz * dz) / (BOLT_GLOW_RADIUS * BOLT_GLOW_RADIUS);
             if (falloff > 0.0F) glow += falloff * bolt.strength();
         }
         return Math.min(glow, 1.0F);
@@ -294,6 +355,36 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
 
     //──State────────────────────────────────────────────────────────
 
+    /**
+     * how far the storm has gathered, from the synced data
+     * @param ticksSinceSync ticks the client counted since this data arrived, partial ticks included
+     */
+    @FunctionalInterface
+    public interface FormationProgress<T> {
+        Formation progress(T data, float ticksSinceSync);
+    }
+
+    /**
+     * @param progress how far the storm has gathered before easing, 0 for clear sky and 1 for the full storm
+     * @param transition the transition it is gathering or breaking up with, null once it has fully formed
+     */
+    public record Formation(float progress, @Nullable TribulationCloudTransition transition) {
+        public static final Formation FORMED = new Formation(1.0F, null);
+
+        //the eased formation the shaders and spin use
+        public float formed() {
+            return transition == null ? 1.0F : transition.ease(progress);
+        }
+
+        public float lightningAt() {
+            return transition == null ? 0.0F : transition.lightningAt();
+        }
+
+        public float spinStart() {
+            return transition == null ? 1.0F : transition.spinStart();
+        }
+    }
+
     private static final class CloudState {
         private final RandomSource random = RandomSource.create();
         private final List<FlickerBolt> bolts = new ArrayList<>();
@@ -302,6 +393,12 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         private final float flowOffset;
         //-1 until the first tick, so joining mid tribulation does not flash
         private int lastStrikes = -1;
+        //the synced data last seen, and the ticks counted since it arrived
+        private Object lastData;
+        private int ticksSinceSync;
+        //how far the storm has turned, and the render time it was last advanced at (-1 before the first frame)
+        private float angle;
+        private float lastTime = -1.0F;
         private int flashTicks;
         private int flashLength = 1;
 
@@ -321,13 +418,19 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     //a bolt following a spiral arm just under the cloud, relative to the eye
     private static final class FlickerBolt {
         private final List<Vec3> points;
-        private final Vec3 middle;
+        //the middle as floats, it is compared against every cloud vertex
+        private final float middleX;
+        private final float middleY;
+        private final float middleZ;
         private final int lifetime;
         private int ticksLeft;
 
         private FlickerBolt(List<Vec3> points, int lifetime) {
             this.points = points;
-            this.middle = points.get(points.size() / 2);
+            Vec3 middle = points.get(points.size() / 2);
+            this.middleX = (float) middle.x;
+            this.middleY = (float) middle.y;
+            this.middleZ = (float) middle.z;
             this.lifetime = lifetime;
             this.ticksLeft = lifetime;
         }

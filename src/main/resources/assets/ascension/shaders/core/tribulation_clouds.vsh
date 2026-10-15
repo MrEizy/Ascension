@@ -15,6 +15,13 @@ in vec4 Color;
 //x = spiral arm coordinate in turns, y = log of the distance from the centre / radius
 out vec2 cloudUv;
 out vec4 vertexColor;
+//the cloud and eye palettes, packed into the texture matrix by the renderer. unpacked here once per vertex instead of per pixel
+flat out vec3 cloudShadow;
+flat out vec3 cloudBase;
+flat out vec3 cloudHighlight;
+flat out vec3 eyeShadow;
+flat out vec3 eyeBase;
+flat out vec3 eyeHighlight;
 
 void main() {
 #ifdef TOP_LAYER
@@ -29,9 +36,17 @@ void main() {
     //the full thickness of the storm in blocks, scaled with its radius
     float maxThickness = TextureMat[3][2];
     float lift = cloudThickness(cloudNoiseUv(UV0, flow), exp(UV0.y), cellOffset) * share * maxThickness;
+    //the storm swells as it gathers, TextureMat[2][0] is how far it has
+    lift *= smoothstep(0.0, 1.0, TextureMat[2][0]);
     vec3 position = Position + vec3(0.0, lift, 0.0);
 
     gl_Position = ProjMat * ModelViewMat * vec4(position, 1.0);
     cloudUv = UV0;
     vertexColor = Color * ColorModulator;
+    cloudShadow = cloudUnpack(TextureMat[0][0]);
+    cloudBase = cloudUnpack(TextureMat[0][1]);
+    cloudHighlight = cloudUnpack(TextureMat[0][2]);
+    eyeShadow = cloudUnpack(TextureMat[1][0]);
+    eyeBase = cloudUnpack(TextureMat[1][1]);
+    eyeHighlight = cloudUnpack(TextureMat[1][2]);
 }

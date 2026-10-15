@@ -23,7 +23,11 @@ public class LightningTribulationType extends TribulationType<LightningTribulati
             instance -> instance.group(
                     Codec.INT.fieldOf("strikes").forGetter(LightningTribulationData::getLightningSurvived),
                     Codec.INT.optionalFieldOf("ticks", 0).forGetter(LightningTribulationData::getTicks),
-                    UUIDUtil.CODEC.fieldOf("id").forGetter(LightningTribulationData::getUUID)
+                    UUIDUtil.CODEC.fieldOf("id").forGetter(LightningTribulationData::getUUID),
+                    //saved before storms formed, so a missing phase means it is already running
+                    LightningTribulationData.Phase.CODEC.optionalFieldOf("phase", LightningTribulationData.Phase.ACTIVE).forGetter(LightningTribulationData::getPhase),
+                    Codec.INT.optionalFieldOf("phase_ticks", 0).forGetter(LightningTribulationData::getPhaseTicks),
+                    Codec.BOOL.optionalFieldOf("failing", false).forGetter(LightningTribulationData::isFailing)
             ).apply(instance, LightningTribulationData::new)
     );
 

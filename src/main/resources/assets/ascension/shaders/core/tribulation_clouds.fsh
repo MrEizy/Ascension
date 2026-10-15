@@ -5,6 +5,12 @@
 
 in vec2 cloudUv;
 in vec4 vertexColor;
+flat in vec3 cloudShadow;
+flat in vec3 cloudBase;
+flat in vec3 cloudHighlight;
+flat in vec3 eyeShadow;
+flat in vec3 eyeBase;
+flat in vec3 eyeHighlight;
 
 out vec4 fragColor;
 
@@ -22,13 +28,12 @@ float posterize(float tone) {
 
 void main() {
     float flow = TextureMat[3][1];
-    //the cloud and eye palettes, packed into the texture matrix by the renderer
-    vec3 cloudShadow = cloudUnpack(TextureMat[0][0]);
-    vec3 cloudBase = cloudUnpack(TextureMat[0][1]);
-    vec3 cloudHighlight = cloudUnpack(TextureMat[0][2]);
-    vec3 eyeShadow = cloudUnpack(TextureMat[1][0]);
-    vec3 eyeBase = cloudUnpack(TextureMat[1][1]);
-    vec3 eyeHighlight = cloudUnpack(TextureMat[1][2]);
+    //how far the storm has gathered, 0 for clear sky and 1 for the full storm, and how the current transition does it
+    float formation = TextureMat[2][0];
+    int style = int(TextureMat[2][1] + 0.5);
+    float patchiness = TextureMat[2][2];
+    float closedAt = TextureMat[2][3];
+    float eyeAt = TextureMat[0][3];
     //snap to a log polar pixel grid, the whole pixel takes the colour at its centre.
     //the grid turns with the spiral, while the billows flow inward through it.
     //pixels are square, so they shrink towards the eye like the billows do
@@ -43,7 +48,9 @@ void main() {
     float glow = floor(clamp(vertexColor.a, 0.0, 1.0) * 3.0 + 0.5) / 3.0;
     vec3 glowColor = eyeHighlight;
 
-    float fray = cloudFray(uv);
+    //the fray noise only matters at the rim and around the eye, everywhere else it is skipped.
+    //1 never cuts anything away, at the rim or at the eye
+    float fray = rn > CLOUD_RIM_START || rn < EYE_EDGE ? cloudFray(uv) : 1.0;
     if (cloudFrayed(fray, rn)) {
         discard;
     }
@@ -54,8 +61,13 @@ void main() {
         //only the underside draws the eye, both sheets meet there
         discard;
 #endif
+        //the eye is the last thing to form, and the first to go dark when the storm breaks up
+        if (formation < eyeAt) {
+            discard;
+        }
         float churn = cloudFbm(vec2(uv.x * CLOUD_PERIOD * 2.0, uv.y * 3.0 - flow * EYE_CHURN), CLOUD_PERIOD * 2.0);
         float energy = 0.3 + 0.5 * smoothstep(0.35, 0.8, churn) + glow * 1.5;
+        energy *= smoothstep(eyeAt, 1.0, formation);
         energy = floor(energy * 4.0) / 4.0;
         //the tint only colours the clouds, the eye has its own palette
         vec3 eye = cloudRamp(eyeShadow, eyeBase, eyeHighlight, clamp(energy, 0.0, 1.0)) + glowColor * glow;
@@ -68,10 +80,20 @@ void main() {
 #else
     vec2 cellOffset = vec2(0.0);
 #endif
-    //slope of the surface, x around the eye and y outward
-    float thickness = cloudThickness(uv, rn, cellOffset);
-    float slopeAround = cloudThickness(uv + vec2(0.02, 0.0), rn, cellOffset) - thickness;
-    float slopeOut = cloudThickness(uv + vec2(0.0, 0.3), rn, cellOffset) - thickness;
+    float wobble = cloudWobble(uv);
+    //a gathering storm only shows the parts its style has formed so far, breaking up runs the same style backwards
+    if (formation < closedAt) {
+        float eyewallWeight;
+        float mass = cloudMass(uv, rn, 0.15, wobble, eyewallWeight);
+        if (!cloudGathered(style, formation, mass, wobble, rn, patchiness, closedAt)) {
+            discard;
+        }
+    }
+
+    //slope of the surface, x around the eye and y outward. the wobble barely changes over such a short step, so all three share one
+    float thickness = cloudThickness(uv, rn, cellOffset, wobble);
+    float slopeAround = cloudThickness(uv + vec2(0.02, 0.0), rn, cellOffset, wobble) - thickness;
+    float slopeOut = cloudThickness(uv + vec2(0.0, 0.3), rn, cellOffset, wobble) - thickness;
 
 #ifdef TOP_LAYER
     //brighter the higher it reaches, with shadows on slopes facing away from the light

@@ -24,11 +24,22 @@ public class ModRenderTypes {
     //cloud shadow, base, highlight then eye shadow, base, highlight, each rgb packed into one float (exact below 2^24).
     //read from TextureMat[0][0..2] and TextureMat[1][0..2]
     public static final float[] tribulationCloudColors = new float[6];
+    //how far the storm has gathered, 0 to 1. read from TextureMat[2][0]
+    public static float tribulationCloudFormation = 1.0F;
+    //how the current transition gathers or breaks up: style index, patchiness, closed at and eye at.
+    //read from TextureMat[2][1], TextureMat[2][2], TextureMat[2][3] and TextureMat[0][3]
+    public static float tribulationCloudStyle;
+    public static float tribulationCloudPatchiness = 0.25F;
+    public static float tribulationCloudClosedAt = 0.85F;
+    public static float tribulationCloudEyeAt = 0.6F;
     private static final TextureTransform TRIBULATION_CLOUD_FLOW = new TextureTransform(
             "ascension_tribulation_cloud_flow",
             () -> new Matrix4f().translation(tribulationCloudPixels, tribulationCloudFlow, tribulationCloudThickness)
                     .m00(tribulationCloudColors[0]).m01(tribulationCloudColors[1]).m02(tribulationCloudColors[2])
                     .m10(tribulationCloudColors[3]).m11(tribulationCloudColors[4]).m12(tribulationCloudColors[5])
+                    .m20(tribulationCloudFormation)
+                    .m21(tribulationCloudStyle).m22(tribulationCloudPatchiness).m23(tribulationCloudClosedAt)
+                    .m03(tribulationCloudEyeAt)
     );
 
     private static RenderType tribulationClouds;

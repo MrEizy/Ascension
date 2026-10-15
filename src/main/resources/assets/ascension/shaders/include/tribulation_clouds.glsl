@@ -108,11 +108,10 @@ float cloudEdges(float rn) {
  * a tall eyewall around the eye, spiral rainbands that thin out towards the rim, and thinLayer between them.
  * eyewallWeight is 1 where the eyewall is the tallest part and falls to 0 out in the bands
  */
-float cloudMass(vec2 uv, float rn, float thinLayer, out float eyewallWeight) {
+float cloudMass(vec2 uv, float rn, float thinLayer, float wobble, out float eyewallWeight) {
     float eyewallDistance = (rn - CLOUD_EYEWALL) / 0.05;
     float eyewall = exp(-eyewallDistance * eyewallDistance);
     //wobbled so the bands are uneven, and thinner further out
-    float wobble = cloudFbm(vec2(uv.x * CLOUD_PERIOD, uv.y * 0.5), CLOUD_PERIOD) - 0.5;
     float bands = smoothstep(0.35, 0.75, 0.5 + 0.5 * cos(TAU * (CLOUD_ARMS * uv.x + 0.4 * wobble)));
     bands *= mix(0.75, 0.35, rn);
     eyewallWeight = eyewall / max(max(eyewall, bands), 0.001);
@@ -120,13 +119,18 @@ float cloudMass(vec2 uv, float rn, float thinLayer, out float eyewallWeight) {
     return thinLayer + (1.0 - thinLayer) * max(eyewall, bands);
 }
 
+//how unevenly the bands are bent. it changes slowly, so nearby samples can share one. takes noise uv
+float cloudWobble(vec2 uv) {
+    return cloudFbm(vec2(uv.x * CLOUD_PERIOD, uv.y * 0.5), CLOUD_PERIOD) - 0.5;
+}
+
 /**
  * how thick the storm is here, 0 to 1. takes noise uv.
  * the mass broken up into cumulus puffs. cellOffset only moves the puffs, so both sheets agree on where the bands are
  */
-float cloudThickness(vec2 uv, float rn, vec2 cellOffset) {
+float cloudThickness(vec2 uv, float rn, vec2 cellOffset, float wobble) {
     float eyewallWeight;
-    float mass = cloudMass(uv, rn, 0.15, eyewallWeight);
+    float mass = cloudMass(uv, rn, 0.15, wobble, eyewallWeight);
 
     float cells = 1.0 - cloudCells(vec2(uv.x * CLOUD_PERIOD * 2.0, uv.y * 2.0) + cellOffset, CLOUD_PERIOD * 2.0);
     //the eyewall is a solid wall with a few broad towers on top. its mass is the highest, so the band sized puffs
@@ -135,4 +139,36 @@ float cloudThickness(vec2 uv, float rn, vec2 cellOffset) {
     float puffs = mix(cells, bigCells, eyewallWeight);
     float puffDepth = mix(0.4, 0.15, eyewallWeight);
     return clamp(mass * (1.0 - puffDepth + puffDepth * puffs), 0.0, 1.0) * cloudEdges(rn);
+}
+
+float cloudThickness(vec2 uv, float rn, vec2 cellOffset) {
+    return cloudThickness(uv, rn, cellOffset, cloudWobble(uv));
+}
+
+//the order TribulationCloudTransition.Style is declared in
+const int CLOUD_STYLE_CORES = 0;
+const int CLOUD_STYLE_RIM = 1;
+const int CLOUD_STYLE_EYE = 2;
+
+/**
+ * whether this part of a gathering or breaking up storm has formed yet.
+ * formation is 0 for clear sky and 1 for the full storm, the cloud is complete from closedAt on.
+ * mass and wobble are storm scale, so both sheets agree on what has formed
+ */
+bool cloudGathered(int style, float formation, float mass, float wobble, float rn, float patchiness, float closedAt) {
+    float gathered = smoothstep(0.0, closedAt, formation);
+    if (style == CLOUD_STYLE_CORES) {
+        //the eyewall and band cores first, then the thin cloud between them
+        return mass + patchiness * (wobble + 0.5) >= mix(1.1, 0.0, gathered);
+    }
+    if (style == CLOUD_STYLE_RIM) {
+        //from the outer edge inward, the eye last
+        return rn + patchiness * wobble >= 1.1 - 1.2 * gathered;
+    }
+    if (style == CLOUD_STYLE_EYE) {
+        //outward from the eye, the rim last
+        return rn - patchiness * wobble <= -0.1 + 1.2 * gathered;
+    }
+    //scatter: random patches everywhere that merge
+    return wobble + 0.5 >= 1.0 - gathered;
 }

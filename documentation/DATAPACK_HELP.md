@@ -352,7 +352,7 @@ Tribulations live in:
 data/<namespace>/ascension/tribulations/...
 ```
 
-`ascension:lightning` strikes the target with lightning `strikes` times, waiting `tick_delay` ticks between strikes:
+`ascension:lightning` strikes the target with lightning `strikes` times, waiting `tick_delay` ticks between strikes. The storm first gathers (`clouds.forming`) before the first strike, and after the last strike (or the target's death) it breaks up (`clouds.dissipating`) before the tribulation succeeds (or fails):
 
 ```json
 {
@@ -381,6 +381,35 @@ data/<namespace>/ascension/tribulations/...
 | `pixel_size` | `3` | Size of a cloud pixel in blocks at the outer edge (0.25 to 64). Pixels shrink towards the eye along with the billows. |
 | `cloud_colors` | greys | The `shadow`, `base` and `highlight` colours of the clouds. Thick undersides use the shadow, thin cloud the base, and puff tops and the top of the storm the highlight. Defaults `#333333`, `#8C8C8C`, `#E6E6E6`. |
 | `eye_colors` | dim purple | The `shadow`, `base` and `highlight` colours of the glowing eye, from dim to flaring. The highlight also colours the lightning: the bolts in the clouds and the glow they cast. Defaults `#110F1D`, `#24213F`, `#9999BF`. |
+| `forming` | 100 ticks, `cores` | How the storm gathers before the first strike. A transition object, see below. |
+| `dissipating` | 60 ticks, `cores` | How the storm breaks up after the last strike or the target's death, before the tribulation resolves. A transition object, see below. |
+
+`forming` and `dissipating` take the same fields, and every one of them is optional:
+
+```json
+"forming": { "ticks": 200, "style": "rim", "easing": "ease_out" },
+"dissipating": { "ticks": 40, "style": "eye", "easing": "ease_in" }
+```
+
+| Field | Default | Meaning |
+| --- | --- | --- |
+| `ticks` | `100` / `60` | How long it takes (0 to 6000). `0` is instant. |
+| `style` | `cores` | Which part of the storm exists first while forming, and last while dissipating. Dissipating plays the style backwards. |
+| `easing` | `linear` | The curve the progress follows: `linear`, `ease_in` (slow start), `ease_out` (slow finish) or `smooth` (slow at both ends). |
+| `patchiness` | `0.25` | How broken up and ragged the edge of the gathered cloud is (0 to 1). |
+| `closed_at` | `0.85` | The point (0 to 1 of the way formed) where the cloud is complete with no holes left. |
+| `eye_at` | `0.6` | The point where the eye starts to glow. Below it the eye is open sky. |
+| `lightning_at` | `0.8` | The point above which lightning crawls through the clouds. |
+| `spin_start` | `0.3` | How fast the storm turns when it starts forming, as a fraction of `rotation_speed`. It speeds up to full as it forms. |
+
+Styles:
+
+| Style | Forming | Dissipating |
+| --- | --- | --- |
+| `cores` | The eyewall and band cores condense first, then the thin cloud between them fills in. | The thin cloud goes first, the cores last. |
+| `rim` | Gathers from the outer edge and sweeps inward, the eye last. | Retreats outward, the rim last. |
+| `eye` | Spreads outward from the eye, the rim last. | Collapses back into the eye. |
+| `scatter` | Random patches appear everywhere and merge. | Breaks into random patches that fade. |
 
 Every colour in `cloud_colors` and `eye_colors` is optional and takes the same formats as `tint`. For a red tribulation with a fiery eye:
 

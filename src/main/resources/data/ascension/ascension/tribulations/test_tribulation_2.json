@@ -9,6 +9,7 @@
     "render_height": 300,
     "pixel_size": 30,
     "cloud_colors": { "shadow": "#000000", "base": "#1f0100", "highlight": "#ff0800" },
+    "forming": { "style": "eye" },
     "eye_colors": {
       "shadow": "#2b0057",
       "base": "#000000",
