@@ -4,10 +4,10 @@
   "damage": 2.0,
   "tick_delay": 40,
   "clouds": {
-    "radius": 300,
+    "radius": 400,
     "rotation_speed": 0.2,
-    "render_height": 128,
+    "render_height": 200,
     "pixel_size": 5,
-    "tint": "#ad1d13"
+    "tint": "#A9B4C6"
   }
 }

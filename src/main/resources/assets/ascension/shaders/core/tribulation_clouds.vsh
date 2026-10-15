@@ -4,8 +4,9 @@
 #moj_import <minecraft:projection.glsl>
 #moj_import <ascension:tribulation_clouds.glsl>
 
-//how far the billows bulge out of the base surface, in blocks
-const float AMPLITUDE = 6.0;
+//how the thickness is split around the flat cloud base, most of it rises above
+const float TOP_SHARE = 0.65;
+const float BOTTOM_SHARE = 0.35;
 
 in vec3 Position;
 in vec2 UV0;
@@ -17,16 +18,18 @@ out vec4 vertexColor;
 
 void main() {
 #ifdef TOP_LAYER
-    //the top bulges up with its own noise, so it does not mirror the underside
-    vec2 offset = vec2(5.0, 31.0);
-    float direction = 1.0;
+    //the top gets its own puffs, so it does not mirror the underside
+    vec2 cellOffset = vec2(5.0, 31.0);
+    float share = TOP_SHARE;
 #else
-    vec2 offset = vec2(0.0);
-    float direction = -1.0;
+    vec2 cellOffset = vec2(0.0);
+    float share = -BOTTOM_SHARE;
 #endif
     float flow = TextureMat[3][1];
-    float height = cloudHeight(cloudNoiseUv(UV0, flow), exp(UV0.y), offset);
-    vec3 position = Position + vec3(0.0, direction * height * AMPLITUDE, 0.0);
+    //the full thickness of the storm in blocks, scaled with its radius
+    float maxThickness = TextureMat[3][2];
+    float thickness = cloudThickness(cloudNoiseUv(UV0, flow), exp(UV0.y), cellOffset);
+    vec3 position = Position + vec3(0.0, thickness * share * maxThickness, 0.0);
 
     gl_Position = ProjMat * ModelViewMat * vec4(position, 1.0);
     cloudUv = UV0;

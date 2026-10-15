@@ -370,13 +370,13 @@ data/<namespace>/ascension/tribulations/...
 }
 ```
 
-`clouds` is optional and controls the storm clouds rendered above the tribulation: a pixelated whirlpool of clouds spiralling and sinking into a black eye. Small bolts crawl along the spiral arms all over the cloud, and the area around the eye flashes on every strike. Every field in it is optional:
+`clouds` is optional and controls the storm clouds rendered above the tribulation: a pixelated hurricane of banded, lumpy storm clouds around a tall eyewall, with a glowing eye in the middle. Small bolts crawl along the spiral bands all over the cloud, and the eye flares on every strike. Every field in it is optional:
 
 | Field | Default | Meaning |
 | --- | --- | --- |
 | `radius` | `64` | Radius of the cloud whirlpool in blocks (1 to 512). |
 | `rotation_speed` | `0.5` | Degrees rotated per tick. Negative values rotate the other way. |
-| `render_height` | `200` | The world Y value of the eye. The clouds rise from the eye towards the rim, and follow the tribulation on X and Z. |
+| `render_height` | `200` | The world Y value of the cloud base. The storm is flat underneath and thickest at the eyewall, and follows the tribulation on X and Z. |
 | `tint` | none | Colour multiplied onto the greyscale clouds, as `"#RRGGBB"`, an int, or `[r, g, b]` floats. Leave it out to keep the clouds greyscale. |
 | `pixel_size` | `3` | Size of a cloud pixel in blocks at the outer edge (0.25 to 64). Pixels shrink towards the eye along with the billows. |
 

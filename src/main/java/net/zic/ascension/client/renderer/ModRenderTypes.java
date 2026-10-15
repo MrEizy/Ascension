@@ -19,8 +19,10 @@ public class ModRenderTypes {
     //pixels around the circle, and how far the billows have flowed towards the eye
     public static float tribulationCloudPixels = 128.0F;
     public static float tribulationCloudFlow;
+    //full thickness of the storm in blocks
+    public static float tribulationCloudThickness;
     private static final TextureTransform TRIBULATION_CLOUD_FLOW = new TextureTransform(
-            "ascension_tribulation_cloud_flow", () -> new Matrix4f().translation(tribulationCloudPixels, tribulationCloudFlow, 0.0F)
+            "ascension_tribulation_cloud_flow", () -> new Matrix4f().translation(tribulationCloudPixels, tribulationCloudFlow, tribulationCloudThickness)
     );
 
     private static RenderType tribulationClouds;
