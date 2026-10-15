@@ -5,7 +5,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.ascension.core.tribulation.EntityTargetingTribulation;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationCloudSettings;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationInstance;
+import net.zic.ascension.api.ascension.core.tribulation.client.TribulationRenderer;
+import net.zic.ascension.client.renderer.tribulation.TribulationCloudRenderer;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 import net.zic.ascension.impl.datapack.tribulation.LightningTribulationType;
 
@@ -16,16 +19,20 @@ public class LightningTribulation extends EntityTargetingTribulation<LightningTr
     private final int strikes;
     private final double damage;
     private final int tickDelay;
+    private final TribulationCloudSettings clouds;
+    private TribulationRenderer<LightningTribulationData> renderer;
 
-    public LightningTribulation(int strikes, double damage, int tickDelay) {
+    public LightningTribulation(int strikes, double damage, int tickDelay, TribulationCloudSettings clouds) {
         this.strikes = strikes;
         this.damage = damage;
         this.tickDelay = tickDelay;
+        this.clouds = clouds;
     }
 
     public int strikes() {return strikes;}
     public double damage() {return damage;}
     public int tickDelay() {return tickDelay;}
+    public TribulationCloudSettings clouds() {return clouds;}
 
     @Override
     public LightningTribulationType getType() {
@@ -62,5 +69,11 @@ public class LightningTribulation extends EntityTargetingTribulation<LightningTr
         //the number of strikes may have been lowered since it was saved
         data.setLightningSurvived(Math.min(data.getLightningSurvived(), strikes));
         return data;
+    }
+
+    @Override
+    public TribulationRenderer<LightningTribulationData> getRenderer() {
+        if (renderer == null) renderer = new TribulationCloudRenderer<>(clouds, LightningTribulationData::getLightningSurvived);
+        return renderer;
     }
 }

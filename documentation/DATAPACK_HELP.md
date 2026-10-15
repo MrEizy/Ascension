@@ -18,6 +18,7 @@ For system-specific authoring, use:
 - [Requirements](#requirements)
 - [Progress actions](#progress-actions)
 - [Datapack resources](#datapack-resources)
+- [Tribulations](#tribulations)
 - [Item tooltips](#item-tooltips)
 - [Compact registry reference](#compact-registry-reference)
 
@@ -343,6 +344,41 @@ Once defined, the resource works with normal skill costs, passive upkeep, resour
   "amount": 15
 }
 ```
+
+# Tribulations
+Tribulations live in:
+
+```text
+data/<namespace>/ascension/tribulations/...
+```
+
+`ascension:lightning` strikes the target with lightning `strikes` times, waiting `tick_delay` ticks between strikes:
+
+```json
+{
+  "type": "ascension:lightning",
+  "strikes": 4,
+  "damage": 2.0,
+  "tick_delay": 10,
+  "clouds": {
+    "radius": 72,
+    "rotation_speed": 0.8,
+    "render_height": 140,
+    "tint": "#FF4040",
+    "pixel_size": 3
+  }
+}
+```
+
+`clouds` is optional and controls the storm clouds rendered above the tribulation: a pixelated whirlpool of clouds spiralling and sinking into a black eye. Small bolts crawl along the spiral arms all over the cloud, and the area around the eye flashes on every strike. Every field in it is optional:
+
+| Field | Default | Meaning |
+| --- | --- | --- |
+| `radius` | `64` | Radius of the cloud whirlpool in blocks (1 to 512). |
+| `rotation_speed` | `0.5` | Degrees rotated per tick. Negative values rotate the other way. |
+| `render_height` | `200` | The world Y value of the eye. The clouds rise from the eye towards the rim, and follow the tribulation on X and Z. |
+| `tint` | none | Colour multiplied onto the greyscale clouds, as `"#RRGGBB"`, an int, or `[r, g, b]` floats. Leave it out to keep the clouds greyscale. |
+| `pixel_size` | `3` | Size of a cloud pixel in blocks at the outer edge (0.25 to 64). Pixels shrink towards the eye along with the billows. |
 
 # Skill runtime additions
 The skill guide contains the full formats for v1.1 runtime features. The compact IDs are:

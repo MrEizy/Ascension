@@ -2,6 +2,8 @@ package net.zic.ascension.client.renderer;
 
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.TextureTransform;
+import org.joml.Matrix4f;
 
 import static net.minecraft.client.renderer.rendertype.OutputTarget.MAIN_TARGET;
 
@@ -13,6 +15,17 @@ public class ModRenderTypes {
     private static RenderType energySurfaceNoDepth;
     private static RenderType auraSurface;
     private static RenderType auraSurfaceNoDepth;
+    //set by the tribulation cloud renderer right before each sheet is drawn, the shader reads them from the texture matrix translation.
+    //pixels around the circle, and how far the billows have flowed towards the eye
+    public static float tribulationCloudPixels = 128.0F;
+    public static float tribulationCloudFlow;
+    private static final TextureTransform TRIBULATION_CLOUD_FLOW = new TextureTransform(
+            "ascension_tribulation_cloud_flow", () -> new Matrix4f().translation(tribulationCloudPixels, tribulationCloudFlow, 0.0F)
+    );
+
+    private static RenderType tribulationClouds;
+    private static RenderType tribulationCloudsTop;
+    private static RenderType tribulationLightning;
 
     public static RenderType energyLines() {
         if (energyLines == null) {
@@ -85,5 +98,44 @@ public class ModRenderTypes {
             );
         }
         return energySurfaceNoDepth;
+    }
+
+    public static RenderType tribulationClouds() {
+        if (tribulationClouds == null) {
+            tribulationClouds = RenderType.create(
+                    "ascension_tribulation_clouds",
+                    RenderSetup.builder(ModRenderPipelines.TRIBULATION_CLOUDS)
+                            .setOutputTarget(MAIN_TARGET)
+                            .setTextureTransform(TRIBULATION_CLOUD_FLOW)
+                            .createRenderSetup()
+            );
+        }
+        return tribulationClouds;
+    }
+
+    public static RenderType tribulationCloudsTop() {
+        if (tribulationCloudsTop == null) {
+            tribulationCloudsTop = RenderType.create(
+                    "ascension_tribulation_clouds_top",
+                    RenderSetup.builder(ModRenderPipelines.TRIBULATION_CLOUDS_TOP)
+                            .setOutputTarget(MAIN_TARGET)
+                            .setTextureTransform(TRIBULATION_CLOUD_FLOW)
+                            .createRenderSetup()
+            );
+        }
+        return tribulationCloudsTop;
+    }
+
+    public static RenderType tribulationLightning() {
+        if (tribulationLightning == null) {
+            tribulationLightning = RenderType.create(
+                    "ascension_tribulation_lightning",
+                    RenderSetup.builder(ModRenderPipelines.TRIBULATION_LIGHTNING)
+                            .setOutputTarget(MAIN_TARGET)
+                            .sortOnUpload()
+                            .createRenderSetup()
+            );
+        }
+        return tribulationLightning;
     }
 }

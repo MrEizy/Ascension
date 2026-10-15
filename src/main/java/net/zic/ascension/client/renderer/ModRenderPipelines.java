@@ -2,6 +2,8 @@ package net.zic.ascension.client.renderer;
 
 import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.ColorTargetState;
+import com.mojang.blaze3d.pipeline.DepthStencilState;
+import com.mojang.blaze3d.platform.CompareOp;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.shaders.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -31,6 +33,9 @@ public class ModRenderPipelines {
     public static RenderPipeline AURA_SURFACE_NO_DEPTH;
     public static RenderPipeline DIVINE_SENSE_WAVE;
     public static RenderPipeline SPHERICAL_DESTRUCTION_WAVE;
+    public static RenderPipeline TRIBULATION_CLOUDS;
+    public static RenderPipeline TRIBULATION_CLOUDS_TOP;
+    public static RenderPipeline TRIBULATION_LIGHTNING;
 
     @SubscribeEvent
     public static void onRegisterRenderPipelines(RegisterRenderPipelinesEvent event) {
@@ -109,5 +114,32 @@ public class ModRenderPipelines {
                 .withCull(false)
                 .build();
         event.registerPipeline(SPHERICAL_DESTRUCTION_WAVE);
+
+        //clouds are drawn per pixel by the shader and cut out with discard, so the output is opaque and depth can be written
+        TRIBULATION_CLOUDS = tribulationClouds("pipeline/tribulation_clouds", false);
+        TRIBULATION_CLOUDS_TOP = tribulationClouds("pipeline/tribulation_clouds_top", true);
+        //same glow as vanilla lightning, without the fog uniform
+        TRIBULATION_LIGHTNING = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/tribulation_lightning"))
+                .withColorTargetState(new ColorTargetState(BlendFunction.LIGHTNING))
+                .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+                .withCull(false)
+                .build();
+        event.registerPipeline(TRIBULATION_CLOUDS);
+        event.registerPipeline(TRIBULATION_CLOUDS_TOP);
+        event.registerPipeline(TRIBULATION_LIGHTNING);
+    }
+
+    private static RenderPipeline tribulationClouds(String location, boolean topLayer) {
+        RenderPipeline.Builder builder = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, location))
+                .withVertexShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/tribulation_clouds"))
+                .withFragmentShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/tribulation_clouds"))
+                .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, true))
+                .withCull(false);
+        if (topLayer) builder.withShaderDefine("TOP_LAYER");
+        return builder.build();
     }
 }
