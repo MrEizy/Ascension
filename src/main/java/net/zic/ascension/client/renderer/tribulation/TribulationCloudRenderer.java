@@ -10,6 +10,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationCloudPalette;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationCloudSettings;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationData;
 import net.zic.ascension.api.ascension.core.tribulation.client.ClientTribulation;
@@ -50,6 +51,9 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     private static final float FLASH_RADIUS = 0.3F;
     //flicker bolts light up the clouds within this many blocks of their middle
     private static final float BOLT_GLOW_RADIUS = 14.0F;
+
+    //bolts are drawn as stacked glowing tubes, so they are dimmer than the eye highlight they are coloured with
+    private static final float BOLT_BRIGHTNESS = 0.75F;
 
     private static final int STRIKE_FLASH_TICKS = 6;
     //1 in this chance per tick of a new flicker bolt somewhere in the cloud
@@ -135,6 +139,8 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         //square pixels need a whole number around the circle so the grid closes at the seam
         ModRenderTypes.tribulationCloudPixels = Math.max(16, Math.round(Mth.TWO_PI * settings.radius() / settings.pixelSize()));
         ModRenderTypes.tribulationCloudThickness = settings.radius() * THICKNESS;
+        packColors(settings.cloudColors(), 0);
+        packColors(settings.eyeColors(), 3);
 
         PoseStack poseStack = event.getPoseStack();
         poseStack.pushPose();
@@ -150,7 +156,7 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         if (!state.bolts.isEmpty()) {
             VertexConsumer lightning = buffers.getBuffer(ModRenderTypes.tribulationLightning());
             for (FlickerBolt bolt : state.bolts) {
-                drawBolt(lightning, pose, bolt, tint);
+                drawBolt(lightning, pose, bolt, settings.eyeColors().highlight());
             }
             buffers.endLastBatch();
         }
@@ -160,6 +166,13 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     @Override
     public void onRemoved(ClientTribulation<T> tribulation) {
         states.remove(tribulation.getId());
+    }
+
+    //each rgb colour as one float the shader unpacks, whole numbers below 2^24 survive the trip exactly
+    private static void packColors(TribulationCloudPalette palette, int start) {
+        ModRenderTypes.tribulationCloudColors[start] = palette.shadow() & 0xFFFFFF;
+        ModRenderTypes.tribulationCloudColors[start + 1] = palette.base() & 0xFFFFFF;
+        ModRenderTypes.tribulationCloudColors[start + 2] = palette.highlight() & 0xFFFFFF;
     }
 
     //──Clouds────────────────────────────────────────────────────────
@@ -244,8 +257,9 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     }
 
     //drawn like vanilla lightning: square tubes of growing width stacked for the glow
-    private static void drawBolt(VertexConsumer consumer, PoseStack.Pose pose, FlickerBolt bolt, int tint) {
-        int color = ARGB.multiply(ARGB.colorFromFloat(0.3F, 0.45F, 0.45F, 0.5F), tint);
+    //the bolts come out of the eye, so they take the eye highlight. the default highlight gives the vanilla lightning colour
+    private static void drawBolt(VertexConsumer consumer, PoseStack.Pose pose, FlickerBolt bolt, int eyeHighlight) {
+        int color = ARGB.color(0.3F, ARGB.scaleRGB(eyeHighlight, BOLT_BRIGHTNESS));
         List<Vec3> points = bolt.points;
         for (int i = 0; i < points.size() - 1; i++) {
             Vec3 start = points.get(i);

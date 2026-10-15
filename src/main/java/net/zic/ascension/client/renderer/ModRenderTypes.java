@@ -21,8 +21,14 @@ public class ModRenderTypes {
     public static float tribulationCloudFlow;
     //full thickness of the storm in blocks
     public static float tribulationCloudThickness;
+    //cloud shadow, base, highlight then eye shadow, base, highlight, each rgb packed into one float (exact below 2^24).
+    //read from TextureMat[0][0..2] and TextureMat[1][0..2]
+    public static final float[] tribulationCloudColors = new float[6];
     private static final TextureTransform TRIBULATION_CLOUD_FLOW = new TextureTransform(
-            "ascension_tribulation_cloud_flow", () -> new Matrix4f().translation(tribulationCloudPixels, tribulationCloudFlow, tribulationCloudThickness)
+            "ascension_tribulation_cloud_flow",
+            () -> new Matrix4f().translation(tribulationCloudPixels, tribulationCloudFlow, tribulationCloudThickness)
+                    .m00(tribulationCloudColors[0]).m01(tribulationCloudColors[1]).m02(tribulationCloudColors[2])
+                    .m10(tribulationCloudColors[3]).m11(tribulationCloudColors[4]).m12(tribulationCloudColors[5])
     );
 
     private static RenderType tribulationClouds;

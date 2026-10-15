@@ -1,13 +1,18 @@
 {
   "type": "ascension:lightning",
-  "strikes": 6,
+  "strikes": 10,
   "damage": 2.0,
-  "tick_delay": 40,
+  "tick_delay": 60,
   "clouds": {
-    "radius": 400,
-    "rotation_speed": 0.2,
+    "radius": 512,
+    "rotation_speed": 1,
     "render_height": 200,
-    "pixel_size": 5,
-    "tint": "#A9B4C6"
+    "pixel_size": 10,
+    "cloud_colors": { "shadow": "#1E1214", "base": "#5A3A3E", "highlight": "#C8A0A0" },
+    "eye_colors": {
+      "shadow": "#200808",
+      "base": "#7A1410",
+      "highlight": "#FF8060"
+    }
   }
 }

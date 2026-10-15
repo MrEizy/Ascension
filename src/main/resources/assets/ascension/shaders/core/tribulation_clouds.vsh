@@ -28,8 +28,8 @@ void main() {
     float flow = TextureMat[3][1];
     //the full thickness of the storm in blocks, scaled with its radius
     float maxThickness = TextureMat[3][2];
-    float thickness = cloudThickness(cloudNoiseUv(UV0, flow), exp(UV0.y), cellOffset);
-    vec3 position = Position + vec3(0.0, thickness * share * maxThickness, 0.0);
+    float lift = cloudThickness(cloudNoiseUv(UV0, flow), exp(UV0.y), cellOffset) * share * maxThickness;
+    vec3 position = Position + vec3(0.0, lift, 0.0);
 
     gl_Position = ProjMat * ModelViewMat * vec4(position, 1.0);
     cloudUv = UV0;

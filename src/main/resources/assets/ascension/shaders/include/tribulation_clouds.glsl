@@ -14,6 +14,19 @@ const float CLOUD_EYEWALL = 0.09;
 //noise cells per unit of log radius
 const float CLOUD_RADIAL_SCALE = 2.5;
 
+//a colour packed by the renderer as r * 65536 + g * 256 + b. not called "packed", that is a reserved word in glsl
+vec3 cloudUnpack(float rgb) {
+    float r = floor(rgb / 65536.0);
+    float g = floor((rgb - r * 65536.0) / 256.0);
+    float b = rgb - r * 65536.0 - g * 256.0;
+    return vec3(r, g, b) / 255.0;
+}
+
+//shadow at level 0, base at 0.5, highlight at 1
+vec3 cloudRamp(vec3 shadow, vec3 base, vec3 highlight, float level) {
+    return level < 0.5 ? mix(shadow, base, level * 2.0) : mix(base, highlight, level * 2.0 - 1.0);
+}
+
 float cloudHash(vec2 p) {
     vec3 p3 = fract(vec3(p.xyx) * 0.1031);
     p3 += dot(p3, p3.yzx + 33.33);
@@ -64,36 +77,62 @@ float cloudCells(vec2 p, float period) {
     return nearest;
 }
 
+//where the outer edge starts breaking up
+const float CLOUD_RIM_START = 0.76;
+
+//chaotic edge noise: chunky lumps plus fine fraying. takes noise uv
+float cloudFray(vec2 uv) {
+    return cloudFbm(vec2(uv.x * CLOUD_PERIOD, uv.y * 0.6), CLOUD_PERIOD) * 0.55
+            + cloudFbm(vec2(uv.x * CLOUD_PERIOD * 4.0, uv.y * 2.5) + vec2(0.0, 71.0), CLOUD_PERIOD * 4.0) * 0.45;
+}
+
+//true where the outer edge has frayed away. the same on both sheets, so the disk stays closed
+bool cloudFrayed(float fray, float rn) {
+    return rn > CLOUD_RIM_START && fray < smoothstep(CLOUD_RIM_START, 1.0, rn) * 1.1;
+}
+
 //the billows drift inward as flow grows, flow comes from the texture matrix translation
 vec2 cloudNoiseUv(vec2 meshUv, float flow) {
     return vec2(meshUv.x, meshUv.y * CLOUD_RADIAL_SCALE + flow);
 }
 
-/**
- * how thick the storm is here, 0 to 1. takes noise uv.
- * a tall eyewall around the eye, spiral rainbands that thin out towards the rim, a thin layer between them,
- * all broken up into cumulus puffs. cellOffset only moves the puffs, so both sheets agree on where the bands are
- */
-float cloudThickness(vec2 uv, float rn, vec2 cellOffset) {
-    //0 inside the eye and rising steeply, so the eyewall gets a wall on the inside
+//0 inside the eye and rising steeply, so the eyewall gets a wall on the inside, and 0 again at the rim
+float cloudEdges(float rn) {
     float eyeRamp = smoothstep(CLOUD_EYE, CLOUD_EYE + 0.02, rn);
     float rim = 1.0 - smoothstep(0.8, 1.0, rn);
+    return eyeRamp * rim;
+}
 
+/**
+ * the large scale shape of the storm before any puffs, 0 to 1. takes noise uv.
+ * a tall eyewall around the eye, spiral rainbands that thin out towards the rim, and thinLayer between them.
+ * eyewallWeight is 1 where the eyewall is the tallest part and falls to 0 out in the bands
+ */
+float cloudMass(vec2 uv, float rn, float thinLayer, out float eyewallWeight) {
     float eyewallDistance = (rn - CLOUD_EYEWALL) / 0.05;
     float eyewall = exp(-eyewallDistance * eyewallDistance);
     //wobbled so the bands are uneven, and thinner further out
     float wobble = cloudFbm(vec2(uv.x * CLOUD_PERIOD, uv.y * 0.5), CLOUD_PERIOD) - 0.5;
     float bands = smoothstep(0.35, 0.75, 0.5 + 0.5 * cos(TAU * (CLOUD_ARMS * uv.x + 0.4 * wobble)));
     bands *= mix(0.75, 0.35, rn);
+    eyewallWeight = eyewall / max(max(eyewall, bands), 0.001);
     //the thin layer between the bands keeps the disk closed
-    float mass = 0.15 + 0.85 * max(eyewall, bands);
+    return thinLayer + (1.0 - thinLayer) * max(eyewall, bands);
+}
+
+/**
+ * how thick the storm is here, 0 to 1. takes noise uv.
+ * the mass broken up into cumulus puffs. cellOffset only moves the puffs, so both sheets agree on where the bands are
+ */
+float cloudThickness(vec2 uv, float rn, vec2 cellOffset) {
+    float eyewallWeight;
+    float mass = cloudMass(uv, rn, 0.15, eyewallWeight);
 
     float cells = 1.0 - cloudCells(vec2(uv.x * CLOUD_PERIOD * 2.0, uv.y * 2.0) + cellOffset, CLOUD_PERIOD * 2.0);
     //the eyewall is a solid wall with a few broad towers on top. its mass is the highest, so the band sized puffs
     //would cut deep narrow spikes into it. it gets puffs twice the size and a third as deep instead
-    float eyewallWeight = eyewall / max(max(eyewall, bands), 0.001);
     float bigCells = 1.0 - cloudCells(vec2(uv.x * CLOUD_PERIOD, uv.y) + cellOffset, CLOUD_PERIOD);
     float puffs = mix(cells, bigCells, eyewallWeight);
     float puffDepth = mix(0.4, 0.15, eyewallWeight);
-    return clamp(mass * (1.0 - puffDepth + puffDepth * puffs), 0.0, 1.0) * eyeRamp * rim;
+    return clamp(mass * (1.0 - puffDepth + puffDepth * puffs), 0.0, 1.0) * cloudEdges(rn);
 }

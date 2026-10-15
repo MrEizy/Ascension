@@ -377,8 +377,17 @@ data/<namespace>/ascension/tribulations/...
 | `radius` | `64` | Radius of the cloud whirlpool in blocks (1 to 512). |
 | `rotation_speed` | `0.5` | Degrees rotated per tick. Negative values rotate the other way. |
 | `render_height` | `200` | The world Y value of the cloud base. The storm is flat underneath and thickest at the eyewall, and follows the tribulation on X and Z. |
-| `tint` | none | Colour multiplied onto the greyscale clouds, as `"#RRGGBB"`, an int, or `[r, g, b]` floats. Leave it out to keep the clouds greyscale. |
+| `tint` | none | Colour multiplied onto the cloud colours, as `"#RRGGBB"`, an int, or `[r, g, b]` floats. A quick way to recolour the clouds. Does not affect the eye. |
 | `pixel_size` | `3` | Size of a cloud pixel in blocks at the outer edge (0.25 to 64). Pixels shrink towards the eye along with the billows. |
+| `cloud_colors` | greys | The `shadow`, `base` and `highlight` colours of the clouds. Thick undersides use the shadow, thin cloud the base, and puff tops and the top of the storm the highlight. Defaults `#333333`, `#8C8C8C`, `#E6E6E6`. |
+| `eye_colors` | dim purple | The `shadow`, `base` and `highlight` colours of the glowing eye, from dim to flaring. The highlight also colours the lightning: the bolts in the clouds and the glow they cast. Defaults `#110F1D`, `#24213F`, `#9999BF`. |
+
+Every colour in `cloud_colors` and `eye_colors` is optional and takes the same formats as `tint`. For a red tribulation with a fiery eye:
+
+```json
+"cloud_colors": { "shadow": "#1E1214", "base": "#5A3A3E", "highlight": "#C8A0A0" },
+"eye_colors": { "shadow": "#200808", "base": "#7A1410", "highlight": "#FF8060" }
+```
 
 # Skill runtime additions
 The skill guide contains the full formats for v1.1 runtime features. The compact IDs are:
