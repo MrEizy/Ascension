@@ -11,7 +11,7 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public interface PurityChangeActionCondition extends ProgressActionCondition {
     @Override
-    default boolean test(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction){
+    default boolean test(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt){
         //first test to make sure context is a bloodline
         Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,contextIdentifier,source.getRegistryAccess());
         if(bloodline == null) return false;

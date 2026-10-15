@@ -27,7 +27,6 @@ import net.zic.ascension.impl.core.tribulation.action.RealmChangeResolutionActio
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
-
 public class SimplePathInstance implements PathInstance {
 
     private final SimplePath path;
@@ -148,6 +147,20 @@ public class SimplePathInstance implements PathInstance {
         return getCurrentMajorRealm() < 0 ? Realm.of(-1,0) : Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm());
     }
 
+    @Override
+    public Realm getPreviousRealm() {
+        if(getCurrentMinorRealm() == 0 && getCurrentMajorRealm() == 0) return getCurrentRealm();
+        return getCurrentMinorRealm() == 0 ?
+                Realm.of(getCurrentMajorRealm()-1,getMaxMinorRealm(getCurrentMajorRealm()-1)) : Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()-1);
+    }
+
+    @Override
+    public Realm getNextRealm() {
+        return getCurrentMinorRealm() == getMaxMinorRealm(getCurrentMajorRealm()) && !isLimitBroken() ?
+                Realm.of(getCurrentMajorRealm()+1,0) : Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()+1);
+    }
+
+
     public MajorRealm getCurrentRealmInstance(){
         if(realms.isEmpty()){
             realms.add(MajorRealm.of(path.getRealmDefinition(0)));
@@ -254,7 +267,7 @@ public class SimplePathInstance implements PathInstance {
 
     @Override
     public void onRealmUp(OriginSource source) {
-        path.getProgressActionHolder().run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.UP);
+        path.getProgressActionHolder().run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.UP,getCurrentRealm().asSalt());
     }
     public void broadcastRealmUp(OriginSource source,Realm oldRealm){
         PathRealmChangeEvent.PathRealmUpEvent event = new PathRealmChangeEvent.PathRealmUpEvent(source,Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()),oldRealm,getPathId(source.getRegistryAccess()),this);
@@ -263,7 +276,7 @@ public class SimplePathInstance implements PathInstance {
 
     @Override
     public void onRealmDown(OriginSource source) {
-        path.getProgressActionHolder().run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.DOWN);
+        path.getProgressActionHolder().run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.DOWN,getNextRealm().asSalt());
     }
     public void broadcastRealmDown(OriginSource source,Realm oldRealm){
         PathRealmChangeEvent.PathRealmDownEvent event = new PathRealmChangeEvent.PathRealmDownEvent(source,Realm.of(getCurrentMajorRealm(),getCurrentMinorRealm()),oldRealm,getPathId(source.getRegistryAccess()),this);
@@ -408,7 +421,7 @@ public class SimplePathInstance implements PathInstance {
 
         handleRealmChange(Realm.of(0,0),source);
         realms.removeFirst();
-        path.getProgressActionHolder().run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.DOWN);
+        path.getProgressActionHolder().run(source,CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).getKey(path),this,ProgressDirection.DOWN, "0_0");
 
         realms.clear();
         realms.addAll(cachedRealms);

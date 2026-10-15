@@ -20,7 +20,7 @@ public record ProgressActionHolder(UUID holderId, List<Pair<ProgressActionCondit
         return new ProgressActionHolder(UUID.randomUUID(),listeners);
     }
 
-    public void run(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction){
+    public void run(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt){
         for(Pair<ProgressActionConditionReference, List<ProgressActionReference>> listener : listeners){
             ProgressActionConditionReference condition = listener.getFirst();
             if(condition.resolve(source.getRegistryAccess()) == null) continue;
@@ -28,7 +28,8 @@ public record ProgressActionHolder(UUID holderId, List<Pair<ProgressActionCondit
                     source,
                     contextIdentifier,
                     contextData,
-                    direction
+                    direction,
+                    salt
             )) continue;
             for(ProgressActionReference action : listener.getSecond()){
                 if(action.resolve(source.getRegistryAccess()) == null) continue;
@@ -38,7 +39,8 @@ public record ProgressActionHolder(UUID holderId, List<Pair<ProgressActionCondit
                         source,
                         contextIdentifier,
                         contextData,
-                        direction
+                        direction,
+                        salt
                 );
             }
         }

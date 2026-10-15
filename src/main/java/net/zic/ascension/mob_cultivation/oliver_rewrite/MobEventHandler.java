@@ -6,7 +6,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
-import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
@@ -15,6 +14,7 @@ import net.zic.ascension.common.data_attachements.AscensionAttachments;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class MobEventHandler {
+    private static final ThreadLocal<Mob> INITIALIZING_MOB = new ThreadLocal<>();
     /*
         TODO:
             remove initialize on entity, then handle everything in on join.
@@ -32,10 +32,33 @@ public class MobEventHandler {
         if(!(event.getEntity() instanceof Mob mob)) return;
         MobSpawnHelper.applyConfigurationInstance(mob);
 
+        if(event.getLevel().isClientSide() || !MobSpawnHelper.hasConfigHolder(mob)) return;
+
+        AscensionEntityDataProvider provider = mob.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+        if(provider == null) return;
+
+        var data = provider.getData();
+        if(data == null || data.getSource() == null || data.getSource().isAttachedTo(mob)) return;
+
+        Mob previous = INITIALIZING_MOB.get();
+        INITIALIZING_MOB.set(mob);
+        try {
+            data.initialize();
+        } finally {
+            if(previous == null) INITIALIZING_MOB.remove();
+            else INITIALIZING_MOB.set(previous);
+        }
     }
 
     @SubscribeEvent
     public static void onSourceLoad(OriginSourceEvent.OriginSourceFinishedLoadingEvent event){
+        Mob initializing = INITIALIZING_MOB.get();
+        if(initializing != null && MobSpawnHelper.hasConfigHolder(initializing)) {
+            AscensionEntityDataProvider provider = initializing.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
+            if(provider != null && provider.getData() != null && provider.getData().getSource() == event.getSource()) {
+                MobSpawnHelper.getConfigHolder(initializing).applyConfigurationToSource();
+            }
+        }
         for(LivingEntity attachedEntity : event.getSource().getAttachedEntities()){
             if(!attachedEntity.hasData(AscensionAttachments.MOB_CONFIG_HOLDER)) continue;
 

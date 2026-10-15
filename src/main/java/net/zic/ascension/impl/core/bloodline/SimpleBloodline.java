@@ -81,7 +81,7 @@ public class SimpleBloodline implements Bloodline {
     @Override
     public Collection<Identifier> onAdded(OriginSource source, BloodlineData data) {
 
-        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), data,ProgressDirection.UP);
+        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), data,ProgressDirection.UP,"_0");
         return unlockedPaths;
     }
 
@@ -90,7 +90,7 @@ public class SimpleBloodline implements Bloodline {
         Identifier bloodlineId = CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
         for (int purity = data.getPurity(); purity >= 1; purity--) {
             data.setPurity(purity - 1);
-            holder.run(source, bloodlineId, data, ProgressDirection.DOWN);
+            holder.run(source, bloodlineId, data, ProgressDirection.DOWN,"_0");
         }
         data.setPurity(0);
         TechniqueSkillService.reconcileAll(source);
@@ -109,13 +109,13 @@ public class SimpleBloodline implements Bloodline {
 
     @Override
     public void purityDown(OriginSource source, BloodlineData data) {
-        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.DOWN);
+        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.DOWN,String.valueOf(data.getPurity()+1));
         TechniqueSkillService.reconcileAll(source);
     }
 
     @Override
     public void purityUp(OriginSource source, BloodlineData data) {
-        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.UP);
+        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.UP,String.valueOf(data.getPurity()));
         TechniqueSkillService.reconcileAll(source);
     }
 
