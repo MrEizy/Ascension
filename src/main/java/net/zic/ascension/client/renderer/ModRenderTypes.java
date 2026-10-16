@@ -32,6 +32,8 @@ public class ModRenderTypes {
     public static float tribulationCloudPatchiness = 0.25F;
     public static float tribulationCloudClosedAt = 0.85F;
     public static float tribulationCloudEyeAt = 0.6F;
+    //which wisp layer is being drawn, 0 is the lowest. only the wispy clouds read it, from TextureMat[1][3]
+    public static float tribulationCloudLayer;
     private static final TextureTransform TRIBULATION_CLOUD_FLOW = new TextureTransform(
             "ascension_tribulation_cloud_flow",
             () -> new Matrix4f().translation(tribulationCloudPixels, tribulationCloudFlow, tribulationCloudThickness)
@@ -40,10 +42,12 @@ public class ModRenderTypes {
                     .m20(tribulationCloudFormation)
                     .m21(tribulationCloudStyle).m22(tribulationCloudPatchiness).m23(tribulationCloudClosedAt)
                     .m03(tribulationCloudEyeAt)
+                    .m13(tribulationCloudLayer)
     );
 
     private static RenderType tribulationClouds;
     private static RenderType tribulationCloudsTop;
+    private static RenderType tribulationWisps;
     private static RenderType tribulationLightning;
 
     public static RenderType energyLines() {
@@ -143,6 +147,19 @@ public class ModRenderTypes {
             );
         }
         return tribulationCloudsTop;
+    }
+
+    public static RenderType tribulationWisps() {
+        if (tribulationWisps == null) {
+            tribulationWisps = RenderType.create(
+                    "ascension_tribulation_wisps",
+                    RenderSetup.builder(ModRenderPipelines.TRIBULATION_WISPS)
+                            .setOutputTarget(MAIN_TARGET)
+                            .setTextureTransform(TRIBULATION_CLOUD_FLOW)
+                            .createRenderSetup()
+            );
+        }
+        return tribulationWisps;
     }
 
     public static RenderType tribulationLightning() {

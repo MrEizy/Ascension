@@ -129,20 +129,24 @@ public class LightningTribulation extends EntityTargetingTribulation<LightningTr
     @Override
     public TribulationRenderer<LightningTribulationData> getRenderer() {
         if (renderer == null) {
-            renderer = new TribulationCloudRenderer<>(
-                    clouds,
-                    LightningTribulationData::getLightningSurvived,
-                    (data, ticksSinceSync) -> {
-                        float progress = data.transitionProgress(clouds.forming().ticks(), clouds.dissipating().ticks(), ticksSinceSync);
-                        return switch (data.getPhase()) {
-                            case FORMING -> new TribulationCloudRenderer.Formation(progress, clouds.forming());
-                            case ACTIVE -> TribulationCloudRenderer.Formation.FORMED;
-                            //dissipating plays its style backwards, from formed to clear sky
-                            case DISSIPATING -> new TribulationCloudRenderer.Formation(1.0F - progress, clouds.dissipating());
-                        };
-                    }
-            );
+            renderer = createRenderer();
         }
         return renderer;
+    }
+
+    //the storm drawn above the tribulation, created once on first use
+    protected TribulationRenderer<LightningTribulationData> createRenderer() {
+        return new TribulationCloudRenderer<>(clouds, LightningTribulationData::getLightningSurvived, this::formation);
+    }
+
+    //how far the storm has gathered, worked out from the synced phase
+    protected TribulationCloudRenderer.Formation formation(LightningTribulationData data, float ticksSinceSync) {
+        float progress = data.transitionProgress(clouds.forming().ticks(), clouds.dissipating().ticks(), ticksSinceSync);
+        return switch (data.getPhase()) {
+            case FORMING -> new TribulationCloudRenderer.Formation(progress, clouds.forming());
+            case ACTIVE -> TribulationCloudRenderer.Formation.FORMED;
+            //dissipating plays its style backwards, from formed to clear sky
+            case DISSIPATING -> new TribulationCloudRenderer.Formation(1.0F - progress, clouds.dissipating());
+        };
     }
 }

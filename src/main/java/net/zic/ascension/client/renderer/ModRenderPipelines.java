@@ -35,6 +35,7 @@ public class ModRenderPipelines {
     public static RenderPipeline SPHERICAL_DESTRUCTION_WAVE;
     public static RenderPipeline TRIBULATION_CLOUDS;
     public static RenderPipeline TRIBULATION_CLOUDS_TOP;
+    public static RenderPipeline TRIBULATION_WISPS;
     public static RenderPipeline TRIBULATION_LIGHTNING;
 
     @SubscribeEvent
@@ -118,6 +119,16 @@ public class ModRenderPipelines {
         //clouds are drawn per pixel by the shader and cut out with discard, so the output is opaque and depth can be written
         TRIBULATION_CLOUDS = tribulationClouds("pipeline/tribulation_clouds", false);
         TRIBULATION_CLOUDS_TOP = tribulationClouds("pipeline/tribulation_clouds_top", true);
+        //the wisps are see through layers stacked on each other, so they blend and leave the depth alone
+        TRIBULATION_WISPS = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/tribulation_wisps"))
+                .withVertexShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/tribulation_wisps"))
+                .withFragmentShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/tribulation_wisps"))
+                .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+                .withCull(false)
+                .build();
         //same glow as vanilla lightning, without the fog uniform
         TRIBULATION_LIGHTNING = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
                 .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/tribulation_lightning"))
@@ -127,6 +138,7 @@ public class ModRenderPipelines {
                 .build();
         event.registerPipeline(TRIBULATION_CLOUDS);
         event.registerPipeline(TRIBULATION_CLOUDS_TOP);
+        event.registerPipeline(TRIBULATION_WISPS);
         event.registerPipeline(TRIBULATION_LIGHTNING);
     }
 

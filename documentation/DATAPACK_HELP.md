@@ -418,6 +418,8 @@ Every colour in `cloud_colors` and `eye_colors` is optional and takes the same f
 "eye_colors": { "shadow": "#200808", "base": "#7A1410", "highlight": "#FF8060" }
 ```
 
+`ascension:v2_tribulation_type` takes exactly the same fields and strikes the same way as `ascension:lightning`, but draws its storm as a vortex of wispy, see-through streaks swirling into the glowing eye instead of the pixelated hurricane. The streaks are drawn in three thin stacked layers that turn at slightly different speeds, and the vortex rises gently towards the eye. `render_height` is the height of the rim, and `pixel_size` is ignored. In the colours, the `shadow` is used for faint haze, the `base` for the streaks, and the `highlight` for the bright filaments. The eye's highlight also lights up the clouds around the eye.
+
 # Skill runtime additions
 The skill guide contains the full formats for v1.1 runtime features. The compact IDs are:
 

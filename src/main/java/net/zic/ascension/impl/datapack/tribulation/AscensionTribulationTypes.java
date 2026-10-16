@@ -16,6 +16,11 @@ public class AscensionTribulationTypes {
             "lightning",
             LightningTribulationType::new
     );
+    //lightning with wispy swirling clouds instead of the pixel hurricane, kept separate so the two can be compared
+    public static final DeferredHolder<TribulationType<?>, V2TribulationType> V2_TRIBULATION = TRIBULATION_TYPES.register(
+            "v2_tribulation_type",
+            V2TribulationType::new
+    );
     public static void register(IEventBus eventBus){
 
         TRIBULATION_TYPES.register(eventBus);

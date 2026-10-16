@@ -7,7 +7,7 @@
     "radius": 800,
     "rotation_speed": 0.3,
     "render_height": 300,
-    "pixel_size": 30,
+    "pixel_size": 1,
     "cloud_colors": { "shadow": "#000000", "base": "#1f0100", "highlight": "#ff0800" },
     "forming": { "style": "eye" },
     "eye_colors": {

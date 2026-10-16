@@ -37,8 +37,8 @@ import java.util.function.ToIntFunction;
  */
 public class TribulationCloudRenderer<T extends TribulationData> implements TribulationRenderer<T> {
     //dense enough for the shader to displace the billows smoothly. ring 0 is the centre point
-    private static final int RINGS = 90;
-    private static final int SEGMENTS = 200;
+    protected static final int RINGS = 90;
+    protected static final int SEGMENTS = 200;
     //the innermost real ring as a fraction of the radius, the shader draws the glowing eye from further out than this
     private static final float INNER_RING = 0.01F;
     //log radius given to the centre point, log(0) would be -infinity
@@ -48,9 +48,9 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     //how much of the thickness rises above the base, must match TOP_SHARE in the tribulation_clouds vertex shader
     private static final float TOP_SHARE = 0.65F;
     //radians the spiral arms turn per unit of log radius
-    private static final float TWIST = 2.0F;
+    protected static final float TWIST = 2.0F;
     //how fast the billows drift towards the eye, in noise cells per tick
-    private static final float INFLOW = 0.02F;
+    protected static final float INFLOW = 0.02F;
     //strikes light up the clouds within this fraction of the radius around the eye
     private static final float FLASH_RADIUS = 0.3F;
     //flicker bolts light up the clouds within this many blocks of their middle
@@ -70,20 +70,20 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     //how far past a size the storm has to go before it switches level, so it does not flicker between two
     private static final float LOD_HYSTERESIS = 0.1F;
 
-    private final TribulationCloudSettings settings;
+    protected final TribulationCloudSettings settings;
     private final ToIntFunction<T> strikeCounter;
     private final FormationProgress<T> formation;
     private final Map<UUID, CloudState> states = new HashMap<>();
 
     //the mesh only depends on the settings, so it is built once
-    private final float[] ringRn = new float[RINGS];
-    private final float[] ringLog = new float[RINGS];
+    protected final float[] ringRn = new float[RINGS];
+    protected final float[] ringLog = new float[RINGS];
     //how far each ring is bent into the spiral, in turns
-    private final float[] ringTwist = new float[RINGS];
-    private final float[] segmentCos = new float[SEGMENTS + 1];
-    private final float[] segmentSin = new float[SEGMENTS + 1];
+    protected final float[] ringTwist = new float[RINGS];
+    protected final float[] segmentCos = new float[SEGMENTS + 1];
+    protected final float[] segmentSin = new float[SEGMENTS + 1];
     //how far around the circle each segment is, in turns
-    private final float[] segmentTurns = new float[SEGMENTS + 1];
+    protected final float[] segmentTurns = new float[SEGMENTS + 1];
 
     /**
      * @param strikeCounter reads how many strikes have happened from the synced data,
@@ -185,9 +185,6 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         //no tint is white, which leaves the greyscale untouched
         int tint = ARGB.opaque(settings.tint().orElse(0xFFFFFF));
         float flash = state.flashTicks > 0 ? Math.clamp((state.flashTicks - partialTick) / state.flashLength, 0.0F, 1.0F) : 0.0F;
-        //square pixels need a whole number around the circle so the grid closes at the seam
-        ModRenderTypes.tribulationCloudPixels = Math.max(16, Math.round(Mth.TWO_PI * settings.radius() / settings.pixelSize()));
-        ModRenderTypes.tribulationCloudThickness = settings.radius() * THICKNESS;
         packColors(settings.cloudColors(), 0);
         packColors(settings.eyeColors(), 3);
         ModRenderTypes.tribulationCloudFormation = formed;
@@ -204,22 +201,9 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         PoseStack.Pose pose = poseStack.last();
         MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
 
-        float angle = state.angle;
-        //both sheets share the base surface, the shader pushes the underside down and the top up.
-        //from below the base the top sheet is always hidden behind the underside, and from above the storm the underside is hidden,
-        //so only the sheet that can be seen is drawn. the shader discards, so hidden fragments would otherwise still be shaded
-        double cameraHeight = -eye.y;
-        int step = lodStep(state, (float) (settings.radius() / Math.max(eye.length(), 1.0D)));
         //the camera relative to the eye, for skipping the parts of a huge storm past the far end of the view
-        float cameraX = (float) -eye.x;
-        float cameraZ = (float) -eye.z;
         float viewDistance = minecraft.options.getEffectiveRenderDistance() * 16.0F * 4.0F;
-        if (cameraHeight < settings.radius() * THICKNESS * TOP_SHARE) {
-            drawSheet(buffers, ModRenderTypes.tribulationClouds(), pose, state, time, angle, tint, flash, step, cameraX, cameraZ, viewDistance);
-        }
-        if (cameraHeight > 0.0D) {
-            drawSheet(buffers, ModRenderTypes.tribulationCloudsTop(), pose, state, time, angle, tint, flash, step, cameraX, cameraZ, viewDistance);
-        }
+        renderClouds(buffers, pose, state, eye.reverse(), time, tint, flash, viewDistance);
 
         if (!state.bolts.isEmpty()) {
             VertexConsumer lightning = buffers.getBuffer(ModRenderTypes.tribulationLightning());
@@ -245,8 +229,45 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
 
     //──Clouds────────────────────────────────────────────────────────
 
+    /**
+     * draws the cloud itself, the colours and formation are already in ModRenderTypes and the pose is at the eye
+     * @param camera the camera relative to the eye
+     * @param viewDistance parts of the storm further than this from the camera are past the end of the view
+     */
+    protected void renderClouds(MultiBufferSource.BufferSource buffers, PoseStack.Pose pose, CloudState state, Vec3 camera,
+                                float time, int tint, float flash, float viewDistance) {
+        //square pixels need a whole number around the circle so the grid closes at the seam
+        ModRenderTypes.tribulationCloudPixels = Math.max(16, Math.round(Mth.TWO_PI * settings.radius() / settings.pixelSize()));
+        ModRenderTypes.tribulationCloudThickness = settings.radius() * THICKNESS;
+
+        float angle = state.angle;
+        //both sheets share the base surface, the shader pushes the underside down and the top up.
+        //from below the base the top sheet is always hidden behind the underside, and from above the storm the underside is hidden,
+        //so only the sheet that can be seen is drawn. the shader discards, so hidden fragments would otherwise still be shaded
+        double cameraHeight = camera.y;
+        int step = lodStep(state, (float) (settings.radius() / Math.max(camera.length(), 1.0D)));
+        float cameraX = (float) camera.x;
+        float cameraZ = (float) camera.z;
+        if (cameraHeight < settings.radius() * THICKNESS * TOP_SHARE) {
+            drawSheet(buffers, ModRenderTypes.tribulationClouds(), pose, state, time, angle, tint, flash, step, cameraX, cameraZ, viewDistance);
+        }
+        if (cameraHeight > 0.0D) {
+            drawSheet(buffers, ModRenderTypes.tribulationCloudsTop(), pose, state, time, angle, tint, flash, step, cameraX, cameraZ, viewDistance);
+        }
+    }
+
+    //height of the cloud base above the eye at this fraction of the radius, the bolts crawl just under it
+    protected float cloudBaseHeight(float rn) {
+        return 0.0F;
+    }
+
+    //whether anything is lighting the clouds up this frame
+    protected static boolean isLit(CloudState state, float flash) {
+        return flash > 0.0F || !state.bolts.isEmpty();
+    }
+
     //picks the mesh level from how big the storm looks, only moving to another level once it is clearly past it
-    private static int lodStep(CloudState state, float apparentSize) {
+    protected static int lodStep(CloudState state, float apparentSize) {
         int level = state.lodLevel;
         while (level > 0 && apparentSize >= LOD_SIZES[level - 1] * (1.0F + LOD_HYSTERESIS)) level--;
         while (level < LOD_STEPS.length - 1 && apparentSize < LOD_SIZES[level] * (1.0F - LOD_HYSTERESIS)) level++;
@@ -265,7 +286,7 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         //the part of the spiral coordinate that is the same for every vertex this frame
         float spiralShift = state.spiralOffset - angle / Mth.TWO_PI;
         //most frames have nothing lighting the clouds up, then every vertex gets the same colour
-        boolean lit = flash > 0.0F || !state.bolts.isEmpty();
+        boolean lit = isLit(state, flash);
         int unlitColor = ARGB.color(0, tint);
 
         for (int ring = 0; ring < RINGS - 1; ring += step) {
@@ -310,7 +331,7 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
                 .setColor(color);
     }
 
-    private static float glow(CloudState state, float rn, float x, float y, float z, float flash) {
+    protected static float glow(CloudState state, float rn, float x, float y, float z, float flash) {
         float glow = flash * Math.max(0.0F, 1.0F - rn / FLASH_RADIUS);
         for (FlickerBolt bolt : state.bolts) {
             float dx = x - bolt.middleX;
@@ -347,7 +368,7 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
             points.add(new Vec3(
                     Mth.cos(theta) * rn * radius + (random.nextFloat() - 0.5F) * jitter,
                     //just under the cloud base, so the bands hanging lower hide parts of it
-                    -3.0F + (random.nextFloat() - 0.5F) * jitter,
+                    cloudBaseHeight(rn) - 3.0F + (random.nextFloat() - 0.5F) * jitter,
                     Mth.sin(theta) * rn * radius + (random.nextFloat() - 0.5F) * jitter
             ));
         }
@@ -422,21 +443,21 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         }
     }
 
-    private static final class CloudState {
+    protected static final class CloudState {
         private final RandomSource random = RandomSource.create();
-        private final List<FlickerBolt> bolts = new ArrayList<>();
+        final List<FlickerBolt> bolts = new ArrayList<>();
         //shifts the noise so tribulations next to each other do not look identical
-        private final float spiralOffset;
-        private final float flowOffset;
+        final float spiralOffset;
+        final float flowOffset;
         //-1 until the first tick, so joining mid tribulation does not flash
         private int lastStrikes = -1;
         //the synced data last seen, and the ticks counted since it arrived
         private Object lastData;
         private int ticksSinceSync;
         //the mesh level it is drawn at, an index into LOD_STEPS
-        private int lodLevel;
+        int lodLevel;
         //how far the storm has turned, and the render time it was last advanced at (-1 before the first frame)
-        private float angle;
+        float angle;
         private float lastTime = -1.0F;
         private int flashTicks;
         private int flashLength = 1;

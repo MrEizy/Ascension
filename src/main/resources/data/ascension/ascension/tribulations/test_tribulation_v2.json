@@ -1,0 +1,14 @@
+{
+  "type": "ascension:v2_tribulation_type",
+  "strikes": 6,
+  "damage": 2.0,
+  "tick_delay": 40,
+  "clouds": {
+    "radius": 400,
+    "rotation_speed": 0.3,
+    "render_height": 260,
+    "cloud_colors": { "shadow": "#0E0620", "base": "#4A2A7A", "highlight": "#C9A6FF" },
+    "eye_colors": { "shadow": "#3A1A6A", "base": "#9B6BFF", "highlight": "#F2E6FF" },
+    "forming": { "style": "eye", "ticks": 160 }
+  }
+}
