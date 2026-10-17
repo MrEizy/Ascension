@@ -48,7 +48,10 @@ public record TribulationCloudTransition(int ticks, Style style, Easing easing, 
         //outward from the eye, so the rim is last
         EYE("eye"),
         //random patches everywhere that merge
-        SCATTER("scatter");
+        SCATTER("scatter"),
+        //a dot of light grows into the eye, then clouds gather at the rim and are drawn inward into the spin.
+        //breaking up is not this played backwards: the eye goes out first, then the clouds thin away
+        VORTEX("vortex");
 
         public static final Codec<Style> CODEC = StringRepresentable.fromEnum(Style::values);
         private final String name;

@@ -34,6 +34,8 @@ public class ModRenderTypes {
     public static float tribulationCloudEyeAt = 0.6F;
     //which wisp layer is being drawn, 0 is the lowest. only the wispy clouds read it, from TextureMat[1][3]
     public static float tribulationCloudLayer;
+    //1 while the storm breaks up, 0 while it gathers or has formed. read from TextureMat[3][3]
+    public static float tribulationCloudDissipating;
     private static final TextureTransform TRIBULATION_CLOUD_FLOW = new TextureTransform(
             "ascension_tribulation_cloud_flow",
             () -> new Matrix4f().translation(tribulationCloudPixels, tribulationCloudFlow, tribulationCloudThickness)
@@ -43,11 +45,15 @@ public class ModRenderTypes {
                     .m21(tribulationCloudStyle).m22(tribulationCloudPatchiness).m23(tribulationCloudClosedAt)
                     .m03(tribulationCloudEyeAt)
                     .m13(tribulationCloudLayer)
+                    .m33(tribulationCloudDissipating)
     );
 
     private static RenderType tribulationClouds;
     private static RenderType tribulationCloudsTop;
     private static RenderType tribulationWisps;
+    private static RenderType tribulationStreams;
+    private static RenderType tribulationMinecraftClouds;
+    private static RenderType tribulationRift;
     private static RenderType tribulationLightning;
 
     public static RenderType energyLines() {
@@ -160,6 +166,44 @@ public class ModRenderTypes {
             );
         }
         return tribulationWisps;
+    }
+
+    public static RenderType tribulationStreams() {
+        if (tribulationStreams == null) {
+            tribulationStreams = RenderType.create(
+                    "ascension_tribulation_streams",
+                    RenderSetup.builder(ModRenderPipelines.TRIBULATION_STREAMS)
+                            .setOutputTarget(MAIN_TARGET)
+                            .setTextureTransform(TRIBULATION_CLOUD_FLOW)
+                            .createRenderSetup()
+            );
+        }
+        return tribulationStreams;
+    }
+
+    public static RenderType tribulationMinecraftClouds() {
+        if (tribulationMinecraftClouds == null) {
+            tribulationMinecraftClouds = RenderType.create(
+                    "ascension_tribulation_minecraft_clouds",
+                    RenderSetup.builder(ModRenderPipelines.TRIBULATION_MINECRAFT_CLOUDS)
+                            .setOutputTarget(MAIN_TARGET)
+                            .createRenderSetup()
+            );
+        }
+        return tribulationMinecraftClouds;
+    }
+
+    public static RenderType tribulationRift() {
+        if (tribulationRift == null) {
+            tribulationRift = RenderType.create(
+                    "ascension_tribulation_rift",
+                    RenderSetup.builder(ModRenderPipelines.TRIBULATION_RIFT)
+                            .setOutputTarget(MAIN_TARGET)
+                            .setTextureTransform(TRIBULATION_CLOUD_FLOW)
+                            .createRenderSetup()
+            );
+        }
+        return tribulationRift;
     }
 
     public static RenderType tribulationLightning() {

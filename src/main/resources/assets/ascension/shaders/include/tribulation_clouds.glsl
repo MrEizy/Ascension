@@ -171,6 +171,83 @@ float cloudThickness(vec2 uv, float rn, vec2 cellOffset) {
 const int CLOUD_STYLE_CORES = 0;
 const int CLOUD_STYLE_RIM = 1;
 const int CLOUD_STYLE_EYE = 2;
+const int CLOUD_STYLE_SCATTER = 3;
+const int CLOUD_STYLE_VORTEX = 4;
+
+//the vortex eye is full size this far into gathering, and has gone out this far into breaking up
+const float VORTEX_EYE_GROWN = 0.15;
+//the dot of light the vortex eye grows from, as a fraction of its full size
+const float VORTEX_EYE_DOT = 0.12;
+
+//how big the vortex eye is, as a fraction of its full size. 0 once it has gone out
+float cloudVortexEyeScale(float formation, bool dissipating) {
+    if (dissipating) {
+        //shrinks away at the very start of breaking up, before any cloud goes
+        return smoothstep(1.0 - VORTEX_EYE_GROWN, 1.0, formation);
+    }
+    //a dot of light that quickly swells, fast at first and settling into its full size
+    float grown = clamp(formation / VORTEX_EYE_GROWN, 0.0, 1.0);
+    grown = 1.0 - (1.0 - grown) * (1.0 - grown);
+    return mix(VORTEX_EYE_DOT, 1.0, grown);
+}
+
+//the patches the vortex gathers and breaks up in, 0 to 1. takes noise uv. finer than the wobble, so the rim gets many small clumps
+float cloudVortexPatch(vec2 uv) {
+    return cloudFbm(vec2(uv.x * CLOUD_PERIOD * 2.0, uv.y * 1.2) + vec2(0.0, 41.0), CLOUD_PERIOD * 2.0);
+}
+
+//the unseen source clouds past the rim that the vortex pulls its streams from, evenly spaced around it.
+//must match STREAMS in TribulationCloudRenderer
+const float VORTEX_STREAMS = 3.0;
+//log of how far out the sources are, as a fraction of the radius. must match STREAM_SOURCE in TribulationCloudRenderer
+const float VORTEX_STREAM_SOURCE = 0.47;
+//half the width of a stream ribbon in turns, the same at every radius. must match STREAM_WIDTH / TAU in TribulationCloudRenderer
+const float VORTEX_STREAM_WIDTH = 0.055;
+//the streams start pulling once the eye has mostly grown, and their heads reach the eye this far towards closedAt
+const float VORTEX_REACH_START = 0.1;
+const float VORTEX_REACH_END = 0.6;
+
+//the log rn the heads of the streams have been pulled in to
+float cloudVortexStreamHead(float formation, float closedAt) {
+    float reach = clamp((formation - VORTEX_REACH_START) / (closedAt * VORTEX_REACH_END - VORTEX_REACH_START), 0.0, 1.0);
+    return mix(VORTEX_STREAM_SOURCE, log(CLOUD_EYE), reach);
+}
+
+/**
+ * how far inside the cloud the streams have brought in this point is, negative outside it.
+ * cloud settles along each stream behind its head, thin just behind the head and fanning out sideways further back,
+ * and keeps spreading until the streams meet into one sea at closedAt.
+ * the streams follow the mesh's spiral arms, so in mesh uv each one is a line of constant x, at a whole fraction of a turn.
+ * meshUv is (spiral coordinate in turns, log rn)
+ */
+float cloudVortexDeposit(vec2 meshUv, float formation, float closedAt) {
+    //how far behind the heads this is, in log radius. negative ahead of them, where nothing has arrived yet
+    float behind = meshUv.y - cloudVortexStreamHead(formation, closedAt);
+    float fromStream = abs(fract(meshUv.x * VORTEX_STREAMS + 0.5) - 0.5) / VORTEX_STREAMS;
+    //how far the deposited cloud has spread out from its stream, slow at first and quicker as more is pulled in
+    float spreading = smoothstep(VORTEX_REACH_START, closedAt, formation);
+    float halfWidth = VORTEX_STREAM_WIDTH * 0.6 * smoothstep(0.0, 0.4, behind)
+            + (0.5 / VORTEX_STREAMS + 0.05) * spreading * spreading * smoothstep(0.0, 0.5, behind);
+    float inside = min((halfWidth - fromStream) * VORTEX_STREAMS * 2.0, behind * 3.0);
+    //the last gaps close as the sea comes together
+    float merge = smoothstep(closedAt * 0.8, closedAt, formation);
+    return max(inside, merge * 1.2 - 0.8);
+}
+
+/**
+ * how far inside the vortex's cloud this point is, negative where there is no cloud yet or any more.
+ * patch is a 0 to 1 noise sampled in noise uv, it frays the edges. meshUv is (spiral coordinate in turns, log rn).
+ * gathering: once the eye has grown, cloud streams in from past the rim and spreads out, see cloudVortexDeposit.
+ * breaking up: nothing goes until the eye is out, then holes open everywhere and widen, a little sooner towards the rim
+ */
+float cloudVortexCoverage(float formation, bool dissipating, vec2 meshUv, float patch, float patchiness, float closedAt) {
+    if (dissipating) {
+        float rn = exp(meshUv.y);
+        float gone = 1.0 - smoothstep(0.0, 1.0 - VORTEX_EYE_GROWN, formation);
+        return patch - gone * (1.15 + (rn - 0.5) * 0.25);
+    }
+    return cloudVortexDeposit(meshUv, formation, closedAt) + (patch - 0.5) * (0.2 + patchiness * 0.6);
+}
 
 /**
  * whether this part of a gathering or breaking up storm has formed yet.
@@ -191,6 +268,6 @@ bool cloudGathered(int style, float formation, float mass, float wobble, float r
         //outward from the eye, the rim last
         return rn - patchiness * wobble <= -0.1 + 1.2 * gathered;
     }
-    //scatter: random patches everywhere that merge
+    //scatter: random patches everywhere that merge. the vortex is handled by cloudVortexCoverage before it gets here
     return wobble + 0.5 >= 1.0 - gathered;
 }

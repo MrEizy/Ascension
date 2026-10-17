@@ -34,6 +34,8 @@ void main() {
     float patchiness = TextureMat[2][2];
     float closedAt = TextureMat[2][3];
     float eyeAt = TextureMat[0][3];
+    bool dissipating = TextureMat[3][3] > 0.5;
+    bool vortex = style == CLOUD_STYLE_VORTEX && formation < 1.0;
     //snap to a log polar pixel grid, the whole pixel takes the colour at its centre.
     //the grid turns with the spiral, while the billows flow inward through it.
     //pixels are square, so they shrink towards the eye like the billows do
@@ -55,19 +57,24 @@ void main() {
         discard;
     }
 
+    //the vortex eye grows from a dot and shrinks away, measuring against a scaled radius shrinks the whole eye with its frayed edge
+    float eyeScale = vortex ? cloudVortexEyeScale(formation, dissipating) : 1.0;
+    float eyeRn = rn / max(eyeScale, 0.001);
+
     //the eye glows like a charged core with a frayed edge, and flares when lightning strikes
-    if (rn < CLOUD_EYE || (rn < EYE_EDGE && fray < 1.0 - smoothstep(CLOUD_EYE, EYE_EDGE, rn))) {
+    if (eyeRn < CLOUD_EYE || (eyeRn < EYE_EDGE && fray < 1.0 - smoothstep(CLOUD_EYE, EYE_EDGE, eyeRn))) {
 #ifdef TOP_LAYER
         //only the underside draws the eye, both sheets meet there
         discard;
 #endif
-        //the eye is the last thing to form, and the first to go dark when the storm breaks up
-        if (formation < eyeAt) {
+        //the eye is the last thing to form, and the first to go dark when the storm breaks up. the vortex eye is the first to form instead
+        if (!vortex && formation < eyeAt) {
             discard;
         }
         float churn = cloudFbm(vec2(uv.x * CLOUD_PERIOD * 2.0, uv.y * 3.0 - flow * EYE_CHURN), CLOUD_PERIOD * 2.0);
         float energy = 0.3 + 0.5 * smoothstep(0.35, 0.8, churn) + glow * 1.5;
-        energy *= smoothstep(eyeAt, 1.0, formation);
+        //the vortex eye blazes as it grows and dims as it shrinks
+        energy *= vortex ? (dissipating ? eyeScale : 1.0) : smoothstep(eyeAt, 1.0, formation);
         energy = floor(energy * 4.0) / 4.0;
         //the tint only colours the clouds, the eye has its own palette
         vec3 eye = cloudRamp(eyeShadow, eyeBase, eyeHighlight, clamp(energy, 0.0, 1.0)) + glowColor * glow;
@@ -80,9 +87,20 @@ void main() {
 #else
     vec2 cellOffset = vec2(0.0);
 #endif
+    //where the small vortex eye does not reach yet, or no longer does, is open sky
+    if (vortex && rn < CLOUD_EYE) {
+        discard;
+    }
+
     float wobble = cloudWobble(uv);
-    //a gathering storm only shows the parts its style has formed so far, breaking up runs the same style backwards
-    if (formation < closedAt) {
+    //a gathering storm only shows the parts its style has formed so far, breaking up runs the same style backwards.
+    //the vortex breaks up in its own order, so it has to check the whole way through
+    if (vortex) {
+        if ((dissipating || formation < closedAt)
+                && cloudVortexCoverage(formation, dissipating, vec2(pixelX, pixelLog), cloudVortexPatch(uv), patchiness, closedAt) < 0.0) {
+            discard;
+        }
+    } else if (formation < closedAt) {
         float eyewallWeight;
         float mass = cloudMass(uv, rn, 0.15, wobble, eyewallWeight);
         if (!cloudGathered(style, formation, mass, wobble, rn, patchiness, closedAt)) {

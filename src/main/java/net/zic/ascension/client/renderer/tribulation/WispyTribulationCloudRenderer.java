@@ -46,8 +46,8 @@ public class WispyTribulationCloudRenderer<T extends TribulationData> extends Tr
     }
 
     @Override
-    protected void renderClouds(MultiBufferSource.BufferSource buffers, PoseStack.Pose pose, CloudState state, Vec3 camera,
-                                float time, int tint, float flash, float viewDistance) {
+    protected void renderClouds(MultiBufferSource.BufferSource buffers, PoseStack.Pose pose, CloudState state, Formation formation,
+                                Vec3 camera, float time, float partialTick, int tint, float flash, float viewDistance) {
         float radius = settings.radius();
         int step = lodStep(state, (float) (radius / Math.max(camera.length(), 1.0D)));
         boolean lit = isLit(state, flash);

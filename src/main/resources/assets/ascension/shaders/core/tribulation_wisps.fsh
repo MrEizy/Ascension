@@ -34,7 +34,16 @@ float cloudRidge(vec2 p, float period) {
 
 //how much of this part of a gathering or breaking up storm is there, soft so the wisps fade in instead of popping.
 //the same shapes as cloudGathered, with the streak density standing in for the mass
-float wispGathered(int style, float formation, float density, float wobble, float rn, float patchiness, float closedAt) {
+float wispGathered(int style, float formation, bool dissipating, float density, float wobble, float patch, vec2 meshUv,
+                   float patchiness, float closedAt) {
+    float rn = exp(meshUv.y);
+    //the vortex breaks up in its own order, so it has to check the whole way through
+    if (style == CLOUD_STYLE_VORTEX && formation < 1.0) {
+        if (!dissipating && formation >= closedAt) {
+            return 1.0;
+        }
+        return smoothstep(-0.08, 0.08, cloudVortexCoverage(formation, dissipating, meshUv, patch, patchiness, closedAt));
+    }
     if (formation >= closedAt) {
         return 1.0;
     }
@@ -67,6 +76,8 @@ void main() {
     float closedAt = TextureMat[2][3];
     float eyeAt = TextureMat[0][3];
     float layer = TextureMat[1][3];
+    bool dissipating = TextureMat[3][3] > 0.5;
+    bool vortex = style == CLOUD_STYLE_VORTEX && formation < 1.0;
 
     float rn = exp(cloudUv.y);
     //each layer gets its own streaks. the shift is along the streaks, so the noise still tiles around the circle
@@ -95,12 +106,17 @@ void main() {
     float layerOpacity = mix(0.9, 0.45, layer / (WISP_LAYERS - 1.0));
 
     float alpha = (density * 0.85 + filaments * 0.35) * rim * inner * layerOpacity;
-    alpha *= wispGathered(style, formation, density, broad - 0.5, rn, patchiness, closedAt);
+    //the vortex patches flow inward with the streaks, so they are drawn into the spin
+    float patch = vortex ? cloudVortexPatch(vec2(s, along * CLOUD_RADIAL_SCALE)) : 0.0;
+    alpha *= wispGathered(style, formation, dissipating, density, broad - 0.5, patch, cloudUv, patchiness, closedAt);
 
     //lightning glow arrives in the vertex alpha. the lightning comes from the eye, so it glows in its highlight
     float glow = clamp(vertexColor.a, 0.0, 1.0);
-    //light from the eye catches the clouds around it, once the eye has lit
-    float eyeOn = smoothstep(eyeAt, 1.0, formation);
+    //the vortex eye grows from a dot and shrinks away, measuring against a scaled radius shrinks the whole eye
+    float eyeScale = vortex ? cloudVortexEyeScale(formation, dissipating) : 1.0;
+    float eyeRn = rn / max(eyeScale, 0.001);
+    //light from the eye catches the clouds around it, once the eye has lit. the vortex eye is lit from the start and dims as it shrinks
+    float eyeOn = vortex ? (dissipating ? eyeScale : 1.0) : smoothstep(eyeAt, 1.0, formation);
     float eyeLight = (1.0 - smoothstep(0.0, EYE_LIGHT, rn)) * eyeOn;
 
     float tone = clamp(0.15 + density * 0.55 + filaments * 0.4 + eyeLight * 0.3, 0.0, 1.0);
@@ -109,9 +125,9 @@ void main() {
     color += eyeHighlight * (eyeLight * eyeLight * 0.6 + glow);
 
     //only the lowest layer draws the eye, a churning core of light the streaks pour into
-    if (layer < 0.5 && rn < WISP_EYE * 2.5) {
+    if (layer < 0.5 && eyeRn < WISP_EYE * 2.5) {
         float churn = cloudFbm(vec2(s * 12.0, cloudUv.y * 3.0 - flow * EYE_CHURN), 12.0);
-        float core = 1.0 - smoothstep(WISP_EYE * 0.3, WISP_EYE * 2.5, rn + (churn - 0.5) * WISP_EYE);
+        float core = 1.0 - smoothstep(WISP_EYE * 0.3, WISP_EYE * 2.5, eyeRn + (churn - 0.5) * WISP_EYE);
         float energy = clamp(core * (0.6 + 0.4 * churn) + glow, 0.0, 1.0);
         float eyeAlpha = core * eyeOn;
         //the tint only colours the clouds, the eye has its own palette

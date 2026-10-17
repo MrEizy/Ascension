@@ -143,10 +143,10 @@ public class LightningTribulation extends EntityTargetingTribulation<LightningTr
     protected TribulationCloudRenderer.Formation formation(LightningTribulationData data, float ticksSinceSync) {
         float progress = data.transitionProgress(clouds.forming().ticks(), clouds.dissipating().ticks(), ticksSinceSync);
         return switch (data.getPhase()) {
-            case FORMING -> new TribulationCloudRenderer.Formation(progress, clouds.forming());
+            case FORMING -> new TribulationCloudRenderer.Formation(progress, clouds.forming(), false);
             case ACTIVE -> TribulationCloudRenderer.Formation.FORMED;
             //dissipating plays its style backwards, from formed to clear sky
-            case DISSIPATING -> new TribulationCloudRenderer.Formation(1.0F - progress, clouds.dissipating());
+            case DISSIPATING -> new TribulationCloudRenderer.Formation(1.0F - progress, clouds.dissipating(), true);
         };
     }
 }

@@ -4,12 +4,12 @@
   "damage": 2.0,
   "tick_delay": 40,
   "clouds": {
-    "radius": 800,
+    "radius": 300,
     "rotation_speed": 0.3,
-    "render_height": 300,
+    "render_height": 200,
     "pixel_size": 1,
     "cloud_colors": { "shadow": "#000000", "base": "#1f0100", "highlight": "#ff0800" },
-    "forming": { "style": "eye" },
+    "forming": { "style": "vortex" },
     "eye_colors": {
       "shadow": "#2b0057",
       "base": "#000000",

@@ -36,6 +36,9 @@ public class ModRenderPipelines {
     public static RenderPipeline TRIBULATION_CLOUDS;
     public static RenderPipeline TRIBULATION_CLOUDS_TOP;
     public static RenderPipeline TRIBULATION_WISPS;
+    public static RenderPipeline TRIBULATION_STREAMS;
+    public static RenderPipeline TRIBULATION_MINECRAFT_CLOUDS;
+    public static RenderPipeline TRIBULATION_RIFT;
     public static RenderPipeline TRIBULATION_LIGHTNING;
 
     @SubscribeEvent
@@ -129,6 +132,32 @@ public class ModRenderPipelines {
                 .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
                 .withCull(false)
                 .build();
+        //the streams a vortex pulls in while it gathers, see through like the wisps
+        TRIBULATION_STREAMS = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/tribulation_streams"))
+                .withVertexShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/tribulation_streams"))
+                .withFragmentShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/tribulation_streams"))
+                .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+                .withCull(false)
+                .build();
+        //minecraft style cloud boxes with their colours baked into the vertices. solid, so they write depth and need no sorting
+        TRIBULATION_MINECRAFT_CLOUDS = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/tribulation_minecraft_clouds"))
+                .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, true))
+                .withCull(false)
+                .build();
+        //the tear in the sky at the eye of a minecraft cloud storm, a dark void with a glowing edge drawn over the clouds
+        TRIBULATION_RIFT = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/tribulation_rift"))
+                .withVertexShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/tribulation_rift"))
+                .withFragmentShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/tribulation_rift"))
+                .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+                .withCull(false)
+                .build();
         //same glow as vanilla lightning, without the fog uniform
         TRIBULATION_LIGHTNING = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
                 .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/tribulation_lightning"))
@@ -139,6 +168,9 @@ public class ModRenderPipelines {
         event.registerPipeline(TRIBULATION_CLOUDS);
         event.registerPipeline(TRIBULATION_CLOUDS_TOP);
         event.registerPipeline(TRIBULATION_WISPS);
+        event.registerPipeline(TRIBULATION_STREAMS);
+        event.registerPipeline(TRIBULATION_MINECRAFT_CLOUDS);
+        event.registerPipeline(TRIBULATION_RIFT);
         event.registerPipeline(TRIBULATION_LIGHTNING);
     }
 

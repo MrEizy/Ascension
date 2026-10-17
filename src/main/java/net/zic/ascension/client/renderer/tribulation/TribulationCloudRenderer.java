@@ -63,6 +63,20 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     //1 in this chance per tick of a new flicker bolt somewhere in the cloud
     private static final int FLICKER_CHANCE = 6;
 
+    //the streams a gathering vortex pulls its cloud in along, from unseen source clouds past the rim.
+    //STREAMS, STREAM_SOURCE and STREAM_WIDTH / 2π must match VORTEX_STREAMS, VORTEX_STREAM_SOURCE and VORTEX_STREAM_WIDTH in the tribulation_clouds include
+    private static final int STREAMS = 3;
+    //log of where the streams start and end, as a fraction of the radius. they start past the rim and run into the eye
+    private static final float STREAM_SOURCE = 0.47F;
+    private static final float STREAM_END = (float) Math.log(0.03F);
+    //half the width of a stream as a fraction of its distance from the eye, so it narrows as it winds in like the spiral arms do
+    private static final float STREAM_WIDTH = 0.055F * Mth.TWO_PI;
+    //how far below the cloud base the streams run, as a fraction of the radius, so the gathered cloud swallows them
+    private static final float STREAM_DROP = 0.015F;
+    //how fast the cloud slides along a stream, in log radius per tick
+    private static final float STREAM_FLOW = 0.01F;
+    private static final int STREAM_SEGMENTS = 96;
+
     //coarser meshes for storms that look small on screen. each step must divide SEGMENTS so the seam still closes.
     //a step is used while the storm's radius divided by its distance is at least the matching size
     private static final int[] LOD_STEPS = {1, 2, 4};
@@ -131,12 +145,12 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         }
     }
 
-    private Formation formation(CloudState state, ClientTribulation<T> tribulation, float partialTick) {
+    protected Formation formation(CloudState state, ClientTribulation<T> tribulation, float partialTick) {
         syncFormation(state, tribulation);
         return formation.progress(tribulation.getData(), state.ticksSinceSync + partialTick);
     }
 
-    private CloudState state(ClientTribulation<T> tribulation) {
+    protected CloudState state(ClientTribulation<T> tribulation) {
         return states.computeIfAbsent(tribulation.getId(), CloudState::new);
     }
 
@@ -156,7 +170,8 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         Formation formation = formation(state, tribulation, 0.0F);
         //lightning only crawls through a storm that has mostly gathered
         if (formation.formed() > formation.lightningAt() && random.nextInt(FLICKER_CHANCE) == 0) {
-            state.bolts.add(createBolt(random, state.angle));
+            FlickerBolt bolt = createBolt(state, random);
+            if (bolt != null) state.bolts.add(bolt);
         }
 
         if (state.flashTicks > 0) state.flashTicks--;
@@ -194,6 +209,7 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         ModRenderTypes.tribulationCloudPatchiness = transition.patchiness();
         ModRenderTypes.tribulationCloudClosedAt = transition.closedAt();
         ModRenderTypes.tribulationCloudEyeAt = transition.eyeAt();
+        ModRenderTypes.tribulationCloudDissipating = formation.dissipating() ? 1.0F : 0.0F;
 
         PoseStack poseStack = event.getPoseStack();
         poseStack.pushPose();
@@ -203,7 +219,8 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
 
         //the camera relative to the eye, for skipping the parts of a huge storm past the far end of the view
         float viewDistance = minecraft.options.getEffectiveRenderDistance() * 16.0F * 4.0F;
-        renderClouds(buffers, pose, state, eye.reverse(), time, tint, flash, viewDistance);
+        renderClouds(buffers, pose, state, formation, eye.reverse(), time, partialTick, tint, flash, viewDistance);
+        renderStreams(buffers, pose, state, formation, time, tint);
 
         if (!state.bolts.isEmpty()) {
             VertexConsumer lightning = buffers.getBuffer(ModRenderTypes.tribulationLightning());
@@ -232,10 +249,11 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     /**
      * draws the cloud itself, the colours and formation are already in ModRenderTypes and the pose is at the eye
      * @param camera the camera relative to the eye
+     * @param time the tribulation's age, partial tick included
      * @param viewDistance parts of the storm further than this from the camera are past the end of the view
      */
-    protected void renderClouds(MultiBufferSource.BufferSource buffers, PoseStack.Pose pose, CloudState state, Vec3 camera,
-                                float time, int tint, float flash, float viewDistance) {
+    protected void renderClouds(MultiBufferSource.BufferSource buffers, PoseStack.Pose pose, CloudState state, Formation formation,
+                                Vec3 camera, float time, float partialTick, int tint, float flash, float viewDistance) {
         //square pixels need a whole number around the circle so the grid closes at the seam
         ModRenderTypes.tribulationCloudPixels = Math.max(16, Math.round(Mth.TWO_PI * settings.radius() / settings.pixelSize()));
         ModRenderTypes.tribulationCloudThickness = settings.radius() * THICKNESS;
@@ -254,6 +272,66 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         if (cameraHeight > 0.0D) {
             drawSheet(buffers, ModRenderTypes.tribulationCloudsTop(), pose, state, time, angle, tint, flash, step, cameraX, cameraZ, viewDistance);
         }
+    }
+
+    //a gathering vortex pulls its cloud in along streams from outside the storm
+    protected void renderStreams(MultiBufferSource.BufferSource buffers, PoseStack.Pose pose, CloudState state, Formation formation,
+                                 float time, int tint) {
+        if (formation.transition() != null && formation.transition().style() == TribulationCloudTransition.Style.VORTEX
+                && !formation.dissipating()) {
+            drawStreams(buffers, pose, state, time, tint);
+        }
+    }
+
+    //shadow at level 0, base at 0.5 and highlight at 1, the same as cloudRamp in the tribulation_clouds include
+    protected static int ramp(TribulationCloudPalette palette, float level) {
+        return level < 0.5F
+                ? ARGB.srgbLerp(level * 2.0F, palette.shadow(), palette.base())
+                : ARGB.srgbLerp(level * 2.0F - 1.0F, palette.base(), palette.highlight());
+    }
+
+    /**
+     * the streams follow the spiral arms in from past the rim to the eye, as flat ribbons just under the cloud base.
+     * each is placed where the clouds' spiral coordinate is a whole fraction of a turn, which is where the
+     * tribulation_clouds shader settles the cloud they bring in
+     */
+    private void drawStreams(MultiBufferSource.BufferSource buffers, PoseStack.Pose pose, CloudState state, float time, int tint) {
+        VertexConsumer consumer = buffers.getBuffer(ModRenderTypes.tribulationStreams());
+        int color = ARGB.color(0, tint);
+        for (int stream = 0; stream < STREAMS; stream++) {
+            //the angle the clouds' spiral coordinate is stream / STREAMS at the centre, undoing the offset and spin the sheets add
+            float start = Mth.TWO_PI * (stream / (float) STREAMS - state.spiralOffset) + state.angle;
+            for (int i = 0; i < STREAM_SEGMENTS; i++) {
+                streamVertex(consumer, pose, start, i, -1.0F, color);
+                streamVertex(consumer, pose, start, i, 1.0F, color);
+                streamVertex(consumer, pose, start, i + 1, 1.0F, color);
+                streamVertex(consumer, pose, start, i + 1, -1.0F, color);
+            }
+        }
+        //read through the texture matrix when the batch is drawn, so it has to be set before ending it
+        ModRenderTypes.tribulationCloudFlow = time * STREAM_FLOW + state.flowOffset;
+        buffers.endLastBatch();
+    }
+
+    private void streamVertex(VertexConsumer consumer, PoseStack.Pose pose, float start, int segment, float side, int color) {
+        float log = Mth.lerp(segment / (float) STREAM_SEGMENTS, STREAM_SOURCE, STREAM_END);
+        float r = (float) Math.exp(log) * settings.radius();
+        //winds the same way as the spiral arms, turning further round the closer it gets
+        float theta = start - TWIST * log;
+        float cos = Mth.cos(theta);
+        float sin = Mth.sin(theta);
+        //the direction along the spiral, turned flat by a quarter to go across it
+        float alongX = cos + TWIST * sin;
+        float alongZ = sin - TWIST * cos;
+        float alongLength = Mth.sqrt(alongX * alongX + alongZ * alongZ);
+        float offset = STREAM_WIDTH * r * side / alongLength;
+        float x = cos * r - alongZ * offset;
+        float z = sin * r + alongX * offset;
+        float y = cloudBaseHeight(r / settings.radius()) - STREAM_DROP * settings.radius();
+        //uv is across the stream from -1 to 1 and the exact log radius
+        consumer.addVertex(pose, x, y, z)
+                .setUv(side, log)
+                .setColor(color);
     }
 
     //height of the cloud base above the eye at this fraction of the radius, the bolts crawl just under it
@@ -347,9 +425,11 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
 
     /**
      * the spiral arms are lines where theta + TWIST * log(rn) - angle stays the same,
-     * so the bolt walks inward along one of them in a few straight pieces
+     * so the bolt walks inward along one of them in a few straight pieces.
+     * storms that are not one solid sheet can return null where there is no cloud to crawl through
      */
-    private FlickerBolt createBolt(RandomSource random, float angle) {
+    protected @Nullable FlickerBolt createBolt(CloudState state, RandomSource random) {
+        float angle = state.angle;
         float radius = settings.radius();
         float startRn = 0.15F + random.nextFloat() * 0.65F;
         float startTheta = random.nextFloat() * Mth.TWO_PI;
@@ -425,9 +505,10 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     /**
      * @param progress how far the storm has gathered before easing, 0 for clear sky and 1 for the full storm
      * @param transition the transition it is gathering or breaking up with, null once it has fully formed
+     * @param dissipating true while it breaks up. most styles just play backwards, the vortex breaks up in its own order
      */
-    public record Formation(float progress, @Nullable TribulationCloudTransition transition) {
-        public static final Formation FORMED = new Formation(1.0F, null);
+    public record Formation(float progress, @Nullable TribulationCloudTransition transition, boolean dissipating) {
+        public static final Formation FORMED = new Formation(1.0F, null, false);
 
         //the eased formation the shaders and spin use
         public float formed() {
@@ -444,7 +525,7 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     }
 
     protected static final class CloudState {
-        private final RandomSource random = RandomSource.create();
+        final RandomSource random = RandomSource.create();
         final List<FlickerBolt> bolts = new ArrayList<>();
         //shifts the noise so tribulations next to each other do not look identical
         final float spiralOffset;
@@ -476,7 +557,7 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
     }
 
     //a bolt following a spiral arm just under the cloud, relative to the eye
-    private static final class FlickerBolt {
+    static final class FlickerBolt {
         private final List<Vec3> points;
         //the middle as floats, it is compared against every cloud vertex
         private final float middleX;
@@ -485,7 +566,7 @@ public class TribulationCloudRenderer<T extends TribulationData> implements Trib
         private final int lifetime;
         private int ticksLeft;
 
-        private FlickerBolt(List<Vec3> points, int lifetime) {
+        FlickerBolt(List<Vec3> points, int lifetime) {
             this.points = points;
             Vec3 middle = points.get(points.size() / 2);
             this.middleX = (float) middle.x;

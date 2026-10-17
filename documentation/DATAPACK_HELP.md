@@ -410,6 +410,14 @@ Styles:
 | `rim` | Gathers from the outer edge and sweeps inward, the eye last. | Retreats outward, the rim last. |
 | `eye` | Spreads outward from the eye, the rim last. | Collapses back into the eye. |
 | `scatter` | Random patches appear everywhere and merge. | Breaks into random patches that fade. |
+| `vortex` | A dot of light appears and quickly grows into the full eye. Then three streams of cloud are pulled in from past the rim, winding along the spiral into the eye. The cloud they bring settles behind them and spreads out sideways, until the streams merge into the sea of clouds at `closed_at` and fade away. A low `spin_start` makes the storm visibly spin up as they gather. `patchiness` controls how ragged the clumps are. | The eye shrinks and goes out first. Then holes open up all over the clouds and widen until nothing is left. |
+
+`vortex` is the only style whose dissipating is not its forming played backwards, because the eye comes first both times. It ignores `eye_at`: the eye is fully grown 15% of the way into forming, and has gone out 15% of the way into dissipating. The storm already slows down as it dissipates, and setting `spin_start` to `0` on `dissipating` makes it come to a complete stop as the last clouds fade:
+
+```json
+"forming": { "ticks": 200, "style": "vortex" },
+"dissipating": { "ticks": 160, "style": "vortex", "spin_start": 0 }
+```
 
 Every colour in `cloud_colors` and `eye_colors` is optional and takes the same formats as `tint`. For a red tribulation with a fiery eye:
 
@@ -417,6 +425,15 @@ Every colour in `cloud_colors` and `eye_colors` is optional and takes the same f
 "cloud_colors": { "shadow": "#1E1214", "base": "#5A3A3E", "highlight": "#C8A0A0" },
 "eye_colors": { "shadow": "#200808", "base": "#7A1410", "highlight": "#FF8060" }
 ```
+
+`ascension:v3_tribulation_type` also takes exactly the same fields and strikes the same way, but builds its storm only out of Minecraft clouds: the blocky 12×4×12 cells in the shapes of the vanilla cloud texture.
+- **Spawning:** clouds appear just outside the edge of the storm in the sky's own cloud colour, so it changes with the time of day and the weather. They are pulled inward in a spiral and take on the `cloud_colors` as they go. Near the eye they glow in the `eye_colors`, then they are swallowed by the eye.
+- **Pull speed:** a cloud takes 60% of the `forming` ticks to go from the edge to the eye (at least 160 and at most 1200 ticks), so the storm is full by the time the strikes begin.
+- **Gathering:** a trickle of clouds comes at first, building to the full rate a third of the way through forming.
+- **Lightning:** the flickering bolts only crawl under clouds that are already part of the storm, never through empty sky.
+- **The rift:** the eye holds a jagged tear in the sky, a dark void with drifting stars and edges glowing in the `eye_colors`. It opens as the eye lights at `eye_at`, flares and widens on every strike, and is the first thing to seal when the storm breaks up.
+- **Breaking up:** no new clouds come. The ones left lose their colour, slow down with the storm, and fall apart cell by cell.
+- **Transition fields:** it uses `ticks`, `easing`, `spin_start`, `eye_at` and `lightning_at`, and ignores `style`, `patchiness`, `closed_at` and `pixel_size`.
 
 `ascension:v2_tribulation_type` takes exactly the same fields and strikes the same way as `ascension:lightning`, but draws its storm as a vortex of wispy, see-through streaks swirling into the glowing eye instead of the pixelated hurricane. The streaks are drawn in three thin stacked layers that turn at slightly different speeds, and the vortex rises gently towards the eye. `render_height` is the height of the rim, and `pixel_size` is ignored. In the colours, the `shadow` is used for faint haze, the `base` for the streaks, and the `highlight` for the bright filaments. The eye's highlight also lights up the clouds around the eye.
 

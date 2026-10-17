@@ -21,6 +21,11 @@ public class AscensionTribulationTypes {
             "v2_tribulation_type",
             V2TribulationType::new
     );
+    //lightning whose storm is made of minecraft clouds pulled in from around it
+    public static final DeferredHolder<TribulationType<?>, V3TribulationType> V3_TRIBULATION = TRIBULATION_TYPES.register(
+            "v3_tribulation_type",
+            V3TribulationType::new
+    );
     public static void register(IEventBus eventBus){
 
         TRIBULATION_TYPES.register(eventBus);
