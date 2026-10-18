@@ -20,6 +20,7 @@ import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
+import net.zic.ascension.skill_casting.SkillCaster;
 import net.zic.ascension.common.util.ModTags;
 import net.zic.ascension.impl.core.skill.passive.PassiveCombatService;
 
@@ -253,8 +254,9 @@ public final class StaggerService {
         state.setProfile(profileId, context.skill());
         state.beginGuardBreak(duration, immunityDuration);
 
-        if (definition.interruptHeldCasts() && target instanceof Player player) {
-            player.getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER).interruptCast();
+        if (definition.interruptHeldCasts()) {
+            SkillCaster caster = SkillCaster.getExisting(target);
+            if (caster != null) caster.interruptCast();
         }
 
         if (definition.onGuardBreak().isEmpty()) {

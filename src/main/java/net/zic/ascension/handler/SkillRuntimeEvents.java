@@ -34,6 +34,7 @@ import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.effects.ModEffects;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
+import net.zic.ascension.skill_casting.SkillCaster;
 import net.zic.ascension.impl.core.effect.FrozenStateService;
 import net.zic.ascension.impl.core.effect.SkillEffectManager;
 import net.zic.ascension.impl.core.effect.SkillEffectModules;
@@ -55,8 +56,9 @@ public final class SkillRuntimeEvents {
 
     @SubscribeEvent
     public static void onResolvedDamage(RPGEngineEntityDamagedEvent.Post event) {
-        if (event.getEntity() instanceof ServerPlayer player && event.getDamage() > 0.0D) {
-            player.getData(AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER).recordDamage((float) event.getDamage());
+        if (event.getEntity() instanceof LivingEntity damaged && !damaged.level().isClientSide() && event.getDamage() > 0.0D) {
+            SkillCaster caster = SkillCaster.getExisting(damaged);
+            if (caster != null) caster.recordDamage((float) event.getDamage());
         }
         if (event.getDamage() <= 0.0D) {
             return;

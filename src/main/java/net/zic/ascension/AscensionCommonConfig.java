@@ -28,6 +28,9 @@ public class AscensionCommonConfig {
     // Weapon Projections
     public final ModConfigSpec.BooleanValue WEAPON_PROJECTION_BLOCK_BREAKING;
 
+    // Skill Casting
+    public final ModConfigSpec.IntValue SKILL_HOT_BAR_SLOTS;
+
     //public final ModConfigSpec.ConfigValue<Map<String,Long>> SPIRIT_STONE_CAPACITY;
 
     public AscensionCommonConfig(ModConfigSpec.Builder builder) {
@@ -127,6 +130,15 @@ public class AscensionCommonConfig {
                         "Disable this to keep projection entity damage and collision while preventing terrain damage. [Default: true]"
                 )
                 .define("blockBreakingEnabled", true);
+        builder.pop();
+
+        builder.push("SkillCasting");
+        SKILL_HOT_BAR_SLOTS = builder
+                .comment(
+                        "Number of slots in the skill hot bar. Read on the server and synced to clients.",
+                        "Lowering it drops skills slotted beyond the new size the next time a player loads. [Default: 6]"
+                )
+                .defineInRange("hotBarSlots", 6, 1, 12);
         builder.pop();
 
 
