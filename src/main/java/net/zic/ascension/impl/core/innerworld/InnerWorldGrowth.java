@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Grows inner worlds ring by ring, chunk by chunk, spread across ticks. The invisible border only
+ * advances when a whole ring has finished, so players never see (or stand on) half-built land.
+ * Terrain is a deterministic function of world coordinates, so re-running a ring is harmless.
+ */
 public final class InnerWorldGrowth {
     private InnerWorldGrowth() {
     }
@@ -33,7 +38,14 @@ public final class InnerWorldGrowth {
     private static Job current;
     private static int nextColumn;
 
+    private static final Map<Integer, SeededWorld> SEEDED = new HashMap<>();
+
+    static SeededWorld seededFor(MinecraftServer server, InnerWorldPlots.Plot plot) {
+        return SEEDED.computeIfAbsent(plot.index, i -> SeededWorld.build(server.registryAccess(), plot.seed));
+    }
+
     public static void clear() {
+        SEEDED.clear();
         QUEUE.clear();
         QUEUED.clear();
         current = null;
@@ -55,6 +67,9 @@ public final class InnerWorldGrowth {
     }
 
     public static void ensureQueued(MinecraftServer server, UUID owner, InnerWorldPlots.Plot plot) {
+        if (plot.generatorVersion >= 1 && plot.seed == null) {
+            return; // seeded plot still waiting for its first cast (no seed yet, so nothing to generate)
+        }
         int target = InnerWorld.radiusChunksForTier(plot.tier);
         int from = Math.max(plot.generatedRadius, QUEUED.getOrDefault(owner, -1)) + 1;
         if (from > target) {
@@ -110,17 +125,31 @@ public final class InnerWorldGrowth {
                 current = null;
                 continue;
             }
+            if (plot.generatorVersion >= 1 && plot.seed == null) {
+                current = null; // unseeded: drop the job rather than generate with the wrong generator
+                continue;
+            }
+            SeededWorld seeded = plot.generatorVersion >= 1 ? seededFor(server, plot) : null;
             long seed = seedFor(plot.index);
             Theme theme = themeFor(seed);
             BlockPos center = InnerWorld.plotCenter(plot.index);
             int baseX = current.cx() * 16;
             int baseZ = current.cz() * 16;
             while (budget > 0 && nextColumn < 256) {
-                fillColumn(level, seed, theme, baseX + (nextColumn & 15), baseZ + (nextColumn >> 4), center.getX(), center.getZ());
+                int wx = baseX + (nextColumn & 15);
+                int wz = baseZ + (nextColumn >> 4);
+                if (seeded != null) {
+                    seeded.fillColumn(level, wx, wz, center.getX(), center.getZ());
+                } else {
+                    fillColumn(level, seed, theme, wx, wz, center.getX(), center.getZ());
+                }
                 nextColumn++;
                 budget--;
             }
             if (nextColumn >= 256) {
+                if (seeded != null) {
+                    InnerWorldBiomes.apply(level, seeded, current.cx(), current.cz(), center.getX(), center.getZ());
+                }
                 finish(server, plot, current);
                 current = null;
             }
@@ -141,7 +170,13 @@ public final class InnerWorldGrowth {
         }
     }
 
-
+    /**
+     * Every plot gets a theme (palette + terrain shape) AND its own noise seed, so two plots
+     * with the same theme still don't look identical — the old version only varied the seed, and
+     * a plain multiply-then-xor seed doesn't scramble adjacent indices enough to look distinct at
+     * these noise frequencies. Same dimension/biome for everyone (that's a flat-generator
+     * limitation we're not fighting), but the hand-placed terrain itself now actually differs.
+     */
     private enum Theme {
         GRASSLAND(Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.STONE, 28.0, 1.0,
                 new Object[]{0.07, Blocks.SHORT_GRASS, 0.075, Blocks.DANDELION, 0.08, Blocks.POPPY, 0.084, Blocks.AZURE_BLUET}),
@@ -159,7 +194,7 @@ public final class InnerWorldGrowth {
         final Block stone;
         final double amplitude;
         final double freqScale;
-        final Object[] decor;
+        final Object[] decor; // threshold, Block, threshold, Block, ...
 
         Theme(Block top, Block sub, Block stone, double amplitude, double freqScale, Object[] decor) {
             this.top = top;
@@ -171,6 +206,7 @@ public final class InnerWorldGrowth {
         }
     }
 
+    /** SplitMix64-style scramble — adjacent plot indices must NOT produce correlated noise fields. */
     private static long seedFor(int plotIndex) {
         long h = (plotIndex + 1L) * 0x9E3779B97F4A7C15L;
         h ^= (h >>> 30);
@@ -190,7 +226,9 @@ public final class InnerWorldGrowth {
     private static void fillColumn(ServerLevel level, long seed, Theme theme, int x, int z, int centerX, int centerZ) {
         double dist = Math.sqrt((double) (x - centerX) * (x - centerX) + (double) (z - centerZ) * (z - centerZ));
         boolean dais = dist <= DAIS_RADIUS;
-
+        // Per-plot jitter derived from the seed alone (constant for the whole plot), so two plots
+        // that happen to roll the same theme still differ in how tall, how bumpy, and how
+        // cluttered they are.
         double ampJitter = 0.7 + hash(seed + 101, 1, 1) * 0.6;      // 0.7 .. 1.3
         double freqJitter = 0.75 + hash(seed + 102, 2, 2) * 0.6;    // 0.75 .. 1.35
         double decorDensity = 0.4 + hash(seed + 103, 3, 3) * 1.4;   // 0.4 .. 1.8
@@ -203,6 +241,8 @@ public final class InnerWorldGrowth {
         double blend = smoothstep(6.0, 18.0, dist);
         int top = InnerWorld.SURFACE_Y + (int) Math.round((n - 0.5) * theme.amplitude * ampJitter * blend);
 
+        // Ponds patchy low-noise basins at a fixed water level. Skipped on the dais, near spawn,
+        // and in themes where water doesn't fit (badlands).
         final int waterLevel = InnerWorld.SURFACE_Y - 2;
         boolean pond = false;
         if (!dais && dist > 16.0 && theme != Theme.MESA) {
@@ -226,6 +266,7 @@ public final class InnerWorldGrowth {
             } else if (y <= bottom + 5) {
                 state = Blocks.DEEPSLATE.defaultBlockState();
             } else if (theme == Theme.MESA) {
+                // Cheap badlands banding: alternate terracotta colors by height, no extra noise cost.
                 state = switch (Math.floorMod(y, 4)) {
                     case 0 -> Blocks.RED_TERRACOTTA.defaultBlockState();
                     case 1 -> Blocks.ORANGE_TERRACOTTA.defaultBlockState();
@@ -243,10 +284,11 @@ public final class InnerWorldGrowth {
             for (int y = top + 1; y <= waterLevel; y++) {
                 level.setBlock(pos.set(x, y, z), fluid, SET_FLAGS);
             }
-            return;
+            return; // no decor or boulders on a pond column
         }
 
         if (!dais) {
+            // Boulders: rare 1-2 block stone piles, more common on rocky/high-density plots.
             double boulderRoll = hash(seed + 9, x, z);
             if (boulderRoll < 0.0018 * decorDensity) {
                 BlockState rock = (theme == Theme.MESA ? Blocks.RED_SANDSTONE : Blocks.COBBLESTONE).defaultBlockState();
@@ -256,6 +298,9 @@ public final class InnerWorldGrowth {
                 }
                 return;
             }
+
+            // Decor thresholds are scaled by the plot's density multiplier, so some plots are
+            // lush meadows and others are nearly bare.
             double roll = hash(seed + 7, x, z) / decorDensity;
             Block decor = null;
             for (int i = 0; i < theme.decor.length; i += 2) {

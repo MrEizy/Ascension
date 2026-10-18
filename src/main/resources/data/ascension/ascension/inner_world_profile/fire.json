@@ -1,0 +1,248 @@
+{
+  "path": "ascension:elemental/fire",
+  "weight_multiplier": 1.0,
+  "variants": [
+    {
+      "weight": 1.2,
+      "biome": "minecraft:nether_wastes",
+      "palette": {
+        "top": "minecraft:netherrack",
+        "sub": "minecraft:netherrack",
+        "stone": "minecraft:blackstone",
+        "decor": [
+          {
+            "block": "minecraft:fire",
+            "chance": 0.004
+          }
+        ]
+      },
+      "terrain": {
+        "amplitude": 26.0,
+        "frequency": 1.1
+      },
+      "features": [
+        {
+          "type": "pools",
+          "block": "minecraft:lava",
+          "density": 0.2
+        },
+        {
+          "type": "spires",
+          "block": "minecraft:basalt",
+          "density": 0.12,
+          "min_size": 2,
+          "max_size": 5,
+          "min_height": 10,
+          "max_height": 26
+        },
+        {
+          "type": "springs",
+          "density": 0.06
+        }
+      ],
+      "qi": {
+        "capacity": 500,
+        "regen": 5,
+        "affinity": 1.4
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:nether_gold_ore",
+            "density": 0.06,
+            "min_depth": 6,
+            "max_depth": 30
+          },
+          {
+            "block": "minecraft:nether_quartz_ore",
+            "density": 0.07,
+            "min_depth": 6,
+            "max_depth": 34
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:ancient_debris",
+            "density": 0.2,
+            "min_depth": 14,
+            "max_depth": 30,
+            "radius": 2
+          }
+        ]
+      }
+    },
+    {
+      "weight": 1.0,
+      "biome": "minecraft:basalt_deltas",
+      "palette": {
+        "top": "minecraft:gravel",
+        "sub": "minecraft:blackstone",
+        "stone": "minecraft:basalt",
+        "decor": [
+          {
+            "block": "minecraft:dead_bush",
+            "chance": 0.01
+          }
+        ]
+      },
+      "terrain": {
+        "amplitude": 14.0,
+        "frequency": 0.8
+      },
+      "features": [
+        {
+          "type": "pillars",
+          "block": "minecraft:obsidian",
+          "density": 0.1,
+          "min_size": 1,
+          "max_size": 3,
+          "min_height": 6,
+          "max_height": 18
+        },
+        {
+          "type": "caves",
+          "density": 0.4
+        }
+      ],
+      "qi": {
+        "capacity": 300,
+        "regen": 3,
+        "affinity": 1.0
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:gilded_blackstone",
+            "density": 0.04,
+            "min_depth": 6,
+            "max_depth": 28
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:raw_copper_block",
+            "density": 0.12,
+            "min_depth": 12,
+            "max_depth": 26,
+            "radius": 2
+          }
+        ]
+      }
+    },
+    {
+      "weight": 0.8,
+      "biome": "minecraft:crimson_forest",
+      "palette": {
+        "top": "minecraft:smooth_basalt",
+        "sub": "minecraft:basalt",
+        "stone": "minecraft:blackstone"
+      },
+      "terrain": {
+        "offset": 6.0,
+        "amplitude": 38.0,
+        "frequency": 1.3,
+        "terrace": 4
+      },
+      "features": [
+        {
+          "type": "mesas",
+          "density": 0.22,
+          "min_size": 14,
+          "max_size": 30,
+          "min_height": 8,
+          "max_height": 20
+        },
+        {
+          "type": "ravines",
+          "density": 0.5,
+          "min_height": 14,
+          "max_height": 30
+        },
+        {
+          "type": "floating_islands",
+          "block": "minecraft:netherrack",
+          "density": 0.1,
+          "min_size": 6,
+          "max_size": 12,
+          "min_height": 50,
+          "max_height": 90
+        }
+      ],
+      "qi": {
+        "capacity": 450,
+        "regen": 4,
+        "affinity": 1.2
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:deepslate_diamond_ore",
+            "density": 0.015,
+            "min_depth": 14,
+            "max_depth": 40,
+            "scale": 4.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:crying_obsidian",
+            "density": 0.18,
+            "min_depth": 16,
+            "max_depth": 34,
+            "radius": 2
+          }
+        ]
+      }
+    },
+    {
+      "weight": 0.7,
+      "biome": "minecraft:badlands",
+      "palette": {
+        "top": "minecraft:red_sand",
+        "sub": "minecraft:red_sandstone",
+        "stone": "minecraft:terracotta",
+        "bands": [
+          "minecraft:red_terracotta",
+          "minecraft:orange_terracotta",
+          "minecraft:terracotta",
+          "minecraft:yellow_terracotta"
+        ]
+      },
+      "terrain": {
+        "amplitude": 20.0,
+        "frequency": 1.0
+      },
+      "features": [
+        {
+          "type": "mesas",
+          "density": 0.3,
+          "min_size": 10,
+          "max_size": 22,
+          "min_height": 8,
+          "max_height": 24
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:lava",
+          "density": 0.06
+        }
+      ],
+      "qi": {
+        "capacity": 250,
+        "regen": 2,
+        "affinity": 0.8
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:gold_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30
+          }
+        ],
+        "treasure": []
+      }
+    }
+  ]
+}

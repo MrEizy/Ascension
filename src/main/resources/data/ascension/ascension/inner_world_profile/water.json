@@ -1,0 +1,216 @@
+{
+  "path": "ascension:elemental/water",
+  "weight_multiplier": 1.0,
+  "variants": [
+    {
+      "weight": 1.2,
+      "biome": "minecraft:beach",
+      "palette": {
+        "top": "minecraft:sand",
+        "sub": "minecraft:sand",
+        "stone": "minecraft:sandstone"
+      },
+      "terrain": {
+        "offset": -2.0,
+        "amplitude": 8.0,
+        "frequency": 0.7
+      },
+      "features": [
+        {
+          "type": "pools",
+          "block": "minecraft:water",
+          "density": 0.35
+        }
+      ],
+      "qi": {
+        "capacity": 350,
+        "regen": 4,
+        "affinity": 1.0
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:lapis_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30
+          }
+        ],
+        "treasure": []
+      }
+    },
+    {
+      "weight": 1.0,
+      "biome": "minecraft:warm_ocean",
+      "palette": {
+        "top": "minecraft:clay",
+        "sub": "minecraft:clay",
+        "stone": "minecraft:prismarine"
+      },
+      "terrain": {
+        "amplitude": 18.0,
+        "frequency": 1.0
+      },
+      "features": [
+        {
+          "type": "spires",
+          "block": "minecraft:prismarine",
+          "density": 0.14,
+          "min_size": 2,
+          "max_size": 5,
+          "min_height": 8,
+          "max_height": 22
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:water",
+          "density": 0.25
+        }
+      ],
+      "qi": {
+        "capacity": 400,
+        "regen": 4,
+        "affinity": 1.2
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:iron_ore",
+            "density": 0.06,
+            "min_depth": 6,
+            "max_depth": 30
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:sea_lantern",
+            "density": 0.15,
+            "min_depth": 10,
+            "max_depth": 24,
+            "radius": 2
+          }
+        ]
+      }
+    },
+    {
+      "weight": 0.9,
+      "biome": "minecraft:ice_spikes",
+      "palette": {
+        "top": "minecraft:snow_block",
+        "sub": "minecraft:packed_ice",
+        "stone": "minecraft:stone",
+        "decor": [
+          {
+            "block": "minecraft:snow",
+            "chance": 0.08
+          }
+        ]
+      },
+      "terrain": {
+        "amplitude": 20.0,
+        "frequency": 0.9
+      },
+      "features": [
+        {
+          "type": "floating_islands",
+          "block": "minecraft:blue_ice",
+          "density": 0.12,
+          "min_size": 6,
+          "max_size": 13,
+          "min_height": 40,
+          "max_height": 80
+        },
+        {
+          "type": "caves",
+          "density": 0.3
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:ice",
+          "density": 0.15
+        }
+      ],
+      "qi": {
+        "capacity": 300,
+        "regen": 3,
+        "affinity": 1.0
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:diamond_ore",
+            "density": 0.015,
+            "min_depth": 14,
+            "max_depth": 40,
+            "scale": 4.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:blue_ice",
+            "density": 0.2,
+            "min_depth": 14,
+            "max_depth": 30,
+            "radius": 3
+          }
+        ]
+      }
+    },
+    {
+      "weight": 0.8,
+      "biome": "minecraft:mangrove_swamp",
+      "palette": {
+        "top": "minecraft:mud",
+        "sub": "minecraft:mud",
+        "stone": "minecraft:stone",
+        "decor": [
+          {
+            "block": "minecraft:brown_mushroom",
+            "chance": 0.01
+          }
+        ]
+      },
+      "terrain": {
+        "offset": -1.0,
+        "amplitude": 10.0,
+        "frequency": 0.8
+      },
+      "features": [
+        {
+          "type": "pools",
+          "block": "minecraft:water",
+          "density": 0.4
+        },
+        {
+          "type": "springs",
+          "density": 0.12
+        }
+      ],
+      "qi": {
+        "capacity": 600,
+        "regen": 6,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:emerald_ore",
+            "density": 0.02,
+            "min_depth": 10,
+            "max_depth": 34,
+            "scale": 4.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:amethyst_block",
+            "density": 0.18,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ]
+      }
+    }
+  ]
+}

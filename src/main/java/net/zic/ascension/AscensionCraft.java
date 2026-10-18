@@ -367,6 +367,11 @@ public class AscensionCraft {
                     ClientboundTribulationRemovePacket.STREAM_CODEC,
                     ClientboundTribulationRemovePacket::handle
             );
+            registrar.playToClient(
+                    InnerWorldVeinsPayload.TYPE,
+                    InnerWorldVeinsPayload.CODEC,
+                    InnerWorldVeinsPayload::handle
+            );
 
         }
     }
