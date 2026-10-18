@@ -1,16 +1,14 @@
 package net.zic.ascension.impl.core.skill.body;
 
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
-import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -214,12 +212,12 @@ public final class BodyCultivationSkillService {
     private static Entry activeEntry(ServerPlayer player, OriginSource source) {
         Entry selected = null;
         for (Identifier skillId : List.copyOf(AscensionOriginSourceHelper.getSkills(source))) {
-            Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, player.registryAccess());
-            SkillData skillData = AscensionOriginSourceHelper.getSkillData(source, skillId);
-            if (!(skill instanceof BodyCultivationSkill bodySkill) || !(skillData instanceof BodyCultivationSkill.Data data)) {
+            SkillInstance<?> held = AscensionOriginSourceHelper.getSkill(source, skillId);
+            SkillInstance<BodyCultivationSkill.Data> instance = held == null ? null : held.as(BodyCultivationSkill.class);
+            if (instance == null) {
                 continue;
             }
-            Entry candidate = new Entry(skillId, bodySkill, data);
+            Entry candidate = new Entry(skillId, (BodyCultivationSkill) instance.getSkill(), instance.getData());
             if (selected == null
                     || candidate.skill().priority() > selected.skill().priority()
                     || (candidate.skill().priority() == selected.skill().priority()

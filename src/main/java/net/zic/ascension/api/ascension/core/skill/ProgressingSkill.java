@@ -2,7 +2,7 @@ package net.zic.ascension.api.ascension.core.skill;
 
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
-public interface ProgressingSkill extends Skill {
+public interface ProgressingSkill<D extends ProgressingSkillData> extends Skill<D> {
     int getMaximumProgression();
 
     int getInitialProgression();
@@ -15,7 +15,7 @@ public interface ProgressingSkill extends Skill {
 
     default void onProgressionChanged(
             OriginSource source,
-            ProgressingSkillData data,
+            SkillInstance<D> instance,
             int previousProgression,
             int currentProgression
     ) {

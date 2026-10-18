@@ -4,72 +4,73 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.skill.ProgressingSkillData;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionSnapshot;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public abstract class SkillEvent extends Event {
     private final OriginSource source;
-    private final Identifier skill;
-    private final SkillData skillData;
+    private final SkillInstance<?> instance;
 
-    protected SkillEvent(OriginSource source, Identifier skill, SkillData skillData) {
+    protected SkillEvent(OriginSource source, SkillInstance<?> instance) {
         this.source = source;
-        this.skill = skill;
-        this.skillData = skillData;
+        this.instance = instance;
     }
 
     public OriginSource getSource() {
         return source;
     }
 
+    public SkillInstance<?> getSkillInstance() {
+        return instance;
+    }
+
     public Identifier getSkill() {
-        return skill;
+        return instance.getSkillId();
     }
 
     public SkillData getSkillData() {
-        return skillData;
+        return instance.getData();
     }
 
-    public Skill getSkill(RegistryAccess access) {
-        return CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, getSkill(), access);
+    public Skill<?> getSkill(RegistryAccess access) {
+        return instance.getSkill();
     }
 
     public abstract static class Added extends SkillEvent {
-        protected Added(OriginSource source, Identifier skill, SkillData skillData) {
-            super(source, skill, skillData);
+        protected Added(OriginSource source, SkillInstance<?> instance) {
+            super(source, instance);
         }
 
         public static final class Pre extends Added implements ICancellableEvent {
-            public Pre(OriginSource source, Identifier skill, SkillData skillData) {
-                super(source, skill, skillData);
+            public Pre(OriginSource source, SkillInstance<?> instance) {
+                super(source, instance);
             }
         }
 
         public static final class Post extends Added {
-            public Post(OriginSource source, Identifier skill, SkillData skillData) {
-                super(source, skill, skillData);
+            public Post(OriginSource source, SkillInstance<?> instance) {
+                super(source, instance);
             }
         }
     }
 
     public abstract static class Removed extends SkillEvent {
-        protected Removed(OriginSource source, Identifier skill, SkillData skillData) {
-            super(source, skill, skillData);
+        protected Removed(OriginSource source, SkillInstance<?> instance) {
+            super(source, instance);
         }
 
         public static final class Pre extends Removed implements ICancellableEvent {
-            public Pre(OriginSource source, Identifier skill, SkillData skillData) {
-                super(source, skill, skillData);
+            public Pre(OriginSource source, SkillInstance<?> instance) {
+                super(source, instance);
             }
         }
 
         public static final class Post extends Removed {
-            public Post(OriginSource source, Identifier skill, SkillData skillData) {
-                super(source, skill, skillData);
+            public Post(OriginSource source, SkillInstance<?> instance) {
+                super(source, instance);
             }
         }
     }
@@ -81,13 +82,12 @@ public abstract class SkillEvent extends Event {
 
         public ProgressionChanged(
                 OriginSource source,
-                Identifier skill,
-                ProgressingSkillData skillData,
+                SkillInstance<?> instance,
                 SkillProgressionSnapshot previous,
                 SkillProgressionSnapshot current,
                 Reason reason
         ) {
-            super(source, skill, skillData);
+            super(source, instance);
             this.previous = previous;
             this.current = current;
             this.reason = reason;
@@ -122,12 +122,11 @@ public abstract class SkillEvent extends Event {
 
         public ProgressionResolve(
                 OriginSource source,
-                Identifier skill,
-                ProgressingSkillData skillData,
+                SkillInstance<?> instance,
                 int permanentProgression,
                 int maximumProgression
         ) {
-            super(source, skill, skillData);
+            super(source, instance);
             this.permanentProgression = permanentProgression;
             this.absoluteMaximumProgression = Math.max(1, maximumProgression);
             this.minimumProgression = 1;

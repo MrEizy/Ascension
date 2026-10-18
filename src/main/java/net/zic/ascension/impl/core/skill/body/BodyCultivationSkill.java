@@ -15,15 +15,21 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 
 import java.util.List;
 import java.util.Optional;
 
-public final class BodyCultivationSkill implements Skill {
+public final class BodyCultivationSkill implements Skill<BodyCultivationSkill.Data> {
+    private static final SerializerHandler<Data> SERIALIZER_HANDLER = new DataSerializerHandler();
+    private static final SyncHandler<Data> SYNC_HANDLER = new DataSyncHandler();
+
     private final Component name;
     private final Component description;
     private final Identifier path;
@@ -95,34 +101,34 @@ public final class BodyCultivationSkill implements Skill {
     }
 
     @Override
-    public void onAdded(OriginSource source, SkillData data) {
+    public void onAdded(OriginSource source, SkillInstance<Data> instance) {
     }
 
     @Override
-    public void onRemoved(OriginSource source, SkillData data) {
+    public void onRemoved(OriginSource source, SkillInstance<Data> instance) {
     }
 
     @Override
-    public void applyToEntity(LivingEntity entity, SkillData data) {
+    public void applyToEntity(LivingEntity entity, SkillInstance<Data> instance) {
     }
 
     @Override
-    public void removeFromEntity(LivingEntity entity, SkillData data) {
+    public void removeFromEntity(LivingEntity entity, SkillInstance<Data> instance) {
     }
 
     @Override
-    public SkillData newData(RegistryAccess access) {
+    public Data newData(RegistryAccess access) {
         return new Data(0.0D);
     }
 
     @Override
-    public SkillData loadData(ValueInput input, RegistryAccess access) {
-        return new Data(input.getDoubleOr("tempering", 0.0D));
+    public SerializerHandler<Data> serializerHandler() {
+        return SERIALIZER_HANDLER;
     }
 
     @Override
-    public SkillData loadData(ByteBuf buf) {
-        return new Data(buf.readDouble());
+    public SyncHandler<Data> syncHandler() {
+        return SYNC_HANDLER;
     }
 
     public record Stimulus(
@@ -379,23 +385,32 @@ public final class BodyCultivationSkill implements Skill {
             return value;
         }
 
-        @Override
-        public SkillType getType() {
-            return AscensionSkillTypes.BODY_CULTIVATION_SKILL_TYPE.get();
-        }
-
-        @Override
-        public void write(ValueOutput output, RegistryAccess access) {
-            output.putDouble("tempering", tempering);
-        }
-
-        @Override
-        public void encode(ByteBuf buf, RegistryAccess access) {
-            buf.writeDouble(tempering);
-        }
-
         private static double sanitize(double value) {
             return Double.isFinite(value) ? Math.max(0.0D, value) : 0.0D;
+        }
+    }
+
+    private static final class DataSerializerHandler implements SerializerHandler<Data> {
+        @Override
+        public Data read(ValueInput input, RegistryAccess access) {
+            return new Data(input.getDoubleOr("tempering", 0.0D));
+        }
+
+        @Override
+        public void write(Data data, ValueOutput output, RegistryAccess access) {
+            output.putDouble("tempering", data.tempering);
+        }
+    }
+
+    private static final class DataSyncHandler implements SyncHandler<Data> {
+        @Override
+        public void decode(Data data, ByteBuf buf, RegistryAccess access) {
+            data.tempering = Data.sanitize(buf.readDouble());
+        }
+
+        @Override
+        public void encode(Data data, ByteBuf buf, RegistryAccess access) {
+            buf.writeDouble(data.tempering);
         }
     }
 }

@@ -136,3 +136,27 @@ If an action `requiresLoadedTarget()` and the target is not loaded when the trib
 
 #### Client
 Tribulations are synced to every player tracking the chunk they are in. Register a `TribulationRenderer` for your type with `TribulationRenderers.register(type, renderer)` during client setup to get `clientTick` and `render` hooks. Clients receive the same `TribulationData` as the server instance (`ClientTribulation.getData()`). It is encoded with `TribulationType.dataStreamCodec()`, which defaults to the data codec, override it for a more compact network format. Call `instance.markDataDirty()` when the data changes so it is resent.
+
+### Skills
+A skill is a registry entry (`data/<namespace>/ascension/skills/`) that holds the configuration and logic, the per-origin state lives in its `SkillData`.
+
+A skill is split into 3 parts
+- `Skill<D>` the registry entry, `D` is the `SkillData` it creates and runs on. It provides `newData()`, a `SerializerHandler<D>` (saving through ValueInput/ValueOutput) and a `SyncHandler<D>` (syncing through a ByteBuf)
+- `SkillData` the per-origin state, it holds no logic or serialization
+- `SkillInstance<D>` held by the `SkillHolder`, wraps a Skill, its id and its data. Every hook (`onAdded`, `onRemoved`, `applyToEntity`, `removeFromEntity`) receives the instance, so a skill always gets its own typed data and its id
+
+#### Data handlers
+- `serializerHandler().read` is expected to return new data
+- `syncHandler().decode` writes into existing data, so always call `newData()` first and decode into that. Do not use `SyncHandler.StreamCodecSyncHandler` for skills, its decode does nothing
+- each skill's data is length prefixed when synced, so a skill the client does not know is skipped instead of breaking the rest of the sync
+
+#### Accessing skills
+```java
+SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source, skillId);
+//narrow to a concrete skill class to get typed data
+SkillInstance<PassiveSkill.Data> passive = instance.as(PassiveSkill.class);
+```
+For toggleable skills use `ToggleableSkills` (`isEnabled`, `enable`, `disable`, `tick`), it handles the typing for you.
+
+Skills are added and removed with an owner (`AscensionOriginSourceHelper.addSkill(source, skill, owner)`), a skill is only removed once every owner has removed it.
+After changing a skill's data call `AscensionOriginSourceHelper.markSkillDirty(source, skillId)`, partial syncs only send dirty and removed skills.

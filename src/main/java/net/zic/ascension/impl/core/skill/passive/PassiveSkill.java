@@ -11,14 +11,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkill;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkillData;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
@@ -29,6 +28,8 @@ import net.zic.ascension.api.ascension.core.skill.passive.PassiveTrigger;
 import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
@@ -39,7 +40,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
+public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillDefinitions.Owner {
+    private static final SyncHandler<Data> SYNC_HANDLER = new DataSyncHandler();
+
     private final Component name;
     private final Component description;
     private final int levels;
@@ -55,6 +58,7 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
     private final List<SkillCondition> enableConditions;
     private final List<SkillAction> enableActions;
     private final List<SkillAction> disableActions;
+    private final SerializerHandler<Data> serializerHandler;
 
     protected PassiveSkill(
             Component name,
@@ -90,6 +94,7 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
         this.enableConditions = enableConditions == null ? List.of() : List.copyOf(enableConditions);
         this.enableActions = enableActions == null ? List.of() : List.copyOf(enableActions);
         this.disableActions = disableActions == null ? List.of() : List.copyOf(disableActions);
+        this.serializerHandler = new DataSerializerHandler(this.enabledByDefault);
     }
 
     public static PassiveSkill create(
@@ -172,8 +177,8 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
         return disableActions;
     }
 
-    public boolean isActive(SkillData data) {
-        return !(this instanceof Toggleable) || data instanceof Data passiveData && passiveData.isEnabled();
+    public boolean isActive(Data data) {
+        return !(this instanceof Toggleable) || data != null && data.isEnabled();
     }
 
     @Override
@@ -200,14 +205,11 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
     }
 
     @Override
-    public void onProgressionChanged(OriginSource source, ProgressingSkillData data, int previousProgression, int currentProgression) {
-        if (!isActive(data) || previousProgression == currentProgression) {
+    public void onProgressionChanged(OriginSource source, SkillInstance<Data> instance, int previousProgression, int currentProgression) {
+        if (!isActive(instance.getData()) || previousProgression == currentProgression) {
             return;
         }
-        Identifier skillId = skillId(source);
-        if (skillId == null) {
-            return;
-        }
+        Identifier skillId = instance.getSkillId();
         modifiers.forEach(modifier -> modifier.remove(source, skillId));
         modifiers.forEach(modifier -> modifier.apply(source, skillId));
     }
@@ -228,37 +230,33 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
     }
 
     @Override
-    public void onAdded(OriginSource source, SkillData data) {
-        if (isActive(data)) {
+    public void onAdded(OriginSource source, SkillInstance<Data> instance) {
+        if (isActive(instance.getData())) {
             if (this instanceof Toggleable) {
-                activateState(source);
+                activateState(source, instance.getSkillId());
             } else {
-                applyModifiers(source);
+                applyModifiers(source, instance.getSkillId());
             }
         }
     }
 
     @Override
-    public void onRemoved(OriginSource source, SkillData data) {
-        if (isActive(data)) {
+    public void onRemoved(OriginSource source, SkillInstance<Data> instance) {
+        if (isActive(instance.getData())) {
             if (this instanceof Toggleable) {
-                deactivateState(source);
+                deactivateState(source, instance.getSkillId());
             } else {
-                removeModifiers(source);
+                removeModifiers(source, instance.getSkillId());
             }
         }
     }
 
     @Override
-    public void applyToEntity(LivingEntity entity, SkillData data) {
-        if (!isActive(data)) {
+    public void applyToEntity(LivingEntity entity, SkillInstance<Data> instance) {
+        if (!isActive(instance.getData())) {
             return;
         }
-        OriginSource source = AscensionOriginSourceHelper.getEntitySource(entity);
-        Identifier skillId = skillId(source);
-        if (skillId == null) {
-            return;
-        }
+        Identifier skillId = instance.getSkillId();
         modifiers.forEach(modifier -> modifier.applyToEntity(entity, skillId));
         if (this instanceof Toggleable && entity.level() instanceof ServerLevel level) {
             SkillActionContext context = new SkillActionContext(level, entity, skillId, null, null, 0.0D, Map.of());
@@ -267,15 +265,11 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
     }
 
     @Override
-    public void removeFromEntity(LivingEntity entity, SkillData data) {
-        if (!isActive(data)) {
+    public void removeFromEntity(LivingEntity entity, SkillInstance<Data> instance) {
+        if (!isActive(instance.getData())) {
             return;
         }
-        OriginSource source = AscensionOriginSourceHelper.getEntitySource(entity);
-        Identifier skillId = skillId(source);
-        if (skillId == null) {
-            return;
-        }
+        Identifier skillId = instance.getSkillId();
         modifiers.forEach(modifier -> modifier.removeFromEntity(entity, skillId));
         if (this instanceof Toggleable && entity.level() instanceof ServerLevel level) {
             SkillActionContext context = new SkillActionContext(level, entity, skillId, null, null, 0.0D, Map.of());
@@ -284,53 +278,39 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
     }
 
     @Override
-    public SkillData newData(RegistryAccess access) {
+    public Data newData(RegistryAccess access) {
         return new Data(new SkillProgressionData(), enabledByDefault);
     }
 
     @Override
-    public SkillData loadData(ValueInput input, RegistryAccess access) {
-        return new Data(input, enabledByDefault);
+    public SerializerHandler<Data> serializerHandler() {
+        return serializerHandler;
     }
 
     @Override
-    public SkillData loadData(ByteBuf buf) {
-        return new Data(buf);
+    public SyncHandler<Data> syncHandler() {
+        return SYNC_HANDLER;
     }
 
-    protected void applyModifiers(OriginSource source) {
-        Identifier skillId = skillId(source);
-        if (skillId != null) {
-            modifiers.forEach(modifier -> modifier.apply(source, skillId));
-        }
+    protected void applyModifiers(OriginSource source, Identifier skillId) {
+        modifiers.forEach(modifier -> modifier.apply(source, skillId));
     }
 
-    protected void removeModifiers(OriginSource source) {
-        Identifier skillId = skillId(source);
-        if (skillId != null) {
-            modifiers.forEach(modifier -> modifier.remove(source, skillId));
-        }
+    protected void removeModifiers(OriginSource source, Identifier skillId) {
+        modifiers.forEach(modifier -> modifier.remove(source, skillId));
     }
 
-    protected void activateState(OriginSource source) {
-        Identifier skillId = skillId(source);
-        if (skillId == null) {
-            return;
-        }
+    protected void activateState(OriginSource source, Identifier skillId) {
         stateGroup.ifPresent(group -> PassiveSkillService.disableStateGroup(source, group, skillId));
-        applyModifiers(source);
+        applyModifiers(source, skillId);
         grantedSkills.forEach(skill -> AscensionOriginSourceHelper.addSkill(source, skill, skillId));
         runStateActions(source, skillId, enableActions);
     }
 
-    protected void deactivateState(OriginSource source) {
-        Identifier skillId = skillId(source);
-        if (skillId == null) {
-            return;
-        }
+    protected void deactivateState(OriginSource source, Identifier skillId) {
         runStateActions(source, skillId, disableActions);
         grantedSkills.forEach(skill -> AscensionOriginSourceHelper.removeSkill(source, skill, skillId));
-        removeModifiers(source);
+        removeModifiers(source, skillId);
     }
 
     private void runStateActions(OriginSource source, Identifier skillId, List<SkillAction> actions) {
@@ -344,10 +324,6 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
             SkillActionContext context = new SkillActionContext(level, entity, skillId, null, null, 0.0D, Map.of());
             SkillActionRuntime.execute(context, actions);
         }
-    }
-
-    private Identifier skillId(OriginSource source) {
-        return CoreRegistries.SKILL_REGISTRY.get(source.getRegistryAccess()).getKey(this);
     }
 
     public record Upkeep(
@@ -366,7 +342,7 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
         ).apply(instance, Upkeep::new));
     }
 
-    private static final class Toggleable extends PassiveSkill implements ToggleableSkill {
+    private static final class Toggleable extends PassiveSkill implements ToggleableSkill<PassiveSkill.Data> {
         private Toggleable(
                 Component name,
                 Component description,
@@ -388,49 +364,45 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
         }
 
         @Override
-        public boolean isEnabled(SkillData data) {
-            return data instanceof Data passiveData && passiveData.isEnabled();
+        public boolean isEnabled(Data data) {
+            return data.isEnabled();
         }
 
         @Override
-        public void setEnabled(SkillData data, boolean enabled) {
-            if (data instanceof Data passiveData) {
-                passiveData.setEnabled(enabled);
-            }
+        public void setEnabled(Data data, boolean enabled) {
+            data.setEnabled(enabled);
         }
 
         @Override
-        public boolean canEnable(LivingEntity entity, OriginSource source, SkillData data) {
-            if (!upkeepAvailable(entity, source, true) || !(entity.level() instanceof ServerLevel level)) {
+        public boolean canEnable(LivingEntity entity, OriginSource source, SkillInstance<Data> instance) {
+            if (!upkeepAvailable(entity, source, instance.getSkillId(), true) || !(entity.level() instanceof ServerLevel level)) {
                 return false;
             }
-            Identifier skillId = CoreRegistries.SKILL_REGISTRY.get(source.getRegistryAccess()).getKey(this);
-            SkillActionContext context = new SkillActionContext(level, entity, skillId, null, null, 0.0D, Map.of());
+            SkillActionContext context = new SkillActionContext(level, entity, instance.getSkillId(), null, null, 0.0D, Map.of());
             return enableConditions().stream().allMatch(condition -> condition != null && condition.test(context));
         }
 
         @Override
-        public void onEnabled(OriginSource source, SkillData data) {
-            activateState(source);
+        public void onEnabled(OriginSource source, SkillInstance<Data> instance) {
+            activateState(source, instance.getSkillId());
         }
 
         @Override
-        public void onDisabled(OriginSource source, SkillData data) {
-            deactivateState(source);
+        public void onDisabled(OriginSource source, SkillInstance<Data> instance) {
+            deactivateState(source, instance.getSkillId());
         }
 
         @Override
-        public boolean tickEnabled(LivingEntity entity, OriginSource source, SkillData data) {
+        public boolean tickEnabled(LivingEntity entity, OriginSource source, SkillInstance<Data> instance) {
             return getUpkeep().isEmpty()
                     || entity.level().getGameTime() % getUpkeep().get().interval() != 0L
-                    || upkeepAvailable(entity, source, false);
+                    || upkeepAvailable(entity, source, instance.getSkillId(), false);
         }
 
-        private boolean upkeepAvailable(LivingEntity entity, OriginSource source, boolean simulate) {
+        private boolean upkeepAvailable(LivingEntity entity, OriginSource source, Identifier skillId, boolean simulate) {
             if (getUpkeep().isEmpty()) {
                 return true;
             }
-            Identifier skillId = CoreRegistries.SKILL_REGISTRY.get(source.getRegistryAccess()).getKey(this);
             Upkeep upkeep = getUpkeep().get();
             ScaledValue.Context valueContext = new ScaledValue.Context(source, skillId, entity, null, 0.0D, Map.of());
             ResourceTransactionRequest request = ResourceTransactionRequest.of(
@@ -456,14 +428,6 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
             this.enabled = enabled;
         }
 
-        public Data(ValueInput input, boolean defaultEnabled) {
-            this(new SkillProgressionData(input.childOrEmpty("progression")), input.getBooleanOr("enabled", defaultEnabled));
-        }
-
-        public Data(ByteBuf buf) {
-            this(new SkillProgressionData(buf), buf.readBoolean());
-        }
-
         @Override
         public SkillProgressionData getSkillProgression() {
             return progression;
@@ -476,22 +440,33 @@ public class PassiveSkill implements ProgressingSkill, SkillDefinitions.Owner {
         public void setEnabled(boolean enabled) {
             this.enabled = enabled;
         }
+    }
 
+    //the default enabled state depends on the skill, so each skill has its own serializer
+    private record DataSerializerHandler(boolean defaultEnabled) implements SerializerHandler<Data> {
         @Override
-        public void write(ValueOutput output, RegistryAccess access) {
-            progression.write(output.child("progression"));
-            output.putBoolean("enabled", enabled);
+        public Data read(ValueInput input, RegistryAccess access) {
+            return new Data(new SkillProgressionData(input.childOrEmpty("progression")), input.getBooleanOr("enabled", defaultEnabled));
         }
 
         @Override
-        public void encode(ByteBuf buf, RegistryAccess access) {
-            progression.encode(buf);
-            buf.writeBoolean(enabled);
+        public void write(Data data, ValueOutput output, RegistryAccess access) {
+            data.progression.write(output.child("progression"));
+            output.putBoolean("enabled", data.enabled);
+        }
+    }
+
+    private static final class DataSyncHandler implements SyncHandler<Data> {
+        @Override
+        public void decode(Data data, ByteBuf buf, RegistryAccess access) {
+            data.progression.decode(buf);
+            data.enabled = buf.readBoolean();
         }
 
         @Override
-        public SkillType getType() {
-            return AscensionSkillTypes.PASSIVE_SKILL_TYPE.get();
+        public void encode(Data data, ByteBuf buf, RegistryAccess access) {
+            data.progression.encode(buf);
+            buf.writeBoolean(data.enabled);
         }
     }
 }

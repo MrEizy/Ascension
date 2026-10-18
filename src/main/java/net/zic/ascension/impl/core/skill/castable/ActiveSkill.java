@@ -13,7 +13,9 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkill;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkillData;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.SkillMasteryRank;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
@@ -49,7 +51,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public final class ActiveSkill implements CastableSkill, ProgressingSkill, SkillDefinitions.Owner {
+public final class ActiveSkill implements CastableSkill<ActiveSkill.Data>, ProgressingSkill<ActiveSkill.Data>, SkillDefinitions.Owner {
+    private static final SerializerHandler<Data> SERIALIZER_HANDLER = new DataSerializerHandler();
+    private static final SyncHandler<Data> SYNC_HANDLER = new DataSyncHandler();
+
     private static final int CHANNEL_MASTERY_INTERVAL = 20;
     private static final double MASTERY_EXPERIENCE_PER_USE = 1.0D;
 
@@ -694,34 +699,34 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
     }
 
     @Override
-    public void onAdded(OriginSource source, SkillData data) {
+    public void onAdded(OriginSource source, SkillInstance<Data> instance) {
     }
 
     @Override
-    public void onRemoved(OriginSource source, SkillData data) {
+    public void onRemoved(OriginSource source, SkillInstance<Data> instance) {
     }
 
     @Override
-    public void applyToEntity(LivingEntity entity, SkillData data) {
+    public void applyToEntity(LivingEntity entity, SkillInstance<Data> instance) {
     }
 
     @Override
-    public void removeFromEntity(LivingEntity entity, SkillData data) {
+    public void removeFromEntity(LivingEntity entity, SkillInstance<Data> instance) {
     }
 
     @Override
-    public SkillData newData(RegistryAccess access) {
+    public Data newData(RegistryAccess access) {
         return new Data(new SkillProgressionData(getInitialProgression(), 0.0D, Map.of()));
     }
 
     @Override
-    public SkillData loadData(ValueInput input, RegistryAccess access) {
-        return new Data(input);
+    public SerializerHandler<Data> serializerHandler() {
+        return SERIALIZER_HANDLER;
     }
 
     @Override
-    public SkillData loadData(ByteBuf buf) {
-        return new Data(buf);
+    public SyncHandler<Data> syncHandler() {
+        return SYNC_HANDLER;
     }
 
     private record ResolvedMastery(int effectiveMastery, Component failureMessage) {
@@ -747,32 +752,33 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
             this.progression = progression == null ? new SkillProgressionData() : progression;
         }
 
-        public Data(ValueInput input) {
-            this(new SkillProgressionData(input.childOrEmpty("progression")));
-        }
-
-        public Data(ByteBuf buf) {
-            this(new SkillProgressionData(buf));
-        }
-
         @Override
         public SkillProgressionData getSkillProgression() {
             return progression;
         }
+    }
 
+    private static final class DataSerializerHandler implements SerializerHandler<Data> {
         @Override
-        public void write(ValueOutput output, RegistryAccess access) {
-            progression.write(output.child("progression"));
+        public Data read(ValueInput input, RegistryAccess access) {
+            return new Data(new SkillProgressionData(input.childOrEmpty("progression")));
         }
 
         @Override
-        public void encode(ByteBuf buf, RegistryAccess access) {
-            progression.encode(buf);
+        public void write(Data data, ValueOutput output, RegistryAccess access) {
+            data.progression.write(output.child("progression"));
+        }
+    }
+
+    private static final class DataSyncHandler implements SyncHandler<Data> {
+        @Override
+        public void decode(Data data, ByteBuf buf, RegistryAccess access) {
+            data.progression.decode(buf);
         }
 
         @Override
-        public SkillType getType() {
-            return AscensionSkillTypes.ACTIVE_SKILL_TYPE.get();
+        public void encode(Data data, ByteBuf buf, RegistryAccess access) {
+            data.progression.encode(buf);
         }
     }
 }

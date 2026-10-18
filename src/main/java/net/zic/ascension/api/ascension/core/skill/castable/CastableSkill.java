@@ -4,11 +4,12 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 
-public interface CastableSkill extends Skill {
+public interface CastableSkill<D extends SkillData> extends Skill<D> {
 
     CastType getCastType();
 
