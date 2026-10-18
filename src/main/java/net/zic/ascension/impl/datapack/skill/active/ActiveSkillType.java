@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.SkillMasteryRank;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
@@ -23,13 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 public final class ActiveSkillType extends SkillType {
-    private static final MapCodec<Data> DATA_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            SkillProgressionData.CODEC.codec().optionalFieldOf("progression", new SkillProgressionData())
-                    .forGetter(Data::getSkillProgression)
-    ).apply(instance, Data::new));
-
     @Override
-    public MapCodec<? extends Skill> codec() {
+    public MapCodec<? extends Skill<?>> codec() {
         return RecordCodecBuilder.<ActiveSkill>mapCodec(instance -> instance.group(
                 ComponentSerialization.CODEC.fieldOf("name").forGetter(ActiveSkill::getName),
                 ComponentSerialization.CODEC.fieldOf("description").forGetter(ActiveSkill::getDescription),
@@ -44,10 +38,5 @@ public final class ActiveSkillType extends SkillType {
                 Codec.unboundedMap(SkillMasteryRank.CODEC, Codec.DOUBLE).optionalFieldOf("mastery_xp", Map.of())
                         .forGetter(ActiveSkill::masteryRequirements)
         ).apply(instance, ActiveSkill::new));
-    }
-
-    @Override
-    public MapCodec<? extends SkillData> dataCodec() {
-        return DATA_CODEC;
     }
 }

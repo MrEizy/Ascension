@@ -1,13 +1,11 @@
 package net.zic.ascension.impl.core.skill.passive;
 
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillCostDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
@@ -78,9 +76,8 @@ public final class PassiveTriggerService {
         long gameTime = owner.level().getGameTime();
         List<Candidate> candidates = new ArrayList<>();
         for (Identifier skillId : List.copyOf(AscensionOriginSourceHelper.getSkills(source))) {
-            Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, owner.registryAccess());
-            SkillData data = AscensionOriginSourceHelper.getSkillData(source, skillId);
-            if (!(skill instanceof PassiveSkill passive) || !(data instanceof PassiveSkill.Data passiveData) || !passive.isActive(passiveData)) {
+            SkillInstance<PassiveSkill.Data> instance = PassiveSkillService.passiveInstance(source, skillId);
+            if (instance == null || !(instance.getSkill() instanceof PassiveSkill passive) || !passive.isActive(instance.getData())) {
                 continue;
             }
             for (int index = 0; index < passive.triggers().size(); index++) {

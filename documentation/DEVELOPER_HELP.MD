@@ -136,3 +136,39 @@ If an action `requiresLoadedTarget()` and the target is not loaded when the trib
 
 #### Client
 Tribulations are synced to every player tracking the chunk they are in. Register a `TribulationRenderer` for your type with `TribulationRenderers.register(type, renderer)` during client setup to get `clientTick` and `render` hooks. Clients receive the same `TribulationData` as the server instance (`ClientTribulation.getData()`). It is encoded with `TribulationType.dataStreamCodec()`, which defaults to the data codec, override it for a more compact network format. Call `instance.markDataDirty()` when the data changes so it is resent.
+
+### Skills
+A skill is a registry entry (`data/<namespace>/ascension/skills/`) that holds the configuration and logic, the per-origin state lives in its `SkillData`.
+
+A skill is split into 3 parts
+- `Skill<D>` the registry entry, `D` is the `SkillData` it creates and runs on. It provides `newData()`, a `SerializerHandler<D>` (saving through ValueInput/ValueOutput) and a `SyncHandler<D>` (syncing through a ByteBuf)
+- `SkillData` the per-origin state, it holds no logic or serialization
+- `SkillInstance<D>` held by the `SkillHolder`, wraps a Skill, its id and its data. Every hook (`onAdded`, `onRemoved`, `applyToEntity`, `removeFromEntity`) receives the instance, so a skill always gets its own typed data and its id
+
+#### Data handlers
+- `serializerHandler().read` is expected to return new data
+- `syncHandler().decode` writes into existing data, so always call `newData()` first and decode into that. Do not use `SyncHandler.StreamCodecSyncHandler` for skills, its decode does nothing
+- each skill's data is length prefixed when synced, so a skill the client does not know is skipped instead of breaking the rest of the sync
+
+#### Accessing skills
+```java
+SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source, skillId);
+//narrow to a concrete skill class to get typed data
+SkillInstance<PassiveSkill.Data> passive = instance.as(PassiveSkill.class);
+```
+For toggleable skills use `ToggleableSkills` (`isEnabled`, `enable`, `disable`, `tick`), it handles the typing for you.
+
+Skills are added and removed with an owner (`AscensionOriginSourceHelper.addSkill(source, skill, owner)`), a skill is only removed once every owner has removed it.
+After changing a skill's data call `AscensionOriginSourceHelper.markSkillDirty(source, skillId)`, partial syncs only send dirty and removed skills.
+
+#### Castable skills
+A `CastableSkill<D, C, E>` can be slotted in the hot bar and cast. `C` is the `CastData` of a single cast, `E` is the `EquipSkillData` kept while the skill is slotted (use `EquipSkillData.Empty` for none).
+
+- `SkillSlot<D, E>` wraps a slotted skill. It receives `onEquip`/`onUnequip`, and `onSelected`/`onUnselected` when the slot gains or loses selection (both sides, useful for UI). `getSkillData()`/`markSkillDataDirty()` reach the owner's skill data, `markEquipDataDirty()` resyncs the hot bar
+- `CastingSkillInstance<D, C, E>` wraps a cast. It holds the cast data, the equip data of the slot it was cast from, the current phase and the ticks into that phase
+- a phase is just an `Identifier`. `startCast` sets the first phase (or ends the cast for an instant skill), `tickCast` decides what each phase does and moves between phases with `setPhase`, and the cast ends with `end(reason)`. `endCast` runs once it has ended, for any reason
+- `getPhaseTicks()` is the number of ticks completed in the current phase, it only advances while the cast continues. It is tracked by the server and synced with the phase, so clients render from it
+- read the cast input with `isInputHeld()` rather than the action manager directly. It reads the caster's zenithlib `ActionManager`, which every living entity has: players hold it with the cast key, a boss or mob AI calls `actionStart`/`actionEnd` with `CastingSkillInstance.CAST_INPUT` itself
+- `SkillCastEvent` (`Start.Pre` cancellable, `Start.Post`, `PhaseChanged`, `End`) is posted on the server only
+- any `LivingEntity` can cast through its `SkillCaster` (`SkillCaster.of(entity).startCast(...)`). Players additionally have a `SkillCastHandler` holding the hot bar, synced only to that player
+- the cast is synced to everyone tracking the caster when it starts, ends, changes phase or its cast data changes. Clients advance the phase ticks between syncs, only the casting player's own client runs skill logic (prediction), other clients only display the cast

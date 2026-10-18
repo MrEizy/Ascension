@@ -1,81 +1,92 @@
 package net.zic.ascension.api.ascension.core.skill.castable;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
-import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
-import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
+import org.jspecify.annotations.Nullable;
 
-public interface CastableSkill extends Skill {
+/**
+ * A skill that can be slotted in the hot bar and cast.
+ * <p>
+ * While slotted the skill is wrapped in a {@link SkillSlot}, holding its {@link EquipSkillData}.
+ * While cast it is wrapped in a {@link CastingSkillInstance}, holding its {@link CastData} and the current phase.
+ * A phase is just an id, the skill decides what each phase does and when to move between them
+ * with {@link CastingSkillInstance#setPhase}. End the cast with {@link CastingSkillInstance#end}.
+ * <p>
+ * Casting runs on both the server and the casting client, the server is authoritative and syncs the
+ * phase, ticks into the phase and cast data to the client.
+ * @param <D> the skill data
+ * @param <C> the data of a single cast
+ * @param <E> the data kept while slotted
+ */
+public interface CastableSkill<D extends SkillData, C extends CastData, E extends EquipSkillData> extends Skill<D> {
 
-    CastType getCastType();
+    //──Equip────────────────────────────────────────────────────────
 
+    E newEquipData(RegistryAccess access);
 
-    //called when added/removed from skill hot bar
-    void onEquip(LivingEntity entity,PreCastData preCastData);
-    void onUnEquip(LivingEntity entity, PreCastData preCastData);
+    SerializerHandler<E> equipSerializerHandler();
 
+    //decode writes into existing data, call newEquipData first
+    SyncHandler<E> equipSyncHandler();
+
+    //called when added to/removed from a hot bar slot
+    default void onEquip(SkillSlot<D, E> slot) {}
+
+    default void onUnequip(SkillSlot<D, E> slot) {}
 
     /*
-        this is called when a skill is selected
-        is called on both server and client so can be used for:
+        called when the slot is selected/unselected, on both server and client so can be used for:
         buffs (if you want some special things to happen)
-        initializing/cleaning up  HUD elements
-        initializing/cleaning up keybinds (you might want them to only be available while skill is here
+        initializing/cleaning up HUD elements
+        initializing/cleaning up keybinds (you might want them to only be available while selected)
      */
-    void selected(LivingEntity entity,PreCastData preCastData);
-    void unselected(LivingEntity entity,PreCastData preCastData);
+    default void onSelected(SkillSlot<D, E> slot) {}
 
+    default void onUnselected(SkillSlot<D, E> slot) {}
+
+    //──Cast────────────────────────────────────────────────────────
+
+    C newCastData(RegistryAccess access);
+
+    //decode writes into existing data, call newCastData first
+    SyncHandler<C> castSyncHandler();
 
     /**
-     * ran on both client and server
-     * used to determine if a skill can be cast. main things you would do here
-     * check cooldown
-     * check and drain qi
-     *
-     * position checks + entity selected checks
-     *
-     * @param caster the entity casting this
+     * ran on both client and server, determines if the skill can be cast (cooldown, resources, targets)
      * @return if it should be cast or not
      */
-    CastResult tryCast(LivingEntity caster);
-
-
-    /**
-     * called first after try cast.
-     * if type == INSTANT this is the only thing called and should apply the cooldown
-     * @param caster the entity casting the skill
-     * @param preCastData the data before it was cast
-     * @return the cast data to use
-     */
-    CastData initialCast(LivingEntity caster,PreCastData preCastData);
+    CastResult tryCast(CastingSkillInstance<D, C, E> instance);
 
     /**
-     *
-     * @param caster the entity casting
-     * @param castStatus the status of this casting instance
-     * @param castData the data for this cast
-     * @param ticksElapsed how many ticks since initialCast
+     * called once the cast is accepted. set the first phase here, or end the cast for an instant skill
      */
-    void continueCasting(LivingEntity caster, CastStatus castStatus, CastData castData, int ticksElapsed);
-
+    void startCast(CastingSkillInstance<D, C, E> instance);
 
     /**
-     * called after continue casting is finished, for charge skills this would spawn the final entity
-     * or other skills would use this to handle clean up
-     * should apply cooldown here
-     * @param caster the entity casting
-     * @param status how/why casting has finished
-     * @param castData the data for this cast
+     * called every tick while casting, {@link CastingSkillInstance#getPhaseTicks()} is the number of ticks
+     * already completed in the current phase
      */
-    void finalCast(LivingEntity caster,CastStatus status,CastData castData,int ticksElapsed);
+    void tickCast(CastingSkillInstance<D, C, E> instance);
 
+    /**
+     * called once the cast has ended, for any reason ({@link CastingSkillInstance#getStatus()}).
+     * charge skills release here, others clean up or apply cooldowns
+     */
+    void endCast(CastingSkillInstance<D, C, E> instance);
 
-    CastData loadCastData(ByteBuf buf);
-    PreCastData newPreCastData();
-    PreCastData loadPreCastData(ValueInput input);
-    PreCastData loadPreCastData(ByteBuf buf);
+    //called on the server when the skill changes the phase
+    default void onPhaseChanged(CastingSkillInstance<D, C, E> instance, @Nullable Identifier previousPhase) {}
 
+    //called on the server when the caster takes damage while casting, end the cast to interrupt it
+    default void onDamaged(CastingSkillInstance<D, C, E> instance, double damage) {}
+
+    //visual state shown to nearby players, null for none
+    default @Nullable ActiveCastVisualState visualState(CastingSkillInstance<D, C, E> instance) {
+        return null;
+    }
 }

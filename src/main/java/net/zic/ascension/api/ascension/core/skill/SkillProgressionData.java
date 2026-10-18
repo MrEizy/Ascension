@@ -86,6 +86,14 @@ public final class SkillProgressionData {
         writeContributions(output.childrenList("caps"), caps);
     }
 
+    //reads into this data, replacing what it held
+    public void decode(ByteBuf buf) {
+        trainedProgression = Math.max(1, buf.readInt());
+        experience = Math.max(0.0D, buf.readDouble());
+        caps.clear();
+        readContributions(buf, caps);
+    }
+
     public void encode(ByteBuf buf) {
         buf.writeInt(trainedProgression);
         buf.writeDouble(experience);

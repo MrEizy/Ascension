@@ -22,8 +22,9 @@ import net.zic.ascension.api.ascension.core.path.bonus.data_source.DataSourcePat
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
-import net.zic.ascension.api.ascension.core.skill.Skill;
+import org.jspecify.annotations.Nullable;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.zic.ascension.api.ascension.core.skill.data_source.SkillHolder;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
@@ -433,58 +434,63 @@ public class AscensionOriginSourceHelper {
 
     public static Collection<Identifier> getSkills(OriginSource source){return getSkillHolder(source).getSkills();}
 
+    public static Collection<SkillInstance<?>> getSkillInstances(OriginSource source){return getSkillHolder(source).getSkillInstances();}
+
     public static boolean hasSkill(OriginSource source,Identifier skill){
         return getSkillHolder(source).hasSkill(skill);
     }
-    public static SkillData getSkillData(OriginSource source,Identifier skill){
-        return getSkillHolder(source).getSkillData(skill);
+    public static @Nullable SkillInstance<?> getSkill(OriginSource source,Identifier skill){
+        return getSkillHolder(source).getSkill(skill);
+    }
+    public static @Nullable SkillData getSkillData(OriginSource source,Identifier skill){
+        SkillInstance<?> instance = getSkill(source,skill);
+        return instance == null ? null : instance.getData();
     }
 
     /**
-     * adds a skill, creating a new skillData instance
+     * adds a skill, creating a new skill instance if it is not already held or cached
      * @param skill the skill we are adding
      * @param owner the source of this skill
      * @return true -> added, false -> not added
      */
     public static boolean addSkill(OriginSource source,Identifier skill,Identifier owner){
         if(skill == null) return false;
-        if(getSkillHolder(source).hasSkill(skill)){
-            getSkillHolder(source).addSkill(skill,getSkillHolder(source).getSkillData(skill),owner);
-            return true;
-        }
-        Skill skillInstance = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY,skill,source.getRegistryAccess());
-        if(skillInstance == null) return false;
-        return addSkill(source,skill,skillInstance.newData(source.getRegistryAccess()),owner);
+        SkillHolder holder = getSkillHolder(source);
+        if(holder.hasSkill(skill)) return holder.addOwner(skill,owner);
 
+        SkillInstance<?> instance = holder.takeCachedSkill(skill);
+        if(instance == null) instance = SkillInstance.create(skill,source.getRegistryAccess());
+        if(instance == null) return false;
+        return addSkill(source,instance,owner);
     }
-    public static boolean addSkill(OriginSource source,Identifier skill, SkillData data, Identifier owner) {
 
-        if(skill == null) return false;
-        if(getSkillHolder(source).hasSkill(skill)){
-            getSkillHolder(source).addSkill(skill,data,owner);
-            return true;
-        }
-        if(!CoreRegistries.SKILL_REGISTRY.get(source.getRegistryAccess()).containsKey(skill)) return false;
-        if(getSkillHolder(source).hasCachedSkill(skill))  data = getSkillHolder(source).removeCachedSkill(skill);
+    /**
+     * adds a skill instance, if the skill is already held only the owner is added
+     * @param instance the skill we are adding
+     * @param owner the source of this skill
+     * @return true -> added, false -> not added
+     */
+    public static boolean addSkill(OriginSource source, SkillInstance<?> instance, Identifier owner) {
+        if(instance == null) return false;
+        SkillHolder holder = getSkillHolder(source);
+        if(holder.hasSkill(instance.getSkillId())) return holder.addOwner(instance.getSkillId(),owner);
 
-        SkillEvent.Added.Pre pre = new SkillEvent.Added.Pre(source,skill,data);
+        SkillInstance<?> cached = holder.takeCachedSkill(instance.getSkillId());
+        if(cached != null) instance = cached;
+
+        SkillEvent.Added.Pre pre = new SkillEvent.Added.Pre(source,instance);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = getSkillHolder(source).addSkill(skill, data,owner);
-        if(!result) return false;
+        if(!holder.addSkill(instance,owner)) return false;
 
         source.startProcess("add_skill");
-        if(pre.getSkill(source.getRegistryAccess()) != null){
-            for(LivingEntity entity : source.getAttachedEntities()){
-                pre.getSkill(source.getRegistryAccess()).applyToEntity(entity,pre.getSkillData());
-            }
+        for(LivingEntity entity : source.getAttachedEntities()){
+            instance.applyToEntity(entity);
         }
-        pre.getSkill(source.getRegistryAccess()).onAdded(source,data);
+        instance.onAdded(source);
 
-        SkillEvent.Added.Post post = new SkillEvent.Added.Post(source,skill,data);
-
-        NeoForge.EVENT_BUS.post(post);
+        NeoForge.EVENT_BUS.post(new SkillEvent.Added.Post(source,instance));
 
         source.markDataSourceDirty(CoreDataSources.SKILL_DATA_SOURCE.getId());
         resolveProcess(source,"add_skill");
@@ -492,27 +498,23 @@ public class AscensionOriginSourceHelper {
     }
 
     public static boolean removeSkill(OriginSource source,Identifier skill,Identifier owner) {
-        if(skill == null || !getSkillHolder(source).hasSkill(skill)) return false;
-        if(!CoreRegistries.SKILL_REGISTRY.get(source.getRegistryAccess()).containsKey(skill)) return false;
-        SkillData data = getSkillHolder(source).getSkillData(skill);
+        if(skill == null) return false;
+        SkillHolder holder = getSkillHolder(source);
+        SkillInstance<?> instance = holder.getSkill(skill);
+        if(instance == null) return false;
 
-
-        SkillEvent.Removed.Pre pre = new SkillEvent.Removed.Pre(source,skill,data);
+        SkillEvent.Removed.Pre pre = new SkillEvent.Removed.Pre(source,instance);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = getSkillHolder(source).removeSkill(skill,owner);
-        if(!result) return false;
+        if(!holder.removeSkill(skill,owner)) return false;
 
         source.startProcess("remove_skill");
-        pre.getSkill(source.getRegistryAccess()).onRemoved(source,data);
-        if(pre.getSkill(source.getRegistryAccess()) != null){
-            for(LivingEntity entity : source.getAttachedEntities()){
-                pre.getSkill(source.getRegistryAccess()).removeFromEntity(entity,pre.getSkillData());
-            }
+        instance.onRemoved(source);
+        for(LivingEntity entity : source.getAttachedEntities()){
+            instance.removeFromEntity(entity);
         }
-        SkillEvent.Removed.Post post = new SkillEvent.Removed.Post(source,skill,data);
-        NeoForge.EVENT_BUS.post(post);
+        NeoForge.EVENT_BUS.post(new SkillEvent.Removed.Post(source,instance));
 
         source.markDataSourceDirty(CoreDataSources.SKILL_DATA_SOURCE.getId());
         resolveProcess(source,"remove_skill");

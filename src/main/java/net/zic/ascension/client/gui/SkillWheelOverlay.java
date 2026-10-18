@@ -111,6 +111,8 @@ public final class SkillWheelOverlay {
             }
 
             container.setSelectedSlot(selected);
+            //selected locally right away so a cast straight after uses the new slot
+            handler.select(selected);
             ClientPacketDistributor.sendToServer(new SelectSkillSlotPacket(selected));
         });
     }

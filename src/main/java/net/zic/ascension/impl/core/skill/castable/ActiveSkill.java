@@ -9,11 +9,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkill;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkillData;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.SkillMasteryRank;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
@@ -25,13 +26,14 @@ import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastData;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastVisualState;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillCostDefinition;
-import net.zic.ascension.api.ascension.core.skill.castable.CastData;
+import net.zic.ascension.api.ascension.core.skill.castable.CastingSkillInstance;
+import net.zic.ascension.api.ascension.core.skill.castable.EquipSkillData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastResult;
 import net.zic.ascension.api.ascension.core.skill.castable.data.CastStatus;
-import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
+import org.jspecify.annotations.Nullable;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
@@ -49,7 +51,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public final class ActiveSkill implements CastableSkill, ProgressingSkill, SkillDefinitions.Owner {
+public final class ActiveSkill implements CastableSkill<ActiveSkill.Data, ActiveCastData, EquipSkillData.Empty>, ProgressingSkill<ActiveSkill.Data>, SkillDefinitions.Owner {
+    //charge skills build up while held and release when let go, channel skills execute every tick while held
+    public static final Identifier CHARGING = AscensionCraft.prefix("charging");
+    public static final Identifier CHANNELING = AscensionCraft.prefix("channeling");
+
+    private static final SerializerHandler<Data> SERIALIZER_HANDLER = new DataSerializerHandler();
+    private static final SyncHandler<Data> SYNC_HANDLER = new DataSyncHandler();
+
     private static final int CHANNEL_MASTERY_INTERVAL = 20;
     private static final double MASTERY_EXPERIENCE_PER_USE = 1.0D;
 
@@ -163,64 +172,64 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
         return Optional.empty();
     }
 
-    public ActiveCastVisualState visualState(LivingEntity caster, CastData castData) {
-        if (!(castData instanceof ActiveCastData data) || cast.mode() == ActiveCastDefinition.Mode.INSTANT) {
-            return null;
-        }
-        Identifier skillId = getSkillId(caster);
-        if (skillId == null) {
-            return null;
-        }
-        return new ActiveCastVisualState(skillId, data.getStageIndex(), cast.progress(data.getTicks()));
+    //──Equip────────────────────────────────────────────────────────
+
+    @Override
+    public EquipSkillData.Empty newEquipData(RegistryAccess access) {
+        return EquipSkillData.Empty.INSTANCE;
     }
 
-    public boolean shouldInterrupt(
-            LivingEntity caster,
-            CastData castData,
-            int ticksElapsed,
-            double damage
-    ) {
-        if (!(castData instanceof ActiveCastData data)) {
-            return false;
+    @Override
+    public SerializerHandler<EquipSkillData.Empty> equipSerializerHandler() {
+        return EquipSkillData.Empty.SERIALIZER_HANDLER;
+    }
+
+    @Override
+    public SyncHandler<EquipSkillData.Empty> equipSyncHandler() {
+        return EquipSkillData.Empty.SYNC_HANDLER;
+    }
+
+    //──Cast────────────────────────────────────────────────────────
+
+    @Override
+    public ActiveCastData newCastData(RegistryAccess access) {
+        return new ActiveCastData();
+    }
+
+    @Override
+    public SyncHandler<ActiveCastData> castSyncHandler() {
+        return ActiveCastData.SYNC_HANDLER;
+    }
+
+    @Override
+    public @Nullable ActiveCastVisualState visualState(CastingSkillInstance<Data, ActiveCastData, EquipSkillData.Empty> instance) {
+        if (cast.mode() == ActiveCastDefinition.Mode.INSTANT) {
+            return null;
         }
-        Identifier skillId = getSkillId(caster);
-        return skillId != null && cast.interruption()
+        return new ActiveCastVisualState(instance.getSkillId(), instance.getCastData().getStageIndex(), cast.progress(instance.getPhaseTicks()));
+    }
+
+    @Override
+    public void onDamaged(CastingSkillInstance<Data, ActiveCastData, EquipSkillData.Empty> instance, double damage) {
+        LivingEntity caster = instance.getCaster();
+        int ticks = instance.getPhaseTicks();
+        boolean interrupt = cast.interruption()
                 .map(interruption -> interruption.shouldInterrupt(
-                        data,
-                        ticksElapsed,
+                        instance.getCastData(),
+                        instance.getTotalTicks(),
                         damage,
-                        scaledValueContext(caster, skillId, null, cast.progress(data.getTicks()), castVariables(data))
+                        scaledValueContext(caster, instance.getSkillId(), null, cast.progress(ticks), castVariables(ticks))
                 ))
                 .orElse(false);
-    }
-
-    @Override
-    public CastType getCastType() {
-        return cast.mode().castType();
-    }
-
-    @Override
-    public void onEquip(LivingEntity entity, PreCastData preCastData) {
-    }
-
-    @Override
-    public void onUnEquip(LivingEntity entity, PreCastData preCastData) {
-    }
-
-    @Override
-    public void selected(LivingEntity entity, PreCastData preCastData) {
-    }
-
-    @Override
-    public void unselected(LivingEntity entity, PreCastData preCastData) {
-    }
-
-    @Override
-    public CastResult tryCast(LivingEntity caster) {
-        Identifier skillId = getSkillId(caster);
-        if (skillId == null) {
-            return CastResult.fail(Component.literal("Invalid active skill"));
+        if (interrupt) {
+            instance.end(CastStatus.Reason.INTERRUPTED);
         }
+    }
+
+    @Override
+    public CastResult tryCast(CastingSkillInstance<Data, ActiveCastData, EquipSkillData.Empty> instance) {
+        LivingEntity caster = instance.getCaster();
+        Identifier skillId = instance.getSkillId();
 
         EntityCooldownHandler cooldownHandler = caster.getData(ZenithAttachments.COOLDOWN_HANDLER);
         if (cooldownHandler.isOnCooldown(skillId)) {
@@ -242,7 +251,7 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
         }
 
         return switch (cast.mode()) {
-            case INSTANT -> {
+            case INSTANT, CHANNEL -> {
                 ResolvedActiveCast resolved = resolve(level, caster, skillId, mastery, 0.0D, Map.of());
                 if (resolved.failureMessage() != null) {
                     yield CastResult.fail(resolved.failureMessage());
@@ -264,133 +273,99 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
                         ? CastResult.success()
                         : CastResult.fail(Component.literal("Not enough resources"));
             }
-            case CHANNEL -> {
-                ResolvedActiveCast resolved = resolve(level, caster, skillId, mastery, 0.0D, Map.of());
-                if (resolved.failureMessage() != null) {
-                    yield CastResult.fail(resolved.failureMessage());
-                }
-                yield canPayCosts(caster, skillId, resolved)
-                        ? CastResult.success()
-                        : CastResult.fail(Component.literal("Not enough resources"));
-            }
         };
     }
 
     @Override
-    public CastData initialCast(LivingEntity caster, PreCastData preCastData) {
-        Identifier skillId = getSkillId(caster);
-        if (skillId == null) {
-            return null;
-        }
-
+    public void startCast(CastingSkillInstance<Data, ActiveCastData, EquipSkillData.Empty> instance) {
+        LivingEntity caster = instance.getCaster();
         if (cast.mode() == ActiveCastDefinition.Mode.INSTANT) {
             if (caster.level() instanceof ServerLevel level) {
-                executeInstant(level, caster, skillId);
+                executeInstant(level, caster, instance.getSkillId());
             }
-            return null;
+            instance.end(CastStatus.Reason.COMPLETED);
+            return;
         }
 
-        ActiveCastData data = new ActiveCastData();
-        data.setStageIndex(cast.stage(cast.progress(0)));
-        return data;
+        instance.getCastData().setStageIndex(cast.stage(cast.progress(0)));
+        instance.setPhase(cast.mode() == ActiveCastDefinition.Mode.CHARGE ? CHARGING : CHANNELING);
     }
 
     @Override
-    public void continueCasting(
-            LivingEntity caster,
-            CastStatus castStatus,
-            CastData castData,
-            int ticksElapsed
-    ) {
-        if (!(castData instanceof ActiveCastData data) || cast.mode() == ActiveCastDefinition.Mode.INSTANT) {
-            castStatus.invalidate();
+    public void tickCast(CastingSkillInstance<Data, ActiveCastData, EquipSkillData.Empty> instance) {
+        boolean charging = instance.isPhase(CHARGING);
+        if (!charging && !instance.isPhase(CHANNELING)) {
+            instance.end(CastStatus.Reason.INVALIDATED);
             return;
         }
 
-        boolean inputActive = caster.getData(ZenithAttachments.ACTION_MANAGER)
-                .isActive(net.zic.ascension.skill_casting.AscensionSkillListener.skillCast);
-        if (!inputActive) {
-            if (cast.mode() == ActiveCastDefinition.Mode.CHARGE) {
-                if (cast.minimumReached(data.getTicks())) {
-                    castStatus.release();
-                } else {
-                    castStatus.cancel();
-                }
+        //ticks completed so far, the maximum is checked first so the tick reaching it still runs
+        int ticks = instance.getPhaseTicks();
+        if (cast.maximumReached(ticks)) {
+            instance.end(CastStatus.Reason.COMPLETED);
+            return;
+        }
+
+        if (!instance.isInputHeld()) {
+            if (charging) {
+                instance.end(cast.minimumReached(ticks) ? CastStatus.Reason.RELEASED : CastStatus.Reason.CANCELLED);
             } else {
-                castStatus.complete();
+                instance.end(CastStatus.Reason.COMPLETED);
             }
             return;
         }
 
-        int nextTicks = cast.maximumTicks() > 0
-                ? Math.min(cast.maximumTicks(), data.getTicks() + 1)
-                : data.getTicks() + 1;
-        data.setTicks(nextTicks);
-
-        Identifier skillId = getSkillId(caster);
-        if (skillId == null) {
-            castStatus.invalidate();
-            return;
-        }
-
+        LivingEntity caster = instance.getCaster();
+        Identifier skillId = instance.getSkillId();
+        ActiveCastData data = instance.getCastData();
+        int nextTicks = ticks + 1;
         double progress = cast.progress(nextTicks);
-        data.setStageIndex(cast.stage(progress));
-        Map<Identifier, Double> variables = castVariables(data);
+        if (data.setStageIndex(cast.stage(progress))) {
+            instance.markCastDataDirty();
+        }
+        Map<Identifier, Double> variables = castVariables(nextTicks);
         cast.movement().apply(caster, scaledValueContext(caster, skillId, null, progress, variables));
         ActiveCastDefinition.Stage stage = cast.stages().get(data.getStageIndex());
-        CastSoundPlayer.playPeriodic(caster, stage.sounds(), ticksElapsed);
+        CastSoundPlayer.playPeriodic(caster, stage.sounds(), ticks);
 
-        if (cast.mode() == ActiveCastDefinition.Mode.CHARGE) {
+        if (charging) {
             if (!caster.level().isClientSide() && cast.cost().isPresent()) {
                 ResourceTransactionService.Result result = cast.cost().get().payIncrement(
                         caster,
                         skillId,
                         data,
                         scaledValueContext(caster, skillId, null, progress, variables),
+                        nextTicks,
                         cast.maximumTicks()
                 );
                 if (result != null && (!result.succeeded()
                         || result.appliedAmount() + 1.0E-8D < result.resolvedAmount())) {
-                    if (cast.cost().get().releaseOnFailure() && cast.minimumReached(data.getTicks())) {
-                        castStatus.outOfResource();
+                    //the failed tick does not count, the release uses the charge paid so far
+                    if (cast.cost().get().releaseOnFailure() && cast.minimumReached(ticks)) {
+                        instance.end(CastStatus.Reason.OUT_OF_RESOURCE);
                     } else {
-                        castStatus.cancel();
+                        instance.end(CastStatus.Reason.CANCELLED);
                     }
-                    return;
                 }
-            }
-
-            if (cast.maximumReached(data.getTicks())) {
-                castStatus.complete();
             }
             return;
         }
 
         if (caster.level() instanceof ServerLevel level) {
-            executeChannelTick(level, caster, skillId, data, castStatus);
-        }
-        if (cast.maximumReached(data.getTicks()) && castStatus.isCasting()) {
-            castStatus.complete();
+            executeChannelTick(level, instance, nextTicks);
         }
     }
 
     @Override
-    public void finalCast(
-            LivingEntity caster,
-            CastStatus status,
-            CastData castData,
-            int ticksElapsed
-    ) {
-        if (!(caster.level() instanceof ServerLevel level)
-                || !(castData instanceof ActiveCastData data)
-                || cast.mode() == ActiveCastDefinition.Mode.INSTANT) {
+    public void endCast(CastingSkillInstance<Data, ActiveCastData, EquipSkillData.Empty> instance) {
+        LivingEntity caster = instance.getCaster();
+        if (!(caster.level() instanceof ServerLevel level) || cast.mode() == ActiveCastDefinition.Mode.INSTANT) {
             return;
         }
 
-        Identifier skillId = getSkillId(caster);
-        if (skillId == null) {
-            return;
-        }
+        Identifier skillId = instance.getSkillId();
+        CastStatus status = instance.getStatus();
+        int ticks = instance.getPhaseTicks();
 
         if (cast.mode() == ActiveCastDefinition.Mode.CHARGE) {
             boolean validRelease = status.isReleased()
@@ -399,11 +374,11 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
                     || status.isInterrupted() && cast.interruption()
                     .map(ActiveCastDefinition.Interruption::releaseAfterMinimum)
                     .orElse(false);
-            if (!validRelease || !cast.minimumReached(data.getTicks())) {
+            if (!validRelease || !cast.minimumReached(ticks)) {
                 return;
             }
 
-            double progress = cast.progress(data.getTicks());
+            double progress = cast.progress(ticks);
             ResolvedMastery mastery = resolveMastery(caster, skillId);
             if (mastery.failureMessage() != null) {
                 return;
@@ -414,7 +389,7 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
                     skillId,
                     mastery,
                     progress,
-                    castVariables(data)
+                    castVariables(ticks)
             );
             if (resolved.failureMessage() != null) {
                 sendFailure(caster, resolved.failureMessage());
@@ -431,7 +406,8 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
             return;
         }
 
-        if (data.getTicks() > 0 && !status.isCancelled() && !status.isInvalidated()) {
+        //a channel that ran at all always goes on cooldown, however it ended, so it can not be skipped by cancelling, logging out or dying
+        if (ticks > 0) {
             ResolvedMastery mastery = resolveMastery(caster, skillId);
             if (mastery.failureMessage() == null) {
                 ResolvedActiveCast resolved = resolve(
@@ -439,8 +415,8 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
                         caster,
                         skillId,
                         mastery,
-                        cast.progress(data.getTicks()),
-                        castVariables(data)
+                        cast.progress(ticks),
+                        castVariables(ticks)
                 );
                 if (resolved.failureMessage() == null) {
                     applyCooldown(caster, skillId, resolved);
@@ -470,17 +446,13 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
         awardMasteryExperience(caster, skillId);
     }
 
-    private void executeChannelTick(
-            ServerLevel level,
-            LivingEntity caster,
-            Identifier skillId,
-            ActiveCastData data,
-            CastStatus status
-    ) {
-        double progress = cast.progress(data.getTicks());
+    private void executeChannelTick(ServerLevel level, CastingSkillInstance<Data, ActiveCastData, EquipSkillData.Empty> instance, int ticks) {
+        LivingEntity caster = instance.getCaster();
+        Identifier skillId = instance.getSkillId();
+        double progress = cast.progress(ticks);
         ResolvedMastery mastery = resolveMastery(caster, skillId);
         if (mastery.failureMessage() != null) {
-            status.invalidate();
+            instance.end(CastStatus.Reason.INVALIDATED);
             return;
         }
         ResolvedActiveCast resolved = resolve(
@@ -489,20 +461,20 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
                 skillId,
                 mastery,
                 progress,
-                castVariables(data)
+                castVariables(ticks)
         );
         if (resolved.failureMessage() != null) {
             return;
         }
         if (!canPayCosts(caster, skillId, resolved) || !payCosts(caster, skillId, resolved)) {
-            status.outOfResource();
+            instance.end(CastStatus.Reason.OUT_OF_RESOURCE);
             return;
         }
         SkillExecutions.apply(level, caster, skillId, progress, actions, resolved.execution());
-        if (data.getTicks() == 1) {
+        if (ticks == 1) {
             PassiveTriggerService.trigger(caster, PassiveTrigger.Event.SKILL_CAST, SkillExecutions.primaryEntity(resolved.execution()), resolved.execution().variables());
         }
-        if (data.getTicks() % CHANNEL_MASTERY_INTERVAL == 0) {
+        if (ticks % CHANNEL_MASTERY_INTERVAL == 0) {
             awardMasteryExperience(caster, skillId);
         }
     }
@@ -612,11 +584,11 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
         return (int) Math.clamp(Math.round(value), 0L, (long) Integer.MAX_VALUE);
     }
 
-    private Map<Identifier, Double> castVariables(ActiveCastData data) {
+    private Map<Identifier, Double> castVariables(int ticks) {
         return Map.of(
-                SkillExecutions.CAST_TICKS, (double) data.getTicks(),
+                SkillExecutions.CAST_TICKS, (double) ticks,
                 SkillExecutions.MAXIMUM_CAST_TICKS, (double) cast.maximumTicks(),
-                SkillExecutions.CAST_PROGRESS, cast.progress(data.getTicks())
+                SkillExecutions.CAST_PROGRESS, cast.progress(ticks)
         );
     }
 
@@ -628,30 +600,6 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
 
     private OriginSource getOriginSource(LivingEntity caster) {
         return AscensionOriginSourceHelper.getEntitySource(caster);
-    }
-
-    private Identifier getSkillId(LivingEntity caster) {
-        return CoreRegistries.SKILL_REGISTRY.get(caster.registryAccess()).getKey(this);
-    }
-
-    @Override
-    public CastData loadCastData(ByteBuf buf) {
-        return cast.mode() == ActiveCastDefinition.Mode.INSTANT ? null : new ActiveCastData(buf);
-    }
-
-    @Override
-    public PreCastData newPreCastData() {
-        return null;
-    }
-
-    @Override
-    public PreCastData loadPreCastData(ValueInput input) {
-        return null;
-    }
-
-    @Override
-    public PreCastData loadPreCastData(ByteBuf buf) {
-        return null;
     }
 
     @Override
@@ -694,34 +642,34 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
     }
 
     @Override
-    public void onAdded(OriginSource source, SkillData data) {
+    public void onAdded(OriginSource source, SkillInstance<Data> instance) {
     }
 
     @Override
-    public void onRemoved(OriginSource source, SkillData data) {
+    public void onRemoved(OriginSource source, SkillInstance<Data> instance) {
     }
 
     @Override
-    public void applyToEntity(LivingEntity entity, SkillData data) {
+    public void applyToEntity(LivingEntity entity, SkillInstance<Data> instance) {
     }
 
     @Override
-    public void removeFromEntity(LivingEntity entity, SkillData data) {
+    public void removeFromEntity(LivingEntity entity, SkillInstance<Data> instance) {
     }
 
     @Override
-    public SkillData newData(RegistryAccess access) {
+    public Data newData(RegistryAccess access) {
         return new Data(new SkillProgressionData(getInitialProgression(), 0.0D, Map.of()));
     }
 
     @Override
-    public SkillData loadData(ValueInput input, RegistryAccess access) {
-        return new Data(input);
+    public SerializerHandler<Data> serializerHandler() {
+        return SERIALIZER_HANDLER;
     }
 
     @Override
-    public SkillData loadData(ByteBuf buf) {
-        return new Data(buf);
+    public SyncHandler<Data> syncHandler() {
+        return SYNC_HANDLER;
     }
 
     private record ResolvedMastery(int effectiveMastery, Component failureMessage) {
@@ -747,32 +695,33 @@ public final class ActiveSkill implements CastableSkill, ProgressingSkill, Skill
             this.progression = progression == null ? new SkillProgressionData() : progression;
         }
 
-        public Data(ValueInput input) {
-            this(new SkillProgressionData(input.childOrEmpty("progression")));
-        }
-
-        public Data(ByteBuf buf) {
-            this(new SkillProgressionData(buf));
-        }
-
         @Override
         public SkillProgressionData getSkillProgression() {
             return progression;
         }
+    }
 
+    private static final class DataSerializerHandler implements SerializerHandler<Data> {
         @Override
-        public void write(ValueOutput output, RegistryAccess access) {
-            progression.write(output.child("progression"));
+        public Data read(ValueInput input, RegistryAccess access) {
+            return new Data(new SkillProgressionData(input.childOrEmpty("progression")));
         }
 
         @Override
-        public void encode(ByteBuf buf, RegistryAccess access) {
-            progression.encode(buf);
+        public void write(Data data, ValueOutput output, RegistryAccess access) {
+            data.progression.write(output.child("progression"));
+        }
+    }
+
+    private static final class DataSyncHandler implements SyncHandler<Data> {
+        @Override
+        public void decode(Data data, ByteBuf buf, RegistryAccess access) {
+            data.progression.decode(buf);
         }
 
         @Override
-        public SkillType getType() {
-            return AscensionSkillTypes.ACTIVE_SKILL_TYPE.get();
+        public void encode(Data data, ByteBuf buf, RegistryAccess access) {
+            data.progression.encode(buf);
         }
     }
 }

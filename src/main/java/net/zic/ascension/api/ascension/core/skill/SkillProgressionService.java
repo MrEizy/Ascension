@@ -2,7 +2,6 @@ package net.zic.ascension.api.ascension.core.skill;
 
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.NeoForge;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.event.skill.SkillEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -103,41 +102,39 @@ public final class SkillProgressionService {
             SkillEvent.ProgressionChanged.Reason reason,
             ProgressionMutation mutation
     ) {
-        ResolvedSkill resolved = resolve(source, skillId);
-        if (resolved == null) {
+        ResolvedSkill<?> resolved = resolve(source, skillId);
+        return resolved != null && mutateTyped(source, resolved, reason, mutation);
+    }
+
+    private static <D extends ProgressingSkillData> boolean mutateTyped(
+            OriginSource source,
+            ResolvedSkill<D> resolved,
+            SkillEvent.ProgressionChanged.Reason reason,
+            ProgressionMutation mutation
+    ) {
+        SkillInstance<D> instance = resolved.instance();
+        ProgressingSkill<D> skill = resolved.skill();
+        D data = instance.getData();
+
+        SkillProgressionSnapshot previous = SkillProgressionResolver.resolve(source, instance, skill, data);
+        if (!mutation.apply(skill, data.getSkillProgression())) {
             return false;
         }
 
-        SkillProgressionSnapshot previous = SkillProgressionResolver.resolve(
-                source,
-                skillId,
-                resolved.skill,
-                resolved.data
-        );
-        if (!mutation.apply(resolved.skill, resolved.data.getSkillProgression())) {
-            return false;
-        }
-
-        SkillProgressionSnapshot current = SkillProgressionResolver.resolve(
-                source,
-                skillId,
-                resolved.skill,
-                resolved.data
-        );
+        SkillProgressionSnapshot current = SkillProgressionResolver.resolve(source, instance, skill, data);
         if (previous.effectiveProgression() != current.effectiveProgression()) {
-            resolved.skill.onProgressionChanged(
+            skill.onProgressionChanged(
                     source,
-                    resolved.data,
+                    instance,
                     previous.effectiveProgression(),
                     current.effectiveProgression()
             );
         }
 
-        AscensionOriginSourceHelper.markSkillDirty(source, skillId);
+        AscensionOriginSourceHelper.markSkillDirty(source, instance.getSkillId());
         NeoForge.EVENT_BUS.post(new SkillEvent.ProgressionChanged(
                 source,
-                skillId,
-                resolved.data,
+                instance,
                 previous,
                 current,
                 reason
@@ -145,22 +142,19 @@ public final class SkillProgressionService {
         return true;
     }
 
-    private static ResolvedSkill resolve(OriginSource source, Identifier skillId) {
+    //the data is always created by the skill, so a progressing skill always holds progressing data
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static ResolvedSkill<?> resolve(OriginSource source, Identifier skillId) {
         if (source == null || skillId == null || source.getRegistryAccess() == null) {
             return null;
         }
 
-        Skill skill = CoreRegistries.safeAccess(
-                CoreRegistries.SKILL_REGISTRY,
-                skillId,
-                source.getRegistryAccess()
-        );
-        SkillData data = AscensionOriginSourceHelper.getSkillData(source, skillId);
-        if (!(skill instanceof ProgressingSkill progressingSkill)
-                || !(data instanceof ProgressingSkillData progressingData)) {
+        SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source, skillId);
+        if (instance == null || !(instance.getSkill() instanceof ProgressingSkill progressingSkill)
+                || !(instance.getData() instanceof ProgressingSkillData)) {
             return null;
         }
-        return new ResolvedSkill(progressingSkill, progressingData);
+        return new ResolvedSkill((SkillInstance) instance, progressingSkill);
     }
 
     private static int clamp(int value, int minimum, int maximum) {
@@ -169,9 +163,9 @@ public final class SkillProgressionService {
 
     @FunctionalInterface
     private interface ProgressionMutation {
-        boolean apply(ProgressingSkill skill, SkillProgressionData progression);
+        boolean apply(ProgressingSkill<?> skill, SkillProgressionData progression);
     }
 
-    private record ResolvedSkill(ProgressingSkill skill, ProgressingSkillData data) {
+    private record ResolvedSkill<D extends ProgressingSkillData>(SkillInstance<D> instance, ProgressingSkill<D> skill) {
     }
 }
