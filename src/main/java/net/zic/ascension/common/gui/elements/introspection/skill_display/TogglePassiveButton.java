@@ -1,5 +1,7 @@
 package net.zic.ascension.common.gui.elements.introspection.skill_display;
 
+import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkills;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
@@ -8,11 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
@@ -88,16 +86,11 @@ public class TogglePassiveButton extends BetterButton {
             OriginSource source,
             Identifier skillId
     ) {
-        Skill skill = CoreRegistries.safeAccess(
-                CoreRegistries.SKILL_REGISTRY,
-                skillId,
-                registryAccess
-        );
-        SkillData data = AscensionOriginSourceHelper.getSkillData(source,skillId);
+        SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source,skillId);
 
-        if (skill instanceof ToggleableSkill toggleableSkill && data != null) {
+        if (ToggleableSkills.isToggleable(instance)) {
             toggleable = true;
-            enabled = toggleableSkill.isEnabled(data);
+            enabled = ToggleableSkills.isEnabled(instance);
         }
     }
 

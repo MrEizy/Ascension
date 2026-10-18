@@ -149,7 +149,7 @@ dependencies {
     //jarJar(implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0'))
 
     //implementation 'com.github.MrEizy:ZenithLib:495d40e491'
-    implementation('io.github.oliverhesse:zenithlib:0.1')
+    implementation('io.github.oliverhesse:zenithlib:0.1.1')
     implementation('com.github.OliverHesse:EasyGui:d71b1e115c')
     implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0')
 

@@ -2,11 +2,9 @@ package net.zic.ascension.impl.core.skill.passive;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.zic.ascension.api.ascension.core.skill.passive.PassiveModifier;
-import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
+import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkills;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
@@ -25,21 +23,15 @@ public final class PassiveSkillService {
             if (skillId.equals(except)) {
                 continue;
             }
-            Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, source.getRegistryAccess());
-            SkillData data = AscensionOriginSourceHelper.getSkillData(source, skillId);
-            if (!(skill instanceof PassiveSkill passive)
-                    || !(skill instanceof ToggleableSkill toggleable)
-                    || data == null
-                    || !group.equals(passive.stateGroup().orElse(null))
-                    || !toggleable.isEnabled(data)) {
+            SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source, skillId);
+            if (instance == null
+                    || !(instance.getSkill() instanceof PassiveSkill passive)
+                    || !group.equals(passive.stateGroup().orElse(null))) {
                 continue;
             }
-            toggleable.onDisabled(source, data);
-            for (var entity : source.getAttachedEntities()) {
-                toggleable.removeEnabledFromEntity(entity, data);
+            if (ToggleableSkills.disable(source, instance, source.getAttachedEntities())) {
+                AscensionOriginSourceHelper.markSkillDirty(source, skillId);
             }
-            toggleable.setEnabled(data, false);
-            AscensionOriginSourceHelper.markSkillDirty(source, skillId);
         }
     }
 
@@ -53,9 +45,13 @@ public final class PassiveSkillService {
         }
         List<Entry<T>> values = new ArrayList<>();
         for (Identifier skillId : AscensionOriginSourceHelper.getSkills(source)) {
-            Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, access);
-            SkillData data = AscensionOriginSourceHelper.getSkillData(source, skillId);
-            if (!(skill instanceof PassiveSkill passive) || !(data instanceof PassiveSkill.Data passiveData) || !passive.isActive(passiveData)) {
+            SkillInstance<PassiveSkill.Data> instance = passiveInstance(source, skillId);
+            if (instance == null) {
+                continue;
+            }
+            PassiveSkill passive = (PassiveSkill) instance.getSkill();
+            PassiveSkill.Data passiveData = instance.getData();
+            if (!passive.isActive(passiveData)) {
                 continue;
             }
             for (PassiveModifier modifier : passive.modifiers()) {
@@ -65,6 +61,12 @@ public final class PassiveSkillService {
             }
         }
         return List.copyOf(values);
+    }
+
+    //the passive skill instance held for this skill, null if it is not a passive skill
+    public static SkillInstance<PassiveSkill.Data> passiveInstance(OriginSource source, Identifier skillId) {
+        SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source, skillId);
+        return instance == null ? null : instance.as(PassiveSkill.class);
     }
 
     public record Entry<T extends PassiveModifier>(

@@ -1,78 +1,89 @@
 package net.zic.ascension.skill_casting.hotbar;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
-import net.zic.ascension.api.ascension.core.skill.castable.PreCastData;
+import net.zic.ascension.Config;
+import net.zic.ascension.api.ascension.core.skill.castable.SkillSlot;
 import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
-// TODO update to include a config option for skill slots
+//the slot count comes from the server config, clients take the size from the sync
 public class SkillHotBar {
-    private final SkillHotBarSlot[] slots;
+    private final LivingEntity owner;
+    //null entries are empty slots
+    private @Nullable SkillSlot<?, ?>[] slots;
 
     private int selectedSlot;
     private boolean dirty;
 
-    public SkillHotBar() {
-        slots = new SkillHotBarSlot[getMaxSlots()];
-        for (int index = 0; index < slots.length; index++) {
-            slots[index] = new SkillHotBarSlot();
+    public SkillHotBar(LivingEntity owner) {
+        this.owner = owner;
+        slots = new SkillSlot<?, ?>[configuredSlots()];
+    }
+
+    public @Nullable SkillSlot<?, ?> getSlot(int slot) {
+        return isValidSlot(slot) ? slots[slot] : null;
+    }
+
+    public @Nullable Identifier getSkill(int slot) {
+        SkillSlot<?, ?> skillSlot = getSlot(slot);
+        return skillSlot == null ? null : skillSlot.getSkillId();
+    }
+
+    //the first slot holding this skill, used to give a synced cast its equip data
+    public @Nullable SkillSlot<?, ?> findSlot(Identifier skill) {
+        for (SkillSlot<?, ?> slot : slots) {
+            if (slot != null && slot.getSkillId().equals(skill)) return slot;
         }
-    }
-
-    public Identifier getSkill(int slot) {
-        return isValidSlot(slot) ? slots[slot].getSkill() : null;
-    }
-
-    public PreCastData getPreCastData(int slot) {
-        return isValidSlot(slot) ? slots[slot].getPreCastData() : null;
+        return null;
     }
 
     public int getSelectedSlot() {
         return selectedSlot;
     }
 
-    public void slotSkill(LivingEntity entity, Identifier skill, int slot) {
+    //slots a skill, null clears the slot. a skill that is not castable is ignored
+    public void slotSkill(@Nullable Identifier skill, int slot) {
         if (!isValidSlot(slot)) {
+            return;
+        }
+        SkillSlot<?, ?> replacement = skill == null ? null : SkillSlot.create(owner, skill, access(), this::markDirty);
+        if (skill != null && replacement == null) {
             return;
         }
 
         boolean selected = slot == selectedSlot;
-        if (selected) {
-            notifySelection(entity, slot, false);
+        SkillSlot<?, ?> previous = slots[slot];
+        if (previous != null) {
+            if (selected) previous.unselect();
+            previous.unequip();
         }
 
-        slots[slot].setSkill(entity, skill);
-
-        if (selected) {
-            notifySelection(entity, slot, true);
+        slots[slot] = replacement;
+        if (replacement != null) {
+            replacement.equip();
+            if (selected) replacement.select();
         }
         markDirty();
     }
 
-    public void select(LivingEntity entity, int slot) {
+    public void select(int slot) {
         if (!isValidSlot(slot) || selectedSlot == slot) {
             return;
         }
 
-        notifySelection(entity, selectedSlot, false);
+        if (slots[selectedSlot] != null) slots[selectedSlot].unselect();
         selectedSlot = slot;
-        notifySelection(entity, selectedSlot, true);
-        markDirty();
-    }
-
-    public void validateSlots(LivingEntity entity) {
-        if (!isValidSlot(selectedSlot)) {
-            selectedSlot = 0;
-        }
+        if (slots[selectedSlot] != null) slots[selectedSlot].select();
         markDirty();
     }
 
@@ -89,131 +100,94 @@ public class SkillHotBar {
     }
 
     public int getMaxSlots() {
-        return 6;
+        return slots.length;
+    }
+
+    //the config may not be loaded yet when the hot bar is first created, the sync or load corrects the size
+    private static int configuredSlots() {
+        try {
+            return Config.COMMON.SKILL_HOT_BAR_SLOTS.get();
+        } catch (IllegalStateException e) {
+            return Config.COMMON.SKILL_HOT_BAR_SLOTS.getDefault();
+        }
     }
 
     private boolean isValidSlot(int slot) {
         return slot >= 0 && slot < slots.length;
     }
 
-    private void notifySelection(LivingEntity entity, int slot, boolean selected) {
-        Identifier skillId = getSkill(slot);
-        if (skillId == null || !(CoreRegistries.safeAccess(
-                CoreRegistries.SKILL_REGISTRY,
-                skillId,
-                entity.level().registryAccess()
-        ) instanceof CastableSkill castableSkill)) {
-            return;
-        }
-
-        if (selected) {
-            castableSkill.selected(entity, getPreCastData(slot));
-        } else {
-            castableSkill.unselected(entity, getPreCastData(slot));
-        }
+    private RegistryAccess access() {
+        return owner.level().registryAccess();
     }
+
+    //──Serialization────────────────────────────────────────────────────────
 
     public void write(ValueOutput output) {
         output.putInt("selected", selectedSlot);
         NbtHelpers.writeArray(output, "slots", slots, (holder, id, value) -> {
-            if (value.getSkill() == null) {
-                return;
-            }
-            NbtHelpers.writeIdentifier(holder, "skill", value.getSkill());
-            if (value.getPreCastData() != null) {
-                value.getPreCastData().write(holder.child("pre_cast_data"));
-            }
+            if (value != null) value.write(holder, access());
         });
     }
 
-    public void load(ValueInput input, LivingEntity entity) {
-        List<SkillHotBarSlot> loadedSlots = NbtHelpers.readList(input, "slots", (holder, id) -> {
-            SkillHotBarSlot slot = new SkillHotBarSlot();
-            if (holder.getString("skill").isEmpty()) {
-                return slot;
-            }
-
-            Identifier skill = NbtHelpers.readIdentifier(holder, "skill");
-            if (!(CoreRegistries.safeAccess(
-                    CoreRegistries.SKILL_REGISTRY,
-                    skill,
-                    entity.level().registryAccess()
-            ) instanceof CastableSkill castableSkill)) {
-                return slot;
-            }
-
-            PreCastData data = castableSkill.loadPreCastData(
-                    holder.childOrEmpty("pre_cast_data")
-            );
-            slot.setSkill(entity, skill, data);
-            return slot;
-        });
-
-        replaceSlots(entity, loadedSlots, input.getIntOr("selected", 0));
+    public void load(ValueInput input) {
+        //readList does not allow null entries, so empty slots are wrapped
+        List<Optional<SkillSlot<?, ?>>> loadedSlots = NbtHelpers.readList(input, "slots", (holder, id) ->
+                Optional.ofNullable(SkillSlot.read(owner, holder, access(), this::markDirty))
+        );
+        replaceSlots(loadedSlots.stream().<SkillSlot<?, ?>>map(slot -> slot.orElse(null)).toList(), configuredSlots(), input.getIntOr("selected", 0));
         markDirty();
     }
 
     public void encode(ByteBuf buf) {
         ByteBufHelpers.encodeArray(slots, buf, (value, target) -> {
-            target.writeBoolean(value.getSkill() != null);
-            if (value.getSkill() == null) {
-                return;
-            }
-
-            ByteBufHelpers.encodeIdentifier(value.getSkill(), target);
-            target.writeBoolean(value.getPreCastData() != null);
-            if (value.getPreCastData() != null) {
-                value.getPreCastData().encode(target);
-            }
+            target.writeBoolean(value != null);
+            if (value != null) value.encode(target, access());
         });
         buf.writeInt(selectedSlot);
     }
 
-    public void decode(RegistryFriendlyByteBuf buf, LivingEntity entity) {
-        List<SkillHotBarSlot> decodedSlots = ByteBufHelpers.decodeArray(buf, source -> {
-            SkillHotBarSlot slot = new SkillHotBarSlot();
-            if (!source.readBoolean()) {
-                return slot;
-            }
-
-            Identifier skill = ByteBufHelpers.decodeIdentifier(source);
-            if (!(CoreRegistries.safeAccess(
-                    CoreRegistries.SKILL_REGISTRY,
-                    skill,
-                    buf.registryAccess()
-            ) instanceof CastableSkill castableSkill)) {
-                return slot;
-            }
-
-            PreCastData preCastData = source.readBoolean()
-                    ? castableSkill.loadPreCastData(source)
-                    : null;
-            slot.setSkill(entity, skill, preCastData);
-            return slot;
-        });
-        int decodedSelectedSlot = buf.readInt();
-
-        replaceSlots(entity, decodedSlots, decodedSelectedSlot);
+    public void decode(ByteBuf buf) {
+        List<SkillSlot<?, ?>> decodedSlots = ByteBufHelpers.decodeArray(buf, source ->
+                source.readBoolean() ? SkillSlot.decode(owner, source, access(), this::markDirty) : null
+        );
+        replaceSlots(decodedSlots, decodedSlots.size(), buf.readInt());
         resolveDirty();
     }
 
-    private void replaceSlots(
-            LivingEntity entity,
-            List<SkillHotBarSlot> replacements,
-            int replacementSelectedSlot
-    ) {
-        notifySelection(entity, selectedSlot, false);
-        for (SkillHotBarSlot slot : slots) {
-            slot.unslotSkill(entity);
+    /**
+     * replaces the slots with loaded or synced ones, resizing the hot bar. only slots whose skill changed are
+     * unequipped/equipped, slots that kept their skill just take the new equip data, so syncs do not re-run hooks
+     */
+    private void replaceSlots(List<SkillSlot<?, ?>> replacements, int size, int replacementSelectedSlot) {
+        int newSize = Math.max(1, size);
+        SkillSlot<?, ?>[] next = new SkillSlot<?, ?>[newSize];
+        for (int index = 0; index < newSize && index < replacements.size(); index++) {
+            next[index] = replacements.get(index);
+        }
+        int nextSelectedSlot = replacementSelectedSlot >= 0 && replacementSelectedSlot < newSize ? replacementSelectedSlot : 0;
+
+        boolean selectionChanged = nextSelectedSlot != selectedSlot
+                || !Objects.equals(getSkill(selectedSlot), next[nextSelectedSlot] == null ? null : next[nextSelectedSlot].getSkillId());
+        if (selectionChanged && getSlot(selectedSlot) != null) {
+            slots[selectedSlot].unselect();
         }
 
-        for (int index = 0; index < slots.length; index++) {
-            slots[index] = index < replacements.size()
-                    ? replacements.get(index)
-                    : new SkillHotBarSlot();
+        for (int index = 0; index < Math.max(slots.length, newSize); index++) {
+            SkillSlot<?, ?> current = index < slots.length ? slots[index] : null;
+            SkillSlot<?, ?> replacement = index < newSize ? next[index] : null;
+            if (current != null && replacement != null && current.getSkillId().equals(replacement.getSkillId())) {
+                current.copyEquipDataFrom(replacement);
+                next[index] = current;
+                continue;
+            }
+            if (current != null) current.unequip();
+            if (replacement != null) replacement.equip();
         }
 
-        selectedSlot = isValidSlot(replacementSelectedSlot) ? replacementSelectedSlot : 0;
-        notifySelection(entity, selectedSlot, true);
+        slots = next;
+        selectedSlot = nextSelectedSlot;
+        if (selectionChanged && slots[selectedSlot] != null) {
+            slots[selectedSlot].select();
+        }
     }
 }

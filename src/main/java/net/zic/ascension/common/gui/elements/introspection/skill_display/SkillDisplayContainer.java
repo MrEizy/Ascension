@@ -107,6 +107,8 @@ public class SkillDisplayContainer extends RenderableElement {
     public void handleSlotClick(SkillSlotButton slotButton) {
         Identifier skillToAssign = getCastableSelectedSkill();
         if (skillToAssign == null) {
+            //selected locally right away so a cast straight after uses the new slot
+            ClientAscensionData.getSkillCastHandler().ifPresent(handler -> handler.select(slotButton.getSlot()));
             ClientPacketDistributor.sendToServer(
                     new SelectSkillSlotPacket(slotButton.getSlot())
             );

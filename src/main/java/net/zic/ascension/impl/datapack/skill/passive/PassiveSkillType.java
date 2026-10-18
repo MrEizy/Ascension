@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
@@ -19,14 +18,8 @@ import net.zic.ascension.impl.core.skill.passive.PassiveSkill;
 import java.util.List;
 
 public final class PassiveSkillType extends SkillType {
-    private static final MapCodec<PassiveSkill.Data> DATA_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            SkillProgressionData.CODEC.codec().optionalFieldOf("progression", new SkillProgressionData())
-                    .forGetter(PassiveSkill.Data::getSkillProgression),
-            Codec.BOOL.optionalFieldOf("enabled", true).forGetter(PassiveSkill.Data::isEnabled)
-    ).apply(instance, PassiveSkill.Data::new));
-
     @Override
-    public MapCodec<? extends Skill> codec() {
+    public MapCodec<? extends Skill<?>> codec() {
         return RecordCodecBuilder.<PassiveSkill>mapCodec(instance -> instance.group(
                 ComponentSerialization.CODEC.fieldOf("name").forGetter(PassiveSkill::getName),
                 ComponentSerialization.CODEC.fieldOf("description").forGetter(PassiveSkill::getDescription),
@@ -45,10 +38,5 @@ public final class PassiveSkillType extends SkillType {
                 SkillAction.CODEC.listOf().optionalFieldOf("on_enable", List.of()).forGetter(PassiveSkill::enableActions),
                 SkillAction.CODEC.listOf().optionalFieldOf("on_disable", List.of()).forGetter(PassiveSkill::disableActions)
         ).apply(instance, PassiveSkill::create));
-    }
-
-    @Override
-    public MapCodec<? extends SkillData> dataCodec() {
-        return DATA_CODEC;
     }
 }
