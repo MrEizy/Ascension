@@ -15,6 +15,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Persistent plot registry, stored as JSON in the world folder (ascension_inner_worlds.json) so it
+ * doesn't depend on the SavedData API. Server thread only.
+ */
 public final class InnerWorldPlots {
     private InnerWorldPlots() {
     }
@@ -48,8 +52,18 @@ public final class InnerWorldPlots {
     public static final class Plot {
         public int index;
         public int tier;
+        /** Largest fully generated ring (in chunks); the invisible border sits here. -1 = nothing yet. */
         public int generatedRadius = -1;
+        /**
+         * 0 = legacy plot generated before the seed system (kept exactly as it was, old generator).
+         * 1 = seeded plot. A version-1 plot with seed == null is waiting for its first cast.
+         * Old save files have no such field, so Gson leaves it at 0 for them automatically.
+         */
+        public int generatorVersion;
+        /** Permanent, hidden. Created once at first cast. */
+        public InnerWorldSeed.Seed seed;
         public Session session;
+        /** Set when the ghost died while the owner was offline; applied on next login. */
         public Origin pendingReturn;
     }
 
@@ -114,6 +128,7 @@ public final class InnerWorldPlots {
             return existing;
         }
         Plot plot = new Plot();
+        plot.generatorVersion = 1;
         plot.index = data.next++;
         data.players.put(player.toString(), plot);
         save();
