@@ -1,5 +1,6 @@
 package net.zic.ascension.common.command.commands;
 
+import net.zic.ascension.impl.core.path.simple.SimplePathData;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -15,7 +16,6 @@ import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
-import net.zic.ascension.impl.core.path.simple.SimplePathInstance;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.Stat;
 
@@ -47,14 +47,14 @@ public class StatDisplayCommand {
                             player.sendSystemMessage(Component.literal("Suppressed : "+data.isCultivationSuppressed()));
                             player.sendSystemMessage(Component.literal("===Paths==="));
                             for(Identifier pathId : AscensionOriginSourceHelper.getPaths(originSource)){
-                                Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,data.getSource().getRegistryAccess());
-                                player.sendSystemMessage(path.name());
-                                PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(originSource,pathId);
+                                Path<?> path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,data.getSource().getRegistryAccess());
+                                player.sendSystemMessage(path.getName(null));
+                                PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(originSource,pathId);
 
                                 player.sendSystemMessage(Component.literal("realm : ").append(path.getRealmName(pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm())));
                                 player.sendSystemMessage(Component.literal("progress : "+pathInstance.getProgress()));
-                                if(pathInstance instanceof SimplePathInstance simplePathInstance){
-                                    player.sendSystemMessage(Component.literal("limitBroken: "+simplePathInstance.isLimitBroken()));
+                                if(pathInstance.getData() instanceof SimplePathData simplePathData){
+                                    player.sendSystemMessage(Component.literal("limitBroken: "+simplePathData.isLimitBroken()));
                                 }
 
                             }

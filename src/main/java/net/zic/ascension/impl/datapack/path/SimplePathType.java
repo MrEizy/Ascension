@@ -15,11 +15,11 @@ import java.util.UUID;
 
 public class SimplePathType extends PathType {
     @Override
-    public MapCodec<? extends Path> codec() {
+    public MapCodec<? extends Path<?>> codec() {
         return RecordCodecBuilder.<SimplePath>mapCodec(instance ->
                 instance.group(
-                        ComponentSerialization.CODEC.fieldOf("name").forGetter(SimplePath::name),
-                        ComponentSerialization.CODEC.fieldOf("description").forGetter(SimplePath::description),
+                        ComponentSerialization.CODEC.fieldOf("name").forGetter(path -> path.getName(null)),
+                        ComponentSerialization.CODEC.fieldOf("description").forGetter(path -> path.getDescription(null)),
                         MajorRealmDefinition.CODEC.listOf().fieldOf("realms").forGetter(SimplePath::getMajorRealmDefinitions),
                         ProgressActionHolder.PROGRESS_HOLDER_CODEC.optionalFieldOf("actions",new ProgressActionHolder(UUID.randomUUID(),List.of())).forGetter(SimplePath::getProgressActionHolder)
                   ).apply(instance, SimplePath::new)

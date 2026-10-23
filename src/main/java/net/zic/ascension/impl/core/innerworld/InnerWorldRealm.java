@@ -21,7 +21,7 @@ final class InnerWorldRealm {
         Collection<Identifier> paths = AscensionOriginSourceHelper.getPaths(source);
         int highest = 0;
         for (Identifier path : paths) {
-            PathInstance instance = AscensionOriginSourceHelper.getPathInstance(source, path);
+            PathInstance<?> instance = AscensionOriginSourceHelper.getPathInstance(source, path);
             if (instance == null) {
                 continue;
             }

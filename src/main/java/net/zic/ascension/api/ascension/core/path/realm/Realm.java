@@ -18,7 +18,7 @@ public record Realm(int majorRealm, int minorRealm) implements Comparable<Realm>
      * @param realm2
      * @return an ordered list of realms between realm 1 and 2, with 0 being smallest. includes both start and end
      */
-    public static List<Realm> getRange(Realm realm1, Realm realm2, Path path){
+    public static List<Realm> getRange(Realm realm1, Realm realm2, Path<?> path){
         if(realm1.equals(realm2)) return new ArrayList<>(){{
             add(realm1);
         }};
@@ -50,7 +50,7 @@ public record Realm(int majorRealm, int minorRealm) implements Comparable<Realm>
 
         return result;
     }
-    public static Realm getNext(Realm realm,Path path){
+    public static Realm getNext(Realm realm,Path<?> path){
          return realm.minorRealm == path.getMaxMinorRealm(realm.majorRealm()) ?
                  Realm.of(realm.majorRealm+1,0):
                  Realm.of(realm.majorRealm(), realm.minorRealm()+1);

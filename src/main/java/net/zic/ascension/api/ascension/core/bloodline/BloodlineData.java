@@ -1,17 +1,11 @@
 package net.zic.ascension.api.ascension.core.bloodline;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
-
+/**
+ * per-origin state of a bloodline. Saving and syncing is handled by the owning {@link Bloodline}
+ * through its {@link Bloodline#serializerHandler()} and {@link Bloodline#syncHandler()}.
+ * Every bloodline tracks a purity, purity driven progression relies on it.
+ */
 public interface BloodlineData {
     int getPurity();
     void setPurity(int newPurity);
-
-
-    BloodlineType getType();
-
-    void write(ValueOutput output, RegistryAccess access);
-    void encode(ByteBuf buf,RegistryAccess access);
 }

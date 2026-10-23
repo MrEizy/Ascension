@@ -11,9 +11,7 @@ import net.minecraft.world.level.Level;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
-import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.item.components.AscensionComponents;
@@ -32,18 +30,18 @@ public class BloodlineTransferItem extends Item {
         if(!stack.has(AscensionComponents.REGISTRY_ID_HOLDER)) return InteractionResult.FAIL;
 
         Identifier targetBloodline = stack.get(AscensionComponents.REGISTRY_ID_HOLDER);
-        Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,targetBloodline,level.registryAccess());
-        BloodlineData data = bloodline.newData(level.registryAccess());
+        if(targetBloodline == null)return InteractionResult.FAIL;
+        BloodlineInstance<?> bloodline = BloodlineInstance.create(targetBloodline,level.registryAccess());
+        if(bloodline == null)return InteractionResult.FAIL;
 
         int purity = stack.getOrDefault(AscensionComponents.PURITY,1);
-        data.setPurity(purity);
-        if(targetBloodline == null)return InteractionResult.FAIL;
+        bloodline.getData().setPurity(purity);
 
         AscensionEntityDataProvider holder = player.getCapability(CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY);
 
         if(holder == null || holder.getData() == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData().getSource();
-        if(!AscensionOriginSourceHelper.addBloodline(source,targetBloodline,data)){
+        if(!AscensionOriginSourceHelper.addBloodline(source,bloodline,true)){
             //TODO return error message to player here
             return InteractionResult.FAIL;
         }

@@ -13,7 +13,7 @@ public interface PurityChangeActionCondition extends ProgressActionCondition {
     @Override
     default boolean test(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt){
         //first test to make sure context is a bloodline
-        Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,contextIdentifier,source.getRegistryAccess());
+        Bloodline<?> bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,contextIdentifier,source.getRegistryAccess());
         if(bloodline == null) return false;
         if(!(contextData instanceof BloodlineData data)) return false;
         int purity = data.getPurity();
@@ -22,6 +22,6 @@ public interface PurityChangeActionCondition extends ProgressActionCondition {
         return test(source,bloodline,data,purity,direction);
     }
 
-    boolean test(OriginSource source, Bloodline bloodline, BloodlineData data, int purity, ProgressDirection direction);
+    boolean test(OriginSource source, Bloodline<?> bloodline, BloodlineData data, int purity, ProgressDirection direction);
 
 }

@@ -78,7 +78,7 @@ public class CultivationCommand {
     private static int showPath(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var players = EntityArgument.getPlayers(context, "target");
         Identifier id = IdentifierArgument.getId(context, "path");
-        Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,id,context.getSource().registryAccess());
+        Path<?> path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,id,context.getSource().registryAccess());
         if(path == null){
             context.getSource().sendFailure(Component.literal("no path :"+id));
             return 0;
@@ -95,7 +95,7 @@ public class CultivationCommand {
                 player.sendSystemMessage(Component.literal("no path data"));
                 continue;
             }
-            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,id);
+            PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(source,id);
             player.sendSystemMessage(Component.literal("realm : ").append(path.getRealmName(pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm())));
             player.sendSystemMessage(Component.literal("progress : "+pathInstance.getProgress()));
 
@@ -114,7 +114,7 @@ public class CultivationCommand {
             } catch (IllegalArgumentException e) {
 
             }
-            Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,context.getSource().registryAccess());
+            Path<?> path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,context.getSource().registryAccess());
             if(path == null){
                 context.getSource().sendFailure(
                         Component.literal("Unknown path '" + pathId + "'. Use a registered path ID (e.g. ascension:body).")
@@ -153,7 +153,7 @@ public class CultivationCommand {
                 ));
                 return false;
             }
-            PathInstance data = AscensionOriginSourceHelper.getPathInstance(originSource,pathId);
+            PathInstance<?> data = AscensionOriginSourceHelper.getPathInstance(originSource,pathId);
 
             if(data == null){
                 source.sendFailure(Component.literal(
@@ -169,7 +169,7 @@ public class CultivationCommand {
 
             if(progressPercent > 0){
                 progressPercent = Math.clamp(progressPercent,0,100);
-                data.progressPath(pathId,data.getMaxProgress()*progressPercent/100.0,originSource,player);
+                data.progressPath(data.getMaxProgress()*progressPercent/100.0,originSource,player);
             }
             AscensionOriginSourceHelper.markPathDirty(originSource,pathId);
 

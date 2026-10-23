@@ -1,11 +1,11 @@
 package net.zic.ascension.impl.core.physique;
 
-import io.netty.buffer.ByteBuf;
+import net.zic.ascension.impl.core.path.simple.SimplePathData;
+import net.zic.ascension.impl.core.path.simple.SimplePath;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.storage.ValueInput;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -16,20 +16,19 @@ import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.physique.Physique;
-import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
+import net.zic.ascension.api.ascension.core.physique.PhysiqueInstance;
 import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
-import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
 import net.zic.ascension.api.ascension.datapack.path.realm.PathRealmChangeEvent;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.ascension.event.physique.PhysiqueChangedEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import org.jspecify.annotations.Nullable;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 import net.zic.ascension.api.rpg_engine.source.OriginSourceEvent;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
-import net.zic.ascension.impl.core.path.simple.SimplePathInstance;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
-import net.zic.zenithlib.common.ZenithRegistries;
 
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.ZenithStatHelper;
@@ -45,7 +44,7 @@ public record InfiniteBreakthroughPhysique(Component name, Component description
                                            Identifier path,
                                            int infiniteRealm,
                                            Optional<AscensionItemTooltipDefinition> itemTooltip,
-                                           RequirementHolder requirements) implements Physique {
+                                           RequirementHolder requirements) implements Physique<EmptyPhysiqueData> {
 
     public static List<InfiniteBreakthroughPhysique> tempRef = new ArrayList<>();
     public static Set<Identifier> existingPhysiques = new HashSet<>();
@@ -70,27 +69,31 @@ public record InfiniteBreakthroughPhysique(Component name, Component description
     @SubscribeEvent
     public static void onRealmUp(PathRealmChangeEvent.PathRealmUpEvent event){
         if(existingPhysiques.contains(AscensionOriginSourceHelper.getPhysiqueId(event.getSource()))){
-            InfiniteBreakthroughPhysique physique = (InfiniteBreakthroughPhysique) AscensionOriginSourceHelper.getPhysique(event.getSource());
-            if(physique == null) return;
+            PhysiqueInstance<?> physiqueInstance = AscensionOriginSourceHelper.getPhysique(event.getSource());
+            if(physiqueInstance == null || !(physiqueInstance.getPhysique() instanceof InfiniteBreakthroughPhysique physique)) return;
             Realm realm = Realm.of(physique.infiniteRealm(),0);
             if(!realm.isInRange(event.getRealm(),event.getOldRealm())) return;
 
-            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(event.getSource(),physique.path());
-            if(!(pathInstance instanceof SimplePathInstance simplePathInstance)) return;
+            PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(event.getSource(),physique.path());
+            PathInstance<SimplePathData> simplePathInstance = pathInstance == null ? null : pathInstance.as(SimplePath.class);
+            if(simplePathInstance == null) return;
+            SimplePath simplePath = (SimplePath) simplePathInstance.getPath();
 
-            simplePathInstance.limitBreakRealm(event.getSource(),physique.infiniteRealm,AscensionOriginSourceHelper.getPhysiqueId(event.getSource()));
+            simplePath.limitBreakRealm(event.getSource(),simplePathInstance,physique.infiniteRealm,AscensionOriginSourceHelper.getPhysiqueId(event.getSource()));
         }
     }
     @SubscribeEvent
     public static void onSourceFinishedLoading(OriginSourceEvent.OriginSourceFinishedLoadingEvent event){
         if(existingPhysiques.contains(AscensionOriginSourceHelper.getPhysiqueId(event.getSource()))){
-            InfiniteBreakthroughPhysique physique = (InfiniteBreakthroughPhysique) AscensionOriginSourceHelper.getPhysique(event.getSource());
-            if(physique == null) return;
+            PhysiqueInstance<?> physiqueInstance = AscensionOriginSourceHelper.getPhysique(event.getSource());
+            if(physiqueInstance == null || !(physiqueInstance.getPhysique() instanceof InfiniteBreakthroughPhysique physique)) return;
             Realm realm = Realm.of(physique.infiniteRealm(),0);
 
 
-            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(event.getSource(),physique.path());
-            if(!(pathInstance instanceof SimplePathInstance simplePathInstance)) return;
+            PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(event.getSource(),physique.path());
+            PathInstance<SimplePathData> simplePathInstance = pathInstance == null ? null : pathInstance.as(SimplePath.class);
+            if(simplePathInstance == null) return;
+            SimplePath simplePath = (SimplePath) simplePathInstance.getPath();
 
             if(simplePathInstance.getCurrentMajorRealm() < 0) return;
 
@@ -98,26 +101,30 @@ public record InfiniteBreakthroughPhysique(Component name, Component description
             Realm end = simplePathInstance.getCurrentRealm();
 
             if(!realm.isInRange(start,end)) return;
-            simplePathInstance.limitBreakRealm(event.getSource(),physique.infiniteRealm,AscensionOriginSourceHelper.getPhysiqueId(event.getSource()));
+            simplePath.limitBreakRealm(event.getSource(),simplePathInstance,physique.infiniteRealm,AscensionOriginSourceHelper.getPhysiqueId(event.getSource()));
         }
     }
     @SubscribeEvent
     public static void onPhysiqueChangeEvent(PhysiqueChangedEvent.Post event){
         if(existingPhysiques.contains(event.getPhysiqueIdentifier())){
-            InfiniteBreakthroughPhysique physique = (InfiniteBreakthroughPhysique) event.getPhysique(event.getSource().getRegistryAccess());
+            InfiniteBreakthroughPhysique physique = (InfiniteBreakthroughPhysique) event.getPhysique();
 
-            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(event.getSource(),physique.path());
-            if(!(pathInstance instanceof SimplePathInstance simplePathInstance)) return;
+            PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(event.getSource(),physique.path());
+            PathInstance<SimplePathData> simplePathInstance = pathInstance == null ? null : pathInstance.as(SimplePath.class);
+            if(simplePathInstance == null) return;
+            SimplePath simplePath = (SimplePath) simplePathInstance.getPath();
 
-            simplePathInstance.removeRealmLimitBreak(event.getSource(),physique.infiniteRealm,event.getPhysiqueIdentifier());
+            simplePath.removeRealmLimitBreak(event.getSource(),simplePathInstance,physique.infiniteRealm,event.getPhysiqueIdentifier());
         }
         if(existingPhysiques.contains(event.getNewPhysiqueIdentifier())){
-            InfiniteBreakthroughPhysique physique = (InfiniteBreakthroughPhysique) event.getNewPhysique(event.getSource().getRegistryAccess());
+            InfiniteBreakthroughPhysique physique = (InfiniteBreakthroughPhysique) event.getNewPhysique();
             Realm realm = Realm.of(physique.infiniteRealm(),0);
 
 
-            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(event.getSource(),physique.path());
-            if(!(pathInstance instanceof SimplePathInstance simplePathInstance)) return;
+            PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(event.getSource(),physique.path());
+            PathInstance<SimplePathData> simplePathInstance = pathInstance == null ? null : pathInstance.as(SimplePath.class);
+            if(simplePathInstance == null) return;
+            SimplePath simplePath = (SimplePath) simplePathInstance.getPath();
 
             if(simplePathInstance.getCurrentMajorRealm() < 0) return;
 
@@ -125,7 +132,7 @@ public record InfiniteBreakthroughPhysique(Component name, Component description
             Realm end = simplePathInstance.getCurrentRealm();
 
             if(!realm.isInRange(start,end)) return;
-            simplePathInstance.limitBreakRealm(event.getSource(),physique.infiniteRealm,event.getNewPhysiqueIdentifier());
+            simplePath.limitBreakRealm(event.getSource(),simplePathInstance,physique.infiniteRealm,event.getNewPhysiqueIdentifier());
 
         }
     }
@@ -164,9 +171,9 @@ public record InfiniteBreakthroughPhysique(Component name, Component description
     }
 
     @Override
-    public Collection<Identifier> onAdded(OriginSource source, PhysiqueData data) {
+    public Collection<Identifier> onAdded(OriginSource source, PhysiqueInstance<EmptyPhysiqueData> instance) {
 
-        Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
+        Identifier physiqueId = instance.getPhysiqueId();
 
         for(Map.Entry<Identifier,ModifierHolder<Double>> modifiers : statModifiers.entrySet()){
             Stat stat = ZenithStatHelper.stat(modifiers.getKey());
@@ -205,8 +212,8 @@ public record InfiniteBreakthroughPhysique(Component name, Component description
     }
 
     @Override
-    public Collection<Identifier> onRemoved(OriginSource source, PhysiqueData data) {
-        Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
+    public Collection<Identifier> onRemoved(OriginSource source, PhysiqueInstance<EmptyPhysiqueData> instance) {
+        Identifier physiqueId = instance.getPhysiqueId();
         for(Map.Entry<Identifier,ModifierHolder<Double>> modifiers : statModifiers.entrySet()){
             Stat stat = ZenithStatHelper.stat(modifiers.getKey());
             for(Modifier<Double> modifier : modifiers.getValue().flat()){
@@ -244,27 +251,37 @@ public record InfiniteBreakthroughPhysique(Component name, Component description
     }
 
     @Override
-    public void applyToEntity(LivingEntity entity, PhysiqueData data) {
+    public void applyToEntity(LivingEntity entity, PhysiqueInstance<EmptyPhysiqueData> instance) {
 
     }
 
     @Override
-    public void removeFromEntity(LivingEntity entity, PhysiqueData data) {
+    public void removeFromEntity(LivingEntity entity, PhysiqueInstance<EmptyPhysiqueData> instance) {
 
     }
 
     @Override
-    public PhysiqueData newData(RegistryAccess access) {
+    public Component getName(@Nullable EmptyPhysiqueData data) {
+        return name;
+    }
+
+    @Override
+    public Component getDescription(@Nullable EmptyPhysiqueData data) {
+        return description;
+    }
+
+    @Override
+    public EmptyPhysiqueData newData(RegistryAccess access) {
         return new EmptyPhysiqueData();
     }
 
     @Override
-    public PhysiqueData loadData(ValueInput input, RegistryAccess access) {
-        return new EmptyPhysiqueData();
+    public SerializerHandler<EmptyPhysiqueData> serializerHandler() {
+        return EmptyPhysiqueData.SERIALIZER_HANDLER;
     }
 
     @Override
-    public PhysiqueData loadData(ByteBuf buf,RegistryAccess access) {
-        return new EmptyPhysiqueData();
+    public SyncHandler<EmptyPhysiqueData> syncHandler() {
+        return EmptyPhysiqueData.SYNC_HANDLER;
     }
 }

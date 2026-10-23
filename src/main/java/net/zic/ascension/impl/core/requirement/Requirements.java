@@ -146,7 +146,7 @@ public final class Requirements {
         @Override
         public boolean test(OriginSource source) {
             if (source == null || path == null) return false;
-            PathInstance instance = AscensionOriginSourceHelper.getPathInstance(source, path);
+            PathInstance<?> instance = AscensionOriginSourceHelper.getPathInstance(source, path);
             if (instance == null) return false;
             int major = instance.getCurrentMajorRealm();
             if (major != minimumMajorRealm) return major > minimumMajorRealm;

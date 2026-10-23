@@ -22,7 +22,7 @@ public class CultivationUtil {
      * @param secondaryPath the path used to cultivate
      * @param baseRate
      */
-    public static void cultivate(LivingEntity caster, OriginSource source,Identifier path, PathInstance pathInstance, Identifier secondaryPath, double baseRate){
+    public static void cultivate(LivingEntity caster, OriginSource source,Identifier path, PathInstance<?> pathInstance, Identifier secondaryPath, double baseRate){
 
 
 
@@ -31,7 +31,7 @@ public class CultivationUtil {
         if(!path.equals(secondaryPath) && secondaryPath != null)cultivationAmount += baseRate*(1+PathInteractionUtil.getEffectivePathMultiplier(caster,secondaryPath));
 
 
-        pathInstance.progressPath(secondaryPath,cultivationAmount,source,caster);
+        pathInstance.progressPath(cultivationAmount,source,caster);
 
         AscensionOriginSourceHelper.markPathDirty(source,path);
     }

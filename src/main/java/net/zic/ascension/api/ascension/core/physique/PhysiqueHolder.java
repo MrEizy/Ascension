@@ -1,35 +1,49 @@
 package net.zic.ascension.api.ascension.core.physique;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.CoreDataSources;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceInstance;
+import org.jspecify.annotations.Nullable;
 
+//an origin holds at most one physique
 public class PhysiqueHolder implements DataSourceInstance<PhysiqueDataSource> {
 
-    Identifier physique;
-    PhysiqueData data;
+    private @Nullable PhysiqueInstance<?> physique;
 
-    public Identifier getPhysique(){
+    public @Nullable Identifier getPhysiqueId(){
+        return physique == null ? null : physique.getPhysiqueId();
+    }
+    public @Nullable PhysiqueInstance<?> getPhysique(){
         return physique;
     }
-    public PhysiqueData getData(){
-        return data;
-    }
-    public Physique getPhysique(RegistryAccess access){
-        return CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,getPhysique(),access);
-    }
 
-    public boolean setPhysique(Identifier id,PhysiqueData data){
-        if((id != null && id.equals(physique)) || (id == null && physique == null)) return false;
-        physique = id;
-        this.data = data;
+    /**
+     * replaces the held physique, runs no physique logic
+     * @return false if the new physique is the same as the held one
+     */
+    public boolean setPhysique(@Nullable PhysiqueInstance<?> instance){
+        Identifier newId = instance == null ? null : instance.getPhysiqueId();
+        Identifier oldId = getPhysiqueId();
+        if((newId != null && newId.equals(oldId)) || (newId == null && oldId == null)) return false;
+        physique = instance;
         return true;
     }
 
+    //──Sync────────────────────────────────────────────────────────
+
+    void encode(ByteBuf buf, RegistryAccess access) {
+        buf.writeBoolean(physique != null);
+        if(physique != null) physique.encode(buf, access);
+    }
+
+    void decode(ByteBuf buf, RegistryAccess access) {
+        physique = buf.readBoolean() ? PhysiqueInstance.decode(buf, access) : null;
+    }
 
     @Override
     public PhysiqueDataSource getDataSource() {
-        return null;//TODO CoreHolderProviders.PHYSIQUE_HOLDER_PROVIDER.get();
+        return CoreDataSources.PHYSIQUE_DATA_SOURCE.get();
     }
 }

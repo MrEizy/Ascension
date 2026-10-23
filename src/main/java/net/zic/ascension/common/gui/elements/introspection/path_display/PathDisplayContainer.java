@@ -146,14 +146,14 @@ public class PathDisplayContainer extends RenderableElement {
         }
 
         ClientAscensionData.getSource().ifPresentOrElse(source -> {
-            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, selectedPath);
+            PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(source, selectedPath);
             if (pathInstance == null) {
                 showMissingPath(selectedPath);
                 return;
             }
 
             ClientAscensionData.getPlayer().ifPresentOrElse(player -> {
-                Path path = CoreRegistries.safeAccess(
+                Path<?> path = CoreRegistries.safeAccess(
                         CoreRegistries.PATH_REGISTRY,
                         selectedPath,
                         player.registryAccess()
@@ -163,10 +163,10 @@ public class PathDisplayContainer extends RenderableElement {
                     return;
                 }
 
-                setPathTitle(path.name());
-                Component description = path.description() == null
+                setPathTitle(path.getName(null));
+                Component description = path.getDescription(null) == null
                         ? Component.empty()
-                        : path.description();
+                        : path.getDescription(null);
 
                 pathInformation.setInformation(
                         path.getRealmName(

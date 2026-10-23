@@ -165,13 +165,13 @@ public class CultivationProgressBar extends RenderableElement {
                 Identifier pathId = activeSkill.cultivationPath().get();
 
                 return ClientAscensionData.getEntityData().flatMap(entityData -> {
-                    PathInstance PathInstance = AscensionOriginSourceHelper.getPathInstance(entityData.getSource(),pathId);
+                    PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(entityData.getSource(),pathId);
 
-                    if (PathInstance == null) {
+                    if (pathInstance == null) {
                         return Optional.empty();
                     }
 
-                    double progress = resolveProgress(PathInstance, pathId, entityData.isCultivationSuppressed(), player.registryAccess());
+                    double progress = resolveProgress(pathInstance, pathId, entityData.isCultivationSuppressed(), player.registryAccess());
 
                     return Optional.of(new CultivationState(progress, resolveContent(pathId)));
                 });
@@ -179,7 +179,7 @@ public class CultivationProgressBar extends RenderableElement {
         });
     }
 
-    private static double resolveProgress(PathInstance pathInstance, Identifier pathId, boolean cultivationSuppressed, net.minecraft.core.RegistryAccess registryAccess) {
+    private static double resolveProgress(PathInstance<?> pathInstance, Identifier pathId, boolean cultivationSuppressed, net.minecraft.core.RegistryAccess registryAccess) {
         /*
         if (cultivationSuppressed && pathInstance instanceof FoundationPathInstance foundationData) {
 
