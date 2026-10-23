@@ -1,0 +1,45 @@
+{
+  "type": "ascension:body_cultivation",
+  "name": {
+    "translate": "ascension.skill.emberblood_tempering.name"
+  },
+  "description": {
+    "translate": "ascension.skill.emberblood_tempering.desc"
+  },
+  "path": "ascension:foundation/body",
+  "priority": 125,
+  "stimuli": [
+    {
+      "source": {
+        "sources": [
+          "ascension:attacking"
+        ]
+      },
+      "gain": 0.5
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "gain": 1.1
+    }
+  ],
+  "maximum_tempering": 135,
+  "conversion": {
+    "rate": 1.15,
+    "progress_per_tempering": 1.25,
+    "interval": 2,
+    "costs": [
+      {
+        "resource": "ascension:qi",
+        "amount": 0.65
+      },
+      {
+        "resource": "ascension:stamina",
+        "amount": 0.35
+      }
+    ]
+  }
+}

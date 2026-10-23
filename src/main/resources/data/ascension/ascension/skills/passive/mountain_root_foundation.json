@@ -1,0 +1,36 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.mountain_root_foundation.name"
+  },
+  "description": {
+    "translate": "ascension.skill.mountain_root_foundation.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stats": {
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:mountain_root_foundation_vitality_bonus",
+              "operation_group": 0,
+              "value": 0.09
+            }
+          ]
+        },
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:mountain_root_foundation_strength_bonus",
+              "operation_group": 0,
+              "value": 0.03
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

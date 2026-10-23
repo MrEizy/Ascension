@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_technique",
-  "name": {"translate": "ascension.technique.open_sky_breathing_scripture.name"},
-  "description": {"translate": "ascension.technique.open_sky_breathing_scripture.desc"},
+  "name": {
+    "translate": "ascension.technique.open_sky_breathing_scripture.name"
+  },
+  "description": {
+    "translate": "ascension.technique.open_sky_breathing_scripture.desc"
+  },
   "path": "ascension:foundation/essence",
   "milestone_realms": [
     0,
@@ -24,6 +28,12 @@
       "caps": {
         "2": "minor_mastery"
       }
+    },
+    "ascension:castable/new_techniques/essence_perception": {
+      "unlock": 1
+    },
+    "ascension:castable/inner_world": {
+      "unlock": 2
     }
   },
   "realm_change_handler": [

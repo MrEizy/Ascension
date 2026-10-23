@@ -1,0 +1,74 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.living_canopy.name"
+  },
+  "description": {
+    "translate": "ascension.skill.living_canopy.desc"
+  },
+  "definitions": {
+    "barriers": {
+      "living_canopy": {
+        "duration": {
+          "base": 90,
+          "per_mastery": 6
+        },
+        "durability": {
+          "base": 10.0,
+          "per_mastery": 2,
+          "maximum": 22.0
+        },
+        "absorption": {
+          "base": 0.43,
+          "per_mastery": 0.025,
+          "maximum": 0.56
+        },
+        "overflow": true,
+        "priority": 8,
+        "replace_existing": true,
+        "projectile_response": "none",
+        "on_break": [
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:item.shield.break",
+            "volume": 0.45,
+            "pitch": 0.9,
+            "subject": "target"
+          }
+        ]
+      }
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:barrier",
+      "action": "apply",
+      "definition": "#living_canopy",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:happy_villager",
+      "count": 18,
+      "spread": 0.65,
+      "speed": 0.03,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:item.shield.block",
+      "volume": 0.55,
+      "pitch": 1.2,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 9
+  },
+  "cooldown": {
+    "base": 130,
+    "per_mastery": -6,
+    "minimum": 100
+  }
+}

@@ -18,7 +18,13 @@
   "max_realm": 5,
   "skills": {
     "ascension:castable/cultivation/plum_blossom_breathing": {},
-    "ascension:passive/plum_blossom_sword_aura": {}
+    "ascension:passive/plum_blossom_sword_aura": {},
+    "ascension:castable/sword_flight": {
+      "unlock": 2
+    },
+    "ascension:castable/new_techniques/essence_perception": {
+      "unlock": 3
+    }
   },
   "realm_change_handler": [
     {

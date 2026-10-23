@@ -1,0 +1,67 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.faultline_cleave.name"
+  },
+  "description": {
+    "translate": "ascension.skill.faultline_cleave.desc"
+  },
+  "target": {
+    "type": "ascension:cone",
+    "range": 6.5,
+    "angle": 65,
+    "maximum_targets": 5,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 13,
+        "per_mastery": 0.65
+      },
+      "stats": {
+        "ascension:strength": 0.25
+      },
+      "minimum": 1,
+      "maximum": 48,
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:weapon",
+        "ascension:axe"
+      ],
+      "path": "ascension:weapon/axe",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:crit",
+      "count": 16,
+      "spread": 0.55,
+      "speed": 0.045,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.player.attack.knockback",
+      "volume": 0.6,
+      "pitch": 1.0,
+      "subject": "target"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 12
+  },
+  "cooldown": {
+    "base": 125,
+    "per_mastery": -3,
+    "minimum": 107
+  }
+}

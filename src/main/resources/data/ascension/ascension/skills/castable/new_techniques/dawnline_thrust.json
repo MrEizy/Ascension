@@ -1,0 +1,67 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.dawnline_thrust.name"
+  },
+  "description": {
+    "translate": "ascension.skill.dawnline_thrust.desc"
+  },
+  "target": {
+    "type": "ascension:ray",
+    "range": 11,
+    "width": 0.6,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 8,
+        "per_mastery": 0.65
+      },
+      "stats": {
+        "ascension:strength": 0.13,
+        "ascension:agility": 0.08
+      },
+      "minimum": 1,
+      "maximum": 48,
+      "classifications": [
+        "ascension:skill",
+        "ascension:ranged",
+        "ascension:weapon",
+        "ascension:spear"
+      ],
+      "path": "ascension:weapon/spear",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:crit",
+      "count": 16,
+      "spread": 0.55,
+      "speed": 0.045,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.player.attack.strong",
+      "volume": 0.6,
+      "pitch": 1.0,
+      "subject": "target"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 6
+  },
+  "cooldown": {
+    "base": 62,
+    "per_mastery": -3,
+    "minimum": 44
+  }
+}
