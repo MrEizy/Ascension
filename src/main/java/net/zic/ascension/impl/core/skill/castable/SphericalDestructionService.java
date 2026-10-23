@@ -39,7 +39,6 @@ public final class SphericalDestructionService {
     private static final int DETONATION_DELAY_TICKS = 12;
     private static final int IMPACT_VISUAL_TICKS = 30;
     private static final double VISUAL_TRACKING_RANGE = 384.0D;
-    private static final int EFFECT_COLOR = 0xFF6A1B;
 
     public static void launch(SkillActionContext context, SkillActions.SphericalDestruction config) {
         if (!(context.level() instanceof ServerLevel serverLevel) || context.caster() == null) {
@@ -71,6 +70,7 @@ public final class SphericalDestructionService {
         state.damage = resolvedDamage;
         state.destroyUnbreakable = config.destroyUnbreakable();
         state.soundRange = config.soundRange();
+        state.color = config.color() & 0xFFFFFF;
 
         ACTIVE.put(state.id, state);
         syncNearbyObservers(state);
@@ -80,7 +80,7 @@ public final class SphericalDestructionService {
         return new SphericalProjectilePayload(
                 state.id, state.level.dimension().identifier(), state.origin, state.direction,
                 state.speed, state.startRadius, state.targetRadius, state.growthDistance,
-                state.maxDistance, state.traveled, EFFECT_COLOR
+                state.maxDistance, state.traveled, state.color
         );
     }
 
@@ -88,7 +88,7 @@ public final class SphericalDestructionService {
         return new SphericalDestructionPayload(
                 state.id, state.impactPos, (int) Math.round(state.targetRadius),
                 state.impactTravelRadius, state.impactAgeTicks, state.soundRange,
-                EFFECT_COLOR, state.level.dimension().identifier()
+                state.color, state.level.dimension().identifier()
         );
     }
 
@@ -199,6 +199,7 @@ public final class SphericalDestructionService {
         double maxDistance;
         double damage;
         double soundRange;
+        int color;
         boolean destroyUnbreakable;
         boolean detonating;
         boolean destructionApplied;
