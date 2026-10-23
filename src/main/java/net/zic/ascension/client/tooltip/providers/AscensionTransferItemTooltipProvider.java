@@ -57,15 +57,15 @@ public final class AscensionTransferItemTooltipProvider implements ZenithTooltip
         RegistryAccess access = context.registryAccess().orElseThrow();
 
         if (stack.getItem() == ModItems.PHYSIQUE_ESSENCE.get()) {
-            Physique physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, registryId, access);
+            Physique<?> physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, registryId, access);
             return physique == null
                     ? Optional.empty()
                     : toResult(
                             context,
                             registryId,
                             physique,
-                            physique.name(),
-                            physique.description(),
+                            physique.getName(null),
+                            physique.getDescription(null),
                             physique.itemTooltip(),
                             DEFAULT_PHYSIQUE_TEMPLATE,
                             PHYSIQUE_THEME
@@ -89,15 +89,15 @@ public final class AscensionTransferItemTooltipProvider implements ZenithTooltip
         }
 
         if (stack.getItem() == ModItems.BLOODLINE_ESSENCE.get()) {
-            Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY, registryId, access);
+            Bloodline<?> bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY, registryId, access);
             return bloodline == null
                     ? Optional.empty()
                     : toResult(
                             context,
                             registryId,
                             bloodline,
-                            bloodline.getName(),
-                            bloodline.getDescription(),
+                            bloodline.getName(null),
+                            bloodline.getDescription(null),
                             bloodline.itemTooltip(),
                             DEFAULT_BLOODLINE_TEMPLATE,
                             BLOODLINE_THEME

@@ -7,37 +7,23 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
 import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
 import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
-import net.zic.zenithlib.nbt.NbtHelpers;
-import net.zic.zenithlib.network.ByteBufHelpers;
 
 public class PhysiqueDataSource implements DataSource<PhysiqueHolder> {
-    //TODO move these over to their own class
     public static final SyncHandler<PhysiqueHolder> SYNC_HANDLER = new SyncHandler<>() {
         @Override
         public void decode(PhysiqueHolder existingEncodable, ByteBuf buf, RegistryAccess access) {
-            if(!buf.readBoolean()){
-                existingEncodable.physique = null;
-                existingEncodable.data = null;
-                return;
-            }
-            existingEncodable.physique = ByteBufHelpers.decodeIdentifier(buf);
-            existingEncodable.data = existingEncodable.getPhysique(access).loadData(buf,access);
+            existingEncodable.decode(buf, access);
         }
 
         @Override
         public void encode(PhysiqueHolder encodable, ByteBuf buf, RegistryAccess access) {
-            buf.writeBoolean(encodable.physique != null);
-            if(encodable.physique == null) return;
-
-            ByteBufHelpers.encodeIdentifier(encodable.physique,buf);
-            encodable.data.encode(buf,access);
+            encodable.encode(buf, access);
         }
     };
     public static final SerializerHandler<PhysiqueHolder> SERIALIZER_HANDLER = new SerializerHandler<PhysiqueHolder>() {
@@ -45,17 +31,11 @@ public class PhysiqueDataSource implements DataSource<PhysiqueHolder> {
         public PhysiqueHolder read(ValueInput input, RegistryAccess access) {
             PhysiqueHolder holder = new PhysiqueHolder();
             try{
-                Identifier id = NbtHelpers.readIdentifier(input,"physique");
-                Physique physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,id,access);
-                if(physique == null) throw new Exception("physique "+id+" does not exist");
+                PhysiqueInstance<?> instance = PhysiqueInstance.read(input,access);
+                if(instance == null) return holder;
+                holder.setPhysique(instance);
 
-                PhysiqueData physiqueData = input.child("data")
-                        .map(valueInput -> physique.loadData(valueInput,access))
-                        .orElse(physique.newData(access));
-
-                holder.setPhysique(id,physiqueData);
-
-                AscensionCraft.LOGGER.info("Loaded physique {}",id);
+                AscensionCraft.LOGGER.info("Loaded physique {}",instance.getPhysiqueId());
             }catch (Exception e){
                 AscensionCraft.LOGGER.info("Error loading physique");
             }
@@ -64,16 +44,13 @@ public class PhysiqueDataSource implements DataSource<PhysiqueHolder> {
 
         @Override
         public void write(PhysiqueHolder writable, ValueOutput output, RegistryAccess access) {
-            if(writable.getPhysique() == null || writable.getData() == null) return;
+            PhysiqueInstance<?> instance = writable.getPhysique();
+            if(instance == null) return;
             try{
-
-                AscensionCraft.LOGGER.debug("Writing physique {}",writable.getPhysique());
-                NbtHelpers.writeIdentifier(output,"physique",writable.getPhysique());
-
-                writable.getData().write(output.child("data"),access);
-
+                AscensionCraft.LOGGER.debug("Writing physique {}",instance.getPhysiqueId());
+                instance.write(output,access);
             }catch (Exception e){
-                AscensionCraft.LOGGER.warn("Error writing physique {}",writable.getPhysique());
+                AscensionCraft.LOGGER.warn("Error writing physique {}",instance.getPhysiqueId());
                 AscensionCraft.LOGGER.warn("stacktrace: ",e);
             }
         }
@@ -86,22 +63,20 @@ public class PhysiqueDataSource implements DataSource<PhysiqueHolder> {
     @Override
     public void onAdded(OriginSource source, PhysiqueHolder holder) {
 
-        if(holder.getPhysique() == null) return;
-        Identifier physique = holder.getPhysique();
-        PhysiqueData data = holder.getData();
-        holder.setPhysique(null,null);
-        AscensionOriginSourceHelper.setPhysique(source,physique,data,false);
+        PhysiqueInstance<?> instance = holder.getPhysique();
+        if(instance == null) return;
+        holder.setPhysique(null);
+        AscensionOriginSourceHelper.setPhysique(source,instance,false);
     }
 
     @Override
     public void onRemoved(OriginSource source, PhysiqueHolder holder) {
-        if(holder.getPhysique() == null) return;
-        Identifier oldPhysique = holder.getPhysique();
-        PhysiqueData oldPhysiqueData = holder.getData();
+        PhysiqueInstance<?> oldPhysique = holder.getPhysique();
+        if(oldPhysique == null) return;
 
-        AscensionOriginSourceHelper.setPhysique(source,null);
+        AscensionOriginSourceHelper.setPhysique(source,(Identifier) null);
 
-        holder.setPhysique(oldPhysique,oldPhysiqueData);
+        holder.setPhysique(oldPhysique);
 
     }
 
@@ -117,31 +92,15 @@ public class PhysiqueDataSource implements DataSource<PhysiqueHolder> {
 
     @Override
     public void applyToEntity(LivingEntity entity, PhysiqueHolder holder) {
-        if (holder.getPhysique() == null || holder.getData() == null) {
-            return;
-        }
-
-        Physique physique = holder.getPhysique(entity.level().registryAccess());
-        if (physique == null) {
-            return;
-        }
-
-        physique.applyToEntity(entity, holder.getData());
+        PhysiqueInstance<?> instance = holder.getPhysique();
+        if (instance != null) instance.applyToEntity(entity);
     }
 
     @Override
     public void removeFromEntity(LivingEntity entity, PhysiqueHolder holder) {
 
-        if (holder.getPhysique() == null || holder.getData() == null) {
-            return;
-        }
-
-        Physique physique = holder.getPhysique(entity.level().registryAccess());
-        if (physique == null) {
-            return;
-        }
-
-        physique.removeFromEntity(entity, holder.getData());
+        PhysiqueInstance<?> instance = holder.getPhysique();
+        if (instance != null) instance.removeFromEntity(entity);
     }
 
     @Override

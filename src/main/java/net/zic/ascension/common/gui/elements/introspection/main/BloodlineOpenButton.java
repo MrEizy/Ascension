@@ -71,12 +71,12 @@ public class BloodlineOpenButton extends BetterButton {
 
         Identifier firstId = bloodlines.getFirst();
         Component firstName = ClientAscensionData.getPlayer().map(player -> {
-            Bloodline bloodline = CoreRegistries.safeAccess(
+            Bloodline<?> bloodline = CoreRegistries.safeAccess(
                     CoreRegistries.BLOODLINE_REGISTRY,
                     firstId,
                     player.registryAccess()
             );
-            return bloodline == null ? Component.literal(firstId.toString()) : bloodline.getName();
+            return bloodline == null ? Component.literal(firstId.toString()) : bloodline.getName(null);
         }).orElseGet(() -> Component.literal(firstId.toString()));
 
         if (bloodlines.size() == 1) {

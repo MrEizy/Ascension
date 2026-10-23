@@ -571,7 +571,7 @@ public final class AscensionTooltipValueSources {
             Identifier id,
             RegistryAccess access
     ) {
-        Path path = CoreRegistries.safeAccess(
+        Path<?> path = CoreRegistries.safeAccess(
                 CoreRegistries.PATH_REGISTRY,
                 id,
                 access
@@ -579,7 +579,7 @@ public final class AscensionTooltipValueSources {
 
         return path == null
                 ? Component.literal(humanName(id.getPath()))
-                : path.name();
+                : path.getName(null);
     }
 
     private static String formatModifier(Modifier<Double> modifier, boolean multiplier) {

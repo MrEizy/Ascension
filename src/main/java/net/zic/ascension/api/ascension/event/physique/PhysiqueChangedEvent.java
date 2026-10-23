@@ -3,10 +3,11 @@ package net.zic.ascension.api.ascension.event.physique;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.ICancellableEvent;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
+import net.zic.ascension.api.ascension.core.physique.PhysiqueInstance;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An event that is called when the physique on an origin source is changed
@@ -16,56 +17,53 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
  *
  */
 public abstract class PhysiqueChangedEvent extends PhysiqueEvent{
-    private Identifier newPhysique;
-    private PhysiqueData newPhysiqueData;
+    private @Nullable PhysiqueInstance<?> newInstance;
 
-    protected PhysiqueChangedEvent(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source) {
-        super(physique, data, source);
-        this.newPhysique = newPhysique;
-        this.newPhysiqueData = newPhysiqueData;
-
+    protected PhysiqueChangedEvent(@Nullable PhysiqueInstance<?> instance, @Nullable PhysiqueInstance<?> newInstance, OriginSource source) {
+        super(instance, source);
+        this.newInstance = newInstance;
     }
 
-    protected void setNewPhysique(Identifier newPhysique){
-        this.newPhysique = newPhysique;
-    }
-    protected void setNewPhysiqueData(PhysiqueData physiqueData){
-        this.newPhysiqueData = physiqueData;
+    protected void setNewPhysiqueInstance(@Nullable PhysiqueInstance<?> newInstance){
+        this.newInstance = newInstance;
     }
 
-    public Identifier getNewPhysiqueIdentifier(){
-        return newPhysique;
+    //null when the physique is being removed
+    public @Nullable PhysiqueInstance<?> getNewPhysiqueInstance(){
+        return newInstance;
     }
-    public Physique getNewPhysique(RegistryAccess access){
-        return CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, newPhysique, access);
+    public @Nullable Identifier getNewPhysiqueIdentifier(){
+        return newInstance == null ? null : newInstance.getPhysiqueId();
     }
-
-    public PhysiqueData getNewPhysiqueData(){
-        return newPhysiqueData;
+    public @Nullable Physique<?> getNewPhysique(){
+        return newInstance == null ? null : newInstance.getPhysique();
+    }
+    public @Nullable PhysiqueData getNewPhysiqueData(){
+        return newInstance == null ? null : newInstance.getData();
     }
 
     public static class Pre extends PhysiqueChangedEvent implements ICancellableEvent {
 
 
-        public Pre(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source) {
-            super(physique, data, newPhysique, newPhysiqueData, source);
+        public Pre(@Nullable PhysiqueInstance<?> instance, @Nullable PhysiqueInstance<?> newInstance, OriginSource source) {
+            super(instance, newInstance, source);
         }
-        @Override
-        public void setNewPhysique(Identifier physique){
-            super.setNewPhysique(physique);
-            super.setNewPhysiqueData(null);
+
+        //replaces the new physique with a fresh instance of physique, null removes the physique instead
+        public void setNewPhysique(@Nullable Identifier physique, RegistryAccess access){
+            setNewPhysiqueInstance(physique == null ? null : PhysiqueInstance.create(physique, access));
         }
 
         @Override
-        public void setNewPhysiqueData(PhysiqueData physiqueData) {
-            super.setNewPhysiqueData(physiqueData);
+        public void setNewPhysiqueInstance(@Nullable PhysiqueInstance<?> newInstance) {
+            super.setNewPhysiqueInstance(newInstance);
         }
     }
     public static class Post extends PhysiqueChangedEvent {
 
 
-        public Post(Identifier physique, PhysiqueData data, Identifier newPhysique, PhysiqueData newPhysiqueData, OriginSource source) {
-            super(physique, data, newPhysique, newPhysiqueData, source);
+        public Post(@Nullable PhysiqueInstance<?> instance, @Nullable PhysiqueInstance<?> newInstance, OriginSource source) {
+            super(instance, newInstance, source);
         }
     }
 }

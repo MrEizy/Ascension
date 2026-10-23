@@ -10,10 +10,10 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public abstract class PathEvent extends Event {
     private final Identifier path;
-    private final PathInstance data;
+    private final PathInstance<?> data;
     private final OriginSource source;
 
-    protected PathEvent(Identifier path, PathInstance data, OriginSource source) {
+    protected PathEvent(Identifier path, PathInstance<?> data, OriginSource source) {
         this.path = path;
         this.data = data;
         this.source = source;
@@ -22,11 +22,11 @@ public abstract class PathEvent extends Event {
     public Identifier getPathIdentifier() {
         return path;
     }
-    public Path getPath(RegistryAccess access){
+    public Path<?> getPath(RegistryAccess access){
         return CoreRegistries.PATH_REGISTRY.get(access).getValue(path);
     }
 
-    public PathInstance getPathInstance(){
+    public PathInstance<?> getPathInstance(){
         return data;
     }
     public OriginSource getSource(){

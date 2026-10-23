@@ -19,7 +19,7 @@ public interface PurityChangeAction extends ProgressAction {
     @Override
     default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt){
         //first test to make sure context is a bloodline
-        Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,contextIdentifier,source.getRegistryAccess());
+        Bloodline<?> bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,contextIdentifier,source.getRegistryAccess());
         if(bloodline == null) return;
         if(!(contextData instanceof BloodlineData data)) return;
 
@@ -29,6 +29,6 @@ public interface PurityChangeAction extends ProgressAction {
         run(holderId,source,bloodline,data,purity,direction,salt);
     }
 
-    void run(UUID holderId, OriginSource source, Bloodline bloodline, BloodlineData data, int purity, ProgressDirection direction, String salt);
+    void run(UUID holderId, OriginSource source, Bloodline<?> bloodline, BloodlineData data, int purity, ProgressDirection direction, String salt);
 
 }

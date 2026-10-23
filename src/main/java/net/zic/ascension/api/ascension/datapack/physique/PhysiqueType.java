@@ -8,10 +8,10 @@ import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 public abstract class PhysiqueType {
 
 
-    public abstract MapCodec<? extends Physique> codec();
+    public abstract MapCodec<? extends Physique<?>> codec();
 
 
-    public static final Codec<Physique> PHYSIQUE_CODEC = TypeRegistries.PHYSIQUE_TYPE_REGISTRY.byNameCodec()
+    public static final Codec<Physique<?>> PHYSIQUE_CODEC = TypeRegistries.PHYSIQUE_TYPE_REGISTRY.byNameCodec()
             .dispatch(
                     Physique::getType,
                     PhysiqueType::codec

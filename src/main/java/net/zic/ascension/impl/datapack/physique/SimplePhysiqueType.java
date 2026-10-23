@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class SimplePhysiqueType extends PhysiqueType {
     @Override
-    public MapCodec<? extends Physique> codec() {
+    public MapCodec<? extends Physique<?>> codec() {
         return RecordCodecBuilder.<SimplePhysique>mapCodec(instance ->
                 instance.group(
                         ComponentSerialization.CODEC.fieldOf("name").forGetter(SimplePhysique::name),

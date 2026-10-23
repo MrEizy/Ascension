@@ -105,7 +105,7 @@ public final class ScaledValueSources {
             if (context.source() == null) {
                 return 1.0D;
             }
-            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(context.source(), path);
+            PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(context.source(), path);
             if (pathInstance == null) {
                 return 1.0D;
             }

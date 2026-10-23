@@ -10,10 +10,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineInstance;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
-import net.zic.ascension.api.ascension.core.physique.Physique;
+import net.zic.ascension.api.ascension.core.physique.PhysiqueInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
@@ -171,7 +170,7 @@ public class MainContainer extends RenderableElement {
         }
 
         StringBuilder signature = new StringBuilder();
-        signature.append(AscensionOriginSourceHelper.getPhysique(source)).append('|');
+        signature.append(AscensionOriginSourceHelper.getPhysiqueId(source)).append('|');
         AscensionOriginSourceHelper.getBloodlines(source).stream()
                 .sorted(Comparator.comparing(Identifier::toString))
                 .forEach(id -> {
@@ -200,11 +199,7 @@ public class MainContainer extends RenderableElement {
             }
 
             ClientAscensionData.getPlayer().ifPresentOrElse(player -> {
-                Physique physique = CoreRegistries.safeAccess(
-                        CoreRegistries.PHYSIQUE_REGISTRY,
-                        physiqueId,
-                        player.registryAccess()
-                );
+                PhysiqueInstance<?> physique = AscensionOriginSourceHelper.getPhysique(source);
                 if (physique == null) {
                     showInformation(
                             Component.literal(physiqueId.toString()),
@@ -215,10 +210,10 @@ public class MainContainer extends RenderableElement {
                     return;
                 }
 
-                Component description = physique.description() == null
+                Component description = physique.getDescription() == null
                         ? Component.empty()
-                        : physique.description();
-                showInformation(physique.name(), description);
+                        : physique.getDescription();
+                showInformation(physique.getName(), description);
             }, () -> showInformation(
                     Component.literal(physiqueId.toString()),
                     Component.translatable("gui.ascension.introspection.data_unavailable")
@@ -245,11 +240,7 @@ public class MainContainer extends RenderableElement {
             ClientAscensionData.getPlayer().ifPresentOrElse(player -> {
                 if (ids.size() == 1) {
                     Identifier id = ids.getFirst();
-                    Bloodline bloodline = CoreRegistries.safeAccess(
-                            CoreRegistries.BLOODLINE_REGISTRY,
-                            id,
-                            player.registryAccess()
-                    );
+                    BloodlineInstance<?> bloodline = AscensionOriginSourceHelper.getBloodline(source,id);
                     if (bloodline == null) {
                         showInformation(
                                 Component.literal(id.toString()),
@@ -261,13 +252,10 @@ public class MainContainer extends RenderableElement {
                     }
 
                     MutableComponent description = Component.empty();
-                    BloodlineData data = AscensionOriginSourceHelper.getBloodlineData(source,id);
-                    if (data != null) {
-                        description.append(Component.translatable(
-                                "gui.ascension.introspection.bloodline_purity",
-                                data.getPurity()
-                        ));
-                    }
+                    description.append(Component.translatable(
+                            "gui.ascension.introspection.bloodline_purity",
+                            bloodline.getData().getPurity()
+                    ));
                     Component bloodlineDescription = bloodline.getDescription();
                     if (bloodlineDescription != null) {
                         if (!description.getString().isEmpty()) {
@@ -282,12 +270,8 @@ public class MainContainer extends RenderableElement {
                 MutableComponent description = Component.empty();
                 for (int index = 0; index < ids.size(); index++) {
                     Identifier id = ids.get(index);
-                    Bloodline bloodline = CoreRegistries.safeAccess(
-                            CoreRegistries.BLOODLINE_REGISTRY,
-                            id,
-                            player.registryAccess()
-                    );
-                    BloodlineData data = AscensionOriginSourceHelper.getBloodlineData(source,id);
+                    BloodlineInstance<?> bloodline = AscensionOriginSourceHelper.getBloodline(source,id);
+                    BloodlineData data = bloodline == null ? null : bloodline.getData();
 
                     if (index > 0) {
                         description.append("\n\n");

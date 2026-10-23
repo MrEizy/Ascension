@@ -1,5 +1,7 @@
 package net.zic.ascension.impl.core.tribulation.action;
 
+import net.zic.ascension.impl.core.path.simple.SimplePathData;
+import net.zic.ascension.impl.core.path.simple.SimplePath;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
@@ -9,7 +11,6 @@ import net.zic.ascension.api.ascension.core.tribulation.TribulationResolutionAct
 import net.zic.ascension.api.ascension.core.tribulation.TribulationResolutionContext;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationResolutionActionType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
-import net.zic.ascension.impl.core.path.simple.SimplePathInstance;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationResolutionActionTypes;
 
 //ends a paths breakthrough attempt without progressing, allowing it to be retried
@@ -27,10 +28,12 @@ public record EndBreakthroughResolutionAction(Identifier path) implements Tribul
     public void resolve(TribulationResolutionContext context) {
         OriginSource source = context.targetSource();
         if (source == null || !AscensionOriginSourceHelper.hasPath(source, path)) return;
-        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
-        if (!(pathInstance instanceof SimplePathInstance simplePathInstance)) return;
+        PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
+        PathInstance<SimplePathData> simplePathInstance = pathInstance == null ? null : pathInstance.as(SimplePath.class);
+        if (simplePathInstance == null) return;
+        SimplePath simplePath = (SimplePath) simplePathInstance.getPath();
 
-        simplePathInstance.endBreakthrough(context.instance().getId());
+        simplePath.endBreakthrough(simplePathInstance, context.instance().getId());
         AscensionOriginSourceHelper.markPathDirty(source, path);
     }
 }

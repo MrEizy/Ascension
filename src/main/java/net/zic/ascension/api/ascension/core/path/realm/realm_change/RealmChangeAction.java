@@ -24,7 +24,7 @@ public interface RealmChangeAction extends ProgressAction {
     @Override
     default void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt){
 
-        if(!(contextData instanceof PathInstance pathInstance)) return;
+        if(!(contextData instanceof PathInstance<?> pathInstance)) return;
 
 
 
@@ -48,11 +48,11 @@ public interface RealmChangeAction extends ProgressAction {
      * @param holderId the id of the holder, used for unique identifiers
      * @param source the source the path data is attached to
      * @param path the path
-     * @param PathInstance the path data
+     * @param pathInstance the path instance
      * @param majorRealm the major realm we are entering/leaving
      * @param minorRealm the minor realm we are entering/leaving
      * @param direction the direction
      */
-    void run(UUID holderId, OriginSource source,Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction);
+    void run(UUID holderId, OriginSource source,Identifier path, PathInstance<?> pathInstance, int majorRealm, int minorRealm, ProgressDirection direction);
 
 }

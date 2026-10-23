@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class InfiniteBreakthroughPhysiqueType extends PhysiqueType {
     @Override
-    public MapCodec<? extends Physique> codec() {
+    public MapCodec<? extends Physique<?>> codec() {
         return RecordCodecBuilder.<InfiniteBreakthroughPhysique>mapCodec(instance ->
                 instance.group(
                         ComponentSerialization.CODEC.fieldOf("name").forGetter(InfiniteBreakthroughPhysique::name),

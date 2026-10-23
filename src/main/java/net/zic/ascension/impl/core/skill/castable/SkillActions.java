@@ -493,7 +493,7 @@ public final class SkillActions {
 
         @Override
         public void apply(SkillActionContext context) {
-            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(context.originSource(), path);
+            PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(context.originSource(), path);
             if (pathInstance == null) {
                 return;
             }

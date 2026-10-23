@@ -32,7 +32,7 @@ public record GiveStatsUsingPurityAction(UUID uuid, Map<Identifier, ModifierHold
     }
 
     @Override
-    public void run(UUID holderId, OriginSource source, Bloodline bloodline, BloodlineData data, int purity, ProgressDirection direction, String salt) {
+    public void run(UUID holderId, OriginSource source, Bloodline<?> bloodline, BloodlineData data, int purity, ProgressDirection direction, String salt) {
         ProgressionModifiers.applyWithPurity(conflictAction, data, purity, direction,
                 (transform, effectiveDirection) -> ProgressionModifiers.applyStats(source, stats, conflictAction, transform, effectiveDirection, salt));
     }

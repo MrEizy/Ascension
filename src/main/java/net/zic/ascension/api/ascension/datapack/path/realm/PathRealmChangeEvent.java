@@ -9,9 +9,9 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public abstract class PathRealmChangeEvent extends RealmEvent{
     Identifier path;
-    PathInstance pathInstance;
+    PathInstance<?> pathInstance;
     Realm oldRealm;
-    public PathRealmChangeEvent(OriginSource source, Realm realm,Realm oldRealm, Identifier path, PathInstance pathInstance) {
+    public PathRealmChangeEvent(OriginSource source, Realm realm,Realm oldRealm, Identifier path, PathInstance<?> pathInstance) {
         super(source, realm);
         this.path = path;
         this.oldRealm = oldRealm;
@@ -25,18 +25,18 @@ public abstract class PathRealmChangeEvent extends RealmEvent{
     public Identifier getPathId() {
         return path;
     }
-    public Path getPath(){
+    public Path<?> getPath(){
         return CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,getSource().getRegistryAccess());
     }
 
-    public PathInstance getPathInstance() {
+    public PathInstance<?> getPathInstance() {
         return pathInstance;
     }
 
     public static class PathRealmUpEvent extends PathRealmChangeEvent {
 
 
-        public PathRealmUpEvent(OriginSource source, Realm realm, Realm oldRealm, Identifier path, PathInstance pathInstance) {
+        public PathRealmUpEvent(OriginSource source, Realm realm, Realm oldRealm, Identifier path, PathInstance<?> pathInstance) {
             super(source, realm, oldRealm, path, pathInstance);
         }
     }
@@ -44,7 +44,7 @@ public abstract class PathRealmChangeEvent extends RealmEvent{
     public static class PathRealmDownEvent extends PathRealmChangeEvent {
 
 
-        public PathRealmDownEvent(OriginSource source, Realm realm, Realm oldRealm, Identifier path, PathInstance pathInstance) {
+        public PathRealmDownEvent(OriginSource source, Realm realm, Realm oldRealm, Identifier path, PathInstance<?> pathInstance) {
             super(source, realm, oldRealm, path, pathInstance);
         }
     }
