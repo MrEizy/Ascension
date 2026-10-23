@@ -217,8 +217,15 @@ PathInstance<SimplePathData> simple = instance.as(SimplePath.class);
 Paths are ownership counted (`addPath(source, pathId, owner)`), saved paths are cached until an owner adds them again and are simulated once the source finishes loading. After changing a path's data call `markPathDirty`.
 
 #### Path interactions and affinity
+Interactions are stored in the `ConfigurationDataMaps.PATH_INTERACTIONS` data map on the path registry, keyed by the target path. Read them through `PathInteractionHelper`:
+- `getInteractions(access, target)` and the typed `getInteractions(access, target, type)` / `getRelated` / `getGenerative` / `getDestructive`
+- `getInteractionsFrom(access, source[, type])`, which scans the data map for interactions a path causes
+- `getInteraction(access, source, target)` and `hasInteraction(access, source, target[, type])`
+
+The interaction methods on `Path` (`getAllTargetInteractions`, `hasSourceInteraction`, ...) are defaults that call the helper.
+
 Raw affinity lives in the `ascension:affinity` path bonus category. Use `PathInteractionUtil` instead of reading it directly when the interactions should apply:
-- `getEffectiveAffinity(entity | PathBonusProvider | ToDoubleFunction<Identifier>, path)` applies related, generative and destructive interactions (formula in `DATAPACK_HELP.md#path-interactions`). It works for any provider, including chunk affinity.
+- `getEffectiveAffinity(entity, path)` or `getEffectiveAffinity(access, PathBonusProvider | ToDoubleFunction<Identifier>, path)` applies related, generative and destructive interactions (formula in `DATAPACK_HELP.md#path-interactions`). It works for any provider, including chunk affinity.
 - `getPathMultiplier(provider, category, path)` returns `1 + bonus` for every other category. These never interact with other paths.
 - `getCollisionMultiplier(attacker, defender, path)` compares both sides' effective affinities when a path-tagged attack lands. `AscensionDamageHandler` applies it automatically to any damage carrying an `AscensionDamageTypeHolders.PATH` holder.
 

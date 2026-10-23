@@ -1,9 +1,11 @@
 package net.zic.ascension.api.ascension.core.alchemy;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.zic.ascension.api.ascension.core.path.interaction.PathInteraction;
-import net.zic.ascension.configuration.interactions.PathInteractions;
+import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionHelper;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,10 +18,14 @@ public final class AlchemyMergeResolver {
 
     public static MergeResult merge(AlchemyBatch batch, AlchemySubstance incoming, AlchemyContext context) {
         AlchemyProcessHooks.ProcessSettings settings = AlchemyProcessHooks.resolve(context == null ? AlchemyContext.EMPTY : context);
-        return merge(batch, incoming, settings.safeEnergyDelta(), settings.explosionEnergyDelta());
+        RegistryAccess access = context == null || context.level() == null ? null : context.level().registryAccess();
+        return merge(batch, incoming, settings.safeEnergyDelta(), settings.explosionEnergyDelta(), access);
     }
 
-    public static MergeResult merge(AlchemyBatch batch, AlchemySubstance incoming, double safeDelta, double explosionDelta) {
+    /**
+     * @param access used to look up path interactions, interactions are skipped when null
+     */
+    public static MergeResult merge(AlchemyBatch batch, AlchemySubstance incoming, double safeDelta, double explosionDelta, @Nullable RegistryAccess access) {
         AlchemyBatch existing = batch == null ? AlchemyBatch.EMPTY : batch;
         double safe = finiteNonNegative(safeDelta);
         double explosion = Math.max(safe, finiteNonNegative(explosionDelta));
@@ -37,7 +43,7 @@ public final class AlchemyMergeResolver {
         Map<Identifier, Double> originalExisting = Map.copyOf(existingAffinities);
         Map<Identifier, Double> originalIncoming = Map.copyOf(incomingAffinities);
 
-        double energyDelta = applyInteractions(originalIncoming, originalExisting, existingAffinities) + applyInteractions(originalExisting, originalIncoming, incomingAffinities);
+        double energyDelta = applyInteractions(access, originalIncoming, originalExisting, existingAffinities) + applyInteractions(access, originalExisting, originalIncoming, incomingAffinities);
         energyDelta = Math.max(0.0D, energyDelta);
 
         LinkedHashMap<Identifier, Double> affinities = new LinkedHashMap<>(existingAffinities);
@@ -75,12 +81,12 @@ public final class AlchemyMergeResolver {
     }
 
     private static double applyInteractions(
+            @Nullable RegistryAccess access,
             Map<Identifier, Double> sources,
             Map<Identifier, Double> targets,
             Map<Identifier, Double> mutableTargets
     ) {
-        PathInteractions.FrozenPathInteractions interactions = PathInteractions.getInstance();
-        if (interactions == null) {
+        if (access == null) {
             return 0.0D;
         }
 
@@ -91,7 +97,7 @@ public final class AlchemyMergeResolver {
                     continue;
                 }
 
-                PathInteraction interaction = interactions.getInteraction(source.getKey(), target.getKey());
+                PathInteraction interaction = PathInteractionHelper.getInteraction(access, source.getKey(), target.getKey());
                 if (interaction == null || !Double.isFinite(interaction.value()) || interaction.value() <= 0.0D) {
                     continue;
                 }

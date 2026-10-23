@@ -6,6 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.interaction.PathInteraction;
+import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionHelper;
 import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionType;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealmDefinition;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
@@ -57,18 +58,34 @@ public interface Path<D extends PathData> {
     //──Path Interactions────────────────────────────────────────────────────────
 
     // methods marked with source treat this path as source, and opposite for those marked with target
+    // interactions are read from the path interactions data map, see PathInteractionHelper
 
+    default boolean hasSourceInteraction(Identifier target,RegistryAccess access){
+        return PathInteractionHelper.hasInteraction(access,getId(access),target);
+    }
+    default boolean hasSourceInteraction(Identifier target,PathInteractionType type,RegistryAccess access){
+        return PathInteractionHelper.hasInteraction(access,getId(access),target,type);
+    }
+    default boolean hasTargetInteraction(Identifier source,RegistryAccess access){
+        return PathInteractionHelper.hasInteraction(access,source,getId(access));
+    }
+    default boolean hasTargetInteraction(Identifier source,PathInteractionType type,RegistryAccess access){
+        return PathInteractionHelper.hasInteraction(access,source,getId(access),type);
+    }
 
-    boolean hasSourceInteraction(Identifier target,RegistryAccess access);
-    boolean hasSourceInteraction(Identifier target,PathInteractionType type,RegistryAccess access);
-    boolean hasTargetInteraction(Identifier source,RegistryAccess access);
-    boolean hasTargetInteraction(Identifier source,PathInteractionType type,RegistryAccess access);
+    default @Nullable PathInteraction getSourceInteraction(Identifier target,RegistryAccess access){
+        return PathInteractionHelper.getInteraction(access,getId(access),target);
+    }
+    default @Nullable PathInteraction getTargetInteraction(Identifier source,RegistryAccess access){
+        return PathInteractionHelper.getInteraction(access,source,getId(access));
+    }
 
-    PathInteraction getSourceInteraction(Identifier target,RegistryAccess access);
-    PathInteraction getTargetInteraction(Identifier source,RegistryAccess access);
-
-    Collection<PathInteraction> getAllSourceInteractions(RegistryAccess access);
-    Collection<PathInteraction> getAllTargetInteractions(RegistryAccess access);
+    default Collection<PathInteraction> getAllSourceInteractions(RegistryAccess access){
+        return PathInteractionHelper.getInteractionsFrom(access,getId(access));
+    }
+    default Collection<PathInteraction> getAllTargetInteractions(RegistryAccess access){
+        return PathInteractionHelper.getInteractions(access,getId(access));
+    }
 
     //──Progression────────────────────────────────────────────────────────
 

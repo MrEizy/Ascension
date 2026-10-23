@@ -68,7 +68,8 @@ public final class AlchemyCommand {
                 new AlchemyBatch(firstSubstance, 1),
                 secondSubstance,
                 safeDelta,
-                explosionDelta
+                explosionDelta,
+                player.registryAccess()
         );
 
         player.sendSystemMessage(Component.literal("Merge outcome: " + result.outcome() + " | delta: " + result.energyDelta()));

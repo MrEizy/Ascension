@@ -200,15 +200,23 @@ Progression handlers use the same flat bonus shape through `ascension:give_path_
 ```
 
 ## Path interactions
-Files in `data/<namespace>/ascension/config/path_interactions/` hold a list of interactions. Each one says how a `source` path's **affinity** influences a `target` path's affinity.
+Path interactions are the `ascension:path_interactions` data map on the path registry, at `data/<namespace>/data_maps/ascension/paths/path_interactions.json`. Each value is keyed by the **target** path and lists how other `source` paths' **affinity** influences it.
 
 ```json
-[
-  { "source": "ascension:elemental/water", "target": "ascension:elemental/fire", "type": "destructive", "value": 0.5 },
-  { "source": "ascension:elemental/wood",  "target": "ascension:elemental/fire", "type": "generative",  "value": 0.5 },
-  { "source": "ascension:elemental/water", "target": "ascension:elemental/ice",  "type": "related",     "value": 0.5 }
-]
+{
+  "values": {
+    "ascension:elemental/fire": [
+      { "source": "ascension:elemental/water", "type": "destructive", "value": 0.5 },
+      { "source": "ascension:elemental/wood",  "type": "generative",  "value": 0.5 }
+    ],
+    "ascension:elemental/ice": [
+      { "source": "ascension:elemental/water", "type": "related", "value": 0.5 }
+    ]
+  }
+}
 ```
+
+`type` is `related`, `generative` or `destructive`. Lists from different datapacks are merged, so a pack adds interactions to a path instead of overriding it. Use `"replace": true` to clear earlier data and `"remove"` to drop a path's interactions. Path tags (`#ns:tag`) and conditions work as in any data map, and the data is synced to clients and refreshed on `/reload`.
 
 Interactions only affect the `ascension:affinity` category. Every other path bonus category is a plain `1 + bonus` multiplier and never interacts with other paths.
 

@@ -1,13 +1,14 @@
 package net.zic.ascension.util;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusProvider;
 import net.zic.ascension.api.ascension.core.path.interaction.PathInteraction;
+import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionHelper;
 import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionType;
-import net.zic.ascension.configuration.interactions.PathInteractions;
 
 import java.util.function.ToDoubleFunction;
 
@@ -38,29 +39,25 @@ public class PathInteractionUtil {
     public static final double T_MAX = 3.0D;
 
     public static double getEffectiveAffinity(LivingEntity entity, Identifier path){
-        return getEffectiveAffinity(entity.getData(CoreAttachments.PATH_BONUS_HOLDER), path);
+        return getEffectiveAffinity(entity.registryAccess(), entity.getData(CoreAttachments.PATH_BONUS_HOLDER), path);
     }
 
-    public static double getEffectiveAffinity(PathBonusProvider provider, Identifier path){
-        return getEffectiveAffinity(id -> provider.getPathBonus(AFFINITY_CATEGORY, id), path);
+    public static double getEffectiveAffinity(RegistryAccess access, PathBonusProvider provider, Identifier path){
+        return getEffectiveAffinity(access, id -> provider.getPathBonus(AFFINITY_CATEGORY, id), path);
     }
 
-    public static double getEffectiveAffinity(ToDoubleFunction<Identifier> affinity, Identifier path){
-        PathInteractions.FrozenPathInteractions interactions = PathInteractions.getInstance();
+    public static double getEffectiveAffinity(RegistryAccess access, ToDoubleFunction<Identifier> affinity, Identifier path){
         double base = raw(affinity, path);
-        if(interactions == null) return base;
-
-        for(PathInteraction interaction : interactions.getInteractionsForTarget(path)){
-            if(interaction.type() == PathInteractionType.RELATED){
-                base += interaction.value() * raw(affinity, interaction.source());
-            }
+        for(PathInteraction interaction : PathInteractionHelper.getRelated(access, path)){
+            base += interaction.value() * raw(affinity, interaction.source());
         }
 
         double pressure = 0;
-        for(PathInteraction interaction : interactions.getInteractionsForTarget(path)){
-            if(interaction.type() == PathInteractionType.RELATED) continue;
-            double term = term(interaction.value() * raw(affinity, interaction.source()), base);
-            pressure += interaction.type() == PathInteractionType.GENERATIVE ? term : -term;
+        for(PathInteraction interaction : PathInteractionHelper.getGenerative(access, path)){
+            pressure += term(interaction.value() * raw(affinity, interaction.source()), base);
+        }
+        for(PathInteraction interaction : PathInteractionHelper.getDestructive(access, path)){
+            pressure -= term(interaction.value() * raw(affinity, interaction.source()), base);
         }
         return base * Math.exp(pressure);
     }
@@ -81,21 +78,17 @@ public class PathInteractionUtil {
      * </ul>
      */
     public static double getCollisionMultiplier(LivingEntity attacker, LivingEntity defender, Identifier path){
-        PathInteractions.FrozenPathInteractions interactions = PathInteractions.getInstance();
-        if(interactions == null) return 1;
-
+        RegistryAccess access = attacker.registryAccess();
         PathBonusProvider defenderProvider = defender.getData(CoreAttachments.PATH_BONUS_HOLDER);
         double attack = getEffectiveAffinity(attacker, path);
 
         double pressure = 0;
-        for(PathInteraction interaction : interactions.getInteractionsForTarget(path)){
-            if(interaction.type() != PathInteractionType.DESTRUCTIVE) continue;
-            double defence = getEffectiveAffinity(defenderProvider, interaction.source());
+        for(PathInteraction interaction : PathInteractionHelper.getDestructive(access, path)){
+            double defence = getEffectiveAffinity(access, defenderProvider, interaction.source());
             pressure -= term(interaction.value() * defence, attack);
         }
-        for(PathInteraction interaction : interactions.getInteractionsForSource(path)){
-            if(interaction.type() != PathInteractionType.DESTRUCTIVE) continue;
-            double defence = getEffectiveAffinity(defenderProvider, interaction.target());
+        for(PathInteraction interaction : PathInteractionHelper.getInteractionsFrom(access, path, PathInteractionType.DESTRUCTIVE)){
+            double defence = getEffectiveAffinity(access, defenderProvider, interaction.target());
             if(defence <= 0) continue;
             pressure += term(interaction.value() * attack, defence);
         }

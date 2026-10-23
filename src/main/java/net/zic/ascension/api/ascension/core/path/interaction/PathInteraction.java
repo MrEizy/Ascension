@@ -16,32 +16,44 @@ import java.util.List;
  * if i use an ice cultivation technique and i have water affinity the ice affinity gets 50% of the water affinity
  *
  * so source is the path that affects the target
+ * <p>
+ * Interactions are stored in the {@code ascension:path_interactions} data map, keyed by the target path,
+ * see {@link PathInteractionHelper}.
  *
  * @param source the source of the interaction
  * @param target the target of the interaction
  */
 public record PathInteraction(Identifier source,Identifier target,PathInteractionType type,double value) {
-    private static final Codec<PathInteraction> INTERACTION_CODEC =RecordCodecBuilder.create(
-            instance->instance.group(
-                    Identifier.CODEC.fieldOf("source").forGetter(PathInteraction::source),
-                    Identifier.CODEC.fieldOf("target").forGetter(PathInteraction::target),
-                    Codec.STRING.comapFlatMap(
-                            type -> {
-                                try {
-                                    return DataResult.success(
-                                            PathInteractionType.valueOf(type.toUpperCase())
-                                    );
-                                } catch (IllegalArgumentException e) {
-                                    return DataResult.<PathInteractionType>error(() ->
-                                            "Unknown target type: " + type);
-                                }
-                            },
-                            PathInteractionType::name
-                    ).fieldOf("type").forGetter(PathInteraction::type),
-                    Codec.DOUBLE.fieldOf("value").forGetter(PathInteraction::value)
-            ).apply(instance,PathInteraction::new)
+
+    private static final Codec<PathInteractionType> TYPE_CODEC = Codec.STRING.comapFlatMap(
+            type -> {
+                try {
+                    return DataResult.success(
+                            PathInteractionType.valueOf(type.toUpperCase())
+                    );
+                } catch (IllegalArgumentException e) {
+                    return DataResult.<PathInteractionType>error(() ->
+                            "Unknown interaction type: " + type);
+                }
+            },
+            type -> type.name().toLowerCase()
     );
 
-    public static final Codec<List<PathInteraction>> REGISTRY_CODEC = INTERACTION_CODEC.listOf();
+    /**
+     * A single data map entry, the target is the path the data map value is attached to.
+     */
+    public record Entry(Identifier source, PathInteractionType type, double value) {
+        public static final Codec<Entry> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                        Identifier.CODEC.fieldOf("source").forGetter(Entry::source),
+                        TYPE_CODEC.fieldOf("type").forGetter(Entry::type),
+                        Codec.DOUBLE.fieldOf("value").forGetter(Entry::value)
+                ).apply(instance, Entry::new)
+        );
+        public static final Codec<List<Entry>> LIST_CODEC = CODEC.listOf();
 
+        public PathInteraction resolve(Identifier target){
+            return new PathInteraction(source, target, type, value);
+        }
+    }
 }

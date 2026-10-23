@@ -34,7 +34,7 @@ public class AffinityCommand {
             player.sendSystemMessage(Component.literal("===Affinities (").append(player.getName()).append(Component.literal(")===")));
             for(Identifier path : pathBonusHolder.getAllPathBonusesInCategory(PathInteractionUtil.AFFINITY_CATEGORY)){
                 player.sendSystemMessage(Component.literal(path+": "+pathBonusHolder.getPathBonus(PathInteractionUtil.AFFINITY_CATEGORY,path)
-                        +" (effective: "+PathInteractionUtil.getEffectiveAffinity(pathBonusHolder,path)+")"));
+                        +" (effective: "+PathInteractionUtil.getEffectiveAffinity(player.registryAccess(),pathBonusHolder,path)+")"));
             }
         }
         return 1;
