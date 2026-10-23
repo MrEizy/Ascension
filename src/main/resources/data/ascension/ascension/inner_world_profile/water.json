@@ -20,6 +20,11 @@
           "type": "pools",
           "block": "minecraft:water",
           "density": 0.35
+        },
+        {
+          "type": "rivers",
+          "block": "minecraft:water",
+          "density": 0.45
         }
       ],
       "qi": {
@@ -65,6 +70,11 @@
           "type": "pools",
           "block": "minecraft:water",
           "density": 0.25
+        },
+        {
+          "type": "rivers",
+          "block": "minecraft:water",
+          "density": 0.35
         }
       ],
       "qi": {
@@ -153,6 +163,12 @@
             "max_depth": 30,
             "radius": 3
           }
+        ],
+        "herbs": [
+          {
+            "herb": "ascension:snow_ginseng",
+            "density": 0.005
+          }
         ]
       }
     },
@@ -184,6 +200,12 @@
         {
           "type": "springs",
           "density": 0.12
+        },
+        {
+          "type": "rivers",
+          "block": "minecraft:water",
+          "density": 0.3,
+          "shore": "minecraft:mud"
         }
       ],
       "qi": {

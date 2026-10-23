@@ -36,8 +36,9 @@
           "max_height": 26
         },
         {
-          "type": "springs",
-          "density": 0.06
+          "type": "rivers",
+          "block": "minecraft:lava",
+          "density": 0.3
         }
       ],
       "qi": {
@@ -241,7 +242,13 @@
             "max_depth": 30
           }
         ],
-        "treasure": []
+        "treasure": [],
+        "herbs": [
+          {
+            "herb": "ascension:nine_sun_fire_root",
+            "density": 0.006
+          }
+        ]
       }
     }
   ]

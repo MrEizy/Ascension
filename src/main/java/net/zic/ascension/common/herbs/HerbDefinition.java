@@ -166,6 +166,14 @@ public final class HerbDefinition {
         return qiProfile.canWildSpawn(level, pos) && spawnRule.canSpawn(level, pos, random);
     }
 
+    /**
+     * For worlds that supply their own atmospheric qi (the inner world): only the herb's random spawn rule, without the
+     * biome-config qi check in canSpawn, which reads BiomeConfiguration data maps those worlds don't have.
+     */
+    public boolean canSpawnIgnoringQi(WorldGenLevel level, BlockPos pos, RandomSource random) {
+        return spawnRule.canSpawn(level, pos, random);
+    }
+
     public Quality cultivatedQuality() {
         return cultivatedQuality;
     }

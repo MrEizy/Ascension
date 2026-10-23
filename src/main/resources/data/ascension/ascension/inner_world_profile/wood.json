@@ -1,0 +1,412 @@
+{
+  "path": "ascension:elemental/wood",
+  "weight_multiplier": 1.0,
+  "variants": [
+    {
+      "weight": 1.3,
+      "biome": "minecraft:forest",
+      "palette": {
+        "top": "minecraft:grass_block",
+        "sub": "minecraft:dirt",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.09
+          },
+          {
+            "block": "minecraft:fern",
+            "chance": 0.03
+          },
+          {
+            "block": "minecraft:dandelion",
+            "chance": 0.01
+          },
+          {
+            "block": "minecraft:poppy",
+            "chance": 0.008
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 14,
+        "frequency": 0.9,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:oak_log",
+          "density": 0.035,
+          "min_size": 6,
+          "max_size": 9,
+          "min_height": 14,
+          "max_height": 24,
+          "shape": "dome",
+          "width": 2,
+          "leaves": "minecraft:oak_leaves"
+        },
+        {
+          "type": "trees",
+          "block": "minecraft:oak_log",
+          "density": 0.1,
+          "min_size": 3,
+          "max_size": 4,
+          "min_height": 5,
+          "max_height": 8,
+          "shape": "round",
+          "width": 1,
+          "leaves": "minecraft:oak_leaves"
+        },
+        {
+          "type": "trees",
+          "block": "minecraft:birch_log",
+          "density": 0.03,
+          "min_size": 2,
+          "max_size": 3,
+          "min_height": 6,
+          "max_height": 9,
+          "shape": "round",
+          "width": 1,
+          "leaves": "minecraft:birch_leaves"
+        },
+        {
+          "type": "rivers",
+          "block": "minecraft:water",
+          "density": 0.18,
+          "shore": "minecraft:sand"
+        }
+      ],
+      "qi": {
+        "capacity": 560,
+        "regen": 6,
+        "affinity": 1.6
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:coal_ore",
+            "density": 0.06,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [],
+        "herbs": [
+          {
+            "herb": "ascension:jade_dew_grass",
+            "density": 0.006
+          },
+          {
+            "herb": "ascension:ginseng",
+            "density": 0.006
+          }
+        ]
+      }
+    },
+    {
+      "weight": 1.1,
+      "biome": "minecraft:jungle",
+      "palette": {
+        "top": "minecraft:grass_block",
+        "sub": "minecraft:dirt",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:fern",
+            "chance": 0.08
+          },
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.06
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 20,
+        "frequency": 1.0,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:jungle_log",
+          "density": 0.05,
+          "min_size": 7,
+          "max_size": 11,
+          "min_height": 22,
+          "max_height": 34,
+          "shape": "dome",
+          "width": 2,
+          "leaves": "minecraft:jungle_leaves"
+        },
+        {
+          "type": "trees",
+          "block": "minecraft:jungle_log",
+          "density": 0.09,
+          "min_size": 3,
+          "max_size": 5,
+          "min_height": 8,
+          "max_height": 13,
+          "shape": "umbrella",
+          "width": 1,
+          "leaves": "minecraft:jungle_leaves"
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:water",
+          "density": 0.12,
+          "shore": "minecraft:mud"
+        }
+      ],
+      "qi": {
+        "capacity": 580,
+        "regen": 6,
+        "affinity": 1.7
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:emerald_ore",
+            "density": 0.015,
+            "min_depth": 10,
+            "max_depth": 34,
+            "scale": 4.0
+          }
+        ],
+        "treasure": [],
+        "herbs": [
+          {
+            "herb": "ascension:ginseng",
+            "density": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "weight": 1.0,
+      "biome": "minecraft:taiga",
+      "palette": {
+        "top": "minecraft:podzol",
+        "sub": "minecraft:dirt",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:fern",
+            "chance": 0.07
+          },
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.05
+          },
+          {
+            "block": "minecraft:brown_mushroom",
+            "chance": 0.01
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 18,
+        "frequency": 1.0,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:spruce_log",
+          "density": 0.1,
+          "min_size": 3,
+          "max_size": 5,
+          "min_height": 8,
+          "max_height": 16,
+          "shape": "cone",
+          "width": 1,
+          "leaves": "minecraft:spruce_leaves"
+        },
+        {
+          "type": "trees",
+          "block": "minecraft:spruce_log",
+          "density": 0.02,
+          "min_size": 6,
+          "max_size": 8,
+          "min_height": 20,
+          "max_height": 30,
+          "shape": "cone",
+          "width": 2,
+          "leaves": "minecraft:spruce_leaves"
+        }
+      ],
+      "qi": {
+        "capacity": 520,
+        "regen": 5,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:coal_ore",
+            "density": 0.06,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [],
+        "herbs": [
+          {
+            "herb": "ascension:jade_dew_grass",
+            "density": 0.005
+          }
+        ]
+      }
+    },
+    {
+      "weight": 0.9,
+      "biome": "minecraft:cherry_grove",
+      "palette": {
+        "top": "minecraft:grass_block",
+        "sub": "minecraft:dirt",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:pink_petals",
+            "chance": 0.07
+          },
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.06
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 18,
+        "frequency": 1.0,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:cherry_log",
+          "density": 0.04,
+          "min_size": 5,
+          "max_size": 8,
+          "min_height": 9,
+          "max_height": 15,
+          "shape": "dome",
+          "width": 2,
+          "leaves": "minecraft:cherry_leaves"
+        },
+        {
+          "type": "trees",
+          "block": "minecraft:cherry_log",
+          "density": 0.07,
+          "min_size": 3,
+          "max_size": 4,
+          "min_height": 5,
+          "max_height": 8,
+          "shape": "round",
+          "width": 1,
+          "leaves": "minecraft:cherry_leaves"
+        },
+        {
+          "type": "springs",
+          "density": 0.05
+        }
+      ],
+      "qi": {
+        "capacity": 560,
+        "regen": 6,
+        "affinity": 1.6
+      },
+      "resources": {
+        "ores": [],
+        "treasure": [],
+        "herbs": [
+          {
+            "herb": "ascension:white_jade_orchid",
+            "density": 0.006
+          }
+        ]
+      }
+    },
+    {
+      "weight": 0.8,
+      "biome": "minecraft:mangrove_swamp",
+      "palette": {
+        "top": "minecraft:mud",
+        "sub": "minecraft:mud",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:fern",
+            "chance": 0.05
+          },
+          {
+            "block": "minecraft:brown_mushroom",
+            "chance": 0.01
+          }
+        ]
+      },
+      "terrain": {
+        "offset": -2,
+        "amplitude": 9,
+        "frequency": 0.8,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:mangrove_log",
+          "density": 0.08,
+          "min_size": 4,
+          "max_size": 7,
+          "min_height": 7,
+          "max_height": 13,
+          "shape": "weeping",
+          "width": 1,
+          "leaves": "minecraft:mangrove_leaves"
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:water",
+          "density": 0.4,
+          "shore": "minecraft:mud"
+        },
+        {
+          "type": "rivers",
+          "block": "minecraft:water",
+          "density": 0.3,
+          "shore": "minecraft:mud"
+        }
+      ],
+      "qi": {
+        "capacity": 540,
+        "regen": 5,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:emerald_ore",
+            "density": 0.012,
+            "min_depth": 10,
+            "max_depth": 34,
+            "scale": 4.0
+          }
+        ],
+        "treasure": [],
+        "herbs": []
+      }
+    }
+  ]
+}

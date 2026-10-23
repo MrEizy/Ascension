@@ -401,6 +401,7 @@ public final class SkillActions {
             }
             resolvedSpeed = Math.clamp(resolvedSpeed, 0.1D, 512.0D);
             int resolvedDuration = Math.clamp((int) Math.round(durationTicks.resolve(context.scaledValueContext())), 1, 12000);
+            net.zic.ascension.AscensionCraft.LOGGER.info("[DivineSense] radius={} speed={} duration={} (temporary diagnostic)", resolvedRadius, resolvedSpeed, resolvedDuration);
             Vec3 center = player.position();
             AABB area = AABB.ofSize(center, resolvedRadius * 2.0D, resolvedRadius * 2.0D, resolvedRadius * 2.0D);
             List<Integer> highlighted = new ArrayList<>();
@@ -410,6 +411,7 @@ public final class SkillActions {
                 }
             }
             ClientboundDivineSensePacket.sendToPlayer(player, new ClientboundDivineSensePacket(center, (float) resolvedRadius, (float) resolvedSpeed, resolvedDuration, color, highlighted));
+            net.zic.ascension.impl.core.innerworld.InnerWorldVeins.reveal(player, center, resolvedRadius);
         }
 
         private boolean isValidTarget(Entity entity) {
@@ -501,6 +503,7 @@ public final class SkillActions {
             if (!Double.isFinite(resolvedRate) || resolvedRate <= 0.0D) {
                 return;
             }
+            resolvedRate *= net.zic.ascension.impl.core.innerworld.InnerWorldSprings.cultivationMultiplier(context.caster());
             CultivationUtil.cultivate(
                     context.caster(),
                     context.originSource(),

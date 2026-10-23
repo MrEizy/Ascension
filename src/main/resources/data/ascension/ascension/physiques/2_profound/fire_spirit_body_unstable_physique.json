@@ -9,6 +9,7 @@
   "paths": [
     "ascension:foundation/soul",
     "ascension:elemental/fire",
+    "ascension:elemental/water",
     "ascension:elemental/yang",
     "ascension:weapon/fist"
   ],

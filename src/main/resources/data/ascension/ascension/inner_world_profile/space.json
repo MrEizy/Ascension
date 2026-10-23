@@ -1,0 +1,236 @@
+{
+  "path": "ascension:elemental/space",
+  "weight_multiplier": 1.0,
+  "variants": [
+    {
+      "weight": 1.2,
+      "biome": "minecraft:the_end",
+      "palette": {
+        "top": "minecraft:end_stone",
+        "sub": "minecraft:end_stone",
+        "stone": "minecraft:end_stone",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 12,
+        "frequency": 0.8,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "floating_islands",
+          "density": 0.2,
+          "min_size": 6,
+          "max_size": 14,
+          "min_height": 40,
+          "max_height": 110,
+          "block": "minecraft:end_stone"
+        },
+        {
+          "type": "spires",
+          "density": 0.1,
+          "min_size": 2,
+          "max_size": 4,
+          "min_height": 14,
+          "max_height": 32,
+          "block": "minecraft:obsidian"
+        }
+      ],
+      "qi": {
+        "capacity": 480,
+        "regen": 5,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [],
+        "treasure": [
+          {
+            "block": "minecraft:purpur_block",
+            "density": 0.14,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 1.0,
+      "biome": "minecraft:end_highlands",
+      "palette": {
+        "top": "minecraft:purpur_block",
+        "sub": "minecraft:end_stone",
+        "stone": "minecraft:end_stone",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 30,
+        "frequency": 1.2,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "spires",
+          "density": 0.14,
+          "min_size": 2,
+          "max_size": 4,
+          "min_height": 12,
+          "max_height": 30,
+          "block": "minecraft:purpur_pillar"
+        },
+        {
+          "type": "ravines",
+          "density": 0.5,
+          "min_height": 16,
+          "max_height": 34
+        },
+        {
+          "type": "floating_islands",
+          "density": 0.1,
+          "min_size": 5,
+          "max_size": 10,
+          "min_height": 50,
+          "max_height": 100,
+          "block": "minecraft:purpur_block"
+        }
+      ],
+      "qi": {
+        "capacity": 500,
+        "regen": 5,
+        "affinity": 1.6
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:amethyst_block",
+            "density": 0.03,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:crying_obsidian",
+            "density": 0.14,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 0.9,
+      "biome": "minecraft:end_midlands",
+      "palette": {
+        "top": "minecraft:black_concrete_powder",
+        "sub": "minecraft:obsidian",
+        "stone": "minecraft:end_stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:end_rod",
+            "chance": 0.006
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 14,
+        "frequency": 0.9,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "pillars",
+          "density": 0.08,
+          "min_size": 1,
+          "max_size": 2,
+          "min_height": 10,
+          "max_height": 24,
+          "block": "minecraft:obsidian"
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:black_stained_glass",
+          "density": 0.14,
+          "shore": "minecraft:obsidian"
+        }
+      ],
+      "qi": {
+        "capacity": 460,
+        "regen": 4,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [],
+        "treasure": [
+          {
+            "block": "minecraft:crying_obsidian",
+            "density": 0.14,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 0.8,
+      "biome": "minecraft:the_end",
+      "palette": {
+        "top": "minecraft:end_stone",
+        "sub": "minecraft:end_stone",
+        "stone": "minecraft:end_stone",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": -6,
+        "amplitude": 16,
+        "frequency": 1.1,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "ravines",
+          "density": 0.8,
+          "min_height": 20,
+          "max_height": 40
+        },
+        {
+          "type": "floating_islands",
+          "density": 0.14,
+          "min_size": 5,
+          "max_size": 11,
+          "min_height": 45,
+          "max_height": 95,
+          "block": "minecraft:end_stone"
+        }
+      ],
+      "qi": {
+        "capacity": 480,
+        "regen": 5,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [],
+        "treasure": [
+          {
+            "block": "minecraft:amethyst_block",
+            "density": 0.14,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    }
+  ]
+}

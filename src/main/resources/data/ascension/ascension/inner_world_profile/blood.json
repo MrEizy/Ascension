@@ -1,0 +1,271 @@
+{
+  "path": "ascension:elemental/blood",
+  "weight_multiplier": 1.0,
+  "variants": [
+    {
+      "weight": 1.2,
+      "biome": "minecraft:crimson_forest",
+      "palette": {
+        "top": "minecraft:crimson_nylium",
+        "sub": "minecraft:netherrack",
+        "stone": "minecraft:blackstone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:crimson_roots",
+            "chance": 0.07
+          },
+          {
+            "block": "minecraft:crimson_fungus",
+            "chance": 0.012
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 24,
+        "frequency": 1.0,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:crimson_stem",
+          "density": 0.07,
+          "min_size": 4,
+          "max_size": 6,
+          "min_height": 6,
+          "max_height": 11,
+          "shape": "dome",
+          "width": 1,
+          "leaves": "minecraft:nether_wart_block"
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:red_stained_glass",
+          "density": 0.16,
+          "shore": "minecraft:netherrack"
+        }
+      ],
+      "qi": {
+        "capacity": 450,
+        "regen": 5,
+        "affinity": 1.4
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:nether_gold_ore",
+            "density": 0.06,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          },
+          {
+            "block": "minecraft:nether_quartz_ore",
+            "density": 0.07,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:redstone_block",
+            "density": 0.16,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 1.0,
+      "biome": "minecraft:eroded_badlands",
+      "palette": {
+        "top": "minecraft:red_sand",
+        "sub": "minecraft:red_sandstone",
+        "stone": "minecraft:terracotta",
+        "deep": "minecraft:deepslate",
+        "bands": [
+          "minecraft:red_terracotta",
+          "minecraft:terracotta",
+          "minecraft:brown_terracotta",
+          "minecraft:red_terracotta"
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 22,
+        "frequency": 1.0,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "mesas",
+          "density": 0.25,
+          "min_size": 10,
+          "max_size": 22,
+          "min_height": 8,
+          "max_height": 22
+        },
+        {
+          "type": "ravines",
+          "density": 0.4,
+          "min_height": 10,
+          "max_height": 26
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:red_stained_glass",
+          "density": 0.08,
+          "shore": "minecraft:red_sandstone"
+        }
+      ],
+      "qi": {
+        "capacity": 350,
+        "regen": 3,
+        "affinity": 1.2
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:redstone_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:raw_copper_block",
+            "density": 0.12,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 0.9,
+      "biome": "minecraft:soul_sand_valley",
+      "palette": {
+        "top": "minecraft:bone_block",
+        "sub": "minecraft:soul_soil",
+        "stone": "minecraft:blackstone",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 20,
+        "frequency": 1.3,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "spires",
+          "density": 0.16,
+          "min_size": 2,
+          "max_size": 4,
+          "min_height": 10,
+          "max_height": 26,
+          "block": "minecraft:bone_block"
+        },
+        {
+          "type": "caves",
+          "density": 0.5
+        }
+      ],
+      "qi": {
+        "capacity": 500,
+        "regen": 5,
+        "affinity": 1.6
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:nether_quartz_ore",
+            "density": 0.06,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:crying_obsidian",
+            "density": 0.16,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": [
+          {
+            "herb": "ascension:blood_lingzhi_mushroom",
+            "density": 0.006
+          }
+        ]
+      }
+    },
+    {
+      "weight": 0.8,
+      "biome": "minecraft:crimson_forest",
+      "palette": {
+        "top": "minecraft:crimson_nylium",
+        "sub": "minecraft:netherrack",
+        "stone": "minecraft:netherrack",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:crimson_roots",
+            "chance": 0.05
+          }
+        ]
+      },
+      "terrain": {
+        "offset": -2,
+        "amplitude": 9,
+        "frequency": 0.8,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "pools",
+          "block": "minecraft:red_stained_glass",
+          "density": 0.4,
+          "shore": "minecraft:crimson_nylium"
+        },
+        {
+          "type": "rivers",
+          "block": "minecraft:red_stained_glass",
+          "density": 0.3,
+          "shore": "minecraft:netherrack"
+        }
+      ],
+      "qi": {
+        "capacity": 400,
+        "regen": 4,
+        "affinity": 1.3
+      },
+      "resources": {
+        "ores": [],
+        "treasure": [
+          {
+            "block": "minecraft:redstone_block",
+            "density": 0.14,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    }
+  ]
+}

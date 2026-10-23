@@ -1,0 +1,275 @@
+{
+  "path": "ascension:elemental/time",
+  "weight_multiplier": 1.0,
+  "variants": [
+    {
+      "weight": 1.2,
+      "biome": "minecraft:desert",
+      "palette": {
+        "top": "minecraft:sand",
+        "sub": "minecraft:sandstone",
+        "stone": "minecraft:sandstone",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 20,
+        "frequency": 0.9,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "mesas",
+          "density": 0.14,
+          "min_size": 10,
+          "max_size": 20,
+          "min_height": 6,
+          "max_height": 16,
+          "block": "minecraft:smooth_sandstone"
+        },
+        {
+          "type": "pillars",
+          "density": 0.05,
+          "min_size": 1,
+          "max_size": 2,
+          "min_height": 8,
+          "max_height": 18,
+          "block": "minecraft:chiseled_sandstone"
+        }
+      ],
+      "qi": {
+        "capacity": 420,
+        "regen": 4,
+        "affinity": 1.3
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:gold_ore",
+            "density": 0.04,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:gold_block",
+            "density": 0.1,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 1.0,
+      "biome": "minecraft:badlands",
+      "palette": {
+        "top": "minecraft:terracotta",
+        "sub": "minecraft:terracotta",
+        "stone": "minecraft:terracotta",
+        "deep": "minecraft:deepslate",
+        "bands": [
+          "minecraft:terracotta",
+          "minecraft:white_terracotta",
+          "minecraft:orange_terracotta",
+          "minecraft:yellow_terracotta",
+          "minecraft:brown_terracotta",
+          "minecraft:terracotta",
+          "minecraft:red_terracotta"
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 28,
+        "frequency": 1.0,
+        "terrace": 3
+      },
+      "features": [
+        {
+          "type": "ravines",
+          "density": 0.6,
+          "min_height": 16,
+          "max_height": 34
+        },
+        {
+          "type": "mesas",
+          "density": 0.22,
+          "min_size": 12,
+          "max_size": 24,
+          "min_height": 8,
+          "max_height": 22
+        }
+      ],
+      "qi": {
+        "capacity": 400,
+        "regen": 3,
+        "affinity": 1.2
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:gold_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:raw_gold_block",
+            "density": 0.12,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": [
+          {
+            "herb": "ascension:nine_sun_fire_root",
+            "density": 0.005
+          }
+        ]
+      }
+    },
+    {
+      "weight": 0.9,
+      "biome": "minecraft:plains",
+      "palette": {
+        "top": "minecraft:mossy_stone_bricks",
+        "sub": "minecraft:stone_bricks",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.04
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 10,
+        "frequency": 0.7,
+        "terrace": 3
+      },
+      "features": [
+        {
+          "type": "pillars",
+          "density": 0.1,
+          "min_size": 1,
+          "max_size": 2,
+          "min_height": 8,
+          "max_height": 20,
+          "block": "minecraft:stone_bricks"
+        },
+        {
+          "type": "pillars",
+          "density": 0.06,
+          "min_size": 1,
+          "max_size": 2,
+          "min_height": 4,
+          "max_height": 10,
+          "block": "minecraft:mossy_cobblestone"
+        }
+      ],
+      "qi": {
+        "capacity": 380,
+        "regen": 3,
+        "affinity": 1.1
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:iron_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:chiseled_stone_bricks",
+            "density": 0.12,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 0.8,
+      "biome": "minecraft:old_growth_birch_forest",
+      "palette": {
+        "top": "minecraft:grass_block",
+        "sub": "minecraft:dirt",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.06
+          },
+          {
+            "block": "minecraft:fern",
+            "chance": 0.04
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 16,
+        "frequency": 0.9,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:oak_log",
+          "density": 0.04,
+          "min_size": 6,
+          "max_size": 9,
+          "min_height": 14,
+          "max_height": 24,
+          "shape": "dome",
+          "width": 2,
+          "leaves": "minecraft:oak_leaves"
+        },
+        {
+          "type": "trees",
+          "block": "minecraft:birch_log",
+          "density": 0.03,
+          "min_size": 3,
+          "max_size": 4,
+          "min_height": 6,
+          "max_height": 9,
+          "shape": "round",
+          "width": 1,
+          "leaves": "minecraft:birch_leaves"
+        }
+      ],
+      "qi": {
+        "capacity": 440,
+        "regen": 4,
+        "affinity": 1.3
+      },
+      "resources": {
+        "ores": [],
+        "treasure": [],
+        "herbs": [
+          {
+            "herb": "ascension:ginseng",
+            "density": 0.005
+          }
+        ]
+      }
+    }
+  ]
+}

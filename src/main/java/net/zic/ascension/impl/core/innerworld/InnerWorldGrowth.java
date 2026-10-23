@@ -149,6 +149,7 @@ public final class InnerWorldGrowth {
             if (nextColumn >= 256) {
                 if (seeded != null) {
                     InnerWorldBiomes.apply(level, seeded, current.cx(), current.cz(), center.getX(), center.getZ());
+                    InnerWorldHerbs.populateChunk(level, seeded, plot, current.cx(), current.cz(), center.getX(), center.getZ());
                 }
                 finish(server, plot, current);
                 current = null;
@@ -226,7 +227,7 @@ public final class InnerWorldGrowth {
     private static void fillColumn(ServerLevel level, long seed, Theme theme, int x, int z, int centerX, int centerZ) {
         double dist = Math.sqrt((double) (x - centerX) * (x - centerX) + (double) (z - centerZ) * (z - centerZ));
         boolean dais = dist <= DAIS_RADIUS;
-        // Per-plot jitter derived from the seed alone (constant for the whole plot), so two plots
+        // Per-plot jitter: derived from the seed alone (constant for the whole plot), so two plots
         // that happen to roll the same theme still differ in how tall, how bumpy, and how
         // cluttered they are.
         double ampJitter = 0.7 + hash(seed + 101, 1, 1) * 0.6;      // 0.7 .. 1.3
@@ -241,7 +242,7 @@ public final class InnerWorldGrowth {
         double blend = smoothstep(6.0, 18.0, dist);
         int top = InnerWorld.SURFACE_Y + (int) Math.round((n - 0.5) * theme.amplitude * ampJitter * blend);
 
-        // Ponds patchy low-noise basins at a fixed water level. Skipped on the dais, near spawn,
+        // Ponds: patchy low-noise basins at a fixed water level. Skipped on the dais, near spawn,
         // and in themes where water doesn't fit (badlands).
         final int waterLevel = InnerWorld.SURFACE_Y - 2;
         boolean pond = false;

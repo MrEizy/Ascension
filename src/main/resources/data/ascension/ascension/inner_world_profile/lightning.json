@@ -1,0 +1,267 @@
+{
+  "path": "ascension:elemental/lightning",
+  "weight_multiplier": 1.0,
+  "variants": [
+    {
+      "weight": 1.2,
+      "biome": "minecraft:windswept_hills",
+      "palette": {
+        "top": "minecraft:grass_block",
+        "sub": "minecraft:dirt",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:lightning_rod",
+            "chance": 0.004
+          },
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.05
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 24,
+        "frequency": 1.1,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "pillars",
+          "density": 0.06,
+          "min_size": 1,
+          "max_size": 1,
+          "min_height": 10,
+          "max_height": 22,
+          "block": "minecraft:lightning_rod"
+        },
+        {
+          "type": "trees",
+          "block": "minecraft:oak_log",
+          "density": 0.02,
+          "min_size": 2,
+          "max_size": 3,
+          "min_height": 5,
+          "max_height": 8,
+          "shape": "round",
+          "width": 1
+        }
+      ],
+      "qi": {
+        "capacity": 460,
+        "regen": 5,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:copper_ore",
+            "density": 0.06,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          },
+          {
+            "block": "minecraft:iron_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:raw_copper_block",
+            "density": 0.14,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 1.0,
+      "biome": "minecraft:jagged_peaks",
+      "palette": {
+        "top": "minecraft:cut_copper",
+        "sub": "minecraft:exposed_copper",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": 6,
+        "amplitude": 42,
+        "frequency": 1.4,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "spires",
+          "density": 0.12,
+          "min_size": 2,
+          "max_size": 4,
+          "min_height": 14,
+          "max_height": 34,
+          "block": "minecraft:oxidized_copper"
+        },
+        {
+          "type": "pillars",
+          "density": 0.05,
+          "min_size": 1,
+          "max_size": 1,
+          "min_height": 12,
+          "max_height": 26,
+          "block": "minecraft:lightning_rod"
+        }
+      ],
+      "qi": {
+        "capacity": 500,
+        "regen": 5,
+        "affinity": 1.6
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:copper_ore",
+            "density": 0.08,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:copper_block",
+            "density": 0.14,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 0.9,
+      "biome": "minecraft:savanna_plateau",
+      "palette": {
+        "top": "minecraft:weathered_copper",
+        "sub": "minecraft:stone",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": 2,
+        "amplitude": 16,
+        "frequency": 0.9,
+        "terrace": 4
+      },
+      "features": [
+        {
+          "type": "mesas",
+          "density": 0.24,
+          "min_size": 12,
+          "max_size": 24,
+          "min_height": 8,
+          "max_height": 18,
+          "block": "minecraft:oxidized_copper"
+        },
+        {
+          "type": "ravines",
+          "density": 0.35,
+          "min_height": 10,
+          "max_height": 24
+        }
+      ],
+      "qi": {
+        "capacity": 440,
+        "regen": 4,
+        "affinity": 1.4
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:copper_ore",
+            "density": 0.07,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:raw_copper_block",
+            "density": 0.14,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 0.8,
+      "biome": "minecraft:stony_shore",
+      "palette": {
+        "top": "minecraft:gravel",
+        "sub": "minecraft:tuff",
+        "stone": "minecraft:tuff",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": -2,
+        "amplitude": 10,
+        "frequency": 0.9,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "pools",
+          "block": "minecraft:water",
+          "density": 0.26,
+          "shore": "minecraft:gravel"
+        },
+        {
+          "type": "pillars",
+          "density": 0.05,
+          "min_size": 1,
+          "max_size": 1,
+          "min_height": 8,
+          "max_height": 18,
+          "block": "minecraft:lightning_rod"
+        }
+      ],
+      "qi": {
+        "capacity": 480,
+        "regen": 5,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:iron_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:amethyst_block",
+            "density": 0.12,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    }
+  ]
+}

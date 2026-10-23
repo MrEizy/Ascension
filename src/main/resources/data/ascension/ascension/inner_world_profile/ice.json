@@ -1,0 +1,249 @@
+{
+  "path": "ascension:elemental/ice",
+  "weight_multiplier": 1.0,
+  "variants": [
+    {
+      "weight": 1.2,
+      "biome": "minecraft:snowy_plains",
+      "palette": {
+        "top": "minecraft:snow_block",
+        "sub": "minecraft:packed_ice",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:snow",
+            "chance": 0.1
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 14,
+        "frequency": 0.8,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:spruce_log",
+          "density": 0.04,
+          "min_size": 3,
+          "max_size": 4,
+          "min_height": 7,
+          "max_height": 11,
+          "shape": "cone",
+          "width": 1,
+          "leaves": "minecraft:spruce_leaves"
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:ice",
+          "density": 0.2,
+          "shore": "minecraft:snow_block"
+        }
+      ],
+      "qi": {
+        "capacity": 380,
+        "regen": 3,
+        "affinity": 1.3
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:lapis_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [],
+        "herbs": [
+          {
+            "herb": "ascension:snow_ginseng",
+            "density": 0.005
+          }
+        ]
+      }
+    },
+    {
+      "weight": 1.0,
+      "biome": "minecraft:ice_spikes",
+      "palette": {
+        "top": "minecraft:snow_block",
+        "sub": "minecraft:packed_ice",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 18,
+        "frequency": 1.0,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "spires",
+          "density": 0.16,
+          "min_size": 2,
+          "max_size": 4,
+          "min_height": 12,
+          "max_height": 30,
+          "block": "minecraft:blue_ice"
+        },
+        {
+          "type": "caves",
+          "density": 0.3
+        }
+      ],
+      "qi": {
+        "capacity": 440,
+        "regen": 4,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:diamond_ore",
+            "density": 0.012,
+            "min_depth": 14,
+            "max_depth": 40,
+            "scale": 4.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:blue_ice",
+            "density": 0.18,
+            "min_depth": 14,
+            "max_depth": 30,
+            "radius": 3
+          }
+        ],
+        "herbs": [
+          {
+            "herb": "ascension:snow_ginseng",
+            "density": 0.006
+          }
+        ]
+      }
+    },
+    {
+      "weight": 0.9,
+      "biome": "minecraft:frozen_peaks",
+      "palette": {
+        "top": "minecraft:snow_block",
+        "sub": "minecraft:packed_ice",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": 6,
+        "amplitude": 42,
+        "frequency": 1.3,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "mesas",
+          "density": 0.16,
+          "min_size": 10,
+          "max_size": 22,
+          "min_height": 8,
+          "max_height": 20,
+          "block": "minecraft:packed_ice"
+        },
+        {
+          "type": "ravines",
+          "density": 0.4,
+          "min_height": 14,
+          "max_height": 30
+        },
+        {
+          "type": "floating_islands",
+          "density": 0.1,
+          "min_size": 6,
+          "max_size": 12,
+          "min_height": 50,
+          "max_height": 90,
+          "block": "minecraft:blue_ice"
+        }
+      ],
+      "qi": {
+        "capacity": 420,
+        "regen": 4,
+        "affinity": 1.4
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:iron_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:packed_ice",
+            "density": 0.12,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 0.8,
+      "biome": "minecraft:frozen_river",
+      "palette": {
+        "top": "minecraft:snow_block",
+        "sub": "minecraft:snow_block",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": -2,
+        "amplitude": 8,
+        "frequency": 0.7,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "rivers",
+          "block": "minecraft:ice",
+          "density": 0.45,
+          "shore": "minecraft:snow_block"
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:water",
+          "density": 0.3,
+          "shore": "minecraft:snow_block"
+        }
+      ],
+      "qi": {
+        "capacity": 360,
+        "regen": 3,
+        "affinity": 1.3
+      },
+      "resources": {
+        "ores": [],
+        "treasure": [
+          {
+            "block": "minecraft:blue_ice",
+            "density": 0.12,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    }
+  ]
+}

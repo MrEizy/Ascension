@@ -1,0 +1,245 @@
+{
+  "path": "ascension:elemental/yang",
+  "weight_multiplier": 1.0,
+  "variants": [
+    {
+      "weight": 1.2,
+      "biome": "minecraft:meadow",
+      "palette": {
+        "top": "minecraft:grass_block",
+        "sub": "minecraft:dirt",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.08
+          },
+          {
+            "block": "minecraft:dandelion",
+            "chance": 0.02
+          },
+          {
+            "block": "minecraft:oxeye_daisy",
+            "chance": 0.015
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 16,
+        "frequency": 0.9,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:birch_log",
+          "density": 0.03,
+          "min_size": 3,
+          "max_size": 4,
+          "min_height": 5,
+          "max_height": 8,
+          "shape": "round",
+          "width": 1,
+          "leaves": "minecraft:birch_leaves"
+        }
+      ],
+      "qi": {
+        "capacity": 420,
+        "regen": 4,
+        "affinity": 1.4
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:gold_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [],
+        "herbs": [
+          {
+            "herb": "ascension:jade_dew_grass",
+            "density": 0.005
+          }
+        ]
+      }
+    },
+    {
+      "weight": 1.0,
+      "biome": "minecraft:stony_peaks",
+      "palette": {
+        "top": "minecraft:calcite",
+        "sub": "minecraft:calcite",
+        "stone": "minecraft:diorite",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": 4,
+        "amplitude": 36,
+        "frequency": 1.2,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "spires",
+          "density": 0.1,
+          "min_size": 2,
+          "max_size": 4,
+          "min_height": 12,
+          "max_height": 28,
+          "block": "minecraft:quartz_block"
+        },
+        {
+          "type": "mesas",
+          "density": 0.14,
+          "min_size": 10,
+          "max_size": 20,
+          "min_height": 8,
+          "max_height": 18,
+          "block": "minecraft:smooth_quartz"
+        }
+      ],
+      "qi": {
+        "capacity": 440,
+        "regen": 4,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [],
+        "treasure": [
+          {
+            "block": "minecraft:glowstone",
+            "density": 0.14,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 0.9,
+      "biome": "minecraft:desert",
+      "palette": {
+        "top": "minecraft:white_concrete_powder",
+        "sub": "minecraft:smooth_sandstone",
+        "stone": "minecraft:sandstone",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 18,
+        "frequency": 1.0,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "spires",
+          "density": 0.08,
+          "min_size": 2,
+          "max_size": 4,
+          "min_height": 8,
+          "max_height": 18,
+          "block": "minecraft:sandstone"
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:water",
+          "density": 0.1,
+          "shore": "minecraft:sand"
+        }
+      ],
+      "qi": {
+        "capacity": 420,
+        "regen": 4,
+        "affinity": 1.4
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:gold_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:gold_block",
+            "density": 0.12,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 0.8,
+      "biome": "minecraft:savanna",
+      "palette": {
+        "top": "minecraft:grass_block",
+        "sub": "minecraft:dirt",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.08
+          },
+          {
+            "block": "minecraft:dandelion",
+            "chance": 0.016
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 14,
+        "frequency": 0.8,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:acacia_log",
+          "density": 0.03,
+          "min_size": 4,
+          "max_size": 7,
+          "min_height": 6,
+          "max_height": 10,
+          "shape": "umbrella",
+          "width": 1,
+          "leaves": "minecraft:acacia_leaves"
+        },
+        {
+          "type": "springs",
+          "density": 0.04
+        }
+      ],
+      "qi": {
+        "capacity": 440,
+        "regen": 5,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [],
+        "treasure": [],
+        "herbs": [
+          {
+            "herb": "ascension:jade_dew_grass",
+            "density": 0.004
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -9,6 +9,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.client.renderer.ModRenderTypes;
@@ -26,6 +27,11 @@ import net.zic.ascension.client.visual.DivineSenseClientState;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID, value = Dist.CLIENT)
 public final class InnerWorldVeinRenderer {
     private InnerWorldVeinRenderer() {
+    }
+
+    @SubscribeEvent
+    public static void onLogout(ClientPlayerNetworkEvent.LoggingOut event) {
+        InnerWorldVeinClientState.clear();
     }
 
     @SubscribeEvent
