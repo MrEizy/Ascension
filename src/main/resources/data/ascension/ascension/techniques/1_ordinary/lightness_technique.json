@@ -6,58 +6,13 @@
   "description": {
     "translate": "ascension.technique.lightness_technique.desc"
   },
-  "path": "ascension:foundation/body",
-  "milestone_realms": [
-    0,
-    1,
-    2
-  ],
-  "technique_families": [
-    "wind"
-  ],
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/lightness_technique/featherstep": {
-      "caps": {
-        "1": "minor_mastery",
-        "2": "major_mastery"
-      }
-    },
-    "ascension:passive/lightness_technique/skimming_stride": {
-      "unlock": 1
-    },
-    "ascension:castable/lightness_technique/cloud_leaping_step": {
-      "unlock": 2
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_lightness_technique_agility_a1",
-                  "value": 0.3
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_lightness_technique_vitality_a1",
-                  "value": 0.05
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/lightness_technique/featherstep",
+        "ascension:passive/lightness_technique/skimming_stride",
+        "ascension:castable/lightness_technique/cloud_leaping_step"
       ]
     }
   ],

@@ -1,14 +1,8 @@
 package net.zic.ascension.api.ascension.core.technique;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.level.storage.ValueOutput;
-
+/**
+ * per-origin state of a technique. Saving and syncing is handled by the owning {@link Technique}
+ * through its {@link Technique#serializerHandler()} and {@link Technique#syncHandler()}.
+ */
 public interface TechniqueData {
-
-
-    public void write(ValueOutput output);
-
-
-    public void encode(ByteBuf buf);
 }

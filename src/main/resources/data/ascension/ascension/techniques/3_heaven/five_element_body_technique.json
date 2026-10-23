@@ -6,81 +6,17 @@
   "description": {
     "translate": "ascension.technique.five_element_body_technique.desc"
   },
-  "path": "ascension:foundation/body",
-  "milestone_realms": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
-  ],
-  "technique_families": [
-    "body"
-  ],
-  "max_realm": 6,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:body_cultivation/five_harmony_tempering": {},
-    "ascension:passive/five_element_body_technique/fivefold_vessel": {
-      "unlock": 1
-    },
-    "ascension:castable/five_element_body_technique/fivefold_palm": {
-      "unlock": 3,
-      "caps": {
-        "6": "minor_mastery"
-      }
-    },
-    "ascension:passive/five_element_body_technique/harmony_guard": {
-      "unlock": 5
-    },
-    "ascension:castable/new_techniques/lifeforce_perception": {
-      "unlock": 2
-    },
-    "ascension:castable/spherical_devastation": {
-      "unlock": 4
-    },
-    "ascension:castable/inner_world": {
-      "unlock": 5
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_five_element_body_technique_vitality_a1",
-                  "value": 1.4
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_five_element_body_technique_strength_a1",
-                  "value": 1.1
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_five_element_body_technique_spirit_a1",
-                  "value": 0.5
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:body_cultivation/five_harmony_tempering",
+        "ascension:passive/five_element_body_technique/fivefold_vessel",
+        "ascension:castable/five_element_body_technique/fivefold_palm",
+        "ascension:passive/five_element_body_technique/harmony_guard",
+        "ascension:castable/new_techniques/lifeforce_perception",
+        "ascension:castable/spherical_devastation",
+        "ascension:castable/inner_world"
       ]
     }
   ],

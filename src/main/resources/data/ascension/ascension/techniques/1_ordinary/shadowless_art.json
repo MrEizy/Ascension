@@ -6,64 +6,12 @@
   "description": {
     "translate": "ascension.technique.shadowless_art.desc"
   },
-  "path": "ascension:foundation/essence",
-  "milestone_realms": [
-    0,
-    1,
-    2
-  ],
-  "technique_families": [
-    "shadow"
-  ],
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/shadowless_art/shadowless_step": {
-      "caps": {
-        "1": "minor_mastery",
-        "2": "major_mastery"
-      }
-    },
-    "ascension:passive/shadowless_art/unseen_circulation": {
-      "unlock": 1
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_shadowless_art_agility_a1",
-                  "value": 0.22
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_shadowless_art_spirit_a1",
-                  "value": 0.12
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_shadowless_art_vitality_a1",
-                  "value": 0.04
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/shadowless_art/shadowless_step",
+        "ascension:passive/shadowless_art/unseen_circulation"
       ]
     }
   ],

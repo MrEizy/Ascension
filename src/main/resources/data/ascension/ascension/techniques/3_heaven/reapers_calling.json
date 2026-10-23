@@ -1,97 +1,19 @@
 {
-  "type": "ascension:kill_progression_technique",
+  "type": "ascension:simple_technique",
   "name": {
     "translate": "ascension.technique.reapers_calling.name"
   },
   "description": {
     "translate": "ascension.technique.reapers_calling.desc"
   },
-  "path": "ascension:foundation/soul",
-  "milestone_realms": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
-  ],
-  "technique_families": [
-    "death",
-    "reincarnation"
-  ],
-  "max_realm": 6,
-  "max_minor_realm": 2,
-  "base_progress": 25.0,
-  "max_health_multiplier": 5.0,
-  "player_multiplier": 5.0,
-  "skills": {
-    "ascension:passive/samsaras_witness": {
-      "unlock": 2
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_reapers_calling_spirit_a1",
-                  "value": 2.5
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_reapers_calling_vitality_a1",
-                  "value": 0.75
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_reapers_calling_agility_a1",
-                  "value": 0.5
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:passive/samsaras_witness"
       ]
     }
   ],
-  "realm_overrides": {
-    "0": {
-      "name": {"translate": "ascension.technique.reapers_calling.realm_override.0.name"}
-    },
-    "1": {
-      "name": {"translate": "ascension.technique.reapers_calling.realm_override.1.name"}
-    },
-    "2": {
-      "name": {"translate": "ascension.technique.reapers_calling.realm_override.2.name"}
-    },
-    "3": {
-      "name": {"translate": "ascension.technique.reapers_calling.realm_override.3.name"}
-    },
-    "4": {
-      "name": {"translate": "ascension.technique.reapers_calling.realm_override.4.name"}
-    },
-    "5": {
-      "name": {"translate": "ascension.technique.reapers_calling.realm_override.5.name"}
-    },
-    "6": {
-      "name": {"translate": "ascension.technique.reapers_calling.realm_override.6.name"}
-    }
-  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "theme_overrides": {

@@ -1,64 +1,20 @@
 {
   "type": "ascension:simple_technique",
-  "name": {"translate": "ascension.technique.pale_moon_scripture.name"},
-  "description": {"translate": "ascension.technique.pale_moon_scripture.desc"},
-  "path": "ascension:foundation/soul",
-  "milestone_realms": [
-    0,
-    1,
-    2
-  ],
-  "technique_families": [
-    "soul",
-    "yin"
-  ],
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/pale_moon": {},
-    "ascension:passive/pale_moon_scripture/lunar_spirit": {
-      "unlock": 1
-    },
-    "ascension:castable/pale_moon_scripture/soul_shift": {
-      "unlock": 1
-    },
-    "ascension:castable/pale_moon_scripture/soul_needle": {
-      "unlock": 2,
-      "caps": {
-        "2": "minor_mastery"
-      }
-    },
-    "ascension:castable/pale_moon_scripture/soul_suppression": {
-      "unlock": 2
-    }
+  "name": {
+    "translate": "ascension.technique.pale_moon_scripture.name"
   },
-  "realm_change_handler": [
+  "description": {
+    "translate": "ascension.technique.pale_moon_scripture.desc"
+  },
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_pale_moon_scripture_spirit_a1",
-                  "value": 0.28
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_pale_moon_scripture_agility_a1",
-                  "value": 0.08
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/pale_moon",
+        "ascension:passive/pale_moon_scripture/lunar_spirit",
+        "ascension:castable/pale_moon_scripture/soul_shift",
+        "ascension:castable/pale_moon_scripture/soul_needle",
+        "ascension:castable/pale_moon_scripture/soul_suppression"
       ]
     }
   ],

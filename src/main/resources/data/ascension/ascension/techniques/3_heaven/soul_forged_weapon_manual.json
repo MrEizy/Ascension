@@ -6,84 +6,17 @@
   "description": {
     "translate": "ascension.technique.soul_forged_weapon_manual.desc"
   },
-  "path": "ascension:foundation/soul",
-  "milestone_realms": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
-  ],
-  "technique_families": [
-    "soul"
-  ],
-  "max_realm": 6,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/soul_forged_meditation": {},
-    "ascension:passive/soul_forged_weapon_manual/soul_tempered_edge": {
-      "unlock": 1
-    },
-    "ascension:castable/soul_forged_weapon_manual/soul_shift": {
-      "unlock": 2
-    },
-    "ascension:castable/soul_forged_weapon_manual/soul_implement": {
-      "unlock": 3,
-      "caps": {
-        "5": "minor_mastery"
-      }
-    },
-    "ascension:castable/soul_forged_weapon_manual/soul_weapon_immolation": {
-      "unlock": 5,
-      "caps": {
-        "6": "major_mastery"
-      }
-    },
-    "ascension:castable/sword_flight": {
-      "unlock": 3
-    },
-    "ascension:castable/inner_world": {
-      "unlock": 4
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_soul_forged_weapon_manual_spirit_a1",
-                  "value": 1.2
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_soul_forged_weapon_manual_strength_a1",
-                  "value": 0.7
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_soul_forged_weapon_manual_vitality_a1",
-                  "value": 0.3
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/soul_forged_meditation",
+        "ascension:passive/soul_forged_weapon_manual/soul_tempered_edge",
+        "ascension:castable/soul_forged_weapon_manual/soul_shift",
+        "ascension:castable/soul_forged_weapon_manual/soul_implement",
+        "ascension:castable/soul_forged_weapon_manual/soul_weapon_immolation",
+        "ascension:castable/sword_flight",
+        "ascension:castable/inner_world"
       ]
     }
   ],

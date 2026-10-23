@@ -26,9 +26,9 @@ import org.jspecify.annotations.Nullable;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.zic.ascension.api.ascension.core.skill.data_source.SkillHolder;
-import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.core.technique.TechniqueHolder;
+import net.zic.ascension.api.ascension.core.technique.TechniqueInstance;
 import net.zic.ascension.api.ascension.event.bloodline.BloodlineEvent;
 import net.zic.ascension.api.ascension.event.path.PathAddedEvent;
 import net.zic.ascension.api.ascension.event.path.PathRemovedEvent;
@@ -535,65 +535,67 @@ public class AscensionOriginSourceHelper {
         return getTechniqueHolder(source).getTechniques();
     }
 
+    public static Collection<TechniqueInstance<?>> getTechniqueInstances(OriginSource source) {
+        return getTechniqueHolder(source).getTechniqueInstances();
+    }
+
     public static boolean hasTechnique(OriginSource source, Identifier technique) {
         return getTechniqueHolder(source).hasTechnique(technique);
     }
 
-    public static Technique getTechnique(OriginSource source, Identifier technique) {
-        return getTechniqueHolder(source).getTechnique(technique, source.getRegistryAccess());
+    public static @Nullable TechniqueInstance<?> getTechnique(OriginSource source, Identifier technique) {
+        return getTechniqueHolder(source).getTechnique(technique);
     }
 
-    public static TechniqueData getTechniqueData(OriginSource source, Identifier technique) {
-        return getTechniqueHolder(source).getTechniqueData(technique);
+    public static @Nullable TechniqueData getTechniqueData(OriginSource source, Identifier technique) {
+        TechniqueInstance<?> instance = getTechnique(source, technique);
+        return instance == null ? null : instance.getData();
     }
 
+    /**
+     * adds a technique with fresh data, checking its requirements
+     * @param technique the technique we are adding
+     * @return true -> added, false -> not added
+     */
     public static boolean addTechnique(OriginSource source, Identifier technique) {
         if (technique == null) {
             return false;
         }
-        Technique techniqueInstance = CoreRegistries.safeAccess(
-                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
-        );
-        return techniqueInstance != null && addTechnique(source, technique, techniqueInstance.newData(), true);
+        TechniqueInstance<?> instance = TechniqueInstance.create(technique, source.getRegistryAccess());
+        return instance != null && addTechnique(source, instance, true);
     }
 
-    public static boolean addTechnique(OriginSource source, Identifier technique, TechniqueData data) {
-        return addTechnique(source, technique, data, true);
-    }
-    public static boolean addTechnique(OriginSource source, Identifier technique, TechniqueData data, boolean checkRequirements) {
-        if (technique == null || data == null || hasTechnique(source, technique)) {
+    /**
+     * adds a technique instance
+     * @param instance the technique we are adding
+     * @param checkRequirements if the technique's requirements must pass
+     * @return true -> added, false -> not added
+     */
+    public static boolean addTechnique(OriginSource source, TechniqueInstance<?> instance, boolean checkRequirements) {
+        if (instance == null || hasTechnique(source, instance.getTechniqueId())) {
             return false;
         }
-        Technique techniqueInstance = CoreRegistries.safeAccess(
-                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
-        );
-        if (techniqueInstance == null || !broadcastTechniqueAddedAttempt(source, technique, data)) {
+        if (!broadcastTechniqueAddedAttempt(source, instance)) {
             return false;
         }
-        if (checkRequirements && !techniqueInstance.requirements().test(source)) {
+        if (checkRequirements && !instance.getTechnique().requirements().test(source)) {
             return false;
         }
-        if (!getTechniqueHolder(source).addTechnique(technique, data)) {
+        if (!getTechniqueHolder(source).addTechnique(instance)) {
             return false;
         }
 
         source.startProcess("add_technique");
-        techniqueInstance.onAdded(source, data);
-        broadcastTechniqueAdded(source, technique, data);
+        instance.onAdded(source);
+        broadcastTechniqueAdded(source, instance);
         source.markDataSourceDirty(CoreDataSources.TECHNIQUE_DATA_SOURCE.getId());
         resolveProcess(source, "add_technique");
         return true;
     }
 
     public static boolean removeTechnique(OriginSource source, Identifier technique) {
-        if (technique == null || !hasTechnique(source, technique)) {
-            return false;
-        }
-        Technique techniqueInstance = CoreRegistries.safeAccess(
-                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
-        );
-        TechniqueData data = getTechniqueData(source, technique);
-        if (techniqueInstance == null || !broadcastTechniqueRemovedAttempt(source, technique, data)) {
+        TechniqueInstance<?> instance = technique == null ? null : getTechnique(source, technique);
+        if (instance == null || !broadcastTechniqueRemovedAttempt(source, instance)) {
             return false;
         }
         if (!getTechniqueHolder(source).removeTechnique(technique)) {
@@ -601,13 +603,14 @@ public class AscensionOriginSourceHelper {
         }
 
         source.startProcess("remove_technique");
-        techniqueInstance.onRemoved(source, data);
-        broadcastTechniqueRemoved(source, technique, data);
+        instance.onRemoved(source);
+        broadcastTechniqueRemoved(source, instance);
         source.markDataSourceDirty(CoreDataSources.TECHNIQUE_DATA_SOURCE.getId());
         resolveProcess(source, "remove_technique");
         return true;
     }
 
+    //should be used if you changed a techniques TechniqueData
     public static void markTechniqueDirty(OriginSource source, Identifier technique) {
         long id = random.nextLong();
         source.startProcess("modified_technique" + id);
@@ -617,41 +620,31 @@ public class AscensionOriginSourceHelper {
     }
 
 
-    public static boolean broadcastTechniqueAddedAttempt(OriginSource source, Identifier technique, TechniqueData data) {
-        TechniqueEvent.Added.Pre pre = new TechniqueEvent.Added.Pre(technique, data, source);
+    public static boolean broadcastTechniqueAddedAttempt(OriginSource source, TechniqueInstance<?> instance) {
+        TechniqueEvent.Added.Pre pre = new TechniqueEvent.Added.Pre(source, instance);
         NeoForge.EVENT_BUS.post(pre);
         return !pre.isCanceled();
     }
 
 
-    public static void broadcastTechniqueAdded(OriginSource source, Identifier technique, TechniqueData data) {
-        Technique techniqueInstance = CoreRegistries.safeAccess(
-                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
-        );
-        if (techniqueInstance != null) {
-            for (LivingEntity entity : source.getAttachedEntities()) {
-                techniqueInstance.applyToEntity(entity, data);
-            }
+    public static void broadcastTechniqueAdded(OriginSource source, TechniqueInstance<?> instance) {
+        for (LivingEntity entity : source.getAttachedEntities()) {
+            instance.applyToEntity(entity);
         }
-        NeoForge.EVENT_BUS.post(new TechniqueEvent.Added.Post(technique, data, source));
+        NeoForge.EVENT_BUS.post(new TechniqueEvent.Added.Post(source, instance));
     }
 
-    public static boolean broadcastTechniqueRemovedAttempt(OriginSource source, Identifier technique, TechniqueData data) {
-        TechniqueEvent.Removed.Pre pre = new TechniqueEvent.Removed.Pre(technique, data, source);
+    public static boolean broadcastTechniqueRemovedAttempt(OriginSource source, TechniqueInstance<?> instance) {
+        TechniqueEvent.Removed.Pre pre = new TechniqueEvent.Removed.Pre(source, instance);
         NeoForge.EVENT_BUS.post(pre);
         return !pre.isCanceled();
     }
 
-    public static void broadcastTechniqueRemoved(OriginSource source, Identifier technique, TechniqueData data) {
-        Technique techniqueInstance = CoreRegistries.safeAccess(
-                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
-        );
-        if (techniqueInstance != null) {
-            for (LivingEntity entity : source.getAttachedEntities()) {
-                techniqueInstance.removeFromEntity(entity, data);
-            }
+    public static void broadcastTechniqueRemoved(OriginSource source, TechniqueInstance<?> instance) {
+        for (LivingEntity entity : source.getAttachedEntities()) {
+            instance.removeFromEntity(entity);
         }
-        NeoForge.EVENT_BUS.post(new TechniqueEvent.Removed.Post(technique, data, source));
+        NeoForge.EVENT_BUS.post(new TechniqueEvent.Removed.Post(source, instance));
     }
     //──Path Bonus Access────────────────────────────────────────────────────────
 

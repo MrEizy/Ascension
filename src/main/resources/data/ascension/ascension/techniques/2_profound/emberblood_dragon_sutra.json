@@ -6,33 +6,18 @@
   "description": {
     "translate": "ascension.technique.emberblood_dragon_sutra.desc"
   },
-  "path": "ascension:foundation/body",
-  "milestone_realms": [
-    0,
-    2,
-    5
-  ],
-  "technique_families": [
-    "body",
-    "fire"
-  ],
-  "max_realm": 5,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:body_cultivation/emberblood_tempering": {},
-    "ascension:passive/emberblood_vigor": {
-      "unlock": 2
-    },
-    "ascension:castable/new_techniques/emberfang_strike": {
-      "unlock": 2
-    },
-    "ascension:castable/new_techniques/cinder_sphere": {
-      "unlock": 4
-    },
-    "ascension:castable/inner_world": {
-      "unlock": 5
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:body_cultivation/emberblood_tempering",
+        "ascension:passive/emberblood_vigor",
+        "ascension:castable/new_techniques/emberfang_strike",
+        "ascension:castable/new_techniques/cinder_sphere",
+        "ascension:castable/inner_world"
+      ]
     }
-  },
+  ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

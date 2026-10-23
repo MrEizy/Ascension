@@ -6,36 +6,19 @@
   "description": {
     "translate": "ascension.technique.mountain_root_bone_scripture.desc"
   },
-  "path": "ascension:foundation/body",
-  "milestone_realms": [
-    0,
-    1,
-    2
-  ],
-  "technique_families": [
-    "earth",
-    "body"
-  ],
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:body_cultivation/mountain_root_tempering": {},
-    "ascension:passive/mountain_root_foundation": {
-      "unlock": 1
-    },
-    "ascension:castable/new_techniques/stoneward_impact": {
-      "unlock": 2
-    },
-    "ascension:castable/new_techniques/lifeforce_perception": {
-      "unlock": 2
-    },
-    "ascension:castable/inner_world": {
-      "unlock": 2
-    },
-    "ascension:castable/new_techniques/stoneward_guard": {
-      "unlock": 1
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:body_cultivation/mountain_root_tempering",
+        "ascension:passive/mountain_root_foundation",
+        "ascension:castable/new_techniques/stoneward_impact",
+        "ascension:castable/new_techniques/lifeforce_perception",
+        "ascension:castable/inner_world",
+        "ascension:castable/new_techniques/stoneward_guard"
+      ]
     }
-  },
+  ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

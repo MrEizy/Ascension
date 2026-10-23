@@ -6,66 +6,13 @@
   "description": {
     "translate": "ascension.technique.burning_bones_technique.desc"
   },
-  "path": "ascension:foundation/body",
-  "milestone_realms": [
-    0,
-    2,
-    5
-  ],
-  "technique_families": [
-    "fire",
-    "body"
-  ],
-  "max_realm": 5,
-  "skills": {
-    "ascension:body_cultivation/burning_bone_tempering": {},
-    "ascension:passive/burning_bones_technique/cinder_bones": {
-      "unlock": 1
-    },
-    "ascension:castable/burning_bones_technique/marrow_flame_fist": {
-      "unlock": 2,
-      "caps": {
-        "3": "minor_mastery",
-        "5": "major_mastery"
-      }
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_burning_bones_technique_strength_a1",
-                  "value": 0.45
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_burning_bones_technique_vitality_a1",
-                  "value": 0.4
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_burning_bones_technique_spirit_a1",
-                  "value": 0.15
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:body_cultivation/burning_bone_tempering",
+        "ascension:passive/burning_bones_technique/cinder_bones",
+        "ascension:castable/burning_bones_technique/marrow_flame_fist"
       ]
     }
   ],

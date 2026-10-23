@@ -8,9 +8,8 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.api.ascension.core.technique.TechniqueInstance;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
 
@@ -65,18 +64,10 @@ public class TechniqueSelectionButton extends BetterButton {
     }
 
     private static Component resolveName(Identifier techniqueId) {
-        return ClientAscensionData.getPlayer().flatMap(player ->
-                ClientAscensionData.getSource().map(source -> {
-                    Technique technique = CoreRegistries.safeAccess(
-                            CoreRegistries.TECHNIQUE_REGISTRY,
-                            techniqueId,
-                            player.registryAccess()
-                    );
-                    return technique == null
-                            ? Component.literal(techniqueId.toString())
-                            : technique.getName(AscensionOriginSourceHelper.getTechniqueData(source, techniqueId));
-                })
-        ).orElseGet(() -> Component.literal(techniqueId.toString()));
+        return ClientAscensionData.getSource()
+                .map(source -> AscensionOriginSourceHelper.getTechnique(source, techniqueId))
+                .map(TechniqueInstance::getName)
+                .orElseGet(() -> Component.literal(techniqueId.toString()));
     }
 
     @Override

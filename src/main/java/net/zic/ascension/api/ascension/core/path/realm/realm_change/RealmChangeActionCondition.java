@@ -7,8 +7,6 @@ import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.ascension.core.technique.Technique;
-import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 import java.util.UUID;

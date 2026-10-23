@@ -1,57 +1,18 @@
 {
   "type": "ascension:simple_technique",
-  "name": {"translate": "ascension.technique.hellbound_marrow_scripture.name"},
-  "description": {"translate": "ascension.technique.hellbound_marrow_scripture.desc"},
-  "path": "ascension:foundation/body",
-  "milestone_realms": [
-    0,
-    1,
-    2
-  ],
-  "technique_families": [
-    "body"
-  ],
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:body_cultivation/hellbound_marrow_refinement": {},
-    "ascension:passive/hellbound_marrow_scripture/marrow_furnace": {
-      "unlock": 1
-    },
-    "ascension:castable/hellbound_marrow_scripture/body_flash_step": {
-      "unlock": 2,
-      "caps": {
-        "2": "minor_mastery"
-      }
-    }
+  "name": {
+    "translate": "ascension.technique.hellbound_marrow_scripture.name"
   },
-  "realm_change_handler": [
+  "description": {
+    "translate": "ascension.technique.hellbound_marrow_scripture.desc"
+  },
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_hellbound_marrow_scripture_strength_a1",
-                  "value": 0.22
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_hellbound_marrow_scripture_vitality_a1",
-                  "value": 0.18
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:body_cultivation/hellbound_marrow_refinement",
+        "ascension:passive/hellbound_marrow_scripture/marrow_furnace",
+        "ascension:castable/hellbound_marrow_scripture/body_flash_step"
       ]
     }
   ],

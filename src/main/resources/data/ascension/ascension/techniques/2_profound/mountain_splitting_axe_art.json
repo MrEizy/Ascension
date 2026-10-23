@@ -6,30 +6,17 @@
   "description": {
     "translate": "ascension.technique.mountain_splitting_axe_art.desc"
   },
-  "path": "ascension:weapon/axe",
-  "milestone_realms": [
-    0,
-    2,
-    5
-  ],
-  "technique_families": [
-    "axe",
-    "earth"
-  ],
-  "max_realm": 5,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:passive/axe_mastery": {},
-    "ascension:castable/new_techniques/faultline_cleave": {
-      "unlock": 2
-    },
-    "ascension:castable/axe_projection": {
-      "unlock": 3
-    },
-    "ascension:castable/spherical_devastation": {
-      "unlock": 5
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:passive/axe_mastery",
+        "ascension:castable/new_techniques/faultline_cleave",
+        "ascension:castable/axe_projection",
+        "ascension:castable/spherical_devastation"
+      ]
     }
-  },
+  ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_battle_style",

@@ -73,7 +73,7 @@ public final class AscensionTransferItemClassifications {
         }
 
         if (stack.getItem() == ModItems.TECHNIQUE_MANUAL.get()) {
-            Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY, registryId, access);
+            Technique<?> technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY, registryId, access);
             return technique == null
                     ? Optional.empty()
                     : classification(TECHNIQUE_MANUAL, technique.itemTooltip());

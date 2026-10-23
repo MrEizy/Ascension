@@ -6,75 +6,16 @@
   "description": {
     "translate": "ascension.technique.sanguine_abyss_technique.desc"
   },
-  "path": "ascension:elemental/blood",
-  "milestone_realms": [
-    0,
-    2,
-    5
-  ],
-  "technique_families": [
-    "blood",
-    "dark",
-    "demonic"
-  ],
-  "max_realm": 5,
-  "skills": {
-    "ascension:castable/cultivation/sanguine_circulation": {},
-    "ascension:castable/sanguine_abyss_technique/malefic_sense": {
-      "unlock": 1
-    },
-    "ascension:passive/sanguine_abyss_technique/blood_thirst": {
-      "unlock": 2
-    },
-    "ascension:castable/blade_projection": {
-      "unlock": 3
-    },
-    "ascension:passive/sanguine_abyss_technique/blood_frenzy": {
-      "unlock": 4
-    },
-    "ascension:castable/sanguine_abyss_technique/abyssal_culling": {
-      "unlock": 5,
-      "caps": {
-        "5": "major_mastery"
-      }
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_sanguine_abyss_technique_strength_a1",
-                  "value": 0.55
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_sanguine_abyss_technique_spirit_a1",
-                  "value": 0.3
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_sanguine_abyss_technique_vitality_a1",
-                  "value": -0.3
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/sanguine_circulation",
+        "ascension:castable/sanguine_abyss_technique/malefic_sense",
+        "ascension:passive/sanguine_abyss_technique/blood_thirst",
+        "ascension:castable/blade_projection",
+        "ascension:passive/sanguine_abyss_technique/blood_frenzy",
+        "ascension:castable/sanguine_abyss_technique/abyssal_culling"
       ]
     }
   ],

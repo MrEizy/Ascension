@@ -43,7 +43,7 @@ public final class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<Bloodline> BLOODLINE_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "bloodlines", () -> BloodlineType.BLOODLINE_CODEC
     );
-    public static final RegistryHelper.DataPackRegistry<Technique> TECHNIQUE_REGISTRY = RegistryHelper.dataPackRegistry(
+    public static final RegistryHelper.DataPackRegistry<Technique<?>> TECHNIQUE_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "techniques", () -> TechniqueType.TECHNIQUE_CODEC
     );
     public static final RegistryHelper.DataPackRegistry<Path> PATH_REGISTRY = RegistryHelper.dataPackRegistry(

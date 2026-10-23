@@ -2,33 +2,30 @@
   "type": "ascension:simple_technique",
   "name": "Example Technique",
   "description": "this is an example",
-  "path": "ascension:foundation/essence",
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/test_cast": {
-      "unlock": 1
-    },
-    "ascension:castable/cultivation/true_breath": {}
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        "ascension:generic_give_stats"
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/test_cast",
+        "ascension:castable/cultivation/true_breath"
       ]
-    }
-  ],
-  "realm_overrides": {
-    "0": {
-      "name": "test realm",
-      "realm_overrides": {
-        "2": {
-          "progress": 100
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:example_technique_strength",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
         }
       }
-    }
-  },
+    },
+    "ascension:generic_give_stats"
+  ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

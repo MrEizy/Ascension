@@ -6,62 +6,15 @@
   "description": {
     "translate": "ascension.technique.sword_draw_manual.desc"
   },
-  "path": "ascension:weapon/sword",
-  "milestone_realms": [
-    0,
-    1,
-    2
-  ],
-  "technique_families": [
-    "sword"
-  ],
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/sword_draw_meditation": {},
-    "ascension:castable/sword_draw_manual/one_breath_draw": {
-      "caps": {
-        "1": "minor_mastery",
-        "2": "major_mastery"
-      }
-    },
-    "ascension:passive/sword_draw_manual/sheathed_edge": {
-      "unlock": 1
-    },
-    "ascension:castable/sword_flight": {
-      "unlock": 1
-    },
-    "ascension:castable/inner_world": {
-      "unlock": 2
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_sword_draw_manual_agility_a1",
-                  "value": 0.18
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_sword_draw_manual_strength_a1",
-                  "value": 0.14
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/sword_draw_meditation",
+        "ascension:castable/sword_draw_manual/one_breath_draw",
+        "ascension:passive/sword_draw_manual/sheathed_edge",
+        "ascension:castable/sword_flight",
+        "ascension:castable/inner_world"
       ]
     }
   ],
