@@ -1,0 +1,74 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.stoneward_guard.name"
+  },
+  "description": {
+    "translate": "ascension.skill.stoneward_guard.desc"
+  },
+  "definitions": {
+    "barriers": {
+      "stoneward_guard": {
+        "duration": {
+          "base": 65,
+          "per_mastery": 6
+        },
+        "durability": {
+          "base": 14.0,
+          "per_mastery": 2,
+          "maximum": 26.0
+        },
+        "absorption": {
+          "base": 0.54,
+          "per_mastery": 0.025,
+          "maximum": 0.67
+        },
+        "overflow": true,
+        "priority": 8,
+        "replace_existing": true,
+        "projectile_response": "none",
+        "on_break": [
+          {
+            "type": "ascension:sound",
+            "sound": "minecraft:item.shield.break",
+            "volume": 0.45,
+            "pitch": 0.9,
+            "subject": "target"
+          }
+        ]
+      }
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:barrier",
+      "action": "apply",
+      "definition": "#stoneward_guard",
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:ash",
+      "count": 18,
+      "spread": 0.65,
+      "speed": 0.03,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:item.shield.block",
+      "volume": 0.55,
+      "pitch": 0.8,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:stamina",
+    "amount": 5
+  },
+  "cooldown": {
+    "base": 145,
+    "per_mastery": -6,
+    "minimum": 115
+  }
+}

@@ -27,6 +27,12 @@
     },
     "ascension:passive/sword_draw_manual/sheathed_edge": {
       "unlock": 1
+    },
+    "ascension:castable/sword_flight": {
+      "unlock": 1
+    },
+    "ascension:castable/inner_world": {
+      "unlock": 2
     }
   },
   "realm_change_handler": [

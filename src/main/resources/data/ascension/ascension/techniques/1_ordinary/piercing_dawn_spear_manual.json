@@ -1,0 +1,38 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.piercing_dawn_spear_manual.name"
+  },
+  "description": {
+    "translate": "ascension.technique.piercing_dawn_spear_manual.desc"
+  },
+  "path": "ascension:weapon/spear",
+  "milestone_realms": [
+    0,
+    1,
+    2
+  ],
+  "technique_families": [
+    "spear",
+    "light"
+  ],
+  "max_realm": 2,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:passive/spear_mastery": {},
+    "ascension:castable/new_techniques/dawnline_thrust": {
+      "unlock": 1
+    },
+    "ascension:castable/spear_projection": {
+      "unlock": 2
+    },
+    "ascension:castable/new_techniques/lifeforce_perception": {
+      "unlock": 2
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_battle_style",
+    "rank": "ascension:ordinary"
+  }
+}

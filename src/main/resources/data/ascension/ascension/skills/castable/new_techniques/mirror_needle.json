@@ -1,0 +1,66 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.mirror_needle.name"
+  },
+  "description": {
+    "translate": "ascension.skill.mirror_needle.desc"
+  },
+  "target": {
+    "type": "ascension:ray",
+    "range": 15,
+    "width": 0.55,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 10,
+        "per_mastery": 0.65
+      },
+      "stats": {
+        "ascension:spirit": 0.22
+      },
+      "minimum": 1,
+      "maximum": 48,
+      "classifications": [
+        "ascension:skill",
+        "ascension:ranged",
+        "ascension:soul",
+        "ascension:ice"
+      ],
+      "path": "ascension:foundation/soul",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:snowflake",
+      "count": 16,
+      "spread": 0.55,
+      "speed": 0.045,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.glass.break",
+      "volume": 0.6,
+      "pitch": 1.0,
+      "subject": "target"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 9
+  },
+  "cooldown": {
+    "base": 92,
+    "per_mastery": -3,
+    "minimum": 74
+  }
+}

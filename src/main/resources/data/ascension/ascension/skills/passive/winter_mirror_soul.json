@@ -1,0 +1,36 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.winter_mirror_soul.name"
+  },
+  "description": {
+    "translate": "ascension.skill.winter_mirror_soul.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:winter_mirror_soul_spirit_bonus",
+              "operation_group": 0,
+              "value": 0.09
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:winter_mirror_soul_vitality_bonus",
+              "operation_group": 0,
+              "value": 0.025
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

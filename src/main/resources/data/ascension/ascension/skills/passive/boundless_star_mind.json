@@ -1,0 +1,36 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.boundless_star_mind.name"
+  },
+  "description": {
+    "translate": "ascension.skill.boundless_star_mind.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:boundless_star_mind_spirit_bonus",
+              "operation_group": 0,
+              "value": 0.125
+            }
+          ]
+        },
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:boundless_star_mind_agility_bonus",
+              "operation_group": 0,
+              "value": 0.03
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

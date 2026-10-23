@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_technique",
-  "name": {"translate": "ascension.technique.white_lightning_ten_stage_technique.name"},
-  "description": {"translate": "ascension.technique.white_lightning_ten_stage_technique.desc"},
+  "name": {
+    "translate": "ascension.technique.white_lightning_ten_stage_technique.name"
+  },
+  "description": {
+    "translate": "ascension.technique.white_lightning_ten_stage_technique.desc"
+  },
   "path": "ascension:foundation/body",
   "milestone_realms": [
     0,
@@ -27,6 +31,12 @@
       }
     },
     "ascension:castable/white_lightning_ten_stage_technique/lightning_flash_step": {
+      "unlock": 5
+    },
+    "ascension:castable/new_techniques/lifeforce_perception": {
+      "unlock": 2
+    },
+    "ascension:castable/inner_world": {
       "unlock": 5
     }
   },

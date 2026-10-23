@@ -1,0 +1,38 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.windstring_hunting_canon.name"
+  },
+  "description": {
+    "translate": "ascension.technique.windstring_hunting_canon.desc"
+  },
+  "path": "ascension:weapon/bow",
+  "milestone_realms": [
+    0,
+    2,
+    5
+  ],
+  "technique_families": [
+    "bow",
+    "wind"
+  ],
+  "max_realm": 5,
+  "max_minor_realm": 2,
+  "skills": {
+    "ascension:passive/bow_mastery": {},
+    "ascension:castable/new_techniques/windstring_volley": {
+      "unlock": 2
+    },
+    "ascension:castable/bow_projection": {
+      "unlock": 3
+    },
+    "ascension:castable/new_techniques/essence_perception": {
+      "unlock": 4
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_battle_style",
+    "rank": "ascension:profound"
+  }
+}

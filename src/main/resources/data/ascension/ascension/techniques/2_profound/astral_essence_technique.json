@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_technique",
-  "name": {"translate": "ascension.technique.astral_essence_technique.name"},
-  "description": {"translate": "ascension.technique.astral_essence_technique.desc"},
+  "name": {
+    "translate": "ascension.technique.astral_essence_technique.name"
+  },
+  "description": {
+    "translate": "ascension.technique.astral_essence_technique.desc"
+  },
   "path": "ascension:foundation/essence",
   "milestone_realms": [
     0,
@@ -24,6 +28,12 @@
       "caps": {
         "5": "minor_mastery"
       }
+    },
+    "ascension:castable/new_techniques/essence_perception": {
+      "unlock": 2
+    },
+    "ascension:castable/spherical_devastation": {
+      "unlock": 4
     }
   },
   "realm_change_handler": [

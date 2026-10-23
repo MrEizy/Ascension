@@ -1,0 +1,73 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.emberfang_strike.name"
+  },
+  "description": {
+    "translate": "ascension.skill.emberfang_strike.desc"
+  },
+  "target": {
+    "type": "ascension:ray",
+    "range": 5,
+    "width": 0.75,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 7,
+        "per_mastery": 0.65
+      },
+      "stats": {
+        "ascension:strength": 0.12
+      },
+      "minimum": 1,
+      "maximum": 48,
+      "classifications": [
+        "ascension:skill",
+        "ascension:melee",
+        "ascension:body",
+        "ascension:fire"
+      ],
+      "path": "ascension:foundation/body",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:effect",
+      "definition": "ascension:burning",
+      "duration": 65,
+      "potency": 1,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:flame",
+      "count": 16,
+      "spread": 0.55,
+      "speed": 0.045,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:item.firecharge.use",
+      "volume": 0.6,
+      "pitch": 1.0,
+      "subject": "target"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 5
+  },
+  "cooldown": {
+    "base": 62,
+    "per_mastery": -3,
+    "minimum": 44
+  }
+}
