@@ -15,6 +15,7 @@ For system-specific authoring, use:
 - [Base stats](#base-stats)
 - [Value modifiers](#value-modifiers)
 - [Path bonuses](#path-bonuses)
+- [Path interactions](#path-interactions)
 - [Requirements](#requirements)
 - [Progress actions](#progress-actions)
 - [Datapack resources](#datapack-resources)
@@ -197,6 +198,35 @@ Progression handlers use the same flat bonus shape through `ascension:give_path_
   }
 }
 ```
+
+## Path interactions
+Files in `data/<namespace>/ascension/config/path_interactions/` hold a list of interactions. Each one says how a `source` path's **affinity** influences a `target` path's affinity.
+
+```json
+[
+  { "source": "ascension:elemental/water", "target": "ascension:elemental/fire", "type": "destructive", "value": 0.5 },
+  { "source": "ascension:elemental/wood",  "target": "ascension:elemental/fire", "type": "generative",  "value": 0.5 },
+  { "source": "ascension:elemental/water", "target": "ascension:elemental/ice",  "type": "related",     "value": 0.5 }
+]
+```
+
+Interactions only affect the `ascension:affinity` category. Every other path bonus category is a plain `1 + bonus` multiplier and never interacts with other paths.
+
+Effective affinity `E` for a target path, where `A(p)` is the raw affinity (never below 0):
+
+1. `related`: `E0 = A(target) + Σ value · A(source)`.
+2. `generative` / `destructive`: each interaction applies pressure based on the **ratio** between the source and the base, `term = clamp(ln(1 + value · A(source) / (E0 + 1)), 0, 3)`.
+3. `E = E0 · exp(Σ generative − Σ destructive)`.
+
+A single term is capped at ×20 or ×0.05, so one interaction can never zero a path. Equal generative and destructive pressure cancel, so a strong generative source brings back a suppressed path. Water 1000 suppresses fire 10 far more than water 10 does, while water 1000 against fire 1000 suppresses about as much as 10 against 10.
+
+### Combat
+An attack tagged with a path compares the attacker's and defender's effective affinities only when it lands:
+
+- each defender path that is `destructive` to the attack path resists: `−ln(1 + value · Ed / (Ea + 1))`;
+- each defender path that the attack path is `destructive` to is overwhelmed: `+ln(1 + value · Ea / (Ed + 1))`.
+
+Damage is multiplied by `exp(clamp(Σ, −3, 3))`, i.e. between ×0.05 and ×20.
 
 # Requirements
 Bloodlines, physiques, and techniques may use Ascension's shared requirement list.

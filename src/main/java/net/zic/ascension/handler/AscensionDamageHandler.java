@@ -1,5 +1,6 @@
 package net.zic.ascension.handler;
 
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -17,10 +18,12 @@ import net.zic.ascension.impl.core.skill.passive.PassiveCombatService;
 import net.zic.ascension.impl.runtime.object.Barriers;
 import net.zic.ascension.impl.runtime.object.OwnerBoundConstructs;
 import net.zic.ascension.impl.runtime.projectile.NormalProjectileService;
+import net.zic.ascension.util.PathInteractionUtil;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class AscensionDamageHandler {
     private static final int PROJECTILE_GROUP = 10;
+    private static final int PATH_AFFINITY_GROUP = 15;
     private static final int PASSIVE_OFFENSE_GROUP = 20;
     private static final int PASSIVE_DEFENSE_GROUP = 30;
 
@@ -66,6 +69,15 @@ public final class AscensionDamageHandler {
         trace.transition("Projectile", beforeProjectile, event.getDamage());
         if (finishIfResolved(event, trace)) {
             return;
+        }
+
+        if (event.getSource().getDamageTypeHolder(AscensionDamageTypeHolders.PATH) instanceof AscensionDamageTypeHolders.Path(Identifier path)
+                && event.getSource().getEntity() instanceof LivingEntity attacker) {
+            double pathMultiplier = PathInteractionUtil.getCollisionMultiplier(attacker, event.getEntity(), path);
+            if (Double.isFinite(pathMultiplier) && pathMultiplier > 0.0D) {
+                event.multiplyDamage(AscensionCraft.prefix("damage_path_affinity"), PATH_AFFINITY_GROUP, pathMultiplier);
+                trace.multiply("Path affinity", pathMultiplier);
+            }
         }
 
         double outgoingMultiplier = PassiveCombatService.outgoingDamageMultiplier(event);

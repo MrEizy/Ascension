@@ -215,3 +215,11 @@ PathInstance<SimplePathData> simple = instance.as(SimplePath.class);
 ((SimplePath) simple.getPath()).limitBreakRealm(source, simple, majorRealm, ownerId);
 ```
 Paths are ownership counted (`addPath(source, pathId, owner)`), saved paths are cached until an owner adds them again and are simulated once the source finishes loading. After changing a path's data call `markPathDirty`.
+
+#### Path interactions and affinity
+Raw affinity lives in the `ascension:affinity` path bonus category. Use `PathInteractionUtil` instead of reading it directly when the interactions should apply:
+- `getEffectiveAffinity(entity | PathBonusProvider | ToDoubleFunction<Identifier>, path)` applies related, generative and destructive interactions (formula in `DATAPACK_HELP.md#path-interactions`). It works for any provider, including chunk affinity.
+- `getPathMultiplier(provider, category, path)` returns `1 + bonus` for every other category. These never interact with other paths.
+- `getCollisionMultiplier(attacker, defender, path)` compares both sides' effective affinities when a path-tagged attack lands. `AscensionDamageHandler` applies it automatically to any damage carrying an `AscensionDamageTypeHolders.PATH` holder.
+
+The tuning constants (`C`, `W`, `T_MAX`) are at the top of `PathInteractionUtil`.
