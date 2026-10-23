@@ -1,71 +1,18 @@
 {
   "type": "ascension:simple_technique",
-  "name": {"translate": "ascension.technique.bloodfeast_soul_refining_scripture.name"},
-  "description": {"translate": "ascension.technique.bloodfeast_soul_refining_scripture.desc"},
-  "path": "ascension:foundation/essence",
-  "milestone_realms": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
-  ],
-  "technique_families": [
-    "essence",
-    "blood"
-  ],
-  "max_realm": 6,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/crimson_refinement": {},
-    "ascension:passive/bloodfeast_soul_refining_scripture/crimson_appetite": {
-      "unlock": 1
-    },
-    "ascension:castable/bloodfeast_soul_refining_scripture/bloodfeast_banquet": {
-      "unlock": 3,
-      "caps": {
-        "6": "major_mastery"
-      }
-    }
+  "name": {
+    "translate": "ascension.technique.bloodfeast_soul_refining_scripture.name"
   },
-  "realm_change_handler": [
+  "description": {
+    "translate": "ascension.technique.bloodfeast_soul_refining_scripture.desc"
+  },
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_bloodfeast_soul_refining_scripture_spirit_a1",
-                  "value": 1.2
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_bloodfeast_soul_refining_scripture_vitality_a1",
-                  "value": 0.8
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_bloodfeast_soul_refining_scripture_strength_a1",
-                  "value": 0.4
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/crimson_refinement",
+        "ascension:passive/bloodfeast_soul_refining_scripture/crimson_appetite",
+        "ascension:castable/bloodfeast_soul_refining_scripture/bloodfeast_banquet"
       ]
     }
   ],

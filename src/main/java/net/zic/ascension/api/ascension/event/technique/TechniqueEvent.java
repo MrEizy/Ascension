@@ -1,73 +1,74 @@
 package net.zic.ascension.api.ascension.event.technique;
 
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
+import net.zic.ascension.api.ascension.core.technique.TechniqueInstance;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 public abstract class TechniqueEvent extends Event {
-    private final Identifier technique;
-    private final TechniqueData data;
     private final OriginSource source;
+    private final TechniqueInstance<?> instance;
 
-    protected TechniqueEvent(Identifier technique, TechniqueData data, OriginSource source) {
-        this.technique = technique;
-        this.data = data;
+    protected TechniqueEvent(OriginSource source, TechniqueInstance<?> instance) {
         this.source = source;
-    }
-
-    public Identifier getTechniqueIdentifier() {
-        return technique;
-    }
-
-    public Technique getTechnique(RegistryAccess access) {
-        return CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY, technique, access);
-    }
-
-    public TechniqueData getTechniqueData() {
-        return data;
+        this.instance = instance;
     }
 
     public OriginSource getSource() {
         return source;
     }
 
+    public TechniqueInstance<?> getTechniqueInstance() {
+        return instance;
+    }
+
+    public Identifier getTechniqueIdentifier() {
+        return instance.getTechniqueId();
+    }
+
+    public Technique<?> getTechnique() {
+        return instance.getTechnique();
+    }
+
+    public TechniqueData getTechniqueData() {
+        return instance.getData();
+    }
+
     public abstract static class Added extends TechniqueEvent {
-        protected Added(Identifier technique, TechniqueData data, OriginSource source) {
-            super(technique, data, source);
+        protected Added(OriginSource source, TechniqueInstance<?> instance) {
+            super(source, instance);
         }
 
         public static final class Pre extends Added implements ICancellableEvent {
-            public Pre(Identifier technique, TechniqueData data, OriginSource source) {
-                super(technique, data, source);
+            public Pre(OriginSource source, TechniqueInstance<?> instance) {
+                super(source, instance);
             }
         }
 
         public static final class Post extends Added {
-            public Post(Identifier technique, TechniqueData data, OriginSource source) {
-                super(technique, data, source);
+            public Post(OriginSource source, TechniqueInstance<?> instance) {
+                super(source, instance);
             }
         }
     }
 
     public abstract static class Removed extends TechniqueEvent {
-        protected Removed(Identifier technique, TechniqueData data, OriginSource source) {
-            super(technique, data, source);
+        protected Removed(OriginSource source, TechniqueInstance<?> instance) {
+            super(source, instance);
         }
 
         public static final class Pre extends Removed implements ICancellableEvent {
-            public Pre(Identifier technique, TechniqueData data, OriginSource source) {
-                super(technique, data, source);
+            public Pre(OriginSource source, TechniqueInstance<?> instance) {
+                super(source, instance);
             }
         }
 
         public static final class Post extends Removed {
-            public Post(Identifier technique, TechniqueData data, OriginSource source) {
-                super(technique, data, source);
+            public Post(OriginSource source, TechniqueInstance<?> instance) {
+                super(source, instance);
             }
         }
     }

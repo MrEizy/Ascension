@@ -6,30 +6,17 @@
   "description": {
     "translate": "ascension.technique.crescent_severance_blade_canon.desc"
   },
-  "path": "ascension:weapon/blade",
-  "milestone_realms": [
-    0,
-    2,
-    5
-  ],
-  "technique_families": [
-    "blade",
-    "moon"
-  ],
-  "max_realm": 5,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:passive/blade_mastery": {},
-    "ascension:castable/new_techniques/crescent_severance": {
-      "unlock": 2
-    },
-    "ascension:castable/blade_projection": {
-      "unlock": 3
-    },
-    "ascension:castable/spherical_devastation": {
-      "unlock": 5
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:passive/blade_mastery",
+        "ascension:castable/new_techniques/crescent_severance",
+        "ascension:castable/blade_projection",
+        "ascension:castable/spherical_devastation"
+      ]
     }
-  },
+  ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_battle_style",

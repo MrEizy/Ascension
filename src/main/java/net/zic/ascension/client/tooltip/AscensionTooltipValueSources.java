@@ -8,7 +8,6 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionDescription;
@@ -16,12 +15,7 @@ import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionConditionReference;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionReference;
-import net.zic.ascension.api.ascension.core.technique.Technique;
-import net.zic.ascension.api.ascension.core.technique.TechniqueSkillCap;
-import net.zic.ascension.api.ascension.core.technique.TechniqueSkillDefinition;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.item.herbs.HerbItem;
@@ -29,20 +23,16 @@ import net.zic.ascension.common.item.artifacts.pills.PillItem;
 import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipProvider;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
-import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
 
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipColor;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipText;
-import net.zic.zenithlib.tooltip.api.animation.RuneDecipherTextEffect;
-import net.zic.zenithlib.tooltip.api.animation.ScrambleRevealTextEffect;
 import net.zic.zenithlib.tooltip.api.context.ZenithTooltipContext;
 import net.zic.zenithlib.tooltip.api.element.BadgeElement;
 import net.zic.zenithlib.tooltip.api.element.BadgeRowElement;
 import net.zic.zenithlib.tooltip.api.element.RowElement;
-import net.zic.zenithlib.tooltip.api.element.TextElement;
 import net.zic.zenithlib.tooltip.api.element.ZenithTooltipElement;
 import net.zic.zenithlib.tooltip.api.value.ZenithTooltipSources;
 import net.zic.zenithlib.tooltip.api.value.ZenithTooltipValue;
@@ -56,7 +46,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.StringJoiner;
 import java.util.TreeMap;
 
@@ -68,8 +57,6 @@ public final class AscensionTooltipValueSources {
     public static final Identifier PHYSIQUE_STATS = AscensionCraft.prefix("physique_stats");
     public static final Identifier PHYSIQUE_AFFINITIES = AscensionCraft.prefix("physique_affinities");
 
-    public static final Identifier TECHNIQUE_PATH = AscensionCraft.prefix("technique_path");
-    public static final Identifier TECHNIQUE_MAX_REALM = AscensionCraft.prefix("technique_max_realm");
     public static final Identifier TECHNIQUE_PROGRESSION_GAINS = AscensionCraft.prefix("technique_progression_gains");
 
     public static final Identifier BLOODLINE_PURITY = AscensionCraft.prefix("bloodline_purity");
@@ -86,16 +73,6 @@ public final class AscensionTooltipValueSources {
     public static final Identifier PILL_EFFECT = AscensionCraft.prefix("pill_effect");
     public static final Identifier PILL_BADGES = AscensionCraft.prefix("pill_badges");
 
-    private static final int TECHNIQUE_REVEAL_LOOKAHEAD = 3;
-
-    private static final ScrambleRevealTextEffect BEYOND_COMPREHENSION_EFFECT =
-            new ScrambleRevealTextEffect(
-                    0.0F,
-                    55,
-                    ScrambleRevealTextEffect.Mode.SCATTERED,
-                    RuneDecipherTextEffect.DEFAULT_RUNE_GLYPHS
-            );
-
     private static boolean registered;
 
     private AscensionTooltipValueSources() {}
@@ -110,9 +87,6 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerValue(PHYSIQUE_PATHS, AscensionTooltipValueSources::physiquePaths);
         ZenithTooltipSources.registerValue(PHYSIQUE_STATS, AscensionTooltipValueSources::physiqueStats);
         ZenithTooltipSources.registerValue(PHYSIQUE_AFFINITIES, AscensionTooltipValueSources::physiqueAffinities);
-
-        ZenithTooltipSources.registerValue(TECHNIQUE_PATH, AscensionTooltipValueSources::techniquePath);
-        ZenithTooltipSources.registerValue(TECHNIQUE_MAX_REALM, AscensionTooltipValueSources::techniqueMaxRealm);
 
         ZenithTooltipSources.registerValue(BLOODLINE_PURITY, AscensionTooltipValueSources::bloodlinePurity);
 
@@ -236,51 +210,6 @@ public final class AscensionTooltipValueSources {
         );
     }
 
-    private static Optional<ZenithTooltipValue> techniquePath(
-            ZenithTooltipContext context
-    ) {
-        Optional<Technique> technique = context.subject(Technique.class);
-
-        if (technique.isEmpty() || context.registryAccess().isEmpty()) {
-            return Optional.empty();
-        }
-
-        Identifier pathId = technique.orElseThrow().getPath();
-        if (pathId == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(
-                ZenithTooltipValue.text(
-                        pathName(
-                                pathId,
-                                context.registryAccess().orElseThrow()
-                        )
-                )
-        );
-    }
-
-    private static Optional<ZenithTooltipValue> techniqueMaxRealm(
-            ZenithTooltipContext context
-    ) {
-        Optional<Technique> technique = context.subject(Technique.class);
-
-        if (technique.isEmpty() || context.registryAccess().isEmpty()) {
-            return Optional.empty();
-        }
-
-        int maxRealm = technique.orElseThrow().getMaxMajorRealm(
-                null,
-                context.registryAccess().orElseThrow()
-        );
-
-        return Optional.of(
-                ZenithTooltipValue.text(
-                        Component.literal(Integer.toString(maxRealm))
-                )
-        );
-    }
-
     private static Optional<ZenithTooltipValue> bloodlinePurity(
             ZenithTooltipContext context
     ) {
@@ -381,108 +310,18 @@ public final class AscensionTooltipValueSources {
             return List.of();
         }
 
-        SimpleTechnique resolvedTechnique = technique.orElseThrow();
-        RegistryAccess access = context.registryAccess().orElseThrow();
-        int currentMajorRealm = currentTechniqueMajorRealm(resolvedTechnique);
-        List<ZenithTooltipElement> elements = new ArrayList<>();
-        elements.addAll(techniqueSkillProgressionElements(resolvedTechnique, access, currentMajorRealm));
-        elements.addAll(progressionElements(
-                resolvedTechnique.getHolder(),
-                access,
-                OptionalInt.of(currentMajorRealm)
-        ));
-        return List.copyOf(elements);
-    }
-
-    private static List<ZenithTooltipElement> techniqueSkillProgressionElements(
-            SimpleTechnique technique,
-            RegistryAccess access,
-            int currentMajorRealm
-    ) {
-        Map<Integer, List<ZenithTooltipElement>> rows = new TreeMap<>();
-
-        technique.getSkills().entrySet().stream()
-                .sorted(Comparator.comparing(entry -> entry.getKey().toString()))
-                .forEach(entry -> {
-                    Identifier skillId = entry.getKey();
-                    TechniqueSkillDefinition definition = entry.getValue();
-                    addTechniqueSkillRow(
-                            rows,
-                            definition.unlock(),
-                            currentMajorRealm,
-                            skillName(skillId, access),
-                            Component.translatable("ascension.tooltip.progression.unlock")
-                    );
-
-                    definition.caps().entrySet().stream()
-                            .sorted(Map.Entry.comparingByKey())
-                            .filter(capEntry -> capEntry.getValue().progression() > 1)
-                            .forEach(capEntry -> addTechniqueSkillRow(
-                                    rows,
-                                    capEntry.getKey(),
-                                    currentMajorRealm,
-                                    skillName(skillId, access),
-                                    techniqueSkillCapValue(skillId, capEntry.getValue(), access)
-                            ));
-                });
-
-        List<ZenithTooltipElement> elements = new ArrayList<>();
-        rows.forEach((realm, realmRows) -> {
-            Component label = realm == 0
-                    ? Component.translatable("ascension.tooltip.progression.condition.on_learn")
-                    : Component.translatable("ascension.tooltip.progression.condition.major_realm", realm);
-            elements.add(new RowElement(
-                    ZenithTooltipText.resolved(label),
-                    ZenithTooltipText.resolved(Component.empty()),
-                    ZenithTooltipColor.ACCENT,
-                    ZenithTooltipColor.MUTED
-            ));
-            elements.addAll(realmRows);
-        });
-        return List.copyOf(elements);
-    }
-
-    private static void addTechniqueSkillRow(
-            Map<Integer, List<ZenithTooltipElement>> rows,
-            int realm,
-            int currentMajorRealm,
-            Component label,
-            Component value
-    ) {
-        ZenithTooltipElement element = realm > currentMajorRealm + TECHNIQUE_REVEAL_LOOKAHEAD
-                ? beyondComprehensionElement()
-                : new RowElement(
-                        ZenithTooltipText.resolved(label),
-                        ZenithTooltipText.resolved(value),
-                        ZenithTooltipColor.TEXT,
-                        ZenithTooltipColor.ACCENT
-                );
-        rows.computeIfAbsent(realm, ignored -> new ArrayList<>()).add(element);
-    }
-
-    private static Component techniqueSkillCapValue(
-            Identifier skillId,
-            TechniqueSkillCap cap,
-            RegistryAccess access
-    ) {
-        Skill skill = CoreRegistries.safeAccess(
-                CoreRegistries.SKILL_REGISTRY,
-                skillId,
-                access
+        List<ProgressActionDescription> descriptions = actionDescriptions(
+                technique.orElseThrow().getOnAddedActions().actions(),
+                context.registryAccess().orElseThrow()
         );
-        if (skill instanceof ActiveSkill) {
-            return Component.literal("Mastery cap: " + cap.masteryRank().displayName());
+        if (descriptions.isEmpty()) {
+            return List.of();
         }
-        return Component.translatable("ascension.tooltip.progression.level", cap.progression());
-    }
 
-    private static Component skillName(Identifier skillId, RegistryAccess access) {
-        Skill skill = CoreRegistries.safeAccess(
-                CoreRegistries.SKILL_REGISTRY,
-                skillId,
-                access
-        );
-        return skill == null ? Component.literal(skillId.getPath()) : skill.getName();
+        List<ZenithTooltipElement> elements = new ArrayList<>();
+        elements.add(headerRow(Component.translatable("ascension.tooltip.progression.condition.on_learn")));
+        elements.addAll(descriptionRows(descriptions));
+        return List.copyOf(elements);
     }
 
     private static List<ZenithTooltipElement> bloodlinePurityElements(
@@ -495,29 +334,13 @@ public final class AscensionTooltipValueSources {
 
         return progressionElements(
                 bloodline.orElseThrow().getHolder(),
-                context.registryAccess().orElseThrow(),
-                OptionalInt.empty()
+                context.registryAccess().orElseThrow()
         );
-    }
-
-    private static int currentTechniqueMajorRealm(SimpleTechnique technique) {
-        return ClientAscensionData.getSource()
-                .map(source -> {
-                    Identifier path = technique.getPath();
-                    if (path == null || !AscensionOriginSourceHelper.hasPath(source, path)) {
-                        return -1;
-                    }
-
-                    PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
-                    return pathInstance == null ? -1 : pathInstance.getCurrentMajorRealm();
-                })
-                .orElse(-1);
     }
 
     private static List<ZenithTooltipElement> progressionElements(
             ProgressActionHolder holder,
-            RegistryAccess access,
-            OptionalInt currentMajorRealm
+            RegistryAccess access
     ) {
         List<ZenithTooltipElement> elements = new ArrayList<>();
 
@@ -528,66 +351,52 @@ public final class AscensionTooltipValueSources {
                 continue;
             }
 
-            List<ProgressActionDescription> descriptions = new ArrayList<>();
-            for (ProgressActionReference actionReference : listener.getSecond()) {
-                ProgressAction action = actionReference.resolve(access);
-                if (action != null) {
-                    descriptions.addAll(action.getDescriptions(access));
-                }
-            }
-
+            List<ProgressActionDescription> descriptions = actionDescriptions(listener.getSecond(), access);
             if (descriptions.isEmpty()) {
                 continue;
             }
 
-            elements.add(new RowElement(
-                    ZenithTooltipText.resolved(condition.getDescription(access)),
-                    ZenithTooltipText.resolved(Component.empty()),
-                    ZenithTooltipColor.ACCENT,
-                    ZenithTooltipColor.MUTED
-            ));
-
-            boolean obscureDescriptions = shouldObscureDescriptions(condition, currentMajorRealm);
-            for (ProgressActionDescription description : descriptions) {
-                if (obscureDescriptions) {
-                    elements.add(beyondComprehensionElement());
-                    continue;
-                }
-
-                elements.add(new RowElement(
-                        ZenithTooltipText.resolved(description.label()),
-                        ZenithTooltipText.resolved(description.value()),
-                        ZenithTooltipColor.TEXT,
-                        toneColor(description.tone())
-                ));
-            }
+            elements.add(headerRow(condition.getDescription(access)));
+            elements.addAll(descriptionRows(descriptions));
         }
 
         return List.copyOf(elements);
     }
 
-    private static boolean shouldObscureDescriptions(
-            ProgressActionCondition condition,
-            OptionalInt currentMajorRealm
+    private static List<ProgressActionDescription> actionDescriptions(
+            List<ProgressActionReference> actions,
+            RegistryAccess access
     ) {
-        if (currentMajorRealm.isEmpty()) {
-            return false;
+        List<ProgressActionDescription> descriptions = new ArrayList<>();
+        for (ProgressActionReference actionReference : actions) {
+            ProgressAction action = actionReference.resolve(access);
+            if (action != null) {
+                descriptions.addAll(action.getDescriptions(access));
+            }
         }
-
-        OptionalInt earliestMajorRealm = condition.getEarliestMajorRealm();
-        return earliestMajorRealm.isPresent()
-                && earliestMajorRealm.getAsInt()
-                > currentMajorRealm.getAsInt() + TECHNIQUE_REVEAL_LOOKAHEAD;
+        return descriptions;
     }
 
-    private static ZenithTooltipElement beyondComprehensionElement() {
-        return TextElement.animated(
-                ZenithTooltipText.resolved(Component.translatable(
-                        "ascension.tooltip.progression.beyond_comprehension"
-                )),
-                ZenithTooltipColor.MUTED,
-                BEYOND_COMPREHENSION_EFFECT
+    private static ZenithTooltipElement headerRow(Component label) {
+        return new RowElement(
+                ZenithTooltipText.resolved(label),
+                ZenithTooltipText.resolved(Component.empty()),
+                ZenithTooltipColor.ACCENT,
+                ZenithTooltipColor.MUTED
         );
+    }
+
+    private static List<ZenithTooltipElement> descriptionRows(List<ProgressActionDescription> descriptions) {
+        List<ZenithTooltipElement> elements = new ArrayList<>();
+        for (ProgressActionDescription description : descriptions) {
+            elements.add(new RowElement(
+                    ZenithTooltipText.resolved(description.label()),
+                    ZenithTooltipText.resolved(description.value()),
+                    ZenithTooltipColor.TEXT,
+                    toneColor(description.tone())
+            ));
+        }
+        return elements;
     }
 
     private static Optional<ZenithTooltipValue> herbAge(ZenithTooltipContext context) {

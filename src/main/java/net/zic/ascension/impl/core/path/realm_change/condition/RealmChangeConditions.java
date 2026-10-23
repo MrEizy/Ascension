@@ -1,4 +1,4 @@
-package net.zic.ascension.impl.core.technique.realm_change.condition;
+package net.zic.ascension.impl.core.path.realm_change.condition;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;

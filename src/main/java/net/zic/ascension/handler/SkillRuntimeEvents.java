@@ -23,13 +23,7 @@ import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.skill.passive.PassiveTrigger;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
-import net.zic.ascension.api.ascension.event.bloodline.BloodlineEvent;
-import net.zic.ascension.api.ascension.event.path.PathAddedEvent;
-import net.zic.ascension.api.ascension.event.path.PathRemovedEvent;
-import net.zic.ascension.api.ascension.event.physique.PhysiqueChangedEvent;
 import net.zic.ascension.api.ascension.event.resource.ResourceTransactionEvent;
-import net.zic.ascension.api.ascension.event.skill.SkillEvent;
-import net.zic.ascension.api.ascension.event.technique.TechniqueEvent;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.effects.ModEffects;
@@ -43,7 +37,6 @@ import net.zic.ascension.impl.core.skill.passive.PassiveCombatService;
 import net.zic.ascension.impl.core.skill.passive.PassiveModifiers;
 import net.zic.ascension.impl.core.skill.passive.PassiveSkillService;
 import net.zic.ascension.impl.core.skill.passive.PassiveTriggerService;
-import net.zic.ascension.impl.core.technique.TechniqueSkillService;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 
 import java.util.Map;
@@ -163,56 +156,6 @@ public final class SkillRuntimeEvents {
                 PassiveTriggerService.RESOURCE_MAXIMUM, result.context().resourceType().getMaximum(request.entity())
         );
         PassiveTriggerService.trigger(request.entity(), PassiveTrigger.Event.RESOURCE_CHANGED, request.target(), variables);
-    }
-
-    @SubscribeEvent
-    public static void onSkillAdded(SkillEvent.Added.Post event) {
-        TechniqueSkillService.reconcileAll(event.getSource());
-    }
-
-    @SubscribeEvent
-    public static void onSkillRemoved(SkillEvent.Removed.Post event) {
-        TechniqueSkillService.reconcileAll(event.getSource());
-    }
-
-    @SubscribeEvent
-    public static void onSkillProgressionChanged(SkillEvent.ProgressionChanged event) {
-        TechniqueSkillService.reconcileAll(event.getSource());
-    }
-
-    @SubscribeEvent
-    public static void onTechniqueAdded(TechniqueEvent.Added.Post event) {
-        TechniqueSkillService.reconcileAll(event.getSource());
-    }
-
-    @SubscribeEvent
-    public static void onTechniqueRemoved(TechniqueEvent.Removed.Post event) {
-        TechniqueSkillService.reconcileAll(event.getSource());
-    }
-
-    @SubscribeEvent
-    public static void onPathAdded(PathAddedEvent.Post event) {
-        TechniqueSkillService.reconcileAll(event.getSource());
-    }
-
-    @SubscribeEvent
-    public static void onPathRemoved(PathRemovedEvent.Post event) {
-        TechniqueSkillService.reconcileAll(event.getSource());
-    }
-
-    @SubscribeEvent
-    public static void onBloodlineAdded(BloodlineEvent.Added.Post event) {
-        TechniqueSkillService.reconcileAll(event.getSource());
-    }
-
-    @SubscribeEvent
-    public static void onBloodlineRemoved(BloodlineEvent.Removed.Post event) {
-        TechniqueSkillService.reconcileAll(event.getSource());
-    }
-
-    @SubscribeEvent
-    public static void onPhysiqueChanged(PhysiqueChangedEvent.Post event) {
-        TechniqueSkillService.reconcileAll(event.getSource());
     }
 
     @SubscribeEvent

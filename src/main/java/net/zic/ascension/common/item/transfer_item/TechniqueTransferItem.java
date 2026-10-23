@@ -31,7 +31,7 @@ public class TechniqueTransferItem extends Item {
         if(!stack.has(AscensionComponents.REGISTRY_ID_HOLDER)) return InteractionResult.FAIL;
 
         Identifier techniqueId = stack.get(AscensionComponents.REGISTRY_ID_HOLDER);
-        Technique targetTechnique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY, techniqueId, level.registryAccess());
+        Technique<?> targetTechnique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY, techniqueId, level.registryAccess());
 
         if(targetTechnique == null) {
             player.sendSystemMessage(Component.literal("[technique does not exist :" + techniqueId + "]"));

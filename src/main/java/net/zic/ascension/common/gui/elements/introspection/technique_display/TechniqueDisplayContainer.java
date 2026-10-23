@@ -9,11 +9,9 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
-import net.zic.ascension.api.ascension.core.technique.TechniqueData;
+import net.zic.ascension.api.ascension.core.technique.TechniqueInstance;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.info.DescriptionDisplayContainer;
@@ -42,7 +40,7 @@ public class TechniqueDisplayContainer extends RenderableElement {
     );
 
     private final TechniqueOptionsScrollBox techniqueOptions;
-    private final EasyLabel selectedPathLabel;
+    private final EasyLabel selectedTechniqueLabel;
     private final DescriptionDisplayContainer techniqueInformation;
 
     private List<Identifier> displayedTechniques = List.of();
@@ -60,8 +58,8 @@ public class TechniqueDisplayContainer extends RenderableElement {
         techniqueOptions.getPositioning().setY(43);
         addChild(techniqueOptions);
 
-        selectedPathLabel = createTopLabel(frame, 31);
-        addChild(selectedPathLabel);
+        selectedTechniqueLabel = createTopLabel(frame, 31);
+        addChild(selectedTechniqueLabel);
 
         techniqueInformation = new DescriptionDisplayContainer(
                 frame,
@@ -146,37 +144,25 @@ public class TechniqueDisplayContainer extends RenderableElement {
             return;
         }
 
-        ClientAscensionData.getSource().ifPresentOrElse(source ->
-                ClientAscensionData.getPlayer().ifPresentOrElse(player -> {
-                    Technique technique = CoreRegistries.safeAccess(
-                            CoreRegistries.TECHNIQUE_REGISTRY,
-                            selectedTechnique,
-                            player.registryAccess()
-                    );
-                    if (technique == null) {
+        ClientAscensionData.getSource().ifPresentOrElse(source -> {
+                    TechniqueInstance<?> instance = AscensionOriginSourceHelper.getTechnique(source, selectedTechnique);
+                    if (instance == null) {
                         showMissingTechnique(selectedTechnique);
                         return;
                     }
 
-                    TechniqueData data = AscensionOriginSourceHelper.getTechniqueData(source, selectedTechnique);
-                    setPathTitle(resolvePathName(technique.getPath(), player.registryAccess()));
+                    Component description = instance.getDescription();
+                    setTitle(instance.getName());
                     techniqueInformation.setInformation(
-                            resolveTechniqueType(technique),
-                            technique.getDescription(data) == null
-                                    ? Component.empty()
-                                    : technique.getDescription(data)
+                            resolveTechniqueType(instance.getTechnique()),
+                            description == null ? Component.empty() : description
                     );
-                }, this::showUnavailableState),
+                },
                 this::showUnavailableState
         );
     }
 
-    private static Component resolvePathName(Identifier pathId, net.minecraft.core.RegistryAccess access) {
-        Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, pathId, access);
-        return path == null ? Component.literal(pathId.toString()) : path.name();
-    }
-
-    private static Component resolveTechniqueType(Technique technique) {
+    private static Component resolveTechniqueType(Technique<?> technique) {
         Identifier template = technique.itemTooltip()
                 .flatMap(definition -> definition.template())
                 .orElse(null);
@@ -189,13 +175,13 @@ public class TechniqueDisplayContainer extends RenderableElement {
         return Component.translatable("gui.ascension.introspection.technique");
     }
 
-    private void setPathTitle(Component title) {
-        selectedPathLabel.setText(title == null ? Component.empty() : title);
-        selectedPathLabel.setTextScale(1.0F);
+    private void setTitle(Component title) {
+        selectedTechniqueLabel.setText(title == null ? Component.empty() : title);
+        selectedTechniqueLabel.setTextScale(1.0F);
     }
 
     private void showEmptyState() {
-        setPathTitle(Component.translatable("gui.ascension.introspection.none"));
+        setTitle(Component.translatable("gui.ascension.introspection.none"));
         techniqueInformation.setInformation(
                 Component.translatable("gui.ascension.introspection.no_techniques"),
                 Component.translatable("gui.ascension.introspection.no_techniques_description")
@@ -203,7 +189,7 @@ public class TechniqueDisplayContainer extends RenderableElement {
     }
 
     private void showUnavailableState() {
-        setPathTitle(Component.translatable("gui.ascension.introspection.none"));
+        setTitle(Component.translatable("gui.ascension.introspection.none"));
         techniqueInformation.setInformation(
                 Component.translatable("gui.ascension.introspection.techniques"),
                 Component.translatable("gui.ascension.introspection.data_unavailable")
@@ -211,7 +197,7 @@ public class TechniqueDisplayContainer extends RenderableElement {
     }
 
     private void showMissingTechnique(Identifier techniqueId) {
-        setPathTitle(Component.translatable("gui.ascension.introspection.none"));
+        setTitle(Component.translatable("gui.ascension.introspection.none"));
         techniqueInformation.setInformation(
                 Component.literal(techniqueId.toString()),
                 Component.translatable("gui.ascension.introspection.missing_registry_entry")

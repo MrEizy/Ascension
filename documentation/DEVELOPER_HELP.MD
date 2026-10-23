@@ -172,3 +172,29 @@ A `CastableSkill<D, C, E>` can be slotted in the hot bar and cast. `C` is the `C
 - `SkillCastEvent` (`Start.Pre` cancellable, `Start.Post`, `PhaseChanged`, `End`) is posted on the server only
 - any `LivingEntity` can cast through its `SkillCaster` (`SkillCaster.of(entity).startCast(...)`). Players additionally have a `SkillCastHandler` holding the hot bar, synced only to that player
 - the cast is synced to everyone tracking the caster when it starts, ends, changes phase or its cast data changes. Clients advance the phase ticks between syncs, only the casting player's own client runs skill logic (prediction), other clients only display the cast
+
+### Techniques
+A technique is a registry entry (`data/<namespace>/ascension/techniques/`) that holds the configuration and logic, the per-origin state lives in its `TechniqueData`. It follows the same pattern as skills.
+
+A technique is split into 3 parts
+- `Technique<D>` the registry entry, `D` is the `TechniqueData` it creates and runs on. It provides `newData()`, a `SerializerHandler<D>` (saving through ValueInput/ValueOutput) and a `SyncHandler<D>` (syncing through a ByteBuf)
+- `TechniqueData` the per-origin state, it holds no logic or serialization
+- `TechniqueInstance<D>` held by the `TechniqueHolder`, wraps a Technique, its id and its data. Every hook (`onAdded`, `onRemoved`, `applyToEntity`, `removeFromEntity`) receives the instance, so a technique always gets its own typed data and its id
+
+`getName` and `getDescription` receive the typed data so they can change with custom progression. The data is `null` when the technique is shown without an owner (technique manuals, tooltips), so always handle that case. Use `instance.getName()` when you have an instance.
+
+#### Data handlers
+- `serializerHandler().read` is expected to return new data
+- `syncHandler().decode` writes into existing data, so always call `newData()` first and decode into that. Do not use `SyncHandler.StreamCodecSyncHandler`, its decode does nothing
+- each technique's data is length prefixed when synced, so a technique the client does not know is skipped instead of breaking the rest of the sync
+
+#### Accessing techniques
+```java
+TechniqueInstance<?> instance = AscensionOriginSourceHelper.getTechnique(source, techniqueId);
+//narrow to a concrete technique class to get typed data
+TechniqueInstance<SimpleTechnique.Data> simple = instance.as(SimpleTechnique.class);
+```
+Techniques are added with `AscensionOriginSourceHelper.addTechnique(source, techniqueId)`, which checks the technique's requirements, or `addTechnique(source, instance, checkRequirements)` to add an instance you created yourself.
+After changing a technique's data call `AscensionOriginSourceHelper.markTechniqueDirty(source, techniqueId)`, partial syncs only send dirty and removed techniques.
+
+`TechniqueEvent` (`Added.Pre`/`Removed.Pre` cancellable, `Added.Post`, `Removed.Post`) carries the `TechniqueInstance`.

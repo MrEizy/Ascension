@@ -1,21 +1,20 @@
 # Ascension Techniques
 This page documents the normal datapack format used to create Ascension techniques.
 
-A technique belongs to one cultivation path, controls how far that technique can progress, owns skill unlocks, raises skill progression caps, and may apply bonuses when realms change.
+A technique is a generic origin source, much like a bloodline or physique. It has very little predefined behaviour: when it is learned it runs a list of progression actions, and when it is removed it reverses them. Skills, stats and path bonuses are all granted through those actions.
+
+Techniques are not tied to a path. A technique and a path can still affect each other, but only through the generic systems every source uses (requirements, skills, stats, path bonuses).
 
 The intended workflow is:
 
-**path + skills -> technique JSON -> technique manual -> game**
+**skills -> technique JSON -> technique manual -> game**
 
 ## Quick links
 - [Files and IDs](#files-and-ids)
 - [Minimal technique](#minimal-technique)
 - [Root fields](#root-fields)
-- [Skill unlocks and caps](#skill-unlocks-and-caps)
+- [On added actions](#on-added-actions)
 - [Requirements](#requirements)
-- [Realm limits](#realm-limits)
-- [Realm overrides](#realm-overrides)
-- [Realm change handlers](#realm-change-handlers)
 - [Technique manuals](#technique-manuals)
 - [Complete example](#complete-example)
 - [Compact reference](#compact-reference)
@@ -50,10 +49,7 @@ For normal datapack techniques, use:
 {
   "type": "ascension:simple_technique",
   "name": "Ember Body Art",
-  "description": "Temper the body through disciplined fire circulation.",
-  "path": "ascension:foundation/body",
-  "max_realm": 3,
-  "skills": {}
+  "description": "Temper the body through disciplined fire circulation."
 }
 ```
 
@@ -62,229 +58,58 @@ For normal datapack techniques, use:
 |---|---|---|
 | `name` | Required | Display name Component |
 | `description` | Required | Description Component |
-| `path` | Required | Path cultivated by this technique |
-| `milestone_realms` | `[]` | Optional notable major-realm indices |
-| `technique_families` | `[]` | Optional string metadata such as `star` or `bow` |
-| `min_realm` | `0` | Minimum major realm |
-| `max_realm` | Path maximum | Maximum major realm |
-| `max_minor_realm` | Path value | Minor-realm cap at the technique's final major realm |
-| `realm_overrides` | `{}` | Technique-specific realm names/progress requirements |
-| `skills` | `{}` | Skills owned and progressed by the technique |
-| `realm_change_handler` | `[]` | Realm-driven stat/path-bonus/skill actions |
+| `on_added` | `[]` | Progression actions run when the technique is learned, reversed when it is removed |
 | `requirements` | `[]` | Requirements that must pass before the technique can be acquired |
 | `item_tooltip` | None | Technique manual presentation |
 
-Realm numbers in technique JSON are zero-indexed.
-
-# Skill unlocks and caps
-`skills` maps a skill ID to its technique progression definition.
+# On added actions
+`on_added` is a list of progression actions. Each entry is either the ID of a shared action in `data/<namespace>/ascension/progress_actions/` or an inline action. Unlike bloodline and path handlers, these actions have no condition: they always run.
 
 ```json
-"skills": {
-  "example:ember_body/cultivation": {},
-  "example:ember_body/iron_pulse": {
-    "unlock": 1
+"on_added": [
+  {
+    "type": "ascension:grant_skills",
+    "skills": [
+      "example:ember_body/cultivation",
+      "example:ember_body/iron_pulse"
+    ]
   },
-  "example:ember_body/scarlet_step": {
-    "unlock": 2,
-    "requirements": [
-      {
-        "type": "ascension:stat",
-        "stat": "ascension:agility",
-        "comparison": "at_least",
-        "value": 20
-      }
-    ],
-    "caps": {
-      "4": "minor_mastery",
-      "6": "major_mastery"
-    }
-  }
-}
-```
-
-`unlock` is the zero-indexed major realm where the technique begins owning the skill. It defaults to `0`.
-
-Caps are cumulative. The latest cap at or below the current major realm is used.
-
-Active skills use mastery names:
-
-```json
-"caps": {
-  "3": "minor_mastery",
-  "5": "major_mastery"
-}
-```
-
-Passive skills use numeric levels:
-
-```json
-"caps": {
-  "3": 2,
-  "5": 3
-}
-```
-
-A cap raises the highest progression the player may train toward. It does not directly grant that mastery rank or passive level.
-
-Each skill entry may also use `requirements`. The technique owns the skill only when both its `unlock` realm and all of its requirements pass. If a requirement later stops passing, the technique removes its ownership/cap for that skill; it is restored when the requirement passes again.
-
-Active mastery IDs:
-
-```text
-initiate
-minor_mastery
-major_mastery
-perfection
-transcendence
-```
-
-# Requirements
-The technique root and individual skill entries use the same shared requirement system.
-
-Technique acquisition:
-
-```json
-"requirements": [
   {
-    "type": "ascension:has_physique",
-    "physique": "example:iron_bloom"
-  }
+    "type": "ascension:give_stats",
+    "stats": {
+      "ascension:vitality": {
+        "flat": [
+          { "id": "example:ember_body_art_vitality", "value": 2.0 }
+        ],
+        "multiplier": []
+      }
+    }
+  },
+  "example:shared_body_stats"
 ]
 ```
 
-Technique skill gate:
+The list runs in two directions:
 
-```json
-"skills": {
-  "example:ember_body/iron_pulse": {
-    "unlock": 1,
-    "requirements": [
-      {
-        "type": "ascension:skill_mastery",
-        "skill": "example:ember_body/cultivation",
-        "mastery": "minor_mastery"
-      }
-    ]
-  }
-}
-```
+| Event | Direction | Effect |
+|---|---|---|
+| Technique learned | Up | `grant_skills` grants each skill, `give_stats` adds its modifiers, `give_path_bonuses` adds its bonuses |
+| Technique removed | Down | The same list runs again in reverse: skills are removed and modifiers/bonuses are taken away |
 
-See `DATAPACK_HELP.md` for the complete compact requirement list.
+Skills granted by a technique are owned by the technique's ID. A skill granted by several sources is only removed once every owner has removed it.
 
-# Realm limits
-`max_realm` limits the maximum major realm reachable with the technique.
-
-```json
-"max_realm": 6
-```
-
-`max_minor_realm` only overrides the minor-realm maximum at the technique's final major realm.
-
-```json
-"max_realm": 6,
-"max_minor_realm": 2
-```
-
-`min_realm` defaults to `0`:
-
-```json
-"min_realm": 2
-```
-
-If `max_realm` is omitted, the technique uses the underlying path's normal maximum.
-
-# Realm overrides
-A technique may rename major realms or override individual minor-realm names and progress requirements.
-
-```json
-"realm_overrides": {
-  "0": {
-    "name": "Kindled Flesh",
-    "realm_overrides": {
-      "2": {
-        "name": "Red Meridian Stage",
-        "progress": 150
-      }
-    }
-  }
-}
-```
-
-Major keys are major-realm indices. Nested keys are minor-realm indices.
-
-Supported author-facing overrides:
-
-| Level | Fields |
-|---|---|
-| Major realm | `name`, `realm_overrides` |
-| Minor realm | `name`, `progress` |
-
-Anything not overridden falls back to the cultivated path.
-
-# Realm change handlers
-`realm_change_handler` uses Ascension's shared progression-action format.
-
-```json
-"realm_change_handler": [
-  {
-    "condition": "ascension:realm_change/all_realms",
-    "actions": [
-      {
-        "type": "ascension:give_base_stats",
-        "stats": [
-          { "id": "ascension:vitality", "value": 1.0 },
-          { "id": "ascension:strength", "value": 0.5 }
-        ]
-      }
-    ]
-  }
-]
-```
-
-Useful shipped condition references:
-
-```text
-ascension:realm_change/on_gained
-ascension:realm_change/all_realms
-ascension:realm_change/all_major_realms
-ascension:realm_change/all_minor_realms
-```
-
-Inline realm conditions:
-
-```json
-{
-  "type": "ascension:major_realms_in",
-  "realms": [1, 3, 5]
-}
-```
-
-```json
-{
-  "type": "ascension:minor_realms_in",
-  "realms": [1, 2]
-}
-```
-
-```json
-{
-  "type": "ascension:realms_in",
-  "realms": {
-    "2": [0, 2],
-    "4": [1]
-  }
-}
-```
+The salt passed to the actions is the technique ID without its namespace (`example:body/ember_body_art` -> `body/ember_body_art`). With the default `salt` conflict action, two techniques that use the same modifier ID still get separate modifiers.
 
 Built-in actions:
 
 ```text
-ascension:give_base_stats
+ascension:give_stats
 ascension:give_path_bonuses
 ascension:grant_skills
 ascension:remove_skills
 ```
+
+See `DATAPACK_HELP.md` for the full action formats and conflict actions.
 
 Path bonus example:
 
@@ -300,7 +125,19 @@ Path bonus example:
 }
 ```
 
-Actions are added when progression moves upward and removed when the matching realm is lost or the technique is removed.
+# Requirements
+Technique acquisition uses the shared requirement system:
+
+```json
+"requirements": [
+  {
+    "type": "ascension:has_physique",
+    "physique": "example:iron_bloom"
+  }
+]
+```
+
+See `DATAPACK_HELP.md` for the complete compact requirement list.
 
 # Technique manuals
 Current technique manuals use the technique theme plus one of two default templates.
@@ -325,7 +162,7 @@ Battle style:
 }
 ```
 
-Use `default_cultivation_technique` when the technique includes a cultivation active/passive skill. Use `default_battle_style` for skill-only combat styles.
+Use `default_cultivation_technique` when the technique includes a cultivation active/passive skill. Use `default_battle_style` for skill-only combat styles. Both templates list the technique's `on_added` gains.
 
 `theme_overrides` may customize individual manuals without creating a new theme.
 
@@ -335,40 +172,37 @@ Use `default_cultivation_technique` when the technique includes a cultivation ac
   "type": "ascension:simple_technique",
   "name": "Ember Body Art",
   "description": "Temper flesh through disciplined fire circulation.",
-  "path": "ascension:foundation/body",
-  "milestone_realms": [0, 2, 4, 6],
-  "technique_families": ["fire", "body"],
-  "max_realm": 6,
-  "max_minor_realm": 2,
-  "skills": {
-    "example:ember_body/cultivation": {},
-    "example:ember_body/falling_mountain_cut": {
-      "unlock": 1,
-      "caps": {
-        "3": "minor_mastery",
-        "5": "major_mastery"
-      }
-    },
-    "example:ember_body/tempered_skin": {
-      "unlock": 2,
-      "caps": {
-        "4": 2,
-        "6": 3
-      }
-    }
-  },
-  "realm_change_handler": [
+  "requirements": [
     {
-      "condition": "ascension:realm_change/all_major_realms",
-      "actions": [
-        {
-          "type": "ascension:give_base_stats",
-          "stats": [
-            { "id": "ascension:vitality", "value": 2.0 },
-            { "id": "ascension:strength", "value": 1.0 }
-          ]
-        }
+      "type": "ascension:has_physique",
+      "physique": "example:iron_bloom"
+    }
+  ],
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "example:ember_body/cultivation",
+        "example:ember_body/falling_mountain_cut",
+        "example:ember_body/tempered_skin"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:vitality": {
+          "flat": [
+            { "id": "example:ember_body_art_vitality", "value": 2.0 }
+          ],
+          "multiplier": []
+        },
+        "ascension:strength": {
+          "flat": [
+            { "id": "example:ember_body_art_strength", "value": 1.0 }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
   "item_tooltip": {
@@ -384,26 +218,21 @@ Use `default_cultivation_technique` when the technique includes a cultivation ac
 Type: ascension:simple_technique
 Path: data/<namespace>/ascension/techniques/
 
-Skill unlock default: 0
-Active caps: initiate, minor_mastery, major_mastery, perfection, transcendence
-Passive caps: positive integers
+Root fields:
+name
+description
+on_added
+requirements
+item_tooltip
 
-Realm conditions:
-ascension:every_realm
-ascension:every_minor_realm
-ascension:every_major_realm
-ascension:major_realms_in
-ascension:minor_realms_in
-ascension:realms_in
+on_added: list of action IDs or inline actions, no condition
+Learned: actions run upward
+Removed: actions run downward (reversed)
+Salt: technique ID path
 
 Progress actions:
-ascension:give_base_stats
+ascension:give_stats
 ascension:give_path_bonuses
 ascension:grant_skills
 ascension:remove_skills
-
-Skill fields:
-unlock
-requirements
-caps
 ```

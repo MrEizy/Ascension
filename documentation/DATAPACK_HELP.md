@@ -4,7 +4,7 @@ This page is the short reference for Ascension datapack layout and the common JS
 For system-specific authoring, use:
 
 - `ASCENSION_SKILLS.md` for skills, runtime conditions, states, and resources
-- `ASCENSION_TECHNIQUES.md` for techniques and realm-driven progression
+- `ASCENSION_TECHNIQUES.md` for techniques and their `on_added` actions
 - `ASCENSION_BLOODLINES.md` for purity-driven bloodlines
 - `ASCENSION_PHYSIQUES.md` for persistent physique bonuses
 
@@ -111,7 +111,7 @@ Physiques use a direct stat-to-value map:
 }
 ```
 
-Bloodline and technique progression actions use a list instead:
+Progression actions (bloodlines, paths, techniques) use a list instead:
 
 ```json
 {
@@ -199,7 +199,7 @@ Progression handlers use the same flat bonus shape through `ascension:give_path_
 ```
 
 # Requirements
-Bloodlines, physiques, techniques, and individual technique skills may use Ascension's shared requirement list.
+Bloodlines, physiques, and techniques may use Ascension's shared requirement list.
 
 ```json
 "requirements": [
@@ -242,12 +242,10 @@ Comparisons used by purity, affinity, and stat requirements:
 at_least, at_most, greater_than, less_than, equal
 ```
 
-Technique skill requirements use the same format. If their requirements stop passing, the technique stops owning that skill until the requirements pass again.
-
 # Progress actions
-Bloodlines and techniques share a small progression-action system.
+Bloodlines, paths, and techniques share a small progression-action system.
 
-A handler is a list of condition/action pairs:
+Bloodline and path handlers are lists of condition/action pairs:
 
 ```json
 [
@@ -267,6 +265,8 @@ A handler is a list of condition/action pairs:
 ```
 
 Both conditions and actions may be written inline or referenced from their datapack registries.
+
+Techniques use a plain action list (`on_added`) with no conditions. It runs upward when the technique is learned and downward when it is removed.
 
 Built-in actions:
 
@@ -301,7 +301,7 @@ Skill progression actions use a simple list:
 
 `grant_skills` is reversed when progression moves backward. `remove_skills` does the opposite: it removes while progressing upward and restores when that progression is reversed.
 
-See the bloodline and technique guides for the inline condition formats and their exact progression semantics.
+See the bloodline and technique guides for the inline condition formats and their exact progression semantics. Realm conditions (`ascension:realm_change/...`, `ascension:every_realm`, etc.) only apply to path handlers.
 
 # Datapack resources
 Custom resources live in:

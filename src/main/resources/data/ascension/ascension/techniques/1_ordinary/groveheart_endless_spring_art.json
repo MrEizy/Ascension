@@ -6,36 +6,19 @@
   "description": {
     "translate": "ascension.technique.groveheart_endless_spring_art.desc"
   },
-  "path": "ascension:foundation/essence",
-  "milestone_realms": [
-    0,
-    1,
-    2
-  ],
-  "technique_families": [
-    "wood",
-    "life"
-  ],
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/groveheart_circulation": {},
-    "ascension:passive/springwell_reserve": {
-      "unlock": 1
-    },
-    "ascension:castable/new_techniques/verdant_grasp": {
-      "unlock": 2
-    },
-    "ascension:castable/new_techniques/essence_perception": {
-      "unlock": 2
-    },
-    "ascension:castable/inner_world": {
-      "unlock": 2
-    },
-    "ascension:castable/new_techniques/living_canopy": {
-      "unlock": 2
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/groveheart_circulation",
+        "ascension:passive/springwell_reserve",
+        "ascension:castable/new_techniques/verdant_grasp",
+        "ascension:castable/new_techniques/essence_perception",
+        "ascension:castable/inner_world",
+        "ascension:castable/new_techniques/living_canopy"
+      ]
     }
-  },
+  ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

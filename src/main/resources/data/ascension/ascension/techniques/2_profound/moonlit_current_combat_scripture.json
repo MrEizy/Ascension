@@ -6,33 +6,18 @@
   "description": {
     "translate": "ascension.technique.moonlit_current_combat_scripture.desc"
   },
-  "path": "ascension:elemental/water",
-  "milestone_realms": [
-    0,
-    2,
-    5
-  ],
-  "technique_families": [
-    "water",
-    "moon"
-  ],
-  "max_realm": 5,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/new_techniques/tidal_retreat": {},
-    "ascension:castable/drowning_grasp": {
-      "unlock": 1
-    },
-    "ascension:castable/new_techniques/mooncurrent_surge": {
-      "unlock": 2
-    },
-    "ascension:castable/new_techniques/tide_sphere": {
-      "unlock": 4
-    },
-    "ascension:castable/inner_world": {
-      "unlock": 5
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/new_techniques/tidal_retreat",
+        "ascension:castable/drowning_grasp",
+        "ascension:castable/new_techniques/mooncurrent_surge",
+        "ascension:castable/new_techniques/tide_sphere",
+        "ascension:castable/inner_world"
+      ]
     }
-  },
+  ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_battle_style",

@@ -6,74 +6,13 @@
   "description": {
     "translate": "ascension.technique.martial_transcendence_vol_1.desc"
   },
-  "path": "ascension:foundation/body",
-  "milestone_realms": [
-    0,
-    1,
-    2
-  ],
-  "technique_families": [
-    "body"
-  ],
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:body_cultivation/martial_transcendence_vol_1": {},
-    "ascension:passive/martial_transcendence_vol_1/refined_mortal_frame": {
-      "unlock": 1
-    },
-    "ascension:castable/martial_transcendence_vol_1/transcendent_impact": {
-      "unlock": 2,
-      "caps": {
-        "2": "minor_mastery"
-      }
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_martial_transcendence_vol_1_strength_a1",
-                  "value": 0.24
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_martial_transcendence_vol_1_vitality_a1",
-                  "value": 0.24
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_martial_transcendence_vol_1_agility_a1",
-                  "value": 0.06
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_martial_transcendence_vol_1_spirit_a1",
-                  "value": 0.06
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:body_cultivation/martial_transcendence_vol_1",
+        "ascension:passive/martial_transcendence_vol_1/refined_mortal_frame",
+        "ascension:castable/martial_transcendence_vol_1/transcendent_impact"
       ]
     }
   ],

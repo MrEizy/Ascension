@@ -6,25 +6,14 @@
   "description": {
     "translate": "ascension.technique.locust_bleeding_manual.desc"
   },
-  "path": "ascension:foundation/essence",
-  "milestone_realms": [
-    0,
-    1,
-    4
-  ],
-  "technique_families": [
-    "poison",
-    "staff"
-  ],
-  "max_realm": 5,
-  "skills": {
-    "ascension:castable/locust_bleeding_manual/bleeding_locust_swarm": {
-      "caps": {
-        "1": "minor_mastery",
-        "4": "major_mastery"
-      }
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/locust_bleeding_manual/bleeding_locust_swarm"
+      ]
     }
-  },
+  ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_battle_style",

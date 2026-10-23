@@ -187,27 +187,13 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                         ).withOnAllPages(true))
                         .add(classification(false, true, ClassificationElement.Style.BADGE))
                         .add(divider())
-                        .add(badge(
-                                sourced("ascension:technique_path"),
-                                ZenithTooltipColor.BACKGROUND,
-                                ZenithTooltipColor.ACCENT,
-                                ZenithTooltipColor.ACCENT
-                        ))
-                        .add(divider())
                         .add(text(
                                 sourced("zenithlib:subject_description"),
                                 ZenithTooltipColor.TEXT,
                                 typewriter(760, 80)
-                        ))
-                        .add(divider())
-                        .add(row(
-                                translated("ascension.tooltip.technique.max_realm"),
-                                sourced("ascension:technique_max_realm"),
-                                ZenithTooltipColor.TEXT,
-                                ZenithTooltipColor.ACCENT
                         )))
-                .page(page(translated("ascension.tooltip.technique.realm_growth"))
-                        .add(header(translated("ascension.tooltip.technique.realm_growth"), ZenithTooltipColor.ACCENT))
+                .page(page(translated("ascension.tooltip.technique.gains"))
+                        .add(header(translated("ascension.tooltip.technique.gains"), ZenithTooltipColor.ACCENT))
                         .add(dynamic(id("technique_progression_gains"))));
     }
 
@@ -222,27 +208,13 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                         ).withOnAllPages(true))
                         .add(classification(false, true, ClassificationElement.Style.BADGE))
                         .add(divider())
-                        .add(badge(
-                                sourced("ascension:technique_path"),
-                                ZenithTooltipColor.BACKGROUND,
-                                ZenithTooltipColor.ACCENT,
-                                ZenithTooltipColor.ACCENT
-                        ))
-                        .add(divider())
                         .add(text(
                                 sourced("zenithlib:subject_description"),
                                 ZenithTooltipColor.TEXT,
                                 typewriter(760, 80)
-                        ))
-                        .add(divider())
-                        .add(row(
-                                translated("ascension.tooltip.technique.max_realm"),
-                                sourced("ascension:technique_max_realm"),
-                                ZenithTooltipColor.TEXT,
-                                ZenithTooltipColor.ACCENT
                         )))
-                .page(page(translated("ascension.tooltip.technique.realm_growth"))
-                        .add(header(translated("ascension.tooltip.technique.realm_growth"), ZenithTooltipColor.ACCENT))
+                .page(page(translated("ascension.tooltip.technique.gains"))
+                        .add(header(translated("ascension.tooltip.technique.gains"), ZenithTooltipColor.ACCENT))
                         .add(dynamic(id("technique_progression_gains"))));
     }
 

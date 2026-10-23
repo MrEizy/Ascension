@@ -500,15 +500,12 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tooltip.physique.stats_affinities", "Stats & Affinities");
         add("ascension.tooltip.physique.stats", "Stats");
         add("ascension.tooltip.physique.affinities", "Affinities");
-        add("ascension.tooltip.technique.max_realm", "Max Realm");
-        add("ascension.tooltip.technique.realm_growth", "Realm Growth");
+        add("ascension.tooltip.technique.gains", "Gains");
 
         // Progression Descriptions
         add("ascension.tooltip.progression.affinity", "%s Affinity");
         add("ascension.tooltip.progression.path_bonus", "%s %s");
         add("ascension.tooltip.progression.unlock", "Unlock");
-        add("ascension.tooltip.progression.level", "Lv. %s");
-        add("ascension.tooltip.progression.beyond_comprehension", "Beyond Comprehension");
         add("ascension.tooltip.value.percent", "%s%%");
         add("ascension.tooltip.progression.condition.conditional", "Conditional");
         add("ascension.tooltip.progression.condition.on_acquisition", "On Acquisition");
@@ -1791,31 +1788,14 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.bloodfeast_soul_refining_scripture.name", "Bloodfeast Soul-Refining Scripture");
         add("ascension.technique.example_technique.desc", "this is an example");
         add("ascension.technique.example_technique.name", "Example Technique");
-        add("ascension.technique.example_technique.realm_override.0.name", "test realm");
         add("ascension.technique.five_element_body_technique.desc", "A high body-cultivation method that tempers flesh through the five harmonies of wood, fire, earth, metal, and water until the body becomes their meeting point.");
         add("ascension.technique.five_element_body_technique.name", "Five Harmony Body Method");
         add("ascension.technique.hellbound_marrow_scripture.desc", "A brutal body scripture that burns qi through bone and marrow, treating pain, violence, and survival as fuel for tempering.");
         add("ascension.technique.hellbound_marrow_scripture.name", "Hellbound Marrow Scripture");
-        add("ascension.technique.nine_revolutions_slaughter_wheel.realm_override.0.name", "First Revolution: Seeded Wheel");
-        add("ascension.technique.nine_revolutions_slaughter_wheel.realm_override.1.name", "Second Revolution: Blood-Iron Circuits");
-        add("ascension.technique.nine_revolutions_slaughter_wheel.realm_override.2.name", "Third Revolution: Butcher Orbiting");
-        add("ascension.technique.nine_revolutions_slaughter_wheel.realm_override.3.name", "Fourth Revolution: Crimson Mandala");
-        add("ascension.technique.nine_revolutions_slaughter_wheel.realm_override.4.name", "Fifth Revolution: Corpse-Grinding Rotation");
-        add("ascension.technique.nine_revolutions_slaughter_wheel.realm_override.5.name", "Sixth Revolution: Slaughterers Domain");
-        add("ascension.technique.nine_revolutions_slaughter_wheel.realm_override.6.name", "Seventh Revolution: Heaven-Rending Cycle");
-        add("ascension.technique.nine_revolutions_slaughter_wheel.realm_override.7.name", "Eighth Revolution: Calamity Wheel");
-        add("ascension.technique.nine_revolutions_slaughter_wheel.realm_override.8.name", "Ninth Revolution: Slaughter Wheel Incarnate");
         add("ascension.technique.open_sky_breathing_scripture.desc", "A simple Essence scripture that imitates the breadth of the open heavens, drawing qi through steady circulation.");
         add("ascension.technique.open_sky_breathing_scripture.name", "Open Sky Breathing Scripture");
         add("ascension.technique.pale_moon_scripture.desc", "A quiet soul scripture patterned after moon-lit meditation, refining cold spiritual clarity into precise soul arts.");
         add("ascension.technique.pale_moon_scripture.name", "Pale Moon Scripture");
-        add("ascension.technique.reapers_calling.realm_override.0.name", "Hell's Entryway");
-        add("ascension.technique.reapers_calling.realm_override.1.name", "Hungry Ghost Road");
-        add("ascension.technique.reapers_calling.realm_override.2.name", "Beast Road");
-        add("ascension.technique.reapers_calling.realm_override.3.name", "Human Road");
-        add("ascension.technique.reapers_calling.realm_override.4.name", "Asura Road");
-        add("ascension.technique.reapers_calling.realm_override.5.name", "Heavenly Road");
-        add("ascension.technique.reapers_calling.realm_override.6.name", "Revolved Samsara");
         add("ascension.technique.scholarly_soul_technique.desc", "An academic soul method that advances through observation, contemplation, and the orderly reconstruction of spiritual principles.");
         add("ascension.technique.scholarly_soul_technique.name", "Scholar’s Soul Transcendence");
         add("ascension.technique.soul_forged_weapon_manual.desc", "A soul-forging manual that tempers intent into weapon-like spiritual force.");

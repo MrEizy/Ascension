@@ -6,39 +6,20 @@
   "description": {
     "translate": "ascension.technique.ninefold_thunder_meridian_scripture.desc"
   },
-  "path": "ascension:foundation/essence",
-  "milestone_realms": [
-    0,
-    2,
-    5
-  ],
-  "technique_families": [
-    "lightning",
-    "essence"
-  ],
-  "max_realm": 5,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/ninefold_thunder_circulation": {},
-    "ascension:passive/thunder_meridians": {
-      "unlock": 2
-    },
-    "ascension:castable/new_techniques/thunder_arc": {
-      "unlock": 3
-    },
-    "ascension:castable/new_techniques/thunder_skip": {
-      "unlock": 3
-    },
-    "ascension:castable/new_techniques/thunder_sphere": {
-      "unlock": 5
-    },
-    "ascension:castable/new_techniques/essence_perception": {
-      "unlock": 4
-    },
-    "ascension:castable/inner_world": {
-      "unlock": 5
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/ninefold_thunder_circulation",
+        "ascension:passive/thunder_meridians",
+        "ascension:castable/new_techniques/thunder_arc",
+        "ascension:castable/new_techniques/thunder_skip",
+        "ascension:castable/new_techniques/thunder_sphere",
+        "ascension:castable/new_techniques/essence_perception",
+        "ascension:castable/inner_world"
+      ]
     }
-  },
+  ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

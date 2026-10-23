@@ -6,75 +6,13 @@
   "description": {
     "translate": "ascension.technique.martial_transcendence_vol_2.desc"
   },
-  "path": "ascension:foundation/body",
-  "milestone_realms": [
-    0,
-    1,
-    3,
-    5
-  ],
-  "technique_families": [
-    "body"
-  ],
-  "max_realm": 5,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:body_cultivation/martial_transcendence_vol_2": {},
-    "ascension:passive/martial_transcendence_vol_2/reforged_mortal_frame": {
-      "unlock": 1
-    },
-    "ascension:castable/martial_transcendence_vol_2/bone_resonance_strike": {
-      "unlock": 2,
-      "caps": {
-        "2": "minor_mastery"
-      }
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_martial_transcendence_vol_2_strength_a1",
-                  "value": 0.7
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_martial_transcendence_vol_2_vitality_a1",
-                  "value": 0.6
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_martial_transcendence_vol_2_agility_a1",
-                  "value": 0.2
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_martial_transcendence_vol_2_spirit_a1",
-                  "value": 0.1
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:body_cultivation/martial_transcendence_vol_2",
+        "ascension:passive/martial_transcendence_vol_2/reforged_mortal_frame",
+        "ascension:castable/martial_transcendence_vol_2/bone_resonance_strike"
       ]
     }
   ],
