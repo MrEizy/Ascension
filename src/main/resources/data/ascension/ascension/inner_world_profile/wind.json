@@ -1,0 +1,241 @@
+{
+  "path": "ascension:elemental/wind",
+  "weight_multiplier": 1.0,
+  "variants": [
+    {
+      "weight": 1.2,
+      "biome": "minecraft:meadow",
+      "palette": {
+        "top": "minecraft:grass_block",
+        "sub": "minecraft:dirt",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.09
+          },
+          {
+            "block": "minecraft:dandelion",
+            "chance": 0.012
+          },
+          {
+            "block": "minecraft:cornflower",
+            "chance": 0.012
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 12,
+        "frequency": 0.7,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:birch_log",
+          "density": 0.012,
+          "min_size": 3,
+          "max_size": 4,
+          "min_height": 6,
+          "max_height": 9,
+          "shape": "round",
+          "width": 1,
+          "leaves": "minecraft:birch_leaves"
+        },
+        {
+          "type": "rivers",
+          "block": "minecraft:water",
+          "density": 0.2,
+          "shore": "minecraft:gravel"
+        }
+      ],
+      "qi": {
+        "capacity": 380,
+        "regen": 4,
+        "affinity": 1.3
+      },
+      "resources": {
+        "ores": [],
+        "treasure": [],
+        "herbs": [
+          {
+            "herb": "ascension:white_jade_orchid",
+            "density": 0.005
+          }
+        ]
+      }
+    },
+    {
+      "weight": 1.0,
+      "biome": "minecraft:windswept_hills",
+      "palette": {
+        "top": "minecraft:grass_block",
+        "sub": "minecraft:dirt",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.07
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 2,
+        "amplitude": 32,
+        "frequency": 1.1,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "spires",
+          "density": 0.08,
+          "min_size": 2,
+          "max_size": 4,
+          "min_height": 10,
+          "max_height": 24,
+          "block": "minecraft:stone"
+        },
+        {
+          "type": "floating_islands",
+          "density": 0.12,
+          "min_size": 6,
+          "max_size": 12,
+          "min_height": 45,
+          "max_height": 100,
+          "block": "minecraft:stone"
+        }
+      ],
+      "qi": {
+        "capacity": 400,
+        "regen": 4,
+        "affinity": 1.4
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:iron_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 0.9,
+      "biome": "minecraft:savanna_plateau",
+      "palette": {
+        "top": "minecraft:coarse_dirt",
+        "sub": "minecraft:terracotta",
+        "stone": "minecraft:terracotta",
+        "deep": "minecraft:deepslate"
+      },
+      "terrain": {
+        "offset": 2,
+        "amplitude": 22,
+        "frequency": 1.0,
+        "terrace": 3
+      },
+      "features": [
+        {
+          "type": "mesas",
+          "density": 0.24,
+          "min_size": 12,
+          "max_size": 24,
+          "min_height": 8,
+          "max_height": 20
+        },
+        {
+          "type": "ravines",
+          "density": 0.5,
+          "min_height": 14,
+          "max_height": 30
+        }
+      ],
+      "qi": {
+        "capacity": 380,
+        "regen": 3,
+        "affinity": 1.2
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:copper_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30,
+            "scale": 5.0
+          }
+        ],
+        "treasure": [],
+        "herbs": []
+      }
+    },
+    {
+      "weight": 0.8,
+      "biome": "minecraft:windswept_savanna",
+      "palette": {
+        "top": "minecraft:grass_block",
+        "sub": "minecraft:dirt",
+        "stone": "minecraft:stone",
+        "deep": "minecraft:deepslate",
+        "decor": [
+          {
+            "block": "minecraft:short_grass",
+            "chance": 0.08
+          }
+        ]
+      },
+      "terrain": {
+        "offset": 0,
+        "amplitude": 18,
+        "frequency": 0.9,
+        "terrace": 0
+      },
+      "features": [
+        {
+          "type": "trees",
+          "block": "minecraft:acacia_log",
+          "density": 0.02,
+          "min_size": 4,
+          "max_size": 6,
+          "min_height": 6,
+          "max_height": 10,
+          "shape": "umbrella",
+          "width": 1,
+          "leaves": "minecraft:acacia_leaves"
+        },
+        {
+          "type": "floating_islands",
+          "density": 0.1,
+          "min_size": 5,
+          "max_size": 10,
+          "min_height": 40,
+          "max_height": 80,
+          "block": "minecraft:stone"
+        }
+      ],
+      "qi": {
+        "capacity": 420,
+        "regen": 4,
+        "affinity": 1.4
+      },
+      "resources": {
+        "ores": [],
+        "treasure": [],
+        "herbs": [
+          {
+            "herb": "ascension:jade_dew_grass",
+            "density": 0.004
+          }
+        ]
+      }
+    }
+  ]
+}
