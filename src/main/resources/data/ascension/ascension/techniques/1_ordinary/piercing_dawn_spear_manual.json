@@ -1,0 +1,25 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.piercing_dawn_spear_manual.name"
+  },
+  "description": {
+    "translate": "ascension.technique.piercing_dawn_spear_manual.desc"
+  },
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:passive/spear_mastery",
+        "ascension:castable/new_techniques/dawnline_thrust",
+        "ascension:castable/spear_projection",
+        "ascension:castable/new_techniques/lifeforce_perception"
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_battle_style",
+    "rank": "ascension:ordinary"
+  }
+}

@@ -10,8 +10,9 @@ import net.zic.ascension.api.rpg_engine.source.data_source.LoadPriority;
 import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
 import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class PathDataSource implements DataSource<PathHolder> {
     public static final SerializerHandler<PathHolder> SERIALIZER_HANDLER = new PathSerializerHandler();
@@ -25,28 +26,28 @@ public class PathDataSource implements DataSource<PathHolder> {
 
     @Override
     public void onAdded(OriginSource source, PathHolder holder) {
-        Map<Identifier, PathInstance> rawPaths = holder.getRawPathInstance();
-        Map<Identifier, HashSet<Identifier>> rawOwners = holder.getRawPathOwnerData();
+        Map<Identifier, PathInstance<?>> rawPaths = holder.getPathSnapshot();
+        Map<Identifier, Set<Identifier>> rawOwners = holder.getOwnerSnapshot();
 
         holder.clearContainer();
         for(Identifier path : rawPaths.keySet()){
             for(Identifier owner : rawOwners.get(path)){
-                AscensionOriginSourceHelper.addPath(source,path,rawPaths.get(path),owner);
+                AscensionOriginSourceHelper.addPath(source,rawPaths.get(path),owner);
             }
         }
     }
 
     @Override
     public void onRemoved(OriginSource source, PathHolder holder) {
-         Map<Identifier,PathInstance> rawPaths = holder.getRawPathInstance();
-        Map<Identifier, HashSet<Identifier>> rawOwners = holder.getRawPathOwnerData();
+        Map<Identifier,PathInstance<?>> rawPaths = holder.getPathSnapshot();
+        Map<Identifier, Set<Identifier>> rawOwners = holder.getOwnerSnapshot();
 
         for(Identifier path : rawPaths.keySet()){
             for(Identifier owner : rawOwners.get(path)){
                 AscensionOriginSourceHelper.removePath(source,path,owner);
             }
         }
-        holder.setRawData(rawPaths,rawOwners);
+        holder.restore(rawPaths,rawOwners);
     }
 
     @Override
@@ -56,8 +57,8 @@ public class PathDataSource implements DataSource<PathHolder> {
 
     @Override
     public void finishedLoading(OriginSource source, PathHolder holder) {
-        for(Identifier path : holder.getPaths()){
-            holder.getPath(path).simulateProgression(source);
+        for(PathInstance<?> instance : List.copyOf(holder.getPathInstances())){
+            instance.simulateProgression(source);
         }
         holder.clearCache();
     }

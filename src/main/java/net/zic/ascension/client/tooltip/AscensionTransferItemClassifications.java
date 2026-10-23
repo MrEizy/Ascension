@@ -59,21 +59,21 @@ public final class AscensionTransferItemClassifications {
         RegistryAccess access = level.registryAccess();
 
         if (stack.getItem() == ModItems.BLOODLINE_ESSENCE.get()) {
-            Bloodline bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY, registryId, access);
+            Bloodline<?> bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY, registryId, access);
             return bloodline == null
                     ? Optional.empty()
                     : classification(BLOODLINE_ESSENCE, bloodline.itemTooltip());
         }
 
         if (stack.getItem() == ModItems.PHYSIQUE_ESSENCE.get()) {
-            Physique physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, registryId, access);
+            Physique<?> physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, registryId, access);
             return physique == null
                     ? Optional.empty()
                     : classification(PHYSIQUE_ESSENCE, physique.itemTooltip());
         }
 
         if (stack.getItem() == ModItems.TECHNIQUE_MANUAL.get()) {
-            Technique technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY, registryId, access);
+            Technique<?> technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY, registryId, access);
             return technique == null
                     ? Optional.empty()
                     : classification(TECHNIQUE_MANUAL, technique.itemTooltip());

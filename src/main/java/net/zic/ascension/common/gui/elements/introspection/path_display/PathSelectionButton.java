@@ -61,12 +61,12 @@ public class PathSelectionButton extends BetterButton {
 
     private static Component resolveName(Identifier pathId) {
         return ClientAscensionData.getPlayer().map(player -> {
-            Path path = CoreRegistries.safeAccess(
+            Path<?> path = CoreRegistries.safeAccess(
                     CoreRegistries.PATH_REGISTRY,
                     pathId,
                     player.registryAccess()
             );
-            return path == null ? Component.literal(pathId.toString()) : path.name();
+            return path == null ? Component.literal(pathId.toString()) : path.getName(null);
         }).orElseGet(() -> Component.literal(pathId.toString()));
     }
 

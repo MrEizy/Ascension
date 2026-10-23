@@ -1,0 +1,25 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.crescent_severance_blade_canon.name"
+  },
+  "description": {
+    "translate": "ascension.technique.crescent_severance_blade_canon.desc"
+  },
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:passive/blade_mastery",
+        "ascension:castable/new_techniques/crescent_severance",
+        "ascension:castable/blade_projection",
+        "ascension:castable/spherical_devastation"
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_battle_style",
+    "rank": "ascension:heaven"
+  }
+}

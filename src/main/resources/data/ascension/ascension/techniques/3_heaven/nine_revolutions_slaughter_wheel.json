@@ -6,130 +6,19 @@
   "description": {
     "translate": "ascension.technique.nine_revolutions_slaughter_wheel.desc"
   },
-  "path": "ascension:foundation/essence",
-  "milestone_realms": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8
-  ],
-  "technique_families": [
-    "blood",
-    "chaos"
-  ],
-  "max_realm": 8,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/nine_revolutions_circulation": {},
-    "ascension:passive/unending_revolution": {
-      "unlock": 1
-    },
-    "ascension:castable/slaughter_wheel_manifestation": {
-      "unlock": 2,
-      "caps": {
-        "3": "minor_mastery",
-        "5": "major_mastery"
-      }
-    },
-    "ascension:castable/revolving_butchers_guard": {
-      "unlock": 4,
-      "caps": {
-        "5": "minor_mastery",
-        "7": "major_mastery"
-      }
-    },
-    "ascension:castable/ninefold_carnage_circuit": {
-      "unlock": 6,
-      "caps": {
-        "7": "minor_mastery"
-      }
-    },
-    "ascension:castable/heaven_grinding_slaughter_wheel": {
-      "unlock": 8
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_revolutions_slaughter_wheel_strength_a1",
-                  "value": 2.25
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_revolutions_slaughter_wheel_spirit_a1",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_revolutions_slaughter_wheel_vitality_a1",
-                  "value": 1.25
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_nine_revolutions_slaughter_wheel_agility_a1",
-                  "value": 0.5
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/nine_revolutions_circulation",
+        "ascension:passive/unending_revolution",
+        "ascension:castable/slaughter_wheel_manifestation",
+        "ascension:castable/revolving_butchers_guard",
+        "ascension:castable/ninefold_carnage_circuit",
+        "ascension:castable/heaven_grinding_slaughter_wheel"
       ]
     }
   ],
-  "realm_overrides": {
-    "0": {
-      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.0.name"}
-    },
-    "1": {
-      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.1.name"}
-    },
-    "2": {
-      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.2.name"}
-    },
-    "3": {
-      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.3.name"}
-    },
-    "4": {
-      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.4.name"}
-    },
-    "5": {
-      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.5.name"}
-    },
-    "6": {
-      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.6.name"}
-    },
-    "7": {
-      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.7.name"}
-    },
-    "8": {
-      "name": {"translate": "ascension.technique.nine_revolutions_slaughter_wheel.realm_override.8.name"}
-    }
-  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "theme_overrides": {

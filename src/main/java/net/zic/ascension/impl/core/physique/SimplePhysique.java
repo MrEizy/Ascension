@@ -1,26 +1,22 @@
 package net.zic.ascension.impl.core.physique;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.physique.Physique;
-import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
+import net.zic.ascension.api.ascension.core.physique.PhysiqueInstance;
 import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.ascension.datapack.path.PathBonusBase;
-import net.zic.ascension.api.ascension.datapack.path.PathBonusModifier;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import org.jspecify.annotations.Nullable;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
 
-import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
 import net.zic.zenithlib.stats.ZenithStatHelper;
 import net.zic.zenithlib.value_containers.typed.Modifier;
@@ -33,7 +29,7 @@ public record SimplePhysique(Component name, Component description, List<Identif
                              Map<PathBonus,ModifierHolder<Double>> pathBonusModifiers,
                              Optional<AscensionItemTooltipDefinition> itemTooltip,
                              RequirementHolder requirements
-                            ) implements Physique {
+                            ) implements Physique<EmptyPhysiqueData> {
 
     public SimplePhysique(
             Component name,
@@ -62,9 +58,9 @@ public record SimplePhysique(Component name, Component description, List<Identif
     }
 
     @Override
-    public Collection<Identifier> onAdded(OriginSource source, PhysiqueData data) {
+    public Collection<Identifier> onAdded(OriginSource source, PhysiqueInstance<EmptyPhysiqueData> instance) {
 
-        Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
+        Identifier physiqueId = instance.getPhysiqueId();
 
         for(Map.Entry<Identifier,ModifierHolder<Double>> modifiers : statModifiers.entrySet()){
             Stat stat = ZenithStatHelper.stat(modifiers.getKey());
@@ -103,8 +99,8 @@ public record SimplePhysique(Component name, Component description, List<Identif
     }
 
     @Override
-    public Collection<Identifier> onRemoved(OriginSource source, PhysiqueData data) {
-        Identifier physiqueId = CoreRegistries.PHYSIQUE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
+    public Collection<Identifier> onRemoved(OriginSource source, PhysiqueInstance<EmptyPhysiqueData> instance) {
+        Identifier physiqueId = instance.getPhysiqueId();
 
         for(Map.Entry<Identifier,ModifierHolder<Double>> modifiers : statModifiers.entrySet()){
             Stat stat = ZenithStatHelper.stat(modifiers.getKey());
@@ -143,42 +139,38 @@ public record SimplePhysique(Component name, Component description, List<Identif
     }
 
     @Override
-    public void applyToEntity(LivingEntity entity, PhysiqueData data) {
+    public void applyToEntity(LivingEntity entity, PhysiqueInstance<EmptyPhysiqueData> instance) {
 
     }
 
     @Override
-    public void removeFromEntity(LivingEntity entity, PhysiqueData data) {
+    public void removeFromEntity(LivingEntity entity, PhysiqueInstance<EmptyPhysiqueData> instance) {
 
     }
 
     @Override
-    public PhysiqueData newData(RegistryAccess access) {
-        return new EmptyData();
+    public Component getName(@Nullable EmptyPhysiqueData data) {
+        return name;
     }
 
     @Override
-    public PhysiqueData loadData(ValueInput input,RegistryAccess access) {
-        return new EmptyData();
+    public Component getDescription(@Nullable EmptyPhysiqueData data) {
+        return description;
     }
 
     @Override
-    public PhysiqueData loadData(ByteBuf buf,RegistryAccess access) {
-        return new EmptyData();
+    public EmptyPhysiqueData newData(RegistryAccess access) {
+        return new EmptyPhysiqueData();
     }
 
-    public static final class EmptyData implements PhysiqueData {
-        @Override
-        public PhysiqueType getType() {
-            return AscensionPhysiqueTypes.SIMPLE_PHYSIQUE_TYPE.get();
-        }
-
-        @Override
-        public void write(ValueOutput output,RegistryAccess access) {
-        }
-
-        @Override
-        public void encode(ByteBuf buf,RegistryAccess access) {
-        }
+    @Override
+    public SerializerHandler<EmptyPhysiqueData> serializerHandler() {
+        return EmptyPhysiqueData.SERIALIZER_HANDLER;
     }
+
+    @Override
+    public SyncHandler<EmptyPhysiqueData> syncHandler() {
+        return EmptyPhysiqueData.SYNC_HANDLER;
+    }
+
 }

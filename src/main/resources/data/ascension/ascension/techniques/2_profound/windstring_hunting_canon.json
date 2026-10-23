@@ -1,0 +1,25 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.windstring_hunting_canon.name"
+  },
+  "description": {
+    "translate": "ascension.technique.windstring_hunting_canon.desc"
+  },
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:passive/bow_mastery",
+        "ascension:castable/new_techniques/windstring_volley",
+        "ascension:castable/bow_projection",
+        "ascension:castable/new_techniques/essence_perception"
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_battle_style",
+    "rank": "ascension:profound"
+  }
+}

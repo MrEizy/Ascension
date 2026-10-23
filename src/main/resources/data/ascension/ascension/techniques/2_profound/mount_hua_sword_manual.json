@@ -6,58 +6,14 @@
   "description": {
     "translate": "ascension.technique.mount_hua_sword_manual.desc"
   },
-  "path": "ascension:foundation/essence",
-  "milestone_realms": [
-    0,
-    2,
-    5
-  ],
-  "technique_families": [
-    "sword"
-  ],
-  "max_realm": 5,
-  "skills": {
-    "ascension:castable/cultivation/plum_blossom_breathing": {},
-    "ascension:passive/plum_blossom_sword_aura": {}
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": {
-        "type": "ascension:major_realms_in",
-        "realms": [
-          5
-        ]
-      },
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_mount_hua_sword_manual_agility_a1",
-                  "value": 0.15
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_mount_hua_sword_manual_strength_a1",
-                  "value": 0.1
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
-      ]
-    },
-    {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        "ascension:generic_give_stats"
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/plum_blossom_breathing",
+        "ascension:passive/plum_blossom_sword_aura",
+        "ascension:castable/sword_flight",
+        "ascension:castable/new_techniques/essence_perception"
       ]
     }
   ],

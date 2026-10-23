@@ -5,7 +5,7 @@ It is written for content authors first. The intended workflow is:
 
 **idea → skill JSON → technique JSON → game**
 
-Most normal content should require no Java. Active skills are assembled from targeting, cast behaviour, costs, and ordered actions. Passive skills are assembled from levels, modifiers, and optional triggers. Techniques own skill unlocks and progression caps.
+Most normal content should require no Java. Active skills are assembled from targeting, cast behaviour, costs, and ordered actions. Passive skills are assembled from levels, modifiers, and optional triggers. Techniques grant skills through their `on_added` actions.
 
 ## Quick links
 - [Files and workflow](#files-and-workflow)
@@ -54,7 +54,7 @@ Normal workflow:
 3. Use fixed numbers until something genuinely needs scaling.
 4. Put reusable gameplay objects in `definitions`.
 5. Put reusable presentation in runtime visual files.
-6. Add the skill to a technique's `skills` block.
+6. Grant the skill from a technique's `on_added` list with `ascension:grant_skills`.
 
 | Skill type | Use it for |
 |---|---|
@@ -175,7 +175,7 @@ Charge/channel stages may contain `threshold`, `particle_field`, and periodic `s
 | Perfection | `perfection` | 900 |
 | Transcendence | `transcendence` | 2500 |
 
-Techniques normally raise the accessible mastery cap; using the skill trains toward it.
+Using the skill trains it toward its accessible mastery cap.
 
 Optional per-skill curve:
 ```json
@@ -539,62 +539,34 @@ Persistent form visuals use `ascension:persistent_visual`:
 `key` identifies the owned visual instance. Persistent visuals are restored when an enabled passive is attached to the player again, without replaying unrelated enable actions.
 
 # Techniques
-A technique connects a cultivation path to skills and progression.
+A technique is a generic source that grants skills (and stats or path bonuses) through its `on_added` actions. It is not tied to a path.
 ```json
 {
   "type": "ascension:simple_technique",
   "name": "Ember Body Art",
   "description": "Tempered breath circulates through flesh and blood.",
-  "path": "ascension:foundation/body",
-  "max_realm": 6,
-  "skills": {
-    "example:ember_body/cultivation": {},
-    "example:ember_body/iron_pulse": {
-      "unlock": 1,
-      "requirements": [
-        {
-          "type": "ascension:has_physique",
-          "physique": "example:iron_bloom"
-        }
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "example:ember_body/cultivation",
+        "example:ember_body/iron_pulse",
+        "example:ember_body/scarlet_step"
       ]
-    },
-    "example:ember_body/scarlet_step": {
-      "unlock": 2,
-      "caps": { "4": "minor_mastery", "6": "major_mastery" }
-    },
-    "example:ember_body/tempered_skin": {
-      "unlock": 3,
-      "caps": { "5": 2 }
     }
-  }
+  ]
 }
 ```
 
-`unlock` is the **zero-indexed major realm** where the technique begins owning the skill. Omit it for realm `0`. Optional `requirements` use the shared Ascension requirement list and are re-evaluated as relevant origin progression changes.
-
-Active caps use mastery names:
-```json
-"caps": { "3": "minor_mastery", "5": "major_mastery" }
-```
-Passive caps use levels:
-```json
-"caps": { "3": 2, "5": 3 }
-```
-An active cap raises the ceiling the player may train toward; it does not directly grant trained mastery.
+Every skill is granted when the technique is learned, owned by the technique's ID, and removed again when the technique is removed.
 
 | Technique field | Meaning |
 |---|---|
-| `path` | Cultivated path |
-| `milestone_realms` | Notable major realms |
-| `technique_families` | Technique family names |
-| `min_realm`, `max_realm` | Major-realm limits |
-| `max_minor_realm` | Minor-realm limit |
-| `realm_overrides` | Technique-specific realm definitions |
-| `skills` | Skill ownership and caps |
-| `realm_change_handler` | Other realm-driven progression |
+| `on_added` | Progression actions run on learn, reversed on removal |
+| `requirements` | Acquisition requirements |
 | `item_tooltip` | Technique manual presentation |
 
-Use `skills` for normal skill progression and `realm_change_handler` for other progression such as stat/path bonuses.
+See `ASCENSION_TECHNIQUES.md` for the full technique format.
 
 # Scaled values
 Many numeric fields accept a `ScaledValue`.
@@ -1154,15 +1126,15 @@ This miniature technique uses two skill files and one technique file.
   "type": "ascension:simple_technique",
   "name": "Ember Body Art",
   "description": "Temper flesh with disciplined fire circulation.",
-  "path": "ascension:foundation/body",
-  "max_realm": 6,
-  "skills": {
-    "example:ember_body/cultivation": {},
-    "example:ember_body/falling_mountain_cut": {
-      "unlock": 1,
-      "caps": { "3": "minor_mastery", "5": "major_mastery" }
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "example:ember_body/cultivation",
+        "example:ember_body/falling_mountain_cut"
+      ]
     }
-  },
+  ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",
@@ -1171,13 +1143,7 @@ This miniature technique uses two skill files and one technique file.
 }
 ```
 
-Result:
-```text
-Realm 0  Ember Meridian Breathing
-Realm 1  Falling Mountain Cut
-Realm 3  Falling Mountain Cut cap -> Minor Mastery
-Realm 5  Falling Mountain Cut cap -> Major Mastery
-```
+Result: learning the manual grants Ember Meridian Breathing and Falling Mountain Cut; forgetting the technique removes both.
 
 # Glossary
 **Action** — One ordered unit of active behaviour: damage, movement, projectile, visual, resource change, etc.
@@ -1214,7 +1180,7 @@ Realm 5  Falling Mountain Cut cap -> Major Mastery
 
 **Subject** — What an action operates on: `caster`, `target`, `origin`, or `position`.
 
-**Technique** — A path-linked definition that owns skills and raises mastery/level caps.
+**Technique** — A generic source that grants skills, stats, and path bonuses through its `on_added` actions.
 
 **Trigger** — A passive event hook that executes ordinary skill actions.
 

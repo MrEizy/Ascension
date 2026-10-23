@@ -22,8 +22,8 @@ final class ProgressionDescriptionUtil {
     }
 
     static Component pathName(Identifier id, RegistryAccess access) {
-        Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, id, access);
-        return path == null ? Component.literal(humanName(id.getPath())) : path.name();
+        Path<?> path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, id, access);
+        return path == null ? Component.literal(humanName(id.getPath())) : path.getName(null);
     }
 
     static Component skillName(Identifier id, RegistryAccess access) {

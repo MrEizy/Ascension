@@ -1,4 +1,4 @@
-package net.zic.ascension.impl.core.technique.realm_change.condition;
+package net.zic.ascension.impl.core.path.realm_change.condition;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
@@ -20,7 +20,7 @@ public final class RealmChangeConditions {
 
     public static final class EveryRealm implements RealmChangeActionCondition {
         @Override
-        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance<?> pathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return true;
         }
 
@@ -39,7 +39,7 @@ public final class RealmChangeConditions {
 
     public static final class EveryMinorRealm implements RealmChangeActionCondition {
         @Override
-        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance<?> pathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return majorRealm != 0;
         }
 
@@ -58,7 +58,7 @@ public final class RealmChangeConditions {
 
     public static final class EveryMajorRealm implements RealmChangeActionCondition {
         @Override
-        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance<?> pathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return minorRealm == 0 && majorRealm > 0;
         }
 
@@ -77,7 +77,7 @@ public final class RealmChangeConditions {
 
     public record MajorRealmsIn(List<Integer> majorRealms) implements RealmChangeActionCondition {
         @Override
-        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance<?> pathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return minorRealm == 0 && majorRealms.contains(majorRealm);
         }
 
@@ -117,7 +117,7 @@ public final class RealmChangeConditions {
 
     public record MinorRealmsIn(List<Integer> minorRealms) implements RealmChangeActionCondition {
         @Override
-        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance<?> pathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return minorRealm != 0 && minorRealms.contains(minorRealm);
         }
 
@@ -144,7 +144,7 @@ public final class RealmChangeConditions {
 
     public record RealmsIn(Map<Integer, List<Integer>> realms) implements RealmChangeActionCondition {
         @Override
-        public boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
+        public boolean test(OriginSource source, Identifier path, PathInstance<?> pathInstance, int majorRealm, int minorRealm, ProgressDirection direction) {
             return realms.containsKey(majorRealm) && realms.get(majorRealm).contains(minorRealm);
         }
 

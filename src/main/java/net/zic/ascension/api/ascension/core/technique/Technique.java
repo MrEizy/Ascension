@@ -1,100 +1,68 @@
 package net.zic.ascension.api.ascension.core.technique;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.storage.ValueInput;
 import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.datapack.technique.TechniqueType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Optional;
 
-public interface Technique {
+/**
+ * A technique as defined in the technique registry.
+ * Holds the configuration and the logic, per-origin state belongs in {@link TechniqueData}.
+ * Techniques held by an origin are always accessed through a {@link TechniqueInstance}, which pairs the technique with its typed data.
+ * @param <D> the data this technique creates and runs on
+ */
+public interface Technique<D extends TechniqueData> {
 
     TechniqueType getType();
 
-    Component getName(@Nullable TechniqueData techniqueData);
-    Component getDescription(@Nullable TechniqueData techniqueData);
+    //data is null when the technique is displayed without an owner, e.g. on a technique manual
+    Component getName(@Nullable D data);
+    Component getDescription(@Nullable D data);
 
-    Identifier getPath();
-
-    /**
-     * A toggle for techniques to opt out of cultivation from the cultivation util pretty much
-     */
-    default boolean allowsCultivationProgress() {
-        return true;
-    }
     /**
      * called when the technique is added to an origin source
      * @param source the origin source it is being added to
-     * @param data the data for this technique
+     * @param instance the instance being added
      */
-    void onAdded(OriginSource source, TechniqueData data);
+    void onAdded(OriginSource source, TechniqueInstance<D> instance);
 
     /**
      * Called when the technique is removed from a source
      * @param source the source it is removed from
-     * @param data the data of this technique
+     * @param instance the instance being removed
      */
-    void onRemoved(OriginSource source, TechniqueData data);
+    void onRemoved(OriginSource source, TechniqueInstance<D> instance);
 
-
-    default void applyToEntity(LivingEntity entity, TechniqueData data) {
+    //called when an entity that owns an origin detects the technique was added
+    default void applyToEntity(LivingEntity entity, TechniqueInstance<D> instance) {
     }
 
-    default void removeFromEntity(LivingEntity entity, TechniqueData data) {
+    //called when either an entity is detached from an origin or the technique is removed from the origin
+    default void removeFromEntity(LivingEntity entity, TechniqueInstance<D> instance) {
     }
 
+    //──Data────────────────────────────────────────────────────────
 
+    //creates fresh data, also used as the target when decoding
+    D newData(RegistryAccess access);
+
+    //saves and loads the data, read is expected to return new data
+    SerializerHandler<D> serializerHandler();
 
     /**
-     * a milestone realm is used when removing a technique,
-     * when removed we decrease the major realm until we either hit a different technique or a milestone realm
-     * @return a Collection of milestone major realms
+     * syncs the data to clients. decode writes into existing data, so always call {@link #newData} first and decode into that.
+     * <p>
+     * Do not use {@link SyncHandler.StreamCodecSyncHandler}, its decode does nothing.
      */
-    Collection<Integer> getMilestoneRealms();
-
-    /**
-     * a technique family refers to if 2 techniques are compatible or not
-     * when trying to learn a technique ALL previous techniques must share at least 1 common family
-     * @return a Collection of families this technique has
-     */
-    Collection<String> getTechniqueFamilies();
-    //──Realms────────────────────────────────────────────────────────
-
-    Component getMajorRealmName(int majorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
-    Component getMinorRealmName(int majorRealm,int minorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
-
-    // returns the formatted name of the realm when both major and minor realm are displayed together
-    Component getRealmName(int majorRealm, int minorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
-
-    //gives the default max minor realm and major realm a technique can cultivate
-    int getMaxMajorRealm(@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
-    int getMaxMinorRealm(int majorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
-
-    //the minimum realm the user needs to be at to learn
-    int getMinMajorRealm(RegistryAccess registryAccess);
-
-    //gives the progress needed to progress a given realm
-    double getMaxProgress(int majorRealm,int minorRealm,@Nullable TechniqueData techniqueData, RegistryAccess registryAccess);
-
-    //id of the tribulation in the tribulation registry, null if there is none
-    @Nullable Identifier getTribulationId(int majorRealm, int minorRealm, RegistryAccess access);
-    //is used for both minor and major realm breakthroughs
-    boolean tryBreakthrough(LivingEntity entity, OriginSource source, int majorRealm, int minorRealm, double progress, @Nullable TechniqueData techniqueData);
-
-
-    void onRealmUp(OriginSource source, TechniqueData techniqueData);
-    void onRealmDown(OriginSource source, TechniqueData techniqueData);
-    TechniqueData newData();
-    TechniqueData loadData(ValueInput input);
-    TechniqueData loadData(ByteBuf buf);
+    SyncHandler<D> syncHandler();
 
     default RequirementHolder requirements() {
         return RequirementHolder.EMPTY;
@@ -102,7 +70,4 @@ public interface Technique {
     default Optional<AscensionItemTooltipDefinition> itemTooltip() {
         return Optional.empty();
     }
-
-
-
 }

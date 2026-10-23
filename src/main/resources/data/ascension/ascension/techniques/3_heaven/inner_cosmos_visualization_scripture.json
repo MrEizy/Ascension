@@ -1,0 +1,26 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.inner_cosmos_visualization_scripture.name"
+  },
+  "description": {
+    "translate": "ascension.technique.inner_cosmos_visualization_scripture.desc"
+  },
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/inner_cosmos_visualization",
+        "ascension:passive/boundless_star_mind",
+        "ascension:castable/new_techniques/starfield_pulse",
+        "ascension:castable/divine_sense/divine_sense_sustained_spirit_art",
+        "ascension:castable/inner_world"
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:heaven"
+  }
+}

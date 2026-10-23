@@ -52,7 +52,7 @@ public final class WeaponTechniqueResolver {
         if (source == null || path == null || !AscensionOriginSourceHelper.hasPath(source, path)) {
             return null;
         }
-        PathInstance data = AscensionOriginSourceHelper.getPathInstance(source, path);
+        PathInstance<?> data = AscensionOriginSourceHelper.getPathInstance(source, path);
         return Identifier.parse("none");
     }
 

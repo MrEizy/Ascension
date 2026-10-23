@@ -6,83 +6,17 @@
   "description": {
     "translate": "ascension.technique.celestial_constellation_circulation.desc"
   },
-  "path": "ascension:foundation/soul",
-  "milestone_realms": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
-  ],
-  "technique_families": [
-    "star",
-    "bow"
-  ],
-  "max_realm": 6,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/celestial_constellation_circulation": {},
-    "ascension:passive/celestial_constellation_circulation/orions_celestial_draw": {
-      "unlock": 1
-    },
-    "ascension:castable/celestial_constellation_circulation/hound_star_pursuit": {
-      "unlock": 2,
-      "caps": {
-        "4": "minor_mastery"
-      }
-    },
-    "ascension:castable/celestial_constellation_circulation/aquila_crossing": {
-      "unlock": 3,
-      "caps": {
-        "6": "minor_mastery"
-      }
-    },
-    "ascension:castable/celestial_constellation_circulation/scorpius_star_nail_formation": {
-      "unlock": 4,
-      "caps": {
-        "6": "minor_mastery"
-      }
-    },
-    "ascension:castable/celestial_constellation_circulation/sagittarius_heaven_piercing_arc": {
-      "unlock": 5
-    },
-    "ascension:castable/celestial_constellation_circulation/sevenfold_celestial_hunt": {
-      "unlock": 6
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_celestial_constellation_circulation_spirit_a1",
-                  "value": 2.0
-                },
-                {
-                  "id": "ascension:3_heaven_celestial_constellation_circulation_spirit_a1_2",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_celestial_constellation_circulation_agility_a1",
-                  "value": 1.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/celestial_constellation_circulation",
+        "ascension:passive/celestial_constellation_circulation/orions_celestial_draw",
+        "ascension:castable/celestial_constellation_circulation/hound_star_pursuit",
+        "ascension:castable/celestial_constellation_circulation/aquila_crossing",
+        "ascension:castable/celestial_constellation_circulation/scorpius_star_nail_formation",
+        "ascension:castable/celestial_constellation_circulation/sagittarius_heaven_piercing_arc",
+        "ascension:castable/celestial_constellation_circulation/sevenfold_celestial_hunt"
       ]
     }
   ],

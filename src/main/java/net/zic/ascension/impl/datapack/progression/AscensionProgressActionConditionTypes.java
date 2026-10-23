@@ -10,7 +10,7 @@ import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionCondit
 
 import net.zic.ascension.impl.datapack.bloodline.purity.condition.OnPurityInRangeConditionType;
 import net.zic.ascension.impl.datapack.progression.condition.UnitConditionType;
-import net.zic.ascension.impl.core.technique.realm_change.condition.RealmChangeConditions;
+import net.zic.ascension.impl.core.path.realm_change.condition.RealmChangeConditions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

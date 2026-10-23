@@ -1,0 +1,27 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.mountain_root_bone_scripture.name"
+  },
+  "description": {
+    "translate": "ascension.technique.mountain_root_bone_scripture.desc"
+  },
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:body_cultivation/mountain_root_tempering",
+        "ascension:passive/mountain_root_foundation",
+        "ascension:castable/new_techniques/stoneward_impact",
+        "ascension:castable/new_techniques/lifeforce_perception",
+        "ascension:castable/inner_world",
+        "ascension:castable/new_techniques/stoneward_guard"
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:ordinary"
+  }
+}

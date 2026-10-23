@@ -1,71 +1,21 @@
 {
   "type": "ascension:simple_technique",
-  "name": {"translate": "ascension.technique.white_lightning_ten_stage_technique.name"},
-  "description": {"translate": "ascension.technique.white_lightning_ten_stage_technique.desc"},
-  "path": "ascension:foundation/body",
-  "milestone_realms": [
-    0,
-    2,
-    5
-  ],
-  "technique_families": [
-    "body",
-    "lightning",
-    "fist"
-  ],
-  "max_realm": 5,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:body_cultivation/white_lightning_cultivation": {},
-    "ascension:passive/white_lightning_ten_stage_technique/lightning_nerves": {
-      "unlock": 2
-    },
-    "ascension:castable/white_lightning_ten_stage_technique/white_lightning_fist": {
-      "unlock": 3,
-      "caps": {
-        "5": "minor_mastery"
-      }
-    },
-    "ascension:castable/white_lightning_ten_stage_technique/lightning_flash_step": {
-      "unlock": 5
-    }
+  "name": {
+    "translate": "ascension.technique.white_lightning_ten_stage_technique.name"
   },
-  "realm_change_handler": [
+  "description": {
+    "translate": "ascension.technique.white_lightning_ten_stage_technique.desc"
+  },
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_white_lightning_ten_stage_technique_strength_a1",
-                  "value": 0.45
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_white_lightning_ten_stage_technique_agility_a1",
-                  "value": 0.35
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_white_lightning_ten_stage_technique_vitality_a1",
-                  "value": 0.2
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:body_cultivation/white_lightning_cultivation",
+        "ascension:passive/white_lightning_ten_stage_technique/lightning_nerves",
+        "ascension:castable/white_lightning_ten_stage_technique/white_lightning_fist",
+        "ascension:castable/white_lightning_ten_stage_technique/lightning_flash_step",
+        "ascension:castable/new_techniques/lifeforce_perception",
+        "ascension:castable/inner_world"
       ]
     }
   ],

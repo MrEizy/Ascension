@@ -24,22 +24,22 @@ public class TechniqueDataSource implements DataSource<TechniqueHolder> {
 
     @Override
     public void onAdded(OriginSource source, TechniqueHolder holder) {
-        Map<Identifier, TechniqueData> techniques = holder.getRawData();
+        Map<Identifier, TechniqueInstance<?>> techniques = holder.getTechniqueSnapshot();
 
         holder.clearContainer();
-        for (Map.Entry<Identifier, TechniqueData> entry : techniques.entrySet()) {
-            AscensionOriginSourceHelper.addTechnique(source, entry.getKey(), entry.getValue(), false);
+        for (TechniqueInstance<?> instance : techniques.values()) {
+            AscensionOriginSourceHelper.addTechnique(source, instance, false);
         }
     }
 
     @Override
     public void onRemoved(OriginSource source, TechniqueHolder holder) {
-        Map<Identifier, TechniqueData> techniques = holder.getRawData();
+        Map<Identifier, TechniqueInstance<?>> techniques = holder.getTechniqueSnapshot();
 
         for (Identifier techniqueId : techniques.keySet()) {
             AscensionOriginSourceHelper.removeTechnique(source, techniqueId);
         }
-        holder.setRawData(techniques);
+        holder.restore(techniques);
     }
 
     @Override
@@ -54,21 +54,15 @@ public class TechniqueDataSource implements DataSource<TechniqueHolder> {
 
     @Override
     public void applyToEntity(LivingEntity entity, TechniqueHolder holder) {
-        for (Identifier techniqueId : holder.getTechniques()) {
-            Technique technique = holder.getTechnique(techniqueId, entity.level().registryAccess());
-            if (technique != null) {
-                technique.applyToEntity(entity, holder.getTechniqueData(techniqueId));
-            }
+        for (TechniqueInstance<?> instance : holder.getTechniqueInstances()) {
+            instance.applyToEntity(entity);
         }
     }
 
     @Override
     public void removeFromEntity(LivingEntity entity, TechniqueHolder holder) {
-        for (Identifier techniqueId : holder.getTechniques()) {
-            Technique technique = holder.getTechnique(techniqueId, entity.level().registryAccess());
-            if (technique != null) {
-                technique.removeFromEntity(entity, holder.getTechniqueData(techniqueId));
-            }
+        for (TechniqueInstance<?> instance : holder.getTechniqueInstances()) {
+            instance.removeFromEntity(entity);
         }
     }
 

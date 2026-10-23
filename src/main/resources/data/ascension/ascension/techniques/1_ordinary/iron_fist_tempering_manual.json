@@ -6,57 +6,13 @@
   "description": {
     "translate": "ascension.technique.iron_fist_tempering_manual.desc"
   },
-  "path": "ascension:foundation/body",
-  "milestone_realms": [
-    0,
-    1,
-    2
-  ],
-  "technique_families": [
-    "fist",
-    "metal"
-  ],
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:body_cultivation/iron_fist_tempering": {},
-    "ascension:passive/iron_fist_tempering_manual/tempered_knuckles": {
-      "unlock": 1
-    },
-    "ascension:castable/iron_fist_tempering_manual/iron_breaking_fist": {
-      "unlock": 2,
-      "caps": {
-        "2": "minor_mastery"
-      }
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_iron_fist_tempering_manual_strength_a1",
-                  "value": 0.25
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_iron_fist_tempering_manual_vitality_a1",
-                  "value": 0.15
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:body_cultivation/iron_fist_tempering",
+        "ascension:passive/iron_fist_tempering_manual/tempered_knuckles",
+        "ascension:castable/iron_fist_tempering_manual/iron_breaking_fist"
       ]
     }
   ],

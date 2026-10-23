@@ -1,8 +1,13 @@
 package net.zic.ascension.impl.core.progression;
 
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
+import net.zic.ascension.api.ascension.core.progression.ProgressActionDescription;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -30,6 +35,20 @@ public record GrantSkillsAction(UUID uuid, List<Identifier> skills) implements P
                 AscensionOriginSourceHelper.removeSkill(source, skill, contextIdentifier);
             }
         }
+    }
+
+    @Override
+    public List<ProgressActionDescription> getDescriptions(RegistryAccess access) {
+        return skills.stream()
+                .map(skillId -> {
+                    Skill<?> skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, access);
+                    return new ProgressActionDescription(
+                            skill == null ? Component.literal(skillId.getPath()) : skill.getName(),
+                            Component.translatable("ascension.tooltip.progression.unlock"),
+                            ProgressActionDescription.Tone.SPECIAL
+                    );
+                })
+                .toList();
     }
 
     @Override

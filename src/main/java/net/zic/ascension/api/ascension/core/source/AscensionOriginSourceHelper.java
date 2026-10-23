@@ -12,6 +12,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolder;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineInstance;
 import net.zic.ascension.api.ascension.core.path.Path;
 
 import net.zic.ascension.api.ascension.core.path.PathHolder;
@@ -22,13 +23,14 @@ import net.zic.ascension.api.ascension.core.path.bonus.data_source.DataSourcePat
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
+import net.zic.ascension.api.ascension.core.physique.PhysiqueInstance;
 import org.jspecify.annotations.Nullable;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.zic.ascension.api.ascension.core.skill.data_source.SkillHolder;
-import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.ascension.core.technique.TechniqueHolder;
+import net.zic.ascension.api.ascension.core.technique.TechniqueInstance;
 import net.zic.ascension.api.ascension.event.bloodline.BloodlineEvent;
 import net.zic.ascension.api.ascension.event.path.PathAddedEvent;
 import net.zic.ascension.api.ascension.event.path.PathRemovedEvent;
@@ -111,78 +113,82 @@ public class AscensionOriginSourceHelper {
 
     //──Physique Access────────────────────────────────────────────────────────
 
-    public static Identifier getPhysiqueId(OriginSource source){
+    public static @Nullable Identifier getPhysiqueId(OriginSource source){
+        return getPhysiqueHolder(source).getPhysiqueId();
+    }
+    public static @Nullable PhysiqueInstance<?> getPhysique(OriginSource source){
         return getPhysiqueHolder(source).getPhysique();
     }
-    public static Physique getPhysique(OriginSource source){
-        return getPhysiqueHolder(source).getPhysique(source.getRegistryAccess());
+    public static @Nullable PhysiqueData getPhysiqueData(OriginSource source){
+        PhysiqueInstance<?> instance = getPhysique(source);
+        return instance == null ? null : instance.getData();
     }
-    public static PhysiqueData getPhysiqueData(OriginSource source){
-        return getPhysiqueHolder(source).getData();
+
+    /**
+     * sets the physique to a fresh instance of physique, checking its requirements
+     * @param physique the new physique, null removes the current physique
+     * @return true -> changed, false -> not changed
+     */
+    public static boolean setPhysique(OriginSource source,@Nullable Identifier physique){
+        if (physique == null) return setPhysique(source, (PhysiqueInstance<?>) null, true);
+        PhysiqueInstance<?> instance = PhysiqueInstance.create(physique,source.getRegistryAccess());
+        if(instance == null) return false;
+        return setPhysique(source, instance, true);
     }
-    public static boolean setPhysique(OriginSource source,Identifier physique){
-        if (physique == null) return setPhysique(source, null, null, true);
-        Physique physiqueInstance = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY,physique,source.getRegistryAccess());
-        if(physiqueInstance == null) return false;
-        return setPhysique(source,physique, physiqueInstance.newData(source.getRegistryAccess()), true);
-    }
-    public static boolean setPhysique(OriginSource source, Identifier physique, PhysiqueData physiqueData) {
-        return setPhysique(source, physique, physiqueData, true);
-    }
-    public static boolean setPhysique(OriginSource source, Identifier physique, PhysiqueData physiqueData, boolean checkRequirements) {
+
+    /**
+     * replaces the current physique with instance
+     * @param instance the new physique, null removes the current physique
+     * @param checkRequirements if the new physique's requirements must pass
+     * @return true -> changed, false -> not changed
+     */
+    public static boolean setPhysique(OriginSource source, @Nullable PhysiqueInstance<?> instance, boolean checkRequirements) {
 
         PhysiqueHolder holder = getPhysiqueHolder(source);
 
-        Identifier oldPhysique = holder.getPhysique();
-        PhysiqueData oldPhysiqueData = holder.getData();
+        PhysiqueInstance<?> oldPhysique = holder.getPhysique();
 
-        PhysiqueChangedEvent.Pre pre = new PhysiqueChangedEvent.Pre(oldPhysique,oldPhysiqueData,physique,physiqueData,source);
+        PhysiqueChangedEvent.Pre pre = new PhysiqueChangedEvent.Pre(oldPhysique,instance,source);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        Identifier newPhysique = pre.getNewPhysiqueIdentifier();
-        PhysiqueData newPhysiqueData = pre.getNewPhysiqueData();
-        Physique oldPhysiqueDefinition = pre.getPhysique(source.getRegistryAccess());
-        Physique newPhysiqueDefinition = pre.getNewPhysique(source.getRegistryAccess());
+        PhysiqueInstance<?> newPhysique = pre.getNewPhysiqueInstance();
 
-        if (newPhysique != null && (newPhysiqueDefinition == null || newPhysiqueData == null)) {
-            return false;
-        }
-        if (checkRequirements && newPhysiqueDefinition != null && !newPhysiqueDefinition.requirements().test(source)) {
+        if (checkRequirements && newPhysique != null && !newPhysique.getPhysique().requirements().test(source)) {
             return false;
         }
 
-        boolean result = holder.setPhysique(newPhysique,newPhysiqueData);
+        boolean result = holder.setPhysique(newPhysique);
         if(!result) return false;
 
         source.markDataSourceDirty(CoreDataSources.PHYSIQUE_DATA_SOURCE.getId());
 
         source.startProcess("set_physique");
 
-        Collection<Identifier> toRemove = oldPhysiqueDefinition == null
-                ? List.of() : oldPhysiqueDefinition.onRemoved(source,oldPhysiqueData);
+        Collection<Identifier> toRemove = oldPhysique == null
+                ? List.of() : oldPhysique.onRemoved(source);
 
-        if(oldPhysiqueDefinition != null){
+        if(oldPhysique != null){
             for(LivingEntity entity : source.getAttachedEntities()){
-                oldPhysiqueDefinition.removeFromEntity(entity,oldPhysiqueData);
+                oldPhysique.removeFromEntity(entity);
             }
         }
-        Collection<Identifier> toAdd = newPhysiqueDefinition == null
-                ? List.of() : newPhysiqueDefinition.onAdded(source, newPhysiqueData);
-        if(newPhysiqueDefinition != null){
+        Collection<Identifier> toAdd = newPhysique == null
+                ? List.of() : newPhysique.onAdded(source);
+        if(newPhysique != null){
             for(LivingEntity entity : source.getAttachedEntities()){
-                newPhysiqueDefinition.applyToEntity(entity,newPhysiqueData);
+                newPhysique.applyToEntity(entity);
             }
         }
-        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,oldPhysiqueData,pre.getNewPhysiqueIdentifier(),pre.getNewPhysiqueData(),source);
+        PhysiqueChangedEvent.Post post = new PhysiqueChangedEvent.Post(oldPhysique,newPhysique,source);
         NeoForge.EVENT_BUS.post(post);
         //first add all new paths with the new physique as owner, this ensures that if there is path overlap there is owners >1
 
         for(Identifier path : toAdd){
-            addPath(source,path,post.getNewPhysiqueIdentifier());
+            addPath(source,path,newPhysique.getPhysiqueId());
         }
         for(Identifier path : toRemove){
-            removePath(source,path,oldPhysique);
+            removePath(source,path,oldPhysique.getPhysiqueId());
         }
 
         resolveProcess(source,"set_physique");
@@ -202,76 +208,83 @@ public class AscensionOriginSourceHelper {
     public static Collection<Identifier> getBloodlines(OriginSource source){
        return getBloodlineHolder(source).getBloodlines();
     }
-    public static Bloodline getBloodline(OriginSource source,Identifier bloodline){
-        return getBloodlineHolder(source).getBloodline(bloodline,source.getRegistryAccess());
+    public static Collection<BloodlineInstance<?>> getBloodlineInstances(OriginSource source){
+        return getBloodlineHolder(source).getBloodlineInstances();
     }
-    public static BloodlineData getBloodlineData(OriginSource source,Identifier bloodline){
+    public static @Nullable BloodlineInstance<?> getBloodline(OriginSource source,Identifier bloodline){
         return getBloodlineHolder(source).getBloodline(bloodline);
+    }
+    public static @Nullable BloodlineData getBloodlineData(OriginSource source,Identifier bloodline){
+        BloodlineInstance<?> instance = getBloodline(source,bloodline);
+        return instance == null ? null : instance.getData();
     }
     public static boolean hasBloodline(OriginSource source,Identifier bloodline){
         return getBloodlineHolder(source).hasBloodline(bloodline);
     }
+
+    /**
+     * adds a bloodline with fresh data, checking its requirements
+     * @param bloodline the bloodline we are adding
+     * @return true -> added or merged, false -> not added
+     */
     public static boolean addBloodline(OriginSource source,Identifier bloodline){
         if(bloodline == null)return false;
-        Bloodline bloodlineInstance = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY,bloodline,source.getRegistryAccess());
-        if(bloodlineInstance == null) return false;
-        return addBloodline(source,bloodline,bloodlineInstance.newData(source.getRegistryAccess()), true);
+        BloodlineInstance<?> instance = BloodlineInstance.create(bloodline,source.getRegistryAccess());
+        return instance != null && addBloodline(source,instance,true);
     }
-    public static void mergeBloodline(OriginSource source,Identifier bloodline,BloodlineData data){
+
+    //increases the purity of a held bloodline by purityGain
+    public static void mergeBloodline(OriginSource source,Identifier bloodline,int purityGain){
+        BloodlineInstance<?> instance = getBloodline(source,bloodline);
+        if(instance == null) return;
 
         source.startProcess("merge_bloodline");
-        CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getValue(bloodline).handlePurityChange(
-                source,
-                getBloodlineData(source,bloodline),
-                getBloodlineData(source,bloodline).getPurity()+data.getPurity()
-        );
+        instance.handlePurityChange(source,instance.getData().getPurity()+purityGain);
 
         getBloodlineHolder(source).markBloodlineDirty(bloodline);
         source.markDataSourceDirty(CoreDataSources.BLOODLINE_DATA_SOURCE.getId());
         resolveProcess(source,"merge_bloodline");
     }
-    //TODO consider creating a replace bloodline event as well
-    public static boolean addBloodline(OriginSource source,Identifier bloodline, BloodlineData data ) {
-        return addBloodline(source, bloodline, data, true);
-    }
-    public static boolean addBloodline(OriginSource source,Identifier bloodline, BloodlineData data, boolean checkRequirements) {
-        if(bloodline == null) return false;
-        if(getBloodlineHolder(source).hasBloodline(bloodline)) {
-            source.startProcess("merge_bloodline");
-            mergeBloodline(source,bloodline,data);
-            resolveProcess(source,"merge_bloodline");
-            return true;
-        };
 
-        BloodlineEvent.Added.Pre pre = new BloodlineEvent.Added.Pre(bloodline,data,source);
+    /**
+     * adds a bloodline instance, if the bloodline is already held the instance's purity is merged into it instead
+     * @param instance the bloodline we are adding
+     * @param checkRequirements if the bloodline's requirements must pass
+     * @return true -> added or merged, false -> not added
+     */
+    //TODO consider creating a replace bloodline event as well
+    public static boolean addBloodline(OriginSource source,BloodlineInstance<?> instance, boolean checkRequirements) {
+        if(instance == null) return false;
+        Identifier bloodline = instance.getBloodlineId();
+        if(getBloodlineHolder(source).hasBloodline(bloodline)) {
+            mergeBloodline(source,bloodline,instance.getData().getPurity());
+            return true;
+        }
+
+        BloodlineEvent.Added.Pre pre = new BloodlineEvent.Added.Pre(source,instance);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
-        Bloodline bloodlineDefinition = pre.getBloodline(source.getRegistryAccess());
-        if (bloodlineDefinition == null || checkRequirements && !bloodlineDefinition.requirements().test(source)) return false;
+        if (checkRequirements && !instance.getBloodline().requirements().test(source)) return false;
 
-        boolean result = getBloodlineHolder(source).addBloodline(bloodline, data);
+        boolean result = getBloodlineHolder(source).addBloodline(instance);
         if(!result) return false;
 
         source.startProcess("add_bloodline");
+        BloodlineData data = instance.getData();
         int purity = data.getPurity();
         data.setPurity(1);
-        Collection<Identifier> toAdd = bloodlineDefinition.onAdded(source,pre.getBloodlineData());
+        Collection<Identifier> toAdd = instance.onAdded(source);
 
-        if(bloodlineDefinition != null){
-            for(LivingEntity entity : source.getAttachedEntities()){
-                bloodlineDefinition.applyToEntity(entity,pre.getBloodlineData());
-            }
+        for(LivingEntity entity : source.getAttachedEntities()){
+            instance.applyToEntity(entity);
         }
-        bloodlineDefinition.handlePurityChange(source,data,purity);
+        instance.handlePurityChange(source,purity);
 
         for(Identifier path : toAdd){
-            addPath(source,path,pre.getBloodlineIdentifier());
+            addPath(source,path,bloodline);
         }
 
-
-
-        BloodlineEvent.Added.Post post= new BloodlineEvent.Added.Post(bloodline,data,source);
-        NeoForge.EVENT_BUS.post(post);
+        NeoForge.EVENT_BUS.post(new BloodlineEvent.Added.Post(source,instance));
         source.markDataSourceDirty(CoreDataSources.BLOODLINE_DATA_SOURCE.getId());
 
         resolveProcess(source,"add_bloodline");
@@ -280,33 +293,28 @@ public class AscensionOriginSourceHelper {
     }
     public static boolean removeBloodline(OriginSource source,Identifier bloodline) {
         if(bloodline == null) return false;
-        if(!getBloodlineHolder(source).hasBloodline(bloodline)) return false;
+        BloodlineInstance<?> instance = getBloodline(source,bloodline);
+        if(instance == null) return false;
 
-        BloodlineData data = getBloodlineHolder(source).getBloodline(bloodline);
-        BloodlineEvent.Removed.Pre pre = new BloodlineEvent.Removed.Pre(bloodline,data,source);
+        BloodlineEvent.Removed.Pre pre = new BloodlineEvent.Removed.Pre(source,instance);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
-
-
 
         boolean result =  getBloodlineHolder(source).removeBloodline(bloodline);
         if(!result) return false;
 
         source.startProcess("remove_bloodline");
-        pre.getBloodline(source.getRegistryAccess()).handlePurityChange(source,data,1);
+        instance.handlePurityChange(source,1);
 
-        Collection<Identifier> toRemove = pre.getBloodline(source.getRegistryAccess()).onRemoved(source,pre.getBloodlineData());
-        if(pre.getBloodline(source.getRegistryAccess()) != null){
-            for(LivingEntity entity : source.getAttachedEntities()){
-                pre.getBloodline(source.getRegistryAccess()).removeFromEntity(entity,pre.getBloodlineData());
-            }
+        Collection<Identifier> toRemove = instance.onRemoved(source);
+        for(LivingEntity entity : source.getAttachedEntities()){
+            instance.removeFromEntity(entity);
         }
         for(Identifier path : toRemove){
-            removePath(source,path,pre.getBloodlineIdentifier());
+            removePath(source,path,bloodline);
         }
 
-        BloodlineEvent.Removed.Post post= new BloodlineEvent.Removed.Post(bloodline,data,source);
-        NeoForge.EVENT_BUS.post(post);
+        NeoForge.EVENT_BUS.post(new BloodlineEvent.Removed.Post(source,instance));
 
         source.markDataSourceDirty(CoreDataSources.BLOODLINE_DATA_SOURCE.getId());
 
@@ -328,65 +336,76 @@ public class AscensionOriginSourceHelper {
     public static boolean hasPath(OriginSource source,Identifier path){
         return getPathHolder(source).hasPath(path);
     }
-    public static PathInstance getPathInstance(OriginSource source, Identifier path){
+    public static @Nullable PathInstance<?> getPathInstance(OriginSource source, Identifier path){
         return getPathHolder(source).getPath(path);
     }
 
     public static Collection<Identifier> getPaths(OriginSource source){
         return getPathHolder(source).getPaths();
     }
+    public static Collection<PathInstance<?>> getPathInstances(OriginSource source){
+        return getPathHolder(source).getPathInstances();
+    }
     public static Collection<Identifier> getPathOwners(OriginSource source,Identifier path){
         return getPathHolder(source).getOwners(path);
     }
 
     /**
-     * Adds a path, creating a fresh PathInstance instance
+     * Adds a path, creating a fresh instance if it is not already held or cached
      * @param path the path to add
      * @param owner the source of this addition
      * @return true-> added, false -> not added
      */
     public static boolean addPath(OriginSource source,Identifier path,Identifier owner){
         if(path == null) return false;
-        if(getPathHolder(source).hasPath(path)){
-            getPathHolder(source).addPath(path,getPathHolder(source).getPath(path),owner);
+        PathHolder holder = getPathHolder(source);
+        if(holder.hasPath(path)){
+            holder.addPath(holder.getPath(path),owner);
             return true;
         }
-        Path pathInstance = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,path,source.getRegistryAccess());
-        if(pathInstance == null) return false;
-        return addPath(source,path,pathInstance.newInstance(source.getRegistryAccess()),owner);
+        PathInstance<?> instance = PathInstance.create(path,source.getRegistryAccess());
+        if(instance == null) return false;
+        return addPath(source,instance,owner);
     }
 
-    public static boolean addPath(OriginSource source,Identifier path, PathInstance existingData, Identifier owner) {
+    /**
+     * Adds a path instance, if the path is already held only the owner is added.
+     * if the path is cached the cached instance is used instead
+     * @param instance the path to add
+     * @param owner the source of this addition
+     * @return true-> added, false -> not added
+     */
+    public static boolean addPath(OriginSource source, PathInstance<?> instance, Identifier owner) {
+        if(instance == null) return false;
         boolean usedCachedResult = false;
-        if(path == null) return false;
-        if(getPathHolder(source).hasPath(path)){
-            getPathHolder(source).addPath(path,existingData,owner);
-
+        Identifier path = instance.getPathId();
+        PathHolder holder = getPathHolder(source);
+        if(holder.hasPath(path)){
+            holder.addPath(instance,owner);
             return true;
         }
-        if(existingData == null) return false;
 
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
-        if(getPathHolder(source).hasCachedPath(path)) {
-            existingData = getPathHolder(source).removeCachedPath(path);
+        if(holder.hasCachedPath(path)) {
+            instance = holder.removeCachedPath(path);
             usedCachedResult = true;
         }
 
 
-        if(existingData == null) return false;
+        if(instance == null) return false;
 
-        PathAddedEvent.Pre pre = new PathAddedEvent.Pre(path,existingData,source);
+        PathAddedEvent.Pre pre = new PathAddedEvent.Pre(path,instance,source);
 
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = getPathHolder(source).addPath(path, existingData,owner);
+        boolean result = holder.addPath(instance,owner);
         if(!result) return false;
 
         source.startProcess("add_path");
 
-        if(!usedCachedResult) existingData.simulateProgression(source);
-        PathAddedEvent.Post post = new PathAddedEvent.Post(path,existingData,source);
+        if(!usedCachedResult) instance.simulateProgression(source);
+        PathAddedEvent.Post post = new PathAddedEvent.Post(path,instance,source);
         NeoForge.EVENT_BUS.post(post);
 
         source.markDataSourceDirty(CoreDataSources.PATH_DATA_SOURCE.getId());
@@ -400,7 +419,7 @@ public class AscensionOriginSourceHelper {
         if(path == null || !getPathHolder(source).hasPath(path)) return false;
 
         if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
-        PathInstance data = getPathHolder(source).getPath(path);
+        PathInstance<?> data = getPathHolder(source).getPath(path);
         PathRemovedEvent.Pre pre = new PathRemovedEvent.Pre(path,data,source);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
@@ -420,7 +439,7 @@ public class AscensionOriginSourceHelper {
         return true;
     }
 
-    //should be used if you changed a paths PathInstance
+    //should be used if you changed a paths PathData
     public static void markPathDirty(OriginSource source,Identifier path){
         long id = random.nextLong();
         source.startProcess("modified_path"+id);
@@ -535,65 +554,67 @@ public class AscensionOriginSourceHelper {
         return getTechniqueHolder(source).getTechniques();
     }
 
+    public static Collection<TechniqueInstance<?>> getTechniqueInstances(OriginSource source) {
+        return getTechniqueHolder(source).getTechniqueInstances();
+    }
+
     public static boolean hasTechnique(OriginSource source, Identifier technique) {
         return getTechniqueHolder(source).hasTechnique(technique);
     }
 
-    public static Technique getTechnique(OriginSource source, Identifier technique) {
-        return getTechniqueHolder(source).getTechnique(technique, source.getRegistryAccess());
+    public static @Nullable TechniqueInstance<?> getTechnique(OriginSource source, Identifier technique) {
+        return getTechniqueHolder(source).getTechnique(technique);
     }
 
-    public static TechniqueData getTechniqueData(OriginSource source, Identifier technique) {
-        return getTechniqueHolder(source).getTechniqueData(technique);
+    public static @Nullable TechniqueData getTechniqueData(OriginSource source, Identifier technique) {
+        TechniqueInstance<?> instance = getTechnique(source, technique);
+        return instance == null ? null : instance.getData();
     }
 
+    /**
+     * adds a technique with fresh data, checking its requirements
+     * @param technique the technique we are adding
+     * @return true -> added, false -> not added
+     */
     public static boolean addTechnique(OriginSource source, Identifier technique) {
         if (technique == null) {
             return false;
         }
-        Technique techniqueInstance = CoreRegistries.safeAccess(
-                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
-        );
-        return techniqueInstance != null && addTechnique(source, technique, techniqueInstance.newData(), true);
+        TechniqueInstance<?> instance = TechniqueInstance.create(technique, source.getRegistryAccess());
+        return instance != null && addTechnique(source, instance, true);
     }
 
-    public static boolean addTechnique(OriginSource source, Identifier technique, TechniqueData data) {
-        return addTechnique(source, technique, data, true);
-    }
-    public static boolean addTechnique(OriginSource source, Identifier technique, TechniqueData data, boolean checkRequirements) {
-        if (technique == null || data == null || hasTechnique(source, technique)) {
+    /**
+     * adds a technique instance
+     * @param instance the technique we are adding
+     * @param checkRequirements if the technique's requirements must pass
+     * @return true -> added, false -> not added
+     */
+    public static boolean addTechnique(OriginSource source, TechniqueInstance<?> instance, boolean checkRequirements) {
+        if (instance == null || hasTechnique(source, instance.getTechniqueId())) {
             return false;
         }
-        Technique techniqueInstance = CoreRegistries.safeAccess(
-                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
-        );
-        if (techniqueInstance == null || !broadcastTechniqueAddedAttempt(source, technique, data)) {
+        if (!broadcastTechniqueAddedAttempt(source, instance)) {
             return false;
         }
-        if (checkRequirements && !techniqueInstance.requirements().test(source)) {
+        if (checkRequirements && !instance.getTechnique().requirements().test(source)) {
             return false;
         }
-        if (!getTechniqueHolder(source).addTechnique(technique, data)) {
+        if (!getTechniqueHolder(source).addTechnique(instance)) {
             return false;
         }
 
         source.startProcess("add_technique");
-        techniqueInstance.onAdded(source, data);
-        broadcastTechniqueAdded(source, technique, data);
+        instance.onAdded(source);
+        broadcastTechniqueAdded(source, instance);
         source.markDataSourceDirty(CoreDataSources.TECHNIQUE_DATA_SOURCE.getId());
         resolveProcess(source, "add_technique");
         return true;
     }
 
     public static boolean removeTechnique(OriginSource source, Identifier technique) {
-        if (technique == null || !hasTechnique(source, technique)) {
-            return false;
-        }
-        Technique techniqueInstance = CoreRegistries.safeAccess(
-                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
-        );
-        TechniqueData data = getTechniqueData(source, technique);
-        if (techniqueInstance == null || !broadcastTechniqueRemovedAttempt(source, technique, data)) {
+        TechniqueInstance<?> instance = technique == null ? null : getTechnique(source, technique);
+        if (instance == null || !broadcastTechniqueRemovedAttempt(source, instance)) {
             return false;
         }
         if (!getTechniqueHolder(source).removeTechnique(technique)) {
@@ -601,13 +622,14 @@ public class AscensionOriginSourceHelper {
         }
 
         source.startProcess("remove_technique");
-        techniqueInstance.onRemoved(source, data);
-        broadcastTechniqueRemoved(source, technique, data);
+        instance.onRemoved(source);
+        broadcastTechniqueRemoved(source, instance);
         source.markDataSourceDirty(CoreDataSources.TECHNIQUE_DATA_SOURCE.getId());
         resolveProcess(source, "remove_technique");
         return true;
     }
 
+    //should be used if you changed a techniques TechniqueData
     public static void markTechniqueDirty(OriginSource source, Identifier technique) {
         long id = random.nextLong();
         source.startProcess("modified_technique" + id);
@@ -617,41 +639,31 @@ public class AscensionOriginSourceHelper {
     }
 
 
-    public static boolean broadcastTechniqueAddedAttempt(OriginSource source, Identifier technique, TechniqueData data) {
-        TechniqueEvent.Added.Pre pre = new TechniqueEvent.Added.Pre(technique, data, source);
+    public static boolean broadcastTechniqueAddedAttempt(OriginSource source, TechniqueInstance<?> instance) {
+        TechniqueEvent.Added.Pre pre = new TechniqueEvent.Added.Pre(source, instance);
         NeoForge.EVENT_BUS.post(pre);
         return !pre.isCanceled();
     }
 
 
-    public static void broadcastTechniqueAdded(OriginSource source, Identifier technique, TechniqueData data) {
-        Technique techniqueInstance = CoreRegistries.safeAccess(
-                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
-        );
-        if (techniqueInstance != null) {
-            for (LivingEntity entity : source.getAttachedEntities()) {
-                techniqueInstance.applyToEntity(entity, data);
-            }
+    public static void broadcastTechniqueAdded(OriginSource source, TechniqueInstance<?> instance) {
+        for (LivingEntity entity : source.getAttachedEntities()) {
+            instance.applyToEntity(entity);
         }
-        NeoForge.EVENT_BUS.post(new TechniqueEvent.Added.Post(technique, data, source));
+        NeoForge.EVENT_BUS.post(new TechniqueEvent.Added.Post(source, instance));
     }
 
-    public static boolean broadcastTechniqueRemovedAttempt(OriginSource source, Identifier technique, TechniqueData data) {
-        TechniqueEvent.Removed.Pre pre = new TechniqueEvent.Removed.Pre(technique, data, source);
+    public static boolean broadcastTechniqueRemovedAttempt(OriginSource source, TechniqueInstance<?> instance) {
+        TechniqueEvent.Removed.Pre pre = new TechniqueEvent.Removed.Pre(source, instance);
         NeoForge.EVENT_BUS.post(pre);
         return !pre.isCanceled();
     }
 
-    public static void broadcastTechniqueRemoved(OriginSource source, Identifier technique, TechniqueData data) {
-        Technique techniqueInstance = CoreRegistries.safeAccess(
-                CoreRegistries.TECHNIQUE_REGISTRY, technique, source.getRegistryAccess()
-        );
-        if (techniqueInstance != null) {
-            for (LivingEntity entity : source.getAttachedEntities()) {
-                techniqueInstance.removeFromEntity(entity, data);
-            }
+    public static void broadcastTechniqueRemoved(OriginSource source, TechniqueInstance<?> instance) {
+        for (LivingEntity entity : source.getAttachedEntities()) {
+            instance.removeFromEntity(entity);
         }
-        NeoForge.EVENT_BUS.post(new TechniqueEvent.Removed.Post(technique, data, source));
+        NeoForge.EVENT_BUS.post(new TechniqueEvent.Removed.Post(source, instance));
     }
     //──Path Bonus Access────────────────────────────────────────────────────────
 

@@ -141,20 +141,20 @@ public class StarterOptionButton extends BetterButton {
         }
 
         if (stage == StarterSelectionStage.PHYSIQUE) {
-            Physique physique = CoreRegistries.safeAccess(
+            Physique<?> physique = CoreRegistries.safeAccess(
                     CoreRegistries.PHYSIQUE_REGISTRY,
                     id,
                     minecraft.player.registryAccess()
             );
-            return physique == null ? Component.literal(id.toString()) : physique.name();
+            return physique == null ? Component.literal(id.toString()) : physique.getName(null);
         }
 
-        Bloodline bloodline = CoreRegistries.safeAccess(
+        Bloodline<?> bloodline = CoreRegistries.safeAccess(
                 CoreRegistries.BLOODLINE_REGISTRY,
                 id,
                 minecraft.player.registryAccess()
         );
-        return bloodline == null ? Component.literal(id.toString()) : bloodline.getName();
+        return bloodline == null ? Component.literal(id.toString()) : bloodline.getName(null);
     }
 
     private static Component resolveDescription(StarterSelectionStage stage, Identifier id) {
@@ -164,24 +164,24 @@ public class StarterOptionButton extends BetterButton {
         }
 
         if (stage == StarterSelectionStage.PHYSIQUE) {
-            Physique physique = CoreRegistries.safeAccess(
+            Physique<?> physique = CoreRegistries.safeAccess(
                     CoreRegistries.PHYSIQUE_REGISTRY,
                     id,
                     minecraft.player.registryAccess()
             );
-            return physique == null || physique.description() == null
+            return physique == null || physique.getDescription(null) == null
                     ? Component.empty()
-                    : physique.description();
+                    : physique.getDescription(null);
         }
 
-        Bloodline bloodline = CoreRegistries.safeAccess(
+        Bloodline<?> bloodline = CoreRegistries.safeAccess(
                 CoreRegistries.BLOODLINE_REGISTRY,
                 id,
                 minecraft.player.registryAccess()
         );
-        return bloodline == null || bloodline.getDescription() == null
+        return bloodline == null || bloodline.getDescription(null) == null
                 ? Component.empty()
-                : bloodline.getDescription();
+                : bloodline.getDescription(null);
     }
 
     @Override
@@ -261,7 +261,7 @@ public class StarterOptionButton extends BetterButton {
             return Component.empty();
         }
 
-        Physique physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, id, minecraft.player.registryAccess());
+        Physique<?> physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, id, minecraft.player.registryAccess());
 
         if (physique == null) {
             return Component.empty();
@@ -276,7 +276,7 @@ public class StarterOptionButton extends BetterButton {
         int index = 0;
 
         for (Identifier pathId : unlockedPaths) {
-            Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, pathId, minecraft.player.registryAccess());
+            Path<?> path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, pathId, minecraft.player.registryAccess());
             Component pathName = path == null ? fallbackPathName(pathId) : resolvePathName(path);
 
             if (index > 0) {
@@ -293,8 +293,8 @@ public class StarterOptionButton extends BetterButton {
         );
     }
 
-    private static Component resolvePathName(Path path) {
-        return path.name();
+    private static Component resolvePathName(Path<?> path) {
+        return path.getName(null);
     }
 
     private static Component fallbackPathName(Identifier pathId) {

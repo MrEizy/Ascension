@@ -6,55 +6,12 @@
   "description": {
     "translate": "ascension.technique.eagle_claw_palm_technique.desc"
   },
-  "path": "ascension:foundation/body",
-  "milestone_realms": [
-    0,
-    1,
-    2
-  ],
-  "technique_families": [
-    "fist"
-  ],
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/eagle_claw_palm_technique/eagle_claw_rending_palm": {
-      "caps": {
-        "1": "minor_mastery",
-        "2": "major_mastery"
-      }
-    },
-    "ascension:passive/eagle_claw_palm_technique/hooked_talon_grip": {
-      "unlock": 1
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_eagle_claw_palm_technique_strength_a1",
-                  "value": 0.22
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_eagle_claw_palm_technique_agility_a1",
-                  "value": 0.08
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/eagle_claw_palm_technique/eagle_claw_rending_palm",
+        "ascension:passive/eagle_claw_palm_technique/hooked_talon_grip"
       ]
     }
   ],

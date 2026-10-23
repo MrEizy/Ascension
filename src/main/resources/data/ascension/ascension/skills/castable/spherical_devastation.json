@@ -31,7 +31,8 @@
       "projectile_speed": 0.65,
       "start_radius": 0.4,
       "growth_distance": 10.0,
-      "max_distance": 32.0
+      "max_distance": 32.0,
+      "color": "#FF6A1B"
     }
   ]
 }

@@ -7,8 +7,6 @@ import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionCondition;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
-import net.zic.ascension.api.ascension.core.technique.Technique;
-import net.zic.ascension.api.ascension.core.technique.TechniqueData;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 import java.util.UUID;
@@ -20,7 +18,7 @@ import java.util.UUID;
 public interface RealmChangeActionCondition extends ProgressActionCondition {
     @Override
     default boolean test(OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt){
-        if(!(contextData instanceof PathInstance pathInstance)) return false;
+        if(!(contextData instanceof PathInstance<?> pathInstance)) return false;
 
 
         if((pathInstance.getCurrentMajorRealm() == -1 && direction == ProgressDirection.DOWN) || (pathInstance.getCurrentMajorRealm() == 0 && pathInstance.getCurrentMinorRealm() == 0 && direction == ProgressDirection.UP)){
@@ -37,12 +35,12 @@ public interface RealmChangeActionCondition extends ProgressActionCondition {
      *
      * @param source the source the path data is attached to
      * @param path the path
-     * @param PathInstance the path data
+     * @param pathInstance the path instance
      * @param majorRealm the major realm we are entering/leaving
      * @param minorRealm the minor realm we are entering/leaving
      * @param direction the direction
      * @return true-> run action false-> do not run action
      */
-    boolean test(OriginSource source, Identifier path, PathInstance PathInstance, int majorRealm, int minorRealm, ProgressDirection direction);
+    boolean test(OriginSource source, Identifier path, PathInstance<?> pathInstance, int majorRealm, int minorRealm, ProgressDirection direction);
 
 }

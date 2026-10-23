@@ -1,0 +1,28 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.ninefold_thunder_meridian_scripture.name"
+  },
+  "description": {
+    "translate": "ascension.technique.ninefold_thunder_meridian_scripture.desc"
+  },
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/ninefold_thunder_circulation",
+        "ascension:passive/thunder_meridians",
+        "ascension:castable/new_techniques/thunder_arc",
+        "ascension:castable/new_techniques/thunder_skip",
+        "ascension:castable/new_techniques/thunder_sphere",
+        "ascension:castable/new_techniques/essence_perception",
+        "ascension:castable/inner_world"
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:profound"
+  }
+}

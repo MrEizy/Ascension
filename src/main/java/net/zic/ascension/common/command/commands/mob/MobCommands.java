@@ -136,11 +136,11 @@ public class MobCommands {
         } else {
             List<Identifier> ids = paths.getPaths().stream().sorted((a, b) -> a.toString().compareTo(b.toString())).toList();
             for (Identifier id : ids) {
-                PathInstance data = paths.getPath(id);
+                PathInstance<?> data = paths.getPath(id);
                 if (data == null) continue;
                 int major = data.getCurrentMajorRealm();
                 int minor = data.getCurrentMinorRealm();
-                Path path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, id, sender.registryAccess());
+                Path<?> path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, id, sender.registryAccess());
                 message.append("\n" + id + " : ");
                 if (path != null) message.append(path.getRealmName(major, minor));
                 else message.append("Unknown path");

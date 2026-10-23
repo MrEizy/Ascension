@@ -7,10 +7,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.path.Path;
-import net.zic.ascension.api.ascension.core.physique.Physique;
-import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.api.ascension.core.physique.PhysiqueInstance;
 import net.zic.ascension.api.ascension.datapack.path.realm.PathRealmChangeEvent;
 import net.zic.ascension.api.ascension.event.bloodline.BloodlineEvent;
 import net.zic.ascension.api.ascension.event.physique.PhysiqueChangedEvent;
@@ -31,7 +29,7 @@ public final class AscensionToastHandler {
 
     @SubscribeEvent
     public static void onPhysiqueChanged(PhysiqueChangedEvent.Post event) {
-        Physique physique = event.getNewPhysique(event.getSource().getRegistryAccess());
+        PhysiqueInstance<?> physique = event.getNewPhysiqueInstance();
         if (physique == null) {
             return;
         }
@@ -39,37 +37,27 @@ public final class AscensionToastHandler {
         show(
                 event.getSource(),
                 Component.translatable("toast.ascension.physique_changed"),
-                physique.name(),
+                physique.getName(),
                 ModItems.PHYSIQUE_ESSENCE.get().getDefaultInstance()
         );
     }
 
     @SubscribeEvent
     public static void onBloodlineGained(BloodlineEvent.Added.Post event) {
-        Bloodline bloodline = event.getBloodline(event.getSource().getRegistryAccess());
-        if (bloodline == null) {
-            return;
-        }
-
         show(
                 event.getSource(),
                 Component.translatable("toast.ascension.bloodline_gained"),
-                bloodline.getName(),
+                event.getBloodlineInstance().getName(),
                 ModItems.BLOODLINE_ESSENCE.get().getDefaultInstance()
         );
     }
 
     @SubscribeEvent
     public static void onTechniqueLearned(TechniqueEvent.Added.Post event) {
-        Technique technique = event.getTechnique(event.getSource().getRegistryAccess());
-        if (technique == null) {
-            return;
-        }
-
         show(
                 event.getSource(),
                 Component.translatable("toast.ascension.technique_learned"),
-                technique.getName(event.getTechniqueData()),
+                event.getTechniqueInstance().getName(),
                 ModItems.TECHNIQUE_MANUAL.get().getDefaultInstance()
         );
     }
@@ -80,7 +68,7 @@ public final class AscensionToastHandler {
             return;
         }
 
-        Path path = event.getPath();
+        Path<?> path = event.getPath();
         if (path == null) {
             return;
         }
@@ -90,7 +78,7 @@ public final class AscensionToastHandler {
                 Component.translatable("toast.ascension.realm_advanced"),
                 Component.translatable(
                         "toast.ascension.realm_change_message",
-                        path.name(),
+                        path.getName(null),
                         path.getRealmName(event.getRealm().majorRealm(), event.getRealm().minorRealm())
                 ),
                 ItemStack.EMPTY
@@ -99,7 +87,7 @@ public final class AscensionToastHandler {
 
     @SubscribeEvent
     public static void onRealmRegressed(PathRealmChangeEvent.PathRealmDownEvent event) {
-        Path path = event.getPath();
+        Path<?> path = event.getPath();
         if (path == null) {
             return;
         }
@@ -109,7 +97,7 @@ public final class AscensionToastHandler {
                 Component.translatable("toast.ascension.realm_regressed"),
                 Component.translatable(
                         "toast.ascension.realm_change_message",
-                        path.name(),
+                        path.getName(null),
                         path.getRealmName(event.getRealm().majorRealm(), event.getRealm().minorRealm())
                 ),
                 ItemStack.EMPTY

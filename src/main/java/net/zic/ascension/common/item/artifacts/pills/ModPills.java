@@ -84,12 +84,12 @@ public final class ModPills {
                         return;
                     }
 
-                    PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
+                    PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
                     if (pathInstance == null || !pathInstance.canProgress()) {
                         return;
                     }
 
-                    pathInstance.progressPath(path, pathInstance.getMaxProgress() * cultivationFraction(data), source, player);
+                    pathInstance.progressPath(pathInstance.getMaxProgress() * cultivationFraction(data), source, player);
                     AscensionOriginSourceHelper.markPathDirty(source, path);
                 })
                 .canConsume((level, player, stack, data) -> {
@@ -98,7 +98,7 @@ public final class ModPills {
                         return false;
                     }
 
-                    PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
+                    PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(source, path);
                     return pathInstance != null && pathInstance.canProgress();
                 })
                 .effectDescription(data -> Component.translatable(

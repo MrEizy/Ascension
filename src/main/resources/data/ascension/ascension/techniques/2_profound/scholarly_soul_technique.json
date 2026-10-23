@@ -1,60 +1,21 @@
 {
   "type": "ascension:simple_technique",
-  "name": {"translate": "ascension.technique.scholarly_soul_technique.name"},
-  "description": {"translate": "ascension.technique.scholarly_soul_technique.desc"},
-  "path": "ascension:foundation/soul",
-  "milestone_realms": [
-    0,
-    2,
-    5
-  ],
-  "technique_families": [
-    "soul"
-  ],
-  "max_realm": 5,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/scholarly_soul": {},
-    "ascension:passive/scholarly_soul_technique/refined_understanding": {
-      "unlock": 2
-    },
-    "ascension:castable/scholarly_soul_technique/sages_observation": {
-      "unlock": 3
-    },
-    "ascension:castable/scholarly_soul_technique/mandate_of_the_sage": {
-      "unlock": 5,
-      "caps": {
-        "5": "minor_mastery"
-      }
-    }
+  "name": {
+    "translate": "ascension.technique.scholarly_soul_technique.name"
   },
-  "realm_change_handler": [
+  "description": {
+    "translate": "ascension.technique.scholarly_soul_technique.desc"
+  },
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_scholarly_soul_technique_spirit_a1",
-                  "value": 0.65
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_scholarly_soul_technique_vitality_a1",
-                  "value": 0.15
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/scholarly_soul",
+        "ascension:passive/scholarly_soul_technique/refined_understanding",
+        "ascension:castable/scholarly_soul_technique/sages_observation",
+        "ascension:castable/scholarly_soul_technique/mandate_of_the_sage",
+        "ascension:castable/inner_world",
+        "ascension:castable/divine_sense/divine_sense_sustained_spirit_art"
       ]
     }
   ],

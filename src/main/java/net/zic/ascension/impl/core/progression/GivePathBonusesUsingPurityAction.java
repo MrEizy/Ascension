@@ -32,7 +32,7 @@ public record GivePathBonusesUsingPurityAction(UUID uuid, Map<PathBonus, Modifie
     }
 
     @Override
-    public void run(UUID holderId, OriginSource source, Bloodline bloodline, BloodlineData data, int purity, ProgressDirection direction, String salt) {
+    public void run(UUID holderId, OriginSource source, Bloodline<?> bloodline, BloodlineData data, int purity, ProgressDirection direction, String salt) {
         ProgressionModifiers.applyWithPurity(conflictAction, data, purity, direction,
                 (transform, effectiveDirection) -> ProgressionModifiers.applyPathBonuses(source, bonuses, conflictAction, transform, effectiveDirection, salt));
     }

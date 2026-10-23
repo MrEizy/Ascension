@@ -1,0 +1,26 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.emberblood_dragon_sutra.name"
+  },
+  "description": {
+    "translate": "ascension.technique.emberblood_dragon_sutra.desc"
+  },
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:body_cultivation/emberblood_tempering",
+        "ascension:passive/emberblood_vigor",
+        "ascension:castable/new_techniques/emberfang_strike",
+        "ascension:castable/new_techniques/cinder_sphere",
+        "ascension:castable/inner_world"
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:profound"
+  }
+}

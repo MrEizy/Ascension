@@ -493,7 +493,7 @@ public final class SkillActions {
 
         @Override
         public void apply(SkillActionContext context) {
-            PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(context.originSource(), path);
+            PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(context.originSource(), path);
             if (pathInstance == null) {
                 return;
             }
@@ -1348,7 +1348,8 @@ public final class SkillActions {
             double projectileSpeed,
             double startRadius,
             double growthDistance,
-            double maxDistance
+            double maxDistance,
+            int color
     ) implements SkillAction {
         public static final MapCodec<SphericalDestruction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.intRange(1, 64).optionalFieldOf("radius", 8).forGetter(SphericalDestruction::radius),
@@ -1358,7 +1359,8 @@ public final class SkillActions {
                 Codec.DOUBLE.optionalFieldOf("projectile_speed", 0.8D).forGetter(SphericalDestruction::projectileSpeed),
                 Codec.DOUBLE.optionalFieldOf("start_radius", 0.3D).forGetter(SphericalDestruction::startRadius),
                 Codec.DOUBLE.optionalFieldOf("growth_distance", 12.0D).forGetter(SphericalDestruction::growthDistance),
-                Codec.DOUBLE.optionalFieldOf("max_distance", 32.0D).forGetter(SphericalDestruction::maxDistance)
+                Codec.DOUBLE.optionalFieldOf("max_distance", 32.0D).forGetter(SphericalDestruction::maxDistance),
+                HexColorCodec.CODEC.optionalFieldOf("color", 0xFF6A1B).forGetter(SphericalDestruction::color)
         ).apply(instance, SphericalDestruction::new));
 
         @Override

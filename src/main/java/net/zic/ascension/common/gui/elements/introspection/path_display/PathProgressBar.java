@@ -45,7 +45,7 @@ public class PathProgressBar extends RenderableElement {
 
         return ClientAscensionData.getPlayer().flatMap(player ->
                 ClientAscensionData.getSource().map(source -> {
-                    PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,selectedPath);
+                    PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(source,selectedPath);
                     if (pathInstance == null) {
                         return 0.0D;
                     }

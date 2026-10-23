@@ -1,0 +1,25 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.cinderveil_flame_battle_art.name"
+  },
+  "description": {
+    "translate": "ascension.technique.cinderveil_flame_battle_art.desc"
+  },
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/burning_touch",
+        "ascension:castable/new_techniques/cinderburst",
+        "ascension:castable/new_techniques/cinder_sphere",
+        "ascension:castable/inner_world"
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_battle_style",
+    "rank": "ascension:ordinary"
+  }
+}

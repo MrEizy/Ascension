@@ -60,45 +60,33 @@ It is that simple.
 For details on Codecs look [here](https://docs.neoforged.net/docs/datastorage/codecs/)
 
 ### Physiques
-This will give a basic overview of what a physique is expected to provide and how they are handled in Entity Data
+A physique is a registry entry (`data/<namespace>/ascension/physiques/`) that holds the configuration and logic, the per-origin state lives in its `PhysiqueData`. It follows the same pattern as skills, an origin holds at most one physique.
+
+A physique is split into 3 parts
+- `Physique<D>` the registry entry, `D` is the `PhysiqueData` it creates and runs on. It provides `newData()`, a `SerializerHandler<D>` and a `SyncHandler<D>`. Physiques without state use `EmptyPhysiqueData` and its shared handlers
+- `PhysiqueData` the per-origin state, it holds no logic or serialization
+- `PhysiqueInstance<D>` held by the `PhysiqueHolder`, wraps a Physique, its id and its data. Every hook receives the instance
 
 #### Methods
-| Fields                                    |  
-|-------------------------------------------|
-| [`getType()`](#getType)                   | 
-| [`name()`](#name)                         | 
-| [`description()`](#description)           | 
-| [`onAdded()`](#onAdded)                   | 
-| [`onRemoved()`](#onRemoved)               | 
-| [`applyToEntity()`](#applyToEntity)       | 
-| [`removeFromEntity()`](#removeFromEntity) | 
-| [`newData()`](#newData)                   | 
-| [`loadData()`](#loadData)                 |
-| [`itemTooltip()`](#itemTooltip)           | 
-##### `getType()`
-One of the most important methods, this allows the codebase link your physique with the type that created it.
-This is required by Neoforge and Minecraft for Datapack Registries.
+| Method | Purpose |
+|---|---|
+| `getType()` | links the physique with the type that created it, required for datapack registries |
+| `getName(data)` / `getDescription(data)` | display Components, `data` is null when shown without an owner (physique essences, tooltips) |
+| `onAdded(source, instance)` | ran when the physique is set on an origin source. Returns the paths to try and unlock, they are owned by the physique's id |
+| `onRemoved(source, instance)` | ran when the physique is removed, before the new physique is added. Returns the paths to try and remove (a path with other owners is kept) |
+| `applyToEntity(entity, instance)` | ran when an entity attaches to the source or the physique was added, for entity only bonuses |
+| `removeFromEntity(entity, instance)` | ran when an entity detaches or the physique was removed, cleans up `applyToEntity` |
+| `newData` / `serializerHandler` / `syncHandler` | create, save and sync the data. `syncHandler().decode` writes into `newData()` |
+| `itemTooltip()` | the tooltip the physique essence displays |
 
-##### `name()`
-The name of the physique as a Component
-##### ```description()```
-The description of the physique as a Component
-##### ```onAdded()```
-ran when a physique is added to an OriginSource,
-Expects a Collection of Identifiers, with each identifier referring to a path to be unlocked
-##### ```onRemoved()```
-ran when a physique is removed, and before the new physique is added
-Expects a Collection of Identifiers, with each identifier referring to a path we want to TRY remove (try is key, since if a path has multiple sources it will not be removed)
-##### ```applyToEntity()```
-ran when an entity that listens to an OriginSource is loaded and attached to the source or a new physique was added, This allows you to apply entity only bonuses if you so wish
-##### ```removeFromEntity()```
-ran when an entity is either removed as a listener from a source or the physique was removed. Allows for the cleanup of anything added in `applyToEntity()`
-##### ```newData()```
-returns a fresh instance of the PhysiqueData
-##### ```loadData()```
-two versions, one for decoding physique data from a byteBuffer, and the other from an ValueInput
-##### ```itemTooltip()```
-handles the tooltip the physique transfer item should display
+#### Changing the physique
+```java
+AscensionOriginSourceHelper.setPhysique(source, physiqueId);           //fresh instance, checks requirements
+AscensionOriginSourceHelper.setPhysique(source, instance, false);      //an instance you created
+PhysiqueInstance<?> current = AscensionOriginSourceHelper.getPhysique(source);
+```
+`PhysiqueChangedEvent.Pre` carries the old and new `PhysiqueInstance` and can swap the new one with `setNewPhysique(id, access)` or `setNewPhysiqueInstance(instance)`. New paths are added before the old ones are removed, so a path both physiques unlock keeps an owner. After changing a physique's data call `markPhysiqueDirty`.
+
 ### Tribulations
 Tribulations differ from other datapack types in that the registry entry holds the logic as well as the configuration.
 A tribulation is always defined in the tribulation registry (`data/<namespace>/ascension/tribulations/`) and is referenced by its registry id, it cannot be defined inline.
@@ -172,3 +160,58 @@ A `CastableSkill<D, C, E>` can be slotted in the hot bar and cast. `C` is the `C
 - `SkillCastEvent` (`Start.Pre` cancellable, `Start.Post`, `PhaseChanged`, `End`) is posted on the server only
 - any `LivingEntity` can cast through its `SkillCaster` (`SkillCaster.of(entity).startCast(...)`). Players additionally have a `SkillCastHandler` holding the hot bar, synced only to that player
 - the cast is synced to everyone tracking the caster when it starts, ends, changes phase or its cast data changes. Clients advance the phase ticks between syncs, only the casting player's own client runs skill logic (prediction), other clients only display the cast
+
+### Techniques
+A technique is a registry entry (`data/<namespace>/ascension/techniques/`) that holds the configuration and logic, the per-origin state lives in its `TechniqueData`. It follows the same pattern as skills.
+
+A technique is split into 3 parts
+- `Technique<D>` the registry entry, `D` is the `TechniqueData` it creates and runs on. It provides `newData()`, a `SerializerHandler<D>` (saving through ValueInput/ValueOutput) and a `SyncHandler<D>` (syncing through a ByteBuf)
+- `TechniqueData` the per-origin state, it holds no logic or serialization
+- `TechniqueInstance<D>` held by the `TechniqueHolder`, wraps a Technique, its id and its data. Every hook (`onAdded`, `onRemoved`, `applyToEntity`, `removeFromEntity`) receives the instance, so a technique always gets its own typed data and its id
+
+`getName` and `getDescription` receive the typed data so they can change with custom progression. The data is `null` when the technique is shown without an owner (technique manuals, tooltips), so always handle that case. Use `instance.getName()` when you have an instance.
+
+#### Data handlers
+- `serializerHandler().read` is expected to return new data
+- `syncHandler().decode` writes into existing data, so always call `newData()` first and decode into that. Do not use `SyncHandler.StreamCodecSyncHandler`, its decode does nothing
+- each technique's data is length prefixed when synced, so a technique the client does not know is skipped instead of breaking the rest of the sync
+
+#### Accessing techniques
+```java
+TechniqueInstance<?> instance = AscensionOriginSourceHelper.getTechnique(source, techniqueId);
+//narrow to a concrete technique class to get typed data
+TechniqueInstance<SimpleTechnique.Data> simple = instance.as(SimpleTechnique.class);
+```
+Techniques are added with `AscensionOriginSourceHelper.addTechnique(source, techniqueId)`, which checks the technique's requirements, or `addTechnique(source, instance, checkRequirements)` to add an instance you created yourself.
+After changing a technique's data call `AscensionOriginSourceHelper.markTechniqueDirty(source, techniqueId)`, partial syncs only send dirty and removed techniques.
+
+`TechniqueEvent` (`Added.Pre`/`Removed.Pre` cancellable, `Added.Post`, `Removed.Post`) carries the `TechniqueInstance`.
+
+### Bloodlines
+Bloodlines follow the same pattern as skills and techniques.
+- `Bloodline<D>` the registry entry (`data/<namespace>/ascension/bloodlines/`), provides `newData()`, a `SerializerHandler<D>` and a `SyncHandler<D>`
+- `BloodlineData` the per-origin state. Every bloodline tracks a purity (`getPurity`/`setPurity`), purity progression actions and conditions rely on it
+- `BloodlineInstance<D>` held by the `BloodlineHolder`, every hook (`onAdded`, `onRemoved`, `purityUp`, `purityDown`, `applyToEntity`, `removeFromEntity`) receives it. `onAdded`/`onRemoved` return the paths the bloodline wants to add or remove, they are owned by the bloodline's id
+
+Change purity with `instance.handlePurityChange(source, newPurity)`, it clamps the value and steps through every purity in between so each step runs its actions.
+
+```java
+BloodlineInstance<?> instance = AscensionOriginSourceHelper.getBloodline(source, bloodlineId);
+BloodlineInstance<SimpleBloodlineData> simple = instance.as(SimpleBloodline.class);
+```
+`AscensionOriginSourceHelper.addBloodline(source, instance, checkRequirements)` adds the instance, if the bloodline is already held its purity is merged into the held one instead. After changing a bloodline's data call `markBloodlineDirty`.
+
+### Paths
+Paths follow the same pattern, but the instance also exposes the realm and progression queries everything else uses.
+- `Path<D>` the registry entry (`data/<namespace>/ascension/paths/`). It holds the realm definitions **and all the progression logic**: `progress`, `changeRealm`, `simulateProgression`, `removeFromSource` and the queries that depend on its definitions (`getMaxProgress`, `canProgress`, `canBreakthrough`, `getNextRealm` ...)
+- `PathData` the per-origin state, it exposes the read only realm and progress getters (`getCurrentMajorRealm`, `getCurrentMinorRealm`, `getCurrentRealm`, `getProgress`)
+- `PathInstance<D>` held by the `PathHolder`. It forwards every query and action to its path, so callers use `instance.progressPath(...)`, `instance.getNextRealm()`, `instance.handleRealmChange(...)` without knowing the path type
+
+The instance is passed as the context data of the path's progress actions, `RealmChangeAction`/`RealmChangeActionCondition` read the realm from it.
+
+`SimplePath` keeps its state in `SimplePathData`, whose fields and mutators are package private: only `SimplePath` can change them. Code outside the package narrows the instance and calls the path:
+```java
+PathInstance<SimplePathData> simple = instance.as(SimplePath.class);
+((SimplePath) simple.getPath()).limitBreakRealm(source, simple, majorRealm, ownerId);
+```
+Paths are ownership counted (`addPath(source, pathId, owner)`), saved paths are cached until an owner adds them again and are simulated once the source finishes loading. After changing a path's data call `markPathDirty`.

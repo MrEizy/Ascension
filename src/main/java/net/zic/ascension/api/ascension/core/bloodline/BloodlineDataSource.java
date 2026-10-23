@@ -24,24 +24,24 @@ public class BloodlineDataSource implements DataSource<BloodlineHolder> {
 
     @Override
     public void onAdded(OriginSource source, BloodlineHolder holder) {
-        Map<Identifier,BloodlineData> bloodlines = holder.getRawData();
+        Map<Identifier,BloodlineInstance<?>> bloodlines = holder.getBloodlineSnapshot();
 
         holder.clearContainer();
 
-        for(Identifier bloodline : bloodlines.keySet()){
-            AscensionOriginSourceHelper.addBloodline(source,bloodline,bloodlines.get(bloodline),false);
+        for(BloodlineInstance<?> instance : bloodlines.values()){
+            AscensionOriginSourceHelper.addBloodline(source,instance,false);
         }
     }
 
     @Override
     public void onRemoved(OriginSource source, BloodlineHolder holder) {
-        Map<Identifier,BloodlineData> bloodlines = holder.getRawData();
+        Map<Identifier,BloodlineInstance<?>> bloodlines = holder.getBloodlineSnapshot();
 
         for(Identifier bloodline : bloodlines.keySet()){
             AscensionOriginSourceHelper.removeBloodline(source,bloodline);
         }
 
-        holder.setRawData(bloodlines);
+        holder.restore(bloodlines);
     }
 
     @Override
@@ -56,15 +56,15 @@ public class BloodlineDataSource implements DataSource<BloodlineHolder> {
 
     @Override
     public void applyToEntity(LivingEntity entity, BloodlineHolder holder) {
-        for(Identifier bloodline : holder.getBloodlines()){
-            holder.getBloodline(bloodline,entity.level().registryAccess()).applyToEntity(entity, holder.getBloodline(bloodline));
+        for(BloodlineInstance<?> instance : holder.getBloodlineInstances()){
+            instance.applyToEntity(entity);
         }
     }
 
     @Override
     public void removeFromEntity(LivingEntity entity, BloodlineHolder holder) {
-        for(Identifier bloodline : holder.getBloodlines()){
-            holder.getBloodline(bloodline,entity.level().registryAccess()).removeFromEntity(entity, holder.getBloodline(bloodline));
+        for(BloodlineInstance<?> instance : holder.getBloodlineInstances()){
+            instance.removeFromEntity(entity);
         }
     }
 

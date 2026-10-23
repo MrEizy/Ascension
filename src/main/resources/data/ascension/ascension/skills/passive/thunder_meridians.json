@@ -1,0 +1,36 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.thunder_meridians.name"
+  },
+  "description": {
+    "translate": "ascension.skill.thunder_meridians.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stats": {
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:thunder_meridians_agility_bonus",
+              "operation_group": 0,
+              "value": 0.075
+            }
+          ]
+        },
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:thunder_meridians_spirit_bonus",
+              "operation_group": 0,
+              "value": 0.04
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

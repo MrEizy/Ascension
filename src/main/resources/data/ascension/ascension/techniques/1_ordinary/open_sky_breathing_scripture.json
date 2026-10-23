@@ -1,58 +1,20 @@
 {
   "type": "ascension:simple_technique",
-  "name": {"translate": "ascension.technique.open_sky_breathing_scripture.name"},
-  "description": {"translate": "ascension.technique.open_sky_breathing_scripture.desc"},
-  "path": "ascension:foundation/essence",
-  "milestone_realms": [
-    0,
-    1,
-    2
-  ],
-  "technique_families": [
-    "essence",
-    "wind"
-  ],
-  "max_realm": 2,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/open_sky_breathing": {},
-    "ascension:passive/open_sky_breathing_scripture/heavens_breath": {
-      "unlock": 1
-    },
-    "ascension:castable/open_sky_breathing_scripture/skyward_pulse": {
-      "unlock": 2,
-      "caps": {
-        "2": "minor_mastery"
-      }
-    }
+  "name": {
+    "translate": "ascension.technique.open_sky_breathing_scripture.name"
   },
-  "realm_change_handler": [
+  "description": {
+    "translate": "ascension.technique.open_sky_breathing_scripture.desc"
+  },
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_open_sky_breathing_scripture_spirit_a1",
-                  "value": 0.25
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:1_ordinary_open_sky_breathing_scripture_agility_a1",
-                  "value": 0.05
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/open_sky_breathing",
+        "ascension:passive/open_sky_breathing_scripture/heavens_breath",
+        "ascension:castable/open_sky_breathing_scripture/skyward_pulse",
+        "ascension:castable/new_techniques/essence_perception",
+        "ascension:castable/inner_world"
       ]
     }
   ],

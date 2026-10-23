@@ -6,23 +6,28 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
-import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
+import net.zic.ascension.api.ascension.core.bloodline.BloodlineInstance;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
-import net.zic.ascension.impl.core.technique.TechniqueSkillService;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public class SimpleBloodline implements Bloodline {
+public class SimpleBloodline implements Bloodline<SimpleBloodlineData> {
+    private static final SerializerHandler<SimpleBloodlineData> SERIALIZER_HANDLER = new DataSerializerHandler();
+    private static final SyncHandler<SimpleBloodlineData> SYNC_HANDLER = new DataSyncHandler();
+
 
     private final Component name;
     private final Component description;
@@ -64,12 +69,12 @@ public class SimpleBloodline implements Bloodline {
     }
 
     @Override
-    public Component getName() {
+    public Component getName(@Nullable SimpleBloodlineData data) {
         return name;
     }
 
     @Override
-    public Component getDescription() {
+    public Component getDescription(@Nullable SimpleBloodlineData data) {
         return description;
     }
 
@@ -79,58 +84,80 @@ public class SimpleBloodline implements Bloodline {
     }
 
     @Override
-    public Collection<Identifier> onAdded(OriginSource source, BloodlineData data) {
-
-        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this), data,ProgressDirection.UP,"_0");
+    public Collection<Identifier> onAdded(OriginSource source, BloodlineInstance<SimpleBloodlineData> instance) {
+        holder.run(source, instance.getBloodlineId(), instance.getData(), ProgressDirection.UP,"_0");
         return unlockedPaths;
     }
 
     @Override
-    public Collection<Identifier> onRemoved(OriginSource source, BloodlineData data) {
-        Identifier bloodlineId = CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this);
+    public Collection<Identifier> onRemoved(OriginSource source, BloodlineInstance<SimpleBloodlineData> instance) {
+        SimpleBloodlineData data = instance.getData();
         for (int purity = data.getPurity(); purity >= 1; purity--) {
             data.setPurity(purity - 1);
-            holder.run(source, bloodlineId, data, ProgressDirection.DOWN,"_0");
+            holder.run(source, instance.getBloodlineId(), data, ProgressDirection.DOWN,"_0");
         }
         data.setPurity(0);
-        TechniqueSkillService.reconcileAll(source);
         return unlockedPaths;
     }
 
     @Override
-    public void applyToEntity(LivingEntity entity, BloodlineData data) {
+    public void applyToEntity(LivingEntity entity, BloodlineInstance<SimpleBloodlineData> instance) {
 
     }
 
     @Override
-    public void removeFromEntity(LivingEntity entity, BloodlineData data) {
+    public void removeFromEntity(LivingEntity entity, BloodlineInstance<SimpleBloodlineData> instance) {
 
     }
 
     @Override
-    public void purityDown(OriginSource source, BloodlineData data) {
-        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.DOWN,String.valueOf(data.getPurity()+1));
-        TechniqueSkillService.reconcileAll(source);
+    public void purityDown(OriginSource source, BloodlineInstance<SimpleBloodlineData> instance) {
+        SimpleBloodlineData data = instance.getData();
+        holder.run(source, instance.getBloodlineId(), data, ProgressDirection.DOWN,String.valueOf(data.getPurity()+1));
     }
 
     @Override
-    public void purityUp(OriginSource source, BloodlineData data) {
-        holder.run(source, CoreRegistries.BLOODLINE_REGISTRY.get(source.getRegistryAccess()).getKey(this),data, ProgressDirection.UP,String.valueOf(data.getPurity()));
-        TechniqueSkillService.reconcileAll(source);
+    public void purityUp(OriginSource source, BloodlineInstance<SimpleBloodlineData> instance) {
+        SimpleBloodlineData data = instance.getData();
+        holder.run(source, instance.getBloodlineId(), data, ProgressDirection.UP,String.valueOf(data.getPurity()));
     }
 
     @Override
-    public BloodlineData newData(RegistryAccess access) {
+    public SimpleBloodlineData newData(RegistryAccess access) {
         return new SimpleBloodlineData();
     }
 
     @Override
-    public BloodlineData loadData(ValueInput input,RegistryAccess access) {
-        return new SimpleBloodlineData(input);
+    public SerializerHandler<SimpleBloodlineData> serializerHandler() {
+        return SERIALIZER_HANDLER;
     }
 
     @Override
-    public BloodlineData loadData(ByteBuf buf) {
-        return new SimpleBloodlineData(buf);
+    public SyncHandler<SimpleBloodlineData> syncHandler() {
+        return SYNC_HANDLER;
+    }
+
+    private static final class DataSerializerHandler implements SerializerHandler<SimpleBloodlineData> {
+        @Override
+        public SimpleBloodlineData read(ValueInput input, RegistryAccess access) {
+            return new SimpleBloodlineData(input.getIntOr("purity", 1));
+        }
+
+        @Override
+        public void write(SimpleBloodlineData writable, ValueOutput output, RegistryAccess access) {
+            output.putInt("purity", writable.getPurity());
+        }
+    }
+
+    private static final class DataSyncHandler implements SyncHandler<SimpleBloodlineData> {
+        @Override
+        public void decode(SimpleBloodlineData existingEncodable, ByteBuf buf, RegistryAccess access) {
+            existingEncodable.setPurity(buf.readInt());
+        }
+
+        @Override
+        public void encode(SimpleBloodlineData encodable, ByteBuf buf, RegistryAccess access) {
+            buf.writeInt(encodable.getPurity());
+        }
     }
 }

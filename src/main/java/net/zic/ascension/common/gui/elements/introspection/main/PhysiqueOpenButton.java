@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.BetterButton;
@@ -68,7 +67,7 @@ public class PhysiqueOpenButton extends BetterButton {
                             player.registryAccess()
                     )
             );
-        }).map(Physique::name).orElseGet(() ->
+        }).map(physique -> physique.getName(null)).orElseGet(() ->
                 Component.translatable("gui.ascension.introspection.no_physique")
         );
     }

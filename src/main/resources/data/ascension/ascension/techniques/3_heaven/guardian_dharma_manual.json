@@ -6,80 +6,14 @@
   "description": {
     "translate": "ascension.technique.guardian_dharma_manual.desc"
   },
-  "path": "ascension:foundation/soul",
-  "milestone_realms": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
-  ],
-  "technique_families": [
-    "life",
-    "order",
-    "fist"
-  ],
-  "max_realm": 6,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/fourfold_dharma_circulation": {},
-    "ascension:passive/ordered_vajra_body": {
-      "unlock": 1
-    },
-    "ascension:castable/golden_bell_of_living_law": {
-      "unlock": 2,
-      "caps": {
-        "4": "minor_mastery",
-        "6": "major_mastery"
-      }
-    },
-    "ascension:castable/guardian_dharma_idol": {
-      "unlock": 3,
-      "caps": {
-        "4": "minor_mastery",
-        "5": "major_mastery",
-        "6": "perfection"
-      }
-    }
-  },
-  "realm_change_handler": [
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_guardian_dharma_manual_spirit_a1",
-                  "value": 2.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_guardian_dharma_manual_vitality_a1",
-                  "value": 3.0
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:3_heaven_guardian_dharma_manual_strength_a1",
-                  "value": 1.0
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/fourfold_dharma_circulation",
+        "ascension:passive/ordered_vajra_body",
+        "ascension:castable/golden_bell_of_living_law",
+        "ascension:castable/guardian_dharma_idol"
       ]
     }
   ],

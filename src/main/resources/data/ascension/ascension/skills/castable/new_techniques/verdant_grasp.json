@@ -1,0 +1,66 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.verdant_grasp.name"
+  },
+  "description": {
+    "translate": "ascension.skill.verdant_grasp.desc"
+  },
+  "target": {
+    "type": "ascension:cone",
+    "range": 6,
+    "angle": 55,
+    "maximum_targets": 4,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 5,
+        "per_mastery": 0.65
+      },
+      "stats": {
+        "ascension:spirit": 0.14
+      },
+      "minimum": 1,
+      "maximum": 48,
+      "classifications": [
+        "ascension:skill",
+        "ascension:essence",
+        "ascension:wood"
+      ],
+      "path": "ascension:foundation/essence",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:happy_villager",
+      "count": 16,
+      "spread": 0.55,
+      "speed": 0.045,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.grass.break",
+      "volume": 0.6,
+      "pitch": 1.0,
+      "subject": "target"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 7
+  },
+  "cooldown": {
+    "base": 90,
+    "per_mastery": -3,
+    "minimum": 72
+  }
+}

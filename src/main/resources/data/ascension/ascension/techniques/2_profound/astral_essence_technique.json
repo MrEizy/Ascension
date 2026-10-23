@@ -1,58 +1,20 @@
 {
   "type": "ascension:simple_technique",
-  "name": {"translate": "ascension.technique.astral_essence_technique.name"},
-  "description": {"translate": "ascension.technique.astral_essence_technique.desc"},
-  "path": "ascension:foundation/essence",
-  "milestone_realms": [
-    0,
-    2,
-    5
-  ],
-  "technique_families": [
-    "essence",
-    "star"
-  ],
-  "max_realm": 5,
-  "max_minor_realm": 2,
-  "skills": {
-    "ascension:castable/cultivation/astral_essence": {},
-    "ascension:passive/astral_essence_technique/stellar_channels": {
-      "unlock": 2
-    },
-    "ascension:castable/astral_essence_technique/starfall_burst": {
-      "unlock": 5,
-      "caps": {
-        "5": "minor_mastery"
-      }
-    }
+  "name": {
+    "translate": "ascension.technique.astral_essence_technique.name"
   },
-  "realm_change_handler": [
+  "description": {
+    "translate": "ascension.technique.astral_essence_technique.desc"
+  },
+  "on_added": [
     {
-      "condition": "ascension:realm_change/all_realms",
-      "actions": [
-        {
-          "type": "ascension:give_stats",
-          "stats": {
-            "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_astral_essence_technique_spirit_a1",
-                  "value": 0.55
-                }
-              ],
-              "multiplier": []
-            },
-            "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:2_profound_astral_essence_technique_agility_a1",
-                  "value": 0.2
-                }
-              ],
-              "multiplier": []
-            }
-          }
-        }
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/cultivation/astral_essence",
+        "ascension:passive/astral_essence_technique/stellar_channels",
+        "ascension:castable/astral_essence_technique/starfall_burst",
+        "ascension:castable/new_techniques/essence_perception",
+        "ascension:castable/spherical_devastation"
       ]
     }
   ],

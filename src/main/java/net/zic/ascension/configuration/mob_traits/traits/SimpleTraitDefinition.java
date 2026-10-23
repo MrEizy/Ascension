@@ -180,7 +180,7 @@ public record SimpleTraitDefinition (UUID traitId,
 
 
         if(!AscensionOriginSourceHelper.addPath(source,path,getId())) return;
-        PathInstance pathInstance = AscensionOriginSourceHelper.getPathInstance(source,path);
+        PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(source,path);
 
         if(pathInstance.getCurrentRealm().compareTo(realm) >= 0) return;
 

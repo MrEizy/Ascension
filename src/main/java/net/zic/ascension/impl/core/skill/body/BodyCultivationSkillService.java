@@ -47,7 +47,7 @@ public final class BodyCultivationSkillService {
         BodyCultivationSkill.Data data = entry.data();
         Identifier skillId = entry.skillId();
 
-        PathInstance path = AscensionOriginSourceHelper.getPathInstance(source, bodySkill.path());
+        PathInstance<?> path = AscensionOriginSourceHelper.getPathInstance(source, bodySkill.path());
         if (path == null || !path.canProgress()) {
             return;
         }
@@ -120,7 +120,7 @@ public final class BodyCultivationSkillService {
         if (data.tempering() <= EPSILON) {
             return;
         }
-        PathInstance path = AscensionOriginSourceHelper.getPathInstance(source, skill.path());
+        PathInstance<?> path = AscensionOriginSourceHelper.getPathInstance(source, skill.path());
         if (path == null || !path.canProgress()) {
             return;
         }
