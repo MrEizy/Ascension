@@ -12,8 +12,6 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
-import net.zic.ascension.api.ascension.core.path.interaction.PathInteraction;
-import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionType;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
@@ -25,7 +23,6 @@ import net.zic.ascension.api.ascension.datapack.path.realm.PathRealmChangeEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
 import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
-import net.zic.ascension.configuration.interactions.PathInteractions;
 import net.zic.ascension.impl.core.path.CompletedTribulation;
 import net.zic.ascension.impl.core.path.realms.BreakthroughBehaviour;
 import net.zic.ascension.impl.core.path.realms.MajorRealm;
@@ -35,7 +32,6 @@ import net.zic.ascension.impl.core.tribulation.action.RealmChangeResolutionActio
 import net.zic.ascension.impl.datapack.path.AscensionPathTypes;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,50 +126,6 @@ public class SimplePath implements Path<SimplePathData> {
     @Override
     public boolean hasTribulation(int majorRealm, int minorRealm) {
         return getTribulationId(majorRealm, minorRealm) != null;
-    }
-
-    //──Path Interactions────────────────────────────────────────────────────────
-
-
-
-    @Override
-    public boolean hasSourceInteraction(Identifier target, RegistryAccess access) {
-        return PathInteractions.hasInteraction(getId(access),target);
-    }
-
-    @Override
-    public boolean hasSourceInteraction(Identifier target, PathInteractionType type, RegistryAccess access) {
-        return PathInteractions.hasInteraction(getId(access),target,type);
-    }
-
-    @Override
-    public boolean hasTargetInteraction(Identifier source, RegistryAccess access) {
-        return PathInteractions.hasInteraction(source,getId(access));
-    }
-
-    @Override
-    public boolean hasTargetInteraction(Identifier source, PathInteractionType type, RegistryAccess access) {
-        return PathInteractions.hasInteraction(source,getId(access),type);
-    }
-
-    @Override
-    public PathInteraction getSourceInteraction(Identifier target, RegistryAccess access) {
-        return PathInteractions.getInteraction(getId(access),target);
-    }
-
-    @Override
-    public PathInteraction getTargetInteraction(Identifier source, RegistryAccess access) {
-        return PathInteractions.getInteraction(source,getId(access));
-    }
-
-    @Override
-    public Collection<PathInteraction> getAllSourceInteractions(RegistryAccess access) {
-        return PathInteractions.getInteractionsForSource(getId(access));
-    }
-
-    @Override
-    public Collection<PathInteraction> getAllTargetInteractions(RegistryAccess access) {
-        return PathInteractions.getInteractionsForTarget(getId(access));
     }
 
     //──Progression────────────────────────────────────────────────────────

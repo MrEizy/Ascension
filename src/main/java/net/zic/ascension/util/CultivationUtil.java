@@ -26,9 +26,9 @@ public class CultivationUtil {
 
 
 
-        double cultivationAmount = baseRate*(1+PathInteractionUtil.getEffectivePathMultiplier(caster,path));
+        double cultivationAmount = baseRate*(1+PathInteractionUtil.getEffectiveAffinity(caster,path));
 
-        if(!path.equals(secondaryPath) && secondaryPath != null)cultivationAmount += baseRate*(1+PathInteractionUtil.getEffectivePathMultiplier(caster,secondaryPath));
+        if(!path.equals(secondaryPath) && secondaryPath != null)cultivationAmount += baseRate*(1+PathInteractionUtil.getEffectiveAffinity(caster,secondaryPath));
 
 
         pathInstance.progressPath(cultivationAmount,source,caster);
