@@ -13,24 +13,18 @@
     }
   },
   "paths": {
-    "ascension:essence": [
+    "ascension:foundation/essence": [
       {
         "major_realm": 0,
         "min_realm": 0,
-        "max_realm": 9,
-        "weight": 20
+        "max_realm": 2,
+        "weight": 80
       },
       {
         "major_realm": 1,
         "min_realm": 0,
-        "max_realm": 9,
-        "weight": 10
-      },
-      {
-        "major_realm": 1,
-        "min_realm": 0,
-        "max_realm": 9,
-        "weight": 1
+        "max_realm": 2,
+        "weight":20
       }
     ]
   }

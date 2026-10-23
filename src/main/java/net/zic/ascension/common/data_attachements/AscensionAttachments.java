@@ -21,6 +21,7 @@ import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.mob_cultivation.oliver_rewrite.MobConfigurationHolder;
 import net.zic.ascension.skill_casting.SkillCastHandler;
+import net.zic.ascension.skill_casting.SkillCaster;
 
 import java.util.function.Supplier;
 import net.zic.ascension.impl.core.control.StaggerService;
@@ -74,6 +75,15 @@ public class AscensionAttachments {
                     .sync(new SkillCastHandler.SyncHandler())
                     .serialize(new SkillCastHandler.Provider())
                     .copyOnDeath()
+                    .build()
+    );
+
+    //the cast state of any living entity, synced to everyone tracking it. not saved, casts end on unload
+    public static final Supplier<AttachmentType<SkillCaster>> ASCENSION_SKILL_CASTER = ATTACHMENT_TYPES.register(
+            "ascension_skill_caster",()->AttachmentType.builder(
+                            (holder)-> holder instanceof LivingEntity entity ? new SkillCaster(entity) : null
+                    )
+                    .sync(new SkillCaster.SyncHandler())
                     .build()
     );
 

@@ -1,0 +1,36 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.springwell_reserve.name"
+  },
+  "description": {
+    "translate": "ascension.skill.springwell_reserve.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stats": {
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:springwell_reserve_vitality_bonus",
+              "operation_group": 0,
+              "value": 0.075
+            }
+          ]
+        },
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:springwell_reserve_spirit_bonus",
+              "operation_group": 0,
+              "value": 0.04
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -3,6 +3,7 @@ package net.zic.ascension.api.ascension.core.skill.toggleable;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
 
@@ -10,30 +11,30 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
  * A skill whose active state is stored in its {@link SkillData} and controlled
  * by the server.
  */
-public interface ToggleableSkill extends Skill {
+public interface ToggleableSkill<D extends SkillData> extends Skill<D> {
 
-    boolean isEnabled(SkillData data);
+    boolean isEnabled(D data);
 
-    void setEnabled(SkillData data, boolean enabled);
+    void setEnabled(D data, boolean enabled);
 
     default boolean canEnable(
             LivingEntity entity,
             OriginSource source,
-            SkillData data
+            SkillInstance<D> instance
     ) {
         return true;
     }
 
-    void onEnabled(OriginSource source, SkillData data);
+    void onEnabled(OriginSource source, SkillInstance<D> instance);
 
-    void onDisabled(OriginSource source, SkillData data);
+    void onDisabled(OriginSource source, SkillInstance<D> instance);
 
-    default void applyEnabledToEntity(LivingEntity entity, SkillData data) {
-        applyToEntity(entity, data);
+    default void applyEnabledToEntity(LivingEntity entity, SkillInstance<D> instance) {
+        applyToEntity(entity, instance);
     }
 
-    default void removeEnabledFromEntity(LivingEntity entity, SkillData data) {
-        removeFromEntity(entity, data);
+    default void removeEnabledFromEntity(LivingEntity entity, SkillInstance<D> instance) {
+        removeFromEntity(entity, instance);
     }
 
     /**
@@ -43,7 +44,7 @@ public interface ToggleableSkill extends Skill {
     default boolean tickEnabled(
             LivingEntity entity,
             OriginSource source,
-            SkillData data
+            SkillInstance<D> instance
     ) {
         return true;
     }

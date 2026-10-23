@@ -2,7 +2,6 @@ package net.zic.ascension.api.ascension.core.skill;
 
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.NeoForge;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.event.skill.SkillEvent;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -16,24 +15,19 @@ public final class SkillProgressionResolver {
             return emptySnapshot();
         }
 
-        Skill skill = CoreRegistries.safeAccess(
-                CoreRegistries.SKILL_REGISTRY,
-                skillId,
-                source.getRegistryAccess()
-        );
-        SkillData data = AscensionOriginSourceHelper.getSkillData(source, skillId);
-        if (!(skill instanceof ProgressingSkill progressingSkill)
-                || !(data instanceof ProgressingSkillData progressingData)) {
+        SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source, skillId);
+        if (instance == null || !(instance.getSkill() instanceof ProgressingSkill<?> progressingSkill)
+                || !(instance.getData() instanceof ProgressingSkillData progressingData)) {
             return emptySnapshot();
         }
 
-        return resolve(source, skillId, progressingSkill, progressingData);
+        return resolve(source, instance, progressingSkill, progressingData);
     }
 
     public static SkillProgressionSnapshot resolve(
             OriginSource source,
-            Identifier skillId,
-            ProgressingSkill skill,
+            SkillInstance<?> instance,
+            ProgressingSkill<?> skill,
             ProgressingSkillData data
     ) {
         SkillProgressionData progression = data.getSkillProgression();
@@ -44,8 +38,7 @@ public final class SkillProgressionResolver {
 
         SkillEvent.ProgressionResolve event = new SkillEvent.ProgressionResolve(
                 source,
-                skillId,
-                data,
+                instance,
                 permanent,
                 maximum
         );

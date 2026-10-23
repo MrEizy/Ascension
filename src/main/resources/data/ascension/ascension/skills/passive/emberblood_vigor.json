@@ -1,0 +1,36 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.emberblood_vigor.name"
+  },
+  "description": {
+    "translate": "ascension.skill.emberblood_vigor.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:stats",
+      "stats": {
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:emberblood_vigor_strength_bonus",
+              "operation_group": 0,
+              "value": 0.075
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:emberblood_vigor_vitality_bonus",
+              "operation_group": 0,
+              "value": 0.045
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

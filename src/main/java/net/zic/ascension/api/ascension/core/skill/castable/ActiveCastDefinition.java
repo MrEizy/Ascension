@@ -12,7 +12,6 @@ import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
-import net.zic.ascension.api.ascension.core.skill.castable.data.CastType;
 import net.zic.ascension.api.ascension.core.skill.particle_field.ParticleFieldDefinition;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 
@@ -115,26 +114,20 @@ public record ActiveCastDefinition(
     }
 
     public enum Mode implements StringRepresentable {
-        INSTANT("instant", CastType.INSTANT),
-        CHARGE("charge", CastType.CHARGE),
-        CHANNEL("channel", CastType.CHANNEL);
+        INSTANT("instant"),
+        CHARGE("charge"),
+        CHANNEL("channel");
 
         public static final Codec<Mode> CODEC = StringRepresentable.fromEnum(Mode::values);
         private final String serializedName;
-        private final CastType castType;
 
-        Mode(String serializedName, CastType castType) {
+        Mode(String serializedName) {
             this.serializedName = serializedName;
-            this.castType = castType;
         }
 
         @Override
         public String getSerializedName() {
             return serializedName;
-        }
-
-        public CastType castType() {
-            return castType;
         }
     }
 
@@ -227,6 +220,7 @@ public record ActiveCastDefinition(
                 Identifier skill,
                 ActiveCastData data,
                 ScaledValue.Context context,
+                int ticks,
                 int maximumTicks
         ) {
             double target = resolveCumulativeCost(context);
@@ -236,7 +230,7 @@ public record ActiveCastDefinition(
                 return null;
             }
             ResourceTransactionService.Result result = ResourceTransactionService.transact(request(
-                    caster, skill, context, data.getTicks(), maximumTicks, delta, Set.of()
+                    caster, skill, context, ticks, maximumTicks, delta, Set.of()
             ));
             if (result.succeeded() && result.appliedAmount() + 1.0E-8D >= result.resolvedAmount()) {
                 data.setCumulativeCostTarget(target);

@@ -1,0 +1,49 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.tidal_retreat.name"
+  },
+  "description": {
+    "translate": "ascension.skill.tidal_retreat.desc"
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:move",
+      "mode": "directional",
+      "direction": "look",
+      "distance": {
+        "base": 4.5,
+        "per_mastery": 0.3
+      },
+      "include_vertical": false,
+      "collision": "stop_before_collision",
+      "preserve_velocity": false,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:splash",
+      "count": 16,
+      "spread": 0.55,
+      "speed": 0.045,
+      "subject": "caster"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.player.splash",
+      "volume": 0.6,
+      "pitch": 1.25,
+      "subject": "caster"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 4
+  },
+  "cooldown": {
+    "base": 57,
+    "per_mastery": -2,
+    "minimum": 45
+  }
+}

@@ -1,0 +1,22 @@
+package net.zic.ascension.impl.datapack.progression.action;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.zic.ascension.api.ascension.core.progression.ProgressAction;
+import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
+import net.zic.ascension.impl.core.progression.GiveStatsUsingPurityAction;
+import net.zic.ascension.impl.core.progression.modifier.ModifierConflictAction;
+import net.zic.zenithlib.value_containers.typed.ValueContainerCodecHelper;
+
+public class GiveStatsUsingPurityActionType extends ProgressActionType {
+    @Override
+    public MapCodec<? extends ProgressAction> codec() {
+        return RecordCodecBuilder.<GiveStatsUsingPurityAction>mapCodec(instance ->
+                instance.group(
+                        ValueContainerCodecHelper.containersCodec(Codec.DOUBLE).fieldOf("stats").forGetter(GiveStatsUsingPurityAction::stats),
+                        ModifierConflictAction.CODEC.optionalFieldOf("conflict_action", ModifierConflictAction.SALT).forGetter(GiveStatsUsingPurityAction::conflictAction)
+                ).apply(instance, GiveStatsUsingPurityAction::from)
+        );
+    }
+}

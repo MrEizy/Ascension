@@ -11,8 +11,8 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "per_purity": true,
+          "type": "ascension:give_stats_using_purity",
+          "conflict_action": "replace",
           "stats": {
             "ascension:strength": {
               "flat": [

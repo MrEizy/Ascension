@@ -23,8 +23,9 @@ public interface ProgressAction {
      * @param contextIdentifier the Identifier of the registry object this action is being queried for(e.g a path, technique, bloodline, physique etc)
      * @param  contextData the data for the contextIdentifier Object (e.g technique data or bloodline data)
      * @param direction is the expected progression gained/up or lost/down
+     * @param salt a deterministic string provided by whatever is calling this action (good when an action is called repeatadly)
      */
-    void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction);
+    void run(UUID holderId, OriginSource source, Identifier contextIdentifier, Object contextData, ProgressDirection direction,String salt);
 
     default List<ProgressActionDescription> getDescriptions(RegistryAccess access) {
         return List.of();

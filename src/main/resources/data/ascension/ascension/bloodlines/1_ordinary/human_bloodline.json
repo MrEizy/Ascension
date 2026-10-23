@@ -11,7 +11,7 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats",
+          "type": "ascension:give_stats_using_purity",
           "stats": {
             "ascension:vitality": {
               "flat": [
@@ -23,7 +23,7 @@
               "multiplier": []
             }
           },
-          "per_purity": true
+          "conflict_action": "replace"
         }
       ]
     }

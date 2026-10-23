@@ -1,0 +1,32 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.essence_perception.name"
+  },
+  "description": {
+    "translate": "ascension.skill.essence_perception.desc"
+  },
+  "target": {
+    "type": "ascension:self"
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:divine_sense",
+      "radius": {
+        "base": 24,
+        "per_mastery": 2,
+        "maximum": 56
+      },
+      "speed": 12,
+      "duration": 110,
+      "color": "#7AC8FF",
+      "include_items": true
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 22
+  },
+  "cooldown": 140
+}

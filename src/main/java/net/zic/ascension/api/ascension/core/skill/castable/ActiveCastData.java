@@ -1,50 +1,30 @@
 package net.zic.ascension.api.ascension.core.skill.castable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.RegistryAccess;
+import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 
+/**
+ * cast data of an active skill. ticks are tracked by the {@link CastingSkillInstance} phase, not here
+ */
 public final class ActiveCastData implements CastData {
-    private int ticks;
+    public static final SyncHandler<ActiveCastData> SYNC_HANDLER = new DataSyncHandler();
+
     private int stageIndex;
     private double cumulativeCostTarget;
     private double interruptionDamage;
     private int lastDamageTick = Integer.MIN_VALUE;
-    private boolean dirty = true;
-    private int lastSyncedTicks;
-
-    public ActiveCastData() {
-    }
-
-    public ActiveCastData(ByteBuf buf) {
-        ticks = Math.max(0, buf.readInt());
-        stageIndex = Math.max(0, buf.readInt());
-        cumulativeCostTarget = Math.max(0.0D, buf.readDouble());
-        interruptionDamage = Math.max(0.0D, buf.readDouble());
-        lastDamageTick = buf.readInt();
-        lastSyncedTicks = ticks;
-        dirty = false;
-    }
-
-    public int getTicks() {
-        return ticks;
-    }
-
-    public void setTicks(int ticks) {
-        this.ticks = Math.max(0, ticks);
-        if (Math.abs(this.ticks - lastSyncedTicks) >= 5) {
-            dirty = true;
-        }
-    }
 
     public int getStageIndex() {
         return stageIndex;
     }
 
-    public void setStageIndex(int stageIndex) {
+    //returns true if the stage changed
+    public boolean setStageIndex(int stageIndex) {
         int resolved = Math.max(0, stageIndex);
-        if (this.stageIndex != resolved) {
-            this.stageIndex = resolved;
-            dirty = true;
-        }
+        if (this.stageIndex == resolved) return false;
+        this.stageIndex = resolved;
+        return true;
     }
 
     public double getCumulativeCostTarget() {
@@ -64,23 +44,16 @@ public final class ActiveCastData implements CastData {
         return interruptionDamage;
     }
 
-    @Override
-    public void encode(ByteBuf buf) {
-        buf.writeInt(ticks);
-        buf.writeInt(stageIndex);
-        buf.writeDouble(cumulativeCostTarget);
-        buf.writeDouble(interruptionDamage);
-        buf.writeInt(lastDamageTick);
-    }
+    //only the stage is needed by the client, cost and interruption are server only
+    private static final class DataSyncHandler implements SyncHandler<ActiveCastData> {
+        @Override
+        public void decode(ActiveCastData data, ByteBuf buf, RegistryAccess access) {
+            data.stageIndex = Math.max(0, buf.readInt());
+        }
 
-    @Override
-    public boolean isDirty() {
-        return dirty;
-    }
-
-    @Override
-    public void resolveDirty() {
-        dirty = false;
-        lastSyncedTicks = ticks;
+        @Override
+        public void encode(ActiveCastData data, ByteBuf buf, RegistryAccess access) {
+            buf.writeInt(data.stageIndex);
+        }
     }
 }

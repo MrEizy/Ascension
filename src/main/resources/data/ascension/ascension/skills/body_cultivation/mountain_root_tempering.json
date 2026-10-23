@@ -1,0 +1,45 @@
+{
+  "type": "ascension:body_cultivation",
+  "name": {
+    "translate": "ascension.skill.mountain_root_tempering.name"
+  },
+  "description": {
+    "translate": "ascension.skill.mountain_root_tempering.desc"
+  },
+  "path": "ascension:foundation/body",
+  "priority": 105,
+  "stimuli": [
+    {
+      "source": {
+        "sources": [
+          "ascension:attacking"
+        ]
+      },
+      "gain": 1.0
+    },
+    {
+      "source": {
+        "sources": [
+          "ascension:damage"
+        ]
+      },
+      "gain": 0.65
+    }
+  ],
+  "maximum_tempering": 110,
+  "conversion": {
+    "rate": 1.05,
+    "progress_per_tempering": 1.25,
+    "interval": 2,
+    "costs": [
+      {
+        "resource": "ascension:qi",
+        "amount": 0.65
+      },
+      {
+        "resource": "ascension:stamina",
+        "amount": 0.35
+      }
+    ]
+  }
+}

@@ -1,5 +1,7 @@
 package net.zic.ascension.skill_passives;
 
+import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkills;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -8,10 +10,6 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
-import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 
@@ -43,18 +41,13 @@ public final class ToggleableSkillTicker {
         LAST_SOURCE_TICK.put(source, gameTime);
 
         for (Identifier skillId : List.copyOf(AscensionOriginSourceHelper.getSkills(source))) {
-            Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, skillId, entity.registryAccess());
-            SkillData data = AscensionOriginSourceHelper.getSkillData(source, skillId);
-            if (!(skill instanceof ToggleableSkill toggleable) || data == null || !toggleable.isEnabled(data)) {
+            SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source, skillId);
+            if (ToggleableSkills.tick(entity, source, instance)) {
                 continue;
             }
-            if (toggleable.tickEnabled(entity, source, data)) {
-                continue;
+            if (ToggleableSkills.disable(source, instance, List.of(entity))) {
+                AscensionOriginSourceHelper.markSkillDirty(source, skillId);
             }
-            toggleable.onDisabled(source, data);
-            toggleable.removeEnabledFromEntity(entity, data);
-            toggleable.setEnabled(data, false);
-            AscensionOriginSourceHelper.markSkillDirty(source, skillId);
         }
     }
 }

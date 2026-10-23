@@ -1,7 +1,11 @@
 {
   "type": "ascension:simple_technique",
-  "name": {"translate": "ascension.technique.soul_forged_weapon_manual.name"},
-  "description": {"translate": "ascension.technique.soul_forged_weapon_manual.desc"},
+  "name": {
+    "translate": "ascension.technique.soul_forged_weapon_manual.name"
+  },
+  "description": {
+    "translate": "ascension.technique.soul_forged_weapon_manual.desc"
+  },
   "path": "ascension:foundation/soul",
   "milestone_realms": [
     0,
@@ -36,6 +40,12 @@
       "caps": {
         "6": "major_mastery"
       }
+    },
+    "ascension:castable/sword_flight": {
+      "unlock": 3
+    },
+    "ascension:castable/inner_world": {
+      "unlock": 4
     }
   },
   "realm_change_handler": [

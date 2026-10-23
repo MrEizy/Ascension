@@ -1,0 +1,66 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.mooncurrent_surge.name"
+  },
+  "description": {
+    "translate": "ascension.skill.mooncurrent_surge.desc"
+  },
+  "target": {
+    "type": "ascension:cone",
+    "range": 9,
+    "angle": 55,
+    "maximum_targets": 4,
+    "filter": {
+      "relations": [
+        "neutral",
+        "hostile"
+      ]
+    }
+  },
+  "actions": [
+    {
+      "type": "ascension:damage",
+      "base": {
+        "base": 8,
+        "per_mastery": 0.65
+      },
+      "stats": {
+        "ascension:spirit": 0.18
+      },
+      "minimum": 1,
+      "maximum": 48,
+      "classifications": [
+        "ascension:skill",
+        "ascension:area",
+        "ascension:water"
+      ],
+      "path": "ascension:elemental/water",
+      "subject": "target"
+    },
+    {
+      "type": "ascension:particles",
+      "particle": "minecraft:splash",
+      "count": 16,
+      "spread": 0.55,
+      "speed": 0.045,
+      "subject": "target"
+    },
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:entity.player.splash",
+      "volume": 0.6,
+      "pitch": 1.0,
+      "subject": "target"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 9
+  },
+  "cooldown": {
+    "base": 95,
+    "per_mastery": -3,
+    "minimum": 77
+  }
+}

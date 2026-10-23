@@ -1,0 +1,64 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.stillwinter_visualization.name"
+  },
+  "description": {
+    "translate": "ascension.skill.stillwinter_visualization.desc"
+  },
+  "cast": {
+    "mode": "channel",
+    "stages": [
+      {
+        "particle_field": {
+          "style": "breath_flow",
+          "particles": [
+            {
+              "weight": 6,
+              "particle": "ascension:particle_field_mote"
+            },
+            {
+              "weight": 4,
+              "particle": "ascension:particle_field_wisp"
+            }
+          ],
+          "colours": [
+            "#86D8FF",
+            "#E5F7FF"
+          ],
+          "density": 11,
+          "radius": {
+            "min": 0.55,
+            "max": 1.05
+          },
+          "height": {
+            "min": -0.1,
+            "max": 0.12
+          },
+          "speed": {
+            "min": 0.035,
+            "max": 0.055
+          },
+          "size": {
+            "min": 0.025,
+            "max": 0.07
+          },
+          "lifetime": {
+            "min": 12,
+            "max": 22
+          },
+          "full_bright": true
+        }
+      }
+    ]
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:cultivate",
+      "path": "ascension:foundation/soul",
+      "secondary_path": "ascension:elemental/ice",
+      "rate": 1.55
+    }
+  ]
+}

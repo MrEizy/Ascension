@@ -1,16 +1,12 @@
 package net.zic.ascension.configuration.mob_traits.traits;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
-import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
-import net.zic.ascension.api.ascension.core.entity.AscensionEntityData;
+import net.zic.ascension.api.ascension.core.CoreDataSources;
+import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
@@ -19,11 +15,9 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.configuration.mob_traits.traits.cultivation_traits.PathDefinition;
 import net.zic.ascension.configuration.mob_traits.traits.cultivation_traits.PotentialRealmDefinition;
-import net.zic.ascension.configuration.mobs.condition.MobConfigurationCondition;
 import net.zic.ascension.configuration.mob_traits.MobTraitDefinition;
 import net.zic.ascension.configuration.mob_traits.MobTraitDefinitionType;
 import net.zic.zenithlib.common.ZenithAttachments;
-import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.custom_attributes.SuppressedAttributeHelper;
 import net.zic.zenithlib.custom_attributes.ZenithAttribute;
 import net.zic.zenithlib.custom_attributes.ZenithAttributeHolder;
@@ -70,9 +64,14 @@ public record SimpleTraitDefinition (UUID traitId,
     }
     @Override
     public void applyToSource(OriginSource source) {
-        paths.forEach(path-> {
-            if(AscensionOriginSourceHelper.hasPath(source,path.path())) AscensionOriginSourceHelper.addPath(source, path.path(), getId());
-            else createFreshPath(source,path);
+        paths.forEach(path -> {
+            boolean hasPath = AscensionOriginSourceHelper.hasPath(source, path.path());
+            PathHolder holder = source.getDataSource(CoreDataSources.PATH_DATA_SOURCE.get());
+            if (hasPath || (holder != null && holder.hasCachedPath(path.path()))) {
+                AscensionOriginSourceHelper.addPath(source, path.path(), getId());
+            } else {
+                createFreshPath(source, path);
+            }
         });
         skills.forEach(skill->AscensionOriginSourceHelper.addSkill(source,skill,getId()));
     }

@@ -7,7 +7,9 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionType;
 import net.zic.ascension.impl.datapack.progression.action.GivePathBonusesActionType;
+import net.zic.ascension.impl.datapack.progression.action.GivePathBonusesUsingPurityActionType;
 import net.zic.ascension.impl.datapack.progression.action.GiveStatsActionType;
+import net.zic.ascension.impl.datapack.progression.action.GiveStatsUsingPurityActionType;
 import net.zic.ascension.impl.datapack.progression.action.GrantSkillsActionType;
 import net.zic.ascension.impl.datapack.progression.action.RemoveSkillsActionType;
 
@@ -23,6 +25,16 @@ public final class AscensionProgressActionTypes {
     public static final DeferredHolder<ProgressActionType, ProgressActionType> GIVE_PATH_BONUSES_TYPE = PROGRESS_ACTION_TYPES.register(
             "give_path_bonuses",
             GivePathBonusesActionType::new
+    );
+
+    public static final DeferredHolder<ProgressActionType, ProgressActionType> GIVE_STATS_USING_PURITY_TYPE = PROGRESS_ACTION_TYPES.register(
+            "give_stats_using_purity",
+            GiveStatsUsingPurityActionType::new
+    );
+
+    public static final DeferredHolder<ProgressActionType, ProgressActionType> GIVE_PATH_BONUSES_USING_PURITY_TYPE = PROGRESS_ACTION_TYPES.register(
+            "give_path_bonuses_using_purity",
+            GivePathBonusesUsingPurityActionType::new
     );
 
     public static final DeferredHolder<ProgressActionType, ProgressActionType> GRANT_SKILLS_TYPE = PROGRESS_ACTION_TYPES.register(

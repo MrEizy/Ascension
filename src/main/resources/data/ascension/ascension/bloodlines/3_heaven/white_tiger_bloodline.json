@@ -15,8 +15,8 @@
       "condition": "ascension:all_purity",
       "actions": [
         {
-          "type": "ascension:give_stats",
-          "per_purity": true,
+          "type": "ascension:give_stats_using_purity",
+          "conflict_action": "replace",
           "stats": {
             "ascension:strength": {
               "flat": [
@@ -48,8 +48,8 @@
           }
         },
         {
-          "type": "ascension:give_path_bonuses",
-          "per_purity": true,
+          "type": "ascension:give_path_bonuses_using_purity",
+          "conflict_action": "replace",
           "bonuses": {
             "ascension:affinity": {
               "ascension:foundation/body": {

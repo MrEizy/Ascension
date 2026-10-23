@@ -1,5 +1,8 @@
 package net.zic.ascension.network;
 
+import java.util.List;
+import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkills;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -9,10 +12,6 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.skill.Skill;
-import net.zic.ascension.api.ascension.core.skill.SkillData;
-import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.zenithlib.network.ByteBufHelpers;
@@ -49,24 +48,13 @@ public record TogglePassiveSkillPacket(Identifier skill, boolean enabled) implem
                 return;
             }
             OriginSource source = holder.getData().getSource();
-            Skill skill = CoreRegistries.safeAccess(CoreRegistries.SKILL_REGISTRY, packet.skill(), player.registryAccess());
-            SkillData data = AscensionOriginSourceHelper.getSkillData(source, packet.skill());
-            if (!(skill instanceof ToggleableSkill toggleable) || data == null || toggleable.isEnabled(data) == packet.enabled()) {
-                return;
+            SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source, packet.skill());
+            boolean changed = packet.enabled()
+                    ? ToggleableSkills.enable(player, source, instance)
+                    : ToggleableSkills.disable(source, instance, List.of(player));
+            if (changed) {
+                AscensionOriginSourceHelper.markSkillDirty(source, packet.skill());
             }
-            if (packet.enabled() && !toggleable.canEnable(player, source, data)) {
-                return;
-            }
-            if (packet.enabled()) {
-                toggleable.setEnabled(data, true);
-                toggleable.onEnabled(source, data);
-                toggleable.applyEnabledToEntity(player, data);
-            } else {
-                toggleable.onDisabled(source, data);
-                toggleable.removeEnabledFromEntity(player, data);
-                toggleable.setEnabled(data, false);
-            }
-            AscensionOriginSourceHelper.markSkillDirty(source, packet.skill());
         });
     }
 }

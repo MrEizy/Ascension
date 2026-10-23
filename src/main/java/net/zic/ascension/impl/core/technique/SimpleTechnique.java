@@ -10,6 +10,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
@@ -137,7 +138,7 @@ public class SimpleTechnique implements Technique {
             return;
         }
         TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
-        holder.run(source, techniqueId, pathInstance, ProgressDirection.UP);
+        holder.run(source, techniqueId, pathInstance, ProgressDirection.UP,"_0");
         TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
     }
 
@@ -149,7 +150,7 @@ public class SimpleTechnique implements Technique {
             return;
         }
         if (pathInstance != null) {
-            holder.run(source, techniqueId, pathInstance, ProgressDirection.DOWN);
+            holder.run(source, techniqueId, pathInstance, ProgressDirection.DOWN,"_0");
         }
         TechniqueSkillService.remove(source, techniqueId, skills);
     }
@@ -292,7 +293,8 @@ public class SimpleTechnique implements Technique {
             return;
         }
         TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
-        holder.run(source, techniqueId, pathInstance, direction);
+        Realm realm = direction == ProgressDirection.UP ? pathInstance.getCurrentRealm() : pathInstance.getNextRealm();
+        holder.run(source, techniqueId, pathInstance, direction,realm.asSalt());
         TechniqueSkillService.reconcile(source, techniqueId, pathInstance, skills);
     }
 

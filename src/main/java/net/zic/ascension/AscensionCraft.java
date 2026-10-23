@@ -316,11 +316,6 @@ public class AscensionCraft {
             );
 
             registrar.playToClient(
-                    ActiveCastVisualStatePacket.TYPE,
-                    ActiveCastVisualStatePacket.STREAM_CODEC,
-                    ActiveCastVisualStatePacket::handle
-            );
-            registrar.playToClient(
                     RuntimeVisualPacket.TYPE,
                     RuntimeVisualPacket.STREAM_CODEC,
                     RuntimeVisualPacket::handle
