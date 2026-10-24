@@ -1,0 +1,11 @@
+{
+  "values": {
+    "ascension:elemental/fire": [
+      { "source": "ascension:elemental/water", "type": "destructive", "value": 0.5 },
+      { "source": "ascension:elemental/wood", "type": "generative", "value": 0.5 }
+    ],
+    "ascension:elemental/ice": [
+      { "source": "ascension:elemental/water", "type": "related", "value": 0.5 }
+    ]
+  }
+}

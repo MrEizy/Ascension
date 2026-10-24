@@ -15,6 +15,7 @@ For system-specific authoring, use:
 - [Base stats](#base-stats)
 - [Value modifiers](#value-modifiers)
 - [Path bonuses](#path-bonuses)
+- [Path interactions](#path-interactions)
 - [Requirements](#requirements)
 - [Progress actions](#progress-actions)
 - [Datapack resources](#datapack-resources)
@@ -197,6 +198,43 @@ Progression handlers use the same flat bonus shape through `ascension:give_path_
   }
 }
 ```
+
+## Path interactions
+Path interactions are the `ascension:path_interactions` data map on the path registry, at `data/<namespace>/data_maps/ascension/paths/path_interactions.json`. Each value is keyed by the **target** path and lists how other `source` paths' **affinity** influences it.
+
+```json
+{
+  "values": {
+    "ascension:elemental/fire": [
+      { "source": "ascension:elemental/water", "type": "destructive", "value": 0.5 },
+      { "source": "ascension:elemental/wood",  "type": "generative",  "value": 0.5 }
+    ],
+    "ascension:elemental/ice": [
+      { "source": "ascension:elemental/water", "type": "related", "value": 0.5 }
+    ]
+  }
+}
+```
+
+`type` is `related`, `generative` or `destructive`. Lists from different datapacks are merged, so a pack adds interactions to a path instead of overriding it. Use `"replace": true` to clear earlier data and `"remove"` to drop a path's interactions. Path tags (`#ns:tag`) and conditions work as in any data map, and the data is synced to clients and refreshed on `/reload`.
+
+Interactions only affect the `ascension:affinity` category. Every other path bonus category is a plain `1 + bonus` multiplier and never interacts with other paths.
+
+Effective affinity `E` for a target path, where `A(p)` is the raw affinity (never below 0):
+
+1. `related`: `E0 = A(target) + Σ value · A(source)`.
+2. `generative` / `destructive`: each interaction applies pressure based on the **ratio** between the source and the base, `term = clamp(ln(1 + value · A(source) / (E0 + 1)), 0, 3)`.
+3. `E = E0 · exp(Σ generative − Σ destructive)`.
+
+A single term is capped at ×20 or ×0.05, so one interaction can never zero a path. Equal generative and destructive pressure cancel, so a strong generative source brings back a suppressed path. Water 1000 suppresses fire 10 far more than water 10 does, while water 1000 against fire 1000 suppresses about as much as 10 against 10.
+
+### Combat
+An attack tagged with a path compares the attacker's and defender's effective affinities only when it lands:
+
+- each defender path that is `destructive` to the attack path resists: `−ln(1 + value · Ed / (Ea + 1))`;
+- each defender path that the attack path is `destructive` to is overwhelmed: `+ln(1 + value · Ea / (Ed + 1))`.
+
+Damage is multiplied by `exp(clamp(Σ, −3, 3))`, i.e. between ×0.05 and ×20.
 
 # Requirements
 Bloodlines, physiques, and techniques may use Ascension's shared requirement list.

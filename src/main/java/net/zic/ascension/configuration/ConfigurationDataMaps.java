@@ -8,13 +8,21 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.registries.datamaps.AdvancedDataMapType;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
+import net.neoforged.neoforge.registries.datamaps.DataMapValueMerger;
+import net.neoforged.neoforge.registries.datamaps.DataMapValueRemover;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.interaction.PathInteraction;
 import net.zic.ascension.configuration.biome.BiomeConfiguration;
 import net.zic.ascension.configuration.dimension.DimensionConfiguration;
 import net.zic.ascension.configuration.item.qi_capacity.TierCapacityDefinition;
 import net.zic.ascension.configuration.mobs.MobConfiguration;
+
+import java.util.List;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public class ConfigurationDataMaps {
     public static final DataMapType<EntityType<?>, MobConfiguration> MOB_CONFIGURATION = DataMapType.builder(
@@ -39,9 +47,23 @@ public class ConfigurationDataMaps {
             DimensionConfiguration.CODEC
     ).build();
 
+    /**
+     * Interactions that influence a path, keyed by the target path. Lists from multiple packs are merged.
+     */
+    public static final AdvancedDataMapType<Path<?>, List<PathInteraction.Entry>, DataMapValueRemover.Default<List<PathInteraction.Entry>, Path<?>>> PATH_INTERACTIONS =
+            AdvancedDataMapType.builder(
+                    Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "path_interactions"),
+                    CoreRegistries.PATH_REGISTRY.key(),
+                    PathInteraction.Entry.LIST_CODEC
+            )
+            .merger(DataMapValueMerger.listMerger())
+            .synced(PathInteraction.Entry.LIST_CODEC, false)
+            .build();
+
     @SubscribeEvent // on the mod event bus
     public static void registerDataMapTypes(RegisterDataMapTypesEvent event) {
         System.out.println("registered data map");
+        event.register(PATH_INTERACTIONS);
         event.register(MOB_CONFIGURATION);
         event.register(ITEM_TIER_QI_CAPACITY);
         event.register(BIOME_CONFIGURATION);
