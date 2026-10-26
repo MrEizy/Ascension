@@ -1,0 +1,15 @@
+{
+  "effect": "ascension:alchemy/effect/jade_heart",
+  "requirements": {
+    "properties": {},
+    "affinities": {},
+    "products": {
+      "ascension:alchemy/reaction/jade_heart": 0.25
+    }
+  },
+  "potency_per_unit": 2,
+  "duration_ticks": 2400,
+  "adverse": false,
+  "priority": 20,
+  "minimum_purity": 0.7
+}

@@ -1,0 +1,14 @@
+{
+  "effect": "ascension:alchemy/effect/verdant_flame",
+  "requirements": {
+    "properties": {},
+    "affinities": {},
+    "products": {
+      "ascension:alchemy/reaction/verdant_flame": 0.5
+    }
+  },
+  "potency_per_unit": 1.1,
+  "duration_ticks": 1000,
+  "adverse": false,
+  "priority": 10
+}

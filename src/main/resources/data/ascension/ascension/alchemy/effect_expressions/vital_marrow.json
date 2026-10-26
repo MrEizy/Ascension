@@ -1,0 +1,14 @@
+{
+  "effect": "ascension:alchemy/effect/vital_marrow",
+  "requirements": {
+    "properties": {},
+    "affinities": {},
+    "products": {
+      "ascension:alchemy/reaction/vital_marrow": 0.5
+    }
+  },
+  "potency_per_unit": 0.8,
+  "duration_ticks": 2400,
+  "adverse": false,
+  "priority": 10
+}

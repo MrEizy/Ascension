@@ -1,0 +1,12 @@
+{
+  "effect": "ascension:alchemy/effect/medicinal_cleansing",
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/cleansing": 1
+    }
+  },
+  "potency_per_unit": 0.6,
+  "duration_ticks": 0,
+  "adverse": false,
+  "priority": 0
+}

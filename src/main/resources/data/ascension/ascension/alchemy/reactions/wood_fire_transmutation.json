@@ -1,0 +1,35 @@
+{
+  "existing": {
+    "properties": {
+      "ascension:alchemy/reinforcement": 1
+    },
+    "affinities": {
+      "ascension:elemental/wood": 0.5
+    },
+    "products": {}
+  },
+  "incoming": {
+    "properties": {
+      "ascension:alchemy/circulation": 1
+    },
+    "affinities": {
+      "ascension:elemental/fire": 0.5
+    },
+    "products": {}
+  },
+  "priority": 15,
+  "products": {
+    "ascension:alchemy/reaction/verdant_flame": 1
+  },
+  "output": {
+    "properties": {
+      "ascension:alchemy/nourishment": 0.5
+    }
+  },
+  "instability_delta": 0.12,
+  "relationship": {
+    "source": "ascension:elemental/wood",
+    "target": "ascension:elemental/fire",
+    "type": "generative"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "effect": "ascension:alchemy/effect/qi_restoration",
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/nourishment": 1
+    }
+  },
+  "potency_per_unit": 0.9,
+  "duration_ticks": 0,
+  "adverse": false,
+  "priority": 0
+}

@@ -1,0 +1,12 @@
+{
+  "effect": "ascension:alchemy/effect/body_reinforcement",
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/reinforcement": 1
+    }
+  },
+  "potency_per_unit": 0.4,
+  "duration_ticks": 1200,
+  "adverse": false,
+  "priority": 0
+}
