@@ -4,11 +4,19 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "accessor.FoodDataAccessor",
+    "accessor.ServerGamePacketListenerImplAccessor",
     "resource.FoodDataRegenerationExhaustionMixin",
     "resource.PlayerAttackExhaustionMixin",
     "resource.PlayerExhaustionFallbackMixin",
     "resource.PlayerJumpExhaustionMixin",
     "resource.PlayerTravelExhaustionMixin"
+  ],
+  "client": [
+    "client.ItemInHandLayerSwordQiMixin",
+    "client.ItemInHandRendererSwordQiMixin",
+    "client.ItemLayerSwordQiMixin",
+    "client.LivingEntityRendererQiCoatingMixin",
+    "client.PlayerModelQiCoatingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

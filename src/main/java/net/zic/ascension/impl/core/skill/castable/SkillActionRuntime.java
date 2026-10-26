@@ -74,6 +74,8 @@ public final class SkillActionRuntime {
             } else if (action instanceof SkillActions.PersistentVisual visual
                     && visual.action() == SkillActions.PersistentVisualAction.APPLY) {
                 visual.apply(context);
+            } else if (action instanceof SkillActions.QiCoatingVisual coating) {
+                coating.apply(context);
             }
         }
     }
@@ -88,6 +90,8 @@ public final class SkillActionRuntime {
                     && visual.action() == SkillActions.PersistentVisualAction.APPLY
                     && cleared.add(visual.key())) {
                 PersistentRuntimeVisuals.remove(context, visual.key());
+            } else if (action instanceof SkillActions.QiCoatingVisual coating && cleared.add(coating.channel().visualKey())) {
+                QiCoatingSelectionService.clear(context, coating.channel());
             } else if (action instanceof SkillActions.MasteryGate gate) {
                 clearPersistentVisuals(context, gate.actions(), cleared);
             } else if (action instanceof SkillActions.Conditional conditional) {

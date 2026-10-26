@@ -61,6 +61,7 @@ public final class PassiveModifiers {
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> PROJECTILES = register("projectiles", Projectiles.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> WEAPON_DAMAGE = register("weapon_damage", WeaponDamage.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> MOVEMENT = register("movement", Movement.CODEC);
+    public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> QI_STEP = register("qi_step", QiStep.CODEC);
 
     private PassiveModifiers() {
     }
@@ -237,11 +238,16 @@ public final class PassiveModifiers {
         }
     }
 
-    public record Movement(boolean allowFlight, double flightSpeedMultiplier, boolean noFallDamage) implements PassiveModifier {
+    /**
+     * @param movementSpeedMultiplier walking speed multiplier, applied like the Speed effect (1.6 matches Speed III)
+     */
+    public record Movement(boolean allowFlight, double flightSpeedMultiplier, boolean noFallDamage, double movementSpeedMultiplier)
+            implements PassiveModifier {
         public static final MapCodec<Movement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 com.mojang.serialization.Codec.BOOL.optionalFieldOf("allow_flight", false).forGetter(Movement::allowFlight),
                 com.mojang.serialization.Codec.doubleRange(0.05D, 20.0D).optionalFieldOf("flight_speed_multiplier", 1.0D).forGetter(Movement::flightSpeedMultiplier),
-                com.mojang.serialization.Codec.BOOL.optionalFieldOf("no_fall_damage", false).forGetter(Movement::noFallDamage)
+                com.mojang.serialization.Codec.BOOL.optionalFieldOf("no_fall_damage", false).forGetter(Movement::noFallDamage),
+                com.mojang.serialization.Codec.doubleRange(0.05D, 20.0D).optionalFieldOf("movement_speed_multiplier", 1.0D).forGetter(Movement::movementSpeedMultiplier)
         ).apply(instance, Movement::new));
 
         @Override
@@ -270,6 +276,9 @@ public final class PassiveModifiers {
             if (noFallDamage) {
                 applyModifier(entity.getAttribute(Attributes.FALL_DAMAGE_MULTIPLIER), modifierId(skillId, "fall_damage"), -1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
             }
+            if (movementSpeedMultiplier != 1.0D) {
+                applyModifier(entity.getAttribute(Attributes.MOVEMENT_SPEED), modifierId(skillId, "movement_speed"), movementSpeedMultiplier - 1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+            }
         }
 
         @Override
@@ -277,6 +286,7 @@ public final class PassiveModifiers {
             removeModifier(entity.getAttribute(NeoForgeMod.CREATIVE_FLIGHT), modifierId(skillId, "flight"));
             removeModifier(entity.getAttribute(Attributes.FLYING_SPEED), modifierId(skillId, "flight_speed"));
             removeModifier(entity.getAttribute(Attributes.FALL_DAMAGE_MULTIPLIER), modifierId(skillId, "fall_damage"));
+            removeModifier(entity.getAttribute(Attributes.MOVEMENT_SPEED), modifierId(skillId, "movement_speed"));
         }
 
         private static void applyModifier(AttributeInstance instance, Identifier id, double value, AttributeModifier.Operation operation) {
@@ -293,6 +303,60 @@ public final class PassiveModifiers {
 
         private static Identifier modifierId(Identifier skillId, String suffix) {
             return Identifier.fromNamespaceAndPath(skillId.getNamespace(), "skill/" + skillId.getPath() + "/movement/" + suffix);
+        }
+    }
+
+    /**
+     * Qi Steps: qi plates form under the player's steps in mid-air, so they can run on through the air (QiStepService on
+     * the server, QiStepClient on the player's own client). Each plate costs qi; jumping up off one costs more, and standing
+     * still on one costs most and only lasts hoverTicks. Strain caps how long one trip through the air lasts whatever qi is
+     * left: steps add 1, jumps and hovering more, and at maxStrain no plates form until the player touches ground again.
+     *
+     * @param stepCost     qi per plate stepped on while running
+     * @param jumpCost     qi to jump up off a plate
+     * @param hoverCost    qi per QiStepService.HOVER_CHARGE_TICKS standing still on a plate
+     * @param hoverTicks   ticks the player can stand still in the air per trip
+     * @param maxStrain    strain at which plates stop forming until the player lands
+     * @param jumpStrain   strain one jump adds
+     * @param hoverStrain  strain each hover charge adds
+     * @param stepDistance blocks run per plate
+     */
+    public record QiStep(double stepCost, double jumpCost, double hoverCost, int hoverTicks, double maxStrain, double jumpStrain,
+                            double hoverStrain, double stepDistance) implements PassiveModifier {
+        public static final MapCodec<QiStep> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Codec.doubleRange(0.0D, 1000.0D).optionalFieldOf("step_cost", 1.0D).forGetter(QiStep::stepCost),
+                Codec.doubleRange(0.0D, 1000.0D).optionalFieldOf("jump_cost", 6.0D).forGetter(QiStep::jumpCost),
+                Codec.doubleRange(0.0D, 1000.0D).optionalFieldOf("hover_cost", 2.0D).forGetter(QiStep::hoverCost),
+                Codec.intRange(0, 1200).optionalFieldOf("hover_ticks", 30).forGetter(QiStep::hoverTicks),
+                Codec.doubleRange(1.0D, 1000.0D).optionalFieldOf("max_strain", 12.0D).forGetter(QiStep::maxStrain),
+                Codec.doubleRange(0.0D, 1000.0D).optionalFieldOf("jump_strain", 4.0D).forGetter(QiStep::jumpStrain),
+                Codec.doubleRange(0.0D, 1000.0D).optionalFieldOf("hover_strain", 1.0D).forGetter(QiStep::hoverStrain),
+                Codec.doubleRange(0.2D, 10.0D).optionalFieldOf("step_distance", 0.8D).forGetter(QiStep::stepDistance)
+        ).apply(instance, QiStep::new));
+
+        @Override
+        public CodecType<PassiveModifier> getType() {
+            return QI_STEP.get();
+        }
+
+        @Override
+        public void apply(OriginSource source, Identifier skillId) {
+            source.getAttachedEntities().forEach(entity -> applyToEntity(entity, skillId));
+        }
+
+        @Override
+        public void remove(OriginSource source, Identifier skillId) {
+            source.getAttachedEntities().forEach(entity -> removeFromEntity(entity, skillId));
+        }
+
+        @Override
+        public void applyToEntity(LivingEntity entity, Identifier skillId) {
+            QiStepService.enable(entity, this);
+        }
+
+        @Override
+        public void removeFromEntity(LivingEntity entity, Identifier skillId) {
+            QiStepService.disable(entity);
         }
     }
 

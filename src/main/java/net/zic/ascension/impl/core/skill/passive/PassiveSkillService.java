@@ -2,6 +2,7 @@ package net.zic.ascension.impl.core.skill.passive;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.zic.ascension.api.ascension.core.skill.passive.PassiveModifier;
 import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkills;
@@ -13,6 +14,31 @@ import java.util.List;
 
 public final class PassiveSkillService {
     private PassiveSkillService() {
+    }
+
+    /**
+     * Switches a toggleable skill the entity has learned on or off, the same way the passive menu does.
+     *
+     * @param enabled the new state, or null to flip the current one
+     * @return whether the skill changed state
+     */
+    public static boolean setEnabled(LivingEntity entity, Identifier skillId, Boolean enabled) {
+        OriginSource source = AscensionOriginSourceHelper.getEntitySource(entity);
+        if (source == null || skillId == null) {
+            return false;
+        }
+        SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source, skillId);
+        if (!ToggleableSkills.isToggleable(instance)) {
+            return false;
+        }
+        boolean enable = enabled == null ? !ToggleableSkills.isEnabled(instance) : enabled;
+        boolean changed = enable
+                ? ToggleableSkills.enable(entity, source, instance)
+                : ToggleableSkills.disable(source, instance, List.of(entity));
+        if (changed) {
+            AscensionOriginSourceHelper.markSkillDirty(source, skillId);
+        }
+        return changed;
     }
 
     public static void disableStateGroup(OriginSource source, Identifier group, Identifier except) {

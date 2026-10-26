@@ -47,6 +47,8 @@ public final class AscensionSkillActionTypes {
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> SPHERICAL_DESTRUCTION = TYPES.add("spherical_destruction", SkillActions.SphericalDestruction.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> INNER_WORLD = TYPES.add("inner_world", SkillActions.InnerWorld.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> VOID_POCKET = TYPES.add("void_pocket", SkillActions.VoidPocket.CODEC);
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> TOGGLE_PASSIVE = TYPES.add("toggle_passive", SkillActions.TogglePassive.CODEC);
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> QI_COATING_VISUAL = TYPES.add("qi_coating_visual", SkillActions.QiCoatingVisual.CODEC);
 
     private AscensionSkillActionTypes() {
     }

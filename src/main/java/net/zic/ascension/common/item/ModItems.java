@@ -75,7 +75,7 @@ public class ModItems {
             properties -> new HoeItem(AscToolTiers.BLACK_IRON, -4f, -3.0f, properties));
     public static final DeferredItem<Item> BLACK_IRON_SPEAR = ITEMS.registerItem("black_iron_spear",
             properties -> new Item(properties.spear(AscToolTiers.BLACK_IRON, 0.95f, 0.7f, 0.7f,
-                    3-5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
+                    3.5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
 
     public static final DeferredItem<Item> FROST_SILVER_SWORD = ITEMS.registerItem("frost_silver_sword",
             properties -> new Item(properties.sword(AscToolTiers.FROST_SILVER, 2.9f, -2.5f)));
@@ -91,7 +91,7 @@ public class ModItems {
             properties -> new HoeItem(AscToolTiers.FROST_SILVER, -4f, -3.0f, properties));
     public static final DeferredItem<Item> FROST_SILVER_SPEAR = ITEMS.registerItem("frost_silver_spear",
             properties -> new Item(properties.spear(AscToolTiers.FROST_SILVER, 1.0f, 0.7f, 0.7f,
-                    3-5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
+                    3.5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
 
     public static final DeferredItem<Item> SPIRITUAL_STONE_SWORD = ITEMS.registerItem("spiritual_stone_sword",
             properties -> new Item(properties.sword(AscToolTiers.SPIRITUAL_STONE, 6f, -2.3f)));
@@ -107,7 +107,7 @@ public class ModItems {
             properties -> new HoeItem(AscToolTiers.SPIRITUAL_STONE, -1.2f, -3.0f, properties));
     public static final DeferredItem<Item> SPIRITUAL_STONE_SPEAR = ITEMS.registerItem("spiritual_stone_spear",
             properties -> new Item(properties.spear(AscToolTiers.SPIRITUAL_STONE, 2.5f, 0.7f, 0.7f,
-                    3-5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
+                    3.5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
 
 
 

@@ -5,6 +5,13 @@
     "ascension:frost_silver_sword",
     "ascension:frost_silver_blade",
     "ascension:spiritual_stone_sword",
-    "ascension:spiritual_stone_blade"
+    "ascension:spiritual_stone_blade",
+    "ascension:wooden_blade",
+    "ascension:stone_blade",
+    "ascension:copper_blade",
+    "ascension:iron_blade",
+    "ascension:gold_blade",
+    "ascension:diamond_blade",
+    "ascension:netherite_blade"
   ]
 }

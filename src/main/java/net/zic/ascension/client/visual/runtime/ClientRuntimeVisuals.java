@@ -8,6 +8,8 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -98,6 +100,13 @@ public final class ClientRuntimeVisuals {
 
     public static RuntimeVisualState get(UUID runtimeId) {
         return STATES.get(runtimeId);
+    }
+
+    /**
+     * Every visual the client currently knows about, for renderers that draw outside the world-space pass.
+     */
+    public static Collection<RuntimeVisualState> states() {
+        return Collections.unmodifiableCollection(STATES.values());
     }
 
     public static float partialTick() {

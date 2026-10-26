@@ -136,4 +136,15 @@ public class ScrollBox extends RenderableElement {
         }
         updateChildrenY(oldYOffset - yOffset);
     }
+
+    public void setScrollOffset(int offset) {
+        int clamped = Math.max(0, Math.min(offset, getMaxYScroll()));
+        if (clamped == yOffset) {
+            return;
+        }
+
+        int oldYOffset = yOffset;
+        yOffset = clamped;
+        updateChildrenY(oldYOffset - yOffset);
+    }
 }

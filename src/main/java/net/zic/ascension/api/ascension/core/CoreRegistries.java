@@ -30,6 +30,8 @@ import net.zic.ascension.api.ascension.core.runtime.OwnerBoundConstructDefinitio
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.BeamDefinition;
 import net.zic.ascension.api.ascension.core.effect.SkillEffectDefinition;
+import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingDefinition;
+import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingElement;
 import net.zic.ascension.api.ascension.core.runtime.AreaFieldDefinition;
 import net.zic.ascension.api.ascension.core.projectile.NormalProjectileDefinition;
 import net.zic.ascension.api.ascension.core.projectile.VirtualProjectileDefinition;
@@ -83,6 +85,14 @@ public final class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<RuntimeVisualDefinition> RUNTIME_VISUAL_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/visuals", () -> RuntimeVisualDefinition.CODEC
     );
+    // Qi Coatings, the looks Qi Coating passives put on their owner (through a runtime visual naming the coating).
+    public static final RegistryHelper.DataPackRegistry<QiCoatingDefinition> QI_COATING_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "skill_system/qi_coatings", () -> QiCoatingDefinition.CODEC
+    );
+    // The elements the Qi Coating skills can be switched to, each naming its path and its body and weapon looks.
+    public static final RegistryHelper.DataPackRegistry<QiCoatingElement> QI_COATING_ELEMENT_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "skill_system/qi_coating_elements", () -> QiCoatingElement.CODEC
+    );
     public static final RegistryHelper.DataPackRegistry<StaggerDefinition> STAGGER_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/stagger", () -> StaggerDefinition.CODEC
     );
@@ -124,6 +134,8 @@ public final class CoreRegistries {
         register(event, BARRIER_REGISTRY);
         register(event, BEAM_REGISTRY);
         register(event, RUNTIME_VISUAL_REGISTRY);
+        register(event, QI_COATING_REGISTRY);
+        register(event, QI_COATING_ELEMENT_REGISTRY);
         register(event, STAGGER_REGISTRY);
         register(event, PROGRESS_ACTION_REGISTRY);
         register(event, PROGRESS_ACTION_CONDITION_REGISTRY);

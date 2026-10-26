@@ -7,6 +7,7 @@ For system-specific authoring, use:
 - `ASCENSION_TECHNIQUES.md` for techniques and their `on_added` actions
 - `ASCENSION_BLOODLINES.md` for purity-driven bloodlines
 - `ASCENSION_PHYSIQUES.md` for persistent physique bonuses
+- `ASCENSION_QI_COATINGS.md` for Qi Coatings 
 
 ## Quick links
 - [Files and IDs](#files-and-ids)
@@ -42,6 +43,7 @@ Common registries:
 | Progress conditions | `data/<namespace>/ascension/progress_action_conditions/...` |
 | Tribulations | `data/<namespace>/ascension/tribulations/...` |
 | Runtime visuals | `data/<namespace>/ascension/skill_system/visuals/...` |
+| Qi coatings | `data/<namespace>/ascension/skill_system/qi_coatings/...` |
 | Beam definitions | `data/<namespace>/ascension/skill_system/runtime/beams/...` |
 | Datapack resources | `data/<namespace>/ascension/skill_system/resources/...` |
 

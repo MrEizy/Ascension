@@ -23,6 +23,7 @@ import net.zic.ascension.client.keybind.*;
 import net.zic.ascension.client.particle.ParticleFieldController;
 import net.zic.ascension.client.particle.ParticleFieldParticle;
 import net.zic.ascension.client.gui.AscensionHudOverlay;
+import net.zic.ascension.client.gui.QiCoatingWheelOverlay;
 import net.zic.ascension.client.gui.SkillWheelOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.visual.runtime.BarrierShellVisualController;
@@ -203,6 +204,7 @@ public class AscensionCraftClient {
             TabletKeybindHandler.onClientTick(event);
             IntrospectionKeybindHandler.onClientTick(event);
             SkillWheelOverlay.onClientTick();
+            QiCoatingWheelOverlay.onClientTick();
             ParticleFieldController.tick();
             ClientRuntimeVisuals.tick();
         }

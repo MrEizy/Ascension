@@ -36,6 +36,7 @@ import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
 import net.zic.ascension.api.ascension.core.skill.castable.action.ActionSubject;
+import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingChannel;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
@@ -47,6 +48,7 @@ import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.api.ascension.value.HexColorCodec;
 import net.zic.ascension.api.ascension.value.ScaledValue;
+import net.zic.ascension.impl.core.skill.passive.PassiveSkillService;
 import net.zic.ascension.impl.core.control.StaggerService;
 import net.zic.ascension.impl.core.damage.AscensionDamageService;
 import net.zic.ascension.impl.core.effect.AscensionBuildupChannels;
@@ -1415,6 +1417,78 @@ public final class SkillActions {
         @Override
         public void apply(SkillActionContext context) {
             VoidPocketService.open(context, this);
+        }
+    }
+
+    /**
+     * Switches one of the caster's toggleable passives, as if from the passive menu. Lets a hotbar skill drive a passive that
+     * owns the upkeep, state group and visuals.
+     */
+    public record TogglePassive(Identifier skill, ToggleMode mode) implements SkillAction {
+        public static final MapCodec<TogglePassive> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Identifier.CODEC.fieldOf("skill").forGetter(TogglePassive::skill),
+                ToggleMode.CODEC.optionalFieldOf("mode", ToggleMode.TOGGLE).forGetter(TogglePassive::mode)
+        ).apply(instance, TogglePassive::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.TOGGLE_PASSIVE.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            PassiveSkillService.setEnabled(context.caster(), skill, switch (mode) {
+                case TOGGLE -> null;
+                case ENABLE -> true;
+                case DISABLE -> false;
+            });
+        }
+    }
+
+    /**
+     * Shows the caster's picked Qi Coating element for a channel (QiCoatingSelectionService). Used in a coating passive's
+     * on_enable like persistent_visual: the passive taking it off again and putting it back on relog go through
+     * SkillActionRuntime the same way.
+     */
+    public record QiCoatingVisual(QiCoatingChannel channel) implements SkillAction {
+        public static final MapCodec<QiCoatingVisual> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                QiCoatingChannel.CODEC.fieldOf("channel").forGetter(QiCoatingVisual::channel)
+        ).apply(instance, QiCoatingVisual::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.QI_COATING_VISUAL.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            QiCoatingSelectionService.show(context, channel);
+        }
+    }
+
+    public enum ToggleMode implements StringRepresentable {
+        TOGGLE("toggle"), ENABLE("enable"), DISABLE("disable");
+
+        public static final Codec<ToggleMode> CODEC = StringRepresentable.fromEnum(ToggleMode::values);
+        private final String name;
+
+        ToggleMode(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return name;
         }
     }
 
