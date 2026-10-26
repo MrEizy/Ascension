@@ -56,9 +56,14 @@ public class GoldenCoreDataSource implements DataSource<GoldenCoreHolder> {
 
     }
 
+    /**
+     * the cache is not cleared here. data sources finish loading in no set order, and cores owned by completed path tribulations
+     * are only added again once the path finishes loading (when its realms are simulated).
+     * unclaimed cached cores are dropped the next time the holder is written instead, see {@link GoldenCoreSerializerHandler}
+     */
     @Override
     public void finishedLoading(OriginSource source, GoldenCoreHolder holder) {
-        holder.clearCache();
+
     }
 
     @Override

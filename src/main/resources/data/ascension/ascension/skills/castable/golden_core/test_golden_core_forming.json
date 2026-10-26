@@ -1,0 +1,11 @@
+{
+  "type": "ascension:golden_core_forming",
+  "name": {"translate": "ascension.skill.test_golden_core_forming.name"},
+  "description": {"translate": "ascension.skill.test_golden_core_forming.desc"},
+  "golden_core": "ascension:test_core",
+  "path": "ascension:foundation/essence",
+  "realm": {
+    "major": 0,
+    "minor": 2
+  }
+}
