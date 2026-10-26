@@ -17,6 +17,7 @@ import net.zic.ascension.api.ascension.core.golden_core.GoldenCoreInstance;
 import net.zic.ascension.api.ascension.core.golden_core.data_source.GoldenCoreHolder;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationInstance;
 import net.zic.ascension.api.ascension.event.golden_core.GoldenCoreEvent;
 
 import net.zic.ascension.api.ascension.core.path.PathHolder;
@@ -54,6 +55,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Contains methods to interact with an origin source.
@@ -454,6 +456,37 @@ public class AscensionOriginSourceHelper {
         getPathHolder(source).markPathDirty(path);
         resolveProcess(source,"modified_path"+id);
 
+    }
+
+    /**
+     * if an external source can trigger the current realm's MANUAL tribulation of a path right now
+     * @param tribulation the tribulation the caller expects to trigger
+     */
+    public static boolean canTriggerPathTribulation(OriginSource source,Identifier path,Identifier tribulation){
+        PathInstance<?> instance = getPathInstance(source,path);
+        return instance != null && instance.canTriggerTribulation(tribulation);
+    }
+
+    /**
+     * triggers the current realm's MANUAL tribulation of a path, and syncs the path
+     * @param tribulation the tribulation the caller expects to trigger, if the realm's tribulation differs nothing is triggered
+     * @param target the entity the tribulation targets
+     * @param beforeStart runs before the tribulation starts, use it to modify the TribulationData (see {@link TribulationInstance#as})
+     * @return the started tribulation, or null if it could not be triggered
+     */
+    public static @Nullable TribulationInstance<?> triggerPathTribulation(OriginSource source, Identifier path, Identifier tribulation, LivingEntity target,
+                                                                          @Nullable Consumer<TribulationInstance<?>> beforeStart){
+        PathInstance<?> instance = getPathInstance(source,path);
+        if(instance == null) return null;
+        TribulationInstance<?> started = instance.triggerTribulation(source,tribulation,target,beforeStart);
+        if(started != null) markPathDirty(source,path);
+        return started;
+    }
+
+    //the running breakthrough tribulation of a path, null if there is none
+    public static @Nullable TribulationInstance<?> getActivePathTribulation(OriginSource source,Identifier path){
+        PathInstance<?> instance = getPathInstance(source,path);
+        return instance == null ? null : instance.getActiveTribulation();
     }
 
     //──Skill Access────────────────────────────────────────────────────────
