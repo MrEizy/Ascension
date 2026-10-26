@@ -106,7 +106,7 @@ public final class AlchemyCommand {
             player.sendSystemMessage(Component.literal("The medicinal reaction was catastrophic; no pill formed."));
             return 0;
         }
-        ItemStack pill = MedicinalPillFactory.condense(result.profile(), result.ingredientCount());
+        ItemStack pill = MedicinalPillFactory.condense(result.profile(), result.ingredientCount(), player.level().registryAccess());
         if (pill.isEmpty()) {
             player.sendSystemMessage(Component.literal("This combination did not express a usable medicinal effect."));
             return 0;

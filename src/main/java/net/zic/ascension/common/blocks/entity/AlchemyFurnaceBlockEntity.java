@@ -60,7 +60,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity {
     public ItemStack condense(AlchemyContext context) {
         if (isEmpty() || context == null || context.level() == null) return ItemStack.EMPTY;
         ItemStack pill = MedicinalPillFactory.condense(
-                MedicinalEffectResolver.resolve(composition, context.level().registryAccess()), ingredientCount);
+                MedicinalEffectResolver.resolve(composition, context.level().registryAccess()), ingredientCount, context.level().registryAccess());
         clear();
         return pill;
     }

@@ -93,6 +93,41 @@ public class AscLangProvider extends LanguageProvider {
         // Pills and Pill Things
         add("item.ascension.jade_bottle", "Jade Bottle");
         add("item.ascension.procedural_pill", "Refined Medicinal Pill");
+
+        // Can't even lie, completely randomized names...
+        add("ascension.alchemy.pill.name.body_reinforcement.0", "Iron Bone Pill");
+        add("ascension.alchemy.pill.name.body_reinforcement.1", "Jade Tendon Pill");
+        add("ascension.alchemy.pill.name.body_reinforcement.2", "Mountain Marrow Pill");
+        add("ascension.alchemy.pill.name.health_restoration.0", "Spring Renewal Pill");
+        add("ascension.alchemy.pill.name.health_restoration.1", "Bloodleaf Restoration Pill");
+        add("ascension.alchemy.pill.name.health_restoration.2", "Living Dew Pill");
+        add("ascension.alchemy.pill.name.jade_heart.0", "Jade Heart Pill");
+        add("ascension.alchemy.pill.name.jade_heart.1", "Moonheart Elixir Pill");
+        add("ascension.alchemy.pill.name.medicinal_cleansing.0", "Clear Meridian Pill");
+        add("ascension.alchemy.pill.name.medicinal_cleansing.1", "Purifying Dew Pill");
+        add("ascension.alchemy.pill.name.medicinal_cleansing.2", "Pristine Lotus Pill");
+        add("ascension.alchemy.pill.name.medicinal_toxicity.0", "Venom Heart Pill");
+        add("ascension.alchemy.pill.name.medicinal_toxicity.1", "Tainted Blood Pill");
+        add("ascension.alchemy.pill.name.meridian_burn.0", "Scorching Meridian Pill");
+        add("ascension.alchemy.pill.name.meridian_burn.1", "Searing Qi Pill");
+        add("ascension.alchemy.pill.name.meridian_corruption.0", "Corrupted Essence Pill");
+        add("ascension.alchemy.pill.name.meridian_corruption.1", "Withering Soul Pill");
+        add("ascension.alchemy.pill.name.qi_circulation.0", "Flowing Meridian Pill");
+        add("ascension.alchemy.pill.name.qi_circulation.1", "Wandering Cloud Pill");
+        add("ascension.alchemy.pill.name.qi_circulation.2", "Azure Channel Pill");
+        add("ascension.alchemy.pill.name.qi_restoration.0", "Spirit Replenishing Pill");
+        add("ascension.alchemy.pill.name.qi_restoration.1", "Gathered Qi Pill");
+        add("ascension.alchemy.pill.name.qi_restoration.2", "Deep Spring Pill");
+        add("ascension.alchemy.pill.name.serene_meridians.0", "Serene Meridian Pill");
+        add("ascension.alchemy.pill.name.serene_meridians.1", "Tranquil Moon Pill");
+        add("ascension.alchemy.pill.name.thunder_vigor.0", "Thunder Vigor Pill");
+        add("ascension.alchemy.pill.name.thunder_vigor.1", "Stormheart Pill");
+        add("ascension.alchemy.pill.name.verdant_flame.0", "Verdant Flame Pill");
+        add("ascension.alchemy.pill.name.verdant_flame.1", "Emberwood Pill");
+        add("ascension.alchemy.pill.name.vital_marrow.0", "Vital Marrow Pill");
+        add("ascension.alchemy.pill.name.vital_marrow.1", "Life Root Pill");
+
+        add("ascension.alchemy.herb.raw_effects", "Raw medicinal effects (estimated)");
         add("ascension.alchemy.pill.inert", "No medicinal composition is stored.");
         add("ascension.alchemy.pill.composition", "Purity: %s%%  |  Toxicity: %s");
         add("ascension.alchemy.pill.raw_warning", "Raw herbs absorb poorly and may overload weak cultivators.");

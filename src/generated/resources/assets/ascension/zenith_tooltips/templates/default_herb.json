@@ -32,6 +32,23 @@
           "type": "zenithlib:divider"
         },
         {
+          "type": "zenithlib:header",
+          "color": "positive",
+          "text": {
+            "translate": "ascension.alchemy.herb.raw_effects"
+          }
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "positive",
+          "text": {
+            "source": "ascension:herb_effect"
+          }
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
           "type": "zenithlib:row",
           "left": {
             "translate": "ascension.herb.tooltip.age"

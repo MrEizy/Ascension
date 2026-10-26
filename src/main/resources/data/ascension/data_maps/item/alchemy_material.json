@@ -87,7 +87,14 @@
       },
       "purity": 0.84,
       "instability": 0.3,
-      "refinement_difficulty": 2.4
+      "refinement_difficulty": 2.4,
+      "direct_effects": [
+        {
+          "id": "ascension:thunder_vigor",
+          "potency": 0.9,
+          "duration_ticks": 1200
+        }
+      ]
     },
     "ascension:ginseng": {
       "type": "ascension:herb",

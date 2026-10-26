@@ -15,10 +15,14 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.item.ModItems;
+import net.zic.ascension.datagen.loot.JadeMedicineLootFunction;
+
+import java.util.List;
 
 import java.util.function.BiConsumer;
 
 public class AscChestLootTableProvider implements LootTableSubProvider {
+    public static final ResourceKey<LootTable> ALCHEMIST_CACHE_BARREL = key("barrels/alchemist_cache");
     public static final ResourceKey<LootTable> SPIRITUAL_CAVERN_BARREL = key("barrels/spiritual_cavern");
     // Referenced by the barrels in sword_tomb1/2/3.nbt
     public static final ResourceKey<LootTable> SWORD_TOMB_1_BARREL = key("barrels/sword_tomb1");
@@ -33,6 +37,13 @@ public class AscChestLootTableProvider implements LootTableSubProvider {
 
     @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
+        consumer.accept(ALCHEMIST_CACHE_BARREL, LootTable.lootTable()
+                .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(ModItems.JADE_BOTTLE.get())
+                                .apply(() -> new JadeMedicineLootFunction(List.of(
+                                        AscensionCraft.prefix("jade_dew_grass"),
+                                        AscensionCraft.prefix("frostglass_lotus")), 3)))));
+
         consumer.accept(SPIRITUAL_CAVERN_BARREL, LootTable.lootTable()
                 .withPool(AscAddedLootTableProvider.physiquePool(AscensionCraft.prefix("2_profound/cold_spring_dantian_physique")))
 

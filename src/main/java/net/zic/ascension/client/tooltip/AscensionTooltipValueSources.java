@@ -67,6 +67,7 @@ public final class AscensionTooltipValueSources {
     public static final Identifier HERB_AGE = AscensionCraft.prefix("herb_age");
     public static final Identifier HERB_QUALITY = AscensionCraft.prefix("herb_quality");
     public static final Identifier HERB_QUALITY_BADGE = AscensionCraft.prefix("herb_quality_badge");
+    public static final Identifier HERB_EFFECT = AscensionCraft.prefix("herb_effect");
     public static final Identifier HERB_ORIGIN = AscensionCraft.prefix("herb_origin");
     public static final Identifier HERB_RELATED_TYPE_BADGE = AscensionCraft.prefix("herb_related_type_badge");
     public static final Identifier HERB_RELATED_TARGET_ROW = AscensionCraft.prefix("herb_related_target_row");
@@ -95,6 +96,7 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerValue(HERB_AGE, AscensionTooltipValueSources::herbAge);
         ZenithTooltipSources.registerValue(HERB_QUALITY, AscensionTooltipValueSources::herbQuality);
         ZenithTooltipSources.registerValue(HERB_ORIGIN, AscensionTooltipValueSources::herbOrigin);
+        ZenithTooltipSources.registerValue(HERB_EFFECT, AscensionTooltipValueSources::herbEffect);
 
         ZenithTooltipSources.registerValue(PILL_GRADE, AscensionTooltipValueSources::pillGrade);
         ZenithTooltipSources.registerValue(PILL_EFFECT, AscensionTooltipValueSources::pillEffect);
@@ -564,6 +566,26 @@ public final class AscensionTooltipValueSources {
                     AscensionComponents.PILL_DATA.get(), AscensionComponents.PillData.DEFAULT)));
         }
         return Optional.empty();
+    }
+
+    private static Optional<ZenithTooltipValue> herbEffect(ZenithTooltipContext context) {
+        if (!(context.stack().getItem() instanceof HerbItem) || context.registryAccess().isEmpty()) {
+            return Optional.empty();
+        }
+        MedicinalProfile profile = net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalHerbConsumption
+                .profile(context.stack(), context.registryAccess().orElseThrow());
+        if (profile.effects().isEmpty()) {
+            return Optional.of(ZenithTooltipValue.text(Component.translatable("ascension.alchemy.pill.inert")));
+        }
+        net.minecraft.network.chat.MutableComponent lines = Component.empty();
+        for (MedicinalProfile.Effect effect : profile.effects()) {
+            if (!lines.getSiblings().isEmpty()) lines.append("\n");
+            lines.append(Component.literal(effect.adverse() ? "− " : "+ ")
+                    .append(Component.translatable("ascension.alchemy.effect." + effect.id().getPath().replace('/', '.')))
+                    .append(" " + String.format(java.util.Locale.ROOT, "%.2f", effect.potency() * (effect.adverse() ? 1.30D : 0.28D)))
+                    .withStyle(effect.adverse() ? net.minecraft.ChatFormatting.RED : net.minecraft.ChatFormatting.GREEN));
+        }
+        return Optional.of(ZenithTooltipValue.text(lines));
     }
 
     private static Optional<ZenithTooltipValue> herbOrigin(ZenithTooltipContext context) {

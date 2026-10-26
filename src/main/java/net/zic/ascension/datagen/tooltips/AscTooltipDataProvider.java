@@ -106,6 +106,9 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                                 ZenithTooltipColor.TEXT
                         ))
                         .add(divider())
+                        .add(header(translated("ascension.alchemy.herb.raw_effects"), ZenithTooltipColor.POSITIVE))
+                        .add(text(sourced("ascension:herb_effect"), ZenithTooltipColor.POSITIVE))
+                        .add(divider())
                         .add(row(
                                 translated("ascension.herb.tooltip.age"),
                                 sourced("ascension:herb_age"),

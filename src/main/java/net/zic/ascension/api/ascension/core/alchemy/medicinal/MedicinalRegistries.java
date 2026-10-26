@@ -23,6 +23,10 @@ public final class MedicinalRegistries {
             AscensionCraft.MOD_ID, "alchemy/effect_actions", () -> MedicinalEffectAction.CODEC
     );
 
+    public static final RegistryHelper.DataPackRegistry<MedicinalPillIdentity> PILL_IDENTITIES = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "alchemy/pill_identities", () -> MedicinalPillIdentity.CODEC
+    );
+
     private MedicinalRegistries() {
     }
 
@@ -31,5 +35,6 @@ public final class MedicinalRegistries {
         event.dataPackRegistry(REACTIONS.key(), REACTIONS.codec().get(), REACTIONS.codec().get());
         event.dataPackRegistry(EXPRESSIONS.key(), EXPRESSIONS.codec().get(), EXPRESSIONS.codec().get());
         event.dataPackRegistry(ACTIONS.key(), ACTIONS.codec().get(), ACTIONS.codec().get());
+        event.dataPackRegistry(PILL_IDENTITIES.key(), PILL_IDENTITIES.codec().get(), PILL_IDENTITIES.codec().get());
     }
 }
