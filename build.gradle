@@ -164,6 +164,10 @@ dependencies {
     //compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
     // at runtime, use the full JEI jar for NeoForge
     //runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+    // dev-only: JEI in the run configs, not a dependency of the built mod
+    localRuntime("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+    // compile-only: JEI API for the optional JEI plugin, not a dependency of the built mod
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
 
     //implementation "maven.modrinth:jade:${project.jade_version}"
 

@@ -492,8 +492,11 @@ public class AscLangProvider extends LanguageProvider {
 
         //Key Items
         add("item.ascension.physique_essence", "Physique Essence");
+        add("item.ascension.physique_essence.named", "Physique Essence: %s");
         add("item.ascension.bloodline_essence", "Bloodline Essence");
+        add("item.ascension.bloodline_essence.named", "Bloodline Essence: %s");
         add("item.ascension.technique_manual", "Technique Manual");
+        add("item.ascension.technique_manual.named", "Technique Manual: %s");
         add("item.ascension.technique_manual.battle_style", "Battle Style");
         add("item.ascension.technique_manual.cultivation_technique", "Cultivation Technique");
 
@@ -1062,9 +1065,9 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.void_pocket.desc", "Strike the air before you until space caves in and tears open, revealing the void where your ender chest is kept.");
         // Qi Coating skills: the element is picked in the coating wheel (Shift + skill wheel key).
         add("ascension.skill.qi_coating.name", "Qi Coating");
-        add("ascension.skill.qi_coating.desc", "Coat your hands in the qi of a Dao you have walked. Hold Shift with the skill wheel key to choose its element. Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.qi_coating.desc", "Control innate elemental qi and coat your body. Press Shift + %s to change mode.");
         add("ascension.skill.external_qi_coating.name", "External Qi Coating");
-        add("ascension.skill.external_qi_coating.desc", "Coat your weapon in the qi of a Dao you have walked. Hold Shift with the skill wheel key to choose its element. Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.external_qi_coating.desc", "Control innate elemental qi and coat your weapon. Press Shift + %s to change mode.");
         add("ascension.qi_coating.element.fire.name", "Fire");
         add("ascension.qi_coating.element.earth.name", "Earth");
         add("ascension.qi_coating.element.water.name", "Water");
@@ -1077,7 +1080,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.qi_coating.element.time.name", "Time");
         add("gui.ascension.qi_coating_wheel.empty", "No Dao unlocked");
         add("ascension.skill.qi_step.name", "Qi Steps");
-        add("ascension.skill.qi_step.desc", "Footholds of qi form under your feet in mid-air, so you can walk, run and jump on through the air. Each step costs a little qi, jumping off a foothold more, and standing still drains fast and only lasts a moment. You can only go so far before you need to touch the ground again.");
+        add("ascension.skill.qi_step.desc", "Use your qi to coat your feet and step on the air to explore beyond the clouds.");
         // Leftover coating skills (Qi Coatings Leftovers test technique).
         add("ascension.skill.water_serpent_qi_layer.name", "Water Qi Layer: Serpent Coil");
         add("ascension.skill.water_serpent_qi_layer.desc", "Serpents of water qi wind up your arms and legs, bursting into spray as they reach the top. Drains 1 qi per second; cast again to release it.");

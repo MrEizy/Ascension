@@ -4,7 +4,8 @@
     "translate": "ascension.skill.qi_coating.name"
   },
   "description": {
-    "translate": "ascension.skill.qi_coating.desc"
+    "translate": "ascension.skill.qi_coating.desc",
+    "with": [{ "keybind": "key.ascension.open_skill_wheel" }]
   },
   "toggleable": true,
   "enabled_by_default": false,
