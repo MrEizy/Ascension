@@ -21,6 +21,7 @@ import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalCompositi
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalComposition;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalPillFactory;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
 import net.zic.ascension.common.item.ModItems;
 
 import java.util.ArrayList;
@@ -106,7 +107,7 @@ public final class AlchemyCommand {
             player.sendSystemMessage(Component.literal("The medicinal reaction was catastrophic; no pill formed."));
             return 0;
         }
-        ItemStack pill = MedicinalPillFactory.condense(result.profile(), result.ingredientCount(), player.level().registryAccess());
+        ItemStack pill = MedicinalPillFactory.condense(result.profile(), result.ingredientCount(), player.level().registryAccess(), MedicinalDecay.now(player.level()));
         if (pill.isEmpty()) {
             player.sendSystemMessage(Component.literal("This combination did not express a usable medicinal effect."));
             return 0;

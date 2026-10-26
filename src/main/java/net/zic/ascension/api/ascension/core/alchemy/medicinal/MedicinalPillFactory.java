@@ -18,7 +18,7 @@ public final class MedicinalPillFactory {
     private MedicinalPillFactory() {
     }
 
-    public static ItemStack condense(MedicinalProfile profile, int ingredientCount, RegistryAccess access) {
+    public static ItemStack condense(MedicinalProfile profile, int ingredientCount, RegistryAccess access, long gameTime) {
         if (profile == null || profile.composition().isEmpty()) return ItemStack.EMPTY;
         List<MedicinalProfile.Effect> beneficial = new ArrayList<>();
         List<MedicinalProfile.Effect> harmful = new ArrayList<>();
@@ -52,6 +52,7 @@ public final class MedicinalPillFactory {
         int count = Math.min(4, Math.max(1, 1 + (Math.max(1, ingredientCount) - 2) / 3));
         ItemStack stack = new ItemStack(ModItems.PROCEDURAL_PILL.get(), count);
         stack.set(AscensionComponents.MEDICINAL_PILL.get(), result);
+        MedicinalDecay.initialize(stack, gameTime);
         stack.set(AscensionComponents.PILL_DATA.get(), new AscensionComponents.PillData(
                 AscensionComponents.PillData.rankForTier(substance.rankTier()), PillGrade.fromQuality(quality)
         ));

@@ -10,14 +10,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.level.Level;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalConsumptionService;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
 
-/**
- * A single consumable whose persistent profile defines every individual pill's actual medicine.
- * Unconfigured stacks cannot be consumed; only the server can apply the resolved medicinal effects.
- */
+
 public final class ProceduralPillItem extends Item {
     public ProceduralPillItem(Properties properties) {
         super(properties.component(DataComponents.CONSUMABLE,
@@ -27,7 +25,8 @@ public final class ProceduralPillItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         MedicinalProfile profile = player.getItemInHand(hand).get(AscensionComponents.MEDICINAL_PILL.get());
-        if (profile == null || profile.composition().isEmpty() || profile.effects().isEmpty()) return InteractionResult.FAIL;
+        if (profile == null || profile.composition().isEmpty() || profile.effects().isEmpty()
+                || MedicinalDecay.expired(player.getItemInHand(hand), MedicinalDecay.now(level))) return InteractionResult.FAIL;
         return super.use(level, player, hand);
     }
 
@@ -35,7 +34,14 @@ public final class ProceduralPillItem extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         MedicinalProfile profile = stack.get(AscensionComponents.MEDICINAL_PILL.get());
         if (profile == null || profile.composition().isEmpty() || profile.effects().isEmpty()) return stack;
-        if (!level.isClientSide()) MedicinalConsumptionService.consume(profile, entity, true);
+        if (!level.isClientSide()) {
+            long now = MedicinalDecay.now(level);
+            if (MedicinalDecay.expired(stack, now)) {
+                return MedicinalDecay.toResidue(stack);
+            }
+            double vitality = MedicinalDecay.vitality(stack, now);
+            MedicinalConsumptionService.consume(MedicinalDecay.diminished(profile, vitality), entity, true);
+        }
         return super.finishUsingItem(stack, level, entity);
     }
 

@@ -12,6 +12,7 @@ import net.zic.ascension.api.ascension.core.alchemy.AlchemyMergeResolver;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyProcessHooks;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementResolver;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalComposition;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalEffectResolver;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalPillFactory;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalReactionResolver;
@@ -60,7 +61,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity {
     public ItemStack condense(AlchemyContext context) {
         if (isEmpty() || context == null || context.level() == null) return ItemStack.EMPTY;
         ItemStack pill = MedicinalPillFactory.condense(
-                MedicinalEffectResolver.resolve(composition, context.level().registryAccess()), ingredientCount, context.level().registryAccess());
+                MedicinalEffectResolver.resolve(composition, context.level().registryAccess()), ingredientCount, context.level().registryAccess(), MedicinalDecay.now(context.level()));
         clear();
         return pill;
     }

@@ -22,6 +22,7 @@ import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.artifacts.pills.PillItem;
 import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
 import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipProvider;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
@@ -74,6 +75,7 @@ public final class AscensionTooltipValueSources {
 
     public static final Identifier PILL_GRADE = AscensionCraft.prefix("pill_grade");
     public static final Identifier PILL_EFFECT = AscensionCraft.prefix("pill_effect");
+    public static final Identifier PILL_DECAY = AscensionCraft.prefix("pill_decay");
     public static final Identifier PILL_BADGES = AscensionCraft.prefix("pill_badges");
 
     private static boolean registered;
@@ -100,6 +102,7 @@ public final class AscensionTooltipValueSources {
 
         ZenithTooltipSources.registerValue(PILL_GRADE, AscensionTooltipValueSources::pillGrade);
         ZenithTooltipSources.registerValue(PILL_EFFECT, AscensionTooltipValueSources::pillEffect);
+        ZenithTooltipSources.registerValue(PILL_DECAY, AscensionTooltipValueSources::pillDecay);
 
         ZenithTooltipSources.registerElement(PHYSIQUE_PATHS, context -> badges(PHYSIQUE_PATHS, context, ZenithTooltipColor.ACCENT));
         ZenithTooltipSources.registerElement(PHYSIQUE_STATS, context -> rows(PHYSIQUE_STATS, context));
@@ -542,19 +545,50 @@ public final class AscensionTooltipValueSources {
                     ? Component.translatable("ascension.alchemy.pill.inert")
                     : pill.item().definition().effectDescription(pill.data()));
             net.minecraft.network.chat.MutableComponent lines = Component.empty();
+            double vitality = MedicinalDecay.vitality(context.stack(), tooltipTime(context));
             for (MedicinalProfile.Effect effect : profile.effects()) {
                 if (!lines.getSiblings().isEmpty()) lines.append("\n");
                 String name = effect.id().getPath().replace('/', '.');
+                double potency = effect.potency() * (effect.adverse() ? 1.0D : vitality);
                 net.minecraft.network.chat.MutableComponent detail = Component.literal(effect.adverse() ? "− " : "+ ")
                         .append(Component.translatable("ascension.alchemy.effect." + name))
-                        .append(" " + String.format(java.util.Locale.ROOT, "%.2f", effect.potency())
-                                + (effect.durationTicks() > 0 ? " (" + effect.durationTicks() / 20 + "s)" : ""));
+                        .append(" " + String.format(java.util.Locale.ROOT, "%.2f", potency)
+                                + (effect.durationTicks() > 0 ? " (" + Math.round(effect.durationTicks() * (effect.adverse() ? 1.0D : vitality)) / 20 + "s)" : ""));
                 lines.append(detail.withStyle(effect.adverse()
                         ? net.minecraft.ChatFormatting.RED : net.minecraft.ChatFormatting.GREEN));
             }
             return ZenithTooltipValue.text(lines.getSiblings().isEmpty()
                     ? Component.translatable("ascension.alchemy.pill.inert") : lines);
         });
+    }
+
+    private static long tooltipTime(ZenithTooltipContext context) {
+        net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
+        if (minecraft.level != null) return MedicinalDecay.now(minecraft.level);
+        MedicinalDecay.State state = context.stack().get(AscensionComponents.MEDICINAL_DECAY.get());
+        return state == null ? 0L : state.checkedAt();
+    }
+
+    private static Optional<ZenithTooltipValue> pillDecay(ZenithTooltipContext context) {
+        MedicinalProfile profile = context.stack().get(AscensionComponents.MEDICINAL_PILL.get());
+        if (profile == null) return Optional.empty();
+        long now = tooltipTime(context);
+        MedicinalDecay.State state = context.stack().get(AscensionComponents.MEDICINAL_DECAY.get());
+        if (state == null) state = MedicinalDecay.fresh(now);
+        double vitality = MedicinalDecay.vitality(profile, state, now);
+        if (vitality <= MedicinalDecay.EXPIRE_AT) {
+            return Optional.of(ZenithTooltipValue.text(Component.translatable("ascension.alchemy.pill.expired")));
+        }
+        long remaining = MedicinalDecay.ticksUntilExpiry(profile, state, now);
+        Component time = remaining == Long.MAX_VALUE
+                ? Component.translatable("ascension.alchemy.pill.preserved")
+                : Component.literal(remaining >= 24000L
+                        ? String.format(java.util.Locale.ROOT, "~%.1f days", remaining / 24000.0D)
+                        : remaining >= 1000L
+                        ? String.format(java.util.Locale.ROOT, "~%.1f hours", remaining / 1000.0D)
+                        : String.format(java.util.Locale.ROOT, "~%ds", remaining / 20L));
+        return Optional.of(ZenithTooltipValue.text(Component.translatable("ascension.alchemy.pill.vitality",
+                Math.round(vitality * 100.0D), time)));
     }
 
     private static Optional<PillContext> pillContext(ZenithTooltipContext context) {

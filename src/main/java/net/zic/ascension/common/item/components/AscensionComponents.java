@@ -13,6 +13,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.alchemy.PillGrade;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
 
 import java.util.function.Supplier;
 
@@ -68,6 +69,14 @@ public class AscensionComponents {
             () -> DataComponentType.<MedicinalProfile>builder()
                     .persistent(MedicinalProfile.CODEC)
                     .networkSynchronized(ByteBufCodecs.fromCodecWithRegistries(MedicinalProfile.CODEC))
+                    .build()
+    );
+
+    public static final Supplier<DataComponentType<MedicinalDecay.State>> MEDICINAL_DECAY = DATA_COMPONENTS.register(
+            "medicinal_decay",
+            () -> DataComponentType.<MedicinalDecay.State>builder()
+                    .persistent(MedicinalDecay.State.CODEC)
+                    .networkSynchronized(ByteBufCodecs.fromCodecWithRegistries(MedicinalDecay.State.CODEC))
                     .build()
     );
 

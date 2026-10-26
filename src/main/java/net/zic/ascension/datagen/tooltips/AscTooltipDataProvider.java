@@ -46,6 +46,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                                 sourced("zenithlib:subject_description"),
                                 ZenithTooltipColor.TEXT
                         ))
+                        .add(text(sourced("ascension:pill_decay"), ZenithTooltipColor.ACCENT))
                         .add(divider())
                         .add(header(translated("ascension.pill.tooltip.effect"), ZenithTooltipColor.ACCENT))
                         .add(text(

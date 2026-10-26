@@ -29,6 +29,13 @@
           }
         },
         {
+          "type": "zenithlib:text",
+          "color": "accent",
+          "text": {
+            "source": "ascension:pill_decay"
+          }
+        },
+        {
           "type": "zenithlib:divider"
         },
         {
