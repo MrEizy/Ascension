@@ -43,6 +43,7 @@ import net.zic.ascension.impl.core.entity.AscensionStats;
 
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
 import net.zic.ascension.impl.datapack.path.AscensionPathTypes;
+import net.zic.ascension.impl.datapack.golden_core.AscensionGoldenCoreTypes;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionConditionTypes;
 import net.zic.ascension.impl.datapack.requirement.AscensionRequirementTypes;
@@ -137,6 +138,7 @@ public class AscensionCraft {
         AscensionSkillTypes.register(modEventBus);
         AscensionTechniqueTypes.register(modEventBus);
         AscensionPathTypes.register(modEventBus);
+        AscensionGoldenCoreTypes.register(modEventBus);
         AscensionTribulationTypes.register(modEventBus);
         AscensionTribulationResolutionActionTypes.register(modEventBus);
 

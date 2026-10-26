@@ -661,6 +661,10 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.path.weapon.umbrella.name", "Umbrella");
         add("ascension.path.weapon.umbrella.desc", "cultivate the deceptive grace of the warding canopy, sheltering blow and blade alike");
 
+        //Golden Cores
+        add("ascension.golden_core.test_core.name", "Test Golden Core");
+        add("ascension.golden_core.test_core.desc", "A plain golden core used for testing. It strengthens the body, and grows stronger with every realm its path reaches.");
+
 
 
         //Physiques

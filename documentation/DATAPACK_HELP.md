@@ -7,6 +7,7 @@ For system-specific authoring, use:
 - `ASCENSION_TECHNIQUES.md` for techniques and their `on_added` actions
 - `ASCENSION_BLOODLINES.md` for purity-driven bloodlines
 - `ASCENSION_PHYSIQUES.md` for persistent physique bonuses
+- `ASCENSION_GOLDEN_CORES.md` for golden cores and their per-realm actions
 
 ## Quick links
 - [Files and IDs](#files-and-ids)
@@ -38,6 +39,7 @@ Common registries:
 | Bloodlines | `data/<namespace>/ascension/bloodlines/...` |
 | Physiques | `data/<namespace>/ascension/physiques/...` |
 | Paths | `data/<namespace>/ascension/paths/...` |
+| Golden cores | `data/<namespace>/ascension/golden_cores/...` |
 | Progress actions | `data/<namespace>/ascension/progress_actions/...` |
 | Progress conditions | `data/<namespace>/ascension/progress_action_conditions/...` |
 | Tribulations | `data/<namespace>/ascension/tribulations/...` |
@@ -339,7 +341,7 @@ Skill progression actions use a simple list:
 
 `grant_skills` is reversed when progression moves backward. `remove_skills` does the opposite: it removes while progressing upward and restores when that progression is reversed.
 
-See the bloodline and technique guides for the inline condition formats and their exact progression semantics. Realm conditions (`ascension:realm_change/...`, `ascension:every_realm`, etc.) only apply to path handlers.
+See the bloodline and technique guides for the inline condition formats and their exact progression semantics. Realm conditions (`ascension:realm_change/...`, `ascension:every_realm`, etc.) only apply to path handlers and golden core `realm_actions`.
 
 # Datapack resources
 Custom resources live in:
@@ -451,6 +453,7 @@ Techniques:                data/<namespace>/ascension/techniques/
 Bloodlines:                data/<namespace>/ascension/bloodlines/
 Physiques:                 data/<namespace>/ascension/physiques/
 Paths:                     data/<namespace>/ascension/paths/
+Golden cores:              data/<namespace>/ascension/golden_cores/
 Progress actions:          data/<namespace>/ascension/progress_actions/
 Progress conditions:       data/<namespace>/ascension/progress_action_conditions/
 Tribulations:              data/<namespace>/ascension/tribulations/

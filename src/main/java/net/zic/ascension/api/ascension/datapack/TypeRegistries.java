@@ -6,6 +6,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.ascension.datapack.golden_core.GoldenCoreType;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
@@ -30,6 +31,7 @@ public final class TypeRegistries {
     public static final Registry<SkillType> SKILL_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "skill_type");
     public static final Registry<TechniqueType> TECHNIQUE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "technique_type");
     public static final Registry<PathType> PATH_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "path_type");
+    public static final Registry<GoldenCoreType> GOLDEN_CORE_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "golden_core_type");
     public static final Registry<TribulationType<?>> TRIBULATION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "tribulation_type");
     public static final Registry<TribulationResolutionActionType> TRIBULATION_RESOLUTION_ACTION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "tribulation_resolution_action_type");
     public static final Registry<ProgressActionType> PROGRESS_ACTION_TYPE_REGISTRY = RegistryHelper.registry(AscensionCraft.MOD_ID, "progression_action_type");
@@ -54,6 +56,7 @@ public final class TypeRegistries {
         event.register(SKILL_TYPE_REGISTRY);
         event.register(TECHNIQUE_TYPE_REGISTRY);
         event.register(PATH_TYPE_REGISTRY);
+        event.register(GOLDEN_CORE_TYPE_REGISTRY);
         event.register(TRIBULATION_TYPE_REGISTRY);
         event.register(TRIBULATION_RESOLUTION_ACTION_TYPE_REGISTRY);
         event.register(PROGRESS_ACTION_TYPE_REGISTRY);

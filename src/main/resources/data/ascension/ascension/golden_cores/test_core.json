@@ -1,0 +1,41 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.golden_core.test_core.name"
+  },
+  "description": {
+    "translate": "ascension.golden_core.test_core.desc"
+  },
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:test_core_vitality_base",
+          "value": 1
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "realm_actions": [
+    {
+      "condition": "ascension:realm_change/all_realms",
+      "actions": [
+        {
+          "type": "ascension:give_stats",
+          "stats": {
+            "ascension:vitality": {
+              "flat": [
+                {
+                  "id": "ascension:test_core_vitality_realm",
+                  "value": 0.5
+                }
+              ],
+              "multiplier": []
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

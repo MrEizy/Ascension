@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.control.StaggerDefinition;
+import net.zic.ascension.api.ascension.core.golden_core.GoldenCore;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
@@ -17,6 +18,7 @@ import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.tribulation.Tribulation;
 import net.zic.ascension.api.ascension.datapack.bloodline.BloodlineType;
+import net.zic.ascension.api.ascension.datapack.golden_core.GoldenCoreType;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.api.ascension.datapack.physique.PhysiqueType;
 import net.zic.ascension.api.ascension.datapack.progresison.ProgressActionConditionType;
@@ -95,6 +97,9 @@ public final class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<Tribulation<?>> TRIBULATION_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "tribulations", () -> TribulationType.TRIBULATION_CODEC
     );
+    public static final RegistryHelper.DataPackRegistry<GoldenCore<?>> GOLDEN_CORE_REGISTRY = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "golden_cores", () -> GoldenCoreType.GOLDEN_CORE_CODEC
+    );
 
     private CoreRegistries() {
     }
@@ -128,6 +133,7 @@ public final class CoreRegistries {
         register(event, PROGRESS_ACTION_REGISTRY);
         register(event, PROGRESS_ACTION_CONDITION_REGISTRY);
         register(event, TRIBULATION_REGISTRY);
+        register(event, GOLDEN_CORE_REGISTRY);
     }
 
     private static <T> void register(DataPackRegistryEvent.NewRegistry event, RegistryHelper.DataPackRegistry<T> registry) {
