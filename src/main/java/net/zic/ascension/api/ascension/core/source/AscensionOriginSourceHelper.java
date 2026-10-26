@@ -13,7 +13,11 @@ import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolder;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineInstance;
+import net.zic.ascension.api.ascension.core.golden_core.GoldenCoreInstance;
+import net.zic.ascension.api.ascension.core.golden_core.data_source.GoldenCoreHolder;
 import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.realm.Realm;
+import net.zic.ascension.api.ascension.event.golden_core.GoldenCoreEvent;
 
 import net.zic.ascension.api.ascension.core.path.PathHolder;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
@@ -107,6 +111,9 @@ public class AscensionOriginSourceHelper {
     }
     protected static DataSourcePathBonusHolder getPathBonusHolder(OriginSource source){
         return getOrCreate(source, CoreDataSources.PATH_BONUS_DATA_SOURCE.get());
+    }
+    protected static GoldenCoreHolder getGoldenCoreHolder(OriginSource source){
+        return getOrCreate(source, CoreDataSources.GOLDEN_CORE_DATA_SOURCE.get());
     }
 
     //TODO add the methods that dont take in data and create a fresh instance instead
@@ -735,6 +742,158 @@ public class AscensionOriginSourceHelper {
 
     public static double getAffinity(OriginSource source,Identifier path){
         return getPathBonus(source,AFFINITY_CATEGORY,path);
+    }
+
+    //──Golden Core Access────────────────────────────────────────────────────────
+
+    public static Collection<UUID> getGoldenCores(OriginSource source){return getGoldenCoreHolder(source).getGoldenCores();}
+
+    public static Collection<GoldenCoreInstance<?>> getGoldenCoreInstances(OriginSource source){return getGoldenCoreHolder(source).getGoldenCoreInstances();}
+
+    public static boolean hasGoldenCore(OriginSource source,UUID id){
+        return getGoldenCoreHolder(source).hasGoldenCore(id);
+    }
+    public static @Nullable GoldenCoreInstance<?> getGoldenCore(OriginSource source,UUID id){
+        return getGoldenCoreHolder(source).getGoldenCore(id);
+    }
+    public static Collection<GoldenCoreInstance<?>> getGoldenCoresForPath(OriginSource source,Identifier path){
+        return getGoldenCoreHolder(source).getGoldenCoresForPath(path);
+    }
+    public static Collection<Identifier> getGoldenCoreOwners(OriginSource source,UUID id){
+        return getGoldenCoreHolder(source).getOwners(id);
+    }
+
+    /**
+     * adds a golden core, creating a new instance if it is not already held or cached.
+     * see {@link #addGoldenCore(OriginSource, GoldenCoreInstance, Identifier)} for how an existing id is handled
+     * @param id the unique id of the instance
+     * @param core the golden core
+     * @param path the path the core tracks
+     * @param acquisitionRealm the realm the core was acquired at, realm actions run for every realm above it
+     * @param owner the source of this core
+     * @return true -> added, false -> not added
+     */
+    public static boolean addGoldenCore(OriginSource source,UUID id,Identifier core,Identifier path,Realm acquisitionRealm,Identifier owner){
+        if(id == null || core == null || path == null) return false;
+        GoldenCoreInstance<?> instance = GoldenCoreInstance.create(id,core,path,acquisitionRealm,source.getRegistryAccess());
+        if(instance == null) return false;
+        return addGoldenCore(source,instance,owner);
+    }
+
+    /**
+     * adds a golden core instance. if a core with the same id is already held (or cached) the owner is added to it, and
+     * <ul>
+     *     <li>if the core differs nothing else changes, the held core may have evolved</li>
+     *     <li>if the path or acquisition realm differ the held core is updated to match them</li>
+     * </ul>
+     * @param instance the core we are adding
+     * @param owner the source of this core
+     * @return true -> added, false -> not added
+     */
+    public static boolean addGoldenCore(OriginSource source, GoldenCoreInstance<?> instance, Identifier owner) {
+        if(instance == null) return false;
+        GoldenCoreHolder holder = getGoldenCoreHolder(source);
+        GoldenCoreInstance<?> existing = holder.getGoldenCore(instance.getId());
+        if(existing != null){
+            if(existing.getCoreId().equals(instance.getCoreId()) && !existing.hasSameDetails(instance)){
+                updateGoldenCoreDetails(source,existing,instance.getPath(),instance.getAcquisitionRealm());
+            }
+            return holder.addOwner(instance.getId(),owner);
+        }
+
+        GoldenCoreInstance<?> cached = holder.takeCachedGoldenCore(instance.getId());
+        if(cached != null){
+            //nothing of the cached core is applied yet, so the details can be swapped directly
+            instance = cached.getCoreId().equals(instance.getCoreId()) && !cached.hasSameDetails(instance)
+                    ? cached.withDetails(instance.getPath(),instance.getAcquisitionRealm())
+                    : cached;
+        }
+
+        GoldenCoreEvent.Added.Pre pre = new GoldenCoreEvent.Added.Pre(source,instance);
+        NeoForge.EVENT_BUS.post(pre);
+        if(pre.isCanceled()) return false;
+
+        if(!holder.addGoldenCore(instance,owner)) return false;
+
+        source.startProcess("add_golden_core");
+        for(LivingEntity entity : source.getAttachedEntities()){
+            instance.applyToEntity(entity);
+        }
+        instance.onAdded(source);
+        instance.syncRealms(source);
+
+        NeoForge.EVENT_BUS.post(new GoldenCoreEvent.Added.Post(source,instance));
+
+        source.markDataSourceDirty(CoreDataSources.GOLDEN_CORE_DATA_SOURCE.getId());
+        resolveProcess(source,"add_golden_core");
+        return true;
+    }
+
+    //removes the core and runs its logic again with the new details, keeps the id, data and owners
+    private static void updateGoldenCoreDetails(OriginSource source, GoldenCoreInstance<?> existing, Identifier path, Realm acquisitionRealm){
+        GoldenCoreHolder holder = getGoldenCoreHolder(source);
+        long id = random.nextLong();
+        source.startProcess("modified_golden_core"+id);
+
+        existing.syncRealms(source,null,null);
+        existing.onRemoved(source);
+
+        GoldenCoreInstance<?> updated = existing.withDetails(path,acquisitionRealm);
+        holder.replaceGoldenCore(updated);
+        updated.onAdded(source);
+        updated.syncRealms(source);
+
+        source.markDataSourceDirty(CoreDataSources.GOLDEN_CORE_DATA_SOURCE.getId());
+        resolveProcess(source,"modified_golden_core"+id);
+    }
+
+    public static boolean removeGoldenCore(OriginSource source,UUID id,Identifier owner) {
+        if(id == null) return false;
+        GoldenCoreHolder holder = getGoldenCoreHolder(source);
+        GoldenCoreInstance<?> instance = holder.getGoldenCore(id);
+        if(instance == null) return false;
+
+        GoldenCoreEvent.Removed.Pre pre = new GoldenCoreEvent.Removed.Pre(source,instance);
+        NeoForge.EVENT_BUS.post(pre);
+        if(pre.isCanceled()) return false;
+
+        if(!holder.removeGoldenCore(id,owner)) return false;
+
+        source.startProcess("remove_golden_core");
+        instance.syncRealms(source,null,null);
+        instance.onRemoved(source);
+        for(LivingEntity entity : source.getAttachedEntities()){
+            instance.removeFromEntity(entity);
+        }
+        NeoForge.EVENT_BUS.post(new GoldenCoreEvent.Removed.Post(source,instance));
+
+        source.markDataSourceDirty(CoreDataSources.GOLDEN_CORE_DATA_SOURCE.getId());
+        resolveProcess(source,"remove_golden_core");
+        return true;
+    }
+
+    //should be used if you changed a cores GoldenCoreData
+    public static void markGoldenCoreDirty(OriginSource source,UUID core){
+        long id = random.nextLong();
+        source.startProcess("modified_golden_core"+id);
+        source.markDataSourceDirty(CoreDataSources.GOLDEN_CORE_DATA_SOURCE.getId());
+        getGoldenCoreHolder(source).markGoldenCoreDirty(core);
+        resolveProcess(source,"modified_golden_core"+id);
+    }
+
+    /**
+     * syncs the realm actions of every core tracking a path. does nothing if the origin holds no golden cores
+     * @param pathInstance the path instance, needed as the path may already be removed from the source
+     * @param target the realm to sync to, null rolls back every applied realm
+     */
+    public static void syncGoldenCoreRealms(OriginSource source,Identifier path,@Nullable PathInstance<?> pathInstance,@Nullable Realm target){
+        if(!source.hasDataSource(CoreDataSources.GOLDEN_CORE_DATA_SOURCE.get())) return;
+        long id = random.nextLong();
+        source.startProcess("sync_golden_core_realms"+id);
+        for(GoldenCoreInstance<?> instance : getGoldenCoreHolder(source).getGoldenCoresForPath(path)){
+            instance.syncRealms(source,pathInstance,target);
+        }
+        resolveProcess(source,"sync_golden_core_realms"+id);
     }
 
     //──Sync────────────────────────────────────────────────────────

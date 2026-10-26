@@ -39,6 +39,7 @@ public final class AscensionCommand {
                 .then(AlchemyCommand.build())
                 .then(AscensionGive.build())
                 .then(InnerWorldCommand.build())
+                .then(GoldenCoreCommand.build())
         );
     }
 }
