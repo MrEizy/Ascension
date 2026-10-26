@@ -1,0 +1,8 @@
+{
+  "elements": [
+    {
+      "type": "ascension:custom",
+      "visual": "ascension:lightning_limb_arcs_layer"
+    }
+  ]
+}

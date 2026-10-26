@@ -1,0 +1,10 @@
+{
+  "coverage": "hands",
+  "fades_arm": true,
+  "shells": {
+    "look": "ascension:space_starfield",
+    "layers": [
+      { "inflate": 0.1, "reach": 5.0, "overhang": 0.1 }
+    ]
+  }
+}

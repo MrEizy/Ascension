@@ -1,0 +1,22 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.void_echo_qi_layer.name"
+  },
+  "description": {
+    "translate": "ascension.skill.void_echo_qi_layer.desc"
+  },
+  "cast": {
+    "mode": "instant"
+  },
+  "cooldown": {
+    "base": 0.5
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:toggle_passive",
+      "skill": "ascension:passive/void_qi_test/void_echo_qi_layer"
+    }
+  ]
+}

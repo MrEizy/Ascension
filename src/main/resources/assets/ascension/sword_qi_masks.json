@@ -1,0 +1,62 @@
+{
+  "masks": {
+    "blade": [
+      "ascension:item/black_iron_blade",
+      "ascension:item/frost_silver_blade",
+      "ascension:item/spiritual_stone_blade",
+      "ascension:item/wooden_blade",
+      "ascension:item/stone_blade",
+      "ascension:item/copper_blade",
+      "ascension:item/iron_blade",
+      "ascension:item/gold_blade",
+      "ascension:item/diamond_blade",
+      "ascension:item/netherite_blade"
+    ],
+    "ascension_axe": [
+      "ascension:item/black_iron_axe",
+      "ascension:item/frost_silver_axe",
+      "ascension:item/spiritual_stone_axe"
+    ],
+    "ascension_spear": [
+      "ascension:item/black_iron_spear_in_hand",
+      "ascension:item/frost_silver_spear_in_hand",
+      "ascension:item/spiritual_stone_spear_in_hand"
+    ],
+    "black_iron_sword": [
+      "ascension:item/black_iron_sword"
+    ],
+    "frost_silver_sword": [
+      "ascension:item/frost_silver_sword"
+    ],
+    "spiritual_stone_sword": [
+      "ascension:item/spiritual_stone_sword"
+    ],
+    "vanilla_sword": [
+      "minecraft:item/wooden_sword",
+      "minecraft:item/stone_sword",
+      "minecraft:item/copper_sword",
+      "minecraft:item/iron_sword",
+      "minecraft:item/golden_sword",
+      "minecraft:item/diamond_sword",
+      "minecraft:item/netherite_sword"
+    ],
+    "vanilla_axe": [
+      "minecraft:item/wooden_axe",
+      "minecraft:item/stone_axe",
+      "minecraft:item/copper_axe",
+      "minecraft:item/iron_axe",
+      "minecraft:item/golden_axe",
+      "minecraft:item/diamond_axe",
+      "minecraft:item/netherite_axe"
+    ],
+    "vanilla_spear": [
+      "minecraft:item/wooden_spear_in_hand",
+      "minecraft:item/stone_spear_in_hand",
+      "minecraft:item/copper_spear_in_hand",
+      "minecraft:item/iron_spear_in_hand",
+      "minecraft:item/golden_spear_in_hand",
+      "minecraft:item/diamond_spear_in_hand",
+      "minecraft:item/netherite_spear_in_hand"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "coverage": "hands",
+  "shells": {
+    "look": "ascension:lightning_crackle",
+    "layers": [
+      { "inflate": 0.5, "reach": 7.6, "overhang": 0.5, "square_cap": true }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.qi_coating.name"
+  },
+  "description": {
+    "translate": "ascension.skill.qi_coating.desc"
+  },
+  "toggleable": true,
+  "enabled_by_default": false,
+  "state_group": "ascension:qi_coating",
+  "upkeep": {
+    "resource": "ascension:qi",
+    "amount": 1.0,
+    "interval": 20
+  },
+  "enable_conditions": [
+    {
+      "type": "ascension:has_qi_coating_element",
+      "channel": "body"
+    }
+  ],
+  "on_enable": [
+    {
+      "type": "ascension:qi_coating_visual",
+      "channel": "body"
+    }
+  ]
+}

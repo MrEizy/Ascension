@@ -1,0 +1,8 @@
+{
+  "name": {
+    "translate": "ascension.qi_coating.element.pure.name"
+  },
+  "body_visual": "ascension:qi_coating/pure_qi_coating",
+  "external_visual": "ascension:qi_coating/pure_external_qi_coating",
+  "order": 0
+}

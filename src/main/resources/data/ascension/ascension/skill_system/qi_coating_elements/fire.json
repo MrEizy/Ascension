@@ -1,0 +1,9 @@
+{
+  "name": {
+    "translate": "ascension.qi_coating.element.fire.name"
+  },
+  "path": "ascension:elemental/fire",
+  "body_visual": "ascension:qi_coating/fire_qi_coating",
+  "external_visual": "ascension:qi_coating/fire_external_qi_coating",
+  "order": 1
+}

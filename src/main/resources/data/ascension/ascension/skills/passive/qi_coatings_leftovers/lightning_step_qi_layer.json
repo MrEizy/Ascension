@@ -1,0 +1,30 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.lightning_step_qi_layer.name"
+  },
+  "description": {
+    "translate": "ascension.skill.lightning_step_qi_layer.desc"
+  },
+  "toggleable": true,
+  "enabled_by_default": false,
+  "state_group": "ascension:qi_coating",
+  "modifiers": [
+    {
+      "type": "ascension:movement",
+      "movement_speed_multiplier": 1.6
+    }
+  ],
+  "upkeep": {
+    "resource": "ascension:qi",
+    "amount": 1.0,
+    "interval": 20
+  },
+  "on_enable": [
+    {
+      "type": "ascension:persistent_visual",
+      "key": "ascension:qi_coating",
+      "visual": "ascension:qi_coating/lightning_step_layer"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "type": "ascension:simple",
+  "name": {
+    "translate": "ascension.bloodline.qi_coatings_dev.name"
+  },
+  "description": {
+    "translate": "ascension.bloodline.qi_coatings_dev.desc"
+  },
+  "paths": [
+    "ascension:elemental/fire",
+    "ascension:elemental/earth",
+    "ascension:elemental/water",
+    "ascension:elemental/ice",
+    "ascension:elemental/metal",
+    "ascension:elemental/wind",
+    "ascension:elemental/lightning",
+    "ascension:elemental/space",
+    "ascension:elemental/time"
+  ],
+  "purity_handler": [],
+  "item_tooltip": {
+    "theme": "ascension:bloodline_essence",
+    "template": "ascension:default_bloodline_essence",
+    "rank": "ascension:ordinary"
+  }
+}

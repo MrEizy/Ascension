@@ -1,0 +1,9 @@
+{
+  "coverage": "hands",
+  "shells": {
+    "look": "ascension:pure_qi",
+    "layers": [
+      { "inflate": 0.1, "reach": 5.0, "overhang": 0.1 }
+    ]
+  }
+}

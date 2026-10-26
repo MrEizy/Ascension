@@ -1,0 +1,7 @@
+{
+  "coverage": "hands",
+  "skin": { "look": "ascension:wind" },
+  "effects": [
+    "ascension:wind_rings"
+  ]
+}

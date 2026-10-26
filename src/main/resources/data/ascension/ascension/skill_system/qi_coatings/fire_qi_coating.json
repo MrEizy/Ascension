@@ -1,0 +1,15 @@
+{
+  "coverage": "hands",
+  "shells": {
+    "texture": {
+      "path": "ascension:textures/qi_coating/fire_qi_coating.png",
+      "frames": 6,
+      "frame_millis": 250,
+      "emissive": true
+    },
+    "layers": [
+      { "inflate": 0.25, "reach": 12.25, "overhang": 0.25, "color": "#B4FFFFFF" },
+      { "inflate": 0.6, "reach": 12.6, "overhang": 0.6, "color": "#40FFC890" }
+    ]
+  }
+}

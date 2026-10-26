@@ -1,0 +1,24 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.metal_golden_body_qi_layer.name"
+  },
+  "description": {
+    "translate": "ascension.skill.metal_golden_body_qi_layer.desc"
+  },
+  "toggleable": true,
+  "enabled_by_default": false,
+  "state_group": "ascension:qi_coating",
+  "upkeep": {
+    "resource": "ascension:qi",
+    "amount": 1.0,
+    "interval": 20
+  },
+  "on_enable": [
+    {
+      "type": "ascension:persistent_visual",
+      "key": "ascension:qi_coating",
+      "visual": "ascension:qi_coating/metal_golden_body_layer"
+    }
+  ]
+}

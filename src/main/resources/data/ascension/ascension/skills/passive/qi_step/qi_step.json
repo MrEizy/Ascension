@@ -1,0 +1,24 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.qi_step.name"
+  },
+  "description": {
+    "translate": "ascension.skill.qi_step.desc"
+  },
+  "toggleable": true,
+  "enabled_by_default": false,
+  "modifiers": [
+    {
+      "type": "ascension:qi_step",
+      "step_cost": 0.75,
+      "jump_cost": 6.0,
+      "hover_cost": 2.0,
+      "hover_ticks": 30,
+      "max_strain": 54.0,
+      "jump_strain": 4.0,
+      "hover_strain": 1.0,
+      "step_distance": 0.6
+    }
+  ]
+}

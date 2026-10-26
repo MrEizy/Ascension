@@ -1,0 +1,22 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.external_qi_coating.name"
+  },
+  "description": {
+    "translate": "ascension.skill.external_qi_coating.desc"
+  },
+  "cast": {
+    "mode": "instant"
+  },
+  "cooldown": {
+    "base": 0.5
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:toggle_passive",
+      "skill": "ascension:passive/qi_coating/external_qi_coating"
+    }
+  ]
+}

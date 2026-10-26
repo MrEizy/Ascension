@@ -1,0 +1,13 @@
+{
+  "coverage": "hands",
+  "fades_arm": true,
+  "echoes": true,
+  "reacts_to": ["hurt"],
+  "shells": {
+    "look": "ascension:time_echo",
+    "quiet_look": "ascension:time_echo_quiet",
+    "layers": [
+      { "inflate": 0.3, "reach": 3.6, "overhang": 0.3 }
+    ]
+  }
+}

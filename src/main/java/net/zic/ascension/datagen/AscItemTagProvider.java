@@ -52,18 +52,8 @@ public class AscItemTagProvider extends ItemTagsProvider {
 
         tag(ItemTags.SWORDS)
                 .add(ModItems.BLACK_IRON_SWORD.get())
-                .add(ModItems.BLACK_IRON_BLADE.get())
                 .add(ModItems.FROST_SILVER_SWORD.get())
-                .add(ModItems.FROST_SILVER_BLADE.get())
-                .add(ModItems.SPIRITUAL_STONE_SWORD.get())
-                .add(ModItems.SPIRITUAL_STONE_BLADE.get())
-                .add(ModItems.WOODEN_BLADE.get())
-                .add(ModItems.STONE_BLADE.get())
-                .add(ModItems.COPPER_BLADE.get())
-                .add(ModItems.IRON_BLADE.get())
-                .add(ModItems.GOLD_BLADE.get())
-                .add(ModItems.DIAMOND_BLADE.get())
-                .add(ModItems.NETHERITE_BLADE.get());
+                .add(ModItems.SPIRITUAL_STONE_SWORD.get());
         tag(ItemTags.PICKAXES)
                 .add(ModItems.BLACK_IRON_PICKAXE.get())
                 .add(ModItems.FROST_SILVER_PICKAXE.get())
@@ -140,6 +130,16 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 );
 
         tag(ModTags.Items.WEAPON_BLADES)
+                .add(ModItems.BLACK_IRON_BLADE.get())
+                .add(ModItems.FROST_SILVER_BLADE.get())
+                .add(ModItems.SPIRITUAL_STONE_BLADE.get())
+                .add(ModItems.WOODEN_BLADE.get())
+                .add(ModItems.STONE_BLADE.get())
+                .add(ModItems.COPPER_BLADE.get())
+                .add(ModItems.IRON_BLADE.get())
+                .add(ModItems.GOLD_BLADE.get())
+                .add(ModItems.DIAMOND_BLADE.get())
+                .add(ModItems.NETHERITE_BLADE.get())
                 .addOptionalTag(ModTags.Items.C_TOOLS_BLADE)
                 .addOptionalTag(ModTags.Items.C_WEAPONS_BLADE);
 

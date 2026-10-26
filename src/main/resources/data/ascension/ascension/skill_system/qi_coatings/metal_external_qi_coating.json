@@ -1,0 +1,6 @@
+{
+  "coverage": "weapon",
+  "grow_millis": 1200,
+  "reacts_to": ["hurt", "attack"],
+  "sword": { "look": "ascension:molten" }
+}

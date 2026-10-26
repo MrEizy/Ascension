@@ -1,0 +1,6 @@
+{
+  "coverage": "weapon",
+  "echoes": true,
+  "reacts_to": ["attack"],
+  "sword": { "look": "ascension:time_echo", "quiet_look": "ascension:time_echo_quiet" }
+}

@@ -1,0 +1,9 @@
+{
+  "name": {
+    "translate": "ascension.qi_coating.element.water.name"
+  },
+  "path": "ascension:elemental/water",
+  "body_visual": "ascension:qi_coating/water_qi_coating",
+  "external_visual": "ascension:qi_coating/water_external_qi_coating",
+  "order": 3
+}
