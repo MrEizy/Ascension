@@ -1,5 +1,7 @@
 package net.zic.ascension.api.ascension.core.path.realm;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import org.jspecify.annotations.NonNull;
@@ -8,6 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record Realm(int majorRealm, int minorRealm) implements Comparable<Realm>{
+    public static final Codec<Realm> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.INT.fieldOf("major").forGetter(Realm::majorRealm),
+            Codec.INT.fieldOf("minor").forGetter(Realm::minorRealm)
+    ).apply(instance, Realm::of));
+
     public static Realm of(int majorRealm,int minorRealm){
         return new Realm(majorRealm,minorRealm);
     }

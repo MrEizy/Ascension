@@ -8,6 +8,7 @@ import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.impl.datapack.skill.active.ActiveSkillType;
 import net.zic.ascension.impl.datapack.skill.body.BodyCultivationSkillType;
+import net.zic.ascension.impl.datapack.skill.golden_core.GoldenCoreFormingSkillType;
 import net.zic.ascension.impl.datapack.skill.passive.PassiveSkillType;
 
 public final class AscensionSkillTypes {
@@ -25,6 +26,10 @@ public final class AscensionSkillTypes {
     public static final DeferredHolder<SkillType, SkillType> BODY_CULTIVATION_SKILL_TYPE = SKILL_TYPES.register(
             "body_cultivation",
             BodyCultivationSkillType::new
+    );
+    public static final DeferredHolder<SkillType, SkillType> GOLDEN_CORE_FORMING_SKILL_TYPE = SKILL_TYPES.register(
+            "golden_core_forming",
+            GoldenCoreFormingSkillType::new
     );
 
     private AscensionSkillTypes() {

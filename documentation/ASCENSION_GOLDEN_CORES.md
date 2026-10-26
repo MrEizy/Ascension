@@ -9,6 +9,7 @@ A golden core is formed on a path at a specific realm. The core then tracks that
 - [Root fields](#root-fields)
 - [Realm actions](#realm-actions)
 - [Runtime behaviour](#runtime-behaviour)
+- [Forming a golden core](#forming-a-golden-core)
 - [Complete example](#complete-example)
 - [Debug command](#debug-command)
 
@@ -75,6 +76,25 @@ Realm actions run for every realm in **(acquisition realm, current realm]**. The
 - **Removal:** removing a core first rolls back its realm actions, then reverses `on_added`, skills, stats and path bonuses.
 - **Ownership:** like skills and paths, cores are added with an owner id and only removed once no owners remain. Adding with an existing instance id only adds the owner. If the path or acquisition realm differ from the held core, the core is removed and re-applied with the new details (realm actions are rolled back and replayed). If the core id differs (e.g. the core has evolved), the held core is left untouched.
 - **Saving:** cores are saved with the origin and wait for their owners to re-add them on load, like skills. Realm progress is not saved, it is rebuilt from the tracked path.
+
+# Forming a golden core
+Golden cores are formed through a path breakthrough. Three pieces work together:
+
+1. **The tribulation** — an `ascension:golden_core` tribulation. It plays out like a lightning tribulation (`strikes`, `damage`, `tick_delay`), and its data also records which golden core it forms.
+   ```json
+   { "type": "ascension:golden_core", "strikes": 4, "damage": 2.0, "tick_delay": 10 }
+   ```
+2. **The path realm** — the minor realm uses that tribulation in manual mode, so it waits at full progress instead of starting on its own:
+   ```json
+   { "name": "...", "progress": 100000, "tribulation": "ascension:golden_core_tribulation", "tribulation_mode": "manual" }
+   ```
+3. **The skill** — an `ascension:golden_core_forming` skill (see `ASCENSION_SKILLS.md`) naming the core, path and realm. Casting it triggers the realm's tribulation and sets the core on the tribulation's data before it starts.
+
+When the tribulation succeeds the path breaks through and keeps the completed tribulation for that realm, as it does for every breakthrough tribulation. The completed tribulation then adds the golden core:
+- the core tracks the skill's `path`, its acquisition realm is the skill's `realm`, and it gets a new instance id stored on the tribulation's data
+- the **tribulation is the owner** (`ascension:tribulation/<tribulation data id>`)
+- if the path drops below that realm, or is removed, the tribulation removes its ownership. Reaching the realm again adds the core back with the same instance id
+- a failed tribulation forms nothing, and can be triggered again
 
 # Complete example
 ```json

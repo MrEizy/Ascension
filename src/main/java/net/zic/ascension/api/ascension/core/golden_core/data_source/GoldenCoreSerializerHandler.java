@@ -40,5 +40,7 @@ public class GoldenCoreSerializerHandler implements SerializerHandler<GoldenCore
                 AscensionCraft.LOGGER.debug("stacktrace",e);
             }
         }
+        //cores no owner claimed since loading are not written, so they are dropped
+        writable.clearCache();
     }
 }

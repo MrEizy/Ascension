@@ -15,6 +15,7 @@ Most normal content should require no Java. Active skills are assembled from tar
 - [Runtime conditions](#runtime-conditions)
 - [Scheduled actions and variables](#scheduled-actions-and-variables)
 - [State and form passives](#state-and-form-passives)
+- [Golden core forming skills](#golden-core-forming-skills)
 - [Techniques](#techniques)
 - [Scaled values](#scaled-values)
 - [Targeting](#targeting)
@@ -537,6 +538,26 @@ Persistent form visuals use `ascension:persistent_visual`:
 ```
 
 `key` identifies the owned visual instance. Persistent visuals are restored when an enabled passive is attached to the player again, without replaying unrelated enable actions.
+
+# Golden core forming skills
+A castable skill that forms a golden core by triggering a path's manual golden core tribulation. It is instant and grants nothing itself, see `ASCENSION_GOLDEN_CORES.md` for the full flow.
+```json
+{
+  "type": "ascension:golden_core_forming",
+  "name": "Condense Golden Core",
+  "description": "Call down the tribulation that tempers your golden core.",
+  "golden_core": "ascension:test_core",
+  "path": "ascension:foundation/essence",
+  "realm": { "major": 0, "minor": 2 }
+}
+```
+| Field | Meaning |
+|---|---|
+| `golden_core` | The golden core the tribulation forms |
+| `path` | The path that must be cultivated, and that the core tracks |
+| `realm` | The realm the path must be at exactly, its tribulation must be an `ascension:golden_core` tribulation with `"tribulation_mode": "manual"` |
+
+The cast fails unless the path is held, at exactly `realm`, and that realm's tribulation is ready to be triggered (progress is full and no tribulation is running).
 
 # Techniques
 A technique is a generic source that grants skills (and stats or path bonuses) through its `on_added` actions. It is not tied to a path.

@@ -221,6 +221,8 @@ Each minor realm of a path may name a breakthrough tribulation, and how it start
 
 For testing, a manual tribulation can be triggered with `/ascension tribulation trigger <players> <path> <tribulation>`.
 
+Golden cores are formed through a manual `ascension:golden_core` tribulation triggered by an `ascension:golden_core_forming` skill, see `ASCENSION_GOLDEN_CORES.md`.
+
 ## Path interactions
 Path interactions are the `ascension:path_interactions` data map on the path registry, at `data/<namespace>/data_maps/ascension/paths/path_interactions.json`. Each value is keyed by the **target** path and lists how other `source` paths' **affinity** influences it.
 
