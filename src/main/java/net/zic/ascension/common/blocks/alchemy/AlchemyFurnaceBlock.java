@@ -18,9 +18,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyContext;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterial;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
-import net.zic.ascension.api.ascension.core.alchemy.AlchemyFormulaResolver;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMergeResolver;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyProcessHooks;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalReactionResolver;
 import net.zic.ascension.common.blocks.entity.AlchemyFurnaceBlockEntity;
 import net.zic.ascension.common.item.ModItems;
 import org.jetbrains.annotations.Nullable;
@@ -74,7 +74,7 @@ public class AlchemyFurnaceBlock extends Block implements EntityBlock {
             return InteractionResult.SUCCESS;
         }
 
-        AlchemyMergeResolver.MergeResult result = furnace.insert(material.get(), context);
+        MedicinalReactionResolver.Step result = furnace.insert(material.get(), context);
         if (result == null) {
             return InteractionResult.FAIL;
         }
@@ -146,22 +146,14 @@ public class AlchemyFurnaceBlock extends Block implements EntityBlock {
         }
 
         AlchemyContext context = AlchemyContext.of(level, pos, player);
-        AlchemyFormulaResolver.CondensationResult result = furnace.condense(context);
-        if (result.success()) {
-            result.outputs().forEach(pill -> popResource(level, pos.above(), pill));
-            if (result.hasRemainder()) {
-                popResource(level, pos.above(), new ItemStack(ModItems.PILL_RESIDUE.get()));
-            }
-            if (level instanceof ServerLevel serverLevel) {
-                spawnSuccessParticles(serverLevel, pos);
-            }
-            ItemStack first = result.outputs().getFirst();
-            player.sendOverlayMessage(Component.translatable("ascension.alchemy_furnace.condensed", first.getHoverName()));
+        ItemStack pill = furnace.condense(context);
+        if (!pill.isEmpty()) {
+            popResource(level, pos.above(), pill);
+            if (level instanceof ServerLevel serverLevel) spawnSuccessParticles(serverLevel, pos);
+            player.sendOverlayMessage(Component.translatable("ascension.alchemy_furnace.condensed", pill.getHoverName()));
         } else {
             popResource(level, pos.above(), new ItemStack(ModItems.PILL_RESIDUE.get()));
-            if (level instanceof ServerLevel serverLevel) {
-                spawnFailureParticles(serverLevel, pos);
-            }
+            if (level instanceof ServerLevel serverLevel) spawnFailureParticles(serverLevel, pos);
             player.sendOverlayMessage(Component.translatable("ascension.alchemy_furnace.residue"));
         }
         return InteractionResult.SUCCESS;

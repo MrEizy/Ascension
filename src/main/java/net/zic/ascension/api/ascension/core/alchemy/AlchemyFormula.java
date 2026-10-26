@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+@Deprecated(forRemoval = true)
 public record AlchemyFormula(
         Identifier output,
         Requirements requirements,

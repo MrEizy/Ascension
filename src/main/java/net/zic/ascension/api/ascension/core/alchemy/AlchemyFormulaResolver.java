@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated(forRemoval = true)
 public final class AlchemyFormulaResolver {
     private static final int MAX_PASSES = 64;
     private static final double QUALITY_EPSILON = 1.0E-9D;

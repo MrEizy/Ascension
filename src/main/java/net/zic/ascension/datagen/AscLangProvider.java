@@ -92,6 +92,11 @@ public class AscLangProvider extends LanguageProvider {
 
         // Pills and Pill Things
         add("item.ascension.jade_bottle", "Jade Bottle");
+        add("item.ascension.procedural_pill", "Refined Medicinal Pill");
+        add("ascension.alchemy.pill.inert", "No medicinal composition is stored.");
+        add("ascension.alchemy.pill.rank", "Rank: %s | Grade: %s");
+        add("ascension.alchemy.pill.purity", "Purity: %s%%");
+        add("ascension.alchemy.pill.toxicity", "Toxicity: %s");
         add("item.ascension.pill_residue", "Pill Residue");
 
         add("item.ascension.fasting_pill", "Fasting Pill");

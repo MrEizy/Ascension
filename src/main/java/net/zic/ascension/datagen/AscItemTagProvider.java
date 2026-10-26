@@ -98,6 +98,16 @@ public class AscItemTagProvider extends ItemTagsProvider {
         tag(ItemTags.WOODEN_BUTTONS).add(ModBlocks.IRONWOOD_BUTTON.asItem());
 
 
+        tag(ModTags.Items.PILLS).add(
+                ModItems.PROCEDURAL_PILL.get(),
+                ModItems.FASTING_PILL.get(),
+                ModItems.QI_REPLENISHING_PILL.get(),
+                ModItems.REGENERATION_PILL.get(),
+                ModItems.STAMINA_REPLENISHING_PILL.get(),
+                ModItems.BODY_CULTIVATION_PILL.get(),
+                ModItems.SOUL_CULTIVATION_PILL.get(),
+                ModItems.ESSENCE_CULTIVATION_PILL.get());
+
         tag(ModTags.Items.HERBS)
                 .add(ModItems.JADE_DEW_GRASS.get())
                 .add(ModItems.GINSENG.get())

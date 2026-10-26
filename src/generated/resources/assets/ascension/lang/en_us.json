@@ -1,4 +1,8 @@
 {
+  "ascension.alchemy.pill.inert": "No medicinal composition is stored.",
+  "ascension.alchemy.pill.purity": "Purity: %s%%",
+  "ascension.alchemy.pill.rank": "Rank: %s | Grade: %s",
+  "ascension.alchemy.pill.toxicity": "Toxicity: %s",
   "ascension.alchemy_furnace.catastrophic": "The batch destabilized and collapsed.",
   "ascension.alchemy_furnace.cleared": "Alchemy batch cleared.",
   "ascension.alchemy_furnace.condensed": "Condensed %s",
@@ -1613,6 +1617,7 @@
   "item.ascension.physique_essence": "Physique Essence",
   "item.ascension.physique_essence.named": "Physique Essence: %s",
   "item.ascension.pill_residue": "Pill Residue",
+  "item.ascension.procedural_pill": "Refined Medicinal Pill",
   "item.ascension.qi_replenishing_pill": "Qi Replenishing Pill",
   "item.ascension.raw_black_iron": "Raw Black Iron",
   "item.ascension.raw_frost_silver": "Raw Frost Silver",

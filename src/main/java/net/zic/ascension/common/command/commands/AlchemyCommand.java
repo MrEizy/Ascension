@@ -16,20 +16,17 @@ import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterial;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMergeResolver;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementResolver;
-import net.zic.ascension.api.ascension.core.alchemy.AlchemyFormulaResolver;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemySubstance;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalCompositionEngine;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalComposition;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalPillFactory;
 import net.zic.ascension.common.item.ModItems;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Exposes legacy alchemy checks and read-only procedural composition simulations.
- * Simulations resolve held ingredients without consuming items or affecting active furnaces.
- */
+
 public final class AlchemyCommand {
     private AlchemyCommand() {
     }
@@ -101,52 +98,23 @@ public final class AlchemyCommand {
         AlchemyMaterial first = AlchemyMaterials.resolve(player.getMainHandItem(), alchemyContext).orElse(null);
         AlchemyMaterial second = AlchemyMaterials.resolve(player.getOffhandItem(), alchemyContext).orElse(null);
         if (first == null || second == null) {
-            player.sendSystemMessage(Component.literal("Main hand and offhand must both contain alchemy substances."));
+            player.sendSystemMessage(Component.literal("Hold alchemical ingredients in both hands."));
             return 0;
         }
-
-        AlchemySubstance firstSubstance = AlchemyRefinementResolver.refine(first, alchemyContext).substance();
-        AlchemySubstance secondSubstance = AlchemyRefinementResolver.refine(second, alchemyContext).substance();
-        AlchemyMergeResolver.MergeResult merge = AlchemyMergeResolver.merge(
-                new AlchemyBatch(firstSubstance, 1),
-                secondSubstance,
-                alchemyContext
-        );
-
-        if (merge.outcome() == AlchemyMergeResolver.Outcome.CATASTROPHIC) {
-            player.sendSystemMessage(Component.literal("The merge became catastrophic before condensation."));
-            player.sendSystemMessage(Component.literal("Energy delta: " + merge.energyDelta()));
+        MedicinalCompositionEngine.Result result = MedicinalCompositionEngine.simulate(List.of(first, second), alchemyContext);
+        if (result.outcome() == AlchemyMergeResolver.Outcome.CATASTROPHIC) {
+            player.sendSystemMessage(Component.literal("The medicinal reaction was catastrophic; no pill formed."));
             return 0;
         }
-
-        AlchemyBatch batch = merge.batch();
-        AlchemyFormulaResolver.CondensationResult result = AlchemyFormulaResolver.condense(batch, alchemyContext);
-        for (ItemStack output : result.outputs()) {
-            if (!player.addItem(output)) {
-                player.drop(output, false);
-            }
+        ItemStack pill = MedicinalPillFactory.condense(result.profile(), result.ingredientCount());
+        if (pill.isEmpty()) {
+            player.sendSystemMessage(Component.literal("This combination did not express a usable medicinal effect."));
+            return 0;
         }
-
-        if (result.success()) {
-            if (result.hasRemainder()) {
-                ItemStack residue = new ItemStack(ModItems.PILL_RESIDUE.get());
-                if (!player.addItem(residue)) {
-                    player.drop(residue, false);
-                }
-            }
-            player.sendSystemMessage(Component.literal(
-                    "Condensed " + result.outputCount() + " pill(s) from " + result.matchedFormulas().size() + " formula match(es)."
-            ));
-            return 1;
-        }
-
-        ItemStack residue = new ItemStack(ModItems.PILL_RESIDUE.get());
-        if (!player.addItem(residue)) {
-            player.drop(residue, false);
-        }
-        player.sendSystemMessage(Component.literal("No pill formula matched. The batch became Pill Residue."));
-        player.sendSystemMessage(Component.literal("Batch: " + describe(batch.substance())));
-        return 0;
+        int count = pill.getCount();
+        if (!player.addItem(pill)) player.drop(pill, false);
+        player.sendSystemMessage(Component.literal("Test condensation produced " + count + " procedural pill(s)."));
+        return 1;
     }
 
     private static int simulate(CommandContext<CommandSourceStack> context, boolean reverse, int slot)

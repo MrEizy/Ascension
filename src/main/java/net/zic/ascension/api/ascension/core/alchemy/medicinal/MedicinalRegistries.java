@@ -8,7 +8,7 @@ import net.zic.zenithlib.registry.RegistryHelper;
 
 /**
  * Registers datapack-defined medicinal reactions and composition-to-effect expressions.
- * These registries are separate from the legacy alchemy formula registry.
+ * Effect actions bind the resulting identifiers to generic server-side operations.
  */
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class MedicinalRegistries {
@@ -19,6 +19,10 @@ public final class MedicinalRegistries {
             AscensionCraft.MOD_ID, "alchemy/effect_expressions", () -> MedicinalEffectExpression.CODEC
     );
 
+    public static final RegistryHelper.DataPackRegistry<MedicinalEffectAction> ACTIONS = RegistryHelper.dataPackRegistry(
+            AscensionCraft.MOD_ID, "alchemy/effect_actions", () -> MedicinalEffectAction.CODEC
+    );
+
     private MedicinalRegistries() {
     }
 
@@ -26,5 +30,6 @@ public final class MedicinalRegistries {
     public static void register(DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(REACTIONS.key(), REACTIONS.codec().get(), REACTIONS.codec().get());
         event.dataPackRegistry(EXPRESSIONS.key(), EXPRESSIONS.codec().get(), EXPRESSIONS.codec().get());
+        event.dataPackRegistry(ACTIONS.key(), ACTIONS.codec().get(), ACTIONS.codec().get());
     }
 }
