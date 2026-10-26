@@ -1,5 +1,5 @@
 {
-  "effect": "ascension:alchemy/effect/meridian_corruption",
+  "effect": "ascension:meridian_corruption",
   "requirements": {
     "properties": {},
     "affinities": {},

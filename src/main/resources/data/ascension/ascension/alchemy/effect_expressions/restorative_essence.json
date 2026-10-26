@@ -1,5 +1,5 @@
 {
-  "effect": "ascension:alchemy/effect/health_restoration",
+  "effect": "ascension:health_restoration",
   "requirements": {
     "properties": {
       "ascension:alchemy/restoration": 1

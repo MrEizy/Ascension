@@ -1,5 +1,5 @@
 {
-  "effect": "ascension:alchemy/effect/thunder_vigor",
+  "effect": "ascension:thunder_vigor",
   "requirements": {
     "properties": {},
     "affinities": {},

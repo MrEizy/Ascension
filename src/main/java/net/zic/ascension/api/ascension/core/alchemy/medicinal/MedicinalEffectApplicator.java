@@ -1,12 +1,10 @@
 package net.zic.ascension.api.ascension.core.alchemy.medicinal;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +12,7 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 import net.zic.ascension.impl.resource.stamina.StaminaService;
+import net.zic.ascension.impl.core.effect.SkillEffectService;
 
 /**
  * Applies stored medicinal effects through a small set of validated gameplay operations.
@@ -24,12 +23,25 @@ public final class MedicinalEffectApplicator {
     }
 
     public static void consume(MedicinalProfile profile, LivingEntity consumer) {
+        consume(profile, consumer, 1.0D, 1.0D);
+    }
+
+    public static void consume(MedicinalProfile profile, LivingEntity consumer, double absorption) {
+        consume(profile, consumer, absorption, 1.0D);
+    }
+
+    public static void consume(MedicinalProfile profile, LivingEntity consumer,
+                               double absorption, double adverseExposure) {
         if (profile == null || !(consumer.level() instanceof ServerLevel server) || profile.composition().isEmpty()) return;
+        if (!Double.isFinite(absorption) || !Double.isFinite(adverseExposure)) return;
+        double absorbed = Mth.clamp(absorption, 0.0D, 1.0D);
+        double exposed = Mth.clamp(adverseExposure, 0.0D, 3.0D);
         Registry<MedicinalEffectAction> actions = MedicinalRegistries.ACTIONS.get(server.registryAccess());
         for (MedicinalProfile.Effect effect : profile.effects()) {
             MedicinalEffectAction action = actions.getValue(effect.id());
             if (action == null) continue;
-            double power = Mth.clamp(effect.potency(), 0.0D, 64.0D) * action.scale();
+            double power = Mth.clamp(effect.potency(), 0.0D, 64.0D) * action.scale()
+                    * (effect.adverse() ? exposed : absorbed);
             if (power <= 0.0D) continue;
             switch (action.action()) {
                 case "health" -> consumer.heal((float) Math.min(consumer.getMaxHealth(), consumer.getMaxHealth() * power));
@@ -54,6 +66,9 @@ public final class MedicinalEffectApplicator {
                             .ifPresent(holder -> consumer.addEffect(new MobEffectInstance(holder,
                                     Math.max(20, effect.durationTicks()), Mth.clamp((int) (power / 8.0D), 0, 2))));
                 });
+                case "skill_effect" -> action.effect().ifPresent(identifier ->
+                        SkillEffectService.apply(consumer, identifier, consumer.getUUID(), null,
+                                Math.max(20, effect.durationTicks()), power));
                 default -> { }
             }
         }

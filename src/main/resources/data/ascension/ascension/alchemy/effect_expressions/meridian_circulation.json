@@ -1,5 +1,5 @@
 {
-  "effect": "ascension:alchemy/effect/qi_circulation",
+  "effect": "ascension:qi_circulation",
   "requirements": {
     "properties": {
       "ascension:alchemy/circulation": 1

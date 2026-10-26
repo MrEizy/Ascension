@@ -20,6 +20,8 @@ import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.artifacts.pills.PillItem;
+import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
 import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipProvider;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
@@ -532,17 +534,36 @@ public final class AscensionTooltipValueSources {
     }
 
     private static Optional<ZenithTooltipValue> pillEffect(ZenithTooltipContext context) {
-        return pillContext(context).map(pill -> ZenithTooltipValue.text(
-                pill.item().definition().effectDescription(pill.data())
-        ));
+        return pillContext(context).map(pill -> {
+            MedicinalProfile profile = context.stack().get(AscensionComponents.MEDICINAL_PILL.get());
+            if (profile == null) return ZenithTooltipValue.text(pill.item() == null
+                    ? Component.translatable("ascension.alchemy.pill.inert")
+                    : pill.item().definition().effectDescription(pill.data()));
+            net.minecraft.network.chat.MutableComponent lines = Component.empty();
+            for (MedicinalProfile.Effect effect : profile.effects()) {
+                if (!lines.getSiblings().isEmpty()) lines.append("\n");
+                String name = effect.id().getPath().replace('/', '.');
+                net.minecraft.network.chat.MutableComponent detail = Component.literal(effect.adverse() ? "− " : "+ ")
+                        .append(Component.translatable("ascension.alchemy.effect." + name))
+                        .append(" " + String.format(java.util.Locale.ROOT, "%.2f", effect.potency())
+                                + (effect.durationTicks() > 0 ? " (" + effect.durationTicks() / 20 + "s)" : ""));
+                lines.append(detail.withStyle(effect.adverse()
+                        ? net.minecraft.ChatFormatting.RED : net.minecraft.ChatFormatting.GREEN));
+            }
+            return ZenithTooltipValue.text(lines.getSiblings().isEmpty()
+                    ? Component.translatable("ascension.alchemy.pill.inert") : lines);
+        });
     }
 
     private static Optional<PillContext> pillContext(ZenithTooltipContext context) {
-        if (!(context.stack().getItem() instanceof PillItem pillItem)) {
-            return Optional.empty();
+        if (context.stack().getItem() instanceof PillItem pillItem) {
+            return Optional.of(new PillContext(pillItem, pillItem.data(context.stack())));
         }
-
-        return Optional.of(new PillContext(pillItem, pillItem.data(context.stack())));
+        if (context.stack().getItem() instanceof ProceduralPillItem) {
+            return Optional.of(new PillContext(null, context.stack().getOrDefault(
+                    AscensionComponents.PILL_DATA.get(), AscensionComponents.PillData.DEFAULT)));
+        }
+        return Optional.empty();
     }
 
     private static Optional<ZenithTooltipValue> herbOrigin(ZenithTooltipContext context) {

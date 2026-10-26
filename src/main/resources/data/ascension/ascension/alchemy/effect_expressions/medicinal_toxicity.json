@@ -1,5 +1,5 @@
 {
-  "effect": "ascension:alchemy/effect/medicinal_toxicity",
+  "effect": "ascension:medicinal_toxicity",
   "requirements": {},
   "potency_per_unit": 0.5,
   "duration_ticks": 1800,

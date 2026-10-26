@@ -1,5 +1,5 @@
 {
-  "effect": "ascension:alchemy/effect/qi_restoration",
+  "effect": "ascension:qi_restoration",
   "requirements": {
     "properties": {
       "ascension:alchemy/nourishment": 1

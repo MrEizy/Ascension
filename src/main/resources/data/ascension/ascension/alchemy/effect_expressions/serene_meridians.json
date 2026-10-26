@@ -1,5 +1,5 @@
 {
-  "effect": "ascension:alchemy/effect/serene_meridians",
+  "effect": "ascension:serene_meridians",
   "requirements": {
     "properties": {},
     "affinities": {},

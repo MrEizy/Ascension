@@ -1,5 +1,5 @@
 {
-  "effect": "ascension:alchemy/effect/meridian_burn",
+  "effect": "ascension:meridian_burn",
   "requirements": {
     "properties": {},
     "affinities": {},

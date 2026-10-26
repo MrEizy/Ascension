@@ -1,5 +1,5 @@
 {
-  "effect": "ascension:alchemy/effect/vital_marrow",
+  "effect": "ascension:vital_marrow",
   "requirements": {
     "properties": {},
     "affinities": {},

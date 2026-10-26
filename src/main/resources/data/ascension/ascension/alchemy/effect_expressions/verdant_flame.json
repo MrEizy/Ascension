@@ -1,5 +1,5 @@
 {
-  "effect": "ascension:alchemy/effect/verdant_flame",
+  "effect": "ascension:verdant_flame",
   "requirements": {
     "properties": {},
     "affinities": {},

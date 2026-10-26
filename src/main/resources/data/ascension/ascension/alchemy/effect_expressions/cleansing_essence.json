@@ -1,5 +1,5 @@
 {
-  "effect": "ascension:alchemy/effect/medicinal_cleansing",
+  "effect": "ascension:medicinal_cleansing",
   "requirements": {
     "properties": {
       "ascension:alchemy/cleansing": 1
