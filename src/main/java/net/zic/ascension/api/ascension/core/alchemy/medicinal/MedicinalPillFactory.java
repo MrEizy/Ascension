@@ -28,7 +28,7 @@ public final class MedicinalPillFactory {
         }
         if (beneficial.isEmpty()) return ItemStack.EMPTY;
 
-        Registry<MedicinalEffectExpression> expressions = access == null ? null : MedicinalRegistries.EXPRESSIONS.get(access);
+        Registry<MedicinalEffectDefinition> expressions = access == null ? null : MedicinalRegistries.EFFECTS.get(access);
         beneficial.sort(Comparator.<MedicinalProfile.Effect>comparingDouble(effect ->
                 -weightedPotency(effect, expressions)).thenComparing(effect -> effect.id().toString()));
         harmful.sort(Comparator.comparingDouble(MedicinalProfile.Effect::potency).reversed()
@@ -59,20 +59,20 @@ public final class MedicinalPillFactory {
         return stack;
     }
 
-    private static double weightedPotency(MedicinalProfile.Effect effect, Registry<MedicinalEffectExpression> expressions) {
+    private static double weightedPotency(MedicinalProfile.Effect effect, Registry<MedicinalEffectDefinition> expressions) {
         if (expressions == null) return effect.potency();
-        int priority = expressions.stream().filter(rule -> rule.effect().equals(effect.id()))
-                .mapToInt(MedicinalEffectExpression::priority).max().orElse(0);
+        MedicinalEffectDefinition definition = expressions.getValue(effect.id());
+        int priority = definition == null ? 0 : definition.priority();
         return effect.potency() + Math.max(0, priority) * 1.25D;
     }
 
     private static Component nameFor(MedicinalProfile profile, Identifier effect, RegistryAccess access) {
         if (access != null) {
-            Registry<MedicinalPillIdentity> identities = MedicinalRegistries.PILL_IDENTITIES.get(access);
-            for (MedicinalPillIdentity identity : identities) {
-                if (!identity.effect().equals(effect)) continue;
-                int index = Math.floorMod(profile.composition().hashCode(), identity.names().size());
-                return Component.translatable(identity.names().get(index));
+            Registry<MedicinalEffectDefinition> effects = MedicinalRegistries.EFFECTS.get(access);
+            MedicinalEffectDefinition definition = effects.getValue(effect);
+            if (definition != null && !definition.names().isEmpty()) {
+                int index = Math.floorMod(profile.composition().hashCode(), definition.names().size());
+                return Component.translatable(definition.names().get(index));
             }
         }
         return Component.translatable("ascension.alchemy.effect." + effect.getPath().replace('/', '.'))

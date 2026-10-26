@@ -36,18 +36,28 @@ public final class MedicinalEffectApplicator {
         if (!Double.isFinite(absorption) || !Double.isFinite(adverseExposure)) return;
         double absorbed = Mth.clamp(absorption, 0.0D, 1.0D);
         double exposed = Mth.clamp(adverseExposure, 0.0D, 3.0D);
-        Registry<MedicinalEffectAction> actions = MedicinalRegistries.ACTIONS.get(server.registryAccess());
+        Registry<MedicinalEffectDefinition> definitions = MedicinalRegistries.EFFECTS.get(server.registryAccess());
         for (MedicinalProfile.Effect effect : profile.effects()) {
-            MedicinalEffectAction action = actions.getValue(effect.id());
-            if (action == null) continue;
+            MedicinalEffectDefinition definition = definitions.getValue(effect.id());
+            if (definition == null) continue;
+            MedicinalEffectAction action = definition.application();
             double power = Mth.clamp(effect.potency(), 0.0D, 64.0D) * action.scale()
                     * (effect.adverse() ? exposed : absorbed);
             if (power <= 0.0D) continue;
             switch (action.action()) {
-                case "health" -> consumer.heal((float) Math.min(consumer.getMaxHealth(), consumer.getMaxHealth() * power));
+                case "health" -> {
+                    int tier = Mth.clamp(profile.composition().substance().rankTier(), 0, 5);
+                    double restored = power * Math.pow(1.3D, tier);
+                    consumer.heal((float) Math.min(consumer.getMaxHealth() * 0.50D, restored));
+                }
                 case "qi" -> {
                     EntityQiProvider qi = consumer.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
-                    if (qi != null && qi.getMaxQi() > 0.0D) qi.regenQi(qi.getMaxQi() * Math.min(1.0D, power));
+                    if (qi != null && qi.getMaxQi() > 0.0D) {
+                        int tier = Mth.clamp(profile.composition().substance().rankTier(), 0, 5);
+                        double restored = power * 2.0D * Math.pow(2.25D, tier);
+                        double limit = qi.getMaxQi() * (0.03D + 0.025D * tier);
+                        qi.regenQi(Math.min(restored, limit));
+                    }
                 }
                 case "stamina" -> {
                     double maximum = StaminaService.getMaximumStamina(consumer);
@@ -56,9 +66,11 @@ public final class MedicinalEffectApplicator {
                 }
                 case "damage" -> consumer.hurtServer(server, server.damageSources().magic(), (float) Math.min(20.0D, power));
                 case "cleanse" -> {
-                    consumer.removeEffect(MobEffects.POISON);
-                    consumer.removeEffect(MobEffects.WITHER);
-                    consumer.removeEffect(MobEffects.WEAKNESS);
+                    if (power >= 0.35D) {
+                        consumer.removeEffect(MobEffects.POISON);
+                        consumer.removeEffect(MobEffects.WEAKNESS);
+                    }
+                    if (power >= 2.0D) consumer.removeEffect(MobEffects.WITHER);
                 }
                 case "status" -> action.status().ifPresent(identifier -> {
                     server.registryAccess().lookupOrThrow(Registries.MOB_EFFECT)

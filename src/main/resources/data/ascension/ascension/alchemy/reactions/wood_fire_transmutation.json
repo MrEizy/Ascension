@@ -18,9 +18,6 @@
     "products": {}
   },
   "priority": 15,
-  "products": {
-    "ascension:alchemy/reaction/verdant_flame": 1
-  },
   "output": {
     "properties": {
       "ascension:alchemy/nourishment": 0.5

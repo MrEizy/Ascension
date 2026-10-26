@@ -18,9 +18,6 @@
     "products": {}
   },
   "priority": 10,
-  "products": {
-    "ascension:alchemy/reaction/thunder_vigor": 0.75
-  },
   "instability_delta": 0.2,
   "energy_delta": 0.3
 }

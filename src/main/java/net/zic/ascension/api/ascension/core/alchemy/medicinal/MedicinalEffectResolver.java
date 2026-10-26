@@ -22,16 +22,16 @@ public final class MedicinalEffectResolver {
     public static MedicinalProfile resolve(MedicinalComposition composition, RegistryAccess access) {
         MedicinalComposition source = composition == null ? MedicinalComposition.EMPTY : composition;
         if (source.isEmpty() || access == null) return new MedicinalProfile(source, List.of());
-        Registry<MedicinalEffectExpression> registry = MedicinalRegistries.EXPRESSIONS.get(access);
-        List<Map.Entry<ResourceKey<MedicinalEffectExpression>, MedicinalEffectExpression>> rules =
+        Registry<MedicinalEffectDefinition> registry = MedicinalRegistries.EFFECTS.get(access);
+        List<Map.Entry<ResourceKey<MedicinalEffectDefinition>, MedicinalEffectDefinition>> rules =
                 new ArrayList<>(registry.entrySet());
-        rules.sort(Comparator.<Map.Entry<ResourceKey<MedicinalEffectExpression>, MedicinalEffectExpression>>comparingInt(
+        rules.sort(Comparator.<Map.Entry<ResourceKey<MedicinalEffectDefinition>, MedicinalEffectDefinition>>comparingInt(
                 entry -> entry.getValue().priority()).reversed()
                 .thenComparing(entry -> entry.getKey().identifier().toString()));
 
         List<MedicinalProfile.Effect> effects = new ArrayList<>();
-        for (Map.Entry<ResourceKey<MedicinalEffectExpression>, MedicinalEffectExpression> entry : rules) {
-            MedicinalEffectExpression rule = entry.getValue();
+        for (Map.Entry<ResourceKey<MedicinalEffectDefinition>, MedicinalEffectDefinition> entry : rules) {
+            MedicinalEffectDefinition rule = entry.getValue();
             if (source.substance().purity() < rule.minimumPurity()
                     || source.substance().instability() > rule.maximumInstability()
                     || source.toxicity() < rule.minimumToxicity()) continue;
@@ -50,7 +50,7 @@ public final class MedicinalEffectResolver {
             double potency = Mth.clamp(Math.min(amount, 64.0D) * rule.potencyPerUnit()
                     * source.substance().amplifier() * purityFactor, 0.0D, 4096.0D);
             if (potency <= 1.0E-8D) continue;
-            effects.add(new MedicinalProfile.Effect(rule.effect(), potency, rule.durationTicks(), rule.adverse()));
+            effects.add(new MedicinalProfile.Effect(entry.getKey().identifier(), potency, rule.durationTicks(), rule.adverse()));
             if (effects.size() >= 32) break;
         }
         return new MedicinalProfile(source, effects);

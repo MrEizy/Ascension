@@ -1,0 +1,17 @@
+{
+  "requirements": {},
+  "potency_per_unit": 0.5,
+  "duration_ticks": 1800,
+  "adverse": true,
+  "priority": 0,
+  "minimum_toxicity": 0.2,
+  "application": {
+    "action": "status",
+    "scale": 0.8,
+    "status": "minecraft:poison"
+  },
+  "names": [
+    "ascension.alchemy.pill.name.medicinal_toxicity.0",
+    "ascension.alchemy.pill.name.medicinal_toxicity.1"
+  ]
+}

@@ -90,7 +90,7 @@
       "refinement_difficulty": 2.4,
       "direct_effects": [
         {
-          "id": "ascension:thunder_vigor",
+          "id": "ascension:qi_circulation",
           "potency": 0.9,
           "duration_ticks": 1200
         }

@@ -18,9 +18,6 @@
     "products": {}
   },
   "priority": 10,
-  "products": {
-    "ascension:alchemy/reaction/vital_marrow": 0.7
-  },
   "output": {
     "properties": {
       "ascension:alchemy/nourishment": 0.6

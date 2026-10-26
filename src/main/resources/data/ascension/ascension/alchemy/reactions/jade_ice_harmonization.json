@@ -18,9 +18,6 @@
     "products": {}
   },
   "priority": 20,
-  "products": {
-    "ascension:alchemy/reaction/serene_meridians": 0.8
-  },
   "output": {
     "properties": {
       "ascension:alchemy/restoration": 0.75
