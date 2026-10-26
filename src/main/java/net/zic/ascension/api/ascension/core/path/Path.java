@@ -10,7 +10,9 @@ import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionHelp
 import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionType;
 import net.zic.ascension.api.ascension.core.path.realm.CompositeRealmDefinition;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
+import net.zic.ascension.api.ascension.core.path.realm.TribulationMode;
 import net.zic.ascension.api.ascension.core.tribulation.Tribulation;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationInstance;
 import net.zic.ascension.api.ascension.datapack.path.PathType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.util.SerializerHandler;
@@ -18,6 +20,7 @@ import net.zic.ascension.api.rpg_engine.source.data_source.util.SyncHandler;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * A path as defined in the path registry.
@@ -54,6 +57,29 @@ public interface Path<D extends PathData> {
     @Nullable Identifier getTribulationId(int majorRealm, int minorRealm);
     @Nullable Tribulation<?> getTribulation(int majorRealm, int minorRealm, RegistryAccess access);
     boolean hasTribulation(int majorRealm, int minorRealm);
+    //how the realm's tribulation is started, AUTO if the realm has no tribulation
+    TribulationMode getTribulationMode(int majorRealm, int minorRealm);
+
+    /**
+     * if an external source can trigger the current realm's tribulation right now.
+     * true only if the current realm's tribulation is the given one, it is MANUAL, the realm is ready to break through
+     * and no tribulation is running
+     * @param tribulation the tribulation the caller expects to trigger
+     */
+    boolean canTriggerTribulation(D data, Identifier tribulation);
+
+    /**
+     * triggers the current realm's MANUAL tribulation, see {@link #canTriggerTribulation}
+     * @param tribulation the tribulation the caller expects to trigger, used to validate the realm still has it
+     * @param target the entity the tribulation targets
+     * @param beforeStart runs before the tribulation starts, used to modify its data
+     * @return the started tribulation, or null if it could not be triggered
+     */
+    @Nullable TribulationInstance<?> triggerTribulation(OriginSource source, PathInstance<D> instance, Identifier tribulation, LivingEntity target,
+                                                         @Nullable Consumer<TribulationInstance<?>> beforeStart);
+
+    //the running breakthrough tribulation of this path, null if there is none
+    @Nullable TribulationInstance<?> getActiveTribulation(D data);
 
     //──Path Interactions────────────────────────────────────────────────────────
 

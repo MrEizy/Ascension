@@ -11,6 +11,10 @@ public interface CompositeRealmDefinition extends RealmDefinition{
 
     //returns the id of the tribulation in the tribulation registry, or null if there is none
     Identifier getRealmTribulationId(int realm);
+    //how the realm's tribulation is started
+    default TribulationMode getRealmTribulationMode(int realm) {
+        return TribulationMode.AUTO;
+    }
     double getMaxProgress(int realm);
 
     RealmDefinition realmDefinition(int realm);

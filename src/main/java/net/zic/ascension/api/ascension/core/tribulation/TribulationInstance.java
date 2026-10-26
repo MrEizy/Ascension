@@ -198,7 +198,19 @@ public final class TribulationInstance<T extends TribulationData> {
         }
     }
 
-    //call when the TribulationData has changed, so it is resent to tracking clients
+    /**
+     * narrows this instance to a concrete tribulation class, e.g. {@code instance.as(LightningTribulation.class)},
+     * so {@link #getData()} returns the tribulation's own data type.
+     * the data is always created by the tribulation, so it always matches the tribulation's data type
+     * @return this instance typed to the tribulation, or null if the tribulation is not of that class
+     */
+    @SuppressWarnings("unchecked")
+    public <E extends TribulationData, R extends Tribulation<E>> @Nullable TribulationInstance<E> as(Class<R> tribulationClass) {
+        return tribulationClass.isInstance(tribulation) ? (TribulationInstance<E>) this : null;
+    }
+
+    //call when the TribulationData has changed, so it is resent to tracking clients.
+    //not needed for changes made in TribulationManager.Builder#beforeStart, the first sync happens after it
     public void markDataDirty() {
         dataDirty = true;
     }

@@ -13,6 +13,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
+import net.zic.ascension.api.ascension.core.path.realm.TribulationMode;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
 import net.zic.ascension.api.ascension.core.tribulation.Tribulation;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class SimplePath implements Path<SimplePathData> {
     //the handlers read the realm definitions of this path, so every path has its own
@@ -128,12 +130,12 @@ public class SimplePath implements Path<SimplePathData> {
         return getTribulationId(majorRealm, minorRealm) != null;
     }
 
+    @Override
+    public TribulationMode getTribulationMode(int majorRealm, int minorRealm) {
+        return getRealmDefinition(majorRealm).getRealmTribulationMode(minorRealm);
+    }
+
     //──Progression────────────────────────────────────────────────────────
-    //need to consider how I want tribulations to be handled should the be auto triggered? or would they need
-    //to use a skill to trigger it?
-    //maybe add a tracker? where say progress is 100, they can use a skill to trigger tribulation, but they can hold off
-    //but not for too long, as we keep track of every bit of progress they make, and if it breaches a certain point it auto trigger?
-    //not sure tbh
     @Override
     public void progress(OriginSource source, PathInstance<SimplePathData> instance, double amount, LivingEntity entitySource) {
         SimplePathData data = instance.getData();
@@ -217,28 +219,56 @@ public class SimplePath implements Path<SimplePathData> {
     //──Tribulations────────────────────────────────────────────────────────
 
     //the active breakthrough tribulation, cleared if the manager no longer has it (finished, discarded or failed to load)
-    private @Nullable UUID getActiveTribulation(SimplePathData data){
+    private @Nullable UUID getActiveTribulationId(SimplePathData data){
         if(data.activeTribulationId == null) return null;
         TribulationManager manager = TribulationManager.getInstance();
         if(manager != null && !manager.has(data.activeTribulationId)) data.activeTribulationId = null;
         return data.activeTribulationId;
     }
 
-    public boolean isBreakingThrough(SimplePathData data){
-        return getActiveTribulation(data) != null;
+    @Override
+    public @Nullable TribulationInstance<?> getActiveTribulation(SimplePathData data) {
+        UUID id = getActiveTribulationId(data);
+        TribulationManager manager = TribulationManager.getInstance();
+        return id == null || manager == null ? null : manager.get(id);
     }
 
-    private void startTribulation(OriginSource source, PathInstance<SimplePathData> instance, Identifier tribulation, LivingEntity target){
+    public boolean isBreakingThrough(SimplePathData data){
+        return getActiveTribulationId(data) != null;
+    }
+
+    @Override
+    public boolean canTriggerTribulation(SimplePathData data, Identifier tribulation) {
+        if(data.getCurrentMajorRealm() < 0 || tribulation == null) return false;
+        int majorRealm = data.getCurrentMajorRealm();
+        int minorRealm = currentMinorRealm(data);
+        return tribulation.equals(getTribulationId(majorRealm, minorRealm))
+                && getTribulationMode(majorRealm, minorRealm) == TribulationMode.MANUAL
+                && canBreakthrough(data);
+    }
+
+    @Override
+    public @Nullable TribulationInstance<?> triggerTribulation(OriginSource source, PathInstance<SimplePathData> instance, Identifier tribulation,
+                                                               LivingEntity target, @Nullable Consumer<TribulationInstance<?>> beforeStart) {
+        if(!canTriggerTribulation(instance.getData(), tribulation)) return null;
+        return startTribulation(source, instance, tribulation, target, beforeStart);
+    }
+
+    private @Nullable TribulationInstance<?> startTribulation(OriginSource source, PathInstance<SimplePathData> instance, Identifier tribulation,
+                                                             LivingEntity target, @Nullable Consumer<TribulationInstance<?>> beforeStart){
         SimplePathData data = instance.getData();
-        if(getActiveTribulation(data) != null) return;
+        if(getActiveTribulationId(data) != null) return null;
         TribulationManager manager = TribulationManager.getInstance();
-        if(manager == null) return;
+        if(manager == null) return null;
         Identifier pathId = instance.getPathId();
-        data.activeTribulationId = manager.create(tribulation)
+        TribulationInstance<?> started = manager.create(tribulation)
                 .targeting(target)
                 .onSuccess(new RealmChangeResolutionAction(pathId, data.getCurrentRealm(), 1))
                 .onFailure(new EndBreakthroughResolutionAction(pathId))
-                .start();
+                .beforeStart(beforeStart)
+                .startInstance();
+        data.activeTribulationId = started == null ? null : started.getId();
+        return started;
     }
 
     /**
@@ -318,9 +348,10 @@ public class SimplePath implements Path<SimplePathData> {
             if(currentRealm(data).isLimitBroken()){
                 changeRealm(source,instance,Realm.of(majorRealm,minorRealm+1));
             }else  changeRealm(source,instance,Realm.getNext(Realm.of(majorRealm,minorRealm),this));
-        }else{
-            startTribulation(source,instance,tribulation,entitySource);
+        }else if(getTribulationMode(majorRealm,minorRealm) == TribulationMode.AUTO){
+            startTribulation(source,instance,tribulation,entitySource,null);
         }
+        //MANUAL tribulations wait at full progress until triggered through triggerTribulation
     }
 
     private void onRealmUp(OriginSource source, PathInstance<SimplePathData> instance) {
@@ -462,7 +493,7 @@ public class SimplePath implements Path<SimplePathData> {
         data.cachedRealms.clear();
         data.progress = cachedProgress;
 
-        UUID activeTribulation = getActiveTribulation(data);
+        UUID activeTribulation = getActiveTribulationId(data);
         if(realmsDiscarded && activeTribulation != null){
             //the realm the tribulation was for no longer exists
             TribulationManager manager = TribulationManager.getInstance();

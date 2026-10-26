@@ -16,6 +16,7 @@ For system-specific authoring, use:
 - [Base stats](#base-stats)
 - [Value modifiers](#value-modifiers)
 - [Path bonuses](#path-bonuses)
+- [Path realm tribulations](#path-realm-tribulations)
 - [Path interactions](#path-interactions)
 - [Requirements](#requirements)
 - [Progress actions](#progress-actions)
@@ -200,6 +201,25 @@ Progression handlers use the same flat bonus shape through `ascension:give_path_
   }
 }
 ```
+
+## Path realm tribulations
+Each minor realm of a path may name a breakthrough tribulation, and how it starts:
+
+```json
+{
+  "name": {"translate": "ascension.realm.minor.high"},
+  "progress": 100000,
+  "tribulation": "ascension:test_tribulation",
+  "tribulation_mode": "manual"
+}
+```
+
+| `tribulation_mode` | Behaviour |
+|---|---|
+| `auto` (default) | The tribulation starts the moment the realm's progress is full |
+| `manual` | The path waits at full progress until an external source (e.g. a skill) triggers the tribulation |
+
+For testing, a manual tribulation can be triggered with `/ascension tribulation trigger <players> <path> <tribulation>`.
 
 ## Path interactions
 Path interactions are the `ascension:path_interactions` data map on the path registry, at `data/<namespace>/data_maps/ascension/paths/path_interactions.json`. Each value is keyed by the **target** path and lists how other `source` paths' **affinity** influences it.

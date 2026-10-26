@@ -35,6 +35,7 @@ import net.zic.ascension.network.tribulation.ClientboundTribulationUpdatePacket;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Holds and runs every active tribulation on the server.
@@ -117,7 +118,7 @@ public class TribulationManager extends SavedData {
         return new Builder(this, tribulation);
     }
 
-    private @Nullable UUID start(Builder builder) {
+    private @Nullable TribulationInstance<?> start(Builder builder) {
         if (server == null || builder.level == null || builder.position == null) return null;
         Registry<Tribulation<?>> registry = CoreRegistries.TRIBULATION_REGISTRY.get(server.registryAccess());
         Tribulation<?> tribulation = registry.getOptional(builder.tribulationId).orElse(null);
@@ -142,12 +143,13 @@ public class TribulationManager extends SavedData {
                 builder.onSuccess,
                 builder.onFailure
         );
+        if (builder.beforeStart != null) builder.beforeStart.accept(instance);
         if (deferring) toAdd.add(instance);
         else addInstance(instance);
         instance.start(builder.level);
         syncInstance(instance);
         setDirty();
-        return instance.getId();
+        return instance;
     }
 
     private void addInstance(TribulationInstance<?> instance) {
@@ -527,6 +529,7 @@ public class TribulationManager extends SavedData {
         private DimensionChangeBehaviour dimensionChangeBehaviour = DimensionChangeBehaviour.STAY;
         private final List<TribulationResolutionAction> onSuccess = new ArrayList<>();
         private final List<TribulationResolutionAction> onFailure = new ArrayList<>();
+        private @Nullable Consumer<TribulationInstance<?>> beforeStart;
 
         private Builder(TribulationManager manager, Identifier tribulationId) {
             this.manager = manager;
@@ -561,8 +564,23 @@ public class TribulationManager extends SavedData {
             return this;
         }
 
+        /**
+         * runs once the instance is created, before the tribulation's onStart and before it is first synced.
+         * use it to modify the TribulationData, see {@link TribulationInstance#as} for typed access
+         */
+        public Builder beforeStart(@Nullable Consumer<TribulationInstance<?>> hook) {
+            this.beforeStart = hook;
+            return this;
+        }
+
         //returns the id of the started tribulation, or null if it could not be started
         public @Nullable UUID start() {
+            TribulationInstance<?> instance = manager.start(this);
+            return instance == null ? null : instance.getId();
+        }
+
+        //returns the started tribulation, or null if it could not be started
+        public @Nullable TribulationInstance<?> startInstance() {
             return manager.start(this);
         }
     }
