@@ -41,7 +41,7 @@ public class AlchemyFurnaceBlock extends HorizontalDirectionalBlock implements E
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
     @Override

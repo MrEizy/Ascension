@@ -24,6 +24,7 @@ import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalCompositionEngine;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalPillFactory;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalIngredientQuality;
 import net.zic.ascension.common.item.ModItems;
 
 import java.util.ArrayList;
@@ -62,11 +63,16 @@ public record JadeMedicineLootFunction(List<Identifier> ingredients, int count,
     public ItemStack apply(ItemStack stack, LootContext context) {
         if (!stack.is(ModItems.JADE_BOTTLE.get())) return stack;
         List<AlchemyMaterial> materials = new ArrayList<>();
+        List<ItemStack> ingredientStacks = new ArrayList<>();
         AlchemyContext alchemyContext = AlchemyContext.of(context.getLevel(), BlockPos.ZERO, null);
         for (Identifier ingredient : ingredients) {
             Item item = BuiltInRegistries.ITEM.getValue(ingredient);
             if (item == null) continue;
-            AlchemyMaterials.resolve(new ItemStack(item), alchemyContext).ifPresent(materials::add);
+            ItemStack ingredientStack = new ItemStack(item);
+            AlchemyMaterials.resolve(ingredientStack, alchemyContext).ifPresent(material -> {
+                materials.add(material);
+                ingredientStacks.add(ingredientStack);
+            });
         }
         if (materials.isEmpty()) return stack;
         MedicinalCompositionEngine.Result result = MedicinalCompositionEngine.simulate(materials, alchemyContext);
@@ -74,7 +80,8 @@ public record JadeMedicineLootFunction(List<Identifier> ingredients, int count,
             return stack;
         }
         ItemStack pill = MedicinalPillFactory.condense(result.profile(), result.ingredientCount(),
-                context.getLevel().registryAccess(), MedicinalDecay.now(context.getLevel()));
+                context.getLevel().registryAccess(), MedicinalDecay.now(context.getLevel()),
+                MedicinalIngredientQuality.average(ingredientStacks));
         if (pill.isEmpty()) return stack;
         pill.setCount(count);
         long now = MedicinalDecay.now(context.getLevel());

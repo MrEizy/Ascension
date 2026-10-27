@@ -67,6 +67,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     private List<AlchemySubstance> extracts = List.of();
     private MedicinalComposition composition = MedicinalComposition.EMPTY;
     private int ingredientCount;
+    private double batchIngredientQuality = 0.35D;
     private boolean ruined;
     private boolean lastPowered;
 
@@ -89,6 +90,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         if (!canStart() || level == null || level.isClientSide()) return false;
         AlchemyContext context = AlchemyContext.of(level, worldPosition, null);
         List<AlchemySubstance> prepared = new ArrayList<>();
+        List<ItemStack> ingredientStacks = new ArrayList<>();
         for (int i = 0; i < MAX_INGREDIENTS; i++) {
             ItemStack stack = items.getItem(i);
             if (stack.isEmpty()) continue;
@@ -97,9 +99,11 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
             AlchemyRefinementResolver.RefinementResult result = AlchemyRefinementResolver.refine(material, context);
             if (result.isEmpty()) return false;
             prepared.add(result.substance());
+            ingredientStacks.add(stack.copy());
         }
         if (prepared.isEmpty()) return false;
         for (int i = 0; i < MAX_INGREDIENTS; i++) if (!items.getItem(i).isEmpty()) items.removeItem(i, 1);
+        batchIngredientQuality = MedicinalIngredientQuality.average(ingredientStacks);
         extracts = List.copyOf(prepared);
         composition = MedicinalComposition.EMPTY;
         ingredientCount = 0;
@@ -137,7 +141,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
             case CONDENSATION -> {
                 ItemStack pill = MedicinalPillFactory.condense(
                         MedicinalEffectResolver.resolve(furnace.composition, level.registryAccess()),
-                        furnace.ingredientCount, level.registryAccess(), MedicinalDecay.now(level));
+                        furnace.ingredientCount, level.registryAccess(), MedicinalDecay.now(level), furnace.batchIngredientQuality);
                 boolean success = !pill.isEmpty();
                 furnace.items.setItem(OUTPUT_SLOT, success ? pill : new ItemStack(ModItems.PILL_RESIDUE.get()));
                 furnace.finish(success);
@@ -212,6 +216,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         output.store("Extracts", AlchemySubstance.CODEC.listOf(), extracts);
         output.store("MedicinalComposition", MedicinalComposition.CODEC, composition);
         output.putInt("IngredientCount", ingredientCount);
+        output.putDouble("BatchIngredientQuality", batchIngredientQuality);
         output.putInt("Phase", phase.ordinal());
         output.putInt("PhaseTicks", phaseTicks);
         output.putBoolean("Ruined", ruined);
@@ -224,6 +229,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         extracts = input.read("Extracts", AlchemySubstance.CODEC.listOf()).orElse(List.of());
         composition = input.read("MedicinalComposition", MedicinalComposition.CODEC).orElse(MedicinalComposition.EMPTY);
         ingredientCount = Math.max(0, Math.min(MAX_INGREDIENTS, input.getIntOr("IngredientCount", 0)));
+        batchIngredientQuality = Mth.clamp(input.getDoubleOr("BatchIngredientQuality", 0.35D), 0.0D, 1.0D);
         phase = Phase.values()[Mth.clamp(input.getIntOr("Phase", 0), 0, Phase.values().length - 1)];
         phaseTicks = Mth.clamp(input.getIntOr("PhaseTicks", 0), 0, PHASE_TICKS);
         ruined = input.getBooleanOr("Ruined", false);

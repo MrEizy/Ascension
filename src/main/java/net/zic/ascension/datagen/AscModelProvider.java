@@ -1,5 +1,6 @@
 package net.zic.ascension.datagen;
 
+import com.geckolib.renderer.internal.GeckolibItemSpecialRenderer;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
@@ -10,6 +11,7 @@ import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.RangeSelectItemModel;
+import net.minecraft.client.renderer.item.SpecialModelWrapper;
 import net.minecraft.client.renderer.item.properties.numeric.Count;
 import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
@@ -31,7 +33,10 @@ import net.zic.ascension.common.blocks.crops.herbs.LilyPadHerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.common.blocks.custom.SpiritualStoneClusterBlock;
 import net.zic.ascension.common.item.ModItems;
+import net.zic.ascension.common.item.geckolibblockitems.AlchemyFurnaceItem;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.Optional;
 
 @NullMarked
 public class AscModelProvider extends ModelProvider {
@@ -197,6 +202,14 @@ public class AscModelProvider extends ModelProvider {
         vanillaBlockModel(blockModels, ModBlocks.AUCTION_HOUSE_CORE.get(), "block/chiseled_deepslate");
         vanillaBlockModel(blockModels, ModBlocks.AUCTION_BIDDER.get(), "block/polished_blackstone_bricks");
         blockModels.createTrivialCube(ModBlocks.SPIRIT_VEIN.get());
+
+
+        itemModels.itemModelOutput.accept(ModBlocks.ALCHEMY_FURNACE.get().asItem(),
+                new SpecialModelWrapper.Unbaked(
+                        AscensionCraft.prefix("item/alchemy_furnace"),
+                        Optional.empty(),
+                        new GeckolibItemSpecialRenderer.Unbaked<AlchemyFurnaceItem>()
+                ));
 
 
         //Block Entities

@@ -17,7 +17,7 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
     public AlchemyFurnaceScreen(AlchemyFurnaceMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         titleLabelX = 8;
-        titleLabelY = -11;
+        titleLabelY = -5;
         inventoryLabelY = 73;
     }
 
@@ -41,6 +41,14 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
                 || phase == AlchemyFurnaceBlockEntity.Phase.SUCCESS
                 || phase == AlchemyFurnaceBlockEntity.Phase.FAILURE
                 ? label : label + " " + (100 * Math.min(menu.phaseTicks(), duration) / duration) + "%";
-        graphics.text(font, Component.literal(status), leftPos + 8, topPos + 63, 0xFF444444, false);
+        if (phase == AlchemyFurnaceBlockEntity.Phase.IDLE) {
+            int relativeX = mouseX - leftPos;
+            int relativeY = mouseY - topPos;
+            if (relativeX >= 72 && relativeX <= 101 && relativeY >= 30 && relativeY <= 58) {
+                graphics.setTooltipForNextFrame(Component.literal("Pulse redstone to begin refinement"), mouseX, mouseY);
+            }
+        } else {
+            graphics.text(font, Component.literal(status), leftPos + 8, topPos + 63, 0xFF444444, false);
+        }
     }
 }
