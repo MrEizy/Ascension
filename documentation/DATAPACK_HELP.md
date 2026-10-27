@@ -221,6 +221,8 @@ Each minor realm of a path may name a breakthrough tribulation, and how it start
 | `auto` (default) | The tribulation starts the moment the realm's progress is full |
 | `manual` | The path waits at full progress until an external source (e.g. a skill) triggers the tribulation |
 
+If a breakthrough tribulation fails, the path's progress in that realm is reset to 0.
+
 For testing, a manual tribulation can be triggered with `/ascension tribulation trigger <players> <path> <tribulation>`.
 
 Golden cores are formed through a manual `ascension:golden_core` tribulation triggered by an `ascension:golden_core_forming` skill, see `ASCENSION_GOLDEN_CORES.md`.

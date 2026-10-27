@@ -28,6 +28,7 @@ import net.zic.ascension.impl.core.path.CompletedTribulation;
 import net.zic.ascension.impl.core.path.realms.BreakthroughBehaviour;
 import net.zic.ascension.impl.core.path.realms.MajorRealm;
 import net.zic.ascension.impl.core.path.realms.MajorRealmDefinition;
+import net.zic.ascension.impl.core.tribulation.action.ClearRealmProgressResolutionAction;
 import net.zic.ascension.impl.core.tribulation.action.EndBreakthroughResolutionAction;
 import net.zic.ascension.impl.core.tribulation.action.RealmChangeResolutionAction;
 import net.zic.ascension.impl.datapack.path.AscensionPathTypes;
@@ -264,7 +265,7 @@ public class SimplePath implements Path<SimplePathData> {
         TribulationInstance<?> started = manager.create(tribulation)
                 .targeting(target)
                 .onSuccess(new RealmChangeResolutionAction(pathId, data.getCurrentRealm(), 1))
-                .onFailure(new EndBreakthroughResolutionAction(pathId))
+                .onFailure(new EndBreakthroughResolutionAction(pathId), new ClearRealmProgressResolutionAction(pathId, data.getCurrentRealm()))
                 .beforeStart(beforeStart)
                 .startInstance();
         data.activeTribulationId = started == null ? null : started.getId();
@@ -295,6 +296,12 @@ public class SimplePath implements Path<SimplePathData> {
     public void endBreakthrough(PathInstance<SimplePathData> instance, UUID tribulation){
         SimplePathData data = instance.getData();
         if(tribulation.equals(data.activeTribulationId)) data.activeTribulationId = null;
+    }
+
+    //clears the progress of a realm after a failed breakthrough, only if the path is still at that realm
+    public void clearRealmProgress(PathInstance<SimplePathData> instance, Realm realm){
+        SimplePathData data = instance.getData();
+        if(data.getCurrentRealm().equals(realm)) data.progress = 0;
     }
 
     private void completeTribulationForRealm(SimplePathData data, Realm realm, OriginSource source){
@@ -438,12 +445,12 @@ public class SimplePath implements Path<SimplePathData> {
                 }
             }else{
                 if(realm.majorRealm() == data.getCurrentMajorRealm()) {
-                    removeTribulationForRealm(data,previousRealm,source);
+                    removeTribulationForRealm(data,realm,source);
                     currentRealm(data).setCurrentRealm(realm.minorRealm());
                     onRealmDown(source,instance);
                     broadcastRealmDown(source,instance,previousRealm);
                 }else{
-                    removeTribulationForRealm(data,previousRealm,source);
+                    removeTribulationForRealm(data,realm,source);
                     data.realms.removeLast();
                     if(currentRealm(data).isLimitBroken() && currentRealm(data).getCurrentRealm() > currentRealm(data).definition().getMaxRealm()){
                         //the realm we have loaded has extra realms we need to include

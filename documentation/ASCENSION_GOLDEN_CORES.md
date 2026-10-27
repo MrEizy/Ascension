@@ -99,8 +99,9 @@ Golden cores are formed through a path breakthrough. Three pieces work together:
 When the tribulation succeeds the path breaks through and keeps the completed tribulation for that realm, as it does for every breakthrough tribulation. The completed tribulation then adds the golden core:
 - the core tracks the skill's `path` (or the tribulation's `default_path`), its acquisition realm is the skill's `realm` (or `default_realm`), and its instance id is stored on the tribulation's data
 - the **tribulation is the owner** (`ascension:tribulation/<tribulation data id>`)
-- if the path drops below that realm, or is removed, the tribulation removes its ownership. Reaching the realm again adds the core back with the same instance id
-- a failed tribulation forms nothing, and can be triggered again
+- if the path drops back to that realm or below, the completed tribulation is discarded and removes its ownership. Breaking through again runs the tribulation again and forms a new core (new instance id)
+- if the whole path is removed and later added again, the path keeps its completed tribulations, so the core comes back with the same instance id
+- a failed tribulation forms nothing and resets the path's progress in that realm, it can be triggered again once the realm is full again
 
 # Complete example
 ```json

@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.datapack.skill.golden_core;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -17,7 +18,8 @@ public final class GoldenCoreFormingSkillType extends SkillType {
                 ComponentSerialization.CODEC.fieldOf("description").forGetter(GoldenCoreFormingSkill::getDescription),
                 Identifier.CODEC.fieldOf("golden_core").forGetter(GoldenCoreFormingSkill::goldenCore),
                 Identifier.CODEC.fieldOf("path").forGetter(GoldenCoreFormingSkill::path),
-                Realm.CODEC.fieldOf("realm").forGetter(GoldenCoreFormingSkill::realm)
+                Realm.CODEC.fieldOf("realm").forGetter(GoldenCoreFormingSkill::realm),
+                Codec.INT.optionalFieldOf("cast_time", 0).forGetter(GoldenCoreFormingSkill::castTime)
         ).apply(instance, GoldenCoreFormingSkill::new));
     }
 }

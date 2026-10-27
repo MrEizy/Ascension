@@ -6,6 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
@@ -36,6 +37,8 @@ import org.jspecify.annotations.Nullable;
  * can only be cast while the path is at exactly the configured realm, and that realm's golden core tribulation is ready
  */
 public final class GoldenCoreFormingSkill implements CastableSkill<GoldenCoreFormingSkill.Data, GoldenCoreFormingSkill.Cast, EquipSkillData.Empty> {
+    public static final Identifier FORMING = AscensionCraft.prefix("forming");
+
     private static final SerializerHandler<Data> SERIALIZER_HANDLER = new DataSerializerHandler();
     private static final SyncHandler<Data> SYNC_HANDLER = new SyncHandler.UnitSyncHandler<>();
     private static final SyncHandler<Cast> CAST_SYNC_HANDLER = new SyncHandler.UnitSyncHandler<>();
@@ -45,18 +48,22 @@ public final class GoldenCoreFormingSkill implements CastableSkill<GoldenCoreFor
     private final Identifier goldenCore;
     private final Identifier path;
     private final Realm realm;
+    private final int castTime;
 
-    public GoldenCoreFormingSkill(Component name, Component description, Identifier goldenCore, Identifier path, Realm realm) {
+    public GoldenCoreFormingSkill(Component name, Component description, Identifier goldenCore, Identifier path, Realm realm, int castTime) {
         this.name = name;
         this.description = description;
         this.goldenCore = goldenCore;
         this.path = path;
         this.realm = realm;
+        this.castTime = castTime;
     }
 
     public Identifier goldenCore() {return goldenCore;}
     public Identifier path() {return path;}
     public Realm realm() {return realm;}
+    //ticks the cast input has to be held before the tribulation starts, 0 starts it straight away
+    public int castTime() {return castTime;}
 
     //the tribulation of the configured realm, the one this skill expects to trigger
     public @Nullable Identifier expectedTribulation(RegistryAccess access) {
@@ -92,15 +99,11 @@ public final class GoldenCoreFormingSkill implements CastableSkill<GoldenCoreFor
 
     @Override
     public void startCast(CastingSkillInstance<Data, Cast, EquipSkillData.Empty> instance) {
-        LivingEntity caster = instance.getCaster();
-        if (!caster.level().isClientSide()) {
-            OriginSource source = AscensionOriginSourceHelper.getEntitySource(caster);
-            Identifier tribulation = expectedTribulation(caster.level().registryAccess());
-            if (source != null && tribulation != null) {
-                AscensionOriginSourceHelper.triggerPathTribulation(source, path, tribulation, caster, this::setGoldenCore);
-            }
+        if (castTime <= 0) {
+            instance.end(CastStatus.Reason.COMPLETED);
+            return;
         }
-        instance.end(CastStatus.Reason.COMPLETED);
+        instance.setPhase(FORMING);
     }
 
     //overrides the tribulation's default golden core, path and realm
@@ -109,12 +112,32 @@ public final class GoldenCoreFormingSkill implements CastableSkill<GoldenCoreFor
         if (typed != null) typed.getData().setGoldenCore(goldenCore, path, realm);
     }
 
+    //the input has to be held for the whole cast time, releasing early cancels the cast
     @Override
     public void tickCast(CastingSkillInstance<Data, Cast, EquipSkillData.Empty> instance) {
+        if (!instance.isPhase(FORMING)) {
+            instance.end(CastStatus.Reason.INVALIDATED);
+            return;
+        }
+        if (instance.getPhaseTicks() >= castTime) {
+            instance.end(CastStatus.Reason.COMPLETED);
+            return;
+        }
+        if (!instance.isInputHeld()) {
+            instance.end(CastStatus.Reason.CANCELLED);
+        }
     }
 
+    //the tribulation only starts once the cast completes, readiness is checked again as it may have changed while casting
     @Override
     public void endCast(CastingSkillInstance<Data, Cast, EquipSkillData.Empty> instance) {
+        LivingEntity caster = instance.getCaster();
+        if (caster.level().isClientSide() || !instance.getStatus().isCompleted()) return;
+        OriginSource source = AscensionOriginSourceHelper.getEntitySource(caster);
+        Identifier tribulation = expectedTribulation(caster.level().registryAccess());
+        if (source != null && tribulation != null) {
+            AscensionOriginSourceHelper.triggerPathTribulation(source, path, tribulation, caster, this::setGoldenCore);
+        }
     }
 
     @Override

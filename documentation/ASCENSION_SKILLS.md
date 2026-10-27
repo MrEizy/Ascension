@@ -567,7 +567,8 @@ A castable skill that forms a golden core by triggering a path's manual golden c
   "description": "Call down the tribulation that tempers your golden core.",
   "golden_core": "ascension:test_core",
   "path": "ascension:foundation/essence",
-  "realm": { "major": 0, "minor": 2 }
+  "realm": { "major": 0, "minor": 2 },
+  "cast_time": 60
 }
 ```
 | Field | Meaning |
@@ -576,7 +577,9 @@ A castable skill that forms a golden core by triggering a path's manual golden c
 | `path` | The path that must be cultivated, and that the core tracks |
 | `realm` | The realm the path must be at exactly, its tribulation must be an `ascension:golden_core` tribulation with `"tribulation_mode": "manual"` |
 
-The cast fails unless the path is held, at exactly `realm`, and that realm's tribulation is ready to be triggered (progress is full and no tribulation is running).
+| `cast_time` | Optional, default `0`. Ticks the cast input must be held before the tribulation starts, releasing early cancels the cast. `0` starts it straight away |
+
+The cast fails unless the path is held, at exactly `realm`, and that realm's tribulation is ready to be triggered (progress is full and no tribulation is running). The tribulation only starts once the cast completes, and readiness is checked again at that point. Taking damage does not interrupt the cast.
 
 # Techniques
 A technique is a generic source that grants skills (and stats or path bonuses) through its `on_added` actions. It is not tied to a path.
