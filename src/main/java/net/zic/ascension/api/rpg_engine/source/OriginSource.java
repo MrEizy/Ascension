@@ -283,9 +283,11 @@ public class OriginSource implements StatProvider {
                 holder.onAdded(this);
             }
         }
-        for(DataSourceHolder<?> holder : dataSources.values()) holder.preFinishedLoading(this);
+        //iterate copies, these hooks can add data sources (e.g. paths simulating realms that grant a golden core).
+        //sources added here were never loaded, so they do not need the loading hooks
+        for(DataSourceHolder<?> holder : List.copyOf(dataSources.values())) holder.preFinishedLoading(this);
         finishLoading();
-        for(DataSourceHolder<?> holder : dataSources.values()) holder.finishedLoading(this);
+        for(DataSourceHolder<?> holder : List.copyOf(dataSources.values())) holder.finishedLoading(this);
     }
 
     public void writeOriginSourceData(ValueOutput output){
