@@ -1,7 +1,6 @@
 package net.zic.ascension.common.gui.menus.alchemy;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -23,16 +22,6 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
     }
 
     @Override
-    protected void init() {
-        super.init();
-        addRenderableWidget(Button.builder(Component.literal("▶"), button -> {
-            if (minecraft != null && minecraft.gameMode != null) {
-                minecraft.gameMode.handleInventoryButtonClick(menu.containerId, 0);
-            }
-        }).bounds(leftPos + 61, topPos + 59, 18, 18).build());
-    }
-
-    @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, leftPos, topPos,
                 0, 0, imageWidth, imageHeight, TEXTURE_WIDTH, TEXTURE_HEIGHT);
@@ -40,7 +29,7 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
         AlchemyFurnaceBlockEntity.Phase phase = AlchemyFurnaceBlockEntity.Phase.values()[ordinal];
         int duration = AlchemyFurnaceBlockEntity.duration(phase);
         String label = switch (phase) {
-            case IDLE -> "Ready";
+            case IDLE -> "Pulse redstone";
             case EXTRACTION -> "Extract";
             case REACTION -> "React";
             case STABILIZATION -> "Stabilize";
@@ -52,6 +41,6 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
                 || phase == AlchemyFurnaceBlockEntity.Phase.SUCCESS
                 || phase == AlchemyFurnaceBlockEntity.Phase.FAILURE
                 ? label : label + " " + (100 * Math.min(menu.phaseTicks(), duration) / duration) + "%";
-        graphics.text(font, Component.literal(status), leftPos + 94, topPos + 73, 0xFF444444, false);
+        graphics.text(font, Component.literal(status), leftPos + 8, topPos + 63, 0xFF444444, false);
     }
 }

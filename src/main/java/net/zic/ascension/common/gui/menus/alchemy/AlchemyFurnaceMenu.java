@@ -56,11 +56,6 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
     private boolean editable() { return furnace == null || furnace.phase() == AlchemyFurnaceBlockEntity.Phase.IDLE; }
     public int phase() { return progress.get(0); }
     public int phaseTicks() { return progress.get(1); }
-    @Override public boolean clickMenuButton(Player player, int id) {
-        if (id != 0) return false;
-        if (player.level().isClientSide()) return true;
-        return furnace != null && furnace.start(player);
-    }
     @Override public boolean stillValid(Player player) {
         return furnace == null || (player.level().getBlockEntity(furnace.getBlockPos()) == furnace
                 && player.distanceToSqr(furnace.getBlockPos().getX() + 0.5, furnace.getBlockPos().getY() + 0.5, furnace.getBlockPos().getZ() + 0.5) <= 64.0);

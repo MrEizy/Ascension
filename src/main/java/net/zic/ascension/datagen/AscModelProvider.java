@@ -203,7 +203,10 @@ public class AscModelProvider extends ModelProvider {
         fermentingBarrelModel(blockModels);
         spiritualStoneClusterModel(blockModels);
         spiritualStoneClusterModel2(blockModels);
-        blockModels.createNonTemplateModelBlock(ModBlocks.ALCHEMY_FURNACE.get());
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(ModBlocks.ALCHEMY_FURNACE.get(),
+                        BlockModelGenerators.plainVariant(AscensionCraft.prefix("block/alchemy_furnace")))
+                        .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
 
         //Fluids
         blockModels.createNonTemplateModelBlock(ModBlocks.LIQUIFIED_SPIRITUAL_QI_BLOCK.get());

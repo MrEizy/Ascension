@@ -68,6 +68,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     private MedicinalComposition composition = MedicinalComposition.EMPTY;
     private int ingredientCount;
     private boolean ruined;
+    private boolean lastPowered;
 
     public AlchemyFurnaceBlockEntity(BlockPos pos, BlockState state) {
         super(AscBlockEntities.ALCHEMY_FURNACE_BE.get(), pos, state);
@@ -84,9 +85,9 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         return false;
     }
 
-    public boolean start(Player alchemist) {
+    public boolean start() {
         if (!canStart() || level == null || level.isClientSide()) return false;
-        AlchemyContext context = AlchemyContext.of(level, worldPosition, alchemist);
+        AlchemyContext context = AlchemyContext.of(level, worldPosition, null);
         List<AlchemySubstance> prepared = new ArrayList<>();
         for (int i = 0; i < MAX_INGREDIENTS; i++) {
             ItemStack stack = items.getItem(i);
@@ -105,6 +106,15 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         ruined = false;
         transition(Phase.EXTRACTION);
         return true;
+    }
+
+    public void updateRedstone() {
+        if (level == null || level.isClientSide()) return;
+        boolean powered = level.hasNeighborSignal(worldPosition);
+        if (powered == lastPowered) return;
+        lastPowered = powered;
+        setChanged();
+        if (powered) start();
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, AlchemyFurnaceBlockEntity furnace) {
@@ -205,6 +215,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         output.putInt("Phase", phase.ordinal());
         output.putInt("PhaseTicks", phaseTicks);
         output.putBoolean("Ruined", ruined);
+        output.putBoolean("LastPowered", lastPowered);
     }
 
     @Override protected void loadAdditional(ValueInput input) {
@@ -216,6 +227,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         phase = Phase.values()[Mth.clamp(input.getIntOr("Phase", 0), 0, Phase.values().length - 1)];
         phaseTicks = Mth.clamp(input.getIntOr("PhaseTicks", 0), 0, PHASE_TICKS);
         ruined = input.getBooleanOr("Ruined", false);
+        lastPowered = input.getBooleanOr("LastPowered", false);
     }
 
     @Override public void preRemoveSideEffects(BlockPos pos, BlockState state) {

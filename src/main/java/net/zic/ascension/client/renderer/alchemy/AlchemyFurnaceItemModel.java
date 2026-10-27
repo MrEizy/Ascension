@@ -9,7 +9,7 @@ import net.zic.ascension.common.item.geckolibblockitems.AlchemyFurnaceItem;
 public class AlchemyFurnaceItemModel extends GeoModel<AlchemyFurnaceItem> {
     private static final Identifier MODEL = AscensionCraft.prefix("block/alchemy_furnace");
     private static final Identifier ANIMATIONS = AscensionCraft.prefix("block/alchemy_furnace");
-    private static final Identifier TEXTURE = AscensionCraft.prefix("block/alchemy_furnace.png");
+    private static final Identifier TEXTURE = AscensionCraft.prefix("textures/block/alchemy_furnace.png");
 
     @Override
     public Identifier getModelResource(GeoRenderState renderState) {
