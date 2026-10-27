@@ -13,6 +13,7 @@ import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillInstance;
+import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastVisualState;
 import net.zic.ascension.api.ascension.core.skill.castable.CastData;
 import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.ascension.core.skill.castable.CastingSkillInstance;
@@ -126,6 +127,13 @@ public final class GoldenCoreFormingSkill implements CastableSkill<GoldenCoreFor
         if (!instance.isInputHeld()) {
             instance.end(CastStatus.Reason.CANCELLED);
         }
+    }
+
+    //progress of the cast time, shown by the cast progress bar
+    @Override
+    public @Nullable ActiveCastVisualState visualState(CastingSkillInstance<Data, Cast, EquipSkillData.Empty> instance) {
+        if (castTime <= 0 || !instance.isPhase(FORMING)) return null;
+        return new ActiveCastVisualState(instance.getSkillId(), 0, (double) instance.getPhaseTicks() / castTime);
     }
 
     //the tribulation only starts once the cast completes, readiness is checked again as it may have changed while casting
