@@ -18,9 +18,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.common.entities.CushionEntity;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 public class CushionBlockBase extends Block {
     public static final MapCodec<CushionBlockBase> CODEC = simpleCodec(CushionBlockBase::new);
     private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 7, 16);
@@ -32,10 +34,10 @@ public class CushionBlockBase extends Block {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!level.isClientSide()) {
-            List<CushionEntity> entities = level.getEntities(AscEntities.CUSHION.get(), new AABB(pos), cushion -> true);
+            List<CushionEntity> entities = level.getEntities(AscEntities.CUSHION.get(), new AABB(pos), Entity::isAlive);
             CushionEntity seat = entities.isEmpty()
                     ? AscEntities.CUSHION.get().spawn((ServerLevel) level, pos, EntitySpawnReason.TRIGGERED)
-                    : entities.get(0);
+                    : entities.getFirst();
 
             if (seat != null && !player.startRiding(seat) && entities.isEmpty()) {
                 seat.discard();

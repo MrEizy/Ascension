@@ -9,7 +9,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.common.blocks.custom.CushionBlockBase;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class CushionEntity extends Entity {
 
     public CushionEntity(EntityType<?> entityType, Level level) {
