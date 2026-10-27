@@ -4,6 +4,7 @@ import net.minecraft.client.color.block.BlockTintSources;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -146,6 +147,7 @@ public class AscensionCraftClient {
         @SubscribeEvent
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(AscEntities.GHOST.get(), InnerWorldGhostRenderer::new);
+            event.registerEntityRenderer(AscEntities.CUSHION.get(), NoopRenderer::new);
 
 
 

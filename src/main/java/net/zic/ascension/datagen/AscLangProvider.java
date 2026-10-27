@@ -133,6 +133,25 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.alchemy_material.tooltip.note", "Usable as a material in alchemy.");
 
         add("block.ascension.alchemy_furnace", "Alchemy Furnace");
+
+        add("block.ascension.cushion_white", "White Cushion");
+        add("block.ascension.cushion_light_gray", "Light Gray Cushion");
+        add("block.ascension.cushion_gray", "Gray Cushion");
+        add("block.ascension.cushion_black", "Black Cushion");
+        add("block.ascension.cushion_brown", "Brown Cushion");
+        add("block.ascension.cushion_red", "Red Cushion");
+        add("block.ascension.cushion_orange", "Orange Cushion");
+        add("block.ascension.cushion_yellow", "Yellow Cushion");
+        add("block.ascension.cushion_lime", "Lime Cushion");
+        add("block.ascension.cushion_green", "Green Cushion");
+        add("block.ascension.cushion_cyan", "Cyan Cushion");
+        add("block.ascension.cushion_light_blue", "Light Blue Cushion");
+        add("block.ascension.cushion_blue", "Blue Cushion");
+        add("block.ascension.cushion_purple", "Purple Cushion");
+        add("block.ascension.cushion_magenta", "Magenta Cushion");
+        add("block.ascension.cushion_pink", "Pink Cushion");
+        add("entity.ascension.cushion_entity", "Cushion");
+
         add("ascension.alchemy_furnace.inserted", "Material added (%s/%s)");
         add("ascension.alchemy_furnace.unstable", "The batch is unstable (%s/%s materials).");
         add("ascension.alchemy_furnace.catastrophic", "The batch destabilized and collapsed.");

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "cushion",
+  "key": {
+    "E": "minecraft:blue_wool",
+    "W": "#minecraft:planks"
+  },
+  "pattern": [
+    "EEE",
+    "EWE"
+  ],
+  "result": {
+    "id": "ascension:cushion_blue"
+  }
+}

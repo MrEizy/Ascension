@@ -11,6 +11,7 @@ import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
@@ -57,6 +58,25 @@ public class AscRecipeProvider extends RecipeProvider {
                     .unlockedBy(getHasName(log), has(log))
                     .group("planks")
                     .save(output, "ascension:shapeless/ironwood_planks_from_" + getItemName(log));
+        }
+
+
+        //Cushions
+        List<ItemLike> cushionWools = List.of(Blocks.WHITE_WOOL, Blocks.LIGHT_GRAY_WOOL, Blocks.GRAY_WOOL,
+                Blocks.BLACK_WOOL, Blocks.BROWN_WOOL, Blocks.RED_WOOL, Blocks.ORANGE_WOOL, Blocks.YELLOW_WOOL,
+                Blocks.LIME_WOOL, Blocks.GREEN_WOOL, Blocks.CYAN_WOOL, Blocks.LIGHT_BLUE_WOOL, Blocks.BLUE_WOOL,
+                Blocks.PURPLE_WOOL, Blocks.MAGENTA_WOOL, Blocks.PINK_WOOL);
+        for (int i = 0; i < ModBlocks.CUSHIONS.size(); i++) {
+            ItemLike cushion = ModBlocks.CUSHIONS.get(i).get();
+            ItemLike wool = cushionWools.get(i);
+            shaped(RecipeCategory.DECORATIONS, cushion)
+                    .pattern("EEE")
+                    .pattern("EWE")
+                    .define('W', ItemTags.PLANKS)
+                    .define('E', wool)
+                    .unlockedBy(getHasName(wool), has(wool))
+                    .group("cushion")
+                    .save(output, "ascension:shaped/" + getItemName(cushion));
         }
 
 

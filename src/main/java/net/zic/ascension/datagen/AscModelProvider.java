@@ -197,6 +197,9 @@ public class AscModelProvider extends ModelProvider {
         vanillaBlockModel(blockModels, ModBlocks.AUCTION_BIDDER.get(), "block/polished_blackstone_bricks");
         blockModels.createTrivialCube(ModBlocks.SPIRIT_VEIN.get());
 
+        //Cushions
+        ModBlocks.CUSHIONS.forEach(cushion -> blockModels.createNonTemplateModelBlock(cushion.get()));
+
 
         //Block Entities
         fermentingBarrelModel(blockModels);
