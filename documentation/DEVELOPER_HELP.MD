@@ -136,8 +136,7 @@ If an action `requiresLoadedTarget()` and the target is not loaded when the trib
 #### Lifecycle
 - tribulations stay in memory while the server runs, but only tick while the chunk they are in is loaded
 - an entity tracking tribulation follows its target, `DimensionChangeBehaviour` decides what happens when the target changes dimension (`STAY` by default, `FOLLOW` or `FAIL`)
-- on load an active tribulation is discarded without running any logic if its id is no longer in the registry, or its data/actions fail to load. `Tribulation.validateLoadedData` can also reject or adjust loaded data
-- `/reload` does not affect running tribulations, restart the server for datapack changes to apply
+- on load an active tribulation is discarded without running any logic if its id is no longer in the registry, or its data/actions fail to load. `Tribulation.validateLoadedData(data, access)` can also reject or adjust loaded data (it gets registry access, so it can check anything the data references still exists)- `/reload` does not affect running tribulations, restart the server for datapack changes to apply
 
 #### Client
 Tribulations are synced to every player tracking the chunk they are in. Register a `TribulationRenderer` for your type with `TribulationRenderers.register(type, renderer)` during client setup to get `clientTick` and `render` hooks. Clients receive the same `TribulationData` as the server instance (`ClientTribulation.getData()`). It is encoded with `TribulationType.dataStreamCodec()`, which defaults to the data codec, override it for a more compact network format. Call `instance.markDataDirty()` when the data changes so it is resent.

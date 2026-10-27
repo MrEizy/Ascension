@@ -21,7 +21,8 @@
         {
           "name": {"translate": "ascension.realm.minor.high"},
           "progress": 100000,
-          "tribulation": "ascension:test_tribulation"
+          "tribulation": "ascension:golden_core_tribulation",
+          "tribulation_mode": "manual"
         }
       ]
     },

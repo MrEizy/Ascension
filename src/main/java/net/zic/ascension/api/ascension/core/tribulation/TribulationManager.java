@@ -100,7 +100,7 @@ public class TribulationManager extends SavedData {
         if (pending.isEmpty()) return;
         Registry<Tribulation<?>> registry = CoreRegistries.TRIBULATION_REGISTRY.get(server.registryAccess());
         for (Dynamic<?> saved : pending) {
-            DataResult<TribulationInstance<?>> result = TribulationInstance.decode(saved, registry);
+            DataResult<TribulationInstance<?>> result = TribulationInstance.decode(saved, registry, server.registryAccess());
             if (result.isError()) {
                 //treat it as if it never existed
                 AscensionCraft.LOGGER.debug("Discarding tribulation: {}", result.error().map(DataResult.Error::message).orElse(""));

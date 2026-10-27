@@ -286,7 +286,7 @@ public final class TribulationInstance<T extends TribulationData> {
      * loads a saved instance, returns an error if the tribulation no longer exists or any part fails to load,
      * in which case the instance is expected to be discarded.
      */
-    static <V> DataResult<TribulationInstance<?>> decode(Dynamic<V> input, Registry<Tribulation<?>> registry) {
+    static <V> DataResult<TribulationInstance<?>> decode(Dynamic<V> input, Registry<Tribulation<?>> registry, RegistryAccess access) {
         DataResult<UUID> id = input.get("id").read(UUIDUtil.CODEC);
         DataResult<Identifier> tribulationId = input.get("tribulation").read(Identifier.CODEC);
         if (id.isError() || tribulationId.isError()) return DataResult.error(() -> "invalid tribulation id");
@@ -294,10 +294,11 @@ public final class TribulationInstance<T extends TribulationData> {
         Optional<Tribulation<?>> tribulation = registry.getOptional(tribulationId.getOrThrow());
         if (tribulation.isEmpty()) return DataResult.error(() -> "unknown tribulation " + tribulationId.getOrThrow());
 
-        return decodeTyped(input, id.getOrThrow(), tribulationId.getOrThrow(), tribulation.get()).map(instance -> instance);
+        return decodeTyped(input, id.getOrThrow(), tribulationId.getOrThrow(), tribulation.get(), access).map(instance -> instance);
     }
 
-    private static <V, T extends TribulationData> DataResult<TribulationInstance<T>> decodeTyped(Dynamic<V> input, UUID id, Identifier tribulationId, Tribulation<T> tribulation) {
+    private static <V, T extends TribulationData> DataResult<TribulationInstance<T>> decodeTyped(Dynamic<V> input, UUID id, Identifier tribulationId, Tribulation<T> tribulation,
+                                                                                               RegistryAccess access) {
         DataResult<T> data = input.get("data").read(tribulation.getType().dataCodec());
         DataResult<ResourceKey<Level>> dimension = input.get("dimension").read(Level.RESOURCE_KEY_CODEC);
         DataResult<Vec3> position = input.get("pos").read(Vec3.CODEC);
@@ -311,7 +312,7 @@ public final class TribulationInstance<T extends TribulationData> {
             return DataResult.error(() -> "failed to load tribulation " + tribulationId);
         }
 
-        T validatedData = tribulation.validateLoadedData(data.getOrThrow());
+        T validatedData = tribulation.validateLoadedData(data.getOrThrow(), access);
         if (validatedData == null) return DataResult.error(() -> "tribulation data rejected for " + tribulationId);
 
         return DataResult.success(new TribulationInstance<>(

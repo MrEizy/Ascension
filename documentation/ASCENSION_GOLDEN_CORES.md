@@ -82,16 +82,22 @@ Golden cores are formed through a path breakthrough. Three pieces work together:
 
 1. **The tribulation** — an `ascension:golden_core` tribulation. It plays out like a lightning tribulation (`strikes`, `damage`, `tick_delay`), and its data also records which golden core it forms.
    ```json
-   { "type": "ascension:golden_core", "strikes": 4, "damage": 2.0, "tick_delay": 10 }
+   {
+     "type": "ascension:golden_core", "strikes": 4, "damage": 2.0, "tick_delay": 10,
+     "default_golden_core": "ascension:test_core",
+     "default_path": "ascension:foundation/essence",
+     "default_realm": { "major": 0, "minor": 2 }
+   }
    ```
+   `default_golden_core`, `default_path` and `default_realm` are required. The tribulation always holds a core: it starts with these defaults, so a tribulation started without a forming skill (auto mode, a command, or a realm reached without running it) still forms the default core on the default path and realm. A realm using the tribulation in auto mode therefore needs its own tribulation file with matching defaults. If the held core is removed from the datapack, it falls back to the default on load.
 2. **The path realm** — the minor realm uses that tribulation in manual mode, so it waits at full progress instead of starting on its own:
    ```json
    { "name": "...", "progress": 100000, "tribulation": "ascension:golden_core_tribulation", "tribulation_mode": "manual" }
    ```
-3. **The skill** — an `ascension:golden_core_forming` skill (see `ASCENSION_SKILLS.md`) naming the core, path and realm. Casting it triggers the realm's tribulation and sets the core on the tribulation's data before it starts.
+3. **The skill** — an `ascension:golden_core_forming` skill (see `ASCENSION_SKILLS.md`) naming the core, path and realm. Casting it triggers the realm's tribulation and replaces the tribulation's default core, path and realm with the skill's before it starts.
 
 When the tribulation succeeds the path breaks through and keeps the completed tribulation for that realm, as it does for every breakthrough tribulation. The completed tribulation then adds the golden core:
-- the core tracks the skill's `path`, its acquisition realm is the skill's `realm`, and it gets a new instance id stored on the tribulation's data
+- the core tracks the skill's `path` (or the tribulation's `default_path`), its acquisition realm is the skill's `realm` (or `default_realm`), and its instance id is stored on the tribulation's data
 - the **tribulation is the owner** (`ascension:tribulation/<tribulation data id>`)
 - if the path drops below that realm, or is removed, the tribulation removes its ownership. Reaching the realm again adds the core back with the same instance id
 - a failed tribulation forms nothing, and can be triggered again

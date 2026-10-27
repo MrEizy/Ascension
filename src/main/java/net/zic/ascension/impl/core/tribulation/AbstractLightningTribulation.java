@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.tribulation;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
@@ -48,7 +49,7 @@ public abstract class AbstractLightningTribulation<D extends LightningTribulatio
     }
 
     @Override
-    public D validateLoadedData(D data) {
+    public D validateLoadedData(D data, RegistryAccess access) {
         //the number of strikes may have been lowered since it was saved
         data.setLightningSurvived(Math.min(data.getLightningSurvived(), strikes));
         return data;

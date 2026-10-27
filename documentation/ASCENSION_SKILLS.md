@@ -572,7 +572,7 @@ A castable skill that forms a golden core by triggering a path's manual golden c
 ```
 | Field | Meaning |
 |---|---|
-| `golden_core` | The golden core the tribulation forms |
+| `golden_core` | The golden core the tribulation forms, replacing the tribulation's `default_golden_core` |
 | `path` | The path that must be cultivated, and that the core tracks |
 | `realm` | The realm the path must be at exactly, its tribulation must be an `ascension:golden_core` tribulation with `"tribulation_mode": "manual"` |
 

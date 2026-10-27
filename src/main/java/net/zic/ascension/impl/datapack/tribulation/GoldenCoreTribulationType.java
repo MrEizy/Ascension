@@ -17,7 +17,10 @@ public class GoldenCoreTribulationType extends TribulationType<GoldenCoreTribula
             instance -> instance.group(
                     Codec.INT.fieldOf("strikes").forGetter(GoldenCoreTribulation::strikes),
                     Codec.DOUBLE.fieldOf("damage").forGetter(GoldenCoreTribulation::damage),
-                    Codec.INT.fieldOf("tick_delay").forGetter(GoldenCoreTribulation::tickDelay)
+                    Codec.INT.fieldOf("tick_delay").forGetter(GoldenCoreTribulation::tickDelay),
+                    Identifier.CODEC.fieldOf("default_golden_core").forGetter(GoldenCoreTribulation::defaultGoldenCore),
+                    Identifier.CODEC.fieldOf("default_path").forGetter(GoldenCoreTribulation::defaultPath),
+                    Realm.CODEC.fieldOf("default_realm").forGetter(GoldenCoreTribulation::defaultRealm)
             ).apply(instance, GoldenCoreTribulation::new)
     );
 

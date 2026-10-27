@@ -12,10 +12,12 @@ import java.util.UUID;
 
 /**
  * lightning data that also holds the golden core formed by the tribulation.
- * the core is set by whatever triggers the tribulation (e.g. a golden core forming skill), before it starts.
- * once completed the path keeps this data, and the tribulation owns the core through {@link #owner()}
+ * the core, path and acquisition realm always start as the tribulation's defaults, whatever triggers the tribulation
+ * (e.g. a golden core forming skill) can override them before it starts.
+ * once completed the tribulation owns the core through {@link #owner()}
  */
 public class GoldenCoreTribulationData extends LightningTribulationData {
+    //only null while loading old data, fixed by GoldenCoreTribulation#validateLoadedData
     private @Nullable Identifier goldenCore;
     private @Nullable UUID goldenCoreId;
     private @Nullable Identifier path;
@@ -31,12 +33,14 @@ public class GoldenCoreTribulationData extends LightningTribulationData {
         this.acquisitionRealm = acquisitionRealm.orElse(null);
     }
 
-    public static GoldenCoreTribulationData fresh() {
-        return new GoldenCoreTribulationData(0, 0, UUID.randomUUID(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+    //fresh data forming the given core
+    public static GoldenCoreTribulationData of(Identifier goldenCore, Identifier path, Realm acquisitionRealm) {
+        return new GoldenCoreTribulationData(0, 0, UUID.randomUUID(), Optional.of(goldenCore), Optional.of(UUID.randomUUID()),
+                Optional.of(path), Optional.of(acquisitionRealm));
     }
 
     /**
-     * sets the golden core this tribulation forms, keeps the existing core id if one is already set
+     * overrides the golden core this tribulation forms, keeps the core's instance id
      * @param goldenCore the golden core
      * @param path the path the core tracks
      * @param acquisitionRealm the realm the core is formed at
@@ -48,6 +52,7 @@ public class GoldenCoreTribulationData extends LightningTribulationData {
         if (goldenCoreId == null) goldenCoreId = UUID.randomUUID();
     }
 
+    //if every part of the core is set, always true once validated
     public boolean hasGoldenCore() {
         return goldenCore != null && goldenCoreId != null && path != null && acquisitionRealm != null;
     }

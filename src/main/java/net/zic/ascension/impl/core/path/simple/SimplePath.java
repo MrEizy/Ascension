@@ -310,7 +310,7 @@ public class SimplePath implements Path<SimplePathData> {
             //no data present for this tribulation, create new data
             completedTribulation = CompletedTribulation.fresh(tribulationId, tribulation);
         }else{
-            completedTribulation = completedTribulation.revalidate();
+            completedTribulation = completedTribulation.revalidate(source.getRegistryAccess());
         }
         data.completedTribulations.put(realm, completedTribulation);
 
@@ -564,7 +564,7 @@ public class SimplePath implements Path<SimplePathData> {
                 Realm realm = Realm.of(completedTribulationInput.getIntOr("major_realm",0),completedTribulationInput.getIntOr("minor_realm",0));
                 Identifier tribulationId = completedTribulationInput.read("tribulation", Identifier.CODEC).orElse(null);
                 Tribulation<?> tribulation = CoreRegistries.safeAccess(CoreRegistries.TRIBULATION_REGISTRY, tribulationId, access);
-                CompletedTribulation<?> completedTribulation = tribulation == null ? null : CompletedTribulation.read(tribulationId, tribulation, completedTribulationInput);
+                CompletedTribulation<?> completedTribulation = tribulation == null ? null : CompletedTribulation.read(tribulationId, tribulation, completedTribulationInput, access);
                 if(completedTribulation == null){
                     AscensionCraft.LOGGER.debug("Invalid completed tribulation {} discarding", tribulationId);
                     continue;

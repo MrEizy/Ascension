@@ -103,7 +103,7 @@ public final class GoldenCoreFormingSkill implements CastableSkill<GoldenCoreFor
         instance.end(CastStatus.Reason.COMPLETED);
     }
 
-    //tells the tribulation which golden core it forms
+    //overrides the tribulation's default golden core, path and realm
     private void setGoldenCore(TribulationInstance<?> tribulation) {
         TribulationInstance<GoldenCoreTribulationData> typed = tribulation.as(GoldenCoreTribulation.class);
         if (typed != null) typed.getData().setGoldenCore(goldenCore, path, realm);
