@@ -1,0 +1,7 @@
+{
+  "stage": "stabilization",
+  "yield": 0.96,
+  "purity_delta": 0.005,
+  "instability_delta": -0.18,
+  "safe_energy_bonus": 0.9
+}

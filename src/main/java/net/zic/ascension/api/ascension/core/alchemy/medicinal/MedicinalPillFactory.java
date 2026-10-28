@@ -19,6 +19,11 @@ public final class MedicinalPillFactory {
     }
 
     public static ItemStack condense(MedicinalProfile profile, int ingredientCount, RegistryAccess access, long gameTime, double ingredientQuality) {
+        return condense(profile, ingredientCount, access, gameTime, ingredientQuality, null, 0.0D);
+    }
+
+    public static ItemStack condense(MedicinalProfile profile, int ingredientCount, RegistryAccess access,
+                                     long gameTime, double ingredientQuality, Identifier desiredEffect, double focusPrecision) {
         if (profile == null || profile.composition().isEmpty()) return ItemStack.EMPTY;
         List<MedicinalProfile.Effect> beneficial = new ArrayList<>();
         List<MedicinalProfile.Effect> harmful = new ArrayList<>();
@@ -35,10 +40,22 @@ public final class MedicinalPillFactory {
                 .thenComparing(effect -> effect.id().toString()));
 
         MedicinalProfile.Effect primary = beneficial.getFirst();
-        double support = beneficial.stream().skip(1).mapToDouble(MedicinalProfile.Effect::potency).sum();
+        if (desiredEffect != null) {
+            for (MedicinalProfile.Effect candidate : beneficial) {
+                if (candidate.id().equals(desiredEffect) && candidate.potency() >= primary.potency()
+                        * Math.max(0.55D, 0.85D - Math.max(0.0D, Math.min(0.3D, focusPrecision)))) {
+                    primary = candidate;
+                    break;
+                }
+            }
+        }
+        final MedicinalProfile.Effect chosen = primary;
+        double support = beneficial.stream().filter(effect -> effect != chosen)
+                .mapToDouble(MedicinalProfile.Effect::potency).sum();
         double bonus = Math.min(primary.potency() * 0.35D, support * 0.08D);
+        double steeringCost = primary == beneficial.getFirst() ? 1.0D : 0.92D;
         MedicinalProfile.Effect focused = new MedicinalProfile.Effect(primary.id(),
-                Math.min(4096.0D, primary.potency() + bonus), primary.durationTicks(), false);
+                Math.min(4096.0D, (primary.potency() + bonus) * steeringCost), primary.durationTicks(), false);
         List<MedicinalProfile.Effect> finalEffects = new ArrayList<>();
         finalEffects.add(focused);
         if (!harmful.isEmpty() && (profile.composition().toxicity() > 0.01D

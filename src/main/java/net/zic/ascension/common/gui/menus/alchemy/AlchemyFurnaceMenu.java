@@ -11,6 +11,11 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementPlan;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementTechnique;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementRegistries;
+import net.minecraft.resources.Identifier;
+import java.util.List;
 import net.zic.ascension.common.blocks.entity.AlchemyFurnaceBlockEntity;
 import net.zic.ascension.common.gui.menus.AscMenuTypes;
 
@@ -27,7 +32,7 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
         super(AscMenuTypes.ALCHEMY_FURNACE.get(), id);
         this.furnace = furnace;
         this.container = furnace == null ? new SimpleContainer(4) : furnace.inventory();
-        this.progress = furnace == null ? new SimpleContainerData(2) : furnace.menuData();
+        this.progress = furnace == null ? new SimpleContainerData(7) : furnace.menuData();
         addSlot(new Slot(container, 0, 52, 20) {
             @Override public boolean mayPlace(ItemStack stack) { return editable() && AlchemyMaterials.resolve(stack, net.zic.ascension.api.ascension.core.alchemy.AlchemyContext.of(playerInventory.player)).isPresent(); }
             @Override public boolean mayPickup(Player player) { return editable(); }
@@ -56,6 +61,56 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
     private boolean editable() { return furnace == null || furnace.phase() == AlchemyFurnaceBlockEntity.Phase.IDLE; }
     public int phase() { return progress.get(0); }
     public int phaseTicks() { return progress.get(1); }
+    public int preparationIndex(int index) { return index < 0 || index > 4 ? 0 : progress.get(index + 2); }
+
+    public String selectionLabel(int index, Player player) {
+        if (index < 0 || index > 4) return "";
+        if (index == 4) {
+            List<Identifier> effects = AlchemyRefinementPlan.focusChoices(player.level().registryAccess());
+            int selection = progress.get(6);
+            return selection <= 0 || selection > effects.size() ? "Auto" : pretty(effects.get(selection - 1).getPath());
+        }
+        AlchemyRefinementTechnique.Stage stage = AlchemyRefinementTechnique.Stage.values()[index];
+        List<Identifier> choices = AlchemyRefinementPlan.choices(player.level().registryAccess(), stage);
+        int selection = progress.get(index + 2);
+        return choices.isEmpty() ? "Default" : pretty(choices.get(Math.max(0, Math.min(selection, choices.size() - 1))).getPath()
+                .replace("_" + stage.name().toLowerCase(), ""));
+    }
+
+    public String selectionDetails(int index, Player player) {
+        if (index == 4) return "Only steers toward effects this medicine can already express; steering may reduce potency.";
+        if (index < 0 || index > 3) return "";
+        AlchemyRefinementTechnique.Stage stage = AlchemyRefinementTechnique.Stage.values()[index];
+        List<Identifier> options = AlchemyRefinementPlan.choices(player.level().registryAccess(), stage);
+        if (options.isEmpty()) return "No techniques loaded";
+        Identifier id = options.get(Math.max(0, Math.min(progress.get(index + 2), options.size() - 1)));
+        AlchemyRefinementTechnique technique = AlchemyRefinementRegistries.TECHNIQUES.get(player.level().registryAccess()).getValue(id);
+        if (technique == null) return "Missing method";
+        return switch (stage) {
+            case EXTRACTION -> String.format(java.util.Locale.ROOT,
+                    "Essence yield %.0f%%, purity %+.0f%%, instability %+.0f%%",
+                    technique.yield() * 100, technique.purityDelta() * 100, technique.instabilityDelta() * 100);
+            case HEATING -> String.format(java.util.Locale.ROOT,
+                    "Heat %.2fx, control %.2fx, yield %.0f%%, instability %+.0f%%",
+                    technique.heat(), technique.control(), technique.yield() * 100, technique.instabilityDelta() * 100);
+            case STABILIZATION -> String.format(java.util.Locale.ROOT,
+                    "Yield %.0f%%, purity %+.0f%%/herb, instability %+.0f%%/herb",
+                    technique.yield() * 100, technique.purityDelta() * 100, technique.instabilityDelta() * 100);
+            case CONDENSATION -> String.format(java.util.Locale.ROOT,
+                    "Ingredient quality %+.0f%%, focus precision %.0f%%",
+                    technique.qualityBonus() * 100, technique.focusPrecision() * 100);
+        };
+    }
+
+    private static String pretty(String path) {
+        String value = path.replace('_', ' ');
+        return value.isEmpty() ? "Default" : Character.toUpperCase(value.charAt(0)) + value.substring(1);
+    }
+
+    @Override public boolean clickMenuButton(Player player, int id) {
+        if (furnace == null || id < 0 || id >= 5 || !stillValid(player)) return false;
+        return furnace.cyclePreparation(id);
+    }
     @Override public boolean stillValid(Player player) {
         return furnace == null || (player.level().getBlockEntity(furnace.getBlockPos()) == furnace
                 && player.distanceToSqr(furnace.getBlockPos().getX() + 0.5, furnace.getBlockPos().getY() + 0.5, furnace.getBlockPos().getZ() + 0.5) <= 64.0);

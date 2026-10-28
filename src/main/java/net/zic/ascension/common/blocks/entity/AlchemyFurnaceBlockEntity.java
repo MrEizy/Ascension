@@ -58,9 +58,21 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         }
     };
     private final ContainerData menuData = new ContainerData() {
-        @Override public int get(int index) { return index == 0 ? phase.ordinal() : (index == 1 ? phaseTicks : 0); }
-        @Override public void set(int index, int value) { if (index == 0 && value >= 0 && value < Phase.values().length) phase = Phase.values()[value]; if (index == 1) phaseTicks = value; }
-        @Override public int getCount() { return 2; }
+        @Override public int get(int index) {
+            if (index == 0) return phase.ordinal();
+            if (index == 1) return phaseTicks;
+            if (level == null) return 0;
+            if (index >= 2 && index <= 5) return plan.index(level.registryAccess(), AlchemyRefinementTechnique.Stage.values()[index - 2]);
+            return index == 6 ? plan.focusIndex(level.registryAccess()) : 0;
+        }
+        @Override public void set(int index, int value) {
+            if (index == 0 && value >= 0 && value < Phase.values().length) phase = Phase.values()[value];
+            if (index == 1) phaseTicks = value;
+            if (level != null && index >= 2 && index <= 5)
+                plan = plan.indexed(level.registryAccess(), AlchemyRefinementTechnique.Stage.values()[index - 2], value);
+            if (level != null && index == 6) plan = plan.indexedFocus(level.registryAccess(), value);
+        }
+        @Override public int getCount() { return 7; }
     };
     private Phase phase = Phase.IDLE;
     private int phaseTicks;
@@ -70,6 +82,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     private double batchIngredientQuality = 0.35D;
     private boolean ruined;
     private boolean lastPowered;
+    private AlchemyRefinementPlan plan = AlchemyRefinementPlan.DEFAULT;
 
     public AlchemyFurnaceBlockEntity(BlockPos pos, BlockState state) {
         super(AscBlockEntities.ALCHEMY_FURNACE_BE.get(), pos, state);
@@ -78,6 +91,24 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     public Container inventory() { return items; }
     public ContainerData menuData() { return menuData; }
     public Phase phase() { return phase; }
+    public AlchemyRefinementPlan plan() { return plan; }
+
+    public boolean cyclePreparation(int slot) {
+        if (level == null || level.isClientSide() || phase != Phase.IDLE || slot < 0 || slot > 4) return false;
+        if (slot == 4) {
+            int count = AlchemyRefinementPlan.focusChoices(level.registryAccess()).size() + 1;
+            if (count <= 1) return false;
+            plan = plan.indexedFocus(level.registryAccess(), (plan.focusIndex(level.registryAccess()) + 1) % count);
+        } else {
+            AlchemyRefinementTechnique.Stage stage = AlchemyRefinementTechnique.Stage.values()[slot];
+            List<net.minecraft.resources.Identifier> choices = AlchemyRefinementPlan.choices(level.registryAccess(), stage);
+            if (choices.isEmpty()) return false;
+            plan = plan.indexed(level.registryAccess(), stage, (plan.index(level.registryAccess(), stage) + 1) % choices.size());
+        }
+        setChanged();
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        return true;
+    }
     public boolean isRunning() { return phase != Phase.IDLE && phase != Phase.SUCCESS && phase != Phase.FAILURE; }
     public static int duration(Phase phase) { return phase == Phase.SUCCESS || phase == Phase.FAILURE ? 60 : PHASE_TICKS; }
     public boolean canStart() {
@@ -96,9 +127,9 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
             if (stack.isEmpty()) continue;
             AlchemyMaterial material = AlchemyMaterials.resolve(stack, context).orElse(null);
             if (material == null) return false;
-            AlchemyRefinementResolver.RefinementResult result = AlchemyRefinementResolver.refine(material, context);
+            AlchemySubstance result = AlchemyPlanEvaluator.extract(material, context, plan, level.registryAccess());
             if (result.isEmpty()) return false;
-            prepared.add(result.substance());
+            prepared.add(result);
             ingredientStacks.add(stack.copy());
         }
         if (prepared.isEmpty()) return false;
@@ -139,9 +170,13 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
                 furnace.transition(Phase.CONDENSATION);
             }
             case CONDENSATION -> {
+                AlchemyRefinementTechnique condensation = AlchemyPlanEvaluator.technique(furnace.plan,
+                        AlchemyRefinementTechnique.Stage.CONDENSATION, level.registryAccess());
                 ItemStack pill = MedicinalPillFactory.condense(
                         MedicinalEffectResolver.resolve(furnace.composition, level.registryAccess()),
-                        furnace.ingredientCount, level.registryAccess(), MedicinalDecay.now(level), furnace.batchIngredientQuality);
+                        furnace.ingredientCount, level.registryAccess(), MedicinalDecay.now(level),
+                        AlchemyPlanEvaluator.finalQuality(furnace.batchIngredientQuality, furnace.plan, level.registryAccess()),
+                        furnace.plan.focus(), condensation.focusPrecision());
                 boolean success = !pill.isEmpty();
                 furnace.items.setItem(OUTPUT_SLOT, success ? pill : new ItemStack(ModItems.PILL_RESIDUE.get()));
                 furnace.finish(success);
@@ -155,7 +190,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     private void performReactions() {
         MedicinalComposition current = MedicinalComposition.EMPTY;
         int count = 0;
-        AlchemyProcessHooks.ProcessSettings settings = AlchemyProcessHooks.ProcessSettings.DEFAULT;
+        AlchemyProcessHooks.ProcessSettings settings = AlchemyPlanEvaluator.reactions(plan, level.registryAccess());
         for (AlchemySubstance substance : extracts) {
             MedicinalReactionResolver.Step step = MedicinalReactionResolver.add(current, count, substance,
                     settings.safeEnergyDelta(), settings.explosionEnergyDelta(), level.registryAccess());
@@ -172,11 +207,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
 
     private void stabilize() {
         if (composition.isEmpty()) return;
-        AlchemySubstance essence = composition.substance();
-        double newPurity = Mth.clamp(essence.purity() + 0.015D * ingredientCount, 0.0D, 1.0D);
-        double newStrain = Math.max(0.0D, essence.instability() - 0.08D * ingredientCount);
-        composition = new MedicinalComposition(new AlchemySubstance(essence.properties(), essence.affinities(),
-                essence.rankTier(), essence.amplifier(), newPurity, newStrain), composition.products(), composition.toxicity());
+        composition = AlchemyPlanEvaluator.stabilize(composition, ingredientCount, plan, level.registryAccess());
     }
 
     private void finish(boolean success) {
@@ -221,6 +252,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         output.putInt("PhaseTicks", phaseTicks);
         output.putBoolean("Ruined", ruined);
         output.putBoolean("LastPowered", lastPowered);
+        output.store("RefinementPlan", AlchemyRefinementPlan.CODEC, plan);
     }
 
     @Override protected void loadAdditional(ValueInput input) {
@@ -234,6 +266,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         phaseTicks = Mth.clamp(input.getIntOr("PhaseTicks", 0), 0, PHASE_TICKS);
         ruined = input.getBooleanOr("Ruined", false);
         lastPowered = input.getBooleanOr("LastPowered", false);
+        plan = input.read("RefinementPlan", AlchemyRefinementPlan.CODEC).orElse(AlchemyRefinementPlan.DEFAULT);
     }
 
     @Override public void preRemoveSideEffects(BlockPos pos, BlockState state) {
