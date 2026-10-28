@@ -266,6 +266,9 @@ void main() {
 #ifdef WIND
     vec2 windTexel = floor(texCoord0 * vec2(textureSize(Sampler0, 0)) * WIND_SKIN_SUBDIVIDE);
     vec4 wind = windSkin(windTexel, floor(coatingData.b * WIND_SKIN_ROWS), seconds);
+    // The green channel is how far the coating has grown in (1 when it doesn't grow; a gather's fade otherwise), which the
+    // wind fades in with.
+    wind.a *= coatingData.g;
     if (wind.a <= 0.0) {
         discard;
     }

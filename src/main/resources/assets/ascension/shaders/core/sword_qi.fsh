@@ -16,6 +16,9 @@ uniform sampler2D Sampler0;
 
 in vec2 auraUv;
 in vec4 vertexColor;
+// Where this fragment sits on the item's model, in model pixels (sword_qi.vsh); every look lays its pattern out in it, so
+// patterns keep their size on 3D weapon models whose faces stretch a few texture pixels a long way.
+in vec2 patternPx;
 
 out vec4 fragColor;
 
@@ -98,19 +101,47 @@ void main() {
     vec3 color = mix(item.rgb * ECHO_TINT, vec3(0.90, 0.80, 1.00), glitch * 0.6);
     fragColor = vec4(color, vertexColor.a * (0.6 + glitch * 0.3));
 #elif STYLE == 2
-    // Earthbound Blade: the earth qi coatings' stone plates over the item, in a grid of STONE_SUBDIVIDE x STONE_SUBDIVIDE texels
-    // per item pixel so the plates are finer than the sprite. The item still shows a little through the plates, more
-    // through the seams, so its outline still reads.
+    // Earthbound Blade: the earth hand coating's cobbles (textures/qi_coating/earth_qi_coating.png) over the item, opaque, at the
+    // texture's density of STONE_SUBDIVIDE x STONE_SUBDIVIDE texels per item pixel so the stones match the hands' in size.
+    // Each cobble is one of four browns, its top-left rim lit and bottom-right rim shaded a little toward the texture's
+    // highlight and shadow, with a few faint speckles, between dark seams. The pixels on the sprite's edge (next to a see-through
+    // pixel) are darkened so its shape still reads, whatever the item's own colours; the colours are the texture's.
     const float STONE_SUBDIVIDE = 3.0;
-    const float STONE_TEXELS_PER_PLATE = 7.0;
-    vec2 texel = floor(auraUv * vec2(textureSize(Sampler0, 0)) * STONE_SUBDIVIDE);
+    const float STONE_TEXELS_PER_COBBLE = 5.5;
+    const float STONE_SEAM = 0.26;
+    const float STONE_RIM = 0.38;
+    const float STONE_RIM_AMOUNT = 0.55;
+    const float STONE_OUTLINE_SHADE = 0.62;
+    const vec3 STONE_SEAM_COLOR = vec3(0.239, 0.161, 0.102);
+    const vec3 STONE_LIT = vec3(0.612, 0.427, 0.286);
+    const vec3 STONE_SHADE = vec3(0.337, 0.239, 0.157);
+    vec2 texel = floor(patternPx * STONE_SUBDIVIDE);
     vec2 id;
     vec2 toCentre;
     float edge;
-    stonePlateCell((texel + 0.5) / STONE_TEXELS_PER_PLATE, 4096.0, id, toCentre, edge);
-    // Atlas y grows down the sprite, so the bevel is lit from the top.
-    vec4 plate = stonePlate(id, toCentre, edge, texel, vec2(-0.4, -1.0), seconds);
-    fragColor = vec4(mix(item.rgb, plate.rgb, plate.a * vertexColor.r), vertexColor.a);
+    stonePlateCell((texel + 0.5) / STONE_TEXELS_PER_COBBLE, 4096.0, id, toCentre, edge);
+    float tone = stonePlateHash(id + 2.9);
+    vec3 stone = tone < 0.25 ? vec3(0.384, 0.271, 0.180)
+               : tone < 0.55 ? vec3(0.471, 0.329, 0.220)
+               : tone < 0.80 ? vec3(0.518, 0.365, 0.243)
+               : vec3(0.553, 0.388, 0.259);
+    if (edge < STONE_RIM) {
+        // Atlas y grows down the sprite, so the top-left rim is the lit one.
+        float facing = dot(normalize(-toCentre + 1e-4), normalize(vec2(-0.7, -1.0)));
+        stone = facing > 0.35 ? mix(stone, STONE_LIT, STONE_RIM_AMOUNT)
+              : facing < -0.35 ? mix(stone, STONE_SHADE, STONE_RIM_AMOUNT) : stone;
+    }
+    float speckle = stonePlateHash(texel + 1.7);
+    stone *= speckle < 0.08 ? 0.92 : speckle > 0.94 ? 1.06 : 1.0;
+    vec3 color = edge < STONE_SEAM ? STONE_SEAM_COLOR : stone;
+    vec2 stoneStep = 1.0 / vec2(textureSize(Sampler0, 0));
+    float rim = min(
+            min(textureLod(Sampler0, auraUv + vec2(stoneStep.x, 0.0), 0.0).a, textureLod(Sampler0, auraUv - vec2(stoneStep.x, 0.0), 0.0).a),
+            min(textureLod(Sampler0, auraUv + vec2(0.0, stoneStep.y), 0.0).a, textureLod(Sampler0, auraUv - vec2(0.0, stoneStep.y), 0.0).a));
+    if (rim < 0.1) {
+        color *= STONE_OUTLINE_SHADE;
+    }
+    fragColor = vec4(mix(item.rgb, color, vertexColor.r), vertexColor.a);
 #elif STYLE == 3
     // Flowing Blade: the water qi coatings' pixel water running from the hilt to the tip in sloped bands, in a grid of
     // WATER_SUBDIVIDE x WATER_SUBDIVIDE texels per item pixel. Handheld sprites run from the handle at the bottom left to the
@@ -122,7 +153,7 @@ void main() {
     const float WATER_WOBBLE = 1.5;
     // How strongly the water covers the item; below 1 so the blade shows through.
     const float WATER_COVER = 0.8;
-    vec2 texel = floor(auraUv * vec2(textureSize(Sampler0, 0)) * WATER_SUBDIVIDE);
+    vec2 texel = floor(patternPx * WATER_SUBDIVIDE);
     float frame = floor(seconds * WATER_FPS);
     float tq = frame / WATER_FPS;
     float along = texel.x - texel.y + floor(sin((texel.x + texel.y) * 0.6 + tq * 4.0) * WATER_WOBBLE);
@@ -135,53 +166,25 @@ void main() {
     }
     fragColor = vec4(mix(item.rgb, water.rgb, water.a * WATER_COVER * vertexColor.r), vertexColor.a);
 #elif STYLE == 4
-    // Charged Blade: the lightning coatings' pixel bolts running hilt to tip, in a grid of BOLT_SUBDIVIDE x BOLT_SUBDIVIDE
-    // texels per item pixel. Handheld sprites run from the handle at the bottom left to the tip at the top right, so x - y
-    // grows toward the tip and x + y runs across the blade. Bolts follow lanes BOLT_LANE texels apart across it (the sprite's
-    // place in the atlas isn't known here, so lanes repeat and any blade holds at least one), zigzagging and breaking up at
-    // random, re-rolled BOLT_FPS times a second with a dim afterimage. On frames with a bolt the blade's outline flashes.
-    const float BOLT_SUBDIVIDE = 2.0;
-    const float BOLT_LANE = 9.0;
+    // Charged Blade: a faint blue charge over the blade, with the crackle kept to its outline: the outline flashes on some
+    // frames, and between flashes a few sparks hop along it, re-rolled BOLT_FPS times a second. No bolts cross the blade's
+    // face, which read as clutter on small sprites.
     const float BOLT_FPS = 10.0;
-    // Texels along the blade between zigzag corners, how far a corner may sit off the lane (texels), and gap chance per run.
-    const float BOLT_KNOT = 3.0;
-    const float BOLT_JITTER = 4.0;
-    const float BOLT_GAP = 0.3;
-    vec2 texel = floor(auraUv * vec2(textureSize(Sampler0, 0)) * BOLT_SUBDIVIDE);
-    float along = texel.x - texel.y;
-    float across = texel.x + texel.y;
-    float lane = floor(across / BOLT_LANE);
+    // Share of outline pixels carrying a spark on a given frame, with the frame before it left as a dimmer afterimage.
+    const float SPARK_SHARE = 0.18;
+    vec2 pixel = floor(patternPx);
     float frame = floor(seconds * BOLT_FPS);
-    // 2 core, 1 glow, 0 none for this frame's bolt in this lane, then the last frame's.
-    float bolt = 0.0;
-    float after = 0.0;
-    for (int back = 0; back < 2; back++) {
-        float f = frame - float(back);
-        float present = step(0.35, waterHash(vec2(lane, f * 1.37)));
-        float run = floor(along / 12.0);
-        present *= step(BOLT_GAP, waterHash(vec2(lane + run * 3.1, f * 0.73)));
-        float k = along / BOLT_KNOT;
-        float a = (waterHash(vec2(lane * 5.3 + floor(k), f)) - 0.5) * BOLT_JITTER;
-        float b = (waterHash(vec2(lane * 5.3 + floor(k) + 1.0, f)) - 0.5) * BOLT_JITTER;
-        float centre = lane * BOLT_LANE + BOLT_LANE * 0.5 + mix(a, b, fract(k));
-        float d = abs(across - centre);
-        float hit = present * (d <= 1.0 ? 2.0 : d <= 2.5 ? 1.0 : 0.0);
-        if (back == 0) {
-            bolt = hit;
-        } else {
-            after = hit;
-        }
-    }
     // Outline: an item pixel with a see-through neighbour.
     vec2 step1 = 1.0 / vec2(textureSize(Sampler0, 0));
     float edge = 1.0 - min(
             min(textureLod(Sampler0, auraUv + vec2(step1.x, 0.0), 0.0).a, textureLod(Sampler0, auraUv - vec2(step1.x, 0.0), 0.0).a),
             min(textureLod(Sampler0, auraUv + vec2(0.0, step1.y), 0.0).a, textureLod(Sampler0, auraUv - vec2(0.0, step1.y), 0.0).a));
     float flash = step(0.5, waterHash(vec2(frame * 0.91, 3.3)));
-    vec4 charge = bolt >= 2.0 ? vec4(0.95, 0.97, 1.00, 0.95)
-                : bolt >= 1.0 ? vec4(0.50, 0.72, 1.00, 0.70)
-                : after >= 2.0 ? vec4(0.42, 0.58, 1.00, 0.45)
-                : edge > 0.9 && flash > 0.0 ? vec4(0.60, 0.80, 1.00, 0.65)
+    float spark = step(1.0 - SPARK_SHARE, waterHash(pixel + frame * 0.37));
+    float afterSpark = step(1.0 - SPARK_SHARE, waterHash(pixel + (frame - 1.0) * 0.37));
+    vec4 charge = edge > 0.9 && flash > 0.0 ? vec4(0.60, 0.80, 1.00, 0.65)
+                : edge > 0.9 && spark > 0.0 ? vec4(0.95, 0.97, 1.00, 0.85)
+                : edge > 0.9 && afterSpark > 0.0 ? vec4(0.50, 0.72, 1.00, 0.55)
                 : vec4(0.30, 0.42, 0.95, 0.25);
     fragColor = vec4(mix(item.rgb, charge.rgb, charge.a * vertexColor.r), vertexColor.a);
 #elif STYLE == 5
@@ -203,9 +206,8 @@ void main() {
     // Idle breaks: every FROST_IDLE_PERIOD seconds, FROST_IDLE_CHANCE of the time, a piece breaks off on its own.
     const float FROST_IDLE_PERIOD = 10.0;
     const float FROST_IDLE_CHANCE = 0.5;
-    vec2 size = vec2(textureSize(Sampler0, 0));
-    vec2 texel = floor(auraUv * size * FROST_SUBDIVIDE);
-    vec2 pixel = floor(auraUv * size);
+    vec2 texel = floor(patternPx * FROST_SUBDIVIDE);
+    vec2 pixel = floor(patternPx);
     float maskBits = floor(vertexColor.r * 255.0 + 0.5);
     float coated = step(128.0, maskBits);
     float impactSeed = mod(maskBits, 128.0);
@@ -278,7 +280,7 @@ void main() {
     const vec4 GALE_BLADE = vec4(0.82, 1.00, 0.84, 0.9);
     const vec4 GALE_BLADE_TRAIL = vec4(0.62, 0.93, 0.68, 0.55);
     const vec4 GALE_WASH = vec4(0.52, 0.86, 0.60, 0.16);
-    vec2 texel = floor(auraUv * vec2(textureSize(Sampler0, 0)) * GALE_SUBDIVIDE);
+    vec2 texel = floor(patternPx * GALE_SUBDIVIDE);
     float frame = floor(seconds * GALE_FPS);
     float alongPx = (texel.x - texel.y) / GALE_SUBDIVIDE;
     float acrossPx = (texel.x + texel.y) / GALE_SUBDIVIDE;
@@ -323,7 +325,7 @@ void main() {
     const float SPARK_FPS = 16.0;
     const float FLASH_SECONDS = 0.12;
     const float FLASH_SHINE = 0.3;
-    vec2 pixel = floor(auraUv * vec2(textureSize(Sampler0, 0)));
+    vec2 pixel = floor(patternPx);
     float maskBits = floor(vertexColor.r * 255.0 + 0.5);
     float coated = step(128.0, maskBits);
     float impactSeed = mod(maskBits, 128.0);
@@ -376,7 +378,7 @@ void main() {
     const float SPARK_SECONDS = 0.35;
     const float SPARK_CHANCE = 0.1;
     const float SPARK_FPS = 16.0;
-    vec2 pixel = floor(auraUv * vec2(textureSize(Sampler0, 0)));
+    vec2 pixel = floor(patternPx);
     float maskBits = floor(vertexColor.r * 255.0 + 0.5);
     float coated = step(128.0, maskBits);
     float impactSeed = mod(maskBits, 128.0);

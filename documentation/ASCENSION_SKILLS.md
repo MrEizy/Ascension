@@ -243,6 +243,7 @@ Built-in modifiers:
 |---|---|
 | `ascension:stats` | Stats and affinities |
 | `ascension:defense` | Damage/stagger mitigation |
+| `ascension:qi_shield` | Pay part of each hit with qi (or another resource) instead of health |
 | `ascension:resources` | Resource transactions |
 | `ascension:projectiles` | Normal projectile profiles |
 | `ascension:weapon_damage` | Weapon, empty-hand/tag, arrow, or trident damage |
@@ -269,6 +270,24 @@ Example defense:
   "stagger_resistance": 0.15
 }
 ```
+
+Example qi shield (the Qi Coating passive uses this):
+```json
+{
+  "type": "ascension:qi_shield",
+  "share": 0.3,
+  "cost_per_damage": 1.0
+}
+```
+
+| Field | Default | Meaning |
+|---|---|---|
+| `share` | Required | Share of each matching hit (after defences) paid with the resource instead of health, 0 to 1 |
+| `cost_per_damage` | `1.0` | Resource spent per point of damage absorbed |
+| `resource` | `ascension:qi` | The resource that pays |
+| `filter` | All damage | Same filter as `defense` (`include_damage_types`, `include_classifications`, ...) |
+
+When the resource runs out, the shield absorbs only what it could pay for and the rest is taken as normal. Several shields apply one after another.
 
 Weapon-damage matches:
 ```text

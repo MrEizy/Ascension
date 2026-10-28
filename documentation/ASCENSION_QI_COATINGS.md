@@ -19,6 +19,7 @@ The chain from a hotbar skill to pixels on screen is:
 - [Skin](#skin)
 - [Sword](#sword)
 - [Hand particles](#hand-particles)
+- [Gather](#gather)
 - [Effects](#effects)
 - [Built-in looks](#built-in-looks)
 - [Adding a new coating (datapack only)](#adding-a-new-coating-datapack-only)
@@ -214,6 +215,7 @@ Sword qi:
 | `overlay` | None | Another coating's id whose shells are drawn on top of this one wherever this one is drawn |
 | `hand_particles` | `[]` | Particles spawned at the hands every tick |
 | `effects` | `[]` | Named coded effects, see [Effects](#effects) |
+| `gather` | None | How a `hands` coating forms as it grows: from specks drawn in from round the arm, see [Gather](#gather) |
 
 A coating that isn't `weapon` needs `shells`, `skin` or both.
 
@@ -295,6 +297,7 @@ Instead of a shader `look`, shells can be painted with a hand-drawn, frame-by-fr
 | `frames` | `1` | How many frames are stacked in the image |
 | `frame_millis` | `250` | How long each frame shows. `250` is 4 changes a second |
 | `emissive` | `true` | Glows at full brightness like the shader looks. `false` lights it like the skin (darker at night, shaded per face) |
+| `emissive_with_shaders` | Same as `emissive` | Overrides `emissive` while an Iris shader pack is in use. Packs draw emissive textures as glowing, see-through layers, which suits glows (fire, water) but not solid looks; earth sets it to `false` so it renders as opaque, lit stone under shaders |
 
 **Painting the image.** Each frame is laid out exactly like a **64x64 player skin**, so it can be painted in any skin editor (Blockbench, a skin editor website) on a blank skin. Each box takes its pixels from the skin area of the body part it covers: the right arm's box from the right arm's area, the head's from the head's, and so on. Paint the inner layer areas; a layer with `"outer": true` (or a body with `"outer": true`) uses the outer layer (sleeve, jacket, pants, hat) areas instead, so one image can hold two different layers. Paint arms in the **wide (4 pixel) layout**: slim arms read the same wide areas, with their 3 pixel wide faces (front, back, hand end and shoulder end) squeezed from the 4 pixel ones, so one image fits both.
 
@@ -344,6 +347,32 @@ The held weapon is redrawn by the look (`sword_qi.fsh`) in place of vanilla's, o
 | `offset_y` | `0.0` | How far above the hand they start |
 | `velocity` | `[0, 0, 0]` | Starting velocity |
 | `converge` | `0.0` | Above 0: each starts at the hand with a velocity this long in a random direction instead. For particles like `minecraft:portal`, which travel from their start plus velocity back to their start, this makes them stream into the hand |
+
+# Gather
+Instead of growing out from the hand, the coating gathers from its surroundings: small glowing specks of the element appear a little way round each arm and are drawn into it, and the shells form from them. When the coating is turned off it plays backwards, the specks flying back out.
+```json
+{
+  "coverage": "hands",
+  "grow_millis": 1800,
+  "gather": {
+    "style": "patches",
+    "colors": ["#624530", "#785438", "#8D6342", "#9C6D49", "#3D291A"]
+  }
+}
+```
+
+| Field | Default | Meaning |
+|---|---|---|
+| `style` | Required | `patches`: the shells and skin look show only round where specks have landed, each patch spreading pixel by pixel until they join (the skin look is drawn fully formed on the pixels revealed so far). `fade`: the shells and skin look fade in evenly while the specks arrive. `specks`: just the specks, the coating forming its own way (a skin look's spread from the hand, a sword look's spread up the blade). Wind rings fade in with `fade` or `patches` |
+| `colors` | Required | The specks' colours (`#RRGGBB` or `#AARRGGBB`), one picked at random per speck |
+| `landings` | `9` | How many places round each arm the specks land, the first on the hand's end (1 to 32) |
+| `specks_per_landing` | `3` | How many specks fly in to each place (1 to 8) |
+| `speck_size` | `0.3` | A speck's half size in pixels; each varies a little from it |
+| `glow` | `0.1` | How strongly each speck glows in its own colour, `0` for none |
+
+Needs `coverage` `hands` or `weapon` and `grow_millis` above 0; the whole gather takes `grow_millis`. On the hands it works with shell looks and texture shells alike, and with a `skin` look on its own (the specks then land up to 7 pixels up the forearm). Each speck is drawn as a cube in a darker shade of its colour with its colour on the middle of each face, so it reads clearly against the arm.
+
+On a weapon the specks fly in from around the held item and land on its coated pixels. `fade` fades the sword look in for looks that blend over the item (`pure_qi`, `water`, `starfield`, `cracked`, `arcs`); `patches` shows the look only round where specks have landed, the rest of the item staying plain until they join. Sword looks with their own spread from the hilt (`frost`, `molten`, `heat`) keep it and only get the specks.
 
 # Effects
 Behaviour that is coded in Java rather than described by data (`QiCoatingEffects`). Unknown ids are ignored.

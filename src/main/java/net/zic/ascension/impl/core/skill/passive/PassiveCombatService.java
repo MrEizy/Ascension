@@ -111,7 +111,43 @@ public final class PassiveCombatService {
                 resolved *= Math.max(0.0D, 1.0D + bonus);
             }
         }
-        return Math.max(0.0D, resolved);
+        return Math.max(0.0D, absorbWithShields(event, source, target, attacker, resolved));
+    }
+
+    /**
+     * Qi shields (PassiveModifiers.QiShield): each matching one pays its share of what is left of the hit with its resource,
+     * draining what the target has, and the damage it paid for is taken off. A shield whose resource runs dry absorbs only what
+     * it could pay for.
+     */
+    private static double absorbWithShields(RPGEngineEntityDamagedEvent.Pre event, OriginSource source, LivingEntity target,
+                                            LivingEntity attacker, double damage) {
+        for (PassiveSkillService.Entry<PassiveModifiers.QiShield> entry
+                : PassiveSkillService.modifiers(source, target.registryAccess(), PassiveModifiers.QiShield.class)) {
+            if (damage <= 0.0D) {
+                break;
+            }
+            PassiveModifiers.QiShield shield = entry.modifier();
+            if (!shield.filter().accepts(event.getSource())) {
+                continue;
+            }
+            ScaledValue.Context context = new ScaledValue.Context(source, entry.skillId(), target, attacker, 0.0D, Map.of());
+            double share = Math.clamp(shield.share().resolve(context), 0.0D, 1.0D);
+            double costPerDamage = shield.costPerDamage().resolve(context);
+            if (!Double.isFinite(share) || share <= 0.0D || !Double.isFinite(costPerDamage) || costPerDamage <= 0.0D) {
+                continue;
+            }
+            double cost = damage * share * costPerDamage;
+            ResourceTransactionService.Result paid = ResourceTransactionService.drain(target, shield.resource(), AscensionResourceSources.DAMAGE, cost);
+            double spent = paid == null ? 0.0D : paid.appliedAmount();
+            double debugBefore = damage;
+            if (Double.isFinite(spent) && spent > 0.0D) {
+                damage -= Math.min(damage * share, spent / costPerDamage);
+            }
+            // TEMP DEBUG (qi shield test): remove once confirmed.
+            net.zic.ascension.AscensionCraft.LOGGER.info("[QiShieldDebug] {} from {}: damage {} -> {}, qi wanted {}, qi spent {}",
+                    target.getScoreboardName(), entry.skillId(), debugBefore, damage, cost, spent);
+        }
+        return damage;
     }
 
     public static void applyLifesteal(RPGEngineEntityDamagedEvent.Post event) {

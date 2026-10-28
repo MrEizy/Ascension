@@ -7,6 +7,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.capabilities.damage_provider.AscensionDamageSourceProvider;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageProfile;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
@@ -18,12 +19,16 @@ import net.zic.ascension.impl.core.skill.passive.PassiveCombatService;
 import net.zic.ascension.impl.runtime.object.Barriers;
 import net.zic.ascension.impl.runtime.object.OwnerBoundConstructs;
 import net.zic.ascension.impl.runtime.projectile.NormalProjectileService;
+import net.zic.ascension.util.AscensionDamageUtil;
 import net.zic.ascension.util.PathInteractionUtil;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class AscensionDamageHandler {
     private static final int PROJECTILE_GROUP = 10;
     private static final int PATH_AFFINITY_GROUP = 15;
+    // Separate groups so the attacker's path damage and the defender's path resistance multiply rather than add.
+    private static final int PATH_DAMAGE_GROUP = 16;
+    private static final int PATH_RESISTANCE_GROUP = 17;
     private static final int PASSIVE_OFFENSE_GROUP = 20;
     private static final int PASSIVE_DEFENSE_GROUP = 30;
 
@@ -78,6 +83,9 @@ public final class AscensionDamageHandler {
                 event.multiplyDamage(AscensionCraft.prefix("damage_path_affinity"), PATH_AFFINITY_GROUP, pathMultiplier);
                 trace.multiply("Path affinity", pathMultiplier);
             }
+        }
+        if (event.getSource().getDamageTypeHolder(AscensionDamageTypeHolders.PATH) instanceof AscensionDamageTypeHolders.Path(Identifier path)) {
+            applyPathBonuses(event, trace, path);
         }
 
         double outgoingMultiplier = PassiveCombatService.outgoingDamageMultiplier(event);
@@ -149,6 +157,28 @@ public final class AscensionDamageHandler {
             trace.transition("Profile clamp", rawDamage, composedDamage);
         }
         trace.transition("Vanilla reductions", composedDamage, event.getDamage());
+    }
+
+    /**
+     * A hit's path against the path bonus holders' damage and resistance categories (AscensionDamageUtil): the attacker deals
+     * 1 + its damage bonus for that path, and the defender takes 1 - its resistance to it, so a negative resistance is a
+     * weakness. Neither goes below 0. Unlike affinity these never interact with other paths.
+     */
+    private static void applyPathBonuses(RPGEngineEntityDamagedEvent.Pre event, DamageTrace trace, Identifier path) {
+        if (event.getSource().getEntity() instanceof LivingEntity attacker) {
+            double dealt = Math.max(0.0D, PathInteractionUtil.getPathMultiplier(
+                    attacker.getData(CoreAttachments.PATH_BONUS_HOLDER), AscensionDamageUtil.DAMAGE_CATEGORY, path));
+            if (Double.isFinite(dealt)) {
+                event.multiplyDamage(AscensionCraft.prefix("damage_path_damage"), PATH_DAMAGE_GROUP, dealt);
+                trace.multiply("Path damage", dealt);
+            }
+        }
+        double taken = Math.max(0.0D, 1.0D - event.getEntity().getData(CoreAttachments.PATH_BONUS_HOLDER)
+                .getPathBonus(AscensionDamageUtil.RESISTANCE_CATEGORY, path));
+        if (Double.isFinite(taken)) {
+            event.multiplyDamage(AscensionCraft.prefix("damage_path_resistance"), PATH_RESISTANCE_GROUP, taken);
+            trace.multiply("Path resistance", taken);
+        }
     }
 
     private static boolean finishIfResolved(RPGEngineEntityDamagedEvent.Pre event, DamageTrace trace) {

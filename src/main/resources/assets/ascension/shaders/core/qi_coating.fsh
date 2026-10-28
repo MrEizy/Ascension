@@ -63,13 +63,23 @@ float fbm(vec2 p, float period) {
 
 // Window into space. Stars and nebula are placed in screen space, so they stay put while the hand moves across them.
 vec4 voidStarfield(float u, float v, float t) {
-    vec3 color = voidSpace(t);
-
-    // Opaque at the fist, thinning out up the forearm into the fading arm.
-    float n = fbm(vec2(u * PERIOD, v * 2.0 + t * 0.1), PERIOD);
-    float top = 0.92 + (n - 0.5) * 0.15;
-    float alpha = 1.0 - smoothstep(top - 0.45, top, v);
-    return vec4(color, alpha * 0.97);
+    // Solid from the fist, thinning out up the forearm along an uneven line, in whole pixels like the patches it gathers in:
+    // each pixel near the top is either there or not, fewer of them the higher up, so the fade reads as scattered pixels.
+    // STARFIELD_COLUMNS pixels round the arm and STARFIELD_ROWS up the box.
+    const float STARFIELD_COLUMNS = 16.0;
+    const float STARFIELD_ROWS = 10.0;
+    const float STARFIELD_FADE = 0.25;
+    vec2 pixel = floor(vec2(u * STARFIELD_COLUMNS, v * STARFIELD_ROWS));
+    vec2 centre = (pixel + 0.5) / vec2(STARFIELD_COLUMNS, STARFIELD_ROWS);
+    // Every face (a quarter of u each) gets the same line, mirrored about its middle, so no side of the arm rises above the rest.
+    float mirrored = 0.5 - abs(fract(centre.x * 4.0) - 0.5);
+    float n = fbm(vec2(mirrored * PERIOD, centre.y * 2.0 + t * 0.1), PERIOD);
+    float top = 0.85 + (n - 0.5) * 0.3;
+    float density = 1.0 - smoothstep(top - STARFIELD_FADE, top, centre.y);
+    if (hash(pixel + 0.37) >= density) {
+        return vec4(0.0);
+    }
+    return vec4(voidSpace(t), 0.97);
 }
 
 // Thin violet film with bands that tear sideways, like the hand isn't quite where it should be. The Time hand coating draws it
@@ -574,7 +584,9 @@ void main() {
     }
 
     float alpha = coating.a * vertexColor.a;
-    if (alpha <= 0.01) {
+    // The space hand window writes depth (QiCoatingLooks), so its faint pixels are left out rather than hiding what's behind.
+    const float STARFIELD_CUTOFF = 0.3;
+    if (alpha <= 0.01 || (id == 5 && alpha < STARFIELD_CUTOFF)) {
         discard;
     }
     fragColor = vec4(coating.rgb * vertexColor.rgb, alpha);

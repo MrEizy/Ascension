@@ -5,5 +5,97 @@
   "path": "ascension:elemental/wind",
   "body_visual": "ascension:qi_coating/wind_qi_coating",
   "external_visual": "ascension:qi_coating/wind_external_qi_coating",
-  "order": 6
+  "order": 6,
+  "body_on_hit": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "base": 0.05,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ]
+      }
+    },
+    "actions": [
+      {
+        "type": "ascension:damage",
+        "base": {
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:context",
+                "key": "ascension:trigger/damage"
+              },
+              "scale": 0.25
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "scale": 0.25
+            }
+          ]
+        },
+        "damage_type": "ascension:wind_qi",
+        "classifications": [
+          "ascension:qi"
+        ],
+        "path": "ascension:elemental/wind",
+        "subject": "target"
+      }
+    ]
+  },
+  "external_on_hit": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "base": 0.05,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ]
+      }
+    },
+    "actions": [
+      {
+        "type": "ascension:damage",
+        "base": {
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:context",
+                "key": "ascension:trigger/damage"
+              },
+              "scale": 0.25
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "scale": 0.25
+            }
+          ]
+        },
+        "damage_type": "ascension:wind_qi",
+        "classifications": [
+          "ascension:qi"
+        ],
+        "path": "ascension:elemental/wind",
+        "subject": "target"
+      }
+    ]
+  }
 }

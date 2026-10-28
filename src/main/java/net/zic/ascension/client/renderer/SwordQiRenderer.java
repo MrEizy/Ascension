@@ -9,6 +9,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.builders.UVPair;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.resources.Identifier;
@@ -20,6 +22,7 @@ import net.minecraft.util.Util;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.client.renderer.layer.QiCoatingGather;
 import net.zic.ascension.client.renderer.layer.QiCoatingLayer;
 import net.zic.ascension.client.visual.QiCoatingClientState;
 import net.zic.ascension.impl.core.skill.castable.QiCoatingService;
@@ -58,6 +61,8 @@ public final class SwordQiRenderer {
     // Red channel carries the mask (coated or plain) to sword_qi.fsh.
     private static final int COATED_COLOR = 0xFFFFFFFF;
     private static final int PLAIN_COLOR = 0xFF00FFFF;
+    // Steps per model pixel the pattern position (setPatternPixel) is stored to; sword_qi.vsh divides it back out.
+    private static final float PATTERN_PRECISION = 64.0F;
     // Hand-painted masks: white where the coating goes, black where it doesn't, the same size as the texture. Weapons of one
     // shape share a mask, textures/sword_qi_mask/<mask>.png, listed under its name in assets/ascension/sword_qi_masks.json; a
     // texture can also have its own at textures/sword_qi_mask/<texture namespace>/<texture path>.png, which wins. Per sprite,
@@ -76,6 +81,9 @@ public final class SwordQiRenderer {
     // Sword qi that grows: how far the current entity's has climbed, 0 to 1, and its last hit (QiCoatingLayer.impactData).
     private static float currentFreeze;
     private static int currentImpact = QiCoatingLayer.NO_IMPACT;
+    // The current coating's gather (QiCoatingDefinition.Gather), or null: while it grows, specks fly into the weapon and the look
+    // forms from them, fading in or in patches round where they land (currentFreeze is how far it has grown).
+    private static QiCoatingDefinition.Gather currentGather;
 
     private SwordQiRenderer() {
     }
@@ -92,6 +100,7 @@ public final class SwordQiRenderer {
         currentEntityId = entityId;
         currentFreeze = current != null && current.grows() ? QiCoatingClientState.growth(entity.getUUID(), current) : 1.0F;
         currentImpact = current != null && current.reacts() ? QiCoatingLayer.latestImpactData(current, entityId) : QiCoatingLayer.NO_IMPACT;
+        currentGather = current != null && current.grows() ? current.definition().gather().orElse(null) : null;
     }
 
     /**
@@ -105,12 +114,15 @@ public final class SwordQiRenderer {
         current = null;
         currentLook = null;
         currentQuietLook = null;
+        currentGather = null;
     }
 
     /**
      * @return whether vanilla should still submit the item as normal
      */
-    public static boolean submit(SubmitNodeCollector submitNodeCollector, PoseStack poseStack, List<BakedQuad> quads) {
+    public static boolean submit(SubmitNodeCollector submitNodeCollector, PoseStack poseStack, List<BakedQuad> quads,
+                                 ItemDisplayContext displayContext, int lightCoords, int overlayCoords, int outlineColor,
+                                 int[] tintLayers, ItemStackRenderState.FoilType foilType) {
         QiCoating coating = current;
         QiCoatingLooks.SwordLook look = currentLook;
         if (coating == null || look == null || quads.isEmpty()) {
@@ -118,6 +130,23 @@ public final class SwordQiRenderer {
         }
         // The render state reuses its quad list every frame, and custom geometry is drawn later.
         List<BakedQuad> snapshot = List.copyOf(quads);
+        QiCoatingDefinition.Gather gather = currentGather;
+        float growth = currentFreeze;
+        if (IrisPipelineCompat.isShaderPackInUse()) {
+            // A shader pack can't draw the sword_qi.fsh looks (IrisPipelineCompat), so the item is submitted as a normal item,
+            // which Iris draws properly, its coated pixels tinted in the look's colour. An echoing coating shows its quiet look's
+            // tint, or the plain item.
+            QiCoatingLooks.SwordLook shown = coating.echoes() ? currentQuietLook : look;
+            if (shown == null) {
+                return true;
+            }
+            float[][] landings = gather != null && growth < 1.0F ? QiCoatingGather.itemLandings(gather, coatedPixels(snapshot)) : null;
+            TintedItem tinted = shaderPackTintedItem(snapshot, tintLayers, shown, gather, landings, growth);
+            submitNodeCollector.submitItem(poseStack, displayContext, lightCoords, overlayCoords, outlineColor, tinted.tintLayers(),
+                    tinted.quads(), foilType);
+            submitSpecks(submitNodeCollector, poseStack, snapshot, gather, landings, growth);
+            return false;
+        }
         if (coating.echoes()) {
             QiCoatingLooks.SwordLook quietLook = currentQuietLook;
             if (!QiCoatingLayer.echoing(coating, currentEntityId)) {
@@ -125,7 +154,7 @@ public final class SwordQiRenderer {
                 if (quietLook == null) {
                     return true;
                 }
-                submitMasked(submitNodeCollector, poseStack, snapshot, quietLook, 0xFF);
+                submitMasked(submitNodeCollector, poseStack, snapshot, quietLook, 0xFF, null, null, 1.0F);
                 return false;
             }
             // See-through copies beside the real item, which vanilla still draws (or the quiet look in its place, if there is one).
@@ -136,19 +165,152 @@ public final class SwordQiRenderer {
                 poseStack.translate((random.nextFloat() - 0.5F) * 2.0F * ECHO_SPREAD,
                         (random.nextFloat() - 0.5F) * 2.0F * ECHO_SPREAD,
                         (random.nextFloat() - 0.5F) * 2.0F * ECHO_SPREAD);
-                submitMasked(submitNodeCollector, poseStack, snapshot, look, ARGB.alpha(ECHO_TINT));
+                submitMasked(submitNodeCollector, poseStack, snapshot, look, ARGB.alpha(ECHO_TINT), null, null, 1.0F);
                 poseStack.popPose();
             }
             if (quietLook == null) {
                 return true;
             }
-            submitMasked(submitNodeCollector, poseStack, snapshot, quietLook, 0xFF);
+            submitMasked(submitNodeCollector, poseStack, snapshot, quietLook, 0xFF, null, null, 1.0F);
             return false;
         }
         // Every other look redraws the item opaque in place of vanilla's: a translucent overlay on top of the item vanished on
         // the front in first person, where the item drew over it afterwards.
-        submitMasked(submitNodeCollector, poseStack, snapshot, look, 0xFF);
+        float[][] landings = gather != null && growth < 1.0F ? QiCoatingGather.itemLandings(gather, coatedPixels(snapshot)) : null;
+        submitMasked(submitNodeCollector, poseStack, snapshot, look, 0xFF, gather, landings, growth);
+        submitSpecks(submitNodeCollector, poseStack, snapshot, gather, landings, growth);
         return false;
+    }
+
+    /**
+     * The gather's specks flying into the item, while it forms (landings set).
+     */
+    private static void submitSpecks(SubmitNodeCollector submitNodeCollector, PoseStack poseStack, List<BakedQuad> quads,
+                                     QiCoatingDefinition.Gather gather, float[][] landings, float growth) {
+        if (landings == null) {
+            return;
+        }
+        float[] bounds = modelBounds(quads);
+        QiCoatingGather.submitItemSpecks(poseStack, submitNodeCollector, gather, landings,
+                (bounds[0] + bounds[2]) * 8.0F, (bounds[1] + bounds[3]) * 8.0F, growth);
+    }
+
+    // How far a coated pixel is tinted toward its look's colour under a shader pack (the rest of the way stays the item).
+    private static final float SHADER_PACK_TINT_STRENGTH = 0.7F;
+
+    /**
+     * The item's quads for a shader pack, to submit as a normal item (SubmitNodeCollector.submitItem, which Iris draws properly
+     * in the world and the first-person hand): split into pixel quads where the painted mask or the gather's patches call for
+     * it, the coated pixels given a tint index of their own, the last of the returned tint layers, holding the look's colour
+     * (faded by a FADE gather). Plain pixels keep their quad's own tint index and the item's tint layers.
+     */
+    private static TintedItem shaderPackTintedItem(List<BakedQuad> quads, int[] tintLayers, QiCoatingLooks.SwordLook look,
+                                                   QiCoatingDefinition.Gather gather, float[][] landings, float growth) {
+        boolean patches = landings != null && gather.style() == QiCoatingDefinition.GatherStyle.PATCHES;
+        float amount = SHADER_PACK_TINT_STRENGTH
+                * (gather != null && gather.style() == QiCoatingDefinition.GatherStyle.FADE ? QiCoatingGather.fadeAmount(growth) : 1.0F);
+        int coatedTintIndex = tintLayers.length;
+        int[] tints = java.util.Arrays.copyOf(tintLayers, coatedTintIndex + 1);
+        tints[coatedTintIndex] = ARGB.srgbLerp(amount, 0xFFFFFFFF, QiCoatingLooks.swordShaderPackTint(look.style()));
+        List<BakedQuad> out = new java.util.ArrayList<>();
+        for (BakedQuad quad : quads) {
+            TextureAtlasSprite sprite = quad.materialInfo().sprite();
+            byte[] mask = paintedMask(sprite);
+            if (mask == null && !patches) {
+                out.add(withTintIndex(quad, coatedTintIndex));
+                continue;
+            }
+            Vector3f origin = quadPoint(quad, 0.0F, 0.0F, new Vector3f());
+            int cellsA = pixelSpan(sprite, origin, quadPoint(quad, 1.0F, 0.0F, new Vector3f()));
+            int cellsB = pixelSpan(sprite, origin, quadPoint(quad, 0.0F, 1.0F, new Vector3f()));
+            for (int i = 0; i < cellsA; i++) {
+                for (int j = 0; j < cellsB; j++) {
+                    float a0 = (float) i / cellsA;
+                    float a1 = (float) (i + 1) / cellsA;
+                    float b0 = (float) j / cellsB;
+                    float b1 = (float) (j + 1) / cellsB;
+                    Vector3f centre = quadPoint(quad, (a0 + a1) * 0.5F, (b0 + b1) * 0.5F, new Vector3f());
+                    int pixel = pixelIndex(sprite, centre.y, centre.z);
+                    if (cellsA * cellsB > 1 && ARGB.alpha(sprite.getPixelRGBA(0, pixel % sprite.contents().width(),
+                            pixel / sprite.contents().width())) < 26) {
+                        continue;
+                    }
+                    boolean coatedPixel = mask == null || mask[pixel] == MASK_COATED;
+                    if (coatedPixel && patches) {
+                        Vector3f middle = quadPosition(quad, (a0 + a1) * 0.5F, (b0 + b1) * 0.5F);
+                        float x = middle.x * 16.0F;
+                        float y = middle.y * 16.0F;
+                        float z = middle.z * 16.0F;
+                        coatedPixel = QiCoatingGather.revealed(landings, growth, x, y, z, QiCoatingGather.pixelJitter(x, y, z));
+                    }
+                    out.add(subQuad(quad, a0, a1, b0, b1, coatedPixel ? coatedTintIndex : quad.materialInfo().tintIndex()));
+                }
+            }
+        }
+        return new TintedItem(out, tints);
+    }
+
+    private record TintedItem(List<BakedQuad> quads, int[] tintLayers) {
+    }
+
+    /**
+     * The part of a quad from a0 to a1 along its first edge and b0 to b1 along its second, with the given tint index.
+     */
+    private static BakedQuad subQuad(BakedQuad quad, float a0, float a1, float b0, float b1, int tintIndex) {
+        float[][] corners = {{a0, b0}, {a1, b0}, {a1, b1}, {a0, b1}};
+        Vector3f[] positions = new Vector3f[4];
+        long[] uvs = new long[4];
+        for (int k = 0; k < 4; k++) {
+            positions[k] = quadPosition(quad, corners[k][0], corners[k][1]);
+            Vector3f uv = quadPoint(quad, corners[k][0], corners[k][1], new Vector3f());
+            uvs[k] = UVPair.pack(uv.y, uv.z);
+        }
+        return new BakedQuad(positions[0], positions[1], positions[2], positions[3], uvs[0], uvs[1], uvs[2], uvs[3],
+                quad.direction(), withTintIndex(quad.materialInfo(), tintIndex));
+    }
+
+    private static BakedQuad withTintIndex(BakedQuad quad, int tintIndex) {
+        return new BakedQuad(quad.position0(), quad.position1(), quad.position2(), quad.position3(), quad.packedUV0(), quad.packedUV1(),
+                quad.packedUV2(), quad.packedUV3(), quad.direction(), withTintIndex(quad.materialInfo(), tintIndex),
+                quad.bakedNormals(), quad.bakedColors());
+    }
+
+    private static BakedQuad.MaterialInfo withTintIndex(BakedQuad.MaterialInfo info, int tintIndex) {
+        return new BakedQuad.MaterialInfo(info.sprite(), info.layer(), info.itemRenderType(), tintIndex, info.shade(),
+                info.lightEmission(), info.ambientOcclusion());
+    }
+
+    /**
+     * The centres of an item's coated, non see-through pixels, in model pixels (1/16 of a block), for its gather's landings.
+     */
+    private static List<float[]> coatedPixels(List<BakedQuad> quads) {
+        List<float[]> pixels = new java.util.ArrayList<>();
+        for (BakedQuad quad : quads) {
+            TextureAtlasSprite sprite = quad.materialInfo().sprite();
+            byte[] mask = paintedMask(sprite);
+            Vector3f origin = quadPoint(quad, 0.0F, 0.0F, new Vector3f());
+            int cellsA = pixelSpan(sprite, origin, quadPoint(quad, 1.0F, 0.0F, new Vector3f()));
+            int cellsB = pixelSpan(sprite, origin, quadPoint(quad, 0.0F, 1.0F, new Vector3f()));
+            if (cellsA * cellsB <= 1) {
+                continue;
+            }
+            for (int i = 0; i < cellsA; i++) {
+                for (int j = 0; j < cellsB; j++) {
+                    float a = (i + 0.5F) / cellsA;
+                    float b = (j + 0.5F) / cellsB;
+                    Vector3f uv = quadPoint(quad, a, b, new Vector3f());
+                    int pixel = pixelIndex(sprite, uv.y, uv.z);
+                    int width = sprite.contents().width();
+                    if (ARGB.alpha(sprite.getPixelRGBA(0, pixel % width, pixel / width)) < 26
+                            || mask != null && mask[pixel] != MASK_COATED) {
+                        continue;
+                    }
+                    Vector3f position = quadPosition(quad, a, b);
+                    pixels.add(new float[]{position.x * 16.0F, position.y * 16.0F, position.z * 16.0F});
+                }
+            }
+        }
+        return pixels;
     }
 
     /**
@@ -157,35 +319,46 @@ public final class SwordQiRenderer {
      * pixels, so this works for flat items and for 3D models drawn from a texture alike. Quads whose texture has no mask are
      * drawn whole and coated.
      *
-     * @param alpha vertex alpha, 0-255
+     * While a gather forms the look (QiCoatingGather): a FADE one fades the coated pixels in, for looks that blend by the red
+     * channel (PLAIN data); a PATCHES one draws the coated pixels not yet reached plain, splitting even unmasked quads into pixels
+     * to do it. Looks with their own spread (SPREAD data) keep it and only get the specks.
+     *
+     * @param alpha    vertex alpha, 0-255
+     * @param gather   the coating's gather, or null
+     * @param landings where its specks land (QiCoatingGather.itemLandings), or null when it isn't forming
+     * @param growth   how far the coating has grown, 0 to 1
      */
     private static void submitMasked(SubmitNodeCollector submitNodeCollector, PoseStack poseStack, List<BakedQuad> quads,
-                                     QiCoatingLooks.SwordLook look, int alpha) {
+                                     QiCoatingLooks.SwordLook look, int alpha, QiCoatingDefinition.Gather gather,
+                                     float[][] landings, float growth) {
         int style = look.style();
         Identifier atlas = quads.getFirst().materialInfo().sprite().atlasLocation();
-        int coated = (alpha << 24) | (COATED_COLOR & 0xFFFFFF);
-        int plain = (alpha << 24) | (PLAIN_COLOR & 0xFFFFFF);
         boolean frost = look.data() == QiCoatingLooks.SwordData.SPREAD;
         boolean gale = look.data() == QiCoatingLooks.SwordData.GALE;
+        boolean fade = gather != null && gather.style() == QiCoatingDefinition.GatherStyle.FADE
+                && look.data() == QiCoatingLooks.SwordData.PLAIN;
+        boolean patches = landings != null && gather.style() == QiCoatingDefinition.GatherStyle.PATCHES && !frost;
+        int coated = (alpha << 24) | (fade
+                ? (Math.round(QiCoatingGather.fadeAmount(growth) * 255.0F) << 16) | (COATED_COLOR & 0xFFFF)
+                : COATED_COLOR & 0xFFFFFF);
+        int plain = (alpha << 24) | (PLAIN_COLOR & 0xFFFFFF);
         float freeze = currentFreeze;
         int impact = currentImpact;
+        float[] bounds = modelBounds(quads);
         submitNodeCollector.submitCustomGeometry(poseStack, ModRenderTypes.swordQi(style, atlas), (pose, buffer) -> {
             for (BakedQuad quad : quads) {
                 TextureAtlasSprite sprite = quad.materialInfo().sprite();
                 byte[] mask = paintedMask(sprite);
-                if (mask == null) {
+                if (mask == null && !patches) {
                     for (int vertex = 0; vertex < BakedQuad.VERTEX_COUNT; vertex++) {
                         Vector3fc position = quad.position(vertex);
                         long uv = quad.packedUV(vertex);
-                        float u = UVPair.unpackU(uv);
-                        float v = UVPair.unpackV(uv);
-                        float uFrac = (u - sprite.getU0()) / (sprite.getU1() - sprite.getU0());
-                        float vFrac = (v - sprite.getV0()) / (sprite.getV1() - sprite.getV0());
-                        float along = (uFrac + 1.0F - vFrac) * 0.5F;
-                        buffer.addVertex(pose, position.x(), position.y(), position.z())
-                                .setUv(u, v)
+                        float along = along(bounds, position.x(), position.y());
+                        VertexConsumer consumer = buffer.addVertex(pose, position.x(), position.y(), position.z())
+                                .setUv(UVPair.unpackU(uv), UVPair.unpackV(uv))
                                 .setColor(frost ? frostColor(coated, freeze, along, impact)
-                                        : gale ? galeColor(coated, along, (uFrac + vFrac) * 0.5F) : coated);
+                                        : gale ? galeColor(coated, along, across(bounds, position.x(), position.y())) : coated);
+                        setPatternPixel(consumer, quad, position);
                     }
                     continue;
                 }
@@ -207,18 +380,19 @@ public final class SwordQiRenderer {
                                 pixel / sprite.contents().width())) < 26) {
                             continue;
                         }
-                        int color = mask[pixel] == MASK_COATED ? coated : plain;
-                        if (frost) {
-                            int width = sprite.contents().width();
-                            int height = sprite.contents().height();
-                            float along = (float) (pixel % width + height - 1 - pixel / width) / Math.max(1, width + height - 2);
-                            color = frostColor(color, freeze, along, impact);
-                        } else if (gale) {
-                            int width = sprite.contents().width();
-                            int height = sprite.contents().height();
-                            int span = Math.max(1, width + height - 2);
-                            color = galeColor(color, (float) (pixel % width + height - 1 - pixel / width) / span,
-                                    (float) (pixel % width + pixel / width) / span);
+                        boolean coatedPixel = mask == null || mask[pixel] == MASK_COATED;
+                        Vector3f middle = quadPosition(quad, (a0 + a1) * 0.5F, (b0 + b1) * 0.5F);
+                        if (coatedPixel && patches) {
+                            float x = middle.x * 16.0F;
+                            float y = middle.y * 16.0F;
+                            float z = middle.z * 16.0F;
+                            coatedPixel = QiCoatingGather.revealed(landings, growth, x, y, z, QiCoatingGather.pixelJitter(x, y, z));
+                        }
+                        int color = coatedPixel ? coated : plain;
+                        if (frost || gale) {
+                            float along = along(bounds, middle.x, middle.y);
+                            color = frost ? frostColor(color, freeze, along, impact)
+                                    : galeColor(color, along, across(bounds, middle.x, middle.y));
                         }
                         subVertex(pose, buffer, quad, a0, b0, color);
                         subVertex(pose, buffer, quad, a1, b0, color);
@@ -325,11 +499,80 @@ public final class SwordQiRenderer {
     }
 
     private static void subVertex(PoseStack.Pose pose, VertexConsumer buffer, BakedQuad quad, float a, float b, int color) {
+        Vector3f position = quadPosition(quad, a, b);
+        Vector3f uv = quadPoint(quad, a, b, new Vector3f());
+        setPatternPixel(buffer.addVertex(pose, position.x, position.y, position.z).setUv(uv.y, uv.z).setColor(color), quad, position);
+    }
+
+    private static Vector3f quadPosition(BakedQuad quad, float a, float b) {
         Vector3f bottom = new Vector3f(quad.position(0)).lerp(quad.position(1), a);
         Vector3f top = new Vector3f(quad.position(3)).lerp(quad.position(2), a);
-        Vector3f position = bottom.lerp(top, b);
-        Vector3f uv = quadPoint(quad, a, b, new Vector3f());
-        buffer.addVertex(pose, position.x, position.y, position.z).setUv(uv.y, uv.z).setColor(color);
+        return bottom.lerp(top, b);
+    }
+
+    /**
+     * Where the vertex sits on the item's model, in model pixels (1/16 of a block) times PATTERN_PRECISION, in the vertex's UV2,
+     * which sword_qi.vsh hands to sword_qi.fsh as the space every look's pattern is laid out in. It is measured on the face's
+     * own plane: across and down for faces looking north or south (so a flat item's front matches its texture's pixels), and
+     * likewise on the others. Laying patterns out on the model rather than the texture keeps them the same size on 3D weapon
+     * models, whose faces can stretch a few texture pixels a long way.
+     */
+    private static void setPatternPixel(VertexConsumer consumer, BakedQuad quad, Vector3fc position) {
+        float x = position.x() * 16.0F;
+        float down = (1.0F - position.y()) * 16.0F;
+        float z = position.z() * 16.0F;
+        float u;
+        float v;
+        switch (quad.direction()) {
+            case EAST, WEST -> {
+                u = z;
+                v = down;
+            }
+            case UP, DOWN -> {
+                u = x;
+                v = z;
+            }
+            default -> {
+                u = x;
+                v = down;
+            }
+        }
+        consumer.setUv2(Math.round(u * PATTERN_PRECISION), Math.round(v * PATTERN_PRECISION));
+    }
+
+    /**
+     * The item model's extent across (x) and up (y), as {minX, minY, maxX, maxY}, which along and across measure against.
+     */
+    private static float[] modelBounds(List<BakedQuad> quads) {
+        float[] bounds = {Float.MAX_VALUE, Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE};
+        for (BakedQuad quad : quads) {
+            for (int vertex = 0; vertex < BakedQuad.VERTEX_COUNT; vertex++) {
+                Vector3fc position = quad.position(vertex);
+                bounds[0] = Math.min(bounds[0], position.x());
+                bounds[1] = Math.min(bounds[1], position.y());
+                bounds[2] = Math.max(bounds[2], position.x());
+                bounds[3] = Math.max(bounds[3], position.y());
+            }
+        }
+        return bounds;
+    }
+
+    /**
+     * How far along the item a point sits, 0 at the handle's bottom left to 1 at the tip's top right of the model.
+     */
+    private static float along(float[] bounds, float x, float y) {
+        return (share(bounds[0], bounds[2], x) + share(bounds[1], bounds[3], y)) * 0.5F;
+    }
+
+    /**
+     * How far across the item a point sits, 0 at its top left to 1 at its bottom right (0.5 down its middle).
+     */
+    private static float across(float[] bounds, float x, float y) {
+        return (share(bounds[0], bounds[2], x) + 1.0F - share(bounds[1], bounds[3], y)) * 0.5F;
+    }
+
+    private static float share(float min, float max, float value) {
+        return max - min < 1.0E-4F ? 0.5F : Mth.clamp((value - min) / (max - min), 0.0F, 1.0F);
     }
 
     /**

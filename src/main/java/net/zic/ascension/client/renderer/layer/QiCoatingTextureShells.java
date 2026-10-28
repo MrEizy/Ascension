@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.HumanoidArm;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingDefinition;
+import net.zic.ascension.client.renderer.IrisPipelineCompat;
 import net.zic.ascension.client.renderer.ModRenderTypes;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
@@ -70,20 +71,35 @@ final class QiCoatingTextureShells {
      * @param growth how far the coating has grown, 0 to 1
      */
     static void submitArm(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, QiCoatingDefinition.Texture texture,
-                          List<QiCoatingDefinition.Layer> layers, HumanoidArm side, boolean slim, int lightCoords, float growth) {
+                          List<QiCoatingDefinition.Layer> layers, HumanoidArm side, boolean slim, int lightCoords, float growth,
+                          QiCoatingDefinition.Gather gather) {
         if (growth <= 0.0F) {
             return;
         }
         Part part = side == HumanoidArm.RIGHT ? Part.RIGHT_ARM : Part.LEFT_ARM;
         int frame = frame(texture);
+        // A gathering coating (QiCoatingGather) keeps its full reach and shows only round where its specks have landed, or fades in.
+        boolean patches = gather != null && gather.style() == QiCoatingDefinition.GatherStyle.PATCHES;
+        boolean fade = gather != null && gather.style() == QiCoatingDefinition.GatherStyle.FADE;
+        float[][] landings = patches ? QiCoatingGather.landings(gather, side, slim, maxReach(layers)) : null;
         submitNodeCollector.submitCustomGeometry(poseStack, renderType(texture), (pose, buffer) -> {
             for (QiCoatingDefinition.Layer layer : layers) {
                 // The inflated box's hand end already sits `inflate` past the hand, so it is moved out by the rest of the
                 // overhang only, ending where a shader shell's does.
-                draw(pose, buffer, texture, frame, part, slim, layer.inflate(), layer.outer(), layer.reach() * growth,
-                        layer.overhang() - layer.inflate(), layer.color(), lightCoords);
+                float reach = patches || fade ? layer.reach() : layer.reach() * growth;
+                int color = fade ? QiCoatingGather.fade(layer.color(), growth) : layer.color();
+                draw(pose, buffer, texture, frame, part, slim, layer.inflate(), layer.outer(), reach,
+                        layer.overhang() - layer.inflate(), color, lightCoords, landings, growth);
             }
         });
+    }
+
+    static float maxReach(List<QiCoatingDefinition.Layer> layers) {
+        float reach = 0.0F;
+        for (QiCoatingDefinition.Layer layer : layers) {
+            reach = Math.max(reach, layer.reach());
+        }
+        return reach;
     }
 
     /**
@@ -124,16 +140,18 @@ final class QiCoatingTextureShells {
         poseStack.pushPose();
         posed.translateAndRotate(poseStack);
         submitNodeCollector.submitCustomGeometry(poseStack, renderType, (pose, buffer) ->
-                draw(pose, buffer, texture, frame, part, slim, body.inflate(), body.outer(), reach, 0.0F, body.color(), lightCoords));
+                draw(pose, buffer, texture, frame, part, slim, body.inflate(), body.outer(), reach, 0.0F, body.color(), lightCoords,
+                        null, 1.0F));
         poseStack.popPose();
     }
 
     private static void draw(PoseStack.Pose pose, VertexConsumer buffer, QiCoatingDefinition.Texture texture, int frame, Part part,
-                             boolean slim, float inflate, boolean outer, float reach, float overhang, int color, int lightCoords) {
+                             boolean slim, float inflate, boolean outer, float reach, float overhang, int color, int lightCoords,
+                             float[][] landings, float growth) {
         PoseStack partPose = new PoseStack();
         partPose.last().set(pose);
         box(slim, part, inflate, outer).render(partPose, new CutConsumer(buffer, pose.pose(), part, reach, overhang, frame, texture.frames(),
-                        slim ? slimArmArea(part, outer) : null),
+                        slim ? slimArmArea(part, outer) : null, landings, growth),
                 lightCoords, OverlayTexture.NO_OVERLAY, color);
     }
 
@@ -143,7 +161,13 @@ final class QiCoatingTextureShells {
 
     static RenderType renderType(QiCoatingDefinition.Texture texture) {
         // Both write depth, so clouds and other translucent things drawn later don't show through.
-        return texture.emissive() ? ModRenderTypes.qiCoatingTextureEmissive(texture.path()) : RenderTypes.entityTranslucent(texture.path());
+        boolean shaderPack = IrisPipelineCompat.isShaderPackInUse();
+        if (!texture.emissive(shaderPack)) {
+            return RenderTypes.entityTranslucent(texture.path());
+        }
+        // Under a shader pack, vanilla's own emissive entity type: Iris binds its samplers in every pass, where our pipeline's
+        // overlay sampler went missing in third person ("Missing sampler Sampler1").
+        return shaderPack ? RenderTypes.entityTranslucentEmissive(texture.path()) : ModRenderTypes.qiCoatingTextureEmissive(texture.path());
     }
 
     /**
@@ -217,12 +241,19 @@ final class QiCoatingTextureShells {
         private final float[][] quad = new float[4][11];
         private final float[] along = new float[4];
         private final float[] slimArea;
+        // A PATCHES gather's landings (QiCoatingGather): when set, faces are split into skin pixels and only those near a landed
+        // speck are drawn.
+        private final float[][] landings;
+        private final float growth;
+        private final float[][] out = new float[4][5];
         private int count;
 
         private CutConsumer(VertexConsumer delegate, Matrix4fc partToWorld, Part part, float reach, float overhang, int frame, int frames,
-                            float[] slimArea) {
+                            float[] slimArea, float[][] landings, float growth) {
             super(delegate);
             this.slimArea = slimArea;
+            this.landings = landings;
+            this.growth = growth;
             this.partToWorld = new Matrix4f(partToWorld);
             this.worldToPart = new Matrix4f(partToWorld).invert();
             this.start = part.start;
@@ -298,11 +329,60 @@ final class QiCoatingTextureShells {
                     float fromEdge = u * 64.0F - slimArea[0];
                     u = (slimArea[0] + (endsRow ? widen(fromEdge, SLIM_ENDS, WIDE_ENDS) : widen(fromEdge, SLIM_SIDES, WIDE_SIDES))) / 64.0F;
                 }
-                Vector3f world = partToWorld.transformPosition(vertex[0] / 16.0F, (start + direction * distance) / 16.0F,
-                        vertex[2] / 16.0F, scratch);
-                delegate.addVertex(world.x, world.y, world.z, Float.floatToRawIntBits(vertex[3]), u, (v + frame) / frames,
-                        Float.floatToRawIntBits(vertex[6]), Float.floatToRawIntBits(vertex[7]), vertex[8], vertex[9], vertex[10]);
+                float[] corner = out[i];
+                corner[0] = vertex[0];
+                corner[1] = start + direction * distance;
+                corner[2] = vertex[2];
+                corner[3] = u;
+                corner[4] = v;
             }
+            if (landings == null) {
+                for (int i = 0; i < 4; i++) {
+                    emit(out[i][0], out[i][1], out[i][2], out[i][3], out[i][4]);
+                }
+                return;
+            }
+            // One cell per skin pixel the face covers, s from corner 0 to 1 and t from corner 0 to 3.
+            int cellsS = Math.max(1, Math.round((Math.abs(out[1][3] - out[0][3]) + Math.abs(out[1][4] - out[0][4])) * 64.0F));
+            int cellsT = Math.max(1, Math.round((Math.abs(out[3][3] - out[0][3]) + Math.abs(out[3][4] - out[0][4])) * 64.0F));
+            float[] centre = new float[5];
+            for (int a = 0; a < cellsS; a++) {
+                for (int b = 0; b < cellsT; b++) {
+                    float s0 = (float) a / cellsS;
+                    float s1 = (float) (a + 1) / cellsS;
+                    float t0 = (float) b / cellsT;
+                    float t1 = (float) (b + 1) / cellsT;
+                    lerp((s0 + s1) * 0.5F, (t0 + t1) * 0.5F, centre);
+                    if (!QiCoatingGather.revealed(landings, growth, centre[0], centre[1], centre[2],
+                            QiCoatingGather.pixelJitter(centre[0], centre[1], centre[2]))) {
+                        continue;
+                    }
+                    emitAt(s0, t0, centre);
+                    emitAt(s1, t0, centre);
+                    emitAt(s1, t1, centre);
+                    emitAt(s0, t1, centre);
+                }
+            }
+        }
+
+        private void lerp(float s, float t, float[] result) {
+            for (int k = 0; k < 5; k++) {
+                float near = out[0][k] + (out[1][k] - out[0][k]) * s;
+                float far = out[3][k] + (out[2][k] - out[3][k]) * s;
+                result[k] = near + (far - near) * t;
+            }
+        }
+
+        private void emitAt(float s, float t, float[] scratchCorner) {
+            lerp(s, t, scratchCorner);
+            emit(scratchCorner[0], scratchCorner[1], scratchCorner[2], scratchCorner[3], scratchCorner[4]);
+        }
+
+        private void emit(float x, float y, float z, float u, float v) {
+            float[] vertex = quad[0];
+            Vector3f world = partToWorld.transformPosition(x / 16.0F, y / 16.0F, z / 16.0F, scratch);
+            delegate.addVertex(world.x, world.y, world.z, Float.floatToRawIntBits(vertex[3]), u, (v + frame) / frames,
+                    Float.floatToRawIntBits(vertex[6]), Float.floatToRawIntBits(vertex[7]), vertex[8], vertex[9], vertex[10]);
         }
 
     }

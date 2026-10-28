@@ -27,6 +27,7 @@ public abstract class ItemLayerSwordQiMixin {
     private boolean ascension$applySwordQi(SubmitNodeCollector submitNodeCollector, PoseStack poseStack, ItemDisplayContext displayContext,
                                            int lightCoords, int overlayCoords, int outlineColor, int[] tintLayers, List<BakedQuad> quads,
                                            ItemStackRenderState.FoilType foilType) {
-        return SwordQiRenderer.submit(submitNodeCollector, poseStack, quads);
+        return SwordQiRenderer.submit(submitNodeCollector, poseStack, quads, displayContext, lightCoords, overlayCoords, outlineColor,
+                tintLayers, foilType);
     }
 }

@@ -1,10 +1,15 @@
 {
   "coverage": "hands",
   "fades_arm": true,
+  "grow_millis": 1800,
+  "gather": {
+    "style": "patches",
+    "colors": ["#1A0F3A", "#2E1F66", "#4B3A9E", "#E8E6FF"]
+  },
   "shells": {
     "look": "ascension:space_starfield",
     "layers": [
-      { "inflate": 0.1, "reach": 5.0, "overhang": 0.1 }
+      { "inflate": 0.3, "reach": 9.0, "overhang": 0.3 }
     ]
   }
 }

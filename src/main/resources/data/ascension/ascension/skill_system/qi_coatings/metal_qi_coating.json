@@ -1,6 +1,10 @@
 {
   "coverage": "hands",
-  "grow_millis": 900,
+  "grow_millis": 1800,
   "reacts_to": ["hurt", "attack"],
+  "gather": {
+    "style": "patches",
+    "colors": ["#F5D27A", "#E0B34E", "#B8862E", "#FFF1C2"]
+  },
   "skin": { "look": "ascension:metal" }
 }

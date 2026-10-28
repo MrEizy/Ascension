@@ -1,4 +1,16 @@
 {
   "coverage": "weapon",
-  "sword": { "look": "ascension:water" }
+  "grow_millis": 1800,
+  "gather": {
+    "style": "fade",
+    "colors": [
+      "#5FB4E8",
+      "#3E8FD6",
+      "#A8DCF5",
+      "#E3F5FF"
+    ]
+  },
+  "sword": {
+    "look": "ascension:water"
+  }
 }

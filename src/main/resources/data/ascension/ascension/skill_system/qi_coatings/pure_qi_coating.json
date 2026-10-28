@@ -1,5 +1,11 @@
 {
   "coverage": "hands",
+  "grow_millis": 1800,
+  "gather": {
+    "style": "fade",
+    "colors": ["#BFF4FF", "#8FE3F5", "#E6FBFF"],
+    "speck_size": 0.18
+  },
   "shells": {
     "look": "ascension:pure_qi",
     "layers": [

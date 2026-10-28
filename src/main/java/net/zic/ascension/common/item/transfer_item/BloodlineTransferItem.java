@@ -16,7 +16,11 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
+import java.util.List;
+
 public class BloodlineTransferItem extends Item {
+    private static final Identifier DEV_BLOODLINE = AscensionCraft.prefix("1_ordinary/qi_coatings_dev_bloodline");
+
     public BloodlineTransferItem(Properties properties) {
         super(properties);
     }
@@ -41,6 +45,13 @@ public class BloodlineTransferItem extends Item {
 
         if(holder == null || holder.getData() == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData().getSource();
+        // The Qi Coatings Dev Bloodline (testing only) replaces every bloodline held, itself included, so it is the only one and
+        // its purity actions run fresh each time instead of merging into a copy already held.
+        if(targetBloodline.equals(DEV_BLOODLINE)){
+            for(Identifier held : List.copyOf(AscensionOriginSourceHelper.getBloodlines(source))){
+                AscensionOriginSourceHelper.removeBloodline(source,held);
+            }
+        }
         if(!AscensionOriginSourceHelper.addBloodline(source,bloodline,true)){
             //TODO return error message to player here
             return InteractionResult.FAIL;

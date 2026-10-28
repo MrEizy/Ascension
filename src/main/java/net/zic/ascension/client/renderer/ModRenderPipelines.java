@@ -33,6 +33,7 @@ public class ModRenderPipelines {
     public static RenderPipeline ENERGY_LINES;
     public static RenderPipeline ENERGY_SURFACE;
     public static RenderPipeline ENERGY_SURFACE_NO_DEPTH;
+    public static RenderPipeline QI_COATING_SPECKS;
     public static RenderPipeline AURA_SURFACE;
     public static RenderPipeline AURA_SURFACE_NO_DEPTH;
     public static RenderPipeline QI_COATING;
@@ -64,6 +65,13 @@ public class ModRenderPipelines {
         ENERGY_SURFACE = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
                 .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/energy_surface"))
                 .withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE))
+                .withCull(false)
+                .build();
+
+        // The flat-coloured specks a gathering qi coating draws in (QiCoatingGather).
+        QI_COATING_SPECKS = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/qi_coating_specks"))
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
                 .withCull(false)
                 .build();
 
@@ -151,6 +159,7 @@ public class ModRenderPipelines {
         event.registerPipeline(ENERGY_LINES);
         event.registerPipeline(ENERGY_SURFACE);
         event.registerPipeline(ENERGY_SURFACE_NO_DEPTH);
+        event.registerPipeline(QI_COATING_SPECKS);
         event.registerPipeline(AURA_SURFACE);
         event.registerPipeline(AURA_SURFACE_NO_DEPTH);
         event.registerPipeline(QI_COATING);
@@ -164,11 +173,12 @@ public class ModRenderPipelines {
         for (int style = 0; style < SWORD_QI.length; style++) {
             RenderPipeline.Builder builder = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET, RenderPipelines.GLOBALS_SNIPPET)
                     .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/sword_qi_" + style))
-                    .withVertexShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/aura"))
+                    .withVertexShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/sword_qi"))
                     .withFragmentShader(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "core/sword_qi"))
                     .withShaderDefine("STYLE", style)
                     .withSampler("Sampler0")
-                    .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+                    // UV2 carries where each vertex sits on the item's model (SwordQiRenderer.setPatternPixel), not light.
+                    .withVertexFormat(DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS)
                     .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
                     .withCull(false);
             // Every look but the echo redraws the item opaque in place of vanilla's, so it writes depth like the item would;
@@ -210,6 +220,8 @@ public class ModRenderPipelines {
                 .withCull(false)
                 .build();
         event.registerPipeline(SPACE_RIFT);
+
+        IrisPipelineCompat.assignPipelines();
     }
 
     /**

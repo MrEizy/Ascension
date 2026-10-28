@@ -15,6 +15,8 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.client.renderer.IrisPipelineCompat;
+import net.zic.ascension.client.renderer.QiCoatingLooks;
 import net.zic.ascension.client.renderer.ModRenderTypes;
 import net.zic.ascension.impl.core.skill.passive.PassiveModifiers;
 import net.zic.ascension.impl.core.skill.passive.QiStepService;
@@ -262,7 +264,7 @@ public final class QiStepClient {
     private static void footholdVertex(PoseStack.Pose pose, VertexConsumer buffer, Vec3 position, float u, float v, int color) {
         buffer.addVertex(pose, (float) position.x, (float) position.y, (float) position.z)
                 .setUv(FOOTHOLD_STYLE_OFFSET + u, v)
-                .setColor(color);
+                .setColor(IrisPipelineCompat.isShaderPackInUse() ? QiCoatingLooks.shellShaderPackColor(FOOTHOLD_STYLE_OFFSET + u, color) : color);
     }
 
     private record Foothold(Vec3 position, float yaw, long spawnTick) {

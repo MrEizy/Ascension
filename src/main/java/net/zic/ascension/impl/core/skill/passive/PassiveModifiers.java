@@ -57,6 +57,7 @@ public final class PassiveModifiers {
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> STATS = register("stats", Stats.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> DEFENSE = register("defense", Defense.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> COMBAT = register("combat", Combat.CODEC);
+    public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> QI_SHIELD = register("qi_shield", QiShield.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> RESOURCES = register("resources", Resources.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> PROJECTILES = register("projectiles", Projectiles.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> WEAPON_DAMAGE = register("weapon_damage", WeaponDamage.CODEC);
@@ -205,6 +206,35 @@ public final class PassiveModifiers {
         @Override
         public CodecType<PassiveModifier> getType() {
             return COMBAT.get();
+        }
+    }
+
+    /**
+     * Pays part of each matching hit with a resource instead of health, until it runs out: `share` of the damage (after
+     * defences) is absorbed at `cost_per_damage` of `resource` per point. Used by the Qi Coatings, so the coated body takes hits
+     * with its qi.
+     */
+    public record QiShield(
+            ScaledValue share,
+            ScaledValue costPerDamage,
+            Identifier resource,
+            BarrierDefinition.DamageFilter filter
+    ) implements PassiveModifier {
+        public static final MapCodec<QiShield> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ScaledValue.COMPACT_CODEC.fieldOf("share").forGetter(QiShield::share),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("cost_per_damage", ScaledValue.constant(1.0D)).forGetter(QiShield::costPerDamage),
+                Identifier.CODEC.optionalFieldOf("resource", AscensionCraft.prefix("qi")).forGetter(QiShield::resource),
+                BarrierDefinition.DamageFilter.CODEC.optionalFieldOf("filter", BarrierDefinition.DamageFilter.EMPTY).forGetter(QiShield::filter)
+        ).apply(instance, QiShield::new));
+
+        public QiShield {
+            costPerDamage = costPerDamage == null ? ScaledValue.constant(1.0D) : costPerDamage;
+            filter = filter == null ? BarrierDefinition.DamageFilter.EMPTY : filter;
+        }
+
+        @Override
+        public CodecType<PassiveModifier> getType() {
+            return QI_SHIELD.get();
         }
     }
 

@@ -43,6 +43,7 @@ import net.zic.ascension.api.ascension.core.qi_coating.QiCoating;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingChannel;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingDefinition;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingEffects;
+import net.zic.ascension.client.renderer.IrisPipelineCompat;
 import net.zic.ascension.client.renderer.ModRenderTypes;
 import net.zic.ascension.client.renderer.QiCoatingLooks;
 import net.zic.ascension.client.visual.QiCoatingClientState;
@@ -70,6 +71,8 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
 
     // Arm cubes run from y = -2 (shoulder) to y = 10 (hand tip), 12px long. A quarter is 3px.
     private static final float HAND_TIP_Y = 10.0F;
+    // How far up the arm a gathering coating with no shells (just a skin look) has its specks land, in pixels from the hand tip.
+    private static final float GATHER_SKIN_REACH = 7.0F;
     private static final float SHOULDER_Y = -2.0F;
     // Whole-body echoes are scattered further than hand echoes so they read at body scale.
     private static final float BODY_ECHO_SPREAD = 1.5F;
@@ -739,15 +742,32 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
     private static void submitSkinLimb(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Identifier skin,
                                        QiCoating coating, float progress, int impact, int lightCoords, ModelPart limb,
                                        float centerX, float tipY) {
+        submitSkinLimb(poseStack, submitNodeCollector, skin, coating, progress, impact, lightCoords, limb, centerX, tipY, null);
+    }
+
+    /**
+     * @param patches if set, only the skin pixels round its landings are coated; the rest show the plain limb underneath
+     */
+    private static void submitSkinLimb(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Identifier skin,
+                                       QiCoating coating, float progress, int impact, int lightCoords, ModelPart limb,
+                                       float centerX, float tipY, Patches patches) {
         RenderPipeline pipeline = coating.definition().skin().map(look -> QiCoatingLooks.skin(look.look())).orElse(null);
         if (pipeline == null) {
             return;
         }
         boolean wholeBody = coating.wholeBody();
-        submitNodeCollector.submitCustomGeometry(poseStack, ModRenderTypes.qiCoatingSkin(pipeline, skin), (pose, buffer) -> {
+        // Under a shader pack the skin pipeline can't be handed to the pack (IrisPipelineCompat), so the same lifted limb is drawn
+        // through vanilla's entity render type, which the pack lights, in the look's tint instead.
+        boolean shaderPack = IrisPipelineCompat.isShaderPackInUse();
+        Identifier look = coating.definition().skin().orElseThrow().look();
+        int tint = shaderPack ? QiCoatingLooks.skinShaderPackTint(look) : 0;
+        float tintTop = shaderPack ? QiCoatingLooks.skinShaderPackTop(look, wholeBody) : 1.0F;
+        RenderType renderType = shaderPack ? RenderTypes.entityTranslucent(skin) : ModRenderTypes.qiCoatingSkin(pipeline, skin);
+        submitNodeCollector.submitCustomGeometry(poseStack, renderType, (pose, buffer) -> {
             PoseStack limbPose = new PoseStack();
             limbPose.last().set(pose);
-            limb.render(limbPose, new SkinCoatingConsumer(buffer, pose.pose(), wholeBody, progress, impact, centerX, tipY),
+            limb.render(limbPose, new SkinCoatingConsumer(buffer, pose.pose(), wholeBody, progress, impact, centerX, tipY, patches,
+                            tint, tintTop),
                     lightCoords, OverlayTexture.NO_OVERLAY);
         });
     }
@@ -793,7 +813,8 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
      * from the hand tip toward the elbow, each a band of four upright faces shaded by qi_coating.fsh's wind rings
      * (WIND_RING_STYLE). Expects the pose stack to already be in the arm's local space. u runs around each ring and v up its band.
      */
-    private static void submitWindRings(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, HumanoidArm side, boolean slim) {
+    private static void submitWindRings(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, HumanoidArm side, boolean slim,
+                                        float alpha) {
         float styleOffset = WIND_RING_STYLE * 2.0F;
         float centerX = armCenterX(side, slim);
         float halfX = (slim ? 3.0F : 4.0F) * 0.5F + WIND_RING_OUTSET;
@@ -809,7 +830,7 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
                 float bottom = HAND_TIP_Y + WIND_RING_TIP_OVERHANG - ring * (WIND_RING_HEIGHT + WIND_RING_GAP);
                 float top = bottom - WIND_RING_HEIGHT;
                 float shift = Mth.frac(ring * RING_PATTERN_SHIFT);
-                int color = ARGB.white(WIND_RING_ALPHA * (1.0F - ring * WIND_RING_ALPHA_FALLOFF));
+                int color = ARGB.white(alpha * WIND_RING_ALPHA * (1.0F - ring * WIND_RING_ALPHA_FALLOFF));
                 for (int face = 0; face < 4; face++) {
                     int next = (face + 1) % 4;
                     side(pose, buffer, cornerX[face], cornerZ[face], cornerX[next], cornerZ[next],
@@ -885,18 +906,32 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
      */
     private static void submitCoatedArm(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, QiCoating coating,
                                         Identifier skinTexture, int lightCoords, int overlayCoords, HumanoidArm side, boolean slim, boolean sleeve, int seed) {
+        float growth = freezeProgress(coating, seed);
+        // A gathering coating (QiCoatingDefinition.Gather) forms from specks drawn in round the arm while it grows; a FADE one
+        // fades its skin look and wind rings in with its shells.
+        QiCoatingDefinition.Gather gather = coating.definition().gather().orElse(null);
+        boolean fade = gather != null && gather.style() == QiCoatingDefinition.GatherStyle.FADE;
+        Patches patches = gather != null && gather.style() == QiCoatingDefinition.GatherStyle.PATCHES
+                ? new Patches(QiCoatingGather.landings(gather, side, slim, gatherReach(coating)), growth)
+                : null;
+        if (gather != null) {
+            QiCoatingGather.submitSpecks(poseStack, submitNodeCollector, gather, side, slim, gatherReach(coating), growth);
+        }
         if (coating.definition().skin().isPresent()) {
-            submitSkinLimb(poseStack, submitNodeCollector, skinTexture, coating, freezeProgress(coating, seed),
+            // In patches the skin look is drawn fully formed, just on the pixels revealed so far.
+            float skinProgress = fade ? QiCoatingGather.fadeAmount(growth) : patches != null ? 1.0F : growth;
+            submitSkinLimb(poseStack, submitNodeCollector, skinTexture, coating, skinProgress,
                     impactData(coating, seed, side == HumanoidArm.RIGHT ? 0 : 1), lightCoords,
-                    skinLimb(slim, side == HumanoidArm.RIGHT ? "right_arm" : "left_arm", sleeve), armCenterX(side, slim), HAND_TIP_Y);
+                    skinLimb(slim, side == HumanoidArm.RIGHT ? "right_arm" : "left_arm", sleeve), armCenterX(side, slim), HAND_TIP_Y,
+                    patches);
         }
         if (coating.hasEffect(QiCoatingEffects.WIND_RINGS)) {
-            submitWindRings(poseStack, submitNodeCollector, side, slim);
+            // The rings aren't made of pixels, so they fade in with a fade or patches gather.
+            submitWindRings(poseStack, submitNodeCollector, side, slim, fade || patches != null ? QiCoatingGather.fadeAmount(growth) : 1.0F);
         }
         if (coating.fadesArm()) {
             submitGhostArm(poseStack, submitNodeCollector, skinTexture, lightCoords, overlayCoords, side, slim, sleeve, 0xFFFFFFFF, GHOST_HAND_ALPHA);
         }
-        float growth = freezeProgress(coating, seed);
         boolean echoing = echoing(coating, seed);
         submitShells(poseStack, submitNodeCollector, coating, side, slim, lightCoords, growth, !echoing);
         if (echoing) {
@@ -1149,15 +1184,22 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
         if (shells == null || shells.layers().isEmpty()) {
             return;
         }
+        // A gathering coating (QiCoatingDefinition.Gather) shows only round where its specks have landed, or fades in.
+        QiCoatingDefinition.Gather gather = coating.definition().gather().orElse(null);
         if (shells.texture().isPresent()) {
             QiCoatingTextureShells.submitArm(poseStack, submitNodeCollector, shells.texture().get(), shells.layers(), side, slim,
-                    lightCoords, growth);
+                    lightCoords, growth, gather);
             return;
         }
         QiCoatingLooks.ShellLook look = QiCoatingLooks.shell(shells.look(quiet).orElseThrow());
         if (look == null) {
             return;
         }
+        // Shell looks aren't cut as they grow; a gather fades their layers in, or splits them into pixels drawn round its landings.
+        boolean fade = gather != null && gather.style() == QiCoatingDefinition.GatherStyle.FADE;
+        Patches patches = gather != null && gather.style() == QiCoatingDefinition.GatherStyle.PATCHES
+                ? new Patches(QiCoatingGather.landings(gather, side, slim, QiCoatingTextureShells.maxReach(shells.layers())), growth)
+                : null;
         // Matches the arm cube bounds in PlayerModel.createMesh.
         float width = slim ? 3.0F : 4.0F;
         float minX = side == HumanoidArm.RIGHT ? 1.0F - width : -1.0F;
@@ -1169,7 +1211,10 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
         List<QiCoatingDefinition.Layer> layers = shells.layers();
         submitNodeCollector.submitCustomGeometry(poseStack, renderType(look), (pose, buffer) -> {
             for (QiCoatingDefinition.Layer layer : layers) {
-                emitShell(pose, buffer, minX, maxX, shiftedStyle, layer);
+                emitShell(pose, buffer, minX, maxX, shiftedStyle, fade
+                        ? new QiCoatingDefinition.Layer(layer.inflate(), layer.reach(), layer.overhang(),
+                        QiCoatingGather.fade(layer.color(), growth), layer.squareCap(), layer.outer())
+                        : layer, patches);
             }
         });
     }
@@ -1188,7 +1233,7 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
      * One shell layer round an arm: from `reach` pixels up from the hand tip down to `overhang` past it.
      */
     private static void emitShell(PoseStack.Pose pose, VertexConsumer buffer, float minX, float maxX, float styleOffset,
-                                  QiCoatingDefinition.Layer layer) {
+                                  QiCoatingDefinition.Layer layer, Patches patches) {
         float topY = HAND_TIP_Y - layer.reach();
         float maxY = HAND_TIP_Y + layer.overhang();
         float minZ = ARM_MIN_Z - layer.inflate();
@@ -1196,16 +1241,29 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
         // A square cap spans as much v across its depth as the sides do over the same distance, so square texels stay square on it.
         float capVSpan = layer.squareCap() ? (maxZ - minZ) / (maxY - topY) : CAP_V_SPAN;
         emitBox(pose, buffer, minX - layer.inflate(), maxX + layer.inflate(), topY, maxY, minZ, maxZ,
-                styleOffset, layer.color(), false, capVSpan);
+                styleOffset, layer.color(), false, capVSpan, patches);
+    }
+
+    /**
+     * A PATCHES gather's landings round an arm (QiCoatingGather.landings) and how far the coating has grown: a shell drawn with
+     * them is split into pixels, and only those round a landing the specks have reached are drawn.
+     */
+    private record Patches(float[][] landings, float growth) {
+    }
+
+    private static void emitBox(PoseStack.Pose pose, VertexConsumer buffer, float minX, float maxX, float minY, float maxY,
+                                float minZ, float maxZ, float styleOffset, int color, boolean topCap, float capVSpan) {
+        emitBox(pose, buffer, minX, maxX, minY, maxY, minZ, maxZ, styleOffset, color, topCap, capVSpan, null);
     }
 
     /**
      * Emits a box in part-local pixels, capped at maxY and optionally at minY; v runs from 0 at maxY (the hand end) to 1 at minY.
      *
      * @param capVSpan how much of the v range each cap spans across its depth
+     * @param patches  if set, only the pixels round its landings are drawn
      */
     private static void emitBox(PoseStack.Pose pose, VertexConsumer buffer, float minX, float maxX, float minY, float maxY,
-                                float minZ, float maxZ, float styleOffset, int color, boolean topCap, float capVSpan) {
+                                float minZ, float maxZ, float styleOffset, int color, boolean topCap, float capVSpan, Patches patches) {
         float x0 = minX / 16.0F;
         float x1 = maxX / 16.0F;
         float z0 = minZ / 16.0F;
@@ -1221,25 +1279,104 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
         float u3 = styleOffset + 0.75F;
         float u4 = styleOffset + 1.0F;
 
-        side(pose, buffer, x0, z0, x1, z0, u0, u1, top, bottom, color);
-        side(pose, buffer, x1, z0, x1, z1, u1, u2, top, bottom, color);
-        side(pose, buffer, x1, z1, x0, z1, u2, u3, top, bottom, color);
-        side(pose, buffer, x0, z1, x0, z0, u3, u4, top, bottom, color);
+        if (patches == null) {
+            side(pose, buffer, x0, z0, x1, z0, u0, u1, top, bottom, color);
+            side(pose, buffer, x1, z0, x1, z1, u1, u2, top, bottom, color);
+            side(pose, buffer, x1, z1, x0, z1, u2, u3, top, bottom, color);
+            side(pose, buffer, x0, z1, x0, z0, u3, u4, top, bottom, color);
+        } else {
+            float[][] cornersX = {{x0, x1}, {x1, x1}, {x1, x0}, {x0, x0}};
+            float[][] cornersZ = {{z0, z0}, {z0, z1}, {z1, z1}, {z1, z0}};
+            float[] us = {u0, u1, u2, u3, u4};
+            for (int face = 0; face < 4; face++) {
+                float ax = cornersX[face][0], bx = cornersX[face][1], az = cornersZ[face][0], bz = cornersZ[face][1];
+                patchedQuad(pose, buffer, patches, color,
+                        new float[]{ax, top, az, us[face], 1.0F}, new float[]{bx, top, bz, us[face + 1], 1.0F},
+                        new float[]{bx, bottom, bz, us[face + 1], 0.0F}, new float[]{ax, bottom, az, us[face], 0.0F});
+            }
+        }
 
         // Caps are mapped flat (u along x, v along z), carrying on from the first face's edge. Reusing the four corner u
         // values from the sides would make the two triangles of the quad interpolate differently and leave a V-shaped seam.
         // Cap over the maxY end (the fist, on arms).
-        vertex(pose, buffer, x0, bottom, z0, u0, 0.0F, color);
-        vertex(pose, buffer, x1, bottom, z0, u1, 0.0F, color);
-        vertex(pose, buffer, x1, bottom, z1, u1, capVSpan, color);
-        vertex(pose, buffer, x0, bottom, z1, u0, capVSpan, color);
+        patchedQuad(pose, buffer, patches, color,
+                new float[]{x0, bottom, z0, u0, 0.0F}, new float[]{x1, bottom, z0, u1, 0.0F},
+                new float[]{x1, bottom, z1, u1, capVSpan}, new float[]{x0, bottom, z1, u0, capVSpan});
 
         if (topCap) {
-            vertex(pose, buffer, x0, top, z0, u0, 1.0F, color);
-            vertex(pose, buffer, x1, top, z0, u1, 1.0F, color);
-            vertex(pose, buffer, x1, top, z1, u1, 1.0F - capVSpan, color);
-            vertex(pose, buffer, x0, top, z1, u0, 1.0F - capVSpan, color);
+            patchedQuad(pose, buffer, patches, color,
+                    new float[]{x0, top, z0, u0, 1.0F}, new float[]{x1, top, z0, u1, 1.0F},
+                    new float[]{x1, top, z1, u1, 1.0F - capVSpan}, new float[]{x0, top, z1, u0, 1.0F - capVSpan});
         }
+    }
+
+    /**
+     * A quad from corners a, b, c, d ({x, y, z, u, v}, positions in blocks), whole, or with patches split into one cell per
+     * pixel (a to b, and a to d) with just the cells round its landings drawn.
+     */
+    private static void patchedQuad(PoseStack.Pose pose, VertexConsumer buffer, Patches patches, int color,
+                                    float[] a, float[] b, float[] c, float[] d) {
+        if (patches == null) {
+            vertex(pose, buffer, a[0], a[1], a[2], a[3], a[4], color);
+            vertex(pose, buffer, b[0], b[1], b[2], b[3], b[4], color);
+            vertex(pose, buffer, c[0], c[1], c[2], c[3], c[4], color);
+            vertex(pose, buffer, d[0], d[1], d[2], d[3], d[4], color);
+            return;
+        }
+        int cellsS = Math.max(1, Math.round(distance(a, b) * 16.0F));
+        int cellsT = Math.max(1, Math.round(distance(a, d) * 16.0F));
+        float[] point = new float[5];
+        for (int i = 0; i < cellsS; i++) {
+            for (int j = 0; j < cellsT; j++) {
+                float s0 = (float) i / cellsS;
+                float s1 = (float) (i + 1) / cellsS;
+                float t0 = (float) j / cellsT;
+                float t1 = (float) (j + 1) / cellsT;
+                quadPoint(a, b, c, d, (s0 + s1) * 0.5F, (t0 + t1) * 0.5F, point);
+                float x = point[0] * 16.0F;
+                float y = point[1] * 16.0F;
+                float z = point[2] * 16.0F;
+                if (!QiCoatingGather.revealed(patches.landings(), patches.growth(), x, y, z, QiCoatingGather.pixelJitter(x, y, z))) {
+                    continue;
+                }
+                quadPoint(a, b, c, d, s0, t0, point);
+                vertex(pose, buffer, point[0], point[1], point[2], point[3], point[4], color);
+                quadPoint(a, b, c, d, s1, t0, point);
+                vertex(pose, buffer, point[0], point[1], point[2], point[3], point[4], color);
+                quadPoint(a, b, c, d, s1, t1, point);
+                vertex(pose, buffer, point[0], point[1], point[2], point[3], point[4], color);
+                quadPoint(a, b, c, d, s0, t1, point);
+                vertex(pose, buffer, point[0], point[1], point[2], point[3], point[4], color);
+            }
+        }
+    }
+
+    private static float distance(float[] from, float[] to) {
+        float dx = to[0] - from[0];
+        float dy = to[1] - from[1];
+        float dz = to[2] - from[2];
+        return Mth.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    /**
+     * The point s along a to b (and d to c) and t along a to d, every component blended.
+     */
+    private static void quadPoint(float[] a, float[] b, float[] c, float[] d, float s, float t, float[] out) {
+        for (int k = 0; k < 5; k++) {
+            float near = a[k] + (b[k] - a[k]) * s;
+            float far = d[k] + (c[k] - d[k]) * s;
+            out[k] = near + (far - near) * t;
+        }
+    }
+
+    /**
+     * How far up the arm a gathering coating's specks land: its shells' reach, or the forearm for a skin look.
+     */
+    private static float gatherReach(QiCoating coating) {
+        return coating.definition().shells()
+                .filter(shells -> !shells.layers().isEmpty())
+                .map(shells -> QiCoatingTextureShells.maxReach(shells.layers()))
+                .orElse(GATHER_SKIN_REACH);
     }
 
     private static void side(PoseStack.Pose pose, VertexConsumer buffer,
@@ -1252,7 +1389,9 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
     }
 
     private static void vertex(PoseStack.Pose pose, VertexConsumer buffer, float x, float y, float z, float u, float v, int color) {
-        buffer.addVertex(pose, x, y, z).setUv(u, v).setColor(color);
+        // Under a shader pack the pack draws these in their vertex colour, so it carries the look's tint (QiCoatingLooks).
+        buffer.addVertex(pose, x, y, z).setUv(u, v)
+                .setColor(IrisPipelineCompat.isShaderPackInUse() ? QiCoatingLooks.shellShaderPackColor(u, color) : color);
     }
 
     private record SkinLimbKey(boolean slim, String name, boolean outerLayer) {
@@ -1316,10 +1455,23 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
         private final int impactAge;
         private final float centerX;
         private final float tipY;
+        // A PATCHES gather (QiCoatingGather): each face is held until its four vertices are in, then split into skin pixels and
+        // only those round a landing are passed on.
+        private final Patches patches;
+        // Per held vertex: local x, y, z (pixels), u, v, overlay, light, normal x, y, z.
+        private final float[][] held = new float[4][10];
+        private int heldCount;
+
+        // A plain colour passed on instead of the coating's data (under a shader pack), or 0 for the data, and how far up the
+        // limb (share of its 12px length from tipY) that tint reaches; the skin pixels above it are left out.
+        private final int tint;
+        private final float tintTop;
 
         private SkinCoatingConsumer(VertexConsumer delegate, Matrix4fc limbToWorld, boolean mantle, float progress, int impact,
-                                    float centerX, float tipY) {
+                                    float centerX, float tipY, Patches patches, int tint, float tintTop) {
             super(delegate);
+            this.tint = tint;
+            this.tintTop = tintTop;
             this.limbToWorld = new Matrix4f(limbToWorld);
             this.worldToLimb = new Matrix4f(limbToWorld).invert();
             this.coating = (mantle ? 128 : 0) | (impact & 0x7F);
@@ -1327,18 +1479,82 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
             this.progress = Math.round(progress * 255.0F);
             this.centerX = centerX;
             this.tipY = tipY;
+            this.patches = patches;
         }
 
         @Override
         public void addVertex(float x, float y, float z, int color, float u, float v, int overlayCoords, int lightCoords, float nx, float ny, float nz) {
-            // ModelPart vertices arrive already transformed; undo that to work in the limb's own pixels. Measured in 12px limb lengths
-            // from the hand or foot (tipY) up, centred on centerX across and 0 front to back.
+            // ModelPart vertices arrive already transformed; undo that to work in the limb's own pixels.
             Vector3f local = worldToLimb.transformPosition(x, y, z, scratch).mul(16.0F);
+            if (patches == null && tintTop >= 1.0F) {
+                emit(local.x, local.y, local.z, u, v, overlayCoords, lightCoords, nx, ny, nz);
+                return;
+            }
+            float[] vertex = held[heldCount];
+            vertex[0] = local.x;
+            vertex[1] = local.y;
+            vertex[2] = local.z;
+            vertex[3] = u;
+            vertex[4] = v;
+            vertex[5] = Float.intBitsToFloat(overlayCoords);
+            vertex[6] = Float.intBitsToFloat(lightCoords);
+            vertex[7] = nx;
+            vertex[8] = ny;
+            vertex[9] = nz;
+            if (++heldCount == 4) {
+                heldCount = 0;
+                emitPatched();
+            }
+        }
+
+        /**
+         * The held face split into one cell per skin pixel (by its texture's extent), passing on just the revealed cells.
+         */
+        private void emitPatched() {
+            float[] a = held[0];
+            float[] b = held[1];
+            float[] c = held[2];
+            float[] d = held[3];
+            int cellsS = Math.max(1, Math.round((Math.abs(b[3] - a[3]) + Math.abs(b[4] - a[4])) * 64.0F));
+            int cellsT = Math.max(1, Math.round((Math.abs(d[3] - a[3]) + Math.abs(d[4] - a[4])) * 64.0F));
+            int overlayCoords = Float.floatToRawIntBits(a[5]);
+            int lightCoords = Float.floatToRawIntBits(a[6]);
+            float[] point = new float[5];
+            for (int i = 0; i < cellsS; i++) {
+                for (int j = 0; j < cellsT; j++) {
+                    float s0 = (float) i / cellsS;
+                    float s1 = (float) (i + 1) / cellsS;
+                    float t0 = (float) j / cellsT;
+                    float t1 = (float) (j + 1) / cellsT;
+                    quadPoint(a, b, c, d, (s0 + s1) * 0.5F, (t0 + t1) * 0.5F, point);
+                    if (patches != null && !QiCoatingGather.revealed(patches.landings(), patches.growth(), point[0], point[1], point[2],
+                            QiCoatingGather.pixelJitter(point[0], point[1], point[2]))) {
+                        continue;
+                    }
+                    // Under a shader pack the tint only reaches the skin look's own top.
+                    if ((tipY - point[1]) / 12.0F > tintTop) {
+                        continue;
+                    }
+                    float[][] corners = {{s0, t0}, {s1, t0}, {s1, t1}, {s0, t1}};
+                    for (float[] corner : corners) {
+                        quadPoint(a, b, c, d, corner[0], corner[1], point);
+                        emit(point[0], point[1], point[2], point[3], point[4], overlayCoords, lightCoords, a[7], a[8], a[9]);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Passes on one vertex given in the limb's own pixels, lifted off the limb and carrying the coating's data. Measured in
+         * 12px limb lengths from the hand or foot (tipY) up, centred on centerX across and 0 front to back.
+         */
+        private void emit(float x, float y, float z, float u, float v, int overlayCoords, int lightCoords, float nx, float ny, float nz) {
+            Vector3f local = scratch.set(x, y, z);
             float up = Mth.clamp((tipY - local.y) / 12.0F, 0.0F, 1.0F);
             local.add(Math.signum(local.x - centerX) * SKIN_COAT_LIFT, Math.signum(local.y - (tipY - 6.0F)) * SKIN_COAT_LIFT,
                     Math.signum(local.z) * SKIN_COAT_LIFT);
             Vector3f lifted = limbToWorld.transformPosition(local.div(16.0F));
-            int data = ARGB.color(impactAge, coating, progress, Math.round(up * 255.0F));
+            int data = tint != 0 ? tint : ARGB.color(impactAge, coating, progress, Math.round(up * 255.0F));
             delegate.addVertex(lifted.x, lifted.y, lifted.z, data, u, v, overlayCoords, lightCoords, nx, ny, nz);
         }
 

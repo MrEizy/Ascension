@@ -3,6 +3,7 @@ package net.zic.ascension.client.renderer;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
@@ -10,12 +11,20 @@ import java.util.Map;
 
 import static net.minecraft.client.renderer.rendertype.OutputTarget.MAIN_TARGET;
 
+/**
+ * Under an Iris shader pack, our untextured geometry (qi coating shells, energy surfaces, auras, gather specks) uses vanilla's
+ * lightning render type instead of ours, drawn in its vertex colour (the shells carry their look's tint, QiCoatingLooks). The
+ * pack has no program for ours, and Iris's fallback for them asked for an overlay sampler they don't bind, crashing ("Missing
+ * sampler Sampler1"). Lightning takes position and colour with a glowing blend, and Iris knows it; the UV some of ours write
+ * isn't in its format, so the buffer skips it.
+ */
 public class ModRenderTypes {
 
     private static RenderType linesNoDepth;
     private static RenderType energyLines;
     private static RenderType energySurface;
     private static RenderType energySurfaceNoDepth;
+    private static RenderType qiCoatingSpecks;
     private static RenderType auraSurface;
     private static RenderType auraSurfaceNoDepth;
     private static RenderType qiCoating;
@@ -51,6 +60,9 @@ public class ModRenderTypes {
 
 
     public static RenderType energySurface() {
+        if (IrisPipelineCompat.isShaderPackInUse()) {
+            return RenderTypes.lightning();
+        }
         if (energySurface == null) {
             energySurface = RenderType.create(
                     "ascension_energy_surface",
@@ -62,7 +74,27 @@ public class ModRenderTypes {
         return energySurface;
     }
 
+    // The specks a gathering qi coating draws in (QiCoatingGather).
+    public static RenderType qiCoatingSpecks() {
+        if (IrisPipelineCompat.isShaderPackInUse()) {
+            return RenderTypes.lightning();
+        }
+        if (qiCoatingSpecks == null) {
+            qiCoatingSpecks = RenderType.create(
+                    "ascension_qi_coating_specks",
+                    RenderSetup.builder(ModRenderPipelines.QI_COATING_SPECKS)
+                            .setOutputTarget(MAIN_TARGET)
+                            .sortOnUpload()
+                            .createRenderSetup()
+            );
+        }
+        return qiCoatingSpecks;
+    }
+
     public static RenderType auraSurface() {
+        if (IrisPipelineCompat.isShaderPackInUse()) {
+            return RenderTypes.lightning();
+        }
         if (auraSurface == null) {
             auraSurface = RenderType.create(
                     "ascension_aura_surface",
@@ -75,6 +107,9 @@ public class ModRenderTypes {
     }
 
     public static RenderType auraSurfaceNoDepth() {
+        if (IrisPipelineCompat.isShaderPackInUse()) {
+            return RenderTypes.lightning();
+        }
         if (auraSurfaceNoDepth == null) {
             auraSurfaceNoDepth = RenderType.create(
                     "ascension_aura_surface_no_depth",
@@ -87,6 +122,9 @@ public class ModRenderTypes {
     }
 
     public static RenderType energySurfaceNoDepth() {
+        if (IrisPipelineCompat.isShaderPackInUse()) {
+            return RenderTypes.lightning();
+        }
         if (energySurfaceNoDepth == null) {
             energySurfaceNoDepth = RenderType.create(
                     "ascension_energy_surface_no_depth",
@@ -99,6 +137,9 @@ public class ModRenderTypes {
     }
 
     public static RenderType qiCoating() {
+        if (IrisPipelineCompat.isShaderPackInUse()) {
+            return RenderTypes.lightning();
+        }
         if (qiCoating == null) {
             qiCoating = RenderType.create(
                     "ascension_qi_coating",
@@ -112,6 +153,9 @@ public class ModRenderTypes {
     }
 
     public static RenderType qiCoatingDepth() {
+        if (IrisPipelineCompat.isShaderPackInUse()) {
+            return RenderTypes.lightning();
+        }
         if (qiCoatingDepth == null) {
             qiCoatingDepth = RenderType.create(
                     "ascension_qi_coating_depth",

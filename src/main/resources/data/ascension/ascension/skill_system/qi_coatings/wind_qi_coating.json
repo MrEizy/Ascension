@@ -1,5 +1,10 @@
 {
   "coverage": "hands",
+  "grow_millis": 1800,
+  "gather": {
+    "style": "patches",
+    "colors": ["#D1FFD9", "#9EEBB3", "#7FD99A"]
+  },
   "skin": { "look": "ascension:wind" },
   "effects": [
     "ascension:wind_rings"

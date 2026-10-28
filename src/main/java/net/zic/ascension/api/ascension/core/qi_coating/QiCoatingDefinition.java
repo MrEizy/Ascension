@@ -35,6 +35,8 @@ import org.jspecify.annotations.NullMarked;
  * @param overlay        another coating drawn over this one wherever this one is drawn (its shells only)
  * @param handParticles  particles spawned at the hands while the coating is on
  * @param effects        named effects coded in Java (QiCoatingEffects) that the coating adds
+ * @param gather         how a hands coating's shells form while they grow: gathered from specks drawn in from round the arm,
+ *                       instead of being cut from the hand up
  */
 public record QiCoatingDefinition(
         Coverage coverage,
@@ -47,7 +49,8 @@ public record QiCoatingDefinition(
         List<Reaction> reactsTo,
         Optional<Identifier> overlay,
         List<HandParticles> handParticles,
-        List<Identifier> effects
+        List<Identifier> effects,
+        Optional<Gather> gather
 ) {
     /**
      * ARGB colours as 8 digit hex strings ({@code #AARRGGBB}), or 6 digits for opaque. HexColorCodec drops the alpha when it
@@ -69,7 +72,8 @@ public record QiCoatingDefinition(
             Reaction.CODEC.listOf().optionalFieldOf("reacts_to", List.of()).forGetter(QiCoatingDefinition::reactsTo),
             Identifier.CODEC.optionalFieldOf("overlay").forGetter(QiCoatingDefinition::overlay),
             HandParticles.CODEC.listOf().optionalFieldOf("hand_particles", List.of()).forGetter(QiCoatingDefinition::handParticles),
-            Identifier.CODEC.listOf().optionalFieldOf("effects", List.of()).forGetter(QiCoatingDefinition::effects)
+            Identifier.CODEC.listOf().optionalFieldOf("effects", List.of()).forGetter(QiCoatingDefinition::effects),
+            Gather.CODEC.optionalFieldOf("gather").forGetter(QiCoatingDefinition::gather)
     ).apply(instance, QiCoatingDefinition::new)).validate(QiCoatingDefinition::validate);
 
     public QiCoatingDefinition {
@@ -85,6 +89,11 @@ public record QiCoatingDefinition(
         }
         if (!weapon && definition.shells().isEmpty() && definition.skin().isEmpty()) {
             return DataResult.error(() -> "A qi coating needs \"shells\" or a \"skin\" look (or both)");
+        }
+        if (definition.gather().isPresent()) {
+            if ((definition.coverage() != Coverage.HANDS && definition.coverage() != Coverage.WEAPON) || definition.growMillis() <= 0) {
+                return DataResult.error(() -> "A qi coating's \"gather\" needs coverage \"hands\" or \"weapon\" and a \"grow_millis\" above 0");
+            }
         }
         return DataResult.success(definition);
     }
@@ -198,14 +207,24 @@ public record QiCoatingDefinition(
      * @param frames      how many frames are stacked in it
      * @param frameMillis how long each frame shows
      * @param emissive    whether it glows at full brightness, like the shader looks; otherwise it is lit like the skin
+     * @param emissiveWithShaders whether it glows while an Iris shader pack is in use, if that should differ from emissive
+     *                    (packs draw emissive textures as glowing, see-through layers, which suits glows but not e.g. stone)
      */
-    public record Texture(Identifier path, int frames, int frameMillis, boolean emissive) {
+    public record Texture(Identifier path, int frames, int frameMillis, boolean emissive, Optional<Boolean> emissiveWithShaders) {
         public static final Codec<Texture> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("path").forGetter(Texture::path),
                 Codec.intRange(1, 256).optionalFieldOf("frames", 1).forGetter(Texture::frames),
                 Codec.intRange(1, 60000).optionalFieldOf("frame_millis", 250).forGetter(Texture::frameMillis),
-                Codec.BOOL.optionalFieldOf("emissive", true).forGetter(Texture::emissive)
+                Codec.BOOL.optionalFieldOf("emissive", true).forGetter(Texture::emissive),
+                Codec.BOOL.optionalFieldOf("emissive_with_shaders").forGetter(Texture::emissiveWithShaders)
         ).apply(instance, Texture::new));
+
+        /**
+         * Whether to draw it glowing right now: emissive_with_shaders while a shader pack is in use (if set), else emissive.
+         */
+        public boolean emissive(boolean shaderPackInUse) {
+            return shaderPackInUse ? emissiveWithShaders.orElse(emissive) : emissive;
+        }
     }
 
     /**
@@ -293,6 +312,58 @@ public record QiCoatingDefinition(
                 Identifier.CODEC.fieldOf("look").forGetter(Sword::look),
                 Identifier.CODEC.optionalFieldOf("quiet_look").forGetter(Sword::quietLook)
         ).apply(instance, Sword::new));
+    }
+
+    /**
+     * How a hands coating's shells form as it grows (QiCoating.growMillis): specks of the element appear a little way round the
+     * arm and are drawn into it, and the shells form from them. Played backwards as the coating shrinks away, the specks flying
+     * back out.
+     *
+     * @param style            how the shells form from the specks
+     * @param colors           the specks' ARGB colours, picked at random per speck
+     * @param landings         how many places round each arm the specks land
+     * @param specksPerLanding how many specks fly in to each place
+     * @param speckSize        a speck's half size, in pixels (each varies a little from it)
+     * @param glow             how strongly each speck glows, 0 for none
+     */
+    public record Gather(GatherStyle style, List<Integer> colors, int landings, int specksPerLanding, float speckSize, float glow) {
+        public static final Codec<Gather> CODEC = RecordCodecBuilder.<Gather>create(instance -> instance.group(
+                GatherStyle.CODEC.fieldOf("style").forGetter(Gather::style),
+                ARGB_CODEC.listOf().fieldOf("colors").forGetter(Gather::colors),
+                Codec.intRange(1, 32).optionalFieldOf("landings", 9).forGetter(Gather::landings),
+                Codec.intRange(1, 8).optionalFieldOf("specks_per_landing", 3).forGetter(Gather::specksPerLanding),
+                Codec.floatRange(0.05F, 2.0F).optionalFieldOf("speck_size", 0.3F).forGetter(Gather::speckSize),
+                Codec.floatRange(0.0F, 1.0F).optionalFieldOf("glow", 0.1F).forGetter(Gather::glow)
+        ).apply(instance, Gather::new)).validate(gather -> gather.colors().isEmpty()
+                ? DataResult.error(() -> "A qi coating's \"gather\" needs at least one colour in \"colors\"")
+                : DataResult.success(gather));
+
+        public Gather {
+            colors = List.copyOf(colors);
+        }
+    }
+
+    @NullMarked
+    public enum GatherStyle implements StringRepresentable {
+        // The shells and skin look show only round where specks have landed, each patch spreading until they join.
+        PATCHES("patches"),
+        // The shells, the skin look and the wind rings fade in evenly while the specks arrive.
+        FADE("fade"),
+        // Just the specks; the coating forms its own way (a skin look's spread from the hand, a sword look's spread up the blade).
+        SPECKS("specks");
+
+        public static final Codec<GatherStyle> CODEC = StringRepresentable.fromEnum(GatherStyle::values);
+
+        private final String name;
+
+        GatherStyle(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return name;
+        }
     }
 
     /**

@@ -1,11 +1,16 @@
 {
   "coverage": "hands",
-  "grow_millis": 900,
+  "grow_millis": 1800,
+  "gather": {
+    "style": "patches",
+    "colors": ["#624530", "#785438", "#8D6342", "#9C6D49", "#3D291A"]
+  },
   "shells": {
     "texture": {
       "path": "ascension:textures/qi_coating/earth_qi_coating.png",
       "frames": 1,
-      "emissive": true
+      "emissive": true,
+      "emissive_with_shaders": false
     },
     "layers": [
       { "inflate": 0.5, "reach": 7.6, "overhang": 0.5 }
