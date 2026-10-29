@@ -26,6 +26,14 @@ public final class InnerWorldQi {
     private InnerWorldQi() {
     }
 
+    /**
+     * CRASH SWITCH. A village cat crossing a chunk crashed in EntityPathBonusHolder.sync (null container in ValueContainer.encode),
+     * reached through ChunkEventHandler.onEnterChunk, which re-syncs every path bonus a chunk provides. Adding a path AFFINITY to
+     * inner world chunks is one of the two things that newly puts path bonuses on those chunks, so it is off until the cause is
+     * confirmed. Capacity and regen (the ambient qi itself) are unaffected. Flip to true to test.
+     */
+    private static final boolean ADD_PATH_AFFINITY = false;
+
     private static final Identifier MODIFIER = AscensionCraft.prefix("inner_world_ambient");
 
     @SubscribeEvent
@@ -54,7 +62,7 @@ public final class InnerWorldQi {
         ChunkQiHandler qi = ChunkHelper.getQiHandler(chunk);
         qi.addCapacityFlatModifier(Modifier.base(MODIFIER, capacity));
         qi.addRegenFlatModifier(Modifier.base(MODIFIER, regen));
-        if (info.path() != null) {
+        if (ADD_PATH_AFFINITY && info.path() != null) {
             double affinity = info.variant().qi().affinity() * tierScale * strongest;
             ChunkHelper.getAffinityProvider(chunk).addFlatModifier(info.path(), Modifier.base(MODIFIER, affinity));
         }

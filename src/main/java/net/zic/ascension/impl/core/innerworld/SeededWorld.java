@@ -9,7 +9,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.zic.ascension.common.blocks.ModBlocks;
 
 import java.util.ArrayList;
@@ -218,24 +217,57 @@ final class SeededWorld {
     }
 
     private Water waterFor(Region region, int lx, int lz, double dist) {
-        Variant v = region.a().variant();
-        double fade = region.fade();
-        double freq = v.terrain().frequency() * freqJitter;
         double wx = lx + 9.0 * (InnerWorldNoise.noise(seed + 60, lx / 55.0, lz / 55.0) - 0.5) * 2.0;
         double wz = lz + 9.0 * (InnerWorldNoise.noise(seed + 61, lx / 55.0 + 31.7, lz / 55.0 - 12.9) - 0.5) * 2.0;
-        // never near the dais, and fading out towards a region border so water doesn't end in a wall
-        double penalty = 0.35 * (1.0 - fade) + 0.3 * (1.0 - InnerWorldNoise.smoothstep(14.0, 44.0, dist));
+        double daisPenalty = 0.3 * (1.0 - InnerWorldNoise.smoothstep(14.0, 44.0, dist));
 
-        Water best = null;
+        // BOTH neighbouring regions are consulted, with their weights, so the water field is continuous across a region border
+        // (a column on either side of the border computes the same thing for each theme). That is what stops a river or lake
+        // from being cut off dead at a border: it either continues (both sides have it) or narrows away smoothly (one side has it).
+        Theme a = region.a();
+        Theme b = region.b();
+        boolean aRivers = hasFeature(a.variant(), FeatureType.RIVERS);
+        boolean bRivers = b != a && hasFeature(b.variant(), FeatureType.RIVERS);
+        Water best = waterOfTheme(a, region.wa(), bRivers, lx, lz, wx, wz, daisPenalty, null);
+        if (b != a) {
+            best = waterOfTheme(b, 1.0 - region.wa(), aRivers, lx, lz, wx, wz, daisPenalty, best);
+        }
+        return best;
+    }
+
+    private static boolean hasFeature(Variant variant, FeatureType type) {
+        for (Feature f : variant.features()) {
+            if (f.type() == type) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Water waterOfTheme(Theme theme, double weight, boolean otherHasRivers, int lx, int lz, double wx, double wz,
+                               double daisPenalty, Water best) {
+        Variant v = theme.variant();
+        double fade = Mth.clamp((weight - 0.5) * 2.0, 0.0, 1.0);   // 1 deep inside this theme, 0 on its border and beyond
+        double freq = v.terrain().frequency() * freqJitter;
+        boolean anyRivers = otherHasRivers || hasFeature(v, FeatureType.RIVERS);
         for (Feature f : v.features()) {
             double margin;
             double bank;
             double span;
             int depth;
             if (f.type() == FeatureType.RIVERS) {
-                double n = InnerWorldNoise.noise(seed + 75, wx / (95.0 / freq), wz / (95.0 / freq));
+                // One river network for the whole plot: the line does NOT depend on the region's terrain frequency, so two river
+                // regions side by side share the same river. A slow "drainage" mask makes rivers appear in only part of the land
+                // and taper out where it fades, so they are rare and end cleanly, never in a wall.
+                double density = Math.min(1.0, f.density());
+                double n = InnerWorldNoise.noise(seed + 75, wx / 150.0, wz / 150.0);
                 double shape = 1.0 - Math.abs(n - 0.5) * 2.0;
-                margin = shape - (1.0 - (0.035 + 0.06 * Math.min(1.0, f.density())));
+                double mask = InnerWorldNoise.noise(seed + 76, wx / 300.0, wz / 300.0);
+                double threshold = 0.6 - 0.2 * density;
+                double maskFade = InnerWorldNoise.smoothstep(threshold, threshold + 0.1, mask);
+                margin = shape - (1.0 - (0.05 + 0.08 * density)) - (1.0 - maskFade) * 0.12;
+                // when the next region has rivers too, the river simply continues: no border penalty at all
+                margin -= otherHasRivers ? 0.0 : 0.3 * (1.0 - fade);
                 bank = 0.17;
                 span = 0.04;
                 depth = 2;
@@ -245,14 +277,27 @@ final class SeededWorld {
                 double n = 0.86 * InnerWorldNoise.noise(seed + 50, wx / scale, wz / scale)
                         + 0.14 * InnerWorldNoise.noise(seed + 52, wx / (scale * 0.6), wz / (scale * 0.6));
                 n = 0.5 + (n - 0.5) * 1.5;
-                margin = n - (0.5 + (1.0 - Math.min(1.0, f.density())) * 0.3);
+                margin = n - (0.5 + (1.0 - Math.min(1.0, f.density())) * 0.3) - 0.35 * (1.0 - fade);
+                if (spring) {
+                    // spirit springs are rare: they only exist inside slow, wide "spirit vein" patches (about a fifth of the land)
+                    double veins = InnerWorldNoise.noise(seed + 77, wx / 220.0, wz / 220.0);
+                    margin -= (1.0 - InnerWorldNoise.smoothstep(0.58, 0.68, veins)) * 0.2;
+                    if (anyRivers) {
+                        // ...and never near a river: the same river network that rivers use (same line, same drainage mask) is
+                        // measured here, and anything within roughly 25 blocks of where a river can run is ruled out
+                        double rn = InnerWorldNoise.noise(seed + 75, wx / 150.0, wz / 150.0);
+                        double nearRiver = InnerWorldNoise.smoothstep(0.5, 0.6, 1.0 - Math.abs(rn - 0.5) * 2.0);
+                        double riverLand = InnerWorldNoise.smoothstep(0.46, 0.56, InnerWorldNoise.noise(seed + 76, wx / 300.0, wz / 300.0));
+                        margin -= nearRiver * riverLand;
+                    }
+                }
                 bank = spring ? 0.2 : 0.28;
                 span = spring ? 0.12 : 0.18;
                 depth = spring ? 3 : 4;
             } else {
                 continue;
             }
-            margin -= penalty;
+            margin -= daisPenalty;
             if (margin > -bank && (best == null || margin > best.margin())) {
                 best = new Water(f, margin, bank, span, depth);
             }
@@ -443,11 +488,6 @@ final class SeededWorld {
             }
         }
 
-        // ---- trees (drawn after decoration so a trunk replaces any plant on its column)
-        if (hasTrees && !dais) {
-            trees(level, pos, x, z, lx, lz);
-        }
-
         // ---- fluids, once every neighbour exists
         if (pool || shoreZone) {
             completeFluids(level, pos, x, z, lx, lz, shape);
@@ -504,39 +544,33 @@ final class SeededWorld {
 
     // ------------------------------------------------------------------------------------------------ trees
     //
-    // Same rule as every other feature: a tree is a pure function of the seed, and each COLUMN draws whichever trees reach
-    // it, so nothing writes into a neighbouring column and chunks still generate in any order. One tree per 6-block cell
-    // (jittered), picked from the TREES features of the region that owns the cell, so a forest can mix big oaks and small
-    // birches. A tree stands on the final ground height and never on water, banks, mesas, spires or the dais.
+    // Trees are planted by VANILLA configured features (minecraft:oak, fancy_oak, spruce, mega_jungle_tree, cherry, ...), named per
+    // tree entry in the profile ("tree"). This class only decides WHERE: one jittered site per 6-block cell, picked from the TREES
+    // entries of the region that owns the cell. InnerWorldTrees plants them once the land around is built.
 
     private static final int TREE_CELL = 6;
-    private static final int TREE_REACH_CELLS = 3;   // canopy radius is capped at 12, +width, so 3 cells (18 blocks) is enough
 
-    private record Tree(int trunkX, int trunkZ, int baseY, int height, int radius, InnerWorldProfile.TreeShape shape,
-                        int width, Block log, Block leaves) {
-        int top() {
-            return baseY + height;
-        }
-
-        double centreX() {
-            return trunkX + (width == 2 ? 1.0 : 0.5);
-        }
-
-        double centreZ() {
-            return trunkZ + (width == 2 ? 1.0 : 0.5);
-        }
+    /** A tree to plant with a vanilla feature: pos = first free block above the ground. */
+    record TreeSpot(BlockPos pos, Identifier feature, long seed) {
     }
 
-    private static final Tree NO_TREE = new Tree(0, 0, 0, 0, 0, InnerWorldProfile.TreeShape.ROUND, 1, null, null);
-    private final Map<Long, Tree> treeCache = new HashMap<>();
+    private record TreeSite(int x, int z, int y, Identifier feature) {
+    }
 
-    private Tree treeInCell(int cx, int cz) {
+    private static final TreeSite NO_TREE = new TreeSite(0, 0, 0, null);
+    private final Map<Long, TreeSite> treeCache = new HashMap<>();
+
+    boolean hasTrees() {
+        return hasTrees;
+    }
+
+    private TreeSite treeInCell(int cx, int cz) {
         long key = ((long) (cx & 0xFFFFFFF) << 28) | (cz & 0xFFFFFFFL);
-        Tree cached = treeCache.get(key);
+        TreeSite cached = treeCache.get(key);
         if (cached != null) {
             return cached == NO_TREE ? null : cached;
         }
-        Tree made = computeTree(cx, cz);
+        TreeSite made = computeTree(cx, cz);
         if (treeCache.size() > 60000) {
             treeCache.clear();
         }
@@ -544,18 +578,18 @@ final class SeededWorld {
         return made;
     }
 
-    private Tree computeTree(int cx, int cz) {
+    private TreeSite computeTree(int cx, int cz) {
         double roll = InnerWorldNoise.hash(seed + 8000, cx, cz);
-        double px = (cx + 0.15 + 0.7 * InnerWorldNoise.hash(seed + 8001, cx, cz)) * TREE_CELL;
-        double pz = (cz + 0.15 + 0.7 * InnerWorldNoise.hash(seed + 8002, cx, cz)) * TREE_CELL;
-        double fromOrigin = Math.hypot(px, pz);
+        int tx = (int) Math.floor((cx + 0.15 + 0.7 * InnerWorldNoise.hash(seed + 8001, cx, cz)) * TREE_CELL);
+        int tz = (int) Math.floor((cz + 0.15 + 0.7 * InnerWorldNoise.hash(seed + 8002, cx, cz)) * TREE_CELL);
+        double fromOrigin = Math.hypot(tx, tz);
         if (fromOrigin < 16.0) {
             return null;
         }
-        Variant variant = regionAt((int) px, (int) pz, fromOrigin).a().variant();
+        Variant variant = regionAt(tx, tz, fromOrigin).a().variant();
         double total = 0.0;
         for (Feature f : variant.features()) {
-            if (f.type() == FeatureType.TREES) {
+            if (f.type() == FeatureType.TREES && f.tree().isPresent()) {
                 total += Math.min(1.0, f.density());
             }
         }
@@ -565,7 +599,7 @@ final class SeededWorld {
         Feature chosen = null;
         double acc = 0.0;
         for (Feature f : variant.features()) {
-            if (f.type() == FeatureType.TREES) {
+            if (f.type() == FeatureType.TREES && f.tree().isPresent()) {
                 acc += Math.min(1.0, f.density());
                 if (roll < acc) {
                     chosen = f;
@@ -576,128 +610,38 @@ final class SeededWorld {
         if (chosen == null) {
             return null;
         }
-
-        int tx = (int) Math.floor(px);
-        int tz = (int) Math.floor(pz);
         Shape ground = shapeAt(tx, tz);
         if (ground.dais() || ground.pool() || ground.shoreZone() || ground.raise() != null) {
             return null;
         }
-        int width = chosen.width() >= 2 ? 2 : 1;
-        if (width == 2) {
-            // a thick trunk needs reasonably level, dry ground under all four of its columns
-            for (int[] d : new int[][]{{1, 0}, {0, 1}, {1, 1}}) {
-                Shape other = shapeAt(tx + d[0], tz + d[1]);
-                if (other.pool() || other.shoreZone() || other.raise() != null || Math.abs(other.ground() - ground.ground()) > 2) {
-                    return null;
-                }
-            }
-        }
-        int radius = (int) Math.max(1, Math.min(12, Math.round(Mth.lerp(InnerWorldNoise.hash(seed + 8003, cx, cz), chosen.minSize(), chosen.maxSize()))));
-        int height = (int) Math.max(2, Math.round(Mth.lerp(InnerWorldNoise.hash(seed + 8004, cx, cz), chosen.minHeight(), chosen.maxHeight())));
-        Block log = chosen.block().orElse(Blocks.OAK_LOG);
-        return new Tree(tx, tz, ground.ground(), height, radius, chosen.shape(), width, log, chosen.leaves().orElse(null));
+        return new TreeSite(tx, tz, ground.ground() + 1, chosen.tree().get());
     }
 
-    /** -1 = no leaves at this height. Otherwise the canopy radius at height y. */
-    private static double canopyRadius(Tree t, int y) {
-        int dy = y - t.top();
-        double r = t.radius();
-        switch (t.shape()) {
-            case ROUND, WEEPING -> {
-                double e = dy >= 0 ? dy / (r * 0.85 + 0.5) : -dy / (r * 0.6 + 0.5);
-                return e > 1.0 ? -1.0 : r * Math.sqrt(1.0 - e * e);
-            }
-            case DOME -> {
-                if (dy < -2 || dy > r * 0.7) {
-                    return -1.0;
-                }
-                if (dy < 0) {
-                    return r * 0.85;
-                }
-                double e = dy / (r * 0.7 + 0.5);
-                return r * Math.sqrt(1.0 - e * e);
-            }
-            case UMBRELLA -> {
-                return dy == 0 ? r : dy == 1 ? r * 0.65 : dy == -1 ? r * 0.4 : -1.0;
-            }
-            case CONE -> {
-                int span = (int) (t.height() * 0.85);
-                int depth = t.top() + 1 - y;
-                if (depth < 0 || depth > span) {
-                    return -1.0;
-                }
-                double cone = r * Math.pow(depth / (double) (span + 1), 0.9);
-                return depth % 2 == 1 ? Math.max(0.0, cone - 0.8) : cone;
-            }
-        }
-        return -1.0;
-    }
-
-    private static BlockState leafState(Block block) {
-        BlockState state = block.defaultBlockState();
-        // persistent leaves never decay; without this the canopy would wither away on random ticks
-        return state.hasProperty(BlockStateProperties.PERSISTENT) ? state.setValue(BlockStateProperties.PERSISTENT, true) : state;
-    }
-
-    private void trees(ServerLevel level, BlockPos.MutableBlockPos pos, int x, int z, int lx, int lz) {
+    /** The trees whose trunk base lies inside this chunk (plot-relative chunk bounds are derived from the plot centre). */
+    List<TreeSpot> treeSpotsInChunk(int chunkX, int chunkZ, int centerX, int centerZ) {
+        List<TreeSpot> spots = new ArrayList<>();
         if (!hasTrees) {
-            return;
+            return spots;
         }
-        int gx = Math.floorDiv(lx, TREE_CELL);
-        int gz = Math.floorDiv(lz, TREE_CELL);
-        for (int dx = -TREE_REACH_CELLS; dx <= TREE_REACH_CELLS; dx++) {
-            for (int dz = -TREE_REACH_CELLS; dz <= TREE_REACH_CELLS; dz++) {
-                Tree tree = treeInCell(gx + dx, gz + dz);
-                if (tree == null) {
+        int minX = chunkX * 16 - centerX;
+        int minZ = chunkZ * 16 - centerZ;
+        for (int cx = Math.floorDiv(minX, TREE_CELL); cx <= Math.floorDiv(minX + 15, TREE_CELL); cx++) {
+            for (int cz = Math.floorDiv(minZ, TREE_CELL); cz <= Math.floorDiv(minZ + 15, TREE_CELL); cz++) {
+                TreeSite site = treeInCell(cx, cz);
+                if (site == null || site.x() < minX || site.x() > minX + 15 || site.z() < minZ || site.z() > minZ + 15) {
                     continue;
                 }
-                double rx = lx + 0.5 - tree.centreX();
-                double rz = lz + 0.5 - tree.centreZ();
-                double dist = Math.sqrt(rx * rx + rz * rz);
-                if (dist > tree.radius() + 1.5) {
-                    continue;
-                }
-
-                // trunk
-                double half = tree.width() / 2.0 + 0.01;
-                if (Math.abs(rx) < half && Math.abs(rz) < half) {
-                    BlockState log = tree.log().defaultBlockState();
-                    for (int y = tree.baseY() + 1; y <= tree.top(); y++) {
-                        level.setBlock(pos.set(x, y, z), log, SET_FLAGS);
-                    }
-                }
-
-                // canopy
-                if (tree.leaves() == null) {
-                    continue;
-                }
-                BlockState leaves = leafState(tree.leaves());
-                boolean weeping = tree.shape() == InnerWorldProfile.TreeShape.WEEPING;
-                int yLo = tree.top() - (tree.shape() == InnerWorldProfile.TreeShape.CONE ? (int) (tree.height() * 0.85)
-                        : (int) (tree.radius() * 0.65) + (weeping ? 8 : 0));
-                int yHi = tree.top() + (tree.shape() == InnerWorldProfile.TreeShape.CONE ? 1 : tree.radius() + 1);
-                for (int y = yLo; y <= yHi; y++) {
-                    double r = canopyRadius(tree, y);
-                    boolean strand = false;
-                    if (r < 0.0 && weeping && dist >= tree.radius() * 0.55 && dist <= tree.radius()) {
-                        int hangTop = tree.top() - (int) (tree.radius() * 0.55);
-                        int length = 2 + (int) (InnerWorldNoise.hash(seed + 8200, x, z) * 5.0);
-                        strand = y <= hangTop && y > hangTop - length;
-                    }
-                    if (!strand && (r < 0.0 || dist > r + 0.3)) {
-                        continue;
-                    }
-                    if (!strand && dist > r * 0.75 && InnerWorldNoise.hash3(seed + 8100, x, y, z) < 0.18) {
-                        continue; // ragged outer edge
-                    }
-                    pos.set(x, y, z);
-                    if (level.getBlockState(pos).isAir()) {
-                        level.setBlock(pos, leaves, SET_FLAGS);
-                    }
-                }
+                long treeSeed = (long) (InnerWorldNoise.hash(seed + 8100, site.x(), site.z()) * Long.MAX_VALUE);
+                spots.add(new TreeSpot(new BlockPos(centerX + site.x(), site.y(), centerZ + site.z()), site.feature(), treeSeed));
             }
         }
+        return spots;
+    }
+
+    /** True once the terrain column at this plot-relative position has been written (a deep layer block that is never carved exists). */
+    boolean isColumnBuilt(ServerLevel level, int centerX, int centerZ, int lx, int lz) {
+        Shape shape = shapeAt(lx, lz);
+        return !level.getBlockState(new BlockPos(centerX + lx, shape.ground() - shape.thickness() + 2, centerZ + lz)).isAir();
     }
 
     // ------------------------------------------------------------------------------------------------ structural features

@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.zic.ascension.impl.core.innerworld.InnerWorld;
 import net.zic.ascension.impl.core.innerworld.InnerWorldGrowth;
+import net.zic.ascension.impl.core.innerworld.InnerWorldDebug;
 import net.zic.ascension.impl.core.innerworld.InnerWorldPlots;
 
 /**
@@ -46,6 +47,15 @@ public final class InnerWorldCommand {
                                                 ctx.getSource(),
                                                 EntityArgument.getPlayer(ctx, "player"),
                                                 IntegerArgumentType.getInteger(ctx, "tier"))))))
+                .then(Commands.literal("debug")
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .executes(ctx -> {
+                                    ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+                                    for (String line : InnerWorldDebug.report(target)) {
+                                        ctx.getSource().sendSuccess(() -> Component.literal(line), false);
+                                    }
+                                    return 1;
+                                })))
                 .then(Commands.literal("info")
                         .then(Commands.argument("player", EntityArgument.player())
                                 .executes(ctx -> info(ctx.getSource(), EntityArgument.getPlayer(ctx, "player")))));

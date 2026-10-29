@@ -62,6 +62,12 @@ public final class InnerWorldPlots {
         public int generatorVersion;
         /** Permanent, hidden. Created once at first cast. */
         public InnerWorldSeed.Seed seed;
+        /** Last known life major realm of the owner (-1 = none); updated whenever structures are scanned. */
+        public int lifeRealm = -1;
+        /** Structure grid cells already handled (placed, or permanently skipped), as "cx:cz". */
+        public java.util.Set<String> structureSites = new java.util.HashSet<>();
+        /** Footprints of placed structures as {minX, minZ, maxX, maxZ} (world blocks, margin included): trees are never planted inside them. */
+        public java.util.List<int[]> structureBoxes = new java.util.ArrayList<>();
         public Session session;
         /** Set when the ghost died while the owner was offline; applied on next login. */
         public Origin pendingReturn;

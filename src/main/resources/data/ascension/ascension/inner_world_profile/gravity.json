@@ -68,7 +68,92 @@
           }
         ],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:cow",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:sheep",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:pig",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:chicken",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:rabbit",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:horse",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:zombie",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:spider",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:creeper",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:village_plains",
+          "weight": 3.0,
+          "spacing": 320
+        },
+        {
+          "structure": "minecraft:pillager_outpost",
+          "weight": 1.0,
+          "spacing": 420
+        },
+        {
+          "structure": "minecraft:ruined_portal",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
     },
     {
       "weight": 1.0,
@@ -127,7 +212,62 @@
           }
         ],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:rabbit",
+            "weight": 5,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:husk",
+            "weight": 6,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:spider",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:creeper",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:village_desert",
+          "weight": 3.0,
+          "spacing": 320
+        },
+        {
+          "structure": "minecraft:desert_pyramid",
+          "weight": 1.0,
+          "spacing": 360
+        },
+        {
+          "structure": "minecraft:ruined_portal_desert",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
     },
     {
       "weight": 0.9,
@@ -189,7 +329,63 @@
           }
         ],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:zombified_piglin",
+            "weight": 6,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:piglin",
+            "weight": 4,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:hoglin",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:strider",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:magma_cube",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:bastion_remnant",
+          "weight": 1.0,
+          "spacing": 360
+        },
+        {
+          "structure": "minecraft:ruined_portal_nether",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
     },
     {
       "weight": 0.8,
@@ -240,7 +436,33 @@
           }
         ],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:enderman",
+            "weight": 8,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:endermite",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:end_city",
+          "weight": 1.0,
+          "spacing": 420
+        }
+      ]
     }
   ]
 }

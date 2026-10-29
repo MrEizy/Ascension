@@ -62,7 +62,57 @@
           }
         ],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:zombie",
+            "weight": 5,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 5,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:spider",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:creeper",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 1
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:mineshaft",
+          "weight": 1.0,
+          "spacing": 300
+        },
+        {
+          "structure": "minecraft:ruined_portal",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        },
+        {
+          "structure": "minecraft:trail_ruins",
+          "weight": 1.0,
+          "spacing": 300,
+          "requires_life": false
+        }
+      ]
     },
     {
       "weight": 1.0,
@@ -100,15 +150,8 @@
       "features": [
         {
           "type": "trees",
-          "block": "minecraft:birch_log",
-          "density": 0.04,
-          "min_size": 3,
-          "max_size": 4,
-          "min_height": 5,
-          "max_height": 8,
-          "shape": "round",
-          "width": 1,
-          "leaves": "minecraft:birch_leaves"
+          "tree": "minecraft:birch",
+          "density": 0.06
         }
       ],
       "qi": {
@@ -125,7 +168,92 @@
             "density": 0.005
           }
         ]
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:cow",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:sheep",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:pig",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:chicken",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:rabbit",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:horse",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:zombie",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:spider",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:creeper",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:village_plains",
+          "weight": 3.0,
+          "spacing": 320
+        },
+        {
+          "structure": "minecraft:pillager_outpost",
+          "weight": 1.0,
+          "spacing": 420
+        },
+        {
+          "structure": "minecraft:ruined_portal",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
     },
     {
       "weight": 0.9,
@@ -187,7 +315,63 @@
           }
         ],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:zombie",
+            "weight": 5,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 5,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:spider",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:creeper",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:goat",
+            "weight": 4,
+            "min_group": 1,
+            "max_group": 3
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:mineshaft",
+          "weight": 1.0,
+          "spacing": 300
+        },
+        {
+          "structure": "minecraft:ruined_portal",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        },
+        {
+          "structure": "minecraft:trail_ruins",
+          "weight": 1.0,
+          "spacing": 300,
+          "requires_life": false
+        }
+      ]
     },
     {
       "weight": 0.8,
@@ -238,7 +422,56 @@
           }
         ],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:polar_bear",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:rabbit",
+            "weight": 4,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:fox",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:stray",
+            "weight": 6,
+            "min_group": 1,
+            "max_group": 3
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:village_snowy",
+          "weight": 3.0,
+          "spacing": 320
+        },
+        {
+          "structure": "minecraft:igloo",
+          "weight": 1.0,
+          "spacing": 300
+        },
+        {
+          "structure": "minecraft:ruined_portal",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
     }
   ]
 }

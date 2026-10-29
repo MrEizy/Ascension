@@ -38,44 +38,23 @@
       "features": [
         {
           "type": "trees",
-          "block": "minecraft:oak_log",
-          "density": 0.035,
-          "min_size": 6,
-          "max_size": 9,
-          "min_height": 14,
-          "max_height": 24,
-          "shape": "dome",
-          "width": 2,
-          "leaves": "minecraft:oak_leaves"
+          "tree": "minecraft:fancy_oak",
+          "density": 0.0525
         },
         {
           "type": "trees",
-          "block": "minecraft:oak_log",
-          "density": 0.1,
-          "min_size": 3,
-          "max_size": 4,
-          "min_height": 5,
-          "max_height": 8,
-          "shape": "round",
-          "width": 1,
-          "leaves": "minecraft:oak_leaves"
+          "tree": "minecraft:oak",
+          "density": 0.15
         },
         {
           "type": "trees",
-          "block": "minecraft:birch_log",
-          "density": 0.03,
-          "min_size": 2,
-          "max_size": 3,
-          "min_height": 6,
-          "max_height": 9,
-          "shape": "round",
-          "width": 1,
-          "leaves": "minecraft:birch_leaves"
+          "tree": "minecraft:birch",
+          "density": 0.045
         },
         {
           "type": "rivers",
           "block": "minecraft:water",
-          "density": 0.18,
+          "density": 0.126,
           "shore": "minecraft:sand"
         }
       ],
@@ -105,7 +84,104 @@
             "density": 0.006
           }
         ]
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 3,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:cow",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:sheep",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:pig",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:chicken",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:rabbit",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:horse",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:zombie",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:spider",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:creeper",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:fox",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:wolf",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 3
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:village_plains",
+          "weight": 3.0,
+          "spacing": 320
+        },
+        {
+          "structure": "minecraft:pillager_outpost",
+          "weight": 1.0,
+          "spacing": 420
+        },
+        {
+          "structure": "minecraft:ruined_portal",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
     },
     {
       "weight": 1.1,
@@ -135,27 +211,13 @@
       "features": [
         {
           "type": "trees",
-          "block": "minecraft:jungle_log",
-          "density": 0.05,
-          "min_size": 7,
-          "max_size": 11,
-          "min_height": 22,
-          "max_height": 34,
-          "shape": "dome",
-          "width": 2,
-          "leaves": "minecraft:jungle_leaves"
+          "tree": "minecraft:mega_jungle_tree",
+          "density": 0.075
         },
         {
           "type": "trees",
-          "block": "minecraft:jungle_log",
-          "density": 0.09,
-          "min_size": 3,
-          "max_size": 5,
-          "min_height": 8,
-          "max_height": 13,
-          "shape": "umbrella",
-          "width": 1,
-          "leaves": "minecraft:jungle_leaves"
+          "tree": "minecraft:jungle_tree",
+          "density": 0.135
         },
         {
           "type": "pools",
@@ -186,7 +248,87 @@
             "density": 0.007
           }
         ]
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 3,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:cow",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:sheep",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:pig",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:chicken",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:rabbit",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:horse",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:zombie",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:spider",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:creeper",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:jungle_pyramid",
+          "weight": 1.0,
+          "spacing": 360
+        },
+        {
+          "structure": "minecraft:ruined_portal_jungle",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
     },
     {
       "weight": 1.0,
@@ -220,27 +362,13 @@
       "features": [
         {
           "type": "trees",
-          "block": "minecraft:spruce_log",
-          "density": 0.1,
-          "min_size": 3,
-          "max_size": 5,
-          "min_height": 8,
-          "max_height": 16,
-          "shape": "cone",
-          "width": 1,
-          "leaves": "minecraft:spruce_leaves"
+          "tree": "minecraft:spruce",
+          "density": 0.15
         },
         {
           "type": "trees",
-          "block": "minecraft:spruce_log",
-          "density": 0.02,
-          "min_size": 6,
-          "max_size": 8,
-          "min_height": 20,
-          "max_height": 30,
-          "shape": "cone",
-          "width": 2,
-          "leaves": "minecraft:spruce_leaves"
+          "tree": "minecraft:mega_spruce",
+          "density": 0.03
         }
       ],
       "qi": {
@@ -265,7 +393,99 @@
             "density": 0.005
           }
         ]
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 3,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:cow",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:sheep",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:pig",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:chicken",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:rabbit",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:horse",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:zombie",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:spider",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:creeper",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:fox",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:wolf",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 3
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:village_taiga",
+          "weight": 3.0,
+          "spacing": 320
+        },
+        {
+          "structure": "minecraft:ruined_portal",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
     },
     {
       "weight": 0.9,
@@ -295,31 +515,17 @@
       "features": [
         {
           "type": "trees",
-          "block": "minecraft:cherry_log",
-          "density": 0.04,
-          "min_size": 5,
-          "max_size": 8,
-          "min_height": 9,
-          "max_height": 15,
-          "shape": "dome",
-          "width": 2,
-          "leaves": "minecraft:cherry_leaves"
+          "tree": "minecraft:cherry",
+          "density": 0.06
         },
         {
           "type": "trees",
-          "block": "minecraft:cherry_log",
-          "density": 0.07,
-          "min_size": 3,
-          "max_size": 4,
-          "min_height": 5,
-          "max_height": 8,
-          "shape": "round",
-          "width": 1,
-          "leaves": "minecraft:cherry_leaves"
+          "tree": "minecraft:cherry",
+          "density": 0.105
         },
         {
           "type": "springs",
-          "density": 0.05
+          "density": 0.03
         }
       ],
       "qi": {
@@ -336,7 +542,92 @@
             "density": 0.006
           }
         ]
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 3,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:cow",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:sheep",
+            "weight": 10,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:pig",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:chicken",
+            "weight": 8,
+            "min_group": 2,
+            "max_group": 4
+          },
+          {
+            "entity": "minecraft:rabbit",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:horse",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:zombie",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:spider",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:creeper",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:village_plains",
+          "weight": 3.0,
+          "spacing": 320
+        },
+        {
+          "structure": "minecraft:pillager_outpost",
+          "weight": 1.0,
+          "spacing": 420
+        },
+        {
+          "structure": "minecraft:ruined_portal",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
     },
     {
       "weight": 0.8,
@@ -366,15 +657,8 @@
       "features": [
         {
           "type": "trees",
-          "block": "minecraft:mangrove_log",
-          "density": 0.08,
-          "min_size": 4,
-          "max_size": 7,
-          "min_height": 7,
-          "max_height": 13,
-          "shape": "weeping",
-          "width": 1,
-          "leaves": "minecraft:mangrove_leaves"
+          "tree": "minecraft:mangrove",
+          "density": 0.12
         },
         {
           "type": "pools",
@@ -385,7 +669,7 @@
         {
           "type": "rivers",
           "block": "minecraft:water",
-          "density": 0.3,
+          "density": 0.21,
           "shore": "minecraft:mud"
         }
       ],
@@ -406,7 +690,57 @@
         ],
         "treasure": [],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 3,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:frog",
+            "weight": 6,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:slime",
+            "weight": 4,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:bogged",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:witch",
+            "weight": 1,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:zombie",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:swamp_hut",
+          "weight": 1.0,
+          "spacing": 320
+        },
+        {
+          "structure": "minecraft:ruined_portal_swamp",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
     }
   ]
 }

@@ -1,47 +1,66 @@
 package net.zic.ascension.impl.core.innerworld;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
-import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.configuration.mob_traits.MobTraitReference;
+import net.zic.ascension.configuration.mobs.MobConfiguration;
+import net.zic.ascension.configuration.mobs.PotentialTrait;
+import net.zic.ascension.mob_cultivation.oliver_rewrite.MobCultivationEliteTier;
+import net.zic.ascension.mob_cultivation.oliver_rewrite.MobConfigurationHolder;
+import net.zic.ascension.mob_cultivation.oliver_rewrite.MobConfigurationInstance;
+import net.zic.ascension.mob_cultivation.oliver_rewrite.MobSpawnHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * THE UNWIRED STEP of the mob cultivation hookup. The inner world decides the allowed realm range for each mob it spawns
- * (see InnerWorldMobs.realmRange). This class hands that range to your Mob Cultivation system.
+ * Hands the inner world's allowed realm range to your mob cultivation system, written against MobSpawnHelper /
+ * MobConfigurationInstance as they are today.
  *
- * I haven't seen your mob cultivation code, so for now the range is written onto the mob as two plain string tags:
- *   ascension_inner_world_realm_min:<n>   and   ascension_inner_world_realm_max:<n>
- * and your MobCultivationEvents / roller needs to read them when it rolls the mob's realm (before it assigns one) and clamp
- * its roll into [min, max]. Send me the roller, the profile record and the attachment type and I'll wire it directly instead.
+ * Your rewrite has no numeric "soul realm" on a mob yet: what a mob is, is its elite TIER plus the traits rolled for that
+ * tier (and MobCultivationEliteTier is marked deprecated, to become trait tiers). So a realm index maps onto the tier
+ * ladder: realm 0 = NORMAL, 1 = ELITE, 2 and above = ANCIENT. assign() picks a realm in [min, max], turns it into that tier,
+ * and rolls the tier's traits exactly the way MobSpawnHelper.generateInstance does. When trait tiers replace the enum,
+ * only TIERS and assign() below need to change.
+ *
+ * ORDER MATTERS: FinalizeSpawnEvent (MobEventHandler.onEntitySpawn) rolls its own random tier, so this must run AFTER
+ * finalize and BEFORE the mob joins the level (EntityJoinLevelEvent applies the instance), which is how InnerWorldMobs does it.
+ * For mobs that are already in the world (villagers placed by a structure) call applyNow() afterwards.
  */
 public final class InnerWorldMobRealms {
     private InnerWorldMobRealms() {
     }
 
-    public static final String MIN_TAG = "ascension_inner_world_realm_min:";
-    public static final String MAX_TAG = "ascension_inner_world_realm_max:";
+    private static final MobCultivationEliteTier[] TIERS = {
+            MobCultivationEliteTier.NORMAL, MobCultivationEliteTier.ELITE, MobCultivationEliteTier.ANCIENT
+    };
 
-    private static boolean warned;
-
-    public static void assign(Mob mob, int minRealm, int maxRealm) {
-        mob.addTag(MIN_TAG + minRealm);
-        mob.addTag(MAX_TAG + maxRealm);
-        if (!warned) {
-            warned = true;
-            AscensionCraft.LOGGER.warn("Inner World mobs: realm range [{}..{}] is written as entity tags only. MobCultivationEvents must read '{}' / '{}' tags to apply it (InnerWorldMobRealms).",
-                    minRealm, maxRealm, MIN_TAG, MAX_TAG);
+    public static void assign(Mob mob, int minRealm, int maxRealm, RandomSource random) {
+        if (!MobSpawnHelper.hasConfig(mob)) {
+            return; // this entity type has no mob cultivation configuration
         }
-    }
+        MobConfiguration configuration = MobSpawnHelper.getConfig(mob);
+        int realm = minRealm + random.nextInt(Math.max(1, maxRealm - minRealm + 1));
+        MobCultivationEliteTier tier = TIERS[Math.max(0, Math.min(realm, TIERS.length - 1))];
 
-    /** Reads the range back, for your roller: returns {min, max} or null if the mob wasn't spawned by the inner world. */
-    public static int[] read(Mob mob) {
-        Integer min = null;
-        Integer max = null;
-        for (String tag : mob.getTags()) {
-            if (tag.startsWith(MIN_TAG)) {
-                min = Integer.parseInt(tag.substring(MIN_TAG.length()));
-            } else if (tag.startsWith(MAX_TAG)) {
-                max = Integer.parseInt(tag.substring(MAX_TAG.length()));
+        List<MobTraitReference> traits = new ArrayList<>();
+        for (PotentialTrait potential : configuration.getPotentialTraits(tier)) {
+            if (potential.test(mob) && random.nextDouble() <= potential.chance()) {
+                traits.add(potential.trait());
             }
         }
-        return min == null || max == null ? null : new int[]{min, max};
+        MobSpawnHelper.getConfigHolder(mob).setMobConfigurationInstance(new MobConfigurationInstance(tier, traits));
+    }
+
+    /** For a mob that has already joined the level: apply the freshly assigned instance to the entity and its origin source. */
+    public static void applyNow(Mob mob) {
+        if (!MobSpawnHelper.hasConfigHolder(mob)) {
+            return;
+        }
+        MobConfigurationHolder holder = MobSpawnHelper.getConfigHolder(mob);
+        holder.applyConfigurationToEntity();
+        if (holder.getSource() != null) {
+            holder.applyConfigurationToSource();
+        }
     }
 }
