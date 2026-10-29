@@ -54,7 +54,33 @@
           }
         ],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:enderman",
+            "weight": 8,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:endermite",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:end_city",
+          "weight": 1.0,
+          "spacing": 420
+        }
+      ]
     },
     {
       "weight": 1.0,
@@ -122,7 +148,33 @@
           }
         ],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 3,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:enderman",
+            "weight": 8,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:endermite",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:end_city",
+          "weight": 1.0,
+          "spacing": 420
+        }
+      ]
     },
     {
       "weight": 0.9,
@@ -179,7 +231,33 @@
           }
         ],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:enderman",
+            "weight": 8,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:endermite",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:end_city",
+          "weight": 1.0,
+          "spacing": 420
+        }
+      ]
     },
     {
       "weight": 0.8,
@@ -230,7 +308,33 @@
           }
         ],
         "herbs": []
-      }
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:enderman",
+            "weight": 8,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:endermite",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:end_city",
+          "weight": 1.0,
+          "spacing": 420
+        }
+      ]
     }
   ]
 }

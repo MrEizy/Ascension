@@ -45,6 +45,7 @@ public final class InnerWorldGrowth {
     }
 
     public static void clear() {
+        InnerWorldTrees.clear();
         SEEDED.clear();
         QUEUE.clear();
         QUEUED.clear();
@@ -150,6 +151,7 @@ public final class InnerWorldGrowth {
                 if (seeded != null) {
                     InnerWorldBiomes.apply(level, seeded, current.cx(), current.cz(), center.getX(), center.getZ());
                     InnerWorldHerbs.populateChunk(level, seeded, plot, current.cx(), current.cz(), center.getX(), center.getZ());
+                    InnerWorldTrees.onChunkBuilt(level, seeded, plot, current.cx(), current.cz(), center);
                 }
                 finish(server, plot, current);
                 current = null;

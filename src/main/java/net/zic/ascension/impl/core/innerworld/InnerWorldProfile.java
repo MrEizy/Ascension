@@ -88,9 +88,10 @@ public record InnerWorldProfile(Identifier path, double weightMultiplier, List<V
         /** Winding channels of fluid that meander across the region, with sloped banks. block = the fluid. density = width. */
         RIVERS,
         /**
-         * Trees. block = the log, leaves = the canopy block (leave it out for a bare dead tree). density = chance per ~6 block cell.
-         * min/max_size = canopy radius (max 12), min/max_height = trunk height, shape = round | cone | dome | umbrella | weeping,
-         * width = 1 or 2 (2 = a thick 2x2 trunk, for big trees). A region can list several tree features (e.g. big oaks plus small birches).
+         * Trees, planted by VANILLA configured features. "tree" = the feature id (minecraft:oak, fancy_oak, spruce, mega_spruce,
+         * jungle_tree, mega_jungle_tree, birch, dark_oak, acacia, cherry, mangrove, pale_oak, azalea_tree, huge_red_mushroom,
+         * huge_brown_mushroom, crimson_fungus, warped_fungus, bamboo_no_podzol, or any modded one). density = chance per ~6 block
+         * cell. A region can list several tree entries (they share that chance by density). Size is whatever the vanilla feature does.
          */
         TREES,
         /** Winding underground tunnels. */
@@ -107,25 +108,13 @@ public record InnerWorldProfile(Identifier path, double weightMultiplier, List<V
         }, t -> t.name().toLowerCase(Locale.ROOT));
     }
 
-    public enum TreeShape {
-        ROUND, CONE, DOME, UMBRELLA, WEEPING;
-
-        public static final Codec<TreeShape> CODEC = Codec.STRING.comapFlatMap(s -> {
-            try {
-                return DataResult.success(valueOf(s.toUpperCase(Locale.ROOT)));
-            } catch (IllegalArgumentException e) {
-                return DataResult.error(() -> "Unknown tree shape: " + s);
-            }
-        }, t -> t.name().toLowerCase(Locale.ROOT));
-    }
-
     /**
      * density: chance per grid cell (spires, pillars, mesas, islands), share of area (pools), or tunnel/cut width (caves, ravines).
      * shore (pools, springs, rivers): the bank and bed block; defaults by fluid (sand for water, basalt for lava, calcite for springs).
      * min/max_size: radius in blocks. min/max_height: spire/pillar/mesa height, island altitude, or ravine depth.
      */
     public record Feature(FeatureType type, Optional<Block> block, double density, int minSize, int maxSize, int minHeight, int maxHeight,
-                          Optional<Block> shore, Optional<Block> leaves, TreeShape shape, int width) {
+                          Optional<Block> shore, Optional<Identifier> tree) {
         public static final Codec<Feature> CODEC = RecordCodecBuilder.create(i -> i.group(
                 FeatureType.CODEC.fieldOf("type").forGetter(Feature::type),
                 BLOCK.optionalFieldOf("block").forGetter(Feature::block),
@@ -135,9 +124,7 @@ public record InnerWorldProfile(Identifier path, double weightMultiplier, List<V
                 Codec.INT.optionalFieldOf("min_height", 8).forGetter(Feature::minHeight),
                 Codec.INT.optionalFieldOf("max_height", 24).forGetter(Feature::maxHeight),
                 BLOCK.optionalFieldOf("shore").forGetter(Feature::shore),
-                BLOCK.optionalFieldOf("leaves").forGetter(Feature::leaves),
-                TreeShape.CODEC.optionalFieldOf("shape", TreeShape.ROUND).forGetter(Feature::shape),
-                Codec.INT.optionalFieldOf("width", 1).forGetter(Feature::width)
+                Identifier.CODEC.optionalFieldOf("tree").forGetter(Feature::tree)
         ).apply(i, Feature::new));
     }
 
