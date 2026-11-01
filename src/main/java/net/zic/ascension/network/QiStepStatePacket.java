@@ -11,6 +11,8 @@ import net.zic.ascension.impl.core.skill.passive.PassiveModifiers;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * Tells a player's own client whether Qi Steps is on (with its settings, or null when off), and whether the current trip
  * through the air is spent (out of qi or strain), so no more plates form until they land.
@@ -26,7 +28,9 @@ public record QiStepStatePacket(PassiveModifiers.@Nullable QiStep settings, bool
         public QiStepStatePacket decode(FriendlyByteBuf buf) {
             PassiveModifiers.QiStep settings = buf.readBoolean()
                     ? new PassiveModifiers.QiStep(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readVarInt(),
-                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble())
+                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
+                    // The costs are only paid, and stamina regen only paused, on the server, so the client doesn't get them.
+                    List.of(), List.of(), List.of(), false)
                     : null;
             return new QiStepStatePacket(settings, buf.readBoolean());
         }

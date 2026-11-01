@@ -15,7 +15,8 @@
     "ascension:elemental/wind",
     "ascension:elemental/lightning",
     "ascension:elemental/space",
-    "ascension:elemental/time"
+    "ascension:elemental/time",
+    "ascension:elemental/life"
   ],
   "purity_handler": [],
   "item_tooltip": {

@@ -57,6 +57,48 @@
       "minecraft:item/golden_spear_in_hand",
       "minecraft:item/diamond_spear_in_hand",
       "minecraft:item/netherite_spear_in_hand"
+    ],
+    "ascension_pickaxe": [
+      "ascension:item/black_iron_pickaxe",
+      "ascension:item/frost_silver_pickaxe",
+      "ascension:item/spiritual_stone_pickaxe"
+    ],
+    "ascension_shovel": [
+      "ascension:item/black_iron_shovel",
+      "ascension:item/frost_silver_shovel",
+      "ascension:item/spiritual_stone_shovel"
+    ],
+    "ascension_hoe": [
+      "ascension:item/black_iron_hoe",
+      "ascension:item/frost_silver_hoe",
+      "ascension:item/spiritual_stone_hoe"
+    ],
+    "vanilla_pickaxe": [
+      "minecraft:item/wooden_pickaxe",
+      "minecraft:item/stone_pickaxe",
+      "minecraft:item/copper_pickaxe",
+      "minecraft:item/iron_pickaxe",
+      "minecraft:item/golden_pickaxe",
+      "minecraft:item/diamond_pickaxe",
+      "minecraft:item/netherite_pickaxe"
+    ],
+    "vanilla_shovel": [
+      "minecraft:item/wooden_shovel",
+      "minecraft:item/stone_shovel",
+      "minecraft:item/copper_shovel",
+      "minecraft:item/iron_shovel",
+      "minecraft:item/golden_shovel",
+      "minecraft:item/diamond_shovel",
+      "minecraft:item/netherite_shovel"
+    ],
+    "vanilla_hoe": [
+      "minecraft:item/wooden_hoe",
+      "minecraft:item/stone_hoe",
+      "minecraft:item/copper_hoe",
+      "minecraft:item/iron_hoe",
+      "minecraft:item/golden_hoe",
+      "minecraft:item/diamond_hoe",
+      "minecraft:item/netherite_hoe"
     ]
   }
 }

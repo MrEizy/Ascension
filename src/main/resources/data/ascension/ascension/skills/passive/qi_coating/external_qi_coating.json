@@ -12,8 +12,8 @@
   "state_group": "ascension:external_qi_coating",
   "upkeep": {
     "resource": "ascension:qi",
-    "amount": { "base": 0.4, "terms": [{ "source": { "type": "ascension:stat", "stat": "ascension:spirit" }, "scale": 0.1 }] },
-    "interval": 20
+    "amount": { "base": 0.02, "terms": [{ "source": { "type": "ascension:stat", "stat": "ascension:spirit" }, "scale": 0.005 }] },
+    "interval": 1
   },
   "enable_conditions": [
     {

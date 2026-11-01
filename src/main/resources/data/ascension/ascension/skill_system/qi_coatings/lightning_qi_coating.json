@@ -1,5 +1,10 @@
 {
   "coverage": "hands",
+  "grow_millis": 1800,
+  "gather": {
+    "style": "fade",
+    "colors": ["#A8D8FF", "#DDF2FF", "#6FB8FF", "#FFFFFF"]
+  },
   "shells": {
     "look": "ascension:lightning_crackle",
     "layers": [

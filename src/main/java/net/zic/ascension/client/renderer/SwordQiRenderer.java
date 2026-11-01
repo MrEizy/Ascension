@@ -1,5 +1,6 @@
 package net.zic.ascension.client.renderer;
 
+import com.google.common.collect.MapMaker;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -8,19 +9,24 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.builders.UVPair;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.client.renderer.layer.QiCoatingGather;
 import net.zic.ascension.client.renderer.layer.QiCoatingLayer;
@@ -35,6 +41,8 @@ import org.joml.Vector3fc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,11 +52,8 @@ import java.util.WeakHashMap;
  * Redraws held items with a coating's sword look (QiCoatingLooks, drawn by sword_qi.fsh). The item-in-hand mixins mark which
  * entity's item is being submitted, and ItemLayerSwordQiMixin hands each item layer's quads here before vanilla submits them.
  */
+@EventBusSubscriber(modid = AscensionCraft.MOD_ID, value = Dist.CLIENT)
 public final class SwordQiRenderer {
-    // Sword qi that grows (its sword look takes SPREAD data) spreads from the hilt to the tip when it comes on and melts
-    // back down to it when it goes off, taking QiCoating.growMillis each way. The shader gets how far along the spread is
-    // in the vertex green channel, and how far along the item each pixel sits in the blue (frostColor).
-
     // Echo copies jump to a new offset every ECHO_STEP_MILLIS, up to ECHO_SPREAD (in item model units, 1 = 16px). Only
     // ECHO_TINT's alpha reaches the shader, which carries its colour itself, since the vertex red channel holds the mask.
     private static final int ECHO_COUNT = 2;
@@ -71,6 +76,12 @@ public final class SwordQiRenderer {
     private static final Identifier SHARED_MASKS = AscensionCraft.prefix("sword_qi_masks.json");
     private static final Map<TextureAtlasSprite, byte[]> PAINTED_MASKS = new WeakHashMap<>();
     private static final byte[] NO_MASK = new byte[0];
+    // Which shared mask each texture uses, from sword_qi_masks.json: read the first time it's needed after each resource reload.
+    private static Map<Identifier, String> sharedMasks;
+    // Each quad split along its texture pixels (cells), kept while its model is; every corner is CORNER_FLOATS floats. Weak keys
+    // compared by identity: BakedQuad is a record, whose equals and hashCode would go through every vertex on each lookup.
+    private static final Map<BakedQuad, QuadCells> CELLS = new MapMaker().weakKeys().makeMap();
+    private static final int CORNER_FLOATS = 7;
 
     // Render-thread only; set around each held-item submit, cleared right after.
     private static QiCoating current;
@@ -92,7 +103,7 @@ public final class SwordQiRenderer {
         Minecraft minecraft = Minecraft.getInstance();
         Entity entity = minecraft.level == null ? null : minecraft.level.getEntity(entityId);
         QiCoating coating = entity == null ? null : QiCoatingClientState.get(entity.getUUID(), QiCoatingChannel.EXTERNAL);
-        currentLook = coating == null || !coating.swordQi() || !carriesSwordQi(itemStack) ? null
+        currentLook = coating == null || !coating.swordQi() || !QiCoatingService.coatsWeapon(itemStack) ? null
                 : coating.definition().sword().map(sword -> QiCoatingLooks.sword(sword.look())).orElse(null);
         current = currentLook == null ? null : coating;
         currentQuietLook = current == null ? null
@@ -100,14 +111,11 @@ public final class SwordQiRenderer {
         currentEntityId = entityId;
         currentFreeze = current != null && current.grows() ? QiCoatingClientState.growth(entity.getUUID(), current) : 1.0F;
         currentImpact = current != null && current.reacts() ? QiCoatingLayer.latestImpactData(current, entityId) : QiCoatingLayer.NO_IMPACT;
+        if (currentLook != null && currentLook.foliage()) {
+            currentImpact = packFoliage(QiCoatingLayer.foliageTint(current, entityId,
+                    LevelRenderer.getLightCoords(minecraft.level, BlockPos.containing(entity.getEyePosition()))));
+        }
         currentGather = current != null && current.grows() ? current.definition().gather().orElse(null) : null;
-    }
-
-    /**
-     * Sword Qi only shows on bladed and polearm weapons: swords, blades, spears and axes.
-     */
-    private static boolean carriesSwordQi(ItemStack itemStack) {
-        return QiCoatingService.coatsWeapon(itemStack);
     }
 
     public static void end() {
@@ -120,9 +128,7 @@ public final class SwordQiRenderer {
     /**
      * @return whether vanilla should still submit the item as normal
      */
-    public static boolean submit(SubmitNodeCollector submitNodeCollector, PoseStack poseStack, List<BakedQuad> quads,
-                                 ItemDisplayContext displayContext, int lightCoords, int overlayCoords, int outlineColor,
-                                 int[] tintLayers, ItemStackRenderState.FoilType foilType) {
+    public static boolean submit(SubmitNodeCollector submitNodeCollector, PoseStack poseStack, List<BakedQuad> quads) {
         QiCoating coating = current;
         QiCoatingLooks.SwordLook look = currentLook;
         if (coating == null || look == null || quads.isEmpty()) {
@@ -132,21 +138,6 @@ public final class SwordQiRenderer {
         List<BakedQuad> snapshot = List.copyOf(quads);
         QiCoatingDefinition.Gather gather = currentGather;
         float growth = currentFreeze;
-        if (IrisPipelineCompat.isShaderPackInUse()) {
-            // A shader pack can't draw the sword_qi.fsh looks (IrisPipelineCompat), so the item is submitted as a normal item,
-            // which Iris draws properly, its coated pixels tinted in the look's colour. An echoing coating shows its quiet look's
-            // tint, or the plain item.
-            QiCoatingLooks.SwordLook shown = coating.echoes() ? currentQuietLook : look;
-            if (shown == null) {
-                return true;
-            }
-            float[][] landings = gather != null && growth < 1.0F ? QiCoatingGather.itemLandings(gather, coatedPixels(snapshot)) : null;
-            TintedItem tinted = shaderPackTintedItem(snapshot, tintLayers, shown, gather, landings, growth);
-            submitNodeCollector.submitItem(poseStack, displayContext, lightCoords, overlayCoords, outlineColor, tinted.tintLayers(),
-                    tinted.quads(), foilType);
-            submitSpecks(submitNodeCollector, poseStack, snapshot, gather, landings, growth);
-            return false;
-        }
         if (coating.echoes()) {
             QiCoatingLooks.SwordLook quietLook = currentQuietLook;
             if (!QiCoatingLayer.echoing(coating, currentEntityId)) {
@@ -195,118 +186,19 @@ public final class SwordQiRenderer {
                 (bounds[0] + bounds[2]) * 8.0F, (bounds[1] + bounds[3]) * 8.0F, growth);
     }
 
-    // How far a coated pixel is tinted toward its look's colour under a shader pack (the rest of the way stays the item).
-    private static final float SHADER_PACK_TINT_STRENGTH = 0.7F;
-
-    /**
-     * The item's quads for a shader pack, to submit as a normal item (SubmitNodeCollector.submitItem, which Iris draws properly
-     * in the world and the first-person hand): split into pixel quads where the painted mask or the gather's patches call for
-     * it, the coated pixels given a tint index of their own, the last of the returned tint layers, holding the look's colour
-     * (faded by a FADE gather). Plain pixels keep their quad's own tint index and the item's tint layers.
-     */
-    private static TintedItem shaderPackTintedItem(List<BakedQuad> quads, int[] tintLayers, QiCoatingLooks.SwordLook look,
-                                                   QiCoatingDefinition.Gather gather, float[][] landings, float growth) {
-        boolean patches = landings != null && gather.style() == QiCoatingDefinition.GatherStyle.PATCHES;
-        float amount = SHADER_PACK_TINT_STRENGTH
-                * (gather != null && gather.style() == QiCoatingDefinition.GatherStyle.FADE ? QiCoatingGather.fadeAmount(growth) : 1.0F);
-        int coatedTintIndex = tintLayers.length;
-        int[] tints = java.util.Arrays.copyOf(tintLayers, coatedTintIndex + 1);
-        tints[coatedTintIndex] = ARGB.srgbLerp(amount, 0xFFFFFFFF, QiCoatingLooks.swordShaderPackTint(look.style()));
-        List<BakedQuad> out = new java.util.ArrayList<>();
-        for (BakedQuad quad : quads) {
-            TextureAtlasSprite sprite = quad.materialInfo().sprite();
-            byte[] mask = paintedMask(sprite);
-            if (mask == null && !patches) {
-                out.add(withTintIndex(quad, coatedTintIndex));
-                continue;
-            }
-            Vector3f origin = quadPoint(quad, 0.0F, 0.0F, new Vector3f());
-            int cellsA = pixelSpan(sprite, origin, quadPoint(quad, 1.0F, 0.0F, new Vector3f()));
-            int cellsB = pixelSpan(sprite, origin, quadPoint(quad, 0.0F, 1.0F, new Vector3f()));
-            for (int i = 0; i < cellsA; i++) {
-                for (int j = 0; j < cellsB; j++) {
-                    float a0 = (float) i / cellsA;
-                    float a1 = (float) (i + 1) / cellsA;
-                    float b0 = (float) j / cellsB;
-                    float b1 = (float) (j + 1) / cellsB;
-                    Vector3f centre = quadPoint(quad, (a0 + a1) * 0.5F, (b0 + b1) * 0.5F, new Vector3f());
-                    int pixel = pixelIndex(sprite, centre.y, centre.z);
-                    if (cellsA * cellsB > 1 && ARGB.alpha(sprite.getPixelRGBA(0, pixel % sprite.contents().width(),
-                            pixel / sprite.contents().width())) < 26) {
-                        continue;
-                    }
-                    boolean coatedPixel = mask == null || mask[pixel] == MASK_COATED;
-                    if (coatedPixel && patches) {
-                        Vector3f middle = quadPosition(quad, (a0 + a1) * 0.5F, (b0 + b1) * 0.5F);
-                        float x = middle.x * 16.0F;
-                        float y = middle.y * 16.0F;
-                        float z = middle.z * 16.0F;
-                        coatedPixel = QiCoatingGather.revealed(landings, growth, x, y, z, QiCoatingGather.pixelJitter(x, y, z));
-                    }
-                    out.add(subQuad(quad, a0, a1, b0, b1, coatedPixel ? coatedTintIndex : quad.materialInfo().tintIndex()));
-                }
-            }
-        }
-        return new TintedItem(out, tints);
-    }
-
-    private record TintedItem(List<BakedQuad> quads, int[] tintLayers) {
-    }
-
-    /**
-     * The part of a quad from a0 to a1 along its first edge and b0 to b1 along its second, with the given tint index.
-     */
-    private static BakedQuad subQuad(BakedQuad quad, float a0, float a1, float b0, float b1, int tintIndex) {
-        float[][] corners = {{a0, b0}, {a1, b0}, {a1, b1}, {a0, b1}};
-        Vector3f[] positions = new Vector3f[4];
-        long[] uvs = new long[4];
-        for (int k = 0; k < 4; k++) {
-            positions[k] = quadPosition(quad, corners[k][0], corners[k][1]);
-            Vector3f uv = quadPoint(quad, corners[k][0], corners[k][1], new Vector3f());
-            uvs[k] = UVPair.pack(uv.y, uv.z);
-        }
-        return new BakedQuad(positions[0], positions[1], positions[2], positions[3], uvs[0], uvs[1], uvs[2], uvs[3],
-                quad.direction(), withTintIndex(quad.materialInfo(), tintIndex));
-    }
-
-    private static BakedQuad withTintIndex(BakedQuad quad, int tintIndex) {
-        return new BakedQuad(quad.position0(), quad.position1(), quad.position2(), quad.position3(), quad.packedUV0(), quad.packedUV1(),
-                quad.packedUV2(), quad.packedUV3(), quad.direction(), withTintIndex(quad.materialInfo(), tintIndex),
-                quad.bakedNormals(), quad.bakedColors());
-    }
-
-    private static BakedQuad.MaterialInfo withTintIndex(BakedQuad.MaterialInfo info, int tintIndex) {
-        return new BakedQuad.MaterialInfo(info.sprite(), info.layer(), info.itemRenderType(), tintIndex, info.shade(),
-                info.lightEmission(), info.ambientOcclusion());
-    }
-
     /**
      * The centres of an item's coated, non see-through pixels, in model pixels (1/16 of a block), for its gather's landings.
      */
     private static List<float[]> coatedPixels(List<BakedQuad> quads) {
-        List<float[]> pixels = new java.util.ArrayList<>();
+        List<float[]> pixels = new ArrayList<>();
         for (BakedQuad quad : quads) {
-            TextureAtlasSprite sprite = quad.materialInfo().sprite();
-            byte[] mask = paintedMask(sprite);
-            Vector3f origin = quadPoint(quad, 0.0F, 0.0F, new Vector3f());
-            int cellsA = pixelSpan(sprite, origin, quadPoint(quad, 1.0F, 0.0F, new Vector3f()));
-            int cellsB = pixelSpan(sprite, origin, quadPoint(quad, 0.0F, 1.0F, new Vector3f()));
-            if (cellsA * cellsB <= 1) {
+            QuadCells split = cells(quad);
+            if (split.single()) {
                 continue;
             }
-            for (int i = 0; i < cellsA; i++) {
-                for (int j = 0; j < cellsB; j++) {
-                    float a = (i + 0.5F) / cellsA;
-                    float b = (j + 0.5F) / cellsB;
-                    Vector3f uv = quadPoint(quad, a, b, new Vector3f());
-                    int pixel = pixelIndex(sprite, uv.y, uv.z);
-                    int width = sprite.contents().width();
-                    if (ARGB.alpha(sprite.getPixelRGBA(0, pixel % width, pixel / width)) < 26
-                            || mask != null && mask[pixel] != MASK_COATED) {
-                        continue;
-                    }
-                    Vector3f position = quadPosition(quad, a, b);
-                    pixels.add(new float[]{position.x * 16.0F, position.y * 16.0F, position.z * 16.0F});
+            for (Cell cell : split.cells()) {
+                if (cell.coated()) {
+                    pixels.add(new float[]{cell.midX() * 16.0F, cell.midY() * 16.0F, cell.midZ() * 16.0F});
                 }
             }
         }
@@ -345,7 +237,7 @@ public final class SwordQiRenderer {
         float freeze = currentFreeze;
         int impact = currentImpact;
         float[] bounds = modelBounds(quads);
-        submitNodeCollector.submitCustomGeometry(poseStack, ModRenderTypes.swordQi(style, atlas), (pose, buffer) -> {
+        AfterShaderPackDraws.submitCustomGeometry(submitNodeCollector, poseStack, ModRenderTypes.swordQi(style, atlas), (pose, buffer) -> {
             for (BakedQuad quad : quads) {
                 TextureAtlasSprite sprite = quad.materialInfo().sprite();
                 byte[] mask = paintedMask(sprite);
@@ -362,46 +254,105 @@ public final class SwordQiRenderer {
                     }
                     continue;
                 }
-                // How many texture pixels the quad spans along each of its edges.
-                Vector3f origin = quadPoint(quad, 0.0F, 0.0F, new Vector3f());
-                int cellsA = pixelSpan(sprite, origin, quadPoint(quad, 1.0F, 0.0F, new Vector3f()));
-                int cellsB = pixelSpan(sprite, origin, quadPoint(quad, 0.0F, 1.0F, new Vector3f()));
-                for (int i = 0; i < cellsA; i++) {
-                    for (int j = 0; j < cellsB; j++) {
-                        float a0 = (float) i / cellsA;
-                        float a1 = (float) (i + 1) / cellsA;
-                        float b0 = (float) j / cellsB;
-                        float b1 = (float) (j + 1) / cellsB;
-                        Vector3f centre = quadPoint(quad, (a0 + a1) * 0.5F, (b0 + b1) * 0.5F, new Vector3f());
-                        int pixel = pixelIndex(sprite, centre.y, centre.z);
-                        // A flat item's front and back faces cover its whole sprite; skip the see-through pixels. One-pixel
-                        // quads (a flat item's edges) are kept as they are.
-                        if (cellsA * cellsB > 1 && ARGB.alpha(sprite.getPixelRGBA(0, pixel % sprite.contents().width(),
-                                pixel / sprite.contents().width())) < 26) {
-                            continue;
-                        }
-                        boolean coatedPixel = mask == null || mask[pixel] == MASK_COATED;
-                        Vector3f middle = quadPosition(quad, (a0 + a1) * 0.5F, (b0 + b1) * 0.5F);
-                        if (coatedPixel && patches) {
-                            float x = middle.x * 16.0F;
-                            float y = middle.y * 16.0F;
-                            float z = middle.z * 16.0F;
-                            coatedPixel = QiCoatingGather.revealed(landings, growth, x, y, z, QiCoatingGather.pixelJitter(x, y, z));
-                        }
-                        int color = coatedPixel ? coated : plain;
-                        if (frost || gale) {
-                            float along = along(bounds, middle.x, middle.y);
-                            color = frost ? frostColor(color, freeze, along, impact)
-                                    : galeColor(color, along, across(bounds, middle.x, middle.y));
-                        }
-                        subVertex(pose, buffer, quad, a0, b0, color);
-                        subVertex(pose, buffer, quad, a1, b0, color);
-                        subVertex(pose, buffer, quad, a1, b1, color);
-                        subVertex(pose, buffer, quad, a0, b1, color);
+                for (Cell cell : cells(quad).cells()) {
+                    boolean coatedPixel = cell.coated();
+                    if (coatedPixel && patches) {
+                        float x = cell.midX() * 16.0F;
+                        float y = cell.midY() * 16.0F;
+                        float z = cell.midZ() * 16.0F;
+                        coatedPixel = QiCoatingGather.revealed(landings, growth, x, y, z, QiCoatingGather.pixelJitter(x, y, z));
                     }
+                    int color = coatedPixel ? coated : plain;
+                    if (frost || gale) {
+                        float along = along(bounds, cell.midX(), cell.midY());
+                        color = frost ? frostColor(color, freeze, along, impact)
+                                : galeColor(color, along, across(bounds, cell.midX(), cell.midY()));
+                    }
+                    emitCell(pose, buffer, cell, color);
                 }
             }
         });
+    }
+
+    /**
+     * A quad split along its own texture pixels, worked out once per quad (CELLS) rather than every frame: one cell per pixel it
+     * shows (a flat item's front and back faces skip their see-through pixels), each flagged coated or plain by the painted mask.
+     */
+    private static QuadCells cells(BakedQuad quad) {
+        return CELLS.computeIfAbsent(quad, SwordQiRenderer::splitQuad);
+    }
+
+    private static QuadCells splitQuad(BakedQuad quad) {
+        TextureAtlasSprite sprite = quad.materialInfo().sprite();
+        byte[] mask = paintedMask(sprite);
+        int width = sprite.contents().width();
+        // How many texture pixels the quad spans along each of its edges.
+        Vector3f origin = quadPoint(quad, 0.0F, 0.0F, new Vector3f());
+        int cellsA = pixelSpan(sprite, origin, quadPoint(quad, 1.0F, 0.0F, new Vector3f()));
+        int cellsB = pixelSpan(sprite, origin, quadPoint(quad, 0.0F, 1.0F, new Vector3f()));
+        boolean single = cellsA * cellsB <= 1;
+        List<Cell> cells = new ArrayList<>();
+        for (int i = 0; i < cellsA; i++) {
+            for (int j = 0; j < cellsB; j++) {
+                float a0 = (float) i / cellsA;
+                float a1 = (float) (i + 1) / cellsA;
+                float b0 = (float) j / cellsB;
+                float b1 = (float) (j + 1) / cellsB;
+                Vector3f centre = quadPoint(quad, (a0 + a1) * 0.5F, (b0 + b1) * 0.5F, new Vector3f());
+                int pixel = pixelIndex(sprite, centre.y, centre.z);
+                // A flat item's front and back faces cover its whole sprite; skip the see-through pixels. One-pixel quads (a
+                // flat item's edges) are kept as they are.
+                if (!single && ARGB.alpha(sprite.getPixelRGBA(0, pixel % width, pixel / width)) < 26) {
+                    continue;
+                }
+                Vector3f middle = quadPosition(quad, (a0 + a1) * 0.5F, (b0 + b1) * 0.5F);
+                float[] corners = new float[4 * CORNER_FLOATS];
+                corner(quad, a0, b0, corners, 0);
+                corner(quad, a1, b0, corners, 1);
+                corner(quad, a1, b1, corners, 2);
+                corner(quad, a0, b1, corners, 3);
+                cells.add(new Cell(mask == null || mask[pixel] == MASK_COATED, middle.x, middle.y, middle.z, corners));
+            }
+        }
+        return new QuadCells(single, cells.toArray(Cell[]::new));
+    }
+
+    // One of a cell's corners into `out` at `index`: its position, atlas UV and pattern position (patternPixel).
+    private static void corner(BakedQuad quad, float a, float b, float[] out, int index) {
+        Vector3f position = quadPosition(quad, a, b);
+        Vector3f uv = quadPoint(quad, a, b, new Vector3f());
+        int[] pattern = patternPixel(quad, position);
+        int at = index * CORNER_FLOATS;
+        out[at] = position.x;
+        out[at + 1] = position.y;
+        out[at + 2] = position.z;
+        out[at + 3] = uv.y;
+        out[at + 4] = uv.z;
+        out[at + 5] = pattern[0];
+        out[at + 6] = pattern[1];
+    }
+
+    private static void emitCell(PoseStack.Pose pose, VertexConsumer buffer, Cell cell, int color) {
+        float[] corners = cell.corners();
+        for (int at = 0; at < corners.length; at += CORNER_FLOATS) {
+            buffer.addVertex(pose, corners[at], corners[at + 1], corners[at + 2])
+                    .setUv(corners[at + 3], corners[at + 4])
+                    .setColor(color)
+                    .setUv2((int) corners[at + 5], (int) corners[at + 6]);
+        }
+    }
+
+    /**
+     * A quad's cells, and whether it is a single pixel (a flat item's edge), which gathers don't land on.
+     */
+    private record QuadCells(boolean single, Cell[] cells) {
+    }
+
+    /**
+     * One texture pixel of a quad: whether the painted mask coats it, its middle (model units), and its four corners
+     * (CORNER_FLOATS each: x, y, z, u, v, pattern u, pattern v).
+     */
+    private record Cell(boolean coated, float midX, float midY, float midZ, float[] corners) {
     }
 
     /**
@@ -461,28 +412,43 @@ public final class SwordQiRenderer {
         }
     }
 
-    /**
-     * The shared mask sword_qi_masks.json lists this texture under, or null. Read once per sprite, so once per weapon texture
-     * after each resource reload.
-     */
     private static String sharedMaskName(Identifier texture) {
+        if (sharedMasks == null) {
+            sharedMasks = readSharedMasks();
+        }
+        return sharedMasks.get(texture);
+    }
+
+    // sword_qi_masks.json as texture to mask name; a texture listed under two masks keeps the first.
+    private static Map<Identifier, String> readSharedMasks() {
+        Map<Identifier, String> masks = new HashMap<>();
         Optional<Resource> resource = Minecraft.getInstance().getResourceManager().getResource(SHARED_MASKS);
         if (resource.isEmpty()) {
-            return null;
+            return masks;
         }
         try (Reader reader = resource.get().openAsReader()) {
-            JsonObject masks = JsonParser.parseReader(reader).getAsJsonObject().getAsJsonObject("masks");
-            for (Map.Entry<String, JsonElement> mask : masks.entrySet()) {
-                for (JsonElement listed : mask.getValue().getAsJsonArray()) {
-                    if (texture.toString().equals(listed.getAsString())) {
-                        return mask.getKey();
-                    }
+            JsonObject listed = JsonParser.parseReader(reader).getAsJsonObject().getAsJsonObject("masks");
+            for (Map.Entry<String, JsonElement> mask : listed.entrySet()) {
+                for (JsonElement texture : mask.getValue().getAsJsonArray()) {
+                    masks.putIfAbsent(Identifier.parse(texture.getAsString()), mask.getKey());
                 }
             }
         } catch (IOException | RuntimeException e) {
             AscensionCraft.LOGGER.warn("Could not read {}", SHARED_MASKS, e);
         }
-        return null;
+        return masks;
+    }
+
+    /**
+     * The masks, the shared mask list and the quads split by them all come from resources, so a resource reload drops them.
+     */
+    @SubscribeEvent
+    public static void onAddReloadListeners(AddClientReloadListenersEvent event) {
+        event.addListener(AscensionCraft.prefix("sword_qi_masks"), (ResourceManagerReloadListener) manager -> {
+            PAINTED_MASKS.clear();
+            CELLS.clear();
+            sharedMasks = null;
+        });
     }
 
     /**
@@ -496,12 +462,6 @@ public final class SwordQiRenderer {
         float u = Mth.lerp(b, Mth.lerp(a, UVPair.unpackU(uv0), UVPair.unpackU(uv1)), Mth.lerp(a, UVPair.unpackU(uv3), UVPair.unpackU(uv2)));
         float v = Mth.lerp(b, Mth.lerp(a, UVPair.unpackV(uv0), UVPair.unpackV(uv1)), Mth.lerp(a, UVPair.unpackV(uv3), UVPair.unpackV(uv2)));
         return out.set(0.0F, u, v);
-    }
-
-    private static void subVertex(PoseStack.Pose pose, VertexConsumer buffer, BakedQuad quad, float a, float b, int color) {
-        Vector3f position = quadPosition(quad, a, b);
-        Vector3f uv = quadPoint(quad, a, b, new Vector3f());
-        setPatternPixel(buffer.addVertex(pose, position.x, position.y, position.z).setUv(uv.y, uv.z).setColor(color), quad, position);
     }
 
     private static Vector3f quadPosition(BakedQuad quad, float a, float b) {
@@ -518,6 +478,12 @@ public final class SwordQiRenderer {
      * models, whose faces can stretch a few texture pixels a long way.
      */
     private static void setPatternPixel(VertexConsumer consumer, BakedQuad quad, Vector3fc position) {
+        int[] pattern = patternPixel(quad, position);
+        consumer.setUv2(pattern[0], pattern[1]);
+    }
+
+    // setPatternPixel's pattern position, {u, v}.
+    private static int[] patternPixel(BakedQuad quad, Vector3fc position) {
         float x = position.x() * 16.0F;
         float down = (1.0F - position.y()) * 16.0F;
         float z = position.z() * 16.0F;
@@ -537,7 +503,7 @@ public final class SwordQiRenderer {
                 v = down;
             }
         }
-        consumer.setUv2(Math.round(u * PATTERN_PRECISION), Math.round(v * PATTERN_PRECISION));
+        return new int[]{Math.round(u * PATTERN_PRECISION), Math.round(v * PATTERN_PRECISION)};
     }
 
     /**
@@ -573,6 +539,15 @@ public final class SwordQiRenderer {
 
     private static float share(float min, float max, float value) {
         return max - min < 1.0E-4F ? 0.5F : Mth.clamp((value - min) / (max - min), 0.0F, 1.0F);
+    }
+
+    /**
+     * A foliage sword look's colour (SwordLook.foliage) packed where frostColor puts the last hit: 5 bits a channel, the low
+     * 7 bits of the 15 in the red channel's low bits and the high 8 in the alpha (sword_qi.fsh unpacks it).
+     */
+    private static int packFoliage(int color) {
+        int packed = (ARGB.red(color) >> 3) << 10 | (ARGB.green(color) >> 3) << 5 | ARGB.blue(color) >> 3;
+        return (packed >> 7 & 0xFF) << 8 | packed & 0x7F;
     }
 
     /**

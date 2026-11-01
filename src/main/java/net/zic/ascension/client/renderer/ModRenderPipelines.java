@@ -39,12 +39,16 @@ public class ModRenderPipelines {
     public static RenderPipeline QI_COATING;
     public static RenderPipeline QI_COATING_DEPTH;
     public static RenderPipeline QI_COATING_TEXTURE_EMISSIVE;
+    // Vanilla's entity_translucent under our own name, so a shader pack leaves it alone (AfterShaderPackDraws).
+    public static RenderPipeline QI_COATING_ENTITY_TRANSLUCENT;
+    // The first-person arm's shape in depth only, under a shader pack, so the hand hides the far side of its coating (AfterShaderPackDraws).
+    public static RenderPipeline QI_COATING_ARM_DEPTH;
     public static RenderPipeline QI_COATING_SKIN;
     public static RenderPipeline QI_COATING_SKIN_WIND;
     public static RenderPipeline QI_COATING_SKIN_METAL;
     // Indexed by sword_qi.fsh style (QiCoatingLooks sword looks): 0 starfield, 1 echo, 2 stone, 3 water, 4 lightning, 5 frost,
     // 6 gale, 7 molten, 8 heat.
-    public static final RenderPipeline[] SWORD_QI = new RenderPipeline[11];
+    public static final RenderPipeline[] SWORD_QI = new RenderPipeline[12];
     public static RenderPipeline DIVINE_SENSE_WAVE;
     public static RenderPipeline SPHERICAL_DESTRUCTION_WAVE;
     public static RenderPipeline SPACE_RIFT;
@@ -164,6 +168,22 @@ public class ModRenderPipelines {
         event.registerPipeline(AURA_SURFACE_NO_DEPTH);
         event.registerPipeline(QI_COATING);
         event.registerPipeline(QI_COATING_DEPTH);
+        QI_COATING_ENTITY_TRANSLUCENT = RenderPipeline.builder(RenderPipelines.ENTITY_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/qi_coating_entity_translucent"))
+                .withShaderDefine("ALPHA_CUTOUT", 0.1F)
+                .withShaderDefine("PER_FACE_LIGHTING")
+                .withSampler("Sampler1")
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                .withCull(false)
+                .build();
+        event.registerPipeline(QI_COATING_ENTITY_TRANSLUCENT);
+        QI_COATING_ARM_DEPTH = RenderPipeline.builder(RenderPipelines.ENTITY_SNIPPET)
+                .withLocation(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "pipeline/qi_coating_arm_depth"))
+                .withShaderDefine("ALPHA_CUTOUT", 0.1F)
+                .withSampler("Sampler1")
+                .withColorTargetState(new ColorTargetState(Optional.empty(), ColorTargetState.WRITE_NONE))
+                .build();
+        event.registerPipeline(QI_COATING_ARM_DEPTH);
         event.registerPipeline(QI_COATING_TEXTURE_EMISSIVE);
         event.registerPipeline(QI_COATING_SKIN);
         event.registerPipeline(QI_COATING_SKIN_WIND);

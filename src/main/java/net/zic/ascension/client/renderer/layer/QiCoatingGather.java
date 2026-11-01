@@ -1,14 +1,12 @@
 package net.zic.ascension.client.renderer.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.HumanoidArm;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingDefinition;
-import net.zic.ascension.client.renderer.ModRenderTypes;
+import net.zic.ascension.client.renderer.QiParticle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +15,11 @@ import java.util.List;
  * A hands coating's gather (QiCoatingDefinition.Gather): while it grows, specks of the element appear a little way round the arm
  * and are drawn into it, and the coating forms from them, either with its shells in patches round where they land (through
  * QiCoatingTextureShells and QiCoatingLayer's shell boxes) or fading in evenly. Played backwards as the coating shrinks, the
- * specks flying back out. Everything
- * here is in the arm's local pixels, with growth (0 to 1) as the clock.
+ * specks flying back out. Everything here is in the arm's local pixels, with growth (0 to 1) as the clock.
  */
 public final class QiCoatingGather {
-    // The specks land between FIRST_ARRIVAL and LAST_ARRIVAL of the growth, one landing after another.
-    private static final float FIRST_ARRIVAL = 0.3F;
-    private static final float LAST_ARRIVAL = 0.85F;
-    // How much of the growth a speck takes to fly in, and how far out it starts, in pixels.
-    private static final float TRAVEL = 0.3F;
+    // When the specks land and how long they take to fly in are QiParticle's (arrival, departure). How far out a speck starts,
+    // in pixels.
     private static final float START_MIN = 5.0F;
     private static final float START_MAX = 11.0F;
     // How far out a speck starts from a held weapon, in item pixels (the item is 16 across).
@@ -38,15 +32,6 @@ public final class QiCoatingGather {
     // Fade: the shells' alpha rises between these shares of the growth.
     private static final float FADE_FROM = 0.3F;
     private static final float FADE_TO = 1.0F;
-    // Each speck's size varies between these shares of Gather.speckSize.
-    private static final float SIZE_LOW = 0.73F;
-    private static final float SIZE_HIGH = 1.33F;
-    // Each speck's look: its edge and core as shares of its colour's brightness, how much of each face the core covers, and its
-    // glow's size (times the speck's).
-    private static final float EDGE_SHADE = 0.6F;
-    private static final float CORE_SHADE = 1.0F;
-    private static final float CORE_SHARE = 0.6F;
-    private static final float GLOW_SCALE = 1.35F;
 
     private QiCoatingGather() {
     }
@@ -73,15 +58,15 @@ public final class QiCoatingGather {
      */
     static float[][] landings(QiCoatingDefinition.Gather gather, HumanoidArm side, boolean slim, float reach) {
         RandomSource random = RandomSource.create(side == HumanoidArm.RIGHT ? 1931L : 7177L);
-        float centerX = centerX(side, slim);
-        float halfX = slim ? 1.5F : 2.0F;
+        float centerX = QiCoatingLayer.armCenterX(side, slim);
+        float halfX = QiCoatingLayer.armWidth(slim) * 0.5F;
         int count = gather.landings();
         float[][] landings = new float[count][4];
         for (int i = 0; i < count; i++) {
             float[] landing = landings[i];
             if (i == 0) {
                 landing[0] = centerX;
-                landing[1] = 10.0F;
+                landing[1] = QiCoatingLayer.HAND_TIP_Y;
                 landing[2] = 0.0F;
             } else {
                 // A point on the arm's surface in a random direction round it.
@@ -90,10 +75,11 @@ public final class QiCoatingGather {
                 float dz = Mth.sin(angle);
                 float scale = 1.0F / Math.max(Math.abs(dx) / halfX, Math.abs(dz) / 2.0F);
                 landing[0] = centerX + dx * scale;
-                landing[1] = 10.0F - random.nextFloat() * Math.min(reach, 12.0F);
+                landing[1] = QiCoatingLayer.HAND_TIP_Y
+                        - random.nextFloat() * Math.min(reach, QiCoatingLayer.HAND_TIP_Y - QiCoatingLayer.SHOULDER_Y);
                 landing[2] = dz * scale;
             }
-            landing[3] = count == 1 ? FIRST_ARRIVAL : FIRST_ARRIVAL + (LAST_ARRIVAL - FIRST_ARRIVAL) * i / (count - 1);
+            landing[3] = QiParticle.arrival(i, count);
         }
         return landings;
     }
@@ -163,7 +149,7 @@ public final class QiCoatingGather {
             landings[i][0] = pixel[0];
             landings[i][1] = pixel[1];
             landings[i][2] = pixel[2];
-            landings[i][3] = count == 1 ? FIRST_ARRIVAL : FIRST_ARRIVAL + (LAST_ARRIVAL - FIRST_ARRIVAL) * i / (count - 1);
+            landings[i][3] = QiParticle.arrival(i, count);
         }
         return landings;
     }
@@ -197,14 +183,14 @@ public final class QiCoatingGather {
                 float startY = landing[1] + outY * distance + (random.nextFloat() - 0.5F) * 3.0F;
                 float startZ = landing[2] + (random.nextFloat() - 0.5F) * 6.0F;
                 float arrive = landing[3] - j * 0.03F;
-                float depart = arrive - TRAVEL * (0.8F + random.nextFloat() * 0.4F);
+                float depart = QiParticle.departure(arrive, random.nextFloat());
                 int color = colors.get(random.nextInt(colors.size()));
-                float size = gather.speckSize() * Mth.lerp(random.nextFloat(), SIZE_LOW, SIZE_HIGH);
+                float size = gather.speckSize() * QiParticle.sizeScale(random.nextFloat());
                 if (growth < depart || growth > arrive) {
                     continue;
                 }
                 float t = (growth - depart) / (arrive - depart);
-                float eased = t * t;
+                float eased = QiParticle.gather(t);
                 specks.add(new Speck(Mth.lerp(eased, startX, landing[0]), Mth.lerp(eased, startY, landing[1]),
                         Mth.lerp(eased, startZ, landing[2]), size * (1.0F - 0.5F * t), color, Math.min(1.0F, t / 0.2F)));
             }
@@ -212,27 +198,15 @@ public final class QiCoatingGather {
         drawSpecks(poseStack, submitNodeCollector, gather, specks);
     }
 
+    // Drawn as qi particles (QiParticle), from the pixels they're worked out in to the pose's blocks.
     private static void drawSpecks(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, QiCoatingDefinition.Gather gather,
                                    List<Speck> specks) {
-        if (specks.isEmpty()) {
-            return;
+        List<QiParticle.Speck> particles = new ArrayList<>(specks.size());
+        for (Speck speck : specks) {
+            particles.add(new QiParticle.Speck(speck.x() / 16.0F, speck.y() / 16.0F, speck.z() / 16.0F, speck.half() / 16.0F,
+                    speck.color(), speck.alpha()));
         }
-        if (gather.glow() > 0.0F) {
-            submitNodeCollector.submitCustomGeometry(poseStack, ModRenderTypes.energySurface(), (pose, buffer) -> {
-                for (Speck speck : specks) {
-                    int glow = ARGB.color(Math.round(gather.glow() * speck.alpha() * 255.0F), speck.color());
-                    cube(buffer, pose, speck.x(), speck.y(), speck.z(), speck.half() * GLOW_SCALE, glow);
-                }
-            });
-        }
-        submitNodeCollector.submitCustomGeometry(poseStack, ModRenderTypes.qiCoatingSpecks(), (pose, buffer) -> {
-            for (Speck speck : specks) {
-                int alpha = Math.round(speck.alpha() * ARGB.alpha(speck.color()));
-                cube(buffer, pose, speck.x(), speck.y(), speck.z(), speck.half(), ARGB.color(alpha, ARGB.scaleRGB(speck.color(), EDGE_SHADE)));
-                coreFaces(buffer, pose, speck.x(), speck.y(), speck.z(), speck.half(),
-                        ARGB.color(alpha, ARGB.scaleRGB(speck.color(), CORE_SHADE)));
-            }
-        });
+        QiParticle.submit(submitNodeCollector, poseStack, particles, gather.glow());
     }
 
     /**
@@ -247,7 +221,7 @@ public final class QiCoatingGather {
      */
     private static List<Speck> specks(QiCoatingDefinition.Gather gather, HumanoidArm side, boolean slim, float reach, float growth) {
         float[][] landings = landings(gather, side, slim, reach);
-        float centerX = centerX(side, slim);
+        float centerX = QiCoatingLayer.armCenterX(side, slim);
         List<Integer> colors = gather.colors();
         List<Speck> specks = new ArrayList<>();
         RandomSource random = RandomSource.create(side.ordinal() * 92821L + 17L);
@@ -267,58 +241,18 @@ public final class QiCoatingGather {
                 float startY = landing[1] + (handEnd ? distance : 0.0F) + (random.nextFloat() - 0.5F) * 5.0F;
                 float startZ = landing[2] + (handEnd ? 0.0F : outZ * distance) + (random.nextFloat() - 0.5F) * 4.0F;
                 float arrive = landing[3] - j * 0.03F;
-                float depart = arrive - TRAVEL * (0.8F + random.nextFloat() * 0.4F);
+                float depart = QiParticle.departure(arrive, random.nextFloat());
                 int color = colors.get(random.nextInt(colors.size()));
-                float size = gather.speckSize() * Mth.lerp(random.nextFloat(), SIZE_LOW, SIZE_HIGH);
+                float size = gather.speckSize() * QiParticle.sizeScale(random.nextFloat());
                 if (growth < depart || growth > arrive) {
                     continue;
                 }
                 float t = (growth - depart) / (arrive - depart);
-                float eased = t * t;
+                float eased = QiParticle.gather(t);
                 specks.add(new Speck(Mth.lerp(eased, startX, landing[0]), Mth.lerp(eased, startY, landing[1]),
                         Mth.lerp(eased, startZ, landing[2]), size * (1.0F - 0.5F * t), color, Math.min(1.0F, t / 0.2F)));
             }
         }
         return specks;
-    }
-
-    private static float centerX(HumanoidArm side, boolean slim) {
-        return (slim ? 0.5F : 1.0F) * (side == HumanoidArm.RIGHT ? -1.0F : 1.0F);
-    }
-
-    /**
-     * A smaller square on each face of a cube, a hair proud of it, so the cube's own colour shows only as a rim round them.
-     */
-    private static void coreFaces(VertexConsumer buffer, PoseStack.Pose pose, float x, float y, float z, float half, int argb) {
-        float c = half * CORE_SHARE / 16.0F;
-        float o = (half + 0.02F) / 16.0F;
-        float cx = x / 16.0F, cy = y / 16.0F, cz = z / 16.0F;
-        quad(buffer, pose, argb, cx - c, cy - c, cz - o, cx + c, cy - c, cz - o, cx + c, cy + c, cz - o, cx - c, cy + c, cz - o);
-        quad(buffer, pose, argb, cx - c, cy - c, cz + o, cx - c, cy + c, cz + o, cx + c, cy + c, cz + o, cx + c, cy - c, cz + o);
-        quad(buffer, pose, argb, cx - o, cy - c, cz - c, cx - o, cy + c, cz - c, cx - o, cy + c, cz + c, cx - o, cy - c, cz + c);
-        quad(buffer, pose, argb, cx + o, cy - c, cz - c, cx + o, cy - c, cz + c, cx + o, cy + c, cz + c, cx + o, cy + c, cz - c);
-        quad(buffer, pose, argb, cx - c, cy - o, cz - c, cx - c, cy - o, cz + c, cx + c, cy - o, cz + c, cx + c, cy - o, cz - c);
-        quad(buffer, pose, argb, cx - c, cy + o, cz - c, cx + c, cy + o, cz - c, cx + c, cy + o, cz + c, cx - c, cy + o, cz + c);
-    }
-
-    private static void cube(VertexConsumer buffer, PoseStack.Pose pose, float x, float y, float z, float half, int argb) {
-        float x0 = (x - half) / 16.0F, x1 = (x + half) / 16.0F;
-        float y0 = (y - half) / 16.0F, y1 = (y + half) / 16.0F;
-        float z0 = (z - half) / 16.0F, z1 = (z + half) / 16.0F;
-        quad(buffer, pose, argb, x0, y0, z0, x1, y0, z0, x1, y1, z0, x0, y1, z0);
-        quad(buffer, pose, argb, x0, y0, z1, x0, y1, z1, x1, y1, z1, x1, y0, z1);
-        quad(buffer, pose, argb, x0, y0, z0, x0, y1, z0, x0, y1, z1, x0, y0, z1);
-        quad(buffer, pose, argb, x1, y0, z0, x1, y0, z1, x1, y1, z1, x1, y1, z0);
-        quad(buffer, pose, argb, x0, y0, z0, x0, y0, z1, x1, y0, z1, x1, y0, z0);
-        quad(buffer, pose, argb, x0, y1, z0, x1, y1, z0, x1, y1, z1, x0, y1, z1);
-    }
-
-    private static void quad(VertexConsumer buffer, PoseStack.Pose pose, int argb,
-                             float ax, float ay, float az, float bx, float by, float bz,
-                             float cx, float cy, float cz, float dx, float dy, float dz) {
-        buffer.addVertex(pose, ax, ay, az).setColor(argb);
-        buffer.addVertex(pose, bx, by, bz).setColor(argb);
-        buffer.addVertex(pose, cx, cy, cz).setColor(argb);
-        buffer.addVertex(pose, dx, dy, dz).setColor(argb);
     }
 }

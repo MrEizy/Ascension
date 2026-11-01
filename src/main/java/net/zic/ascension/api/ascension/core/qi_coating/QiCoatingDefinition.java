@@ -3,12 +3,8 @@ package net.zic.ascension.api.ascension.core.qi_coating;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +13,9 @@ import org.jspecify.annotations.NullMarked;
 /**
  * A Qi Coating, loaded from {@code data/<namespace>/ascension/skill_system/qi_coatings/}. It says where the coating goes and which
  * of the built-in looks draw it (a look is shader code, named in the client's QiCoatingLooks), with everything else about it
- * (shell geometry, how it grows, particles, flags and the named code effects it adds) as data. A runtime visual puts it on its
- * owner with an {@code ascension:custom} element whose {@code resources.visual} is the coating's id; Qi Coating passives show
- * that runtime visual with {@code ascension:persistent_visual}.
+ * (shell geometry, how it grows, flags and the named code effects it adds) as data. Qi Coating passives put it on their owner
+ * by its id (QiCoatingManager): through an element's {@code body_coating} or {@code external_coating}
+ * ({@code ascension:qi_coating_visual}), or named directly ({@code ascension:qi_coating}).
  *
  * @param coverage       where the coating goes
  * @param shells         boxes drawn around the limbs, shaded by a shell look
@@ -27,16 +23,18 @@ import org.jspecify.annotations.NullMarked;
  * @param sword          the held weapon redrawn by a sword look (coverage {@code weapon} only)
  * @param growMillis     how long the coating takes to grow in when it comes on and to shrink away when it goes off; 0 to just
  *                       appear and vanish
- * @param fadesArm       whether the arm itself fades from opaque at the shoulder to mostly see-through at the hand
  * @param echoes         whether flickering offset copies of the arm (or body, or weapon) are drawn alongside it
  * @param reactsTo       what the coating reacts to: looks with a hit animation play it after these, and an echoing coating
  *                       echoes only for a moment after them (always, if empty), drawing its looks' {@code quiet_look} (if any)
  *                       the rest of the time
- * @param overlay        another coating drawn over this one wherever this one is drawn (its shells only)
- * @param handParticles  particles spawned at the hands while the coating is on
  * @param effects        named effects coded in Java (QiCoatingEffects) that the coating adds
  * @param gather         how a hands coating's shells form while they grow: gathered from specks drawn in from round the arm,
  *                       instead of being cut from the hand up
+ * @param foliageMillis  for a look coloured by the biome's foliage (ShellLook/SwordLook foliage): it comes on in the shade of
+ *                       the biome it was turned on in, then takes about this long to take on a new biome's shade; 0 follows
+ *                       the biome at once
+ * @param foliageLocked  for a look coloured by the biome's foliage: keeps the shade it came on in, whatever biome the player
+ *                       walks into, until it is turned on again
  */
 public record QiCoatingDefinition(
         Coverage coverage,
@@ -44,13 +42,12 @@ public record QiCoatingDefinition(
         Optional<Skin> skin,
         Optional<Sword> sword,
         int growMillis,
-        boolean fadesArm,
         boolean echoes,
         List<Reaction> reactsTo,
-        Optional<Identifier> overlay,
-        List<HandParticles> handParticles,
         List<Identifier> effects,
-        Optional<Gather> gather
+        Optional<Gather> gather,
+        int foliageMillis,
+        boolean foliageLocked
 ) {
     /**
      * ARGB colours as 8 digit hex strings ({@code #AARRGGBB}), or 6 digits for opaque. HexColorCodec drops the alpha when it
@@ -67,18 +64,16 @@ public record QiCoatingDefinition(
             Skin.CODEC.optionalFieldOf("skin").forGetter(QiCoatingDefinition::skin),
             Sword.CODEC.optionalFieldOf("sword").forGetter(QiCoatingDefinition::sword),
             Codec.intRange(0, 60000).optionalFieldOf("grow_millis", 0).forGetter(QiCoatingDefinition::growMillis),
-            Codec.BOOL.optionalFieldOf("fades_arm", false).forGetter(QiCoatingDefinition::fadesArm),
             Codec.BOOL.optionalFieldOf("echoes", false).forGetter(QiCoatingDefinition::echoes),
             Reaction.CODEC.listOf().optionalFieldOf("reacts_to", List.of()).forGetter(QiCoatingDefinition::reactsTo),
-            Identifier.CODEC.optionalFieldOf("overlay").forGetter(QiCoatingDefinition::overlay),
-            HandParticles.CODEC.listOf().optionalFieldOf("hand_particles", List.of()).forGetter(QiCoatingDefinition::handParticles),
             Identifier.CODEC.listOf().optionalFieldOf("effects", List.of()).forGetter(QiCoatingDefinition::effects),
-            Gather.CODEC.optionalFieldOf("gather").forGetter(QiCoatingDefinition::gather)
+            Gather.CODEC.optionalFieldOf("gather").forGetter(QiCoatingDefinition::gather),
+            Codec.intRange(0, 600000).optionalFieldOf("foliage_millis", 0).forGetter(QiCoatingDefinition::foliageMillis),
+            Codec.BOOL.optionalFieldOf("foliage_locked", false).forGetter(QiCoatingDefinition::foliageLocked)
     ).apply(instance, QiCoatingDefinition::new)).validate(QiCoatingDefinition::validate);
 
     public QiCoatingDefinition {
         reactsTo = List.copyOf(reactsTo);
-        handParticles = List.copyOf(handParticles);
         effects = List.copyOf(effects);
     }
 
@@ -200,31 +195,21 @@ public record QiCoatingDefinition(
 
     /**
      * An animated texture for shells, laid out like a 64x64 player skin (any multiple of that size works): each box is painted
-     * from the skin area of the body part it covers, the outer layer's area for layers marked {@code outer}. The frames are
-     * stacked top to bottom in one image, so a 5 frame texture is 64 wide and 320 tall.
+     * from the skin area of the body part it covers (its inner layer). The frames are stacked top to bottom in one image, so a 5
+     * frame texture is 64 wide and 320 tall.
      *
      * @param path        the texture, e.g. {@code ascension:textures/qi_coating/jade_fist.png}
      * @param frames      how many frames are stacked in it
      * @param frameMillis how long each frame shows
      * @param emissive    whether it glows at full brightness, like the shader looks; otherwise it is lit like the skin
-     * @param emissiveWithShaders whether it glows while an Iris shader pack is in use, if that should differ from emissive
-     *                    (packs draw emissive textures as glowing, see-through layers, which suits glows but not e.g. stone)
      */
-    public record Texture(Identifier path, int frames, int frameMillis, boolean emissive, Optional<Boolean> emissiveWithShaders) {
+    public record Texture(Identifier path, int frames, int frameMillis, boolean emissive) {
         public static final Codec<Texture> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("path").forGetter(Texture::path),
                 Codec.intRange(1, 256).optionalFieldOf("frames", 1).forGetter(Texture::frames),
                 Codec.intRange(1, 60000).optionalFieldOf("frame_millis", 250).forGetter(Texture::frameMillis),
-                Codec.BOOL.optionalFieldOf("emissive", true).forGetter(Texture::emissive),
-                Codec.BOOL.optionalFieldOf("emissive_with_shaders").forGetter(Texture::emissiveWithShaders)
+                Codec.BOOL.optionalFieldOf("emissive", true).forGetter(Texture::emissive)
         ).apply(instance, Texture::new));
-
-        /**
-         * Whether to draw it glowing right now: emissive_with_shaders while a shader pack is in use (if set), else emissive.
-         */
-        public boolean emissive(boolean shaderPackInUse) {
-            return shaderPackInUse ? emissiveWithShaders.orElse(emissive) : emissive;
-        }
     }
 
     /**
@@ -235,17 +220,14 @@ public record QiCoatingDefinition(
      * @param overhang  how far past the hand tip it goes
      * @param color     ARGB tint; its alpha sets how see-through the whole box is
      * @param squareCap whether the fist cap is mapped so a square texel grid on the sides stays square on it (shell looks only)
-     * @param outer     texture shells only: whether the box is painted from the skin's outer layer area (the sleeve's) instead
-     *                  of the inner one
      */
-    public record Layer(float inflate, float reach, float overhang, int color, boolean squareCap, boolean outer) {
+    public record Layer(float inflate, float reach, float overhang, int color, boolean squareCap) {
         public static final Codec<Layer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.floatRange(0.0F, 8.0F).fieldOf("inflate").forGetter(Layer::inflate),
                 Codec.floatRange(0.0F, 16.0F).fieldOf("reach").forGetter(Layer::reach),
                 Codec.floatRange(0.0F, 8.0F).optionalFieldOf("overhang", 0.0F).forGetter(Layer::overhang),
                 ARGB_CODEC.optionalFieldOf("color", 0xFFFFFFFF).forGetter(Layer::color),
-                Codec.BOOL.optionalFieldOf("square_cap", false).forGetter(Layer::squareCap),
-                Codec.BOOL.optionalFieldOf("outer", false).forGetter(Layer::outer)
+                Codec.BOOL.optionalFieldOf("square_cap", false).forGetter(Layer::squareCap)
         ).apply(instance, Layer::new));
     }
 
@@ -255,22 +237,14 @@ public record QiCoatingDefinition(
      * @param mode          {@code film}: one box round every part; {@code limbs}: one box round each arm and leg, with the look's
      *                      per-limb pattern
      * @param inflate       how far the boxes sit out from the body, in pixels
-     * @param limbReach     film only: how far up each limb the boxes go from the hand or foot, in pixels, with no caps; absent
-     *                      for whole limbs
-     * @param torsoAndHead  film only: whether the head and torso get a box too
      * @param legsOnly      limbs only: whether only the legs get boxes
-     * @param outer         texture shells only: whether the boxes are painted from the skin's outer layer areas
      * @param color         texture shells only: ARGB tint multiplied into the texture; its alpha sets how see-through the boxes are
      */
-    public record Body(BodyMode mode, float inflate, Optional<Float> limbReach, boolean torsoAndHead, boolean legsOnly,
-                       boolean outer, int color) {
+    public record Body(BodyMode mode, float inflate, boolean legsOnly, int color) {
         public static final Codec<Body> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 BodyMode.CODEC.fieldOf("mode").forGetter(Body::mode),
                 Codec.floatRange(0.0F, 4.0F).optionalFieldOf("inflate", 0.4F).forGetter(Body::inflate),
-                Codec.floatRange(0.0F, 12.0F).optionalFieldOf("limb_reach").forGetter(Body::limbReach),
-                Codec.BOOL.optionalFieldOf("torso_and_head", true).forGetter(Body::torsoAndHead),
                 Codec.BOOL.optionalFieldOf("legs_only", false).forGetter(Body::legsOnly),
-                Codec.BOOL.optionalFieldOf("outer", false).forGetter(Body::outer),
                 ARGB_CODEC.optionalFieldOf("color", 0xFFFFFFFF).forGetter(Body::color)
         ).apply(instance, Body::new));
     }
@@ -332,7 +306,7 @@ public record QiCoatingDefinition(
                 ARGB_CODEC.listOf().fieldOf("colors").forGetter(Gather::colors),
                 Codec.intRange(1, 32).optionalFieldOf("landings", 9).forGetter(Gather::landings),
                 Codec.intRange(1, 8).optionalFieldOf("specks_per_landing", 3).forGetter(Gather::specksPerLanding),
-                Codec.floatRange(0.05F, 2.0F).optionalFieldOf("speck_size", 0.3F).forGetter(Gather::speckSize),
+                Codec.floatRange(0.05F, 2.0F).optionalFieldOf("speck_size", 0.18F).forGetter(Gather::speckSize),
                 Codec.floatRange(0.0F, 1.0F).optionalFieldOf("glow", 0.1F).forGetter(Gather::glow)
         ).apply(instance, Gather::new)).validate(gather -> gather.colors().isEmpty()
                 ? DataResult.error(() -> "A qi coating's \"gather\" needs at least one colour in \"colors\"")
@@ -364,31 +338,5 @@ public record QiCoatingDefinition(
         public String getSerializedName() {
             return name;
         }
-    }
-
-    /**
-     * Particles spawned at each hand every tick (at the hand on screen in first person).
-     *
-     * @param particle the particle
-     * @param chance   chance per tick, per hand, of spawning
-     * @param count    how many spawn each time
-     * @param spread   how far from the hand (blocks, either way across) each may start
-     * @param offsetY  how far above the hand they start
-     * @param velocity their starting velocity
-     * @param converge if above 0, each starts at the hand with a velocity this long in a random direction instead (particles
-     *                 like portal ones, that travel from their start plus velocity back to their start, then stream into the
-     *                 hand)
-     */
-    public record HandParticles(ParticleOptions particle, float chance, int count, float spread, float offsetY, Vec3 velocity,
-                                float converge) {
-        public static final Codec<HandParticles> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                ParticleTypes.CODEC.fieldOf("particle").forGetter(HandParticles::particle),
-                Codec.floatRange(0.0F, 1.0F).optionalFieldOf("chance", 1.0F).forGetter(HandParticles::chance),
-                Codec.intRange(1, 32).optionalFieldOf("count", 1).forGetter(HandParticles::count),
-                Codec.floatRange(0.0F, 2.0F).optionalFieldOf("spread", 0.0F).forGetter(HandParticles::spread),
-                Codec.floatRange(-2.0F, 2.0F).optionalFieldOf("offset_y", 0.0F).forGetter(HandParticles::offsetY),
-                CodecHelpers.VEC3.optionalFieldOf("velocity", Vec3.ZERO).forGetter(HandParticles::velocity),
-                Codec.floatRange(0.0F, 4.0F).optionalFieldOf("converge", 0.0F).forGetter(HandParticles::converge)
-        ).apply(instance, HandParticles::new));
     }
 }

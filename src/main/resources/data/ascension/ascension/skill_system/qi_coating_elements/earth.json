@@ -3,8 +3,8 @@
     "translate": "ascension.qi_coating.element.earth.name"
   },
   "path": "ascension:elemental/earth",
-  "body_visual": "ascension:qi_coating/earth_qi_coating",
-  "external_visual": "ascension:qi_coating/earth_external_qi_coating",
+  "body_coating": "ascension:earth_qi_coating",
+  "external_coating": "ascension:earth_external_qi_coating",
   "order": 2,
   "body_on_hit": {
     "cost": {
@@ -97,5 +97,74 @@
         "subject": "target"
       }
     ]
+  },
+  "external_on_mine": {
+    "speed": {
+      "blocks": "#ascension:earth_qi_coating_mineable",
+      "multiplier": 2.0
+    }
+  },
+  "external_on_use": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "base": 2.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:context",
+              "key": "ascension:qi_coating/blocks"
+            },
+            "scale": 0.35
+          }
+        ]
+      }
+    },
+    "till": {
+      "radius": {
+        "base": 1.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "scale": 3.0
+          },
+          {
+            "source": {
+              "type": "ascension:affinity",
+              "path": "ascension:elemental/earth"
+            },
+            "operation": "multiply",
+            "scale": 10.0,
+            "offset": 1.0
+          }
+        ]
+      },
+      "charge_ticks": 40
+    },
+    "flatten": {
+      "radius": {
+        "base": 1.0,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:charge"
+            },
+            "scale": 3.0
+          },
+          {
+            "source": {
+              "type": "ascension:affinity",
+              "path": "ascension:elemental/earth"
+            },
+            "operation": "multiply",
+            "scale": 10.0,
+            "offset": 1.0
+          }
+        ]
+      },
+      "charge_ticks": 40
+    }
   }
 }

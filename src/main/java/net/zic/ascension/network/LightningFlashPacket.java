@@ -6,7 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.client.renderer.layer.QiCoatingLayer;
+import net.zic.ascension.client.renderer.layer.LightningStepVisuals;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -39,6 +39,6 @@ public record LightningFlashPacket(int entityId, float dirX, float dirZ) impleme
     }
 
     public static void handle(LightningFlashPacket packet, IPayloadContext context) {
-        context.enqueueWork(() -> QiCoatingLayer.startLightningFlash(packet.entityId(), packet.dirX(), packet.dirZ()));
+        context.enqueueWork(() -> LightningStepVisuals.startLightningFlash(packet.entityId(), packet.dirX(), packet.dirZ()));
     }
 }

@@ -2,26 +2,25 @@
 
 #moj_import <minecraft:globals.glsl>
 #moj_import <ascension:void_space.glsl>
-#moj_import <ascension:water_pixels.glsl>
 #moj_import <ascension:wind_gust.glsl>
+#moj_import <ascension:life_vines.glsl>
 
 // UV layout (written by QiCoatingLayer):
 //   x = style * 2 + position around the arm perimeter (0..1, wraps seamlessly)
 //   y = 0 at the hand tip, 1 at the top of the coating
 // Styles are the shell looks' in QiCoatingLooks (with a style per limb for patterns that differ per limb):
-// 5 the space hand coating (starfield), 9 the Time hand coating's echo (58 its quiet look), 10-11 whole-body layers (echo,
-// shelved; starfield). Styles 6 (lensing), 7 (horizon) and 8 (pull) were removed.
+// 5 the space hand coating (starfield), 9 the Time hand coating's echo (58 its quiet look), 11 the whole-body starfield layer.
 // 14 and 16 are the pixel lightning hand coating and limb layer (15, Lightning Step, uses 49-55).
-// 27 is the Serpent Coil coating (arms only) and 28 the Serpent Coil layer (arms and legs).
 // 32 is the rings of the Tornado Fist.
-// 41-43 are the Serpent Coil layer on the left arm, right leg and left leg, and 44 the coating on the left arm, so each limb runs
-// on its own timing. 45 is the lightning hand coating on the left arm and 46-48 the lightning limbs on the left arm, right leg
-// and left leg. 49-50 are Lightning Step's right and left legs, 51 its spear flash trail and 52-55 its footprints. 56 is a Sky
-// Stride qi plate, and 57 the Pure Qi hand coating.
+// 45 is the lightning hand coating on the left arm and 46-48 the lightning limbs on the left arm, right leg and left leg, so each
+// limb runs on its own timing. 49-50 are Lightning Step's right and left legs, 51 its spear flash trail and 52-55 its
+// footprints. 56 is a Qi Step plate, 57 the Pure Qi hand coating, 59 the Qi Barrier's whole-body film, and 60-61 the Life
+// hand coating on the right and left arm.
 // Sword qi is drawn by sword_qi.fsh, and the ice, metal and the Tornado Fist's skin wind are painted into the skin itself by
 // qi_coating_skin.fsh.
 in vec2 auraUv;
 in vec4 vertexColor;
+in vec3 viewPosition;
 
 out vec4 fragColor;
 
@@ -59,7 +58,7 @@ float fbm(vec2 p, float period) {
     return value;
 }
 
-// ---- Space/void looks (styles 5 and 9-11) ----
+// ---- Space/void looks (styles 5, 9 and 11) ----
 
 // Window into space. Stars and nebula are placed in screen space, so they stay put while the hand moves across them.
 vec4 voidStarfield(float u, float v, float t) {
@@ -95,22 +94,12 @@ vec4 voidEcho(float u, float v, float t, float glitching) {
     return vec4(color, alpha * (0.22 + glitch * 0.35 + n * 0.15));
 }
 
-// Whole-body echo layer: the same tearing violet film as voidEcho, but even over the whole part with no top edge.
-vec4 voidEchoLayer(float u, float v, float t) {
-    float tick = floor(t * 11.0);
-    float glitch = step(0.8, hash(vec2(floor(v * 14.0), tick)));
-    float n = fbm(vec2(u * PERIOD + glitch * 1.3, v * 2.0 - t * 0.5), PERIOD);
-    vec3 color = mix(vec3(0.15, 0.05, 0.30), vec3(0.65, 0.45, 1.00), n);
-    color = mix(color, vec3(0.90, 0.80, 1.00), glitch * 0.6);
-    return vec4(color, 0.12 + glitch * 0.3 + n * 0.1);
-}
-
 // Whole-body starfield: the void shows through at partial strength so the skin underneath stays readable.
 vec4 voidStarfieldLayer(float u, float v, float t) {
     return vec4(voidSpace(t), 0.6);
 }
 
-// ---- Lightning look prototypes: pixel bolts (styles 14 and 16, plus 45-48 for the other limbs) ----
+// ---- Lightning looks: pixel bolts (styles 14 and 16, plus 45-48 for the other limbs) ----
 // Crackling Fist (14, 45 on the left arm) runs up to the elbow; Crackling Limbs (16, 46-48 on the other limbs) runs most of
 // the way up the arms and legs. Lightning Step crackles harder around the feet only (49, 50) and leaves crackling
 // footprints (52-55). The coatings are bolts racing up each limb (lightningStreaks).
@@ -139,33 +128,36 @@ float boltHash(vec3 p) {
 }
 
 // Column (in texels around the limb) of a bolt at `row`: a slanted line from (startX, startRow), its corners every
-// BOLT_KNOT_ROWS rows pushed off it at random. The first corner sits on the line, so a fork starts on its parent.
-float boltColumn(float row, vec3 seed, float startX, float startRow, float slope) {
+// BOLT_KNOT_ROWS rows pushed up to jitter / 2 texels off it at random. The first corner sits on the line, so a fork starts on
+// its parent.
+float boltColumn(float row, vec3 seed, float startX, float startRow, float slope, float jitter) {
     float k = max(0.0, row - startRow) / BOLT_KNOT_ROWS;
     float i = floor(k);
-    float a = i < 0.5 ? 0.0 : (boltHash(seed + vec3(i, 0.0, 0.0)) - 0.5) * BOLT_JITTER;
-    float b = (boltHash(seed + vec3(i + 1.0, 0.0, 0.0)) - 0.5) * BOLT_JITTER;
+    float a = i < 0.5 ? 0.0 : (boltHash(seed + vec3(i, 0.0, 0.0)) - 0.5) * jitter;
+    float b = (boltHash(seed + vec3(i + 1.0, 0.0, 0.0)) - 0.5) * jitter;
     return startX + (row - startRow) * slope + mix(a, b, k - i);
 }
 
 // How a texel sits on one bolt running `len` rows up from startRow: 2 on its core, 1 on the glow beside it, 0 off it. Each row
 // covers every column the bolt crosses within it, so steep zigzags stay unbroken lines. Wraps around `columns`.
-float boltTexel(vec2 cell, float columns, vec3 seed, float startX, float startRow, float slope, float len) {
+float boltTexel(vec2 cell, float columns, vec3 seed, float startX, float startRow, float slope, float len, float jitter) {
     if (cell.y < startRow || cell.y > startRow + len) {
         return 0.0;
     }
-    float x0 = boltColumn(max(startRow, cell.y - 0.5), seed, startX, startRow, slope);
-    float x1 = boltColumn(min(startRow + len, cell.y + 0.5), seed, startX, startRow, slope);
+    float x0 = boltColumn(max(startRow, cell.y - 0.5), seed, startX, startRow, slope, jitter);
+    float x1 = boltColumn(min(startRow + len, cell.y + 0.5), seed, startX, startRow, slope, jitter);
     float mid = (x0 + x1) * 0.5;
     float halfSpan = abs(x1 - x0) * 0.5;
     float d = abs(mod(cell.x + 0.5 - mid + columns * 0.5, columns) - columns * 0.5) - halfSpan;
     return d < 0.5 ? 2.0 : d < 1.5 ? 1.0 : 0.0;
 }
 
-// Racing lightning: like the water serpents, each limb has `count` bolts that climb from the hand or foot to `top`, but in a fraction of a second.
+// Racing lightning: each limb has `count` bolts that climb from the hand or foot to `top`, but in a fraction of a second.
 // Each is a jagged line of texels with a thick white head; its route is set for the whole climb, while its zigzag is re-rolled
 // STREAK_FPS times a second so it flickers as it goes. Its tail breaks up, a dim afterflash is left a few rows behind it, and
-// now and then a short fork snaps off its body. No film or sparks: only the lines.
+// now and then a short fork snaps off its body. No film or sparks: only the lines. `chaos` (1 calm) makes it wilder: the
+// zigzag re-rolled faster and swinging further, forks more often, the bolts' timing more uneven, and now and then a frame where
+// the whole limb strobes, its glow flashing white.
 const float STREAK_FPS = 20.0;
 // Seconds per cycle and the share of it a bolt is climbing (the rest is a pause before the next one).
 const float STREAK_PERIOD = 0.75;
@@ -185,18 +177,28 @@ const float STREAK_STEP_SPEED = 1.5;
 // How far up the legs the bolts climb: Crackling Limbs, and Lightning Step (around the feet).
 const float STREAK_LEG_TOP = 0.6;
 const float STREAK_STEP_TOP = 0.45;
+// The coatings (Crackling Fist and Limbs): bolts per limb, how much faster they climb, how wild they are, and the chance per
+// frame that a limb strobes, times (chaos - 1), so calm bolts never do.
+const int CRACKLE_COUNT = 3;
+const float CRACKLE_SPEED = 1.4;
+const float CRACKLE_CHAOS = 1.6;
+const float STREAK_STROBE_CHANCE = 0.12;
 
-vec4 lightningStreaks(float u, float v, float t, float limb, vec2 texels, float top, int count, float speed) {
+vec4 lightningStreaks(float u, float v, float t, float limb, vec2 texels, float top, int count, float speed, float chaos) {
     vec2 cell = floor(vec2(u, v) * texels);
-    float tq = floor(t * STREAK_FPS) / STREAK_FPS;
-    float frame = floor(t * STREAK_FPS);
+    float fps = STREAK_FPS * chaos;
+    float tq = floor(t * fps) / fps;
+    float frame = floor(t * fps);
+    float jitter = BOLT_JITTER * chaos;
+    // Wider spread of cycle lengths, so the bolts fall out of step with each other.
+    float spread = 0.4 * chaos;
     float topRows = floor(top * texels.y);
     float lengthRows = max(4.0, floor(STREAK_LENGTH * topRows));
     float best = 0.0;
     float after = 0.0;
     for (int b = 0; b < count; b++) {
         vec3 base = vec3(float(b) * 13.1, 0.0, limb * 7.9);
-        float period = STREAK_PERIOD / speed * (0.8 + 0.4 * boltHash(base + 0.7));
+        float period = STREAK_PERIOD / speed * (1.0 - spread * 0.5 + spread * boltHash(base + 0.7));
         float cycleTime = tq / period + boltHash(base + 1.9);
         float climb = fract(cycleTime) / STREAK_ACTIVE;
         if (climb > 1.0) {
@@ -209,7 +211,7 @@ vec4 lightningStreaks(float u, float v, float t, float limb, vec2 texels, float 
         float slope = (boltHash(route + 2.3) - 0.5) * 1.4;
         float headRow = floor(mix(-1.0, topRows + lengthRows, climb));
         float tailRow = headRow - lengthRows;
-        float hit = boltTexel(cell, texels.x, zigzag, startX, 0.0, slope, topRows);
+        float hit = boltTexel(cell, texels.x, zigzag, startX, 0.0, slope, topRows, jitter);
         if (hit > 0.0 && cell.y <= headRow && cell.y >= tailRow) {
             float fromTail = (cell.y - tailRow) / lengthRows;
             if (headRow - cell.y < STREAK_HEAD_ROWS) {
@@ -223,18 +225,20 @@ vec4 lightningStreaks(float u, float v, float t, float limb, vec2 texels, float 
             after = 2.0;
         }
         // A fork snapping off the body.
-        if (boltHash(zigzag + 8.8) < STREAK_FORK_CHANCE) {
+        if (boltHash(zigzag + 8.8) < STREAK_FORK_CHANCE * chaos) {
             float forkRow = floor(mix(tailRow + lengthRows * STREAK_TAIL, headRow - STREAK_HEAD_ROWS, boltHash(zigzag + 5.3)));
             if (forkRow >= 0.0 && forkRow < topRows) {
-                float forkX = boltColumn(forkRow, zigzag, startX, 0.0, slope);
+                float forkX = boltColumn(forkRow, zigzag, startX, 0.0, slope, jitter);
                 float forkSlope = slope + (boltHash(zigzag + 6.1) < 0.5 ? -1.0 : 1.0);
                 float fork = boltTexel(cell, texels.x, zigzag + vec3(0.0, 0.0, 41.0), forkX, forkRow, forkSlope,
-                        min(3.0 + floor(3.0 * boltHash(zigzag + 7.7)), topRows - forkRow));
+                        min(3.0 + floor(3.0 * chaos * boltHash(zigzag + 7.7)), topRows - forkRow), jitter);
                 best = max(best, fork);
             }
         }
     }
-    if (best >= 2.0) {
+    // A strobe frame: everything lit flashes white.
+    bool strobe = boltHash(vec3(limb * 3.1, frame * 0.37, 9.4)) < STREAK_STROBE_CHANCE * (chaos - 1.0);
+    if (best >= 2.0 || strobe && (best >= 1.0 || after >= 2.0)) {
         return BOLT_CORE;
     }
     if (best >= 1.0) {
@@ -244,7 +248,7 @@ vec4 lightningStreaks(float u, float v, float t, float limb, vec2 texels, float 
 }
 
 
-// ---- Sky Stride footholds (56, drawn by SkyStrideClient as small flat squares under the feet, in the world) ----
+// ---- Qi Step footholds (56, drawn by QiStepClient as small flat squares under the feet, in the world) ----
 // A translucent pale-cyan pixel square: a soft notched rim (and an inner ring, on grids big enough for one) over a faint fill,
 // with a glint sweeping around the rim and the whole square pulsing softly. The vertex alpha fades it at the end of its life, and texels drop out as it does.
 // Texels across a foothold, a little over one per skin pixel.
@@ -290,6 +294,78 @@ const vec4 PURE_QI_FILM = vec4(0.45, 0.82, 1.00, 0.18);
 
 vec4 pureQi(float u, float v, float t) {
     return vec4(PURE_QI_FILM.rgb, PURE_QI_FILM.a * (1.0 - smoothstep(0.45, 0.95, v)));
+}
+
+// ---- Qi Barrier (style 59) ----
+// The Qi Barrier's film over the whole body (QiCoatingLayer.submitBarrierFilm): the Pure Qi film, even all over and a little
+// more see-through than the hand coating's, so the skin shows clearly through it. Its vertex colour isn't a tint: alpha is how
+// faded in it is, and the hit flash is how far blue is down from 1 (so plain white is no flash).
+// Each part is its own box, so where two meet (arm and torso, leg and leg) the film doubles up, and the sides seen edge-on
+// stack into bright lines. The film thins toward each face's edges (BARRIER_EDGE of the face, down to BARRIER_EDGE_ALPHA) and
+// on faces seen at a grazing angle (fully faded at BARRIER_GRAZE_MIN, untouched from BARRIER_GRAZE_MAX), so the parts read
+// as one film.
+const float BARRIER_FILM_ALPHA = 0.09;
+const float BARRIER_EDGE = 0.18;
+const float BARRIER_EDGE_ALPHA = 0.35;
+const float BARRIER_GRAZE_MIN = 0.15;
+const float BARRIER_GRAZE_MAX = 0.55;
+const vec3 BARRIER_FLASH = vec3(0.92, 0.99, 1.00);
+const float BARRIER_FLASH_ALPHA = 0.3;
+
+vec4 qiBarrier(float u, float v, float t) {
+    float flash = 1.0 - vertexColor.b;
+    vec4 colour = vec4(PURE_QI_FILM.rgb, BARRIER_FILM_ALPHA);
+    colour.rgb = mix(colour.rgb, BARRIER_FLASH, flash * 0.6);
+    colour.a = min(1.0, colour.a + flash * BARRIER_FLASH_ALPHA);
+    // Across the face (u gives each side a quarter of the perimeter) and along it (v, 0 to 1 down the part).
+    float across = fract(u * 4.0);
+    float edge = min(min(across, 1.0 - across), min(v, 1.0 - v));
+    float edgeFade = mix(BARRIER_EDGE_ALPHA, 1.0, smoothstep(0.0, BARRIER_EDGE, edge));
+    vec3 normal = normalize(cross(dFdx(viewPosition), dFdy(viewPosition)));
+    float facing = abs(dot(normal, normalize(-viewPosition)));
+    float grazeFade = smoothstep(BARRIER_GRAZE_MIN, BARRIER_GRAZE_MAX, facing);
+    colour.a *= edgeFade * grazeFade;
+    return colour;
+}
+
+// ---- Life (styles 60 and 61, the right and left arm) ----
+// Life's hand coating: Minecraft's own vines (life_vines.glsl, shared with the blade's) wound round the hand and forearm, with a
+// pulse of life light climbing them every LIFE_PULSE_PERIOD seconds, like sap rising. The pattern tiles round the arm without a
+// seam; the left arm's is mirrored and shifted so the two hands differ. The vines grow in from the fingertips as the coating
+// comes on and draw back down as it goes off: QiCoatingLayer passes how far it has grown in the vertex colour's alpha
+// (QiCoatingLooks.ShellLook.grows), and the foliage colour under the light in its rgb (ShellLook.foliage).
+// Texels round the shell and up it, 2 per skin pixel for life_qi_coating.json's reach 7 and overhang 0.3 (16 and 7 would draw
+// the vines at the block's own scale, 1 per skin pixel).
+const vec2 VINE_TEXELS = vec2(32.0, 15.0);
+// How many rows the life light lights either side of its head.
+const float LIFE_PULSE_ROWS = 2.5;
+// Each column's growing tip runs up to VINE_TIP_JAG rows ahead of or behind the others, and the vines stop up to VINE_TOP_JAG
+// rows short of the shell's top, so neither edge is a straight line.
+const float VINE_TIP_JAG = 3.0;
+const float VINE_TOP_JAG = 3.0;
+const float VINE_ALPHA = 0.97;
+
+vec4 lifeVines(float u, float v, float t, float limb) {
+    vec2 cell = floor(vec2(u, v) * VINE_TEXELS);
+    float growth = vertexColor.a;
+    if (cell.y > growth * (VINE_TEXELS.y + VINE_TIP_JAG) - floor(hash(vec2(cell.x, limb + 9.1)) * VINE_TIP_JAG)
+            || cell.y >= VINE_TEXELS.y - floor(hash(vec2(cell.x + 0.5, limb + 3.3)) * VINE_TOP_JAG)) {
+        return vec4(0.0);
+    }
+    int x = int(cell.x) + int(limb * 8.0);
+    if (limb > 0.5) {
+        x = 15 - x;
+    }
+    int shade = vineShade(x, int(cell.y));
+    if (shade == 0) {
+        return vec4(0.0);
+    }
+    // The pulse climbing the arm, lighting the rows round its head in stepped bands.
+    float climb = lifePulseClimb(t, limb * 1.3);
+    float head = mix(-LIFE_PULSE_ROWS, VINE_TEXELS.y + LIFE_PULSE_ROWS, climb);
+    float glow = climb <= 1.0 ? max(0.0, 1.0 - abs(cell.y - head) / LIFE_PULSE_ROWS) : 0.0;
+    glow = floor(glow * 3.0 + 0.5) / 3.0;
+    return vec4(vineColour(shade, vertexColor.rgb, glow), VINE_ALPHA);
 }
 
 // Lightning Step's footprints (52-55, four variants): a flat square on the ground under a step, with MARK_BOLTS short jagged
@@ -373,130 +449,8 @@ vec4 lightningTrail(float u, float v, float t) {
     return best >= 2.0 ? BOLT_CORE : best >= 1.0 ? BOLT_GLOW : after >= 2.0 ? BOLT_AFTER : vec4(0.0);
 }
 
-// ---- Water look prototypes: pixel water streams (water_pixels.glsl) ----
-// Serpent Coil runs up the arms as a coating (27, 44 on the left arm) and up the arms and legs as a layer (28, 41-43 on the
-// other limbs). Each limb has its own shader style so it can run on its own timing and know which side is its outside.
-
-// Serpent Coil: the whole limb (12.8px tall).
-const vec2 SERPENT_TEXELS = vec2(48.0, 33.0);
-const float SERPENT_TURNS = 1.25;
-const float SERPENT_LENGTH = 0.4;
-const float SERPENT_HEAD_WIDTH = 10.0;
-const float SERPENT_TAIL_WIDTH = 4.0;
-// Seconds per climb, and the share of it the serpent is out (the rest is a pause before the next one forms).
-const float SERPENT_PERIOD = 4.0;
-const float SERPENT_ACTIVE = 0.85;
-// Where the serpent has thinned away to nothing, just short of the shoulder or hip, and over how much of the limb below that
-// it tapers, so it ends smoothly instead of being cut off.
-const float SERPENT_TOP = 0.88;
-const float SERPENT_TAPER = 0.24;
-// Where each limb's serpent is in its climb at time 0: right arm, left arm, right leg, left leg. QiCoatingLayer's splash
-// particles use the same values.
-const float SERPENT_LIMB_OFFSETS[4] = float[4](0.0, 0.43, 0.71, 0.19);
-// Where around each limb (share of the perimeter) its serpent starts, in the same limb order, so no two limbs look alike.
-const float SERPENT_LIMB_PHASES[4] = float[4](0.0, 0.37, 0.61, 0.18);
-// Middle of each limb's outer face, in the same limb order: the right limbs' outer side is the last face, the left limbs' the
-// second. The pool's foam line runs up it.
-const float POOL_OUTER_FACE[4] = float[4](0.875, 0.375, 0.875, 0.375);
-// Foam line half-width in texels, and how far it wanders sideways as it runs (share of the perimeter).
-const float POOL_FOAM_WIDTH = 1.2;
-const float POOL_FOAM_WANDER = 0.025;
-// The pool of flowing water around each hand and foot the serpents rise out of: its height (share of the limb), how far its top
-// edge rolls, and how fast its bands swirl around the limb.
-const float POOL_HEIGHT = 0.22;
-const float POOL_WAVE = 0.03;
-const float POOL_SWIRL = 0.7;
-
-// A stream wound along a helix around the limb: `turns` times from v = 0 to 1, starting `phase` of the way around, with its
-// head at `head` (v) and its body trailing `len` behind it toward the hand or foot. Works in texels: `cell` is the texel and
-// `texels` the grid size. Above `fadeTop - fadeLength` the stream narrows, reaching nothing at `fadeTop`. Returns vec4(0) off
-// the stream. `t` is already stepped to the water frame rate.
-vec4 waterStream(vec2 cell, vec2 texels, float phase, float turns, float head, float len, float headWidth, float tailWidth,
-                 float fadeTop, float fadeLength, float t) {
-    vec2 q = (cell + 0.5) / texels;
-    // 0 at the head, 1 at the tail end; slightly negative is the rounded front of the head.
-    float behind = (head - q.y) / len;
-    const float NOSE = 0.05;
-    if (behind < -NOSE || behind > 1.3) {
-        return vec4(0.0);
-    }
-    // Distance across the stream in texels, measured square to the helix rather than around the limb.
-    float slope = turns * texels.x / texels.y;
-    float across = waterAround(q.x, phase + q.y * turns) * texels.x / sqrt(1.0 + slope * slope);
-    float width = mix(headWidth, tailWidth, clamp(behind, 0.0, 1.0)) * (behind < 0.0 ? 1.0 + behind / NOSE : 1.0)
-            * clamp((fadeTop - q.y) / fadeLength, 0.0, 1.0);
-    if (abs(across) > width * 0.5) {
-        return vec4(0.0);
-    }
-    float side = across / (width * 0.5);
-    if (behind > 1.0) {
-        // Wake: a few droplets left behind the tail.
-        return waterHash(cell + floor(t * WATER_FPS) * 0.37) < 0.2 && abs(side) < 0.5 ? vec4(WATER_LIGHT.rgb, 0.45) : vec4(0.0);
-    }
-    if (behind > 0.65 && waterHash(cell + floor(t * WATER_FPS) * 0.37) < (behind - 0.65) / 0.35) {
-        // The tail breaks up into the film.
-        return vec4(0.0);
-    }
-    if (behind < 0.15) {
-        // Foam head with a lit rim.
-        return abs(side) < 0.55 ? WATER_FOAM : WATER_LIGHT;
-    }
-    return waterStreamTexel(across, width * 0.5);
-}
-
-// Serpent Coil (27-28, 41-44): one water serpent per limb winds from the hand or foot toward the shoulder or hip, its foam
-// head leading, and thins away to nothing just short of the top; then a new one rises out of the pool of water round the hand
-// or foot. `limb` indexes the SERPENT_LIMB_ and POOL_ arrays: 0 right arm, 1 left arm, 2 right leg, 3 left leg.
-vec4 waterSerpentLimb(float u, float v, float t, int limb) {
-    vec2 cell = floor(vec2(u, v) * SERPENT_TEXELS);
-    vec2 q = (cell + 0.5) / SERPENT_TEXELS;
-    float tq = floor(t * WATER_FPS) / WATER_FPS;
-
-    // Pool: water flowing round the hand or foot in sloped bands, up to a rolling lighter crest, with the odd glint. A line
-    // of white foam runs up the outer side and curls along the crest there, broken into dashes that flow upward.
-    vec4 pool = vec4(0.0);
-    float poolTop = POOL_HEIGHT + POOL_WAVE * sin(q.x * TAU * 2.0 - tq * 4.0 + float(limb) * 1.7);
-    if (q.y < poolTop) {
-        pool = fract(q.x * 3.0 + q.y * 2.0 - tq * POOL_SWIRL) < 0.22 ? vec4(WATER_LIGHT.rgb, 0.5) : vec4(WATER_MID.rgb, 0.42);
-        float foamCentre = POOL_OUTER_FACE[limb] + POOL_FOAM_WANDER * sin(q.y * TAU * 4.0 - tq * 5.0);
-        float fromFoam = abs(waterAround(q.x, foamCentre)) * SERPENT_TEXELS.x;
-        bool crest = q.y > poolTop - 1.5 / SERPENT_TEXELS.y;
-        if (crest) {
-            pool = fromFoam < 6.0 ? vec4(WATER_FOAM.rgb, 0.8) : vec4(WATER_LIGHT.rgb, 0.6);
-        } else if (fromFoam < POOL_FOAM_WIDTH && fract(q.y * 6.0 - tq * 1.5) < 0.75) {
-            pool = vec4(WATER_FOAM.rgb, 0.8);
-        } else if (waterHash(cell + floor(t * 4.0) * 0.61) > 0.98) {
-            pool = vec4(WATER_FOAM.rgb, 0.6);
-        }
-    }
-
-    if (q.y > SERPENT_TOP) {
-        return pool;
-    }
-    float cycle = fract(t / SERPENT_PERIOD + SERPENT_LIMB_OFFSETS[limb]);
-    float progress = cycle / SERPENT_ACTIVE;
-    if (progress > 1.0) {
-        return pool;
-    }
-    float head = mix(-0.05, SERPENT_TOP + SERPENT_LENGTH, progress);
-    float phase = SERPENT_LIMB_PHASES[limb];
-
-    vec4 serpent = waterStream(cell, SERPENT_TEXELS, phase, SERPENT_TURNS, head, SERPENT_LENGTH,
-            SERPENT_HEAD_WIDTH, SERPENT_TAIL_WIDTH, SERPENT_TOP, SERPENT_TAPER, tq);
-    // A dark eye on each side of the head.
-    float behind = (head - q.y) / SERPENT_LENGTH;
-    if (serpent.a > 0.0 && behind > 0.04 && behind < 0.08) {
-        float slope = SERPENT_TURNS * SERPENT_TEXELS.x / SERPENT_TEXELS.y;
-        float across = waterAround(q.x, phase + q.y * SERPENT_TURNS) * SERPENT_TEXELS.x / sqrt(1.0 + slope * slope);
-        if (abs(abs(across) - SERPENT_HEAD_WIDTH * 0.3) < 0.5) {
-            return vec4(0.04, 0.12, 0.36, 0.92);
-        }
-    }
-    return serpent.a > 0.0 ? serpent : pool;
-}
-
-// ---- Wind look prototypes: the Tornado Fist's rings ----
-// Each wind ring (QiCoatingLayer.submitWindRings) is a band WIND_AROUND texels round and WIND_ROWS tall. The
+// ---- Wind looks: the Tornado Fist's rings ----
+// Each wind ring (WindRingsEffect) is a band WIND_AROUND texels round and WIND_ROWS tall. The
 // Tornado Fist's rings stand still, so the motion is here: light green streaks slide round each row at their own pace, stepping
 // WIND_FPS times a second, each a bright head with a tail fading behind it, and each row a texel further round than the one
 // below so they lean like the coiled streaks painted into the skin under them (qi_coating_skin.fsh), which run the same way.
@@ -508,7 +462,7 @@ const float WIND_FPS = 16.0;
 // Each row is cut into cells WIND_CELL texels long (WIND_AROUND is a whole number of them), each of which may carry a streak.
 const float WIND_CELL = 8.0;
 // Share of cells carrying a streak between gusts, and at a gust's height. Like the skin, the rings keep running steadily
-// between gusts (the first try: 0.25 and 0.4 below).
+// between gusts.
 const float WIND_CALM_CHANCE = 0.5;
 const float WIND_GUST_CHANCE = 0.8;
 // How faint the streaks are between gusts, as a share of a gust's brightness.
@@ -542,8 +496,8 @@ void main() {
     float seconds = GameTime * 1200.0;
     float style = floor(max(0.0, auraUv.x) / 2.0);
     float u = clamp(auraUv.x - style * 2.0, 0.0, 1.0);
-    // The stone plates start each limb at its own point around the perimeter (QiCoatingLayer.LIMB_PATTERN_SHIFTS), so their
-    // u runs past 1 and wraps back onto the perimeter here.
+    // The wind rings start each ring at its own point around the perimeter (QiCoatingLayer.RING_PATTERN_SHIFT), so their u runs
+    // past 1 and wraps back onto the perimeter here.
     float wrappedU = fract(max(0.0, auraUv.x) - style * 2.0);
     float v = clamp(auraUv.y, 0.0, 1.0);
 
@@ -553,22 +507,17 @@ void main() {
         coating = voidStarfield(u, v, seconds);
     } else if (id == 9 || id == 58) {
         coating = voidEcho(u, v, seconds, id == 9 ? 1.0 : 0.0);
-    } else if (id == 10) {
-        coating = voidEchoLayer(u, v, seconds);
     } else if (id == 11) {
         coating = voidStarfieldLayer(u, v, seconds);
-    } else if (id == 27 || id == 44) {
-        coating = waterSerpentLimb(wrappedU, v, seconds, id == 44 ? 1 : 0);
-    } else if (id == 28 || (id >= 41 && id <= 43)) {
-        coating = waterSerpentLimb(wrappedU, v, seconds, id == 28 ? 0 : id - 40);
     } else if (id == 14 || id == 45) {
-        coating = lightningStreaks(u, v, seconds, id == 45 ? 1.0 : 0.0, CRACKLE_HAND_TEXELS, CRACKLE_HAND_TOP, STREAK_COUNT, 1.0);
+        coating = lightningStreaks(u, v, seconds, id == 45 ? 1.0 : 0.0, CRACKLE_HAND_TEXELS, CRACKLE_HAND_TOP, CRACKLE_COUNT,
+                CRACKLE_SPEED, CRACKLE_CHAOS);
     } else if (id == 16 || (id >= 46 && id <= 48)) {
         coating = lightningStreaks(u, v, seconds, id == 16 ? 0.0 : float(id - 45), CRACKLE_LIMB_TEXELS,
-                id >= 47 ? STREAK_LEG_TOP : CRACKLE_LIMB_TOP, STREAK_COUNT, 1.0);
+                id >= 47 ? STREAK_LEG_TOP : CRACKLE_LIMB_TOP, CRACKLE_COUNT, CRACKLE_SPEED, CRACKLE_CHAOS);
     } else if (id == 49 || id == 50) {
         coating = lightningStreaks(u, v, seconds, float(id - 39), CRACKLE_LIMB_TEXELS, STREAK_STEP_TOP, STREAK_STEP_COUNT,
-                STREAK_STEP_SPEED);
+                STREAK_STEP_SPEED, 1.0);
     } else if (id == 51) {
         coating = lightningTrail(u, v, seconds);
     } else if (id >= 52 && id <= 55) {
@@ -577,17 +526,24 @@ void main() {
         coating = qiPlate(u, v, seconds);
     } else if (id == 57) {
         coating = pureQi(u, v, seconds);
+    } else if (id == 59) {
+        coating = qiBarrier(u, v, seconds);
+    } else if (id == 60 || id == 61) {
+        coating = lifeVines(u, v, seconds, float(id - 60));
     } else if (id == 32) {
         coating = windRing(wrappedU, v, seconds);
     } else {
         discard;
     }
 
-    float alpha = coating.a * vertexColor.a;
+    // Life reads how far it has grown from the vertex alpha, not an opacity.
+    float alpha = coating.a * (id == 60 || id == 61 ? 1.0 : vertexColor.a);
     // The space hand window writes depth (QiCoatingLooks), so its faint pixels are left out rather than hiding what's behind.
     const float STARFIELD_CUTOFF = 0.3;
     if (alpha <= 0.01 || (id == 5 && alpha < STARFIELD_CUTOFF)) {
         discard;
     }
-    fragColor = vec4(coating.rgb * vertexColor.rgb, alpha);
+    // The Qi Barrier reads its flash from the vertex colour, and Life has already used its foliage colour, so neither is tinted.
+    vec3 tint = id == 59 || id == 60 || id == 61 ? vec3(1.0) : vertexColor.rgb;
+    fragColor = vec4(coating.rgb * tint, alpha);
 }

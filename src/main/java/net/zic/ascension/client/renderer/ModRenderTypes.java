@@ -12,11 +12,11 @@ import java.util.Map;
 import static net.minecraft.client.renderer.rendertype.OutputTarget.MAIN_TARGET;
 
 /**
- * Under an Iris shader pack, our untextured geometry (qi coating shells, energy surfaces, auras, gather specks) uses vanilla's
- * lightning render type instead of ours, drawn in its vertex colour (the shells carry their look's tint, QiCoatingLooks). The
- * pack has no program for ours, and Iris's fallback for them asked for an overlay sampler they don't bind, crashing ("Missing
- * sampler Sampler1"). Lightning takes position and colour with a glowing blend, and Iris knows it; the UV some of ours write
- * isn't in its format, so the buffer skips it.
+ * Under an Iris shader pack, the energy surfaces and auras (runtime visuals, drawn inside the pack's passes) use vanilla's
+ * lightning render type instead of ours, drawn in their vertex colour: the pack has no program for ours, and Iris's fallback
+ * for them asked for an overlay sampler they don't bind ("Missing sampler Sampler1"). Lightning takes position and colour with
+ * a glowing blend, and Iris knows it; the UV some of ours write isn't in its format, so the buffer skips it. The Qi Coatings'
+ * types have no fallback: under a pack they are drawn after it (AfterShaderPackDraws).
  */
 public class ModRenderTypes {
 
@@ -31,6 +31,8 @@ public class ModRenderTypes {
     private static RenderType qiCoatingDepth;
     private static final Map<Identifier, RenderType[]> SWORD_QI = new HashMap<>();
     private static final Map<Identifier, RenderType> QI_COATING_TEXTURE_EMISSIVE = new HashMap<>();
+    private static final Map<Identifier, RenderType> QI_COATING_ENTITY_TRANSLUCENT = new HashMap<>();
+    private static final Map<Identifier, RenderType> QI_COATING_ARM_DEPTH = new HashMap<>();
     // Per skin-fitted pipeline, per skin texture.
     private static final Map<RenderPipeline, Map<Identifier, RenderType>> QI_COATING_SKIN = new HashMap<>();
 
@@ -63,6 +65,11 @@ public class ModRenderTypes {
         if (IrisPipelineCompat.isShaderPackInUse()) {
             return RenderTypes.lightning();
         }
+        return energySurfaceDirect();
+    }
+
+    // energySurface without the shader pack fallback, for geometry drawn after the pack (AfterShaderPackDraws).
+    public static RenderType energySurfaceDirect() {
         if (energySurface == null) {
             energySurface = RenderType.create(
                     "ascension_energy_surface",
@@ -76,9 +83,6 @@ public class ModRenderTypes {
 
     // The specks a gathering qi coating draws in (QiCoatingGather).
     public static RenderType qiCoatingSpecks() {
-        if (IrisPipelineCompat.isShaderPackInUse()) {
-            return RenderTypes.lightning();
-        }
         if (qiCoatingSpecks == null) {
             qiCoatingSpecks = RenderType.create(
                     "ascension_qi_coating_specks",
@@ -137,9 +141,6 @@ public class ModRenderTypes {
     }
 
     public static RenderType qiCoating() {
-        if (IrisPipelineCompat.isShaderPackInUse()) {
-            return RenderTypes.lightning();
-        }
         if (qiCoating == null) {
             qiCoating = RenderType.create(
                     "ascension_qi_coating",
@@ -153,9 +154,6 @@ public class ModRenderTypes {
     }
 
     public static RenderType qiCoatingDepth() {
-        if (IrisPipelineCompat.isShaderPackInUse()) {
-            return RenderTypes.lightning();
-        }
         if (qiCoatingDepth == null) {
             qiCoatingDepth = RenderType.create(
                     "ascension_qi_coating_depth",
@@ -178,6 +176,37 @@ public class ModRenderTypes {
                         .withTexture("Sampler0", key)
                         .useOverlay()
                         .sortOnUpload()
+                        .createRenderSetup()
+        ));
+    }
+
+    /**
+     * Vanilla's entityTranslucent through our own copy of its pipeline, for coating geometry drawn after a shader pack
+     * (AfterShaderPackDraws): Iris still swaps vanilla's pipelines for its own programs there, which drew nothing.
+     */
+    public static RenderType qiCoatingEntityTranslucent(Identifier texture) {
+        return QI_COATING_ENTITY_TRANSLUCENT.computeIfAbsent(texture, key -> RenderType.create(
+                "ascension_qi_coating_entity_translucent",
+                RenderSetup.builder(ModRenderPipelines.QI_COATING_ENTITY_TRANSLUCENT)
+                        .withTexture("Sampler0", key)
+                        .useLightmap()
+                        .useOverlay()
+                        .sortOnUpload()
+                        .createRenderSetup()
+        ));
+    }
+
+    /**
+     * The first-person arm in depth only (ModRenderPipelines.QI_COATING_ARM_DEPTH), from the given skin texture so its
+     * see-through pixels are left out.
+     */
+    public static RenderType qiCoatingArmDepth(Identifier skin) {
+        return QI_COATING_ARM_DEPTH.computeIfAbsent(skin, key -> RenderType.create(
+                "ascension_qi_coating_arm_depth",
+                RenderSetup.builder(ModRenderPipelines.QI_COATING_ARM_DEPTH)
+                        .withTexture("Sampler0", key)
+                        .useLightmap()
+                        .useOverlay()
                         .createRenderSetup()
         ));
     }

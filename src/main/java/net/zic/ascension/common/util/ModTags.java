@@ -20,6 +20,8 @@ public class ModTags {
         public static final TagKey<Block> LINKABLE_CONTAINERS = createTag("linkable_containers");
         public static final TagKey<Block> PROJECTION_UNBREAKABLE = createTag("projection_unbreakable");
         public static final TagKey<Block> HERB_SOILS = createTag("herb_soils");
+        // What the Earth element's External Qi Coating mines faster (its external_on_mine speed).
+        public static final TagKey<Block> EARTH_QI_COATING_MINEABLE = createTag("earth_qi_coating_mineable");
 
         public static final  TagKey<Block> NEEDS_BLACK_IRON_TOOL = createTag("needs_black_iron_tool");
         public static final  TagKey<Block> INCORRECT_FOR_BLACK_IRON_TOOL = createTag("incorrect_for_black_iron_tool");

@@ -16,9 +16,8 @@
   },
   "on_enable": [
     {
-      "type": "ascension:persistent_visual",
-      "key": "ascension:qi_coating",
-      "visual": "ascension:qi_coating/space_starfield_layer"
+      "type": "ascension:qi_coating",
+      "coating": "ascension:space_starfield_layer"
     }
   ]
 }

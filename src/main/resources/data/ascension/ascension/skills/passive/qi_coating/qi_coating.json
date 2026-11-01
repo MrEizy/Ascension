@@ -12,11 +12,11 @@
   "state_group": "ascension:qi_coating",
   "upkeep": {
     "resource": "ascension:qi",
-    "amount": { "base": 0.4, "terms": [{ "source": { "type": "ascension:stat", "stat": "ascension:spirit" }, "scale": 0.1 }] },
-    "interval": 20
+    "amount": { "base": 0.02, "terms": [{ "source": { "type": "ascension:stat", "stat": "ascension:spirit" }, "scale": 0.005 }] },
+    "interval": 1
   },
   "modifiers": [
-    { "type": "ascension:qi_shield", "share": 0.9, "cost_per_damage": 1.0 }
+    { "type": "ascension:qi_shield", "share": 0.5, "cost_per_damage": 1.0 }
   ],
   "enable_conditions": [
     {
@@ -25,6 +25,12 @@
     }
   ],
   "on_enable": [
+    {
+      "type": "ascension:barrier",
+      "action": "remove",
+      "definition": "ascension:qi_barrier",
+      "subject": "caster"
+    },
     {
       "type": "ascension:qi_coating_visual",
       "channel": "body"

@@ -80,10 +80,14 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .add(ModBlocks.IRONWOOD_LOG.asItem())
                 .add(ModBlocks.IRONWOOD_WOOD.asItem())
                 .add(ModBlocks.STRIPPED_IRONWOOD_LOG.asItem())
-                .add(ModBlocks.STRIPPED_IRONWOOD_WOOD.asItem());
-        tag(ItemTags.PLANKS).add(ModBlocks.IRONWOOD_PLANKS.asItem());
-        tag(ItemTags.LEAVES).add(ModBlocks.IRONWOOD_LEAVES.asItem());
-        tag(ItemTags.SAPLINGS).add(ModBlocks.IRONWOOD_SAPLING.asItem());
+                .add(ModBlocks.STRIPPED_IRONWOOD_WOOD.asItem())
+                .add(ModBlocks.PEACH_LOG.asItem())
+                .add(ModBlocks.PEACH_WOOD.asItem())
+                .add(ModBlocks.STRIPPED_PEACH_LOG.asItem())
+                .add(ModBlocks.STRIPPED_PEACH_WOOD.asItem());
+        tag(ItemTags.PLANKS).add(ModBlocks.IRONWOOD_PLANKS.asItem()).add(ModBlocks.PEACH_PLANKS.asItem());
+        tag(ItemTags.LEAVES).add(ModBlocks.IRONWOOD_LEAVES.asItem()).add(ModBlocks.PEACH_LEAVES.asItem());
+        tag(ItemTags.SAPLINGS).add(ModBlocks.IRONWOOD_SAPLING.asItem()).add(ModBlocks.PEACH_SAPLING.asItem());
         tag(ItemTags.WOODEN_STAIRS).add(ModBlocks.IRONWOOD_STAIRS.asItem());
         tag(ItemTags.WOODEN_SLABS).add(ModBlocks.IRONWOOD_SLAB.asItem());
         tag(ItemTags.WOODEN_FENCES).add(ModBlocks.IRONWOOD_FENCE.asItem());

@@ -1,6 +1,5 @@
 {
   "coverage": "hands",
-  "fades_arm": true,
   "grow_millis": 1800,
   "gather": {
     "style": "patches",
@@ -9,7 +8,7 @@
   "shells": {
     "look": "ascension:space_starfield",
     "layers": [
-      { "inflate": 0.3, "reach": 9.0, "overhang": 0.3 }
+      { "inflate": 0.3, "reach": 7.6, "overhang": 0.3 }
     ]
   }
 }

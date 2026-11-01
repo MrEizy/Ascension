@@ -15,11 +15,6 @@ public final class QiCoatingEffects {
      */
     public static final Identifier LIGHTNING_STEP = AscensionCraft.prefix("lightning_step");
     /**
-     * Serpent Coil: a burst of spray at the top of each limb as its water serpent thins away there, timed with the
-     * {@code ascension:water_serpent} shell looks (on the arms for a hands coating, the arms and legs for a body one).
-     */
-    public static final Identifier SERPENT_SPLASHES = AscensionCraft.prefix("serpent_splashes");
-    /**
      * Tornado Fist: a box of wind rings round each forearm, their streaks running round in time with the {@code ascension:wind}
      * skin look.
      */

@@ -85,7 +85,7 @@ public final class CoreRegistries {
     public static final RegistryHelper.DataPackRegistry<RuntimeVisualDefinition> RUNTIME_VISUAL_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/visuals", () -> RuntimeVisualDefinition.CODEC
     );
-    // Qi Coatings, the looks Qi Coating passives put on their owner (through a runtime visual naming the coating).
+    // Qi Coatings, the looks Qi Coating passives put on their owner (QiCoatingManager).
     public static final RegistryHelper.DataPackRegistry<QiCoatingDefinition> QI_COATING_REGISTRY = RegistryHelper.dataPackRegistry(
             AscensionCraft.MOD_ID, "skill_system/qi_coatings", () -> QiCoatingDefinition.CODEC
     );

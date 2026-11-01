@@ -3,8 +3,8 @@
     "translate": "ascension.qi_coating.element.ice.name"
   },
   "path": "ascension:elemental/ice",
-  "body_visual": "ascension:qi_coating/ice_qi_coating",
-  "external_visual": "ascension:qi_coating/ice_external_qi_coating",
+  "body_coating": "ascension:ice_qi_coating",
+  "external_coating": "ascension:ice_external_qi_coating",
   "order": 4,
   "body_on_hit": {
     "cost": {
@@ -97,5 +97,43 @@
         "subject": "target"
       }
     ]
+  },
+  "external_on_mine": {
+    "speed": {
+      "blocks": [
+        "minecraft:ice",
+        "minecraft:packed_ice",
+        "minecraft:blue_ice"
+      ],
+      "multiplier": 2.0
+    },
+    "silk_touch": [
+      "minecraft:ice",
+      "minecraft:packed_ice",
+      "minecraft:blue_ice"
+    ]
+  },
+  "external_on_use": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": 5.0
+    },
+    "transform": {
+      "minecraft:water": "minecraft:ice",
+      "minecraft:ice": {
+        "block": "minecraft:packed_ice",
+        "cost": {
+          "resource": "ascension:qi",
+          "amount": 10.0
+        }
+      },
+      "minecraft:packed_ice": {
+        "block": "minecraft:blue_ice",
+        "cost": {
+          "resource": "ascension:qi",
+          "amount": 20.0
+        }
+      }
+    }
   }
 }

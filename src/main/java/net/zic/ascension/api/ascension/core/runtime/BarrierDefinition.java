@@ -18,6 +18,9 @@ public record BarrierDefinition(
         ScaledValue durability,
         ScaledValue absorption,
         boolean overflow,
+        double overflowMultiplier,
+        boolean solid,
+        boolean suppressHurtEffects,
         int priority,
         boolean replaceExisting,
         DamageFilter filter,
@@ -32,6 +35,12 @@ public record BarrierDefinition(
             ScaledValue.COMPACT_CODEC.fieldOf("durability").forGetter(BarrierDefinition::durability),
             ScaledValue.COMPACT_CODEC.optionalFieldOf("absorption", ScaledValue.constant(1.0D)).forGetter(BarrierDefinition::absorption),
             Codec.BOOL.optionalFieldOf("overflow", true).forGetter(BarrierDefinition::overflow),
+            // How much of the damage that gets past the barrier as it breaks is taken; 1 takes all of it.
+            Codec.doubleRange(0.0D, 1.0D).optionalFieldOf("overflow_multiplier", 1.0D).forGetter(BarrierDefinition::overflowMultiplier),
+            // Whether other living things are pushed back out of the barrier (its visual's radius and height round its entity).
+            Codec.BOOL.optionalFieldOf("solid", false).forGetter(BarrierDefinition::solid),
+            // Whether a hit the barrier takes whole leaves out the hurt flash, camera shake, hurt sound and knockback.
+            Codec.BOOL.optionalFieldOf("suppress_hurt_effects", false).forGetter(BarrierDefinition::suppressHurtEffects),
             Codec.INT.optionalFieldOf("priority", 0).forGetter(BarrierDefinition::priority),
             Codec.BOOL.optionalFieldOf("replace_existing", true).forGetter(BarrierDefinition::replaceExisting),
             DamageFilter.CODEC.optionalFieldOf("filter", DamageFilter.EMPTY).forGetter(BarrierDefinition::filter),

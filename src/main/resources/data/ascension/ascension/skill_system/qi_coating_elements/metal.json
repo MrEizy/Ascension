@@ -3,8 +3,8 @@
     "translate": "ascension.qi_coating.element.metal.name"
   },
   "path": "ascension:elemental/metal",
-  "body_visual": "ascension:qi_coating/metal_qi_coating",
-  "external_visual": "ascension:qi_coating/metal_external_qi_coating",
+  "body_coating": "ascension:metal_qi_coating",
+  "external_coating": "ascension:metal_external_qi_coating",
   "order": 5,
   "body_on_hit": {
     "cost": {
@@ -97,5 +97,8 @@
         "subject": "target"
       }
     ]
+  },
+  "external_on_mine": {
+    "fortune": 2
   }
 }

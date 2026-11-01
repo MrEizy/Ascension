@@ -9,8 +9,7 @@
     "texture": {
       "path": "ascension:textures/qi_coating/earth_qi_coating.png",
       "frames": 1,
-      "emissive": true,
-      "emissive_with_shaders": false
+      "emissive": true
     },
     "layers": [
       { "inflate": 0.5, "reach": 7.6, "overhang": 0.5 }

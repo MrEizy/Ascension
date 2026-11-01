@@ -185,6 +185,7 @@ public final class AscensionDamageHandler {
         if (Double.isFinite(event.getDamage()) && event.getDamage() > 0.0D) {
             return false;
         }
+        Barriers.noteResolvedHit(event);
         trace.finish(event);
         return true;
     }

@@ -1078,6 +1078,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.qi_coating.element.space.name", "Space");
         add("ascension.qi_coating.element.pure.name", "Pure Qi");
         add("ascension.qi_coating.element.time.name", "Time");
+        add("ascension.qi_coating.element.life.name", "Life");
 
         // Qi damage types (data/ascension/damage_type), one per elemental path (plus pure qi)
         add("death.attack.ascension.blood_qi", "%1$s was turned into a husk by blood qi");
@@ -1143,6 +1144,8 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.qi_coating_wheel.empty", "No Dao unlocked");
         add("ascension.skill.qi_step.name", "Qi Steps");
         add("ascension.skill.qi_step.desc", "Use your qi to coat your feet and step on the air to explore beyond the clouds.");
+        add("ascension.skill.qi_barrier.name", "Qi Barrier");
+        add("ascension.skill.qi_barrier.desc", "Shape a share of your qi into a bubble of hexagons that takes hits for you until it shatters.");
         // Leftover coating skills (Qi Coatings Leftovers test technique).
         add("ascension.skill.water_serpent_qi_layer.name", "Water Qi Layer: Serpent Coil");
         add("ascension.skill.water_serpent_qi_layer.desc", "Serpents of water qi wind up your arms and legs, bursting into spray as they reach the top. Drains 1 qi per second; cast again to release it.");

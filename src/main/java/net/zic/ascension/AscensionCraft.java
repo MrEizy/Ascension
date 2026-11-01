@@ -341,6 +341,11 @@ public class AscensionCraft {
                     LightningFlashPacket::handle
             );
             registrar.playToClient(
+                    QiCoatingSyncPacket.TYPE,
+                    QiCoatingSyncPacket.STREAM_CODEC,
+                    QiCoatingSyncPacket::handle
+            );
+            registrar.playToClient(
                     QiStepStatePacket.TYPE,
                     QiStepStatePacket.STREAM_CODEC,
                     QiStepStatePacket::handle
@@ -354,6 +359,11 @@ public class AscensionCraft {
                     QiStepActionPacket.TYPE,
                     QiStepActionPacket.STREAM_CODEC,
                     QiStepActionPacket::handle
+            );
+            registrar.playToServer(
+                    ServerboundToolChargeReleasePacket.TYPE,
+                    ServerboundToolChargeReleasePacket.STREAM_CODEC,
+                    ServerboundToolChargeReleasePacket::handle
             );
 
             registrar.playToServer(

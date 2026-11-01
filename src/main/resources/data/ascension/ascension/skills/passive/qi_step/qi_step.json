@@ -11,9 +11,18 @@
   "modifiers": [
     {
       "type": "ascension:qi_step",
-      "step_cost": 0.75,
-      "jump_cost": 6.0,
-      "hover_cost": 2.0,
+      "step_costs": [
+        { "resource": "ascension:qi", "amount": 0.75 },
+        { "resource": "ascension:stamina", "amount": 0.75 }
+      ],
+      "jump_costs": [
+        { "resource": "ascension:qi", "amount": 6.0 },
+        { "resource": "ascension:stamina", "amount": 6.0 }
+      ],
+      "hover_costs": [
+        { "resource": "ascension:qi", "amount": 2.0 },
+        { "resource": "ascension:stamina", "amount": 2.0 }
+      ],
       "hover_ticks": 30,
       "max_strain": 54.0,
       "jump_strain": 4.0,

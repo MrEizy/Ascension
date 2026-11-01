@@ -3,8 +3,8 @@
     "translate": "ascension.qi_coating.element.space.name"
   },
   "path": "ascension:elemental/space",
-  "body_visual": "ascension:qi_coating/space_qi_coating",
-  "external_visual": "ascension:qi_coating/space_external_qi_coating",
+  "body_coating": "ascension:space_qi_coating",
+  "external_coating": "ascension:space_external_qi_coating",
   "order": 8,
   "body_on_hit": {
     "cost": {
@@ -97,5 +97,27 @@
         "subject": "target"
       }
     ]
+  },
+  "external_on_mine": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "terms": [
+          { "source": { "type": "ascension:context", "key": "ascension:qi_coating/items" }, "scale": 1.0 }
+        ]
+      }
+    },
+    "to_inventory": true
+  },
+  "external_on_kill": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "terms": [
+          { "source": { "type": "ascension:context", "key": "ascension:qi_coating/items" }, "scale": 1.0 }
+        ]
+      }
+    },
+    "to_inventory": true
   }
 }

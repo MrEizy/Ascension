@@ -3,39 +3,12 @@ package net.zic.ascension.api.ascension.core.qi_coating;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 
 /**
  * A loaded Qi Coating: its registry id and definition. Two are the same coating when their ids match, so a datapack reload that
  * changes a coating's definition doesn't make it count as a different coating (its grow-in doesn't restart).
  */
 public record QiCoating(Identifier id, QiCoatingDefinition definition) {
-
-    /**
-     * The coating a runtime visual puts on its owner: the first {@code ascension:custom} element whose {@code resources.visual}
-     * names a coating. Null if none does.
-     */
-    public static QiCoating fromVisual(RuntimeVisualDefinition visual, RegistryAccess access) {
-        if (visual == null) {
-            return null;
-        }
-        for (RuntimeVisualDefinition.Element element : visual.elements()) {
-            if (element.type().equals(RuntimeVisualDefinition.Types.CUSTOM)) {
-                QiCoating coating = element.resources().visual().map(id -> byId(id, access)).orElse(null);
-                if (coating != null) {
-                    return coating;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * The coating a runtime visual (by its registry id) puts on its owner, or null.
-     */
-    public static QiCoating fromVisual(Identifier visualId, RegistryAccess access) {
-        return fromVisual(CoreRegistries.safeAccess(CoreRegistries.RUNTIME_VISUAL_REGISTRY, visualId, access), access);
-    }
 
     /**
      * The coating with this id, or null if no datapack defines it.
@@ -76,10 +49,6 @@ public record QiCoating(Identifier id, QiCoatingDefinition definition) {
      */
     public boolean grows() {
         return definition.growMillis() > 0;
-    }
-
-    public boolean fadesArm() {
-        return definition.fadesArm();
     }
 
     public boolean echoes() {

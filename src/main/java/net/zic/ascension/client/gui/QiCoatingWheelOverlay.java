@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingChannel;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingElement;
 import net.zic.ascension.client.keybind.ModKeybinds;
@@ -121,7 +120,7 @@ public final class QiCoatingWheelOverlay {
     private static Component name(Identifier element) {
         Minecraft minecraft = Minecraft.getInstance();
         QiCoatingElement definition = minecraft.level == null ? null
-                : CoreRegistries.safeAccess(CoreRegistries.QI_COATING_ELEMENT_REGISTRY, element, minecraft.level.registryAccess());
+                : QiCoatingElement.byId(element, minecraft.level.registryAccess());
         return definition == null ? Component.literal(element.getPath()) : definition.name();
     }
 

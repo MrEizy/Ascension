@@ -17,6 +17,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
+import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillCostDefinition;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonusHolder;
@@ -350,9 +351,18 @@ public final class PassiveModifiers {
      * @param jumpStrain   strain one jump adds
      * @param hoverStrain  strain each hover charge adds
      * @param stepDistance blocks run per plate
+     * @param stepCosts    what a plate stepped on costs, in the skill cost format (any resources, stat-scaled); empty for just
+     *                     stepCost in qi
+     * @param jumpCosts    the same for a jump, falling back to jumpCost in qi
+     * @param hoverCosts   the same for a hover charge, falling back to hoverCost in qi
+     * @param pausesStaminaRegen whether stamina stops regenerating while the player is in the air on a trip (from their first
+     *                     plate until they land), even standing still on a plate; its usual delay starts once they land
      */
     public record QiStep(double stepCost, double jumpCost, double hoverCost, int hoverTicks, double maxStrain, double jumpStrain,
-                            double hoverStrain, double stepDistance) implements PassiveModifier {
+                            double hoverStrain, double stepDistance, List<ActiveSkillCostDefinition> stepCosts,
+                            List<ActiveSkillCostDefinition> jumpCosts, List<ActiveSkillCostDefinition> hoverCosts,
+                            boolean pausesStaminaRegen)
+            implements PassiveModifier {
         public static final MapCodec<QiStep> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.doubleRange(0.0D, 1000.0D).optionalFieldOf("step_cost", 1.0D).forGetter(QiStep::stepCost),
                 Codec.doubleRange(0.0D, 1000.0D).optionalFieldOf("jump_cost", 6.0D).forGetter(QiStep::jumpCost),
@@ -361,7 +371,11 @@ public final class PassiveModifiers {
                 Codec.doubleRange(1.0D, 1000.0D).optionalFieldOf("max_strain", 12.0D).forGetter(QiStep::maxStrain),
                 Codec.doubleRange(0.0D, 1000.0D).optionalFieldOf("jump_strain", 4.0D).forGetter(QiStep::jumpStrain),
                 Codec.doubleRange(0.0D, 1000.0D).optionalFieldOf("hover_strain", 1.0D).forGetter(QiStep::hoverStrain),
-                Codec.doubleRange(0.2D, 10.0D).optionalFieldOf("step_distance", 0.8D).forGetter(QiStep::stepDistance)
+                Codec.doubleRange(0.2D, 10.0D).optionalFieldOf("step_distance", 0.8D).forGetter(QiStep::stepDistance),
+                ActiveSkillCostDefinition.LIST_CODEC.optionalFieldOf("step_costs", List.of()).forGetter(QiStep::stepCosts),
+                ActiveSkillCostDefinition.LIST_CODEC.optionalFieldOf("jump_costs", List.of()).forGetter(QiStep::jumpCosts),
+                ActiveSkillCostDefinition.LIST_CODEC.optionalFieldOf("hover_costs", List.of()).forGetter(QiStep::hoverCosts),
+                Codec.BOOL.optionalFieldOf("pauses_stamina_regen", true).forGetter(QiStep::pausesStaminaRegen)
         ).apply(instance, QiStep::new));
 
         @Override
@@ -381,7 +395,7 @@ public final class PassiveModifiers {
 
         @Override
         public void applyToEntity(LivingEntity entity, Identifier skillId) {
-            QiStepService.enable(entity, this);
+            QiStepService.enable(entity, this, skillId);
         }
 
         @Override

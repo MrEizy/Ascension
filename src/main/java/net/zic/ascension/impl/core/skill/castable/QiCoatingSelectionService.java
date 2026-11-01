@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -25,14 +24,13 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.skill.passive.PassiveSkill;
 import net.zic.ascension.impl.core.skill.passive.PassiveSkillService;
-import net.zic.ascension.impl.runtime.object.PersistentRuntimeVisuals;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Server side of the Qi Coating skills: which element each channel shows (picked in the coating wheel, stored in
@@ -44,10 +42,10 @@ public final class QiCoatingSelectionService {
     private static final int PATH_CHECK_INTERVAL = 20;
 
     // The element each player's channel is showing right now, and through which passive skill.
-    private static final Map<Key, Shown> SHOWN = new ConcurrentHashMap<>();
+    private static final Map<Key, Shown> SHOWN = new HashMap<>();
     // Switches waiting for the old coating to shrink away. One per channel: a newer pick replaces it.
-    private static final Map<Key, Shown> PENDING = new ConcurrentHashMap<>();
-    private static final Map<Key, Long> PENDING_DUE = new ConcurrentHashMap<>();
+    private static final Map<Key, Shown> PENDING = new HashMap<>();
+    private static final Map<Key, Long> PENDING_DUE = new HashMap<>();
 
     private QiCoatingSelectionService() {
     }
@@ -60,7 +58,7 @@ public final class QiCoatingSelectionService {
             return List.of();
         }
         return CoreRegistries.QI_COATING_ELEMENT_REGISTRY.get(access).entrySet().stream()
-                .filter(entry -> entry.getValue().visual(channel).isPresent())
+                .filter(entry -> entry.getValue().coating(channel).isPresent())
                 .filter(entry -> entry.getValue().path().map(path -> AscensionOriginSourceHelper.hasPath(source, path)).orElse(true))
                 .sorted(Comparator.comparingInt((Map.Entry<ResourceKey<QiCoatingElement>, QiCoatingElement> entry) -> entry.getValue().order())
                         .thenComparing(entry -> entry.getKey().identifier().toString()))
@@ -130,7 +128,7 @@ public final class QiCoatingSelectionService {
         PENDING.remove(key);
         PENDING_DUE.remove(key);
         SHOWN.remove(key);
-        PersistentRuntimeVisuals.remove(context, channel.visualKey());
+        QiCoatingManager.clear(context.caster(), channel, context.skill());
     }
 
     /**
@@ -157,10 +155,9 @@ public final class QiCoatingSelectionService {
             return;
         }
         ServerLevel level = player.level();
-        SkillActionContext context = new SkillActionContext(level, player, shown.skill(), null, null, 0.0D, Map.of());
         long shrinkTicks = Math.max(1L, (growMillis(shown.element(), channel, player.registryAccess()) + 49L) / 50L);
         SHOWN.remove(key);
-        PersistentRuntimeVisuals.remove(context, channel.visualKey());
+        QiCoatingManager.clear(player, channel, shown.skill());
         PENDING.put(key, new Shown(element, shown.skill()));
         PENDING_DUE.put(key, level.getGameTime() + shrinkTicks);
     }
@@ -173,20 +170,19 @@ public final class QiCoatingSelectionService {
     }
 
     private static void showElement(SkillActionContext context, QiCoatingChannel channel, Identifier elementId) {
-        QiCoatingElement element = CoreRegistries.safeAccess(CoreRegistries.QI_COATING_ELEMENT_REGISTRY, elementId, context.level().registryAccess());
-        Identifier visual = element == null ? null : element.visual(channel).orElse(null);
-        if (visual == null) {
+        QiCoatingElement element = QiCoatingElement.byId(elementId, context.level().registryAccess());
+        Identifier coating = element == null ? null : element.coating(channel).orElse(null);
+        if (coating == null) {
             return;
         }
         LivingEntity caster = context.caster();
-        PersistentRuntimeVisuals.apply(context, channel.visualKey(), visual, caster, Vec3.ZERO, false,
-                1.0F, 0.0D, 0xFFFFFFFF, 0xFFFFFFFF);
+        QiCoatingManager.set(caster, channel, coating, context.skill());
         SHOWN.put(new Key(caster.getUUID(), channel), new Shown(elementId, context.skill()));
     }
 
     private static long growMillis(Identifier elementId, QiCoatingChannel channel, RegistryAccess access) {
-        QiCoatingElement element = CoreRegistries.safeAccess(CoreRegistries.QI_COATING_ELEMENT_REGISTRY, elementId, access);
-        QiCoating coating = element == null ? null : element.visual(channel).map(visual -> QiCoating.fromVisual(visual, access)).orElse(null);
+        QiCoatingElement element = QiCoatingElement.byId(elementId, access);
+        QiCoating coating = element == null ? null : element.coating(channel).map(id -> QiCoating.byId(id, access)).orElse(null);
         return coating == null ? 0L : coating.growMillis();
     }
 
@@ -251,6 +247,12 @@ public final class QiCoatingSelectionService {
      * The element a channel is showing and the passive skill showing it.
      */
     public record Shown(Identifier element, Identifier skill) {
+        /**
+         * The element itself, or null if no datapack defines it any more.
+         */
+        public QiCoatingElement definition(RegistryAccess access) {
+            return QiCoatingElement.byId(element, access);
+        }
     }
 
     @EventBusSubscriber(modid = AscensionCraft.MOD_ID)

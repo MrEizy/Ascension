@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -15,8 +14,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.client.renderer.IrisPipelineCompat;
-import net.zic.ascension.client.renderer.QiCoatingLooks;
+import net.zic.ascension.client.renderer.AfterShaderPackDraws;
 import net.zic.ascension.client.renderer.ModRenderTypes;
 import net.zic.ascension.impl.core.skill.passive.PassiveModifiers;
 import net.zic.ascension.impl.core.skill.passive.QiStepService;
@@ -198,11 +196,13 @@ public final class QiStepClient {
                 nextFoot = 1 - nextFoot;
                 formFootholds(player, QiStepService.Action.STEP, foot, false);
             }
-        } else if (++hoverCharge >= QiStepService.HOVER_CHARGE_TICKS) {
-            hoverCharge = 0;
-            strain += settings.hoverStrain();
-            formFootholds(player, QiStepService.Action.HOVER, centre, true);
         }
+        // Standing still charge off for now: no extra qi for standing in the air, and no new footholds every few ticks.
+        // } else if (++hoverCharge >= QiStepService.HOVER_CHARGE_TICKS) {
+        //     hoverCharge = 0;
+        //     strain += settings.hoverStrain();
+        //     formFootholds(player, QiStepService.Action.HOVER, centre, true);
+        // }
     }
 
     /**
@@ -240,9 +240,11 @@ public final class QiStepClient {
         float time = minecraft.level.getGameTime() + minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
         FOOTHOLDS.removeIf(foothold -> time - foothold.spawnTick() > FOOTHOLD_TICKS);
         Vec3 camera = minecraft.gameRenderer.getMainCamera().position();
-        PoseStack.Pose pose = event.getPoseStack().last();
-        MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
-        VertexConsumer buffer = buffers.getBuffer(ModRenderTypes.qiCoating());
+        // Under a shader pack, drawn after it with our own shader (AfterShaderPackDraws).
+        AfterShaderPackDraws.drawOrDefer(event.getPoseStack(), ModRenderTypes.qiCoating(), (pose, buffer) -> drawFootholds(pose, buffer, camera, time));
+    }
+
+    private static void drawFootholds(PoseStack.Pose pose, VertexConsumer buffer, Vec3 camera, float time) {
         for (Foothold foothold : FOOTHOLDS) {
             float life = Math.min(1.0F, (foothold.spawnTick() + FOOTHOLD_TICKS - time) / FOOTHOLD_FADE_TICKS);
             if (life <= 0.0F) {
@@ -258,13 +260,12 @@ public final class QiStepClient {
             footholdVertex(pose, buffer, centre.add(x).add(z), 1.0F, 1.0F, color);
             footholdVertex(pose, buffer, centre.subtract(x).add(z), 0.0F, 1.0F, color);
         }
-        buffers.endLastBatch();
     }
 
     private static void footholdVertex(PoseStack.Pose pose, VertexConsumer buffer, Vec3 position, float u, float v, int color) {
         buffer.addVertex(pose, (float) position.x, (float) position.y, (float) position.z)
                 .setUv(FOOTHOLD_STYLE_OFFSET + u, v)
-                .setColor(IrisPipelineCompat.isShaderPackInUse() ? QiCoatingLooks.shellShaderPackColor(FOOTHOLD_STYLE_OFFSET + u, color) : color);
+                .setColor(color);
     }
 
     private record Foothold(Vec3 position, float yaw, long spawnTick) {

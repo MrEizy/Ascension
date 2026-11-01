@@ -11,8 +11,8 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
- * The two places a Qi Coating can go, each with its own skill (Qi Coating, External Qi Coating), state group and persistent
- * visual key, so one of each can be on at the same time.
+ * The two places a Qi Coating can go, each with its own skill (Qi Coating, External Qi Coating) and state group, so one of each
+ * can be on at the same time.
  */
 @NullMarked
 public enum QiCoatingChannel implements StringRepresentable {
@@ -35,15 +35,19 @@ public enum QiCoatingChannel implements StringRepresentable {
     }
 
     /**
-     * The persistent visual key the channel's coating is shown under.
+     * The channel's id, as its state group is named.
      */
-    public Identifier visualKey() {
+    public Identifier id() {
         return id;
     }
 
     /**
-     * Whether a coating belongs to this channel: weapon coatings are external, everything else is on the body.
+     * The channel a coating goes on: weapon coatings are external, everything else is on the body.
      */
+    public static QiCoatingChannel of(QiCoating coating) {
+        return coating.swordQi() ? EXTERNAL : BODY;
+    }
+
     public boolean matches(@Nullable QiCoating coating) {
         return coating != null && coating.swordQi() == (this == EXTERNAL);
     }

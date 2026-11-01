@@ -6,6 +6,7 @@
 #moj_import <ascension:ice_crystal.glsl>
 #moj_import <ascension:wind_gust.glsl>
 #moj_import <ascension:qi_impact.glsl>
+#moj_import <ascension:molten_gold.glsl>
 
 // Skin-fitted qi coatings: QiCoatingLayer redraws the coated limbs from the player's own skin, both layers, a hair off each
 // surface, and this paints the coating into the skin's pixels. The base layer is coated all over; the outer layer (sleeves and
@@ -60,13 +61,11 @@ const float ICE_SELF_LIGHT = 0.45;
 // windRing). Between gusts only a few faint streaks drift round; every so often a gust climbs from the hand up the arm and the
 // streaks thicken and brighten as it passes. The four sides of a limb sit side by side in the skin texture, 16 pixels round, so
 // the streaks repeat every 16 pixels and wrap round the arm without a seam. Only coatingData.b (how far up the limb) is used.
-// (The first version: flat streaks 2-3 texels long in lanes a skin pixel tall, half of each lane's 4-texel cells lit, colour
-// 0.90, 1.00, 0.91, 0.45, over a film of 0.72, 0.94, 0.78, 0.08 all over the arm, every lane running all the time.)
 const float WIND_SKIN_SUBDIVIDE = 2.0;
 const float WIND_SKIN_AROUND = 16.0 * WIND_SKIN_SUBDIVIDE;
 const float WIND_SKIN_ROWS = 12.0 * WIND_SKIN_SUBDIVIDE;
 const float WIND_SKIN_FPS = 16.0;
-// -1.0 turns the skin's streaks the same way as the rings (the first try, 1.0, turned them against each other).
+// -1.0 turns the skin's streaks the same way as the rings.
 const float WIND_SKIN_DIRECTION = -1.0;
 // How far up the limb the wind reaches (about as far as the rings), and how many texels its top edge wanders.
 const float WIND_SKIN_TOP = WIND_GUST_TOP;
@@ -79,7 +78,7 @@ const float WIND_SKIN_CELL = 8.0;
 const float WIND_SKIN_WIDTH = 2.0;
 const float WIND_SKIN_SLANT = 1.0;
 // Share of cells carrying a streak between gusts, and at a gust's front. The wind keeps running steadily between gusts, which
-// only swell it (the first try, 0.15 and 0.45 below, left the arm nearly bare between short flashes).
+// only swell it.
 const float WIND_SKIN_CALM_CHANCE = 0.45;
 const float WIND_SKIN_GUST_CHANCE = 0.8;
 // How faint the streaks are between gusts, as a share of a gust's brightness.
@@ -133,7 +132,7 @@ vec4 windSkin(vec2 texel, float row, float seconds) {
 // and that glow shrinks back into the front over the last MOLTEN_COOL of the spread as the metal cools; drops of molten gold run
 // down from the front in DRIP_CHANCE of the two-texel columns, one every DRIP_PERIOD seconds at DRIP_SPEED rows a second.
 // Molten texels give off their own light. Every METAL_SHEEN_PERIOD seconds a chevron of light sweeps up the Molten Fist. A swing
-// or hit throws sparks off the Molten Fist; on the Golden Body it sends a bright ring out up and down the arm from where it
+// or hit flashes the Molten Fist brighter; on the Golden Body it sends a bright ring out up and down the arm from where it
 // struck. Drawn in METAL_SUBDIVIDE x METAL_SUBDIVIDE texels per skin pixel.
 const float METAL_SUBDIVIDE = 2.0;
 const float METAL_ROWS = 12.0 * METAL_SUBDIVIDE;
@@ -145,23 +144,12 @@ const float MOLTEN_FIST_JAG = 1.0;
 const float GOLDEN_BODY_TOP = 1.0;
 const float GOLDEN_BODY_JAG = 2.0;
 const float METAL_SPREAD_FPS = 8.0;
-// The gold tint: a pixel's brightness picks a gold along a ramp from GOLD_DEEP (dark pixels) to GOLD_BRIGHT (light ones), then
-// GOLD_TINT_AMOUNT of the way from the skin's own colour to that. The ramp keeps the gold saturated at every brightness, so
-// fully lit faces (tops of the head and shoulders) don't clip to a pale, near-white gold. GOLD_DEEP, GOLD_BRIGHT, GOLD_TINT_AMOUNT,
-// GOLD_SHINE and the molten colours must match sword_qi.fsh's Molten Edge.
-const vec3 GOLD_DEEP = vec3(0.30, 0.18, 0.04);
-const vec3 GOLD_BRIGHT = vec3(0.98, 0.80, 0.42);
-const float GOLD_TINT_AMOUNT = 0.8;
-const vec3 GOLD_SHINE = vec3(1.00, 0.97, 0.80);
+// The gold and molten colours and goldTint are in molten_gold.glsl, shared with sword_qi.fsh's Molten Edge.
 // How far the sheen and the Molten Fist's hit flash brighten the gold toward GOLD_SHINE.
 const float METAL_SHEEN_SHINE = 0.6;
 const float METAL_FLASH_SHINE = 0.3;
 const float MOLTEN_ROWS = 5.0;
 const float MOLTEN_COOL = 0.2;
-const vec3 MOLTEN_WHITE = vec3(1.00, 0.97, 0.84);
-const vec3 MOLTEN_YELLOW = vec3(1.00, 0.80, 0.32);
-const vec3 MOLTEN_ORANGE = vec3(1.00, 0.52, 0.12);
-const vec3 MOLTEN_RED = vec3(0.82, 0.27, 0.06);
 const float DRIP_CHANCE = 0.3;
 const float DRIP_PERIOD = 0.8;
 const float DRIP_SPEED = 14.0;
@@ -171,11 +159,7 @@ const float METAL_SHEEN_PERIOD = 3.0;
 const float METAL_SHEEN_RUN = 0.6;
 const float METAL_SHEEN_WIDTH = 2.0;
 const float METAL_SHEEN_DIP = 2.0;
-// Molten Fist sparks: for METAL_SPARK_SECONDS after a hit, METAL_SPARK_CHANCE of the texels flash, re-rolled
-// METAL_SPARK_FPS times a second, and the whole fist flashes brighter for the first METAL_FLASH_SECONDS.
-const float METAL_SPARK_SECONDS = 0.35;
-const float METAL_SPARK_CHANCE = 0.08;
-const float METAL_SPARK_FPS = 16.0;
+// Molten Fist hit flash: the whole fist flashes brighter for the first METAL_FLASH_SECONDS after a hit.
 const float METAL_FLASH_SECONDS = 0.12;
 // Golden Body ring: runs out from the struck row at METAL_RING_SPEED rows a second, for METAL_RING_SECONDS.
 const float METAL_RING_SPEED = 40.0;
@@ -186,17 +170,14 @@ const float METAL_SELF_LIGHT = 0.35;
 const float METAL_SHADE_MID = 0.75;
 const float METAL_SHADE_FLATTEN = 0.5;
 
-// A skin pixel tinted gold, keeping its own brightness (on the gold ramp) and a little of its own colour.
-vec3 goldTint(vec3 skin) {
-    float lum = dot(skin, vec3(0.299, 0.587, 0.114));
-    return mix(skin, mix(GOLD_DEEP, GOLD_BRIGHT, clamp(lum * 1.1, 0.0, 1.0)), GOLD_TINT_AMOUNT);
-}
-
 // The gold at this texel, or vec4(0) where the coating hasn't reached. `glow` is set to 1 on texels that give off their own
 // light (molten ones).
 vec4 metalSkin(vec3 skin, vec2 texel, float row, bool body, float progress, float impactAge, float impactSeed, float seconds,
                out float glow) {
     glow = 0.0;
+    // A fully grown coating arrives as 255 in the vertex colour, which interpolates to a hair under 1 on some pixels: snapped,
+    // or the molten glow at the front came on there pixel by pixel as a band of static.
+    progress = progress > 254.5 / 255.0 ? 1.0 : progress;
     float top = body ? GOLDEN_BODY_TOP : MOLTEN_FIST_TOP;
     float jag = body ? GOLDEN_BODY_JAG : MOLTEN_FIST_JAG;
     float front = iceFreezeRow(texel.x, top * METAL_ROWS, progress, jag, floor(seconds * METAL_SPREAD_FPS));
@@ -205,10 +186,11 @@ vec4 metalSkin(vec3 skin, vec2 texel, float row, bool body, float progress, floa
     }
     float heatRows = MOLTEN_ROWS * clamp((1.0 - progress) / MOLTEN_COOL, 0.0, 1.0);
     float behind = floor(front - 1.0 - row);
-    if (behind < heatRows) {
+    // Only while there's heat: the row the front cuts through is -1 behind it, which counted as glowing once cooled.
+    if (heatRows > 0.0 && behind < heatRows) {
         glow = 1.0;
         float heat = behind / max(heatRows, 1.0);
-        return vec4(heat < 0.25 ? MOLTEN_WHITE : heat < 0.5 ? MOLTEN_YELLOW : heat < 0.75 ? MOLTEN_ORANGE : MOLTEN_RED, 1.0);
+        return vec4(moltenColour(heat), 1.0);
     }
     if (progress < 0.999 && mod(texel.x, 2.0) == 0.0) {
         float column = floor(texel.x / 2.0);
@@ -220,9 +202,6 @@ vec4 metalSkin(vec3 skin, vec2 texel, float row, bool body, float progress, floa
                 return vec4(row == drip ? MOLTEN_ORANGE : MOLTEN_RED, 1.0);
             }
         }
-    }
-    if (row >= front - 1.0) {
-        return vec4(GOLD_SHINE, 1.0);
     }
     vec3 gold = goldTint(skin);
     if (!body) {
@@ -238,10 +217,6 @@ vec4 metalSkin(vec3 skin, vec2 texel, float row, bool body, float progress, floa
         if (!body) {
             if (impactAge < METAL_FLASH_SECONDS) {
                 gold = mix(gold, GOLD_SHINE, METAL_FLASH_SHINE);
-            }
-            if (impactAge < METAL_SPARK_SECONDS
-                    && iceHash(texel + vec2(impactSeed * 1.31, floor(impactAge * METAL_SPARK_FPS) * 0.73)) < METAL_SPARK_CHANCE) {
-                return vec4(1.0, 1.0, 0.92, 1.0);
             }
         } else if (impactAge < METAL_RING_SECONDS) {
             float struck = floor(iceHash(vec2(impactSeed, 3.7)) * max(1.0, top * METAL_ROWS - jag - 1.0));

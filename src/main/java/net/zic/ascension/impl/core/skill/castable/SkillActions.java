@@ -36,6 +36,7 @@ import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
 import net.zic.ascension.api.ascension.core.skill.castable.action.ActionSubject;
+import net.zic.ascension.api.ascension.core.qi_coating.QiCoating;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingChannel;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
@@ -1473,6 +1474,51 @@ public final class SkillActions {
         @Override
         public void apply(SkillActionContext context) {
             QiCoatingSelectionService.show(context, channel);
+        }
+    }
+
+    /**
+     * Puts a named Qi Coating on the caster (QiCoatingManager), on the channel its coverage belongs to: for coating skills that
+     * don't go through the element wheel, such as the whole-body layers. Used in a passive's on_enable like qi_coating_visual,
+     * and taken off the same way.
+     */
+    public record ApplyQiCoating(Identifier coating) implements SkillAction {
+        public static final MapCodec<ApplyQiCoating> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Identifier.CODEC.fieldOf("coating").forGetter(ApplyQiCoating::coating)
+        ).apply(instance, ApplyQiCoating::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.QI_COATING.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            QiCoatingChannel channel = channel(context);
+            if (channel != null) {
+                QiCoatingManager.set(context.caster(), channel, coating, context.skill());
+            }
+        }
+
+        /**
+         * Takes the coating off again, when the passive that put it on goes off.
+         */
+        public void clear(SkillActionContext context) {
+            QiCoatingChannel channel = channel(context);
+            if (channel != null) {
+                QiCoatingManager.clear(context.caster(), channel, context.skill());
+            }
+        }
+
+        // The channel the coating's coverage belongs to, or null if no datapack defines it.
+        private QiCoatingChannel channel(SkillActionContext context) {
+            QiCoating definition = QiCoating.byId(coating, context.level().registryAccess());
+            return definition == null ? null : QiCoatingChannel.of(definition);
         }
     }
 

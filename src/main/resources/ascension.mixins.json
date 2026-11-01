@@ -5,6 +5,8 @@
   "mixins": [
     "accessor.FoodDataAccessor",
     "accessor.ServerGamePacketListenerImplAccessor",
+    "block.IceBlockQiCoatingMixin",
+    "combat.LivingEntityBarrierHurtMixin",
     "resource.FoodDataRegenerationExhaustionMixin",
     "resource.PlayerAttackExhaustionMixin",
     "resource.PlayerExhaustionFallbackMixin",
@@ -12,11 +14,12 @@
     "resource.PlayerTravelExhaustionMixin"
   ],
   "client": [
+    "client.GameRendererAfterShaderPackMixin",
     "client.ItemInHandLayerSwordQiMixin",
+    "client.ItemInHandRendererAfterShaderPackMixin",
     "client.ItemInHandRendererSwordQiMixin",
     "client.ItemLayerSwordQiMixin",
-    "client.LivingEntityRendererQiCoatingMixin",
-    "client.PlayerModelQiCoatingMixin"
+    "client.LivingEntityRendererQiCoatingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

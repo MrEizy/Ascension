@@ -221,7 +221,8 @@
           "type": "ascension:grant_skills",
           "skills": [
             "ascension:castable/qi_step/qi_step",
-            "ascension:passive/qi_step/qi_step"
+            "ascension:passive/qi_step/qi_step",
+            "ascension:castable/qi_barrier"
           ]
         }
       ]

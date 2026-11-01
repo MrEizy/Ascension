@@ -1,6 +1,5 @@
 {
   "coverage": "hands",
-  "fades_arm": true,
   "echoes": true,
   "reacts_to": ["hurt"],
   "shells": {

@@ -3,8 +3,8 @@
     "translate": "ascension.qi_coating.element.wind.name"
   },
   "path": "ascension:elemental/wind",
-  "body_visual": "ascension:qi_coating/wind_qi_coating",
-  "external_visual": "ascension:qi_coating/wind_external_qi_coating",
+  "body_coating": "ascension:wind_qi_coating",
+  "external_coating": "ascension:wind_external_qi_coating",
   "order": 6,
   "body_on_hit": {
     "cost": {
@@ -97,5 +97,8 @@
         "subject": "target"
       }
     ]
+  },
+  "external_on_mine": {
+    "airborne": true
   }
 }

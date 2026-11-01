@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.HumanoidArm;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingDefinition;
-import net.zic.ascension.client.renderer.IrisPipelineCompat;
+import net.zic.ascension.client.renderer.AfterShaderPackDraws;
 import net.zic.ascension.client.renderer.ModRenderTypes;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
@@ -82,13 +82,13 @@ final class QiCoatingTextureShells {
         boolean patches = gather != null && gather.style() == QiCoatingDefinition.GatherStyle.PATCHES;
         boolean fade = gather != null && gather.style() == QiCoatingDefinition.GatherStyle.FADE;
         float[][] landings = patches ? QiCoatingGather.landings(gather, side, slim, maxReach(layers)) : null;
-        submitNodeCollector.submitCustomGeometry(poseStack, renderType(texture), (pose, buffer) -> {
+        AfterShaderPackDraws.submitCustomGeometry(submitNodeCollector, poseStack, renderType(texture), (pose, buffer) -> {
             for (QiCoatingDefinition.Layer layer : layers) {
                 // The inflated box's hand end already sits `inflate` past the hand, so it is moved out by the rest of the
                 // overhang only, ending where a shader shell's does.
                 float reach = patches || fade ? layer.reach() : layer.reach() * growth;
                 int color = fade ? QiCoatingGather.fade(layer.color(), growth) : layer.color();
-                draw(pose, buffer, texture, frame, part, slim, layer.inflate(), layer.outer(), reach,
+                draw(pose, buffer, texture, frame, part, slim, layer.inflate(), reach,
                         layer.overhang() - layer.inflate(), color, lightCoords, landings, growth);
             }
         });
@@ -103,8 +103,7 @@ final class QiCoatingTextureShells {
     }
 
     /**
-     * A body coating's boxes in third person, as its Shells.body says: every part (film; just up to limb_reach on the limbs, and
-     * without the head and torso unless torso_and_head) or each limb (limbs; or just the legs).
+     * A body coating's boxes in third person, as its Shells.body says: every part (film) or each limb (limbs; or just the legs).
      */
     static void submitBody(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, PlayerModel model,
                            QiCoatingDefinition.Texture texture, QiCoatingDefinition.Body body, boolean slim, int lightCoords,
@@ -113,21 +112,20 @@ final class QiCoatingTextureShells {
             return;
         }
         boolean film = body.mode() == QiCoatingDefinition.BodyMode.FILM;
-        float limbReach = film ? body.limbReach().orElse(WHOLE_PART) : WHOLE_PART;
         int frame = frame(texture);
         RenderType renderType = renderType(texture);
         poseStack.pushPose();
         model.root().translateAndRotate(poseStack);
-        if (film && body.torsoAndHead()) {
+        if (film) {
             submitPart(poseStack, submitNodeCollector, renderType, model.head, texture, frame, Part.HEAD, slim, body, WHOLE_PART * growth, lightCoords);
             submitPart(poseStack, submitNodeCollector, renderType, model.body, texture, frame, Part.BODY, slim, body, WHOLE_PART * growth, lightCoords);
         }
         if (film || !body.legsOnly()) {
-            submitPart(poseStack, submitNodeCollector, renderType, model.rightArm, texture, frame, Part.RIGHT_ARM, slim, body, limbReach * growth, lightCoords);
-            submitPart(poseStack, submitNodeCollector, renderType, model.leftArm, texture, frame, Part.LEFT_ARM, slim, body, limbReach * growth, lightCoords);
+            submitPart(poseStack, submitNodeCollector, renderType, model.rightArm, texture, frame, Part.RIGHT_ARM, slim, body, WHOLE_PART * growth, lightCoords);
+            submitPart(poseStack, submitNodeCollector, renderType, model.leftArm, texture, frame, Part.LEFT_ARM, slim, body, WHOLE_PART * growth, lightCoords);
         }
-        submitPart(poseStack, submitNodeCollector, renderType, model.rightLeg, texture, frame, Part.RIGHT_LEG, slim, body, limbReach * growth, lightCoords);
-        submitPart(poseStack, submitNodeCollector, renderType, model.leftLeg, texture, frame, Part.LEFT_LEG, slim, body, limbReach * growth, lightCoords);
+        submitPart(poseStack, submitNodeCollector, renderType, model.rightLeg, texture, frame, Part.RIGHT_LEG, slim, body, WHOLE_PART * growth, lightCoords);
+        submitPart(poseStack, submitNodeCollector, renderType, model.leftLeg, texture, frame, Part.LEFT_LEG, slim, body, WHOLE_PART * growth, lightCoords);
         poseStack.popPose();
     }
 
@@ -139,19 +137,19 @@ final class QiCoatingTextureShells {
         }
         poseStack.pushPose();
         posed.translateAndRotate(poseStack);
-        submitNodeCollector.submitCustomGeometry(poseStack, renderType, (pose, buffer) ->
-                draw(pose, buffer, texture, frame, part, slim, body.inflate(), body.outer(), reach, 0.0F, body.color(), lightCoords,
+        AfterShaderPackDraws.submitCustomGeometry(submitNodeCollector, poseStack, renderType, (pose, buffer) ->
+                draw(pose, buffer, texture, frame, part, slim, body.inflate(), reach, 0.0F, body.color(), lightCoords,
                         null, 1.0F));
         poseStack.popPose();
     }
 
     private static void draw(PoseStack.Pose pose, VertexConsumer buffer, QiCoatingDefinition.Texture texture, int frame, Part part,
-                             boolean slim, float inflate, boolean outer, float reach, float overhang, int color, int lightCoords,
+                             boolean slim, float inflate, float reach, float overhang, int color, int lightCoords,
                              float[][] landings, float growth) {
         PoseStack partPose = new PoseStack();
         partPose.last().set(pose);
-        box(slim, part, inflate, outer).render(partPose, new CutConsumer(buffer, pose.pose(), part, reach, overhang, frame, texture.frames(),
-                        slim ? slimArmArea(part, outer) : null, landings, growth),
+        box(slim, part, inflate).render(partPose, new CutConsumer(buffer, pose.pose(), part, reach, overhang, frame, texture.frames(),
+                        slim ? slimArmArea(part) : null, landings, growth),
                 lightCoords, OverlayTexture.NO_OVERLAY, color);
     }
 
@@ -161,47 +159,37 @@ final class QiCoatingTextureShells {
 
     static RenderType renderType(QiCoatingDefinition.Texture texture) {
         // Both write depth, so clouds and other translucent things drawn later don't show through.
-        boolean shaderPack = IrisPipelineCompat.isShaderPackInUse();
-        if (!texture.emissive(shaderPack)) {
-            return RenderTypes.entityTranslucent(texture.path());
-        }
-        // Under a shader pack, vanilla's own emissive entity type: Iris binds its samplers in every pass, where our pipeline's
-        // overlay sampler went missing in third person ("Missing sampler Sampler1").
-        return shaderPack ? RenderTypes.entityTranslucentEmissive(texture.path()) : ModRenderTypes.qiCoatingTextureEmissive(texture.path());
+        return texture.emissive() ? ModRenderTypes.qiCoatingTextureEmissive(texture.path()) : ModRenderTypes.qiCoatingEntityTranslucent(texture.path());
     }
 
     /**
-     * A private copy of one of the player model's parts, inflated, with just its inner box or just its outer layer box, baked at
-     * the origin. Never re-posed, so safe to draw deferred.
+     * A private copy of one of the player model's parts, inflated, with just its inner box (not its outer layer), baked at the
+     * origin. Never re-posed, so safe to draw deferred.
      */
-    private static ModelPart box(boolean slim, Part part, float inflate, boolean outer) {
-        return PARTS.computeIfAbsent(new PartKey(slim, part, inflate, outer), key -> {
+    private static ModelPart box(boolean slim, Part part, float inflate) {
+        return PARTS.computeIfAbsent(new PartKey(slim, part, inflate), key -> {
             ModelPart root = LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(key.inflate()), key.slim()), 64, 64)
                     .bakeRoot();
             ModelPart base = root.getChild(key.part().name);
             base.setInitialPose(PartPose.ZERO);
             base.resetPose();
-            ModelPart outerBox = base.getChild(key.part().outerName);
-            if (key.outer()) {
-                return outerBox;
-            }
-            outerBox.visible = false;
+            base.getChild(key.part().outerName).visible = false;
             return base;
         });
     }
 
-    private record PartKey(boolean slim, Part part, float inflate, boolean outer) {
+    private record PartKey(boolean slim, Part part, float inflate) {
     }
 
     /**
-     * The top left corner of a slim arm's skin area (its box or its sleeve), in pixels, or null for any other part. Slim arms
+     * The top left corner of a slim arm's skin area, in pixels, or null for any other part. Slim arms
      * are 3 wide, so their faces would read the wide arm's area shifted; CutConsumer stretches them onto the wide one instead,
      * so one texture fits both.
      */
-    private static float[] slimArmArea(Part part, boolean outer) {
+    private static float[] slimArmArea(Part part) {
         return switch (part) {
-            case RIGHT_ARM -> outer ? new float[]{40.0F, 32.0F} : new float[]{40.0F, 16.0F};
-            case LEFT_ARM -> outer ? new float[]{48.0F, 48.0F} : new float[]{32.0F, 48.0F};
+            case RIGHT_ARM -> new float[]{40.0F, 16.0F};
+            case LEFT_ARM -> new float[]{32.0F, 48.0F};
             default -> null;
         };
     }

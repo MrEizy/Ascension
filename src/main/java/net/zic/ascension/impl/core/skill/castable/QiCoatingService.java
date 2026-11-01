@@ -1,6 +1,5 @@
 package net.zic.ascension.impl.core.skill.castable;
 
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,7 +20,6 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoating;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingChannel;
 import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingEffects;
@@ -33,26 +31,26 @@ import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.common.util.ModTags;
 import net.zic.ascension.impl.core.skill.passive.PassiveTriggerService;
-import net.zic.ascension.impl.runtime.object.PersistentRuntimeVisuals;
 import net.zic.ascension.network.LightningFlashPacket;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 /**
- * Server-side behaviour of Qi Coatings beyond their looks. Coatings themselves are passives (toggle_passive and
- * persistent_visual), which own their upkeep; this runs the Qi Coating elements' combat hooks (QiCoatingElement.Hook) and the
+ * Server-side behaviour of Qi Coatings beyond their looks. Coatings themselves are passives (toggle_passive, and
+ * QiCoatingManager to put them on), which own their upkeep; this runs the Qi Coating elements' combat hooks (QiCoatingElement.Hook) and the
  * Lightning Step spear flash.
  */
 public final class QiCoatingService {
     // Element hooks: the melee swing each player made last (AttackEntityEvent), so a hit can be told apart from projectiles and
     // skill damage, when each hook may fire again, and whether a hook is running (its own damage never sets off another hook).
-    private static final Map<UUID, Swing> MELEE_SWINGS = new ConcurrentHashMap<>();
-    private static final Map<HookKey, Long> HOOK_READY_AT = new ConcurrentHashMap<>();
+    private static final Map<UUID, Swing> MELEE_SWINGS = new HashMap<>();
+    private static final Map<HookKey, Long> HOOK_READY_AT = new HashMap<>();
     private static boolean runningHook;
 
     // Lightning Step spear flash: holding right click with a spear for FLASH_WINDUP_TICKS while Lightning Step is on spends
@@ -64,17 +62,19 @@ public final class QiCoatingService {
     // Durability the spear loses per flash, on top of the usual 1 per target hit (vanilla charges every spear hit the same).
     private static final int FLASH_DURABILITY_COST = 8;
     // Players whose current hold has already flashed (or failed to), and when each may flash again.
-    private static final Set<UUID> FLASHED_THIS_HOLD = ConcurrentHashMap.newKeySet();
-    private static final Map<UUID, Long> FLASH_READY_AT = new ConcurrentHashMap<>();
+    private static final Set<UUID> FLASHED_THIS_HOLD = new HashSet<>();
+    private static final Map<UUID, Long> FLASH_READY_AT = new HashMap<>();
 
     private QiCoatingService() {
     }
 
     /**
-     * Whether External Qi Coating shows on this item: bladed weapons and polearms (swords, blades, axes and spears).
+     * Whether External Qi Coating shows on this item: bladed weapons and polearms (swords, blades, axes and spears) and the
+     * other tools (pickaxes, shovels and hoes).
      */
     public static boolean coatsWeapon(ItemStack itemStack) {
         return itemStack.is(ItemTags.SWORDS) || itemStack.is(ItemTags.AXES) || itemStack.is(ItemTags.SPEARS)
+                || itemStack.is(ItemTags.PICKAXES) || itemStack.is(ItemTags.SHOVELS) || itemStack.is(ItemTags.HOES)
                 || itemStack.is(ModTags.Items.WEAPON_BLADES) || itemStack.is(ModTags.Items.WEAPON_SPEARS);
     }
 
@@ -120,8 +120,7 @@ public final class QiCoatingService {
      */
     private static void fireHook(ServerPlayer player, Hook hook, LivingEntity target, Map<Identifier, Double> variables) {
         QiCoatingSelectionService.Shown shown = QiCoatingSelectionService.shown(player.getUUID(), hook.channel).orElse(null);
-        QiCoatingElement element = shown == null ? null
-                : CoreRegistries.safeAccess(CoreRegistries.QI_COATING_ELEMENT_REGISTRY, shown.element(), player.registryAccess());
+        QiCoatingElement element = shown == null ? null : shown.definition(player.registryAccess());
         QiCoatingElement.Hook definition = element == null ? null : hook.definition.apply(element).orElse(null);
         if (definition == null) {
             return;
@@ -180,13 +179,11 @@ public final class QiCoatingService {
     }
 
     /**
-     * Whether the player has a coating on with the Lightning Step effect (QiCoatingEffects.LIGHTNING_STEP): one of their
-     * persistent visuals names a coating that adds it.
+     * Whether the player has a coating on with the Lightning Step effect (QiCoatingEffects.LIGHTNING_STEP).
      */
     private static boolean hasLightningStep(ServerPlayer player) {
-        RegistryAccess access = player.level().registryAccess();
-        for (Identifier visual : PersistentRuntimeVisuals.visualsOn(player.getUUID())) {
-            QiCoating coating = QiCoating.fromVisual(visual, access);
+        for (QiCoatingChannel channel : QiCoatingChannel.values()) {
+            QiCoating coating = QiCoatingManager.get(player, channel);
             if (coating != null && coating.hasEffect(QiCoatingEffects.LIGHTNING_STEP)) {
                 return true;
             }

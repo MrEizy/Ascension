@@ -3,8 +3,8 @@
     "translate": "ascension.qi_coating.element.lightning.name"
   },
   "path": "ascension:elemental/lightning",
-  "body_visual": "ascension:qi_coating/lightning_qi_coating",
-  "external_visual": "ascension:qi_coating/lightning_external_qi_coating",
+  "body_coating": "ascension:lightning_qi_coating",
+  "external_coating": "ascension:lightning_external_qi_coating",
   "order": 7,
   "body_on_hit": {
     "cost": {

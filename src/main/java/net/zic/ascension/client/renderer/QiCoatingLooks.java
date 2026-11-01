@@ -31,24 +31,24 @@ public final class QiCoatingLooks {
     static {
         // Pure Qi: an even pale cyan film of plain qi, the element-less coating anyone can use.
         registerShell(id("pure_qi"), ShellLook.plain(57));
+        // Qi Barrier: the Pure Qi film over the whole body while the barrier is up (QiCoatingLayer.submitBarrierFilm).
+        registerShell(id("qi_barrier"), ShellLook.plain(59));
         // Space: a window into the starry depths of space on the hands, or over the whole body. The hands' window writes depth,
         // or translucent things drawn after it (water, clouds, particles) showed through it depending on draw order; its faint
         // pixels up the forearm are cut off in qi_coating.fsh (STARFIELD_CUTOFF) so they don't hide what's behind them.
-        registerShell(id("space_starfield"), new ShellLook(new int[]{5}, false, false, Render.DEPTH));
-        // Shelved (its JSON is in src/main/resources-disabled/qi_coatings).
-        // registerShell(id("void_echo_layer"), ShellLook.plain(10));
+        registerShell(id("space_starfield"), new ShellLook(new int[]{5}, false, Render.DEPTH));
         // Time: a thin violet film whose bands tear sideways (time_echo), drawn still between triggers (time_echo_quiet).
         registerShell(id("time_echo"), ShellLook.plain(9));
         registerShell(id("time_echo_quiet"), ShellLook.plain(58));
         registerShell(id("space_starfield_layer"), ShellLook.plain(11));
         // Lightning: pixel bolts racing up the arms (hand coating) or every limb, and Lightning Step's crackling legs, which
         // don't write depth so the see-through body shows behind them.
-        registerShell(id("lightning_crackle"), new ShellLook(new int[]{14, 45}, true, false, Render.DEPTH));
-        registerShell(id("lightning_crackle_limbs"), new ShellLook(new int[]{16, 46, 47, 48}, true, false, Render.DEPTH));
-        registerShell(id("lightning_step"), new ShellLook(new int[]{15, 15, 49, 50}, true, false, Render.NORMAL));
-        // Water: the Serpent Coil, on the arms only or on every limb.
-        registerShell(id("water_serpent_arms"), new ShellLook(new int[]{27, 44}, true, false, Render.DEPTH));
-        registerShell(id("water_serpent"), new ShellLook(new int[]{28, 41, 42, 43}, true, false, Render.DEPTH));
+        registerShell(id("lightning_crackle"), new ShellLook(new int[]{14, 45}, true, Render.DEPTH));
+        registerShell(id("lightning_crackle_limbs"), new ShellLook(new int[]{16, 46, 47, 48}, true, Render.DEPTH));
+        registerShell(id("lightning_step"), new ShellLook(new int[]{15, 15, 49, 50}, true, Render.NORMAL));
+        // Life: Minecraft's vines wound up the hand and forearm, a pulse of life light climbing them now and then; they grow in
+        // from the fingertips themselves (grows) and take the biome's foliage colour under the world's light (foliage).
+        registerShell(id("life_vines"), new ShellLook(new int[]{60, 61}, true, Render.DEPTH, true, true));
 
         registerSkin(id("ice"), () -> ModRenderPipelines.QI_COATING_SKIN);
         registerSkin(id("metal"), () -> ModRenderPipelines.QI_COATING_SKIN_METAL);
@@ -66,6 +66,8 @@ public final class QiCoatingLooks {
         registerSword(id("gale"), new SwordLook(6, SwordData.GALE));
         registerSword(id("molten"), new SwordLook(7, SwordData.SPREAD));
         registerSword(id("heat"), new SwordLook(8, SwordData.SPREAD));
+        // Life: the hand's vines over the blade, growing from the hilt (SPREAD), coloured by the biome's foliage (foliage).
+        registerSword(id("life_vines"), new SwordLook(11, SwordData.SPREAD, true));
     }
 
     private QiCoatingLooks() {
@@ -116,87 +118,6 @@ public final class QiCoatingLooks {
         return look;
     }
 
-    // ---- Shader pack tints ----
-    // With an Iris shader pack on, the pack's programs draw our geometry instead of our shaders (IrisPipelineCompat), so each
-    // look shows as a flat colour: these pick it, so a coating reads as its element instead of plain white.
-
-    /**
-     * The colour a qi_coating.fsh vertex is drawn in under a shader pack: its style's tint (the style is the vertex's u over 2),
-     * with the vertex's alpha scaled by the tint's. Styles without a tint keep their colour.
-     */
-    public static int shellShaderPackColor(float u, int color) {
-        int style = (int) Math.floor(Math.max(0.0F, u) / 2.0F);
-        int tint = switch (style) {
-            case 5, 11 -> 0xE62E1F66;              // space starfield: deep violet
-            case 9, 10, 58 -> 0x59B98CFF;          // time echoes: faint violet
-            case 27, 28, 41, 42, 43, 44 -> 0x995FB4E8; // water serpent: blue
-            case 14, 16, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55 -> 0x80A8D8FF; // lightning: faint light blue
-            case 56, 57 -> 0x8CBFF4FF;             // qi step footholds, pure qi: pale cyan
-            case 32 -> 0x669EEBB3;                 // wind rings: faint light green
-            default -> 0;
-        };
-        if (tint == 0) {
-            return color;
-        }
-        int alpha = Math.round(((color >>> 24) & 0xFF) * ((tint >>> 24) & 0xFF) / 255.0F);
-        return (alpha << 24) | (tint & 0xFFFFFF);
-    }
-
-    /**
-     * The tint a skin look's limb is drawn with under a shader pack, through vanilla's entity render type.
-     */
-    public static int skinShaderPackTint(Identifier look) {
-        if (look.equals(id("ice"))) {
-            return 0xC0A9DDF5;
-        }
-        if (look.equals(id("metal"))) {
-            return 0xE0E0B34E;
-        }
-        if (look.equals(id("wind"))) {
-            return 0x609EEBB3;
-        }
-        return 0x80FFFFFF;
-    }
-
-    /**
-     * How far up the limb (share of its length from the hand or foot) a skin look's tint reaches under a shader pack: the
-     * shader's own coating tops in qi_coating_skin.fsh (RIME_TOP / MANTLE_TOP, MOLTEN_FIST_TOP / GOLDEN_BODY_TOP, WIND_GUST_TOP),
-     * cut straight across instead of jagged.
-     *
-     * @param wholeBody whether it is a whole-body layer (the ice mantle, the golden body) rather than a hands coating
-     */
-    public static float skinShaderPackTop(Identifier look, boolean wholeBody) {
-        if (look.equals(id("ice"))) {
-            return wholeBody ? 0.8F : 0.38F;
-        }
-        if (look.equals(id("metal"))) {
-            return wholeBody ? 1.0F : 0.38F;
-        }
-        if (look.equals(id("wind"))) {
-            return 0.62F;
-        }
-        return 1.0F;
-    }
-
-    /**
-     * The tint a sword look's coated pixels are drawn with under a shader pack, by sword_qi.fsh style.
-     */
-    public static int swordShaderPackTint(int style) {
-        return switch (style) {
-            case 0 -> 0xFF4B3A9E;     // starfield
-            case 1, 10 -> 0xFFB98CFF; // time echo
-            case 2 -> 0xFF8D6342;     // cracked
-            case 3 -> 0xFF5FB4E8;     // water
-            case 4 -> 0xFFA8D8FF;     // arcs
-            case 5 -> 0xFFA9DDF5;     // frost
-            case 6 -> 0xFF9EEBB3;     // gale
-            case 7 -> 0xFFE0B34E;     // molten
-            case 8 -> 0xFFFF8A26;     // heat
-            case 9 -> 0xFFBFF4FF;     // pure qi
-            default -> 0xFFFFFFFF;
-        };
-    }
-
     /**
      * How a shell look's boxes are drawn.
      */
@@ -209,14 +130,22 @@ public final class QiCoatingLooks {
 
     /**
      * @param styles  the qi_coating.fsh style, or one per limb when the pattern differs per limb
-     * @param perLimb whether each limb gets its own pattern (styles per limb, or shifted round the limb for stone plates); a body
+     * @param perLimb whether each limb gets its own pattern (a style per limb); a body
      *                coating's {@code limbs} shells use it
-     * @param stone   whether the pattern is the stone plates, which start at a different point round each limb
      * @param render  how the boxes are drawn
+     * @param grows   whether the look draws its own growing in (and shrinking away), from how far the coating has grown, which
+     *                QiCoatingLayer passes in the vertex colour's alpha instead of the layer's opacity (a grow_millis coating
+     *                without a gather)
+     * @param foliage whether its vertex colour is the biome's foliage colour under the world's light where the player stands,
+     *                like vines and leaves, instead of the layer's colour
      */
-    public record ShellLook(int[] styles, boolean perLimb, boolean stone, Render render) {
+    public record ShellLook(int[] styles, boolean perLimb, Render render, boolean grows, boolean foliage) {
+        public ShellLook(int[] styles, boolean perLimb, Render render) {
+            this(styles, perLimb, render, false, false);
+        }
+
         static ShellLook plain(int style) {
-            return new ShellLook(new int[]{style}, false, false, Render.NORMAL);
+            return new ShellLook(new int[]{style}, false, Render.NORMAL);
         }
 
         public int style() {
@@ -246,8 +175,13 @@ public final class QiCoatingLooks {
 
     /**
      * @param style the sword_qi.fsh STYLE
-     * @param data  what it needs in its vertex colour
+     * @param data    what it needs in its vertex colour
+     * @param foliage for SPREAD looks: the biome's foliage colour under the world's light where the player stands goes where the
+     *                last hit would (SwordQiRenderer.packFoliage), for looks that colour themselves like vines
      */
-    public record SwordLook(int style, SwordData data) {
+    public record SwordLook(int style, SwordData data, boolean foliage) {
+        public SwordLook(int style, SwordData data) {
+            this(style, data, false);
+        }
     }
 }

@@ -6,12 +6,16 @@
 #moj_import <ascension:water_pixels.glsl>
 #moj_import <ascension:ice_crystal.glsl>
 #moj_import <ascension:qi_impact.glsl>
+#moj_import <ascension:life_vines.glsl>
+#moj_import <ascension:molten_gold.glsl>
 
 // Sword Qi: redraws a held item's own quads. Sampler0 is the item's atlas and auraUv its atlas UV, so the item's
 // alpha masks every effect to the blade's pixels. STYLE is set per pipeline: 0 starfield, 1 echo, 2 stone, 3 water, 4 lightning,
-// 5 frost, 6 gale, 7 molten, 8 heat, 9 pure qi, 10 time (the echo's quiet look).
+// 5 frost, 6 gale, 7 molten, 8 heat, 9 pure qi, 10 time (the echo's quiet look), 11 life.
 // The vertex red channel is the painted mask (SwordQiRenderer.submitMasked): 1 on pixels the coating covers, 0 on the rest,
 // which show the plain item.
+// Handheld sprites run from the handle at the bottom left to the tip at the top right, and atlas y grows down, so x - y runs
+// toward the tip and x + y across the blade.
 uniform sampler2D Sampler0;
 
 in vec2 auraUv;
@@ -77,6 +81,163 @@ vec4 frostBreak(float alongPx, float across, vec2 texel, float age, float seed) 
     return (fromA >= 0.25 && fromA < 0.5) || (-fromB >= 0.25 && -fromB < 0.5) ? CRACK_LIT_EDGE : vec4(0.0);
 }
 #endif
+
+#if STYLE == 4
+// Charged Blade: the lightning hand coating's racing bolts (qi_coating.fsh lightningStreaks) climbing the blade from the hilt to
+// the tip. On the texel grid x - y runs along the blade (rows, 0 at the bottom left) and x + y across it (columns, 0
+// down a 16px sprite's diagonal, where blades sit). Bolts start near the diagonal and barely slant, so they run up the blade rather than off it.
+// The timing, head, tail, afterflash, forks and strobe frames are the hand's; keep them in step with qi_coating.fsh.
+const float BLADE_BOLT_SUBDIVIDE = 3.0;
+const float BLADE_BOLT_ROWS = 32.0 * BLADE_BOLT_SUBDIVIDE;
+// Rows between a bolt's zigzag corners, how far either side of the diagonal (columns) it starts, how far each corner may sit
+// off its line (times chaos), and its most slant (columns per row). A pixel across the blade is about four columns.
+const float BLADE_BOLT_KNOT_ROWS = 4.0;
+const float BLADE_BOLT_START = 1.5;
+const float BLADE_BOLT_JITTER = 2.0;
+const float BLADE_BOLT_SLANT = 0.03;
+// Columns either side of a bolt's line that are its white core, and its blue glow.
+const float BLADE_BOLT_CORE = 1.0;
+const float BLADE_BOLT_GLOW = 2.5;
+const vec4 BLADE_BOLT_CORE_COLOR = vec4(0.95, 0.97, 1.00, 0.95);
+const vec4 BLADE_BOLT_GLOW_COLOR = vec4(0.50, 0.72, 1.00, 0.70);
+const vec4 BLADE_BOLT_AFTER_COLOR = vec4(0.42, 0.58, 1.00, 0.45);
+// The hand's streak settings (STREAK_* and CRACKLE_*). Rows run diagonally here, about 0.7 texels each, so the head and
+// afterflash span a row more.
+const float BLADE_STREAK_FPS = 20.0;
+const float BLADE_STREAK_PERIOD = 0.75;
+const float BLADE_STREAK_ACTIVE = 0.4;
+const float BLADE_STREAK_LENGTH = 0.5;
+const float BLADE_STREAK_HEAD_ROWS = 3.0;
+const float BLADE_STREAK_TAIL = 0.3;
+const float BLADE_STREAK_AFTER_ROWS = 4.0;
+const float BLADE_STREAK_FORK_CHANCE = 0.5;
+const float BLADE_STREAK_STROBE_CHANCE = 0.12;
+const int BLADE_BOLT_COUNT = 3;
+const float BLADE_BOLT_SPEED = 1.4;
+const float BLADE_BOLT_CHAOS = 1.6;
+
+float bladeBoltHash(vec3 p) {
+    return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453);
+}
+
+// Column of a bolt at `row`: a slanted line from (startCol, startRow), its corners every BLADE_BOLT_KNOT_ROWS rows pushed up
+// to jitter / 2 columns off it. The first corner sits on the line, so a fork starts on its parent.
+float bladeBoltColumn(float row, vec3 seed, float startCol, float startRow, float slope, float jitter) {
+    float k = max(0.0, row - startRow) / BLADE_BOLT_KNOT_ROWS;
+    float i = floor(k);
+    float a = i < 0.5 ? 0.0 : (bladeBoltHash(seed + vec3(i, 0.0, 0.0)) - 0.5) * jitter;
+    float b = (bladeBoltHash(seed + vec3(i + 1.0, 0.0, 0.0)) - 0.5) * jitter;
+    return startCol + (row - startRow) * slope + mix(a, b, k - i);
+}
+
+// How a cell (column, row) sits on one bolt running `len` rows up from startRow: 2 on its core, 1 on its glow, 0 off it.
+float bladeBoltTexel(vec2 cell, vec3 seed, float startCol, float startRow, float slope, float len, float jitter) {
+    if (cell.y < startRow || cell.y > startRow + len) {
+        return 0.0;
+    }
+    float d = abs(cell.x - bladeBoltColumn(cell.y, seed, startCol, startRow, slope, jitter));
+    return d < BLADE_BOLT_CORE ? 2.0 : d < BLADE_BOLT_GLOW ? 1.0 : 0.0;
+}
+
+// The hand's lightningStreaks on the blade: BLADE_BOLT_COUNT bolts racing from the hilt to the tip, each a jagged line with a
+// white head, a breaking-up tail, a dim afterflash behind it and now and then a fork, plus strobe frames where all of it
+// flashes white. Transparent where no bolt is.
+vec4 bladeBolts(vec2 cell, float t) {
+    float chaos = BLADE_BOLT_CHAOS;
+    float fps = BLADE_STREAK_FPS * chaos;
+    float frame = floor(t * fps);
+    float tq = frame / fps;
+    float jitter = BLADE_BOLT_JITTER * chaos;
+    float spread = 0.4 * chaos;
+    float lengthRows = floor(BLADE_STREAK_LENGTH * BLADE_BOLT_ROWS);
+    float best = 0.0;
+    float after = 0.0;
+    for (int b = 0; b < BLADE_BOLT_COUNT; b++) {
+        vec3 base = vec3(float(b) * 13.1, 0.0, 5.3);
+        float period = BLADE_STREAK_PERIOD / BLADE_BOLT_SPEED * (1.0 - spread * 0.5 + spread * bladeBoltHash(base + 0.7));
+        float cycleTime = tq / period + bladeBoltHash(base + 1.9);
+        float climb = fract(cycleTime) / BLADE_STREAK_ACTIVE;
+        if (climb > 1.0) {
+            continue;
+        }
+        // The route for this climb, and the zigzag for this frame.
+        vec3 route = base + vec3(0.0, floor(cycleTime) * 3.7, 0.0);
+        vec3 zigzag = route + vec3(0.0, 0.0, frame * 1.37);
+        float startCol = (bladeBoltHash(route + 1.1) - 0.5) * 2.0 * BLADE_BOLT_START;
+        float slope = (bladeBoltHash(route + 2.3) - 0.5) * 2.0 * BLADE_BOLT_SLANT;
+        float headRow = floor(mix(-1.0, BLADE_BOLT_ROWS + lengthRows, climb));
+        float tailRow = headRow - lengthRows;
+        float hit = bladeBoltTexel(cell, zigzag, startCol, 0.0, slope, BLADE_BOLT_ROWS, jitter);
+        if (hit > 0.0 && cell.y <= headRow && cell.y >= tailRow) {
+            float fromTail = (cell.y - tailRow) / lengthRows;
+            if (headRow - cell.y < BLADE_STREAK_HEAD_ROWS) {
+                hit = 2.0;
+            } else if (fromTail < BLADE_STREAK_TAIL) {
+                // The tail: glow only, breaking up toward its end.
+                hit = bladeBoltHash(vec3(cell, frame * 0.61)) < fromTail / BLADE_STREAK_TAIL ? 1.0 : 0.0;
+            }
+            best = max(best, hit);
+        } else if (hit >= 2.0 && cell.y < tailRow && cell.y >= tailRow - BLADE_STREAK_AFTER_ROWS) {
+            after = 2.0;
+        }
+        // A fork snapping off the body, slanting off toward one edge of the blade.
+        if (bladeBoltHash(zigzag + 8.8) < BLADE_STREAK_FORK_CHANCE * chaos) {
+            float forkRow = floor(mix(tailRow + lengthRows * BLADE_STREAK_TAIL, headRow - BLADE_STREAK_HEAD_ROWS,
+                    bladeBoltHash(zigzag + 5.3)));
+            if (forkRow >= 0.0 && forkRow < BLADE_BOLT_ROWS) {
+                float forkCol = bladeBoltColumn(forkRow, zigzag, startCol, 0.0, slope, jitter);
+                float forkSlope = slope + (bladeBoltHash(zigzag + 6.1) < 0.5 ? -0.6 : 0.6);
+                float fork = bladeBoltTexel(cell, zigzag + vec3(0.0, 0.0, 41.0), forkCol, forkRow, forkSlope,
+                        min(4.0 + floor(4.0 * chaos * bladeBoltHash(zigzag + 7.7)), BLADE_BOLT_ROWS - forkRow), jitter);
+                best = max(best, fork);
+            }
+        }
+    }
+    bool strobe = bladeBoltHash(vec3(3.1, frame * 0.37, 9.4)) < BLADE_STREAK_STROBE_CHANCE * (chaos - 1.0);
+    if (best >= 2.0 || strobe && (best >= 1.0 || after >= 2.0)) {
+        return BLADE_BOLT_CORE_COLOR;
+    }
+    if (best >= 1.0) {
+        return BLADE_BOLT_GLOW_COLOR;
+    }
+    return after >= 2.0 ? BLADE_BOLT_AFTER_COLOR : vec4(0.0);
+}
+#endif
+
+// ---- Looks that spread up the blade (SPREAD data: STYLE 5, 7, 8 and 11) ----
+// Their vertex colour (SwordQiRenderer.frostColor): the painted mask in red's top bit and the last hit's seed in its low 7 bits,
+// how far the look has spread in green, how far along the item this pixel sits in blue, and how long ago the last hit was in
+// alpha (as a share of IMPACT_SECONDS; 1 if not recently).
+float spreadCoated() {
+    return step(128.0, floor(vertexColor.r * 255.0 + 0.5));
+}
+
+float spreadHitSeed() {
+    return mod(floor(vertexColor.r * 255.0 + 0.5), 128.0);
+}
+
+// Seconds since the last hit, or -1 if not recently.
+float spreadHitAge() {
+    return vertexColor.a < 1.0 ? vertexColor.a * IMPACT_SECONDS : -1.0;
+}
+
+// How far along the item (0 at the hilt, 1 at the tip) the spread has reached at this pixel, `progress` (0 to 1) of the way
+// there, the front wandering up to `jag` either way per pixel. `frame` re-rolls the wander, so a front given the frame number
+// crawls while it spreads (pass 0 once it has finished).
+float spreadFront(float progress, vec2 pixel, float jag, float frame) {
+    return progress * (1.0 + jag * 2.0) - jag + (iceHash(pixel * 0.73 + frame) - 0.5) * 2.0 * jag;
+}
+
+// Hit sparks (the Molten Edge's and the Heated Blade's): SPREAD_SPARK_CHANCE of the pixels flash for SPREAD_SPARK_SECONDS after
+// a hit, re-rolled SPREAD_SPARK_FPS times a second.
+const float SPREAD_SPARK_SECONDS = 0.35;
+const float SPREAD_SPARK_CHANCE = 0.1;
+const float SPREAD_SPARK_FPS = 16.0;
+
+bool spreadSpark(vec2 pixel, float hitSeed, float hitAge) {
+    return hitAge >= 0.0 && hitAge < SPREAD_SPARK_SECONDS
+            && iceHash(pixel + vec2(hitSeed * 1.31, floor(hitAge * SPREAD_SPARK_FPS) * 0.73)) < SPREAD_SPARK_CHANCE;
+}
 
 void main() {
     vec4 item = textureLod(Sampler0, auraUv, 0.0);
@@ -144,8 +305,7 @@ void main() {
     fragColor = vec4(mix(item.rgb, color, vertexColor.r), vertexColor.a);
 #elif STYLE == 3
     // Flowing Blade: the water qi coatings' pixel water running from the hilt to the tip in sloped bands, in a grid of
-    // WATER_SUBDIVIDE x WATER_SUBDIVIDE texels per item pixel. Handheld sprites run from the handle at the bottom left to the
-    // tip at the top right, and atlas y grows down the sprite, so x - y grows toward the tip.
+    // WATER_SUBDIVIDE x WATER_SUBDIVIDE texels per item pixel.
     const float WATER_SUBDIVIDE = 2.0;
     // Band length along the blade in texels, bands per second, and how far each band's front wobbles (texels).
     const float WATER_BAND = 9.0;
@@ -166,34 +326,18 @@ void main() {
     }
     fragColor = vec4(mix(item.rgb, water.rgb, water.a * WATER_COVER * vertexColor.r), vertexColor.a);
 #elif STYLE == 4
-    // Charged Blade: a faint blue charge over the blade, with the crackle kept to its outline: the outline flashes on some
-    // frames, and between flashes a few sparks hop along it, re-rolled BOLT_FPS times a second. No bolts cross the blade's
-    // face, which read as clutter on small sprites.
-    const float BOLT_FPS = 10.0;
-    // Share of outline pixels carrying a spark on a given frame, with the frame before it left as a dimmer afterimage.
-    const float SPARK_SHARE = 0.18;
-    vec2 pixel = floor(patternPx);
-    float frame = floor(seconds * BOLT_FPS);
-    // Outline: an item pixel with a see-through neighbour.
-    vec2 step1 = 1.0 / vec2(textureSize(Sampler0, 0));
-    float edge = 1.0 - min(
-            min(textureLod(Sampler0, auraUv + vec2(step1.x, 0.0), 0.0).a, textureLod(Sampler0, auraUv - vec2(step1.x, 0.0), 0.0).a),
-            min(textureLod(Sampler0, auraUv + vec2(0.0, step1.y), 0.0).a, textureLod(Sampler0, auraUv - vec2(0.0, step1.y), 0.0).a));
-    float flash = step(0.5, waterHash(vec2(frame * 0.91, 3.3)));
-    float spark = step(1.0 - SPARK_SHARE, waterHash(pixel + frame * 0.37));
-    float afterSpark = step(1.0 - SPARK_SHARE, waterHash(pixel + (frame - 1.0) * 0.37));
-    vec4 charge = edge > 0.9 && flash > 0.0 ? vec4(0.60, 0.80, 1.00, 0.65)
-                : edge > 0.9 && spark > 0.0 ? vec4(0.95, 0.97, 1.00, 0.85)
-                : edge > 0.9 && afterSpark > 0.0 ? vec4(0.50, 0.72, 1.00, 0.55)
-                : vec4(0.30, 0.42, 0.95, 0.25);
+    // Charged Blade: the hand coating's racing bolts up the blade (bladeBolts), over the plain item. The red channel fades it in
+    // with the gather (PLAIN data).
+    vec2 texel = floor(patternPx * BLADE_BOLT_SUBDIVIDE);
+    // Texel centres on a 16px sprite's diagonal add up to 16 pixels, so column 0 runs down it.
+    vec2 cell = vec2(texel.x + texel.y + 1.0 - 16.0 * BLADE_BOLT_SUBDIVIDE, texel.x - texel.y + 16.0 * BLADE_BOLT_SUBDIVIDE);
+    vec4 charge = bladeBolts(cell, seconds);
     fragColor = vec4(mix(item.rgb, charge.rgb, charge.a * vertexColor.r), vertexColor.a);
 #elif STYLE == 5
     // Frostbite Edge: the ice qi coatings' ice sheet climbs the blade from the hilt to the tip when it comes on, behind a
     // ragged white edge, in a grid of FROST_SUBDIVIDE x FROST_SUBDIVIDE texels per item pixel, and glows faintly like the
     // hand coatings' ice. A swing or hit breaks a piece off it (frostBreak), and now and then one breaks off on its own.
-    // Vertex colour (SwordQiRenderer.frostColor): r has the painted mask in its top bit (coated or plain) and the last hit's
-    // seed in its low 7 bits; g is how far the frost has climbed; b how far along the item this pixel sits; a how long ago the
-    // last hit was, as a share of IMPACT_SECONDS (1 if not recently). The result is drawn opaque.
+    // Vertex colour: the spreading looks', with g how far the frost has climbed. The result is drawn opaque.
     const float FROST_SUBDIVIDE = 3.0;
     // How far the frost's leading edge wanders (share of the item's length), and the frame rate it crawls at while climbing.
     const float FROST_JAG = 0.08;
@@ -208,16 +352,14 @@ void main() {
     const float FROST_IDLE_CHANCE = 0.5;
     vec2 texel = floor(patternPx * FROST_SUBDIVIDE);
     vec2 pixel = floor(patternPx);
-    float maskBits = floor(vertexColor.r * 255.0 + 0.5);
-    float coated = step(128.0, maskBits);
-    float impactSeed = mod(maskBits, 128.0);
-    float impactAge = vertexColor.a < 1.0 ? vertexColor.a * IMPACT_SECONDS : -1.0;
+    float coated = spreadCoated();
+    float impactSeed = spreadHitSeed();
+    float impactAge = spreadHitAge();
     float progress = vertexColor.g;
     float along = vertexColor.b;
     float frame = floor(seconds * FROST_FPS);
     float eased = 1.0 - (1.0 - progress) * (1.0 - progress);
-    float front = eased * (1.0 + FROST_JAG * 2.0) - FROST_JAG
-            + (iceHash(pixel * 0.73 + (progress < 0.999 ? frame : 0.0)) - 0.5) * 2.0 * FROST_JAG;
+    float front = spreadFront(eased, pixel, FROST_JAG, progress < 0.999 ? frame : 0.0);
     vec4 ice;
     if (along > front) {
         ice = along < front + FROST_RIME_AHEAD && iceHash(texel + frame * 0.31) < 0.25 ? ICE_RIME_SPECK : vec4(0.0);
@@ -236,8 +378,6 @@ void main() {
                 breakSeed = floor(iceHash(idleId + 1.3) * 128.0);
             }
         }
-        // Handheld sprites run from the handle at the bottom left to the tip at the top right and atlas y grows down, so
-        // within a pixel x - y runs toward the tip and x + y across the blade.
         vec2 sub = texel - pixel * FROST_SUBDIVIDE;
         float alongPx = along * FROST_ITEM_PIXELS + ((sub.x - sub.y) / (2.0 * FROST_SUBDIVIDE));
         vec4 broken = frostBreak(alongPx, pixel.x + pixel.y, texel, breakAge, breakSeed);
@@ -257,8 +397,7 @@ void main() {
     // in a grid of GALE_SUBDIVIDE x GALE_SUBDIVIDE texels per item pixel, stepping GALE_FPS times a second. The item is a flat
     // sprite, so the spin is faked: each wind blade is a slanted, bowed stripe sliding toward the tip, so at any one spot it
     // sweeps across the blade from one edge to the other, bright as it comes in and fading as it leaves, as if it went round the
-    // back. Handheld sprites run from the handle at the bottom left to the tip at the top right and atlas y grows down, so x - y
-    // runs toward the tip and x + y across the blade. Vertex colour (SwordQiRenderer.galeColor): r the painted mask, g how far
+    // back. Vertex colour (SwordQiRenderer.galeColor): r the painted mask, g how far
     // across the item the pixel sits (0.5 down its middle), b how far along it.
     const float GALE_SUBDIVIDE = 2.0;
     const float GALE_FPS = 12.0;
@@ -303,54 +442,36 @@ void main() {
     // to the tip as molten gold behind a ragged front, the MOLTEN_SPAN of the item behind the front glowing white, yellow, orange
     // then red, and that glow shrinks back into the front over the last MOLTEN_COOL of the pour as it cools; it melts back down
     // when it goes off. Behind it the blade is tinted gold, keeping each pixel's brightness and a little of its colour. A swing
-    // or hit throws sparks off it, with a brief flash. The gold tint and molten colours must match qi_coating_skin.fsh's.
-    // Vertex colour (SwordQiRenderer.frostColor): r has the painted mask in its top bit and the last hit's seed in its low 7
-    // bits; g is how far the pour has got; b how far along the item this pixel sits; a how long ago the last hit was, as a
-    // share of IMPACT_SECONDS (1 if not recently). The result is drawn opaque.
+    // or hit throws sparks off it, with a brief flash. The gold and molten colours come from molten_gold.glsl, shared with qi_coating_skin.fsh.
+    // Vertex colour: the spreading looks' (spreadCoated, spreadHitSeed, spreadHitAge), with g how far the pour has got. Its hit
+    // sparks are spreadSpark's. The result is drawn opaque.
     const float MOLTEN_JAG = 0.06;
     const float MOLTEN_FPS = 8.0;
     const float MOLTEN_SPAN = 0.18;
     const float MOLTEN_COOL = 0.2;
-    const vec3 MOLTEN_WHITE = vec3(1.00, 0.97, 0.84);
-    const vec3 MOLTEN_YELLOW = vec3(1.00, 0.80, 0.32);
-    const vec3 MOLTEN_ORANGE = vec3(1.00, 0.52, 0.12);
-    const vec3 MOLTEN_RED = vec3(0.82, 0.27, 0.06);
-    const vec3 GOLD_DEEP = vec3(0.30, 0.18, 0.04);
-    const vec3 GOLD_BRIGHT = vec3(0.98, 0.80, 0.42);
-    const float GOLD_TINT_AMOUNT = 0.8;
-    const vec3 GOLD_SHINE = vec3(1.00, 0.97, 0.80);
-    // Sparks as on the Molten Fist.
-    const float SPARK_SECONDS = 0.35;
-    const float SPARK_CHANCE = 0.1;
-    const float SPARK_FPS = 16.0;
     const float FLASH_SECONDS = 0.12;
     const float FLASH_SHINE = 0.3;
     vec2 pixel = floor(patternPx);
-    float maskBits = floor(vertexColor.r * 255.0 + 0.5);
-    float coated = step(128.0, maskBits);
-    float impactSeed = mod(maskBits, 128.0);
-    float impactAge = vertexColor.a < 1.0 ? vertexColor.a * IMPACT_SECONDS : -1.0;
+    float coated = spreadCoated();
+    float impactAge = spreadHitAge();
     float progress = vertexColor.g;
     float along = vertexColor.b;
     float frame = floor(seconds * MOLTEN_FPS);
     float eased = 1.0 - (1.0 - progress) * (1.0 - progress);
-    float front = eased * (1.0 + MOLTEN_JAG * 2.0) - MOLTEN_JAG
-            + (iceHash(pixel * 0.73 + (progress < 0.999 ? frame : 0.0)) - 0.5) * 2.0 * MOLTEN_JAG;
+    float front = spreadFront(eased, pixel, MOLTEN_JAG, progress < 0.999 ? frame : 0.0);
     vec3 color = item.rgb;
     if (along <= front) {
         float span = MOLTEN_SPAN * clamp((1.0 - progress) / MOLTEN_COOL, 0.0, 1.0);
         float behind = front - along;
         if (behind < span) {
             float heat = behind / span;
-            color = heat < 0.25 ? MOLTEN_WHITE : heat < 0.5 ? MOLTEN_YELLOW : heat < 0.75 ? MOLTEN_ORANGE : MOLTEN_RED;
+            color = moltenColour(heat);
         } else {
-            float lum = dot(item.rgb, vec3(0.299, 0.587, 0.114));
-            color = mix(item.rgb, mix(GOLD_DEEP, GOLD_BRIGHT, clamp(lum * 1.1, 0.0, 1.0)), GOLD_TINT_AMOUNT);
+            color = goldTint(item.rgb);
             if (impactAge >= 0.0 && impactAge < FLASH_SECONDS) {
                 color = mix(color, GOLD_SHINE, FLASH_SHINE);
             }
-            if (impactAge >= 0.0 && impactAge < SPARK_SECONDS
-                    && iceHash(pixel + vec2(impactSeed * 1.31, floor(impactAge * SPARK_FPS) * 0.73)) < SPARK_CHANCE) {
+            if (spreadSpark(pixel, spreadHitSeed(), impactAge)) {
                 color = vec3(1.0, 1.0, 0.92);
             }
         }
@@ -361,8 +482,7 @@ void main() {
     // tip behind a white-hot front (like the Molten Edge's pour), and cools back down when it goes off. Behind it the blade
     // glows hotter toward the tip: deep red, orange, yellow, then white-hot past HEAT_YELLOW_TO_WHITE of the item, keeping the
     // blade's own shading, and HEAT_FLICKER of its pixels flicker a step hotter each frame. A swing or hit throws ember sparks.
-    // Vertex colour as the Molten Edge's (SwordQiRenderer.frostColor).
-    // The result is drawn opaque.
+    // Vertex colour as the Molten Edge's, with g how far the heat has spread. The result is drawn opaque.
     const float HEAT_JAG = 0.06;
     const float HEAT_FPS = 10.0;
     const float HEAT_FRONT = 0.06;
@@ -375,20 +495,13 @@ void main() {
     const vec3 HEAT_ORANGE = vec3(1.00, 0.45, 0.06);
     const vec3 HEAT_YELLOW = vec3(1.00, 0.80, 0.30);
     const vec3 HEAT_WHITE = vec3(1.00, 0.95, 0.78);
-    const float SPARK_SECONDS = 0.35;
-    const float SPARK_CHANCE = 0.1;
-    const float SPARK_FPS = 16.0;
     vec2 pixel = floor(patternPx);
-    float maskBits = floor(vertexColor.r * 255.0 + 0.5);
-    float coated = step(128.0, maskBits);
-    float impactSeed = mod(maskBits, 128.0);
-    float impactAge = vertexColor.a < 1.0 ? vertexColor.a * IMPACT_SECONDS : -1.0;
+    float coated = spreadCoated();
     float progress = vertexColor.g;
     float along = vertexColor.b;
     float frame = floor(seconds * HEAT_FPS);
     float eased = 1.0 - (1.0 - progress) * (1.0 - progress);
-    float front = eased * (1.0 + HEAT_JAG * 2.0) - HEAT_JAG
-            + (iceHash(pixel * 0.73 + (progress < 0.999 ? frame : 0.0)) - 0.5) * 2.0 * HEAT_JAG;
+    float front = spreadFront(eased, pixel, HEAT_JAG, progress < 0.999 ? frame : 0.0);
     vec3 color = item.rgb;
     if (along <= front) {
         float heat = along < HEAT_RED_TO_ORANGE ? 0.0 : along < HEAT_ORANGE_TO_YELLOW ? 1.0 : along < HEAT_YELLOW_TO_WHITE ? 2.0 : 3.0;
@@ -401,8 +514,7 @@ void main() {
         vec3 glow = heat < 1.0 ? HEAT_RED : heat < 2.0 ? HEAT_ORANGE : heat < 3.0 ? HEAT_YELLOW : HEAT_WHITE;
         float lum = dot(item.rgb, vec3(0.299, 0.587, 0.114));
         color = mix(item.rgb, glow * (0.55 + 0.6 * lum), HEAT_AMOUNT);
-        if (impactAge >= 0.0 && impactAge < SPARK_SECONDS
-                && iceHash(pixel + vec2(impactSeed * 1.31, floor(impactAge * SPARK_FPS) * 0.73)) < SPARK_CHANCE) {
+        if (spreadSpark(pixel, spreadHitSeed(), spreadHitAge())) {
             color = HEAT_WHITE;
         }
     }
@@ -422,5 +534,35 @@ void main() {
     float lum = dot(item.rgb, vec3(0.299, 0.587, 0.114));
     vec3 color = mix(item.rgb, TIME_TINT * (0.6 + 0.5 * lum), TIME_AMOUNT);
     fragColor = vec4(mix(item.rgb, color, vertexColor.r), vertexColor.a);
+#elif STYLE == 11
+    // Life's blade: the hand coating's vines (life_vines.glsl) over the coated pixels, laid out on the model's pixels at
+    // VINE_BLADE_TEXELS vine texels a pixel. When it comes on they grow from the hilt to the tip behind a ragged front, and draw
+    // back down when it goes off; the life light climbs them from the hilt to the tip every LIFE_PULSE_PERIOD seconds. The rest
+    // of the item is drawn plain, unlit like every sword look.
+    // Vertex colour (SwordQiRenderer.frostColor, with the foliage colour where a hit would go, SwordLook.foliage): r has the
+    // painted mask in its top bit; g is how far it has grown; b how far along the item this pixel sits; and the foliage colour
+    // under the world's light, 5 bits a channel, is split between r's low 7 bits (low) and a (high). The result is drawn opaque.
+    const float VINE_BLADE_TEXELS = 2.0;
+    // How far (as a share of the item) the growing front wanders either way, and how far the life light reaches either side
+    // of its head.
+    const float VINE_BLADE_JAG = 0.06;
+    const float VINE_BLADE_PULSE = 0.12;
+    float coated = spreadCoated();
+    float foliageBits = floor(vertexColor.a * 255.0 + 0.5) * 128.0 + spreadHitSeed();
+    vec3 foliage = vec3(floor(foliageBits / 1024.0), mod(floor(foliageBits / 32.0), 32.0), mod(foliageBits, 32.0)) / 31.0;
+    float progress = vertexColor.g;
+    float along = vertexColor.b;
+    vec2 texel = floor(patternPx * VINE_BLADE_TEXELS);
+    float front = spreadFront(progress, floor(patternPx), VINE_BLADE_JAG, 0.0);
+    int shade = vineShade(int(texel.x), int(texel.y));
+    vec3 color = item.rgb;
+    if (coated > 0.5 && along <= front && shade > 0) {
+        float climb = lifePulseClimb(seconds, 0.0);
+        float head = mix(-VINE_BLADE_PULSE, 1.0 + VINE_BLADE_PULSE, climb);
+        float glow = climb <= 1.0 ? max(0.0, 1.0 - abs(along - head) / VINE_BLADE_PULSE) : 0.0;
+        glow = floor(glow * 3.0 + 0.5) / 3.0;
+        color = vineColour(shade, foliage, glow);
+    }
+    fragColor = vec4(color, 1.0);
 #endif
 }

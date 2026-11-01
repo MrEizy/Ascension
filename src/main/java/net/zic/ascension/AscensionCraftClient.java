@@ -27,6 +27,7 @@ import net.zic.ascension.client.gui.QiCoatingWheelOverlay;
 import net.zic.ascension.client.gui.SkillWheelOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.visual.runtime.BarrierShellVisualController;
+import net.zic.ascension.client.visual.runtime.QiBarrierVisualController;
 import net.zic.ascension.client.visual.runtime.ClientRuntimeVisuals;
 import net.zic.ascension.client.visual.runtime.GuardianDharmaVisualController;
 import net.zic.ascension.client.visual.runtime.WeaponSwingVisualController;
@@ -164,6 +165,7 @@ public class AscensionCraftClient {
             event.enqueueWork(() -> {
                 AscensionClientTooltipProviders.registerAll();
                 BarrierShellVisualController.registerDefaults();
+                QiBarrierVisualController.registerDefault();
                 GuardianDharmaVisualController.registerDefault();
                 WeaponSwingVisualController.registerDefault();
                 AscensionCreativeSections.register();
