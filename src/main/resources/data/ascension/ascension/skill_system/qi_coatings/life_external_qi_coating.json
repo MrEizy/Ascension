@@ -1,0 +1,12 @@
+{
+  "coverage": "weapon",
+  "grow_millis": 1800,
+  "foliage_locked": true,
+  "gather": {
+    "style": "specks",
+    "colors": ["#C8FF8C", "#8EE05A", "#E8FFB8", "#5FC63A"]
+  },
+  "sword": {
+    "look": "ascension:life_vines"
+  }
+}
