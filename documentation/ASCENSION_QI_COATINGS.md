@@ -150,12 +150,14 @@ The costs of `external_on_mine` and `external_on_kill` can read how many items t
 In use: Fire smelts, Water turns concrete powder into concrete, Space sends drops to the inventory, Earth mines `#ascension:earth_qi_coating_mineable` (stone, dirt, sand, gravel, clay, terracotta) twice as fast and tills with a hoe and makes paths with a shovel (3x3 on a tap, held for 2 seconds out to radius 4, times 1 + 10 x earth affinity, so 0.01 affinity is 10% further), Life turns cobblestone and stone bricks (and their slabs, stairs and walls) mossy, breaks leaves instantly and logs twice as fast with an axe, and bone-meals with a hoe, Ice mines ice, packed ice and blue ice twice as fast and keeps them whole and freezes with a right-click (water source to ice, ice to packed ice, packed ice to blue ice), Metal mines as if with 2 more levels of Fortune, Wind mines at full speed in the air and Water under water, and Time rewinds worn blocks to fresh ones (weathered copper of every kind, waxed or not, to fresh copper; cracked bricks and tiles to whole; chipped and damaged anvils to new; dead coral blocks to living). Speed bonuses are free beyond the coating's upkeep. Fire's smelting costs 20 qi a block, Water's concrete 5, Life's mossy blocks 15 and Life's bone meal 10 a use; Space's pickup (mined blocks and kills) 1 qi an item; Earth's tilling and paths 2 a use plus 0.35 a block (about 5 for 3x3), and Time's rewinding 5 a block (250 for an anvil); Ice's freezing 5 (water), 10 (to packed ice) and 20 (to blue ice) a use; Metal's Fortune, Ice's pickup and the air and water mining are free.
 
 ```json
-"external_on_mine": {
-  "cost": { "resource": "ascension:qi", "amount": 0.1 },
-  "convert": { "minecraft:white_concrete_powder": "minecraft:white_concrete" },
-  "speed": [ { "blocks": "#minecraft:leaves", "multiplier": 50.0, "tools": "#minecraft:axes" } ]
-},
-"external_on_use": { "cost": { "resource": "ascension:qi", "amount": 0.2 }, "till": 1, "bonemeal": true }
+{
+  "external_on_mine": {
+    "cost": { "resource": "ascension:qi", "amount": 0.1 },
+    "convert": { "minecraft:white_concrete_powder": "minecraft:white_concrete" },
+    "speed": [ { "blocks": "#minecraft:leaves", "multiplier": 50.0, "tools": "#minecraft:axes" } ]
+  },
+  "external_on_use": { "cost": { "resource": "ascension:qi", "amount": 0.2 }, "till": 1, "bonemeal": true }
+}
 ```
 
 # How a coating reaches the player

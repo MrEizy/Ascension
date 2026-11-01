@@ -37,6 +37,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gamerules.GameRules;
@@ -358,7 +359,7 @@ public final class QiCoatingMining {
         QiCoatingSelectionService.Shown shown = shown(player);
         QiCoatingElement.Use use = usable(player, shown, tool);
         QiCoatingElement.Area area = kind.area(use);
-        if (area == null || area.chargeTicks() > 0 || event.getContext().getClickedFace() == Direction.DOWN
+        if (use == null || area == null || area.chargeTicks() > 0 || event.getContext().getClickedFace() == Direction.DOWN
                 || !level.getBlockState(event.getPos().above()).isAir()) {
             return;
         }
@@ -401,6 +402,10 @@ public final class QiCoatingMining {
             return;
         }
         QiCoatingElement.Area area = kind.area(element.externalOnUse().orElse(null));
+        // chargesArea already checked it charges; this only tells the null checker so.
+        if (area == null) {
+            return;
+        }
         long now = level.getGameTime();
         AreaCharge charge = AREA_CHARGES.get(player.getUUID());
         if (charge == null || charge.level != level || charge.kind != kind) {
@@ -490,7 +495,7 @@ public final class QiCoatingMining {
         QiCoatingSelectionService.Shown shown = shown(player);
         QiCoatingElement.Use use = usable(player, shown, tool);
         QiCoatingElement.Area area = charge.kind.area(use);
-        if (area == null || area.chargeTicks() <= 0) {
+        if (use == null || area == null || area.chargeTicks() <= 0) {
             return;
         }
         ServerLevel level = charge.level;
@@ -625,7 +630,7 @@ public final class QiCoatingMining {
         if (!PassiveTriggerService.run(player, player, shown.skill(), List.of(), use.costs(), List.of(), Map.of())) {
             return;
         }
-        if (BoneMealItem.growCrop(new ItemStack(Items.BONE_MEAL), level, pos)) {
+        if (BoneMealItem.applyBonemeal(new ItemStack(Items.BONE_MEAL), level, pos, player)) {
             level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 15);
         }
         event.setCanceled(true);
@@ -657,7 +662,7 @@ public final class QiCoatingMining {
         BlockPos pos = hit.getBlockPos();
         BlockState state = level.getBlockState(pos);
         QiCoatingElement.Transform transform = use.transform().get(state.getBlock());
-        if (transform == null || state.liquid() && !state.getFluidState().isSource() || !level.mayInteract(player, pos)
+        if (transform == null || state.getBlock() instanceof LiquidBlock && !state.getFluidState().isSource() || !level.mayInteract(player, pos)
                 || !player.mayUseItemAt(pos, hit.getDirection(), tool)) {
             return;
         }
@@ -667,7 +672,7 @@ public final class QiCoatingMining {
         BlockState made = transform.block().defaultBlockState();
         level.setBlockAndUpdate(pos, made);
         level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, made));
-        level.playSound(null, pos, made.getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
+        level.playSound(null, pos, made.getSoundType(level, pos, player).getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
         player.swing(InteractionHand.MAIN_HAND, true);
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);

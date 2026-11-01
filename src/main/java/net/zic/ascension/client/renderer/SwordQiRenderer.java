@@ -211,7 +211,7 @@ public final class SwordQiRenderer {
      * pixels, so this works for flat items and for 3D models drawn from a texture alike. Quads whose texture has no mask are
      * drawn whole and coated.
      *
-     * While a gather forms the look (QiCoatingGather): a FADE one fades the coated pixels in, for looks that blend by the red
+     * <p>While a gather forms the look (QiCoatingGather): a FADE one fades the coated pixels in, for looks that blend by the red
      * channel (PLAIN data); a PATCHES one draws the coated pixels not yet reached plain, splitting even unmasked quads into pixels
      * to do it. Looks with their own spread (SPREAD data) keep it and only get the specks.
      *
@@ -229,7 +229,7 @@ public final class SwordQiRenderer {
         boolean gale = look.data() == QiCoatingLooks.SwordData.GALE;
         boolean fade = gather != null && gather.style() == QiCoatingDefinition.GatherStyle.FADE
                 && look.data() == QiCoatingLooks.SwordData.PLAIN;
-        boolean patches = landings != null && gather.style() == QiCoatingDefinition.GatherStyle.PATCHES && !frost;
+        boolean patches = landings != null && gather != null && gather.style() == QiCoatingDefinition.GatherStyle.PATCHES && !frost;
         int coated = (alpha << 24) | (fade
                 ? (Math.round(QiCoatingGather.fadeAmount(growth) * 255.0F) << 16) | (COATED_COLOR & 0xFFFF)
                 : COATED_COLOR & 0xFFFFFF);
@@ -444,7 +444,7 @@ public final class SwordQiRenderer {
      */
     @SubscribeEvent
     public static void onAddReloadListeners(AddClientReloadListenersEvent event) {
-        event.addListener(AscensionCraft.prefix("sword_qi_masks"), (ResourceManagerReloadListener) manager -> {
+        event.addListener(AscensionCraft.prefix("sword_qi_masks"), (ResourceManagerReloadListener) _ -> {
             PAINTED_MASKS.clear();
             CELLS.clear();
             sharedMasks = null;

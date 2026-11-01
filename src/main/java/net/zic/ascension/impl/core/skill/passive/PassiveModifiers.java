@@ -39,6 +39,8 @@ import net.zic.zenithlib.value_containers.typed.ModifierHolder;
 import net.zic.zenithlib.value_containers.typed.ValueContainerCodecHelper;
 import net.zic.zenithlib.value_containers.typed.ValueContainerHelpers;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -426,6 +428,7 @@ public final class PassiveModifiers {
             return WEAPON_DAMAGE.get();
         }
 
+        @NullMarked
         public enum Match implements StringRepresentable {
             HELD_WEAPON("held_weapon"),
             EMPTY_HAND_OR_TAG("empty_hand_or_tag"),

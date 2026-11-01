@@ -643,13 +643,6 @@ public class QiCoatingLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
         return look.limbStyle(limb) * 2.0F;
     }
 
-    private static void submitPartShell(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, ModelPart part, RenderType renderType,
-                                        float styleOffset, float minX, float maxX, float minY, float maxY, float minZ, float maxZ,
-                                        boolean topCap, float inflate) {
-        submitPartShell(poseStack, submitNodeCollector, part, renderType, styleOffset, minX, maxX, minY, maxY, minZ, maxZ,
-                topCap, inflate, false);
-    }
-
     /**
      * @param squareCap whether the caps are mapped so a square texel grid on the sides stays square on them, instead of
      *                  ShellGeometry.CAP_V_SPAN

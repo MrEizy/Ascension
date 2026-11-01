@@ -3,6 +3,7 @@ package net.zic.ascension.api.ascension.core.runtime;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.zic.ascension.api.ascension.core.damage.AscensionDamageTypeHolders;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.value.ScaledValue;
@@ -82,7 +83,7 @@ public record BarrierDefinition(
         }
 
         public boolean accepts(RPGEngineDamageSource source) {
-            Identifier damageType = source.typeHolder().unwrapKey().map(key -> key.identifier()).orElse(null);
+            Identifier damageType = source.typeHolder().unwrapKey().map(ResourceKey::identifier).orElse(null);
             if (!includeDamageTypes.isEmpty() && !includeDamageTypes.contains(damageType)) {
                 return false;
             }

@@ -71,6 +71,8 @@ import net.zic.ascension.impl.runtime.weapon.WeaponVfxUtils;
 import net.zic.ascension.network.ClientboundDivineSensePacket;
 import net.zic.ascension.util.CultivationUtil;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -228,6 +230,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum VariableOperation implements StringRepresentable {
         SET("set"), ADD("add"), MULTIPLY("multiply");
 
@@ -1522,6 +1525,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum ToggleMode implements StringRepresentable {
         TOGGLE("toggle"), ENABLE("enable"), DISABLE("disable");
 
@@ -1562,6 +1566,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum PersistentVisualAction implements StringRepresentable {
         APPLY("apply"), REMOVE("remove");
 
@@ -1578,6 +1583,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum RuntimeAction implements StringRepresentable {
         APPLY("apply"),
         REPAIR("repair"),
@@ -1596,6 +1602,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum StaggerAction implements StringRepresentable {
         APPLY("apply"),
         REDUCE("reduce"),
@@ -1616,6 +1623,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum MoveMode implements StringRepresentable {
         DIRECTIONAL("directional"),
         TARGET_POSITION("target_position"),
@@ -1634,6 +1642,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum MoveDirection implements StringRepresentable {
         LOOK("look"),
         TOWARD_TARGET("toward_target"),
@@ -1652,6 +1661,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum AnchorAction implements StringRepresentable {
         SET("set"),
         CLEAR("clear");
@@ -1669,6 +1679,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum PointMode implements StringRepresentable {
         NONE("none"),
         CASTER_TO_EXECUTION("caster_to_execution"),

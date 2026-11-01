@@ -1,6 +1,7 @@
 package net.zic.ascension.client.visual;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
@@ -201,12 +202,12 @@ public final class QiCoatingClientState {
      */
     @SubscribeEvent
     public static void onTagsUpdated(TagsUpdatedEvent.ClientPacketReceived event) {
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.level == null) {
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level == null) {
             return;
         }
-        LIVE.replaceAll((key, live) -> {
-            QiCoating coating = QiCoating.byId(live.coating().id(), minecraft.level.registryAccess());
+        LIVE.replaceAll((_, live) -> {
+            QiCoating coating = QiCoating.byId(live.coating().id(), level.registryAccess());
             return coating == null ? live : new Live(coating, live.startMillis());
         });
     }

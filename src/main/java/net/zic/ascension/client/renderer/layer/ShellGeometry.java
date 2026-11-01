@@ -60,21 +60,20 @@ final class ShellGeometry {
 
         // u runs continuously around the perimeter so the shader's noise wraps without a seam. Each face gets an equal
         // quarter, so fract(u * 4) is the position across a face (exact for wide arms, slightly stretched on slim ones).
-        float u0 = styleOffset;
         float u1 = styleOffset + 0.25F;
         float u2 = styleOffset + 0.5F;
         float u3 = styleOffset + 0.75F;
         float u4 = styleOffset + 1.0F;
 
         if (patches == null) {
-            side(pose, buffer, x0, z0, x1, z0, u0, u1, top, bottom, color);
+            side(pose, buffer, x0, z0, x1, z0, styleOffset, u1, top, bottom, color);
             side(pose, buffer, x1, z0, x1, z1, u1, u2, top, bottom, color);
             side(pose, buffer, x1, z1, x0, z1, u2, u3, top, bottom, color);
             side(pose, buffer, x0, z1, x0, z0, u3, u4, top, bottom, color);
         } else {
             float[][] cornersX = {{x0, x1}, {x1, x1}, {x1, x0}, {x0, x0}};
             float[][] cornersZ = {{z0, z0}, {z0, z1}, {z1, z1}, {z1, z0}};
-            float[] us = {u0, u1, u2, u3, u4};
+            float[] us = {styleOffset, u1, u2, u3, u4};
             for (int face = 0; face < 4; face++) {
                 float ax = cornersX[face][0], bx = cornersX[face][1], az = cornersZ[face][0], bz = cornersZ[face][1];
                 patchedQuad(pose, buffer, patches, color,
@@ -87,13 +86,13 @@ final class ShellGeometry {
         // values from the sides would make the two triangles of the quad interpolate differently and leave a V-shaped seam.
         // Cap over the maxY end (the fist, on arms).
         patchedQuad(pose, buffer, patches, color,
-                new float[]{x0, bottom, z0, u0, 0.0F}, new float[]{x1, bottom, z0, u1, 0.0F},
-                new float[]{x1, bottom, z1, u1, capVSpan}, new float[]{x0, bottom, z1, u0, capVSpan});
+                new float[]{x0, bottom, z0, styleOffset, 0.0F}, new float[]{x1, bottom, z0, u1, 0.0F},
+                new float[]{x1, bottom, z1, u1, capVSpan}, new float[]{x0, bottom, z1, styleOffset, capVSpan});
 
         if (topCap) {
             patchedQuad(pose, buffer, patches, color,
-                    new float[]{x0, top, z0, u0, 1.0F}, new float[]{x1, top, z0, u1, 1.0F},
-                    new float[]{x1, top, z1, u1, 1.0F - capVSpan}, new float[]{x0, top, z1, u0, 1.0F - capVSpan});
+                    new float[]{x0, top, z0, styleOffset, 1.0F}, new float[]{x1, top, z0, u1, 1.0F},
+                    new float[]{x1, top, z1, u1, 1.0F - capVSpan}, new float[]{x0, top, z1, styleOffset, 1.0F - capVSpan});
         }
     }
 

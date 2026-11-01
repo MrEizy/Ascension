@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.impl.runtime.object.Barriers;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -31,40 +32,41 @@ public abstract class LivingEntityBarrierHurtMixin {
     @WrapWithCondition(method = "hurtServer", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerLevel;broadcastDamageEvent(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;)V"))
     private boolean ascension$damageEvent(ServerLevel level, Entity entity, DamageSource source) {
-        return !ascension$suppressed();
+        return ascension$showsHurtEffects();
     }
 
     @WrapWithCondition(method = "hurtServer", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;markHurt()V"))
     private boolean ascension$markHurt(LivingEntity entity) {
-        return !ascension$suppressed();
+        return ascension$showsHurtEffects();
     }
 
     @WrapWithCondition(method = "hurtServer", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
     private boolean ascension$knockback(LivingEntity entity, double power, double xd, double zd) {
-        return !ascension$suppressed();
+        return ascension$showsHurtEffects();
     }
 
     @WrapWithCondition(method = "hurtServer", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;indicateDamage(DD)V"))
     private boolean ascension$indicateDamage(LivingEntity entity, double xd, double zd) {
-        return !ascension$suppressed();
+        return ascension$showsHurtEffects();
     }
 
     @WrapWithCondition(method = "hurtServer", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;playHurtSound(Lnet/minecraft/world/damagesource/DamageSource;)V"))
     private boolean ascension$hurtSound(LivingEntity entity, DamageSource source) {
-        return !ascension$suppressed();
+        return ascension$showsHurtEffects();
     }
 
     @WrapWithCondition(method = "hurtServer", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;playSecondaryHurtSound(Lnet/minecraft/world/damagesource/DamageSource;)V"))
     private boolean ascension$secondaryHurtSound(LivingEntity entity, DamageSource source) {
-        return !ascension$suppressed();
+        return ascension$showsHurtEffects();
     }
 
-    private boolean ascension$suppressed() {
-        return Barriers.hurtEffectsSuppressed((LivingEntity) (Object) this);
+    @Unique
+    private boolean ascension$showsHurtEffects() {
+        return !Barriers.hurtEffectsSuppressed((LivingEntity) (Object) this);
     }
 }

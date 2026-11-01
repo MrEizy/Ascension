@@ -18,22 +18,17 @@ public final class LightmapColor {
     }
 
     /**
-     * Opaque white times the light, for packed light coordinates; full white if the lightmap hasn't been worked out yet.
+     * Opaque white times the light, for packed light coordinates.
      */
     public static int of(int packedLight) {
         LightmapRenderState state = Minecraft.getInstance().gameRenderer.getGameRenderState().lightmapRenderState;
-        if (state.ambientColor == null || state.skyLightColor == null || state.blockLightTint == null) {
-            return 0xFFFFFFFF;
-        }
         float blockLevel = LightCoordsUtil.block(packedLight) / 15.0F;
         float skyLevel = LightCoordsUtil.sky(packedLight) / 15.0F;
         float blockBrightness = brightness(blockLevel) * state.blockFactor;
         float skyBrightness = brightness(skyLevel) * state.skyFactor;
 
         Vector3f color = new Vector3f(state.ambientColor);
-        if (state.nightVisionColor != null) {
-            color.max(new Vector3f(state.nightVisionColor).mul(state.nightVisionEffectIntensity));
-        }
+        color.max(new Vector3f(state.nightVisionColor).mul(state.nightVisionEffectIntensity));
         color.add(new Vector3f(state.skyLightColor).mul(skyBrightness));
         float parabola = (2.0F * blockLevel - 1.0F) * (2.0F * blockLevel - 1.0F);
         Vector3f blockColor = new Vector3f(state.blockLightTint).lerp(new Vector3f(1.0F), 0.9F * parabola);

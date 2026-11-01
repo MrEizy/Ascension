@@ -139,7 +139,7 @@ public class AscensionCraftClient {
                     new Material(Identifier.withDefaultNamespace("block/water_still")),
                     new Material(Identifier.withDefaultNamespace("block/water_flow")),
                     new Material(Identifier.withDefaultNamespace("block/water_overlay")),
-                    state -> 0xA129A6FF);
+                    _ -> 0xA129A6FF);
 
             event.register(liquifiedSpiritualQiModel, AscFluids.LIQUIFIED_SPIRITUAL_QI_SOURCE.get());
             event.register(liquifiedSpiritualQiModel, AscFluids.LIQUIFIED_SPIRITUAL_QI_FLOWING.get());

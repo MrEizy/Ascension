@@ -215,7 +215,7 @@ public class ModRenderTypes {
      * A skin-fitted qi coating (one of ModRenderPipelines' QI_COATING_SKIN pipelines) drawn from the given skin texture.
      */
     public static RenderType qiCoatingSkin(RenderPipeline pipeline, Identifier skin) {
-        return QI_COATING_SKIN.computeIfAbsent(pipeline, key -> new HashMap<>()).computeIfAbsent(skin, key -> RenderType.create(
+        return QI_COATING_SKIN.computeIfAbsent(pipeline, _ -> new HashMap<>()).computeIfAbsent(skin, key -> RenderType.create(
                 "ascension_" + pipeline.getLocation().getPath().substring("pipeline/".length()),
                 RenderSetup.builder(pipeline)
                         .withTexture("Sampler0", key)
@@ -231,7 +231,7 @@ public class ModRenderTypes {
      * Sword Qi for quads from the given atlas; see ModRenderPipelines.SWORD_QI for the styles.
      */
     public static RenderType swordQi(int style, Identifier atlas) {
-        RenderType[] types = SWORD_QI.computeIfAbsent(atlas, key -> new RenderType[ModRenderPipelines.SWORD_QI.length]);
+        RenderType[] types = SWORD_QI.computeIfAbsent(atlas, _ -> new RenderType[ModRenderPipelines.SWORD_QI.length]);
         if (types[style] == null) {
             types[style] = RenderType.create(
                     "ascension_sword_qi_" + style,

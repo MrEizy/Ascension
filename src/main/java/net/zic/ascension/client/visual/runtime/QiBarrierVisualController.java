@@ -124,7 +124,7 @@ public final class QiBarrierVisualController implements RuntimeVisualController 
 
     @Override
     public void onUpdate(RuntimeVisualState previous, RuntimeVisualState current) {
-        Live live = LIVE.computeIfAbsent(current.runtimeId(), id -> new Live(current.ownerId(), Util.getMillis(), current.progress()));
+        Live live = LIVE.computeIfAbsent(current.runtimeId(), _ -> new Live(current.ownerId(), Util.getMillis(), current.progress()));
         if (current.progress() < live.progress - 1.0E-4F) {
             live.flashMillis = Util.getMillis();
         }
