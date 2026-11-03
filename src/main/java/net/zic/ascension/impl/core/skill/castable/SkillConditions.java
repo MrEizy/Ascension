@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
+import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingChannel;
 import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
@@ -75,6 +76,26 @@ public final class SkillConditions {
         @Override
         public boolean test(SkillActionContext context) {
             return condition != null && !condition.test(context);
+        }
+    }
+
+    /**
+     * Whether the caster has the path for at least one element the Qi Coating channel can show, so the coating has a look.
+     */
+    public record HasQiCoatingElement(QiCoatingChannel channel) implements SkillCondition {
+        public static final MapCodec<HasQiCoatingElement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                QiCoatingChannel.CODEC.fieldOf("channel").forGetter(HasQiCoatingElement::channel)
+        ).apply(instance, HasQiCoatingElement::new));
+
+        @Override
+        public CodecType<SkillCondition> getType() {
+            return AscensionSkillConditionTypes.HAS_QI_COATING_ELEMENT.get();
+        }
+
+        @Override
+        public boolean test(SkillActionContext context) {
+            return context != null && context.caster() != null
+                    && QiCoatingSelectionService.resolve(context.caster(), channel).isPresent();
         }
     }
 

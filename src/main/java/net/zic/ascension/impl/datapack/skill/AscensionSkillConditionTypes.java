@@ -25,6 +25,7 @@ public final class AscensionSkillConditionTypes {
     public static final DeferredHolder<CodecType<SkillCondition>, CodecType<SkillCondition>> DISTANCE = TYPES.add("distance", SkillConditions.Distance.CODEC);
     public static final DeferredHolder<CodecType<SkillCondition>, CodecType<SkillCondition>> VARIABLE = TYPES.add("variable", SkillConditions.Variable.CODEC);
     public static final DeferredHolder<CodecType<SkillCondition>, CodecType<SkillCondition>> RANDOM = TYPES.add("random", SkillConditions.Random.CODEC);
+    public static final DeferredHolder<CodecType<SkillCondition>, CodecType<SkillCondition>> HAS_QI_COATING_ELEMENT = TYPES.add("has_qi_coating_element", SkillConditions.HasQiCoatingElement.CODEC);
 
     private AscensionSkillConditionTypes() {
     }

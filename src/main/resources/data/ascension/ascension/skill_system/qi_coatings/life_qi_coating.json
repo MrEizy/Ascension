@@ -1,0 +1,15 @@
+{
+  "coverage": "hands",
+  "grow_millis": 1800,
+  "foliage_locked": true,
+  "gather": {
+    "style": "specks",
+    "colors": ["#C8FF8C", "#8EE05A", "#E8FFB8", "#5FC63A"]
+  },
+  "shells": {
+    "look": "ascension:life_vines",
+    "layers": [
+      { "inflate": 0.3, "reach": 7.0, "overhang": 0.3, "square_cap": true }
+    ]
+  }
+}

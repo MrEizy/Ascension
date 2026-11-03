@@ -1,0 +1,10 @@
+{
+  "coverage": "body",
+  "shells": {
+    "look": "ascension:lightning_step",
+    "body": { "mode": "limbs", "legs_only": true }
+  },
+  "effects": [
+    "ascension:lightning_step"
+  ]
+}

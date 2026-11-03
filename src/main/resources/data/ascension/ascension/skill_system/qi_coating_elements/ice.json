@@ -1,0 +1,139 @@
+{
+  "name": {
+    "translate": "ascension.qi_coating.element.ice.name"
+  },
+  "path": "ascension:elemental/ice",
+  "body_coating": "ascension:ice_qi_coating",
+  "external_coating": "ascension:ice_external_qi_coating",
+  "order": 4,
+  "body_on_hit": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "base": 0.05,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ]
+      }
+    },
+    "actions": [
+      {
+        "type": "ascension:damage",
+        "base": {
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:context",
+                "key": "ascension:trigger/damage"
+              },
+              "scale": 0.25
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "scale": 0.25
+            }
+          ]
+        },
+        "damage_type": "ascension:ice_qi",
+        "classifications": [
+          "ascension:qi"
+        ],
+        "path": "ascension:elemental/ice",
+        "subject": "target"
+      }
+    ]
+  },
+  "external_on_hit": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "base": 0.05,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ]
+      }
+    },
+    "actions": [
+      {
+        "type": "ascension:damage",
+        "base": {
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:context",
+                "key": "ascension:trigger/damage"
+              },
+              "scale": 0.25
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "scale": 0.25
+            }
+          ]
+        },
+        "damage_type": "ascension:ice_qi",
+        "classifications": [
+          "ascension:qi"
+        ],
+        "path": "ascension:elemental/ice",
+        "subject": "target"
+      }
+    ]
+  },
+  "external_on_mine": {
+    "speed": {
+      "blocks": [
+        "minecraft:ice",
+        "minecraft:packed_ice",
+        "minecraft:blue_ice"
+      ],
+      "multiplier": 2.0
+    },
+    "silk_touch": [
+      "minecraft:ice",
+      "minecraft:packed_ice",
+      "minecraft:blue_ice"
+    ]
+  },
+  "external_on_use": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": 5.0
+    },
+    "transform": {
+      "minecraft:water": "minecraft:ice",
+      "minecraft:ice": {
+        "block": "minecraft:packed_ice",
+        "cost": {
+          "resource": "ascension:qi",
+          "amount": 10.0
+        }
+      },
+      "minecraft:packed_ice": {
+        "block": "minecraft:blue_ice",
+        "cost": {
+          "resource": "ascension:qi",
+          "amount": 20.0
+        }
+      }
+    }
+  }
+}

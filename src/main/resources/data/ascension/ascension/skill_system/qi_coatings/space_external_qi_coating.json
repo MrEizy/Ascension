@@ -1,0 +1,16 @@
+{
+  "coverage": "weapon",
+  "grow_millis": 1800,
+  "gather": {
+    "style": "patches",
+    "colors": [
+      "#1A0F3A",
+      "#2E1F66",
+      "#4B3A9E",
+      "#E8E6FF"
+    ]
+  },
+  "sword": {
+    "look": "ascension:starfield"
+  }
+}

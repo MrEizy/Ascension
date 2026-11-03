@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillCostDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
+import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.skill.passive.PassiveTrigger;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
@@ -104,44 +105,14 @@ public final class PassiveTriggerService {
     }
 
     private static boolean execute(LivingEntity owner, LivingEntity target, Candidate candidate, Map<Identifier, Double> variables) {
-        if (!(owner.level() instanceof ServerLevel level)) {
-            return false;
-        }
-        OriginSource source = AscensionOriginSourceHelper.getEntitySource(owner);
-        if (source == null) {
-            return false;
-        }
         PassiveTrigger trigger = candidate.trigger();
-        SkillActionContext actionContext = new SkillActionContext(
-                level,
-                owner,
-                candidate.skillId(),
-                target,
-                target == null ? null : target.position().add(0.0D, target.getBbHeight() * 0.5D, 0.0D),
-                0.0D,
-                variables
-        );
-        for (SkillCondition condition : trigger.conditions()) {
-            if (condition == null || !condition.test(actionContext)) {
-                return false;
-            }
-        }
-        ScaledValue.Context valueContext = new ScaledValue.Context(source, candidate.skillId(), owner, target, 0.0D, variables);
-        for (ActiveSkillCostDefinition cost : trigger.costs()) {
-            if (!cost.canPay(owner, candidate.skillId(), target, valueContext, variables)) {
-                return false;
-            }
-        }
         TriggerKey key = new TriggerKey(owner.getUUID(), candidate.skillId(), candidate.index());
         Set<TriggerKey> active = ACTIVE_TRIGGERS.get();
         active.add(key);
         try {
-            for (ActiveSkillCostDefinition cost : trigger.costs()) {
-                if (!cost.pay(owner, candidate.skillId(), target, valueContext, variables)) {
-                    return false;
-                }
+            if (!run(owner, target, candidate.skillId(), trigger.conditions(), trigger.costs(), trigger.actions(), variables)) {
+                return false;
             }
-            SkillActionRuntime.execute(actionContext, trigger.actions());
             LAST_TRIGGER.put(key, owner.level().getGameTime());
             return true;
         } finally {
@@ -150,6 +121,49 @@ public final class PassiveTriggerService {
                 ACTIVE_TRIGGERS.remove();
             }
         }
+    }
+
+    /**
+     * Runs a trigger's body for an owner, as the skill skillId: checks the conditions and that every cost can be paid, pays them,
+     * then runs the actions with target as the action target. False (with nothing paid or run) if a condition fails or a cost
+     * can't be paid. Doesn't check or start a cooldown. Also used by Qi Coating element hooks (QiCoatingService).
+     */
+    public static boolean run(LivingEntity owner, LivingEntity target, Identifier skillId, List<SkillCondition> conditions,
+                              List<ActiveSkillCostDefinition> costs, List<SkillAction> actions, Map<Identifier, Double> variables) {
+        if (!(owner.level() instanceof ServerLevel level)) {
+            return false;
+        }
+        OriginSource source = AscensionOriginSourceHelper.getEntitySource(owner);
+        if (source == null) {
+            return false;
+        }
+        SkillActionContext actionContext = new SkillActionContext(
+                level,
+                owner,
+                skillId,
+                target,
+                target == null ? null : target.position().add(0.0D, target.getBbHeight() * 0.5D, 0.0D),
+                0.0D,
+                variables
+        );
+        for (SkillCondition condition : conditions) {
+            if (condition == null || !condition.test(actionContext)) {
+                return false;
+            }
+        }
+        ScaledValue.Context valueContext = new ScaledValue.Context(source, skillId, owner, target, 0.0D, variables);
+        for (ActiveSkillCostDefinition cost : costs) {
+            if (!cost.canPay(owner, skillId, target, valueContext, variables)) {
+                return false;
+            }
+        }
+        for (ActiveSkillCostDefinition cost : costs) {
+            if (!cost.pay(owner, skillId, target, valueContext, variables)) {
+                return false;
+            }
+        }
+        SkillActionRuntime.execute(actionContext, actions);
+        return true;
     }
 
     private static boolean valid(LivingEntity entity) {

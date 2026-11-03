@@ -30,7 +30,8 @@ public final class SkillWheelOverlay {
                 && minecraft.screen == null
                 && !minecraft.player.isSpectator()
                 && !minecraft.options.hideGui
-                && ModKeybinds.OPEN_SKILL_WHEEL.isDown();
+                && ModKeybinds.OPEN_SKILL_WHEEL.isDown()
+                && !QiCoatingWheelOverlay.wantsOpen();
 
         if (shouldOpen && !open) {
             open();

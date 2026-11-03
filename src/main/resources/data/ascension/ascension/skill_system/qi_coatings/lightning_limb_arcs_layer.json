@@ -1,0 +1,10 @@
+{
+  "coverage": "body",
+  "shells": {
+    "look": "ascension:lightning_crackle_limbs",
+    "layers": [
+      { "inflate": 0.4, "reach": 12.4, "overhang": 0.4, "square_cap": true }
+    ],
+    "body": { "mode": "limbs" }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "coverage": "body",
+  "echoes": true,
+  "shells": {
+    "look": "ascension:void_echo_layer",
+    "layers": [
+      { "inflate": 0.4, "reach": 12.4, "overhang": 0.4 }
+    ],
+    "body": { "mode": "film" }
+  }
+}

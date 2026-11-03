@@ -1,0 +1,20 @@
+{
+  "coverage": "weapon",
+  "grow_millis": 1200,
+  "gather": {
+    "style": "fade",
+    "colors": [
+      "#FFE08A",
+      "#FFB347",
+      "#FF8A26",
+      "#FF5A14"
+    ]
+  },
+  "reacts_to": [
+    "hurt",
+    "attack"
+  ],
+  "sword": {
+    "look": "ascension:heat"
+  }
+}

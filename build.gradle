@@ -68,6 +68,9 @@ neoForge {
             gameDirectory = project.file('run')
             jvmArguments.add '-Xmx9G'
             systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+            systemProperty 'neoforge.disableGlValidation', 'true'
+            // Logs every hit's damage step by step (DamageTrace); remove when done debugging.
+            systemProperty 'ascension.damageTrace', 'true'
         }
 
         client2 {
@@ -153,7 +156,7 @@ dependencies {
     //jarJar(implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0'))
 
     //implementation 'com.github.MrEizy:ZenithLib:495d40e491'
-    implementation('io.github.oliverhesse:zenithlib:0.1.1')
+    implementation('io.github.oliverhesse:zenithlib:0.1.2')
     implementation('com.github.OliverHesse:EasyGui:d71b1e115c')
     implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0')
 
@@ -164,6 +167,10 @@ dependencies {
     //compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
     // at runtime, use the full JEI jar for NeoForge
     //runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+    // dev-only: JEI in the run configs, not a dependency of the built mod
+    localRuntime("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+    // compile-only: JEI API for the optional JEI plugin, not a dependency of the built mod
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
 
     //implementation "maven.modrinth:jade:${project.jade_version}"
 

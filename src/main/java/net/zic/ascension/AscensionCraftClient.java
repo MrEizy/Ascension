@@ -23,9 +23,11 @@ import net.zic.ascension.client.keybind.*;
 import net.zic.ascension.client.particle.ParticleFieldController;
 import net.zic.ascension.client.particle.ParticleFieldParticle;
 import net.zic.ascension.client.gui.AscensionHudOverlay;
+import net.zic.ascension.client.gui.QiCoatingWheelOverlay;
 import net.zic.ascension.client.gui.SkillWheelOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.visual.runtime.BarrierShellVisualController;
+import net.zic.ascension.client.visual.runtime.QiBarrierVisualController;
 import net.zic.ascension.client.visual.runtime.ClientRuntimeVisuals;
 import net.zic.ascension.client.visual.runtime.GuardianDharmaVisualController;
 import net.zic.ascension.client.visual.runtime.WeaponSwingVisualController;
@@ -137,7 +139,7 @@ public class AscensionCraftClient {
                     new Material(Identifier.withDefaultNamespace("block/water_still")),
                     new Material(Identifier.withDefaultNamespace("block/water_flow")),
                     new Material(Identifier.withDefaultNamespace("block/water_overlay")),
-                    state -> 0xA129A6FF);
+                    _ -> 0xA129A6FF);
 
             event.register(liquifiedSpiritualQiModel, AscFluids.LIQUIFIED_SPIRITUAL_QI_SOURCE.get());
             event.register(liquifiedSpiritualQiModel, AscFluids.LIQUIFIED_SPIRITUAL_QI_FLOWING.get());
@@ -163,6 +165,7 @@ public class AscensionCraftClient {
             event.enqueueWork(() -> {
                 AscensionClientTooltipProviders.registerAll();
                 BarrierShellVisualController.registerDefaults();
+                QiBarrierVisualController.registerDefault();
                 GuardianDharmaVisualController.registerDefault();
                 WeaponSwingVisualController.registerDefault();
                 AscensionCreativeSections.register();
@@ -203,6 +206,7 @@ public class AscensionCraftClient {
             TabletKeybindHandler.onClientTick(event);
             IntrospectionKeybindHandler.onClientTick(event);
             SkillWheelOverlay.onClientTick();
+            QiCoatingWheelOverlay.onClientTick();
             ParticleFieldController.tick();
             ClientRuntimeVisuals.tick();
         }

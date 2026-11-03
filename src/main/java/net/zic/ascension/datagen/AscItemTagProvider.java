@@ -52,11 +52,8 @@ public class AscItemTagProvider extends ItemTagsProvider {
 
         tag(ItemTags.SWORDS)
                 .add(ModItems.BLACK_IRON_SWORD.get())
-                .add(ModItems.BLACK_IRON_BLADE.get())
                 .add(ModItems.FROST_SILVER_SWORD.get())
-                .add(ModItems.FROST_SILVER_BLADE.get())
-                .add(ModItems.SPIRITUAL_STONE_SWORD.get())
-                .add(ModItems.SPIRITUAL_STONE_BLADE.get());
+                .add(ModItems.SPIRITUAL_STONE_SWORD.get());
         tag(ItemTags.PICKAXES)
                 .add(ModItems.BLACK_IRON_PICKAXE.get())
                 .add(ModItems.FROST_SILVER_PICKAXE.get())
@@ -83,10 +80,14 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .add(ModBlocks.IRONWOOD_LOG.asItem())
                 .add(ModBlocks.IRONWOOD_WOOD.asItem())
                 .add(ModBlocks.STRIPPED_IRONWOOD_LOG.asItem())
-                .add(ModBlocks.STRIPPED_IRONWOOD_WOOD.asItem());
-        tag(ItemTags.PLANKS).add(ModBlocks.IRONWOOD_PLANKS.asItem());
-        tag(ItemTags.LEAVES).add(ModBlocks.IRONWOOD_LEAVES.asItem());
-        tag(ItemTags.SAPLINGS).add(ModBlocks.IRONWOOD_SAPLING.asItem());
+                .add(ModBlocks.STRIPPED_IRONWOOD_WOOD.asItem())
+                .add(ModBlocks.PEACH_LOG.asItem())
+                .add(ModBlocks.PEACH_WOOD.asItem())
+                .add(ModBlocks.STRIPPED_PEACH_LOG.asItem())
+                .add(ModBlocks.STRIPPED_PEACH_WOOD.asItem());
+        tag(ItemTags.PLANKS).add(ModBlocks.IRONWOOD_PLANKS.asItem()).add(ModBlocks.PEACH_PLANKS.asItem());
+        tag(ItemTags.LEAVES).add(ModBlocks.IRONWOOD_LEAVES.asItem()).add(ModBlocks.PEACH_LEAVES.asItem());
+        tag(ItemTags.SAPLINGS).add(ModBlocks.IRONWOOD_SAPLING.asItem()).add(ModBlocks.PEACH_SAPLING.asItem());
         tag(ItemTags.WOODEN_STAIRS).add(ModBlocks.IRONWOOD_STAIRS.asItem());
         tag(ItemTags.WOODEN_SLABS).add(ModBlocks.IRONWOOD_SLAB.asItem());
         tag(ItemTags.WOODEN_FENCES).add(ModBlocks.IRONWOOD_FENCE.asItem());
@@ -133,6 +134,16 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 );
 
         tag(ModTags.Items.WEAPON_BLADES)
+                .add(ModItems.BLACK_IRON_BLADE.get())
+                .add(ModItems.FROST_SILVER_BLADE.get())
+                .add(ModItems.SPIRITUAL_STONE_BLADE.get())
+                .add(ModItems.WOODEN_BLADE.get())
+                .add(ModItems.STONE_BLADE.get())
+                .add(ModItems.COPPER_BLADE.get())
+                .add(ModItems.IRON_BLADE.get())
+                .add(ModItems.GOLD_BLADE.get())
+                .add(ModItems.DIAMOND_BLADE.get())
+                .add(ModItems.NETHERITE_BLADE.get())
                 .addOptionalTag(ModTags.Items.C_TOOLS_BLADE)
                 .addOptionalTag(ModTags.Items.C_WEAPONS_BLADE);
 

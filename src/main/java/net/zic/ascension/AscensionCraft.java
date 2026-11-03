@@ -287,6 +287,11 @@ public class AscensionCraft {
                     SelectSkillSlotPacket::handle
             );
             registrar.playToServer(
+                    SelectQiCoatingElementPacket.TYPE,
+                    SelectQiCoatingElementPacket.STREAM_CODEC,
+                    SelectQiCoatingElementPacket::handle
+            );
+            registrar.playToServer(
                     TogglePassiveSkillPacket.TYPE,
                     TogglePassiveSkillPacket.STREAM_CODEC,
                     TogglePassiveSkillPacket::handle
@@ -330,6 +335,36 @@ public class AscensionCraft {
                     SwordFlightStatePacket.STREAM_CODEC,
                     SwordFlightStatePacket::handle
             );
+            registrar.playToClient(
+                    LightningFlashPacket.TYPE,
+                    LightningFlashPacket.STREAM_CODEC,
+                    LightningFlashPacket::handle
+            );
+            registrar.playToClient(
+                    QiCoatingSyncPacket.TYPE,
+                    QiCoatingSyncPacket.STREAM_CODEC,
+                    QiCoatingSyncPacket::handle
+            );
+            registrar.playToClient(
+                    QiStepStatePacket.TYPE,
+                    QiStepStatePacket.STREAM_CODEC,
+                    QiStepStatePacket::handle
+            );
+            registrar.playToClient(
+                    QiStepPlatePacket.TYPE,
+                    QiStepPlatePacket.STREAM_CODEC,
+                    QiStepPlatePacket::handle
+            );
+            registrar.playToServer(
+                    QiStepActionPacket.TYPE,
+                    QiStepActionPacket.STREAM_CODEC,
+                    QiStepActionPacket::handle
+            );
+            registrar.playToServer(
+                    ServerboundToolChargeReleasePacket.TYPE,
+                    ServerboundToolChargeReleasePacket.STREAM_CODEC,
+                    ServerboundToolChargeReleasePacket::handle
+            );
 
             registrar.playToServer(
                     ChooseStarterOptionPacket.TYPE,
@@ -361,6 +396,21 @@ public class AscensionCraft {
                     ClientboundTribulationRemovePacket.TYPE,
                     ClientboundTribulationRemovePacket.STREAM_CODEC,
                     ClientboundTribulationRemovePacket::handle
+            );
+            registrar.playToClient(
+                    SpaceRiftPayload.TYPE,
+                    SpaceRiftPayload.CODEC,
+                    SpaceRiftPayload::handle
+            );
+            registrar.playToClient(
+                    SpaceRiftClosePayload.TYPE,
+                    SpaceRiftClosePayload.CODEC,
+                    SpaceRiftClosePayload::handle
+            );
+            registrar.playToServer(
+                    SpaceRiftInteractPayload.TYPE,
+                    SpaceRiftInteractPayload.CODEC,
+                    SpaceRiftInteractPayload::handle
             );
 
         }

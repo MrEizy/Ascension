@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
+import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingSelection;
 import net.zic.ascension.api.ascension.core.resource.DatapackResourceData;
 
 import java.util.function.Supplier;
@@ -26,6 +27,14 @@ public class CoreAttachments {
                             (holder)-> new EntityPathBonusHolder((LivingEntity) holder)
                     )
                     .sync(new EntityPathBonusHolder.SyncHandler())
+                    .build()
+    );
+
+    public static final Supplier<AttachmentType<QiCoatingSelection>> QI_COATING_SELECTION = ATTACHMENT_TYPES.register(
+            "qi_coating_selection", () -> AttachmentType.builder(holder -> new QiCoatingSelection())
+                    .serialize(QiCoatingSelection.CODEC.fieldOf("selected"))
+                    .sync(new QiCoatingSelection.SyncHandler())
+                    .copyOnDeath()
                     .build()
     );
 

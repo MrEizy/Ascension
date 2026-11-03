@@ -1,0 +1,19 @@
+{
+  "coverage": "hands",
+  "grow_millis": 1800,
+  "gather": {
+    "style": "fade",
+    "colors": ["#5FB4E8", "#3E8FD6", "#A8DCF5", "#E3F5FF"]
+  },
+  "shells": {
+    "texture": {
+      "path": "ascension:textures/qi_coating/water_serpent.png",
+      "frames": 32,
+      "frame_millis": 125,
+      "emissive": true
+    },
+    "layers": [
+      { "inflate": 0.4, "reach": 12.4, "overhang": 0.4, "color": "#FFD8DFEB" }
+    ]
+  }
+}

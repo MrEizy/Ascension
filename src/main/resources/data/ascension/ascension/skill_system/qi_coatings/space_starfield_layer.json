@@ -1,0 +1,10 @@
+{
+  "coverage": "body",
+  "shells": {
+    "look": "ascension:space_starfield_layer",
+    "layers": [
+      { "inflate": 0.4, "reach": 12.4, "overhang": 0.4 }
+    ],
+    "body": { "mode": "film" }
+  }
+}

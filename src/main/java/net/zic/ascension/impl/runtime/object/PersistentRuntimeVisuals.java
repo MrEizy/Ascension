@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.runtime.object;
 
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
@@ -9,9 +10,11 @@ import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.zic.ascension.AscensionCraft;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -48,6 +51,55 @@ public final class PersistentRuntimeVisuals {
         if (state != null) {
             RuntimeVisualSync.remove(context.level(), state);
         }
+    }
+
+    /**
+     * The ids of the persistent visuals on the entity, such as a Qi Coating's.
+     */
+    public static List<Identifier> visualsOn(UUID owner) {
+        List<Identifier> visuals = new ArrayList<>();
+        for (Map.Entry<Key, RuntimeVisualState> entry : ACTIVE.entrySet()) {
+            if (entry.getKey().owner().equals(owner)) {
+                visuals.add(entry.getValue().visual());
+            }
+        }
+        return visuals;
+    }
+
+    /**
+     * Visuals are only sent to players in range when they start, so anyone who comes into range of the owner later gets them
+     * here.
+     */
+    @SubscribeEvent
+    public static void onStartTracking(PlayerEvent.StartTracking event) {
+        if (event.getEntity() instanceof ServerPlayer viewer) {
+            sendOwnedBy(viewer, event.getTarget().getUUID());
+        }
+    }
+
+    /**
+     * Players don't track themselves, so the owner gets its own visuals again after anything that rebuilds its client world.
+     */
+    @SubscribeEvent
+    public static void onChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            sendOwnedBy(player, player.getUUID());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            sendOwnedBy(player, player.getUUID());
+        }
+    }
+
+    private static void sendOwnedBy(ServerPlayer viewer, UUID owner) {
+        ACTIVE.forEach((key, state) -> {
+            if (key.owner().equals(owner)) {
+                RuntimeVisualSync.spawnFor(viewer, state);
+            }
+        });
     }
 
     @SubscribeEvent

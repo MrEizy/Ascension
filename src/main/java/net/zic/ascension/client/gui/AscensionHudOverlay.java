@@ -64,5 +64,6 @@ public final class AscensionHudOverlay {
         hudFrame.run(graphics, 0, 0, partialTick);
         cultivationFrame.run(graphics, 0, 0, partialTick);
         SkillWheelOverlay.render(graphics, partialTick);
+        QiCoatingWheelOverlay.render(graphics, partialTick);
     }
 }

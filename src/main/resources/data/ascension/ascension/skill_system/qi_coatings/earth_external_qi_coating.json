@@ -1,0 +1,17 @@
+{
+  "coverage": "weapon",
+  "grow_millis": 1800,
+  "gather": {
+    "style": "patches",
+    "colors": [
+      "#624530",
+      "#785438",
+      "#8D6342",
+      "#9C6D49",
+      "#3D291A"
+    ]
+  },
+  "sword": {
+    "look": "ascension:cracked"
+  }
+}

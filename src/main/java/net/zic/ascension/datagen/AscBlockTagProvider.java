@@ -62,6 +62,19 @@ public class AscBlockTagProvider extends BlockTagsProvider {
         tag(ModTags.Blocks.HERB_SOILS)
                 .add(ModBlocks.CULTIVATION_SOIL.get());
 
+        tag(ModTags.Blocks.EARTH_QI_COATING_MINEABLE)
+                .addTag(BlockTags.BASE_STONE_OVERWORLD)
+                .addTag(BlockTags.BASE_STONE_NETHER)
+                .addTag(BlockTags.DIRT)
+                .addTag(BlockTags.SAND)
+                .addTag(BlockTags.TERRACOTTA)
+                .add(Blocks.COBBLESTONE)
+                .add(Blocks.COBBLED_DEEPSLATE)
+                .add(Blocks.GRAVEL)
+                .add(Blocks.CLAY)
+                .add(Blocks.SANDSTONE)
+                .add(Blocks.RED_SANDSTONE);
+
         tag(BlockTags.LOGS_THAT_BURN)
                 .add(ModBlocks.PEACH_LOG.get())
                 .add(ModBlocks.PEACH_WOOD.get())

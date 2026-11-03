@@ -1,5 +1,6 @@
 package net.zic.ascension.common;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -222,6 +223,7 @@ public class ModCreativeModeTabs {
                                         Identifier physiqueId = holder.key().identifier();
                                         ItemStack stack = new ItemStack(ModItems.PHYSIQUE_ESSENCE.get());
                                         stack.set(AscensionComponents.REGISTRY_ID_HOLDER.get(), physiqueId);
+                                        stack.set(DataComponents.ITEM_NAME, Component.translatable("item.ascension.physique_essence.named", holder.value().getName(null)));
                                         output.accept(stack);
                                     }))
                     .build());
@@ -239,6 +241,7 @@ public class ModCreativeModeTabs {
                                         Identifier bloodlineId = holder.key().identifier();
                                         ItemStack stack = new ItemStack(ModItems.BLOODLINE_ESSENCE.get());
                                         stack.set(AscensionComponents.REGISTRY_ID_HOLDER.get(), bloodlineId);
+                                        stack.set(DataComponents.ITEM_NAME, Component.translatable("item.ascension.bloodline_essence.named", holder.value().getName(null)));
                                         stack.set(AscensionComponents.PURITY.get(), 100);
                                         output.accept(stack);
                                     }))
@@ -257,6 +260,7 @@ public class ModCreativeModeTabs {
                                         Identifier techniqueId = holder.key().identifier();
                                         ItemStack stack = new ItemStack(ModItems.TECHNIQUE_MANUAL.get());
                                         stack.set(AscensionComponents.REGISTRY_ID_HOLDER.get(), techniqueId);
+                                        stack.set(DataComponents.ITEM_NAME, Component.translatable("item.ascension.technique_manual.named", holder.value().getName(null)));
                                         output.accept(stack);
                                     }))
                     .build());

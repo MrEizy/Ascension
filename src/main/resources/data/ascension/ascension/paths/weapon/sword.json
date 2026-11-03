@@ -110,5 +110,33 @@
       ]
     }
   ],
-  "interactions": []
+  "interactions": [],
+  "actions": [
+    {
+      "condition": "ascension:realm_change/second_major_realm",
+      "actions": [
+        {
+          "type": "ascension:grant_skills",
+          "skills": [
+            "ascension:castable/qi_step/qi_step",
+            "ascension:passive/qi_step/qi_step"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": "ascension:realm_change/third_major_realm",
+      "actions": [
+        {
+          "type": "ascension:grant_skills",
+          "skills": [
+            "ascension:castable/qi_coating/qi_coating",
+            "ascension:passive/qi_coating/qi_coating",
+            "ascension:castable/qi_coating/external_qi_coating",
+            "ascension:passive/qi_coating/external_qi_coating"
+          ]
+        }
+      ]
+    }
+  ]
 }

@@ -1,0 +1,126 @@
+{
+  "name": {
+    "translate": "ascension.qi_coating.element.water.name"
+  },
+  "path": "ascension:elemental/water",
+  "body_coating": "ascension:water_qi_coating",
+  "external_coating": "ascension:water_external_qi_coating",
+  "order": 3,
+  "body_on_hit": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "base": 0.05,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ]
+      }
+    },
+    "actions": [
+      {
+        "type": "ascension:damage",
+        "base": {
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:context",
+                "key": "ascension:trigger/damage"
+              },
+              "scale": 0.25
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "scale": 0.25
+            }
+          ]
+        },
+        "damage_type": "ascension:water_qi",
+        "classifications": [
+          "ascension:qi"
+        ],
+        "path": "ascension:elemental/water",
+        "subject": "target"
+      }
+    ]
+  },
+  "external_on_hit": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "base": 0.05,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ]
+      }
+    },
+    "actions": [
+      {
+        "type": "ascension:damage",
+        "base": {
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:context",
+                "key": "ascension:trigger/damage"
+              },
+              "scale": 0.25
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "scale": 0.25
+            }
+          ]
+        },
+        "damage_type": "ascension:water_qi",
+        "classifications": [
+          "ascension:qi"
+        ],
+        "path": "ascension:elemental/water",
+        "subject": "target"
+      }
+    ]
+  },
+  "external_on_mine": {
+    "underwater": true,
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": 5.0
+    },
+    "convert": {
+      "minecraft:white_concrete_powder": "minecraft:white_concrete",
+      "minecraft:orange_concrete_powder": "minecraft:orange_concrete",
+      "minecraft:magenta_concrete_powder": "minecraft:magenta_concrete",
+      "minecraft:light_blue_concrete_powder": "minecraft:light_blue_concrete",
+      "minecraft:yellow_concrete_powder": "minecraft:yellow_concrete",
+      "minecraft:lime_concrete_powder": "minecraft:lime_concrete",
+      "minecraft:pink_concrete_powder": "minecraft:pink_concrete",
+      "minecraft:gray_concrete_powder": "minecraft:gray_concrete",
+      "minecraft:light_gray_concrete_powder": "minecraft:light_gray_concrete",
+      "minecraft:cyan_concrete_powder": "minecraft:cyan_concrete",
+      "minecraft:purple_concrete_powder": "minecraft:purple_concrete",
+      "minecraft:blue_concrete_powder": "minecraft:blue_concrete",
+      "minecraft:brown_concrete_powder": "minecraft:brown_concrete",
+      "minecraft:green_concrete_powder": "minecraft:green_concrete",
+      "minecraft:red_concrete_powder": "minecraft:red_concrete",
+      "minecraft:black_concrete_powder": "minecraft:black_concrete"
+    }
+  }
+}

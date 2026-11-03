@@ -36,6 +36,8 @@ import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualDefinition;
 import net.zic.ascension.api.ascension.core.runtime.RuntimeVisualState;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
 import net.zic.ascension.api.ascension.core.skill.castable.action.ActionSubject;
+import net.zic.ascension.api.ascension.core.qi_coating.QiCoating;
+import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingChannel;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.DefinitionRef;
@@ -47,6 +49,7 @@ import net.zic.ascension.api.ascension.datapack.CodecHelpers;
 import net.zic.ascension.api.ascension.datapack.CodecType;
 import net.zic.ascension.api.ascension.value.HexColorCodec;
 import net.zic.ascension.api.ascension.value.ScaledValue;
+import net.zic.ascension.impl.core.skill.passive.PassiveSkillService;
 import net.zic.ascension.impl.core.control.StaggerService;
 import net.zic.ascension.impl.core.damage.AscensionDamageService;
 import net.zic.ascension.impl.core.effect.AscensionBuildupChannels;
@@ -67,6 +70,8 @@ import net.zic.ascension.impl.runtime.weapon.WeaponTechniqueResolver;
 import net.zic.ascension.impl.runtime.weapon.WeaponVfxUtils;
 import net.zic.ascension.network.ClientboundDivineSensePacket;
 import net.zic.ascension.util.CultivationUtil;
+
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -225,6 +230,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum VariableOperation implements StringRepresentable {
         SET("set"), ADD("add"), MULTIPLY("multiply");
 
@@ -1380,6 +1386,163 @@ public final class SkillActions {
     }
 
     /**
+     * Punches a rift into the space in front of the caster; clicking into it once open reaches their ender chest.
+     * See {@link VoidPocketService}.
+     */
+    public record VoidPocket(
+            float radius,
+            double distance,
+            double heightOffset,
+            int openDelayTicks,
+            int idleSeconds,
+            double maxReach,
+            int maxSeconds
+    ) implements SkillAction {
+        public static final MapCodec<VoidPocket> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Codec.floatRange(0.25F, 8.0F).optionalFieldOf("radius", 1.0F).forGetter(VoidPocket::radius),
+                Codec.DOUBLE.optionalFieldOf("distance", 2.5D).forGetter(VoidPocket::distance),
+                Codec.DOUBLE.optionalFieldOf("height_offset", 0.0D).forGetter(VoidPocket::heightOffset),
+                Codec.intRange(0, 200).optionalFieldOf("open_delay_ticks", 30).forGetter(VoidPocket::openDelayTicks),
+                Codec.intRange(1, 600).optionalFieldOf("idle_seconds", 30).forGetter(VoidPocket::idleSeconds),
+                Codec.DOUBLE.optionalFieldOf("max_reach", 6.0D).forGetter(VoidPocket::maxReach),
+                Codec.intRange(5, 3600).optionalFieldOf("max_seconds", 300).forGetter(VoidPocket::maxSeconds)
+        ).apply(instance, VoidPocket::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.VOID_POCKET.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            VoidPocketService.open(context, this);
+        }
+    }
+
+    /**
+     * Switches one of the caster's toggleable passives, as if from the passive menu. Lets a hotbar skill drive a passive that
+     * owns the upkeep, state group and visuals.
+     */
+    public record TogglePassive(Identifier skill, ToggleMode mode) implements SkillAction {
+        public static final MapCodec<TogglePassive> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Identifier.CODEC.fieldOf("skill").forGetter(TogglePassive::skill),
+                ToggleMode.CODEC.optionalFieldOf("mode", ToggleMode.TOGGLE).forGetter(TogglePassive::mode)
+        ).apply(instance, TogglePassive::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.TOGGLE_PASSIVE.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            PassiveSkillService.setEnabled(context.caster(), skill, switch (mode) {
+                case TOGGLE -> null;
+                case ENABLE -> true;
+                case DISABLE -> false;
+            });
+        }
+    }
+
+    /**
+     * Shows the caster's picked Qi Coating element for a channel (QiCoatingSelectionService). Used in a coating passive's
+     * on_enable like persistent_visual: the passive taking it off again and putting it back on relog go through
+     * SkillActionRuntime the same way.
+     */
+    public record QiCoatingVisual(QiCoatingChannel channel) implements SkillAction {
+        public static final MapCodec<QiCoatingVisual> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                QiCoatingChannel.CODEC.fieldOf("channel").forGetter(QiCoatingVisual::channel)
+        ).apply(instance, QiCoatingVisual::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.QI_COATING_VISUAL.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            QiCoatingSelectionService.show(context, channel);
+        }
+    }
+
+    /**
+     * Puts a named Qi Coating on the caster (QiCoatingManager), on the channel its coverage belongs to: for coating skills that
+     * don't go through the element wheel, such as the whole-body layers. Used in a passive's on_enable like qi_coating_visual,
+     * and taken off the same way.
+     */
+    public record ApplyQiCoating(Identifier coating) implements SkillAction {
+        public static final MapCodec<ApplyQiCoating> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Identifier.CODEC.fieldOf("coating").forGetter(ApplyQiCoating::coating)
+        ).apply(instance, ApplyQiCoating::new));
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.QI_COATING.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            QiCoatingChannel channel = channel(context);
+            if (channel != null) {
+                QiCoatingManager.set(context.caster(), channel, coating, context.skill());
+            }
+        }
+
+        /**
+         * Takes the coating off again, when the passive that put it on goes off.
+         */
+        public void clear(SkillActionContext context) {
+            QiCoatingChannel channel = channel(context);
+            if (channel != null) {
+                QiCoatingManager.clear(context.caster(), channel, context.skill());
+            }
+        }
+
+        // The channel the coating's coverage belongs to, or null if no datapack defines it.
+        private QiCoatingChannel channel(SkillActionContext context) {
+            QiCoating definition = QiCoating.byId(coating, context.level().registryAccess());
+            return definition == null ? null : QiCoatingChannel.of(definition);
+        }
+    }
+
+    @NullMarked
+    public enum ToggleMode implements StringRepresentable {
+        TOGGLE("toggle"), ENABLE("enable"), DISABLE("disable");
+
+        public static final Codec<ToggleMode> CODEC = StringRepresentable.fromEnum(ToggleMode::values);
+        private final String name;
+
+        ToggleMode(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return name;
+        }
+    }
+
+    /**
      * Casting this while outside the inner world sends you in (leaving a ghost behind);
      * casting it again while already inside brings you back out peacefully. The forced,
      * 50%-health return only happens if the ghost is actually killed — see
@@ -1403,6 +1566,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum PersistentVisualAction implements StringRepresentable {
         APPLY("apply"), REMOVE("remove");
 
@@ -1419,6 +1583,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum RuntimeAction implements StringRepresentable {
         APPLY("apply"),
         REPAIR("repair"),
@@ -1437,6 +1602,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum StaggerAction implements StringRepresentable {
         APPLY("apply"),
         REDUCE("reduce"),
@@ -1457,6 +1623,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum MoveMode implements StringRepresentable {
         DIRECTIONAL("directional"),
         TARGET_POSITION("target_position"),
@@ -1475,6 +1642,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum MoveDirection implements StringRepresentable {
         LOOK("look"),
         TOWARD_TARGET("toward_target"),
@@ -1493,6 +1661,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum AnchorAction implements StringRepresentable {
         SET("set"),
         CLEAR("clear");
@@ -1510,6 +1679,7 @@ public final class SkillActions {
         }
     }
 
+    @NullMarked
     public enum PointMode implements StringRepresentable {
         NONE("none"),
         CASTER_TO_EXECUTION("caster_to_execution"),
