@@ -10,6 +10,7 @@ The chain from a hotbar skill to pixels on screen is:
 ## Quick links
 - [The Qi Coating skills and elements](#the-qi-coating-skills-and-elements)
 - [On-hit and defence effects](#on-hit-and-defence-effects)
+- [Mining and tool effects](#mining-and-tool-effects)
 - [How a coating reaches the player](#how-a-coating-reaches-the-player)
 - [Files and IDs](#files-and-ids)
 - [Minimal coatings](#minimal-coatings)
@@ -49,13 +50,15 @@ The wheel lists the elements whose path the player has. Elements are data, in `s
 ```
 
 `body_coating` and `external_coating` are coating ids (files in `skill_system/qi_coatings/`). An element without one isn't offered on that skill. `path` is optional: an element without it is open to everyone. 
-The built-in elements are Pure Qi (`pure`, no path, first in the wheel, so it is what a new player starts with), Fire, Earth, Water, Ice, Metal, Wind, Lightning, Space and Time. Time's hand coating is a still violet film that glitches and throws flickering copies of the arm for a moment when the player is hurt (`"reacts_to": ["hurt"]`), and its weapon coating a still violet tint that does the same when they swing (`"reacts_to": ["attack"]`). Pure Qi draws with the `pure_qi` shell look (style 57, an even pale cyan film round the hand, softening away up the forearm) and the `pure_qi` sword look (sword style 9, the blade tinted pale cyan).
+The built-in elements are Pure Qi (`pure`, no path, first in the wheel, so it is what a new player starts with), Fire, Earth, Water, Ice, Metal, Wind, Lightning, Space, Time and Life (vines round the hand or up the blade, coloured by the biome's foliage). Time's hand coating is a still violet film that glitches and throws flickering copies of the arm for a moment when the player is hurt (`"reacts_to": ["hurt"]`), and its weapon coating a still violet tint that does the same when they swing (`"reacts_to": ["attack"]`). Pure Qi draws with the `pure_qi` shell look (style 57, an even pale cyan film round the hand, softening away up the forearm) and the `pure_qi` sword look (sword style 9, the blade tinted pale cyan).
 
 The pick is stored per player (`CoreAttachments.QI_COATING_SELECTION`, kept through death and relogging). Picking a different element while the coating is on switches it: the old coating comes off and shrinks away (`grow_millis`), and only then does the new one go on (`QiCoatingSelectionService`). If the player loses the path for the element they're showing, it falls back to the first element they still have, or turns off if there's none left.
 
 The skills' passives use two pieces built for this:
 - `ascension:qi_coating_visual` (action, `"channel": "body" | "external"`) puts the picked element's coating on in `on_enable`. It comes off when the passive goes off, and back on when the player logs in or respawns.
 - `ascension:has_qi_coating_element` (condition, same `channel`) is an `enable_conditions` entry, so the coating can't be turned on with no element to show.
+
+While Qi Coating is on, half of each hit is paid with qi instead of health (an `ascension:qi_shield` modifier on its passive, `"share": 0.5`; see [Skills](ASCENSION_SKILLS.md)), and turning it on removes an active Qi Barrier.
 
 Whole-body layers and Lightning Step are standalone coating skills, held by the **Qi Coatings Leftovers** test technique (`techniques/1_ordinary/qi_coatings_leftovers.json`),
 and use the `ascension:qi_coating` state group.
@@ -147,7 +150,7 @@ An area (`till`, `flatten`) is a radius, or `{ "radius": ..., "charge_ticks": 0,
 
 The costs of `external_on_mine` and `external_on_kill` can read how many items the drops hold, as `{ "type": "ascension:context", "key": "ascension:qi_coating/items" }`, to charge per item.
 
-In use: Fire smelts, Water turns concrete powder into concrete, Space sends drops to the inventory, Earth mines `#ascension:earth_qi_coating_mineable` (stone, dirt, sand, gravel, clay, terracotta) twice as fast and tills with a hoe and makes paths with a shovel (3x3 on a tap, held for 2 seconds out to radius 4, times 1 + 10 x earth affinity, so 0.01 affinity is 10% further), Life turns cobblestone and stone bricks (and their slabs, stairs and walls) mossy, breaks leaves instantly and logs twice as fast with an axe, and bone-meals with a hoe, Ice mines ice, packed ice and blue ice twice as fast and keeps them whole and freezes with a right-click (water source to ice, ice to packed ice, packed ice to blue ice), Metal mines as if with 2 more levels of Fortune, Wind mines at full speed in the air and Water under water, and Time rewinds worn blocks to fresh ones (weathered copper of every kind, waxed or not, to fresh copper; cracked bricks and tiles to whole; chipped and damaged anvils to new; dead coral blocks to living). Speed bonuses are free beyond the coating's upkeep. Fire's smelting costs 20 qi a block, Water's concrete 5, Life's mossy blocks 15 and Life's bone meal 10 a use; Space's pickup (mined blocks and kills) 1 qi an item; Earth's tilling and paths 2 a use plus 0.35 a block (about 5 for 3x3), and Time's rewinding 5 a block (250 for an anvil); Ice's freezing 5 (water), 10 (to packed ice) and 20 (to blue ice) a use; Metal's Fortune, Ice's pickup and the air and water mining are free.
+In use: Fire smelts, Water turns concrete powder into concrete, Space sends drops to the inventory, Earth mines `#ascension:earth_qi_coating_mineable` (stone, dirt, sand, gravel, clay, terracotta) twice as fast and tills with a hoe and makes paths with a shovel (3x3 on a tap, held for 2 seconds out to radius 4, times 1 + 10 x earth affinity, so 0.01 affinity is 10% further), Life turns cobblestone and stone bricks (and their slabs, stairs and walls) mossy, breaks leaves instantly and logs twice as fast with an axe, and bone-meals with a hoe, Ice mines ice, packed ice and blue ice twice as fast and keeps them whole and freezes with a right-click (water source to ice, ice to packed ice, packed ice to blue ice), Metal mines as if with 2 more levels of Fortune, Wind mines at full speed in the air and Water under water, and Time rewinds worn blocks to fresh ones (weathered copper of every kind, waxed or not, to fresh copper; cracked bricks and tiles to whole; chipped and damaged anvils to new; dead coral blocks to living). Speed bonuses are free beyond the coating's upkeep. Fire's smelting costs 20 qi a block, Water's concrete 5, Life's mossy blocks 15 and Life's bone meal 10 a use; Space's pickup (mined blocks and kills) 1 qi an item; Earth's tilling and paths 2 a use plus 0.35 a block (about 5 for 3x3), and Time's rewinding 5 a block (250 for an anvil); Ice's freezing 5 (water), 10 (to packed ice) and 20 (to blue ice) a use; Metal's Fortune, Ice's silk touch and the air and water mining are free.
 
 ```json
 {
@@ -257,7 +260,7 @@ A coating that isn't `weapon` needs `shells`, `skin` or both.
 | `hands` | Both arms (shell `layers`, skin on the arms) | The arm on screen |
 | `body` | Shells as `shells.body` says; skin on the arms and legs | The arm on screen (shell `layers`, skin) |
 | `whole_skin` | Like `body`, but the skin look also covers the head and torso, pouring on part by part (legs, then torso, then head; arms meanwhile) | Like `body` |
-| `weapon` | The held weapon, if it is bladed or a polearm | The held weapon |
+| `weapon` | The held weapon or tool: swords, axes, spears, pickaxes, shovels and hoes (by item tag) | The held weapon or tool |
 
 # Shells
 ```json
@@ -380,7 +383,7 @@ Instead of growing out from the hand, the coating gathers from its surroundings:
 
 Needs `coverage` `hands` or `weapon` and `grow_millis` above 0; the whole gather takes `grow_millis`. On the hands it works with shell looks and texture shells alike, and with a `skin` look on its own (the specks then land up to 7 pixels up the forearm). Each speck is drawn as a cube in a darker shade of its colour with its colour on the middle of each face, so it reads clearly against the arm.
 
-On a weapon the specks fly in from around the held item and land on its coated pixels. `fade` fades the sword look in for looks that blend over the item (`pure_qi`, `water`, `starfield`, `cracked`, `arcs`); `patches` shows the look only round where specks have landed, the rest of the item staying plain until they join. Sword looks with their own spread from the hilt (`frost`, `molten`, `heat`) keep it and only get the specks.
+On a weapon the specks fly in from around the held item and land on its coated pixels. `fade` fades the sword look in for looks that blend over the item (`pure_qi`, `water`, `starfield`, `cracked`, `arcs`, `time_echo`, `time_echo_quiet`); `patches` shows the look only round where specks have landed, the rest of the item staying plain until they join (also works with `gale`). Sword looks with their own spread from the hilt (`frost`, `molten`, `heat`, `life_vines`) keep it and only get the specks, whatever the style.
 
 # Effects
 Behaviour that is coded in Java rather than described by data (`QiCoatingEffects`). Unknown ids are ignored.
@@ -398,6 +401,7 @@ Looks are registered in `QiCoatingLooks` (client). A coating that names an unkno
 | Look | What it looks like | Per-limb |
 |---|---|---|
 | `ascension:pure_qi` | An even pale cyan film round the hand, softening away up the forearm | |
+| `ascension:qi_barrier` | The Qi Barrier skill's whole-body Pure Qi film (style 59; drawn by `QiBarrierVisualController`, not by a coating file) | |
 | `ascension:space_starfield` | A window into starry space | |
 | `ascension:time_echo` | A thin violet film whose bands tear sideways (use it with `echoes`) | |
 | `ascension:time_echo_quiet` | The same violet film held still, for `quiet_look` | |
@@ -432,7 +436,7 @@ Looks are registered in `QiCoatingLooks` (client). A coating that names an unkno
 | `ascension:heat` | Heat spreading from the hilt, red to white-hot at the tip | Yes |
 | `ascension:life_vines` | Minecraft's vines growing up the blade from the hilt, coloured by the biome's foliage and the world's light, a pulse of green-gold life light climbing them every few seconds | Yes |
 
-"Grows" looks take how far the coating has spread; give their coatings a `grow_millis` (the built-in ones use 1200). Hit animations (the `ice` and `metal` skin looks, and the `frost`, `molten` and `heat` sword looks) only play for what the coating lists in `reacts_to`.
+"Grows" looks take how far the coating has spread; give their coatings a `grow_millis` (the built-in ones use 1200 to 1800). Hit animations (the `ice` and `metal` skin looks, and the `frost`, `molten` and `heat` sword looks) only play for what the coating lists in `reacts_to`.
 
 **Shelved looks.** The whole-body Echo layer (`void_echo_layer`, style 10) was removed from `qi_coating.fsh` and `QiCoatingLooks` (restore it from git history); its coating, old runtime visual wrapper and skill JSON are parked in `src/main/resources-disabled/qi_coatings/`, which the game doesn't load.
 
@@ -513,6 +517,8 @@ The vertex colour each skin look receives: red's top bit is 0 for a hand coating
 **Effect**
 Add an id to `QiCoatingEffects`. Its client side is a `QiCoatingEffect` (hooks for ticking each player, a see-through body, and drawing with the body or each arm; Lightning Step's `LightningStepVisuals` and the Tornado Fist's `WindRingsEffect` are examples), registered with `QiCoatingLayer.registerEffect(id, effect)`. Server behaviour checks `coating.hasEffect(...)` where it should act (`QiCoatingService`, with the coating from `QiCoatingManager.get`).
 
+**Shader packs.** Submit coating geometry through `AfterShaderPackDraws.submitCustomGeometry` (or `drawOrDefer`), not `SubmitNodeCollector` directly: under an Iris shader pack it records the draw and replays it after the pack with our own shaders, so the look still shows.
+
 Other mods can call the `QiCoatingLooks.register*` methods during client setup to add looks without touching these files.
 
 # Values that must match
@@ -522,4 +528,5 @@ Some numbers are shared between shaders and Java; change them together.
 |---|---|
 | Hit reaction length | `QiCoatingLayer.IMPACT_MILLIS` and `IMPACT_SECONDS` in `include/qi_impact.glsl` |
 | Gold tint and molten colours | `qi_coating_skin.fsh` (METAL) and `sword_qi.fsh` (STYLE 7) |
-| Wind ring style | `QiCoatingLayer.WIND_RING_STYLE` and style 32 in `qi_coating.fsh` |
+| Wind ring style | `WindRingsEffect.WIND_RING_STYLE` and style 32 in `qi_coating.fsh` |
+| Sword look count | `ModRenderPipelines.SWORD_QI` array size (12) and the highest `STYLE` in `sword_qi.fsh` (11) |
