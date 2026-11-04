@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.trading.TradeCost;
 import net.minecraft.world.item.trading.VillagerTrade;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetComponentsFunction;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.item.ModItems;
@@ -38,6 +37,23 @@ public class AscVillagerTrades {
             createKey("librarian/3/sustained_spirit_art");
     public static final ResourceKey<VillagerTrade> LIBRARIAN_3_SWORD_DRAW_MANUAL =
             createKey("librarian/3/sword_draw_manual");
+
+    public static final ResourceKey<VillagerTrade> CLERIC_5_GENTLE_EXTRACTION =
+            createKey("cleric/5/gentle_extraction");
+    public static final ResourceKey<VillagerTrade> CLERIC_5_FORCEFUL_EXTRACTION =
+            createKey("cleric/5/forceful_extraction");
+    public static final ResourceKey<VillagerTrade> CLERIC_5_GRADUAL_HEATING =
+            createKey("cleric/5/gradual_heating");
+    public static final ResourceKey<VillagerTrade> CLERIC_5_INTENSE_HEATING =
+            createKey("cleric/5/intense_heating");
+    public static final ResourceKey<VillagerTrade> CLERIC_5_HARMONIZING_STABILIZATION =
+            createKey("cleric/5/harmonizing_stabilization");
+    public static final ResourceKey<VillagerTrade> CLERIC_5_PURIFYING_STABILIZATION =
+            createKey("cleric/5/purifying_stabilization");
+    public static final ResourceKey<VillagerTrade> CLERIC_5_FOCUSED_CONDENSATION =
+            createKey("cleric/5/focused_condensation");
+    public static final ResourceKey<VillagerTrade> CLERIC_5_PRECISE_CONDENSATION =
+            createKey("cleric/5/precise_condensation");
 
     private static final Identifier ID_EAGLE_CLAW_PALM =
             Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "1_ordinary/eagle_claw_palm_technique");
@@ -141,6 +157,28 @@ public class AscVillagerTrades {
                 Optional.empty(),
                 List.of(SetComponentsFunction.setComponent(
                         AscensionComponents.REGISTRY_ID_HOLDER.get(), ID_SWORD_DRAW).build())));
+
+        registerAlchemyTechniqueTrade(context, CLERIC_5_GENTLE_EXTRACTION, "gentle_extraction", 18);
+        registerAlchemyTechniqueTrade(context, CLERIC_5_FORCEFUL_EXTRACTION, "forceful_extraction", 20);
+        registerAlchemyTechniqueTrade(context, CLERIC_5_GRADUAL_HEATING, "gradual_heating", 18);
+        registerAlchemyTechniqueTrade(context, CLERIC_5_INTENSE_HEATING, "intense_heating", 24);
+        registerAlchemyTechniqueTrade(context, CLERIC_5_HARMONIZING_STABILIZATION, "harmonizing_stabilization", 22);
+        registerAlchemyTechniqueTrade(context, CLERIC_5_PURIFYING_STABILIZATION, "purifying_stabilization", 22);
+        registerAlchemyTechniqueTrade(context, CLERIC_5_FOCUSED_CONDENSATION, "focused_condensation", 24);
+        registerAlchemyTechniqueTrade(context, CLERIC_5_PRECISE_CONDENSATION, "precise_condensation", 28);
+    }
+
+    private static void registerAlchemyTechniqueTrade(BootstrapContext<VillagerTrade> context,
+                                                       ResourceKey<VillagerTrade> key,
+                                                       String technique, int price) {
+        context.register(key, new VillagerTrade(
+                new TradeCost(ModItems.SPIRITUAL_STONE, price),
+                new ItemStackTemplate(ModItems.TECHNIQUE_MANUAL, 1),
+                3, 10, 0.01f,
+                Optional.empty(),
+                List.of(SetComponentsFunction.setComponent(
+                        AscensionComponents.REGISTRY_ID_HOLDER.get(),
+                        Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "alchemy/" + technique)).build())));
     }
 
     private static ResourceKey<VillagerTrade> createKey(String name) {
