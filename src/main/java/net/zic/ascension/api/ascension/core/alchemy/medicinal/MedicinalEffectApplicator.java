@@ -8,6 +8,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
@@ -61,9 +66,34 @@ public final class MedicinalEffectApplicator {
                 }
                 case "stamina" -> {
                     double maximum = StaminaService.getMaximumStamina(consumer);
+                    int tier = Mth.clamp(profile.composition().substance().rankTier(), 0, 5);
+                    double fraction = Math.min(0.40D, power * 0.04D * Math.pow(1.20D, tier));
                     if (maximum > 0.0D) StaminaService.restore(consumer, AscensionResourceSources.DIRECT,
-                            maximum * Math.min(1.0D, power));
+                            maximum * fraction);
                 }
+                case "food" -> {
+                    if (consumer instanceof Player player) {
+                        FoodData food = player.getFoodData();
+                        food.setFoodLevel(Math.min(20, food.getFoodLevel() + Math.max(1, (int) Math.ceil(power * 1.5D))));
+                        food.setSaturation(Math.min((float) food.getFoodLevel(), food.getSaturationLevel() + (float) (power * 0.8D)));
+                    }
+                }
+                case "cultivation" -> action.path().ifPresent(pathId -> {
+                    if (!(consumer instanceof Player player)) return;
+                    OriginSource source = AscensionOriginSourceHelper.getEntitySource(player);
+                    if (source == null) return;
+                    PathInstance<?> path = AscensionOriginSourceHelper.getPathInstance(source, pathId);
+                    if (path == null || !path.canProgress()) return;
+                    int tier = Mth.clamp(profile.composition().substance().rankTier(), 0, 5);
+                    double fraction = Math.min(0.03D + 0.008D * tier,
+                            power * 0.002D * Math.pow(1.35D, tier));
+                    double maximum = Math.max(0.0D, path.getMaxProgress());
+                    double remaining = Math.max(0.0D, maximum - path.getProgress());
+                    double progress = Math.min(remaining, maximum * fraction);
+                    if (progress <= 0.0D || !Double.isFinite(progress)) return;
+                    path.progressPath(progress, source, player);
+                    AscensionOriginSourceHelper.markPathDirty(source, pathId);
+                });
                 case "damage" -> consumer.hurtServer(server, server.damageSources().magic(), (float) Math.min(20.0D, power));
                 case "cleanse" -> {
                     if (power >= 0.35D) {

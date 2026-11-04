@@ -93,12 +93,13 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     public Phase phase() { return phase; }
     public AlchemyRefinementPlan plan() { return plan; }
 
-    public boolean cyclePreparation(int slot, Player player) {
+    public boolean cyclePreparation(int slot, Player player, int direction) {
+        if (direction != 1 && direction != -1) return false;
         if (level == null || level.isClientSide() || phase != Phase.IDLE || slot < 0 || slot > 4) return false;
         if (slot == 4) {
             int count = AlchemyRefinementPlan.focusChoices(level.registryAccess()).size() + 1;
             if (count <= 1) return false;
-            plan = plan.indexedFocus(level.registryAccess(), (plan.focusIndex(level.registryAccess()) + 1) % count);
+            plan = plan.indexedFocus(level.registryAccess(), Math.floorMod(plan.focusIndex(level.registryAccess()) + direction, count));
         } else {
             AlchemyTechnique.Stage stage = AlchemyTechnique.Stage.values()[slot];
             List<net.minecraft.resources.Identifier> choices = AlchemyRefinementPlan.choices(level.registryAccess(), stage);
@@ -106,7 +107,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
             int current = plan.index(level.registryAccess(), stage);
             boolean found = false;
             for (int offset = 1; offset <= choices.size(); offset++) {
-                int next = (current + offset) % choices.size();
+                int next = Math.floorMod(current + direction * offset, choices.size());
                 if (next != current && AlchemyRefinementPlan.isLearnedOrBasic(level.registryAccess(), player, choices.get(next))) {
                     plan = plan.with(stage, choices.get(next));
                     found = true;

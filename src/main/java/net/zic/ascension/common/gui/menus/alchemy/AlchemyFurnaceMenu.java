@@ -117,8 +117,8 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
     }
 
     @Override public boolean clickMenuButton(Player player, int id) {
-        if (furnace == null || id < 0 || id >= 5 || !stillValid(player)) return false;
-        return furnace.cyclePreparation(id, player);
+        if (furnace == null || id < 0 || id >= 10 || !stillValid(player)) return false;
+        return furnace.cyclePreparation(id % 5, player, id < 5 ? 1 : -1);
     }
     @Override public boolean stillValid(Player player) {
         return furnace == null || (player.level().getBlockEntity(furnace.getBlockPos()) == furnace

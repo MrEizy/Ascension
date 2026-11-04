@@ -1,0 +1,18 @@
+{
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/nourishment": 5,
+      "ascension:alchemy/restoration": 2
+    }
+  },
+  "potency_per_unit": 2.4,
+  "priority": 0,
+  "application": {
+    "action": "food",
+    "scale": 1.0
+  },
+  "names": [
+    "ascension.alchemy.pill.name.sustenance.0",
+    "ascension.alchemy.pill.name.sustenance.1"
+  ]
+}

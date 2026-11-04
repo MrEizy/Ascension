@@ -27,10 +27,10 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
     }
 
     private int panelX() {
-        int right = leftPos + imageWidth + 6;
-        if (right + PANEL_WIDTH <= width - 3) return right;
         int left = leftPos - PANEL_WIDTH - 6;
-        return left >= 3 ? left : Math.max(3, width - PANEL_WIDTH - 3);
+        if (left >= 3) return left;
+        int right = leftPos + imageWidth + 6;
+        return right + PANEL_WIDTH <= width - 3 ? right : Math.max(3, width - PANEL_WIDTH - 3);
     }
 
     private int boxY(int index) {
@@ -39,14 +39,14 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (event.button() == 0 && minecraft != null && minecraft.gameMode != null
+        if ((event.button() == 0 || event.button() == 1) && minecraft != null && minecraft.gameMode != null
                 && menu.phase() == AlchemyFurnaceBlockEntity.Phase.IDLE.ordinal()) {
             int x = panelX();
             for (int index = 0; index < LABELS.length; index++) {
                 int y = boxY(index);
                 if (event.x() >= x && event.x() < x + PANEL_WIDTH
                         && event.y() >= y && event.y() < y + BOX_HEIGHT) {
-                    minecraft.gameMode.handleInventoryButtonClick(menu.containerId, index);
+                    minecraft.gameMode.handleInventoryButtonClick(menu.containerId, index + (event.button() == 0 ? 5 : 0));
                     return true;
                 }
             }
@@ -106,6 +106,7 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
             if (hovered && minecraft != null && minecraft.player != null) {
                 String detail = menu.selectionDetails(i, minecraft.player);
                 if (!editable) detail = "Cannot change preparation during refinement. " + detail;
+                else detail = "Left-click: previous. Right-click: next. " + detail;
                 graphics.setTooltipForNextFrame(font, font.split(Component.literal(detail), Math.min(220, Math.max(100, width - 32))), mouseX, mouseY);
             }
         }
