@@ -142,6 +142,13 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.alchemy.effect.body_reinforcement", "Body Reinforcement");
         add("ascension.alchemy.effect.health_restoration", "Health Restoration");
         add("ascension.alchemy.effect.medicinal_cleansing", "Medicinal Cleansing");
+        add("ascension.alchemy.effect.deep_purification", "Deep Purification");
+        add("ascension.alchemy.pill.name.deep_purification.0", "Pure Meridian Cleansing Pill");
+        add("ascension.alchemy.pill.name.deep_purification.1", "Frost-Moon Purification Pill");
+        add("ascension.alchemy.feedback.impurities_purified", "Purified %s medicinal impurities");
+        add("ascension.alchemy.impurities.display", "Impurities: %s%%");
+        add("ascension.alchemy.efficiency.display", "Cultivation: %s%% efficiency");
+
         add("ascension.alchemy.effect.medicinal_toxicity", "Medicinal Toxicity");
         add("ascension.alchemy.effect.meridian_burn", "Meridian Burn");
         add("ascension.alchemy.effect.meridian_corruption", "Meridian Corruption");

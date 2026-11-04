@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.level.Level;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalImpurities;
 
 import java.util.Objects;
 
@@ -55,6 +56,14 @@ public class PillItem extends Item {
 
         if (!level.isClientSide()) {
             definition.effect().apply(level, player, stack, data);
+            double traceImpurities = switch (data.grade()) {
+                case LOW -> 1.5D;
+                case MID -> 1.0D;
+                case HIGH -> 0.6D;
+                case PEAK -> 0.25D;
+                case SUPREME -> 0.0D;
+            };
+            MedicinalImpurities.add(player, traceImpurities);
         }
 
         return super.finishUsingItem(stack, level, entity);

@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalImpurities;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.item.components.AscensionComponents;
@@ -89,7 +90,7 @@ public final class ModPills {
                         return;
                     }
 
-                    pathInstance.progressPath(pathInstance.getMaxProgress() * cultivationFraction(data), source, player);
+                    pathInstance.progressPath(pathInstance.getMaxProgress() * cultivationFraction(data) * MedicinalImpurities.efficiency(player), source, player);
                     AscensionOriginSourceHelper.markPathDirty(source, path);
                 })
                 .canConsume((level, player, stack, data) -> {

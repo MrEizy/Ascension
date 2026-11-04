@@ -127,6 +127,12 @@ public final class MedicinalEffectApplicator {
                             ? "ascension.alchemy.feedback.reinforcement_shield"
                             : "ascension.alchemy.feedback.reinforcement");
                 }
+                case "purify_impurities" -> {
+                    double purificationPower = Mth.clamp(effect.potency(), 0.0D, 64.0D) * action.scale()
+                            * Math.max(0.45D, absorbed);
+                    double removed = MedicinalImpurities.purify(consumer, Math.min(20.0D, purificationPower * 4.0D));
+                    notifyGain(consumer, "ascension.alchemy.feedback.impurities_purified", removed);
+                }
                 case "damage" -> consumer.hurtServer(server, server.damageSources().magic(), (float) Math.min(20.0D, power));
                 case "cleanse" -> {
                     boolean affected = consumer.hasEffect(MobEffects.POISON)

@@ -110,5 +110,12 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
                 graphics.setTooltipForNextFrame(font, font.split(Component.literal(detail), Math.min(220, Math.max(100, width - 32))), mouseX, mouseY);
             }
         }
+        int infoY = boxY(4) + BOX_HEIGHT + 8;
+        graphics.text(font, Component.translatable("ascension.alchemy.impurities.display",
+                String.format(java.util.Locale.ROOT, "%.1f", menu.medicinalImpurities())),
+                x + 4, infoY, 0xFFE7B876, false);
+        graphics.text(font, Component.translatable("ascension.alchemy.efficiency.display",
+                String.format(java.util.Locale.ROOT, "%.1f", menu.cultivationEfficiency())),
+                x + 4, infoY + 11, 0xFFB4D1C1, false);
     }
 }

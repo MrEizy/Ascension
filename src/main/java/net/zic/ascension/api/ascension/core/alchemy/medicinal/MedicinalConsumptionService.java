@@ -31,7 +31,9 @@ public final class MedicinalConsumptionService {
         double instability = substance.instability();
         double absorption = (refined ? 0.90D : 0.28D) * (0.60D + 0.40D * purity)
                 / (1.0D + 0.30D * disparity);
+        absorption *= MedicinalImpurities.efficiency(consumer);
         MedicinalEffectApplicator.consume(profile, consumer, absorption, refined ? 0.65D : 1.30D);
+        MedicinalImpurities.add(consumer, MedicinalImpurities.contaminants(profile, refined));
 
         double impurityBurden = (1.0D - purity) * (refined ? 0.6D : 2.2D);
         double unstableBurden = instability * (refined ? 0.35D : 0.90D);
