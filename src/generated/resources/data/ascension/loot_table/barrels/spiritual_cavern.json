@@ -3,6 +3,58 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.12,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "count": 3,
+              "function": "ascension:bottled_medicine",
+              "ingredients": [
+                "ascension:jade_dew_grass",
+                "ascension:frostglass_lotus"
+              ]
+            }
+          ],
+          "name": "ascension:jade_bottle"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.025,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "ascension:bottled_medicine",
+              "ingredients": [
+                "ascension:jade_dew_grass",
+                "ascension:frostglass_lotus"
+              ],
+              "remaining_vitality": 0.03
+            }
+          ],
+          "name": "ascension:jade_bottle"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
