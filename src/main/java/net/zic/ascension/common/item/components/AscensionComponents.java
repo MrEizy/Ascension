@@ -105,7 +105,6 @@ public class AscensionComponents {
         public static final Identifier HEAVENS_PATH = AscensionCraft.prefix("heavens_path");
 
         public static final PillData DEFAULT = new PillData(ORDINARY, PillGrade.PEAK);
-        public static final PillData MAXIMUM = new PillData(HEAVENS_PATH, PillGrade.SUPREME);
 
         public static final Codec<PillData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("rank").forGetter(PillData::rank),
@@ -153,9 +152,6 @@ public class AscensionComponents {
             return 0;
         }
 
-        public double strengthMultiplier() {
-            return 0.6D + (rankTier(rank) * 5 + grade.step()) * 0.1D;
-        }
     }
 
     public record HerbData(int ageTier, int qualityTier, boolean wild) {

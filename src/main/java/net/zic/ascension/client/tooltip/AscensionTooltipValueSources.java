@@ -19,7 +19,6 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.item.herbs.HerbItem;
-import net.zic.ascension.common.item.artifacts.pills.PillItem;
 import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
@@ -584,9 +583,8 @@ public final class AscensionTooltipValueSources {
     }
 
     private static List<ZenithTooltipElement> pillBadges(ZenithTooltipContext context) {
-        return pillContext(context)
-                .map(pill -> {
-                    AscensionComponents.PillData data = pill.data();
+        return pillData(context)
+                .map(data -> {
                     Component rankName = Component.translatable(
                             "zenith." + data.rank().getNamespace() + ".tier." + data.rank().getPath()
                     );
@@ -630,17 +628,15 @@ public final class AscensionTooltipValueSources {
     }
 
     private static Optional<ZenithTooltipValue> pillGrade(ZenithTooltipContext context) {
-        return pillContext(context).map(pill -> ZenithTooltipValue.text(
-                Component.translatable(pill.data().grade().translationKey())
+        return pillData(context).map(data -> ZenithTooltipValue.text(
+                Component.translatable(data.grade().translationKey())
         ));
     }
 
     private static Optional<ZenithTooltipValue> pillEffect(ZenithTooltipContext context) {
-        return pillContext(context).map(pill -> {
+        return pillData(context).map(data -> {
             MedicinalProfile profile = context.stack().get(AscensionComponents.MEDICINAL_PILL.get());
-            if (profile == null) return ZenithTooltipValue.text(pill.item() == null
-                    ? Component.translatable("ascension.alchemy.pill.inert")
-                    : pill.item().definition().effectDescription(pill.data()));
+            if (profile == null) return ZenithTooltipValue.text(Component.translatable("ascension.alchemy.pill.inert"));
             net.minecraft.network.chat.MutableComponent lines = Component.empty();
             double vitality = MedicinalDecay.vitality(context.stack(), tooltipTime(context));
             for (MedicinalProfile.Effect effect : profile.effects()) {
@@ -660,21 +656,11 @@ public final class AscensionTooltipValueSources {
     }
 
     private static Optional<ZenithTooltipValue> pillImpurities(ZenithTooltipContext context) {
-        double amount;
         MedicinalProfile profile = context.stack().get(AscensionComponents.MEDICINAL_PILL.get());
-        if (profile != null) {
-            amount = MedicinalImpurities.contaminants(profile, true);
-        } else if (context.stack().getItem() instanceof PillItem pill) {
-            amount = switch (pill.data(context.stack()).grade()) {
-                case LOW -> 1.5D;
-                case MID -> 1.0D;
-                case HIGH -> 0.6D;
-                case PEAK -> 0.25D;
-                case SUPREME -> 0.0D;
-            };
-        } else {
+        if (!(context.stack().getItem() instanceof ProceduralPillItem) || profile == null) {
             return Optional.empty();
         }
+        double amount = MedicinalImpurities.contaminants(profile, true);
         amount *= net.zic.ascension.Config.ALCHEMY_SERVER.IMPURITY_GAIN_MULTIPLIER.get();
         return Optional.of(ZenithTooltipValue.text(Component.translatable(
                 "ascension.alchemy.pill.impurities",
@@ -710,15 +696,10 @@ public final class AscensionTooltipValueSources {
                 Math.round(vitality * 100.0D), time)));
     }
 
-    private static Optional<PillContext> pillContext(ZenithTooltipContext context) {
-        if (context.stack().getItem() instanceof PillItem pillItem) {
-            return Optional.of(new PillContext(pillItem, pillItem.data(context.stack())));
-        }
-        if (context.stack().getItem() instanceof ProceduralPillItem) {
-            return Optional.of(new PillContext(null, context.stack().getOrDefault(
-                    AscensionComponents.PILL_DATA.get(), AscensionComponents.PillData.DEFAULT)));
-        }
-        return Optional.empty();
+    private static Optional<AscensionComponents.PillData> pillData(ZenithTooltipContext context) {
+        if (!(context.stack().getItem() instanceof ProceduralPillItem)) return Optional.empty();
+        return Optional.of(context.stack().getOrDefault(
+                AscensionComponents.PILL_DATA.get(), AscensionComponents.PillData.DEFAULT));
     }
 
     private static Optional<ZenithTooltipValue> herbEffect(ZenithTooltipContext context) {
@@ -835,8 +816,6 @@ public final class AscensionTooltipValueSources {
         return result.toString();
     }
 
-
-    private record PillContext(PillItem item, AscensionComponents.PillData data) {}
 
     private record HerbContext(
             HerbDefinition definition,

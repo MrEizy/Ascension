@@ -179,31 +179,6 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.alchemy.pill.toxicity", "Toxicity: %s");
         add("item.ascension.pill_residue", "Pill Residue");
 
-        add("item.ascension.fasting_pill", "Fasting Pill");
-        add("ascension.pill.fasting_pill.description", "A nourishing pill refined to sustain the body without ordinary food.");
-        add("ascension.pill.fasting_pill.effect", "Restores hunger and saturation to full.");
-
-        add("item.ascension.qi_replenishing_pill", "Qi Replenishing Pill");
-        add("ascension.pill.qi_replenishing_pill.description", "A concentrated pill that releases refined spiritual energy back into the cultivator.");
-        add("ascension.pill.qi_replenishing_pill.effect", "Restores %s%% of maximum Qi.");
-
-        add("item.ascension.regeneration_pill", "Regeneration Pill");
-        add("ascension.pill.regeneration_pill.description", "A restorative pill that rapidly replenishes damaged flesh and blood.");
-        add("ascension.pill.regeneration_pill.effect", "Restores %s%% of maximum health.");
-
-        add("item.ascension.stamina_replenishing_pill", "Stamina Replenishing Pill");
-        add("ascension.pill.stamina_replenishing_pill.description", "A vigorous pill that restores the body's spent physical energy.");
-        add("ascension.pill.stamina_replenishing_pill.effect", "Restores %s%% of maximum Stamina.");
-
-        add("item.ascension.body_cultivation_pill", "Body Cultivation Pill");
-        add("ascension.pill.body_cultivation_pill.description", "A strengthening pill refined to accelerate cultivation of the body.");
-        add("item.ascension.soul_cultivation_pill", "Soul Cultivation Pill");
-        add("ascension.pill.soul_cultivation_pill.description", "A tranquil pill refined to nourish and advance cultivation of the soul.");
-        add("item.ascension.essence_cultivation_pill", "Essence Cultivation Pill");
-        add("ascension.pill.essence_cultivation_pill.description", "A concentrated pill refined to accelerate cultivation of spiritual essence.");
-        add("ascension.pill.cultivation.effect", "Grants %s%% of the current realm's required cultivation progress.");
-
-
         // Pill Tooltip
         add("ascension.pill.tooltip.type", "Pill");
         add("ascension.pill.tooltip.grade", "Grade");

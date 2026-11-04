@@ -111,8 +111,10 @@ public class AscChestLootTableProvider implements LootTableSubProvider {
         consumer.accept(IRONWOOD_ISLAND_BARREL, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .setRolls(UniformGenerator.between(1, 3))
-                        .add(LootItem.lootTableItem(ModItems.QI_REPLENISHING_PILL.get())
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3)))
+                        .add(LootItem.lootTableItem(ModItems.JADE_BOTTLE.get())
+                                .apply(() -> new JadeMedicineLootFunction(List.of(
+                                        AscensionCraft.prefix("jade_dew_grass"),
+                                        AscensionCraft.prefix("frostglass_lotus")), 2))
                                 .setWeight(21))
                         .add(LootItem.lootTableItem(ModItems.NETHERITE_BLADE.get()).setWeight(15))
                         .add(LootItem.lootTableItem(ModItems.JADE_DEW_GRASS.get())

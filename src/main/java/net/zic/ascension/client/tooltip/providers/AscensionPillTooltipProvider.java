@@ -5,7 +5,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.common.item.artifacts.pills.PillItem;
 import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
 import net.zic.ascension.common.item.components.AscensionComponents;
@@ -38,8 +37,7 @@ public final class AscensionPillTooltipProvider implements ZenithTooltipProvider
     @Override
     public Optional<ZenithTooltipProviders.Result> create(ZenithTooltipContext context) {
         ItemStack stack = context.stack();
-        if (!(stack.getItem() instanceof PillItem)
-                && !(stack.getItem() instanceof ProceduralPillItem)) return Optional.empty();
+        if (!(stack.getItem() instanceof ProceduralPillItem)) return Optional.empty();
 
         Identifier itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
         Optional<ZenithTooltipDocument> document = ZenithTooltipRepository.fromTemplate(DEFAULT_TEMPLATE, DEFAULT_THEME);
@@ -48,8 +46,7 @@ public final class AscensionPillTooltipProvider implements ZenithTooltipProvider
                 value,
                 context,
                 itemId,
-                stack.getItem() instanceof PillItem pill ? pill.definition()
-                        : stack.get(AscensionComponents.MEDICINAL_PILL.get()) != null
+                stack.get(AscensionComponents.MEDICINAL_PILL.get()) != null
                         ? stack.get(AscensionComponents.MEDICINAL_PILL.get()) : stack,
                 ZenithTooltipSubject.of(
                         stack.getHoverName(),
@@ -62,8 +59,7 @@ public final class AscensionPillTooltipProvider implements ZenithTooltipProvider
     }
 
     private static Optional<ZenithClassification> classification(ItemStack stack, Identifier itemId) {
-        if (!(stack.getItem() instanceof PillItem)
-                && !(stack.getItem() instanceof ProceduralPillItem)) return Optional.empty();
+        if (!(stack.getItem() instanceof ProceduralPillItem)) return Optional.empty();
 
         AscensionComponents.PillData data = stack.getOrDefault(AscensionComponents.PILL_DATA.get(),
                 AscensionComponents.PillData.DEFAULT);
