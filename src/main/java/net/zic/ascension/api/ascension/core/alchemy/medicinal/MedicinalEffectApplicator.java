@@ -21,6 +21,8 @@ import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 import net.zic.ascension.impl.resource.stamina.StaminaService;
 import net.zic.ascension.impl.core.effect.SkillEffectService;
+import net.zic.ascension.network.alchemy.ClientboundMedicinalCultivationProgressPacket;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
  * Applies stored medicinal effects through a small set of validated gameplay operations.
@@ -107,9 +109,12 @@ public final class MedicinalEffectApplicator {
                     path.progressPath(progress, source, player);
                     AscensionOriginSourceHelper.markPathDirty(source, pathId);
                     if (player instanceof ServerPlayer serverPlayer) {
-                        serverPlayer.sendOverlayMessage(Component.translatable(
-                                "ascension.alchemy.feedback.cultivation", pathId.getPath().replace("foundation/", ""),
-                                formatValue(progress / Math.max(1.0D, maximum) * 100.0D)));
+                        double currentMaximum = path.getMaxProgress();
+                        float currentFraction = currentMaximum > 0.0D
+                                ? (float) Mth.clamp(path.getProgress() / currentMaximum, 0.0D, 1.0D)
+                                : 0.0F;
+                        PacketDistributor.sendToPlayer(serverPlayer,
+                                new ClientboundMedicinalCultivationProgressPacket(pathId, currentFraction));
                     }
                 });
                 case "reinforcement" -> {

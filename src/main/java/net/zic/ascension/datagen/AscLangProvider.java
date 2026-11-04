@@ -131,7 +131,6 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.alchemy.feedback.qi", "Restored %s Qi");
         add("ascension.alchemy.feedback.stamina", "Restored %s stamina");
         add("ascension.alchemy.feedback.food", "Restored %s hunger");
-        add("ascension.alchemy.feedback.cultivation", "%s cultivation: +%s%% of current realm");
         add("ascension.alchemy.feedback.reinforcement", "Body reinforced: increased damage resistance");
         add("ascension.alchemy.feedback.reinforcement_shield", "Body reinforced: damage resistance and shielding");
         add("ascension.alchemy.feedback.qi_flow", "Qi circulation enhanced: faster natural regeneration");
