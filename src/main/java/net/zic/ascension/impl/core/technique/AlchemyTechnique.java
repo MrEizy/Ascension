@@ -28,6 +28,8 @@ import java.util.Optional;
 public record AlchemyTechnique(Component name, Component description, Refinement refinement, boolean basic,
                                Optional<AscensionItemTooltipDefinition> itemTooltip,
                                RequirementHolder requirements) implements Technique<AlchemyTechnique.Data> {
+    public static final int MAX_LEARNED_SPECIALIZED = 3;
+
     private static final SerializerHandler<Data> SERIALIZER = new SerializerHandler<>() {
         @Override public Data read(ValueInput input, RegistryAccess access) { return new Data(); }
         @Override public void write(Data data, ValueOutput output, RegistryAccess access) { }

@@ -34,28 +34,28 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
         this.furnace = furnace;
         this.container = furnace == null ? new SimpleContainer(4) : furnace.inventory();
         this.progress = furnace == null ? new SimpleContainerData(7) : furnace.menuData();
-        addSlot(new Slot(container, 0, 52, 20) {
+        addSlot(new Slot(container, 0, 53, 20) {
             @Override public boolean mayPlace(ItemStack stack) { return editable() && AlchemyMaterials.resolve(stack, net.zic.ascension.api.ascension.core.alchemy.AlchemyContext.of(playerInventory.player)).isPresent(); }
             @Override public boolean mayPickup(Player player) { return editable(); }
             @Override public int getMaxStackSize() { return 1; }
         });
-        addSlot(new Slot(container, 1, 79, 10) {
+        addSlot(new Slot(container, 1, 80, 9) {
             @Override public boolean mayPlace(ItemStack stack) { return editable() && AlchemyMaterials.resolve(stack, net.zic.ascension.api.ascension.core.alchemy.AlchemyContext.of(playerInventory.player)).isPresent(); }
             @Override public boolean mayPickup(Player player) { return editable(); }
             @Override public int getMaxStackSize() { return 1; }
         });
-        addSlot(new Slot(container, 2, 106, 20) {
+        addSlot(new Slot(container, 2, 107, 20) {
             @Override public boolean mayPlace(ItemStack stack) { return editable() && AlchemyMaterials.resolve(stack, net.zic.ascension.api.ascension.core.alchemy.AlchemyContext.of(playerInventory.player)).isPresent(); }
             @Override public boolean mayPickup(Player player) { return editable(); }
             @Override public int getMaxStackSize() { return 1; }
         });
-        addSlot(new Slot(container, 3, 97, 59) {
+        addSlot(new Slot(container, 3, 98, 59) {
             @Override public boolean mayPlace(ItemStack stack) { return false; }
         });
         for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++)
-            addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 83 + row * 18));
+            addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
         for (int col = 0; col < 9; col++)
-            addSlot(new Slot(playerInventory, col, 8 + col * 18, 141));
+            addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
         addDataSlots(progress);
     }
 
@@ -74,8 +74,10 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
         AlchemyTechnique.Stage stage = AlchemyTechnique.Stage.values()[index];
         List<Identifier> choices = AlchemyRefinementPlan.choices(player.level().registryAccess(), stage);
         int selection = progress.get(index + 2);
-        return choices.isEmpty() ? "Default" : pretty(choices.get(Math.max(0, Math.min(selection, choices.size() - 1))).getPath()
-                .replace("_" + stage.name().toLowerCase(), ""));
+        if (choices.isEmpty()) return "Default";
+        Identifier selected = choices.get(Math.max(0, Math.min(selection, choices.size() - 1)));
+        Technique<?> technique = CoreRegistries.TECHNIQUE_REGISTRY.get(player.level().registryAccess()).getValue(selected);
+        return technique == null ? pretty(selected.getPath()) : technique.getName(null).getString();
     }
 
     public String selectionDetails(int index, Player player) {

@@ -27,6 +27,7 @@ import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipPro
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
@@ -61,6 +62,7 @@ public final class AscensionTooltipValueSources {
     public static final Identifier PHYSIQUE_AFFINITIES = AscensionCraft.prefix("physique_affinities");
 
     public static final Identifier TECHNIQUE_PROGRESSION_GAINS = AscensionCraft.prefix("technique_progression_gains");
+    public static final Identifier ALCHEMY_TECHNIQUE_REFINEMENT = AscensionCraft.prefix("alchemy_technique_refinement");
 
     public static final Identifier BLOODLINE_PURITY = AscensionCraft.prefix("bloodline_purity");
     public static final Identifier BLOODLINE_PURITY_GAINS = AscensionCraft.prefix("bloodline_purity_gains");
@@ -108,6 +110,7 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerElement(PHYSIQUE_STATS, context -> rows(PHYSIQUE_STATS, context));
         ZenithTooltipSources.registerElement(PHYSIQUE_AFFINITIES, context -> rows(PHYSIQUE_AFFINITIES, context));
         ZenithTooltipSources.registerElement(TECHNIQUE_PROGRESSION_GAINS, AscensionTooltipValueSources::techniqueProgressionElements);
+        ZenithTooltipSources.registerElement(ALCHEMY_TECHNIQUE_REFINEMENT, AscensionTooltipValueSources::alchemyTechniqueElements);
         ZenithTooltipSources.registerElement(BLOODLINE_PURITY_GAINS, AscensionTooltipValueSources::bloodlinePurityElements);
         ZenithTooltipSources.registerElement(HERB_QUALITY_BADGE, AscensionTooltipValueSources::herbQualityBadge);
         ZenithTooltipSources.registerElement(HERB_RELATED_TYPE_BADGE, AscensionTooltipValueSources::herbRelatedTypeBadge);
@@ -307,6 +310,60 @@ public final class AscensionTooltipValueSources {
             return current;
         }
         return Math.signum(current) == Math.signum(next) ? current : 0.0;
+    }
+
+    private static List<ZenithTooltipElement> alchemyTechniqueElements(ZenithTooltipContext context) {
+        return context.subject(AlchemyTechnique.class).map(technique -> {
+            AlchemyTechnique.Refinement method = technique.refinement();
+            List<ZenithTooltipValue.Row> values = new ArrayList<>();
+            values.add(ZenithTooltipValue.row(
+                    Component.translatable("ascension.alchemy.technique.stage"),
+                    Component.literal(switch (method.stage()) {
+                        case EXTRACTION -> "Extraction";
+                        case HEATING -> "Heating";
+                        case STABILIZATION -> "Stabilization";
+                        case CONDENSATION -> "Condensation";
+                    }), ZenithTooltipValue.Tone.SPECIAL));
+            values.add(ZenithTooltipValue.row(
+                    Component.translatable("ascension.alchemy.technique.access"),
+                    Component.translatable(technique.basic() ? "ascension.alchemy.technique.basic" : "ascension.alchemy.technique.specialized"),
+                    ZenithTooltipValue.Tone.NEUTRAL));
+            if (!technique.basic()) {
+                values.add(ZenithTooltipValue.row(
+                        Component.translatable("ascension.alchemy.technique.known_limit"),
+                        Component.literal(Integer.toString(AlchemyTechnique.MAX_LEARNED_SPECIALIZED)),
+                        ZenithTooltipValue.Tone.NEUTRAL));
+            }
+            if (method.heat() != 1.0D) alchemyModifier(values, "Heat", method.heat(), true);
+            if (method.control() != 2.5D) alchemyModifier(values, "Control", method.control(), true);
+            if (method.yield() != 1.0D) alchemyModifier(values, "Essence yield", method.yield(), true);
+            if (method.purityDelta() != 0.0D) alchemyModifier(values, "Purity", method.purityDelta(), false);
+            if (method.instabilityDelta() != 0.0D) alchemyModifier(values, "Instability", method.instabilityDelta(), false);
+            if (method.toxicityDelta() != 0.0D) alchemyModifier(values, "Toxicity", method.toxicityDelta(), false);
+            if (method.safeEnergyBonus() != 0.0D) alchemyFlatModifier(values, "Safe energy", method.safeEnergyBonus());
+            if (method.explosionEnergyBonus() != 0.0D) alchemyFlatModifier(values, "Explosion tolerance", method.explosionEnergyBonus());
+            if (method.qualityBonus() != 0.0D) alchemyModifier(values, "Quality", method.qualityBonus(), false);
+            if (method.focusPrecision() != 0.0D) alchemyModifier(values, "Focus precision", method.focusPrecision(), false);
+            return values.stream()
+                    .map(row -> (ZenithTooltipElement) new RowElement(
+                            ZenithTooltipText.resolved(row.left()), ZenithTooltipText.resolved(row.right()),
+                            ZenithTooltipColor.TEXT, toneColor(row.tone())))
+                    .toList();
+        }).orElseGet(List::of);
+    }
+
+    private static void alchemyFlatModifier(List<ZenithTooltipValue.Row> values, String name, double amount) {
+        values.add(ZenithTooltipValue.row(Component.literal(name),
+                Component.literal(String.format(java.util.Locale.ROOT, "%+.2f", amount)),
+                amount > 0.0D ? ZenithTooltipValue.Tone.POSITIVE : ZenithTooltipValue.Tone.NEGATIVE));
+    }
+
+    private static void alchemyModifier(List<ZenithTooltipValue.Row> values, String name, double amount, boolean multiplier) {
+        String formatted = multiplier
+                ? String.format(java.util.Locale.ROOT, "%.2fx", amount)
+                : String.format(java.util.Locale.ROOT, "%+.1f%%", amount * 100.0D);
+        values.add(ZenithTooltipValue.row(Component.literal(name), Component.literal(formatted),
+                amount > (multiplier ? 1.0D : 0.0D) ? ZenithTooltipValue.Tone.POSITIVE : ZenithTooltipValue.Tone.NEGATIVE));
     }
 
     private static List<ZenithTooltipElement> techniqueProgressionElements(

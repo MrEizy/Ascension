@@ -22,8 +22,8 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
     public AlchemyFurnaceScreen(AlchemyFurnaceMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         titleLabelX = 8;
-        titleLabelY = -5;
-        inventoryLabelY = 73;
+        titleLabelY = 3;
+        inventoryLabelY = 74;
     }
 
     private int panelX() {
@@ -106,7 +106,7 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
             if (hovered && minecraft != null && minecraft.player != null) {
                 String detail = menu.selectionDetails(i, minecraft.player);
                 if (!editable) detail = "Cannot change preparation during refinement. " + detail;
-                graphics.setTooltipForNextFrame(Component.literal(detail), mouseX, mouseY);
+                graphics.setTooltipForNextFrame(font, font.split(Component.literal(detail), Math.min(220, Math.max(100, width - 32))), mouseX, mouseY);
             }
         }
     }

@@ -14,6 +14,7 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
@@ -260,7 +261,8 @@ public class ModCreativeModeTabs {
                                         Identifier techniqueId = holder.key().identifier();
                                         ItemStack stack = new ItemStack(ModItems.TECHNIQUE_MANUAL.get());
                                         stack.set(AscensionComponents.REGISTRY_ID_HOLDER.get(), techniqueId);
-                                        stack.set(DataComponents.ITEM_NAME, Component.translatable("item.ascension.technique_manual.named", holder.value().getName(null)));
+                                        stack.set(DataComponents.ITEM_NAME, holder.value() instanceof AlchemyTechnique ? holder.value().getName(null)
+                                                : Component.translatable("item.ascension.technique_manual.named", holder.value().getName(null)));
                                         output.accept(stack);
                                     }))
                     .build());

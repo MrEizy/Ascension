@@ -542,6 +542,14 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.technique_manual.named", "Technique Manual: %s");
         add("item.ascension.technique_manual.battle_style", "Battle Style");
         add("item.ascension.technique_manual.cultivation_technique", "Cultivation Technique");
+        add("item.ascension.technique_manual.alchemy_technique", "Alchemy Technique");
+
+        add("ascension.alchemy.technique.stage", "Stage");
+        add("ascension.alchemy.technique.access", "Acquisition");
+        add("ascension.alchemy.technique.basic", "Basic technique");
+        add("ascension.alchemy.technique.specialized", "Requires manual");
+        add("ascension.alchemy.technique.known_limit", "Specialized technique limit");
+        add("ascension.alchemy.technique.limit_reached", "You can only learn %s specialized alchemy techniques.");
 
         // Transfer Item Tooltips
         add("ascension.tooltip.bloodline.purity", "Purity");
