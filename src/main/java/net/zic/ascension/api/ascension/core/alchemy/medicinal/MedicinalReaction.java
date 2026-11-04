@@ -10,10 +10,6 @@ import net.zic.ascension.api.ascension.core.path.interaction.PathInteractionType
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * Describes a bounded, ordered reaction between an existing mixture and an incoming essence.
- * Required reagents are consumed once per insertion; products may react on later insertions.
- */
 public record MedicinalReaction(
         Reagents existing,
         Reagents incoming,

@@ -9,10 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyContext;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
 
-/**
- * Turns harvested herbs into direct medicinal compositions without furnace extraction.
- * Uses the same expression rules as pills while preserving raw-herb inefficiency and risk.
- */
 public final class MedicinalHerbConsumption {
     private MedicinalHerbConsumption() {
     }

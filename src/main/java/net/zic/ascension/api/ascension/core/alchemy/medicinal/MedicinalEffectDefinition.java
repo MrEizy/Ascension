@@ -6,10 +6,6 @@ import net.minecraft.util.Mth;
 
 import java.util.List;
 
-/**
- * Defines an entire medicinal effect in one datapack entry: expression, execution and pill names.
- * The registry entry ID is the effect ID, so no duplicate identifier fields are needed.
- */
 public record MedicinalEffectDefinition(
         MedicinalReaction.Reagents requirements,
         double minimumPurity,

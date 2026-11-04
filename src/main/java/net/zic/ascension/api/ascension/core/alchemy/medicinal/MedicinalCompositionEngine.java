@@ -12,10 +12,6 @@ import net.zic.ascension.api.ascension.core.alchemy.AlchemyMergeResolver;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Orchestrates ingredient extraction, insertion-order reactions, and final medicinal expression.
- * It is currently an isolated simulation facade and does not alter existing furnace behaviour.
- */
 public final class MedicinalCompositionEngine {
     private MedicinalCompositionEngine() {
     }

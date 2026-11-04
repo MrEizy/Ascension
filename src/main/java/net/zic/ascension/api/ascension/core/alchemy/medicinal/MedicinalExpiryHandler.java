@@ -9,10 +9,6 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.gui.menus.jade_bottle.JadeBottleMenu;
 
-/**
- * Clears expired medicine from loaded player inventories at a low, staggered frequency.
- * Unloaded or nested inventories remain untouched until accessed, with consumption always validated.
- */
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class MedicinalExpiryHandler {
     private MedicinalExpiryHandler() {

@@ -10,10 +10,6 @@ import net.zic.ascension.Config;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
-/**
- * Computes non-linear medicinal vitality from immutable pill profiles and lazy aging checkpoints.
- * Storage transitions settle elapsed age at the previous rate, without ticking stored items.
- */
 public final class MedicinalDecay {
     public static final double EXPIRE_AT = 0.01D;
     public static final double OPEN_AIR_RATE = 1.0D;

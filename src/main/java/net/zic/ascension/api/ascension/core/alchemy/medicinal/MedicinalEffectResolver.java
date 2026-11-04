@@ -11,10 +11,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Resolves data-driven effect expressions from the final medicinal mixture without modifying it.
- * The result is a persistent effect profile, not an immediate skill or resource transaction.
- */
 public final class MedicinalEffectResolver {
     private MedicinalEffectResolver() {
     }

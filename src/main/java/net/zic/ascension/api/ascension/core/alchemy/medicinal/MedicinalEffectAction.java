@@ -7,10 +7,6 @@ import net.minecraft.util.Mth;
 
 import java.util.Optional;
 
-/**
- * Maps a resolved medicinal effect identifier to a server-side gameplay operation.
- * Datapacks control the operation and scaling without introducing a class per medicine.
- */
 public record MedicinalEffectAction(String action, double scale, Optional<Identifier> status, Optional<Identifier> effect, Optional<Identifier> path) {
     public static final Codec<MedicinalEffectAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("action").forGetter(MedicinalEffectAction::action),

@@ -10,10 +10,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Holds an immutable, serializable medicinal mixture independently of its eventual item form.
- * Reaction products and toxicity remain distinct from the original medicinal properties.
- */
 public record MedicinalComposition(AlchemySubstance substance, Map<Identifier, Double> products, double toxicity) {
     public static final Codec<MedicinalComposition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             AlchemySubstance.CODEC.fieldOf("substance").forGetter(MedicinalComposition::substance),

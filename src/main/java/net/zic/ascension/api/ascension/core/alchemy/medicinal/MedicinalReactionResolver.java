@@ -18,10 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Applies ordered, reagent-limited medicinal transformations on top of Ascension's path-aware merge.
- * Every insertion is deterministic, consumes its reagents, and records generated medicinal products.
- */
 public final class MedicinalReactionResolver {
     private static final double EPSILON = 1.0E-8D;
 

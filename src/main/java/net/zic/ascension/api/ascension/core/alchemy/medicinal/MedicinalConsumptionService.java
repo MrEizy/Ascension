@@ -8,10 +8,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 
-/**
- * Applies shared medicinal effects with separate raw and refined absorption rules.
- * Cultivation disparity, purity and instability create predictable medicinal backlash.
- */
 public final class MedicinalConsumptionService {
     private MedicinalConsumptionService() {
     }

@@ -7,10 +7,6 @@ import net.minecraft.util.Mth;
 
 import java.util.List;
 
-/**
- * Captures the resolved medicinal effect profile of a composition for later pill and herb usage.
- * It is safe to serialize, keeping established effects stable across future datapack changes.
- */
 public record MedicinalProfile(MedicinalComposition composition, List<Effect> effects, int schemaVersion) {
     public static final Codec<MedicinalProfile> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             MedicinalComposition.CODEC.fieldOf("composition").forGetter(MedicinalProfile::composition),

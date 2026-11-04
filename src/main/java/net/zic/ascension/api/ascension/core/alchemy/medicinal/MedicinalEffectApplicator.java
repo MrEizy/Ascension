@@ -25,10 +25,6 @@ import net.zic.ascension.impl.core.effect.SkillEffectService;
 import net.zic.ascension.network.alchemy.ClientboundMedicinalCultivationProgressPacket;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/**
- * Applies stored medicinal effects through a small set of validated gameplay operations.
- * The server resolves actions from datapacks; unknown effects do nothing rather than guessing.
- */
 public final class MedicinalEffectApplicator {
     private MedicinalEffectApplicator() {
     }

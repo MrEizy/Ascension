@@ -11,10 +11,6 @@ import net.minecraft.world.item.component.ItemContainerContents;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Reconciles expired pills only when storage is inspected, without ticking block inventories.
- * Also resolves medicine inside nested item containers while preserving their slot positions.
- */
 public final class MedicinalContainerAccess {
     private static final int MAX_NESTING = 4;
     private static final int MAX_VISITED = 512;

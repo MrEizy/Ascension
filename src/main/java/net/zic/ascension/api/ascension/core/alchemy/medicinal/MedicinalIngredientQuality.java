@@ -6,10 +6,6 @@ import net.zic.ascension.common.item.herbs.HerbItem;
 
 import java.util.List;
 
-/**
- * Evaluates medicinal ingredient quality independently of its extracted purity.
- * Keeps the grade potential of a batch tied to the actual materials supplied.
- */
 public final class MedicinalIngredientQuality {
     private MedicinalIngredientQuality() {
     }
