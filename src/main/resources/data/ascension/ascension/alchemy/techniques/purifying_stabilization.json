@@ -1,7 +1,0 @@
-{
-  "stage": "stabilization",
-  "yield": 0.84,
-  "purity_delta": 0.045,
-  "instability_delta": -0.035,
-  "toxicity_delta": -0.12
-}

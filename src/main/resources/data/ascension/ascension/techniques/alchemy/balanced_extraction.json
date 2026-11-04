@@ -1,0 +1,9 @@
+{
+  "type": "ascension:alchemy_technique",
+  "name": "Balanced Extraction",
+  "description": "Extracts medicinal essence at a balanced rate without specializing in purity or yield.",
+  "basic": true,
+  "refinement": {
+    "stage": "extraction"
+  }
+}

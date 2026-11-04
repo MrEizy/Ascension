@@ -3,10 +3,15 @@ package net.zic.ascension.api.ascension.core.alchemy;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique;
+import net.minecraft.world.entity.player.Player;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementTechnique.Stage;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique.Stage;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalEffectDefinition;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalRegistries;
 import org.jspecify.annotations.Nullable;
@@ -60,8 +65,8 @@ public record AlchemyRefinementPlan(Identifier extraction, Identifier heating, I
 
     public static List<Identifier> choices(RegistryAccess access, Stage stage) {
         if (access == null) return List.of();
-        Registry<AlchemyRefinementTechnique> registry = AlchemyRefinementRegistries.TECHNIQUES.get(access);
-        return registry.entrySet().stream().filter(entry -> entry.getValue().stage() == stage)
+        Registry<Technique<?>> registry = CoreRegistries.TECHNIQUE_REGISTRY.get(access);
+        return registry.entrySet().stream().filter(entry -> entry.getValue() instanceof AlchemyTechnique technique && technique.stage() == stage)
                 .map(entry -> entry.getKey().identifier()).sorted(Comparator.comparing(Identifier::toString)).toList();
     }
 
@@ -70,6 +75,13 @@ public record AlchemyRefinementPlan(Identifier extraction, Identifier heating, I
         Registry<MedicinalEffectDefinition> registry = MedicinalRegistries.EFFECTS.get(access);
         return registry.entrySet().stream().filter(entry -> !entry.getValue().adverse())
                 .map(entry -> entry.getKey().identifier()).sorted(Comparator.comparing(Identifier::toString)).toList();
+    }
+
+    public static boolean isLearnedOrBasic(RegistryAccess access, Player player, Identifier id) {
+        Technique<?> technique = CoreRegistries.TECHNIQUE_REGISTRY.get(access).getValue(id);
+        if (!(technique instanceof AlchemyTechnique alchemy)) return false;
+        if (alchemy.basic()) return true;
+        return AscensionOriginSourceHelper.hasTechnique(AscensionOriginSourceHelper.getEntitySource(player), id);
     }
 
     public int index(RegistryAccess access, Stage stage) {

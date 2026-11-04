@@ -1,0 +1,15 @@
+{
+  "type": "ascension:alchemy_technique",
+  "name": "Gradual Heating",
+  "description": "Raises heat carefully, reducing reaction instability at the cost of extraction yield.",
+  "basic": false,
+  "refinement": {
+    "stage": "heating",
+    "heat": 0.8,
+    "control": 3.25,
+    "yield": 0.94,
+    "purity_delta": 0.02,
+    "instability_delta": -0.07,
+    "safe_energy_bonus": 0.35
+  }
+}

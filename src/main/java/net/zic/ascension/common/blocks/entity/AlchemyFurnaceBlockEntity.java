@@ -32,6 +32,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.alchemy.*;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.*;
 import net.zic.ascension.common.gui.menus.alchemy.AlchemyFurnaceMenu;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.common.item.ModItems;
 import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
@@ -62,14 +63,14 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
             if (index == 0) return phase.ordinal();
             if (index == 1) return phaseTicks;
             if (level == null) return 0;
-            if (index >= 2 && index <= 5) return plan.index(level.registryAccess(), AlchemyRefinementTechnique.Stage.values()[index - 2]);
+            if (index >= 2 && index <= 5) return plan.index(level.registryAccess(), AlchemyTechnique.Stage.values()[index - 2]);
             return index == 6 ? plan.focusIndex(level.registryAccess()) : 0;
         }
         @Override public void set(int index, int value) {
             if (index == 0 && value >= 0 && value < Phase.values().length) phase = Phase.values()[value];
             if (index == 1) phaseTicks = value;
             if (level != null && index >= 2 && index <= 5)
-                plan = plan.indexed(level.registryAccess(), AlchemyRefinementTechnique.Stage.values()[index - 2], value);
+                plan = plan.indexed(level.registryAccess(), AlchemyTechnique.Stage.values()[index - 2], value);
             if (level != null && index == 6) plan = plan.indexedFocus(level.registryAccess(), value);
         }
         @Override public int getCount() { return 7; }
@@ -93,17 +94,27 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     public Phase phase() { return phase; }
     public AlchemyRefinementPlan plan() { return plan; }
 
-    public boolean cyclePreparation(int slot) {
+    public boolean cyclePreparation(int slot, Player player) {
         if (level == null || level.isClientSide() || phase != Phase.IDLE || slot < 0 || slot > 4) return false;
         if (slot == 4) {
             int count = AlchemyRefinementPlan.focusChoices(level.registryAccess()).size() + 1;
             if (count <= 1) return false;
             plan = plan.indexedFocus(level.registryAccess(), (plan.focusIndex(level.registryAccess()) + 1) % count);
         } else {
-            AlchemyRefinementTechnique.Stage stage = AlchemyRefinementTechnique.Stage.values()[slot];
+            AlchemyTechnique.Stage stage = AlchemyTechnique.Stage.values()[slot];
             List<net.minecraft.resources.Identifier> choices = AlchemyRefinementPlan.choices(level.registryAccess(), stage);
             if (choices.isEmpty()) return false;
-            plan = plan.indexed(level.registryAccess(), stage, (plan.index(level.registryAccess(), stage) + 1) % choices.size());
+            int current = plan.index(level.registryAccess(), stage);
+            boolean found = false;
+            for (int offset = 1; offset <= choices.size(); offset++) {
+                int next = (current + offset) % choices.size();
+                if (next != current && AlchemyRefinementPlan.isLearnedOrBasic(level.registryAccess(), player, choices.get(next))) {
+                    plan = plan.with(stage, choices.get(next));
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return false;
         }
         setChanged();
         level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
@@ -170,8 +181,8 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
                 furnace.transition(Phase.CONDENSATION);
             }
             case CONDENSATION -> {
-                AlchemyRefinementTechnique condensation = AlchemyPlanEvaluator.technique(furnace.plan,
-                        AlchemyRefinementTechnique.Stage.CONDENSATION, level.registryAccess());
+                AlchemyTechnique.Refinement condensation = AlchemyPlanEvaluator.technique(furnace.plan,
+                        AlchemyTechnique.Stage.CONDENSATION, level.registryAccess());
                 ItemStack pill = MedicinalPillFactory.condense(
                         MedicinalEffectResolver.resolve(furnace.composition, level.registryAccess()),
                         furnace.ingredientCount, level.registryAccess(), MedicinalDecay.now(level),

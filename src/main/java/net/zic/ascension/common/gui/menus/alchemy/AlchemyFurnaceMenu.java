@@ -12,8 +12,9 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementPlan;
-import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementTechnique;
-import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementRegistries;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.minecraft.resources.Identifier;
 import java.util.List;
 import net.zic.ascension.common.blocks.entity.AlchemyFurnaceBlockEntity;
@@ -70,7 +71,7 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
             int selection = progress.get(6);
             return selection <= 0 || selection > effects.size() ? "Auto" : pretty(effects.get(selection - 1).getPath());
         }
-        AlchemyRefinementTechnique.Stage stage = AlchemyRefinementTechnique.Stage.values()[index];
+        AlchemyTechnique.Stage stage = AlchemyTechnique.Stage.values()[index];
         List<Identifier> choices = AlchemyRefinementPlan.choices(player.level().registryAccess(), stage);
         int selection = progress.get(index + 2);
         return choices.isEmpty() ? "Default" : pretty(choices.get(Math.max(0, Math.min(selection, choices.size() - 1))).getPath()
@@ -80,25 +81,28 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
     public String selectionDetails(int index, Player player) {
         if (index == 4) return "Only steers toward effects this medicine can already express; steering may reduce potency.";
         if (index < 0 || index > 3) return "";
-        AlchemyRefinementTechnique.Stage stage = AlchemyRefinementTechnique.Stage.values()[index];
+        AlchemyTechnique.Stage stage = AlchemyTechnique.Stage.values()[index];
         List<Identifier> options = AlchemyRefinementPlan.choices(player.level().registryAccess(), stage);
         if (options.isEmpty()) return "No techniques loaded";
         Identifier id = options.get(Math.max(0, Math.min(progress.get(index + 2), options.size() - 1)));
-        AlchemyRefinementTechnique technique = AlchemyRefinementRegistries.TECHNIQUES.get(player.level().registryAccess()).getValue(id);
-        if (technique == null) return "Missing method";
-        return switch (stage) {
+        Technique<?> knownTechnique = CoreRegistries.TECHNIQUE_REGISTRY.get(player.level().registryAccess()).getValue(id);
+        if (!(knownTechnique instanceof AlchemyTechnique technique)) return "Missing alchemy technique";
+        AlchemyTechnique.Refinement method = technique.refinement();
+        String explanation = technique.getDescription(null).getString();
+        String access = technique.basic() ? "Basic technique. " : "Learnable through a technique manual. ";
+        return access + explanation + " " + switch (stage) {
             case EXTRACTION -> String.format(java.util.Locale.ROOT,
                     "Essence yield %.0f%%, purity %+.0f%%, instability %+.0f%%",
-                    technique.yield() * 100, technique.purityDelta() * 100, technique.instabilityDelta() * 100);
+                    method.yield() * 100, method.purityDelta() * 100, method.instabilityDelta() * 100);
             case HEATING -> String.format(java.util.Locale.ROOT,
                     "Heat %.2fx, control %.2fx, yield %.0f%%, instability %+.0f%%",
-                    technique.heat(), technique.control(), technique.yield() * 100, technique.instabilityDelta() * 100);
+                    method.heat(), method.control(), method.yield() * 100, method.instabilityDelta() * 100);
             case STABILIZATION -> String.format(java.util.Locale.ROOT,
                     "Yield %.0f%%, purity %+.0f%%/herb, instability %+.0f%%/herb",
-                    technique.yield() * 100, technique.purityDelta() * 100, technique.instabilityDelta() * 100);
+                    method.yield() * 100, method.purityDelta() * 100, method.instabilityDelta() * 100);
             case CONDENSATION -> String.format(java.util.Locale.ROOT,
                     "Ingredient quality %+.0f%%, focus precision %.0f%%",
-                    technique.qualityBonus() * 100, technique.focusPrecision() * 100);
+                    method.qualityBonus() * 100, method.focusPrecision() * 100);
         };
     }
 
@@ -109,7 +113,7 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
 
     @Override public boolean clickMenuButton(Player player, int id) {
         if (furnace == null || id < 0 || id >= 5 || !stillValid(player)) return false;
-        return furnace.cyclePreparation(id);
+        return furnace.cyclePreparation(id, player);
     }
     @Override public boolean stillValid(Player player) {
         return furnace == null || (player.level().getBlockEntity(furnace.getBlockPos()) == furnace
