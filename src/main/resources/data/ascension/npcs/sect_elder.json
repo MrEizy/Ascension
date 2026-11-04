@@ -1,0 +1,93 @@
+{
+  "names": [
+    "Elder Chen",
+    "Elder Wu",
+    "Elder Mu",
+    "Elder Bai",
+    "Elder Song",
+    "Elder Lin"
+  ],
+  "skins": [
+    "default"
+  ],
+  "greeting": "Young one, what matter brings you before this elder?",
+  "dialogue": [
+    "Patience is the foundation of every great technique.",
+    "Our sect has endured many generations.",
+    "A strong foundation outweighs a hasty breakthrough."
+  ],
+  "guidance": {
+    "techniques": [
+      "ascension:1_ordinary/eagle_claw_palm_technique",
+      "ascension:1_ordinary/grasping_sand_technique",
+      "ascension:1_ordinary/iron_fist_tempering_manual",
+      "ascension:1_ordinary/lightness_technique",
+      "ascension:1_ordinary/sword_draw_manual"
+    ],
+    "offering_item": "ascension:spiritual_stone",
+    "offering_count": 4,
+    "kills": 3
+  },
+  "personalities": [
+    {
+      "id": "compassionate",
+      "weight": 6
+    },
+    {
+      "id": "stern",
+      "weight": 4
+    },
+    {
+      "id": "eccentric",
+      "weight": 2
+    },
+    {
+      "id": "reserved",
+      "weight": 1
+    }
+  ],
+  "affiliations": [
+    {
+      "id": "orthodox",
+      "weight": 9
+    },
+    {
+      "id": "unorthodox",
+      "weight": 2
+    }
+  ],
+  "cultivation_routine": {
+    "min_interval_ticks": 350,
+    "max_interval_ticks": 700,
+    "meditation_ticks": 240,
+    "circulation_ticks": 180,
+    "circulation_chance": 80
+  },
+  "daily_life": {
+    "social_min_interval_ticks": 550,
+    "social_max_interval_ticks": 1300,
+    "social_duration_ticks": 80,
+    "social_radius": 6,
+    "preferred_periods": [
+      "dawn",
+      "day",
+      "night"
+    ]
+  },
+  "duel": {
+    "finish_health_percent": 20,
+    "max_duration_ticks": 2400,
+    "max_distance": 32
+  },
+  "dialogue_unlocks": {
+    "gift_talks": 2,
+    "insult_talks": 2,
+    "challenge_talks": 3,
+    "guidance_talks": 4
+  },
+  "village_spawning": {
+    "weight": 2,
+    "max_per_village": 1,
+    "home_radius": 20
+  }
+}

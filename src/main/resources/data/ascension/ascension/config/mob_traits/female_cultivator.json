@@ -1,0 +1,84 @@
+{
+  "type": "ascension:simple_trait",
+  "name": "Female Cultivator Cultivation",
+  "paths": {
+    "ascension:foundation/essence": [
+      {
+        "major_realm": 0,
+        "min_realm": 0,
+        "max_realm": 2,
+        "weight": 75
+      },
+      {
+        "major_realm": 1,
+        "min_realm": 0,
+        "max_realm": 2,
+        "weight": 22
+      },
+      {
+        "major_realm": 2,
+        "min_realm": 0,
+        "max_realm": 2,
+        "weight": 3
+      }
+    ]
+  },
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:npc_female_cultivator_vitality",
+          "value": 6.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:npc_female_cultivator_strength",
+          "value": 4.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:agility": {
+      "flat": [
+        {
+          "id": "ascension:npc_female_cultivator_agility",
+          "value": 4.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:npc_female_cultivator_spirit",
+          "value": 4.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "attributes": {
+    "minecraft:max_health": {
+      "flat": [
+        {
+          "id": "ascension:npc_female_cultivator_max_health",
+          "value": 3.0
+        }
+      ],
+      "multiplier": []
+    },
+    "minecraft:attack_damage": {
+      "flat": [
+        {
+          "id": "ascension:npc_female_cultivator_attack_damage",
+          "value": 1.0
+        }
+      ],
+      "multiplier": []
+    }
+  }
+}
