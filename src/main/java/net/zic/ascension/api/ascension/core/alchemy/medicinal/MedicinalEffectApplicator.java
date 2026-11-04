@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.util.CultivationUtil;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
@@ -106,8 +107,9 @@ public final class MedicinalEffectApplicator {
                     double remaining = Math.max(0.0D, maximum - path.getProgress());
                     double progress = Math.min(remaining, maximum * fraction);
                     if (progress <= 0.0D || !Double.isFinite(progress)) return;
-                    path.progressPath(progress, source, player);
-                    AscensionOriginSourceHelper.markPathDirty(source, pathId);
+                    double impurityEfficiency = MedicinalImpurities.efficiency(player);
+                    CultivationUtil.cultivate(player, source, pathId, path, null,
+                            progress / impurityEfficiency);
                     if (player instanceof ServerPlayer serverPlayer) {
                         double currentMaximum = path.getMaxProgress();
                         float currentFraction = currentMaximum > 0.0D

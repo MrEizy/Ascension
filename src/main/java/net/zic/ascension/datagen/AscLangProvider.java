@@ -137,7 +137,10 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.alchemy.feedback.stamina_flow", "Physical vigor enhanced: faster stamina regeneration");
         add("ascension.alchemy.feedback.cleansed", "Harmful conditions cleansed");
         add("ascension.alchemy.pill.inert", "No medicinal composition is stored.");
-        add("ascension.alchemy.pill.composition", "Purity: %s%%  |  Toxicity: %s");
+        add("ascension.alchemy.pill.composition", "Purity: %s%%");
+        add("ascension.alchemy.pill.impurities", "Impurities: +%s%%");
+        add("gui.ascension.introspection.medicinal_impurities", "Medicinal impurities: %s%%");
+        add("gui.ascension.introspection.medicinal_impurities_tooltip", "Cultivation efficiency: %s%% (−%s%%)");
         add("ascension.alchemy.pill.raw_warning", "Raw herbs absorb poorly and may overload weak cultivators.");
         add("ascension.alchemy.effect.body_reinforcement", "Body Reinforcement");
         add("ascension.alchemy.effect.health_restoration", "Health Restoration");

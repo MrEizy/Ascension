@@ -55,8 +55,7 @@ public final class AscensionPillTooltipProvider implements ZenithTooltipProvider
                         stack.getHoverName(),
                         stack.get(AscensionComponents.MEDICINAL_PILL.get()) instanceof MedicinalProfile profile
                                 ? Component.translatable("ascension.alchemy.pill.composition",
-                                        Math.round(profile.composition().substance().purity() * 100.0D),
-                                        String.format(java.util.Locale.ROOT, "%.2f", profile.composition().toxicity()))
+                                        Math.round(profile.composition().substance().purity() * 100.0D))
                                 : Component.translatable(itemId.getNamespace() + ".pill." + itemId.getPath() + ".description")
                 )
         ));

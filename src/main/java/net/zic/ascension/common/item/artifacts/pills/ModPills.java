@@ -8,9 +8,13 @@ import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
-import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalImpurities;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
+import net.zic.ascension.util.CultivationUtil;
+import net.zic.ascension.network.alchemy.ClientboundMedicinalCultivationProgressPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.impl.resource.AscensionResourceSources;
 import net.zic.ascension.impl.resource.stamina.StaminaService;
@@ -90,8 +94,19 @@ public final class ModPills {
                         return;
                     }
 
-                    pathInstance.progressPath(pathInstance.getMaxProgress() * cultivationFraction(data) * MedicinalImpurities.efficiency(player), source, player);
-                    AscensionOriginSourceHelper.markPathDirty(source, path);
+                    double maximum = Math.max(0.0D, pathInstance.getMaxProgress());
+                    double remaining = Math.max(0.0D, maximum - pathInstance.getProgress());
+                    double requested = Math.min(remaining, maximum * cultivationFraction(data));
+                    if (requested <= 0.0D) return;
+                    CultivationUtil.cultivate(player, source, path, pathInstance, null, requested);
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        double updatedMaximum = pathInstance.getMaxProgress();
+                        float progress = updatedMaximum > 0.0D
+                                ? (float) Mth.clamp(pathInstance.getProgress() / updatedMaximum, 0.0D, 1.0D)
+                                : 0.0F;
+                        PacketDistributor.sendToPlayer(serverPlayer,
+                                new ClientboundMedicinalCultivationProgressPacket(path, progress));
+                    }
                 })
                 .canConsume((level, player, stack, data) -> {
                     OriginSource source = AscensionOriginSourceHelper.getEntitySource(player);

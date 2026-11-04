@@ -11,7 +11,6 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
-import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalImpurities;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyRefinementPlan;
 import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
@@ -25,7 +24,6 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
     private final AlchemyFurnaceBlockEntity furnace;
     private final Container container;
     private final ContainerData progress;
-    private final ContainerData medicinalCondition;
 
     public AlchemyFurnaceMenu(int id, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
         this(id, playerInventory, playerInventory.player.level().getBlockEntity(buf.readBlockPos()) instanceof AlchemyFurnaceBlockEntity entity ? entity : null);
@@ -36,15 +34,6 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
         this.furnace = furnace;
         this.container = furnace == null ? new SimpleContainer(4) : furnace.inventory();
         this.progress = furnace == null ? new SimpleContainerData(7) : furnace.menuData();
-        this.medicinalCondition = playerInventory.player.level().isClientSide()
-                ? new SimpleContainerData(1)
-                : new ContainerData() {
-                    @Override public int get(int index) {
-                        return index == 0 ? (int) Math.round(MedicinalImpurities.get(playerInventory.player) * 10.0D) : 0;
-                    }
-                    @Override public void set(int index, int value) { }
-                    @Override public int getCount() { return 1; }
-                };
         addSlot(new Slot(container, 0, 53, 20) {
             @Override public boolean mayPlace(ItemStack stack) { return editable() && AlchemyMaterials.resolve(stack, net.zic.ascension.api.ascension.core.alchemy.AlchemyContext.of(playerInventory.player)).isPresent(); }
             @Override public boolean mayPickup(Player player) { return editable(); }
@@ -68,12 +57,9 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
         for (int col = 0; col < 9; col++)
             addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
         addDataSlots(progress);
-        addDataSlots(medicinalCondition);
     }
 
     private boolean editable() { return furnace == null || furnace.phase() == AlchemyFurnaceBlockEntity.Phase.IDLE; }
-    public double medicinalImpurities() { return medicinalCondition.get(0) / 10.0D; }
-    public double cultivationEfficiency() { return Math.max(15.0D, 100.0D - medicinalImpurities()); }
     public int phase() { return progress.get(0); }
     public int phaseTicks() { return progress.get(1); }
     public int preparationIndex(int index) { return index < 0 || index > 4 ? 0 : progress.get(index + 2); }

@@ -42,6 +42,7 @@ public class MainContainer extends RenderableElement {
     private final PlayerViewer playerViewer;
     private final PhysiqueOpenButton physiqueButton;
     private final BloodlineOpenButton bloodlineButton;
+    private final MedicinalConditionDisplay medicinalCondition;
 
     private InformationPanel informationPanel = InformationPanel.DEFAULT;
     private OriginSource observedSource;
@@ -114,6 +115,11 @@ public class MainContainer extends RenderableElement {
         bloodlineButton.getPositioning().setX(112);
         bloodlineButton.getPositioning().setY(35);
         addChild(bloodlineButton);
+
+        medicinalCondition = new MedicinalConditionDisplay(frame);
+        medicinalCondition.getPositioning().setX(98);
+        medicinalCondition.getPositioning().setY(57);
+        addChild(medicinalCondition);
 
         showDefaultInformation();
         refreshSynchronizedState();

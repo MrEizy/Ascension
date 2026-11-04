@@ -3,16 +3,14 @@ package net.zic.ascension.api.ascension.core.alchemy.medicinal;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.zic.ascension.Config;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 
-/**
- * Persists medicinal impurities independently of entity cultivation data.
- * Reconciles slow purification lazily against server game time rather than ticking players.
- */
+
 public final class MedicinalImpurities {
     private static final double MAX = 100.0D;
     private static final double TICKS_PER_DAY = 24000.0D;
@@ -33,8 +31,8 @@ public final class MedicinalImpurities {
     }
 
     public static double get(LivingEntity entity) {
-        if (!(entity instanceof Player) || !(entity.level() instanceof ServerLevel server)) return 0.0D;
-        long now = server.getServer().overworld().getGameTime();
+        if (!(entity instanceof Player)) return 0.0D;
+        long now = currentTime(entity.level());
         State stored = entity.getData(AscensionAttachments.MEDICINAL_IMPURITIES);
         return reconcile(stored, now).amount();
     }
@@ -74,6 +72,11 @@ public final class MedicinalImpurities {
         return Mth.clamp((impure * (refined ? 6.0D : 14.0D) * strength)
                 + instability * (refined ? 0.75D : 2.5D)
                 + toxicity * (refined ? 2.0D : 4.0D), 0.0D, 25.0D);
+    }
+
+    private static long currentTime(Level level) {
+        return level instanceof ServerLevel server
+                ? server.getServer().overworld().getGameTime() : level.getGameTime();
     }
 
     private static State reconcile(State state, long now) {

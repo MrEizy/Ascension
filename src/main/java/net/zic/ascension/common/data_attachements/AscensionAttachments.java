@@ -1,6 +1,8 @@
 package net.zic.ascension.common.data_attachements;
 
 import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -168,6 +170,13 @@ public class AscensionAttachments {
     public static final Supplier<AttachmentType<MedicinalImpurities.State>> MEDICINAL_IMPURITIES = ATTACHMENT_TYPES.register(
             "medicinal_impurities", () -> AttachmentType.builder(holder -> new MedicinalImpurities.State(0.0D, 0L))
                     .serialize(MedicinalImpurities.State.CODEC.fieldOf("data"))
+                    .sync((holder, to) -> holder == to, StreamCodec.of(
+                            (ByteBuf buf, MedicinalImpurities.State state) -> {
+                                buf.writeDouble(state.amount());
+                                buf.writeLong(state.checkedAt());
+                            },
+                            (ByteBuf buf) -> new MedicinalImpurities.State(buf.readDouble(), buf.readLong())
+                    ))
                     .copyOnDeath()
                     .build()
     );

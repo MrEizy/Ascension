@@ -25,6 +25,7 @@ import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyContext;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalImpurities;
 import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipProvider;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
@@ -81,6 +82,7 @@ public final class AscensionTooltipValueSources {
     public static final Identifier PILL_GRADE = AscensionCraft.prefix("pill_grade");
     public static final Identifier PILL_EFFECT = AscensionCraft.prefix("pill_effect");
     public static final Identifier PILL_DECAY = AscensionCraft.prefix("pill_decay");
+    public static final Identifier PILL_IMPURITIES = AscensionCraft.prefix("pill_impurities");
     public static final Identifier PILL_BADGES = AscensionCraft.prefix("pill_badges");
 
     private static boolean registered;
@@ -108,6 +110,7 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerValue(PILL_GRADE, AscensionTooltipValueSources::pillGrade);
         ZenithTooltipSources.registerValue(PILL_EFFECT, AscensionTooltipValueSources::pillEffect);
         ZenithTooltipSources.registerValue(PILL_DECAY, AscensionTooltipValueSources::pillDecay);
+        ZenithTooltipSources.registerValue(PILL_IMPURITIES, AscensionTooltipValueSources::pillImpurities);
 
         ZenithTooltipSources.registerElement(PHYSIQUE_PATHS, context -> badges(PHYSIQUE_PATHS, context, ZenithTooltipColor.ACCENT));
         ZenithTooltipSources.registerElement(PHYSIQUE_STATS, context -> rows(PHYSIQUE_STATS, context));
@@ -654,6 +657,28 @@ public final class AscensionTooltipValueSources {
             return ZenithTooltipValue.text(lines.getSiblings().isEmpty()
                     ? Component.translatable("ascension.alchemy.pill.inert") : lines);
         });
+    }
+
+    private static Optional<ZenithTooltipValue> pillImpurities(ZenithTooltipContext context) {
+        double amount;
+        MedicinalProfile profile = context.stack().get(AscensionComponents.MEDICINAL_PILL.get());
+        if (profile != null) {
+            amount = MedicinalImpurities.contaminants(profile, true);
+        } else if (context.stack().getItem() instanceof PillItem pill) {
+            amount = switch (pill.data(context.stack()).grade()) {
+                case LOW -> 1.5D;
+                case MID -> 1.0D;
+                case HIGH -> 0.6D;
+                case PEAK -> 0.25D;
+                case SUPREME -> 0.0D;
+            };
+        } else {
+            return Optional.empty();
+        }
+        amount *= net.zic.ascension.Config.ALCHEMY_SERVER.IMPURITY_GAIN_MULTIPLIER.get();
+        return Optional.of(ZenithTooltipValue.text(Component.translatable(
+                "ascension.alchemy.pill.impurities",
+                String.format(java.util.Locale.ROOT, "%.2f", amount))));
     }
 
     private static long tooltipTime(ZenithTooltipContext context) {
