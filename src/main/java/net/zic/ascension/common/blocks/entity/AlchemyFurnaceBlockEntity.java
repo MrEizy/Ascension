@@ -82,7 +82,6 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     private int ingredientCount;
     private double batchIngredientQuality = 0.35D;
     private boolean ruined;
-    private boolean lastPowered;
     private AlchemyRefinementPlan plan = AlchemyRefinementPlan.DEFAULT;
 
     public AlchemyFurnaceBlockEntity(BlockPos pos, BlockState state) {
@@ -152,15 +151,6 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         ruined = false;
         transition(Phase.EXTRACTION);
         return true;
-    }
-
-    public void updateRedstone() {
-        if (level == null || level.isClientSide()) return;
-        boolean powered = level.hasNeighborSignal(worldPosition);
-        if (powered == lastPowered) return;
-        lastPowered = powered;
-        setChanged();
-        if (powered) start();
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, AlchemyFurnaceBlockEntity furnace) {
@@ -262,7 +252,6 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         output.putInt("Phase", phase.ordinal());
         output.putInt("PhaseTicks", phaseTicks);
         output.putBoolean("Ruined", ruined);
-        output.putBoolean("LastPowered", lastPowered);
         output.store("RefinementPlan", AlchemyRefinementPlan.CODEC, plan);
     }
 
@@ -276,7 +265,6 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         phase = Phase.values()[Mth.clamp(input.getIntOr("Phase", 0), 0, Phase.values().length - 1)];
         phaseTicks = Mth.clamp(input.getIntOr("PhaseTicks", 0), 0, PHASE_TICKS);
         ruined = input.getBooleanOr("Ruined", false);
-        lastPowered = input.getBooleanOr("LastPowered", false);
         plan = input.read("RefinementPlan", AlchemyRefinementPlan.CODEC).orElse(AlchemyRefinementPlan.DEFAULT);
     }
 

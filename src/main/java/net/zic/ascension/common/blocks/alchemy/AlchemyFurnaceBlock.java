@@ -4,12 +4,12 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -54,22 +54,6 @@ public class AlchemyFurnaceBlock extends HorizontalDirectionalBlock implements E
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
-    @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock,
-                                   @Nullable Orientation orientation, boolean movedByPiston) {
-        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof AlchemyFurnaceBlockEntity furnace) {
-            furnace.updateRedstone();
-        }
-    }
-
-    @Override
-    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
-        super.onPlace(state, level, pos, oldState, movedByPiston);
-        if (!oldState.is(this) && !level.isClientSide()
-                && level.getBlockEntity(pos) instanceof AlchemyFurnaceBlockEntity furnace) {
-            furnace.updateRedstone();
-        }
-    }
     @Override protected MapCodec<? extends HorizontalDirectionalBlock> codec() { return CODEC; }
     @Override public RenderShape getRenderShape(BlockState state) { return RenderShape.INVISIBLE; }
     @Nullable @Override public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new AlchemyFurnaceBlockEntity(pos, state); }
@@ -83,7 +67,14 @@ public class AlchemyFurnaceBlock extends HorizontalDirectionalBlock implements E
     @Override public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
         if (player instanceof ServerPlayer serverPlayer && level.getBlockEntity(pos) instanceof AlchemyFurnaceBlockEntity furnace) {
-            serverPlayer.openMenu(furnace, buf -> buf.writeBlockPos(pos));
+            if (player.isShiftKeyDown()) {
+                if (!furnace.start()) {
+                    serverPlayer.sendOverlayMessage(Component.literal(
+                            "Cannot begin refinement: check ingredients, output and furnace state."));
+                }
+            } else {
+                serverPlayer.openMenu(furnace, buf -> buf.writeBlockPos(pos));
+            }
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.FAIL;

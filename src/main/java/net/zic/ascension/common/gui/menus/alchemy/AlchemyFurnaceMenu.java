@@ -65,7 +65,7 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
     public int preparationIndex(int index) { return index < 0 || index > 4 ? 0 : progress.get(index + 2); }
 
     public String selectionLabel(int index, Player player) {
-        if (index < 0 || index > 4) return "";
+        if (index < 0 || index > 4 || player == null) return "";
         if (index == 4) {
             List<Identifier> effects = AlchemyRefinementPlan.focusChoices(player.level().registryAccess());
             int selection = progress.get(6);
@@ -79,6 +79,7 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
     }
 
     public String selectionDetails(int index, Player player) {
+        if (player == null) return "";
         if (index == 4) return "Only steers toward effects this medicine can already express; steering may reduce potency.";
         if (index < 0 || index > 3) return "";
         AlchemyTechnique.Stage stage = AlchemyTechnique.Stage.values()[index];
@@ -89,7 +90,9 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
         if (!(knownTechnique instanceof AlchemyTechnique technique)) return "Missing alchemy technique";
         AlchemyTechnique.Refinement method = technique.refinement();
         String explanation = technique.getDescription(null).getString();
-        String access = technique.basic() ? "Basic technique. " : "Learnable through a technique manual. ";
+        String access = technique.basic() ? "Basic technique. "
+                : AlchemyRefinementPlan.isLearnedOrBasic(player.level().registryAccess(), player, id)
+                        ? "Learned technique. " : "Not yet learned. ";
         return access + explanation + " " + switch (stage) {
             case EXTRACTION -> String.format(java.util.Locale.ROOT,
                     "Essence yield %.0f%%, purity %+.0f%%, instability %+.0f%%",
