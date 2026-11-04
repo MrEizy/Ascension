@@ -116,7 +116,9 @@ public class MainContainer extends RenderableElement {
         bloodlineButton.getPositioning().setY(35);
         addChild(bloodlineButton);
 
-        medicinalCondition = new MedicinalConditionDisplay(frame);
+        medicinalCondition = new MedicinalConditionDisplay(
+                frame, () -> informationPanel == InformationPanel.DEFAULT
+        );
         medicinalCondition.getPositioning().setX(98);
         medicinalCondition.getPositioning().setY(57);
         addChild(medicinalCondition);
