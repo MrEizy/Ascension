@@ -1,0 +1,28 @@
+{
+  "existing": {
+    "properties": {
+      "ascension:alchemy/reinforcement": 1
+    },
+    "affinities": {
+      "ascension:elemental/wood": 0.5
+    },
+    "products": {}
+  },
+  "incoming": {
+    "properties": {
+      "ascension:alchemy/restoration": 1
+    },
+    "affinities": {
+      "ascension:elemental/life": 0.5
+    },
+    "products": {}
+  },
+  "priority": 10,
+  "output": {
+    "properties": {
+      "ascension:alchemy/nourishment": 0.6
+    }
+  },
+  "purity_delta": 0.06,
+  "toxicity_delta": -0.08
+}

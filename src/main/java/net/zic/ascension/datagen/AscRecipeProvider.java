@@ -137,6 +137,16 @@ public class AscRecipeProvider extends RecipeProvider {
                 .save(output, "ascension:shapeless/black_iron_nugget_from_ingot");
 
 
+        shaped(RecipeCategory.MISC, ModItems.JADE_BOTTLE.get())
+                .pattern(" J ")
+                .pattern("JBJ")
+                .pattern(" J ")
+                .define('J', ModItems.JADE.get())
+                .define('B', Items.GLASS_BOTTLE)
+                .unlockedBy(getHasName(ModItems.JADE.get()), has(ModItems.JADE))
+                .group("alchemy")
+                .save(output, "ascension:shaped/jade_bottle");
+
         shaped(RecipeCategory.MISC, ModBlocks.ALCHEMY_FURNACE.get())
                 .pattern("B B")
                 .pattern("B B")

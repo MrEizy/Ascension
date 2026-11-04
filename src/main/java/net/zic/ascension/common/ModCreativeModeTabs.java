@@ -14,10 +14,10 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
-import net.zic.ascension.common.item.artifacts.pills.ModPills;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
 import java.util.function.Supplier;
@@ -150,13 +150,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.WHITE_JADE_ORCHID);
                         output.accept(ModItems.PEACH);
                         output.accept(ModItems.PILL_RESIDUE);
-                        output.accept(ModPills.maximumStack(ModItems.FASTING_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.QI_REPLENISHING_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.REGENERATION_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.STAMINA_REPLENISHING_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.BODY_CULTIVATION_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.SOUL_CULTIVATION_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.ESSENCE_CULTIVATION_PILL.get()));
 
 
                     }).build());
@@ -260,7 +253,8 @@ public class ModCreativeModeTabs {
                                         Identifier techniqueId = holder.key().identifier();
                                         ItemStack stack = new ItemStack(ModItems.TECHNIQUE_MANUAL.get());
                                         stack.set(AscensionComponents.REGISTRY_ID_HOLDER.get(), techniqueId);
-                                        stack.set(DataComponents.ITEM_NAME, Component.translatable("item.ascension.technique_manual.named", holder.value().getName(null)));
+                                        stack.set(DataComponents.ITEM_NAME, holder.value() instanceof AlchemyTechnique ? holder.value().getName(null)
+                                                : Component.translatable("item.ascension.technique_manual.named", holder.value().getName(null)));
                                         output.accept(stack);
                                     }))
                     .build());

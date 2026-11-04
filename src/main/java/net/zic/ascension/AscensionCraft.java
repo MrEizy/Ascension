@@ -34,6 +34,7 @@ import net.zic.ascension.datagen.loot.ModLootModifiers;
 import net.zic.ascension.configuration.mob_traits.traits.AscensionTraitTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationResolutionActionTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
+import net.zic.ascension.network.alchemy.ClientboundMedicinalCultivationProgressPacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationAddPacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationRemovePacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationUpdatePacket;
@@ -175,6 +176,7 @@ public class AscensionCraft {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC, "ascension/Ascension-Common.toml");
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.CULTIVATION_SPEC, "ascension/Ascension-Cultivation.toml");
         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC, "ascension/Ascension-Client.toml");
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.ALCHEMY_SERVER_SPEC, "ascension/Ascension-Alchemy.toml");
 
     }
 
@@ -324,6 +326,11 @@ public class AscensionCraft {
                     RuntimeVisualPacket.TYPE,
                     RuntimeVisualPacket.STREAM_CODEC,
                     RuntimeVisualPacket::handle
+            );
+            registrar.playToClient(
+                    ClientboundMedicinalCultivationProgressPacket.TYPE,
+                    ClientboundMedicinalCultivationProgressPacket.STREAM_CODEC,
+                    ClientboundMedicinalCultivationProgressPacket::handle
             );
             registrar.playToClient(
                     ClientboundDivineSensePacket.TYPE,

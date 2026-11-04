@@ -1,0 +1,22 @@
+{
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/reinforcement": 5,
+      "ascension:alchemy/nourishment": 3
+    },
+    "affinities": {
+      "ascension:elemental/wood": 1.5
+    }
+  },
+  "potency_per_unit": 2.4,
+  "priority": 2,
+  "application": {
+    "action": "cultivation",
+    "scale": 1.0,
+    "path": "ascension:foundation/body"
+  },
+  "names": [
+    "ascension.alchemy.pill.name.body_cultivation.0",
+    "ascension.alchemy.pill.name.body_cultivation.1"
+  ]
+}

@@ -1,5 +1,6 @@
 package net.zic.ascension.datagen;
 
+import com.geckolib.renderer.internal.GeckolibItemSpecialRenderer;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
@@ -10,6 +11,7 @@ import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.RangeSelectItemModel;
+import net.minecraft.client.renderer.item.SpecialModelWrapper;
 import net.minecraft.client.renderer.item.properties.numeric.Count;
 import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
@@ -31,7 +33,10 @@ import net.zic.ascension.common.blocks.crops.herbs.LilyPadHerbCropBlock;
 import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.common.blocks.custom.SpiritualStoneClusterBlock;
 import net.zic.ascension.common.item.ModItems;
+import net.zic.ascension.common.item.geckolibblockitems.AlchemyFurnaceItem;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.Optional;
 
 @NullMarked
 public class AscModelProvider extends ModelProvider {
@@ -91,15 +96,8 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.NETHERITE_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
 
         // Pills
+        pillItemModel(itemModels, ModItems.PROCEDURAL_PILL.get(), "qi_replenishing_pill");
         pillItemModel(itemModels, ModItems.PILL_RESIDUE.get(), "pill_residue");
-        pillItemModel(itemModels, ModItems.FASTING_PILL.get(), "fasting_pill_t1");
-        pillItemModel(itemModels, ModItems.QI_REPLENISHING_PILL.get(), "qi_replenishing_pill");
-        pillItemModel(itemModels, ModItems.REGENERATION_PILL.get(), "regeneration_pill");
-        pillItemModel(itemModels, ModItems.STAMINA_REPLENISHING_PILL.get(), "inner_reinforcement_pill");
-        pillItemModel(itemModels, ModItems.BODY_CULTIVATION_PILL.get(), "inner_reinforcement_pill");
-        pillItemModel(itemModels, ModItems.SOUL_CULTIVATION_PILL.get(), "fasting_pill_t1");
-        pillItemModel(itemModels, ModItems.ESSENCE_CULTIVATION_PILL.get(), "qi_replenishing_pill");
-
 
         //Key Items
         itemModels.generateFlatItem(ModItems.BLOODLINE_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
@@ -198,11 +196,22 @@ public class AscModelProvider extends ModelProvider {
         blockModels.createTrivialCube(ModBlocks.SPIRIT_VEIN.get());
 
 
+        itemModels.itemModelOutput.accept(ModBlocks.ALCHEMY_FURNACE.get().asItem(),
+                new SpecialModelWrapper.Unbaked(
+                        AscensionCraft.prefix("item/alchemy_furnace"),
+                        Optional.empty(),
+                        new GeckolibItemSpecialRenderer.Unbaked<AlchemyFurnaceItem>()
+                ));
+
+
         //Block Entities
         fermentingBarrelModel(blockModels);
         spiritualStoneClusterModel(blockModels);
         spiritualStoneClusterModel2(blockModels);
-        blockModels.createNonTemplateModelBlock(ModBlocks.ALCHEMY_FURNACE.get());
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(ModBlocks.ALCHEMY_FURNACE.get(),
+                        BlockModelGenerators.plainVariant(AscensionCraft.prefix("block/alchemy_furnace")))
+                        .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
 
         //Fluids
         blockModels.createNonTemplateModelBlock(ModBlocks.LIQUIFIED_SPIRITUAL_QI_BLOCK.get());

@@ -98,6 +98,8 @@ public class AscItemTagProvider extends ItemTagsProvider {
         tag(ItemTags.WOODEN_BUTTONS).add(ModBlocks.IRONWOOD_BUTTON.asItem());
 
 
+        tag(ModTags.Items.PILLS).add(ModItems.PROCEDURAL_PILL.get());
+
         tag(ModTags.Items.HERBS)
                 .add(ModItems.JADE_DEW_GRASS.get())
                 .add(ModItems.GINSENG.get())

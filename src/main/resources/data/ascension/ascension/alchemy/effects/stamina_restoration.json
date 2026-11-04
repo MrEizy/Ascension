@@ -1,0 +1,18 @@
+{
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/circulation": 3,
+      "ascension:alchemy/reinforcement": 2
+    }
+  },
+  "potency_per_unit": 2.2,
+  "priority": 1,
+  "application": {
+    "action": "stamina",
+    "scale": 1.0
+  },
+  "names": [
+    "ascension.alchemy.pill.name.stamina_restoration.0",
+    "ascension.alchemy.pill.name.stamina_restoration.1"
+  ]
+}

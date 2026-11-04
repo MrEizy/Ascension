@@ -1,0 +1,23 @@
+{
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/cleansing": 4.5,
+      "ascension:alchemy/nourishment": 4
+    },
+    "affinities": {
+      "ascension:elemental/moon": 1.5,
+      "ascension:elemental/yin": 1
+    }
+  },
+  "potency_per_unit": 2.4,
+  "priority": 2,
+  "application": {
+    "action": "cultivation",
+    "scale": 1.0,
+    "path": "ascension:foundation/soul"
+  },
+  "names": [
+    "ascension.alchemy.pill.name.soul_cultivation.0",
+    "ascension.alchemy.pill.name.soul_cultivation.1"
+  ]
+}

@@ -14,8 +14,7 @@ import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHuman;
 import net.zic.ascension.common.item.artifacts.pills.JadeBottleItem;
-import net.zic.ascension.common.item.artifacts.pills.ModPills;
-import net.zic.ascension.common.item.artifacts.pills.PillItem;
+import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.qi_holder.SpiritStone;
 import net.zic.ascension.common.item.transfer_item.BloodlineTransferItem;
@@ -159,21 +158,10 @@ public class ModItems {
                     .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "jade_bottle"))));
 
     // Pills
+    public static final DeferredItem<Item> PROCEDURAL_PILL = ITEMS.registerItem("procedural_pill",
+            properties -> new ProceduralPillItem(properties.stacksTo(16)));
     public static final DeferredItem<Item> PILL_RESIDUE = ITEMS.registerSimpleItem("pill_residue");
-    public static final DeferredItem<Item> FASTING_PILL = ITEMS.registerItem("fasting_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.FASTING));
-    public static final DeferredItem<Item> QI_REPLENISHING_PILL = ITEMS.registerItem("qi_replenishing_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.QI_REPLENISHING));
-    public static final DeferredItem<Item> REGENERATION_PILL = ITEMS.registerItem("regeneration_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.REGENERATION));
-    public static final DeferredItem<Item> STAMINA_REPLENISHING_PILL = ITEMS.registerItem("stamina_replenishing_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.STAMINA_REPLENISHING));
-    public static final DeferredItem<Item> BODY_CULTIVATION_PILL = ITEMS.registerItem("body_cultivation_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/body"))));
-    public static final DeferredItem<Item> SOUL_CULTIVATION_PILL = ITEMS.registerItem("soul_cultivation_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/soul"))));
-    public static final DeferredItem<Item> ESSENCE_CULTIVATION_PILL = ITEMS.registerItem("essence_cultivation_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/essence"))));
+
 
 
     //Ores

@@ -14,6 +14,7 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
@@ -42,6 +43,19 @@ public class TechniqueTransferItem extends Item {
 
         if(holder == null || holder.getData() == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData().getSource();
+
+        if (targetTechnique instanceof AlchemyTechnique alchemy && !alchemy.basic()
+                && !AscensionOriginSourceHelper.hasTechnique(source, techniqueId)) {
+            long specialized = AscensionOriginSourceHelper.getTechniques(source).stream()
+                    .map(id -> CoreRegistries.TECHNIQUE_REGISTRY.get(level.registryAccess()).getValue(id))
+                    .filter(known -> known instanceof AlchemyTechnique knownAlchemy && !knownAlchemy.basic())
+                    .count();
+            if (specialized >= AlchemyTechnique.MAX_LEARNED_SPECIALIZED) {
+                player.sendOverlayMessage(Component.translatable(
+                        "ascension.alchemy.technique.limit_reached", AlchemyTechnique.MAX_LEARNED_SPECIALIZED));
+                return InteractionResult.FAIL;
+            }
+        }
 
         if (!AscensionOriginSourceHelper.addTechnique(source, techniqueId)) return InteractionResult.FAIL;
 

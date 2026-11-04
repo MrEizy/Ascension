@@ -19,11 +19,17 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.item.herbs.HerbItem;
-import net.zic.ascension.common.item.artifacts.pills.PillItem;
+import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyContext;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalImpurities;
 import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipProvider;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 
 import net.zic.zenithlib.common.ZenithRegistries;
 import net.zic.zenithlib.stats.Stat;
@@ -58,6 +64,7 @@ public final class AscensionTooltipValueSources {
     public static final Identifier PHYSIQUE_AFFINITIES = AscensionCraft.prefix("physique_affinities");
 
     public static final Identifier TECHNIQUE_PROGRESSION_GAINS = AscensionCraft.prefix("technique_progression_gains");
+    public static final Identifier ALCHEMY_TECHNIQUE_REFINEMENT = AscensionCraft.prefix("alchemy_technique_refinement");
 
     public static final Identifier BLOODLINE_PURITY = AscensionCraft.prefix("bloodline_purity");
     public static final Identifier BLOODLINE_PURITY_GAINS = AscensionCraft.prefix("bloodline_purity_gains");
@@ -65,12 +72,16 @@ public final class AscensionTooltipValueSources {
     public static final Identifier HERB_AGE = AscensionCraft.prefix("herb_age");
     public static final Identifier HERB_QUALITY = AscensionCraft.prefix("herb_quality");
     public static final Identifier HERB_QUALITY_BADGE = AscensionCraft.prefix("herb_quality_badge");
+    public static final Identifier HERB_EFFECT = AscensionCraft.prefix("herb_effect");
+    public static final Identifier HERB_ALCHEMY_DETAILS = AscensionCraft.prefix("herb_alchemy_details");
     public static final Identifier HERB_ORIGIN = AscensionCraft.prefix("herb_origin");
     public static final Identifier HERB_RELATED_TYPE_BADGE = AscensionCraft.prefix("herb_related_type_badge");
     public static final Identifier HERB_RELATED_TARGET_ROW = AscensionCraft.prefix("herb_related_target_row");
 
     public static final Identifier PILL_GRADE = AscensionCraft.prefix("pill_grade");
     public static final Identifier PILL_EFFECT = AscensionCraft.prefix("pill_effect");
+    public static final Identifier PILL_DECAY = AscensionCraft.prefix("pill_decay");
+    public static final Identifier PILL_IMPURITIES = AscensionCraft.prefix("pill_impurities");
     public static final Identifier PILL_BADGES = AscensionCraft.prefix("pill_badges");
 
     private static boolean registered;
@@ -93,16 +104,21 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerValue(HERB_AGE, AscensionTooltipValueSources::herbAge);
         ZenithTooltipSources.registerValue(HERB_QUALITY, AscensionTooltipValueSources::herbQuality);
         ZenithTooltipSources.registerValue(HERB_ORIGIN, AscensionTooltipValueSources::herbOrigin);
+        ZenithTooltipSources.registerValue(HERB_EFFECT, AscensionTooltipValueSources::herbEffect);
 
         ZenithTooltipSources.registerValue(PILL_GRADE, AscensionTooltipValueSources::pillGrade);
         ZenithTooltipSources.registerValue(PILL_EFFECT, AscensionTooltipValueSources::pillEffect);
+        ZenithTooltipSources.registerValue(PILL_DECAY, AscensionTooltipValueSources::pillDecay);
+        ZenithTooltipSources.registerValue(PILL_IMPURITIES, AscensionTooltipValueSources::pillImpurities);
 
         ZenithTooltipSources.registerElement(PHYSIQUE_PATHS, context -> badges(PHYSIQUE_PATHS, context, ZenithTooltipColor.ACCENT));
         ZenithTooltipSources.registerElement(PHYSIQUE_STATS, context -> rows(PHYSIQUE_STATS, context));
         ZenithTooltipSources.registerElement(PHYSIQUE_AFFINITIES, context -> rows(PHYSIQUE_AFFINITIES, context));
         ZenithTooltipSources.registerElement(TECHNIQUE_PROGRESSION_GAINS, AscensionTooltipValueSources::techniqueProgressionElements);
+        ZenithTooltipSources.registerElement(ALCHEMY_TECHNIQUE_REFINEMENT, AscensionTooltipValueSources::alchemyTechniqueElements);
         ZenithTooltipSources.registerElement(BLOODLINE_PURITY_GAINS, AscensionTooltipValueSources::bloodlinePurityElements);
         ZenithTooltipSources.registerElement(HERB_QUALITY_BADGE, AscensionTooltipValueSources::herbQualityBadge);
+        ZenithTooltipSources.registerElement(HERB_ALCHEMY_DETAILS, AscensionTooltipValueSources::herbAlchemyDetails);
         ZenithTooltipSources.registerElement(HERB_RELATED_TYPE_BADGE, AscensionTooltipValueSources::herbRelatedTypeBadge);
         ZenithTooltipSources.registerElement(HERB_RELATED_TARGET_ROW, AscensionTooltipValueSources::herbRelatedTargetRow);
         ZenithTooltipSources.registerElement(PILL_BADGES, AscensionTooltipValueSources::pillBadges);
@@ -302,6 +318,60 @@ public final class AscensionTooltipValueSources {
         return Math.signum(current) == Math.signum(next) ? current : 0.0;
     }
 
+    private static List<ZenithTooltipElement> alchemyTechniqueElements(ZenithTooltipContext context) {
+        return context.subject(AlchemyTechnique.class).map(technique -> {
+            AlchemyTechnique.Refinement method = technique.refinement();
+            List<ZenithTooltipValue.Row> values = new ArrayList<>();
+            values.add(ZenithTooltipValue.row(
+                    Component.translatable("ascension.alchemy.technique.stage"),
+                    Component.literal(switch (method.stage()) {
+                        case EXTRACTION -> "Extraction";
+                        case HEATING -> "Heating";
+                        case STABILIZATION -> "Stabilization";
+                        case CONDENSATION -> "Condensation";
+                    }), ZenithTooltipValue.Tone.SPECIAL));
+            values.add(ZenithTooltipValue.row(
+                    Component.translatable("ascension.alchemy.technique.access"),
+                    Component.translatable(technique.basic() ? "ascension.alchemy.technique.basic" : "ascension.alchemy.technique.specialized"),
+                    ZenithTooltipValue.Tone.NEUTRAL));
+            if (!technique.basic()) {
+                values.add(ZenithTooltipValue.row(
+                        Component.translatable("ascension.alchemy.technique.known_limit"),
+                        Component.literal(Integer.toString(AlchemyTechnique.MAX_LEARNED_SPECIALIZED)),
+                        ZenithTooltipValue.Tone.NEUTRAL));
+            }
+            if (method.heat() != 1.0D) alchemyModifier(values, "Heat", method.heat(), true);
+            if (method.control() != 2.5D) alchemyModifier(values, "Control", method.control(), true);
+            if (method.yield() != 1.0D) alchemyModifier(values, "Essence yield", method.yield(), true);
+            if (method.purityDelta() != 0.0D) alchemyModifier(values, "Purity", method.purityDelta(), false);
+            if (method.instabilityDelta() != 0.0D) alchemyModifier(values, "Instability", method.instabilityDelta(), false);
+            if (method.toxicityDelta() != 0.0D) alchemyModifier(values, "Toxicity", method.toxicityDelta(), false);
+            if (method.safeEnergyBonus() != 0.0D) alchemyFlatModifier(values, "Safe energy", method.safeEnergyBonus());
+            if (method.explosionEnergyBonus() != 0.0D) alchemyFlatModifier(values, "Explosion tolerance", method.explosionEnergyBonus());
+            if (method.qualityBonus() != 0.0D) alchemyModifier(values, "Quality", method.qualityBonus(), false);
+            if (method.focusPrecision() != 0.0D) alchemyModifier(values, "Focus precision", method.focusPrecision(), false);
+            return values.stream()
+                    .map(row -> (ZenithTooltipElement) new RowElement(
+                            ZenithTooltipText.resolved(row.left()), ZenithTooltipText.resolved(row.right()),
+                            ZenithTooltipColor.TEXT, toneColor(row.tone())))
+                    .toList();
+        }).orElseGet(List::of);
+    }
+
+    private static void alchemyFlatModifier(List<ZenithTooltipValue.Row> values, String name, double amount) {
+        values.add(ZenithTooltipValue.row(Component.literal(name),
+                Component.literal(String.format(java.util.Locale.ROOT, "%+.2f", amount)),
+                amount > 0.0D ? ZenithTooltipValue.Tone.POSITIVE : ZenithTooltipValue.Tone.NEGATIVE));
+    }
+
+    private static void alchemyModifier(List<ZenithTooltipValue.Row> values, String name, double amount, boolean multiplier) {
+        String formatted = multiplier
+                ? String.format(java.util.Locale.ROOT, "%.2fx", amount)
+                : String.format(java.util.Locale.ROOT, "%+.1f%%", amount * 100.0D);
+        values.add(ZenithTooltipValue.row(Component.literal(name), Component.literal(formatted),
+                amount > (multiplier ? 1.0D : 0.0D) ? ZenithTooltipValue.Tone.POSITIVE : ZenithTooltipValue.Tone.NEGATIVE));
+    }
+
     private static List<ZenithTooltipElement> techniqueProgressionElements(
             ZenithTooltipContext context
     ) {
@@ -399,6 +469,39 @@ public final class AscensionTooltipValueSources {
         return elements;
     }
 
+    private static List<ZenithTooltipElement> herbAlchemyDetails(ZenithTooltipContext context) {
+        if (!(context.stack().getItem() instanceof HerbItem)) return List.of();
+        return AlchemyMaterials.resolve(context.stack(), AlchemyContext.EMPTY).map(material -> {
+            List<ZenithTooltipValue.Row> values = new ArrayList<>();
+            values.add(ZenithTooltipValue.row(Component.translatable("ascension.alchemy.herb.purity"),
+                    Component.literal(Math.round(material.purity() * 100.0D) + "%"), ZenithTooltipValue.Tone.NEUTRAL));
+            values.add(ZenithTooltipValue.row(Component.translatable("ascension.alchemy.herb.instability"),
+                    Component.literal(String.format(java.util.Locale.ROOT, "%.2f", material.instability())),
+                    ZenithTooltipValue.Tone.NEUTRAL));
+            material.essence().properties().entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey(Comparator.comparing(Identifier::toString)))
+                    .forEach(entry -> values.add(ZenithTooltipValue.row(
+                            Component.literal(readableProperty(entry.getKey())),
+                            Component.literal(String.format(java.util.Locale.ROOT, "%.2f", entry.getValue())),
+                            ZenithTooltipValue.Tone.POSITIVE)));
+            material.essence().affinities().entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey(Comparator.comparing(Identifier::toString)))
+                    .forEach(entry -> values.add(ZenithTooltipValue.row(
+                            Component.literal(readableProperty(entry.getKey()) + " (Qi)"),
+                            Component.literal(String.format(java.util.Locale.ROOT, "%.2f", entry.getValue())),
+                            ZenithTooltipValue.Tone.SPECIAL)));
+            return values.stream().map(row -> (ZenithTooltipElement) new RowElement(
+                    ZenithTooltipText.resolved(row.left()), ZenithTooltipText.resolved(row.right()),
+                    ZenithTooltipColor.TEXT, toneColor(row.tone()))).toList();
+        }).orElseGet(List::of);
+    }
+
+    private static String readableProperty(Identifier id) {
+        String raw = id.getPath();
+        String part = raw.substring(raw.lastIndexOf('/') + 1).replace('_', ' ');
+        return part.isEmpty() ? raw : Character.toUpperCase(part.charAt(0)) + part.substring(1);
+    }
+
     private static Optional<ZenithTooltipValue> herbAge(ZenithTooltipContext context) {
         return herbContext(context).map(herb -> ZenithTooltipValue.text(
                 Component.translatable(
@@ -480,9 +583,8 @@ public final class AscensionTooltipValueSources {
     }
 
     private static List<ZenithTooltipElement> pillBadges(ZenithTooltipContext context) {
-        return pillContext(context)
-                .map(pill -> {
-                    AscensionComponents.PillData data = pill.data();
+        return pillData(context)
+                .map(data -> {
                     Component rankName = Component.translatable(
                             "zenith." + data.rank().getNamespace() + ".tier." + data.rank().getPath()
                     );
@@ -526,23 +628,98 @@ public final class AscensionTooltipValueSources {
     }
 
     private static Optional<ZenithTooltipValue> pillGrade(ZenithTooltipContext context) {
-        return pillContext(context).map(pill -> ZenithTooltipValue.text(
-                Component.translatable(pill.data().grade().translationKey())
+        return pillData(context).map(data -> ZenithTooltipValue.text(
+                Component.translatable(data.grade().translationKey())
         ));
     }
 
     private static Optional<ZenithTooltipValue> pillEffect(ZenithTooltipContext context) {
-        return pillContext(context).map(pill -> ZenithTooltipValue.text(
-                pill.item().definition().effectDescription(pill.data())
-        ));
+        return pillData(context).map(data -> {
+            MedicinalProfile profile = context.stack().get(AscensionComponents.MEDICINAL_PILL.get());
+            if (profile == null) return ZenithTooltipValue.text(Component.translatable("ascension.alchemy.pill.inert"));
+            net.minecraft.network.chat.MutableComponent lines = Component.empty();
+            double vitality = MedicinalDecay.vitality(context.stack(), tooltipTime(context));
+            for (MedicinalProfile.Effect effect : profile.effects()) {
+                if (!lines.getSiblings().isEmpty()) lines.append("\n");
+                String name = effect.id().getPath().replace('/', '.');
+                double potency = effect.potency() * (effect.adverse() ? 1.0D : vitality);
+                net.minecraft.network.chat.MutableComponent detail = Component.literal(effect.adverse() ? "− " : "+ ")
+                        .append(Component.translatable("ascension.alchemy.effect." + name))
+                        .append(" " + String.format(java.util.Locale.ROOT, "%.2f", potency)
+                                + (effect.durationTicks() > 0 ? " (" + Math.round(effect.durationTicks() * (effect.adverse() ? 1.0D : vitality)) / 20 + "s)" : ""));
+                lines.append(detail.withStyle(effect.adverse()
+                        ? net.minecraft.ChatFormatting.RED : net.minecraft.ChatFormatting.GREEN));
+            }
+            return ZenithTooltipValue.text(lines.getSiblings().isEmpty()
+                    ? Component.translatable("ascension.alchemy.pill.inert") : lines);
+        });
     }
 
-    private static Optional<PillContext> pillContext(ZenithTooltipContext context) {
-        if (!(context.stack().getItem() instanceof PillItem pillItem)) {
+    private static Optional<ZenithTooltipValue> pillImpurities(ZenithTooltipContext context) {
+        MedicinalProfile profile = context.stack().get(AscensionComponents.MEDICINAL_PILL.get());
+        if (!(context.stack().getItem() instanceof ProceduralPillItem) || profile == null) {
             return Optional.empty();
         }
+        double amount = MedicinalImpurities.contaminants(profile, true);
+        amount *= net.zic.ascension.Config.ALCHEMY_SERVER.IMPURITY_GAIN_MULTIPLIER.get();
+        return Optional.of(ZenithTooltipValue.text(Component.translatable(
+                "ascension.alchemy.pill.impurities",
+                String.format(java.util.Locale.ROOT, "%.2f", amount))));
+    }
 
-        return Optional.of(new PillContext(pillItem, pillItem.data(context.stack())));
+    private static long tooltipTime(ZenithTooltipContext context) {
+        net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
+        if (minecraft.level != null) return MedicinalDecay.now(minecraft.level);
+        MedicinalDecay.State state = context.stack().get(AscensionComponents.MEDICINAL_DECAY.get());
+        return state == null ? 0L : state.checkedAt();
+    }
+
+    private static Optional<ZenithTooltipValue> pillDecay(ZenithTooltipContext context) {
+        MedicinalProfile profile = context.stack().get(AscensionComponents.MEDICINAL_PILL.get());
+        if (profile == null) return Optional.empty();
+        long now = tooltipTime(context);
+        MedicinalDecay.State state = context.stack().get(AscensionComponents.MEDICINAL_DECAY.get());
+        if (state == null) state = MedicinalDecay.fresh(now);
+        double vitality = MedicinalDecay.vitality(profile, state, now);
+        if (vitality <= MedicinalDecay.EXPIRE_AT) {
+            return Optional.of(ZenithTooltipValue.text(Component.translatable("ascension.alchemy.pill.expired")));
+        }
+        long remaining = MedicinalDecay.ticksUntilExpiry(profile, state, now);
+        Component time = remaining == Long.MAX_VALUE
+                ? Component.translatable("ascension.alchemy.pill.preserved")
+                : Component.literal(remaining >= 24000L
+                        ? String.format(java.util.Locale.ROOT, "~%.1f days", remaining / 24000.0D)
+                        : remaining >= 1000L
+                        ? String.format(java.util.Locale.ROOT, "~%.1f hours", remaining / 1000.0D)
+                        : String.format(java.util.Locale.ROOT, "~%ds", remaining / 20L));
+        return Optional.of(ZenithTooltipValue.text(Component.translatable("ascension.alchemy.pill.vitality",
+                Math.round(vitality * 100.0D), time)));
+    }
+
+    private static Optional<AscensionComponents.PillData> pillData(ZenithTooltipContext context) {
+        if (!(context.stack().getItem() instanceof ProceduralPillItem)) return Optional.empty();
+        return Optional.of(context.stack().getOrDefault(
+                AscensionComponents.PILL_DATA.get(), AscensionComponents.PillData.DEFAULT));
+    }
+
+    private static Optional<ZenithTooltipValue> herbEffect(ZenithTooltipContext context) {
+        if (!(context.stack().getItem() instanceof HerbItem) || context.registryAccess().isEmpty()) {
+            return Optional.empty();
+        }
+        MedicinalProfile profile = net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalHerbConsumption
+                .profile(context.stack(), context.registryAccess().orElseThrow());
+        if (profile.effects().isEmpty()) {
+            return Optional.of(ZenithTooltipValue.text(Component.translatable("ascension.alchemy.pill.inert")));
+        }
+        net.minecraft.network.chat.MutableComponent lines = Component.empty();
+        for (MedicinalProfile.Effect effect : profile.effects()) {
+            if (!lines.getSiblings().isEmpty()) lines.append("\n");
+            lines.append(Component.literal(effect.adverse() ? "− " : "+ ")
+                    .append(Component.translatable("ascension.alchemy.effect." + effect.id().getPath().replace('/', '.')))
+                    .append(" " + String.format(java.util.Locale.ROOT, "%.2f", effect.potency() * (effect.adverse() ? 1.30D : 0.28D)))
+                    .withStyle(effect.adverse() ? net.minecraft.ChatFormatting.RED : net.minecraft.ChatFormatting.GREEN));
+        }
+        return Optional.of(ZenithTooltipValue.text(lines));
     }
 
     private static Optional<ZenithTooltipValue> herbOrigin(ZenithTooltipContext context) {
@@ -639,8 +816,6 @@ public final class AscensionTooltipValueSources {
         return result.toString();
     }
 
-
-    private record PillContext(PillItem item, AscensionComponents.PillData data) {}
 
     private record HerbContext(
             HerbDefinition definition,

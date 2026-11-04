@@ -92,38 +92,101 @@ public class AscLangProvider extends LanguageProvider {
 
         // Pills and Pill Things
         add("item.ascension.jade_bottle", "Jade Bottle");
+        add("item.ascension.procedural_pill", "Refined Medicinal Pill");
+
+        // Can't even lie, completely randomized names...
+        add("ascension.alchemy.pill.name.body_reinforcement.0", "Iron Bone Pill");
+        add("ascension.alchemy.pill.name.body_reinforcement.1", "Jade Tendon Pill");
+        add("ascension.alchemy.pill.name.body_reinforcement.2", "Mountain Marrow Pill");
+        add("ascension.alchemy.pill.name.health_restoration.0", "Spring Renewal Pill");
+        add("ascension.alchemy.pill.name.health_restoration.1", "Bloodleaf Restoration Pill");
+        add("ascension.alchemy.pill.name.health_restoration.2", "Living Dew Pill");
+        add("ascension.alchemy.pill.name.medicinal_cleansing.0", "Clear Meridian Pill");
+        add("ascension.alchemy.pill.name.medicinal_cleansing.1", "Purifying Dew Pill");
+        add("ascension.alchemy.pill.name.medicinal_cleansing.2", "Pristine Lotus Pill");
+        add("ascension.alchemy.pill.name.medicinal_toxicity.0", "Venom Heart Pill");
+        add("ascension.alchemy.pill.name.medicinal_toxicity.1", "Tainted Blood Pill");
+        add("ascension.alchemy.pill.name.meridian_burn.0", "Scorching Meridian Pill");
+        add("ascension.alchemy.pill.name.meridian_burn.1", "Searing Qi Pill");
+        add("ascension.alchemy.pill.name.meridian_corruption.0", "Corrupted Essence Pill");
+        add("ascension.alchemy.pill.name.meridian_corruption.1", "Withering Soul Pill");
+        add("ascension.alchemy.pill.name.qi_circulation.0", "Flowing Meridian Pill");
+        add("ascension.alchemy.pill.name.qi_circulation.1", "Wandering Cloud Pill");
+        add("ascension.alchemy.pill.name.qi_circulation.2", "Azure Channel Pill");
+        add("ascension.alchemy.pill.name.qi_restoration.0", "Spirit Replenishing Pill");
+        add("ascension.alchemy.pill.name.qi_restoration.1", "Gathered Qi Pill");
+        add("ascension.alchemy.pill.name.qi_restoration.2", "Deep Spring Pill");
+
+        add("ascension.alchemy.herb.raw_effects", "Raw medicinal effects (estimated)");
+        add("ascension.alchemy.herb.details", "Alchemy Details");
+        add("ascension.alchemy.herb.purity", "Material purity");
+        add("ascension.alchemy.herb.instability", "Material instability");
+        add("ascension.alchemy.effect.vitality_renewal", "Vitality Renewal");
+        add("ascension.alchemy.effect.stamina_vigor", "Stamina Vigor");
+        add("ascension.alchemy.pill.name.stamina_vigor.0", "Enduring Marrow Pill");
+        add("ascension.alchemy.pill.name.stamina_vigor.1", "Steadfast Pulse Pill");
+        add("ascension.alchemy.pill.name.vitality_renewal.0", "Vitality Renewal Pill");
+        add("ascension.alchemy.pill.name.vitality_renewal.1", "Living Spring Pill");
+        add("ascension.alchemy.feedback.health", "Restored %s health");
+        add("ascension.alchemy.feedback.qi", "Restored %s Qi");
+        add("ascension.alchemy.feedback.stamina", "Restored %s stamina");
+        add("ascension.alchemy.feedback.food", "Restored %s hunger");
+        add("ascension.alchemy.feedback.reinforcement", "Body reinforced: increased damage resistance");
+        add("ascension.alchemy.feedback.reinforcement_shield", "Body reinforced: damage resistance and shielding");
+        add("ascension.alchemy.feedback.qi_flow", "Qi circulation enhanced: faster natural regeneration");
+        add("ascension.alchemy.feedback.stamina_flow", "Physical vigor enhanced: faster stamina regeneration");
+        add("ascension.alchemy.feedback.cleansed", "Harmful conditions cleansed");
+        add("ascension.alchemy.pill.inert", "No medicinal composition is stored.");
+        add("ascension.alchemy.pill.composition", "Purity: %s%%");
+        add("ascension.alchemy.pill.impurities", "Impurities: +%s%%");
+        add("gui.ascension.introspection.medicinal_impurities", "Medicinal impurities: %s%%");
+        add("gui.ascension.introspection.medicinal_impurities_tooltip", "Cultivation efficiency: %s%% (−%s%%)");
+        add("ascension.alchemy.pill.raw_warning", "Raw herbs absorb poorly and may overload weak cultivators.");
+        add("ascension.alchemy.effect.body_reinforcement", "Body Reinforcement");
+        add("ascension.alchemy.effect.health_restoration", "Health Restoration");
+        add("ascension.alchemy.effect.medicinal_cleansing", "Medicinal Cleansing");
+        add("ascension.alchemy.effect.deep_purification", "Deep Purification");
+        add("ascension.alchemy.pill.name.deep_purification.0", "Pure Meridian Cleansing Pill");
+        add("ascension.alchemy.pill.name.deep_purification.1", "Frost-Moon Purification Pill");
+        add("ascension.alchemy.feedback.impurities_purified", "Purified %s medicinal impurities");
+        add("ascension.alchemy.impurities.display", "Impurities: %s%%");
+        add("ascension.alchemy.efficiency.display", "Cultivation: %s%% efficiency");
+
+        add("ascension.alchemy.effect.medicinal_toxicity", "Medicinal Toxicity");
+        add("ascension.alchemy.effect.meridian_burn", "Meridian Burn");
+        add("ascension.alchemy.effect.meridian_corruption", "Meridian Corruption");
+        add("ascension.alchemy.effect.qi_circulation", "Qi Circulation");
+        add("ascension.alchemy.effect.qi_restoration", "Qi Restoration");
+        add("ascension.alchemy.pill.name.qi_restoration.3", "Qi Replenishing Pill");
+        add("ascension.alchemy.pill.name.health_restoration.3", "Regeneration Pill");
+        add("ascension.alchemy.effect.stamina_restoration", "Stamina Restoration");
+        add("ascension.alchemy.effect.sustenance", "Sustenance");
+        add("ascension.alchemy.effect.body_cultivation", "Body Cultivation");
+        add("ascension.alchemy.effect.soul_cultivation", "Soul Cultivation");
+        add("ascension.alchemy.effect.essence_cultivation", "Essence Cultivation");
+        add("ascension.alchemy.pill.name.stamina_restoration.0", "Stamina Replenishing Pill");
+        add("ascension.alchemy.pill.name.stamina_restoration.1", "Vigorous Marrow Pill");
+        add("ascension.alchemy.pill.name.sustenance.0", "Fasting Pill");
+        add("ascension.alchemy.pill.name.sustenance.1", "Nourishing Grain Pill");
+        add("ascension.alchemy.pill.name.body_cultivation.0", "Body Cultivation Pill");
+        add("ascension.alchemy.pill.name.body_cultivation.1", "Iron Vessel Cultivation Pill");
+        add("ascension.alchemy.pill.name.soul_cultivation.0", "Soul Cultivation Pill");
+        add("ascension.alchemy.pill.name.soul_cultivation.1", "Moonlit Spirit Pill");
+        add("ascension.alchemy.pill.name.essence_cultivation.0", "Essence Cultivation Pill");
+        add("ascension.alchemy.pill.name.essence_cultivation.1", "Thunder Essence Pill");
+        add("ascension.alchemy.pill.rank", "Rank: %s | Grade: %s");
+        add("ascension.alchemy.pill.purity", "Purity: %s%%");
+        add("ascension.alchemy.pill.toxicity", "Toxicity: %s");
         add("item.ascension.pill_residue", "Pill Residue");
-
-        add("item.ascension.fasting_pill", "Fasting Pill");
-        add("ascension.pill.fasting_pill.description", "A nourishing pill refined to sustain the body without ordinary food.");
-        add("ascension.pill.fasting_pill.effect", "Restores hunger and saturation to full.");
-
-        add("item.ascension.qi_replenishing_pill", "Qi Replenishing Pill");
-        add("ascension.pill.qi_replenishing_pill.description", "A concentrated pill that releases refined spiritual energy back into the cultivator.");
-        add("ascension.pill.qi_replenishing_pill.effect", "Restores %s%% of maximum Qi.");
-
-        add("item.ascension.regeneration_pill", "Regeneration Pill");
-        add("ascension.pill.regeneration_pill.description", "A restorative pill that rapidly replenishes damaged flesh and blood.");
-        add("ascension.pill.regeneration_pill.effect", "Restores %s%% of maximum health.");
-
-        add("item.ascension.stamina_replenishing_pill", "Stamina Replenishing Pill");
-        add("ascension.pill.stamina_replenishing_pill.description", "A vigorous pill that restores the body's spent physical energy.");
-        add("ascension.pill.stamina_replenishing_pill.effect", "Restores %s%% of maximum Stamina.");
-
-        add("item.ascension.body_cultivation_pill", "Body Cultivation Pill");
-        add("ascension.pill.body_cultivation_pill.description", "A strengthening pill refined to accelerate cultivation of the body.");
-        add("item.ascension.soul_cultivation_pill", "Soul Cultivation Pill");
-        add("ascension.pill.soul_cultivation_pill.description", "A tranquil pill refined to nourish and advance cultivation of the soul.");
-        add("item.ascension.essence_cultivation_pill", "Essence Cultivation Pill");
-        add("ascension.pill.essence_cultivation_pill.description", "A concentrated pill refined to accelerate cultivation of spiritual essence.");
-        add("ascension.pill.cultivation.effect", "Grants %s%% of the current realm's required cultivation progress.");
-
 
         // Pill Tooltip
         add("ascension.pill.tooltip.type", "Pill");
         add("ascension.pill.tooltip.grade", "Grade");
         add("ascension.pill.tooltip.rank_badge", "%s Rank");
         add("ascension.pill.tooltip.effect", "Effect");
+        add("ascension.alchemy.pill.vitality", "Medicinal vitality: %s%% | Time remaining: %s");
+        add("ascension.alchemy.pill.expired", "Expired · medicinal essence dissipated");
+        add("ascension.alchemy.pill.preserved", "preserved indefinitely");
         add("ascension.pill.grade.low", "Low-grade");
         add("ascension.pill.grade.mid", "Mid-grade");
         add("ascension.pill.grade.high", "High-grade");
@@ -499,6 +562,14 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.technique_manual.named", "Technique Manual: %s");
         add("item.ascension.technique_manual.battle_style", "Battle Style");
         add("item.ascension.technique_manual.cultivation_technique", "Cultivation Technique");
+        add("item.ascension.technique_manual.alchemy_technique", "Alchemy Technique");
+
+        add("ascension.alchemy.technique.stage", "Stage");
+        add("ascension.alchemy.technique.access", "Acquisition");
+        add("ascension.alchemy.technique.basic", "Basic technique");
+        add("ascension.alchemy.technique.specialized", "Requires manual");
+        add("ascension.alchemy.technique.known_limit", "Specialized technique limit");
+        add("ascension.alchemy.technique.limit_reached", "You can only learn %s specialized alchemy techniques.");
 
         // Transfer Item Tooltips
         add("ascension.tooltip.bloodline.purity", "Purity");

@@ -39,10 +39,11 @@ import net.zic.ascension.common.fluids.AscFluidTypes;
 import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.gui.menus.AscMenuTypes;
 import net.zic.ascension.common.gui.menus.jade_bottle.JadeBottleScreen;
+import net.zic.ascension.common.gui.menus.alchemy.AlchemyFurnaceScreen;
+import net.zic.ascension.client.renderer.alchemy.AlchemyFurnaceRenderer;
+import net.zic.ascension.common.blocks.entity.AscBlockEntities;
 import net.zic.ascension.common.particle.AscensionParticles;
 import net.zic.ascension.network.WeaponSwingRequestPacket;
-import net.zic.zenithlib.configuration.attribute_scaling.LivingEntityScaling;
-import net.zic.zenithlib.custom_attributes.ZenithAttribute;
 
 import java.util.List;
 
@@ -80,6 +81,7 @@ public class AscensionCraftClient {
         @SubscribeEvent
         public static void registerScreens(RegisterMenuScreensEvent event) {
             event.register(AscMenuTypes.JADE_BOTTLE.get(), JadeBottleScreen::new);
+            event.register(AscMenuTypes.ALCHEMY_FURNACE.get(), AlchemyFurnaceScreen::new);
         }
 
         @SubscribeEvent
@@ -148,6 +150,7 @@ public class AscensionCraftClient {
         @SubscribeEvent
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(AscEntities.GHOST.get(), InnerWorldGhostRenderer::new);
+            event.registerBlockEntityRenderer(AscBlockEntities.ALCHEMY_FURNACE_BE.get(), AlchemyFurnaceRenderer::new);
 
 
 

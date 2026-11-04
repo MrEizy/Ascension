@@ -1,0 +1,11 @@
+{
+  "type": "ascension:alchemy_technique",
+  "name": "Balanced Stabilization",
+  "description": "Uses an uncomplicated stabilization method to reduce instability.",
+  "basic": true,
+  "refinement": {
+    "stage": "stabilization",
+    "purity_delta": 0.015,
+    "instability_delta": -0.08
+  }
+}

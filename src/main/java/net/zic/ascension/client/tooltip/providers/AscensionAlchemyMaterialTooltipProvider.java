@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterialProvider;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
-import net.zic.ascension.common.item.artifacts.pills.PillItem;
+import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipDocument;
 import net.zic.zenithlib.tooltip.api.ZenithTooltipProviders;
@@ -33,7 +33,7 @@ public final class AscensionAlchemyMaterialTooltipProvider implements ZenithTool
     @Override
     public Optional<ZenithTooltipProviders.Result> create(ZenithTooltipContext context) {
         ItemStack stack = context.stack();
-        if (stack.getItem() instanceof HerbItem || stack.getItem() instanceof PillItem) {
+        if (stack.getItem() instanceof HerbItem || stack.getItem() instanceof ProceduralPillItem) {
             return Optional.empty();
         }
 

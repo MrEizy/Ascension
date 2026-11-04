@@ -54,6 +54,40 @@
       "title": {
         "source": "zenithlib:subject_name"
       }
+    },
+    {
+      "elements": [
+        {
+          "type": "zenithlib:header",
+          "text": {
+            "translate": "ascension.alchemy.herb.details"
+          }
+        },
+        {
+          "type": "zenithlib:dynamic",
+          "source": "ascension:herb_alchemy_details"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
+          "type": "zenithlib:header",
+          "color": "positive",
+          "text": {
+            "translate": "ascension.alchemy.herb.raw_effects"
+          }
+        },
+        {
+          "type": "zenithlib:text",
+          "color": "positive",
+          "text": {
+            "source": "ascension:herb_effect"
+          }
+        }
+      ],
+      "title": {
+        "translate": "ascension.alchemy.herb.details"
+      }
     }
   ]
 }

@@ -1,0 +1,33 @@
+{
+  "existing": {
+    "properties": {
+      "ascension:alchemy/cleansing": 0.5
+    },
+    "affinities": {
+      "ascension:elemental/water": 0.25
+    },
+    "products": {}
+  },
+  "incoming": {
+    "properties": {
+      "ascension:alchemy/nourishment": 1
+    },
+    "affinities": {
+      "ascension:elemental/ice": 0.5
+    },
+    "products": {}
+  },
+  "priority": 20,
+  "output": {
+    "properties": {
+      "ascension:alchemy/restoration": 0.75
+    }
+  },
+  "purity_delta": 0.05,
+  "instability_delta": -0.08,
+  "relationship": {
+    "source": "ascension:elemental/water",
+    "target": "ascension:elemental/ice",
+    "type": "related"
+  }
+}
