@@ -21,7 +21,7 @@ public record MedicinalEffectAction(String action, double scale, Optional<Identi
     ).apply(instance, MedicinalEffectAction::new));
 
     public MedicinalEffectAction {
-        if (!java.util.Set.of("health", "qi", "stamina", "damage", "status", "cleanse", "skill_effect", "food", "cultivation").contains(action)) {
+        if (!java.util.Set.of("health", "qi", "stamina", "damage", "status", "cleanse", "skill_effect", "food", "cultivation", "reinforcement").contains(action)) {
             throw new IllegalArgumentException("Unknown medicinal action: " + action);
         }
         scale = Double.isFinite(scale) ? Mth.clamp(scale, 0.0D, 10.0D) : 1.0D;

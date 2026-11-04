@@ -102,13 +102,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                         ).withOnAllPages(true))
                         .add(dynamic(id("herb_quality_badge")))
                         .add(divider())
-                        .add(text(
-                                sourced("zenithlib:subject_description"),
-                                ZenithTooltipColor.TEXT
-                        ))
-                        .add(divider())
-                        .add(header(translated("ascension.alchemy.herb.raw_effects"), ZenithTooltipColor.POSITIVE))
-                        .add(text(sourced("ascension:herb_effect"), ZenithTooltipColor.POSITIVE))
+                        .add(text(sourced("zenithlib:subject_description"), ZenithTooltipColor.TEXT))
                         .add(divider())
                         .add(row(
                                 translated("ascension.herb.tooltip.age"),
@@ -121,7 +115,13 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                                 sourced("ascension:herb_origin"),
                                 ZenithTooltipColor.TEXT,
                                 ZenithTooltipColor.MUTED
-                        )));
+                        )))
+                .page(page(translated("ascension.alchemy.herb.details"))
+                        .add(header(translated("ascension.alchemy.herb.details"), ZenithTooltipColor.ACCENT))
+                        .add(dynamic(id("herb_alchemy_details")))
+                        .add(divider())
+                        .add(header(translated("ascension.alchemy.herb.raw_effects"), ZenithTooltipColor.POSITIVE))
+                        .add(text(sourced("ascension:herb_effect"), ZenithTooltipColor.POSITIVE)));
     }
 
     private void addDefaultTransferItemTooltips() {

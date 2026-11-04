@@ -22,6 +22,8 @@ import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.artifacts.pills.PillItem;
 import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyContext;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
 import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipProvider;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
@@ -71,6 +73,7 @@ public final class AscensionTooltipValueSources {
     public static final Identifier HERB_QUALITY = AscensionCraft.prefix("herb_quality");
     public static final Identifier HERB_QUALITY_BADGE = AscensionCraft.prefix("herb_quality_badge");
     public static final Identifier HERB_EFFECT = AscensionCraft.prefix("herb_effect");
+    public static final Identifier HERB_ALCHEMY_DETAILS = AscensionCraft.prefix("herb_alchemy_details");
     public static final Identifier HERB_ORIGIN = AscensionCraft.prefix("herb_origin");
     public static final Identifier HERB_RELATED_TYPE_BADGE = AscensionCraft.prefix("herb_related_type_badge");
     public static final Identifier HERB_RELATED_TARGET_ROW = AscensionCraft.prefix("herb_related_target_row");
@@ -113,6 +116,7 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerElement(ALCHEMY_TECHNIQUE_REFINEMENT, AscensionTooltipValueSources::alchemyTechniqueElements);
         ZenithTooltipSources.registerElement(BLOODLINE_PURITY_GAINS, AscensionTooltipValueSources::bloodlinePurityElements);
         ZenithTooltipSources.registerElement(HERB_QUALITY_BADGE, AscensionTooltipValueSources::herbQualityBadge);
+        ZenithTooltipSources.registerElement(HERB_ALCHEMY_DETAILS, AscensionTooltipValueSources::herbAlchemyDetails);
         ZenithTooltipSources.registerElement(HERB_RELATED_TYPE_BADGE, AscensionTooltipValueSources::herbRelatedTypeBadge);
         ZenithTooltipSources.registerElement(HERB_RELATED_TARGET_ROW, AscensionTooltipValueSources::herbRelatedTargetRow);
         ZenithTooltipSources.registerElement(PILL_BADGES, AscensionTooltipValueSources::pillBadges);
@@ -461,6 +465,39 @@ public final class AscensionTooltipValueSources {
             ));
         }
         return elements;
+    }
+
+    private static List<ZenithTooltipElement> herbAlchemyDetails(ZenithTooltipContext context) {
+        if (!(context.stack().getItem() instanceof HerbItem)) return List.of();
+        return AlchemyMaterials.resolve(context.stack(), AlchemyContext.EMPTY).map(material -> {
+            List<ZenithTooltipValue.Row> values = new ArrayList<>();
+            values.add(ZenithTooltipValue.row(Component.translatable("ascension.alchemy.herb.purity"),
+                    Component.literal(Math.round(material.purity() * 100.0D) + "%"), ZenithTooltipValue.Tone.NEUTRAL));
+            values.add(ZenithTooltipValue.row(Component.translatable("ascension.alchemy.herb.instability"),
+                    Component.literal(String.format(java.util.Locale.ROOT, "%.2f", material.instability())),
+                    ZenithTooltipValue.Tone.NEUTRAL));
+            material.essence().properties().entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey(Comparator.comparing(Identifier::toString)))
+                    .forEach(entry -> values.add(ZenithTooltipValue.row(
+                            Component.literal(readableProperty(entry.getKey())),
+                            Component.literal(String.format(java.util.Locale.ROOT, "%.2f", entry.getValue())),
+                            ZenithTooltipValue.Tone.POSITIVE)));
+            material.essence().affinities().entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey(Comparator.comparing(Identifier::toString)))
+                    .forEach(entry -> values.add(ZenithTooltipValue.row(
+                            Component.literal(readableProperty(entry.getKey()) + " (Qi)"),
+                            Component.literal(String.format(java.util.Locale.ROOT, "%.2f", entry.getValue())),
+                            ZenithTooltipValue.Tone.SPECIAL)));
+            return values.stream().map(row -> (ZenithTooltipElement) new RowElement(
+                    ZenithTooltipText.resolved(row.left()), ZenithTooltipText.resolved(row.right()),
+                    ZenithTooltipColor.TEXT, toneColor(row.tone()))).toList();
+        }).orElseGet(List::of);
+    }
+
+    private static String readableProperty(Identifier id) {
+        String raw = id.getPath();
+        String part = raw.substring(raw.lastIndexOf('/') + 1).replace('_', ' ');
+        return part.isEmpty() ? raw : Character.toUpperCase(part.charAt(0)) + part.substring(1);
     }
 
     private static Optional<ZenithTooltipValue> herbAge(ZenithTooltipContext context) {

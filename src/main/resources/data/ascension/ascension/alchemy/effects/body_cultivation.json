@@ -1,14 +1,14 @@
 {
   "requirements": {
     "properties": {
-      "ascension:alchemy/reinforcement": 7,
-      "ascension:alchemy/nourishment": 4
+      "ascension:alchemy/reinforcement": 5,
+      "ascension:alchemy/nourishment": 3
     },
     "affinities": {
-      "ascension:elemental/wood": 3
+      "ascension:elemental/wood": 1.5
     }
   },
-  "potency_per_unit": 3.0,
+  "potency_per_unit": 2.4,
   "priority": 2,
   "application": {
     "action": "cultivation",

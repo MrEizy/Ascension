@@ -9,9 +9,9 @@
   "adverse": false,
   "priority": 0,
   "application": {
-    "action": "status",
+    "action": "skill_effect",
     "scale": 1.0,
-    "status": "minecraft:speed"
+    "effect": "ascension:medicinal_qi_flow"
   },
   "names": [
     "ascension.alchemy.pill.name.qi_circulation.0",

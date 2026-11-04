@@ -1,0 +1,24 @@
+{
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/restoration": 2.0,
+      "ascension:alchemy/nourishment": 2.0
+    },
+    "affinities": {
+      "ascension:elemental/life": 1.0
+    }
+  },
+  "potency_per_unit": 1.1,
+  "duration_ticks": 1000,
+  "adverse": false,
+  "priority": 1,
+  "application": {
+    "action": "status",
+    "scale": 1.0,
+    "status": "minecraft:regeneration"
+  },
+  "names": [
+    "ascension.alchemy.pill.name.vitality_renewal.0",
+    "ascension.alchemy.pill.name.vitality_renewal.1"
+  ]
+}

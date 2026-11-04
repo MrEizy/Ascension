@@ -1,15 +1,15 @@
 {
   "requirements": {
     "properties": {
-      "ascension:alchemy/cleansing": 7,
-      "ascension:alchemy/nourishment": 6
+      "ascension:alchemy/cleansing": 4.5,
+      "ascension:alchemy/nourishment": 4
     },
     "affinities": {
-      "ascension:elemental/moon": 2,
-      "ascension:elemental/yin": 2
+      "ascension:elemental/moon": 1.5,
+      "ascension:elemental/yin": 1
     }
   },
-  "potency_per_unit": 3.0,
+  "potency_per_unit": 2.4,
   "priority": 2,
   "application": {
     "action": "cultivation",

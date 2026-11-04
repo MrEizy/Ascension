@@ -118,6 +118,25 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.alchemy.pill.name.qi_restoration.2", "Deep Spring Pill");
 
         add("ascension.alchemy.herb.raw_effects", "Raw medicinal effects (estimated)");
+        add("ascension.alchemy.herb.details", "Alchemy Details");
+        add("ascension.alchemy.herb.purity", "Material purity");
+        add("ascension.alchemy.herb.instability", "Material instability");
+        add("ascension.alchemy.effect.vitality_renewal", "Vitality Renewal");
+        add("ascension.alchemy.effect.stamina_vigor", "Stamina Vigor");
+        add("ascension.alchemy.pill.name.stamina_vigor.0", "Enduring Marrow Pill");
+        add("ascension.alchemy.pill.name.stamina_vigor.1", "Steadfast Pulse Pill");
+        add("ascension.alchemy.pill.name.vitality_renewal.0", "Vitality Renewal Pill");
+        add("ascension.alchemy.pill.name.vitality_renewal.1", "Living Spring Pill");
+        add("ascension.alchemy.feedback.health", "Restored %s health");
+        add("ascension.alchemy.feedback.qi", "Restored %s Qi");
+        add("ascension.alchemy.feedback.stamina", "Restored %s stamina");
+        add("ascension.alchemy.feedback.food", "Restored %s hunger");
+        add("ascension.alchemy.feedback.cultivation", "%s cultivation: +%s%% of current realm");
+        add("ascension.alchemy.feedback.reinforcement", "Body reinforced: increased damage resistance");
+        add("ascension.alchemy.feedback.reinforcement_shield", "Body reinforced: damage resistance and shielding");
+        add("ascension.alchemy.feedback.qi_flow", "Qi circulation enhanced: faster natural regeneration");
+        add("ascension.alchemy.feedback.stamina_flow", "Physical vigor enhanced: faster stamina regeneration");
+        add("ascension.alchemy.feedback.cleansed", "Harmful conditions cleansed");
         add("ascension.alchemy.pill.inert", "No medicinal composition is stored.");
         add("ascension.alchemy.pill.composition", "Purity: %s%%  |  Toxicity: %s");
         add("ascension.alchemy.pill.raw_warning", "Raw herbs absorb poorly and may overload weak cultivators.");

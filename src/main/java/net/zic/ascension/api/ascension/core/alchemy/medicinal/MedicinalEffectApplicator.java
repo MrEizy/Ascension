@@ -1,6 +1,9 @@
 package net.zic.ascension.api.ascension.core.alchemy.medicinal;
 
 import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import java.util.Locale;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -53,7 +56,9 @@ public final class MedicinalEffectApplicator {
                 case "health" -> {
                     int tier = Mth.clamp(profile.composition().substance().rankTier(), 0, 5);
                     double restored = power * Math.pow(1.3D, tier);
+                    float before = consumer.getHealth();
                     consumer.heal((float) Math.min(consumer.getMaxHealth() * 0.50D, restored));
+                    notifyGain(consumer, "ascension.alchemy.feedback.health", consumer.getHealth() - before);
                 }
                 case "qi" -> {
                     EntityQiProvider qi = consumer.getCapability(CoreCapabilities.ASCENSION_ENTITY_QI_PROVIDER);
@@ -61,21 +66,29 @@ public final class MedicinalEffectApplicator {
                         int tier = Mth.clamp(profile.composition().substance().rankTier(), 0, 5);
                         double restored = power * 2.0D * Math.pow(2.25D, tier);
                         double limit = qi.getMaxQi() * (0.03D + 0.025D * tier);
+                        double before = qi.getQi();
                         qi.regenQi(Math.min(restored, limit));
+                        notifyGain(consumer, "ascension.alchemy.feedback.qi", qi.getQi() - before);
                     }
                 }
                 case "stamina" -> {
                     double maximum = StaminaService.getMaximumStamina(consumer);
                     int tier = Mth.clamp(profile.composition().substance().rankTier(), 0, 5);
                     double fraction = Math.min(0.40D, power * 0.04D * Math.pow(1.20D, tier));
-                    if (maximum > 0.0D) StaminaService.restore(consumer, AscensionResourceSources.DIRECT,
-                            maximum * fraction);
+                    if (maximum > 0.0D) {
+                        double before = StaminaService.getStamina(consumer);
+                        StaminaService.restore(consumer, AscensionResourceSources.DIRECT, maximum * fraction);
+                        notifyGain(consumer, "ascension.alchemy.feedback.stamina",
+                                StaminaService.getStamina(consumer) - before);
+                    }
                 }
                 case "food" -> {
                     if (consumer instanceof Player player) {
                         FoodData food = player.getFoodData();
+                        int before = food.getFoodLevel();
                         food.setFoodLevel(Math.min(20, food.getFoodLevel() + Math.max(1, (int) Math.ceil(power * 1.5D))));
                         food.setSaturation(Math.min((float) food.getFoodLevel(), food.getSaturationLevel() + (float) (power * 0.8D)));
+                        notifyGain(consumer, "ascension.alchemy.feedback.food", food.getFoodLevel() - before);
                     }
                 }
                 case "cultivation" -> action.path().ifPresent(pathId -> {
@@ -93,14 +106,33 @@ public final class MedicinalEffectApplicator {
                     if (progress <= 0.0D || !Double.isFinite(progress)) return;
                     path.progressPath(progress, source, player);
                     AscensionOriginSourceHelper.markPathDirty(source, pathId);
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.sendOverlayMessage(Component.translatable(
+                                "ascension.alchemy.feedback.cultivation", pathId.getPath().replace("foundation/", ""),
+                                formatValue(progress / Math.max(1.0D, maximum) * 100.0D)));
+                    }
                 });
+                case "reinforcement" -> {
+                    int duration = Math.max(100, effect.durationTicks());
+                    consumer.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, duration, power >= 9.0D ? 1 : 0));
+                    if (power >= 0.60D) {
+                        consumer.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, duration, power >= 7.0D ? 1 : 0));
+                    }
+                    notifyStatus(consumer, power >= 0.60D
+                            ? "ascension.alchemy.feedback.reinforcement_shield"
+                            : "ascension.alchemy.feedback.reinforcement");
+                }
                 case "damage" -> consumer.hurtServer(server, server.damageSources().magic(), (float) Math.min(20.0D, power));
                 case "cleanse" -> {
+                    boolean affected = consumer.hasEffect(MobEffects.POISON)
+                            || consumer.hasEffect(MobEffects.WEAKNESS)
+                            || (power >= 2.0D && consumer.hasEffect(MobEffects.WITHER));
                     if (power >= 0.35D) {
                         consumer.removeEffect(MobEffects.POISON);
                         consumer.removeEffect(MobEffects.WEAKNESS);
                     }
                     if (power >= 2.0D) consumer.removeEffect(MobEffects.WITHER);
+                    if (affected) notifyStatus(consumer, "ascension.alchemy.feedback.cleansed");
                 }
                 case "status" -> action.status().ifPresent(identifier -> {
                     server.registryAccess().lookupOrThrow(Registries.MOB_EFFECT)
@@ -108,11 +140,31 @@ public final class MedicinalEffectApplicator {
                             .ifPresent(holder -> consumer.addEffect(new MobEffectInstance(holder,
                                     Math.max(20, effect.durationTicks()), Mth.clamp((int) (power / 8.0D), 0, 2))));
                 });
-                case "skill_effect" -> action.effect().ifPresent(identifier ->
-                        SkillEffectService.apply(consumer, identifier, consumer.getUUID(), null,
-                                Math.max(20, effect.durationTicks()), power));
+                case "skill_effect" -> action.effect().ifPresent(identifier -> {
+                    if (SkillEffectService.apply(consumer, identifier, consumer.getUUID(), null,
+                            Math.max(20, effect.durationTicks()), power)) {
+                        if (identifier.getPath().equals("medicinal_qi_flow"))
+                            notifyStatus(consumer, "ascension.alchemy.feedback.qi_flow");
+                        else if (identifier.getPath().equals("medicinal_stamina_flow"))
+                            notifyStatus(consumer, "ascension.alchemy.feedback.stamina_flow");
+                    }
+                });
                 default -> { }
             }
         }
+    }
+
+    private static void notifyGain(LivingEntity consumer, String key, double amount) {
+        if (consumer instanceof ServerPlayer player && Double.isFinite(amount) && amount > 1.0E-4D) {
+            player.sendOverlayMessage(Component.translatable(key, formatValue(amount)));
+        }
+    }
+
+    private static void notifyStatus(LivingEntity consumer, String key) {
+        if (consumer instanceof ServerPlayer player) player.sendOverlayMessage(Component.translatable(key));
+    }
+
+    private static String formatValue(double amount) {
+        return String.format(Locale.ROOT, "%.2f", Math.max(0.0D, amount));
     }
 }

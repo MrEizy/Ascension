@@ -1,0 +1,24 @@
+{
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/reinforcement": 2.0,
+      "ascension:alchemy/circulation": 2.0
+    },
+    "affinities": {
+      "ascension:elemental/wood": 1.0
+    }
+  },
+  "potency_per_unit": 0.75,
+  "duration_ticks": 1200,
+  "adverse": false,
+  "priority": 1,
+  "application": {
+    "action": "skill_effect",
+    "scale": 1.0,
+    "effect": "ascension:medicinal_stamina_flow"
+  },
+  "names": [
+    "ascension.alchemy.pill.name.stamina_vigor.0",
+    "ascension.alchemy.pill.name.stamina_vigor.1"
+  ]
+}
