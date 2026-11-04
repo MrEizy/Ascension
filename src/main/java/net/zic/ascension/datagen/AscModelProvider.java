@@ -215,6 +215,14 @@ public class AscModelProvider extends ModelProvider {
 
         //Fluids
         blockModels.createNonTemplateModelBlock(ModBlocks.LIQUIFIED_SPIRITUAL_QI_BLOCK.get());
+
+        //Spawn Eggs
+        itemModels.generateFlatItem(ModItems.TREASURE_RAT_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.MALE_CULTIVATOR_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.FEMALE_CULTIVATOR_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.SECT_ELDER_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.SECT_MASTER_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.YOUNG_MASTER_SPAWN_EGG.get(), ModelTemplates.FLAT_ITEM);
     }
 
 

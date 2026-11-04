@@ -1,11 +1,13 @@
 package net.zic.ascension.common.item;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionAscendant;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionEarth;
@@ -24,6 +26,23 @@ import net.zic.zenithlib.registry.RegistryHelper;
 
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(AscensionCraft.MOD_ID);
+
+    public static final DeferredItem<SpawnEggItem> TREASURE_RAT_SPAWN_EGG =
+            ITEMS.registerItem("treasure_rat_spawn_egg",
+                    properties -> new SpawnEggItem(properties.spawnEgg(AscEntities.TREASURE_RAT.get())));
+
+    public static final DeferredItem<SpawnEggItem> MALE_CULTIVATOR_SPAWN_EGG = npcEgg("male_cultivator", AscEntities.MALE_CULTIVATOR);
+    public static final DeferredItem<SpawnEggItem> FEMALE_CULTIVATOR_SPAWN_EGG = npcEgg("female_cultivator", AscEntities.FEMALE_CULTIVATOR);
+    public static final DeferredItem<SpawnEggItem> SECT_ELDER_SPAWN_EGG = npcEgg("sect_elder", AscEntities.SECT_ELDER);
+    public static final DeferredItem<SpawnEggItem> SECT_MASTER_SPAWN_EGG = npcEgg("sect_master", AscEntities.SECT_MASTER);
+    public static final DeferredItem<SpawnEggItem> YOUNG_MASTER_SPAWN_EGG = npcEgg("young_master", AscEntities.YOUNG_MASTER);
+
+    private static DeferredItem<SpawnEggItem> npcEgg(String name,
+            net.neoforged.neoforge.registries.DeferredHolder<EntityType<?>,
+                    EntityType<net.zic.ascension.common.entities.npc.CultivatorNpcEntity>> entity) {
+        return ITEMS.registerItem(name + "_spawn_egg", properties -> new SpawnEggItem(properties.spawnEgg(entity.get())));
+    }
+
 
 
 
