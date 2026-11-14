@@ -60,6 +60,7 @@ public final class PassiveModifiers {
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> RESOURCES = register("resources", Resources.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> PROJECTILES = register("projectiles", Projectiles.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> WEAPON_DAMAGE = register("weapon_damage", WeaponDamage.CODEC);
+    public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> DUAL_WIELD = register("dual_wield", DualWield.CODEC);
     public static final DeferredHolder<CodecType<PassiveModifier>, CodecType<PassiveModifier>> MOVEMENT = register("movement", Movement.CODEC);
 
     private PassiveModifiers() {
@@ -335,6 +336,34 @@ public final class PassiveModifiers {
             public String getSerializedName() {
                 return name;
             }
+        }
+    }
+
+    /**
+     * Dual wielding. Put this modifier on a passive skill: while the player has that skill, BOTH hands must each hold something
+     * this list accepts, and right-click (on an entity or empty air) becomes an offhand attack using the offhand item.
+     * A hand is accepted by the first "weapons" entry that fits it:
+     *   {"tag": "ascension:weapon/blades", "path": "ascension:weapon/blade"}   an item in that item tag, if the player has that path
+     *   {"empty_hand": true, "path": "ascension:weapon/fist"}                  a bare hand, if the player has that path
+     * "path" is optional (leave it out to need only the tag). Anything not accepted, such as a torch, block, food or shield in the
+     * offhand, makes dual wielding inactive and the offhand behaves exactly like vanilla.
+     */
+    public record DualWield(List<Weapon> weapons) implements PassiveModifier {
+        public static final MapCodec<DualWield> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Weapon.CODEC.listOf().fieldOf("weapons").forGetter(DualWield::weapons)
+        ).apply(instance, DualWield::new));
+
+        public record Weapon(Optional<Identifier> tag, boolean emptyHand, Optional<Identifier> path) {
+            public static final Codec<Weapon> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    Identifier.CODEC.optionalFieldOf("tag").forGetter(Weapon::tag),
+                    Codec.BOOL.optionalFieldOf("empty_hand", false).forGetter(Weapon::emptyHand),
+                    Identifier.CODEC.optionalFieldOf("path").forGetter(Weapon::path)
+            ).apply(instance, Weapon::new));
+        }
+
+        @Override
+        public CodecType<PassiveModifier> getType() {
+            return DUAL_WIELD.get();
         }
     }
 }
