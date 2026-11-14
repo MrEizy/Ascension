@@ -801,6 +801,8 @@ public class AscLangProvider extends LanguageProvider {
         //Physiques
 
         //Ordinary Physiques
+        add("ascension.physique.test.name", "Test Physique");
+        add("ascension.physique.test.desc", "Flip property for testing things easily.");
         add("ascension.physique.five_elements_imbalance.name", "Five Elements Imbalance");
         add("ascension.physique.five_elements_imbalance.desc", "The five elements within the body are in chaos, causing cultivation instability and frequent qi deviations. Those who persevere with this may be surprised.");
         add("ascension.physique.brittle_bone_body.name", "Brittle Bone Body");
@@ -944,7 +946,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.bloodline.ember_spirit.name", "Ember Spirit Bloodline");
         add("ascension.bloodline.ember_spirit.desc", "A minor lineage altered by generations spent beside small fire spirits. Its qi runs warm and answers readily to flame.");
         add("ascension.bloodline.qi_coatings_dev.name", "Qi Coatings Dev Bloodline");
-        add("ascension.bloodline.qi_coatings_dev.desc", "Holds every elemental path so the Qi Coating wheel offers every element. For testing coatings only.");
+        add("ascension.bloodline.qi_coatings_dev.desc", "Flip property for testing things easily.");
         add("ascension.bloodline.deep_spring_spirit.name", "Deep Spring Spirit Bloodline");
         add("ascension.bloodline.deep_spring_spirit.desc", "A spirit-blooded lineage descended from beings born in old mountain springs. Its qi is cool, patient, and difficult to exhaust.");
         add("ascension.bloodline.verdant_flame_spirit.name", "Verdant Flame Spirit Bloodline");
@@ -1001,7 +1003,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.sustained_spirit_art.name", "Sustained Spirit Art");
         add("ascension.technique.sustained_spirit_art.desc", "An ordinary soul art that draws cold spiritual energy inward, quieting needless bodily activity to preserve nourishment and endurance");
         add("ascension.technique.qi_coatings_leftovers.name", "Qi Coatings Leftovers");
-        add("ascension.technique.qi_coatings_leftovers.desc", "A test essence art holding the qi layers and Lightning Step that are not part of the Qi Coating skills.");
+        add("ascension.technique.qi_coatings_leftovers.desc", "Leftover and extra skills and coatings with no home yet, kept here until we decide what to do with them.");
         add("ascension.technique.qi_coatings_dev.name", "Qi Coatings Dev");
         add("ascension.technique.qi_coatings_dev.desc", "A test art granting Qi Coating, External Qi Coating and every qi layer. Pair it with the Qi Coatings Dev Bloodline to unlock every element.");
         add("ascension.technique.imperial_seven_stances.name", "Seven Stance Imperial Army Art");
@@ -1191,7 +1193,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.spherical_devastation.name", "Spherical Devastation");
         add("ascension.skill.spherical_devastation.desc", "Unleash a rotating sphere of annihilating force, scouring everything caught within it and shaking the ground for all who stand nearby.");
         add("ascension.skill.void_pocket.name", "Void Pocket");
-        add("ascension.skill.void_pocket.desc", "Strike the air before you until space caves in and tears open, revealing the void where your ender chest is kept.");
+        add("ascension.skill.void_pocket.desc", "Unravel the space before you and reach into the void to carve out a space to store your personal valuables.");
         // Qi Coating skills: the element is picked in the coating wheel (Shift + skill wheel key).
         add("ascension.skill.qi_coating.name", "Qi Coating");
         add("ascension.skill.qi_coating.desc", "Control innate elemental qi and coat your body. Press Shift + %s to change mode.");
@@ -1274,20 +1276,20 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.qi_step.name", "Qi Steps");
         add("ascension.skill.qi_step.desc", "Use your qi to coat your feet and step on the air to explore beyond the clouds.");
         add("ascension.skill.qi_barrier.name", "Qi Barrier");
-        add("ascension.skill.qi_barrier.desc", "Shape a share of your qi into a bubble of hexagons that takes hits for you until it shatters.");
+        add("ascension.skill.qi_barrier.desc", "Shape qi into a barrier to block damage using the accumulated qi.");
         // Leftover coating skills (Qi Coatings Leftovers test technique).
         add("ascension.skill.water_serpent_qi_layer.name", "Water Qi Layer: Serpent Coil");
-        add("ascension.skill.water_serpent_qi_layer.desc", "Serpents of water qi wind up your arms and legs, bursting into spray as they reach the top. Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.water_serpent_qi_layer.desc", "Shape water qi into a qi coating imitating coiling serpents. Drains 1 qi per second; cast again to release it.");
         add("ascension.skill.ice_mantle_qi_layer.name", "Ice Qi Layer: Glacial Mantle");
-        add("ascension.skill.ice_mantle_qi_layer.desc", "Freeze plates of clear ice over your arms and legs, one by one from the hands and feet up. Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.ice_mantle_qi_layer.desc", "Control ice qi to coat yourself in a layer of ice. Drains 1 qi per second; cast again to release it.");
         add("ascension.skill.metal_golden_body_qi_layer.name", "Metal Qi Layer: Golden Body");
-        add("ascension.skill.metal_golden_body_qi_layer.desc", "Pour molten metal qi over your whole body, from the hands and feet up, cooling into plates of gold. Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.metal_golden_body_qi_layer.desc", "Control metal qi to coat yourself with golden metal, reinforcing yourself and becoming as sturdy as a bronze bell. Drains 1 qi per second; cast again to release it.");
         add("ascension.skill.space_starfield_qi_layer.name", "Space Qi Layer: Starfield");
-        add("ascension.skill.space_starfield_qi_layer.desc", "The starry depths of space show through your whole body. Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.space_starfield_qi_layer.desc", "Control spatial qi and weave the void between space into a protective garment. Drains 1 qi per second; cast again to release it.");
         add("ascension.skill.lightning_step_qi_layer.name", "Lightning Qi Layer: Step");
-        add("ascension.skill.lightning_step_qi_layer.desc", "Lightning qi crackles around your feet and quickens your stride; hold a spear charge to flash forward in a streak of lightning (3 qi). Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.lightning_step_qi_layer.desc", "Control lightning qi and imbue it into your feet to become faster; hold a spear charge to flash forward in a streak of lightning (3 qi). Drains 1 qi per second; cast again to release it.");
         add("ascension.skill.lightning_limb_arcs_qi_layer.name", "Lightning Qi Layer: Crackling Limbs");
-        add("ascension.skill.lightning_limb_arcs_qi_layer.desc", "Lightning qi crackles up your arms and legs, throwing off sparks. Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.lightning_limb_arcs_qi_layer.desc", "Control lightning qi to imbue yourself with an electric field. Drains 1 qi per second; cast again to release it.");
         // Shelved coating, kept for later (its JSON is in src/main/resources-disabled). The Echo layer is kept for a whole-body Time coating.
         // add("ascension.skill.void_echo_qi_layer.name", "Void Qi Layer: Echo");
         // add("ascension.skill.void_echo_qi_layer.desc", "Space cannot hold your whole body in one place, leaving flickering echoes. Drains 1 qi per second; cast again to release it.");

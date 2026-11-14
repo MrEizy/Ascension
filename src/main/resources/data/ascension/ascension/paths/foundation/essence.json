@@ -237,7 +237,8 @@
             "ascension:castable/qi_coating/qi_coating",
             "ascension:passive/qi_coating/qi_coating",
             "ascension:castable/qi_coating/external_qi_coating",
-            "ascension:passive/qi_coating/external_qi_coating"
+            "ascension:passive/qi_coating/external_qi_coating",
+            "ascension:castable/inner_world"
           ]
         }
       ]

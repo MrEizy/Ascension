@@ -13,6 +13,9 @@ import net.minecraft.world.level.biome.Biome;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.physique.Physique;
+import net.zic.ascension.api.ascension.core.technique.Technique;
 
 public class ModTags {
     public static class Blocks {
@@ -137,5 +140,21 @@ public class ModTags {
         public static boolean isListed(Identifier skill, RegistryAccess access) {
             return CoreRegistries.SKILL_REGISTRY.get(access).get(skill).map(holder -> !holder.is(HIDDEN)).orElse(true);
         }
+    }
+
+    // Dev/test entries tagged hidden are left out of the transfer creative tabs (and so out of JEI).
+    public static class Physiques {
+        public static final TagKey<Physique<?>> HIDDEN =
+                TagKey.create(CoreRegistries.PHYSIQUE_REGISTRY.key(), Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "hidden"));
+    }
+
+    public static class Bloodlines {
+        public static final TagKey<Bloodline<?>> HIDDEN =
+                TagKey.create(CoreRegistries.BLOODLINE_REGISTRY.key(), Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "hidden"));
+    }
+
+    public static class Techniques {
+        public static final TagKey<Technique<?>> HIDDEN =
+                TagKey.create(CoreRegistries.TECHNIQUE_REGISTRY.key(), Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "hidden"));
     }
 }
