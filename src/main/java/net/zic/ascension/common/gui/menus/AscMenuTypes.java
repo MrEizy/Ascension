@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.gui.menus.jade_bottle.JadeBottleMenu;
+import net.zic.ascension.common.gui.menus.alchemy.AlchemyFurnaceMenu;
 
 public class AscMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENU_TYPES =
@@ -18,6 +19,9 @@ public class AscMenuTypes {
             MENU_TYPES.register("jade_bottle",
                     () -> IMenuTypeExtension.create(JadeBottleMenu::fromNetwork));
 
+
+    public static final DeferredHolder<MenuType<?>, MenuType<AlchemyFurnaceMenu>> ALCHEMY_FURNACE =
+            MENU_TYPES.register("alchemy_furnace", () -> IMenuTypeExtension.create(AlchemyFurnaceMenu::new));
 
     public static void register(IEventBus modEventBus) {
         MENU_TYPES.register(modEventBus);

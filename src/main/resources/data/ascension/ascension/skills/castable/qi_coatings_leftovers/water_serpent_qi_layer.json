@@ -1,0 +1,22 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.water_serpent_qi_layer.name"
+  },
+  "description": {
+    "translate": "ascension.skill.water_serpent_qi_layer.desc"
+  },
+  "cast": {
+    "mode": "instant"
+  },
+  "cooldown": {
+    "base": 0.5
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:toggle_passive",
+      "skill": "ascension:passive/qi_coatings_leftovers/water_serpent_qi_layer"
+    }
+  ]
+}

@@ -3,6 +3,7 @@ package net.zic.ascension.util;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalImpurities;
 import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -31,7 +32,7 @@ public class CultivationUtil {
         if(!path.equals(secondaryPath) && secondaryPath != null)cultivationAmount += baseRate*(1+PathInteractionUtil.getEffectiveAffinity(caster,secondaryPath));
 
 
-        pathInstance.progressPath(cultivationAmount,source,caster);
+        pathInstance.progressPath(cultivationAmount * MedicinalImpurities.efficiency(caster),source,caster);
 
         AscensionOriginSourceHelper.markPathDirty(source,path);
     }

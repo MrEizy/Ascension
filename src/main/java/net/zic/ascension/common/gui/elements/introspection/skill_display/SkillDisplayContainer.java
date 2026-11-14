@@ -15,14 +15,20 @@ import net.zic.ascension.api.ascension.core.skill.castable.CastableSkill;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
+import net.zic.ascension.common.gui.elements.general.ScrollBar;
+import net.zic.ascension.common.gui.elements.general.TextInputField;
 import net.zic.ascension.common.gui.elements.info.DescriptionDisplayContainer;
+import net.zic.ascension.common.util.ModTags;
 import net.zic.ascension.common.gui.elements.introspection.BackButton;
 import net.zic.ascension.common.gui.elements.introspection.IntrospectionContainer;
 import net.zic.ascension.network.SelectSkillSlotPacket;
 import net.zic.ascension.network.UpdateSkillSlotPacket;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class SkillDisplayContainer extends RenderableElement {
     private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(
@@ -43,6 +49,7 @@ public class SkillDisplayContainer extends RenderableElement {
     private long observedRevision = Long.MIN_VALUE;
     private List<Identifier> displayedSkills = List.of();
     private Identifier selectedSkill;
+    private String searchQuery = "";
 
     public SkillDisplayContainer(UIFrame frame, IntrospectionContainer owner) {
         super(frame);
@@ -60,6 +67,23 @@ public class SkillDisplayContainer extends RenderableElement {
         skillOptions.getPositioning().setX(6);
         skillOptions.getPositioning().setY(43);
         addChild(skillOptions);
+
+        TextInputField searchField = new TextInputField(
+                frame,
+                90,
+                10,
+                Component.translatable("gui.ascension.introspection.search_skills"),
+                32,
+                this::onSearchChanged
+        );
+        searchField.getPositioning().setX(6);
+        searchField.getPositioning().setY(28);
+        addChild(searchField);
+
+        ScrollBar skillScrollBar = new ScrollBar(frame, skillOptions, 10, skillOptions.getHeight());
+        skillScrollBar.getPositioning().setX(98);
+        skillScrollBar.getPositioning().setY(43);
+        addChild(skillScrollBar);
 
         selectedSkillInformation = new DescriptionDisplayContainer(
                 frame,
@@ -154,9 +178,11 @@ public class SkillDisplayContainer extends RenderableElement {
             return;
         }
 
-        List<Identifier> skills = AscensionOriginSourceHelper.getSkills(source).stream()
+        List<Identifier> ownedSkills = AscensionOriginSourceHelper.getSkills(source).stream()
+                .filter(id -> ModTags.Skills.isListed(id, source.getRegistryAccess()))
                 .sorted(Comparator.comparing(Identifier::toString))
                 .toList();
+        List<Identifier> skills = filterBySearch(ownedSkills, source);
 
         if (!skills.equals(displayedSkills)) {
             displayedSkills = skills;
@@ -165,10 +191,17 @@ public class SkillDisplayContainer extends RenderableElement {
 
         if (skills.isEmpty()) {
             selectedSkill = null;
-            showInformation(
-                    Component.translatable("gui.ascension.introspection.no_skills"),
-                    Component.translatable("gui.ascension.introspection.no_skills_description")
-            );
+            if (ownedSkills.isEmpty()) {
+                showInformation(
+                        Component.translatable("gui.ascension.introspection.no_skills"),
+                        Component.translatable("gui.ascension.introspection.no_skills_description")
+                );
+            } else {
+                showInformation(
+                        Component.translatable("gui.ascension.introspection.no_matching_skills"),
+                        Component.translatable("gui.ascension.introspection.no_matching_skills_description")
+                );
+            }
             return;
         }
 
@@ -176,6 +209,34 @@ public class SkillDisplayContainer extends RenderableElement {
             selectedSkill = skills.getFirst();
         }
         showSelectedSkill();
+    }
+
+    private void onSearchChanged(String value) {
+        searchQuery = value.strip().toLowerCase(Locale.ROOT);
+        refreshSynchronizedState();
+    }
+
+    //matches the translated name, names starting with the query come first
+    private List<Identifier> filterBySearch(List<Identifier> skills, OriginSource source) {
+        if (searchQuery.isEmpty()) {
+            return skills;
+        }
+
+        Map<Identifier, String> names = new HashMap<>();
+        for (Identifier skillId : skills) {
+            Skill skill = CoreRegistries.safeAccess(
+                    CoreRegistries.SKILL_REGISTRY,
+                    skillId,
+                    source.getRegistryAccess()
+            );
+            String name = skill == null ? skillId.toString() : skill.getName().getString();
+            names.put(skillId, name.toLowerCase(Locale.ROOT));
+        }
+
+        return skills.stream()
+                .filter(skillId -> names.get(skillId).contains(searchQuery))
+                .sorted(Comparator.comparing((Identifier skillId) -> !names.get(skillId).startsWith(searchQuery)))
+                .toList();
     }
 
     private void showSelectedSkill() {

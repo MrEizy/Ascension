@@ -1,0 +1,14 @@
+{
+  "coverage": "hands",
+  "grow_millis": 1800,
+  "gather": {
+    "style": "patches",
+    "colors": ["#1A0F3A", "#2E1F66", "#4B3A9E", "#E8E6FF"]
+  },
+  "shells": {
+    "look": "ascension:space_starfield",
+    "layers": [
+      { "inflate": 0.3, "reach": 7.6, "overhang": 0.3 }
+    ]
+  }
+}

@@ -10,6 +10,132 @@
             }
           ]
         }
+      },
+      "minecraft:attack_damage": {
+        "ascension:strength": {
+          "multiplier": [
+            {
+              "id": "ascension:strength_damage_scaling",
+              "value": 0.0
+            }
+          ]
+        }
+      },
+      "minecraft:jump_strength": {
+        "ascension:strength": {
+          "multiplier": [
+            {
+              "id": "ascension:strength_jump_scaling",
+              "value": -0.995
+            }
+          ]
+        }
+      },
+      "minecraft:movement_speed": {
+        "ascension:strength": {
+          "multiplier": [
+            {
+              "id": "ascension:strength_movement_scaling",
+              "value": -0.99995
+            }
+          ]
+        },
+        "ascension:agility": {
+          "multiplier": [
+            {
+              "id": "ascension:agility_movement_scaling",
+              "value": -0.998
+            }
+          ]
+        }
+      },
+      "minecraft:attack_speed": {
+        "ascension:strength": {
+          "multiplier": [
+            {
+              "id": "ascension:strength_attack_speed_scaling",
+              "value": -0.999
+            }
+          ]
+        },
+        "ascension:agility": {
+          "multiplier": [
+            {
+              "id": "ascension:agility_attack_speed_scaling",
+              "value": -0.999
+            }
+          ]
+        }
+      },
+      "minecraft:mining_efficiency": {
+        "ascension:strength": {
+          "multiplier": [
+            {
+              "id": "ascension:strength_mining_scaling",
+              "value": -0.999
+            }
+          ]
+        }
+      },
+      "minecraft:safe_fall_distance": {
+        "ascension:strength": {
+          "multiplier": [
+            {
+              "id": "ascension:strength_safe_fall_scaling",
+              "value": -0.9
+            }
+          ]
+        }
+      },
+      "minecraft:step_height": {
+        "ascension:agility": {
+          "multiplier": [
+            {
+              "id": "ascension:agility_step_height_scaling",
+              "value": -0.95
+            }
+          ]
+        }
+      },
+      "ascension:max_stamina": {
+        "ascension:strength": {
+          "multiplier": [
+            {
+              "id": "ascension:strength_max_stamina_scaling",
+              "value": 1.0
+            }
+          ]
+        }
+      },
+      "ascension:stamina_regen_rate": {
+        "ascension:agility": {
+          "multiplier": [
+            {
+              "id": "ascension:agility_stamina_regen_scaling",
+              "value": -0.8
+            }
+          ]
+        }
+      },
+      "ascension:max_qi": {
+        "ascension:spirit": {
+          "multiplier": [
+            {
+              "id": "ascension:spirit_max_qi_scaling",
+              "value": 9.0
+            }
+          ]
+        }
+      },
+      "ascension:qi_regen_rate": {
+        "ascension:spirit": {
+          "multiplier": [
+            {
+              "id": "ascension:spirit_qi_regen_scaling",
+              "value": -0.75
+            }
+          ]
+        }
       }
     }
   }

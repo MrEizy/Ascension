@@ -10,12 +10,15 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
+import net.zic.ascension.api.ascension.core.path.realm.TribulationMode;
+import net.zic.ascension.api.ascension.core.tribulation.TribulationInstance;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.zenithlib.nbt.NbtHelpers;
 import net.zic.zenithlib.network.ByteBufHelpers;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * A path held by an origin source.
@@ -75,6 +78,40 @@ public final class PathInstance<D extends PathData> {
     public Realm getPreviousRealm() {return path.getPreviousRealm(data);}
     public Realm getNextRealm() {return path.getNextRealm(data);}
     public int getMaxMinorRealm(int majorRealm) {return path.getMaxMinorRealm(data, majorRealm);}
+
+    //──Tribulations────────────────────────────────────────────────────────
+
+    //the tribulation of the current realm, null if there is none or the path is not cultivated
+    public @Nullable Identifier getCurrentTribulationId() {
+        if (getCurrentMajorRealm() < 0) return null;
+        return path.getTribulationId(getCurrentMajorRealm(), getCurrentMinorRealm());
+    }
+
+    //how the current realm's tribulation is started
+    public TribulationMode getTribulationMode() {
+        if (getCurrentMajorRealm() < 0) return TribulationMode.AUTO;
+        return path.getTribulationMode(getCurrentMajorRealm(), getCurrentMinorRealm());
+    }
+
+    public boolean canTriggerTribulation(Identifier tribulation) {
+        return path.canTriggerTribulation(data, tribulation);
+    }
+
+    /**
+     * triggers the current realm's MANUAL tribulation, prefer {@link net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper#triggerPathTribulation}
+     * as it also syncs the path
+     * @param tribulation the tribulation the caller expects to trigger
+     * @param beforeStart runs before the tribulation starts, used to modify its data
+     * @return the started tribulation, or null if it could not be triggered
+     */
+    public @Nullable TribulationInstance<?> triggerTribulation(OriginSource source, Identifier tribulation, LivingEntity target,
+                                                               @Nullable Consumer<TribulationInstance<?>> beforeStart) {
+        return path.triggerTribulation(source, this, tribulation, target, beforeStart);
+    }
+
+    public @Nullable TribulationInstance<?> getActiveTribulation() {
+        return path.getActiveTribulation(data);
+    }
 
     //──Dispatch────────────────────────────────────────────────────────
 

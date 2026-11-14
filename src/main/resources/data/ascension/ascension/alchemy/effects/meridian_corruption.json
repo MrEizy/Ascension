@@ -1,0 +1,22 @@
+{
+  "requirements": {
+    "properties": {},
+    "affinities": {},
+    "products": {
+      "ascension:alchemy/reaction/corrupted_essence": 0.4
+    }
+  },
+  "potency_per_unit": 0.7,
+  "duration_ticks": 1600,
+  "adverse": true,
+  "priority": 5,
+  "application": {
+    "action": "skill_effect",
+    "scale": 0.8,
+    "effect": "ascension:paralysis"
+  },
+  "names": [
+    "ascension.alchemy.pill.name.meridian_corruption.0",
+    "ascension.alchemy.pill.name.meridian_corruption.1"
+  ]
+}

@@ -11,6 +11,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyContext;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyEssence;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterial;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterialProvider;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
@@ -66,7 +67,8 @@ public final class AlchemyMaterialProviders {
             double amplifier,
             double purity,
             double instability,
-            double refinementDifficulty
+            double refinementDifficulty,
+            List<MedicinalProfile.Effect> directEffects
     ) implements AlchemyMaterialProvider {
         public static final MapCodec<Herb> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.unboundedMap(Identifier.CODEC, Codec.DOUBLE).optionalFieldOf("properties", Map.of()).forGetter(Herb::properties),
@@ -75,13 +77,15 @@ public final class AlchemyMaterialProviders {
                 Codec.DOUBLE.optionalFieldOf("amplifier", 1.0D).forGetter(Herb::amplifier),
                 Codec.DOUBLE.optionalFieldOf("purity", 1.0D).forGetter(Herb::purity),
                 Codec.DOUBLE.optionalFieldOf("instability", 0.0D).forGetter(Herb::instability),
-                Codec.DOUBLE.optionalFieldOf("refinement_difficulty", 1.0D).forGetter(Herb::refinementDifficulty)
+                Codec.DOUBLE.optionalFieldOf("refinement_difficulty", 1.0D).forGetter(Herb::refinementDifficulty),
+                MedicinalProfile.Effect.CODEC.listOf().optionalFieldOf("direct_effects", List.of()).forGetter(Herb::directEffects)
         ).apply(instance, Herb::new));
 
         public Herb {
             properties = properties == null ? Map.of() : Map.copyOf(properties);
             affinities = affinities == null ? Map.of() : Map.copyOf(affinities);
             rankTiers = rankTiers == null ? List.of() : List.copyOf(rankTiers);
+            directEffects = directEffects == null ? List.of() : List.copyOf(directEffects.stream().limit(8).toList());
             amplifier = finiteNonNegative(amplifier, 1.0D);
             purity = Mth.clamp(Double.isFinite(purity) ? purity : 1.0D, 0.0D, 1.0D);
             instability = finiteNonNegative(instability, 0.0D);

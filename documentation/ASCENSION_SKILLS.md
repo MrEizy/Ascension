@@ -15,6 +15,7 @@ Most normal content should require no Java. Active skills are assembled from tar
 - [Runtime conditions](#runtime-conditions)
 - [Scheduled actions and variables](#scheduled-actions-and-variables)
 - [State and form passives](#state-and-form-passives)
+- [Golden core forming skills](#golden-core-forming-skills)
 - [Techniques](#techniques)
 - [Scaled values](#scaled-values)
 - [Targeting](#targeting)
@@ -243,6 +244,7 @@ Built-in modifiers:
 |---|---|
 | `ascension:stats` | Stats and affinities |
 | `ascension:defense` | Damage/stagger mitigation |
+| `ascension:qi_shield` | Pay part of each hit with qi (or another resource) instead of health |
 | `ascension:resources` | Resource transactions |
 | `ascension:projectiles` | Normal projectile profiles |
 | `ascension:weapon_damage` | Weapon, empty-hand/tag, arrow, or trident damage |
@@ -269,6 +271,24 @@ Example defense:
   "stagger_resistance": 0.15
 }
 ```
+
+Example qi shield (the Qi Coating passive uses this):
+```json
+{
+  "type": "ascension:qi_shield",
+  "share": 0.3,
+  "cost_per_damage": 1.0
+}
+```
+
+| Field | Default | Meaning |
+|---|---|---|
+| `share` | Required | Share of each matching hit (after defences) paid with the resource instead of health, 0 to 1 |
+| `cost_per_damage` | `1.0` | Resource spent per point of damage absorbed |
+| `resource` | `ascension:qi` | The resource that pays |
+| `filter` | All damage | Same filter as `defense` (`include_damage_types`, `include_classifications`, ...) |
+
+When the resource runs out, the shield absorbs only what it could pay for and the rest is taken as normal. Several shields apply one after another.
 
 Weapon-damage matches:
 ```text
@@ -537,6 +557,29 @@ Persistent form visuals use `ascension:persistent_visual`:
 ```
 
 `key` identifies the owned visual instance. Persistent visuals are restored when an enabled passive is attached to the player again, without replaying unrelated enable actions.
+
+# Golden core forming skills
+A castable skill that forms a golden core by triggering a path's manual golden core tribulation. It is instant and grants nothing itself, see `ASCENSION_GOLDEN_CORES.md` for the full flow.
+```json
+{
+  "type": "ascension:golden_core_forming",
+  "name": "Condense Golden Core",
+  "description": "Call down the tribulation that tempers your golden core.",
+  "golden_core": "ascension:test_core",
+  "path": "ascension:foundation/essence",
+  "realm": { "major": 0, "minor": 2 },
+  "cast_time": 60
+}
+```
+| Field | Meaning |
+|---|---|
+| `golden_core` | The golden core the tribulation forms, replacing the tribulation's `default_golden_core` |
+| `path` | The path that must be cultivated, and that the core tracks |
+| `realm` | The realm the path must be at exactly, its tribulation must be an `ascension:golden_core` tribulation with `"tribulation_mode": "manual"` |
+
+| `cast_time` | Optional, default `0`. Ticks the cast input must be held before the tribulation starts, releasing early cancels the cast. `0` starts it straight away |
+
+The cast fails unless the path is held, at exactly `realm`, and that realm's tribulation is ready to be triggered (progress is full and no tribulation is running). The tribulation only starts once the cast completes, and readiness is checked again at that point. Taking damage does not interrupt the cast.
 
 # Techniques
 A technique is a generic source that grants skills (and stats or path bonuses) through its `on_added` actions. It is not tied to a path.

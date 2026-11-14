@@ -1,0 +1,16 @@
+{
+  "type": "ascension:alchemy_technique",
+  "name": "Intense Heating",
+  "description": "Applies aggressive heat for greater yield, increasing thermal strain and reaction risks.",
+  "basic": false,
+  "refinement": {
+    "stage": "heating",
+    "heat": 1.5,
+    "control": 1.9,
+    "yield": 1.12,
+    "purity_delta": -0.04,
+    "instability_delta": 0.15,
+    "safe_energy_bonus": -0.65,
+    "explosion_energy_bonus": -0.3
+  }
+}

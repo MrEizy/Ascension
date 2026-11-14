@@ -17,9 +17,12 @@ in vec4 Color;
 
 out vec2 auraUv;
 out vec4 vertexColor;
+// The vertex relative to the camera, for fragment shaders that shade by the angle a face is seen at (qi_coating.fsh).
+out vec3 viewPosition;
 
 void main() {
-    gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);
+    viewPosition = (ModelViewMat * vec4(Position, 1.0)).xyz;
+    gl_Position = ProjMat * vec4(viewPosition, 1.0);
     auraUv = UV0;
     vertexColor = Color * ColorModulator;
 }

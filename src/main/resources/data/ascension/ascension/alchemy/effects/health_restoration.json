@@ -1,0 +1,21 @@
+{
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/restoration": 1
+    }
+  },
+  "potency_per_unit": 1.0,
+  "duration_ticks": 0,
+  "adverse": false,
+  "priority": 0,
+  "application": {
+    "action": "health",
+    "scale": 0.6
+  },
+  "names": [
+    "ascension.alchemy.pill.name.health_restoration.0",
+    "ascension.alchemy.pill.name.health_restoration.1",
+    "ascension.alchemy.pill.name.health_restoration.2",
+    "ascension.alchemy.pill.name.health_restoration.3"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "ascension:alchemy_technique",
+  "name": "Purifying Stabilization",
+  "description": "Sacrifices a portion of medicinal yield to remove impurities and toxic traces.",
+  "basic": false,
+  "refinement": {
+    "stage": "stabilization",
+    "yield": 0.84,
+    "purity_delta": 0.045,
+    "instability_delta": -0.035,
+    "toxicity_delta": -0.12
+  }
+}

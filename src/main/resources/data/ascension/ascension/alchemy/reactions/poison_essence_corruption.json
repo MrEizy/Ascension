@@ -1,0 +1,24 @@
+{
+  "existing": {
+    "properties": {
+      "ascension:alchemy/nourishment": 1
+    },
+    "affinities": {},
+    "products": {}
+  },
+  "incoming": {
+    "properties": {
+      "ascension:alchemy/circulation": 0.5
+    },
+    "affinities": {
+      "ascension:elemental/poison": 0.5
+    },
+    "products": {}
+  },
+  "priority": 8,
+  "products": {
+    "ascension:alchemy/reaction/corrupted_essence": 0.8
+  },
+  "purity_delta": -0.08,
+  "toxicity_delta": 0.65
+}

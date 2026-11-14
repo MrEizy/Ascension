@@ -9,6 +9,7 @@ import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.components.AscensionComponents;
@@ -30,6 +31,7 @@ public final class AscensionTransferItemTooltipProvider implements ZenithTooltip
     private static final Identifier DEFAULT_BLOODLINE_TEMPLATE = AscensionCraft.prefix("default_bloodline_essence");
     private static final Identifier DEFAULT_PHYSIQUE_TEMPLATE = AscensionCraft.prefix("default_physique_essence");
     private static final Identifier DEFAULT_TECHNIQUE_TEMPLATE = AscensionCraft.prefix("default_technique_manual");
+    private static final Identifier DEFAULT_ALCHEMY_TECHNIQUE_TEMPLATE = AscensionCraft.prefix("default_alchemy_technique");
 
     private static final Identifier BLOODLINE_THEME = AscensionCraft.prefix("bloodline_essence");
     private static final Identifier PHYSIQUE_THEME = AscensionCraft.prefix("physique_essence");
@@ -83,7 +85,7 @@ public final class AscensionTransferItemTooltipProvider implements ZenithTooltip
                             technique.getName(null),
                             technique.getDescription(null),
                             technique.itemTooltip(),
-                            DEFAULT_TECHNIQUE_TEMPLATE,
+                            technique instanceof AlchemyTechnique ? DEFAULT_ALCHEMY_TECHNIQUE_TEMPLATE : DEFAULT_TECHNIQUE_TEMPLATE,
                             TECHNIQUE_THEME
                     );
         }

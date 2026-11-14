@@ -1,0 +1,104 @@
+{
+  "name": {
+    "translate": "ascension.qi_coating.element.metal.name"
+  },
+  "path": "ascension:elemental/metal",
+  "body_coating": "ascension:metal_qi_coating",
+  "external_coating": "ascension:metal_external_qi_coating",
+  "order": 5,
+  "body_on_hit": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "base": 0.05,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ]
+      }
+    },
+    "actions": [
+      {
+        "type": "ascension:damage",
+        "base": {
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:context",
+                "key": "ascension:trigger/damage"
+              },
+              "scale": 0.25
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "scale": 0.25
+            }
+          ]
+        },
+        "damage_type": "ascension:metal_qi",
+        "classifications": [
+          "ascension:qi"
+        ],
+        "path": "ascension:elemental/metal",
+        "subject": "target"
+      }
+    ]
+  },
+  "external_on_hit": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "base": 0.05,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ]
+      }
+    },
+    "actions": [
+      {
+        "type": "ascension:damage",
+        "base": {
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:context",
+                "key": "ascension:trigger/damage"
+              },
+              "scale": 0.25
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "scale": 0.25
+            }
+          ]
+        },
+        "damage_type": "ascension:metal_qi",
+        "classifications": [
+          "ascension:qi"
+        ],
+        "path": "ascension:elemental/metal",
+        "subject": "target"
+      }
+    ]
+  },
+  "external_on_mine": {
+    "fortune": 2
+  }
+}

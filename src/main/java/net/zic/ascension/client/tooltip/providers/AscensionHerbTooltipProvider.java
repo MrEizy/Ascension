@@ -62,6 +62,7 @@ public final class AscensionHerbTooltipProvider implements ZenithTooltipProvider
 
     private static Component herbDescription(HerbDefinition definition) {
         Identifier id = definition.id();
-        return Component.translatable(id.getNamespace() + ".herb." + id.getPath() + ".description");
+        return Component.translatable(id.getNamespace() + ".herb." + id.getPath() + ".description")
+                .append("\n").append(Component.translatable("ascension.alchemy.pill.raw_warning"));
     }
 }

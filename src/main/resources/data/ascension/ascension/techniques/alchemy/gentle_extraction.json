@@ -1,0 +1,12 @@
+{
+  "type": "ascension:alchemy_technique",
+  "name": "Gentle Extraction",
+  "description": "Slowly extracts medicinal essence to improve purity and reduce strain at the cost of yield.",
+  "basic": false,
+  "refinement": {
+    "stage": "extraction",
+    "yield": 0.88,
+    "purity_delta": 0.06,
+    "instability_delta": -0.05
+  }
+}

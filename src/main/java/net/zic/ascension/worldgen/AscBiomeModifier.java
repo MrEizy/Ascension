@@ -6,17 +6,21 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
-import net.minecraft.world.level.biome.Biome;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.worldgen.biome.AscBiomeFeatures;
 import net.zic.ascension.worldgen.biome.AscBiomes;
 
 public class AscBiomeModifier {
+
+    public static final ResourceKey<BiomeModifier> SPAWN_TREASURE_RAT = registerKey("spawn_treasure_rat");
 
     //Ores
     public static final ResourceKey<BiomeModifier> ADD_JADE_ORE = registerKey(("add_jade_ore"));
@@ -45,6 +49,13 @@ public class AscBiomeModifier {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         var biomes = context.lookup(Registries.BIOME);
 
+
+        context.register(SPAWN_TREASURE_RAT, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
+                HolderSet.direct(
+                        biomes.getOrThrow(Biomes.FOREST),
+                        biomes.getOrThrow(Biomes.BIRCH_FOREST)
+                ),
+                new Weighted<>(new MobSpawnSettings.SpawnerData(AscEntities.TREASURE_RAT.get(), 2, 4), 10)));
 
         //Ores
         context.register(ADD_JADE_ORE, new BiomeModifiers.AddFeaturesBiomeModifier(

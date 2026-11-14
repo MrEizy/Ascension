@@ -1,0 +1,22 @@
+{
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/circulation": 6,
+      "ascension:alchemy/nourishment": 5
+    },
+    "affinities": {
+      "ascension:elemental/lightning": 5
+    }
+  },
+  "potency_per_unit": 3.0,
+  "priority": 2,
+  "application": {
+    "action": "cultivation",
+    "scale": 1.0,
+    "path": "ascension:foundation/essence"
+  },
+  "names": [
+    "ascension.alchemy.pill.name.essence_cultivation.0",
+    "ascension.alchemy.pill.name.essence_cultivation.1"
+  ]
+}

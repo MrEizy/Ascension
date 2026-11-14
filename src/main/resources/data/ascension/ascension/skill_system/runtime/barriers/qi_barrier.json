@@ -1,0 +1,50 @@
+{
+  "duration": 1200,
+  "durability": {
+    "base": 15.0,
+    "terms": [
+      {
+        "source": {
+          "type": "ascension:stat",
+          "stat": "ascension:spirit"
+        },
+        "scale": 1.5
+      }
+    ],
+    "minimum": 0.0
+  },
+  "absorption": 1.0,
+  "overflow": true,
+  "overflow_multiplier": 0.5,
+  "solid": true,
+  "suppress_hurt_effects": true,
+  "priority": 100,
+  "replace_existing": true,
+  "filter": {
+    "exclude_damage_types": [
+      "minecraft:fall",
+      "minecraft:drown",
+      "minecraft:starve",
+      "minecraft:in_wall",
+      "minecraft:cramming",
+      "minecraft:fly_into_wall",
+      "minecraft:out_of_world",
+      "minecraft:outside_border",
+      "minecraft:generic_kill"
+    ]
+  },
+  "projectile_response": "discard",
+  "on_break": [
+    {
+      "type": "ascension:sound",
+      "sound": "minecraft:block.glass.break",
+      "volume": 0.9,
+      "pitch": 1.3
+    }
+  ],
+  "visual": {
+    "id": "ascension:qi_barrier",
+    "radius": 0.75,
+    "height": 2.2
+  }
+}

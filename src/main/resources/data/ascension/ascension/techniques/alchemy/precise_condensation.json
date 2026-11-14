@@ -1,0 +1,11 @@
+{
+  "type": "ascension:alchemy_technique",
+  "name": "Precise Condensation",
+  "description": "Condenses with greater quality precision at the cost of medicinal focus control.",
+  "basic": false,
+  "refinement": {
+    "stage": "condensation",
+    "quality_bonus": 0.045,
+    "focus_precision": 0.1
+  }
+}

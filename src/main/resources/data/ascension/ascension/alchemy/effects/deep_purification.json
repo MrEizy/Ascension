@@ -1,0 +1,25 @@
+{
+  "requirements": {
+    "properties": {
+      "ascension:alchemy/cleansing": 14.0,
+      "ascension:alchemy/nourishment": 3.0
+    },
+    "affinities": {
+      "ascension:elemental/water": 5.0,
+      "ascension:elemental/ice": 2.0,
+      "ascension:elemental/moon": 2.0
+    }
+  },
+  "minimum_purity": 0.91,
+  "maximum_instability": 0.35,
+  "potency_per_unit": 2.0,
+  "priority": 12,
+  "application": {
+    "action": "purify_impurities",
+    "scale": 1.0
+  },
+  "names": [
+    "ascension.alchemy.pill.name.deep_purification.0",
+    "ascension.alchemy.pill.name.deep_purification.1"
+  ]
+}

@@ -33,6 +33,7 @@ import net.zic.ascension.common.blocks.crops.mushrooms.LingzhiMushroomBlock;
 import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.ModItems;
+import net.zic.ascension.common.item.geckolibblockitems.AlchemyFurnaceItem;
 import net.zic.ascension.worldgen.tree.AscTreeGrowers;
 import org.jspecify.annotations.NullMarked;
 
@@ -422,9 +423,13 @@ public class ModBlocks {
             properties -> new FermentingBarrelBlock(properties.strength(2).explosionResistance(3.5f)
                     .requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 
-    public static final DeferredBlock<AlchemyFurnaceBlock> ALCHEMY_FURNACE = registerBlock("alchemy_furnace",
+    public static final DeferredBlock<AlchemyFurnaceBlock> ALCHEMY_FURNACE = BLOCKS.registerBlock("alchemy_furnace",
             properties -> new AlchemyFurnaceBlock(properties.strength(3.0F).explosionResistance(6.0F)
-                    .sound(SoundType.STONE)));
+                    .sound(SoundType.STONE).noOcclusion()));
+    static {
+        ModItems.ITEMS.registerItem("alchemy_furnace",
+                properties -> new AlchemyFurnaceItem(ALCHEMY_FURNACE.get(), properties.useBlockDescriptionPrefix()));
+    }
 
     //Cushions
     public static final DeferredBlock<CushionBlockBase> CUSHION_WHITE = registerCushion("cushion_white");

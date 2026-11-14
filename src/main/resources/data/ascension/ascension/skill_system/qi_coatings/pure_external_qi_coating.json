@@ -1,0 +1,15 @@
+{
+  "coverage": "weapon",
+  "grow_millis": 1800,
+  "gather": {
+    "style": "fade",
+    "colors": [
+      "#BFF4FF",
+      "#8FE3F5",
+      "#E6FBFF"
+    ]
+  },
+  "sword": {
+    "look": "ascension:pure_qi"
+  }
+}

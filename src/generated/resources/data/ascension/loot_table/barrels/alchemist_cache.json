@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "count": 3,
+              "function": "ascension:bottled_medicine",
+              "ingredients": [
+                "ascension:jade_dew_grass",
+                "ascension:frostglass_lotus"
+              ]
+            }
+          ],
+          "name": "ascension:jade_bottle"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ascension:barrels/alchemist_cache"
+}

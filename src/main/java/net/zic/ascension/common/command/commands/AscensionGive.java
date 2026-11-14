@@ -12,6 +12,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.common.item.ModItems;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique;
+import net.minecraft.core.component.DataComponents;
 import net.zic.ascension.common.item.components.AscensionComponents;
 
 public class AscensionGive {
@@ -75,6 +77,9 @@ public class AscensionGive {
 
         ItemStack stack = new ItemStack(ModItems.TECHNIQUE_MANUAL.get(),amount);
         stack.set(AscensionComponents.REGISTRY_ID_HOLDER, technique);
+        if (CoreRegistries.TECHNIQUE_REGISTRY.get(context.getSource().registryAccess()).getValue(technique) instanceof AlchemyTechnique alchemy) {
+            stack.set(DataComponents.ITEM_NAME, alchemy.getName(null));
+        }
         context.getSource().getPlayer().addItem(stack);
         return 1;
     }

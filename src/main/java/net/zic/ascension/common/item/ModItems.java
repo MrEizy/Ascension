@@ -1,11 +1,13 @@
 package net.zic.ascension.common.item;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.entities.AscEntities;
 import net.zic.ascension.common.fluids.AscFluids;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionAscendant;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionEarth;
@@ -14,8 +16,7 @@ import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.herbs.ModHerbs;
 import net.zic.ascension.common.item.artifacts.consumable.TabletOfDestructionHuman;
 import net.zic.ascension.common.item.artifacts.pills.JadeBottleItem;
-import net.zic.ascension.common.item.artifacts.pills.ModPills;
-import net.zic.ascension.common.item.artifacts.pills.PillItem;
+import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.qi_holder.SpiritStone;
 import net.zic.ascension.common.item.transfer_item.BloodlineTransferItem;
@@ -25,6 +26,23 @@ import net.zic.zenithlib.registry.RegistryHelper;
 
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(AscensionCraft.MOD_ID);
+
+    public static final DeferredItem<SpawnEggItem> TREASURE_RAT_SPAWN_EGG =
+            ITEMS.registerItem("treasure_rat_spawn_egg",
+                    properties -> new SpawnEggItem(properties.spawnEgg(AscEntities.TREASURE_RAT.get())));
+
+    public static final DeferredItem<SpawnEggItem> MALE_CULTIVATOR_SPAWN_EGG = npcEgg("male_cultivator", AscEntities.MALE_CULTIVATOR);
+    public static final DeferredItem<SpawnEggItem> FEMALE_CULTIVATOR_SPAWN_EGG = npcEgg("female_cultivator", AscEntities.FEMALE_CULTIVATOR);
+    public static final DeferredItem<SpawnEggItem> SECT_ELDER_SPAWN_EGG = npcEgg("sect_elder", AscEntities.SECT_ELDER);
+    public static final DeferredItem<SpawnEggItem> SECT_MASTER_SPAWN_EGG = npcEgg("sect_master", AscEntities.SECT_MASTER);
+    public static final DeferredItem<SpawnEggItem> YOUNG_MASTER_SPAWN_EGG = npcEgg("young_master", AscEntities.YOUNG_MASTER);
+
+    private static DeferredItem<SpawnEggItem> npcEgg(String name,
+            net.neoforged.neoforge.registries.DeferredHolder<EntityType<?>,
+                    EntityType<net.zic.ascension.common.entities.npc.CultivatorNpcEntity>> entity) {
+        return ITEMS.registerItem(name + "_spawn_egg", properties -> new SpawnEggItem(properties.spawnEgg(entity.get())));
+    }
+
 
 
 
@@ -75,7 +93,7 @@ public class ModItems {
             properties -> new HoeItem(AscToolTiers.BLACK_IRON, -4f, -3.0f, properties));
     public static final DeferredItem<Item> BLACK_IRON_SPEAR = ITEMS.registerItem("black_iron_spear",
             properties -> new Item(properties.spear(AscToolTiers.BLACK_IRON, 0.95f, 0.7f, 0.7f,
-                    3-5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
+                    3.5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
 
     public static final DeferredItem<Item> FROST_SILVER_SWORD = ITEMS.registerItem("frost_silver_sword",
             properties -> new Item(properties.sword(AscToolTiers.FROST_SILVER, 2.9f, -2.5f)));
@@ -91,7 +109,7 @@ public class ModItems {
             properties -> new HoeItem(AscToolTiers.FROST_SILVER, -4f, -3.0f, properties));
     public static final DeferredItem<Item> FROST_SILVER_SPEAR = ITEMS.registerItem("frost_silver_spear",
             properties -> new Item(properties.spear(AscToolTiers.FROST_SILVER, 1.0f, 0.7f, 0.7f,
-                    3-5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
+                    3.5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
 
     public static final DeferredItem<Item> SPIRITUAL_STONE_SWORD = ITEMS.registerItem("spiritual_stone_sword",
             properties -> new Item(properties.sword(AscToolTiers.SPIRITUAL_STONE, 6f, -2.3f)));
@@ -107,7 +125,7 @@ public class ModItems {
             properties -> new HoeItem(AscToolTiers.SPIRITUAL_STONE, -1.2f, -3.0f, properties));
     public static final DeferredItem<Item> SPIRITUAL_STONE_SPEAR = ITEMS.registerItem("spiritual_stone_spear",
             properties -> new Item(properties.spear(AscToolTiers.SPIRITUAL_STONE, 2.5f, 0.7f, 0.7f,
-                    3-5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
+                    3.5f, 13f, 8.5f, 5.1f, 13.37f, 4.67f)));
 
 
 
@@ -159,21 +177,10 @@ public class ModItems {
                     .setId(RegistryHelper.key(Registries.ITEM, AscensionCraft.MOD_ID, "jade_bottle"))));
 
     // Pills
+    public static final DeferredItem<Item> PROCEDURAL_PILL = ITEMS.registerItem("procedural_pill",
+            properties -> new ProceduralPillItem(properties.stacksTo(16)));
     public static final DeferredItem<Item> PILL_RESIDUE = ITEMS.registerSimpleItem("pill_residue");
-    public static final DeferredItem<Item> FASTING_PILL = ITEMS.registerItem("fasting_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.FASTING));
-    public static final DeferredItem<Item> QI_REPLENISHING_PILL = ITEMS.registerItem("qi_replenishing_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.QI_REPLENISHING));
-    public static final DeferredItem<Item> REGENERATION_PILL = ITEMS.registerItem("regeneration_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.REGENERATION));
-    public static final DeferredItem<Item> STAMINA_REPLENISHING_PILL = ITEMS.registerItem("stamina_replenishing_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.STAMINA_REPLENISHING));
-    public static final DeferredItem<Item> BODY_CULTIVATION_PILL = ITEMS.registerItem("body_cultivation_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/body"))));
-    public static final DeferredItem<Item> SOUL_CULTIVATION_PILL = ITEMS.registerItem("soul_cultivation_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/soul"))));
-    public static final DeferredItem<Item> ESSENCE_CULTIVATION_PILL = ITEMS.registerItem("essence_cultivation_pill",
-            properties -> new PillItem(properties.stacksTo(16), ModPills.cultivation(AscensionCraft.prefix("foundation/essence"))));
+
 
 
     //Ores

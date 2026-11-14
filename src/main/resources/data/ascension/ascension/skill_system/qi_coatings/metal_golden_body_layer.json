@@ -1,0 +1,6 @@
+{
+  "coverage": "whole_skin",
+  "grow_millis": 2600,
+  "reacts_to": ["hurt", "attack"],
+  "skin": { "look": "ascension:metal" }
+}

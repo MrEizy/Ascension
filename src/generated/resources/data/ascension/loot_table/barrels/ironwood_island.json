@@ -8,16 +8,15 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 3.0,
-                "min": 1.0
-              },
-              "function": "minecraft:set_count"
+              "count": 2,
+              "function": "ascension:bottled_medicine",
+              "ingredients": [
+                "ascension:jade_dew_grass",
+                "ascension:frostglass_lotus"
+              ]
             }
           ],
-          "name": "ascension:qi_replenishing_pill",
+          "name": "ascension:jade_bottle",
           "weight": 21
         },
         {

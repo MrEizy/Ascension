@@ -1,5 +1,6 @@
 package net.zic.ascension.api.ascension.core.tribulation;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.level.ServerLevel;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationType;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -44,10 +45,10 @@ public interface Tribulation<T extends TribulationData> {
 
     /**
      * called on loaded data (both active and completed) to ensure it still matches this tribulation,
-     * the configuration may have changed since it was saved.
+     * the configuration (or the registries it references) may have changed since it was saved.
      * @return the data to use, or null to discard it
      */
-    default @Nullable T validateLoadedData(T data) {
+    default @Nullable T validateLoadedData(T data, RegistryAccess access) {
         return data;
     }
 

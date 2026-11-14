@@ -1,0 +1,20 @@
+{
+  "coverage": "hands",
+  "grow_millis": 1800,
+  "gather": {
+    "style": "specks",
+    "colors": [
+      "#DFF6FF",
+      "#A9DDF5",
+      "#7CC4EA",
+      "#FFFFFF"
+    ]
+  },
+  "reacts_to": [
+    "hurt",
+    "attack"
+  ],
+  "skin": {
+    "look": "ascension:ice"
+  }
+}

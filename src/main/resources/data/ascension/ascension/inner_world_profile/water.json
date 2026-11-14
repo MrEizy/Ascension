@@ -1,0 +1,442 @@
+{
+  "path": "ascension:elemental/water",
+  "weight_multiplier": 1.0,
+  "variants": [
+    {
+      "weight": 1.2,
+      "biome": "minecraft:beach",
+      "palette": {
+        "top": "minecraft:sand",
+        "sub": "minecraft:sand",
+        "stone": "minecraft:sandstone"
+      },
+      "terrain": {
+        "offset": -2.0,
+        "amplitude": 8.0,
+        "frequency": 0.7
+      },
+      "features": [
+        {
+          "type": "pools",
+          "block": "minecraft:water",
+          "density": 0.35
+        },
+        {
+          "type": "rivers",
+          "block": "minecraft:water",
+          "density": 0.315
+        }
+      ],
+      "qi": {
+        "capacity": 350,
+        "regen": 4,
+        "affinity": 1.0
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:lapis_ore",
+            "density": 0.05,
+            "min_depth": 6,
+            "max_depth": 30
+          }
+        ],
+        "treasure": []
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:rabbit",
+            "weight": 5,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:husk",
+            "weight": 6,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:spider",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:creeper",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 1
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:village_desert",
+          "weight": 3.0,
+          "spacing": 320
+        },
+        {
+          "structure": "minecraft:desert_pyramid",
+          "weight": 1.0,
+          "spacing": 360
+        },
+        {
+          "structure": "minecraft:ruined_portal_desert",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
+    },
+    {
+      "weight": 1.0,
+      "biome": "minecraft:warm_ocean",
+      "palette": {
+        "top": "minecraft:clay",
+        "sub": "minecraft:clay",
+        "stone": "minecraft:prismarine"
+      },
+      "terrain": {
+        "amplitude": 18.0,
+        "frequency": 1.0
+      },
+      "features": [
+        {
+          "type": "spires",
+          "block": "minecraft:prismarine",
+          "density": 0.14,
+          "min_size": 2,
+          "max_size": 5,
+          "min_height": 8,
+          "max_height": 22
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:water",
+          "density": 0.25
+        },
+        {
+          "type": "rivers",
+          "block": "minecraft:water",
+          "density": 0.245
+        }
+      ],
+      "qi": {
+        "capacity": 400,
+        "regen": 4,
+        "affinity": 1.2
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:iron_ore",
+            "density": 0.06,
+            "min_depth": 6,
+            "max_depth": 30
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:sea_lantern",
+            "density": 0.15,
+            "min_depth": 10,
+            "max_depth": 24,
+            "radius": 2
+          }
+        ]
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:zombie",
+            "weight": 5,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:skeleton",
+            "weight": 5,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:spider",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:creeper",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 1
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:mineshaft",
+          "weight": 1.0,
+          "spacing": 300
+        },
+        {
+          "structure": "minecraft:ruined_portal",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        },
+        {
+          "structure": "minecraft:trail_ruins",
+          "weight": 1.0,
+          "spacing": 300,
+          "requires_life": false
+        }
+      ]
+    },
+    {
+      "weight": 0.9,
+      "biome": "minecraft:ice_spikes",
+      "palette": {
+        "top": "minecraft:snow_block",
+        "sub": "minecraft:packed_ice",
+        "stone": "minecraft:stone",
+        "decor": [
+          {
+            "block": "minecraft:snow",
+            "chance": 0.08
+          }
+        ]
+      },
+      "terrain": {
+        "amplitude": 20.0,
+        "frequency": 0.9
+      },
+      "features": [
+        {
+          "type": "floating_islands",
+          "block": "minecraft:blue_ice",
+          "density": 0.12,
+          "min_size": 6,
+          "max_size": 13,
+          "min_height": 40,
+          "max_height": 80
+        },
+        {
+          "type": "caves",
+          "density": 0.3
+        },
+        {
+          "type": "pools",
+          "block": "minecraft:ice",
+          "density": 0.15
+        }
+      ],
+      "qi": {
+        "capacity": 300,
+        "regen": 3,
+        "affinity": 1.0
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:diamond_ore",
+            "density": 0.015,
+            "min_depth": 14,
+            "max_depth": 40,
+            "scale": 4.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:blue_ice",
+            "density": 0.2,
+            "min_depth": 14,
+            "max_depth": 30,
+            "radius": 3
+          }
+        ],
+        "herbs": [
+          {
+            "herb": "ascension:snow_ginseng",
+            "density": 0.005
+          }
+        ]
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 2,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:polar_bear",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:rabbit",
+            "weight": 4,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:fox",
+            "weight": 2,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:stray",
+            "weight": 6,
+            "min_group": 1,
+            "max_group": 3
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:village_snowy",
+          "weight": 3.0,
+          "spacing": 320
+        },
+        {
+          "structure": "minecraft:igloo",
+          "weight": 1.0,
+          "spacing": 300
+        },
+        {
+          "structure": "minecraft:ruined_portal",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
+    },
+    {
+      "weight": 0.8,
+      "biome": "minecraft:mangrove_swamp",
+      "palette": {
+        "top": "minecraft:mud",
+        "sub": "minecraft:mud",
+        "stone": "minecraft:stone",
+        "decor": [
+          {
+            "block": "minecraft:brown_mushroom",
+            "chance": 0.01
+          }
+        ]
+      },
+      "terrain": {
+        "offset": -1.0,
+        "amplitude": 10.0,
+        "frequency": 0.8
+      },
+      "features": [
+        {
+          "type": "pools",
+          "block": "minecraft:water",
+          "density": 0.4
+        },
+        {
+          "type": "springs",
+          "density": 0.072
+        },
+        {
+          "type": "rivers",
+          "block": "minecraft:water",
+          "density": 0.21,
+          "shore": "minecraft:mud"
+        }
+      ],
+      "qi": {
+        "capacity": 600,
+        "regen": 6,
+        "affinity": 1.5
+      },
+      "resources": {
+        "ores": [
+          {
+            "block": "minecraft:emerald_ore",
+            "density": 0.02,
+            "min_depth": 10,
+            "max_depth": 34,
+            "scale": 4.0
+          }
+        ],
+        "treasure": [
+          {
+            "block": "minecraft:amethyst_block",
+            "density": 0.18,
+            "min_depth": 12,
+            "max_depth": 28,
+            "radius": 2
+          }
+        ]
+      },
+      "mobs": {
+        "min_realm": 0,
+        "max_realm": 3,
+        "life_multiplier_per_realm": 0.5,
+        "spawns": [
+          {
+            "entity": "minecraft:frog",
+            "weight": 6,
+            "min_group": 1,
+            "max_group": 3
+          },
+          {
+            "entity": "minecraft:slime",
+            "weight": 4,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:bogged",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          },
+          {
+            "entity": "minecraft:witch",
+            "weight": 1,
+            "min_group": 1,
+            "max_group": 1
+          },
+          {
+            "entity": "minecraft:zombie",
+            "weight": 3,
+            "min_group": 1,
+            "max_group": 2
+          }
+        ]
+      },
+      "structures": [
+        {
+          "structure": "minecraft:swamp_hut",
+          "weight": 1.0,
+          "spacing": 320
+        },
+        {
+          "structure": "minecraft:ruined_portal_swamp",
+          "weight": 1.0,
+          "spacing": 256,
+          "requires_life": false
+        }
+      ]
+    }
+  ]
+}

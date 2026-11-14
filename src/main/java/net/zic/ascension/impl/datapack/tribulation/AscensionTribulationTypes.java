@@ -16,6 +16,10 @@ public class AscensionTribulationTypes {
             "lightning",
             LightningTribulationType::new
     );
+    public static final DeferredHolder<TribulationType<?>, GoldenCoreTribulationType> GOLDEN_CORE_TRIBULATION = TRIBULATION_TYPES.register(
+            "golden_core",
+            GoldenCoreTribulationType::new
+    );
     public static void register(IEventBus eventBus){
 
         TRIBULATION_TYPES.register(eventBus);
