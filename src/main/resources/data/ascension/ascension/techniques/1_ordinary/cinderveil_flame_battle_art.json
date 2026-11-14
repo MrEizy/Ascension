@@ -12,8 +12,7 @@
       "skills": [
         "ascension:castable/burning_touch",
         "ascension:castable/new_techniques/cinderburst",
-        "ascension:castable/new_techniques/cinder_sphere",
-        "ascension:castable/inner_world"
+        "ascension:castable/new_techniques/cinder_sphere"
       ]
     }
   ],

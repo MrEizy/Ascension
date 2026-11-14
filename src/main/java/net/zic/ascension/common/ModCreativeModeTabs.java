@@ -19,6 +19,7 @@ import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.artifacts.pills.ModPills;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.common.util.ModTags;
 
 import java.util.function.Supplier;
 
@@ -219,6 +220,7 @@ public class ModCreativeModeTabs {
                             itemDisplayParameters.holders()
                                     .lookupOrThrow(CoreRegistries.PHYSIQUE_REGISTRY.key())
                                     .listElements()
+                                    .filter(holder -> !holder.is(ModTags.Physiques.HIDDEN))
                                     .forEach(holder -> {
                                         Identifier physiqueId = holder.key().identifier();
                                         ItemStack stack = new ItemStack(ModItems.PHYSIQUE_ESSENCE.get());
@@ -237,6 +239,7 @@ public class ModCreativeModeTabs {
                             itemDisplayParameters.holders()
                                     .lookupOrThrow(CoreRegistries.BLOODLINE_REGISTRY.key())
                                     .listElements()
+                                    .filter(holder -> !holder.is(ModTags.Bloodlines.HIDDEN))
                                     .forEach(holder -> {
                                         Identifier bloodlineId = holder.key().identifier();
                                         ItemStack stack = new ItemStack(ModItems.BLOODLINE_ESSENCE.get());
@@ -256,6 +259,7 @@ public class ModCreativeModeTabs {
                             itemDisplayParameters.holders()
                                     .lookupOrThrow(CoreRegistries.TECHNIQUE_REGISTRY.key())
                                     .listElements()
+                                    .filter(holder -> !holder.is(ModTags.Techniques.HIDDEN))
                                     .forEach(holder -> {
                                         Identifier techniqueId = holder.key().identifier();
                                         ItemStack stack = new ItemStack(ModItems.TECHNIQUE_MANUAL.get());

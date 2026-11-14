@@ -12,8 +12,8 @@
       "skills": [
         "ascension:castable/cultivation/plum_blossom_breathing",
         "ascension:passive/plum_blossom_sword_aura",
-        "ascension:castable/sword_flight",
-        "ascension:castable/new_techniques/essence_perception"
+        "ascension:castable/new_techniques/essence_perception",
+        "ascension:castable/sword_flight"
       ]
     }
   ],
