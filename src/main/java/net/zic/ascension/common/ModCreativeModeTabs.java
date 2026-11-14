@@ -130,6 +130,8 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModBlocks.FERMENTING_BARREL);
 
+                        ModBlocks.CUSHIONS.forEach(output::accept);
+
 
                     }).build());
 

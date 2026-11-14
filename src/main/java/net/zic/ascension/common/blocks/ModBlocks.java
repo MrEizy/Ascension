@@ -18,6 +18,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.alchemy.AlchemyFurnaceBlock;
+import net.zic.ascension.common.blocks.custom.CushionBlockBase;
 import net.zic.ascension.common.blocks.custom.SpiritVeinBlock;
 import net.zic.ascension.common.blocks.custom.SpiritualStoneClusterBlock;
 import net.zic.ascension.common.blocks.entity.FermentingBarrelBlock;
@@ -36,6 +37,7 @@ import net.zic.ascension.common.item.geckolibblockitems.AlchemyFurnaceItem;
 import net.zic.ascension.worldgen.tree.AscTreeGrowers;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
 import java.util.function.Function;
 
 @NullMarked
@@ -429,8 +431,37 @@ public class ModBlocks {
                 properties -> new AlchemyFurnaceItem(ALCHEMY_FURNACE.get(), properties.useBlockDescriptionPrefix()));
     }
 
+    //Cushions
+    public static final DeferredBlock<CushionBlockBase> CUSHION_WHITE = registerCushion("cushion_white");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_LIGHT_GRAY = registerCushion("cushion_light_gray");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_GRAY = registerCushion("cushion_gray");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_BLACK = registerCushion("cushion_black");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_BROWN = registerCushion("cushion_brown");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_RED = registerCushion("cushion_red");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_ORANGE = registerCushion("cushion_orange");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_YELLOW = registerCushion("cushion_yellow");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_LIME = registerCushion("cushion_lime");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_GREEN = registerCushion("cushion_green");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_CYAN = registerCushion("cushion_cyan");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_LIGHT_BLUE = registerCushion("cushion_light_blue");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_BLUE = registerCushion("cushion_blue");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_PURPLE = registerCushion("cushion_purple");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_MAGENTA = registerCushion("cushion_magenta");
+    public static final DeferredBlock<CushionBlockBase> CUSHION_PINK = registerCushion("cushion_pink");
+
+    public static final List<DeferredBlock<CushionBlockBase>> CUSHIONS = List.of(
+            CUSHION_WHITE, CUSHION_LIGHT_GRAY, CUSHION_GRAY, CUSHION_BLACK,
+            CUSHION_BROWN, CUSHION_RED, CUSHION_ORANGE, CUSHION_YELLOW,
+            CUSHION_LIME, CUSHION_GREEN, CUSHION_CYAN, CUSHION_LIGHT_BLUE,
+            CUSHION_BLUE, CUSHION_PURPLE, CUSHION_MAGENTA, CUSHION_PINK);
 
 
+
+
+    private static DeferredBlock<CushionBlockBase> registerCushion(String name) {
+        return registerBlock(name, properties -> new CushionBlockBase(properties.strength(0.8f)
+                .sound(SoundType.WOOL).ignitedByLava().noOcclusion()));
+    }
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> function) {
         DeferredBlock<T> toReturn = BLOCKS.registerBlock(name, function);
