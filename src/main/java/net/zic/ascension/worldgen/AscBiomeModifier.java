@@ -174,9 +174,8 @@ public class AscBiomeModifier {
         //Trees
         context.register(ADD_PEACH_TREE, new BiomeModifiers.AddFeaturesBiomeModifier(
                 HolderSet.direct(
-                        biomes.getOrThrow(Biomes.PLAINS),
-                        biomes.getOrThrow(Biomes.MEADOW),
-                        biomes.getOrThrow(Biomes.WINDSWEPT_HILLS),
+                        biomes.getOrThrow(Biomes.FOREST),
+                        biomes.getOrThrow(Biomes.BIRCH_FOREST),
                         biomes.getOrThrow(AscBiomes.GREYSTONE_FOOTHILLS),
                         biomes.getOrThrow(AscBiomes.JADEBLOOM_FOREST),
                         biomes.getOrThrow(AscBiomes.VERDANT_MOOR)
