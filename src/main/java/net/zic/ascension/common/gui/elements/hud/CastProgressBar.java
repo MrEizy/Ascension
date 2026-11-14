@@ -81,7 +81,7 @@ public class CastProgressBar extends RenderableElement {
                         return Optional.empty();
                     }
 
-                    return Optional.of(new CastState(visualState.progress(), CultivationProgressBar.contentFor(formingSkill.path())));
+                    return Optional.of(new CastState(visualState.progress(), CultivationProgressBar.resolveContent(formingSkill.path())));
                 })
         );
     }

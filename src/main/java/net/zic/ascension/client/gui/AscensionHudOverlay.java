@@ -57,6 +57,6 @@ public final class AscensionHudOverlay {
     private static void renderSkillWheel(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
         if (!HudVisibility.isHudVisible()) return;
         SkillWheelOverlay.render(graphics, deltaTracker.getGameTimeDeltaPartialTick(false));
-        QiCoatingWheelOverlay.render(graphics, partialTick);
+        QiCoatingWheelOverlay.render(graphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 }

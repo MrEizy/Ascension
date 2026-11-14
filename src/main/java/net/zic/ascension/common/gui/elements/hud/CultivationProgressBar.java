@@ -198,7 +198,7 @@ public class CultivationProgressBar extends RenderableElement {
 
                     double progress = resolveProgress(pathInstance, pathId, entityData.isCultivationSuppressed(), player.registryAccess());
 
-                    return Optional.of(new CultivationState(progress, contentFor(pathId)));
+                    return Optional.of(new CultivationState(progress, resolveContent(pathId)));
                 });
             });
         });
@@ -249,7 +249,7 @@ public class CultivationProgressBar extends RenderableElement {
     }
 
     //the bar fill for a path, also used by the cast progress bar
-    static ITextureData contentFor(Identifier pathId) {
+    static ITextureData resolveContent(Identifier pathId) {
         if (SOUL_PATH.equals(pathId)) {
             return SOUL_CONTENT;
         }
