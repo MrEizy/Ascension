@@ -767,6 +767,16 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.path.weapon.umbrella.name", "Umbrella");
         add("ascension.path.weapon.umbrella.desc", "cultivate the deceptive grace of the warding canopy, sheltering blow and blade alike");
 
+        //Golden Cores
+        add("ascension.golden_core.test_core.name", "Test Golden Core");
+        add("ascension.golden_core.test_core.desc", "A plain golden core used for testing. It strengthens the body, and grows stronger with every realm its path reaches.");
+        add("ascension.skill.test_golden_core_forming.name", "Test Golden Core Forming");
+        add("ascension.skill.test_golden_core_forming.desc", "Condense your essence into a golden core, calling down the tribulation that tempers it.");
+        add("ascension.skill.golden_core_forming.fail.no_path", "You do not cultivate the required path");
+        add("ascension.skill.golden_core_forming.fail.wrong_realm", "You are not at the required realm");
+        add("ascension.skill.golden_core_forming.fail.no_tribulation", "This realm has no golden core tribulation");
+        add("ascension.skill.golden_core_forming.fail.not_ready", "You are not ready to form a golden core");
+
 
 
         //Physiques

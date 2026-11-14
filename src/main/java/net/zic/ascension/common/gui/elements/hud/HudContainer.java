@@ -43,6 +43,11 @@ public class HudContainer extends RenderableElement {
     }
 
     @Override
+    public boolean isVisible() {
+        return super.isVisible() && HudVisibility.isHudVisible();
+    }
+
+    @Override
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         HUD_TEXTURE.render(graphics);
     }

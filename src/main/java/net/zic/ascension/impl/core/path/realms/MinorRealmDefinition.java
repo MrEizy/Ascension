@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.ascension.core.path.realm.RealmDefinition;
+import net.zic.ascension.api.ascension.core.path.realm.TribulationMode;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 public record MinorRealmDefinition(
         Component name,
         Identifier tribulation,
+        TribulationMode tribulationMode,
         BreakthroughBehaviour breakthroughBehaviour,
         double maxProgress) implements RealmDefinition {
     @Override
@@ -27,6 +29,11 @@ public record MinorRealmDefinition(
     }
 
     @Override
+    public TribulationMode getTribulationMode() {
+        return tribulationMode;
+    }
+
+    @Override
     public double getMaxProgression() {
         return maxProgress;
     }
@@ -37,6 +44,7 @@ public record MinorRealmDefinition(
                             Codec.DOUBLE.fieldOf("progress").forGetter(MinorRealmDefinition::maxProgress),
                             Identifier.CODEC.optionalFieldOf("tribulation").forGetter(
                                     obj-> Optional.ofNullable(obj.tribulation)),
+                            TribulationMode.CODEC.optionalFieldOf("tribulation_mode", TribulationMode.AUTO).forGetter(MinorRealmDefinition::tribulationMode),
                             Codec.either(Codec.INT,Codec.STRING).optionalFieldOf("breakthrough_behaviour", Either.right("instant")).forGetter(
                                     obj->{
                                         if(obj.breakthroughBehaviour == BreakthroughBehaviour.INSTANT) return Either.right("instant");
@@ -44,11 +52,12 @@ public record MinorRealmDefinition(
                                         return Either.left(obj.breakthroughBehaviour.delayTicks());
                                     }
                             )
-                    ).apply(instance, (name,progress,reference,behaviour)->
+                    ).apply(instance, (name,progress,reference,tribulationMode,behaviour)->
                             new
                                     MinorRealmDefinition(
                                     name,
                                     reference.orElse(null),
+                                    tribulationMode,
                                     behaviour.map(BreakthroughBehaviour::new,type->type.equals("instant") ? BreakthroughBehaviour.INSTANT:BreakthroughBehaviour.NONE),
                                     progress
                             )

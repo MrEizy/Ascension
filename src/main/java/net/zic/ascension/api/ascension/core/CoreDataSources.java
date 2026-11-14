@@ -5,6 +5,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineDataSource;
+import net.zic.ascension.api.ascension.core.golden_core.data_source.GoldenCoreDataSource;
 import net.zic.ascension.api.ascension.core.path.PathDataSource;
 import net.zic.ascension.api.ascension.core.path.bonus.data_source.PathBonusDataSource;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueDataSource;
@@ -41,6 +42,10 @@ public class CoreDataSources {
     public static final DeferredHolder<DataSource<?>, PathBonusDataSource> PATH_BONUS_DATA_SOURCE = DATA_SOURCES.register(
             "path_bonus_data_source",
             PathBonusDataSource::new
+    );
+    public static final DeferredHolder<DataSource<?>, GoldenCoreDataSource> GOLDEN_CORE_DATA_SOURCE = DATA_SOURCES.register(
+            "golden_core_data_source",
+            GoldenCoreDataSource::new
     );
     public static void register(IEventBus eventBus){
 

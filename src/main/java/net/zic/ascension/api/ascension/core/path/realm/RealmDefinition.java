@@ -13,4 +13,8 @@ public interface RealmDefinition {
 
     double getMaxProgression();
 
+    default TribulationMode getTribulationMode() {
+        return TribulationMode.AUTO;
+    }
+
 }

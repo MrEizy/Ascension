@@ -106,8 +106,25 @@ UUID id = TribulationManager.get(server)
         .onFailure(new EndBreakthroughResolutionAction(pathId))
         .start();
 ```
+Use `.beforeStart(instance -> ...)` to modify the tribulation's data before `onStart` runs, and `startInstance()` instead of `start()` to get the started `TribulationInstance` back.
+`instance.as(MyTribulation.class)` narrows an instance to a concrete tribulation, so `getData()` returns its own `TribulationData` type. After changing the data of a tribulation that is already running call `instance.markDataDirty()`.
+
 Inside `tick` call `instance.succeed()` or `instance.fail()` to finish the tribulation.
 If the tribulation tracks an entity, extend `EntityTargetingTribulation`, which splits ticking into `tickWithTarget` and `tickWithoutTarget`.
+
+#### Manually triggering a path tribulation
+A realm whose tribulation has `"tribulation_mode": "manual"` waits at full progress instead of starting it. An external source (e.g. a skill) triggers it through the helper, naming the tribulation it expects so a changed realm/datapack is never triggered by mistake:
+```java
+Identifier tribulation = Identifier.parse("ascension:test_tribulation");
+if (AscensionOriginSourceHelper.canTriggerPathTribulation(source, pathId, tribulation)) {
+    TribulationInstance<?> started = AscensionOriginSourceHelper.triggerPathTribulation(source, pathId, tribulation, caster, instance -> {
+        TribulationInstance<MyTribulationData> typed = instance.as(MyTribulation.class);
+        if (typed != null) typed.getData().setStrikes(typed.getData().getStrikes() + 2);
+    });
+}
+TribulationInstance<?> running = AscensionOriginSourceHelper.getActivePathTribulation(source, pathId);
+```
+The trigger only succeeds if the current realm's tribulation is the given one, it is manual, the realm's progress is full and no tribulation is running. Success and failure resolve exactly like an automatic breakthrough tribulation, a failed manual tribulation can be triggered again.
 
 #### Resolution actions
 `TribulationResolutionAction`s are saved alongside the active tribulation, and run once it finishes, only the success or the failure list runs.
@@ -119,8 +136,7 @@ If an action `requiresLoadedTarget()` and the target is not loaded when the trib
 #### Lifecycle
 - tribulations stay in memory while the server runs, but only tick while the chunk they are in is loaded
 - an entity tracking tribulation follows its target, `DimensionChangeBehaviour` decides what happens when the target changes dimension (`STAY` by default, `FOLLOW` or `FAIL`)
-- on load an active tribulation is discarded without running any logic if its id is no longer in the registry, or its data/actions fail to load. `Tribulation.validateLoadedData` can also reject or adjust loaded data
-- `/reload` does not affect running tribulations, restart the server for datapack changes to apply
+- on load an active tribulation is discarded without running any logic if its id is no longer in the registry, or its data/actions fail to load. `Tribulation.validateLoadedData(data, access)` can also reject or adjust loaded data (it gets registry access, so it can check anything the data references still exists)- `/reload` does not affect running tribulations, restart the server for datapack changes to apply
 
 #### Client
 Tribulations are synced to every player tracking the chunk they are in. Register a `TribulationRenderer` for your type with `TribulationRenderers.register(type, renderer)` during client setup to get `clientTick` and `render` hooks. Clients receive the same `TribulationData` as the server instance (`ClientTribulation.getData()`). It is encoded with `TribulationType.dataStreamCodec()`, which defaults to the data codec, override it for a more compact network format. Call `instance.markDataDirty()` when the data changes so it is resent.

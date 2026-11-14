@@ -38,15 +38,15 @@ public class CultivationProgressBar extends RenderableElement {
     private static final Identifier BODY_PATH =
             Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "foundation/body");
 
-    private static final int FRAME_WIDTH = 111;
-    private static final int FRAME_HEIGHT = 53;
+    static final int FRAME_WIDTH = 111;
+    static final int FRAME_HEIGHT = 53;
 
-    private static final int CONTENT_X = 5;
-    private static final int CONTENT_Y = 30;
-    private static final int CONTENT_WIDTH = 101;
-    private static final int CONTENT_HEIGHT = 9;
+    static final int CONTENT_X = 5;
+    static final int CONTENT_Y = 30;
+    static final int CONTENT_WIDTH = 101;
+    static final int CONTENT_HEIGHT = 9;
 
-    private static final ITextureData BACKGROUND =
+    static final ITextureData BACKGROUND =
             new TextureDataSubsection(
                     FRAME_TEXTURE,
                     FRAME_WIDTH,
@@ -129,6 +129,11 @@ public class CultivationProgressBar extends RenderableElement {
     }
 
     @Override
+    public boolean isVisible() {
+        return super.isVisible() && HudVisibility.isHudVisible();
+    }
+
+    @Override
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         Optional<CultivationState> optionalState = getState();
         if (optionalState.isEmpty()) {
@@ -193,7 +198,7 @@ public class CultivationProgressBar extends RenderableElement {
 
                     double progress = resolveProgress(pathInstance, pathId, entityData.isCultivationSuppressed(), player.registryAccess());
 
-                    return Optional.of(new CultivationState(progress, resolveContent(pathId)));
+                    return Optional.of(new CultivationState(progress, contentFor(pathId)));
                 });
             });
         });
@@ -243,7 +248,8 @@ public class CultivationProgressBar extends RenderableElement {
         return Math.clamp(pathInstance.getProgress() / maximum, 0.0D, 1.0D);
     }
 
-    private static ITextureData resolveContent(Identifier pathId) {
+    //the bar fill for a path, also used by the cast progress bar
+    static ITextureData contentFor(Identifier pathId) {
         if (SOUL_PATH.equals(pathId)) {
             return SOUL_CONTENT;
         }
