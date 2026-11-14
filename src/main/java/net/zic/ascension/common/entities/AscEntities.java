@@ -37,6 +37,13 @@ public class AscEntities {
                     .updateInterval(3)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, id)));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<CushionEntity>> CUSHION =
+            ENTITY_TYPES.register("cushion_entity", id -> EntityType.Builder
+                    .of(CushionEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .passengerAttachments(7.0F / 16.0F)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, id)));
+
     public static final DeferredHolder<EntityType<?>, EntityType<TreasureRatEntity>> TREASURE_RAT =
             ENTITY_TYPES.register("treasure_rat", id -> EntityType.Builder
                     .of(TreasureRatEntity::new, MobCategory.CREATURE)
