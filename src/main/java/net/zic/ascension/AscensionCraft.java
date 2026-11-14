@@ -411,6 +411,11 @@ public class AscensionCraft {
                     ClientboundTribulationRemovePacket::handle
             );
             registrar.playToClient(
+                    InnerWorldVeinsPayload.TYPE,
+                    InnerWorldVeinsPayload.CODEC,
+                    InnerWorldVeinsPayload::handle
+            );
+            registrar.playToClient(
                     SpaceRiftPayload.TYPE,
                     SpaceRiftPayload.CODEC,
                     SpaceRiftPayload::handle
@@ -425,6 +430,16 @@ public class AscensionCraft {
                     SpaceRiftInteractPayload.CODEC,
                     SpaceRiftInteractPayload::handle
             );
+//            registrar.playToServer(
+//                    OffhandAttackPayload.TYPE,
+//                    OffhandAttackPayload.CODEC,
+//                    OffhandAttackPayload::handle
+//            );
+//            registrar.playToClient(
+//                    DualWieldStatePayload.TYPE,
+//                    DualWieldStatePayload.CODEC,
+//                    DualWieldStatePayload::handle
+//            );
 
         }
     }
