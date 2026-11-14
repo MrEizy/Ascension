@@ -430,6 +430,16 @@ public class AscensionCraft {
                     SpaceRiftInteractPayload.CODEC,
                     SpaceRiftInteractPayload::handle
             );
+//            registrar.playToServer(
+//                    OffhandAttackPayload.TYPE,
+//                    OffhandAttackPayload.CODEC,
+//                    OffhandAttackPayload::handle
+//            );
+//            registrar.playToClient(
+//                    DualWieldStatePayload.TYPE,
+//                    DualWieldStatePayload.CODEC,
+//                    DualWieldStatePayload::handle
+//            );
 
         }
     }
