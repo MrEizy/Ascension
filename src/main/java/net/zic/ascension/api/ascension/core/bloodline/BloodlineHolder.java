@@ -21,8 +21,13 @@ public class BloodlineHolder implements DataSourceInstance<BloodlineDataSource> 
     private final Set<Identifier> dirtyBloodlines = new HashSet<>();
     private final Set<Identifier> removedBloodlines = new HashSet<>();
 
+    public static final int MAX_BLOODLINES = 4;
+
     public boolean addBloodline(BloodlineInstance<?> instance) {
         if (instance == null || hasBloodline(instance.getBloodlineId())) {
+            return false;
+        }
+        if (bloodlines.size() >= MAX_BLOODLINES) {
             return false;
         }
         Identifier bloodline = instance.getBloodlineId();
