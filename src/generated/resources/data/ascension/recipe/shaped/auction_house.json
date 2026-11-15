@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "black_iron",
+  "key": {
+    "B": "ascension:black_iron_ingot"
+  },
+  "pattern": [
+    "B B",
+    "BBB",
+    "B B"
+  ],
+  "result": {
+    "id": "ascension:auction_house_core"
+  }
+}

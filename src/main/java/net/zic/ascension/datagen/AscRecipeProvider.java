@@ -183,6 +183,26 @@ public class AscRecipeProvider extends RecipeProvider {
                 .save(output, "ascension:shapeless/cultivation_soil");
 
 
+
+        //Auction
+        shaped(RecipeCategory.MISC, ModBlocks.AUCTION_HOUSE_CORE.get())
+                .pattern("B B")
+                .pattern("BBB")
+                .pattern("B B")
+                .define('B', ModItems.BLACK_IRON_INGOT.get())
+                .unlockedBy(getHasName(ModItems.BLACK_IRON_INGOT.get()), has(ModItems.BLACK_IRON_INGOT))
+                .group("black_iron")
+                .save(output, "ascension:shaped/auction_house");
+        shaped(RecipeCategory.MISC, ModBlocks.AUCTION_BIDDER.get())
+                .pattern("BBB")
+                .pattern("B B")
+                .pattern("B B")
+                .define('B', ModItems.BLACK_IRON_INGOT.get())
+                .unlockedBy(getHasName(ModItems.BLACK_IRON_INGOT.get()), has(ModItems.BLACK_IRON_INGOT))
+                .group("black_iron")
+                .save(output, "ascension:shaped/auction_bid");
+
+
         //Artifacts
         shaped(RecipeCategory.MISC, ModItems.TABLET_OF_DESTRUCTION_HUMAN.get(), 8)
                 .pattern("GBG")
