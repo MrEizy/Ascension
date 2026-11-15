@@ -567,7 +567,7 @@ A castable skill that forms a golden core by triggering a path's manual golden c
   "description": "Call down the tribulation that tempers your golden core.",
   "golden_core": "ascension:test_core",
   "path": "ascension:foundation/essence",
-  "realm": { "major": 0, "minor": 2 },
+  "realm": { "major": 1, "minor": 2 },
   "cast_time": 60
 }
 ```

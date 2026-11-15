@@ -5,7 +5,7 @@
   "golden_core": "ascension:test_core",
   "path": "ascension:foundation/essence",
   "realm": {
-    "major": 0,
+    "major": 2,
     "minor": 2
   },
   "cast_time": 60
