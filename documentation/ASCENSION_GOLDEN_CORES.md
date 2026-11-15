@@ -86,7 +86,7 @@ Golden cores are formed through a path breakthrough. Three pieces work together:
      "type": "ascension:golden_core", "strikes": 4, "damage": 2.0, "tick_delay": 10,
      "default_golden_core": "ascension:test_core",
      "default_path": "ascension:foundation/essence",
-     "default_realm": { "major": 0, "minor": 2 }
+     "default_realm": { "major": 2, "minor": 2 }
    }
    ```
    `default_golden_core`, `default_path` and `default_realm` are required. The tribulation always holds a core: it starts with these defaults, so a tribulation started without a forming skill (auto mode, a command, or a realm reached without running it) still forms the default core on the default path and realm. A realm using the tribulation in auto mode therefore needs its own tribulation file with matching defaults. If the held core is removed from the datapack, it falls back to the default on load.

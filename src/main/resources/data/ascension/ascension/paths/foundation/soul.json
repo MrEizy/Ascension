@@ -50,7 +50,9 @@
         },
         {
           "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 1000000000
+          "progress": 1000000000,
+          "tribulation": "ascension:test_tribulation",
+          "tribulation_mode": "auto"
         }
       ]
     },

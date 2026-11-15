@@ -20,9 +20,7 @@
         },
         {
           "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 100000,
-          "tribulation": "ascension:golden_core_tribulation",
-          "tribulation_mode": "manual"
+          "progress": 100000
         }
       ]
     },
@@ -56,7 +54,9 @@
         },
         {
           "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 1000000000
+          "progress": 1000000000,
+          "tribulation": "ascension:golden_core_tribulation",
+          "tribulation_mode": "auto"
         }
       ]
     },

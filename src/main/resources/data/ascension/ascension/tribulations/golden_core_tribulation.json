@@ -6,7 +6,7 @@
   "default_golden_core": "ascension:test_core",
   "default_path": "ascension:foundation/essence",
   "default_realm": {
-    "major": 0,
+    "major": 2,
     "minor": 2
   }
 }
