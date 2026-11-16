@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.Pools;
@@ -17,11 +18,13 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
 import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
+import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
@@ -30,6 +33,7 @@ import net.zic.ascension.AscensionCraft;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class AscStructures {
 
@@ -42,6 +46,7 @@ public class AscStructures {
     public static final ResourceKey<Structure> SWORD_TOMB2 = structureKey("sword_tomb2");
     public static final ResourceKey<Structure> SWORD_TOMB3 = structureKey("sword_tomb3");
     public static final ResourceKey<Structure> FLOATING_IRONWOOD_ISLAND = structureKey("floating_ironwood_island");
+    public static final ResourceKey<Structure> PAGODA_LARGE = structureKey("pagoda_large");
 
 
     public static final ResourceKey<StructureSet> SPIRITUAL_CAVERN_SET = structureSetKey("spiritual_cavern_set");
@@ -49,6 +54,7 @@ public class AscStructures {
     public static final ResourceKey<StructureSet> SWORD_TOMB2_SET = structureSetKey("sword_tomb2_set");
     public static final ResourceKey<StructureSet> SWORD_TOMB3_SET = structureSetKey("sword_tomb3_set");
     public static final ResourceKey<StructureSet> FLOATING_IRONWOOD_ISLAND_SET = structureSetKey("floating_ironwood_island_set");
+    public static final ResourceKey<StructureSet> PAGODA_LARGE_SET = structureSetKey("pagoda_large_set");
 
 
     public static final ResourceKey<StructureTemplatePool> SPIRITUAL_CAVERN_POOL = poolKey("spiritual_caverns/spiritual_cavern_pool");
@@ -56,6 +62,7 @@ public class AscStructures {
     public static final ResourceKey<StructureTemplatePool> SWORD_TOMB2_POOL = poolKey("sword_tombs/sword_tomb2_pool");
     public static final ResourceKey<StructureTemplatePool> SWORD_TOMB3_POOL = poolKey("sword_tombs/sword_tomb3_pool");
     public static final ResourceKey<StructureTemplatePool> FLOATING_IRONWOOD_ISLAND_POOL = poolKey("floating_ironwood_island/floating_ironwood_island_pool");
+    public static final ResourceKey<StructureTemplatePool> PAGODA_LARGE_POOL = poolKey("pagodas/pagoda_large_pool");
 
     public static void bootstrapStructures(BootstrapContext<Structure> context) {
         HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
@@ -103,6 +110,20 @@ public class AscStructures {
                 UniformHeight.of(VerticalAnchor.absolute(90), VerticalAnchor.absolute(250)),
                 false
         ));
+
+        context.register(PAGODA_LARGE, new JigsawStructure(
+                new Structure.StructureSettings(
+                        HolderSet.direct(biomes::getOrThrow, Biomes.FOREST, Biomes.CHERRY_GROVE, Biomes.PLAINS),
+                        Map.of(),
+                        GenerationStep.Decoration.SURFACE_STRUCTURES,
+                        TerrainAdjustment.BEARD_BOX
+                ),
+                pools.getOrThrow(PAGODA_LARGE_POOL),
+                1,
+                ConstantHeight.of(VerticalAnchor.absolute(0)),
+                false,
+                Heightmap.Types.WORLD_SURFACE_WG
+        ));
     }
 
     public static void bootstrapStructureSets(BootstrapContext<StructureSet> context) {
@@ -128,6 +149,15 @@ public class AscStructures {
                 structures.getOrThrow(FLOATING_IRONWOOD_ISLAND),
                 new RandomSpreadStructurePlacement(40, 16, RandomSpreadType.LINEAR, 12244329)
         ));
+        // Kept at least 10 chunks away from villages
+        context.register(PAGODA_LARGE_SET, new StructureSet(
+                structures.getOrThrow(PAGODA_LARGE),
+                new RandomSpreadStructurePlacement(Vec3i.ZERO, StructurePlacement.FrequencyReductionMethod.DEFAULT, 1.0F,
+                        12244330,
+                        Optional.of(new StructurePlacement.ExclusionZone(
+                                context.lookup(Registries.STRUCTURE_SET).getOrThrow(BuiltinStructureSets.VILLAGES), 10)),
+                        50, 20, RandomSpreadType.LINEAR)
+        ));
     }
 
     public static void bootstrapPools(BootstrapContext<StructureTemplatePool> context) {
@@ -141,6 +171,7 @@ public class AscStructures {
         context.register(SWORD_TOMB2_POOL, singleTemplatePool(emptyPool, "sword_tomb2", emptyProcessors));
         context.register(SWORD_TOMB3_POOL, singleTemplatePool(emptyPool, "sword_tomb3", emptyProcessors));
         context.register(FLOATING_IRONWOOD_ISLAND_POOL, singleTemplatePool(emptyPool, "floating_ironwood_island", emptyProcessors));
+        context.register(PAGODA_LARGE_POOL, singleTemplatePool(emptyPool, "pagoda_large", emptyProcessors));
     }
 
     private static JigsawStructure surfaceTomb(Holder<StructureTemplatePool> pool, HolderSet<Biome> biomes) {

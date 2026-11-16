@@ -131,6 +131,10 @@ public final class ResourceTransactionService {
                     resolvedAmount,
                     request.hasFlag(ResourceTransactionRequest.Flag.SIMULATE)
             );
+            if (!request.hasFlag(ResourceTransactionRequest.Flag.SIMULATE)
+                    && (application.status() == Status.SUCCESS || application.status() == Status.PARTIAL)) {
+                resourceType.afterApply(request.entity(), request.operation(), application, request);
+            }
             return finish(new Result(
                     context,
                     application.status(),

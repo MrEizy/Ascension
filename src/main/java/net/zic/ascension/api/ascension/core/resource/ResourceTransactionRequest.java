@@ -72,7 +72,9 @@ public record ResourceTransactionRequest(
         ALLOW_REENTRY,
         BYPASS_MODIFIERS,
         BYPASS_EVENTS,
-        SIMULATE
+        SIMULATE,
+        // Spends without pausing the resource's natural regeneration (slow background drains like body cultivation).
+        KEEP_REGEN_DELAY
     }
 
     public record SourceSelector(

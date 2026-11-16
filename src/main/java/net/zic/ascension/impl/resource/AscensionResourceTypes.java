@@ -11,6 +11,7 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
 import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
 import net.zic.ascension.api.ascension.core.resource.ResourceRegistries;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceType;
 import net.zic.ascension.impl.resource.stamina.StaminaService;
 import net.zic.ascension.mixins.accessor.FoodDataAccessor;
@@ -142,9 +143,11 @@ public final class AscensionResourceTypes {
         public void afterApply(
                 LivingEntity entity,
                 ResourceOperation operation,
-                ResourceOperation.Application result
+                ResourceOperation.Application result,
+                ResourceTransactionRequest request
         ) {
             if (result.appliedAmount() > 0.0D
+                    && !request.hasFlag(ResourceTransactionRequest.Flag.KEEP_REGEN_DELAY)
                     && (operation == ResourceOperation.CONSUME || operation == ResourceOperation.DRAIN)) {
                 StaminaService.resetRegenerationDelay(entity);
             }

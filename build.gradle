@@ -156,7 +156,8 @@ dependencies {
     //jarJar(implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0'))
 
     //implementation 'com.github.MrEizy:ZenithLib:495d40e491'
-    implementation('io.github.oliverhesse:zenithlib:0.1.2')
+    // TEMP: compile against 0.1.2, run with run/mods/zenithlib-0.1.3.jar. Change back to implementation after mavel release
+    compileOnly('io.github.oliverhesse:zenithlib:0.1.2')
     implementation('com.github.OliverHesse:EasyGui:d71b1e115c')
     implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0')
 
