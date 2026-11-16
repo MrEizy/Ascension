@@ -12,7 +12,8 @@
       "skills": [
         "ascension:body_cultivation/rigid_stance_breathing",
         "ascension:passive/rigid_stance_summation_technique/summated_guard",
-        "ascension:castable/rigid_stance_summation_technique/mountain_receives_strike"
+        "ascension:castable/rigid_stance_summation_technique/mountain_receives_strike",
+        "ascension:castable/divine_sense/divine_sense_rigid_stance_summation_technique"
       ]
     }
   ],

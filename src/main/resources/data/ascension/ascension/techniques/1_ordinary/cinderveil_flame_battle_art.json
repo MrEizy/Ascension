@@ -12,7 +12,8 @@
       "skills": [
         "ascension:castable/burning_touch",
         "ascension:castable/new_techniques/cinderburst",
-        "ascension:castable/new_techniques/cinder_sphere"
+        "ascension:castable/new_techniques/cinder_sphere",
+        "ascension:castable/divine_sense/divine_sense_cinderveil_flame_battle_art"
       ]
     }
   ],
