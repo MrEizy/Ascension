@@ -12,7 +12,8 @@
       "skills": [
         "ascension:castable/cultivation/crimson_refinement",
         "ascension:passive/bloodfeast_soul_refining_scripture/crimson_appetite",
-        "ascension:castable/bloodfeast_soul_refining_scripture/bloodfeast_banquet"
+        "ascension:castable/bloodfeast_soul_refining_scripture/bloodfeast_banquet",
+        "ascension:castable/divine_sense/divine_sense_bloodfeast_soul_refining_scripture"
       ]
     }
   ],

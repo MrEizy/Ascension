@@ -13,7 +13,8 @@
         "ascension:castable/cultivation/sword_draw_meditation",
         "ascension:castable/sword_draw_manual/one_breath_draw",
         "ascension:passive/sword_draw_manual/sheathed_edge",
-        "ascension:castable/sword_flight"
+        "ascension:castable/sword_flight",
+        "ascension:castable/divine_sense/divine_sense_sword_draw_manual"
       ]
     }
   ],

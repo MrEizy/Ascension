@@ -12,7 +12,8 @@
       "skills": [
         "ascension:body_cultivation/iron_fist_tempering",
         "ascension:passive/iron_fist_tempering_manual/tempered_knuckles",
-        "ascension:castable/iron_fist_tempering_manual/iron_breaking_fist"
+        "ascension:castable/iron_fist_tempering_manual/iron_breaking_fist",
+        "ascension:castable/divine_sense/divine_sense_iron_fist_tempering_manual"
       ]
     }
   ],

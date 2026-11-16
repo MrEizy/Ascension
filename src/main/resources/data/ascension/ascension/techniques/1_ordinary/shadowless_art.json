@@ -11,7 +11,8 @@
       "type": "ascension:grant_skills",
       "skills": [
         "ascension:castable/shadowless_art/shadowless_step",
-        "ascension:passive/shadowless_art/unseen_circulation"
+        "ascension:passive/shadowless_art/unseen_circulation",
+        "ascension:castable/divine_sense/divine_sense_shadowless_art"
       ]
     }
   ],

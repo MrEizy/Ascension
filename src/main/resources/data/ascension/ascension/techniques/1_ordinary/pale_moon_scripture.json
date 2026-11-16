@@ -14,7 +14,8 @@
         "ascension:passive/pale_moon_scripture/lunar_spirit",
         "ascension:castable/pale_moon_scripture/soul_shift",
         "ascension:castable/pale_moon_scripture/soul_needle",
-        "ascension:castable/pale_moon_scripture/soul_suppression"
+        "ascension:castable/pale_moon_scripture/soul_suppression",
+        "ascension:castable/divine_sense/divine_sense_pale_moon_scripture"
       ]
     }
   ],
