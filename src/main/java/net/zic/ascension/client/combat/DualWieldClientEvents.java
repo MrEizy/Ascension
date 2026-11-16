@@ -13,13 +13,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.network.OffhandAttackPayload;
 
-/**
- * Right-click while dual wielding. Per your rule: if the crosshair is on a BLOCK, vanilla keeps the click (doors, chests, placing);
- * on an entity or empty air, the click becomes an offhand attack. The server re-checks everything, so this only decides whether
- * to send. Clicks are throttled to one per 3 ticks, and the server enforces the real per-hand cooldown.
- *
- * The empty-offhand arm in first person is drawn by DualWieldHandRenderer.
- */
+
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID, value = Dist.CLIENT)
 public final class DualWieldClientEvents {
     private DualWieldClientEvents() {
