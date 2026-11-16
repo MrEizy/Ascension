@@ -301,6 +301,32 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.diamond_blade", "Diamond Blade");
         add("item.ascension.netherite_blade", "Netherite Blade");
 
+        add("item.ascension.copper_chakram", "Copper Chakram");
+        add("item.ascension.iron_chakram", "Iron Chakram");
+        add("item.ascension.golden_chakram", "Golden Chakram");
+        add("item.ascension.diamond_chakram", "Diamond Chakram");
+        add("item.ascension.netherite_chakram", "Netherite Chakram");
+        add("item.ascension.black_iron_chakram", "Black Iron Chakram");
+        add("item.ascension.frost_silver_chakram", "Frost Silver Chakram");
+        add("item.ascension.spiritual_stone_chakram", "Spiritual Stone Chakram");
+
+
+
+        //Enchantments
+        add("enchantment.ascension.ricochet", "Ricochet");
+        add("enchantment.ascension.razor_edge", "Razor Edge");
+        add("enchantment.ascension.swift_return", "Swift Return");
+
+
+
+        //Sounds
+        add("subtitles.ascension.chakram.throw", "Chakram whooshes");
+        add("subtitles.ascension.chakram.ricochet", "Chakram ricochets");
+        add("subtitles.ascension.chakram.hit", "Chakram slices");
+        add("subtitles.ascension.chakram.return", "Chakram returns");
+        add("subtitles.ascension.chakram.catch", "Chakram caught");
+        add("subtitles.ascension.chakram.thud", "Chakram thuds");
+
 
 
 

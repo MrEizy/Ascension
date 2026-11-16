@@ -36,6 +36,8 @@ public class AscBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.SPIRITUAL_STONE_CLUSTER.get());
 
 
+
+
         tag(BlockTags.MINEABLE_WITH_AXE)
                 .add(ModBlocks.PEACH_LOG.get())
                 .add(ModBlocks.PEACH_WOOD.get())
@@ -177,6 +179,34 @@ public class AscBlockTagProvider extends BlockTagsProvider {
                         Blocks.STRUCTURE_BLOCK,
                         Blocks.JIGSAW
                 );
+
+
+
+        tag(ModTags.Blocks.BOUNCY)
+                .add(Blocks.SLIME_BLOCK);
+
+        tag(ModTags.Blocks.NO_RICOCHET)
+                .addTag(BlockTags.WOOL)
+                .addTag(BlockTags.WOOL_CARPETS)
+                .addTag(BlockTags.LEAVES)
+                .addTag(BlockTags.BEDS)
+                .add(Blocks.HAY_BLOCK)
+                .add(Blocks.SNOW_BLOCK)
+                .add(Blocks.SNOW)
+                .add(Blocks.POWDER_SNOW)
+                .add(Blocks.HONEY_BLOCK)
+                .add(Blocks.SPONGE)
+                .add(Blocks.WET_SPONGE)
+                .add(Blocks.COBWEB)
+                .add(Blocks.MUD)
+                .add(Blocks.MOSS_BLOCK)
+                .add(Blocks.MOSS_CARPET)
+                .add(Blocks.TARGET)
+                .add(Blocks.DRIED_KELP_BLOCK);
+
+        tag(ModTags.Blocks.CHAKRAM_DESTRUCTION)
+                .addTag(BlockTags.FLOWER_POTS)
+                .add(Blocks.DECORATED_POT);
 
     }
 }

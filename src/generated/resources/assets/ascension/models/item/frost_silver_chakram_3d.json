@@ -1,0 +1,6 @@
+{
+  "parent": "ascension:item/chakram_3d",
+  "textures": {
+    "layer0": "ascension:item/frost_silver_chakram"
+  }
+}

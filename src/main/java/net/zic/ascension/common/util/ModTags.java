@@ -3,11 +3,14 @@ package net.zic.ascension.common.util;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.biome.Biome;
 import net.zic.ascension.AscensionCraft;
@@ -20,6 +23,7 @@ import net.zic.ascension.api.ascension.core.technique.Technique;
 public class ModTags {
     public static class Blocks {
         public static final TagKey<Block> DESTRUCTIBLE_BLOCKS = createTag("blocks_destruction");
+        public static final TagKey<Block> CHAKRAM_DESTRUCTION = createTag("chakram_destruction");
         public static final TagKey<Block> LINKABLE_CONTAINERS = createTag("linkable_containers");
         public static final TagKey<Block> PROJECTION_UNBREAKABLE = createTag("projection_unbreakable");
         public static final TagKey<Block> HERB_SOILS = createTag("herb_soils");
@@ -37,6 +41,10 @@ public class ModTags {
 
 
 
+        //Weapon Stuff
+        public static final TagKey<Block> NO_RICOCHET = createTag("no_ricochet");
+        public static final TagKey<Block> BOUNCY = createTag("bouncy");
+
 
         private static TagKey<Block> createCommonTag(String path) {
             return BlockTags.create(Identifier.fromNamespaceAndPath("c", path));
@@ -45,6 +53,14 @@ public class ModTags {
         private static TagKey<Block> createTag(String name) {
             return BlockTags.create(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
         }
+    }
+
+    public static class DamageTypes {
+        public static final ResourceKey<DamageType> CHAKRAM =
+                ResourceKey.create(Registries.DAMAGE_TYPE,
+                        Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "chakram"));
+
+        private DamageTypes() {}
     }
 
     public static class Items {
@@ -69,6 +85,8 @@ public class ModTags {
         public static final TagKey<Item> WEAPON_MACES = createItemTag("weapon/maces");
         public static final TagKey<Item> WEAPON_SPEARS = createItemTag("weapon/spears");
 
+        public static final TagKey<Item> CHAKRAMS = createItemTag("weapon/chakrams");
+
         public static final TagKey<Item> C_TOOLS_BLADE = createCommonItemTag("tools/blade");
         public static final TagKey<Item> C_WEAPONS_BLADE = createCommonItemTag("weapons/blade");
         public static final TagKey<Item> C_TOOLS_GAUNTLET = createCommonItemTag("tools/gauntlet");
@@ -90,6 +108,19 @@ public class ModTags {
         private static TagKey<Item> createItemTag(String name) {
             return ItemTags.create(Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
         }
+    }
+
+    public static class Enchantments {
+        public static final TagKey<Enchantment> CHAKRAM = createTag("chakram");
+
+        public static final TagKey<Enchantment> CHAKRAM_EXCLUSIVE = createTag("exclusive_set/chakram");
+
+        private static TagKey<Enchantment> createTag(String name) {
+            return TagKey.create(Registries.ENCHANTMENT,
+                    Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
+        }
+
+        private Enchantments() {}
     }
 
     public static class Biomes {
@@ -125,6 +156,9 @@ public class ModTags {
             return TagKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
         }
     }
+
+
+
 
     public static class Skills {
         // Skills that only back another skill, such as the passive a Qi Coating hotbar skill toggles; left out of skill lists.

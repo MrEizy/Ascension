@@ -59,6 +59,7 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.BLACK_IRON_SWORD);
                         output.accept(ModItems.BLACK_IRON_BLADE);
+                        output.accept(ModItems.BLACK_IRON_CHAKRAM);
                         output.accept(ModItems.BLACK_IRON_PICKAXE);
                         output.accept(ModItems.BLACK_IRON_SHOVEL);
                         output.accept(ModItems.BLACK_IRON_AXE);
@@ -67,6 +68,7 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.FROST_SILVER_SWORD);
                         output.accept(ModItems.FROST_SILVER_BLADE);
+                        output.accept(ModItems.FROST_SILVER_CHAKRAM);
                         output.accept(ModItems.FROST_SILVER_PICKAXE);
                         output.accept(ModItems.FROST_SILVER_SHOVEL);
                         output.accept(ModItems.FROST_SILVER_AXE);
@@ -76,11 +78,13 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.SPIRITUAL_STONE_SWORD);
                         output.accept(ModItems.SPIRITUAL_STONE_BLADE);
+                        output.accept(ModItems.SPIRITUAL_STONE_CHAKRAM);
                         output.accept(ModItems.SPIRITUAL_STONE_PICKAXE);
                         output.accept(ModItems.SPIRITUAL_STONE_SHOVEL);
                         output.accept(ModItems.SPIRITUAL_STONE_AXE);
                         output.accept(ModItems.SPIRITUAL_STONE_HOE);
                         output.accept(ModItems.SPIRITUAL_STONE_SPEAR);
+
 
 
                     }).build());
@@ -205,6 +209,21 @@ public class ModCreativeModeTabs {
             event.insertAfter(Items.DIAMOND_SWORD.getDefaultInstance(), ModItems.DIAMOND_BLADE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(Items.NETHERITE_SWORD.getDefaultInstance(), ModItems.NETHERITE_BLADE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
 
+            event.insertAfter(ModItems.COPPER_BLADE.get().asItem().getDefaultInstance(),
+                    ModItems.COPPER_CHAKRAM.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.IRON_BLADE.get().asItem().getDefaultInstance(),
+                    ModItems.IRON_CHAKRAM.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.GOLD_BLADE.get().asItem().getDefaultInstance(),
+                    ModItems.GOLDEN_CHAKRAM.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.DIAMOND_BLADE.get().asItem().getDefaultInstance(),
+                    ModItems.DIAMOND_CHAKRAM.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.NETHERITE_BLADE.get().asItem().getDefaultInstance(),
+                    ModItems.NETHERITE_CHAKRAM.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
     }
 
