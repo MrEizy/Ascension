@@ -152,6 +152,16 @@ public class AscBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.STRIPPED_PEACH_WOOD.get());
 
         dropSelf(ModBlocks.PEACH_PLANKS.get());
+        dropSelf(ModBlocks.PEACH_STAIRS.get());
+        add(ModBlocks.PEACH_SLAB.get(), createSlabItemTable(ModBlocks.PEACH_SLAB.get()));
+        dropSelf(ModBlocks.PEACH_FENCE.get());
+        dropSelf(ModBlocks.PEACH_FENCE_GATE.get());
+        add(ModBlocks.PEACH_DOOR.get(), createDoorTable(ModBlocks.PEACH_DOOR.get()));
+        dropSelf(ModBlocks.PEACH_TRAPDOOR.get());
+        dropSelf(ModBlocks.PEACH_PRESSURE_PLATE.get());
+        dropSelf(ModBlocks.PEACH_BUTTON.get());
+
+        dropSelf(ModBlocks.PEACH_PLANKS.get());
         dropSelf(ModBlocks.PEACH_SAPLING.get());
 
         add(ModBlocks.POTTED_PEACH_SAPLING.get(), createPotFlowerItemTable(ModBlocks.PEACH_SAPLING.get()));

@@ -450,15 +450,6 @@ public final class PassiveModifiers {
         }
     }
 
-    /**
-     * Dual wielding. Put this modifier on a passive skill: while the player has that skill, BOTH hands must each hold something
-     * this list accepts, and right-click (on an entity or empty air) becomes an offhand attack using the offhand item.
-     * A hand is accepted by the first "weapons" entry that fits it:
-     *   {"tag": "ascension:weapon/blades", "path": "ascension:weapon/blade"}   an item in that item tag, if the player has that path
-     *   {"empty_hand": true, "path": "ascension:weapon/fist"}                  a bare hand, if the player has that path
-     * "path" is optional (leave it out to need only the tag). Anything not accepted, such as a torch, block, food or shield in the
-     * offhand, makes dual wielding inactive and the offhand behaves exactly like vanilla.
-     */
     public record DualWield(List<Weapon> weapons) implements PassiveModifier {
         public static final MapCodec<DualWield> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Weapon.CODEC.listOf().fieldOf("weapons").forGetter(DualWield::weapons)

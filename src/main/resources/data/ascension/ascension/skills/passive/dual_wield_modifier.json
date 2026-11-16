@@ -1,0 +1,9 @@
+{
+  "type": "ascension:dual_wield",
+  "weapons": [
+    { "tag": "ascension:weapon/blades", "path": "ascension:weapon/blade" },
+    { "tag": "ascension:weapon/spears", "path": "ascension:weapon/spear" },
+    { "tag": "ascension:weapon/fists",  "path": "ascension:weapon/fist" },
+    { "empty_hand": true,               "path": "ascension:weapon/fist" }
+  ]
+}

@@ -166,7 +166,7 @@ public class AscModelProvider extends ModelProvider {
 
 
         //Trees
-        blockModels.createTrivialCube(ModBlocks.PEACH_PLANKS.get());
+        blockModels.family(ModBlocks.PEACH_PLANKS.get()).generateFor(AscBlockFamilies.PEACH_PLANKS);
         blockModels.woodProvider(ModBlocks.PEACH_LOG.get()).logWithHorizontal(ModBlocks.PEACH_LOG.get()).wood(ModBlocks.PEACH_WOOD.get());
         blockModels.woodProvider(ModBlocks.STRIPPED_PEACH_LOG.get()).logWithHorizontal(ModBlocks.STRIPPED_PEACH_LOG.get()).wood(ModBlocks.STRIPPED_PEACH_WOOD.get());
 

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "wooden_pressure_plate",
+  "key": {
+    "#": "ascension:peach_planks"
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "id": "ascension:peach_pressure_plate"
+  }
+}

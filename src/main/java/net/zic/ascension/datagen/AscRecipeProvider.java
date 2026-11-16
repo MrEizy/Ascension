@@ -59,6 +59,17 @@ public class AscRecipeProvider extends RecipeProvider {
                     .group("planks")
                     .save(output, "ascension:shapeless/ironwood_planks_from_" + getItemName(log));
         }
+        generateRecipes(AscBlockFamilies.PEACH_PLANKS, FeatureFlags.VANILLA_SET);
+        woodFromLogs(ModBlocks.PEACH_WOOD.get(), ModBlocks.PEACH_LOG.get());
+        woodFromLogs(ModBlocks.STRIPPED_PEACH_WOOD.get(), ModBlocks.STRIPPED_PEACH_LOG.get());
+        for (ItemLike log : List.of(ModBlocks.PEACH_LOG.get(), ModBlocks.PEACH_WOOD.get(),
+                ModBlocks.STRIPPED_PEACH_LOG.get(), ModBlocks.STRIPPED_PEACH_WOOD.get())) {
+            shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.PEACH_PLANKS.get(), 4)
+                    .requires(log)
+                    .unlockedBy(getHasName(log), has(log))
+                    .group("planks")
+                    .save(output, "ascension:shapeless/peach_planks_from_" + getItemName(log));
+        }
 
 
         //Cushions

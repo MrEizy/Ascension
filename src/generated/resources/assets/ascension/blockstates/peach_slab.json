@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "ascension:block/peach_slab"
+    },
+    "type=double": {
+      "model": "ascension:block/peach_planks"
+    },
+    "type=top": {
+      "model": "ascension:block/peach_slab_top"
+    }
+  }
+}

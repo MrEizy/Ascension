@@ -105,8 +105,15 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.PEACH_WOOD);
                         output.accept(ModBlocks.STRIPPED_PEACH_LOG);
                         output.accept(ModBlocks.STRIPPED_PEACH_WOOD);
-
                         output.accept(ModBlocks.PEACH_PLANKS);
+                        output.accept(ModBlocks.PEACH_STAIRS);
+                        output.accept(ModBlocks.PEACH_SLAB);
+                        output.accept(ModBlocks.PEACH_FENCE);
+                        output.accept(ModBlocks.PEACH_FENCE_GATE);
+                        output.accept(ModBlocks.PEACH_DOOR);
+                        output.accept(ModBlocks.PEACH_TRAPDOOR);
+                        output.accept(ModBlocks.PEACH_PRESSURE_PLATE);
+                        output.accept(ModBlocks.PEACH_BUTTON);
                         output.accept(ModBlocks.PEACH_LEAVES);
 
                         output.accept(ModBlocks.PEACH_SAPLING);

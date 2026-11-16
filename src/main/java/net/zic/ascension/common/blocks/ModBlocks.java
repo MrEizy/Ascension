@@ -318,6 +318,33 @@ public class ModBlocks {
                 }
             });
 
+    public static final DeferredBlock<StairBlock> PEACH_STAIRS = registerBlock("peach_stairs",
+            properties -> new StairBlock(ModBlocks.PEACH_PLANKS.get().defaultBlockState(),
+                    properties.mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2f, 3f).ignitedByLava()));
+    public static final DeferredBlock<SlabBlock> PEACH_SLAB = registerBlock("peach_slab",
+            properties -> new SlabBlock(properties.mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2f, 3f).ignitedByLava()));
+
+    public static final DeferredBlock<FenceBlock> PEACH_FENCE = registerBlock("peach_fence",
+            properties -> new FenceBlock(properties.mapColor(MapColor.WOOD).forceSolidOn().sound(SoundType.WOOD)
+                    .strength(2f, 3f).ignitedByLava()));
+    public static final DeferredBlock<FenceGateBlock> PEACH_FENCE_GATE = registerBlock("peach_fence_gate",
+            properties -> new FenceGateBlock(WoodType.OAK, properties.mapColor(MapColor.WOOD).forceSolidOn()
+                    .strength(2f, 3f).ignitedByLava()));
+
+    public static final DeferredBlock<DoorBlock> PEACH_DOOR = registerBlock("peach_door",
+            properties -> new DoorBlock(BlockSetType.OAK, properties.mapColor(MapColor.WOOD).strength(3f)
+                    .noOcclusion().ignitedByLava().pushReaction(PushReaction.DESTROY)));
+    public static final DeferredBlock<TrapDoorBlock> PEACH_TRAPDOOR = registerBlock("peach_trapdoor",
+            properties -> new TrapDoorBlock(BlockSetType.OAK, properties.mapColor(MapColor.WOOD).strength(3f)
+                    .noOcclusion().isValidSpawn(Blocks::never).ignitedByLava()));
+
+    public static final DeferredBlock<PressurePlateBlock> PEACH_PRESSURE_PLATE = registerBlock("peach_pressure_plate",
+            properties -> new PressurePlateBlock(BlockSetType.OAK, properties.mapColor(MapColor.WOOD).forceSolidOn()
+                    .noCollision().strength(0.5f).ignitedByLava().pushReaction(PushReaction.DESTROY)));
+    public static final DeferredBlock<ButtonBlock> PEACH_BUTTON = registerBlock("peach_button",
+            properties -> new ButtonBlock(BlockSetType.OAK, 30, properties.noCollision().strength(0.5f)
+                    .pushReaction(PushReaction.DESTROY)));
+
     public static final DeferredBlock<Block> PEACH_SAPLING = registerBlock("peach_sapling",
             properties -> new SaplingBlock(AscTreeGrowers.PEACH, properties.mapColor(MapColor.PLANT).noCollision()
                     .randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
