@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.Skill;
@@ -102,6 +103,14 @@ public class ModTags {
 
         private static TagKey<Biome> createTag(String name) {
             return TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
+        }
+    }
+
+    public static class Structures {
+        public static final TagKey<Structure> PAGODAS = createTag("pagodas");
+
+        private static TagKey<Structure> createTag(String name) {
+            return TagKey.create(Registries.STRUCTURE, Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
         }
     }
 
