@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_diamond_chakram": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:diamond_chakram"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:netherite_chakram_smithing"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_diamond_chakram"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:netherite_chakram_smithing"
+    ]
+  }
+}

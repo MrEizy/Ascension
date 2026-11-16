@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "chakram",
+  "key": {
+    "T": "minecraft:diamond"
+  },
+  "pattern": [
+    "TTT",
+    "T T",
+    "TTT"
+  ],
+  "result": {
+    "id": "ascension:diamond_chakram"
+  }
+}
