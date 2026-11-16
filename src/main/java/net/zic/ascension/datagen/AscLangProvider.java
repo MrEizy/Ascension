@@ -382,6 +382,14 @@ public class AscLangProvider extends LanguageProvider {
         add("block.ascension.stripped_peach_log", "Stripped Peach Log");
         add("block.ascension.stripped_peach_wood", "Stripped Peach Wood");
         add("block.ascension.peach_planks", "Peach Planks");
+        add("block.ascension.peach_stairs", "Peach Stairs");
+        add("block.ascension.peach_slab", "Peach Slab");
+        add("block.ascension.peach_fence", "Peach Fence");
+        add("block.ascension.peach_fence_gate", "Peach Fence Gate");
+        add("block.ascension.peach_door", "Peach Door");
+        add("block.ascension.peach_trapdoor", "Peach Trapdoor");
+        add("block.ascension.peach_pressure_plate", "Peach Pressure Plate");
+        add("block.ascension.peach_button", "Peach Button");
         add("block.ascension.peach_leaves", "Peach Leaves");
         add("block.ascension.peach_sapling", "Peach Sapling");
         add("block.ascension.potted_peach_sapling", "Potted Peach Sapling");
