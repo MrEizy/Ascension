@@ -35,6 +35,8 @@ import net.zic.ascension.configuration.mob_traits.traits.AscensionTraitTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationResolutionActionTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
 import net.zic.ascension.network.alchemy.ClientboundMedicinalCultivationProgressPacket;
+import net.zic.ascension.network.alchemy.ServerboundStabilizationHitPacket;
+import net.zic.ascension.network.alchemy.ClientboundStabilizationHitResultPacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationAddPacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationRemovePacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationUpdatePacket;
@@ -332,6 +334,16 @@ public class AscensionCraft {
                     RuntimeVisualPacket.TYPE,
                     RuntimeVisualPacket.STREAM_CODEC,
                     RuntimeVisualPacket::handle
+            );
+            registrar.playToServer(
+                    ServerboundStabilizationHitPacket.TYPE,
+                    ServerboundStabilizationHitPacket.STREAM_CODEC,
+                    ServerboundStabilizationHitPacket::handle
+            );
+            registrar.playToClient(
+                    ClientboundStabilizationHitResultPacket.TYPE,
+                    ClientboundStabilizationHitResultPacket.STREAM_CODEC,
+                    ClientboundStabilizationHitResultPacket::handle
             );
             registrar.playToClient(
                     ClientboundMedicinalCultivationProgressPacket.TYPE,

@@ -33,7 +33,8 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
         super(AscMenuTypes.ALCHEMY_FURNACE.get(), id);
         this.furnace = furnace;
         this.container = furnace == null ? new SimpleContainer(4) : furnace.inventory();
-        this.progress = furnace == null ? new SimpleContainerData(7) : furnace.menuData();
+        this.progress = furnace == null || playerInventory.player.level().isClientSide()
+                ? new SimpleContainerData(10) : furnace.menuData();
         addSlot(new Slot(container, 0, 53, 20) {
             @Override public boolean mayPlace(ItemStack stack) { return editable() && AlchemyMaterials.resolve(stack, net.zic.ascension.api.ascension.core.alchemy.AlchemyContext.of(playerInventory.player)).isPresent(); }
             @Override public boolean mayPickup(Player player) { return editable(); }
@@ -62,6 +63,12 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
     private boolean editable() { return furnace == null || furnace.phase() == AlchemyFurnaceBlockEntity.Phase.IDLE; }
     public int phase() { return progress.get(0); }
     public int phaseTicks() { return progress.get(1); }
+    public int phaseDuration(AlchemyFurnaceBlockEntity.Phase phase) {
+        return phase == AlchemyFurnaceBlockEntity.Phase.STABILIZATION
+                ? Math.max(1, progress.get(9)) : AlchemyFurnaceBlockEntity.duration(phase);
+    }
+    public int reactionQiProgress() { return progress.get(7); }
+    public int stabilizationProgress() { return progress.get(8); }
     public int preparationIndex(int index) { return index < 0 || index > 4 ? 0 : progress.get(index + 2); }
 
     public String selectionLabel(int index, Player player) {
@@ -100,11 +107,12 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
                     "Essence yield %.0f%%, purity %+.0f%%, instability %+.0f%%",
                     method.yield() * 100, method.purityDelta() * 100, method.instabilityDelta() * 100);
             case HEATING -> String.format(java.util.Locale.ROOT,
-                    "Heat %.2fx, control %.2fx, yield %.0f%%, instability %+.0f%%",
-                    method.heat(), method.control(), method.yield() * 100, method.instabilityDelta() * 100);
+                    "Heat %.2fx, control %.2fx, yield %.0f%%, instability %+.0f%%, Reaction Qi %.2f/tick",
+                    method.heat(), method.control(), method.yield() * 100, method.instabilityDelta() * 100, method.qiPerTick());
             case STABILIZATION -> String.format(java.util.Locale.ROOT,
-                    "Yield %.0f%%, purity %+.0f%%/herb, instability %+.0f%%/herb",
-                    method.yield() * 100, method.purityDelta() * 100, method.instabilityDelta() * 100);
+                    "Yield %.0f%%, purity %+.0f%%/herb, instability %+.0f%%/herb, targets %d, required score %.0f%%",
+                    method.yield() * 100, method.purityDelta() * 100, method.instabilityDelta() * 100,
+                    method.stabilization().targetCount(), method.stabilization().requiredScore() * 100);
             case CONDENSATION -> String.format(java.util.Locale.ROOT,
                     "Ingredient quality %+.0f%%, focus precision %.0f%%",
                     method.qualityBonus() * 100, method.focusPrecision() * 100);

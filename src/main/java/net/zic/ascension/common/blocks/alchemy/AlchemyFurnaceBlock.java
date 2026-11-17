@@ -68,7 +68,7 @@ public class AlchemyFurnaceBlock extends HorizontalDirectionalBlock implements E
         if (level.isClientSide()) return InteractionResult.SUCCESS;
         if (player instanceof ServerPlayer serverPlayer && level.getBlockEntity(pos) instanceof AlchemyFurnaceBlockEntity furnace) {
             if (player.isShiftKeyDown()) {
-                if (!furnace.start()) {
+                if (!furnace.start(player)) {
                     serverPlayer.sendOverlayMessage(Component.literal(
                             "Cannot begin refinement: check ingredients, output and furnace state."));
                 }

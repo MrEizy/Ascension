@@ -44,6 +44,7 @@ import net.zic.ascension.common.gui.menus.AscMenuTypes;
 import net.zic.ascension.common.gui.menus.jade_bottle.JadeBottleScreen;
 import net.zic.ascension.common.gui.menus.alchemy.AlchemyFurnaceScreen;
 import net.zic.ascension.client.renderer.alchemy.AlchemyFurnaceRenderer;
+import net.zic.ascension.client.alchemy.AlchemyStabilizationClient;
 import net.zic.ascension.common.blocks.entity.AscBlockEntities;
 import net.zic.ascension.common.particle.AscensionParticles;
 import net.zic.ascension.network.WeaponSwingRequestPacket;
@@ -66,6 +67,7 @@ public class AscensionCraftClient {
         modEventBus.addListener(AscensionCraftClient::registerKeyBindings);
         modEventBus.addListener(ClientEvents::onClientSetup);
         modEventBus.addListener(AscensionHudOverlay::registerGuiLayers);
+        modEventBus.addListener(AlchemyStabilizationClient::registerGuiLayers);
         NeoForge.EVENT_BUS.addListener(AscensionHudOverlay::hideVanillaHealth);
 
     }
