@@ -30,12 +30,14 @@
 * Moved Spawn Eggs into Spawn Egg Tab
 * Tweaked the progression between realms
 * Decreased chance for Young Master to spawn in villages
+* Older herbs gain a +45% increase in properties per growth-stage :)
 
 ### Fixes
 * Fixed Peach Planks not having a Recipe.
 * Fixed Body Cultivation skills by making them toggleable
 * Auction House and Bidder not opening GUIs
 * NPC Guidance now actual gives randomly selected techniques from their respective pools
+* Jade Bottle Tooltip now shows pill and pill expiry instead of placeholder values
 
 ### Technical Changes
 * Moved nested ToggleablePassiveSkill class out of PassiveSkill for reusability
