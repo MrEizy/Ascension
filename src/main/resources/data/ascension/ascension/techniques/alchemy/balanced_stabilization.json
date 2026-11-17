@@ -9,10 +9,11 @@
     "instability_delta": -0.08,
     "stabilization": {
       "target_count": 5,
-      "approach_ticks": 16,
-      "interval_ticks": 11,
-      "perfect_window": 2,
-      "good_window": 5,
+      "prepare_ticks": 20,
+      "approach_ticks": 30,
+      "interval_ticks": 36,
+      "perfect_window": 4,
+      "good_window": 8,
       "required_score": 0.7,
       "pattern": "sweep"
     }

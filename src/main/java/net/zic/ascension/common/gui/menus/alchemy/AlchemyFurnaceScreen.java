@@ -61,7 +61,7 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
 
         int ordinal = Math.max(0, Math.min(AlchemyFurnaceBlockEntity.Phase.values().length - 1, menu.phase()));
         AlchemyFurnaceBlockEntity.Phase phase = AlchemyFurnaceBlockEntity.Phase.values()[ordinal];
-        int duration = AlchemyFurnaceBlockEntity.duration(phase);
+        int duration = menu.phaseDuration(phase);
         String label = switch (phase) {
             case IDLE -> "Ready";
             case EXTRACTION -> "Extract";

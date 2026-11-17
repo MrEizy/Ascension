@@ -81,6 +81,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
             if (index == 6) return plan.focusIndex(level.registryAccess());
             if (index == 7) return reactionQiProgress();
             if (index == 8) return stabilizationProgress();
+            if (index == 9) return stabilizationSettings.durationTicks();
             return 0;
         }
         @Override public void set(int index, int value) {
@@ -90,7 +91,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
                 plan = plan.indexed(level.registryAccess(), AlchemyTechnique.Stage.values()[index - 2], value);
             if (level != null && index == 6) plan = plan.indexedFocus(level.registryAccess(), value);
         }
-        @Override public int getCount() { return 9; }
+        @Override public int getCount() { return 10; }
     };
     private Phase phase = Phase.IDLE;
     private int phaseTicks;
@@ -155,6 +156,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     }
     public boolean isRunning() { return phase != Phase.IDLE && phase != Phase.SUCCESS && phase != Phase.FAILURE; }
     public static int duration(Phase phase) { return phase == Phase.SUCCESS || phase == Phase.FAILURE ? 60 : PHASE_TICKS; }
+    public int phaseDuration() { return phase == Phase.STABILIZATION ? stabilizationSettings.durationTicks() : duration(phase); }
     public boolean canStart() {
         if (phase != Phase.IDLE || !items.getItem(OUTPUT_SLOT).isEmpty()) return false;
         for (int i = 0; i < MAX_INGREDIENTS; i++) if (!items.getItem(i).isEmpty()) return true;
@@ -199,7 +201,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     public static void serverTick(Level level, BlockPos pos, BlockState state, AlchemyFurnaceBlockEntity furnace) {
         if (!(level instanceof ServerLevel serverLevel) || furnace.phase == Phase.IDLE) return;
         if (furnace.phase == Phase.REACTION) furnace.supplyReactionQi(serverLevel);
-        if (++furnace.phaseTicks < duration(furnace.phase)) {
+        if (++furnace.phaseTicks < furnace.phaseDuration()) {
             if (furnace.phaseTicks % 20 == 0) furnace.setChanged();
             return;
         }
@@ -346,12 +348,6 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
             stabilizationSeed = serverLevel.getRandom().nextLong();
             stabilizationHitMask = 0;
             stabilizationScore = 0;
-            if (alchemistId != null) {
-                Player alchemist = serverLevel.getServer().getPlayerList().getPlayer(alchemistId);
-                if (alchemist != null && alchemist.level() == serverLevel) {
-                    alchemist.sendOverlayMessage(Component.literal("Stabilization: left-click glowing targets as the rings close"));
-                }
-            }
         }
         phase = next;
         phaseTicks = 0;
@@ -406,7 +402,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         ingredientCount = Math.max(0, Math.min(MAX_INGREDIENTS, input.getIntOr("IngredientCount", 0)));
         batchIngredientQuality = Mth.clamp(input.getDoubleOr("BatchIngredientQuality", 0.35D), 0.0D, 1.0D);
         phase = Phase.values()[Mth.clamp(input.getIntOr("Phase", 0), 0, Phase.values().length - 1)];
-        phaseTicks = Mth.clamp(input.getIntOr("PhaseTicks", 0), 0, PHASE_TICKS);
+        phaseTicks = Math.max(0, input.getIntOr("PhaseTicks", 0));
         ruined = input.getBooleanOr("Ruined", false);
         plan = input.read("RefinementPlan", AlchemyRefinementPlan.CODEC).orElse(AlchemyRefinementPlan.DEFAULT);
         String storedAlchemist = input.getStringOr("Alchemist", "");
@@ -423,6 +419,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         reactionGradePenalty = Mth.clamp(input.getIntOr("ReactionGradePenalty", 0), 0, 1);
         stabilizationSettings = input.read("StabilizationSettings", AlchemyStabilization.Settings.CODEC)
                 .orElse(AlchemyStabilization.Settings.DEFAULT);
+        phaseTicks = Math.min(phaseTicks, phaseDuration());
         stabilizationStartTick = input.getLongOr("StabilizationStartTick", 0L);
         stabilizationSeed = input.getLongOr("StabilizationSeed", 0L);
         stabilizationHitMask = input.getIntOr("StabilizationHitMask", 0)

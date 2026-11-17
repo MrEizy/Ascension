@@ -11,10 +11,11 @@
     "safe_energy_bonus": 0.9,
     "stabilization": {
       "target_count": 7,
-      "approach_ticks": 13,
-      "interval_ticks": 9,
-      "perfect_window": 2,
-      "good_window": 4,
+      "prepare_ticks": 20,
+      "approach_ticks": 26,
+      "interval_ticks": 29,
+      "perfect_window": 3,
+      "good_window": 7,
       "required_score": 0.72,
       "pattern": "alternating"
     }

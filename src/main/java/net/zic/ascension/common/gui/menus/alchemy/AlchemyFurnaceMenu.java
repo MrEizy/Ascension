@@ -34,7 +34,7 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
         this.furnace = furnace;
         this.container = furnace == null ? new SimpleContainer(4) : furnace.inventory();
         this.progress = furnace == null || playerInventory.player.level().isClientSide()
-                ? new SimpleContainerData(9) : furnace.menuData();
+                ? new SimpleContainerData(10) : furnace.menuData();
         addSlot(new Slot(container, 0, 53, 20) {
             @Override public boolean mayPlace(ItemStack stack) { return editable() && AlchemyMaterials.resolve(stack, net.zic.ascension.api.ascension.core.alchemy.AlchemyContext.of(playerInventory.player)).isPresent(); }
             @Override public boolean mayPickup(Player player) { return editable(); }
@@ -63,6 +63,10 @@ public class AlchemyFurnaceMenu extends AbstractContainerMenu {
     private boolean editable() { return furnace == null || furnace.phase() == AlchemyFurnaceBlockEntity.Phase.IDLE; }
     public int phase() { return progress.get(0); }
     public int phaseTicks() { return progress.get(1); }
+    public int phaseDuration(AlchemyFurnaceBlockEntity.Phase phase) {
+        return phase == AlchemyFurnaceBlockEntity.Phase.STABILIZATION
+                ? Math.max(1, progress.get(9)) : AlchemyFurnaceBlockEntity.duration(phase);
+    }
     public int reactionQiProgress() { return progress.get(7); }
     public int stabilizationProgress() { return progress.get(8); }
     public int preparationIndex(int index) { return index < 0 || index > 4 ? 0 : progress.get(index + 2); }

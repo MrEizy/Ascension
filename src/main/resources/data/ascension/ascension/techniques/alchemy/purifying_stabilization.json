@@ -11,10 +11,11 @@
     "toxicity_delta": -0.12,
     "stabilization": {
       "target_count": 6,
-      "approach_ticks": 16,
-      "interval_ticks": 10,
-      "perfect_window": 2,
-      "good_window": 4,
+      "prepare_ticks": 22,
+      "approach_ticks": 30,
+      "interval_ticks": 34,
+      "perfect_window": 3,
+      "good_window": 7,
       "required_score": 0.75,
       "pattern": "shuffled"
     }

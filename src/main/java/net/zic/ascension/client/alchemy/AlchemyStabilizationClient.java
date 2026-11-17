@@ -52,14 +52,26 @@ public final class AlchemyStabilizationClient {
         if (furnace == null || !owner(furnace, minecraft.player)) return;
         int width = minecraft.getWindow().getGuiScaledWidth();
         int height = minecraft.getWindow().getGuiScaledHeight();
-        int total = furnace.stabilizationSettings().targetCount();
+        AlchemyStabilization.Settings settings = furnace.stabilizationSettings();
+        int total = settings.targetCount();
         int completed = Integer.bitCount(furnace.stabilizationHitMask());
         int score = total == 0 ? 0 : Math.round(100.0F * furnace.stabilizationScore() / (100.0F * total));
-        String label = "Stabilization " + score + "%  |  " + completed + "/" + total;
-        int left = (width - minecraft.font.width(label)) / 2;
-        int y = height / 2 + 28;
-        graphics.fill(left - 6, y - 3, left + minecraft.font.width(label) + 6, y + 12, 0xB51B2730);
-        graphics.text(minecraft.font, Component.literal(label), left, y, 0xFFDFF5FF, false);
+        long elapsed = minecraft.level.getGameTime() - furnace.stabilizationStartTick();
+        String label = elapsed < settings.prepareTicks()
+                ? "Stabilize  |  Get ready"
+                : "Stabilize " + score + "%  |  " + completed + "/" + total;
+        int textWidth = minecraft.font.width(label);
+        int boxWidth = Math.max(132, textWidth + 14);
+        int left = (width - boxWidth) / 2;
+        int top = height - 73;
+        graphics.fill(left, top, left + boxWidth, top + 20, 0xB22D2115);
+        graphics.fill(left + 1, top + 1, left + boxWidth - 1, top + 2, 0xB7B98A45);
+        graphics.text(minecraft.font, Component.literal(label), (width - textWidth) / 2, top + 4, 0xFFFBE1A5, false);
+        int barLeft = left + 7;
+        int barRight = left + boxWidth - 7;
+        graphics.fill(barLeft, top + 15, barRight, top + 17, 0x88624C32);
+        graphics.fill(barLeft, top + 15, barLeft + (barRight - barLeft) * score / 100,
+                top + 17, 0xFFF5B54C);
     }
 
     @SubscribeEvent
@@ -177,13 +189,13 @@ public final class AlchemyStabilizationClient {
                 if (remaining > settings.approachTicks() || remaining < -settings.goodWindow()) continue;
                 Vec3 world = AlchemyStabilization.position(pos, furnace.getBlockState(),
                         AlchemyStabilization.targetPosition(settings, seed, i));
-                drawTarget(pose, vertices, world.subtract(camera), camera.subtract(world), remaining, settings);
+                drawTarget(pose, vertices, world.subtract(camera), camera.subtract(world), remaining, tick, settings);
             }
         });
     }
 
     private static void drawTarget(PoseStack.Pose pose, VertexConsumer vertices, Vec3 point, Vec3 toCamera,
-                                   float remaining, AlchemyStabilization.Settings settings) {
+                                   float remaining, float tick, AlchemyStabilization.Settings settings) {
         if (toCamera.lengthSqr() < 0.001D) return;
         Vec3 normal = toCamera.normalize();
         Vec3 upHint = Math.abs(normal.y) > 0.98D
@@ -192,11 +204,33 @@ public final class AlchemyStabilizationClient {
         if (right.lengthSqr() < 0.001D) return;
         Vec3 up = normal.cross(right).normalize();
         float progress = Math.max(0.0F, Math.min(1.0F, remaining / settings.approachTicks()));
-        double radius = 0.052D + 0.135D * progress;
-        int ringColor = Math.abs(remaining) <= settings.perfectWindow() ? 0xEFFFF0AB : 0xDFA3EDFF;
-        addDisc(pose, vertices, point, right, up, 0.033D, 0xE7C8F6FF);
-        addRing(pose, vertices, point, right, up, 0.045D, 0.052D, 0xA456B7F1);
-        addRing(pose, vertices, point, right, up, radius - 0.007D, radius, ringColor);
+        float pulse = 0.5F + 0.5F * (float) Math.sin(tick * 0.2F);
+        double radius = 0.074D + 0.175D * progress;
+        int ringColor = Math.abs(remaining) <= settings.perfectWindow() ? 0xFFFFE7A2 : 0xEFFFBA4F;
+        addDisc(pose, vertices, point, right, up, 0.066D + 0.006D * pulse, 0x6EFFA536);
+        addDisc(pose, vertices, point, right, up, 0.047D, 0xFFF8CB70);
+        addDisc(pose, vertices, point, right, up, 0.021D, 0xFFFFF2C4);
+        addRing(pose, vertices, point, right, up, 0.065D, 0.073D, 0xCFFFD185);
+        addRing(pose, vertices, point, right, up, radius - 0.010D, radius, ringColor);
+        addArc(pose, vertices, point, right, up, 0.092D, 0.101D,
+                tick * 0.105D, Math.PI * 0.64D, 0xBFFFD47E);
+        addArc(pose, vertices, point, right, up, 0.092D, 0.101D,
+                tick * 0.105D + Math.PI, Math.PI * 0.64D, 0xBFFFD47E);
+        addArc(pose, vertices, point, right, up, radius + 0.018D, radius + 0.025D,
+                -tick * 0.065D, Math.PI * 0.43D, 0x9FFF9F32);
+    }
+
+    private static void addArc(PoseStack.Pose pose, VertexConsumer vertices, Vec3 center,
+                               Vec3 right, Vec3 up, double inner, double outer,
+                               double start, double sweep, int color) {
+        for (int i = 0; i < 12; i++) {
+            double a = start + sweep * i / 12.0D;
+            double b = start + sweep * (i + 1) / 12.0D;
+            addVertex(pose, vertices, center, right, up, Math.cos(a) * inner, Math.sin(a) * inner, color);
+            addVertex(pose, vertices, center, right, up, Math.cos(a) * outer, Math.sin(a) * outer, color);
+            addVertex(pose, vertices, center, right, up, Math.cos(b) * outer, Math.sin(b) * outer, color);
+            addVertex(pose, vertices, center, right, up, Math.cos(b) * inner, Math.sin(b) * inner, color);
+        }
     }
 
     private static void addRing(PoseStack.Pose pose, VertexConsumer vertices, Vec3 center,
