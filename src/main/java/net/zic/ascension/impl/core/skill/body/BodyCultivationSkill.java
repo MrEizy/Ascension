@@ -9,13 +9,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
-import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillInstance;
+import net.zic.ascension.api.ascension.core.skill.toggleable.ToggleableSkill;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
@@ -26,14 +25,15 @@ import net.zic.ascension.impl.datapack.skill.AscensionSkillTypes;
 import java.util.List;
 import java.util.Optional;
 
-public final class BodyCultivationSkill implements Skill<BodyCultivationSkill.Data> {
-    private static final SerializerHandler<Data> SERIALIZER_HANDLER = new DataSerializerHandler();
+public final class BodyCultivationSkill implements ToggleableSkill<BodyCultivationSkill.Data> {
     private static final SyncHandler<Data> SYNC_HANDLER = new DataSyncHandler();
 
     private final Component name;
     private final Component description;
     private final Identifier path;
     private final int priority;
+    private final boolean enabledByDefault;
+    private final SerializerHandler<Data> serializerHandler;
     private final List<Stimulus> stimuli;
     private final ScaledValue maximumTempering;
     private final Conversion conversion;
@@ -44,6 +44,7 @@ public final class BodyCultivationSkill implements Skill<BodyCultivationSkill.Da
             Component description,
             Identifier path,
             int priority,
+            boolean enabledByDefault,
             List<Stimulus> stimuli,
             ScaledValue maximumTempering,
             Conversion conversion,
@@ -53,6 +54,8 @@ public final class BodyCultivationSkill implements Skill<BodyCultivationSkill.Da
         this.description = description;
         this.path = path;
         this.priority = priority;
+        this.enabledByDefault = enabledByDefault;
+        this.serializerHandler = new DataSerializerHandler(enabledByDefault);
         this.stimuli = stimuli == null ? List.of() : List.copyOf(stimuli);
         this.maximumTempering = maximumTempering == null
                 ? ScaledValue.constant(100.0D)
@@ -67,6 +70,10 @@ public final class BodyCultivationSkill implements Skill<BodyCultivationSkill.Da
 
     public int priority() {
         return priority;
+    }
+
+    public boolean enabledByDefault() {
+        return enabledByDefault;
     }
 
     public List<Stimulus> stimuli() {
@@ -117,13 +124,31 @@ public final class BodyCultivationSkill implements Skill<BodyCultivationSkill.Da
     }
 
     @Override
+    public boolean isEnabled(Data data) {
+        return data != null && data.enabled();
+    }
+
+    @Override
+    public void setEnabled(Data data, boolean enabled) {
+        data.setEnabled(enabled);
+    }
+
+    @Override
+    public void onEnabled(OriginSource source, SkillInstance<Data> instance) {
+    }
+
+    @Override
+    public void onDisabled(OriginSource source, SkillInstance<Data> instance) {
+    }
+
+    @Override
     public Data newData(RegistryAccess access) {
-        return new Data(0.0D);
+        return new Data(0.0D, enabledByDefault);
     }
 
     @Override
     public SerializerHandler<Data> serializerHandler() {
-        return SERIALIZER_HANDLER;
+        return serializerHandler;
     }
 
     @Override
@@ -367,10 +392,24 @@ public final class BodyCultivationSkill implements Skill<BodyCultivationSkill.Da
 
     public static final class Data implements SkillData {
         private double tempering;
+        private boolean enabled;
         private boolean dirty;
 
-        public Data(double tempering) {
+        public Data(double tempering, boolean enabled) {
             this.tempering = sanitize(tempering);
+            this.enabled = enabled;
+        }
+
+        public boolean enabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            if (this.enabled == enabled) {
+                return;
+            }
+            this.enabled = enabled;
+            this.dirty = true;
         }
 
         public double tempering() {
@@ -399,15 +438,16 @@ public final class BodyCultivationSkill implements Skill<BodyCultivationSkill.Da
         }
     }
 
-    private static final class DataSerializerHandler implements SerializerHandler<Data> {
+    private record DataSerializerHandler(boolean defaultEnabled) implements SerializerHandler<Data> {
         @Override
         public Data read(ValueInput input, RegistryAccess access) {
-            return new Data(input.getDoubleOr("tempering", 0.0D));
+            return new Data(input.getDoubleOr("tempering", 0.0D), input.getBooleanOr("enabled", defaultEnabled));
         }
 
         @Override
         public void write(Data data, ValueOutput output, RegistryAccess access) {
             output.putDouble("tempering", data.tempering);
+            output.putBoolean("enabled", data.enabled);
         }
     }
 
@@ -415,11 +455,13 @@ public final class BodyCultivationSkill implements Skill<BodyCultivationSkill.Da
         @Override
         public void decode(Data data, ByteBuf buf, RegistryAccess access) {
             data.tempering = Data.sanitize(buf.readDouble());
+            data.enabled = buf.readBoolean();
         }
 
         @Override
         public void encode(Data data, ByteBuf buf, RegistryAccess access) {
             buf.writeDouble(data.tempering);
+            buf.writeBoolean(data.enabled);
         }
     }
 }

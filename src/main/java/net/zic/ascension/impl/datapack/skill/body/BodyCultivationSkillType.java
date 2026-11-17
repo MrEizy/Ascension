@@ -19,6 +19,7 @@ public final class BodyCultivationSkillType extends SkillType {
                 ComponentSerialization.CODEC.fieldOf("description").forGetter(BodyCultivationSkill::getDescription),
                 net.minecraft.resources.Identifier.CODEC.fieldOf("path").forGetter(BodyCultivationSkill::path),
                 Codec.INT.optionalFieldOf("priority", 0).forGetter(BodyCultivationSkill::priority),
+                Codec.BOOL.optionalFieldOf("enabled_by_default", false).forGetter(BodyCultivationSkill::enabledByDefault),
                 BodyCultivationSkill.Stimulus.CODEC.listOf().fieldOf("stimuli").forGetter(BodyCultivationSkill::stimuli),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("maximum_tempering", ScaledValue.constant(100.0D)).forGetter(BodyCultivationSkill::maximumTempering),
                 BodyCultivationSkill.Conversion.CODEC.fieldOf("conversion").forGetter(BodyCultivationSkill::conversion),
