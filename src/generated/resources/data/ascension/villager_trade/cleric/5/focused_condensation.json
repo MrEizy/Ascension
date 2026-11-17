@@ -1,0 +1,20 @@
+{
+  "given_item_modifiers": [
+    {
+      "components": {
+        "ascension:registry_id_holder": "ascension:alchemy/focused_condensation"
+      },
+      "function": "minecraft:set_components"
+    }
+  ],
+  "gives": {
+    "id": "ascension:technique_manual"
+  },
+  "max_uses": 3.0,
+  "reputation_discount": 0.01,
+  "wants": {
+    "count": 24.0,
+    "id": "ascension:spiritual_stone"
+  },
+  "xp": 10.0
+}

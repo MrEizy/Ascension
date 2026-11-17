@@ -1,0 +1,20 @@
+{
+  "coverage": "hands",
+  "grow_millis": 1800,
+  "gather": {
+    "style": "fade",
+    "colors": ["#FFE08A", "#FFB347", "#FF8A26", "#FF5A14"]
+  },
+  "shells": {
+    "texture": {
+      "path": "ascension:textures/qi_coating/fire_qi_coating.png",
+      "frames": 6,
+      "frame_millis": 250,
+      "emissive": true
+    },
+    "layers": [
+      { "inflate": 0.25, "reach": 12.25, "overhang": 0.25, "color": "#B4FFFFFF" },
+      { "inflate": 0.6, "reach": 12.6, "overhang": 0.6, "color": "#40FFC890" }
+    ]
+  }
+}

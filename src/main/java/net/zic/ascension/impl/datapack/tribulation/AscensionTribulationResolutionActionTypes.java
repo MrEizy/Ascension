@@ -8,6 +8,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationResolutionAction;
 import net.zic.ascension.api.ascension.datapack.TypeRegistries;
 import net.zic.ascension.api.ascension.datapack.tribulation.TribulationResolutionActionType;
+import net.zic.ascension.impl.core.tribulation.action.ClearRealmProgressResolutionAction;
 import net.zic.ascension.impl.core.tribulation.action.EndBreakthroughResolutionAction;
 import net.zic.ascension.impl.core.tribulation.action.RealmChangeResolutionAction;
 
@@ -21,6 +22,8 @@ public class AscensionTribulationResolutionActionTypes {
             register("realm_change", () -> RealmChangeResolutionAction.CODEC);
     public static final DeferredHolder<TribulationResolutionActionType, TribulationResolutionActionType> END_BREAKTHROUGH =
             register("end_breakthrough", () -> EndBreakthroughResolutionAction.CODEC);
+    public static final DeferredHolder<TribulationResolutionActionType, TribulationResolutionActionType> CLEAR_REALM_PROGRESS =
+            register("clear_realm_progress", () -> ClearRealmProgressResolutionAction.CODEC);
 
     private static DeferredHolder<TribulationResolutionActionType, TribulationResolutionActionType> register(
             String name,

@@ -27,5 +27,15 @@ public class AscVillagerTradeTags extends VillagerTradesTagsProvider {
         builder.add(TagEntry.element(AscVillagerTrades.LIBRARIAN_3_SHADOWLESS_ART.identifier()));
         builder.add(TagEntry.element(AscVillagerTrades.LIBRARIAN_3_SUSTAINED_SPIRIT_ART.identifier()));
         builder.add(TagEntry.element(AscVillagerTrades.LIBRARIAN_3_SWORD_DRAW_MANUAL.identifier()));
+
+        var clericMaster = getOrCreateRawBuilder(VillagerTradeTags.CLERIC_LEVEL_5);
+        clericMaster.add(TagEntry.element(AscVillagerTrades.CLERIC_5_GENTLE_EXTRACTION.identifier()));
+        clericMaster.add(TagEntry.element(AscVillagerTrades.CLERIC_5_FORCEFUL_EXTRACTION.identifier()));
+        clericMaster.add(TagEntry.element(AscVillagerTrades.CLERIC_5_GRADUAL_HEATING.identifier()));
+        clericMaster.add(TagEntry.element(AscVillagerTrades.CLERIC_5_INTENSE_HEATING.identifier()));
+        clericMaster.add(TagEntry.element(AscVillagerTrades.CLERIC_5_HARMONIZING_STABILIZATION.identifier()));
+        clericMaster.add(TagEntry.element(AscVillagerTrades.CLERIC_5_PURIFYING_STABILIZATION.identifier()));
+        clericMaster.add(TagEntry.element(AscVillagerTrades.CLERIC_5_FOCUSED_CONDENSATION.identifier()));
+        clericMaster.add(TagEntry.element(AscVillagerTrades.CLERIC_5_PRECISE_CONDENSATION.identifier()));
     }
 }

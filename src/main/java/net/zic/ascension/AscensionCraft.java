@@ -34,15 +34,19 @@ import net.zic.ascension.datagen.loot.ModLootModifiers;
 import net.zic.ascension.configuration.mob_traits.traits.AscensionTraitTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationResolutionActionTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
+import net.zic.ascension.network.alchemy.ClientboundMedicinalCultivationProgressPacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationAddPacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationRemovePacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationUpdatePacket;
 import net.zic.ascension.impl.datapack.alchemy.AlchemyMaterialProviders;
 import net.zic.ascension.network.*;
+import net.zic.ascension.network.npc.NpcDialoguePacket;
+import net.zic.ascension.network.npc.NpcActionPacket;
 import net.zic.ascension.impl.core.entity.AscensionStats;
 
 import net.zic.ascension.impl.datapack.bloodline.AscensionBloodlineTypes;
 import net.zic.ascension.impl.datapack.path.AscensionPathTypes;
+import net.zic.ascension.impl.datapack.golden_core.AscensionGoldenCoreTypes;
 import net.zic.ascension.impl.datapack.physique.AscensionPhysiqueTypes;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionConditionTypes;
 import net.zic.ascension.impl.datapack.requirement.AscensionRequirementTypes;
@@ -137,6 +141,7 @@ public class AscensionCraft {
         AscensionSkillTypes.register(modEventBus);
         AscensionTechniqueTypes.register(modEventBus);
         AscensionPathTypes.register(modEventBus);
+        AscensionGoldenCoreTypes.register(modEventBus);
         AscensionTribulationTypes.register(modEventBus);
         AscensionTribulationResolutionActionTypes.register(modEventBus);
 
@@ -175,6 +180,7 @@ public class AscensionCraft {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC, "ascension/Ascension-Common.toml");
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.CULTIVATION_SPEC, "ascension/Ascension-Cultivation.toml");
         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC, "ascension/Ascension-Client.toml");
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.ALCHEMY_SERVER_SPEC, "ascension/Ascension-Alchemy.toml");
 
     }
 
@@ -265,6 +271,8 @@ public class AscensionCraft {
         @SubscribeEvent
         public static void registerPayloads(RegisterPayloadHandlersEvent event) {
             PayloadRegistrar registrar = event.registrar(AscensionCraft.MOD_ID);
+            registrar.playToServer(NpcActionPacket.TYPE, NpcActionPacket.STREAM_CODEC, NpcActionPacket::handle);
+            registrar.playToClient(NpcDialoguePacket.TYPE, NpcDialoguePacket.STREAM_CODEC, NpcDialoguePacket::handle);
 
             registrar.playToServer(
                     CycleDropModePacket.TYPE,
@@ -285,6 +293,11 @@ public class AscensionCraft {
                     SelectSkillSlotPacket.TYPE,
                     SelectSkillSlotPacket.STREAM_CODEC,
                     SelectSkillSlotPacket::handle
+            );
+            registrar.playToServer(
+                    SelectQiCoatingElementPacket.TYPE,
+                    SelectQiCoatingElementPacket.STREAM_CODEC,
+                    SelectQiCoatingElementPacket::handle
             );
             registrar.playToServer(
                     TogglePassiveSkillPacket.TYPE,
@@ -321,6 +334,11 @@ public class AscensionCraft {
                     RuntimeVisualPacket::handle
             );
             registrar.playToClient(
+                    ClientboundMedicinalCultivationProgressPacket.TYPE,
+                    ClientboundMedicinalCultivationProgressPacket.STREAM_CODEC,
+                    ClientboundMedicinalCultivationProgressPacket::handle
+            );
+            registrar.playToClient(
                     ClientboundDivineSensePacket.TYPE,
                     ClientboundDivineSensePacket.STREAM_CODEC,
                     ClientboundDivineSensePacket::handle
@@ -329,6 +347,36 @@ public class AscensionCraft {
                     SwordFlightStatePacket.TYPE,
                     SwordFlightStatePacket.STREAM_CODEC,
                     SwordFlightStatePacket::handle
+            );
+            registrar.playToClient(
+                    LightningFlashPacket.TYPE,
+                    LightningFlashPacket.STREAM_CODEC,
+                    LightningFlashPacket::handle
+            );
+            registrar.playToClient(
+                    QiCoatingSyncPacket.TYPE,
+                    QiCoatingSyncPacket.STREAM_CODEC,
+                    QiCoatingSyncPacket::handle
+            );
+            registrar.playToClient(
+                    QiStepStatePacket.TYPE,
+                    QiStepStatePacket.STREAM_CODEC,
+                    QiStepStatePacket::handle
+            );
+            registrar.playToClient(
+                    QiStepPlatePacket.TYPE,
+                    QiStepPlatePacket.STREAM_CODEC,
+                    QiStepPlatePacket::handle
+            );
+            registrar.playToServer(
+                    QiStepActionPacket.TYPE,
+                    QiStepActionPacket.STREAM_CODEC,
+                    QiStepActionPacket::handle
+            );
+            registrar.playToServer(
+                    ServerboundToolChargeReleasePacket.TYPE,
+                    ServerboundToolChargeReleasePacket.STREAM_CODEC,
+                    ServerboundToolChargeReleasePacket::handle
             );
 
             registrar.playToServer(
@@ -361,6 +409,36 @@ public class AscensionCraft {
                     ClientboundTribulationRemovePacket.TYPE,
                     ClientboundTribulationRemovePacket.STREAM_CODEC,
                     ClientboundTribulationRemovePacket::handle
+            );
+            registrar.playToClient(
+                    InnerWorldVeinsPayload.TYPE,
+                    InnerWorldVeinsPayload.CODEC,
+                    InnerWorldVeinsPayload::handle
+            );
+            registrar.playToClient(
+                    SpaceRiftPayload.TYPE,
+                    SpaceRiftPayload.CODEC,
+                    SpaceRiftPayload::handle
+            );
+            registrar.playToClient(
+                    SpaceRiftClosePayload.TYPE,
+                    SpaceRiftClosePayload.CODEC,
+                    SpaceRiftClosePayload::handle
+            );
+            registrar.playToServer(
+                    SpaceRiftInteractPayload.TYPE,
+                    SpaceRiftInteractPayload.CODEC,
+                    SpaceRiftInteractPayload::handle
+            );
+            registrar.playToServer(
+                    OffhandAttackPayload.TYPE,
+                    OffhandAttackPayload.CODEC,
+                    OffhandAttackPayload::handle
+            );
+            registrar.playToClient(
+                    DualWieldStatePayload.TYPE,
+                    DualWieldStatePayload.CODEC,
+                    DualWieldStatePayload::handle
             );
 
         }

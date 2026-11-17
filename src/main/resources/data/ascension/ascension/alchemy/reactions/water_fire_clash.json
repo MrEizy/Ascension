@@ -1,0 +1,33 @@
+{
+  "existing": {
+    "properties": {
+      "ascension:alchemy/cleansing": 0.5
+    },
+    "affinities": {
+      "ascension:elemental/water": 0.25
+    },
+    "products": {}
+  },
+  "incoming": {
+    "properties": {
+      "ascension:alchemy/circulation": 0.5
+    },
+    "affinities": {
+      "ascension:elemental/fire": 0.25
+    },
+    "products": {}
+  },
+  "priority": 12,
+  "products": {
+    "ascension:alchemy/reaction/scalded_meridians": 0.5
+  },
+  "purity_delta": -0.08,
+  "instability_delta": 0.45,
+  "toxicity_delta": 0.55,
+  "energy_delta": 0.75,
+  "relationship": {
+    "source": "ascension:elemental/water",
+    "target": "ascension:elemental/fire",
+    "type": "destructive"
+  }
+}

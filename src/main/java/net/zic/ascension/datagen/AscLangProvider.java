@@ -56,6 +56,35 @@ public class AscLangProvider extends LanguageProvider {
 
 
 
+        // NPC Things
+        add("entity.ascension.male_cultivator", "Male Cultivator");
+        add("entity.ascension.female_cultivator", "Female Cultivator");
+        add("entity.ascension.sect_elder", "Sect Elder");
+        add("entity.ascension.sect_master", "Sect Master");
+        add("entity.ascension.young_master", "Young Master");
+
+        add("item.ascension.male_cultivator_spawn_egg", "Male Cultivator Spawn Egg");
+        add("item.ascension.female_cultivator_spawn_egg", "Female Cultivator Spawn Egg");
+        add("item.ascension.sect_elder_spawn_egg", "Sect Elder Spawn Egg");
+        add("item.ascension.sect_master_spawn_egg", "Sect Master Spawn Egg");
+        add("item.ascension.young_master_spawn_egg", "Young Master Spawn Egg");
+
+        add("gui.ascension.npc.talk", "Speak");
+        add("gui.ascension.npc.challenge", "Challenge");
+        add("gui.ascension.npc.leave", "Leave");
+        add("gui.ascension.npc.aggressive", "You have already challenged this cultivator.");
+        add("gui.ascension.npc.challenge_started", "Very well. Defend yourself!");
+        add("gui.ascension.npc.withdraw", "Forfeit Challenge");
+        add("gui.ascension.npc.challenge_ended", "The challenge has ended.");
+        add("gui.ascension.npc.survival_required", "Switch to Survival or Adventure mode before challenging a cultivator.");
+        add("gui.ascension.npc.too_far", "You must approach the cultivator.");
+        add("gui.ascension.npc.guidance", "Request Guidance / Check Trial");
+        add("gui.ascension.npc.enlightened", "Guidance Completed");
+        add("gui.ascension.npc.reinforcement", "The Young Master calls a Sect Elder to his defence!");
+
+        add("entity.ascension.treasure_rat", "Treasure Rat");
+        add("item.ascension.treasure_rat_spawn_egg", "Treasure Rat Spawn Egg");
+
         // Items
         add("item.ascension.tablet_of_destruction_human", "Tablet of Destruction - Human");
         add("item.ascension.tablet_of_destruction_earth", "Tablet of Destruction - Earth");
@@ -92,38 +121,101 @@ public class AscLangProvider extends LanguageProvider {
 
         // Pills and Pill Things
         add("item.ascension.jade_bottle", "Jade Bottle");
+        add("item.ascension.procedural_pill", "Refined Medicinal Pill");
+
+        // Can't even lie, completely randomized names...
+        add("ascension.alchemy.pill.name.body_reinforcement.0", "Iron Bone Pill");
+        add("ascension.alchemy.pill.name.body_reinforcement.1", "Jade Tendon Pill");
+        add("ascension.alchemy.pill.name.body_reinforcement.2", "Mountain Marrow Pill");
+        add("ascension.alchemy.pill.name.health_restoration.0", "Spring Renewal Pill");
+        add("ascension.alchemy.pill.name.health_restoration.1", "Bloodleaf Restoration Pill");
+        add("ascension.alchemy.pill.name.health_restoration.2", "Living Dew Pill");
+        add("ascension.alchemy.pill.name.medicinal_cleansing.0", "Clear Meridian Pill");
+        add("ascension.alchemy.pill.name.medicinal_cleansing.1", "Purifying Dew Pill");
+        add("ascension.alchemy.pill.name.medicinal_cleansing.2", "Pristine Lotus Pill");
+        add("ascension.alchemy.pill.name.medicinal_toxicity.0", "Venom Heart Pill");
+        add("ascension.alchemy.pill.name.medicinal_toxicity.1", "Tainted Blood Pill");
+        add("ascension.alchemy.pill.name.meridian_burn.0", "Scorching Meridian Pill");
+        add("ascension.alchemy.pill.name.meridian_burn.1", "Searing Qi Pill");
+        add("ascension.alchemy.pill.name.meridian_corruption.0", "Corrupted Essence Pill");
+        add("ascension.alchemy.pill.name.meridian_corruption.1", "Withering Soul Pill");
+        add("ascension.alchemy.pill.name.qi_circulation.0", "Flowing Meridian Pill");
+        add("ascension.alchemy.pill.name.qi_circulation.1", "Wandering Cloud Pill");
+        add("ascension.alchemy.pill.name.qi_circulation.2", "Azure Channel Pill");
+        add("ascension.alchemy.pill.name.qi_restoration.0", "Spirit Replenishing Pill");
+        add("ascension.alchemy.pill.name.qi_restoration.1", "Gathered Qi Pill");
+        add("ascension.alchemy.pill.name.qi_restoration.2", "Deep Spring Pill");
+
+        add("ascension.alchemy.herb.raw_effects", "Raw medicinal effects (estimated)");
+        add("ascension.alchemy.herb.details", "Alchemy Details");
+        add("ascension.alchemy.herb.purity", "Material purity");
+        add("ascension.alchemy.herb.instability", "Material instability");
+        add("ascension.alchemy.effect.vitality_renewal", "Vitality Renewal");
+        add("ascension.alchemy.effect.stamina_vigor", "Stamina Vigor");
+        add("ascension.alchemy.pill.name.stamina_vigor.0", "Enduring Marrow Pill");
+        add("ascension.alchemy.pill.name.stamina_vigor.1", "Steadfast Pulse Pill");
+        add("ascension.alchemy.pill.name.vitality_renewal.0", "Vitality Renewal Pill");
+        add("ascension.alchemy.pill.name.vitality_renewal.1", "Living Spring Pill");
+        add("ascension.alchemy.feedback.health", "Restored %s health");
+        add("ascension.alchemy.feedback.qi", "Restored %s Qi");
+        add("ascension.alchemy.feedback.stamina", "Restored %s stamina");
+        add("ascension.alchemy.feedback.food", "Restored %s hunger");
+        add("ascension.alchemy.feedback.reinforcement", "Body reinforced: increased damage resistance");
+        add("ascension.alchemy.feedback.reinforcement_shield", "Body reinforced: damage resistance and shielding");
+        add("ascension.alchemy.feedback.qi_flow", "Qi circulation enhanced: faster natural regeneration");
+        add("ascension.alchemy.feedback.stamina_flow", "Physical vigor enhanced: faster stamina regeneration");
+        add("ascension.alchemy.feedback.cleansed", "Harmful conditions cleansed");
+        add("ascension.alchemy.pill.inert", "No medicinal composition is stored.");
+        add("ascension.alchemy.pill.composition", "Purity: %s%%");
+        add("ascension.alchemy.pill.impurities", "Impurities: +%s%%");
+        add("gui.ascension.introspection.medicinal_impurities", "Medicinal impurities: %s%%");
+        add("gui.ascension.introspection.medicinal_impurities_tooltip", "Cultivation efficiency: %s%% (−%s%%)");
+        add("ascension.alchemy.pill.raw_warning", "Raw herbs absorb poorly and may overload weak cultivators.");
+        add("ascension.alchemy.effect.body_reinforcement", "Body Reinforcement");
+        add("ascension.alchemy.effect.health_restoration", "Health Restoration");
+        add("ascension.alchemy.effect.medicinal_cleansing", "Medicinal Cleansing");
+        add("ascension.alchemy.effect.deep_purification", "Deep Purification");
+        add("ascension.alchemy.pill.name.deep_purification.0", "Pure Meridian Cleansing Pill");
+        add("ascension.alchemy.pill.name.deep_purification.1", "Frost-Moon Purification Pill");
+        add("ascension.alchemy.feedback.impurities_purified", "Purified %s medicinal impurities");
+        add("ascension.alchemy.impurities.display", "Impurities: %s%%");
+        add("ascension.alchemy.efficiency.display", "Cultivation: %s%% efficiency");
+
+        add("ascension.alchemy.effect.medicinal_toxicity", "Medicinal Toxicity");
+        add("ascension.alchemy.effect.meridian_burn", "Meridian Burn");
+        add("ascension.alchemy.effect.meridian_corruption", "Meridian Corruption");
+        add("ascension.alchemy.effect.qi_circulation", "Qi Circulation");
+        add("ascension.alchemy.effect.qi_restoration", "Qi Restoration");
+        add("ascension.alchemy.pill.name.qi_restoration.3", "Qi Replenishing Pill");
+        add("ascension.alchemy.pill.name.health_restoration.3", "Regeneration Pill");
+        add("ascension.alchemy.effect.stamina_restoration", "Stamina Restoration");
+        add("ascension.alchemy.effect.sustenance", "Sustenance");
+        add("ascension.alchemy.effect.body_cultivation", "Body Cultivation");
+        add("ascension.alchemy.effect.soul_cultivation", "Soul Cultivation");
+        add("ascension.alchemy.effect.essence_cultivation", "Essence Cultivation");
+        add("ascension.alchemy.pill.name.stamina_restoration.0", "Stamina Replenishing Pill");
+        add("ascension.alchemy.pill.name.stamina_restoration.1", "Vigorous Marrow Pill");
+        add("ascension.alchemy.pill.name.sustenance.0", "Fasting Pill");
+        add("ascension.alchemy.pill.name.sustenance.1", "Nourishing Grain Pill");
+        add("ascension.alchemy.pill.name.body_cultivation.0", "Body Cultivation Pill");
+        add("ascension.alchemy.pill.name.body_cultivation.1", "Iron Vessel Cultivation Pill");
+        add("ascension.alchemy.pill.name.soul_cultivation.0", "Soul Cultivation Pill");
+        add("ascension.alchemy.pill.name.soul_cultivation.1", "Moonlit Spirit Pill");
+        add("ascension.alchemy.pill.name.essence_cultivation.0", "Essence Cultivation Pill");
+        add("ascension.alchemy.pill.name.essence_cultivation.1", "Thunder Essence Pill");
+        add("ascension.alchemy.pill.rank", "Rank: %s | Grade: %s");
+        add("ascension.alchemy.pill.purity", "Purity: %s%%");
+        add("ascension.alchemy.pill.toxicity", "Toxicity: %s");
         add("item.ascension.pill_residue", "Pill Residue");
-
-        add("item.ascension.fasting_pill", "Fasting Pill");
-        add("ascension.pill.fasting_pill.description", "A nourishing pill refined to sustain the body without ordinary food.");
-        add("ascension.pill.fasting_pill.effect", "Restores hunger and saturation to full.");
-
-        add("item.ascension.qi_replenishing_pill", "Qi Replenishing Pill");
-        add("ascension.pill.qi_replenishing_pill.description", "A concentrated pill that releases refined spiritual energy back into the cultivator.");
-        add("ascension.pill.qi_replenishing_pill.effect", "Restores %s%% of maximum Qi.");
-
-        add("item.ascension.regeneration_pill", "Regeneration Pill");
-        add("ascension.pill.regeneration_pill.description", "A restorative pill that rapidly replenishes damaged flesh and blood.");
-        add("ascension.pill.regeneration_pill.effect", "Restores %s%% of maximum health.");
-
-        add("item.ascension.stamina_replenishing_pill", "Stamina Replenishing Pill");
-        add("ascension.pill.stamina_replenishing_pill.description", "A vigorous pill that restores the body's spent physical energy.");
-        add("ascension.pill.stamina_replenishing_pill.effect", "Restores %s%% of maximum Stamina.");
-
-        add("item.ascension.body_cultivation_pill", "Body Cultivation Pill");
-        add("ascension.pill.body_cultivation_pill.description", "A strengthening pill refined to accelerate cultivation of the body.");
-        add("item.ascension.soul_cultivation_pill", "Soul Cultivation Pill");
-        add("ascension.pill.soul_cultivation_pill.description", "A tranquil pill refined to nourish and advance cultivation of the soul.");
-        add("item.ascension.essence_cultivation_pill", "Essence Cultivation Pill");
-        add("ascension.pill.essence_cultivation_pill.description", "A concentrated pill refined to accelerate cultivation of spiritual essence.");
-        add("ascension.pill.cultivation.effect", "Grants %s%% of the current realm's required cultivation progress.");
-
 
         // Pill Tooltip
         add("ascension.pill.tooltip.type", "Pill");
         add("ascension.pill.tooltip.grade", "Grade");
         add("ascension.pill.tooltip.rank_badge", "%s Rank");
         add("ascension.pill.tooltip.effect", "Effect");
+        add("ascension.alchemy.pill.vitality", "Medicinal vitality: %s%% | Time remaining: %s");
+        add("ascension.alchemy.pill.expired", "Expired · medicinal essence dissipated");
+        add("ascension.alchemy.pill.preserved", "preserved indefinitely");
         add("ascension.pill.grade.low", "Low-grade");
         add("ascension.pill.grade.mid", "Mid-grade");
         add("ascension.pill.grade.high", "High-grade");
@@ -133,6 +225,25 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.alchemy_material.tooltip.note", "Usable as a material in alchemy.");
 
         add("block.ascension.alchemy_furnace", "Alchemy Furnace");
+
+        add("block.ascension.cushion_white", "White Cushion");
+        add("block.ascension.cushion_light_gray", "Light Gray Cushion");
+        add("block.ascension.cushion_gray", "Gray Cushion");
+        add("block.ascension.cushion_black", "Black Cushion");
+        add("block.ascension.cushion_brown", "Brown Cushion");
+        add("block.ascension.cushion_red", "Red Cushion");
+        add("block.ascension.cushion_orange", "Orange Cushion");
+        add("block.ascension.cushion_yellow", "Yellow Cushion");
+        add("block.ascension.cushion_lime", "Lime Cushion");
+        add("block.ascension.cushion_green", "Green Cushion");
+        add("block.ascension.cushion_cyan", "Cyan Cushion");
+        add("block.ascension.cushion_light_blue", "Light Blue Cushion");
+        add("block.ascension.cushion_blue", "Blue Cushion");
+        add("block.ascension.cushion_purple", "Purple Cushion");
+        add("block.ascension.cushion_magenta", "Magenta Cushion");
+        add("block.ascension.cushion_pink", "Pink Cushion");
+        add("entity.ascension.cushion_entity", "Cushion");
+
         add("ascension.alchemy_furnace.inserted", "Material added (%s/%s)");
         add("ascension.alchemy_furnace.unstable", "The batch is unstable (%s/%s materials).");
         add("ascension.alchemy_furnace.catastrophic", "The batch destabilized and collapsed.");
@@ -271,6 +382,14 @@ public class AscLangProvider extends LanguageProvider {
         add("block.ascension.stripped_peach_log", "Stripped Peach Log");
         add("block.ascension.stripped_peach_wood", "Stripped Peach Wood");
         add("block.ascension.peach_planks", "Peach Planks");
+        add("block.ascension.peach_stairs", "Peach Stairs");
+        add("block.ascension.peach_slab", "Peach Slab");
+        add("block.ascension.peach_fence", "Peach Fence");
+        add("block.ascension.peach_fence_gate", "Peach Fence Gate");
+        add("block.ascension.peach_door", "Peach Door");
+        add("block.ascension.peach_trapdoor", "Peach Trapdoor");
+        add("block.ascension.peach_pressure_plate", "Peach Pressure Plate");
+        add("block.ascension.peach_button", "Peach Button");
         add("block.ascension.peach_leaves", "Peach Leaves");
         add("block.ascension.peach_sapling", "Peach Sapling");
         add("block.ascension.potted_peach_sapling", "Potted Peach Sapling");
@@ -402,6 +521,9 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.no_techniques_description", "This character has not acquired any techniques.");
         add("gui.ascension.introspection.no_skills", "No skills");
         add("gui.ascension.introspection.no_skills_description", "This character has not acquired any skills.");
+        add("gui.ascension.introspection.no_matching_skills", "No matching skills");
+        add("gui.ascension.introspection.no_matching_skills_description", "None of your skills match the search.");
+        add("gui.ascension.introspection.search_skills", "Search skills...");
         add("gui.ascension.introspection.no_stats", "No Ascension stats are currently available.");
         add("gui.ascension.introspection.data_unavailable", "Synchronized Ascension data is temporarily unavailable.");
         add("gui.ascension.introspection.missing_registry_entry", "The synchronized identifier is not present in the client registry.");
@@ -489,10 +611,21 @@ public class AscLangProvider extends LanguageProvider {
 
         //Key Items
         add("item.ascension.physique_essence", "Physique Essence");
+        add("item.ascension.physique_essence.named", "Physique Essence: %s");
         add("item.ascension.bloodline_essence", "Bloodline Essence");
+        add("item.ascension.bloodline_essence.named", "Bloodline Essence: %s");
         add("item.ascension.technique_manual", "Technique Manual");
+        add("item.ascension.technique_manual.named", "Technique Manual: %s");
         add("item.ascension.technique_manual.battle_style", "Battle Style");
         add("item.ascension.technique_manual.cultivation_technique", "Cultivation Technique");
+        add("item.ascension.technique_manual.alchemy_technique", "Alchemy Technique");
+
+        add("ascension.alchemy.technique.stage", "Stage");
+        add("ascension.alchemy.technique.access", "Acquisition");
+        add("ascension.alchemy.technique.basic", "Basic technique");
+        add("ascension.alchemy.technique.specialized", "Requires manual");
+        add("ascension.alchemy.technique.known_limit", "Specialized technique limit");
+        add("ascension.alchemy.technique.limit_reached", "You can only learn %s specialized alchemy techniques.");
 
         // Transfer Item Tooltips
         add("ascension.tooltip.bloodline.purity", "Purity");
@@ -661,11 +794,23 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.path.weapon.umbrella.name", "Umbrella");
         add("ascension.path.weapon.umbrella.desc", "cultivate the deceptive grace of the warding canopy, sheltering blow and blade alike");
 
+        //Golden Cores
+        add("ascension.golden_core.test_core.name", "Test Golden Core");
+        add("ascension.golden_core.test_core.desc", "A plain golden core used for testing. It strengthens the body, and grows stronger with every realm its path reaches.");
+        add("ascension.skill.test_golden_core_forming.name", "Test Golden Core Forming");
+        add("ascension.skill.test_golden_core_forming.desc", "Condense your essence into a golden core, calling down the tribulation that tempers it.");
+        add("ascension.skill.golden_core_forming.fail.no_path", "You do not cultivate the required path");
+        add("ascension.skill.golden_core_forming.fail.wrong_realm", "You are not at the required realm");
+        add("ascension.skill.golden_core_forming.fail.no_tribulation", "This realm has no golden core tribulation");
+        add("ascension.skill.golden_core_forming.fail.not_ready", "You are not ready to form a golden core");
+
 
 
         //Physiques
 
         //Ordinary Physiques
+        add("ascension.physique.test.name", "Test Physique");
+        add("ascension.physique.test.desc", "Flip property for testing things easily.");
         add("ascension.physique.five_elements_imbalance.name", "Five Elements Imbalance");
         add("ascension.physique.five_elements_imbalance.desc", "The five elements within the body are in chaos, causing cultivation instability and frequent qi deviations. Those who persevere with this may be surprised.");
         add("ascension.physique.brittle_bone_body.name", "Brittle Bone Body");
@@ -808,6 +953,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.bloodline.white_tiger.desc", "A rare lineage carrying a trace of the White Tiger, sacred beast of the western heavens.");
         add("ascension.bloodline.ember_spirit.name", "Ember Spirit Bloodline");
         add("ascension.bloodline.ember_spirit.desc", "A minor lineage altered by generations spent beside small fire spirits. Its qi runs warm and answers readily to flame.");
+        add("ascension.bloodline.qi_coatings_dev.name", "Qi Coatings Dev Bloodline");
+        add("ascension.bloodline.qi_coatings_dev.desc", "Flip property for testing things easily.");
         add("ascension.bloodline.deep_spring_spirit.name", "Deep Spring Spirit Bloodline");
         add("ascension.bloodline.deep_spring_spirit.desc", "A spirit-blooded lineage descended from beings born in old mountain springs. Its qi is cool, patient, and difficult to exhaust.");
         add("ascension.bloodline.verdant_flame_spirit.name", "Verdant Flame Spirit Bloodline");
@@ -863,6 +1010,10 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.mount_hua_sword_manual.desc", "A sword manual of Mount Hua that binds breath and sword as one, its gentle, falling-petal forms hiding a killing edge just a heartbeat behind");
         add("ascension.technique.sustained_spirit_art.name", "Sustained Spirit Art");
         add("ascension.technique.sustained_spirit_art.desc", "An ordinary soul art that draws cold spiritual energy inward, quieting needless bodily activity to preserve nourishment and endurance");
+        add("ascension.technique.qi_coatings_leftovers.name", "Qi Coatings Leftovers");
+        add("ascension.technique.qi_coatings_leftovers.desc", "Leftover and extra skills and coatings with no home yet, kept here until we decide what to do with them.");
+        add("ascension.technique.qi_coatings_dev.name", "Qi Coatings Dev");
+        add("ascension.technique.qi_coatings_dev.desc", "A test art granting Qi Coating, External Qi Coating and every qi layer. Pair it with the Qi Coatings Dev Bloodline to unlock every element.");
         add("ascension.technique.imperial_seven_stances.name", "Seven Stance Imperial Army Art");
         add("ascension.technique.imperial_seven_stances.desc", "Seven practical sword stances drilled into the mortal armies of the Yonmeng Empire; modest alone, dependable in formation.");
         add("ascension.technique.celestial_constellation_circulation.name", "Celestial Constellation Circulation");
@@ -979,6 +1130,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.plum_blossom_breathing.desc", "The first breathing method taught at Mount Hua, circulating qi until it flows naturally into the sword, letting sword and essence grow together as one");
         add("ascension.skill.stillfrost_breathing.name", "Stillfrost Breathing");
         add("ascension.skill.stillfrost_breathing.desc", "Breathe slowly and draw frost into the soul, cultivating inner stillness while refining Soul through Ice");
+        add("ascension.skill.dual_wield_modifier.name", "Dual Wielding");
+        add("ascension.skill.dual_wield_modifier.desc", "EIZY WRITE SOMETHING HERE PLS FOR THE LOVE OF GOD");
         add("ascension.skill.sustained_spirit.name", "Sustained Spirit");
         add("ascension.skill.sustained_spirit.desc", "Cold spiritual stillness suppresses wasteful movement, reducing exhaustion and stamina spent through travel");
         add("ascension.skill.frostbound_stillness.name", "Frostbound Stillness");
@@ -1049,6 +1202,107 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.sword_flight.desc", "Bind spirit to steel and ride the blade itself through the sky, steering with nothing but where the eyes fall.");
         add("ascension.skill.spherical_devastation.name", "Spherical Devastation");
         add("ascension.skill.spherical_devastation.desc", "Unleash a rotating sphere of annihilating force, scouring everything caught within it and shaking the ground for all who stand nearby.");
+        add("ascension.skill.void_pocket.name", "Void Pocket");
+        add("ascension.skill.void_pocket.desc", "Unravel the space before you and reach into the void to carve out a space to store your personal valuables.");
+        // Qi Coating skills: the element is picked in the coating wheel (Shift + skill wheel key).
+        add("ascension.skill.qi_coating.name", "Qi Coating");
+        add("ascension.skill.qi_coating.desc", "Control innate elemental qi and coat your body. Press Shift + %s to change mode.");
+        add("ascension.skill.external_qi_coating.name", "External Qi Coating");
+        add("ascension.skill.external_qi_coating.desc", "Control innate elemental qi and coat your weapon. Press Shift + %s to change mode.");
+        add("ascension.qi_coating.element.fire.name", "Fire");
+        add("ascension.qi_coating.element.earth.name", "Earth");
+        add("ascension.qi_coating.element.water.name", "Water");
+        add("ascension.qi_coating.element.ice.name", "Ice");
+        add("ascension.qi_coating.element.metal.name", "Metal");
+        add("ascension.qi_coating.element.wind.name", "Wind");
+        add("ascension.qi_coating.element.lightning.name", "Lightning");
+        add("ascension.qi_coating.element.space.name", "Space");
+        add("ascension.qi_coating.element.pure.name", "Pure Qi");
+        add("ascension.qi_coating.element.time.name", "Time");
+        add("ascension.qi_coating.element.life.name", "Life");
+
+        // Qi damage types (data/ascension/damage_type), one per elemental path (plus pure qi)
+        add("death.attack.ascension.blood_qi", "%1$s was turned into a husk by blood qi");
+        add("death.attack.ascension.blood_qi.player", "%1$s was turned into a husk by %2$s's blood qi");
+        add("death.attack.ascension.chaos_qi", "%1$s was unmade by chaos qi");
+        add("death.attack.ascension.chaos_qi.player", "%1$s was unmade by %2$s's chaos qi");
+        add("death.attack.ascension.dark_qi", "%1$s was swallowed by dark qi");
+        add("death.attack.ascension.dark_qi.player", "%1$s was swallowed by %2$s's dark qi");
+        add("death.attack.ascension.death_qi", "%1$s's life force was corrupted by death qi");
+        add("death.attack.ascension.death_qi.player", "%1$s's life force was corrupted by %2$s's death qi");
+        add("death.attack.ascension.fate_qi", "%1$s's fate was severed by fate qi");
+        add("death.attack.ascension.fate_qi.player", "%1$s's fate was severed by %2$s's fate qi");
+        add("death.attack.ascension.gravity_qi", "%1$s was crushed by gravity qi");
+        add("death.attack.ascension.gravity_qi.player", "%1$s was crushed by %2$s's gravity qi");
+        add("death.attack.ascension.illusion_qi", "%1$s got lost in their own mind to illusion qi");
+        add("death.attack.ascension.illusion_qi.player", "%1$s got lost in their own mind to %2$s's illusion qi");
+        add("death.attack.ascension.karma_qi", "%1$s paid their karmic debt");
+        add("death.attack.ascension.karma_qi.player", "%1$s paid their karmic debt to %2$s");
+        add("death.attack.ascension.life_qi", "%1$s's life force was taken as nourishment by life qi");
+        add("death.attack.ascension.life_qi.player", "%1$s's life force was taken as nourishment by %2$s's life qi");
+        add("death.attack.ascension.light_qi", "%1$s was purified by light qi");
+        add("death.attack.ascension.light_qi.player", "%1$s was purified by %2$s's light qi");
+        add("death.attack.ascension.moon_qi", "%1$s was chilled to the soul by moon qi");
+        add("death.attack.ascension.moon_qi.player", "%1$s was chilled to the soul by %2$s's moon qi");
+        add("death.attack.ascension.order_qi", "%1$s was judged by order qi");
+        add("death.attack.ascension.order_qi.player", "%1$s was judged by %2$s's order qi");
+        add("death.attack.ascension.poison_qi", "%1$s was poisoned by poison qi");
+        add("death.attack.ascension.poison_qi.player", "%1$s was poisoned by %2$s's poison qi");
+        add("death.attack.ascension.reincarnation_qi", "%1$s was sent to their next life");
+        add("death.attack.ascension.reincarnation_qi.player", "%1$s was sent to their next life by %2$s");
+        add("death.attack.ascension.sound_qi", "%1$s was shattered by sound qi");
+        add("death.attack.ascension.sound_qi.player", "%1$s was shattered by %2$s's sound qi");
+        add("death.attack.ascension.star_qi", "%1$s was reduced to stardust by star qi");
+        add("death.attack.ascension.star_qi.player", "%1$s was reduced to stardust by %2$s's star qi");
+        add("death.attack.ascension.sun_qi", "%1$s was seared to the soul by sun qi");
+        add("death.attack.ascension.sun_qi.player", "%1$s was seared to the soul by %2$s's sun qi");
+        add("death.attack.ascension.wood_qi", "%1$s was turned to wood by wood qi");
+        add("death.attack.ascension.wood_qi.player", "%1$s was turned to wood by %2$s's wood qi");
+        add("death.attack.ascension.yang_qi", "%1$s was boiled alive from the inside by yang qi");
+        add("death.attack.ascension.yang_qi.player", "%1$s was boiled alive from the inside by %2$s's yang qi");
+        add("death.attack.ascension.yin_qi", "%1$s was frozen into an ice sculpture by yin qi");
+        add("death.attack.ascension.yin_qi.player", "%1$s was frozen into an ice sculpture by %2$s's yin qi");
+        add("death.attack.ascension.pure_qi", "%1$s was overwhelmed by pure qi");
+        add("death.attack.ascension.pure_qi.player", "%1$s was overwhelmed by %2$s's pure qi");
+        add("death.attack.ascension.fire_qi", "%1$s was burned away by fire qi");
+        add("death.attack.ascension.fire_qi.player", "%1$s was burned away by %2$s's fire qi");
+        add("death.attack.ascension.earth_qi", "%1$s was crushed by earth qi");
+        add("death.attack.ascension.earth_qi.player", "%1$s was crushed by %2$s's earth qi");
+        add("death.attack.ascension.metal_qi", "%1$s was cut down by metal qi");
+        add("death.attack.ascension.metal_qi.player", "%1$s was cut down by %2$s's metal qi");
+        add("death.attack.ascension.water_qi", "%1$s was swept away by water qi");
+        add("death.attack.ascension.water_qi.player", "%1$s was swept away by %2$s's water qi");
+        add("death.attack.ascension.ice_qi", "%1$s was frozen solid by ice qi");
+        add("death.attack.ascension.ice_qi.player", "%1$s was frozen solid by %2$s's ice qi");
+        add("death.attack.ascension.lightning_qi", "%1$s was struck down by lightning qi");
+        add("death.attack.ascension.lightning_qi.player", "%1$s was struck down by %2$s's lightning qi");
+        add("death.attack.ascension.wind_qi", "%1$s was torn apart by wind qi");
+        add("death.attack.ascension.wind_qi.player", "%1$s was torn apart by %2$s's wind qi");
+        add("death.attack.ascension.spatial_qi", "%1$s was shredded by spatial qi");
+        add("death.attack.ascension.spatial_qi.player", "%1$s was shredded by %2$s's spatial qi");
+        add("death.attack.ascension.temporal_qi", "%1$s ran out of time to temporal qi");
+        add("death.attack.ascension.temporal_qi.player", "%1$s ran out of time to %2$s's temporal qi");
+        add("gui.ascension.qi_coating_wheel.empty", "No Dao unlocked");
+        add("ascension.skill.qi_step.name", "Qi Steps");
+        add("ascension.skill.qi_step.desc", "Use your qi to coat your feet and step on the air to explore beyond the clouds.");
+        add("ascension.skill.qi_barrier.name", "Qi Barrier");
+        add("ascension.skill.qi_barrier.desc", "Shape qi into a barrier to block damage using the accumulated qi.");
+        // Leftover coating skills (Qi Coatings Leftovers test technique).
+        add("ascension.skill.water_serpent_qi_layer.name", "Water Qi Layer: Serpent Coil");
+        add("ascension.skill.water_serpent_qi_layer.desc", "Shape water qi into a qi coating imitating coiling serpents. Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.ice_mantle_qi_layer.name", "Ice Qi Layer: Glacial Mantle");
+        add("ascension.skill.ice_mantle_qi_layer.desc", "Control ice qi to coat yourself in a layer of ice. Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.metal_golden_body_qi_layer.name", "Metal Qi Layer: Golden Body");
+        add("ascension.skill.metal_golden_body_qi_layer.desc", "Control metal qi to coat yourself with golden metal, reinforcing yourself and becoming as sturdy as a bronze bell. Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.space_starfield_qi_layer.name", "Space Qi Layer: Starfield");
+        add("ascension.skill.space_starfield_qi_layer.desc", "Control spatial qi and weave the void between space into a protective garment. Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.lightning_step_qi_layer.name", "Lightning Qi Layer: Step");
+        add("ascension.skill.lightning_step_qi_layer.desc", "Control lightning qi and imbue it into your feet to become faster; hold a spear charge to flash forward in a streak of lightning (3 qi). Drains 1 qi per second; cast again to release it.");
+        add("ascension.skill.lightning_limb_arcs_qi_layer.name", "Lightning Qi Layer: Crackling Limbs");
+        add("ascension.skill.lightning_limb_arcs_qi_layer.desc", "Control lightning qi to imbue yourself with an electric field. Drains 1 qi per second; cast again to release it.");
+        // Shelved coating, kept for later (its JSON is in src/main/resources-disabled). The Echo layer is kept for a whole-body Time coating.
+        // add("ascension.skill.void_echo_qi_layer.name", "Void Qi Layer: Echo");
+        // add("ascension.skill.void_echo_qi_layer.desc", "Space cannot hold your whole body in one place, leaving flickering echoes. Drains 1 qi per second; cast again to release it.");
         add("ascension.skill.inner_world.name", "Inner World");
         add("ascension.skill.inner_world.desc", "Withdraw into a private inner world, leaving your body behind. If your body is destroyed you are dragged back, badly weakened.");
 

@@ -1,6 +1,9 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "ascension:block/alchemy_furnace"
+    "type": "minecraft:special",
+    "base": "ascension:item/alchemy_furnace",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
   }
 }

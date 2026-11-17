@@ -1,0 +1,128 @@
+{
+  "name": {
+    "translate": "ascension.qi_coating.element.life.name"
+  },
+  "path": "ascension:elemental/life",
+  "body_coating": "ascension:life_qi_coating",
+  "external_coating": "ascension:life_external_qi_coating",
+  "order": 10,
+  "body_on_hit": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "base": 0.05,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ]
+      }
+    },
+    "actions": [
+      {
+        "type": "ascension:damage",
+        "base": {
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:context",
+                "key": "ascension:trigger/damage"
+              },
+              "scale": 0.25
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "scale": 0.25
+            }
+          ]
+        },
+        "damage_type": "ascension:life_qi",
+        "classifications": [
+          "ascension:qi"
+        ],
+        "path": "ascension:elemental/life",
+        "subject": "target"
+      }
+    ]
+  },
+  "external_on_hit": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": {
+        "base": 0.05,
+        "terms": [
+          {
+            "source": {
+              "type": "ascension:stat",
+              "stat": "ascension:spirit"
+            },
+            "scale": 0.0125
+          }
+        ]
+      }
+    },
+    "actions": [
+      {
+        "type": "ascension:damage",
+        "base": {
+          "terms": [
+            {
+              "source": {
+                "type": "ascension:context",
+                "key": "ascension:trigger/damage"
+              },
+              "scale": 0.25
+            },
+            {
+              "source": {
+                "type": "ascension:stat",
+                "stat": "ascension:spirit"
+              },
+              "scale": 0.25
+            }
+          ]
+        },
+        "damage_type": "ascension:life_qi",
+        "classifications": [
+          "ascension:qi"
+        ],
+        "path": "ascension:elemental/life",
+        "subject": "target"
+      }
+    ]
+  },
+  "external_on_mine": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": 15.0
+    },
+    "convert": {
+      "minecraft:cobblestone": "minecraft:mossy_cobblestone",
+      "minecraft:cobblestone_slab": "minecraft:mossy_cobblestone_slab",
+      "minecraft:cobblestone_stairs": "minecraft:mossy_cobblestone_stairs",
+      "minecraft:cobblestone_wall": "minecraft:mossy_cobblestone_wall",
+      "minecraft:stone_bricks": "minecraft:mossy_stone_bricks",
+      "minecraft:stone_brick_slab": "minecraft:mossy_stone_brick_slab",
+      "minecraft:stone_brick_stairs": "minecraft:mossy_stone_brick_stairs",
+      "minecraft:stone_brick_wall": "minecraft:mossy_stone_brick_wall"
+    },
+    "speed": [
+      { "blocks": "#minecraft:leaves", "multiplier": 50.0, "tools": "#minecraft:axes" },
+      { "blocks": "#minecraft:logs", "multiplier": 2.0, "tools": "#minecraft:axes" }
+    ]
+  },
+  "external_on_use": {
+    "cost": {
+      "resource": "ascension:qi",
+      "amount": 10.0
+    },
+    "bonemeal": true
+  }
+}

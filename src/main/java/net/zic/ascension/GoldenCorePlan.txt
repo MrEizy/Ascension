@@ -1,0 +1,37 @@
+Golden Core
+
+A Golden Core Data Source
+A Golden Core Holder (Data Source Instance)
+A Golden Core
+A Golden Core Data
+A Golden Core Instance (typed, holds Golden core and Golden Core Data)
+A Golden Core Event Handler (to ensure it can listen to realm changes properly)
+
+Golden Core Instane
+	- UUID (a uniuqe id to this instance, when something is trying to declare ownership it uses a UUID instead of Identifier)
+	- Golden Core
+	- Golden Core Data
+	- Aquisition Realm
+	- End Realm (not sure about this tbh, but the idea is after this point stop giving bonuses?)
+	- path -> the path this core is tracking (should be final)
+
+Golden Core Holder
+	- holds a map of UUID-> Golden Core Instance(multiple cores of the same Identifier can exists as long as they are unique instances)
+	- whenever someoen tries to add a Core they pass an UUID,golden core, golden core data,start realm, end realm,owener id,path. etc etc. so if the id exisits instead of making a new one we add owenership.
+	  however if details like start/end realm/ path differ we do end up modifying the existing one to match the details(first run removal actions then apply changes and run apply actions,
+	  ensure this appropriatly adjusts realm change actions as well)
+	  if the goldne core provided differs do nothing. since golden cores can evolve themselves there are instances where it will differ.
+
+	- (might be useful to also map path-> cores of that path for quick access)
+	- like skills and paths store them cached on load while we wait for owners to appear.
+
+
+
+Golden Core
+	- Logic center
+	- actions
+		supports a set of actions for added/remvoed
+		supports a seperate set of actions+conditions for realm changes
+	- standard options skills and physics and bloodlines have
+
+Golden Core Data a generic marker interface

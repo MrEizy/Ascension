@@ -1,0 +1,22 @@
+{
+  "requirements": {
+    "properties": {},
+    "affinities": {},
+    "products": {
+      "ascension:alchemy/reaction/scalded_meridians": 0.25
+    }
+  },
+  "potency_per_unit": 0.7,
+  "duration_ticks": 1000,
+  "adverse": true,
+  "priority": 10,
+  "application": {
+    "action": "skill_effect",
+    "scale": 0.7,
+    "effect": "ascension:burning"
+  },
+  "names": [
+    "ascension.alchemy.pill.name.meridian_burn.0",
+    "ascension.alchemy.pill.name.meridian_burn.1"
+  ]
+}

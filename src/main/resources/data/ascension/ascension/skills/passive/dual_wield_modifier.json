@@ -1,0 +1,39 @@
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.dual_wield_modifier.name"
+  },
+  "description": {
+    "translate": "ascension.skill.dual_wield_modifier.desc"
+  },
+  "modifiers": [
+    {
+      "type": "ascension:dual_wield",
+      "weapons": [
+        {
+          "tag": "ascension:weapon/blades",
+          "path": "ascension:weapon/blade"
+        },
+        {
+          "tag": "ascension:weapon/spears",
+          "path": "ascension:weapon/spear"
+        },
+        {
+          "tag": "ascension:weapon/fists",
+          "path": "ascension:weapon/fist"
+        },
+        {
+          "empty_hand": true,
+          "path": "ascension:weapon/fist"
+        }
+      ]
+    }
+  ],
+  "toggleable": true,
+  "enabled_by_default": false,
+  "upkeep": {
+    "resource": "ascension:stamina",
+    "amount": 1.0,
+    "interval": 30
+  }
+}

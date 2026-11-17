@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_peach_wood": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:peach_wood"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:shapeless/peach_planks_from_peach_wood"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_peach_wood"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:shapeless/peach_planks_from_peach_wood"
+    ]
+  }
+}

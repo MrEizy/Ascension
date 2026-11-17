@@ -1,5 +1,6 @@
 package net.zic.ascension.common;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -13,11 +14,12 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
-import net.zic.ascension.common.item.artifacts.pills.ModPills;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.common.util.ModTags;
 
 import java.util.function.Supplier;
 
@@ -39,6 +41,12 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE);
                         output.accept(ModItems.SPIRITUAL_STONE);
                         output.accept(ModItems.JADE);
+                        output.accept(ModItems.TREASURE_RAT_SPAWN_EGG);
+                        output.accept(ModItems.MALE_CULTIVATOR_SPAWN_EGG);
+                        output.accept(ModItems.FEMALE_CULTIVATOR_SPAWN_EGG);
+                        output.accept(ModItems.SECT_ELDER_SPAWN_EGG);
+                        output.accept(ModItems.SECT_MASTER_SPAWN_EGG);
+                        output.accept(ModItems.YOUNG_MASTER_SPAWN_EGG);
                         output.accept(ModItems.RAW_FROST_SILVER);
                         output.accept(ModItems.FROST_SILVER_INGOT);
                         output.accept(ModItems.FROST_SILVER_NUGGET);
@@ -97,8 +105,15 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.PEACH_WOOD);
                         output.accept(ModBlocks.STRIPPED_PEACH_LOG);
                         output.accept(ModBlocks.STRIPPED_PEACH_WOOD);
-
                         output.accept(ModBlocks.PEACH_PLANKS);
+                        output.accept(ModBlocks.PEACH_STAIRS);
+                        output.accept(ModBlocks.PEACH_SLAB);
+                        output.accept(ModBlocks.PEACH_FENCE);
+                        output.accept(ModBlocks.PEACH_FENCE_GATE);
+                        output.accept(ModBlocks.PEACH_DOOR);
+                        output.accept(ModBlocks.PEACH_TRAPDOOR);
+                        output.accept(ModBlocks.PEACH_PRESSURE_PLATE);
+                        output.accept(ModBlocks.PEACH_BUTTON);
                         output.accept(ModBlocks.PEACH_LEAVES);
 
                         output.accept(ModBlocks.PEACH_SAPLING);
@@ -122,6 +137,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.IRONWOOD_SAPLING);
 
                         output.accept(ModBlocks.FERMENTING_BARREL);
+
+                        ModBlocks.CUSHIONS.forEach(output::accept);
 
 
                     }).build());
@@ -149,13 +166,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.WHITE_JADE_ORCHID);
                         output.accept(ModItems.PEACH);
                         output.accept(ModItems.PILL_RESIDUE);
-                        output.accept(ModPills.maximumStack(ModItems.FASTING_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.QI_REPLENISHING_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.REGENERATION_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.STAMINA_REPLENISHING_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.BODY_CULTIVATION_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.SOUL_CULTIVATION_PILL.get()));
-                        output.accept(ModPills.maximumStack(ModItems.ESSENCE_CULTIVATION_PILL.get()));
 
 
                     }).build());
@@ -218,10 +228,12 @@ public class ModCreativeModeTabs {
                             itemDisplayParameters.holders()
                                     .lookupOrThrow(CoreRegistries.PHYSIQUE_REGISTRY.key())
                                     .listElements()
+                                    .filter(holder -> !holder.is(ModTags.Physiques.HIDDEN))
                                     .forEach(holder -> {
                                         Identifier physiqueId = holder.key().identifier();
                                         ItemStack stack = new ItemStack(ModItems.PHYSIQUE_ESSENCE.get());
                                         stack.set(AscensionComponents.REGISTRY_ID_HOLDER.get(), physiqueId);
+                                        stack.set(DataComponents.ITEM_NAME, Component.translatable("item.ascension.physique_essence.named", holder.value().getName(null)));
                                         output.accept(stack);
                                     }))
                     .build());
@@ -235,10 +247,12 @@ public class ModCreativeModeTabs {
                             itemDisplayParameters.holders()
                                     .lookupOrThrow(CoreRegistries.BLOODLINE_REGISTRY.key())
                                     .listElements()
+                                    .filter(holder -> !holder.is(ModTags.Bloodlines.HIDDEN))
                                     .forEach(holder -> {
                                         Identifier bloodlineId = holder.key().identifier();
                                         ItemStack stack = new ItemStack(ModItems.BLOODLINE_ESSENCE.get());
                                         stack.set(AscensionComponents.REGISTRY_ID_HOLDER.get(), bloodlineId);
+                                        stack.set(DataComponents.ITEM_NAME, Component.translatable("item.ascension.bloodline_essence.named", holder.value().getName(null)));
                                         stack.set(AscensionComponents.PURITY.get(), 100);
                                         output.accept(stack);
                                     }))
@@ -253,10 +267,13 @@ public class ModCreativeModeTabs {
                             itemDisplayParameters.holders()
                                     .lookupOrThrow(CoreRegistries.TECHNIQUE_REGISTRY.key())
                                     .listElements()
+                                    .filter(holder -> !holder.is(ModTags.Techniques.HIDDEN))
                                     .forEach(holder -> {
                                         Identifier techniqueId = holder.key().identifier();
                                         ItemStack stack = new ItemStack(ModItems.TECHNIQUE_MANUAL.get());
                                         stack.set(AscensionComponents.REGISTRY_ID_HOLDER.get(), techniqueId);
+                                        stack.set(DataComponents.ITEM_NAME, holder.value() instanceof AlchemyTechnique ? holder.value().getName(null)
+                                                : Component.translatable("item.ascension.technique_manual.named", holder.value().getName(null)));
                                         output.accept(stack);
                                     }))
                     .build());

@@ -7,6 +7,8 @@ For system-specific authoring, use:
 - `ASCENSION_TECHNIQUES.md` for techniques and their `on_added` actions
 - `ASCENSION_BLOODLINES.md` for purity-driven bloodlines
 - `ASCENSION_PHYSIQUES.md` for persistent physique bonuses
+- `ASCENSION_GOLDEN_CORES.md` for golden cores and their per-realm actions
+- `ASCENSION_QI_COATINGS.md` for Qi Coatings 
 
 ## Quick links
 - [Files and IDs](#files-and-ids)
@@ -15,6 +17,7 @@ For system-specific authoring, use:
 - [Base stats](#base-stats)
 - [Value modifiers](#value-modifiers)
 - [Path bonuses](#path-bonuses)
+- [Path realm tribulations](#path-realm-tribulations)
 - [Path interactions](#path-interactions)
 - [Requirements](#requirements)
 - [Progress actions](#progress-actions)
@@ -38,10 +41,12 @@ Common registries:
 | Bloodlines | `data/<namespace>/ascension/bloodlines/...` |
 | Physiques | `data/<namespace>/ascension/physiques/...` |
 | Paths | `data/<namespace>/ascension/paths/...` |
+| Golden cores | `data/<namespace>/ascension/golden_cores/...` |
 | Progress actions | `data/<namespace>/ascension/progress_actions/...` |
 | Progress conditions | `data/<namespace>/ascension/progress_action_conditions/...` |
 | Tribulations | `data/<namespace>/ascension/tribulations/...` |
 | Runtime visuals | `data/<namespace>/ascension/skill_system/visuals/...` |
+| Qi coatings | `data/<namespace>/ascension/skill_system/qi_coatings/...` |
 | Beam definitions | `data/<namespace>/ascension/skill_system/runtime/beams/...` |
 | Datapack resources | `data/<namespace>/ascension/skill_system/resources/...` |
 
@@ -199,6 +204,29 @@ Progression handlers use the same flat bonus shape through `ascension:give_path_
 }
 ```
 
+## Path realm tribulations
+Each minor realm of a path may name a breakthrough tribulation, and how it starts:
+
+```json
+{
+  "name": {"translate": "ascension.realm.minor.high"},
+  "progress": 100000,
+  "tribulation": "ascension:test_tribulation",
+  "tribulation_mode": "manual"
+}
+```
+
+| `tribulation_mode` | Behaviour |
+|---|---|
+| `auto` (default) | The tribulation starts the moment the realm's progress is full |
+| `manual` | The path waits at full progress until an external source (e.g. a skill) triggers the tribulation |
+
+If a breakthrough tribulation fails, the path's progress in that realm is reset to 0.
+
+For testing, a manual tribulation can be triggered with `/ascension tribulation trigger <players> <path> <tribulation>`.
+
+Golden cores are formed through a manual `ascension:golden_core` tribulation triggered by an `ascension:golden_core_forming` skill, see `ASCENSION_GOLDEN_CORES.md`.
+
 ## Path interactions
 Path interactions are the `ascension:path_interactions` data map on the path registry, at `data/<namespace>/data_maps/ascension/paths/path_interactions.json`. Each value is keyed by the **target** path and lists how other `source` paths' **affinity** influences it.
 
@@ -339,7 +367,7 @@ Skill progression actions use a simple list:
 
 `grant_skills` is reversed when progression moves backward. `remove_skills` does the opposite: it removes while progressing upward and restores when that progression is reversed.
 
-See the bloodline and technique guides for the inline condition formats and their exact progression semantics. Realm conditions (`ascension:realm_change/...`, `ascension:every_realm`, etc.) only apply to path handlers.
+See the bloodline and technique guides for the inline condition formats and their exact progression semantics. Realm conditions (`ascension:realm_change/...`, `ascension:every_realm`, etc.) only apply to path handlers and golden core `realm_actions`.
 
 # Datapack resources
 Custom resources live in:
@@ -451,6 +479,7 @@ Techniques:                data/<namespace>/ascension/techniques/
 Bloodlines:                data/<namespace>/ascension/bloodlines/
 Physiques:                 data/<namespace>/ascension/physiques/
 Paths:                     data/<namespace>/ascension/paths/
+Golden cores:              data/<namespace>/ascension/golden_cores/
 Progress actions:          data/<namespace>/ascension/progress_actions/
 Progress conditions:       data/<namespace>/ascension/progress_action_conditions/
 Tribulations:              data/<namespace>/ascension/tribulations/

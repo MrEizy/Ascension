@@ -11,6 +11,7 @@ import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.ModBlocks;
 import net.zic.ascension.common.item.ModItems;
@@ -57,6 +58,36 @@ public class AscRecipeProvider extends RecipeProvider {
                     .unlockedBy(getHasName(log), has(log))
                     .group("planks")
                     .save(output, "ascension:shapeless/ironwood_planks_from_" + getItemName(log));
+        }
+        generateRecipes(AscBlockFamilies.PEACH_PLANKS, FeatureFlags.VANILLA_SET);
+        woodFromLogs(ModBlocks.PEACH_WOOD.get(), ModBlocks.PEACH_LOG.get());
+        woodFromLogs(ModBlocks.STRIPPED_PEACH_WOOD.get(), ModBlocks.STRIPPED_PEACH_LOG.get());
+        for (ItemLike log : List.of(ModBlocks.PEACH_LOG.get(), ModBlocks.PEACH_WOOD.get(),
+                ModBlocks.STRIPPED_PEACH_LOG.get(), ModBlocks.STRIPPED_PEACH_WOOD.get())) {
+            shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.PEACH_PLANKS.get(), 4)
+                    .requires(log)
+                    .unlockedBy(getHasName(log), has(log))
+                    .group("planks")
+                    .save(output, "ascension:shapeless/peach_planks_from_" + getItemName(log));
+        }
+
+
+        //Cushions
+        List<ItemLike> cushionWools = List.of(Blocks.WHITE_WOOL, Blocks.LIGHT_GRAY_WOOL, Blocks.GRAY_WOOL,
+                Blocks.BLACK_WOOL, Blocks.BROWN_WOOL, Blocks.RED_WOOL, Blocks.ORANGE_WOOL, Blocks.YELLOW_WOOL,
+                Blocks.LIME_WOOL, Blocks.GREEN_WOOL, Blocks.CYAN_WOOL, Blocks.LIGHT_BLUE_WOOL, Blocks.BLUE_WOOL,
+                Blocks.PURPLE_WOOL, Blocks.MAGENTA_WOOL, Blocks.PINK_WOOL);
+        for (int i = 0; i < ModBlocks.CUSHIONS.size(); i++) {
+            ItemLike cushion = ModBlocks.CUSHIONS.get(i).get();
+            ItemLike wool = cushionWools.get(i);
+            shaped(RecipeCategory.DECORATIONS, cushion)
+                    .pattern("EEE")
+                    .pattern("EWE")
+                    .define('W', ItemTags.PLANKS)
+                    .define('E', wool)
+                    .unlockedBy(getHasName(wool), has(wool))
+                    .group("cushion")
+                    .save(output, "ascension:shaped/" + getItemName(cushion));
         }
 
 
@@ -137,6 +168,16 @@ public class AscRecipeProvider extends RecipeProvider {
                 .save(output, "ascension:shapeless/black_iron_nugget_from_ingot");
 
 
+        shaped(RecipeCategory.MISC, ModItems.JADE_BOTTLE.get())
+                .pattern(" J ")
+                .pattern("JBJ")
+                .pattern(" J ")
+                .define('J', ModItems.JADE.get())
+                .define('B', Items.GLASS_BOTTLE)
+                .unlockedBy(getHasName(ModItems.JADE.get()), has(ModItems.JADE))
+                .group("alchemy")
+                .save(output, "ascension:shaped/jade_bottle");
+
         shaped(RecipeCategory.MISC, ModBlocks.ALCHEMY_FURNACE.get())
                 .pattern("B B")
                 .pattern("B B")
@@ -151,6 +192,26 @@ public class AscRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(ModItems.SPIRITUAL_STONE.get()), has(ModItems.SPIRITUAL_STONE))
                 .group("cultivation_soil")
                 .save(output, "ascension:shapeless/cultivation_soil");
+
+
+
+        //Auction
+        shaped(RecipeCategory.MISC, ModBlocks.AUCTION_HOUSE_CORE.get())
+                .pattern("B B")
+                .pattern("BBB")
+                .pattern("B B")
+                .define('B', ModItems.BLACK_IRON_INGOT.get())
+                .unlockedBy(getHasName(ModItems.BLACK_IRON_INGOT.get()), has(ModItems.BLACK_IRON_INGOT))
+                .group("black_iron")
+                .save(output, "ascension:shaped/auction_house");
+        shaped(RecipeCategory.MISC, ModBlocks.AUCTION_BIDDER.get())
+                .pattern("BBB")
+                .pattern("B B")
+                .pattern("B B")
+                .define('B', ModItems.BLACK_IRON_INGOT.get())
+                .unlockedBy(getHasName(ModItems.BLACK_IRON_INGOT.get()), has(ModItems.BLACK_IRON_INGOT))
+                .group("black_iron")
+                .save(output, "ascension:shaped/auction_bid");
 
 
         //Artifacts

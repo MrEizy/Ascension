@@ -17,4 +17,17 @@ public class AscBlockFamilies {
             .recipeGroupPrefix("wooden")
             .recipeUnlockedBy("has_planks")
             .getFamily();
+
+    public static final BlockFamily PEACH_PLANKS = new BlockFamily.Builder(ModBlocks.PEACH_PLANKS.get())
+            .button(ModBlocks.PEACH_BUTTON.get())
+            .fence(ModBlocks.PEACH_FENCE.get())
+            .fenceGate(ModBlocks.PEACH_FENCE_GATE.get())
+            .pressurePlate(ModBlocks.PEACH_PRESSURE_PLATE.get())
+            .slab(ModBlocks.PEACH_SLAB.get())
+            .stairs(ModBlocks.PEACH_STAIRS.get())
+            .door(ModBlocks.PEACH_DOOR.get())
+            .trapdoor(ModBlocks.PEACH_TRAPDOOR.get())
+            .recipeGroupPrefix("wooden")
+            .recipeUnlockedBy("has_planks")
+            .getFamily();
 }

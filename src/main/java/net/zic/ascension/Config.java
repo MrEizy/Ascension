@@ -6,10 +6,12 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public class Config {
     public static AscensionCommonConfig COMMON;
     public static AscensionClientConfig CLIENT;
+    public static AlchemyServerConfig ALCHEMY_SERVER;
 
     public static ModConfigSpec CULTIVATION_SPEC;
     public static ModConfigSpec COMMON_SPEC;
     public static ModConfigSpec CLIENT_SPEC;
+    public static ModConfigSpec ALCHEMY_SERVER_SPEC;
 
 
     static {
@@ -21,6 +23,10 @@ public class Config {
         COMMON_SPEC = commonBuilder.build();
 
 
+
+        ModConfigSpec.Builder alchemyServerBuilder = new ModConfigSpec.Builder();
+        ALCHEMY_SERVER = new AlchemyServerConfig(alchemyServerBuilder);
+        ALCHEMY_SERVER_SPEC = alchemyServerBuilder.build();
 
         ModConfigSpec.Builder clientBuilder = new ModConfigSpec.Builder();
         CLIENT = new AscensionClientConfig(clientBuilder);

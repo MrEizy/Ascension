@@ -5,7 +5,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -25,12 +28,15 @@ import net.zic.ascension.api.rpg_engine.damage.RPGEngineEntityDamagedEvent;
 import net.zic.ascension.impl.runtime.projectile.ProjectileImpactResponses;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.WeakHashMap;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class Barriers {
@@ -39,6 +45,13 @@ public final class Barriers {
     public static final Identifier DURABILITY = AscensionCraft.prefix("barrier_durability");
     public static final Identifier MAXIMUM_DURABILITY = AscensionCraft.prefix("barrier_maximum_durability");
     private static final List<BarrierInstance> ACTIVE = new ArrayList<>();
+    // Entities whose hit being dealt now was taken whole by a barrier with suppress_hurt_effects, so LivingEntityBarrierHurtMixin
+    // leaves out the hurt flash, sound and knockback that follow it. Cleared as each hit starts and ends.
+    private static final Set<LivingEntity> HURT_EFFECTS_SUPPRESSED = Collections.newSetFromMap(new WeakHashMap<>());
+    // How hard a solid barrier pushes a player back out (blocks a tick per block they're in, plus a little), since a player's
+    // position can only be moved from their own client.
+    private static final double PLAYER_PUSH = 0.5D;
+    private static final double PLAYER_PUSH_MIN = 0.05D;
 
     private Barriers() {
     }
@@ -101,6 +114,7 @@ public final class Barriers {
                 durability,
                 Math.clamp(absorption, 0.0D, 1.0D),
                 definition.overflow(),
+                definition.overflowMultiplier(),
                 definition.priority(),
                 context.level().getGameTime() + Math.max(1L, Math.round(duration)),
                 protectedEntity.position(),
@@ -191,6 +205,7 @@ public final class Barriers {
                 .sorted(Comparator.comparingInt((BarrierInstance value) -> value.priority).reversed())
                 .toList();
 
+        boolean suppressHurtEffects = false;
         for (BarrierInstance barrier : candidates) {
             if (remaining <= 0.0D) {
                 break;
@@ -210,6 +225,7 @@ public final class Barriers {
             }
 
             barrier.durability = Math.max(0.0D, barrier.durability - absorbed);
+            suppressHurtEffects |= definition.suppressHurtEffects();
             remaining = Math.max(0.0D, remaining - (barrier.overflow ? absorbed : requested));
             if (remaining <= 0.0D) {
                 ProjectileImpactResponses.apply(event.getSource(), event.getEntity(), definition.projectileResponse());
@@ -220,6 +236,8 @@ public final class Barriers {
             }
 
             if (barrier.durability <= 0.0D) {
+                // What gets past a barrier as it breaks is cut by its overflow_multiplier.
+                remaining *= barrier.overflowMultiplier;
                 ACTIVE.remove(barrier);
                 finish(level, barrier, Removal.BROKEN);
             } else {
@@ -227,7 +245,92 @@ public final class Barriers {
             }
         }
 
+        if (suppressHurtEffects && remaining <= 0.0D) {
+            HURT_EFFECTS_SUPPRESSED.add(event.getEntity());
+        }
         event.resolveDamage(AscensionCraft.prefix("damage_barriers"), 60, remaining);
+    }
+
+    /**
+     * Whether the hit being dealt to this entity now was taken whole by a barrier with suppress_hurt_effects
+     * (LivingEntityBarrierHurtMixin).
+     */
+    public static boolean hurtEffectsSuppressed(LivingEntity entity) {
+        return HURT_EFFECTS_SUPPRESSED.contains(entity);
+    }
+
+    public static void clearHurtEffectsSuppressed(LivingEntity entity) {
+        HURT_EFFECTS_SUPPRESSED.remove(entity);
+    }
+
+    /**
+     * A hit brought to nothing before it reached the barriers (by a passive's defence, say): if the entity has a barrier with
+     * suppress_hurt_effects that would have taken it, it leaves out the hurt effects too, as if the barrier had.
+     */
+    public static void noteResolvedHit(RPGEngineEntityDamagedEvent.Pre event) {
+        if (!(event.getEntity().level() instanceof ServerLevel level)) {
+            return;
+        }
+        for (BarrierInstance barrier : ACTIVE) {
+            if (!barrier.dimension.equals(level.dimension()) || !barrier.protectedEntityId.equals(event.getEntity().getUUID())) {
+                continue;
+            }
+            BarrierDefinition definition = SkillDefinitions.resolveStored(BarrierDefinition.class, barrier.skillId, barrier.definitionId, CoreRegistries.BARRIER_REGISTRY, level.registryAccess());
+            if (definition != null && definition.suppressHurtEffects() && definition.filter().accepts(event.getSource())) {
+                HURT_EFFECTS_SUPPRESSED.add(event.getEntity());
+                return;
+            }
+        }
+    }
+
+    /**
+     * A solid barrier pushes every other living thing overlapping it (its radius and height round the middle of its entity,
+     * widened by theirs) back out to its surface and stops it moving further in. Mobs are moved straight out (colliding with
+     * blocks on the way); players are given a shove, as only their own client can move them.
+     */
+    private static void pushOut(ServerLevel level, BarrierInstance barrier, LivingEntity protectedEntity) {
+        double halfHeight = barrier.height * 0.5D;
+        Vec3 centre = barrier.position.add(0.0D, protectedEntity.getBbHeight() * 0.5D, 0.0D);
+        AABB area = new AABB(centre, centre).inflate(barrier.radius + 1.0D, halfHeight + 1.5D, barrier.radius + 1.0D);
+        for (LivingEntity other : level.getEntitiesOfClass(LivingEntity.class, area)) {
+            if (other == protectedEntity || other.getUUID().equals(barrier.ownerId) || other.isSpectator() || !other.isAlive()) {
+                continue;
+            }
+            double otherHalfWidth = other.getBbWidth() * 0.5D;
+            double otherHalfHeight = other.getBbHeight() * 0.5D;
+            double reachX = barrier.radius + otherHalfWidth;
+            double reachY = halfHeight + otherHalfHeight;
+            Vec3 offset = other.position().add(0.0D, otherHalfHeight, 0.0D).subtract(centre);
+            // How far out it is, 1 on the surface, in the barrier's ellipsoid widened by the other's size.
+            double x = offset.x / reachX;
+            double y = offset.y / reachY;
+            double z = offset.z / reachX;
+            double depth = Math.sqrt(x * x + y * y + z * z);
+            if (depth >= 1.0D) {
+                continue;
+            }
+            if (depth < 1.0E-4D) {
+                x = 1.0D;
+                depth = 1.0D;
+                y = 0.0D;
+                z = 0.0D;
+            }
+            Vec3 surface = new Vec3(x / depth * reachX, y / depth * reachY, z / depth * reachX);
+            Vec3 outward = new Vec3(x / reachX, y / reachY, z / reachX).normalize();
+            Vec3 motion = other.getDeltaMovement();
+            double inward = motion.dot(outward);
+            if (inward < 0.0D) {
+                motion = motion.subtract(outward.scale(inward));
+            }
+            if (other instanceof Player) {
+                double push = PLAYER_PUSH * surface.subtract(offset).length() + PLAYER_PUSH_MIN;
+                other.setDeltaMovement(motion.add(outward.scale(push)));
+                other.hurtMarked = true;
+            } else {
+                other.setDeltaMovement(motion);
+                other.move(MoverType.PISTON, surface.subtract(offset));
+            }
+        }
     }
 
     @SubscribeEvent
@@ -254,6 +357,9 @@ public final class Barriers {
             }
 
             barrier.position = living.position();
+            if (definition.solid()) {
+                pushOut(level, barrier, living);
+            }
             boolean moved = barrier.position.distanceToSqr(barrier.syncedPosition) > 0.0025D;
             boolean heartbeat = level.getGameTime() - barrier.lastVisualSync >= 20L;
             if (heartbeat || moved && level.getGameTime() - barrier.lastPositionSync >= 2L) {
@@ -466,6 +572,7 @@ public final class Barriers {
         private final double maximumDurability;
         private final double absorption;
         private final boolean overflow;
+        private final double overflowMultiplier;
         private final int priority;
         private final long expiresAt;
         private final double radius;
@@ -490,6 +597,7 @@ public final class Barriers {
                 double durability,
                 double absorption,
                 boolean overflow,
+                double overflowMultiplier,
                 int priority,
                 long expiresAt,
                 Vec3 position,
@@ -507,6 +615,7 @@ public final class Barriers {
             this.durability = durability;
             this.absorption = absorption;
             this.overflow = overflow;
+            this.overflowMultiplier = overflowMultiplier;
             this.priority = priority;
             this.expiresAt = expiresAt;
             this.position = position;

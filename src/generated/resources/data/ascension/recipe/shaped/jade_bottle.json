@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "alchemy",
+  "key": {
+    "B": "minecraft:glass_bottle",
+    "J": "ascension:jade"
+  },
+  "pattern": [
+    " J ",
+    "JBJ",
+    " J "
+  ],
+  "result": {
+    "id": "ascension:jade_bottle"
+  }
+}

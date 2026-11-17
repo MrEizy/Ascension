@@ -1,0 +1,6 @@
+{
+  "coverage": "body",
+  "grow_millis": 1600,
+  "reacts_to": ["hurt", "attack"],
+  "skin": { "look": "ascension:ice" }
+}

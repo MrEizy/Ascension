@@ -1,6 +1,8 @@
 package net.zic.ascension.common.data_attachements;
 
 import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -11,9 +13,9 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalImpurities;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.capabilities.EntityQiProvider;
-import net.zic.ascension.api.ascension.core.path.bonus.MultiSourcePathBonusHolder;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkPathAffinityProvider;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHandler;
@@ -162,6 +164,20 @@ public class AscensionAttachments {
     public static final Supplier<AttachmentType<NormalProjectileService.Data>> NORMAL_PROJECTILE_DATA = ATTACHMENT_TYPES.register(
             "normal_projectile_data", () -> AttachmentType.builder(holder -> new NormalProjectileService.Data())
                     .serialize(NormalProjectileService.Data.CODEC.fieldOf("data"))
+                    .build()
+    );
+
+    public static final Supplier<AttachmentType<MedicinalImpurities.State>> MEDICINAL_IMPURITIES = ATTACHMENT_TYPES.register(
+            "medicinal_impurities", () -> AttachmentType.builder(holder -> new MedicinalImpurities.State(0.0D, 0L))
+                    .serialize(MedicinalImpurities.State.CODEC.fieldOf("data"))
+                    .sync((holder, to) -> holder == to, StreamCodec.of(
+                            (ByteBuf buf, MedicinalImpurities.State state) -> {
+                                buf.writeDouble(state.amount());
+                                buf.writeLong(state.checkedAt());
+                            },
+                            (ByteBuf buf) -> new MedicinalImpurities.State(buf.readDouble(), buf.readLong())
+                    ))
+                    .copyOnDeath()
                     .build()
     );
 

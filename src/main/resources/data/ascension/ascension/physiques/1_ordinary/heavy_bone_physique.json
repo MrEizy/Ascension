@@ -7,7 +7,7 @@
     "translate": "ascension.physique.heavy_bone_physique.desc"
   },
   "paths": [
-    "ascension:foundation/essence",
+    "ascension:foundation/body",
     "ascension:elemental/fire",
     "ascension:elemental/metal",
     "ascension:weapon/hammer"

@@ -1,0 +1,13 @@
+{
+  "values": [
+    "ascension:passive/qi_coatings_leftovers/ice_mantle_qi_layer",
+    "ascension:passive/qi_coatings_leftovers/lightning_limb_arcs_qi_layer",
+    "ascension:passive/qi_coatings_leftovers/lightning_step_qi_layer",
+    "ascension:passive/qi_coatings_leftovers/metal_golden_body_qi_layer",
+    "ascension:passive/qi_coatings_leftovers/space_starfield_qi_layer",
+    "ascension:passive/qi_coatings_leftovers/water_serpent_qi_layer",
+    "ascension:passive/qi_coating/qi_coating",
+    "ascension:passive/qi_coating/external_qi_coating",
+    "ascension:passive/qi_step/qi_step"
+  ]
+}

@@ -345,10 +345,19 @@ public final class BodyCultivationSkill implements Skill<BodyCultivationSkill.Da
         }
     }
 
-    public record ResourceCost(Identifier resource, ScaledValue amount) {
+    /**
+     * One resource charged per tempering converted.
+     *
+     * @param resource          the resource to consume
+     * @param amount            how much is consumed per point of tempering converted
+     * @param pausesRegeneration whether paying it restarts the resource's regen delay (as sprinting does). Off by
+     *                          default, since conversion pays every few ticks and would otherwise stop regen entirely
+     */
+    public record ResourceCost(Identifier resource, ScaledValue amount, boolean pausesRegeneration) {
         public static final Codec<ResourceCost> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("resource").forGetter(ResourceCost::resource),
-                ScaledValue.COMPACT_CODEC.fieldOf("amount").forGetter(ResourceCost::amount)
+                ScaledValue.COMPACT_CODEC.fieldOf("amount").forGetter(ResourceCost::amount),
+                Codec.BOOL.optionalFieldOf("pauses_regeneration", false).forGetter(ResourceCost::pausesRegeneration)
         ).apply(instance, ResourceCost::new));
 
         public ResourceCost {

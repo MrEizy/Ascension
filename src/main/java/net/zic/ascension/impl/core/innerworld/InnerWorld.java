@@ -21,11 +21,11 @@ public final class InnerWorld {
 
     public static final int PLOT_SPACING_BLOCKS = 8192;
     public static final int BASE_RADIUS_CHUNKS = 4;
-    public static final int CHUNKS_PER_REALM = 6;
-    public static final int MAX_RADIUS_CHUNKS = 96;
+    public static final int CHUNKS_PER_REALM = 3;
+    public static final int MAX_RADIUS_CHUNKS = 33;
     public static final int MIN_GAP_BLOCKS = 5000;
-    public static final int SURFACE_Y = 64;
-    public static final int VOID_RESCUE_Y = 0;
+    public static final int SURFACE_Y = 120;
+    public static final int VOID_RESCUE_Y = -20;
 
     static {
         int worstCaseHalfSpan = MAX_RADIUS_CHUNKS * 16 + 16;

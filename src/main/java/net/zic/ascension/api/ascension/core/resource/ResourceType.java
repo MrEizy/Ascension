@@ -22,7 +22,8 @@ public interface ResourceType {
     default void afterApply(
             LivingEntity entity,
             ResourceOperation operation,
-            ResourceOperation.Application result
+            ResourceOperation.Application result,
+            ResourceTransactionRequest request
     ) {
     }
 }

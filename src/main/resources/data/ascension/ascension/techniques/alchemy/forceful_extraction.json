@@ -1,0 +1,12 @@
+{
+  "type": "ascension:alchemy_technique",
+  "name": "Forceful Extraction",
+  "description": "Forces additional essence from ingredients at the risk of impurities and instability.",
+  "basic": false,
+  "refinement": {
+    "stage": "extraction",
+    "yield": 1.18,
+    "purity_delta": -0.06,
+    "instability_delta": 0.16
+  }
+}

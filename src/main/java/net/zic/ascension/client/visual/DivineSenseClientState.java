@@ -53,6 +53,15 @@ public final class DivineSenseClientState {
         return entity.position().distanceToSqr(center) <= reach * reach;
     }
 
+    /** True while a Divine Sense is active and its wave has reached this point. Used to light up revealed treasure veins. */
+    public boolean isWaveReaching(Vec3 point) {
+        if (!isActive()) {
+            return false;
+        }
+        float reach = waveRadius();
+        return point.distanceToSqr(center) <= reach * reach;
+    }
+
     public int outlineColor(Entity entity) {
         float distance = (float) Math.sqrt(entity.position().distanceToSqr(center));
         float behindWave = waveRadius() - distance;

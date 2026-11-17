@@ -1,0 +1,53 @@
+{
+  "type": "ascension:simple_trait",
+  "name": "Elite Cultivator",
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:npc_elite_vitality",
+          "value": 6.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:npc_elite_strength",
+          "value": 4.0
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:npc_elite_spirit",
+          "value": 3.0
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "attributes": {
+    "minecraft:max_health": {
+      "flat": [
+        {
+          "id": "ascension:npc_elite_max_health",
+          "value": 80.0
+        }
+      ],
+      "multiplier": []
+    },
+    "minecraft:attack_damage": {
+      "flat": [
+        {
+          "id": "ascension:npc_elite_attack_damage",
+          "value": 10.0
+        }
+      ],
+      "multiplier": []
+    }
+  }
+}

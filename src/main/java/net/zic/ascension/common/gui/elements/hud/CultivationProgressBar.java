@@ -6,6 +6,8 @@ import net.lucent.easygui.gui.layout.positioning.rules.PositioningRules;
 import net.lucent.easygui.gui.textures.ITextureData;
 import net.lucent.easygui.gui.textures.TextureDataSubsection;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
@@ -36,15 +38,15 @@ public class CultivationProgressBar extends RenderableElement {
     private static final Identifier BODY_PATH =
             Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "foundation/body");
 
-    private static final int FRAME_WIDTH = 111;
-    private static final int FRAME_HEIGHT = 53;
+    static final int FRAME_WIDTH = 111;
+    static final int FRAME_HEIGHT = 53;
 
-    private static final int CONTENT_X = 5;
-    private static final int CONTENT_Y = 30;
-    private static final int CONTENT_WIDTH = 101;
-    private static final int CONTENT_HEIGHT = 9;
+    static final int CONTENT_X = 5;
+    static final int CONTENT_Y = 30;
+    static final int CONTENT_WIDTH = 101;
+    static final int CONTENT_HEIGHT = 9;
 
-    private static final ITextureData BACKGROUND =
+    static final ITextureData BACKGROUND =
             new TextureDataSubsection(
                     FRAME_TEXTURE,
                     FRAME_WIDTH,
@@ -99,6 +101,21 @@ public class CultivationProgressBar extends RenderableElement {
                     CONTENT_HEIGHT
             );
 
+    private static final int MEDICINAL_DISPLAY_TICKS = 80;
+    private static Identifier medicinalPath;
+    private static float medicinalProgress;
+    private static long medicinalExpiry;
+    private static ClientLevel medicinalLevel;
+
+    public static void showMedicinalProgress(Identifier path, float progress) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.level == null || client.player == null || path == null || !Float.isFinite(progress)) return;
+        medicinalPath = path;
+        medicinalProgress = Math.clamp(progress, 0.0F, 1.0F);
+        medicinalLevel = client.level;
+        medicinalExpiry = client.level.getGameTime() + MEDICINAL_DISPLAY_TICKS;
+    }
+
     public CultivationProgressBar(UIFrame frame) {
         super(frame);
 
@@ -109,6 +126,11 @@ public class CultivationProgressBar extends RenderableElement {
         getPositioning().setYPositioningRule(PositioningRules.END);
         getPositioning().setX(-FRAME_WIDTH / 2);
         getPositioning().setY(86);
+    }
+
+    @Override
+    public boolean isVisible() {
+        return super.isVisible() && HudVisibility.isHudVisible();
     }
 
     @Override
@@ -140,6 +162,9 @@ public class CultivationProgressBar extends RenderableElement {
     }
 
     private Optional<CultivationState> getState() {
+        Optional<CultivationState> medicine = getMedicinalState();
+        if (medicine.isPresent()) return medicine;
+
         return ClientAscensionData.getPlayer().flatMap(player -> {
             boolean castHeld = player.getData(ZenithAttachments.ACTION_MANAGER).isActive(AscensionSkillListener.skillCast);
 
@@ -179,6 +204,18 @@ public class CultivationProgressBar extends RenderableElement {
         });
     }
 
+    private static Optional<CultivationState> getMedicinalState() {
+        Minecraft client = Minecraft.getInstance();
+        if (medicinalPath == null) return Optional.empty();
+        if (client.level == null || client.level != medicinalLevel || client.player == null
+                || client.level.getGameTime() > medicinalExpiry) {
+            medicinalPath = null;
+            medicinalLevel = null;
+            return Optional.empty();
+        }
+        return Optional.of(new CultivationState(medicinalProgress, resolveContent(medicinalPath)));
+    }
+
     private static double resolveProgress(PathInstance<?> pathInstance, Identifier pathId, boolean cultivationSuppressed, net.minecraft.core.RegistryAccess registryAccess) {
         /*
         if (cultivationSuppressed && pathInstance instanceof FoundationPathInstance foundationData) {
@@ -211,7 +248,8 @@ public class CultivationProgressBar extends RenderableElement {
         return Math.clamp(pathInstance.getProgress() / maximum, 0.0D, 1.0D);
     }
 
-    private static ITextureData resolveContent(Identifier pathId) {
+    //the bar fill for a path, also used by the cast progress bar
+    static ITextureData resolveContent(Identifier pathId) {
         if (SOUL_PATH.equals(pathId)) {
             return SOUL_CONTENT;
         }

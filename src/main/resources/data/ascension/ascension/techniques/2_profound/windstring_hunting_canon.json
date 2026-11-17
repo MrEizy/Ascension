@@ -13,7 +13,8 @@
         "ascension:passive/bow_mastery",
         "ascension:castable/new_techniques/windstring_volley",
         "ascension:castable/bow_projection",
-        "ascension:castable/new_techniques/essence_perception"
+        "ascension:castable/new_techniques/essence_perception",
+        "ascension:castable/divine_sense/divine_sense_windstring_hunting_canon"
       ]
     }
   ],

@@ -99,9 +99,9 @@ public final class ResourceOperation {
             Application result,
             boolean simulate
     ) {
+        // afterApply runs in ResourceTransactionService, which has the request flags.
         if (!simulate) {
             resource.setAmount(entity, result.amountAfter());
-            resource.afterApply(entity, operation, result);
         }
     }
 

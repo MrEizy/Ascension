@@ -1,0 +1,11 @@
+{
+  "type": "ascension:alchemy_technique",
+  "name": "Steady Heating",
+  "description": "Maintains steady furnace heat and reliable temperature control.",
+  "basic": true,
+  "refinement": {
+    "stage": "heating",
+    "heat": 1.0,
+    "control": 2.5
+  }
+}

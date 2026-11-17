@@ -1,9 +1,8 @@
 {
   "type": "neoforge:add_features",
   "biomes": [
-    "minecraft:plains",
-    "minecraft:meadow",
-    "minecraft:windswept_hills",
+    "minecraft:forest",
+    "minecraft:birch_forest",
     "ascension:greystone_foothills",
     "ascension:jadebloom_forest",
     "ascension:verdant_moor"

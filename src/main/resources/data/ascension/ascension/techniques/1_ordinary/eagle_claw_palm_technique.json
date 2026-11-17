@@ -11,7 +11,8 @@
       "type": "ascension:grant_skills",
       "skills": [
         "ascension:castable/eagle_claw_palm_technique/eagle_claw_rending_palm",
-        "ascension:passive/eagle_claw_palm_technique/hooked_talon_grip"
+        "ascension:passive/eagle_claw_palm_technique/hooked_talon_grip",
+        "ascension:castable/divine_sense/divine_sense_eagle_claw_palm_technique"
       ]
     }
   ],

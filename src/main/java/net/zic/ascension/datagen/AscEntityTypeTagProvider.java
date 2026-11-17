@@ -32,6 +32,10 @@ public class AscEntityTypeTagProvider extends EntityTypeTagsProvider {
                 .add(EntityType.ARROW, EntityType.SPECTRAL_ARROW, EntityType.TRIDENT);
 
 
+        tag(ModTags.EntityTypes.ORTHODOX);
+        tag(ModTags.EntityTypes.UNORTHODOX);
+        tag(ModTags.EntityTypes.DEMONIC);
+
         // Mob Cultivation Stuff
         tag(ModTags.EntityTypes.MOB_CULTIVATION_PASSIVE);
         tag(ModTags.EntityTypes.MOB_CULTIVATION_HOSTILE);

@@ -1,0 +1,33 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.qi_coatings_leftovers.name"
+  },
+  "description": {
+    "translate": "ascension.technique.qi_coatings_leftovers.desc"
+  },
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/qi_coatings_leftovers/ice_mantle_qi_layer",
+        "ascension:passive/qi_coatings_leftovers/ice_mantle_qi_layer",
+        "ascension:castable/qi_coatings_leftovers/lightning_limb_arcs_qi_layer",
+        "ascension:passive/qi_coatings_leftovers/lightning_limb_arcs_qi_layer",
+        "ascension:castable/qi_coatings_leftovers/lightning_step_qi_layer",
+        "ascension:passive/qi_coatings_leftovers/lightning_step_qi_layer",
+        "ascension:castable/qi_coatings_leftovers/metal_golden_body_qi_layer",
+        "ascension:passive/qi_coatings_leftovers/metal_golden_body_qi_layer",
+        "ascension:castable/qi_coatings_leftovers/space_starfield_qi_layer",
+        "ascension:passive/qi_coatings_leftovers/space_starfield_qi_layer",
+        "ascension:castable/qi_coatings_leftovers/water_serpent_qi_layer",
+        "ascension:passive/qi_coatings_leftovers/water_serpent_qi_layer"
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:ordinary"
+  }
+}

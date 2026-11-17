@@ -1,5 +1,6 @@
 package net.zic.ascension.impl.core.path;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -23,9 +24,9 @@ public record CompletedTribulation<T extends TribulationData>(Identifier id, Tri
 
     //returns null if the data is missing or rejected by the tribulation
     //TODO update to use SERIALIZER for data reading/writing
-    public static <T extends TribulationData> @Nullable CompletedTribulation<T> read(Identifier id, Tribulation<T> tribulation, ValueInput input) {
+    public static <T extends TribulationData> @Nullable CompletedTribulation<T> read(Identifier id, Tribulation<T> tribulation, ValueInput input, RegistryAccess access) {
         try{
-            T data = input.read("data", tribulation.getType().dataCodec()).map(tribulation::validateLoadedData).orElse(null);
+            T data = input.read("data", tribulation.getType().dataCodec()).map(loaded -> tribulation.validateLoadedData(loaded, access)).orElse(null);
             return data == null ? null : new CompletedTribulation<>(id, tribulation, data);
         } catch (Exception e){
             AscensionCraft.LOGGER.debug("unable to read tribulation");
@@ -34,8 +35,8 @@ public record CompletedTribulation<T extends TribulationData>(Identifier id, Tri
     }
 
     //checks the data still matches the tribulation, replacing it with fresh data if not
-    public CompletedTribulation<T> revalidate() {
-        T validated = tribulation.validateLoadedData(data);
+    public CompletedTribulation<T> revalidate(RegistryAccess access) {
+        T validated = tribulation.validateLoadedData(data, access);
         return new CompletedTribulation<>(id, tribulation, validated == null ? tribulation.newData() : validated);
     }
 

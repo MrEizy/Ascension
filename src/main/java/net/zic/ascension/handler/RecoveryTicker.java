@@ -4,6 +4,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
@@ -16,17 +18,27 @@ import net.zic.ascension.impl.resource.AscensionResourceTypes;
 import net.zic.ascension.impl.resource.stamina.StaminaService;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class RecoveryTicker {
     private static final double TICKS_PER_SECOND = 20.0D;
     private static final float VANILLA_HEALTH_THRESHOLD = 20.0F;
-    public static final double SPRINTING_COST = 0.10D;
+    public static final double SPRINTING_COST = 0.3D;
     public static final double SWIMMING_COST = 0.14D;
     public static final double ELYTRA_COST = 0.08D;
     public static final double CLIMBING_COST = 0.10D;
-    public static final double CRAWLING_COST = 0.06D;
-    public static final double JUMPING_COST = 4.0D;
+    public static final double CRAWLING_COST = 0.03D;
+    public static final double JUMPING_COST = 1.5D;
     public static final double ATTACKING_COST = 6.0D;
+    // 0.01 blocks per tick; sneaking is about 0.065.
+    private static final double MIN_MOVEMENT_SQR = 1.0E-4D;
+    // 10 blocks in one tick is a teleport, not movement (elytra tops out around 3-4).
+    private static final double MAX_MOVEMENT_SQR = 100.0D;
+    // Last tick's position per online player; the server has no reliable per-player velocity.
+    private static final Map<UUID, Vec3> LAST_POSITIONS = new HashMap<>();
 
     private RecoveryTicker() {
     }
@@ -104,15 +116,15 @@ public final class RecoveryTicker {
             regenerateStamina(player);
             return;
         }
-        Vec3 deltaMovement = player.getDeltaMovement();
-        if (deltaMovement.lengthSqr() > 1.0E-4D) {
+        boolean moved = movedSinceLastTick(player);
+        if (moved) {
             BodyCultivationSkillService.stimulate(
                     player,
                     AscensionResourceSources.movementSource(player),
                     1.0D
             );
         }
-        MovementCost movement = movementCost(player);
+        MovementCost movement = moved ? movementCost(player) : null;
         if (movement == null) {
             regenerateStamina(player);
             return;
@@ -160,11 +172,46 @@ public final class RecoveryTicker {
         }
     }
 
-    private static MovementCost movementCost(ServerPlayer player) {
-        Vec3 movement = player.getDeltaMovement();
-        if (movement.lengthSqr() <= 1.0E-4D) {
-            return null;
+    /**
+     * Whether the player really moved since the previous tick. Server-side delta movement can't be used: it never holds
+     * walking or sprinting (the client moves the player) and always holds gravity, so standing still looked like moving.
+     */
+    private static boolean movedSinceLastTick(ServerPlayer player) {
+        Vec3 current = player.position();
+        Vec3 previous = LAST_POSITIONS.put(player.getUUID(), current);
+        if (previous == null || player.isPassenger()) {
+            return false;
         }
+        double distanceSqr = current.distanceToSqr(previous);
+        // Teleports, pearls and dimension changes aren't movement the player made.
+        boolean moved = distanceSqr > MIN_MOVEMENT_SQR && distanceSqr < MAX_MOVEMENT_SQR;
+        // TEMP DEBUG: checks the position-based movement check. Remove once confirmed.
+        if (player.tickCount % 20 == 0) {
+            MovementCost cost = moved ? movementCost(player) : null;
+            AscensionCraft.LOGGER.info(
+                    "[MovementDebug] {} distance={} moved={} source={} cost={} stamina={}",
+                    player.getName().getString(),
+                    String.format("%.4f", Math.sqrt(distanceSqr)),
+                    moved,
+                    AscensionResourceSources.movementSource(player).id(),
+                    cost == null ? "none" : cost.source().id() + "@" + cost.amount(),
+                    String.format("%.2f", StaminaService.getStamina(player))
+            );
+        }
+        return moved;
+    }
+
+    @SubscribeEvent
+    public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+        LAST_POSITIONS.remove(event.getEntity().getUUID());
+    }
+
+    @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        LAST_POSITIONS.clear();
+    }
+
+    private static MovementCost movementCost(ServerPlayer player) {
         if (player.isFallFlying()) {
             return new MovementCost(AscensionResourceSources.ELYTRA, ELYTRA_COST);
         }

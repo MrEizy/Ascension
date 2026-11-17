@@ -20,8 +20,7 @@
         },
         {
           "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 100000,
-          "tribulation": "ascension:test_tribulation"
+          "progress": 100000
         }
       ]
     },
@@ -55,7 +54,9 @@
         },
         {
           "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 1000000000
+          "progress": 1000000000,
+          "tribulation": "ascension:golden_core_tribulation",
+          "tribulation_mode": "auto"
         }
       ]
     },
@@ -214,6 +215,34 @@
     }
   ],
   "actions": [
+    {
+      "condition": "ascension:realm_change/second_major_realm",
+      "actions": [
+        {
+          "type": "ascension:grant_skills",
+          "skills": [
+            "ascension:castable/qi_step/qi_step",
+            "ascension:passive/qi_step/qi_step",
+            "ascension:castable/qi_barrier"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": "ascension:realm_change/third_major_realm",
+      "actions": [
+        {
+          "type": "ascension:grant_skills",
+          "skills": [
+            "ascension:castable/qi_coating/qi_coating",
+            "ascension:passive/qi_coating/qi_coating",
+            "ascension:castable/qi_coating/external_qi_coating",
+            "ascension:passive/qi_coating/external_qi_coating",
+            "ascension:castable/inner_world"
+          ]
+        }
+      ]
+    },
     {
       "condition": "ascension:realm_change/on_gained",
       "actions": [

@@ -12,7 +12,8 @@
       "skills": [
         "ascension:castable/lightness_technique/featherstep",
         "ascension:passive/lightness_technique/skimming_stride",
-        "ascension:castable/lightness_technique/cloud_leaping_step"
+        "ascension:castable/lightness_technique/cloud_leaping_step",
+        "ascension:castable/divine_sense/divine_sense_lightness_technique"
       ]
     }
   ],

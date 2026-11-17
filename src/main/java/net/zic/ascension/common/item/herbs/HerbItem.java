@@ -1,9 +1,15 @@
 package net.zic.ascension.common.item.herbs;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.component.Consumables;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalHerbConsumption;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyContext;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +34,8 @@ public class HerbItem extends Item {
     }
 
     public HerbItem(Properties properties, HerbDefinition definition, Supplier<? extends Block> crop) {
-        super(properties.component(AscensionComponents.HERB_DATA.get(), AscensionComponents.HerbData.DEFAULT));
+        super(properties.component(AscensionComponents.HERB_DATA.get(), AscensionComponents.HerbData.DEFAULT)
+                .component(DataComponents.CONSUMABLE, Consumables.defaultFood().consumeSeconds(1.6F).build()));
         this.definition = definition;
         this.crop = crop;
     }
@@ -42,7 +49,21 @@ public class HerbItem extends Item {
     }
 
     public void applyHerbEffects(LivingEntity entity, ItemStack stack) {
-        definition.applyEffects(entity, stack, data(stack));
+        MedicinalHerbConsumption.consume(stack, entity);
+    }
+
+    @Override
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (AlchemyMaterials.resolve(player.getItemInHand(hand), AlchemyContext.of(player)).isEmpty()) {
+            return InteractionResult.FAIL;
+        }
+        return super.use(level, player, hand);
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+        if (!level.isClientSide()) applyHerbEffects(entity, stack);
+        return super.finishUsingItem(stack, level, entity);
     }
 
     @Override

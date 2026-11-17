@@ -30,7 +30,7 @@ public class AscDataGen {
                 List.of(
                         new LootTableProvider.SubProviderEntry(AscBlockLootTableProvider::new, LootContextParamSets.BLOCK),
                         new LootTableProvider.SubProviderEntry(AscEntityLootTableProvider::new, LootContextParamSets.ENTITY),
-                        new LootTableProvider.SubProviderEntry(_ -> new AscChestLootTableProvider(), LootContextParamSets.CHEST),
+                        new LootTableProvider.SubProviderEntry(AscChestLootTableProvider::new, LootContextParamSets.CHEST),
                         new LootTableProvider.SubProviderEntry(_ -> new AscAddedLootTableProvider(), LootContextParamSets.ENTITY)),
                 lookupProvider));
         generator.addProvider(true, new AscGlobalLootModifierProvider(packOutput, lookupProvider));
@@ -45,6 +45,7 @@ public class AscDataGen {
         generator.addProvider(true, new AscItemTagProvider(packOutput, lookupProvider));
         generator.addProvider(true, new AscEntityTypeTagProvider(packOutput, lookupProvider));
         generator.addProvider(true, new AscBiomeTagProvider(packOutput, datapackProvider.getRegistryProvider()));
+        generator.addProvider(true, new AscStructureTagProvider(packOutput, datapackProvider.getRegistryProvider()));
         generator.addProvider(true, new AscWorldPresetTagProvider(packOutput));
         generator.addProvider(true, new MobCultivationProfileDataProvider(packOutput));
         generator.addProvider(true, new MobCultivationLootDataProvider(packOutput));

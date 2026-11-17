@@ -1,0 +1,95 @@
+{
+  "names": [
+    "Jin Hao",
+    "Wei Jun",
+    "Luo Yan",
+    "Zhao Kai",
+    "Yun Fei",
+    "Liang Xu"
+  ],
+  "skins": [
+    "default"
+  ],
+  "greeting": "You have something to say to me?",
+  "dialogue": [
+    "Do you even know whose presence you stand in?",
+    "My cultivation is advancing splendidly.",
+    "Try not to embarrass yourself in front of me."
+  ],
+  "encounter": {
+    "summon_delay_ticks": 300,
+    "taunts": [
+      "Your lineage is so insignificant that even the heavens have forgotten its name.",
+      "Did your ancestors cultivate incompetence for ten generations?",
+      "An ant dares look upon this young master?",
+      "Elder! This fool needs a lesson in respect.",
+      "Your bloodline is weaker than the tea my servants discard."
+    ]
+  },
+  "personalities": [
+    {
+      "id": "arrogant",
+      "weight": 8
+    },
+    {
+      "id": "competitive",
+      "weight": 3
+    },
+    {
+      "id": "cautious",
+      "weight": 2
+    },
+    {
+      "id": "compassionate",
+      "weight": 1
+    }
+  ],
+  "affiliations": [
+    {
+      "id": "orthodox",
+      "weight": 6
+    },
+    {
+      "id": "unorthodox",
+      "weight": 3
+    },
+    {
+      "id": "demonic",
+      "weight": 1
+    }
+  ],
+  "cultivation_routine": {
+    "min_interval_ticks": 700,
+    "max_interval_ticks": 1300,
+    "meditation_ticks": 140,
+    "circulation_ticks": 120,
+    "circulation_chance": 45
+  },
+  "daily_life": {
+    "social_min_interval_ticks": 450,
+    "social_max_interval_ticks": 950,
+    "social_duration_ticks": 70,
+    "social_radius": 6,
+    "preferred_periods": [
+      "day",
+      "dusk",
+      "night"
+    ]
+  },
+  "duel": {
+    "finish_health_percent": 25,
+    "max_duration_ticks": 2400,
+    "max_distance": 32
+  },
+  "dialogue_unlocks": {
+    "gift_talks": 2,
+    "insult_talks": 2,
+    "challenge_talks": 3,
+    "guidance_talks": 4
+  },
+  "village_spawning": {
+    "weight": 2,
+    "max_per_village": 1,
+    "home_radius": 22
+  }
+}

@@ -1,5 +1,6 @@
 package net.zic.ascension.common.util;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
@@ -9,7 +10,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.skill.Skill;
+import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
+import net.zic.ascension.api.ascension.core.physique.Physique;
+import net.zic.ascension.api.ascension.core.technique.Technique;
 
 public class ModTags {
     public static class Blocks {
@@ -17,6 +24,8 @@ public class ModTags {
         public static final TagKey<Block> LINKABLE_CONTAINERS = createTag("linkable_containers");
         public static final TagKey<Block> PROJECTION_UNBREAKABLE = createTag("projection_unbreakable");
         public static final TagKey<Block> HERB_SOILS = createTag("herb_soils");
+        // What the Earth element's External Qi Coating mines faster (its external_on_mine speed).
+        public static final TagKey<Block> EARTH_QI_COATING_MINEABLE = createTag("earth_qi_coating_mineable");
 
         public static final  TagKey<Block> NEEDS_BLACK_IRON_TOOL = createTag("needs_black_iron_tool");
         public static final  TagKey<Block> INCORRECT_FOR_BLACK_IRON_TOOL = createTag("incorrect_for_black_iron_tool");
@@ -97,6 +106,14 @@ public class ModTags {
         }
     }
 
+    public static class Structures {
+        public static final TagKey<Structure> PAGODAS = createTag("pagodas");
+
+        private static TagKey<Structure> createTag(String name) {
+            return TagKey.create(Registries.STRUCTURE, Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
+        }
+    }
+
     public static class EntityTypes {
         public static final TagKey<EntityType<?>> FROZEN_IMMUNE = createTag("frozen_immune");
         public static final TagKey<EntityType<?>> FROZEN_RESISTANT = createTag("frozen_resistant");
@@ -105,6 +122,9 @@ public class ModTags {
         public static final TagKey<EntityType<?>> STAGGER_IMMUNE = createTag("stagger_immune");
         public static final TagKey<EntityType<?>> STAGGER_RESISTANT = createTag("stagger_resistant");
         public static final TagKey<EntityType<?>> STAGGER_BOSS_PROFILE = createTag("stagger_boss_profile");
+        public static final TagKey<EntityType<?>> ORTHODOX = createTag("orthodox");
+        public static final TagKey<EntityType<?>> UNORTHODOX = createTag("unorthodox");
+        public static final TagKey<EntityType<?>> DEMONIC = createTag("demonic");
         public static final TagKey<EntityType<?>> MOB_CULTIVATION_PASSIVE = createTag("mob_cultivation/passive");
         public static final TagKey<EntityType<?>> MOB_CULTIVATION_HOSTILE = createTag("mob_cultivation/hostile");
         public static final TagKey<EntityType<?>> MOB_CULTIVATION_BOSSES = createTag("mob_cultivation/bosses");
@@ -113,5 +133,37 @@ public class ModTags {
         private static TagKey<EntityType<?>> createTag(String name) {
             return TagKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
         }
+    }
+
+    public static class Skills {
+        // Skills that only back another skill, such as the passive a Qi Coating hotbar skill toggles; left out of skill lists.
+        public static final TagKey<Skill<?>> HIDDEN = createTag("hidden");
+
+        private static TagKey<Skill<?>> createTag(String name) {
+            return TagKey.create(CoreRegistries.SKILL_REGISTRY.key(), Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, name));
+        }
+
+        /**
+         * Whether the skill should appear in skill lists and tooltips.
+         */
+        public static boolean isListed(Identifier skill, RegistryAccess access) {
+            return CoreRegistries.SKILL_REGISTRY.get(access).get(skill).map(holder -> !holder.is(HIDDEN)).orElse(true);
+        }
+    }
+
+    // Dev/test entries tagged hidden are left out of the transfer creative tabs (and so out of JEI).
+    public static class Physiques {
+        public static final TagKey<Physique<?>> HIDDEN =
+                TagKey.create(CoreRegistries.PHYSIQUE_REGISTRY.key(), Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "hidden"));
+    }
+
+    public static class Bloodlines {
+        public static final TagKey<Bloodline<?>> HIDDEN =
+                TagKey.create(CoreRegistries.BLOODLINE_REGISTRY.key(), Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "hidden"));
+    }
+
+    public static class Techniques {
+        public static final TagKey<Technique<?>> HIDDEN =
+                TagKey.create(CoreRegistries.TECHNIQUE_REGISTRY.key(), Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "hidden"));
     }
 }

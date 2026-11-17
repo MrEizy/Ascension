@@ -1,0 +1,12 @@
+{
+  "type": "ascension:golden_core",
+  "strikes": 4,
+  "damage": 2.0,
+  "tick_delay": 10,
+  "default_golden_core": "ascension:test_core",
+  "default_path": "ascension:foundation/essence",
+  "default_realm": {
+    "major": 2,
+    "minor": 2
+  }
+}

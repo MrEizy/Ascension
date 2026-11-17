@@ -1,5 +1,15 @@
 {
   "values": [
+    "ascension:black_iron_blade",
+    "ascension:frost_silver_blade",
+    "ascension:spiritual_stone_blade",
+    "ascension:wooden_blade",
+    "ascension:stone_blade",
+    "ascension:copper_blade",
+    "ascension:iron_blade",
+    "ascension:gold_blade",
+    "ascension:diamond_blade",
+    "ascension:netherite_blade",
     {
       "id": "#c:tools/blade",
       "required": false

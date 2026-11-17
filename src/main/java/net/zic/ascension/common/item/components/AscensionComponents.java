@@ -12,6 +12,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.alchemy.PillGrade;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
 
 import java.util.function.Supplier;
 
@@ -62,6 +64,22 @@ public class AscensionComponents {
                     .build()
     );
 
+    public static final Supplier<DataComponentType<MedicinalProfile>> MEDICINAL_PILL = DATA_COMPONENTS.register(
+            "medicinal_pill",
+            () -> DataComponentType.<MedicinalProfile>builder()
+                    .persistent(MedicinalProfile.CODEC)
+                    .networkSynchronized(ByteBufCodecs.fromCodecWithRegistries(MedicinalProfile.CODEC))
+                    .build()
+    );
+
+    public static final Supplier<DataComponentType<MedicinalDecay.State>> MEDICINAL_DECAY = DATA_COMPONENTS.register(
+            "medicinal_decay",
+            () -> DataComponentType.<MedicinalDecay.State>builder()
+                    .persistent(MedicinalDecay.State.CODEC)
+                    .networkSynchronized(ByteBufCodecs.fromCodecWithRegistries(MedicinalDecay.State.CODEC))
+                    .build()
+    );
+
     public static final Supplier<DataComponentType<Identifier>> PATH_DAMAGE_TYPE = DATA_COMPONENTS.register(
             "path_damage_type",
             ()->DataComponentType.<Identifier>builder()
@@ -87,7 +105,6 @@ public class AscensionComponents {
         public static final Identifier HEAVENS_PATH = AscensionCraft.prefix("heavens_path");
 
         public static final PillData DEFAULT = new PillData(ORDINARY, PillGrade.PEAK);
-        public static final PillData MAXIMUM = new PillData(HEAVENS_PATH, PillGrade.SUPREME);
 
         public static final Codec<PillData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("rank").forGetter(PillData::rank),
@@ -135,9 +152,6 @@ public class AscensionComponents {
             return 0;
         }
 
-        public double strengthMultiplier() {
-            return 0.6D + (rankTier(rank) * 5 + grade.step()) * 0.1D;
-        }
     }
 
     public record HerbData(int ageTier, int qualityTier, boolean wild) {

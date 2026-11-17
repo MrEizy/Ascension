@@ -1,0 +1,96 @@
+{
+  "names": [
+    "Sect Master Han",
+    "Sect Master Wei",
+    "Sect Master Jin",
+    "Sect Master Shen",
+    "Sect Master Zhen"
+  ],
+  "skins": [
+    "default"
+  ],
+  "greeting": "State your business, cultivator.",
+  "dialogue": [
+    "A sect is only as strong as its disciples.",
+    "There is much you have yet to learn.",
+    "Your determination will be tested by the heavens."
+  ],
+  "guidance": {
+    "techniques": [
+      "ascension:1_ordinary/imperial_seven_stances",
+      "ascension:1_ordinary/nine_paths_of_truth",
+      "ascension:1_ordinary/shadowless_art",
+      "ascension:1_ordinary/martial_transcendence_vol_1",
+      "ascension:1_ordinary/open_sky_breathing_scripture"
+    ],
+    "offering_item": "ascension:spiritual_stone",
+    "offering_count": 12,
+    "kills": 8
+  },
+  "personalities": [
+    {
+      "id": "reserved",
+      "weight": 6
+    },
+    {
+      "id": "compassionate",
+      "weight": 3
+    },
+    {
+      "id": "stern",
+      "weight": 3
+    },
+    {
+      "id": "cautious",
+      "weight": 1
+    },
+    {
+      "id": "arrogant",
+      "weight": 1
+    }
+  ],
+  "affiliations": [
+    {
+      "id": "orthodox",
+      "weight": 9
+    },
+    {
+      "id": "unorthodox",
+      "weight": 1
+    }
+  ],
+  "cultivation_routine": {
+    "min_interval_ticks": 250,
+    "max_interval_ticks": 600,
+    "meditation_ticks": 300,
+    "circulation_ticks": 240,
+    "circulation_chance": 90
+  },
+  "daily_life": {
+    "social_min_interval_ticks": 900,
+    "social_max_interval_ticks": 1800,
+    "social_duration_ticks": 85,
+    "social_radius": 6,
+    "preferred_periods": [
+      "dawn",
+      "dusk",
+      "night"
+    ]
+  },
+  "duel": {
+    "finish_health_percent": 15,
+    "max_duration_ticks": 2400,
+    "max_distance": 32
+  },
+  "dialogue_unlocks": {
+    "gift_talks": 2,
+    "insult_talks": 2,
+    "challenge_talks": 3,
+    "guidance_talks": 4
+  },
+  "village_spawning": {
+    "weight": 1,
+    "max_per_village": 1,
+    "home_radius": 18
+  }
+}

@@ -49,7 +49,7 @@
     {
       "type": "ascension:cultivate",
       "path": "ascension:foundation/essence",
-      "secondary_path": "ascension:elemental/wood",
+      "secondary_path": "ascension:weapon/sword",
       "rate": 2
     }
   ]

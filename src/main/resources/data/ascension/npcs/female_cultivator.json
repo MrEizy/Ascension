@@ -1,0 +1,85 @@
+{
+  "names": [
+    "Mei Lin",
+    "Su Yan",
+    "Liu Xue",
+    "Qin Yue",
+    "Xiao Lan",
+    "Yun Qing",
+    "Shen Yue",
+    "Lan Yu",
+    "Lu Jianjia",
+    "Kevin"
+  ],
+  "skins": [
+    "default"
+  ],
+  "greeting": "Greetings, fellow cultivator. What brings you here?",
+  "dialogue": [
+    "The flow of spiritual qi is unusual today.",
+    "One should never neglect the foundation of cultivation.",
+    "I hope your travels are going well."
+  ],
+  "personalities": [
+    {
+      "id": "compassionate",
+      "weight": 6
+    },
+    {
+      "id": "reserved",
+      "weight": 4
+    },
+    {
+      "id": "competitive",
+      "weight": 3
+    }
+  ],
+  "affiliations": [
+    {
+      "id": "orthodox",
+      "weight": 8
+    },
+    {
+      "id": "unorthodox",
+      "weight": 2
+    },
+    {
+      "id": "demonic",
+      "weight": 1
+    }
+  ],
+  "cultivation_routine": {
+    "min_interval_ticks": 500,
+    "max_interval_ticks": 1000,
+    "meditation_ticks": 160,
+    "circulation_ticks": 120,
+    "circulation_chance": 60
+  },
+  "daily_life": {
+    "social_min_interval_ticks": 600,
+    "social_max_interval_ticks": 1200,
+    "social_duration_ticks": 70,
+    "social_radius": 6,
+    "preferred_periods": [
+      "dawn",
+      "day",
+      "night"
+    ]
+  },
+  "duel": {
+    "finish_health_percent": 30,
+    "max_duration_ticks": 2400,
+    "max_distance": 32
+  },
+  "dialogue_unlocks": {
+    "gift_talks": 2,
+    "insult_talks": 2,
+    "challenge_talks": 3,
+    "guidance_talks": 4
+  },
+  "village_spawning": {
+    "weight": 6,
+    "max_per_village": 2,
+    "home_radius": 28
+  }
+}

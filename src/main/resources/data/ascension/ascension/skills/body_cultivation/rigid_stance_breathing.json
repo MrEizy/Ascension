@@ -16,6 +16,14 @@
         ]
       },
       "gain": 1.15
+    },
+    {
+      "source": {
+        "source_tags": [
+          "ascension:movement"
+        ]
+      },
+      "gain": 0.015
     }
   ],
   "maximum_tempering": 170.0,

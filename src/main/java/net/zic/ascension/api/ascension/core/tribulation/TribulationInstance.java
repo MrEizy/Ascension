@@ -198,7 +198,19 @@ public final class TribulationInstance<T extends TribulationData> {
         }
     }
 
-    //call when the TribulationData has changed, so it is resent to tracking clients
+    /**
+     * narrows this instance to a concrete tribulation class, e.g. {@code instance.as(LightningTribulation.class)},
+     * so {@link #getData()} returns the tribulation's own data type.
+     * the data is always created by the tribulation, so it always matches the tribulation's data type
+     * @return this instance typed to the tribulation, or null if the tribulation is not of that class
+     */
+    @SuppressWarnings("unchecked")
+    public <E extends TribulationData, R extends Tribulation<E>> @Nullable TribulationInstance<E> as(Class<R> tribulationClass) {
+        return tribulationClass.isInstance(tribulation) ? (TribulationInstance<E>) this : null;
+    }
+
+    //call when the TribulationData has changed, so it is resent to tracking clients.
+    //not needed for changes made in TribulationManager.Builder#beforeStart, the first sync happens after it
     public void markDataDirty() {
         dataDirty = true;
     }
@@ -274,7 +286,7 @@ public final class TribulationInstance<T extends TribulationData> {
      * loads a saved instance, returns an error if the tribulation no longer exists or any part fails to load,
      * in which case the instance is expected to be discarded.
      */
-    static <V> DataResult<TribulationInstance<?>> decode(Dynamic<V> input, Registry<Tribulation<?>> registry) {
+    static <V> DataResult<TribulationInstance<?>> decode(Dynamic<V> input, Registry<Tribulation<?>> registry, RegistryAccess access) {
         DataResult<UUID> id = input.get("id").read(UUIDUtil.CODEC);
         DataResult<Identifier> tribulationId = input.get("tribulation").read(Identifier.CODEC);
         if (id.isError() || tribulationId.isError()) return DataResult.error(() -> "invalid tribulation id");
@@ -282,10 +294,11 @@ public final class TribulationInstance<T extends TribulationData> {
         Optional<Tribulation<?>> tribulation = registry.getOptional(tribulationId.getOrThrow());
         if (tribulation.isEmpty()) return DataResult.error(() -> "unknown tribulation " + tribulationId.getOrThrow());
 
-        return decodeTyped(input, id.getOrThrow(), tribulationId.getOrThrow(), tribulation.get()).map(instance -> instance);
+        return decodeTyped(input, id.getOrThrow(), tribulationId.getOrThrow(), tribulation.get(), access).map(instance -> instance);
     }
 
-    private static <V, T extends TribulationData> DataResult<TribulationInstance<T>> decodeTyped(Dynamic<V> input, UUID id, Identifier tribulationId, Tribulation<T> tribulation) {
+    private static <V, T extends TribulationData> DataResult<TribulationInstance<T>> decodeTyped(Dynamic<V> input, UUID id, Identifier tribulationId, Tribulation<T> tribulation,
+                                                                                               RegistryAccess access) {
         DataResult<T> data = input.get("data").read(tribulation.getType().dataCodec());
         DataResult<ResourceKey<Level>> dimension = input.get("dimension").read(Level.RESOURCE_KEY_CODEC);
         DataResult<Vec3> position = input.get("pos").read(Vec3.CODEC);
@@ -299,7 +312,7 @@ public final class TribulationInstance<T extends TribulationData> {
             return DataResult.error(() -> "failed to load tribulation " + tribulationId);
         }
 
-        T validatedData = tribulation.validateLoadedData(data.getOrThrow());
+        T validatedData = tribulation.validateLoadedData(data.getOrThrow(), access);
         if (validatedData == null) return DataResult.error(() -> "tribulation data rejected for " + tribulationId);
 
         return DataResult.success(new TribulationInstance<>(

@@ -14,6 +14,12 @@ public final class AlchemyRefinementResolver {
         }
 
         AlchemyProcessHooks.ProcessSettings settings = AlchemyProcessHooks.resolve(context == null ? AlchemyContext.EMPTY : context);
+        return refine(material, context, settings);
+    }
+
+    public static RefinementResult refine(AlchemyMaterial material, AlchemyContext context,
+                                          AlchemyProcessHooks.ProcessSettings settings) {
+        if (material == null || material.isEmpty()) return RefinementResult.EMPTY;
         double capacity = Math.max(EPSILON, settings.heat() * settings.refinementControl());
         double difficulty = Math.max(0.0D, material.refinementDifficulty());
         double strain = difficulty <= capacity ? 0.0D : (difficulty - capacity) / capacity;

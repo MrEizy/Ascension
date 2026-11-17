@@ -182,7 +182,7 @@ public final class BodyCultivationSkillService {
         }
 
         Map<Identifier, Double> values = new HashMap<>(context.variables());
-        return ResourceTransactionRequest.of(
+        ResourceTransactionRequest request = ResourceTransactionRequest.of(
                         player,
                         cost.resource(),
                         ResourceOperation.CONSUME,
@@ -191,6 +191,10 @@ public final class BodyCultivationSkillService {
                 )
                 .withSkill(skillId)
                 .withValues(values);
+        // Conversion pays every few ticks; resetting the regen delay each time would keep stamina pinned at zero.
+        return cost.pausesRegeneration()
+                ? request
+                : request.withFlags(Set.of(ResourceTransactionRequest.Flag.KEEP_REGEN_DELAY));
     }
 
     private static ScaledValue.Context context(

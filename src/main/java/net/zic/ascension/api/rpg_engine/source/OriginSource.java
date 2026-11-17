@@ -136,6 +136,10 @@ public class OriginSource implements StatProvider {
         if(dataSources.containsKey(dataSource)) return false;
         dataSources.put(dataSource,holder);
         holder.onAdded(this);
+        // A holder made after the source was attached (data sources are made lazily, and some aren't saved) is applied to the
+        // entities already attached, as attachToEntity does for the ones that existed then; without this, e.g. the path bonus
+        // holder was never registered as a provider on the player, so no path bonus reached them.
+        for (LivingEntity entity : attachedEntities) { holder.applyToEntity(entity); }
         markDataSourceDirty(dataSource);
         return true;
     }
@@ -173,6 +177,7 @@ public class OriginSource implements StatProvider {
     public DataSourceHolder<?> removeDataSourceHolder(Identifier dataSource){
         if(!dataSources.containsKey(dataSource)) return null;
         dataSources.get(dataSource).onRemoved(this);
+        for (LivingEntity entity : attachedEntities) { dataSources.get(dataSource).removeFromEntity(entity); }
         removedDataSources.add(dataSource);
         return dataSources.remove(dataSource);
     }
@@ -278,9 +283,11 @@ public class OriginSource implements StatProvider {
                 holder.onAdded(this);
             }
         }
-        for(DataSourceHolder<?> holder : dataSources.values()) holder.preFinishedLoading(this);
+        //iterate copies, these hooks can add data sources (e.g. paths simulating realms that grant a golden core).
+        //sources added here were never loaded, so they do not need the loading hooks
+        for(DataSourceHolder<?> holder : List.copyOf(dataSources.values())) holder.preFinishedLoading(this);
         finishLoading();
-        for(DataSourceHolder<?> holder : dataSources.values()) holder.finishedLoading(this);
+        for(DataSourceHolder<?> holder : List.copyOf(dataSources.values())) holder.finishedLoading(this);
     }
 
     public void writeOriginSourceData(ValueOutput output){
