@@ -41,12 +41,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE);
                         output.accept(ModItems.SPIRITUAL_STONE);
                         output.accept(ModItems.JADE);
-                        output.accept(ModItems.TREASURE_RAT_SPAWN_EGG);
-                        output.accept(ModItems.MALE_CULTIVATOR_SPAWN_EGG);
-                        output.accept(ModItems.FEMALE_CULTIVATOR_SPAWN_EGG);
-                        output.accept(ModItems.SECT_ELDER_SPAWN_EGG);
-                        output.accept(ModItems.SECT_MASTER_SPAWN_EGG);
-                        output.accept(ModItems.YOUNG_MASTER_SPAWN_EGG);
                         output.accept(ModItems.RAW_FROST_SILVER);
                         output.accept(ModItems.FROST_SILVER_INGOT);
                         output.accept(ModItems.FROST_SILVER_NUGGET);
@@ -224,6 +218,15 @@ public class ModCreativeModeTabs {
             event.insertAfter(ModItems.NETHERITE_BLADE.get().asItem().getDefaultInstance(),
                     ModItems.NETHERITE_CHAKRAM.get().asItem().getDefaultInstance(),
                     CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+        }
+
+        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            event.accept(ModItems.TREASURE_RAT_SPAWN_EGG);
+            event.accept(ModItems.MALE_CULTIVATOR_SPAWN_EGG);
+            event.accept(ModItems.FEMALE_CULTIVATOR_SPAWN_EGG);
+            event.accept(ModItems.SECT_ELDER_SPAWN_EGG);
+            event.accept(ModItems.SECT_MASTER_SPAWN_EGG);
+            event.accept(ModItems.YOUNG_MASTER_SPAWN_EGG);
         }
     }
 
