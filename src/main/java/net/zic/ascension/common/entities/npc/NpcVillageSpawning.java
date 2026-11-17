@@ -22,6 +22,7 @@ import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.entities.AscEntities;
+import net.zic.ascension.common.util.ModTags;
 
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -51,12 +52,15 @@ public final class NpcVillageSpawning {
                         rules.searchRadius(), PoiManager.Occupancy.ANY);
                 if (nearbyPoi.isEmpty()) continue;
                 BlockPos poi = nearbyPoi.get();
-                StructureStart village = level.structureManager().getStructureWithPieceAt(poi, StructureTags.VILLAGE);
+                StructureStart pagoda = level.structureManager().getStructureWithPieceAt(poi, ModTags.Structures.PAGODAS);
+                StructureStart village = pagoda.isValid() ? pagoda
+                        : level.structureManager().getStructureWithPieceAt(poi, StructureTags.VILLAGE);
                 if (!village.isValid()) continue;
                 BlockPos villageCenter = village.getBoundingBox().getCenter();
                 if (!checkedVillages.add(villageCenter)) continue;
                 if (level.getRandom().nextInt(100) >= rules.spawnChancePercent()) continue;
-                attemptSpawn(level, player, poi, village, villageCenter, rules);
+                if (pagoda.isValid()) populatePagoda(level, player, pagoda, villageCenter, rules);
+                else attemptSpawn(level, player, poi, village, villageCenter, rules);
             }
         }
     }
@@ -75,9 +79,7 @@ public final class NpcVillageSpawning {
         for (Variant variant : List.of(
                 new Variant("male_cultivator", AscEntities.MALE_CULTIVATOR.get()),
                 new Variant("female_cultivator", AscEntities.FEMALE_CULTIVATOR.get()),
-                new Variant("young_master", AscEntities.YOUNG_MASTER.get()),
-                new Variant("sect_elder", AscEntities.SECT_ELDER.get()),
-                new Variant("sect_master", AscEntities.SECT_MASTER.get()))) {
+                new Variant("young_master", AscEntities.YOUNG_MASTER.get()))) {
             NpcProfile.VillageSpawn settings = NpcProfile.load(level, variant.id()).villageSpawn();
             if (settings.weight() <= 0 || settings.maxPerVillage() <= 0) continue;
             long count = residents.stream().filter(npc -> npc.getNpcType().equals(variant.id())).count();
@@ -118,6 +120,54 @@ public final class NpcVillageSpawning {
         }
     }
 
+    private static void populatePagoda(ServerLevel level, ServerPlayer player, StructureStart pagoda,
+                                       BlockPos center, Rules rules) {
+        AABB area = new AABB(center).inflate(rules.populationRadius(), 64.0, rules.populationRadius());
+        List<CultivatorNpcEntity> residents = level.getEntitiesOfClass(CultivatorNpcEntity.class, area,
+                npc -> npc.isAlive() && !npc.isSummonedGuard() &&
+                        center.equals(npc.getVillageAnchor()));
+        for (PagodaVariant variant : List.of(
+                new PagodaVariant("sect_master", AscEntities.SECT_MASTER.get(), 1, 20, 10),
+                new PagodaVariant("sect_elder", AscEntities.SECT_ELDER.get(), 2, 12, 16),
+                new PagodaVariant("young_master", AscEntities.YOUNG_MASTER.get(), 1, 12, 16),
+                new PagodaVariant("male_cultivator", AscEntities.MALE_CULTIVATOR.get(), 2, 4, 18),
+                new PagodaVariant("female_cultivator", AscEntities.FEMALE_CULTIVATOR.get(), 2, 4, 18))) {
+            long count = residents.stream().filter(npc -> npc.getNpcType().equals(variant.id())).count();
+            while (count < variant.max()) {
+                CultivatorNpcEntity npc = spawnPagodaNpc(level, player, pagoda, center, variant, rules);
+                if (npc == null) break;
+                residents.add(npc);
+                count++;
+            }
+        }
+    }
+
+    private static CultivatorNpcEntity spawnPagodaNpc(ServerLevel level, ServerPlayer player,
+                                                        StructureStart pagoda, BlockPos center,
+                                                        PagodaVariant variant, Rules rules) {
+        int y = pagoda.getBoundingBox().minY() + variant.floor();
+        for (int attempt = 0; attempt < 64; attempt++) {
+            int x = center.getX() + level.getRandom().nextInt(variant.radius() * 2 + 1) - variant.radius();
+            int z = center.getZ() + level.getRandom().nextInt(variant.radius() * 2 + 1) - variant.radius();
+            if (!level.getChunkSource().hasChunk(x >> 4, z >> 4)) continue;
+            BlockPos pos = new BlockPos(x, y, z);
+            if (!pagoda.getBoundingBox().isInside(pos)
+                    || pos.distSqr(player.blockPosition()) < rules.minPlayerDistance() * rules.minPlayerDistance()) continue;
+            if (!level.getBlockState(pos).isAir() || !level.getBlockState(pos.above()).isAir()
+                    || level.canSeeSky(pos) || !level.getFluidState(pos).isEmpty()
+                    || !level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP)) continue;
+            CultivatorNpcEntity npc = variant.type().create(level, EntitySpawnReason.NATURAL);
+            if (npc == null) return null;
+            npc.snapTo(x + 0.5, y, z + 0.5, level.getRandom().nextFloat() * 360.0F, 0.0F);
+            if (!level.noCollision(npc, npc.getBoundingBox())) continue;
+            EventHooks.finalizeMobSpawn(npc, level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.NATURAL, null);
+            npc.setVillageHome(pos, center, NpcProfile.load(level, variant.id()).villageSpawn().homeRadius());
+            level.addFreshEntity(npc);
+            return npc;
+        }
+        return null;
+    }
+
     private static synchronized Rules rules(ResourceManager manager) {
         if (manager == cachedManager) return cachedRules;
         cachedManager = manager;
@@ -152,6 +202,9 @@ public final class NpcVillageSpawning {
     }
 
     private record Variant(String id, EntityType<CultivatorNpcEntity> type) { }
+
+    private record PagodaVariant(String id, EntityType<CultivatorNpcEntity> type,
+                                 int max, int floor, int radius) { }
 
     private record Rules(int intervalTicks, int spawnChancePercent, int maxPerVillage,
                          int searchRadius, int populationRadius, int spawnRadius,
