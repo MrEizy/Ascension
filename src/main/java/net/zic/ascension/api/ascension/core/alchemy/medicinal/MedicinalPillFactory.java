@@ -24,6 +24,12 @@ public final class MedicinalPillFactory {
 
     public static ItemStack condense(MedicinalProfile profile, int ingredientCount, RegistryAccess access,
                                      long gameTime, double ingredientQuality, Identifier desiredEffect, double focusPrecision) {
+        return condense(profile, ingredientCount, access, gameTime, ingredientQuality, desiredEffect, focusPrecision, 0);
+    }
+
+    public static ItemStack condense(MedicinalProfile profile, int ingredientCount, RegistryAccess access,
+                                     long gameTime, double ingredientQuality, Identifier desiredEffect,
+                                     double focusPrecision, int gradePenalty) {
         if (profile == null || profile.composition().isEmpty()) return ItemStack.EMPTY;
         List<MedicinalProfile.Effect> beneficial = new ArrayList<>();
         List<MedicinalProfile.Effect> harmful = new ArrayList<>();
@@ -67,12 +73,14 @@ public final class MedicinalPillFactory {
         double refinementQuality = substance.purity() / (1.0D + substance.instability() * 0.15D);
         double quality = Math.max(0.0D, Math.min(1.0D,
                 ingredientQuality * 0.90D + refinementQuality * 0.10D));
+        int gradeIndex = PillGrade.fromQuality(quality).step() - Math.max(0, gradePenalty);
+        if (gradeIndex < 0) return ItemStack.EMPTY;
         int count = Math.min(4, Math.max(1, 1 + (Math.max(1, ingredientCount) - 2) / 3));
         ItemStack stack = new ItemStack(ModItems.PROCEDURAL_PILL.get(), count);
         stack.set(AscensionComponents.MEDICINAL_PILL.get(), result);
         MedicinalDecay.initialize(stack, gameTime);
         stack.set(AscensionComponents.PILL_DATA.get(), new AscensionComponents.PillData(
-                AscensionComponents.PillData.rankForTier(substance.rankTier()), PillGrade.fromQuality(quality)
+                AscensionComponents.PillData.rankForTier(substance.rankTier()), PillGrade.values()[gradeIndex]
         ));
         stack.set(DataComponents.ITEM_NAME, nameFor(result, primary.id(), access));
         return stack;

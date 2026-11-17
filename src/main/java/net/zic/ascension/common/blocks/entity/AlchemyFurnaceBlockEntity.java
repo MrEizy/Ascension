@@ -7,6 +7,10 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 import net.minecraft.core.BlockPos;
+import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
+import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
+import net.zic.ascension.impl.resource.AscensionResourceTypes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -34,6 +38,7 @@ import net.zic.ascension.api.ascension.core.alchemy.medicinal.*;
 import net.zic.ascension.common.gui.menus.alchemy.AlchemyFurnaceMenu;
 import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.common.item.ModItems;
+import java.util.UUID;
 import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +47,9 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     public static final int MAX_INGREDIENTS = 3;
     public static final int OUTPUT_SLOT = 3;
     public static final int PHASE_TICKS = 80;
+    private static final double REQUIRED_REACTION_QI_FRACTION = 0.8D;
+    private static final ResourceSourceIdentity REACTION_QI_SOURCE = ResourceSourceIdentity.of(
+            AscensionCraft.prefix("alchemy_reaction"), ResourceSourceIdentity.Tags.SKILL);
 
     public enum Phase { IDLE, EXTRACTION, REACTION, STABILIZATION, CONDENSATION, SUCCESS, FAILURE }
 
@@ -64,7 +72,9 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
             if (index == 1) return phaseTicks;
             if (level == null) return 0;
             if (index >= 2 && index <= 5) return plan.index(level.registryAccess(), AlchemyTechnique.Stage.values()[index - 2]);
-            return index == 6 ? plan.focusIndex(level.registryAccess()) : 0;
+            if (index == 6) return plan.focusIndex(level.registryAccess());
+            if (index == 7) return reactionQiProgress();
+            return 0;
         }
         @Override public void set(int index, int value) {
             if (index == 0 && value >= 0 && value < Phase.values().length) phase = Phase.values()[value];
@@ -73,7 +83,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
                 plan = plan.indexed(level.registryAccess(), AlchemyTechnique.Stage.values()[index - 2], value);
             if (level != null && index == 6) plan = plan.indexedFocus(level.registryAccess(), value);
         }
-        @Override public int getCount() { return 7; }
+        @Override public int getCount() { return 8; }
     };
     private Phase phase = Phase.IDLE;
     private int phaseTicks;
@@ -83,6 +93,10 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     private double batchIngredientQuality = 0.35D;
     private boolean ruined;
     private AlchemyRefinementPlan plan = AlchemyRefinementPlan.DEFAULT;
+    private @Nullable UUID alchemistId;
+    private double reactionQiPerTick;
+    private double reactionQiDelivered;
+    private int reactionGradePenalty;
 
     public AlchemyFurnaceBlockEntity(BlockPos pos, BlockState state) {
         super(AscBlockEntities.ALCHEMY_FURNACE_BE.get(), pos, state);
@@ -128,8 +142,8 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         return false;
     }
 
-    public boolean start() {
-        if (!canStart() || level == null || level.isClientSide()) return false;
+    public boolean start(Player player) {
+        if (player == null || !canStart() || level == null || level.isClientSide()) return false;
         AlchemyContext context = AlchemyContext.of(level, worldPosition, null);
         List<AlchemySubstance> prepared = new ArrayList<>();
         List<ItemStack> ingredientStacks = new ArrayList<>();
@@ -150,12 +164,17 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         composition = MedicinalComposition.EMPTY;
         ingredientCount = 0;
         ruined = false;
+        alchemistId = player.getUUID();
+        reactionQiPerTick = 0.0D;
+        reactionQiDelivered = 0.0D;
+        reactionGradePenalty = 0;
         transition(Phase.EXTRACTION);
         return true;
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, AlchemyFurnaceBlockEntity furnace) {
-        if (!(level instanceof ServerLevel) || furnace.phase == Phase.IDLE) return;
+        if (!(level instanceof ServerLevel serverLevel) || furnace.phase == Phase.IDLE) return;
+        if (furnace.phase == Phase.REACTION) furnace.supplyReactionQi(serverLevel);
         if (++furnace.phaseTicks < duration(furnace.phase)) {
             if (furnace.phaseTicks % 20 == 0) furnace.setChanged();
             return;
@@ -163,6 +182,9 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         switch (furnace.phase) {
             case EXTRACTION -> furnace.transition(Phase.REACTION);
             case REACTION -> {
+                furnace.reactionGradePenalty = furnace.reactionQiPerTick > 0.0D
+                        && furnace.reactionQiDelivered + 1.0E-6D < furnace.reactionQiPerTick
+                        * PHASE_TICKS * REQUIRED_REACTION_QI_FRACTION ? 1 : 0;
                 furnace.performReactions();
                 furnace.transition(furnace.ruined ? Phase.FAILURE : Phase.STABILIZATION);
                 if (furnace.ruined) furnace.finish(false);
@@ -178,7 +200,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
                         MedicinalEffectResolver.resolve(furnace.composition, level.registryAccess()),
                         furnace.ingredientCount, level.registryAccess(), MedicinalDecay.now(level),
                         AlchemyPlanEvaluator.finalQuality(furnace.batchIngredientQuality, furnace.plan, level.registryAccess()),
-                        furnace.plan.focus(), condensation.focusPrecision());
+                        furnace.plan.focus(), condensation.focusPrecision(), furnace.reactionGradePenalty);
                 boolean success = !pill.isEmpty();
                 furnace.items.setItem(OUTPUT_SLOT, success ? pill : new ItemStack(ModItems.PILL_RESIDUE.get()));
                 furnace.finish(success);
@@ -187,6 +209,26 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
             case SUCCESS, FAILURE -> furnace.transition(Phase.IDLE);
             default -> {}
         }
+    }
+
+    private void supplyReactionQi(ServerLevel serverLevel) {
+        if (reactionQiPerTick <= 0.0D || alchemistId == null) return;
+        Player player = serverLevel.getServer().getPlayerList().getPlayer(alchemistId);
+        if (player == null || player.level() != serverLevel || !player.isAlive()) return;
+        double dx = player.getX() - (worldPosition.getX() + 0.5D);
+        double dz = player.getZ() - (worldPosition.getZ() + 0.5D);
+        if (dx * dx + dz * dz > 1.0D
+                || Math.abs(player.getY() - (worldPosition.getY() + 0.5D)) > 1.0D) return;
+        ResourceTransactionService.Result result = ResourceTransactionService.drain(
+                player, AscensionResourceTypes.QI.getId(), REACTION_QI_SOURCE, reactionQiPerTick);
+        reactionQiDelivered = Math.min(reactionQiPerTick * PHASE_TICKS,
+                reactionQiDelivered + Math.max(0.0D, result.appliedAmount()));
+    }
+
+    private int reactionQiProgress() {
+        if (reactionQiPerTick <= 0.0D) return 100;
+        return Mth.clamp((int) Math.round(100.0D * reactionQiDelivered
+                / (reactionQiPerTick * PHASE_TICKS)), 0, 100);
     }
 
     private void performReactions() {
@@ -218,9 +260,18 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         composition = MedicinalComposition.EMPTY;
         ingredientCount = 0;
         ruined = false;
+        alchemistId = null;
+        reactionGradePenalty = 0;
+        reactionQiDelivered = 0.0D;
+        reactionQiPerTick = 0.0D;
     }
 
     private void transition(Phase next) {
+        if (next == Phase.REACTION && level != null) {
+            reactionQiPerTick = AlchemyPlanEvaluator.technique(plan, AlchemyTechnique.Stage.HEATING,
+                    level.registryAccess()).qiPerTick();
+            reactionQiDelivered = 0.0D;
+        }
         phase = next;
         phaseTicks = 0;
         setChanged();
@@ -254,6 +305,10 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         output.putInt("PhaseTicks", phaseTicks);
         output.putBoolean("Ruined", ruined);
         output.store("RefinementPlan", AlchemyRefinementPlan.CODEC, plan);
+        if (alchemistId != null) output.putString("Alchemist", alchemistId.toString());
+        output.putDouble("ReactionQiPerTick", reactionQiPerTick);
+        output.putDouble("ReactionQiDelivered", reactionQiDelivered);
+        output.putInt("ReactionGradePenalty", reactionGradePenalty);
     }
 
     @Override protected void loadAdditional(ValueInput input) {
@@ -267,6 +322,18 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         phaseTicks = Mth.clamp(input.getIntOr("PhaseTicks", 0), 0, PHASE_TICKS);
         ruined = input.getBooleanOr("Ruined", false);
         plan = input.read("RefinementPlan", AlchemyRefinementPlan.CODEC).orElse(AlchemyRefinementPlan.DEFAULT);
+        String storedAlchemist = input.getStringOr("Alchemist", "");
+        try {
+            alchemistId = storedAlchemist.isEmpty() ? null : UUID.fromString(storedAlchemist);
+        } catch (IllegalArgumentException ignored) {
+            alchemistId = null;
+        }
+        double savedRate = input.getDoubleOr("ReactionQiPerTick", 0.0D);
+        reactionQiPerTick = Double.isFinite(savedRate) ? Mth.clamp(savedRate, 0.0D, 1000.0D) : 0.0D;
+        double savedDelivered = input.getDoubleOr("ReactionQiDelivered", 0.0D);
+        reactionQiDelivered = Double.isFinite(savedDelivered)
+                ? Mth.clamp(savedDelivered, 0.0D, reactionQiPerTick * PHASE_TICKS) : 0.0D;
+        reactionGradePenalty = Mth.clamp(input.getIntOr("ReactionGradePenalty", 0), 0, 1);
     }
 
     @Override public void preRemoveSideEffects(BlockPos pos, BlockState state) {

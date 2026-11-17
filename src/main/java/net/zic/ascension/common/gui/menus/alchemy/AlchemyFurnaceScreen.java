@@ -76,6 +76,9 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
                     label + " " + (100 * Math.min(menu.phaseTicks(), duration) / duration) + "%";
             default -> label;
         };
+        if (phase == AlchemyFurnaceBlockEntity.Phase.REACTION) {
+            status += " | Qi " + menu.reactionQiProgress() + "%";
+        }
         if (phase == AlchemyFurnaceBlockEntity.Phase.IDLE) {
             int relativeX = mouseX - leftPos;
             int relativeY = mouseY - topPos;
