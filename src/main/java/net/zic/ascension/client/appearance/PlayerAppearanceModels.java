@@ -39,6 +39,7 @@ public final class PlayerAppearanceModels {
     public static void onAddReloadListeners(AddClientReloadListenersEvent event) {
         event.addListener(AscensionCraft.prefix("player_appearances"), (ResourceManagerReloadListener) manager -> {
             MODELS.clear();
+            PlayerAppearanceGeoRenderer.clear();
             cachedManager = manager;
         });
     }
@@ -47,6 +48,7 @@ public final class PlayerAppearanceModels {
         ResourceManager manager = Minecraft.getInstance().getResourceManager();
         if (manager != cachedManager) {
             MODELS.clear();
+            PlayerAppearanceGeoRenderer.clear();
             cachedManager = manager;
         }
         return MODELS.computeIfAbsent(id, key -> Optional.ofNullable(load(manager, key))).orElse(null);
@@ -63,6 +65,12 @@ public final class PlayerAppearanceModels {
             try (var reader = new InputStreamReader(resource.get().open(), StandardCharsets.UTF_8)) {
                 JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
                 Identifier texture = Identifier.parse(root.get("texture").getAsString());
+                if (root.has("renderer") && root.get("renderer").getAsString().equals("geckolib")) {
+                    return loadGecko(root, texture);
+                }
+                if (root.has("renderer") && !root.get("renderer").getAsString().equals("cuboids")) {
+                    throw new IllegalArgumentException("Unknown appearance renderer " + root.get("renderer").getAsString());
+                }
                 JsonArray dimensions = root.getAsJsonArray("texture_size");
                 int width = dimensions == null ? 64 : dimensions.get(0).getAsInt();
                 int height = dimensions == null ? 64 : dimensions.get(1).getAsInt();
@@ -110,12 +118,41 @@ public final class PlayerAppearanceModels {
                     ModelPart geometry = LayerDefinition.create(mesh, width, height).bakeRoot().getChild("geometry");
                     attachments.add(new Attachment(anchor, offset, rotation, axis, degrees, speed, geometry));
                 }
-                return new Appearance(texture, List.copyOf(attachments));
+                return new Appearance(texture, List.copyOf(attachments), List.of());
             }
         } catch (Exception exception) {
             AscensionCraft.LOGGER.warn("Unable to load player appearance model {}", path, exception);
             return null;
         }
+    }
+
+    private static Appearance loadGecko(JsonObject root, Identifier texture) {
+        Identifier model = Identifier.parse(root.get("model").getAsString());
+        Identifier animation = root.has("animation")
+                ? Identifier.parse(root.get("animation").getAsString()) : model;
+        JsonObject animations = root.has("animations") ? root.getAsJsonObject("animations") : null;
+        String idle = animations == null || !animations.has("idle") ? "" : animations.get("idle").getAsString();
+        String walk = animations == null || !animations.has("walk") ? "" : animations.get("walk").getAsString();
+        JsonArray parts = root.getAsJsonArray("parts");
+        if (parts == null || parts.size() == 0 || parts.size() > 48) {
+            throw new IllegalArgumentException("Expected 1 to 48 GeckoLib attachments");
+        }
+        List<GeoAttachment> attachments = new ArrayList<>();
+        for (var entry : parts) {
+            JsonObject part = entry.getAsJsonObject();
+            String anchor = part.get("anchor").getAsString();
+            if (!List.of("head", "body", "left_arm", "right_arm", "left_leg", "right_leg").contains(anchor)) {
+                throw new IllegalArgumentException("Unknown model anchor " + anchor);
+            }
+            float[] offset = vector(part, "offset", new float[]{0, 0, 0});
+            float[] rotation = vector(part, "rotation", new float[]{0, 0, 0});
+            float scale = part.has("scale") ? part.get("scale").getAsFloat() : 1.0f;
+            if (!Float.isFinite(scale) || scale <= 0.0f || scale > 16.0f) {
+                throw new IllegalArgumentException("Invalid GeckoLib attachment scale");
+            }
+            attachments.add(new GeoAttachment(anchor, offset, rotation, scale, model, animation, idle, walk));
+        }
+        return new Appearance(texture, List.of(), List.copyOf(attachments));
     }
 
     private static float[] vector(JsonObject object, String key, float[] fallback) {
@@ -139,7 +176,11 @@ public final class PlayerAppearanceModels {
         return result;
     }
 
-    public record Appearance(Identifier texture, List<Attachment> parts) {
+    public record Appearance(Identifier texture, List<Attachment> parts, List<GeoAttachment> geckoParts) {
+    }
+
+    public record GeoAttachment(String anchor, float[] offset, float[] rotation, float scale,
+                                Identifier model, Identifier animation, String idle, String walk) {
     }
 
     public record Attachment(String anchor, float[] offset, float[] rotation, String swayAxis, float swayDegrees,

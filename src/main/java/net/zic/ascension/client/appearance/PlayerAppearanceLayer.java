@@ -91,6 +91,30 @@ public final class PlayerAppearanceLayer extends RenderLayer<AvatarRenderState, 
                 poseStack.popPose();
             }
         }
+        for (var id : player.getData(AscensionAttachments.PLAYER_APPEARANCES).appearances()) {
+            PlayerAppearanceModels.Appearance appearance = PlayerAppearanceModels.get(id);
+            if (appearance == null) {
+                continue;
+            }
+            for (var attachment : appearance.geckoParts()) {
+                ModelPart anchor = anchor(model, attachment.anchor());
+                if (anchor == null || !anchor.visible) {
+                    continue;
+                }
+                poseStack.pushPose();
+                model.root().translateAndRotate(poseStack);
+                anchor.translateAndRotate(poseStack);
+                float[] offset = attachment.offset();
+                float[] rotation = attachment.rotation();
+                poseStack.translate(offset[0] / 16.0F, offset[1] / 16.0F, offset[2] / 16.0F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(rotation[0]));
+                poseStack.mulPose(Axis.YP.rotationDegrees(rotation[1]));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(rotation[2]));
+                poseStack.scale(attachment.scale(), attachment.scale(), attachment.scale());
+                PlayerAppearanceGeoRenderer.submit(player, poseStack, collector, lightCoords, appearance.texture(), attachment);
+                poseStack.popPose();
+            }
+        }
     }
 
     private static ModelPart anchor(PlayerModel model, String name) {

@@ -1,51 +1,26 @@
 {
-  "texture": "ascension:textures/entity/player_appearance/moonveil_fox.png",
-  "texture_size": [
-    64,
-    64
-  ],
+  "renderer": "geckolib",
+  "texture": "ascension:textures/entity/player_appearances/moonveil_fox_ears_state_l.png",
+  "model": "ascension:player_appearances/moonveil_fox_ears",
+  "animation": "ascension:player_appearances/moonveil_fox_ears",
+  "animations": {
+    "idle": "animation.ascension.fox_ears.idle",
+    "walk": "animation.ascension.fox_ears.walk"
+  },
   "parts": [
     {
       "anchor": "head",
-      "cubes": [
-        {
-          "origin": [
-            -4,
-            -12,
-            -1
-          ],
-          "size": [
-            2,
-            4,
-            2
-          ],
-          "uv": [
-            0,
-            0
-          ]
-        }
-      ]
-    },
-    {
-      "anchor": "head",
-      "cubes": [
-        {
-          "origin": [
-            2,
-            -12,
-            -1
-          ],
-          "size": [
-            2,
-            4,
-            2
-          ],
-          "uv": [
-            12,
-            0
-          ]
-        }
-      ]
+      "offset": [
+        0,
+        -8,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1
     }
   ]
 }
