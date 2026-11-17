@@ -16,15 +16,19 @@
 * Added Concealment skill type
 * Added a data-driven Player Visual System supporting custom models, textures, and GeckoLib animations
 * Added semi-animated demo model Fox Ears and Tails for the Moonveil Fox Bloodline, with 1–3 tails based on bloodline purity
+* New structure; Large Pagoda
+* Sect Elders and Sect Leaders spawning has been moved to the large Pagoda
 
 ### Removed
 * Disabled Spherical Devestation
+* Sect Elders and Sect Masters no longer spawn in villages
 
 ### Changes
 * Updated the Alchemy Reaction phase to require player Qi contribution, with consumption rates determined by the selected Alchemy Technique
 * Updated the Alchemy Stabilization phase with an interactive minigame, where player performance influences the final pill quality
 * Moved Spawn Eggs into Spawn Egg Tab
 * Tweaked the progression between realms
+* Decreased change for Young Master to spawn in villages
 
 ### Fixes
 * Fixed Peach Planks not having a Recipe.
