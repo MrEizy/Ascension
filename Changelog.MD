@@ -22,6 +22,7 @@
 * Updated the Alchemy Reaction phase to require player Qi contribution, with consumption rates determined by the selected Alchemy Technique
 * Updated the Alchemy Stabilization phase with an interactive minigame, where player performance influences the final pill quality
 * Moved Spawn Eggs into Spawn Egg Tab
+* Tweaked the progression between realms
 
 ### Fixes
 * Fixed Peach Planks not having a Recipe.
