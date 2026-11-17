@@ -246,8 +246,8 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         if (player == null || player.level() != serverLevel || !player.isAlive()) return;
         double dx = player.getX() - (worldPosition.getX() + 0.5D);
         double dz = player.getZ() - (worldPosition.getZ() + 0.5D);
-        if (dx * dx + dz * dz > 1.0D
-                || Math.abs(player.getY() - (worldPosition.getY() + 0.5D)) > 1.0D) return;
+        if (dx * dx + dz * dz > 2.25D
+                || Math.abs(player.getY() - (worldPosition.getY() + 0.5D)) > 1.5D) return;
         ResourceTransactionService.Result result = ResourceTransactionService.drain(
                 player, AscensionResourceTypes.QI.getId(), REACTION_QI_SOURCE, reactionQiPerTick);
         reactionQiDelivered = Math.min(reactionQiPerTick * PHASE_TICKS,

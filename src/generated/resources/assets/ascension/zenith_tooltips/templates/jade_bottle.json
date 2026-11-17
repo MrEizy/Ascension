@@ -28,7 +28,7 @@
             "translate": "ascension.tooltip.jade_bottle.contained_pill"
           },
           "right": {
-            "literal": "null"
+            "source": "ascension:jade_bottle_contents"
           }
         },
         {
@@ -37,7 +37,7 @@
             "translate": "ascension.tooltip.jade_bottle.expiration"
           },
           "right": {
-            "literal": "20 seconds"
+            "source": "ascension:jade_bottle_expiration"
           },
           "right_color": "warning"
         }

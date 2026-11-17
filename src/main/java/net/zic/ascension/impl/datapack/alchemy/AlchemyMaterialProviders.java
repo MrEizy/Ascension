@@ -21,6 +21,7 @@ import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.item.herbs.HerbItem;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,14 +105,19 @@ public final class AlchemyMaterialProviders {
             }
 
             AscensionComponents.HerbData data = herbItem.data(stack);
-            HerbDefinition.AgeThreshold age = herbItem.definition().ageThreshold(data.ageTier());
+            int ageTier = Mth.clamp(data.ageTier(), 0, herbItem.definition().maxAgeTier());
+            HerbDefinition.AgeThreshold age = herbItem.definition().ageThreshold(ageTier);
+            double agePropertyMultiplier = 1.0D + ageTier * 0.45D;
+            Map<Identifier, Double> agedProperties = new LinkedHashMap<>();
+            properties.forEach((id, amount) -> agedProperties.put(id, amount * agePropertyMultiplier));
+
             double qualityAmplifier = qualityAmplifier(data.qualityTier());
             double resolvedAmplifier = amplifier * qualityAmplifier;
             double resolvedPurity = Mth.clamp(purity * qualityAmplifier, 0.0D, 1.0D);
             double resolvedInstability = instability * qualityInstability(data.qualityTier());
 
             return new AlchemyMaterial(
-                    new AlchemyEssence(properties, affinities, rankTier(data.ageTier(), age.years()), resolvedAmplifier),
+                    new AlchemyEssence(agedProperties, affinities, rankTier(ageTier, age.years()), resolvedAmplifier),
                     resolvedPurity,
                     resolvedInstability,
                     refinementDifficulty
