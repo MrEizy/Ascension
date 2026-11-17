@@ -1,0 +1,26 @@
+{
+  "renderer": "geckolib",
+  "texture": "ascension:textures/entity/player_appearances/moonveil_fox_tails.png",
+  "model": "ascension:player_appearances/moonveil_fox_tails_two",
+  "animation": "ascension:player_appearances/moonveil_fox_tails",
+  "animations": {
+    "idle": "animation.ascension.fox_tails_2.idle",
+    "walk": "animation.ascension.fox_tails_2.walk"
+  },
+  "parts": [
+    {
+      "anchor": "body",
+      "offset": [
+        0,
+        22,
+        3
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 2.0
+    }
+  ]
+}

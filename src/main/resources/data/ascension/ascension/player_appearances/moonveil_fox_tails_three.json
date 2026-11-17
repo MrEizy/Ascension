@@ -3,8 +3,8 @@
   "source": {
     "type": "bloodline",
     "id": "ascension:2_profound/moonveil_fox_bloodline",
-    "min_purity": 50
+    "min_purity": 80
   },
   "group": "moonveil_fox_tails",
-  "priority": 10
+  "priority": 30
 }

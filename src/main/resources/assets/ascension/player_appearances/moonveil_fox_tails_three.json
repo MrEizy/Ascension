@@ -1,165 +1,26 @@
 {
-  "texture": "ascension:textures/entity/player_appearances/moonveil_fox.png",
-  "texture_size": [
-    64,
-    64
-  ],
+  "renderer": "geckolib",
+  "texture": "ascension:textures/entity/player_appearances/moonveil_fox_tails.png",
+  "model": "ascension:player_appearances/moonveil_fox_tails_three",
+  "animation": "ascension:player_appearances/moonveil_fox_tails",
+  "animations": {
+    "idle": "animation.ascension.fox_tails_3.idle",
+    "walk": "animation.ascension.fox_tails_3.walk"
+  },
   "parts": [
     {
       "anchor": "body",
       "offset": [
         0,
-        10,
-        2
-      ],
-      "rotation": [
-        0,
-        -42,
-        -14
-      ],
-      "sway": {
-        "axis": "y",
-        "degrees": 9,
-        "speed": 2.5
-      },
-      "cubes": [
-        {
-          "origin": [
-            -1.5,
-            -1,
-            0
-          ],
-          "size": [
-            3,
-            5,
-            3
-          ],
-          "uv": [
-            0,
-            14
-          ]
-        },
-        {
-          "origin": [
-            -2.5,
-            -4,
-            2.5
-          ],
-          "size": [
-            5,
-            4,
-            3
-          ],
-          "uv": [
-            14,
-            14
-          ]
-        }
-      ]
-    },
-    {
-      "anchor": "body",
-      "offset": [
-        0,
-        10,
-        2
+        22,
+        3
       ],
       "rotation": [
         0,
         0,
-        -14
+        0
       ],
-      "sway": {
-        "axis": "y",
-        "degrees": 9,
-        "speed": 2.5
-      },
-      "cubes": [
-        {
-          "origin": [
-            -1.5,
-            -1,
-            0
-          ],
-          "size": [
-            3,
-            5,
-            3
-          ],
-          "uv": [
-            0,
-            14
-          ]
-        },
-        {
-          "origin": [
-            -2.5,
-            -4,
-            2.5
-          ],
-          "size": [
-            5,
-            4,
-            3
-          ],
-          "uv": [
-            14,
-            14
-          ]
-        }
-      ]
-    },
-    {
-      "anchor": "body",
-      "offset": [
-        0,
-        10,
-        2
-      ],
-      "rotation": [
-        0,
-        42,
-        -14
-      ],
-      "sway": {
-        "axis": "y",
-        "degrees": 9,
-        "speed": 2.5
-      },
-      "cubes": [
-        {
-          "origin": [
-            -1.5,
-            -1,
-            0
-          ],
-          "size": [
-            3,
-            5,
-            3
-          ],
-          "uv": [
-            0,
-            14
-          ]
-        },
-        {
-          "origin": [
-            -2.5,
-            -4,
-            2.5
-          ],
-          "size": [
-            5,
-            4,
-            3
-          ],
-          "uv": [
-            14,
-            14
-          ]
-        }
-      ]
+      "scale": 2.0
     }
   ]
 }
