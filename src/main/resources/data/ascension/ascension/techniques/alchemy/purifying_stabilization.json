@@ -8,6 +8,15 @@
     "yield": 0.84,
     "purity_delta": 0.045,
     "instability_delta": -0.035,
-    "toxicity_delta": -0.12
+    "toxicity_delta": -0.12,
+    "stabilization": {
+      "target_count": 6,
+      "approach_ticks": 16,
+      "interval_ticks": 10,
+      "perfect_window": 2,
+      "good_window": 4,
+      "required_score": 0.75,
+      "pattern": "shuffled"
+    }
   }
 }

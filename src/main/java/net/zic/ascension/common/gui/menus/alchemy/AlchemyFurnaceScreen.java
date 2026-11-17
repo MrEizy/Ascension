@@ -78,6 +78,8 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
         };
         if (phase == AlchemyFurnaceBlockEntity.Phase.REACTION) {
             status += " | Qi " + menu.reactionQiProgress() + "%";
+        } else if (phase == AlchemyFurnaceBlockEntity.Phase.STABILIZATION) {
+            status += " | Score " + menu.stabilizationProgress() + "%";
         }
         if (phase == AlchemyFurnaceBlockEntity.Phase.IDLE) {
             int relativeX = mouseX - leftPos;

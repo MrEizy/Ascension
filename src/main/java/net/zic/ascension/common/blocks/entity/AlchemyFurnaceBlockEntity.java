@@ -7,6 +7,12 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.ClipContext;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
@@ -46,7 +52,7 @@ import java.util.List;
 public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvider, GeoBlockEntity {
     public static final int MAX_INGREDIENTS = 3;
     public static final int OUTPUT_SLOT = 3;
-    public static final int PHASE_TICKS = 80;
+    public static final int PHASE_TICKS = AlchemyStabilization.PHASE_TICKS;
     private static final double REQUIRED_REACTION_QI_FRACTION = 0.8D;
     private static final ResourceSourceIdentity REACTION_QI_SOURCE = ResourceSourceIdentity.of(
             AscensionCraft.prefix("alchemy_reaction"), ResourceSourceIdentity.Tags.SKILL);
@@ -74,6 +80,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
             if (index >= 2 && index <= 5) return plan.index(level.registryAccess(), AlchemyTechnique.Stage.values()[index - 2]);
             if (index == 6) return plan.focusIndex(level.registryAccess());
             if (index == 7) return reactionQiProgress();
+            if (index == 8) return stabilizationProgress();
             return 0;
         }
         @Override public void set(int index, int value) {
@@ -83,7 +90,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
                 plan = plan.indexed(level.registryAccess(), AlchemyTechnique.Stage.values()[index - 2], value);
             if (level != null && index == 6) plan = plan.indexedFocus(level.registryAccess(), value);
         }
-        @Override public int getCount() { return 8; }
+        @Override public int getCount() { return 9; }
     };
     private Phase phase = Phase.IDLE;
     private int phaseTicks;
@@ -97,6 +104,12 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     private double reactionQiPerTick;
     private double reactionQiDelivered;
     private int reactionGradePenalty;
+    private AlchemyStabilization.Settings stabilizationSettings = AlchemyStabilization.Settings.DEFAULT;
+    private long stabilizationStartTick;
+    private long stabilizationSeed;
+    private int stabilizationHitMask;
+    private int stabilizationScore;
+    private int stabilizationGradePenalty;
 
     public AlchemyFurnaceBlockEntity(BlockPos pos, BlockState state) {
         super(AscBlockEntities.ALCHEMY_FURNACE_BE.get(), pos, state);
@@ -106,6 +119,12 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
     public ContainerData menuData() { return menuData; }
     public Phase phase() { return phase; }
     public AlchemyRefinementPlan plan() { return plan; }
+    public @Nullable UUID alchemistId() { return alchemistId; }
+    public AlchemyStabilization.Settings stabilizationSettings() { return stabilizationSettings; }
+    public long stabilizationStartTick() { return stabilizationStartTick; }
+    public long stabilizationSeed() { return stabilizationSeed; }
+    public int stabilizationHitMask() { return stabilizationHitMask; }
+    public int stabilizationScore() { return stabilizationScore; }
 
     public boolean cyclePreparation(int slot, Player player, int direction) {
         if (direction != 1 && direction != -1) return false;
@@ -168,6 +187,11 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         reactionQiPerTick = 0.0D;
         reactionQiDelivered = 0.0D;
         reactionGradePenalty = 0;
+        stabilizationGradePenalty = 0;
+        stabilizationHitMask = 0;
+        stabilizationScore = 0;
+        stabilizationStartTick = 0L;
+        stabilizationSeed = 0L;
         transition(Phase.EXTRACTION);
         return true;
     }
@@ -190,6 +214,8 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
                 if (furnace.ruined) furnace.finish(false);
             }
             case STABILIZATION -> {
+                furnace.stabilizationGradePenalty = furnace.stabilizationProgress() <
+                        Math.round(furnace.stabilizationSettings.requiredScore() * 100.0D) ? 1 : 0;
                 furnace.stabilize();
                 furnace.transition(Phase.CONDENSATION);
             }
@@ -200,7 +226,8 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
                         MedicinalEffectResolver.resolve(furnace.composition, level.registryAccess()),
                         furnace.ingredientCount, level.registryAccess(), MedicinalDecay.now(level),
                         AlchemyPlanEvaluator.finalQuality(furnace.batchIngredientQuality, furnace.plan, level.registryAccess()),
-                        furnace.plan.focus(), condensation.focusPrecision(), furnace.reactionGradePenalty);
+                        furnace.plan.focus(), condensation.focusPrecision(),
+                        furnace.reactionGradePenalty + furnace.stabilizationGradePenalty);
                 boolean success = !pill.isEmpty();
                 furnace.items.setItem(OUTPUT_SLOT, success ? pill : new ItemStack(ModItems.PILL_RESIDUE.get()));
                 furnace.finish(success);
@@ -229,6 +256,41 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         if (reactionQiPerTick <= 0.0D) return 100;
         return Mth.clamp((int) Math.round(100.0D * reactionQiDelivered
                 / (reactionQiPerTick * PHASE_TICKS)), 0, 100);
+    }
+
+    private int stabilizationProgress() {
+        if (stabilizationSettings.targetCount() <= 0) return 0;
+        return Mth.clamp((int) Math.round((double) stabilizationScore / stabilizationSettings.targetCount()), 0, 100);
+    }
+
+    public boolean hitStabilization(Player player, int index, int clientTick) {
+        if (!(level instanceof ServerLevel serverLevel) || phase != Phase.STABILIZATION
+                || alchemistId == null || !alchemistId.equals(player.getUUID())
+                || !player.isAlive() || player.level() != serverLevel
+                || index < 0 || index >= stabilizationSettings.targetCount()
+                || (stabilizationHitMask & (1 << index)) != 0) return false;
+        int serverTick = (int) (serverLevel.getGameTime() - stabilizationStartTick);
+        if (clientTick < serverTick - 8 || clientTick > serverTick + 2) return false;
+        int points = AlchemyStabilization.points(stabilizationSettings, index, clientTick);
+        if (points <= 0) return false;
+        Vec3 position = AlchemyStabilization.position(worldPosition, getBlockState(),
+                AlchemyStabilization.targetPosition(stabilizationSettings, stabilizationSeed, index));
+        Vec3 eye = player.getEyePosition();
+        Vec3 toTarget = position.subtract(eye);
+        double distance = toTarget.length();
+        if (distance > AlchemyStabilization.INTERACTION_REACH || distance < 0.15D
+                || toTarget.normalize().dot(player.getLookAngle()) <
+                Math.cos(Math.atan2(0.17D, distance))) return false;
+        BlockHitResult obstruction = serverLevel.clip(new ClipContext(eye, position, ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE, player));
+        if (obstruction.getType() == HitResult.Type.BLOCK && !obstruction.getBlockPos().equals(worldPosition)) return false;
+        stabilizationHitMask |= 1 << index;
+        stabilizationScore += points;
+        serverLevel.playSound(null, worldPosition, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS,
+                0.7F, points == 100 ? 1.5F : 1.0F);
+        setChanged();
+        serverLevel.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        return true;
     }
 
     private void performReactions() {
@@ -264,6 +326,11 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         reactionGradePenalty = 0;
         reactionQiDelivered = 0.0D;
         reactionQiPerTick = 0.0D;
+        stabilizationStartTick = 0L;
+        stabilizationSeed = 0L;
+        stabilizationHitMask = 0;
+        stabilizationScore = 0;
+        stabilizationGradePenalty = 0;
     }
 
     private void transition(Phase next) {
@@ -271,6 +338,20 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
             reactionQiPerTick = AlchemyPlanEvaluator.technique(plan, AlchemyTechnique.Stage.HEATING,
                     level.registryAccess()).qiPerTick();
             reactionQiDelivered = 0.0D;
+        }
+        if (next == Phase.STABILIZATION && level instanceof ServerLevel serverLevel) {
+            stabilizationSettings = AlchemyPlanEvaluator.technique(plan, AlchemyTechnique.Stage.STABILIZATION,
+                    level.registryAccess()).stabilization();
+            stabilizationStartTick = serverLevel.getGameTime();
+            stabilizationSeed = serverLevel.getRandom().nextLong();
+            stabilizationHitMask = 0;
+            stabilizationScore = 0;
+            if (alchemistId != null) {
+                Player alchemist = serverLevel.getServer().getPlayerList().getPlayer(alchemistId);
+                if (alchemist != null && alchemist.level() == serverLevel) {
+                    alchemist.sendOverlayMessage(Component.literal("Stabilization: left-click glowing targets as the rings close"));
+                }
+            }
         }
         phase = next;
         phaseTicks = 0;
@@ -309,6 +390,12 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         output.putDouble("ReactionQiPerTick", reactionQiPerTick);
         output.putDouble("ReactionQiDelivered", reactionQiDelivered);
         output.putInt("ReactionGradePenalty", reactionGradePenalty);
+        output.store("StabilizationSettings", AlchemyStabilization.Settings.CODEC, stabilizationSettings);
+        output.putLong("StabilizationStartTick", stabilizationStartTick);
+        output.putLong("StabilizationSeed", stabilizationSeed);
+        output.putInt("StabilizationHitMask", stabilizationHitMask);
+        output.putInt("StabilizationScore", stabilizationScore);
+        output.putInt("StabilizationGradePenalty", stabilizationGradePenalty);
     }
 
     @Override protected void loadAdditional(ValueInput input) {
@@ -334,6 +421,15 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         reactionQiDelivered = Double.isFinite(savedDelivered)
                 ? Mth.clamp(savedDelivered, 0.0D, reactionQiPerTick * PHASE_TICKS) : 0.0D;
         reactionGradePenalty = Mth.clamp(input.getIntOr("ReactionGradePenalty", 0), 0, 1);
+        stabilizationSettings = input.read("StabilizationSettings", AlchemyStabilization.Settings.CODEC)
+                .orElse(AlchemyStabilization.Settings.DEFAULT);
+        stabilizationStartTick = input.getLongOr("StabilizationStartTick", 0L);
+        stabilizationSeed = input.getLongOr("StabilizationSeed", 0L);
+        stabilizationHitMask = input.getIntOr("StabilizationHitMask", 0)
+                & ((1 << stabilizationSettings.targetCount()) - 1);
+        stabilizationScore = Mth.clamp(input.getIntOr("StabilizationScore", 0), 0,
+                stabilizationSettings.targetCount() * 100);
+        stabilizationGradePenalty = Mth.clamp(input.getIntOr("StabilizationGradePenalty", 0), 0, 1);
     }
 
     @Override public void preRemoveSideEffects(BlockPos pos, BlockState state) {

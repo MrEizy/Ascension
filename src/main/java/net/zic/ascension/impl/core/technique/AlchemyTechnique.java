@@ -5,6 +5,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
+import net.zic.ascension.api.ascension.core.alchemy.AlchemyStabilization;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.util.Mth;
@@ -77,7 +78,8 @@ public record AlchemyTechnique(Component name, Component description, Refinement
     public record Refinement(Stage stage, double heat, double control, double yield,
                              double purityDelta, double instabilityDelta, double toxicityDelta,
                              double safeEnergyBonus, double explosionEnergyBonus,
-                             double qualityBonus, double focusPrecision, double qiPerTick) {
+                             double qualityBonus, double focusPrecision, double qiPerTick,
+                             AlchemyStabilization.Settings stabilization) {
         public static final Codec<Refinement> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Stage.CODEC.fieldOf("stage").forGetter(Refinement::stage),
                 Codec.DOUBLE.optionalFieldOf("heat", 1.0D).forGetter(Refinement::heat),
@@ -90,7 +92,9 @@ public record AlchemyTechnique(Component name, Component description, Refinement
                 Codec.DOUBLE.optionalFieldOf("explosion_energy_bonus", 0.0D).forGetter(Refinement::explosionEnergyBonus),
                 Codec.DOUBLE.optionalFieldOf("quality_bonus", 0.0D).forGetter(Refinement::qualityBonus),
                 Codec.DOUBLE.optionalFieldOf("focus_precision", 0.0D).forGetter(Refinement::focusPrecision),
-                Codec.DOUBLE.optionalFieldOf("qi_per_tick", 0.0D).forGetter(Refinement::qiPerTick)
+                Codec.DOUBLE.optionalFieldOf("qi_per_tick", 0.0D).forGetter(Refinement::qiPerTick),
+                AlchemyStabilization.Settings.CODEC.optionalFieldOf("stabilization",
+                        AlchemyStabilization.Settings.DEFAULT).forGetter(Refinement::stabilization)
         ).apply(instance, Refinement::new));
 
         public Refinement {
@@ -106,6 +110,7 @@ public record AlchemyTechnique(Component name, Component description, Refinement
             qualityBonus = bounded(qualityBonus, -0.15D, 0.15D, 0.0D);
             focusPrecision = bounded(focusPrecision, 0.0D, 0.4D, 0.0D);
             qiPerTick = bounded(qiPerTick, 0.0D, 1000.0D, 0.0D);
+            stabilization = stabilization == null ? AlchemyStabilization.Settings.DEFAULT : stabilization;
         }
 
         private static double bounded(double value, double min, double max, double fallback) {
@@ -114,7 +119,7 @@ public record AlchemyTechnique(Component name, Component description, Refinement
 
         public static Refinement neutral(Stage stage) {
             return new Refinement(stage, 1.0D, 2.5D, 1.0D, 0.0D, 0.0D, 0.0D,
-                    0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+                    0.0D, 0.0D, 0.0D, 0.0D, 0.0D, AlchemyStabilization.Settings.DEFAULT);
         }
     }
 }
