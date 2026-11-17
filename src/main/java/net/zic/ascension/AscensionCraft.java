@@ -456,6 +456,11 @@ public class AscensionCraft {
                     DualWieldStatePayload.CODEC,
                     DualWieldStatePayload::handle
             );
+            registrar.playToClient(
+                    OffhandCooldownPayload.TYPE,
+                    OffhandCooldownPayload.CODEC,
+                    OffhandCooldownPayload::handle
+            );
 
         }
     }

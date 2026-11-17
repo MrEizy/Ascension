@@ -24,21 +24,26 @@ public final class DualWieldHandRenderer {
 
     @SubscribeEvent
     public static void onRenderHand(RenderHandEvent event) {
-        if (event.getHand() != InteractionHand.OFF_HAND || !event.getItemStack().isEmpty() || !DualWieldClientState.active()) {
+        if (event.getHand() != InteractionHand.MAIN_HAND || !DualWieldClientState.active()) {
             return;
         }
         Minecraft minecraft = Minecraft.getInstance();
         AbstractClientPlayer player = minecraft.player;
-        if (player == null || player.isInvisible() || player.isScoping()) {
+        if (player == null || !player.getOffhandItem().isEmpty() || player.isInvisible() || player.isScoping()) {
             return; // the same cases where vanilla draws no arm
         }
+
+        float partialTick = event.getPartialTick(); // getPartialTicks() on older NeoForge
+        float attackValue = DualWieldClientState.offhandSwingProgress(partialTick);
+        if (attackValue <= 0.0F && player.swingingArm == InteractionHand.OFF_HAND) {
+            attackValue = player.getAttackAnim(partialTick); // swings we didn't start ourselves
+        }
+        float inverseArmHeight = 0.0F; // this hand never "equips" anything, so it is never lowered
 
         PoseStack poseStack = event.getPoseStack();
         HumanoidArm arm = player.getMainArm().getOpposite();
         boolean isRightArm = arm != HumanoidArm.LEFT;
         float invert = isRightArm ? 1.0F : -1.0F;
-        float attackValue = event.getSwingProgress();
-        float inverseArmHeight = event.getEquipProgress();
 
         poseStack.pushPose();
         float sqrtAttackValue = Mth.sqrt(attackValue);

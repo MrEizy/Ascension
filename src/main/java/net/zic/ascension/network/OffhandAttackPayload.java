@@ -10,9 +10,10 @@ import net.zic.ascension.impl.core.skill.passive.DualWielding;
 
 public record OffhandAttackPayload(int targetId) implements CustomPacketPayload {
     public static final Type<OffhandAttackPayload> TYPE = new Type<>(AscensionCraft.prefix("offhand_attack"));
+
     public static final StreamCodec<RegistryFriendlyByteBuf, OffhandAttackPayload> CODEC = StreamCodec.of(
-            (buf, payload) -> buf.writeInt(payload.targetId),
-            buf -> new OffhandAttackPayload(buf.readInt())
+            (buf, payload) -> buf.writeVarInt(payload.targetId),
+            buf -> new OffhandAttackPayload(buf.readVarInt())
     );
 
     @Override

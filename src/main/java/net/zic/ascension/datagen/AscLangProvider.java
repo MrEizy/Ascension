@@ -1158,7 +1158,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.stillfrost_breathing.name", "Stillfrost Breathing");
         add("ascension.skill.stillfrost_breathing.desc", "Breathe slowly and draw frost into the soul, cultivating inner stillness while refining Soul through Ice");
         add("ascension.skill.dual_wield_modifier.name", "Dual Wielding");
-        add("ascension.skill.dual_wield_modifier.desc", "EIZY WRITE SOMETHING HERE PLS FOR THE LOVE OF GOD");
+        add("ascension.skill.dual_wield_modifier.desc", "Dual wield your goofy Fists or Blades (more to come)");
         add("ascension.skill.sustained_spirit.name", "Sustained Spirit");
         add("ascension.skill.sustained_spirit.desc", "Cold spiritual stillness suppresses wasteful movement, reducing exhaustion and stamina spent through travel");
         add("ascension.skill.frostbound_stillness.name", "Frostbound Stillness");

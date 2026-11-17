@@ -15,10 +15,6 @@
           "path": "ascension:weapon/blade"
         },
         {
-          "tag": "ascension:weapon/spears",
-          "path": "ascension:weapon/spear"
-        },
-        {
           "tag": "ascension:weapon/fists",
           "path": "ascension:weapon/fist"
         },
