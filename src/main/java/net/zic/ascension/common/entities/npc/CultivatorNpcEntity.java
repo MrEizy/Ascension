@@ -58,7 +58,6 @@ import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.network.npc.NpcDialoguePacket;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +81,6 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
     private String affiliationId = "";
     private NpcHabits habits;
     @Nullable private CultivatorNpcEntity socialPartner;
-    private List<String> assignedTeachings = List.of();
     @Nullable private UUID challengedBy;
     private NpcEncounterType encounterType = NpcEncounterType.NONE;
     private int encounterTicks;
@@ -284,7 +282,6 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         super.addAdditionalSaveData(output);
         output.putString("NpcSkin", getSkin());
         output.putString("NpcName", entityData.get(GENERATED_NAME));
-        output.putString("NpcTeachings", String.join(",", assignedTeachings));
         output.putString("NpcPersonality", personalityId);
         output.putString("NpcAffiliation", affiliationId);
         if (homePos != null && !summonedGuard) {
@@ -343,8 +340,6 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         challengedBy = null;
         encounterType = NpcEncounterType.NONE;
         encounterTicks = 0;
-        String storedTeachings = input.getStringOr("NpcTeachings", "");
-        assignedTeachings = storedTeachings.isBlank() ? List.of() : List.of(storedTeachings.split(","));
         trials.clear();
         String storedTrials = input.getStringOr("NpcTrials", "");
         if (!storedTrials.isBlank()) {
@@ -398,15 +393,6 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         if (entityData.get(GENERATED_NAME).isBlank()) {
             setGeneratedName(profile.randomName(random));
             setSkin(profile.randomSkin(random));
-        }
-        if (canGuide() && !summonedGuard && assignedTeachings.isEmpty() && !profile.teachings().isEmpty()) {
-            List<String> available = new ArrayList<>(profile.teachings());
-            int count = getNpcType().equals("sect_master") ? 3 : 1;
-            List<String> picked = new ArrayList<>();
-            while (!available.isEmpty() && picked.size() < count) {
-                picked.add(available.remove(random.nextInt(available.size())));
-            }
-            assignedTeachings = List.copyOf(picked);
         }
         profileReady = true;
     }
@@ -565,7 +551,7 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
         NpcSocialState.Relationship relation = relationship(player, personality);
         PacketDistributor.sendToPlayer(player, new NpcDialoguePacket(getId(), getUUID(),
                 getName().getString(), message, isChallenger(player),
-                canGuide() && !summonedGuard && !assignedTeachings.isEmpty(),
+                canGuide() && !summonedGuard && !profile.teachings().isEmpty(),
                 trials.containsKey(player.getUUID()) && trials.get(player.getUUID()).completed,
                 personality.name(), relation.standing(), relation.respect(), getAffiliation().label(),
                 NpcReputation.get(server.getServer()).value(player.getUUID(), getAffiliation()),
@@ -676,11 +662,12 @@ public class CultivatorNpcEntity extends PathfinderMob implements GeoEntity {
 
     public void guide(ServerPlayer player) {
         if (!(level() instanceof ServerLevel server) || !actionUnlocked(player, NpcAction.GUIDANCE)
-                || !canGuide() || summonedGuard || challengedBy != null || assignedTeachings.isEmpty()) return;
+                || !canGuide() || summonedGuard || challengedBy != null) return;
         NpcProfile profile = NpcProfile.load(server, getNpcType());
+        if (profile.teachings().isEmpty()) return;
         TrialProgress progress = trials.get(player.getUUID());
         if (progress == null) {
-            String technique = assignedTeachings.get(random.nextInt(assignedTeachings.size()));
+            String technique = profile.teachings().get(random.nextInt(profile.teachings().size()));
             progress = new TrialProgress(technique, 0, false);
             trials.put(player.getUUID(), progress);
         }
