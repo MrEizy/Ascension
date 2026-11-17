@@ -35,6 +35,11 @@ import net.zic.ascension.datagen.loot.ModLootModifiers;
 import net.zic.ascension.configuration.mob_traits.traits.AscensionTraitTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationResolutionActionTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
+import net.zic.ascension.network.auction.AuctionActionPacket;
+import net.zic.ascension.network.auction.AuctionInboxActionPacket;
+import net.zic.ascension.network.auction.AuctionScreenPacket;
+import net.zic.ascension.network.auction.BidAuctionPacket;
+import net.zic.ascension.network.auction.CreateAuctionPacket;
 import net.zic.ascension.network.alchemy.ClientboundMedicinalCultivationProgressPacket;
 import net.zic.ascension.network.alchemy.ServerboundStabilizationHitPacket;
 import net.zic.ascension.network.alchemy.ClientboundStabilizationHitResultPacket;
@@ -279,6 +284,32 @@ public class AscensionCraft {
             PayloadRegistrar registrar = event.registrar(AscensionCraft.MOD_ID);
             registrar.playToServer(NpcActionPacket.TYPE, NpcActionPacket.STREAM_CODEC, NpcActionPacket::handle);
             registrar.playToClient(NpcDialoguePacket.TYPE, NpcDialoguePacket.STREAM_CODEC, NpcDialoguePacket::handle);
+
+            registrar.playToClient(
+                    AuctionScreenPacket.TYPE,
+                    AuctionScreenPacket.STREAM_CODEC,
+                    AuctionScreenPacket::handle
+            );
+            registrar.playToServer(
+                    CreateAuctionPacket.TYPE,
+                    CreateAuctionPacket.STREAM_CODEC,
+                    CreateAuctionPacket::handle
+            );
+            registrar.playToServer(
+                    BidAuctionPacket.TYPE,
+                    BidAuctionPacket.STREAM_CODEC,
+                    BidAuctionPacket::handle
+            );
+            registrar.playToServer(
+                    AuctionActionPacket.TYPE,
+                    AuctionActionPacket.STREAM_CODEC,
+                    AuctionActionPacket::handle
+            );
+            registrar.playToServer(
+                    AuctionInboxActionPacket.TYPE,
+                    AuctionInboxActionPacket.STREAM_CODEC,
+                    AuctionInboxActionPacket::handle
+            );
 
             registrar.playToServer(
                     CycleDropModePacket.TYPE,
