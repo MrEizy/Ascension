@@ -13,9 +13,9 @@
       "target_count": 6,
       "prepare_ticks": 22,
       "approach_ticks": 30,
-      "interval_ticks": 34,
-      "perfect_window": 3,
-      "good_window": 7,
+      "interval_ticks": 44,
+      "perfect_window": 5,
+      "good_window": 10,
       "required_score": 0.75,
       "pattern": "shuffled"
     }

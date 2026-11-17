@@ -36,6 +36,13 @@ public final class AlchemyStabilizationClient {
     private static BlockPos activePos;
     private static long lastHitTick = Long.MIN_VALUE;
     private static int lastHitIndex = -1;
+    private static BlockPos predictedPos;
+    private static long predictedSeed;
+    private static int predictedMask;
+    private static final long[] predictedUntil = new long[AlchemyStabilization.MAX_TARGETS];
+    private static final int[] predictedPoints = new int[AlchemyStabilization.MAX_TARGETS];
+    private static String feedback;
+    private static long feedbackUntil;
 
     private AlchemyStabilizationClient() {
     }
@@ -54,8 +61,13 @@ public final class AlchemyStabilizationClient {
         int height = minecraft.getWindow().getGuiScaledHeight();
         AlchemyStabilization.Settings settings = furnace.stabilizationSettings();
         int total = settings.targetCount();
-        int completed = Integer.bitCount(furnace.stabilizationHitMask());
-        int score = total == 0 ? 0 : Math.round(100.0F * furnace.stabilizationScore() / (100.0F * total));
+        syncPrediction(minecraft, furnace);
+        int completed = Integer.bitCount(furnace.stabilizationHitMask() | predictedMask);
+        int earned = furnace.stabilizationScore();
+        for (int i = 0; i < total; i++) {
+            if ((predictedMask & (1 << i)) != 0) earned += predictedPoints[i];
+        }
+        int score = total == 0 ? 0 : Math.round((float) earned / total);
         long elapsed = minecraft.level.getGameTime() - furnace.stabilizationStartTick();
         String label = elapsed < settings.prepareTicks()
                 ? "Stabilize  |  Get ready"
@@ -72,6 +84,10 @@ public final class AlchemyStabilizationClient {
         graphics.fill(barLeft, top + 15, barRight, top + 17, 0x88624C32);
         graphics.fill(barLeft, top + 15, barLeft + (barRight - barLeft) * score / 100,
                 top + 17, 0xFFF5B54C);
+        if (feedback != null && minecraft.level.getGameTime() < feedbackUntil) {
+            graphics.text(minecraft.font, Component.literal(feedback),
+                    (width - minecraft.font.width(feedback)) / 2, top - 12, 0xFFFFC16D, true);
+        }
     }
 
     @SubscribeEvent
@@ -79,6 +95,7 @@ public final class AlchemyStabilizationClient {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level == null || minecraft.player == null) {
             activePos = null;
+            resetPrediction();
             return;
         }
         if (activePos == null || minecraft.level.getGameTime() % 5L == 0L
@@ -87,9 +104,54 @@ public final class AlchemyStabilizationClient {
             activePos = nearestFurnace(minecraft);
         }
         AlchemyFurnaceBlockEntity furnace = activeFurnace(minecraft);
+        syncPrediction(minecraft, furnace);
         if (furnace != null && owner(furnace, minecraft.player)
                 && minecraft.screen instanceof AlchemyFurnaceScreen) {
             minecraft.screen.onClose();
+        }
+    }
+
+    private static void resetPrediction() {
+        predictedPos = null;
+        predictedMask = 0;
+        feedback = null;
+        feedbackUntil = 0L;
+    }
+
+    private static void syncPrediction(Minecraft minecraft, AlchemyFurnaceBlockEntity furnace) {
+        if (furnace == null) {
+            resetPrediction();
+            return;
+        }
+        if (predictedPos == null) return;
+        if (!predictedPos.equals(activePos) || predictedSeed != furnace.stabilizationSeed()) {
+            resetPrediction();
+            return;
+        }
+        int confirmed = furnace.stabilizationHitMask();
+        for (int i = 0; i < AlchemyStabilization.MAX_TARGETS; i++) {
+            int bit = 1 << i;
+            if ((predictedMask & bit) != 0 && ((confirmed & bit) != 0
+                    || minecraft.level.getGameTime() >= predictedUntil[i])) {
+                predictedMask &= ~bit;
+            }
+        }
+    }
+
+    public static void onHitResult(BlockPos pos, long seed, int index, boolean accepted) {
+        if (predictedPos == null || !predictedPos.equals(pos) || predictedSeed != seed
+                || index < 0 || index >= AlchemyStabilization.MAX_TARGETS) return;
+        int bit = 1 << index;
+        if (accepted) {
+            predictedMask |= bit;
+            predictedUntil[index] = Long.MAX_VALUE;
+        } else {
+            predictedMask &= ~bit;
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.level != null) {
+                feedback = "Hit not registered";
+                feedbackUntil = minecraft.level.getGameTime() + 14L;
+            }
         }
     }
 
@@ -145,27 +207,39 @@ public final class AlchemyStabilizationClient {
                 || towardFurnace.normalize().dot(look) < Math.cos(Math.atan2(0.95D, range))) return;
         event.setCanceled(true);
         event.setSwingHand(false);
+        syncPrediction(minecraft, furnace);
         double best = Double.MAX_VALUE;
         int selected = -1;
         int tick = (int) (minecraft.level.getGameTime() - furnace.stabilizationStartTick());
         AlchemyStabilization.Settings settings = furnace.stabilizationSettings();
         for (int i = 0; i < settings.targetCount(); i++) {
-            if ((furnace.stabilizationHitMask() & (1 << i)) != 0) continue;
-            int delta = Math.abs(tick - settings.hitTick(i));
-            if (delta > settings.goodWindow() + 1) continue;
+            if (((furnace.stabilizationHitMask() | predictedMask) & (1 << i)) != 0) continue;
+            int remaining = settings.hitTick(i) - tick;
+            if (remaining > settings.approachTicks() || remaining < -settings.goodWindow()) continue;
             Vec3 point = AlchemyStabilization.position(activePos, furnace.getBlockState(),
                     AlchemyStabilization.targetPosition(settings, furnace.stabilizationSeed(), i));
             Vec3 ray = point.subtract(eye);
             double distance = ray.length();
             if (distance > AlchemyStabilization.INTERACTION_REACH || distance <= 0.15D) continue;
             double miss = ray.cross(look).length();
-            if (ray.dot(look) <= 0.0D || miss > 0.15D || miss >= best) continue;
+            if (ray.dot(look) <= 0.0D || miss > AlchemyStabilization.TARGET_HIT_RADIUS || miss >= best) continue;
             best = miss;
             selected = i;
         }
         if (selected < 0 || lastHitTick == minecraft.level.getGameTime() && lastHitIndex == selected) return;
         lastHitIndex = selected;
         lastHitTick = minecraft.level.getGameTime();
+        if (Math.abs(tick - settings.hitTick(selected)) > settings.goodWindow()) {
+            feedback = "Too early";
+            feedbackUntil = minecraft.level.getGameTime() + 12L;
+            return;
+        }
+        predictedPos = activePos;
+        predictedSeed = furnace.stabilizationSeed();
+        predictedMask |= 1 << selected;
+        predictedPoints[selected] = AlchemyStabilization.points(settings, selected, tick);
+        predictedUntil[selected] = minecraft.level.getGameTime() + 18L;
+        feedback = null;
         ClientPacketDistributor.sendToServer(new ServerboundStabilizationHitPacket(activePos, selected, tick));
     }
 
@@ -180,7 +254,8 @@ public final class AlchemyStabilizationClient {
                 + minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true) - furnace.stabilizationStartTick();
         Vec3 camera = minecraft.gameRenderer.getMainCamera().position();
         BlockPos pos = activePos;
-        int hitMask = furnace.stabilizationHitMask();
+        syncPrediction(minecraft, furnace);
+        int hitMask = furnace.stabilizationHitMask() | predictedMask;
         long seed = furnace.stabilizationSeed();
         AfterShaderPackDraws.drawOrDefer(event.getPoseStack(), RenderTypes.lightning(), (pose, vertices) -> {
             for (int i = 0; i < settings.targetCount(); i++) {
@@ -268,5 +343,6 @@ public final class AlchemyStabilizationClient {
         activePos = null;
         lastHitIndex = -1;
         lastHitTick = Long.MIN_VALUE;
+        resetPrediction();
     }
 }

@@ -6,6 +6,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.blocks.entity.AlchemyFurnaceBlockEntity;
 
@@ -30,7 +31,9 @@ public record ServerboundStabilizationHitPacket(BlockPos furnacePos, int targetI
         context.enqueueWork(() -> {
             if (context.player() instanceof ServerPlayer player && player.level().isLoaded(packet.furnacePos())
                     && player.level().getBlockEntity(packet.furnacePos()) instanceof AlchemyFurnaceBlockEntity furnace) {
-                furnace.hitStabilization(player, packet.targetIndex(), packet.hitTick());
+                boolean accepted = furnace.hitStabilization(player, packet.targetIndex(), packet.hitTick());
+                PacketDistributor.sendToPlayer(player, new ClientboundStabilizationHitResultPacket(
+                        packet.furnacePos(), furnace.stabilizationSeed(), packet.targetIndex(), accepted));
             }
         });
     }

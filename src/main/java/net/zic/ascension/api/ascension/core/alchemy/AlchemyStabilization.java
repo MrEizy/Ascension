@@ -16,6 +16,8 @@ public final class AlchemyStabilization {
     public static final int PHASE_TICKS = 80;
     public static final int MAX_TARGETS = 12;
     public static final double INTERACTION_REACH = 3.5D;
+    public static final double TARGET_HIT_RADIUS = 0.25D;
+    public static final double SERVER_AIM_TOLERANCE = 0.36D;
     private static final int[] ALTERNATING_ORDER = {0, 4, 1, 3, 2};
     private static final double[][] POINTS = {{-0.20D, 0.64D}, {0.0D, 0.70D}, {0.20D, 0.64D}, {-0.15D, 0.48D}, {0.15D, 0.48D}};
 

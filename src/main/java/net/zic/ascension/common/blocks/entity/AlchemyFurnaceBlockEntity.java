@@ -272,7 +272,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
                 || index < 0 || index >= stabilizationSettings.targetCount()
                 || (stabilizationHitMask & (1 << index)) != 0) return false;
         int serverTick = (int) (serverLevel.getGameTime() - stabilizationStartTick);
-        if (clientTick < serverTick - 8 || clientTick > serverTick + 2) return false;
+        if (clientTick < serverTick - 12 || clientTick > serverTick + 3) return false;
         int points = AlchemyStabilization.points(stabilizationSettings, index, clientTick);
         if (points <= 0) return false;
         Vec3 position = AlchemyStabilization.position(worldPosition, getBlockState(),
@@ -282,7 +282,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         double distance = toTarget.length();
         if (distance > AlchemyStabilization.INTERACTION_REACH || distance < 0.15D
                 || toTarget.normalize().dot(player.getLookAngle()) <
-                Math.cos(Math.atan2(0.17D, distance))) return false;
+                Math.cos(Math.atan2(AlchemyStabilization.SERVER_AIM_TOLERANCE, distance))) return false;
         BlockHitResult obstruction = serverLevel.clip(new ClipContext(eye, position, ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE, player));
         if (obstruction.getType() == HitResult.Type.BLOCK && !obstruction.getBlockPos().equals(worldPosition)) return false;
