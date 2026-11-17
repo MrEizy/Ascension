@@ -2,6 +2,21 @@
 
 # Ascension Changelog
 
+## Ascension Version 0.2.1 Snapshot 26.1.2
+
+### Added
+
+### Removed
+
+### Changes
+* Updated the Alchemy Reaction phase to require player Qi contribution, with consumption rates determined by the selected Alchemy Technique
+* Updated the Alchemy Stabilization phase with an interactive minigame, where player performance influences the final pill quality
+
+
+### Fixes
+
+
+
 ## Ascension Version 0.2.0 Snapshot 26.1.2
 
 ### Added
