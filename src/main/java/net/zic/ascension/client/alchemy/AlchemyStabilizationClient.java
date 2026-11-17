@@ -229,17 +229,15 @@ public final class AlchemyStabilizationClient {
         if (selected < 0 || lastHitTick == minecraft.level.getGameTime() && lastHitIndex == selected) return;
         lastHitIndex = selected;
         lastHitTick = minecraft.level.getGameTime();
-        if (Math.abs(tick - settings.hitTick(selected)) > settings.goodWindow()) {
-            feedback = "Too early";
-            feedbackUntil = minecraft.level.getGameTime() + 12L;
-            return;
-        }
+        int points = AlchemyStabilization.points(settings, selected, tick);
+        if (points <= 0) return;
         predictedPos = activePos;
         predictedSeed = furnace.stabilizationSeed();
         predictedMask |= 1 << selected;
-        predictedPoints[selected] = AlchemyStabilization.points(settings, selected, tick);
+        predictedPoints[selected] = points;
         predictedUntil[selected] = minecraft.level.getGameTime() + 18L;
-        feedback = null;
+        feedback = points == 100 ? "Perfect" : points == 75 ? "Good" : "Early";
+        feedbackUntil = minecraft.level.getGameTime() + 12L;
         ClientPacketDistributor.sendToServer(new ServerboundStabilizationHitPacket(activePos, selected, tick));
     }
 
@@ -281,7 +279,8 @@ public final class AlchemyStabilizationClient {
         float progress = Math.max(0.0F, Math.min(1.0F, remaining / settings.approachTicks()));
         float pulse = 0.5F + 0.5F * (float) Math.sin(tick * 0.2F);
         double radius = 0.074D + 0.175D * progress;
-        int ringColor = Math.abs(remaining) <= settings.perfectWindow() ? 0xFFFFE7A2 : 0xEFFFBA4F;
+        int ringColor = Math.abs(remaining) <= settings.perfectWindow() ? 0xFFFFE7A2
+                : Math.abs(remaining) <= settings.goodWindow() ? 0xFFFFC566 : 0xDFFF933A;
         addDisc(pose, vertices, point, right, up, 0.066D + 0.006D * pulse, 0x6EFFA536);
         addDisc(pose, vertices, point, right, up, 0.047D, 0xFFF8CB70);
         addDisc(pose, vertices, point, right, up, 0.021D, 0xFFFFF2C4);

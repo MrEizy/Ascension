@@ -13,7 +13,7 @@
       "approach_ticks": 30,
       "interval_ticks": 42,
       "perfect_window": 6,
-      "good_window": 12,
+      "good_window": 18,
       "required_score": 0.7,
       "pattern": "sweep"
     }

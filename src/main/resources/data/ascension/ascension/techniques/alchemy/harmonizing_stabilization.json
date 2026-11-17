@@ -15,7 +15,7 @@
       "approach_ticks": 26,
       "interval_ticks": 39,
       "perfect_window": 5,
-      "good_window": 10,
+      "good_window": 16,
       "required_score": 0.72,
       "pattern": "alternating"
     }

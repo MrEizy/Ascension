@@ -56,7 +56,7 @@ public final class AlchemyStabilization {
             approachTicks = Mth.clamp(approachTicks, 12, 50);
             intervalTicks = Mth.clamp(intervalTicks, 12, 60);
             perfectWindow = Mth.clamp(perfectWindow, 1, 8);
-            goodWindow = Mth.clamp(goodWindow, perfectWindow, 12);
+            goodWindow = Mth.clamp(goodWindow, perfectWindow, 24);
             requiredScore = Double.isFinite(requiredScore) ? Mth.clamp(requiredScore, 0.0D, 1.0D) : 0.70D;
             pattern = pattern == null ? Pattern.SHUFFLED : pattern;
         }
@@ -94,9 +94,11 @@ public final class AlchemyStabilization {
     }
 
     public static int points(Settings settings, int index, int tick) {
-        int offset = Math.abs(tick - settings.hitTick(index));
+        int remaining = settings.hitTick(index) - tick;
+        int offset = Math.abs(remaining);
         if (offset <= settings.perfectWindow()) return 100;
-        if (offset <= settings.goodWindow()) return 65;
+        if (offset <= settings.goodWindow()) return 75;
+        if (remaining >= 0 && remaining <= settings.approachTicks()) return 45;
         return 0;
     }
 }
