@@ -1,0 +1,14 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/bastion_bridge"
+    },
+    {
+      "chance": 0.18,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "table": "ascension:added_loot/techniques/profound/martial_transcendence_vol_2"
+}

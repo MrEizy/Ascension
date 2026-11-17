@@ -21,7 +21,17 @@
         },
         {
           "type": "minecraft:item",
-          "name": "ascension:netherite_blade",
+          "name": "ascension:diamond_blade",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ascension:diamond_chakram",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ascension:iron_chakram",
           "weight": 15
         },
         {
@@ -38,19 +48,69 @@
             }
           ],
           "name": "ascension:jade_dew_grass",
-          "weight": 10
+          "weight": 15
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:enchanted_golden_apple",
-          "weight": 13
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/sustained_spirit_art"
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:technique_manual",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/lightness_technique"
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:technique_manual",
+          "weight": 8
         }
       ],
       "rolls": {
         "type": "minecraft:uniform",
-        "max": 3.0,
-        "min": 1.0
+        "max": 4.0,
+        "min": 2.0
       }
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.15,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/mount_hua_sword_manual"
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:technique_manual"
+        }
+      ],
+      "rolls": 1.0
     },
     {
       "bonus_rolls": 0.0,
@@ -78,7 +138,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 6.0,
+                "max": 4.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
@@ -86,6 +146,22 @@
           ],
           "name": "minecraft:diamond",
           "weight": 21
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 8.0,
+                "min": 2.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:iron_ingot",
+          "weight": 25
         },
         {
           "type": "minecraft:item",

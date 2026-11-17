@@ -7,17 +7,18 @@
 ## Ascension Version 0.2.1 Snapshot 26.1.2
 
 ### Added
-* Added Dual Wielding Skill
+* Added Dual Wielding Skill (Fist, Blade Dao gets it at second major realm)
 * Added 8 New Weapons (Chakrams)
 * Added 4 New Enchantments (Chakram Enchantments)
 * Added Missing Peach Blocks
 * Added More Recipes
-* Added 42 new Divine Senses
+* Added custom divine sense to all techniques
 * Added Concealment skill type
 * Added a data-driven Player Visual System supporting custom models, textures, and GeckoLib animations
 * Added semi-animated demo model Fox Ears and Tails for the Moonveil Fox Bloodline, with 1–3 tails based on bloodline purity
 * New structure; Large Pagoda
 * Sect Elders and Sect Leaders spawning has been moved to the large Pagoda
+* Added more ways to get techniques
 
 ### Removed
 * Disabled Spherical Devestation
@@ -28,7 +29,7 @@
 * Updated the Alchemy Stabilization phase with an interactive minigame, where player performance influences the final pill quality
 * Moved Spawn Eggs into Spawn Egg Tab
 * Tweaked the progression between realms
-* Decreased change for Young Master to spawn in villages
+* Decreased chance for Young Master to spawn in villages
 
 ### Fixes
 * Fixed Peach Planks not having a Recipe.
