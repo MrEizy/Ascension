@@ -34,6 +34,7 @@
 * Fixed Peach Planks not having a Recipe.
 * Fixed Body Cultivation skills by making them toggleable
 * Auction House and Bidder not opening GUIs
+* NPC Guidance now actual gives randomly selected techniques from their respective pools
 
 ### Technical Changes
 * Moved nested ToggleablePassiveSkill class out of PassiveSkill for reusability
