@@ -226,6 +226,7 @@ public class ModCreativeModeTabs {
             event.accept(ModItems.FEMALE_CULTIVATOR_SPAWN_EGG);
             event.accept(ModItems.SECT_ELDER_SPAWN_EGG);
             event.accept(ModItems.SECT_MASTER_SPAWN_EGG);
+
             event.accept(ModItems.YOUNG_MASTER_SPAWN_EGG);
         }
     }
