@@ -687,7 +687,10 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tooltip.jade_bottle", "Jade Bottle");
         add("ascension.tooltip.jade_bottle.contained", "Contained");
         add("ascension.tooltip.jade_bottle.contained_pill", "Contained Pill");
-        add("ascension.tooltip.jade_bottle.expiration", "Expiration");
+        add("ascension.tooltip.jade_bottle.expiration", "Time Remaining");
+        add("ascension.tooltip.jade_bottle.empty", "Empty");
+        add("ascension.tooltip.jade_bottle.expired", "Expired");
+        add("ascension.tooltip.jade_bottle.not_applicable", "X");
 
 
 
