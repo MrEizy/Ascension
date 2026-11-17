@@ -304,12 +304,38 @@ public class AscRecipeProvider extends RecipeProvider {
                 ModItems.SPIRITUAL_STONE_BLADE.get()
         );
         smithingTransform(
+                ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE.asItem(),
+                ModItems.NETHERITE_CHAKRAM.get(),
+                Ingredient.of(ModItems.SPIRITUAL_STONE),
+                RecipeCategory.COMBAT,
+                ModItems.SPIRITUAL_STONE_CHAKRAM.get()
+        );
+        smithingTransform(
                 Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
                 ModItems.DIAMOND_BLADE.get(),
                 Ingredient.of(Items.NETHERITE_INGOT),
                 RecipeCategory.COMBAT,
                 ModItems.NETHERITE_BLADE.get()
         );
+        smithingTransform(
+                Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
+                ModItems.DIAMOND_CHAKRAM.get(),
+                Ingredient.of(Items.NETHERITE_INGOT),
+                RecipeCategory.COMBAT,
+                ModItems.NETHERITE_CHAKRAM.get()
+        );
+
+
+        shaped(RecipeCategory.MISC, ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE.get(), 2)
+                .pattern("STS")
+                .pattern("SES")
+                .pattern("SSS")
+                .define('T', ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE.get())
+                .define('S', ModItems.SPIRITUAL_STONE.get())
+                .define('E', Blocks.END_STONE)
+                .unlockedBy(getHasName(ModItems.SPIRITUAL_STONE.get()), has(ModItems.SPIRITUAL_STONE))
+                .group("spiritual_stone")
+                .save(output, "ascension:shaped/spiritual_template");
 
 
         shaped(RecipeCategory.COMBAT, ModItems.BLACK_IRON_SWORD.get())
@@ -330,6 +356,14 @@ public class AscRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(ModItems.BLACK_IRON_INGOT.get()), has(ModItems.BLACK_IRON_INGOT))
                 .group("black_iron")
                 .save(output, "ascension:shaped/black_iron_blade");
+        shaped(RecipeCategory.COMBAT, ModItems.BLACK_IRON_CHAKRAM.get())
+                .pattern("TTT")
+                .pattern("T T")
+                .pattern("TTT")
+                .define('T', ModItems.BLACK_IRON_INGOT.get())
+                .unlockedBy(getHasName(ModItems.BLACK_IRON_INGOT.get()), has(ModItems.BLACK_IRON_INGOT))
+                .group("black_iron")
+                .save(output, "ascension:shaped/black_iron_chakram");
         shaped(RecipeCategory.COMBAT, ModItems.BLACK_IRON_AXE.get())
                 .pattern("TT ")
                 .pattern("TS ")
@@ -393,6 +427,14 @@ public class AscRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(ModItems.FROST_SILVER_INGOT.get()), has(ModItems.FROST_SILVER_INGOT))
                 .group("frost_silver")
                 .save(output, "ascension:shaped/frost_silver_blade");
+        shaped(RecipeCategory.COMBAT, ModItems.FROST_SILVER_CHAKRAM.get())
+                .pattern("TTT")
+                .pattern("T T")
+                .pattern("TTT")
+                .define('T', ModItems.FROST_SILVER_INGOT.get())
+                .unlockedBy(getHasName(ModItems.FROST_SILVER_INGOT.get()), has(ModItems.FROST_SILVER_INGOT))
+                .group("frost_silver")
+                .save(output, "ascension:shaped/frost_silver_chakram");
         shaped(RecipeCategory.COMBAT, ModItems.FROST_SILVER_AXE.get())
                 .pattern("TT ")
                 .pattern("TS ")
@@ -492,6 +534,39 @@ public class AscRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(Items.DIAMOND), has(Items.DIAMOND))
                 .group("blade")
                 .save(output, "ascension:shaped/diamond_blade");
+
+        shaped(RecipeCategory.COMBAT, ModItems.COPPER_CHAKRAM.get())
+                .pattern("TTT")
+                .pattern("T T")
+                .pattern("TTT")
+                .define('T', Items.COPPER_INGOT)
+                .unlockedBy(getHasName(Items.COPPER_INGOT), has(Items.COPPER_INGOT))
+                .group("chakram")
+                .save(output, "ascension:shaped/copper_chakram");
+        shaped(RecipeCategory.COMBAT, ModItems.IRON_CHAKRAM.get())
+                .pattern("TTT")
+                .pattern("T T")
+                .pattern("TTT")
+                .define('T', Items.IRON_INGOT)
+                .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                .group("chakram")
+                .save(output, "ascension:shaped/iron_chakram");
+        shaped(RecipeCategory.COMBAT, ModItems.GOLDEN_CHAKRAM.get())
+                .pattern("TTT")
+                .pattern("T T")
+                .pattern("TTT")
+                .define('T', Items.GOLD_INGOT)
+                .unlockedBy(getHasName(Items.GOLD_INGOT), has(Items.GOLD_INGOT))
+                .group("chakram")
+                .save(output, "ascension:shaped/gold_chakram");
+        shaped(RecipeCategory.COMBAT, ModItems.DIAMOND_CHAKRAM.get())
+                .pattern("TTT")
+                .pattern("T T")
+                .pattern("TTT")
+                .define('T', Items.DIAMOND)
+                .unlockedBy(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                .group("chakram")
+                .save(output, "ascension:shaped/diamond_chakram");
 
     }
 

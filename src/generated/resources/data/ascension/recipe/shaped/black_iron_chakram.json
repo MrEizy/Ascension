@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "black_iron",
+  "key": {
+    "T": "ascension:black_iron_ingot"
+  },
+  "pattern": [
+    "TTT",
+    "T T",
+    "TTT"
+  ],
+  "result": {
+    "id": "ascension:black_iron_chakram"
+  }
+}

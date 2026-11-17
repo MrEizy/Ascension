@@ -41,12 +41,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE);
                         output.accept(ModItems.SPIRITUAL_STONE);
                         output.accept(ModItems.JADE);
-                        output.accept(ModItems.TREASURE_RAT_SPAWN_EGG);
-                        output.accept(ModItems.MALE_CULTIVATOR_SPAWN_EGG);
-                        output.accept(ModItems.FEMALE_CULTIVATOR_SPAWN_EGG);
-                        output.accept(ModItems.SECT_ELDER_SPAWN_EGG);
-                        output.accept(ModItems.SECT_MASTER_SPAWN_EGG);
-                        output.accept(ModItems.YOUNG_MASTER_SPAWN_EGG);
                         output.accept(ModItems.RAW_FROST_SILVER);
                         output.accept(ModItems.FROST_SILVER_INGOT);
                         output.accept(ModItems.FROST_SILVER_NUGGET);
@@ -59,6 +53,7 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.BLACK_IRON_SWORD);
                         output.accept(ModItems.BLACK_IRON_BLADE);
+                        output.accept(ModItems.BLACK_IRON_CHAKRAM);
                         output.accept(ModItems.BLACK_IRON_PICKAXE);
                         output.accept(ModItems.BLACK_IRON_SHOVEL);
                         output.accept(ModItems.BLACK_IRON_AXE);
@@ -67,6 +62,7 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.FROST_SILVER_SWORD);
                         output.accept(ModItems.FROST_SILVER_BLADE);
+                        output.accept(ModItems.FROST_SILVER_CHAKRAM);
                         output.accept(ModItems.FROST_SILVER_PICKAXE);
                         output.accept(ModItems.FROST_SILVER_SHOVEL);
                         output.accept(ModItems.FROST_SILVER_AXE);
@@ -76,11 +72,13 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.SPIRITUAL_STONE_SWORD);
                         output.accept(ModItems.SPIRITUAL_STONE_BLADE);
+                        output.accept(ModItems.SPIRITUAL_STONE_CHAKRAM);
                         output.accept(ModItems.SPIRITUAL_STONE_PICKAXE);
                         output.accept(ModItems.SPIRITUAL_STONE_SHOVEL);
                         output.accept(ModItems.SPIRITUAL_STONE_AXE);
                         output.accept(ModItems.SPIRITUAL_STONE_HOE);
                         output.accept(ModItems.SPIRITUAL_STONE_SPEAR);
+
 
 
                     }).build());
@@ -205,6 +203,31 @@ public class ModCreativeModeTabs {
             event.insertAfter(Items.DIAMOND_SWORD.getDefaultInstance(), ModItems.DIAMOND_BLADE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(Items.NETHERITE_SWORD.getDefaultInstance(), ModItems.NETHERITE_BLADE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
 
+            event.insertAfter(ModItems.COPPER_BLADE.get().asItem().getDefaultInstance(),
+                    ModItems.COPPER_CHAKRAM.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.IRON_BLADE.get().asItem().getDefaultInstance(),
+                    ModItems.IRON_CHAKRAM.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.GOLD_BLADE.get().asItem().getDefaultInstance(),
+                    ModItems.GOLDEN_CHAKRAM.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.DIAMOND_BLADE.get().asItem().getDefaultInstance(),
+                    ModItems.DIAMOND_CHAKRAM.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.NETHERITE_BLADE.get().asItem().getDefaultInstance(),
+                    ModItems.NETHERITE_CHAKRAM.get().asItem().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+        }
+
+        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            event.accept(ModItems.TREASURE_RAT_SPAWN_EGG);
+            event.accept(ModItems.MALE_CULTIVATOR_SPAWN_EGG);
+            event.accept(ModItems.FEMALE_CULTIVATOR_SPAWN_EGG);
+            event.accept(ModItems.SECT_ELDER_SPAWN_EGG);
+            event.accept(ModItems.SECT_MASTER_SPAWN_EGG);
+
+            event.accept(ModItems.YOUNG_MASTER_SPAWN_EGG);
         }
     }
 

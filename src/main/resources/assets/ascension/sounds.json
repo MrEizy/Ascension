@@ -1,0 +1,38 @@
+{
+  "chakram.throw": {
+    "subtitle": "subtitles.ascension.chakram.throw",
+    "sounds": [
+      { "name": "minecraft:entity/player/attack/sweep1", "pitch": 1.35, "volume": 0.9 }
+    ]
+  },
+  "chakram.ricochet": {
+    "subtitle": "subtitles.ascension.chakram.ricochet",
+    "sounds": [
+      { "name": "minecraft:item/shield/block1", "pitch": 1.75, "volume": 0.6 }
+    ]
+  },
+  "chakram.hit": {
+    "subtitle": "subtitles.ascension.chakram.hit",
+    "sounds": [
+      { "name": "minecraft:item/trident/pierce1", "pitch": 1.3, "volume": 1.0 }
+    ]
+  },
+  "chakram.return": {
+    "subtitle": "subtitles.ascension.chakram.return",
+    "sounds": [
+      { "name": "minecraft:item/trident/return1", "pitch": 1.45, "volume": 0.7 }
+    ]
+  },
+  "chakram.catch": {
+    "subtitle": "subtitles.ascension.chakram.catch",
+    "sounds": [
+      { "name": "minecraft:item/armor/equip_iron1", "pitch": 1.35, "volume": 1.0 }
+    ]
+  },
+  "chakram.thud": {
+    "subtitle": "subtitles.ascension.chakram.thud",
+    "sounds": [
+      { "name": "minecraft:item/trident/ground_impact1", "pitch": 1.25, "volume": 1.0 }
+    ]
+  }
+}

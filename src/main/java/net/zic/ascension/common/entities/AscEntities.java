@@ -19,6 +19,7 @@ import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.common.entities.weapons.ChakramEntity;
 import net.zic.ascension.impl.core.innerworld.InnerWorldGhost;
 
 public class AscEntities {
@@ -50,6 +51,23 @@ public class AscEntities {
                     .sized(0.5F, 0.35F)
                     .clientTrackingRange(8)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, id)));
+
+
+
+
+    //Weapons
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ChakramEntity>> CHAKRAM =
+            ENTITY_TYPES.register("chakram", id -> EntityType.Builder
+                    .<ChakramEntity>of((type, level) -> new ChakramEntity(type, level), MobCategory.MISC)
+                    .sized(0.6F, 0.6F)
+                    .clientTrackingRange(8)
+                    .updateInterval(1)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, id)));
+
+
+
+    //Npcs
 
     public static final DeferredHolder<EntityType<?>, EntityType<CultivatorNpcEntity>> MALE_CULTIVATOR = npc("male_cultivator");
     public static final DeferredHolder<EntityType<?>, EntityType<CultivatorNpcEntity>> FEMALE_CULTIVATOR = npc("female_cultivator");

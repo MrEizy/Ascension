@@ -50,6 +50,31 @@ public class AscItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.SPIRITUAL_STONE_REPAIRABLE)
                 .add(ModItems.SPIRITUAL_STONE.get());
 
+        tag(ModTags.Items.CHAKRAMS)
+                .add(ModItems.COPPER_CHAKRAM.get())
+                .add(ModItems.IRON_CHAKRAM.get())
+                .add(ModItems.GOLDEN_CHAKRAM.get())
+                .add(ModItems.DIAMOND_CHAKRAM.get())
+                .add(ModItems.NETHERITE_CHAKRAM.get())
+                .add(ModItems.BLACK_IRON_CHAKRAM.get())
+                .add(ModItems.FROST_SILVER_CHAKRAM.get())
+                .add(ModItems.SPIRITUAL_STONE_CHAKRAM.get());
+
+        tag(ItemTags.DURABILITY_ENCHANTABLE)
+                .add(ModItems.COPPER_CHAKRAM.get())
+                .add(ModItems.IRON_CHAKRAM.get())
+                .add(ModItems.GOLDEN_CHAKRAM.get())
+                .add(ModItems.DIAMOND_CHAKRAM.get())
+                .add(ModItems.NETHERITE_CHAKRAM.get());
+
+        tag(ItemTags.VANISHING_ENCHANTABLE)
+                .add(ModItems.COPPER_CHAKRAM.get())
+                .add(ModItems.IRON_CHAKRAM.get())
+                .add(ModItems.GOLDEN_CHAKRAM.get())
+                .add(ModItems.DIAMOND_CHAKRAM.get())
+                .add(ModItems.NETHERITE_CHAKRAM.get());
+
+
         tag(ItemTags.SWORDS)
                 .add(ModItems.BLACK_IRON_SWORD.get())
                 .add(ModItems.FROST_SILVER_SWORD.get())

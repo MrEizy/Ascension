@@ -29,6 +29,7 @@ import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.command.commands.AuctionCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.common.sounds.AscSounds;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.datagen.loot.ModLootModifiers;
 import net.zic.ascension.configuration.mob_traits.traits.AscensionTraitTypes;
@@ -115,6 +116,9 @@ public class AscensionCraft {
         AscensionParticles.register(modEventBus);
 
         AscMenuTypes.register(modEventBus);
+
+        AscSounds.register(modEventBus);
+
 
 
         AscFluidTypes.register(modEventBus);

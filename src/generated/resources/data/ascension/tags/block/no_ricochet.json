@@ -1,0 +1,21 @@
+{
+  "values": [
+    "#minecraft:wool",
+    "#minecraft:wool_carpets",
+    "#minecraft:leaves",
+    "#minecraft:beds",
+    "minecraft:hay_block",
+    "minecraft:snow_block",
+    "minecraft:snow",
+    "minecraft:powder_snow",
+    "minecraft:honey_block",
+    "minecraft:sponge",
+    "minecraft:wet_sponge",
+    "minecraft:cobweb",
+    "minecraft:mud",
+    "minecraft:moss_block",
+    "minecraft:moss_carpet",
+    "minecraft:target",
+    "minecraft:dried_kelp_block"
+  ]
+}
