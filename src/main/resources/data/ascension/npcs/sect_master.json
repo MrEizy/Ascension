@@ -89,7 +89,7 @@
     "guidance_talks": 4
   },
   "village_spawning": {
-    "weight": 1,
+    "weight": 0,
     "max_per_village": 1,
     "home_radius": 18
   }
