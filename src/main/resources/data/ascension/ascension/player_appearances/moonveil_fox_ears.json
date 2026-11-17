@@ -1,0 +1,8 @@
+{
+  "appearance": "ascension:moonveil_fox_ears",
+  "source": {
+    "type": "bloodline",
+    "id": "ascension:2_profound/moonveil_fox_bloodline",
+    "min_purity": 1
+  }
+}

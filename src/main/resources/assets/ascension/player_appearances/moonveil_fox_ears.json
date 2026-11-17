@@ -1,0 +1,51 @@
+{
+  "texture": "ascension:textures/entity/player_appearance/moonveil_fox.png",
+  "texture_size": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "anchor": "head",
+      "cubes": [
+        {
+          "origin": [
+            -4,
+            -12,
+            -1
+          ],
+          "size": [
+            2,
+            4,
+            2
+          ],
+          "uv": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "anchor": "head",
+      "cubes": [
+        {
+          "origin": [
+            2,
+            -12,
+            -1
+          ],
+          "size": [
+            2,
+            4,
+            2
+          ],
+          "uv": [
+            12,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

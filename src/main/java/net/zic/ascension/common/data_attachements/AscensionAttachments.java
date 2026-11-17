@@ -20,6 +20,7 @@ import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkPathAffinityProvider;
 import net.zic.ascension.chunks.atmospheric_qi.ChunkQiHandler;
 import net.zic.ascension.common.util.AscensionAttributes;
+import net.zic.ascension.common.appearance.PlayerAppearanceState;
 import net.zic.ascension.impl.core.entity.SimpleAscensionEntityData;
 import net.zic.ascension.mob_cultivation.oliver_rewrite.MobConfigurationHolder;
 import net.zic.ascension.skill_casting.SkillCastHandler;
@@ -35,6 +36,12 @@ import net.zic.ascension.impl.core.effect.SkillEffectManager;
 //TODO go thorough and clean up what we are no longer using
 public class AscensionAttachments {
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, AscensionCraft.MOD_ID);
+
+    public static final Supplier<AttachmentType<PlayerAppearanceState>> PLAYER_APPEARANCES = ATTACHMENT_TYPES.register(
+            "player_appearances", () -> AttachmentType.builder(holder -> new PlayerAppearanceState())
+                    .sync(new PlayerAppearanceState.SyncHandler())
+                    .build()
+    );
 
     public static final Supplier<AttachmentType<SimpleAscensionEntityData>> SIMPLE_ENTITY_DATA = ATTACHMENT_TYPES.register(
             "simple_ascension_entity_data",()->AttachmentType.builder(

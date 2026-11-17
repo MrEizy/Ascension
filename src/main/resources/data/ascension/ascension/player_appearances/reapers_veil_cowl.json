@@ -1,0 +1,8 @@
+{
+  "appearance": "ascension:reapers_veil_cowl",
+  "source": {
+    "type": "skill",
+    "id": "ascension:concealment/reapers_calling/reapers_veil",
+    "active": true
+  }
+}
