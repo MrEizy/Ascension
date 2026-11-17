@@ -2,6 +2,8 @@
 
 # Ascension Changelog
 
+---
+
 ## Ascension Version 0.2.1 Snapshot 26.1.2
 
 ### Added
@@ -11,11 +13,10 @@
 * Added Missing Peach Blocks
 * Added More Recipes
 * Added 42 new Divine Senses
-
+* Added Concealment skill type
 
 ### Removed
 * Disabled Spherical Devestation
-* 
 
 ### Changes
 * Updated the Alchemy Reaction phase to require player Qi contribution, with consumption rates determined by the selected Alchemy Technique
@@ -24,18 +25,12 @@
 
 ### Fixes
 * Fixed Peach Planks not having a Recipe.
+* Fixed Body Cultivation skills by making them toggleable
 
+### Technical Changes
+* Moved nested ToggleablePassiveSkill class out of PassiveSkill for reusability
 
-
-
-
-
-
-
-
-
-
-
+---
 
 ## Ascension Version 0.2.0 Snapshot 26.1.2
 
