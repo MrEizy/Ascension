@@ -12,9 +12,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
-import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
-import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkill;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillInstance;
@@ -38,7 +35,6 @@ import net.zic.ascension.impl.core.skill.castable.SkillActionRuntime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillDefinitions.Owner {
     private static final SyncHandler<Data> SYNC_HANDLER = new DataSyncHandler();
@@ -116,7 +112,7 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
             List<SkillAction> disableActions
     ) {
         return toggleable
-                ? new Toggleable(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep, stateGroup, grantedSkills, enableConditions, enableActions, disableActions)
+                ? new ToggleablePassiveSkill(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep, stateGroup, grantedSkills, enableConditions, enableActions, disableActions)
                 : new PassiveSkill(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, true, Optional.empty(), Optional.empty(), List.of(), List.of(), List.of(), List.of());
     }
 
@@ -146,7 +142,7 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
     }
 
     public boolean isToggleable() {
-        return this instanceof Toggleable;
+        return this instanceof ToggleableSkill<?>;
     }
 
     public boolean isEnabledByDefault() {
@@ -178,7 +174,7 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
     }
 
     public boolean isActive(Data data) {
-        return !(this instanceof Toggleable) || data != null && data.isEnabled();
+        return !(this instanceof ToggleableSkill<?>) || data != null && data.isEnabled();
     }
 
     @Override
@@ -232,7 +228,7 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
     @Override
     public void onAdded(OriginSource source, SkillInstance<Data> instance) {
         if (isActive(instance.getData())) {
-            if (this instanceof Toggleable) {
+            if (this instanceof ToggleableSkill<?>) {
                 activateState(source, instance.getSkillId());
             } else {
                 applyModifiers(source, instance.getSkillId());
@@ -243,7 +239,7 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
     @Override
     public void onRemoved(OriginSource source, SkillInstance<Data> instance) {
         if (isActive(instance.getData())) {
-            if (this instanceof Toggleable) {
+            if (this instanceof ToggleableSkill<?>) {
                 deactivateState(source, instance.getSkillId());
             } else {
                 removeModifiers(source, instance.getSkillId());
@@ -258,7 +254,7 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
         }
         Identifier skillId = instance.getSkillId();
         modifiers.forEach(modifier -> modifier.applyToEntity(entity, skillId));
-        if (this instanceof Toggleable && entity.level() instanceof ServerLevel level) {
+        if (this instanceof ToggleableSkill<?> && entity.level() instanceof ServerLevel level) {
             SkillActionContext context = new SkillActionContext(level, entity, skillId, null, null, 0.0D, Map.of());
             SkillActionRuntime.restorePersistentVisuals(context, enableActions);
         }
@@ -271,7 +267,7 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
         }
         Identifier skillId = instance.getSkillId();
         modifiers.forEach(modifier -> modifier.removeFromEntity(entity, skillId));
-        if (this instanceof Toggleable && entity.level() instanceof ServerLevel level) {
+        if (this instanceof ToggleableSkill<?> && entity.level() instanceof ServerLevel level) {
             SkillActionContext context = new SkillActionContext(level, entity, skillId, null, null, 0.0D, Map.of());
             SkillActionRuntime.clearPersistentVisuals(context, enableActions);
         }
@@ -342,82 +338,6 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
         ).apply(instance, Upkeep::new));
     }
 
-    private static final class Toggleable extends PassiveSkill implements ToggleableSkill<PassiveSkill.Data> {
-        private Toggleable(
-                Component name,
-                Component description,
-                int levels,
-                int baseLevelCap,
-                List<Double> levelExperienceRequirements,
-                List<PassiveModifier> modifiers,
-                List<PassiveTrigger> triggers,
-                SkillDefinitions definitions,
-                boolean enabledByDefault,
-                Optional<Upkeep> upkeep,
-                Optional<Identifier> stateGroup,
-                List<Identifier> grantedSkills,
-                List<SkillCondition> enableConditions,
-                List<SkillAction> enableActions,
-                List<SkillAction> disableActions
-        ) {
-            super(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep, stateGroup, grantedSkills, enableConditions, enableActions, disableActions);
-        }
-
-        @Override
-        public boolean isEnabled(Data data) {
-            return data.isEnabled();
-        }
-
-        @Override
-        public void setEnabled(Data data, boolean enabled) {
-            data.setEnabled(enabled);
-        }
-
-        @Override
-        public boolean canEnable(LivingEntity entity, OriginSource source, SkillInstance<Data> instance) {
-            if (!upkeepAvailable(entity, source, instance.getSkillId(), true) || !(entity.level() instanceof ServerLevel level)) {
-                return false;
-            }
-            SkillActionContext context = new SkillActionContext(level, entity, instance.getSkillId(), null, null, 0.0D, Map.of());
-            return enableConditions().stream().allMatch(condition -> condition != null && condition.test(context));
-        }
-
-        @Override
-        public void onEnabled(OriginSource source, SkillInstance<Data> instance) {
-            activateState(source, instance.getSkillId());
-        }
-
-        @Override
-        public void onDisabled(OriginSource source, SkillInstance<Data> instance) {
-            deactivateState(source, instance.getSkillId());
-        }
-
-        @Override
-        public boolean tickEnabled(LivingEntity entity, OriginSource source, SkillInstance<Data> instance) {
-            return getUpkeep().isEmpty()
-                    || entity.level().getGameTime() % getUpkeep().get().interval() != 0L
-                    || upkeepAvailable(entity, source, instance.getSkillId(), false);
-        }
-
-        private boolean upkeepAvailable(LivingEntity entity, OriginSource source, Identifier skillId, boolean simulate) {
-            if (getUpkeep().isEmpty()) {
-                return true;
-            }
-            Upkeep upkeep = getUpkeep().get();
-            ScaledValue.Context valueContext = new ScaledValue.Context(source, skillId, entity, null, 0.0D, Map.of());
-            ResourceTransactionRequest request = ResourceTransactionRequest.of(
-                    entity,
-                    upkeep.resource(),
-                    upkeep.operation(),
-                    Math.max(0.0D, upkeep.amount().resolve(valueContext)),
-                    new ResourceSourceIdentity.Simple(upkeep.source(), Set.of(ResourceSourceIdentity.Tags.SKILL))
-            ).withSkill(skillId);
-            if (simulate) {
-                request = request.withFlags(Set.of(ResourceTransactionRequest.Flag.SIMULATE));
-            }
-            return ResourceTransactionService.transact(request).succeeded();
-        }
-    }
 
     public static final class Data implements ProgressingSkillData {
         private final SkillProgressionData progression;
