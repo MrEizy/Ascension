@@ -9,20 +9,14 @@ import org.jspecify.annotations.NullMarked;
 import java.util.Optional;
 
 /**
- * The player animation a cast plays on its caster while it lasts, the {@code animation} field of a cast definition. Written
- * as just the animation's id, or as {@code {"id": ..., "seated_from": ..., "end": ..., "seated_end": ...}}. Played on the
- * client by {@code client.animation.PlayerAnimations} from the cast state every client already has.
+ * The player animation a cast plays on its caster, the {@code animation} field of a cast. Either just an id or an object.
+ * Played by {@code client.animation.PlayerAnimations}.
  *
- * @param id         the Player Animation Library animation, the name inside a file in
- *                   {@code assets/<namespace>/player_animations/} (for example {@code ascension:meditate})
- * @param seatedFrom seconds into the animation to start at when the caster is already seated (on a cushion), so a sit-down
- *                   at its start is skipped; 0 plays it from the start
- * @param end        played once when the cast ends, before the player goes back to normal (standing back up); without it
- *                   the player snaps back
- * @param seatedEnd  played when the cast ends while seated, holding its last frame until the player gets up (floating back
- *                   down onto the cushion); without it the player snaps to the seated pose
- * @param seatedOnly plays only while the caster sits on a cushion; elsewhere the cast shows no animation (for casts people
- *                   often walk around during)
+ * @param id         the animation, e.g. {@code ascension:meditate}
+ * @param seatedFrom seconds to start at when on a cushion, skipping the sit-down
+ * @param end        played once when the cast ends
+ * @param seatedEnd  played when the cast ends on a cushion, holding its last frame
+ * @param seatedOnly only plays on a cushion
  */
 @NullMarked
 public record CastAnimation(
@@ -50,7 +44,6 @@ public record CastAnimation(
                     : Either.right(animation)
     );
 
-    /** The animation to play when the cast ends, for a caster who is or isn't seated. */
     public Optional<Identifier> endFor(boolean seated) {
         return seated ? seatedEnd : end;
     }

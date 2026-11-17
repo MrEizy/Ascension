@@ -14,6 +14,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastVisualState;
 import net.zic.ascension.api.ascension.core.skill.castable.CastAnimation;
+import net.zic.ascension.api.ascension.core.skill.castable.CastingSkillInstance;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.common.entities.CushionEntity;
 import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
@@ -28,26 +29,20 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Plays Player Animation Library animations on players, from state every client already has: a cast whose definition names
- * an {@code animation} (meditation while cultivating), then that cast's ending once it stops (floating down, standing up),
- * otherwise the cross-legged pose while riding a cushion. Nothing is sent
- * for it; casts reach other clients through the synced {@link SkillCaster} attachment and riding is vanilla.
- * {@link #register()} runs in client setup and {@link #tick()} every client tick, both from {@code AscensionCraftClient}.
+ * Plays player animations: a cast's {@code animation} and its ending, otherwise the cross-legged pose on a cushion. Runs
+ * from synced cast state and vanilla riding, so it needs no packets. Called from {@code AscensionCraftClient}.
  */
 @NullMarked
 public final class PlayerAnimations {
     public static final Identifier LAYER = AscensionCraft.prefix("player_animations");
     private static final Playing SITTING = new Playing(AscensionCraft.prefix("sit_crosslegged"), null, false, true, false);
-    // sit_crosslegged's last keyframe: a cushion shows the finished pose instead of the player sitting down onto it
+    // skips the sit-down, straight to the seated pose
     private static final float SEATED_TICK = 40.0F;
-    // above the default layers, so this pose wins over other mods' idle animations
     private static final int LAYER_PRIORITY = 1000;
     private static final float TICKS_PER_SECOND = 20.0F;
-    // 0.01 blocks in a tick, as RecoveryTicker counts movement; sneaking is about 0.065
     private static final double MIN_MOVEMENT_SQR = 1.0E-4D;
 
-    // what each player is playing, so an animation is only (re)started when it changes. Keyed on the player object (weakly):
-    // a player who leaves and comes back into view is a new object with a new controller and starts again
+    // weak keys: a player coming back into view is a new object and starts fresh
     private static final Map<AbstractClientPlayer, Playing> PLAYING = new MapMaker().weakKeys().makeMap();
     private static @Nullable ClientLevel activeLevel;
 
@@ -55,7 +50,6 @@ public final class PlayerAnimations {
     }
 
     public static void register() {
-        // the controller only plays what tick() triggers; it has no idle animation of its own
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(LAYER, LAYER_PRIORITY,
                 avatar -> new PlayerAnimationController(avatar, (controller, data, setter) -> PlayState.STOP));
     }
@@ -64,7 +58,6 @@ public final class PlayerAnimations {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level != activeLevel) {
-            // the players (and their controllers) of the old level are gone with it
             PLAYING.clear();
             activeLevel = level;
         }
@@ -81,7 +74,6 @@ public final class PlayerAnimations {
     private static void update(AbstractClientPlayer player, boolean local) {
         boolean seated = player.getVehicle() instanceof CushionEntity;
         Playing current = PLAYING.get(player);
-        // off a cushion, moving or being hit cuts a cast animation or its ending off at once, with no ending
         boolean disturbed = !seated && (player.hurtTime > 0 || moved(player));
 
         CastAnimation cast = castAnimation(player, local);
@@ -89,41 +81,42 @@ public final class PlayerAnimations {
             cast = null;
         }
         if (cast != null) {
+            // stays off until the cast ends
             if (current != null && current.interrupted() && current.cast() == cast) {
-                // stays off until this cast ends, rather than restarting the moment the player stands still
                 return;
             }
             boolean started = current != null && !current.ending() && cast.id().equals(current.id());
             if (disturbed) {
-                // only a meditation already under way is cut off; one not started yet (the player still sliding to a stop
-                // as the cast began) just waits until they are still
+                // not started yet: wait until the player is still
                 if (started) {
                     stop(player);
                     PLAYING.put(player, new Playing(cast.id(), cast, false, false, true));
                 } else if (current != null) {
-                    // an ending of the previous cast still playing
                     stop(player);
                     PLAYING.remove(player);
                 }
                 return;
             }
             if (!started) {
-                play(player, new Playing(cast.id(), cast, false, seated, false),
-                        seated ? cast.seatedFrom() * TICKS_PER_SECOND : 0.0F);
+                float startTick = seated ? cast.seatedFrom() * TICKS_PER_SECOND : 0.0F;
+                // a player just come into view joins the cast where it is instead of starting over
+                if (current == null && !local) {
+                    startTick += elapsedTicks(player);
+                }
+                play(player, new Playing(cast.id(), cast, false, seated, false), startTick);
             }
             return;
         }
 
         if (current != null && current.cast() != null && !current.interrupted()) {
             if (!current.ending()) {
-                // the cast just ended: play its ending for where the player is, if it has one
+                // the cast just ended
                 Optional<Identifier> end = current.cast().endFor(seated);
                 if (end.isPresent() && !disturbed) {
                     play(player, new Playing(end.get(), current.cast(), true, seated, false), 0.0F);
                     return;
                 }
             } else if (current.seated() == seated && !disturbed && isActive(player)) {
-                // let the ending finish; a seated ending holds its last frame (the seated pose) until the player gets up
                 return;
             }
         }
@@ -138,8 +131,12 @@ public final class PlayerAnimations {
         }
     }
 
-    // Whether the player's position changed since last tick (walking, jumping, knockback). Works for other players too: their
-    // position only changes when the server sends movement.
+    private static int elapsedTicks(AbstractClientPlayer player) {
+        SkillCaster caster = SkillCaster.getExisting(player);
+        CastingSkillInstance<?, ?, ?> casting = caster == null ? null : caster.getCasting();
+        return casting == null ? 0 : casting.getTotalTicks();
+    }
+
     private static boolean moved(AbstractClientPlayer player) {
         double dx = player.getX() - player.xo;
         double dy = player.getY() - player.yo;
@@ -159,7 +156,7 @@ public final class PlayerAnimations {
         if (controller == null) {
             return;
         }
-        // a missing animation is logged once by PAL; remembering it anyway stops that repeating every tick
+        // stored even if the animation is missing, so PAL only logs it once
         controller.triggerAnimation(playing.id(), startTick);
         PLAYING.put(player, playing);
     }
@@ -174,11 +171,9 @@ public final class PlayerAnimations {
         return layer instanceof PlayerAnimationController controller ? controller : null;
     }
 
-    // The animation of the cast the player is channelling, read the same way ParticleFieldController reads cast visuals.
     private static @Nullable CastAnimation castAnimation(AbstractClientPlayer player, boolean local) {
         ActiveCastVisualState state;
         if (local) {
-            // the local cast is predicted and reconciled with the server, so it is always current
             if (!player.getData(ZenithAttachments.ACTION_MANAGER).isActive(AscensionSkillListener.skillCast)) {
                 return null;
             }
@@ -200,11 +195,11 @@ public final class PlayerAnimations {
     /**
      * What a player is playing.
      *
-     * @param id     the animation
-     * @param cast   the cast animation it belongs to, kept to find the cast's ending once the cast state is gone
-     * @param ending whether it is that cast's ending
-     * @param seated      whether the player was on a cushion when it started; getting on or off cuts an ending short
-     * @param interrupted the cast's animation was cut off by moving or being hit: nothing plays until the cast ends
+     * @param id          the animation
+     * @param cast        the cast it belongs to
+     * @param ending      whether it is the cast's ending
+     * @param seated      whether the player was on a cushion when it started
+     * @param interrupted cut off by moving or being hit
      */
     private record Playing(Identifier id, @Nullable CastAnimation cast, boolean ending, boolean seated, boolean interrupted) {
     }

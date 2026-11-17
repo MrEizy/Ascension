@@ -83,7 +83,7 @@ config="${mod_id}.mixins.json"
     ordering="NONE"
     side="BOTH"
 
-# Plays the player animations (meditation, cushion sitting); only the client renders them
+# Player animations, client only
 [[dependencies.${mod_id}]]
     modId="player_animation_library"
     type="required"

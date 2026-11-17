@@ -166,9 +166,7 @@ dependencies {
     implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0')
 
     implementation("com.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}")
-    // Player animations (meditation, cushion sitting). Compile only: dev runs it from run/mods/PlayerAnimationLibMerged-*.jar
-    // (with Bendable Cuboids for knee bends), so it isn't loaded twice. Not transitive: PAL asks for newer netty/joml than
-    // Minecraft's strict versions, and only its own classes are needed to compile.
+    // Player Animation Library. Compile only: dev runs the jar in run/mods. Not transitive: its netty/joml clash with Minecraft's.
     compileOnly("com.zigythebird.playeranim:PlayerAnimationLibNeo:${player_animation_library_version}") { transitive = false }
     compileOnly("com.zigythebird.playeranim:PlayerAnimationLibCore:${player_animation_library_version}") { transitive = false }
 
