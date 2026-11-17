@@ -1,0 +1,17 @@
+{
+  "type": "ascension:concealment",
+  "name": {
+    "translate": "ascension.skill.reapers_veil.name"
+  },
+  "description": {
+    "translate": "ascension.skill.reapers_veil.desc"
+  },
+  "enabled_by_default": false,
+  "identity": {
+    "death_message": {
+      "text": "The Reaper",
+      "obfuscated": true,
+      "bold": true
+    }
+  }
+}
