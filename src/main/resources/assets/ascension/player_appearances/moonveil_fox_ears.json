@@ -1,0 +1,26 @@
+{
+  "renderer": "geckolib",
+  "texture": "ascension:textures/entity/player_appearances/moonveil_fox_ears_state_l.png",
+  "model": "ascension:player_appearances/moonveil_fox_ears",
+  "animation": "ascension:player_appearances/moonveil_fox_ears",
+  "animations": {
+    "idle": "animation.ascension.fox_ears.idle",
+    "walk": "animation.ascension.fox_ears.walk"
+  },
+  "parts": [
+    {
+      "anchor": "head",
+      "offset": [
+        0,
+        -8,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1
+    }
+  ]
+}

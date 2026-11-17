@@ -17,3 +17,18 @@ Download Link : [src](https://legacy.curseforge.com/minecraft/mc-mods/perfect-as
 </details>
 
 This project includes third-party code; see **THIRD_PARTY_LICENSES.md**.
+
+
+---
+##### MODEL CREDITS:
+Accessory Fox Ears by **_state_L_**  
+https://sketchfab.com/3d-models/accessory-fox-ears-82f5a2d637cd462795ca33168f2fe1b0  
+Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0) https://creativecommons.org/licenses/by/4.0/
+Adapted for Ascension using a Blockbench-exported GeckoLib model.
+
+Minecraft Anthro Kitsune Model by **_Endles13_**  
+https://sketchfab.com/3d-models/minecraft-anthro-kitsune-model-26ac1fe155b74527a2007569acb5192d  
+Licenced under Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA 4.0) https://creativecommons.org/licenses/by-nc-sa/4.0/  
+Tail geometry extracted and arranged into one-, two-, and three-tail configurations, recoloured texture, UV atlas adaptation, and new idle/walk animations for Ascension.  
+
+

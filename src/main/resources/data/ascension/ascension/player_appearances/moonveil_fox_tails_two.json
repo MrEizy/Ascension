@@ -1,0 +1,11 @@
+{
+  "appearance": "ascension:moonveil_fox_tails_two",
+  "source": {
+    "type": "bloodline",
+    "id": "ascension:2_profound/moonveil_fox_bloodline",
+    "min_purity": 50,
+    "max_purity": 79
+  },
+  "group": "moonveil_fox_tails",
+  "priority": 20
+}
