@@ -14,6 +14,8 @@
 * Added More Recipes
 * Added 42 new Divine Senses
 * Added Concealment skill type
+* Added a data-driven Player Visual System supporting custom models, textures, and GeckoLib animations
+* Added semi-animated demo model Fox Ears and Tails for the Moonveil Fox Bloodline, with 1–3 tails based on bloodline purity
 
 ### Removed
 * Disabled Spherical Devestation
