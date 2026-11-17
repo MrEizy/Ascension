@@ -5,15 +5,35 @@
 ## Ascension Version 0.2.1 Snapshot 26.1.2
 
 ### Added
+* Added Dual Wielding Skill
+* Added 8 New Weapons (Chakrams)
+* Added 4 New Enchantments (Chakram Enchantments)
+* Added Missing Peach Blocks
+* Added More Recipes
+* Added 42 new Divine Senses
+
 
 ### Removed
+* Disabled Spherical Devestation
+* 
 
 ### Changes
 * Updated the Alchemy Reaction phase to require player Qi contribution, with consumption rates determined by the selected Alchemy Technique
 * Updated the Alchemy Stabilization phase with an interactive minigame, where player performance influences the final pill quality
-
+* Moved Spawn Eggs into Spawn Egg Tab
 
 ### Fixes
+* Fixed Peach Planks not having a Recipe.
+
+
+
+
+
+
+
+
+
+
 
 
 
