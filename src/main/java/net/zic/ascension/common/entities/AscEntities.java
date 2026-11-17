@@ -41,7 +41,9 @@ public class AscEntities {
             ENTITY_TYPES.register("cushion_entity", id -> EntityType.Builder
                     .of(CushionEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
-                    .passengerAttachments(7.0F / 16.0F)
+                    //cushion top plus the 0.6 a riding player is lowered by, so the rider stands on the cushion and the
+                    //sit_crosslegged animation lowers them onto it
+                    .passengerAttachments(7.0F / 16.0F + 0.6F)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, id)));
 
     public static final DeferredHolder<EntityType<?>, EntityType<TreasureRatEntity>> TREASURE_RAT =

@@ -4,6 +4,12 @@
   "description": {"translate": "ascension.skill.open_sky_breathing.desc"},
   "cast": {
     "mode": "channel",
+    "animation": {
+      "id": "ascension:meditate",
+      "seated_from": 2.0,
+      "seated_only": true,
+      "seated_end": "ascension:meditate_land"
+    },
     "stages": [
       {
         "particle_field": {

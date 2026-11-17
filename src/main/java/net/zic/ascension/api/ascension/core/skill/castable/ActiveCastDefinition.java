@@ -30,7 +30,8 @@ public record ActiveCastDefinition(
         Optional<Cost> cost,
         Movement movement,
         Optional<Interruption> interruption,
-        List<Stage> stages
+        List<Stage> stages,
+        Optional<CastAnimation> animation
 ) {
     public static final Codec<ActiveCastDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Mode.CODEC.optionalFieldOf("mode", Mode.INSTANT).forGetter(ActiveCastDefinition::mode),
@@ -39,7 +40,8 @@ public record ActiveCastDefinition(
             Cost.CODEC.codec().optionalFieldOf("cost").forGetter(ActiveCastDefinition::cost),
             Movement.CODEC.codec().optionalFieldOf("movement", Movement.defaults()).forGetter(ActiveCastDefinition::movement),
             Interruption.CODEC.codec().optionalFieldOf("interruption").forGetter(ActiveCastDefinition::interruption),
-            Stage.CODEC.listOf().optionalFieldOf("stages", List.of()).forGetter(ActiveCastDefinition::stages)
+            Stage.CODEC.listOf().optionalFieldOf("stages", List.of()).forGetter(ActiveCastDefinition::stages),
+            CastAnimation.CODEC.optionalFieldOf("animation").forGetter(ActiveCastDefinition::animation)
     ).apply(instance, ActiveCastDefinition::new));
 
     public ActiveCastDefinition {
@@ -49,6 +51,7 @@ public record ActiveCastDefinition(
         cost = cost == null ? Optional.empty() : cost;
         movement = movement == null ? Movement.defaults() : movement;
         interruption = interruption == null ? Optional.empty() : interruption;
+        animation = animation == null ? Optional.empty() : animation;
 
         if (mode == Mode.INSTANT) {
             minimumTicks = 0;
@@ -77,7 +80,8 @@ public record ActiveCastDefinition(
     }
 
     public static ActiveCastDefinition instant() {
-        return new ActiveCastDefinition(Mode.INSTANT, 0, 0, Optional.empty(), Movement.defaults(), Optional.empty(), List.of());
+        return new ActiveCastDefinition(Mode.INSTANT, 0, 0, Optional.empty(), Movement.defaults(), Optional.empty(), List.of(),
+                Optional.empty());
     }
 
     public double progress(int ticks) {

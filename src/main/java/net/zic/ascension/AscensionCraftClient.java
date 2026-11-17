@@ -24,6 +24,7 @@ import net.zic.ascension.client.renderer.rat.TreasureRatRenderer;
 import net.zic.ascension.client.renderer.npc.CultivatorNpcRenderer;
 import net.zic.ascension.client.keybind.*;
 import net.zic.ascension.client.particle.ParticleFieldController;
+import net.zic.ascension.client.animation.PlayerAnimations;
 import net.zic.ascension.client.particle.ParticleFieldParticle;
 import net.zic.ascension.client.gui.AscensionHudOverlay;
 import net.zic.ascension.client.gui.QiCoatingWheelOverlay;
@@ -182,6 +183,7 @@ public class AscensionCraftClient {
                 GuardianDharmaVisualController.registerDefault();
                 WeaponSwingVisualController.registerDefault();
                 AscensionCreativeSections.register();
+                PlayerAnimations.register();
             });
         }
 
@@ -221,6 +223,7 @@ public class AscensionCraftClient {
             SkillWheelOverlay.onClientTick();
             QiCoatingWheelOverlay.onClientTick();
             ParticleFieldController.tick();
+            PlayerAnimations.tick();
             ClientRuntimeVisuals.tick();
         }
     }
