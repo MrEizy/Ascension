@@ -1,3 +1,4 @@
+
 {
   "type": "ascension:simple_technique",
   "name": {
@@ -10,7 +11,8 @@
     {
       "type": "ascension:grant_skills",
       "skills": [
-        "ascension:passive/samsaras_witness",
+        "ascension:passive/reapers_calling/samsaras_witness",
+        "ascension:passive/reapers_calling/soul_reaping",
         "ascension:castable/divine_sense/divine_sense_reapers_calling"
       ]
     }
