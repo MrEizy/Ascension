@@ -1,5 +1,6 @@
 package net.zic.ascension.common.entities.weapons;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -68,6 +69,7 @@ public class ChakramEntity extends Projectile {
     private int maxFlightTicks = BASE_FLIGHT_TICKS;
     private int returnTicks;
     private int swiftReturn = -1;
+    private boolean phasingRecall;
     private final Set<Integer> hitThisLeg = new HashSet<>();
 
     public ChakramEntity(EntityType<? extends ChakramEntity> type, Level level) {
@@ -85,6 +87,8 @@ public class ChakramEntity extends Projectile {
         this.creative = creative;
         this.ricochetsLeft = BASE_RICOCHETS + enchantLevel(AscEnchantments.RICOCHET);
         this.maxFlightTicks = BASE_FLIGHT_TICKS + Math.round(4.0F * power);
+        this.swiftReturn = enchantLevel(AscEnchantments.SWIFT_RETURN);
+        this.phasingRecall = enchantLevel(AscEnchantments.PHASING_RECALL) > 0;
     }
 
     @Override
@@ -206,6 +210,13 @@ public class ChakramEntity extends Projectile {
     }
 
     private void tickReturning(Vec3 from) {
+        // Show a subtle phase trail while the chakram is travelling through solid blocks.
+        if (phasingRecall && level() instanceof ServerLevel serverLevel
+                && level().getBlockState(BlockPos.containing(from)).isSolid()) {
+            serverLevel.sendParticles(ParticleTypes.PORTAL,
+                    from.x, from.y, from.z, 3, 0.1, 0.1, 0.1, 0.05);
+        }
+
         Entity owner = getOwner();
         boolean server = level() instanceof ServerLevel;
         if (owner == null || !owner.isAlive() || owner.isSpectator() || owner.level() != level()) {
@@ -238,24 +249,26 @@ public class ChakramEntity extends Projectile {
 
         Vec3 to = from.add(vel);
 
-        HitResult hit = level().clip(new ClipContext(
-                from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-        if (hit.getType() == HitResult.Type.BLOCK) {
-            BlockHitResult bhr = (BlockHitResult) hit;
-            if (!tryBreakDestructible(bhr)) {
-                Vec3 at = bhr.getLocation().add(
-                        bhr.getDirection().getStepX() * 0.05,
-                        bhr.getDirection().getStepY() * 0.05,
-                        bhr.getDirection().getStepZ() * 0.05);
-                setPos(at.x, at.y, at.z);
-                setDeltaMovement(Vec3.ZERO);
-                if (server) {
-                    sound(AscSounds.CHAKRAM_THUD.get(), 0.6F, 1.0F);
-                    dropAsItem();
+        // Phasing Recall bypasses block collision only during the return leg.
+        if (!phasingRecall) {
+            HitResult hit = level().clip(new ClipContext(
+                    from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+            if (hit.getType() == HitResult.Type.BLOCK) {
+                BlockHitResult bhr = (BlockHitResult) hit;
+                if (!tryBreakDestructible(bhr)) {
+                    Vec3 at = bhr.getLocation().add(
+                            bhr.getDirection().getStepX() * 0.05,
+                            bhr.getDirection().getStepY() * 0.05,
+                            bhr.getDirection().getStepZ() * 0.05);
+                    setPos(at.x, at.y, at.z);
+                    setDeltaMovement(Vec3.ZERO);
+                    if (server) {
+                        sound(AscSounds.CHAKRAM_THUD.get(), 0.6F, 1.0F);
+                        dropAsItem();
+                    }
+                    return;
                 }
-                return;
             }
-
         }
 
         if (server) {
@@ -397,6 +410,7 @@ public class ChakramEntity extends Projectile {
         out.putInt("RicochetsLeft", ricochetsLeft);
         out.putInt("FlightTicks", flightTicks);
         out.putInt("MaxFlightTicks", maxFlightTicks);
+        out.putBoolean("PhasingRecall", phasingRecall);
     }
 
     @Override
@@ -410,6 +424,7 @@ public class ChakramEntity extends Projectile {
         ricochetsLeft = in.getIntOr("RicochetsLeft", BASE_RICOCHETS);
         flightTicks = in.getIntOr("FlightTicks", 0);
         maxFlightTicks = in.getIntOr("MaxFlightTicks", BASE_FLIGHT_TICKS);
+        phasingRecall = in.getBooleanOr("PhasingRecall", enchantLevel(AscEnchantments.PHASING_RECALL) > 0);
     }
 
     @Override

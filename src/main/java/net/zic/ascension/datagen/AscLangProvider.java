@@ -316,6 +316,7 @@ public class AscLangProvider extends LanguageProvider {
         add("enchantment.ascension.ricochet", "Ricochet");
         add("enchantment.ascension.razor_edge", "Razor Edge");
         add("enchantment.ascension.swift_return", "Swift Return");
+        add("enchantment.ascension.phasing_recall", "Phasing Recall");
 
 
 

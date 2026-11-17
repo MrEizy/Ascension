@@ -11,6 +11,8 @@ public final class AscEnchantments {
             ResourceKey.create(Registries.ENCHANTMENT, AscensionCraft.prefix("razor_edge"));
     public static final ResourceKey<Enchantment> SWIFT_RETURN =
             ResourceKey.create(Registries.ENCHANTMENT, AscensionCraft.prefix("swift_return"));
+    public static final ResourceKey<Enchantment> PHASING_RECALL =
+            ResourceKey.create(Registries.ENCHANTMENT, AscensionCraft.prefix("phasing_recall"));
 
     private AscEnchantments() {}
 }
