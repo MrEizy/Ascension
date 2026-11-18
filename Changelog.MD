@@ -4,6 +4,21 @@
 
 ---
 
+## Ascension Version 0.2.2 Snapshot 26.1.2
+
+### Added
+
+### Removed
+
+### Changes
+
+### Fixes
+* Projection Skills actually project, deal some damage and break blocks
+
+### Technical Changes
+
+---
+
 ## Ascension Version 0.2.1 Snapshot 26.1.2
 
 ### Added
