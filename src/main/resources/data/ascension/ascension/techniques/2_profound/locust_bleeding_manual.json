@@ -10,8 +10,7 @@
     {
       "type": "ascension:grant_skills",
       "skills": [
-        "ascension:castable/locust_bleeding_manual/bleeding_locust_swarm",
-        "ascension:castable/divine_sense/divine_sense_locust_bleeding_manual"
+        "ascension:castable/locust_bleeding_manual/bleeding_locust_swarm"
       ]
     }
   ],

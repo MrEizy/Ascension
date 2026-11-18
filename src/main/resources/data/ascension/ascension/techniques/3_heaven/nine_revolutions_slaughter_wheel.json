@@ -10,8 +10,7 @@
     {
       "type": "ascension:grant_skills",
       "skills": [
-        "ascension:passive/samsaras_witness",
-        "ascension:castable/divine_sense/divine_sense_reapers_calling"
+        "ascension:passive/samsaras_witness"
       ]
     }
   ],

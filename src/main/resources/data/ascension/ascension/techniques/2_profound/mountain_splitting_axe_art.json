@@ -12,8 +12,7 @@
       "skills": [
         "ascension:passive/axe_mastery",
         "ascension:castable/new_techniques/faultline_cleave",
-        "ascension:castable/axe_projection",
-        "ascension:castable/divine_sense/divine_sense_mountain_splitting_axe_art"
+        "ascension:castable/axe_projection"
       ]
     }
   ],

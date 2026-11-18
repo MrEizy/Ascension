@@ -1,5 +1,6 @@
 package net.zic.ascension.common.item.transfer_item;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -10,9 +11,12 @@ import net.minecraft.world.level.Level;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.impl.core.connection.Connected;
 
 public class PhysiqueTransferItem extends Item {
     public PhysiqueTransferItem(Properties properties) {
@@ -35,6 +39,17 @@ public class PhysiqueTransferItem extends Item {
 
         if(holder == null || holder.getData() == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData().getSource();
+
+        // connected_physique: the technique / bloodline it is connected to has to be held first
+        Physique<?> definition = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, targetPhysique, level.registryAccess());
+        if (definition instanceof Connected connected) {
+            Component failure = connected.connections().failureMessage(source, level.registryAccess());
+            if (failure != null) {
+                player.sendOverlayMessage(failure);
+                return InteractionResult.FAIL;
+            }
+        }
+
         if(!AscensionOriginSourceHelper.setPhysique(source,targetPhysique)){
             //TODO return error message to player here
             return InteractionResult.FAIL;

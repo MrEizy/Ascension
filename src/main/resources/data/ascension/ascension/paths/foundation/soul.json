@@ -129,6 +129,7 @@
             "ascension:passive/qi_coating/qi_coating",
             "ascension:castable/qi_coating/external_qi_coating",
             "ascension:passive/qi_coating/external_qi_coating",
+            "ascension:passive/divine_sense/divine_sense_soul",
             "ascension:castable/inner_world"
           ]
         }

@@ -13,8 +13,7 @@
         "ascension:castable/cultivation/stillwinter_visualization",
         "ascension:passive/winter_mirror_soul",
         "ascension:castable/new_techniques/mirror_needle",
-        "ascension:castable/frostbound_stillness",
-        "ascension:castable/divine_sense/divine_sense_stillwinter_mirror_visualization"
+        "ascension:castable/frostbound_stillness"
       ]
     }
   ],
