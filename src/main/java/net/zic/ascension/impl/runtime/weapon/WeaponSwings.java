@@ -107,10 +107,10 @@ public final class WeaponSwings {
         }
 
         Vec3 nextPosition = instance.position.add(instance.velocity);
-        BlockHitResult blockHit = findBlockImpact(level, owner, instance.position, nextPosition, instance.spec.blockImpact());
-        boolean collided = blockHit != null;
+        BlockCollision collision = findBlockImpact(level, owner, instance.position, nextPosition, instance.spec);
+        boolean collided = collision != null;
         if (collided) {
-            instance.position = blockHit.getLocation();
+            instance.position = collision.center();
         }
 
         if (!instance.damageApplied) {
@@ -125,7 +125,7 @@ public final class WeaponSwings {
         if (collided) {
             WeaponSwingSpec.BlockImpact impact = instance.spec.blockImpact();
             if (impact.mode() == WeaponSwingSpec.BlockImpact.Mode.BREAK) {
-                applyBlockImpact(level, owner, instance, blockHit, impact);
+                applyBlockImpact(level, owner, instance, collision.hit(), impact);
             }
             if (impact.consumeProjection()) {
                 return false;
@@ -141,25 +141,51 @@ public final class WeaponSwings {
         return instance.ticksLived < instance.spec.duration();
     }
 
-    private static BlockHitResult findBlockImpact(
+    private static BlockCollision findBlockImpact(
             ServerLevel level,
             LivingEntity owner,
             Vec3 start,
             Vec3 end,
-            WeaponSwingSpec.BlockImpact impact
+            WeaponSwingSpec spec
     ) {
-        if (impact.mode() == WeaponSwingSpec.BlockImpact.Mode.IGNORE
+        if (spec.blockImpact().mode() == WeaponSwingSpec.BlockImpact.Mode.IGNORE
                 || start.distanceToSqr(end) <= 1.0E-10D) {
             return null;
         }
-        BlockHitResult result = level.clip(new ClipContext(
-                start,
-                end,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                owner
-        ));
-        return result.getType() == HitResult.Type.BLOCK ? result : null;
+
+        Vec3 forward = end.subtract(start).normalize();
+        Vec3 right = forward.cross(new Vec3(0.0D, 1.0D, 0.0D));
+        if (right.lengthSqr() <= 1.0E-8D) {
+            right = new Vec3(1.0D, 0.0D, 0.0D);
+        } else {
+            right = right.normalize();
+        }
+        Vec3 side = right.scale(spec.radius().x * 0.5D);
+        Vec3 vertical = new Vec3(0.0D, spec.radius().y * 0.5D, 0.0D);
+        Vec3[] offsets = {Vec3.ZERO, side, side.scale(-1.0D), vertical, vertical.scale(-1.0D)};
+        double movementLength = start.distanceTo(end);
+        BlockCollision closest = null;
+        double closestFraction = Double.POSITIVE_INFINITY;
+
+        for (Vec3 offset : offsets) {
+            Vec3 sampleStart = start.add(offset);
+            BlockHitResult hit = level.clip(new ClipContext(
+                    sampleStart,
+                    end.add(offset),
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    owner
+            ));
+            if (hit.getType() != HitResult.Type.BLOCK) {
+                continue;
+            }
+            double fraction = Math.clamp(sampleStart.distanceTo(hit.getLocation()) / movementLength, 0.0D, 1.0D);
+            if (fraction < closestFraction) {
+                closestFraction = fraction;
+                closest = new BlockCollision(hit, start.lerp(end, fraction));
+            }
+        }
+        return closest;
     }
 
     private static void applyAreaDamage(ServerLevel level, LivingEntity owner, Instance instance) {
@@ -178,9 +204,10 @@ public final class WeaponSwings {
                 search,
                 candidate -> validTarget(owner, candidate, instance)
         )) {
-            applyKnockback(owner, target, instance.position, instance.spec.knockback());
-            applyDamage(level, owner, target, instance);
-            instance.hitEntities.add(target.getUUID());
+            if (applyDamage(level, owner, target, instance)) {
+                applyKnockback(owner, target, instance.position, instance.spec.knockback());
+                instance.hitEntities.add(target.getUUID());
+            }
         }
     }
 
@@ -199,13 +226,14 @@ public final class WeaponSwings {
             if (target.getBoundingBox().inflate(0.15D).clip(rayStart, rayEnd).isEmpty()) {
                 continue;
             }
-            applyKnockback(owner, target, instance.position, instance.spec.knockback());
-            applyDamage(level, owner, target, instance);
-            instance.hitEntities.add(target.getUUID());
+            if (applyDamage(level, owner, target, instance)) {
+                applyKnockback(owner, target, instance.position, instance.spec.knockback());
+                instance.hitEntities.add(target.getUUID());
+            }
         }
     }
 
-    private static void applyDamage(
+    private static boolean applyDamage(
             ServerLevel level,
             LivingEntity owner,
             LivingEntity target,
@@ -229,7 +257,7 @@ public final class WeaponSwings {
                 instance.spec.technique()
         );
         if (!damaged) {
-            return;
+            return false;
         }
 
         target.invulnerableTime = instance.velocity.lengthSqr() < 1.0E-6D ? 0 : 8;
@@ -241,6 +269,7 @@ public final class WeaponSwings {
                 effect.duration(),
                 effect.potency()
         ));
+        return true;
     }
 
     private static void applyBlockImpact(
@@ -401,7 +430,7 @@ public final class WeaponSwings {
                         Optional.empty(),
                         Optional.empty(),
                         7,
-                        1
+                        3
                 )
         );
         return new RuntimeVisualState(
@@ -454,6 +483,9 @@ public final class WeaponSwings {
                 case Z -> center.offset(first, second, depth);
             };
         }
+    }
+
+    private record BlockCollision(BlockHitResult hit, Vec3 center) {
     }
 
     private record BlockCandidate(BlockPos position, double distance) {

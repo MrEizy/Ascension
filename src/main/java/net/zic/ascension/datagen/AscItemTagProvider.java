@@ -185,6 +185,7 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .add(Items.MACE);
 
         tag(ModTags.Items.WEAPON_SPEARS)
+                .addTag(ItemTags.SPEARS)
                 .addOptionalTag(ModTags.Items.C_TOOLS_SPEAR)
                 .addOptionalTag(ModTags.Items.C_WEAPONS_SPEAR);
 

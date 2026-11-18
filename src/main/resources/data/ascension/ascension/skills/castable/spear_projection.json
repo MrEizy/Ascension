@@ -13,8 +13,12 @@
         5.5
       ],
       "damage": {
-        "base": 12.0,
-        "weapon": 1.0
+        "base": 34.0,
+        "weapon": 1.6,
+        "stats": {
+          "ascension:strength": 0.14,
+          "ascension:agility": 0.05
+        }
       },
       "knockback": 0.7,
       "duration": 55.0,
