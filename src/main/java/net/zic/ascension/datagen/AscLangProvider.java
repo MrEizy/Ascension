@@ -515,7 +515,7 @@ public class AscLangProvider extends LanguageProvider {
         add("auction.ascension.cancel_has_bids", "You cannot cancel an auction after a bid has been placed.");
         add("auction.ascension.notifications_enabled", "Auction notifications enabled.");
         add("auction.ascension.notifications_disabled", "Auction notifications disabled.");
-        add("auction.ascension.five_minutes", "%s has 5 minutes remaining.");
+        add("auction.ascension.five_minutes", "%s ends in 5 minutes or less.");
         add("auction.ascension.lost", "You lost the auction for %s. Your %s Spiritual Stones were returned to your Auction Inbox.");
         add("auction.ascension.ended_watching", "The auction for %s has ended.");
         add("auction.ascension.cancelled_watching", "The auction for %s was cancelled.");

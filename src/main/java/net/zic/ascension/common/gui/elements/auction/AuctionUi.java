@@ -32,6 +32,7 @@ final class AuctionUi {
     static final Identifier MY_AUCTIONS_BUTTON = texture("my_auctions_buttons.png");
     static final Identifier MINUS_BUTTON = texture("negative_button.png");
     static final Identifier PLUS_BUTTON = texture("plus_button.png");
+    static final Identifier TEXT_BUTTON = texture("text_buttons.png");
 
     private AuctionUi() {
     }
@@ -52,8 +53,12 @@ final class AuctionUi {
         return sprite(INBOX, 256, 260, 1, 187, 216, 20);
     }
 
-    static ITextureData inboxClaimButton() {
-        return sprite(INBOX, 256, 260, 63, 212, 88, 10);
+    static ITextureData inboxClaimNormal() {
+        return sprite(TEXT_BUTTON, 89, 24, 0, 12, 89, 12);
+    }
+
+    static ITextureData inboxClaimHover() {
+        return sprite(TEXT_BUTTON, 89, 24, 0, 0, 89, 12);
     }
 
     static ITextureData backHover() {
@@ -132,6 +137,12 @@ final class AuctionUi {
         graphics.pose().popMatrix();
     }
 
+    static void itemTooltip(GuiGraphicsExtractor graphics, ItemStack stack, int mouseX, int mouseY) {
+        if (!stack.isEmpty()) {
+            graphics.setTooltipForNextFrame(Minecraft.getInstance().font, stack, mouseX, mouseY);
+        }
+    }
+
     static ItemStack inventoryStack(int slot) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || slot < 0 || slot >= minecraft.player.getInventory().getContainerSize()) {
@@ -153,9 +164,9 @@ final class AuctionUi {
     }
 
     static long durationStep(int modifiers) {
-        if ((modifiers & GLFW.GLFW_MOD_CONTROL) != 0) return 10L * 60L * 60L * 1000L;
-        if ((modifiers & GLFW.GLFW_MOD_SHIFT) != 0) return 30L * 60L * 1000L;
-        return 60L * 60L * 1000L;
+        if ((modifiers & GLFW.GLFW_MOD_CONTROL) != 0) return 60L * 60L * 1000L;
+        if ((modifiers & GLFW.GLFW_MOD_SHIFT) != 0) return 10L * 60L * 1000L;
+        return 60_000L;
     }
 
     static long safeAdd(long a, long b) {
