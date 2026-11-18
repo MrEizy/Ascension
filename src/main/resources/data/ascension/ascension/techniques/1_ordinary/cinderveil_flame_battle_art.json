@@ -11,8 +11,7 @@
       "type": "ascension:grant_skills",
       "skills": [
         "ascension:castable/burning_touch",
-        "ascension:castable/new_techniques/cinderburst",
-        "ascension:castable/new_techniques/cinder_sphere"
+        "ascension:castable/new_techniques/cinderburst"
       ]
     }
   ],

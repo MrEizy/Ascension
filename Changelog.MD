@@ -7,16 +7,23 @@
 ## Ascension Version 0.2.2 Snapshot 26.1.2
 
 ### Added
+* Added a new Technique, Bloodline and Physique Type (Connected type)
+* Added a new Technique and Physique using the Connected Type
 
 ### Removed
+* Removed all divine senses
+* Temporarily disabled all Spherical Devestation Skills
 
 ### Changes
 * Auction max and min time changed: 1 min to 1440 min
 * Auction Items show proper tooltip on hover now
+* Turned all Divine senses into 3 different types. Soul, Essence and Body only.
 
 ### Fixes
 * Projection Skills actually project, deal some damage and break blocks
 * Claiming Button in Auction Inbox actually functions now
+* Fixed so Phasing Recall can spawn on the top of pagoda.
+* 
 
 ### Technical Changes
 
