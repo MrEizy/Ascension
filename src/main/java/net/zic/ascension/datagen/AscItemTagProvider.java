@@ -65,7 +65,11 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.IRON_CHAKRAM.get())
                 .add(ModItems.GOLDEN_CHAKRAM.get())
                 .add(ModItems.DIAMOND_CHAKRAM.get())
-                .add(ModItems.NETHERITE_CHAKRAM.get());
+                .add(ModItems.NETHERITE_CHAKRAM.get())
+                .addTag(ModTags.Items.WEAPON_FISTS);
+
+        tag(ItemTags.CAULDRON_CAN_REMOVE_DYE)
+                .add(ModItems.CLOTH_FIST_WRAPS.get());
 
         tag(ItemTags.VANISHING_ENCHANTABLE)
                 .add(ModItems.COPPER_CHAKRAM.get())
@@ -178,6 +182,7 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .add(Items.BOW, Items.CROSSBOW);
 
         tag(ModTags.Items.WEAPON_FISTS)
+                .add(ModItems.CLOTH_FIST_WRAPS.get())
                 .addOptionalTag(ModTags.Items.C_TOOLS_GAUNTLET)
                 .addOptionalTag(ModTags.Items.C_WEAPONS_GAUNTLET);
 
