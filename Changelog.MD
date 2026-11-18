@@ -4,6 +4,24 @@
 
 ---
 
+## Ascension Version 0.2.2 Snapshot 26.1.2
+
+### Added
+
+### Removed
+
+### Changes
+* Auction max and min time changed: 1 min to 1440 min
+* Auction Items show proper tooltip on hover now
+
+### Fixes
+* Projection Skills actually project, deal some damage and break blocks
+* Claiming Button in Auction Inbox actually functions now
+
+### Technical Changes
+
+---
+
 ## Ascension Version 0.2.1 Snapshot 26.1.2
 
 ### Added

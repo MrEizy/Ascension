@@ -1399,7 +1399,7 @@
   "auction.ascension.currency_unavailable": "Spiritual Stones are not registered on this server.",
   "auction.ascension.ended_no_bid": "%s received no bids and was returned to your Auction Inbox.",
   "auction.ascension.ended_watching": "The auction for %s has ended.",
-  "auction.ascension.five_minutes": "%s has 5 minutes remaining.",
+  "auction.ascension.five_minutes": "%s ends in 5 minutes or less.",
   "auction.ascension.inbox_waiting": "You have unclaimed auction contents. Use /auction inbox to collect them.",
   "auction.ascension.invalid_access": "That auction terminal is no longer valid or in range.",
   "auction.ascension.invalid_item": "That item stack is no longer available.",

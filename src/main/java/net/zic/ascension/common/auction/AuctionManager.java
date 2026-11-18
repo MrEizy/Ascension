@@ -34,8 +34,8 @@ import java.util.UUID;
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class AuctionManager extends SavedData {
     public static final int BIDDER_RADIUS = 20;
-    public static final long MIN_DURATION_MILLIS = 30L * 60L * 1000L;
-    public static final long MAX_DURATION_MILLIS = 7L * 24L * 60L * 60L * 1000L;
+    public static final long MIN_DURATION_MILLIS = 60_000L;
+    public static final long MAX_DURATION_MILLIS = 24L * 60L * 60L * 1000L;
     public static final long FIVE_MINUTE_WARNING_MILLIS = 5L * 60L * 1000L;
 
     private static final Codec<UUID> UUID_CODEC = Codec.STRING.xmap(UUID::fromString, UUID::toString);

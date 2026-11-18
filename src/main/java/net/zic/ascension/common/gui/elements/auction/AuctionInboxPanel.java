@@ -11,6 +11,7 @@ import java.util.UUID;
 
 final class AuctionInboxPanel extends AuctionPanel {
     private static final int PAGE_SIZE = 4;
+    private static final int ROW_HIT_WIDTH = 166;
 
     private final int page;
     private final int pages;
@@ -56,7 +57,7 @@ final class AuctionInboxPanel extends AuctionPanel {
                 AuctionButtons.InboxEntryButton row = new AuctionButtons.InboxEntryButton(
                         getUiFrame(), entry
                 );
-                row.place(9, y, 216, 20);
+                row.place(9, y, ROW_HIT_WIDTH, 20);
                 addChild(row);
 
                 AuctionButtons.InboxClaimButton claim = new AuctionButtons.InboxClaimButton(
@@ -70,7 +71,7 @@ final class AuctionInboxPanel extends AuctionPanel {
                 AuctionButtons.CurrencyInboxButton row = new AuctionButtons.CurrencyInboxButton(
                         getUiFrame(), host.packet().inboxCurrency()
                 );
-                row.place(9, y, 216, 20);
+                row.place(9, y, ROW_HIT_WIDTH, 20);
                 addChild(row);
 
                 AuctionButtons.InboxClaimButton claim = new AuctionButtons.InboxClaimButton(

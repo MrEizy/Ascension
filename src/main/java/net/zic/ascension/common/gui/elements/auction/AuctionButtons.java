@@ -1,6 +1,7 @@
 package net.zic.ascension.common.gui.elements.auction;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.lucent.easygui.gui.RenderableElement;
 import net.lucent.easygui.gui.UIFrame;
 import net.lucent.easygui.gui.events.type.EasyEvent;
 import net.lucent.easygui.gui.events.type.EasyMouseEvent;
@@ -207,15 +208,12 @@ final class AuctionButtons {
         private final Supplier<ItemStack> stack;
         private final BooleanSupplier selected;
         private final Runnable action;
-        private final AscensionTooltip tooltip;
 
         ItemSlotButton(UIFrame frame, Supplier<ItemStack> stack, BooleanSupplier selected, Runnable action) {
             super(frame, 0, 0);
             this.stack = stack;
             this.selected = selected;
             this.action = action;
-            this.tooltip = new AscensionTooltip(frame);
-            this.tooltip.setActive(true);
             setWidth(17);
             setHeight(17);
         }
@@ -241,8 +239,7 @@ final class AuctionButtons {
             ItemStack current = stack.get();
             AuctionUi.item(graphics, current, 0, 0);
             if (isHovered() && !current.isEmpty()) {
-                tooltip.setText(current.getHoverName());
-                getUiFrame().setTooltip(tooltip);
+                AuctionUi.itemTooltip(graphics, current, mouseX, mouseY);
             }
         }
     }
@@ -251,7 +248,6 @@ final class AuctionButtons {
         private final AuctionViewData.AuctionView auction;
         private final ListingStyle style;
         private final Runnable action;
-        private final AscensionTooltip tooltip;
         private final ITextureData rowTexture = AuctionUi.auctionRow();
 
         ListingButton(UIFrame frame, AuctionViewData.AuctionView auction, ListingStyle style, Runnable action) {
@@ -259,8 +255,6 @@ final class AuctionButtons {
             this.auction = auction;
             this.style = style;
             this.action = action;
-            this.tooltip = new AscensionTooltip(frame);
-            this.tooltip.setActive(true);
         }
 
         void place(int x, int y, int width, int height) {
@@ -318,8 +312,7 @@ final class AuctionButtons {
             }
 
             if (isHovered()) {
-                tooltip.setText(auction.item().getHoverName());
-                getUiFrame().setTooltip(tooltip);
+                AuctionUi.itemTooltip(graphics, auction.item(), mouseX, mouseY);
             }
         }
     }
@@ -359,16 +352,13 @@ final class AuctionButtons {
         }
     }
 
-    static final class InboxEntryButton extends BetterButton {
+    static final class InboxEntryButton extends RenderableElement {
         private final AuctionViewData.InboxEntryView entry;
-        private final AscensionTooltip tooltip;
         private final ITextureData rowTexture = AuctionUi.inboxRow();
 
         InboxEntryButton(UIFrame frame, AuctionViewData.InboxEntryView entry) {
-            super(frame, 0, 0);
+            super(frame);
             this.entry = entry;
-            this.tooltip = new AscensionTooltip(frame);
-            this.tooltip.setActive(true);
         }
 
         void place(int x, int y, int width, int height) {
@@ -376,11 +366,6 @@ final class AuctionButtons {
             getPositioning().setY(y);
             setWidth(width);
             setHeight(height);
-        }
-
-        @Override
-        public void onClick() {
-            // The row is informational. Each row has its own dedicated ClaimButton.
         }
 
         @Override
@@ -389,19 +374,18 @@ final class AuctionButtons {
             AuctionUi.item(graphics, entry.item(), 7, 2);
             AuctionUi.stringScaled(graphics, AuctionUi.stackTitle(entry.item(), 22), 27, 6, 0.68F, AuctionUi.TEXT);
 
-            if (isHovered()) {
-                tooltip.setText(entry.item().getHoverName());
-                getUiFrame().setTooltip(tooltip);
+            if (isPointBounded(mouseX, mouseY)) {
+                AuctionUi.itemTooltip(graphics, entry.item(), mouseX, mouseY);
             }
         }
     }
 
-    static final class CurrencyInboxButton extends BetterButton {
+    static final class CurrencyInboxButton extends RenderableElement {
         private final long amount;
         private final ITextureData rowTexture = AuctionUi.inboxRow();
 
         CurrencyInboxButton(UIFrame frame, long amount) {
-            super(frame, 0, 0);
+            super(frame);
             this.amount = amount;
         }
 
@@ -410,11 +394,6 @@ final class AuctionButtons {
             getPositioning().setY(y);
             setWidth(width);
             setHeight(height);
-        }
-
-        @Override
-        public void onClick() {
-            // The row is informational. Each row has its own dedicated ClaimButton.
         }
 
         @Override
@@ -427,6 +406,8 @@ final class AuctionButtons {
     static final class InboxClaimButton extends BetterButton {
         private final Runnable action;
         private final AscensionTooltip tooltip;
+        private final ITextureData normal = AuctionUi.inboxClaimNormal();
+        private final ITextureData hover = AuctionUi.inboxClaimHover();
 
         InboxClaimButton(UIFrame frame, Runnable action) {
             super(frame, 0, 0);
@@ -449,9 +430,11 @@ final class AuctionButtons {
 
         @Override
         public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-            if (isHovered() || isPressed()) {
-                graphics.fill(0, 0, getWidth(), getHeight(), 0x1827C9F4);
-            }
+            ITextureData background = isHovered() || isPressed() ? hover : normal;
+            graphics.pose().pushMatrix();
+            graphics.pose().scale(getWidth() / (float) background.getWidth(), getHeight() / (float) background.getHeight());
+            background.render(graphics);
+            graphics.pose().popMatrix();
             AuctionUi.centeredScaled(graphics, "Claim", getWidth() / 2.0F, 3.0F, 0.62F, AuctionUi.TEXT);
 
             if (isHovered()) {
@@ -461,15 +444,12 @@ final class AuctionButtons {
         }
     }
 
-    static final class TooltipHotspot extends BetterButton {
-        private final AscensionTooltip tooltip;
-        private final Supplier<Component> text;
+    static final class ItemTooltipHotspot extends BetterButton {
+        private final Supplier<ItemStack> stack;
 
-        TooltipHotspot(UIFrame frame, Supplier<Component> text) {
+        ItemTooltipHotspot(UIFrame frame, Supplier<ItemStack> stack) {
             super(frame, 0, 0);
-            this.text = text;
-            this.tooltip = new AscensionTooltip(frame);
-            this.tooltip.setActive(true);
+            this.stack = stack;
         }
 
         void place(int x, int y, int width, int height) {
@@ -486,8 +466,7 @@ final class AuctionButtons {
         @Override
         public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
             if (isHovered()) {
-                tooltip.setText(text.get());
-                getUiFrame().setTooltip(tooltip);
+                AuctionUi.itemTooltip(graphics, stack.get(), mouseX, mouseY);
             }
         }
     }
