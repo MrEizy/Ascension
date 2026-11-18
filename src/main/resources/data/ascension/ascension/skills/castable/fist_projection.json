@@ -13,7 +13,10 @@
         2.6
       ],
       "damage": {
-        "base": 9.0
+        "base": 26.0,
+        "stats": {
+          "ascension:strength": 0.2
+        }
       },
       "knockback": 1.4,
       "duration": 40.0,

@@ -42,7 +42,7 @@ public final class WeaponSwingVisualController implements RuntimeVisualControlle
         double age = Math.max(0.0D, now - state.primaryValue());
         int frameTicks = Math.max(1, layer.resources().frameTicks());
         int frameCount = Math.max(1, layer.resources().frames());
-        int frame = Math.clamp((int) Math.floor(age / frameTicks), 0, frameCount - 1);
+        int frame = Math.floorMod((int) Math.floor(age / frameTicks), frameCount);
         Identifier texture = Identifier.fromNamespaceAndPath(
                 textureBase.getNamespace(),
                 "textures/" + textureBase.getPath() + "/" + frame + ".png"

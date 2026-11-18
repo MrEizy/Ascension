@@ -6,8 +6,12 @@
     {
       "type": "ascension:weapon_swing",
       "damage": {
-        "base": 10.0,
-        "weapon": 1.0
+        "base": 28.0,
+        "weapon": 1.5,
+        "stats": {
+          "ascension:strength": 0.12,
+          "ascension:agility": 0.05
+        }
       },
       "duration": 60.0,
       "movement": [
