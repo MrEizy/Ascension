@@ -56,8 +56,8 @@ final class AuctionBidDetailPanel extends AuctionPanel {
         bid.place(74, 167, 86, 8);
         addChild(bid);
 
-        AuctionButtons.TooltipHotspot itemTip = new AuctionButtons.TooltipHotspot(
-                frame, () -> auction.item().getHoverName()
+        AuctionButtons.ItemTooltipHotspot itemTip = new AuctionButtons.ItemTooltipHotspot(
+                frame, auction::item
         );
         itemTip.place(90, 60, 54, 53);
         addChild(itemTip);

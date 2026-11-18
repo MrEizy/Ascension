@@ -27,11 +27,8 @@ final class AuctionCreatePanel extends AuctionPanel {
         confirm.place(174, 100, 54, 10);
         addChild(confirm);
 
-        AuctionButtons.TooltipHotspot previewTooltip = new AuctionButtons.TooltipHotspot(
-                frame, () -> {
-                    ItemStack stack = selectedStack();
-                    return stack.isEmpty() ? Component.literal("Selected item") : stack.getHoverName();
-                }
+        AuctionButtons.ItemTooltipHotspot previewTooltip = new AuctionButtons.ItemTooltipHotspot(
+                frame, this::selectedStack
         );
         previewTooltip.place(174, 116, 54, 53);
         addChild(previewTooltip);
