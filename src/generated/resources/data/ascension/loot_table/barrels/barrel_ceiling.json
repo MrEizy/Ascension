@@ -797,7 +797,7 @@
             {
               "add": false,
               "enchantments": {
-                "minecraft:mending": 1.0
+                "ascension:phasing_recall": 1.0
               },
               "function": "minecraft:set_enchantments"
             }

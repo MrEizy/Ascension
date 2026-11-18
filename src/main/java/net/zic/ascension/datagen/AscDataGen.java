@@ -24,6 +24,7 @@ public class AscDataGen {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         var lookupProvider = event.getLookupProvider();
+        AscDatapackProvider datapackProvider = new AscDatapackProvider(packOutput, lookupProvider);
 
         generator.addProvider(true, new AscLangProvider(packOutput));
         generator.addProvider(true, new LootTableProvider(packOutput, Collections.emptySet(),
@@ -32,12 +33,11 @@ public class AscDataGen {
                         new LootTableProvider.SubProviderEntry(AscEntityLootTableProvider::new, LootContextParamSets.ENTITY),
                         new LootTableProvider.SubProviderEntry(AscChestLootTableProvider::new, LootContextParamSets.CHEST),
                         new LootTableProvider.SubProviderEntry(_ -> new AscAddedLootTableProvider(), LootContextParamSets.ENTITY)),
-                lookupProvider));
+                datapackProvider.getRegistryProvider()));
         generator.addProvider(true, new AscGlobalLootModifierProvider(packOutput, lookupProvider));
 
         generator.addProvider(true, new AscRecipeProvider.Runner(packOutput, lookupProvider));
 
-        AscDatapackProvider datapackProvider = new AscDatapackProvider(packOutput, lookupProvider);
         generator.addProvider(true, datapackProvider);
 
         generator.addProvider(true, new AscModelProvider(packOutput));

@@ -268,8 +268,7 @@ public class AscChestLootTableProvider implements LootTableSubProvider {
                                 .apply(new SetEnchantmentsFunction.Builder()
                                         .withEnchantment(
                                                 this.registries.lookupOrThrow(Registries.ENCHANTMENT)
-                                                        .get(AscEnchantments.PHASING_RECALL)
-                                                        .orElseGet(() -> this.registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.MENDING)),
+                                                        .getOrThrow(AscEnchantments.PHASING_RECALL),
                                                 ConstantValue.exactly(1)))))
                 .withPool(LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1))
