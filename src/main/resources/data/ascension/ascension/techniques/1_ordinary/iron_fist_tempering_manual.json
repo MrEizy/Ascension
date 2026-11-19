@@ -14,11 +14,145 @@
         "ascension:passive/iron_fist_tempering_manual/tempered_knuckles",
         "ascension:castable/iron_fist_tempering_manual/iron_breaking_fist"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:iron_fist_tempering_manual_learn_flat_strength",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:iron_fist_tempering_manual_learn_flat_vitality",
+              "value": 0.5
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:ordinary"
-  }
+  },
+  "realm_stat_growth": [
+    {
+      "path": "ascension:foundation/body",
+      "realm": {
+        "major": 1,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:iron_fist_tempering_manual_growth_flat_strength",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/body",
+      "realm": {
+        "major": 3,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:iron_fist_tempering_manual_growth_percent_strength",
+              "operation_group": 0,
+              "value": 0.015
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:iron_fist_tempering_manual_growth_percent_vitality",
+              "operation_group": 0,
+              "value": 0.0075
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/body",
+      "realm": {
+        "major": 6,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:iron_fist_tempering_manual_growth_flat_strength",
+              "value": 1.0
+            }
+          ],
+          "multiplier": [
+            {
+              "id": "ascension:iron_fist_tempering_manual_growth_percent_strength",
+              "operation_group": 0,
+              "value": 0.015
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:iron_fist_tempering_manual_growth_flat_vitality",
+              "value": 0.5
+            }
+          ],
+          "multiplier": []
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/body",
+      "realm": {
+        "major": 9,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:iron_fist_tempering_manual_growth_percent_strength",
+              "operation_group": 0,
+              "value": 0.02
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:iron_fist_tempering_manual_growth_percent_vitality",
+              "operation_group": 0,
+              "value": 0.01
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

@@ -33,6 +33,7 @@ import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipPro
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
+import net.zic.ascension.impl.core.technique.TechniqueRealmStatBonus;
 import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 
 import net.zic.zenithlib.common.ZenithRegistries;
@@ -392,13 +393,22 @@ public final class AscensionTooltipValueSources {
                 technique.orElseThrow().getOnAddedActions().actions(),
                 context.registryAccess().orElseThrow()
         );
-        if (descriptions.isEmpty()) {
-            return List.of();
-        }
-
         List<ZenithTooltipElement> elements = new ArrayList<>();
-        elements.add(headerRow(Component.translatable("ascension.tooltip.progression.condition.on_learn")));
-        elements.addAll(descriptionRows(descriptions));
+        if (!descriptions.isEmpty()) {
+            elements.add(headerRow(Component.translatable("ascension.tooltip.progression.condition.on_learn")));
+            elements.addAll(descriptionRows(descriptions));
+        }
+        for (TechniqueRealmStatBonus bonus : technique.orElseThrow().getRealmStatGrowth()) {
+            List<ProgressActionDescription> growthDescriptions = bonus.descriptionAction()
+                    .getDescriptions(context.registryAccess().orElseThrow());
+            if (growthDescriptions.isEmpty()) continue;
+            Path<?> path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, bonus.path(),
+                    context.registryAccess().orElseThrow());
+            Component pathName = path == null ? Component.literal(bonus.path().toString()) : path.getName(null);
+            elements.add(headerRow(Component.translatable("ascension.tooltip.progression.condition.technique_realm",
+                    pathName, bonus.realm().majorRealm() + 1, bonus.realm().minorRealm() + 1)));
+            elements.addAll(descriptionRows(growthDescriptions));
+        }
         return List.copyOf(elements);
     }
 

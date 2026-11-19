@@ -14,6 +14,20 @@
         "ascension:passive/sustained_spirit",
         "ascension:castable/frostbound_stillness"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:sustained_spirit_art_learn_flat_spirit",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
   "item_tooltip": {
@@ -34,5 +48,87 @@
     },
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:ordinary"
-  }
+  },
+  "realm_stat_growth": [
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 1,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:sustained_spirit_art_growth_flat_spirit",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 3,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:sustained_spirit_art_growth_percent_spirit",
+              "operation_group": 0,
+              "value": 0.015
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 6,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:sustained_spirit_art_growth_flat_spirit",
+              "value": 1.0
+            }
+          ],
+          "multiplier": [
+            {
+              "id": "ascension:sustained_spirit_art_growth_percent_spirit",
+              "operation_group": 0,
+              "value": 0.015
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 9,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:sustained_spirit_art_growth_percent_spirit",
+              "operation_group": 0,
+              "value": 0.02
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

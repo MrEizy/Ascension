@@ -14,6 +14,29 @@
         "ascension:passive/reapers_calling/soul_reaping",
         "ascension:concealment/reapers_calling/reapers_veil"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:agility": {
+          "flat": [
+            {
+              "id": "ascension:reapers_calling_learn_flat_agility",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:reapers_calling_learn_flat_spirit",
+              "value": 3.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
   "item_tooltip": {
@@ -34,5 +57,116 @@
     },
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:heaven"
-  }
+  },
+  "realm_stat_growth": [
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 1,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:reapers_calling_growth_flat_spirit",
+              "value": 2.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 3,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:reapers_calling_growth_percent_agility",
+              "operation_group": 0,
+              "value": 0.0125
+            }
+          ]
+        },
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:reapers_calling_growth_percent_spirit",
+              "operation_group": 0,
+              "value": 0.025
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 6,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:agility": {
+          "flat": [
+            {
+              "id": "ascension:reapers_calling_growth_flat_agility",
+              "value": 1.5
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:reapers_calling_growth_flat_spirit",
+              "value": 3.0
+            }
+          ],
+          "multiplier": [
+            {
+              "id": "ascension:reapers_calling_growth_percent_spirit",
+              "operation_group": 0,
+              "value": 0.03
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 9,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:reapers_calling_growth_percent_agility",
+              "operation_group": 0,
+              "value": 0.0175
+            }
+          ]
+        },
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:reapers_calling_growth_percent_spirit",
+              "operation_group": 0,
+              "value": 0.035
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

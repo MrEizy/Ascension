@@ -14,11 +14,145 @@
         "ascension:passive/boundless_star_mind",
         "ascension:castable/new_techniques/starfield_pulse"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_learn_flat_spirit",
+              "value": 3.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_learn_flat_vitality",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:heaven"
-  }
+  },
+  "realm_stat_growth": [
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 1,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_growth_flat_spirit",
+              "value": 2.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 3,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_growth_percent_spirit",
+              "operation_group": 0,
+              "value": 0.025
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_growth_percent_vitality",
+              "operation_group": 0,
+              "value": 0.0125
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 6,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_growth_flat_spirit",
+              "value": 3.0
+            }
+          ],
+          "multiplier": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_growth_percent_spirit",
+              "operation_group": 0,
+              "value": 0.03
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_growth_flat_vitality",
+              "value": 1.5
+            }
+          ],
+          "multiplier": []
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 9,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:spirit": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_growth_percent_spirit",
+              "operation_group": 0,
+              "value": 0.035
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_growth_percent_vitality",
+              "operation_group": 0,
+              "value": 0.0175
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

@@ -690,6 +690,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tooltip.progression.condition.each_minor_realm", "Each Minor Realm");
         add("ascension.tooltip.progression.condition.each_major_realm", "Each Major Realm");
         add("ascension.tooltip.progression.condition.on_learn", "On Learning");
+        add("ascension.tooltip.progression.condition.technique_realm", "%s: Major Realm %s, Minor Realm %s");
         add("ascension.tooltip.progression.condition.major_realm", "Major Realm %s");
         add("ascension.tooltip.progression.condition.major_realms", "Major Realms %s");
         add("ascension.tooltip.progression.condition.minor_realm", "Minor Realm %s");

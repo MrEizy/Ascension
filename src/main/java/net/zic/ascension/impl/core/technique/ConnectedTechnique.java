@@ -9,6 +9,7 @@ import net.zic.ascension.impl.core.connection.Connected;
 import net.zic.ascension.impl.core.connection.ConnectionRequirements;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,11 +22,12 @@ public class ConnectedTechnique extends SimpleTechnique implements Connected {
             Component name,
             Component description,
             ProgressActionList onAddedActions,
+            List<TechniqueRealmStatBonus> realmStatGrowth,
             Optional<AscensionItemTooltipDefinition> itemTooltip,
             RequirementHolder requirements,
             ConnectionRequirements connections
     ) {
-        super(name, description, onAddedActions, itemTooltip, requirements);
+        super(name, description, onAddedActions, realmStatGrowth, itemTooltip, requirements);
         this.connections = connections == null ? ConnectionRequirements.EMPTY : connections;
     }
 

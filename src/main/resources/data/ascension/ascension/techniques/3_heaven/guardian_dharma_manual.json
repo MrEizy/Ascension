@@ -15,6 +15,29 @@
         "ascension:castable/golden_bell_of_living_law",
         "ascension:castable/guardian_dharma_idol"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:guardian_dharma_manual_learn_flat_strength",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:guardian_dharma_manual_learn_flat_vitality",
+              "value": 3.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
   "item_tooltip": {
@@ -35,5 +58,116 @@
     },
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:heaven"
-  }
+  },
+  "realm_stat_growth": [
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 1,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:guardian_dharma_manual_growth_flat_vitality",
+              "value": 2.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 3,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:guardian_dharma_manual_growth_percent_strength",
+              "operation_group": 0,
+              "value": 0.0125
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:guardian_dharma_manual_growth_percent_vitality",
+              "operation_group": 0,
+              "value": 0.025
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 6,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:guardian_dharma_manual_growth_flat_strength",
+              "value": 1.5
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:guardian_dharma_manual_growth_flat_vitality",
+              "value": 3.0
+            }
+          ],
+          "multiplier": [
+            {
+              "id": "ascension:guardian_dharma_manual_growth_percent_vitality",
+              "operation_group": 0,
+              "value": 0.03
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/soul",
+      "realm": {
+        "major": 9,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:guardian_dharma_manual_growth_percent_strength",
+              "operation_group": 0,
+              "value": 0.0175
+            }
+          ]
+        },
+        "ascension:vitality": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:guardian_dharma_manual_growth_percent_vitality",
+              "operation_group": 0,
+              "value": 0.035
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

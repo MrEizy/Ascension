@@ -1,11 +1,15 @@
 package net.zic.ascension.impl.core.technique;
 
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.Identifier;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionList;
 import net.zic.ascension.api.ascension.core.progression.ProgressDirection;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
+import net.zic.ascension.api.ascension.core.path.realm.Realm;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.core.technique.Technique;
 import net.zic.ascension.api.ascension.core.technique.TechniqueData;
@@ -18,6 +22,7 @@ import net.zic.ascension.api.tooltip.AscensionItemTooltipDefinition;
 import net.zic.ascension.impl.datapack.technique.AscensionTechniqueTypes;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 public class SimpleTechnique implements Technique<SimpleTechnique.Data> {
@@ -27,6 +32,7 @@ public class SimpleTechnique implements Technique<SimpleTechnique.Data> {
     private final Component name;
     private final Component description;
     private final ProgressActionList onAddedActions;
+    private final List<TechniqueRealmStatBonus> realmStatGrowth;
     private final Optional<AscensionItemTooltipDefinition> itemTooltip;
     private final RequirementHolder requirements;
 
@@ -34,18 +40,24 @@ public class SimpleTechnique implements Technique<SimpleTechnique.Data> {
             Component name,
             Component description,
             ProgressActionList onAddedActions,
+            List<TechniqueRealmStatBonus> realmStatGrowth,
             Optional<AscensionItemTooltipDefinition> itemTooltip,
             RequirementHolder requirements
     ) {
         this.name = name;
         this.description = description;
         this.onAddedActions = onAddedActions == null ? ProgressActionList.EMPTY : onAddedActions;
+        this.realmStatGrowth = realmStatGrowth == null ? List.of() : List.copyOf(realmStatGrowth);
         this.itemTooltip = itemTooltip == null ? Optional.empty() : itemTooltip;
         this.requirements = requirements == null ? RequirementHolder.EMPTY : requirements;
     }
 
     public ProgressActionList getOnAddedActions() {
         return onAddedActions;
+    }
+
+    public List<TechniqueRealmStatBonus> getRealmStatGrowth() {
+        return realmStatGrowth;
     }
 
     @Override
@@ -76,10 +88,12 @@ public class SimpleTechnique implements Technique<SimpleTechnique.Data> {
     @Override
     public void onAdded(OriginSource source, TechniqueInstance<Data> instance) {
         runActions(source, instance, ProgressDirection.UP);
+        applyOwnedRealmStatGrowth(source, instance.getTechniqueId(), ProgressDirection.UP);
     }
 
     @Override
     public void onRemoved(OriginSource source, TechniqueInstance<Data> instance) {
+        applyOwnedRealmStatGrowth(source, instance.getTechniqueId(), ProgressDirection.DOWN);
         runActions(source, instance, ProgressDirection.DOWN);
     }
 
@@ -96,6 +110,28 @@ public class SimpleTechnique implements Technique<SimpleTechnique.Data> {
     @Override
     public SyncHandler<Data> syncHandler() {
         return SYNC_HANDLER;
+    }
+
+    private void applyOwnedRealmStatGrowth(OriginSource source, Identifier techniqueId, ProgressDirection direction) {
+        for (TechniqueRealmStatBonus bonus : realmStatGrowth) {
+            PathInstance<?> path = AscensionOriginSourceHelper.getPathInstance(source, bonus.path());
+            if (path != null && path.getCurrentMajorRealm() >= 0
+                    && path.getCurrentRealm().compareTo(bonus.realm()) >= 0) {
+                bonus.apply(source, techniqueId, direction);
+            }
+        }
+    }
+
+    public void updateRealmStatGrowth(OriginSource source, Identifier techniqueId, Identifier path,
+                                      @Nullable Realm previous, @Nullable Realm current) {
+        for (TechniqueRealmStatBonus bonus : realmStatGrowth) {
+            if (!bonus.path().equals(path)) continue;
+            boolean wasActive = previous != null && previous.compareTo(bonus.realm()) >= 0;
+            boolean isActive = current != null && current.compareTo(bonus.realm()) >= 0;
+            if (wasActive != isActive) {
+                bonus.apply(source, techniqueId, isActive ? ProgressDirection.UP : ProgressDirection.DOWN);
+            }
+        }
     }
 
     private void runActions(OriginSource source, TechniqueInstance<Data> instance, ProgressDirection direction) {

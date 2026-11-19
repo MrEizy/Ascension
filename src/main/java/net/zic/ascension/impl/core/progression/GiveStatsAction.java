@@ -12,7 +12,6 @@ import net.zic.ascension.impl.core.progression.modifier.ModifierConflictAction;
 import net.zic.ascension.impl.datapack.progression.AscensionProgressActionTypes;
 import net.zic.zenithlib.value_containers.typed.ModifierHolder;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,13 +40,18 @@ public record GiveStatsAction(UUID uuid, Map<Identifier, ModifierHolder<Double>>
 
     static List<ProgressActionDescription> describe(Map<Identifier, ModifierHolder<Double>> stats) {
         return stats.entrySet().stream()
-                .map(bonus ->
-                        bonus.getValue().flat().stream().map( modifier ->  ProgressActionDescription.numeric(
-                                ProgressionDescriptionUtil.statName(
-                                        bonus.getKey()),
-                                Component.literal(ProgressionDescriptionUtil.signedNumber( modifier.value())),
+                .flatMap(bonus -> java.util.stream.Stream.concat(
+                        bonus.getValue().flat().stream().map(modifier -> ProgressActionDescription.numeric(
+                                ProgressionDescriptionUtil.statName(bonus.getKey()),
+                                Component.literal(ProgressionDescriptionUtil.signedNumber(modifier.value())),
                                 modifier.value()
-                        )).toList()).flatMap(Collection::stream).toList();
+                        )),
+                        bonus.getValue().multiplier().stream().map(modifier -> ProgressActionDescription.numeric(
+                                ProgressionDescriptionUtil.statName(bonus.getKey()),
+                                Component.literal(ProgressionDescriptionUtil.signedPercent(modifier.value())),
+                                modifier.value()
+                        ))
+                )).toList();
     }
 
     @Override

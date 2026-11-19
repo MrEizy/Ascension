@@ -16,11 +16,145 @@
         "ascension:castable/white_lightning_ten_stage_technique/lightning_flash_step",
         "ascension:castable/new_techniques/lifeforce_perception"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:agility": {
+          "flat": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_learn_flat_agility",
+              "value": 2.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_learn_flat_strength",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:profound"
-  }
+  },
+  "realm_stat_growth": [
+    {
+      "path": "ascension:foundation/body",
+      "realm": {
+        "major": 1,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:agility": {
+          "flat": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_growth_flat_agility",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/body",
+      "realm": {
+        "major": 3,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_growth_percent_agility",
+              "operation_group": 0,
+              "value": 0.02
+            }
+          ]
+        },
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_growth_percent_strength",
+              "operation_group": 0,
+              "value": 0.01
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/body",
+      "realm": {
+        "major": 6,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:agility": {
+          "flat": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_growth_flat_agility",
+              "value": 2.0
+            }
+          ],
+          "multiplier": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_growth_percent_agility",
+              "operation_group": 0,
+              "value": 0.02
+            }
+          ]
+        },
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_growth_flat_strength",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
+    },
+    {
+      "path": "ascension:foundation/body",
+      "realm": {
+        "major": 9,
+        "minor": 0
+      },
+      "stats": {
+        "ascension:agility": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_growth_percent_agility",
+              "operation_group": 0,
+              "value": 0.025
+            }
+          ]
+        },
+        "ascension:strength": {
+          "flat": [],
+          "multiplier": [
+            {
+              "id": "ascension:white_lightning_ten_stage_technique_growth_percent_strength",
+              "operation_group": 0,
+              "value": 0.0125
+            }
+          ]
+        }
+      }
+    }
+  ]
 }
