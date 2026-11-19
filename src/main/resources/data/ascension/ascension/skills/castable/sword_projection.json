@@ -1,12 +1,19 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.sword_projection.name"},
-  "description": {"translate": "ascension.skill.sword_projection.desc"},
+  "name": {
+    "translate": "ascension.skill.sword_projection.name"
+  },
+  "description": {
+    "translate": "ascension.skill.sword_projection.desc"
+  },
   "actions": [
     {
       "type": "ascension:weapon_swing",
       "damage": {
-        "base": 28.0,
+        "base": {
+          "base": 28.0,
+          "per_mastery": 1.54
+        },
         "weapon": 1.5,
         "stats": {
           "ascension:strength": 0.12,
@@ -41,7 +48,15 @@
   ],
   "cost": {
     "resource": "ascension:qi",
-    "amount": 80.0
+    "amount": {
+      "base": 80.0,
+      "per_mastery": -2.0,
+      "minimum": 69.6
+    }
   },
-  "cooldown": 200.0
+  "cooldown": {
+    "base": 200.0,
+    "per_mastery": -7.0,
+    "minimum": 164.0
+  }
 }

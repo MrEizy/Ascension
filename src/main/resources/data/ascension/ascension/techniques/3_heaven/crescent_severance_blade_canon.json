@@ -12,8 +12,7 @@
       "skills": [
         "ascension:passive/blade_mastery",
         "ascension:castable/new_techniques/crescent_severance",
-        "ascension:castable/blade_projection",
-        "ascension:castable/divine_sense/divine_sense_crescent_severance_blade_canon"
+        "ascension:castable/blade_projection"
       ]
     }
   ],

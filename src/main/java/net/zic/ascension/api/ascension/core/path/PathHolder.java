@@ -20,6 +20,7 @@ public class PathHolder implements DataSourceInstance<PathDataSource> {
 
     //paths read from save, held until an owner adds the path again
     private final Map<Identifier, PathInstance<?>> cachedPaths = new HashMap<>();
+    private final Set<Identifier> savedCommandPaths = new HashSet<>();
 
     //sync state, only the dirty and removed paths are sent in a partial patch
     private final Set<Identifier> dirtyPaths = new HashSet<>();
@@ -60,7 +61,7 @@ public class PathHolder implements DataSourceInstance<PathDataSource> {
     public boolean removePath(Identifier path,Identifier owner){
         Set<Identifier> owners = pathOwners.get(path);
         if (owners == null) return false;
-        owners.remove(owner);
+        if (!owners.remove(owner)) return false;
         if(!owners.isEmpty()) return false;
         paths.remove(path);
         pathOwners.remove(path);
@@ -76,12 +77,21 @@ public class PathHolder implements DataSourceInstance<PathDataSource> {
         return paths.values();
     }
     public Collection<Identifier> getOwners(Identifier path){
-        return pathOwners.get(path);
+        Set<Identifier> owners = pathOwners.get(path);
+        return owners == null ? Set.of() : Set.copyOf(owners);
     }
 
     //should be used if you changed a paths PathData
     public void markPathDirty(Identifier path){
         if(hasPath(path)) dirtyPaths.add(path);
+    }
+
+    public void cacheCommandPath(Identifier path) {
+        savedCommandPaths.add(path);
+    }
+
+    public Set<Identifier> getSavedCommandPaths() {
+        return Set.copyOf(savedCommandPaths);
     }
 
     //──Cached Data────────────────────────────────────────────────────────
@@ -97,6 +107,7 @@ public class PathHolder implements DataSourceInstance<PathDataSource> {
     }
     public void clearCache(){
         cachedPaths.clear();
+        savedCommandPaths.clear();
     }
 
     //──Raw Manipulation────────────────────────────────────────────────────────

@@ -52,7 +52,10 @@ public class PathDataSource implements DataSource<PathHolder> {
 
     @Override
     public void preFinishedLoading(OriginSource source, PathHolder holder) {
-
+        // Reattach explicit admin ownership after other sources have reconstructed their grants.
+        for (Identifier path : holder.getSavedCommandPaths()) {
+            AscensionOriginSourceHelper.addPath(source, path, AscensionOriginSourceHelper.COMMAND_PATH_OWNER);
+        }
     }
 
     @Override

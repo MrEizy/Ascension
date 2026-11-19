@@ -48,8 +48,9 @@ public class StatDisplayCommand {
                             player.sendSystemMessage(Component.literal("===Paths==="));
                             for(Identifier pathId : AscensionOriginSourceHelper.getPaths(originSource)){
                                 Path<?> path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,pathId,data.getSource().getRegistryAccess());
-                                player.sendSystemMessage(path.getName(null));
                                 PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(originSource,pathId);
+                                if (path == null || pathInstance == null) continue;
+                                player.sendSystemMessage(path.getName(null));
 
                                 player.sendSystemMessage(Component.literal("realm : ").append(path.getRealmName(pathInstance.getCurrentMajorRealm(),pathInstance.getCurrentMinorRealm())));
                                 player.sendSystemMessage(Component.literal("progress : "+pathInstance.getProgress()));

@@ -563,6 +563,10 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.toggle_passive.disable", "Disable passive");
         add("gui.ascension.introspection.back", "Back");
         add("gui.ascension.introspection.skill_mastery", "Mastery: %s");
+        add("gui.ascension.introspection.skill_mastery_progress", "Mastery: %s | %s/%s");
+        add("gui.ascension.introspection.skill_mastery_capped", "Mastery: %s (cap: %s)");
+        add("gui.ascension.introspection.skill_mastery_maxed", "Mastery: %s (maximum)");
+        add("gui.ascension.introspection.skill_mastery_unavailable", "Mastery: %s (progression unavailable)");
         add("gui.ascension.introspection.path_progress", "Path: %s%%");
         add("gui.ascension.introspection.skill_slots.open", "Show skill slots");
         add("gui.ascension.introspection.skill_slots.close", "Hide skill slots");
@@ -594,9 +598,16 @@ public class AscLangProvider extends LanguageProvider {
         add("toast.ascension.physique_changed", "Physique Changed");
         add("toast.ascension.bloodline_gained", "Bloodline Gained");
         add("toast.ascension.technique_learned", "Technique Learned");
+        add("toast.ascension.skill_mastery_advanced", "Skill Mastery Advanced");
+        add("toast.ascension.skill_mastery_message", "%s: %s");
         add("toast.ascension.realm_advanced", "Realm Advanced");
         add("toast.ascension.realm_regressed", "Realm Regressed");
         add("toast.ascension.realm_change_message", "%s: %s");
+
+        add("ascension.connection.requires.physique", "Requires the physique: %s");
+        add("ascension.connection.requires.technique", "Requires the technique: %s");
+        add("ascension.connection.requires.bloodline", "Requires the bloodline: %s");
+        add("ascension.connection.requires.path", "Requires the path: %s");
 
 
 
@@ -907,6 +918,9 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.thunder_spirit_veins.name", "Thunder Spirit Veins");
         add("ascension.physique.thunder_spirit_veins.desc", "Fine channels run through the limbs like branching lightning, letting violent thunder qi pass through flesh with unusual speed.");
 
+        add("ascension.physique.god_envied_physique.name", "God Envied Physique");
+        add("ascension.physique.god_envied_physique.desc", "A body the heavens themselves begrudge. It's Qi Refining Stage has no ceiling, boasting god-slaying capabilities and immortality from the extremely pure and dense Qi!");
+
         //Heaven Physiques
         add("ascension.physique.lunar_dream_eyes.name", "Lunar Dream Eyes");
         add("ascension.physique.lunar_dream_eyes.desc", "Eyes born beneath an unachievable moon perceive the seam between waking thought and dream.");
@@ -1089,9 +1103,16 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.moonlit_current_combat_scripture.name", "Moonlit Current Combat Scripture");
         add("ascension.technique.moonlit_current_combat_scripture.desc", "A fluid combat style whose steps and waves change course before an opponents very eyes.");
 
+        add("ascension.technique.boundless_qi_scripture.name", "Boundless Qi Scripture");
+        add("ascension.technique.boundless_qi_scripture.desc", "A Qingming Sword Sect breathing technique with no limit and no ceiling. Condense the same breath ten thousand times and the qi within grows without end.");
+
+
         //Skills
         add("ascension.skill.divine_sense.name", "Divine Sense");
         add("ascension.skill.divine_sense.desc", "Release a pulse of spiritual perception that reveals nearby beings and items through obstacles.");
+
+        add("ascension.skill.boundless_cultivation.name", "Boundless Cultivation");
+        add("ascension.skill.boundless_cultivation.desc", "A breathing skill with no upper limit nor does it have a ceiling.");
 
         add("ascension.skill.eagle_claw_rending_palm.name", "Eagle-Claw Rending Palm");
         add("ascension.skill.eagle_claw_rending_palm.desc", "Hook the hand like a talon and drive a short tearing palm through the opponent's guard.");

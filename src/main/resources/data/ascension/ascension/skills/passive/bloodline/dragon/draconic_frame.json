@@ -1,13 +1,52 @@
 {
   "type": "ascension:passive",
-  "name": {"translate": "ascension.skill.draconic_frame.name"},
-  "description": {"translate": "ascension.skill.draconic_frame.desc"},
+  "name": {
+    "translate": "ascension.skill.draconic_frame.name"
+  },
+  "description": {
+    "translate": "ascension.skill.draconic_frame.desc"
+  },
   "modifiers": [
     {
       "type": "ascension:defense",
-      "flat_reduction": 0.6,
-      "percentage_reduction": 0.06,
-      "stagger_resistance": 0.15
+      "flat_reduction": {
+        "base": 0.6,
+        "per_level": 0.12
+      },
+      "percentage_reduction": {
+        "base": 0.06,
+        "per_level": 0.01
+      },
+      "stagger_resistance": {
+        "base": 0.15,
+        "per_level": 0.015
+      }
     }
-  ]
+  ],
+  "levels": 3,
+  "level_cap": 3,
+  "training": {
+    "milestones": [
+      {
+        "level": 2,
+        "requirements": [
+          {
+            "type": "ascension:bloodline_purity",
+            "bloodline": "ascension:3_heaven/dragon_bloodline",
+            "value": 25
+          }
+        ]
+      },
+      {
+        "level": 3,
+        "requirements": [
+          {
+            "type": "ascension:bloodline_purity",
+            "bloodline": "ascension:3_heaven/dragon_bloodline",
+            "value": 50
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -3,12 +3,18 @@ package net.zic.ascension.api.ascension.value;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 
-public final class HexColorCodec {
+import java.util.Locale;
 
-    public static final Codec<Integer> CODEC = Codec.STRING.comapFlatMap(
-            HexColorCodec::parse,
+public final class HexColorCodec {
+    public static final Codec<Integer> RGB_CODEC = Codec.STRING.comapFlatMap(
+            value -> parse(value).map(color -> color & 0xFFFFFF),
             HexColorCodec::toHexString
     );
+    public static final Codec<Integer> ARGB_CODEC = Codec.STRING.comapFlatMap(
+            HexColorCodec::parseArgb,
+            HexColorCodec::toArgbHexString
+    );
+    public static final Codec<Integer> CODEC = RGB_CODEC;
 
     private HexColorCodec() {
     }
@@ -19,18 +25,33 @@ public final class HexColorCodec {
         }
         String hex = value.startsWith("#") ? value.substring(1) : value;
         if (hex.length() != 6 && hex.length() != 8) {
-            return DataResult.error(() -> "Color must be a 6 or 8 digit hex code, got: " + value);
+            return DataResult.error(() -> "Color must be #RRGGBB or #AARRGGBB, got: " + value);
+        }
+        for (int index = 0; index < hex.length(); index++) {
+            if (Character.digit(hex.charAt(index), 16) < 0) {
+                return DataResult.error(() -> "Invalid hex color: " + value);
+            }
         }
         try {
-            long parsed = Long.parseLong(hex, 16);
-            return DataResult.success((int) (parsed & 0xFFFFFFFFL));
+            return DataResult.success((int) Long.parseLong(hex, 16));
         } catch (NumberFormatException exception) {
             return DataResult.error(() -> "Invalid hex color: " + value);
         }
     }
 
+    public static DataResult<Integer> parseArgb(String value) {
+        return parse(value).map(color -> {
+            String hex = value.startsWith("#") ? value.substring(1) : value;
+            return hex.length() == 6 ? color | 0xFF000000 : color;
+        });
+    }
+
     public static String toHexString(int color) {
-        return String.format("#%06X", color & 0xFFFFFF);
+        return String.format(Locale.ROOT, "#%06X", color & 0xFFFFFF);
+    }
+
+    public static String toArgbHexString(int color) {
+        return String.format(Locale.ROOT, "#%08X", color);
     }
 
     public static float[] toFloats(int color) {

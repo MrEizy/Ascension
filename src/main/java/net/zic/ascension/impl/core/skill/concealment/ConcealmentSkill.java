@@ -19,9 +19,7 @@ public final class ConcealmentSkill extends ToggleablePassiveSkill {
         super(
                 passive.getName(),
                 passive.getDescription(),
-                passive.getConfiguredLevels(),
-                passive.getConfiguredBaseLevelCap(),
-                passive.getLevelExperienceRequirements(),
+                passive.progressionSettings(),
                 passive.modifiers(),
                 passive.triggers(),
                 passive.definitions(),

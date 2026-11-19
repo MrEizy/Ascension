@@ -5,10 +5,14 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.zic.ascension.api.ascension.core.resource.ResourceSourceIdentity;
+import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionRequest;
 import net.zic.ascension.api.ascension.core.resource.ResourceTransactionService;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.SkillInstance;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionService;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillActionContext;
@@ -28,9 +32,7 @@ public class ToggleablePassiveSkill extends PassiveSkill implements ToggleableSk
     protected ToggleablePassiveSkill(
             Component name,
             Component description,
-            int levels,
-            int baseLevelCap,
-            List<Double> levelExperienceRequirements,
+            ProgressionSettings progressionSettings,
             List<PassiveModifier> modifiers,
             List<PassiveTrigger> triggers,
             SkillDefinitions definitions,
@@ -42,7 +44,7 @@ public class ToggleablePassiveSkill extends PassiveSkill implements ToggleableSk
             List<SkillAction> enableActions,
             List<SkillAction> disableActions
     ) {
-        super(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep, stateGroup, grantedSkills, enableConditions, enableActions, disableActions);
+        super(name, description, progressionSettings, modifiers, triggers, definitions, enabledByDefault, upkeep, stateGroup, grantedSkills, enableConditions, enableActions, disableActions);
     }
 
     @Override
@@ -76,16 +78,45 @@ public class ToggleablePassiveSkill extends PassiveSkill implements ToggleableSk
 
     @Override
     public boolean tickEnabled(LivingEntity entity, OriginSource source, SkillInstance<Data> instance) {
-        return getUpkeep().isEmpty()
-                || entity.level().getGameTime() % getUpkeep().get().interval() != 0L
-                || upkeepAvailable(entity, source, instance.getSkillId(), false);
+        if (getUpkeep().isEmpty() || entity.level().getGameTime() % getUpkeep().get().interval() != 0L) {
+            return true;
+        }
+        Upkeep upkeep = getUpkeep().get();
+        ResourceTransactionService.Result result = transactUpkeep(entity, source, instance.getSkillId(), false);
+        if (!result.succeeded()) {
+            return false;
+        }
+        Training training = training();
+        if (!training.hasPaidTraining()
+                || (upkeep.operation() != ResourceOperation.CONSUME
+                && upkeep.operation() != ResourceOperation.DRAIN)
+                || result.status() != ResourceTransactionService.Status.SUCCESS
+                || result.appliedAmount() <= 0.0D) {
+            return true;
+        }
+        SkillProgressionData progression = instance.getData().getSkillProgression();
+        if (progression.getTrainedProgression() >= progression.getAccessibleCap(getDefaultProgressionCap(), getMaximumProgression())) {
+            return true;
+        }
+        int ticks = instance.getData().addPaidUptimeTicks(upkeep.interval(), training.paidUptimeTicks());
+        if (ticks >= training.paidUptimeTicks()) {
+            instance.getData().resetPaidUptimeTicks();
+            SkillProgressionService.addExperience(source, instance.getSkillId(), training.experience());
+        } else if (ticks % 200 < upkeep.interval()) {
+            AscensionOriginSourceHelper.markSkillDirty(source, instance.getSkillId());
+        }
+        return true;
     }
 
     private boolean upkeepAvailable(LivingEntity entity, OriginSource source, Identifier skillId, boolean simulate) {
         if (getUpkeep().isEmpty()) {
             return true;
         }
-        Upkeep upkeep = getUpkeep().get();
+        return transactUpkeep(entity, source, skillId, simulate).succeeded();
+    }
+
+    private ResourceTransactionService.Result transactUpkeep(LivingEntity entity, OriginSource source, Identifier skillId, boolean simulate) {
+        Upkeep upkeep = getUpkeep().orElseThrow();
         ScaledValue.Context valueContext = new ScaledValue.Context(source, skillId, entity, null, 0.0D, Map.of());
         ResourceTransactionRequest request = ResourceTransactionRequest.of(
                 entity,
@@ -97,6 +128,6 @@ public class ToggleablePassiveSkill extends PassiveSkill implements ToggleableSk
         if (simulate) {
             request = request.withFlags(Set.of(ResourceTransactionRequest.Flag.SIMULATE));
         }
-        return ResourceTransactionService.transact(request).succeeded();
+        return ResourceTransactionService.transact(request);
     }
 }

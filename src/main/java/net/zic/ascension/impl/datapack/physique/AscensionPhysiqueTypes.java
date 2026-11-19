@@ -17,10 +17,17 @@ public class AscensionPhysiqueTypes {
             SimplePhysiqueType::new
     );
 
+    public static final DeferredHolder<PhysiqueType,PhysiqueType> CONNECTED_PHYSIQUE_TYPE = PHYSIQUE_TYPES.register(
+            "connected_physique",
+            ConnectedPhysiqueType::new
+    );
+
     public static final DeferredHolder<PhysiqueType,PhysiqueType> INFINITE_BREAKTHROUGH_PHYSIQUE_TYPE = PHYSIQUE_TYPES.register(
             "infinite_breakthrough",
             InfiniteBreakthroughPhysiqueType::new
     );
+
+
 
 
     public static void register(IEventBus eventBus){

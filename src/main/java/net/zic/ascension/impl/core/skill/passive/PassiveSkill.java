@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.resource.ResourceOperation;
+import net.zic.ascension.api.ascension.core.requirement.RequirementHolder;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkill;
 import net.zic.ascension.api.ascension.core.skill.ProgressingSkillData;
 import net.zic.ascension.api.ascension.core.skill.SkillInstance;
@@ -41,6 +42,7 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
 
     private final Component name;
     private final Component description;
+    private final ProgressionSettings progressionSettings;
     private final int levels;
     private final int baseLevelCap;
     private final List<Double> levelExperienceRequirements;
@@ -59,9 +61,7 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
     protected PassiveSkill(
             Component name,
             Component description,
-            int levels,
-            int baseLevelCap,
-            List<Double> levelExperienceRequirements,
+            ProgressionSettings progressionSettings,
             List<PassiveModifier> modifiers,
             List<PassiveTrigger> triggers,
             SkillDefinitions definitions,
@@ -75,11 +75,10 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
     ) {
         this.name = name;
         this.description = description;
-        this.levels = Math.max(1, levels);
-        this.baseLevelCap = Math.clamp(baseLevelCap <= 0 ? 1 : baseLevelCap, 1, this.levels);
-        this.levelExperienceRequirements = levelExperienceRequirements == null
-                ? List.of()
-                : levelExperienceRequirements.stream().map(value -> Math.max(0.0D, value)).toList();
+        this.progressionSettings = progressionSettings == null ? ProgressionSettings.DEFAULT : progressionSettings;
+        this.levels = this.progressionSettings.levels();
+        this.baseLevelCap = Math.clamp(this.progressionSettings.levelCap(), 1, this.levels);
+        this.levelExperienceRequirements = this.progressionSettings.levelExperience();
         this.modifiers = modifiers == null ? List.of() : List.copyOf(modifiers);
         this.triggers = triggers == null ? List.of() : List.copyOf(triggers);
         this.definitions = definitions == null ? SkillDefinitions.EMPTY : definitions;
@@ -96,9 +95,7 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
     public static PassiveSkill create(
             Component name,
             Component description,
-            int levels,
-            int baseLevelCap,
-            List<Double> levelExperienceRequirements,
+            ProgressionSettings progressionSettings,
             List<PassiveModifier> modifiers,
             List<PassiveTrigger> triggers,
             SkillDefinitions definitions,
@@ -112,8 +109,16 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
             List<SkillAction> disableActions
     ) {
         return toggleable
-                ? new ToggleablePassiveSkill(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, enabledByDefault, upkeep, stateGroup, grantedSkills, enableConditions, enableActions, disableActions)
-                : new PassiveSkill(name, description, levels, baseLevelCap, levelExperienceRequirements, modifiers, triggers, definitions, true, Optional.empty(), Optional.empty(), List.of(), List.of(), List.of(), List.of());
+                ? new ToggleablePassiveSkill(name, description, progressionSettings, modifiers, triggers, definitions, enabledByDefault, upkeep, stateGroup, grantedSkills, enableConditions, enableActions, disableActions)
+                : new PassiveSkill(name, description, progressionSettings, modifiers, triggers, definitions, true, Optional.empty(), Optional.empty(), List.of(), List.of(), List.of(), List.of());
+    }
+
+    public ProgressionSettings progressionSettings() {
+        return progressionSettings;
+    }
+
+    public Training training() {
+        return progressionSettings.training();
     }
 
     public int getConfiguredLevels() {
@@ -322,6 +327,54 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
         }
     }
 
+    public record ProgressionSettings(int levels, int levelCap, List<Double> levelExperience, Training training) {
+        public static final ProgressionSettings DEFAULT = new ProgressionSettings(1, 1, List.of(), Training.NONE);
+        public static final com.mojang.serialization.MapCodec<ProgressionSettings> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Codec.intRange(1, 1024).optionalFieldOf("levels", 1).forGetter(ProgressionSettings::levels),
+                Codec.INT.optionalFieldOf("level_cap", 1).forGetter(ProgressionSettings::levelCap),
+                Codec.DOUBLE.listOf().optionalFieldOf("level_xp", List.of()).forGetter(ProgressionSettings::levelExperience),
+                Training.CODEC.optionalFieldOf("training", Training.NONE).forGetter(ProgressionSettings::training)
+        ).apply(instance, ProgressionSettings::new));
+
+        public ProgressionSettings {
+            levels = Math.max(1, levels);
+            levelCap = Math.clamp(levelCap, 1, levels);
+            levelExperience = levelExperience == null ? List.of() : levelExperience.stream()
+                    .map(value -> Double.isFinite(value) ? Math.max(0.0D, value) : 0.0D).toList();
+            training = training == null ? Training.NONE : training;
+        }
+    }
+
+    public record Training(int paidUptimeTicks, double experience, List<Milestone> milestones) {
+        public static final Training NONE = new Training(0, 0.0D, List.of());
+        public static final Codec<Training> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Codec.intRange(0, 72000).optionalFieldOf("paid_uptime_ticks", 0).forGetter(Training::paidUptimeTicks),
+                Codec.doubleRange(0.0D, 100000.0D).optionalFieldOf("experience", 0.0D).forGetter(Training::experience),
+                Milestone.CODEC.listOf().optionalFieldOf("milestones", List.of()).forGetter(Training::milestones)
+        ).apply(instance, Training::new));
+
+        public Training {
+            paidUptimeTicks = Math.max(0, paidUptimeTicks);
+            experience = Double.isFinite(experience) ? Math.max(0.0D, experience) : 0.0D;
+            milestones = milestones == null ? List.of() : List.copyOf(milestones);
+        }
+
+        public boolean hasPaidTraining() {
+            return paidUptimeTicks > 0 && experience > 0.0D;
+        }
+    }
+
+    public record Milestone(int level, RequirementHolder requirements) {
+        public static final Codec<Milestone> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Codec.intRange(2, 1024).fieldOf("level").forGetter(Milestone::level),
+                RequirementHolder.CODEC.fieldOf("requirements").forGetter(Milestone::requirements)
+        ).apply(instance, Milestone::new));
+
+        public Milestone {
+            requirements = requirements == null ? RequirementHolder.EMPTY : requirements;
+        }
+    }
+
     public record Upkeep(
             Identifier resource,
             ResourceOperation operation,
@@ -341,6 +394,8 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
 
     public static final class Data implements ProgressingSkillData {
         private final SkillProgressionData progression;
+        private long lastProgressionExperienceTick = Long.MIN_VALUE / 2L;
+        private int paidUptimeTicks;
         private boolean enabled;
 
         public Data(SkillProgressionData progression, boolean enabled) {
@@ -351,6 +406,25 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
         @Override
         public SkillProgressionData getSkillProgression() {
             return progression;
+        }
+
+        public boolean canAwardExperienceAt(long gameTime) {
+            return gameTime < lastProgressionExperienceTick
+                    || gameTime - lastProgressionExperienceTick >= 20L;
+        }
+
+        public void markExperienceAwardedAt(long gameTime) {
+            lastProgressionExperienceTick = gameTime;
+        }
+
+        public int addPaidUptimeTicks(int ticks, int target) {
+            paidUptimeTicks = (int) Math.min(Math.max(0, target),
+                    (long) Math.max(0, paidUptimeTicks) + Math.max(0, ticks));
+            return paidUptimeTicks;
+        }
+
+        public void resetPaidUptimeTicks() {
+            paidUptimeTicks = 0;
         }
 
         public boolean isEnabled() {
@@ -366,13 +440,16 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
     private record DataSerializerHandler(boolean defaultEnabled) implements SerializerHandler<Data> {
         @Override
         public Data read(ValueInput input, RegistryAccess access) {
-            return new Data(new SkillProgressionData(input.childOrEmpty("progression")), input.getBooleanOr("enabled", defaultEnabled));
+            Data data = new Data(new SkillProgressionData(input.childOrEmpty("progression")), input.getBooleanOr("enabled", defaultEnabled));
+            data.paidUptimeTicks = Math.max(0, input.getIntOr("paid_uptime_ticks", 0));
+            return data;
         }
 
         @Override
         public void write(Data data, ValueOutput output, RegistryAccess access) {
             data.progression.write(output.child("progression"));
             output.putBoolean("enabled", data.enabled);
+            output.putInt("paid_uptime_ticks", data.paidUptimeTicks);
         }
     }
 

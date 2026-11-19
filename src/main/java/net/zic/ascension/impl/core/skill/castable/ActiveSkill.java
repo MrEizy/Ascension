@@ -60,7 +60,7 @@ public final class ActiveSkill implements CastableSkill<ActiveSkill.Data, Active
     private static final SyncHandler<Data> SYNC_HANDLER = new DataSyncHandler();
 
     private static final int CHANNEL_MASTERY_INTERVAL = 20;
-    private static final double MASTERY_EXPERIENCE_PER_USE = 1.0D;
+    private static final int MASTERY_EXPERIENCE_INTERVAL = 20;
 
     private final Component name;
     private final Component description;
@@ -72,6 +72,7 @@ public final class ActiveSkill implements CastableSkill<ActiveSkill.Data, Active
     private final List<ActiveSkillCostDefinition> costs;
     private final ScaledValue cooldown;
     private final SkillMasteryRank defaultMasteryCap;
+    private final double masteryExperiencePerUse;
     private final Map<SkillMasteryRank, Double> masteryRequirements;
 
     public ActiveSkill(
@@ -85,6 +86,7 @@ public final class ActiveSkill implements CastableSkill<ActiveSkill.Data, Active
             List<ActiveSkillCostDefinition> costs,
             ScaledValue cooldown,
             SkillMasteryRank defaultMasteryCap,
+            double masteryExperiencePerUse,
             Map<SkillMasteryRank, Double> masteryRequirements
     ) {
         this.name = name;
@@ -96,7 +98,9 @@ public final class ActiveSkill implements CastableSkill<ActiveSkill.Data, Active
         this.actions = actions == null ? List.of() : List.copyOf(actions);
         this.costs = costs == null ? List.of() : List.copyOf(costs);
         this.cooldown = cooldown == null ? ScaledValue.constant(0.0D) : cooldown;
-        this.defaultMasteryCap = defaultMasteryCap == null ? SkillMasteryRank.INITIATE : defaultMasteryCap;
+        this.defaultMasteryCap = defaultMasteryCap == null ? SkillMasteryRank.TRANSCENDENCE : defaultMasteryCap;
+        this.masteryExperiencePerUse = Double.isFinite(masteryExperiencePerUse)
+                ? Math.max(0.0D, masteryExperiencePerUse) : 0.0D;
         EnumMap<SkillMasteryRank, Double> requirements = new EnumMap<>(SkillMasteryRank.class);
         if (masteryRequirements != null) {
             masteryRequirements.forEach((rank, value) -> {
@@ -138,6 +142,10 @@ public final class ActiveSkill implements CastableSkill<ActiveSkill.Data, Active
 
     public SkillMasteryRank defaultMasteryCap() {
         return defaultMasteryCap;
+    }
+
+    public double masteryExperiencePerUse() {
+        return masteryExperiencePerUse;
     }
 
     public Map<SkillMasteryRank, Double> masteryRequirements() {
@@ -549,9 +557,24 @@ public final class ActiveSkill implements CastableSkill<ActiveSkill.Data, Active
     }
 
     private void awardMasteryExperience(LivingEntity caster, Identifier skillId) {
+        if (masteryExperiencePerUse <= 0.0D) {
+            return;
+        }
         OriginSource source = getOriginSource(caster);
-        if (source != null) {
-            SkillProgressionService.addExperience(source, skillId, MASTERY_EXPERIENCE_PER_USE);
+        if (source == null) {
+            return;
+        }
+        SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source, skillId);
+        if (instance == null || !(instance.getData() instanceof Data data)) {
+            return;
+        }
+        long gameTime = caster.level().getGameTime();
+        if (gameTime >= data.lastMasteryExperienceTick
+                && gameTime - data.lastMasteryExperienceTick < MASTERY_EXPERIENCE_INTERVAL) {
+            return;
+        }
+        if (SkillProgressionService.addExperience(source, skillId, masteryExperiencePerUse)) {
+            data.lastMasteryExperienceTick = gameTime;
         }
     }
 
@@ -690,6 +713,7 @@ public final class ActiveSkill implements CastableSkill<ActiveSkill.Data, Active
 
     public static final class Data implements ProgressingSkillData {
         private final SkillProgressionData progression;
+        private long lastMasteryExperienceTick = Long.MIN_VALUE / 2L;
 
         public Data(SkillProgressionData progression) {
             this.progression = progression == null ? new SkillProgressionData() : progression;

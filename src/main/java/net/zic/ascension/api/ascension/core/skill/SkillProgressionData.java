@@ -31,19 +31,19 @@ public final class SkillProgressionData {
 
     public SkillProgressionData(int trainedProgression, double experience, Map<Identifier, Integer> caps) {
         this.trainedProgression = Math.max(1, trainedProgression);
-        this.experience = Math.max(0.0D, experience);
+        this.experience = finiteExperience(experience);
         copyContributions(caps, this.caps);
     }
 
     public SkillProgressionData(ValueInput input) {
         trainedProgression = Math.max(1, input.getIntOr("trained", 1));
-        experience = Math.max(0.0D, input.getDoubleOr("experience", 0.0D));
+        experience = finiteExperience(input.getDoubleOr("experience", 0.0D));
         readContributions(input.childrenListOrEmpty("caps"), caps);
     }
 
     public SkillProgressionData(ByteBuf buf) {
         trainedProgression = Math.max(1, buf.readInt());
-        experience = Math.max(0.0D, buf.readDouble());
+        experience = finiteExperience(buf.readDouble());
         readContributions(buf, caps);
     }
 
@@ -60,7 +60,7 @@ public final class SkillProgressionData {
     }
 
     public void setExperience(double experience) {
-        this.experience = Math.max(0.0D, experience);
+        this.experience = finiteExperience(experience);
     }
 
     public Map<Identifier, Integer> getCaps() {
@@ -68,7 +68,7 @@ public final class SkillProgressionData {
     }
 
     public int getAccessibleCap(int defaultCap, int maximumProgression) {
-        int contributedCap = maximumContribution(caps, defaultCap);
+        int contributedCap = caps.isEmpty() ? defaultCap : maximumContribution(caps, 1);
         return clamp(contributedCap, 1, maximumProgression);
     }
 
@@ -89,7 +89,7 @@ public final class SkillProgressionData {
     //reads into this data, replacing what it held
     public void decode(ByteBuf buf) {
         trainedProgression = Math.max(1, buf.readInt());
-        experience = Math.max(0.0D, buf.readDouble());
+        experience = finiteExperience(buf.readDouble());
         caps.clear();
         readContributions(buf, caps);
     }
@@ -160,6 +160,10 @@ public final class SkillProgressionData {
             int progression = Math.max(1, buf.readInt());
             contributions.put(id, progression);
         }
+    }
+
+    private static double finiteExperience(double experience) {
+        return Double.isFinite(experience) ? Math.max(0.0D, experience) : 0.0D;
     }
 
     private static int clamp(int value, int minimum, int maximum) {

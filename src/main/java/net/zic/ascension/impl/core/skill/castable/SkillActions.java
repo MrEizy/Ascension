@@ -1010,6 +1010,7 @@ public final class SkillActions {
             ActionSubject subject,
             String vfxType,
             String color,
+            RuntimeVisualDefinition.VisualColor tint,
             java.util.Map<Identifier, String> techniqueColors,
             Vec3 radius,
             SkillDamageDefinition damage,
@@ -1026,6 +1027,7 @@ public final class SkillActions {
                 ActionSubject.CODEC.optionalFieldOf("subject", ActionSubject.CASTER).forGetter(WeaponSwing::subject),
                 Codec.STRING.optionalFieldOf("vfx_type", "sword_swing").forGetter(WeaponSwing::vfxType),
                 Codec.STRING.optionalFieldOf("color", "blue").forGetter(WeaponSwing::color),
+                RuntimeVisualDefinition.VisualColor.CODEC.optionalFieldOf("tint", RuntimeVisualDefinition.VisualColor.WHITE).forGetter(WeaponSwing::tint),
                 Codec.unboundedMap(Identifier.CODEC, Codec.STRING).optionalFieldOf("technique_colors", java.util.Map.of()).forGetter(WeaponSwing::techniqueColors),
                 CodecHelpers.VEC3.optionalFieldOf("radius", new Vec3(2.0D, 2.0D, 2.0D)).forGetter(WeaponSwing::radius),
                 SkillDamageDefinition.CODEC.codec().optionalFieldOf("damage", SkillDamageDefinition.base(4.0D)).forGetter(WeaponSwing::damage),
@@ -1042,6 +1044,7 @@ public final class SkillActions {
         public WeaponSwing {
             vfxType = vfxType == null || vfxType.isBlank() ? "sword_swing" : vfxType;
             color = color == null || color.isBlank() ? "blue" : color;
+            tint = tint == null ? RuntimeVisualDefinition.VisualColor.WHITE : tint;
             techniqueColors = techniqueColors == null ? java.util.Map.of() : java.util.Map.copyOf(techniqueColors);
             radius = radius == null ? new Vec3(2.0D, 2.0D, 2.0D) : radius;
             damage = damage == null ? SkillDamageDefinition.base(4.0D) : damage;
@@ -1103,6 +1106,7 @@ public final class SkillActions {
                     pathId,
                     style.technique(),
                     style.colorFolder(),
+                    tint.argb(),
                     movement,
                     extras.hitShape(),
                     extras.blockImpact(),

@@ -1,0 +1,51 @@
+{
+  "type": "ascension:active",
+  "name": {"translate": "ascension.skill.boundless_cultivation.name"},
+  "description": {"translate": "ascension.skill.boundless_cultivation.desc"},
+  "cast": {
+    "mode": "channel",
+    "stages": [
+      {
+        "particle_field": {
+          "style": "inward_flow",
+          "particles": [
+            {
+              "weight": 8,
+              "particle": "ascension:particle_field_petal_lotus"
+            }
+          ],
+          "density": 20,
+          "radius": {
+            "min": 0.7,
+            "max": 1.35
+          },
+          "height": {
+            "min": -0.02,
+            "max": 1.7
+          },
+          "speed": {
+            "min": 0.043,
+            "max": 0.068
+          },
+          "size": {
+            "min": 0.04,
+            "max": 0.11
+          },
+          "lifetime": {
+            "min": 20,
+            "max": 34
+          },
+          "full_bright": true
+        }
+      }
+    ]
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:cultivate",
+      "path": "ascension:foundation/essence",
+      "rate": 4.67
+    }
+  ]
+}

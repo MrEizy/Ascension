@@ -13,8 +13,7 @@
         "ascension:castable/cultivation/scholarly_soul",
         "ascension:passive/scholarly_soul_technique/refined_understanding",
         "ascension:castable/scholarly_soul_technique/sages_observation",
-        "ascension:castable/scholarly_soul_technique/mandate_of_the_sage",
-        "ascension:castable/divine_sense/divine_sense_scholarly_soul_technique"
+        "ascension:castable/scholarly_soul_technique/mandate_of_the_sage"
       ]
     }
   ],

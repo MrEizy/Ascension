@@ -11,8 +11,7 @@
       "type": "ascension:grant_skills",
       "skills": [
         "ascension:castable/grasping_sand_technique/grasping_sand_palm",
-        "ascension:passive/grasping_sand_technique/rooted_grip",
-        "ascension:castable/divine_sense/divine_sense_grasping_sand_technique"
+        "ascension:passive/grasping_sand_technique/rooted_grip"
       ]
     }
   ],

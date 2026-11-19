@@ -12,8 +12,7 @@
       "skills": [
         "ascension:body_cultivation/martial_transcendence_vol_1",
         "ascension:passive/martial_transcendence_vol_1/refined_mortal_frame",
-        "ascension:castable/martial_transcendence_vol_1/transcendent_impact",
-        "ascension:castable/divine_sense/divine_sense_martial_transcendence_vol_1"
+        "ascension:castable/martial_transcendence_vol_1/transcendent_impact"
       ]
     }
   ],

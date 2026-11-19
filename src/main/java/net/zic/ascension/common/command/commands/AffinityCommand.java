@@ -16,7 +16,10 @@ import net.zic.ascension.util.PathInteractionUtil;
 
 public class AffinityCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> build() {
-        return Commands.literal("affinity")
+        return buildAs("affinity");
+    }
+    public static LiteralArgumentBuilder<CommandSourceStack> buildAs(String name) {
+        return Commands.literal(name)
                 .then(Commands.literal("view")
                         .then(Commands.argument("target", EntityArgument.players())
                                 .executes(AffinityCommand::viewAffinity)
@@ -31,12 +34,12 @@ public class AffinityCommand {
         var players = EntityArgument.getPlayers(context, "target");
         for(ServerPlayer player : players){
             EntityPathBonusHolder pathBonusHolder = player.getData(CoreAttachments.PATH_BONUS_HOLDER);
-            player.sendSystemMessage(Component.literal("===Affinities (").append(player.getName()).append(Component.literal(")===")));
+            context.getSource().sendSystemMessage(Component.literal("===Affinities (").append(player.getName()).append(Component.literal(")===")));
             for(Identifier path : pathBonusHolder.getAllPathBonusesInCategory(PathInteractionUtil.AFFINITY_CATEGORY)){
-                player.sendSystemMessage(Component.literal(path+": "+pathBonusHolder.getPathBonus(PathInteractionUtil.AFFINITY_CATEGORY,path)
+                context.getSource().sendSystemMessage(Component.literal(path+": "+pathBonusHolder.getPathBonus(PathInteractionUtil.AFFINITY_CATEGORY,path)
                         +" (effective: "+PathInteractionUtil.getEffectiveAffinity(player.registryAccess(),pathBonusHolder,path)+")"));
             }
         }
-        return 1;
+        return players.size();
     }
 }
