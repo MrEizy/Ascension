@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.boundless_qi_scripture.desc"
   },
+  "path": "ascension:foundation/essence",
+  "max_realm": 5,
+  "max_minor_realm": 2,
   "physique_connection": "ascension:2_profound/god_envied_physique",
   "on_added": [
     {
@@ -13,8 +16,28 @@
       "skills": [
         "ascension:castable/cultivation/boundless_cultivation"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:boundless_qi_scripture_learn_flat_spirit",
+              "value": 2.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "flat": 0.17647,
+      "multiplier": 0.013
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "theme_overrides": {

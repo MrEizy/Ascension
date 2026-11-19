@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.rigid_stance_summation_technique.desc"
   },
+  "path": "ascension:foundation/body",
+  "max_realm": 5,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -14,8 +17,41 @@
         "ascension:passive/rigid_stance_summation_technique/summated_guard",
         "ascension:castable/rigid_stance_summation_technique/mountain_receives_strike"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:rigid_stance_summation_technique_learn_flat_strength",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:rigid_stance_summation_technique_learn_flat_vitality",
+              "value": 2.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:strength": {
+      "flat": 0.05882,
+      "multiplier": 0.0045
+    },
+    "ascension:vitality": {
+      "flat": 0.17647,
+      "multiplier": 0.013
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.guardian_dharma_manual.desc"
   },
+  "path": "ascension:foundation/soul",
+  "max_realm": 8,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -15,8 +18,41 @@
         "ascension:castable/golden_bell_of_living_law",
         "ascension:castable/guardian_dharma_idol"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:guardian_dharma_manual_learn_flat_strength",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:guardian_dharma_manual_learn_flat_vitality",
+              "value": 3.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:strength": {
+      "flat": 0.05769,
+      "multiplier": 0.00375
+    },
+    "ascension:vitality": {
+      "flat": 0.19231,
+      "multiplier": 0.01125
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "theme_overrides": {

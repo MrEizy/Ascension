@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.ninefold_thunder_meridian_scripture.desc"
   },
+  "path": "ascension:foundation/essence",
+  "max_realm": 5,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -16,8 +19,41 @@
         "ascension:castable/new_techniques/thunder_skip",
         "ascension:castable/new_techniques/essence_perception"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:agility": {
+          "flat": [
+            {
+              "id": "ascension:ninefold_thunder_meridian_scripture_learn_flat_agility",
+              "value": 2.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:ninefold_thunder_meridian_scripture_learn_flat_spirit",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:agility": {
+      "flat": 0.17647,
+      "multiplier": 0.013
+    },
+    "ascension:spirit": {
+      "flat": 0.05882,
+      "multiplier": 0.0045
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

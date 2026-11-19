@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.hellbound_marrow_scripture.desc"
   },
+  "path": "ascension:foundation/body",
+  "max_realm": 2,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -14,8 +17,41 @@
         "ascension:passive/hellbound_marrow_scripture/marrow_furnace",
         "ascension:castable/hellbound_marrow_scripture/body_flash_step"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:strength": {
+          "flat": [
+            {
+              "id": "ascension:hellbound_marrow_scripture_learn_flat_strength",
+              "value": 0.5
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:hellbound_marrow_scripture_learn_flat_vitality",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:strength": {
+      "flat": 0.0625,
+      "multiplier": 0.00875
+    },
+    "ascension:vitality": {
+      "flat": 0.25,
+      "multiplier": 0.025
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

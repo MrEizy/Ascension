@@ -61,6 +61,10 @@ final class ProgressionDescriptionUtil {
         return number;
     }
 
+    static String signedPercent(double value) {
+        return signedNumber(BigDecimal.valueOf(value).movePointRight(2).doubleValue()) + "%";
+    }
+
     private static String humanName(String value) {
         String path = value;
         int slash = path.lastIndexOf('/');

@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.five_element_body_technique.desc"
   },
+  "path": "ascension:foundation/body",
+  "max_realm": 8,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -16,8 +19,41 @@
         "ascension:passive/five_element_body_technique/harmony_guard",
         "ascension:castable/new_techniques/lifeforce_perception"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:five_element_body_technique_learn_flat_spirit",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:five_element_body_technique_learn_flat_vitality",
+              "value": 3.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "flat": 0.05769,
+      "multiplier": 0.00375
+    },
+    "ascension:vitality": {
+      "flat": 0.19231,
+      "multiplier": 0.01125
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

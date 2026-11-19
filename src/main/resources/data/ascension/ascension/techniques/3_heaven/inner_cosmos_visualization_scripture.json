@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.inner_cosmos_visualization_scripture.desc"
   },
+  "path": "ascension:foundation/soul",
+  "max_realm": 8,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -14,8 +17,41 @@
         "ascension:passive/boundless_star_mind",
         "ascension:castable/new_techniques/starfield_pulse"
       ]
+    },
+    {
+      "type": "ascension:give_stats",
+      "stats": {
+        "ascension:spirit": {
+          "flat": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_learn_flat_spirit",
+              "value": 3.0
+            }
+          ],
+          "multiplier": []
+        },
+        "ascension:vitality": {
+          "flat": [
+            {
+              "id": "ascension:inner_cosmos_visualization_scripture_learn_flat_vitality",
+              "value": 1.0
+            }
+          ],
+          "multiplier": []
+        }
+      }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "flat": 0.19231,
+      "multiplier": 0.01125
+    },
+    "ascension:vitality": {
+      "flat": 0.05769,
+      "multiplier": 0.00375
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",

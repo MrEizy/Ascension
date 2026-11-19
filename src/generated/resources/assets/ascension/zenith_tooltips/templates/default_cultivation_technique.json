@@ -25,6 +25,13 @@
           "type": "zenithlib:divider"
         },
         {
+          "type": "zenithlib:dynamic",
+          "source": "ascension:technique_path_badges"
+        },
+        {
+          "type": "zenithlib:divider"
+        },
+        {
           "type": "zenithlib:text",
           "effect": {
             "type": "zenithlib:typewriter",
@@ -34,6 +41,10 @@
           "text": {
             "source": "zenithlib:subject_description"
           }
+        },
+        {
+          "type": "zenithlib:dynamic",
+          "source": "ascension:technique_max_realm"
         }
       ],
       "title": {
