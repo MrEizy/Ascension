@@ -297,6 +297,7 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.stone_blade", "Stone Blade");
         add("item.ascension.copper_blade", "Copper Blade");
         add("item.ascension.iron_blade", "Iron Blade");
+        add("item.ascension.cloth_fist_wraps", "Wraps");
         add("item.ascension.gold_blade", "Gold Blade");
         add("item.ascension.diamond_blade", "Diamond Blade");
         add("item.ascension.netherite_blade", "Netherite Blade");
@@ -317,6 +318,8 @@ public class AscLangProvider extends LanguageProvider {
         add("enchantment.ascension.razor_edge", "Razor Edge");
         add("enchantment.ascension.swift_return", "Swift Return");
         add("enchantment.ascension.phasing_recall", "Phasing Recall");
+        add("enchantment.ascension.penetrating_strike", "Penetrating Strike");
+        add("enchantment.ascension.impact", "Impact");
 
 
 

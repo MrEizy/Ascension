@@ -1,8 +1,11 @@
 package net.zic.ascension.common.item;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -150,6 +153,20 @@ public class ModItems {
             properties -> new Item(properties.sword(ToolMaterial.DIAMOND, 2f, -2f)));
     public static final DeferredItem<Item> NETHERITE_BLADE = ITEMS.registerItem("netherite_blade",
             properties -> new Item(properties.sword(ToolMaterial.NETHERITE, 2f, -2f)));
+
+
+    public static final DeferredItem<Item> CLOTH_FIST_WRAPS = ITEMS.registerItem("cloth_fist_wraps",
+            properties -> new Item(properties.sword(ToolMaterial.WOOD, 2f, -1f)) {
+                @Override
+                public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+                    return enchantment.is(Enchantments.KNOCKBACK) || super.supportsEnchantment(stack, enchantment);
+                }
+
+                @Override
+                public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
+                    return enchantment.is(Enchantments.KNOCKBACK) || super.isPrimaryItemFor(stack, enchantment);
+                }
+            });
 
 
     //Chakrams

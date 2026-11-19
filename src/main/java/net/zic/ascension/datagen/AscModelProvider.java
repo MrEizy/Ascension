@@ -3,6 +3,7 @@ package net.zic.ascension.datagen;
 import com.geckolib.renderer.internal.GeckolibItemSpecialRenderer;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.color.item.Dye;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
@@ -95,6 +96,9 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.GOLD_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(ModItems.DIAMOND_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(ModItems.NETHERITE_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+
+        itemModels.itemModelOutput.accept(ModItems.CLOTH_FIST_WRAPS.get(), ItemModelUtils.tintedModel(
+                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/cloth_fist_wraps"), new Dye(-1)));
 
         // Chakrams
         itemModels.generateFlatItem(ModItems.COPPER_CHAKRAM.get(), ModelTemplates.FLAT_ITEM);

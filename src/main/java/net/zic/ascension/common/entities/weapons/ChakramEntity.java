@@ -2,26 +2,33 @@ package net.zic.ascension.common.entities.weapons;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -33,11 +40,16 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.zic.ascension.api.ascension.core.qi_coating.QiCoating;
+import net.zic.ascension.api.ascension.core.qi_coating.QiCoatingChannel;
 import net.zic.ascension.common.enchantments.AscEnchantments;
 import net.zic.ascension.common.item.weapons.ChakramItem;
 import net.zic.ascension.common.item.weapons.ChakramTier;
 import net.zic.ascension.common.sounds.AscSounds;
 import net.zic.ascension.common.util.ModTags;
+import net.zic.ascension.impl.core.skill.castable.QiCoatingManager;
+import net.zic.ascension.impl.core.skill.castable.QiCoatingSelectionService;
+import net.zic.ascension.impl.core.skill.castable.QiCoatingService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,6 +61,8 @@ public class ChakramEntity extends Projectile {
             SynchedEntityData.defineId(ChakramEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Boolean> DATA_RETURNING =
             SynchedEntityData.defineId(ChakramEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<String> DATA_COATING =
+            SynchedEntityData.defineId(ChakramEntity.class, EntityDataSerializers.STRING);
 
     private static final int BASE_RICOCHETS = 2;
     private static final int BASE_FLIGHT_TICKS = 8;
@@ -71,6 +85,9 @@ public class ChakramEntity extends Projectile {
     private int swiftReturn = -1;
     private boolean phasingRecall;
     private final Set<Integer> hitThisLeg = new HashSet<>();
+    private QiCoatingSelectionService.Shown thrownElement;
+    private String resolvedCoatingId = "";
+    private QiCoating resolvedCoating;
 
     public ChakramEntity(EntityType<? extends ChakramEntity> type, Level level) {
         super(type, level);
@@ -89,12 +106,39 @@ public class ChakramEntity extends Projectile {
         this.maxFlightTicks = BASE_FLIGHT_TICKS + Math.round(4.0F * power);
         this.swiftReturn = enchantLevel(AscEnchantments.SWIFT_RETURN);
         this.phasingRecall = enchantLevel(AscEnchantments.PHASING_RECALL) > 0;
+        captureCoating(owner, stack);
+    }
+
+    /**
+     * Keeps the thrower's External coating as it is at the throw: the look (synced to clients) and the shown element (for hits).
+     * Only a sword qi coating on a weapon it coats; anything else leaves the chakram plain.
+     */
+    private void captureCoating(LivingEntity owner, ItemStack stack) {
+        if (!(owner instanceof ServerPlayer player) || !QiCoatingService.coatsWeapon(stack)) return;
+        QiCoating coating = QiCoatingManager.get(player, QiCoatingChannel.EXTERNAL);
+        if (coating == null || !coating.swordQi()) return;
+        entityData.set(DATA_COATING, coating.id().toString());
+        thrownElement = QiCoatingSelectionService.shown(player.getUUID(), QiCoatingChannel.EXTERNAL).orElse(null);
+    }
+
+    /**
+     * The coating this chakram was thrown with, or null. Client side, for ChakramRenderer.
+     */
+    public QiCoating thrownCoating() {
+        String id = entityData.get(DATA_COATING);
+        if (!id.equals(resolvedCoatingId)) {
+            resolvedCoatingId = id;
+            Identifier parsed = id.isEmpty() ? null : Identifier.tryParse(id);
+            resolvedCoating = parsed == null ? null : QiCoating.byId(parsed, level().registryAccess());
+        }
+        return resolvedCoating;
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder b) {
         b.define(DATA_ITEM, ItemStack.EMPTY);
         b.define(DATA_RETURNING, false);
+        b.define(DATA_COATING, "");
     }
 
     public ItemStack getItem() { return entityData.get(DATA_ITEM); }
@@ -104,6 +148,27 @@ public class ChakramEntity extends Projectile {
 
     private ChakramTier tier() {
         return getItem().getItem() instanceof ChakramItem item ? item.tier() : ChakramTier.IRON;
+    }
+
+    /**
+     * Full-power hit damage: the tier's for Ascension's chakrams. A chakram from another mod (the Hephaestus addon's tool
+     * chakram) hits with its own main-hand attack damage, the player's base 1 included, so its materials decide the damage;
+     * one without any falls back to iron.
+     */
+    private float thrownDamage(ItemStack weapon) {
+        if (weapon.getItem() instanceof ChakramItem item) {
+            return item.tier().damage;
+        }
+        float damage = 1.0F;
+        boolean found = false;
+        for (ItemAttributeModifiers.Entry entry : weapon.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY).modifiers()) {
+            if (entry.attribute().is(Attributes.ATTACK_DAMAGE) && entry.slot().test(EquipmentSlot.MAINHAND)
+                    && entry.modifier().operation() == AttributeModifier.Operation.ADD_VALUE) {
+                damage += (float) entry.modifier().amount();
+                found = true;
+            }
+        }
+        return found ? damage : ChakramTier.IRON.damage;
     }
 
     @Override
@@ -318,7 +383,7 @@ public class ChakramEntity extends Projectile {
     private void hurt(ServerLevel level, Entity target, Entity owner) {
         hitThisLeg.add(target.getId());
         ItemStack weapon = getItem();
-        float damage = tier().damage * (0.45F + 0.55F * power);
+        float damage = thrownDamage(weapon) * (0.45F + 0.55F * power);
         int razor = enchantLevel(AscEnchantments.RAZOR_EDGE);
         if (razor > 0) damage += RAZOR_EDGE_DAMAGE * razor;
         if (isReturning()) damage *= 0.8F;
@@ -334,6 +399,9 @@ public class ChakramEntity extends Projectile {
                     living.push(push.x, 0.08, push.z);
                 }
                 EnchantmentHelper.doPostAttackEffectsWithItemSource(level, target, source, weapon);
+                if (thrownElement != null && owner instanceof ServerPlayer thrower) {
+                    QiCoatingService.onThrownHit(thrower, thrownElement, living, damage);
+                }
             }
             sound(AscSounds.CHAKRAM_HIT.get(), 0.9F, 1.0F + random.nextFloat() * 0.2F);
         }
@@ -411,6 +479,11 @@ public class ChakramEntity extends Projectile {
         out.putInt("FlightTicks", flightTicks);
         out.putInt("MaxFlightTicks", maxFlightTicks);
         out.putBoolean("PhasingRecall", phasingRecall);
+        out.putString("QiCoating", entityData.get(DATA_COATING));
+        if (thrownElement != null) {
+            out.putString("QiCoatingElement", thrownElement.element().toString());
+            out.putString("QiCoatingSkill", thrownElement.skill().toString());
+        }
     }
 
     @Override
@@ -425,6 +498,11 @@ public class ChakramEntity extends Projectile {
         flightTicks = in.getIntOr("FlightTicks", 0);
         maxFlightTicks = in.getIntOr("MaxFlightTicks", BASE_FLIGHT_TICKS);
         phasingRecall = in.getBooleanOr("PhasingRecall", enchantLevel(AscEnchantments.PHASING_RECALL) > 0);
+        entityData.set(DATA_COATING, in.getStringOr("QiCoating", ""));
+        Identifier element = Identifier.tryParse(in.getStringOr("QiCoatingElement", ""));
+        Identifier skill = Identifier.tryParse(in.getStringOr("QiCoatingSkill", ""));
+        thrownElement = element == null || skill == null || element.getPath().isEmpty() ? null
+                : new QiCoatingSelectionService.Shown(element, skill);
     }
 
     @Override

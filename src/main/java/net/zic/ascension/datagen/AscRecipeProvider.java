@@ -6,9 +6,11 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CookingBookCategory;
+import net.minecraft.world.item.crafting.DyeRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
@@ -507,6 +509,21 @@ public class AscRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(Items.COPPER_INGOT), has(Items.COPPER_INGOT))
                 .group("blade")
                 .save(output, "ascension:shaped/copper_blade");
+        shaped(RecipeCategory.COMBAT, ModItems.CLOTH_FIST_WRAPS.get())
+                .pattern("WWW")
+                .pattern("WSW")
+                .pattern("WW ")
+                .define('W', Items.WHITE_WOOL)
+                .define('S', Items.STRING)
+                .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+                .group("fist_weapon")
+                .save(output, "ascension:shaped/cloth_fist_wraps");
+        CustomCraftingRecipeBuilder.customCrafting(RecipeCategory.MISC, (common, book) -> new DyeRecipe(common, book,
+                        Ingredient.of(ModItems.CLOTH_FIST_WRAPS.get()), tag(ItemTags.DYES),
+                        new ItemStackTemplate(ModItems.CLOTH_FIST_WRAPS.get())))
+                .unlockedBy(getHasName(ModItems.CLOTH_FIST_WRAPS.get()), has(ModItems.CLOTH_FIST_WRAPS.get()))
+                .group("dyed_fist_weapon")
+                .save(output, "ascension:cloth_fist_wraps_dyed");
         shaped(RecipeCategory.COMBAT, ModItems.IRON_BLADE.get())
                 .pattern(" T ")
                 .pattern("TT ")

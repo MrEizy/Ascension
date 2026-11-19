@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "fist_weapon",
+  "key": {
+    "S": "minecraft:string",
+    "W": "minecraft:white_wool"
+  },
+  "pattern": [
+    "WWW",
+    "WSW",
+    "WW "
+  ],
+  "result": {
+    "id": "ascension:cloth_fist_wraps"
+  }
+}

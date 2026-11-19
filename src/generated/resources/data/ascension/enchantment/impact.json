@@ -1,0 +1,35 @@
+{
+  "anvil_cost": 1,
+  "description": {
+    "translate": "enchantment.ascension.impact"
+  },
+  "effects": {
+    "minecraft:damage": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 1.0,
+            "per_level_above_first": 0.5
+          }
+        }
+      }
+    ]
+  },
+  "max_cost": {
+    "base": 21,
+    "per_level_above_first": 11
+  },
+  "max_level": 5,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 11
+  },
+  "slots": [
+    "mainhand",
+    "offhand"
+  ],
+  "supported_items": "#ascension:weapon/fists",
+  "weight": 10
+}

@@ -50,6 +50,7 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.LIQUIFIED_SPIRITUAL_QI_BUCKET);
 
+                        output.accept(ModItems.CLOTH_FIST_WRAPS);
 
                         output.accept(ModItems.BLACK_IRON_SWORD);
                         output.accept(ModItems.BLACK_IRON_BLADE);

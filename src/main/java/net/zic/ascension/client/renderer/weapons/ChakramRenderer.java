@@ -13,6 +13,9 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.zic.ascension.api.ascension.core.qi_coating.QiCoating;
+import net.zic.ascension.client.renderer.SwordQiRenderer;
 import net.zic.ascension.common.entities.weapons.ChakramEntity;
 import org.joml.Matrix4f;
 
@@ -41,6 +44,9 @@ public class ChakramRenderer extends EntityRenderer<ChakramEntity, ChakramRender
         state.yaw   = Mth.rotLerp(partialTick, chakram.yRotO, chakram.getYRot());
         state.pitch = Mth.lerp(partialTick, chakram.xRotO, chakram.getXRot());
         state.spin  = (chakram.tickCount + partialTick) * SPIN_PER_TICK;
+        state.entityId = chakram.getId();
+        state.stack = chakram.getItem();
+        state.coating = chakram.thrownCoating();
 
         Minecraft mc = Minecraft.getInstance();
         state.hidden = chakram.tickCount < 2
@@ -65,8 +71,17 @@ public class ChakramRenderer extends EntityRenderer<ChakramEntity, ChakramRender
                 .scale(SCALE);
 
         poseStack.mulPose(t);
-        state.item.submit(poseStack, collector, state.lightCoords,
-                OverlayTexture.NO_OVERLAY, 0);
+        if (state.coating != null) {
+            SwordQiRenderer.beginThrown(state.entityId, state.stack, state.coating);
+        }
+        try {
+            state.item.submit(poseStack, collector, state.lightCoords,
+                    OverlayTexture.NO_OVERLAY, 0);
+        } finally {
+            if (state.coating != null) {
+                SwordQiRenderer.end();
+            }
+        }
         poseStack.popPose();
     }
 
@@ -74,5 +89,8 @@ public class ChakramRenderer extends EntityRenderer<ChakramEntity, ChakramRender
         public final ItemStackRenderState item = new ItemStackRenderState();
         public float yaw, pitch, spin;
         public boolean hidden;
+        public int entityId;
+        public ItemStack stack = ItemStack.EMPTY;
+        public QiCoating coating;
     }
 }
