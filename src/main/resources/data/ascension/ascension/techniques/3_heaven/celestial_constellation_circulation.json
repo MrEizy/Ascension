@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.celestial_constellation_circulation.desc"
   },
+  "path": "ascension:foundation/soul",
+  "max_realm": 8,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -43,6 +46,16 @@
       }
     }
   ],
+  "stats_per_realm": {
+    "ascension:agility": {
+      "flat": 0.05769,
+      "multiplier": 0.00375
+    },
+    "ascension:spirit": {
+      "flat": 0.19231,
+      "multiplier": 0.01125
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "theme_overrides": {
@@ -61,116 +74,5 @@
     },
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:heaven"
-  },
-  "realm_stat_growth": [
-    {
-      "path": "ascension:foundation/soul",
-      "realm": {
-        "major": 1,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [
-            {
-              "id": "ascension:celestial_constellation_circulation_growth_flat_spirit",
-              "value": 2.0
-            }
-          ],
-          "multiplier": []
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/soul",
-      "realm": {
-        "major": 3,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:agility": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:celestial_constellation_circulation_growth_percent_agility",
-              "operation_group": 0,
-              "value": 0.0125
-            }
-          ]
-        },
-        "ascension:spirit": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:celestial_constellation_circulation_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.025
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/soul",
-      "realm": {
-        "major": 6,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:agility": {
-          "flat": [
-            {
-              "id": "ascension:celestial_constellation_circulation_growth_flat_agility",
-              "value": 1.5
-            }
-          ],
-          "multiplier": []
-        },
-        "ascension:spirit": {
-          "flat": [
-            {
-              "id": "ascension:celestial_constellation_circulation_growth_flat_spirit",
-              "value": 3.0
-            }
-          ],
-          "multiplier": [
-            {
-              "id": "ascension:celestial_constellation_circulation_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.03
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/soul",
-      "realm": {
-        "major": 9,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:agility": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:celestial_constellation_circulation_growth_percent_agility",
-              "operation_group": 0,
-              "value": 0.0175
-            }
-          ]
-        },
-        "ascension:spirit": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:celestial_constellation_circulation_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.035
-            }
-          ]
-        }
-      }
-    }
-  ]
+  }
 }

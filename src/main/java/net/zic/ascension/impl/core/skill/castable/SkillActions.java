@@ -502,7 +502,8 @@ public final class SkillActions {
         @Override
         public void apply(SkillActionContext context) {
             PathInstance<?> pathInstance = AscensionOriginSourceHelper.getPathInstance(context.originSource(), path);
-            if (pathInstance == null) {
+            if (pathInstance == null || !net.zic.ascension.impl.core.technique.TechniqueCultivationLimits.canCultivate(
+                    context.originSource(), context.skill(), path, pathInstance)) {
                 return;
             }
             double resolvedRate = rate.resolve(context.scaledValueContext());

@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.nine_paths_of_truth.desc"
   },
+  "path": "ascension:foundation/essence",
+  "max_realm": 2,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -38,120 +41,19 @@
       }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "flat": 0.25,
+      "multiplier": 0.025
+    },
+    "ascension:vitality": {
+      "flat": 0.0625,
+      "multiplier": 0.00875
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:ordinary"
-  },
-  "realm_stat_growth": [
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 1,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [
-            {
-              "id": "ascension:nine_paths_of_truth_growth_flat_spirit",
-              "value": 1.0
-            }
-          ],
-          "multiplier": []
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 3,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:nine_paths_of_truth_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.015
-            }
-          ]
-        },
-        "ascension:vitality": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:nine_paths_of_truth_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.0075
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 6,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [
-            {
-              "id": "ascension:nine_paths_of_truth_growth_flat_spirit",
-              "value": 1.0
-            }
-          ],
-          "multiplier": [
-            {
-              "id": "ascension:nine_paths_of_truth_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.015
-            }
-          ]
-        },
-        "ascension:vitality": {
-          "flat": [
-            {
-              "id": "ascension:nine_paths_of_truth_growth_flat_vitality",
-              "value": 0.5
-            }
-          ],
-          "multiplier": []
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 9,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:nine_paths_of_truth_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.02
-            }
-          ]
-        },
-        "ascension:vitality": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:nine_paths_of_truth_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.01
-            }
-          ]
-        }
-      }
-    }
-  ]
+  }
 }

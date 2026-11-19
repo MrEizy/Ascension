@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.mountain_root_bone_scripture.desc"
   },
+  "path": "ascension:foundation/body",
+  "max_realm": 2,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -32,91 +35,15 @@
       }
     }
   ],
+  "stats_per_realm": {
+    "ascension:vitality": {
+      "flat": 0.25,
+      "multiplier": 0.025
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:ordinary"
-  },
-  "realm_stat_growth": [
-    {
-      "path": "ascension:foundation/body",
-      "realm": {
-        "major": 1,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:vitality": {
-          "flat": [
-            {
-              "id": "ascension:mountain_root_bone_scripture_growth_flat_vitality",
-              "value": 1.0
-            }
-          ],
-          "multiplier": []
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/body",
-      "realm": {
-        "major": 3,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:vitality": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:mountain_root_bone_scripture_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.015
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/body",
-      "realm": {
-        "major": 6,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:vitality": {
-          "flat": [
-            {
-              "id": "ascension:mountain_root_bone_scripture_growth_flat_vitality",
-              "value": 1.0
-            }
-          ],
-          "multiplier": [
-            {
-              "id": "ascension:mountain_root_bone_scripture_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.015
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/body",
-      "realm": {
-        "major": 9,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:vitality": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:mountain_root_bone_scripture_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.02
-            }
-          ]
-        }
-      }
-    }
-  ]
+  }
 }

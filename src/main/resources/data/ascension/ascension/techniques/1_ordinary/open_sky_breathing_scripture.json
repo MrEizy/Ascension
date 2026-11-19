@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.open_sky_breathing_scripture.desc"
   },
+  "path": "ascension:foundation/essence",
+  "max_realm": 2,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -31,91 +34,15 @@
       }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "flat": 0.25,
+      "multiplier": 0.025
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:ordinary"
-  },
-  "realm_stat_growth": [
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 1,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [
-            {
-              "id": "ascension:open_sky_breathing_scripture_growth_flat_spirit",
-              "value": 1.0
-            }
-          ],
-          "multiplier": []
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 3,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:open_sky_breathing_scripture_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.015
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 6,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [
-            {
-              "id": "ascension:open_sky_breathing_scripture_growth_flat_spirit",
-              "value": 1.0
-            }
-          ],
-          "multiplier": [
-            {
-              "id": "ascension:open_sky_breathing_scripture_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.015
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 9,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:open_sky_breathing_scripture_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.02
-            }
-          ]
-        }
-      }
-    }
-  ]
+  }
 }

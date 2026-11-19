@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.martial_transcendence_vol_2.desc"
   },
+  "path": "ascension:foundation/body",
+  "max_realm": 5,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -39,120 +42,19 @@
       }
     }
   ],
+  "stats_per_realm": {
+    "ascension:strength": {
+      "flat": 0.17647,
+      "multiplier": 0.013
+    },
+    "ascension:vitality": {
+      "flat": 0.05882,
+      "multiplier": 0.0045
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:profound"
-  },
-  "realm_stat_growth": [
-    {
-      "path": "ascension:foundation/body",
-      "realm": {
-        "major": 1,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:strength": {
-          "flat": [
-            {
-              "id": "ascension:martial_transcendence_vol_2_growth_flat_strength",
-              "value": 1.0
-            }
-          ],
-          "multiplier": []
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/body",
-      "realm": {
-        "major": 3,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:strength": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:martial_transcendence_vol_2_growth_percent_strength",
-              "operation_group": 0,
-              "value": 0.02
-            }
-          ]
-        },
-        "ascension:vitality": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:martial_transcendence_vol_2_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.01
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/body",
-      "realm": {
-        "major": 6,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:strength": {
-          "flat": [
-            {
-              "id": "ascension:martial_transcendence_vol_2_growth_flat_strength",
-              "value": 2.0
-            }
-          ],
-          "multiplier": [
-            {
-              "id": "ascension:martial_transcendence_vol_2_growth_percent_strength",
-              "operation_group": 0,
-              "value": 0.02
-            }
-          ]
-        },
-        "ascension:vitality": {
-          "flat": [
-            {
-              "id": "ascension:martial_transcendence_vol_2_growth_flat_vitality",
-              "value": 1.0
-            }
-          ],
-          "multiplier": []
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/body",
-      "realm": {
-        "major": 9,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:strength": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:martial_transcendence_vol_2_growth_percent_strength",
-              "operation_group": 0,
-              "value": 0.025
-            }
-          ]
-        },
-        "ascension:vitality": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:martial_transcendence_vol_2_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.0125
-            }
-          ]
-        }
-      }
-    }
-  ]
+  }
 }

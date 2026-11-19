@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.nine_revolutions_slaughter_wheel.desc"
   },
+  "path": "ascension:foundation/essence",
+  "max_realm": 8,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -42,6 +45,16 @@
       }
     }
   ],
+  "stats_per_realm": {
+    "ascension:agility": {
+      "flat": 0.05769,
+      "multiplier": 0.00375
+    },
+    "ascension:strength": {
+      "flat": 0.19231,
+      "multiplier": 0.01125
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "theme_overrides": {
@@ -60,116 +73,5 @@
     },
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:heaven"
-  },
-  "realm_stat_growth": [
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 1,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:strength": {
-          "flat": [
-            {
-              "id": "ascension:nine_revolutions_slaughter_wheel_growth_flat_strength",
-              "value": 2.0
-            }
-          ],
-          "multiplier": []
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 3,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:agility": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:nine_revolutions_slaughter_wheel_growth_percent_agility",
-              "operation_group": 0,
-              "value": 0.0125
-            }
-          ]
-        },
-        "ascension:strength": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:nine_revolutions_slaughter_wheel_growth_percent_strength",
-              "operation_group": 0,
-              "value": 0.025
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 6,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:agility": {
-          "flat": [
-            {
-              "id": "ascension:nine_revolutions_slaughter_wheel_growth_flat_agility",
-              "value": 1.5
-            }
-          ],
-          "multiplier": []
-        },
-        "ascension:strength": {
-          "flat": [
-            {
-              "id": "ascension:nine_revolutions_slaughter_wheel_growth_flat_strength",
-              "value": 3.0
-            }
-          ],
-          "multiplier": [
-            {
-              "id": "ascension:nine_revolutions_slaughter_wheel_growth_percent_strength",
-              "operation_group": 0,
-              "value": 0.03
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 9,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:agility": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:nine_revolutions_slaughter_wheel_growth_percent_agility",
-              "operation_group": 0,
-              "value": 0.0175
-            }
-          ]
-        },
-        "ascension:strength": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:nine_revolutions_slaughter_wheel_growth_percent_strength",
-              "operation_group": 0,
-              "value": 0.035
-            }
-          ]
-        }
-      }
-    }
-  ]
+  }
 }

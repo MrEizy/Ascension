@@ -6,6 +6,9 @@
   "description": {
     "translate": "ascension.technique.groveheart_endless_spring_art.desc"
   },
+  "path": "ascension:foundation/essence",
+  "max_realm": 2,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -41,120 +44,19 @@
       }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "flat": 0.0625,
+      "multiplier": 0.00875
+    },
+    "ascension:vitality": {
+      "flat": 0.25,
+      "multiplier": 0.025
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:ordinary"
-  },
-  "realm_stat_growth": [
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 1,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:vitality": {
-          "flat": [
-            {
-              "id": "ascension:groveheart_endless_spring_art_growth_flat_vitality",
-              "value": 1.0
-            }
-          ],
-          "multiplier": []
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 3,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:groveheart_endless_spring_art_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.0075
-            }
-          ]
-        },
-        "ascension:vitality": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:groveheart_endless_spring_art_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.015
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 6,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [
-            {
-              "id": "ascension:groveheart_endless_spring_art_growth_flat_spirit",
-              "value": 0.5
-            }
-          ],
-          "multiplier": []
-        },
-        "ascension:vitality": {
-          "flat": [
-            {
-              "id": "ascension:groveheart_endless_spring_art_growth_flat_vitality",
-              "value": 1.0
-            }
-          ],
-          "multiplier": [
-            {
-              "id": "ascension:groveheart_endless_spring_art_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.015
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 9,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:groveheart_endless_spring_art_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.01
-            }
-          ]
-        },
-        "ascension:vitality": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:groveheart_endless_spring_art_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.02
-            }
-          ]
-        }
-      }
-    }
-  ]
+  }
 }

@@ -675,6 +675,10 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tooltip.physique.stats", "Stats");
         add("ascension.tooltip.physique.affinities", "Affinities");
         add("ascension.tooltip.technique.gains", "Gains");
+        add("ascension.tooltip.technique.paths", "Cultivates");
+        add("ascension.tooltip.technique.maximum_realm", "Maximum Realm");
+        add("ascension.tooltip.technique.realm_limit", "Major %s, Minor %s");
+        add("ascension.tooltip.technique.stat_path", "%s (%s)");
 
         // Progression Descriptions
         add("ascension.tooltip.progression.affinity", "%s Affinity");

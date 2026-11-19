@@ -6,6 +6,13 @@
   "description": {
     "translate": "ascension.technique.sanguine_abyss_technique.desc"
   },
+  "path": [
+    "ascension:foundation/essence",
+    "ascension:elemental/blood",
+    "ascension:elemental/dark"
+  ],
+  "max_realm": 5,
+  "max_minor_realm": 2,
   "on_added": [
     {
       "type": "ascension:grant_skills",
@@ -42,120 +49,21 @@
       }
     }
   ],
+  "stats_per_realm": {
+    "ascension:spirit": {
+      "path": "ascension:foundation/essence",
+      "flat": 0.17647,
+      "multiplier": 0.013
+    },
+    "ascension:vitality": {
+      "path": "ascension:elemental/blood",
+      "flat": 0.05882,
+      "multiplier": 0.0045
+    }
+  },
   "item_tooltip": {
     "theme": "ascension:technique_manual",
     "template": "ascension:default_cultivation_technique",
     "rank": "ascension:profound"
-  },
-  "realm_stat_growth": [
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 1,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [
-            {
-              "id": "ascension:sanguine_abyss_technique_growth_flat_spirit",
-              "value": 1.0
-            }
-          ],
-          "multiplier": []
-        }
-      }
-    },
-    {
-      "path": "ascension:elemental/blood",
-      "realm": {
-        "major": 3,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:sanguine_abyss_technique_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.02
-            }
-          ]
-        },
-        "ascension:vitality": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:sanguine_abyss_technique_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.01
-            }
-          ]
-        }
-      }
-    },
-    {
-      "path": "ascension:elemental/dark",
-      "realm": {
-        "major": 6,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [
-            {
-              "id": "ascension:sanguine_abyss_technique_growth_flat_spirit",
-              "value": 2.0
-            }
-          ],
-          "multiplier": [
-            {
-              "id": "ascension:sanguine_abyss_technique_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.02
-            }
-          ]
-        },
-        "ascension:vitality": {
-          "flat": [
-            {
-              "id": "ascension:sanguine_abyss_technique_growth_flat_vitality",
-              "value": 1.0
-            }
-          ],
-          "multiplier": []
-        }
-      }
-    },
-    {
-      "path": "ascension:foundation/essence",
-      "realm": {
-        "major": 9,
-        "minor": 0
-      },
-      "stats": {
-        "ascension:spirit": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:sanguine_abyss_technique_growth_percent_spirit",
-              "operation_group": 0,
-              "value": 0.025
-            }
-          ]
-        },
-        "ascension:vitality": {
-          "flat": [],
-          "multiplier": [
-            {
-              "id": "ascension:sanguine_abyss_technique_growth_percent_vitality",
-              "operation_group": 0,
-              "value": 0.0125
-            }
-          ]
-        }
-      }
-    }
-  ]
+  }
 }

@@ -142,6 +142,7 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                                 translated("item.ascension.bloodline_essence")
                         ).withOnAllPages(true))
                         .add(classification(false, true, ClassificationElement.Style.BADGE))
+                        .add(dynamic(id("technique_metadata")))
                         .add(divider())
                         .add(dynamicBar(
                                 translated("ascension.tooltip.bloodline.purity"),

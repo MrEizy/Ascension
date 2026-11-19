@@ -51,6 +51,7 @@ import net.zic.zenithlib.value_containers.typed.ValueContainer;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -504,6 +505,10 @@ public class AscensionOriginSourceHelper {
     public static Collection<Identifier> getSkills(OriginSource source){return getSkillHolder(source).getSkills();}
 
     public static Collection<SkillInstance<?>> getSkillInstances(OriginSource source){return getSkillHolder(source).getSkillInstances();}
+
+    public static Set<Identifier> getSkillOwners(OriginSource source, Identifier skill) {
+        return getSkillHolder(source).getOwners(skill);
+    }
 
     public static boolean hasSkill(OriginSource source,Identifier skill){
         return getSkillHolder(source).hasSkill(skill);

@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
@@ -34,6 +35,7 @@ import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
 import net.zic.ascension.impl.core.physique.SimplePhysique;
 import net.zic.ascension.impl.core.technique.SimpleTechnique;
 import net.zic.ascension.impl.core.technique.TechniqueRealmStatBonus;
+import net.zic.ascension.impl.core.technique.TechniqueRealmStatRate;
 import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 
 import net.zic.zenithlib.common.ZenithRegistries;
@@ -69,6 +71,7 @@ public final class AscensionTooltipValueSources {
     public static final Identifier PHYSIQUE_AFFINITIES = AscensionCraft.prefix("physique_affinities");
 
     public static final Identifier TECHNIQUE_PROGRESSION_GAINS = AscensionCraft.prefix("technique_progression_gains");
+    public static final Identifier TECHNIQUE_METADATA = AscensionCraft.prefix("technique_metadata");
     public static final Identifier ALCHEMY_TECHNIQUE_REFINEMENT = AscensionCraft.prefix("alchemy_technique_refinement");
 
     public static final Identifier BLOODLINE_PURITY = AscensionCraft.prefix("bloodline_purity");
@@ -124,6 +127,7 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerElement(PHYSIQUE_STATS, context -> rows(PHYSIQUE_STATS, context));
         ZenithTooltipSources.registerElement(PHYSIQUE_AFFINITIES, context -> rows(PHYSIQUE_AFFINITIES, context));
         ZenithTooltipSources.registerElement(TECHNIQUE_PROGRESSION_GAINS, AscensionTooltipValueSources::techniqueProgressionElements);
+        ZenithTooltipSources.registerElement(TECHNIQUE_METADATA, AscensionTooltipValueSources::techniqueMetadataElements);
         ZenithTooltipSources.registerElement(ALCHEMY_TECHNIQUE_REFINEMENT, AscensionTooltipValueSources::alchemyTechniqueElements);
         ZenithTooltipSources.registerElement(BLOODLINE_PURITY_GAINS, AscensionTooltipValueSources::bloodlinePurityElements);
         ZenithTooltipSources.registerElement(HERB_QUALITY_BADGE, AscensionTooltipValueSources::herbQualityBadge);
@@ -381,6 +385,40 @@ public final class AscensionTooltipValueSources {
                 amount > (multiplier ? 1.0D : 0.0D) ? ZenithTooltipValue.Tone.POSITIVE : ZenithTooltipValue.Tone.NEGATIVE));
     }
 
+    private static List<ZenithTooltipElement> techniqueMetadataElements(ZenithTooltipContext context) {
+        Optional<SimpleTechnique> technique = context.subject(SimpleTechnique.class);
+        if (technique.isEmpty() || technique.get().getCultivationPaths().isEmpty() || context.registryAccess().isEmpty()) {
+            return List.of();
+        }
+        RegistryAccess access = context.registryAccess().orElseThrow();
+        SimpleTechnique definition = technique.get();
+        MutableComponent paths = Component.empty();
+        for (int index = 0; index < definition.getCultivationPaths().size(); index++) {
+            Identifier path = definition.getCultivationPaths().get(index);
+            if (index > 0) paths.append(", ");
+            paths.append(pathName(path, access));
+        }
+        List<ZenithTooltipElement> result = new ArrayList<>();
+        result.add(new RowElement(
+                ZenithTooltipText.resolved(Component.translatable("ascension.tooltip.technique.paths")),
+                ZenithTooltipText.resolved(paths),
+                ZenithTooltipColor.ACCENT, ZenithTooltipColor.TEXT));
+        if (definition.getMaxRealm().isPresent()) {
+            int major = definition.getMaxRealm().get();
+            int minor = definition.getMaxMinorRealm().orElseGet(() -> {
+                Path<?> path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,
+                        definition.getCultivationPaths().getFirst(), access);
+                return path != null && major < path.getMaxMajorRealm() ? path.getMaxMinorRealm(major) : 0;
+            });
+            Component limit = Component.translatable("ascension.tooltip.technique.realm_limit",
+                    major + 1, minor + 1);
+            result.add(new RowElement(
+                    ZenithTooltipText.resolved(Component.translatable("ascension.tooltip.technique.maximum_realm")),
+                    ZenithTooltipText.resolved(limit), ZenithTooltipColor.ACCENT, ZenithTooltipColor.TEXT));
+        }
+        return List.copyOf(result);
+    }
+
     private static List<ZenithTooltipElement> techniqueProgressionElements(
             ZenithTooltipContext context
     ) {
@@ -398,7 +436,40 @@ public final class AscensionTooltipValueSources {
             elements.add(headerRow(Component.translatable("ascension.tooltip.progression.condition.on_learn")));
             elements.addAll(descriptionRows(descriptions));
         }
-        for (TechniqueRealmStatBonus bonus : technique.orElseThrow().getRealmStatGrowth()) {
+        SimpleTechnique definition = technique.orElseThrow();
+        List<ZenithTooltipElement> minorRows = new ArrayList<>();
+        List<ZenithTooltipElement> majorRows = new ArrayList<>();
+        definition.getStatsPerRealm().entrySet().stream()
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Identifier::toString)))
+                .forEach(entry -> {
+                    TechniqueRealmStatRate rate = entry.getValue();
+                    Component name = statName(entry.getKey());
+                    Identifier path = rate.path().orElseGet(() -> definition.getCultivationPaths().isEmpty()
+                            ? null : definition.getCultivationPaths().getFirst());
+                    if (path != null && definition.getCultivationPaths().size() > 1) {
+                        name = Component.translatable("ascension.tooltip.technique.stat_path",
+                                name, pathName(path, context.registryAccess().orElseThrow()));
+                    }
+                    if (rate.flat() != 0.0D) {
+                        minorRows.add(new RowElement(ZenithTooltipText.resolved(name),
+                                ZenithTooltipText.resolved(Component.literal(signedNumber(rate.flat()))),
+                                ZenithTooltipColor.TEXT, rate.flat() > 0.0D ? ZenithTooltipColor.POSITIVE : ZenithTooltipColor.NEGATIVE));
+                    }
+                    if (rate.multiplier() != 0.0D) {
+                        majorRows.add(new RowElement(ZenithTooltipText.resolved(name),
+                                ZenithTooltipText.resolved(Component.literal(signedNumber(rate.multiplier() * 100.0D) + "%")),
+                                ZenithTooltipColor.TEXT, rate.multiplier() > 0.0D ? ZenithTooltipColor.POSITIVE : ZenithTooltipColor.NEGATIVE));
+                    }
+                });
+        if (!minorRows.isEmpty()) {
+            elements.add(headerRow(Component.translatable("ascension.tooltip.progression.condition.each_minor_realm")));
+            elements.addAll(minorRows);
+        }
+        if (!majorRows.isEmpty()) {
+            elements.add(headerRow(Component.translatable("ascension.tooltip.progression.condition.each_major_realm")));
+            elements.addAll(majorRows);
+        }
+        for (TechniqueRealmStatBonus bonus : definition.getRealmStatGrowth()) {
             List<ProgressActionDescription> growthDescriptions = bonus.descriptionAction()
                     .getDescriptions(context.registryAccess().orElseThrow());
             if (growthDescriptions.isEmpty()) continue;
