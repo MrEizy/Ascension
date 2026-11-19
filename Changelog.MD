@@ -17,6 +17,7 @@
   * Penetrating Strike ignores part of the target's armor, 15% per level (up to level 3).
 * Chakrams can now carry External Qi Coating. Thrown chakrams show the sword qi look in flight and apply the element's on-hit effect to whatever they hit.
 * Added an animation for sitting on cushions and cultivating on cushions
+* Techniques now give stats, and have enforced max realms etc
 
 ### Removed
 * Removed all divine senses
