@@ -90,3 +90,10 @@ config="${mod_id}.mixins.json"
     versionRange="[${player_animation_library_version_range},)"
     ordering="NONE"
     side="CLIENT"
+
+[[dependencies.${mod_id}]]
+    modId="bendable_cuboids"
+    type="required"
+    versionRange="[${bendable_cuboids_version_range},)"
+    ordering="NONE"
+    side="CLIENT"

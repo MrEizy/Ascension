@@ -166,9 +166,8 @@ dependencies {
     implementation('com.github.MrEizy:Builders-Zenith:1e2ec420f0')
 
     implementation("com.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}")
-    // Player Animation Library. Compile only: dev runs the jar in run/mods. Not transitive: its netty/joml clash with Minecraft's.
-    compileOnly("com.zigythebird.playeranim:PlayerAnimationLibNeo:${player_animation_library_version}") { transitive = false }
-    compileOnly("com.zigythebird.playeranim:PlayerAnimationLibCore:${player_animation_library_version}") { transitive = false }
+    implementation("maven.modrinth:player-animation-library:${player_animation_library_modrinth}")
+    implementation("maven.modrinth:bendable-cuboids:${bendable_cuboids_modrinth}")
 
 
     // compile against the JEI API but do not include it at runtime
@@ -227,7 +226,8 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             jade_version        : jade_version,
             curios_version        : curios_version,
             modopedia_version        : modopedia_version,
-            player_animation_library_version_range: player_animation_library_version_range
+            player_animation_library_version_range: player_animation_library_version_range,
+            bendable_cuboids_version_range: bendable_cuboids_version_range
     ]
     inputs.properties replaceProperties
     expand replaceProperties
