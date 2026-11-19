@@ -68,7 +68,7 @@ public final class SkillProgressionData {
     }
 
     public int getAccessibleCap(int defaultCap, int maximumProgression) {
-        int contributedCap = maximumContribution(caps, defaultCap);
+        int contributedCap = caps.isEmpty() ? defaultCap : maximumContribution(caps, 1);
         return clamp(contributedCap, 1, maximumProgression);
     }
 

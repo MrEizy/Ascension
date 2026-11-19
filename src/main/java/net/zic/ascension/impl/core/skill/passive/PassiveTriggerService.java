@@ -1,6 +1,7 @@
 package net.zic.ascension.impl.core.skill.passive;
 
 import net.zic.ascension.api.ascension.core.skill.SkillInstance;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionService;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -114,6 +115,7 @@ public final class PassiveTriggerService {
                 return false;
             }
             LAST_TRIGGER.put(key, owner.level().getGameTime());
+            awardExperience(owner, candidate.skillId(), trigger.experience());
             return true;
         } finally {
             active.remove(key);
@@ -164,6 +166,26 @@ public final class PassiveTriggerService {
         }
         SkillActionRuntime.execute(actionContext, actions);
         return true;
+    }
+
+    private static void awardExperience(LivingEntity owner, Identifier skillId, double amount) {
+        if (amount <= 0.0D) {
+            return;
+        }
+        OriginSource source = AscensionOriginSourceHelper.getEntitySource(owner);
+        if (source == null) {
+            return;
+        }
+        SkillInstance<PassiveSkill.Data> instance = PassiveSkillService.passiveInstance(source, skillId);
+        if (instance == null) {
+            return;
+        }
+        PassiveSkill.Data data = instance.getData();
+        long gameTime = owner.level().getGameTime();
+        if (data.canAwardExperienceAt(gameTime)
+                && SkillProgressionService.addExperience(source, skillId, amount)) {
+            data.markExperienceAwardedAt(gameTime);
+        }
     }
 
     private static boolean valid(LivingEntity entity) {

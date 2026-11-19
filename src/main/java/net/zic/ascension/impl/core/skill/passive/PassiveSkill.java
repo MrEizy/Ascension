@@ -341,6 +341,7 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
 
     public static final class Data implements ProgressingSkillData {
         private final SkillProgressionData progression;
+        private long lastProgressionExperienceTick = Long.MIN_VALUE / 2L;
         private boolean enabled;
 
         public Data(SkillProgressionData progression, boolean enabled) {
@@ -351,6 +352,15 @@ public class PassiveSkill implements ProgressingSkill<PassiveSkill.Data>, SkillD
         @Override
         public SkillProgressionData getSkillProgression() {
             return progression;
+        }
+
+        public boolean canAwardExperienceAt(long gameTime) {
+            return gameTime < lastProgressionExperienceTick
+                    || gameTime - lastProgressionExperienceTick >= 20L;
+        }
+
+        public void markExperienceAwardedAt(long gameTime) {
+            lastProgressionExperienceTick = gameTime;
         }
 
         public boolean isEnabled() {

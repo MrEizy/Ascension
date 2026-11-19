@@ -17,6 +17,7 @@ public record PassiveTrigger(
         boolean allowEmptyHand,
         int cooldown,
         int priority,
+        double experience,
         List<ActiveSkillCostDefinition> costs,
         List<SkillCondition> conditions,
         List<SkillAction> actions
@@ -27,6 +28,7 @@ public record PassiveTrigger(
             Codec.BOOL.optionalFieldOf("allow_empty_hand", false).forGetter(PassiveTrigger::allowEmptyHand),
             Codec.intRange(0, 72000).optionalFieldOf("cooldown", 0).forGetter(PassiveTrigger::cooldown),
             Codec.INT.optionalFieldOf("priority", 0).forGetter(PassiveTrigger::priority),
+            Codec.DOUBLE.optionalFieldOf("experience", 0.0D).forGetter(PassiveTrigger::experience),
             ActiveSkillCostDefinition.LIST_CODEC.optionalFieldOf("cost", List.of()).forGetter(PassiveTrigger::costs),
             SkillCondition.CODEC.listOf().optionalFieldOf("conditions", List.of()).forGetter(PassiveTrigger::conditions),
             SkillAction.CODEC.listOf().optionalFieldOf("actions", List.of()).forGetter(PassiveTrigger::actions)
@@ -36,6 +38,7 @@ public record PassiveTrigger(
         event = event == null ? Event.ATTACK : event;
         weaponTag = weaponTag == null ? Optional.empty() : weaponTag;
         cooldown = Math.max(0, cooldown);
+        experience = Double.isFinite(experience) ? Math.max(0.0D, experience) : 0.0D;
         costs = costs == null ? List.of() : List.copyOf(costs);
         conditions = conditions == null ? List.of() : List.copyOf(conditions);
         actions = actions == null ? List.of() : List.copyOf(actions);
