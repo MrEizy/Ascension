@@ -8,7 +8,8 @@
 
 ### Added
 * Added a new Technique, Bloodline and Physique Type (Connected type)
-* Added a new Technique and Physique using the Connected Type
+* Added a new Technique and Physique using the Connected Types
+* Mastery related things to many skills
 
 ### Removed
 * Removed all divine senses
@@ -18,6 +19,8 @@
 * Auction max and min time changed: 1 min to 1440 min
 * Auction Items show proper tooltip on hover now
 * Turned all Divine senses into 3 different types. Soul, Essence and Body only.
+* Skills can actually gain Mastery now
+* Passive Skills have Levels, Active Skills have Ranks for master
 
 ### Fixes
 * Projection Skills actually project, deal some damage and break blocks
