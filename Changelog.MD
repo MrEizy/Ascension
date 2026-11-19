@@ -11,6 +11,11 @@
 * Added a new Technique and Physique using the Connected Types
 * Mastery related changes to many skills
 * Added cultivation path assignment and management commands
+* Added Cloth Fist Wraps, the first fist weapon. They're crafted from wool and string and can be dyed.
+* Added 2 new fist weapon enchantments:
+  * Impact adds bonus melee damage (up to level 5).
+  * Penetrating Strike ignores part of the target's armor, 15% per level (up to level 3).
+* Chakrams can now carry External Qi Coating. Thrown chakrams show the sword qi look in flight and apply the element's on-hit effect to whatever they hit.
 
 ### Removed
 * Removed all divine senses
