@@ -12,27 +12,27 @@ import net.zic.ascension.chunks.atmospheric_qi.ChunkHelper;
 
 public class ChunkCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> build() {
-        return Commands.literal("chunk")
+        return buildAs("chunk");
+    }
+    public static LiteralArgumentBuilder<CommandSourceStack> buildAs(String name) {
+        return Commands.literal(name)
                 .then(Commands.literal("view")
                         .executes(ChunkCommand::viewAtmosphericQi));
     }
 
     private static int viewAtmosphericQi(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 
-        ServerPlayer player = context.getSource().getPlayer();
+        ServerPlayer player = context.getSource().getPlayerOrException();
 
         ChunkQiHandler qiHandler = ChunkHelper.getQiHandler(player.level().getChunk(player.blockPosition()));
 
-        player.sendSystemMessage(Component.literal("===Chunk==="));
-        player.sendSystemMessage(Component.literal(qiHandler.getQi()+"/"+qiHandler.getCapacity()));
-        player.sendSystemMessage(Component.literal(qiHandler.getRegenRate()+"/s"));
-        player.sendSystemMessage(Component.literal("Affinities:"));
-        /*TODO update with Chunk Affinity Provider
-        for(Identifier id : chunkQiContainer.getAllPathBonusesInCategory(PathInteractionUtil.AFFINITY_CATEGORY)){
-            player.sendSystemMessage(Component.literal(id +":"+chunkQiContainer.getPathBonus(PathInteractionUtil.AFFINITY_CATEGORY,id)));
+        if (qiHandler == null) {
+            context.getSource().sendFailure(Component.literal("Chunk has no atmospheric Qi data"));
+            return 0;
         }
-
-         */
+        context.getSource().sendSystemMessage(Component.literal("===Chunk==="));
+        context.getSource().sendSystemMessage(Component.literal(qiHandler.getQi() + "/" + qiHandler.getCapacity()));
+        context.getSource().sendSystemMessage(Component.literal(qiHandler.getRegenRate() + "/s"));
 
         return 1;
     }

@@ -30,6 +30,7 @@ public class SlotSkillCommand {
                         .then(Commands.argument("skill", IdentifierArgument.id())
                                 .suggests((context, builder) -> {
                                     Player player = context.getSource().getPlayer();
+                                    if (player == null) return SharedSuggestionProvider.suggestResource(Set.<Identifier>of(), builder);
                                     AscensionEntityDataProvider holder = player.getCapability(
                                             CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
                                     );
@@ -65,20 +66,26 @@ public class SlotSkillCommand {
                         .executes(SlotSkillCommand::unSlot));
     }
 
+    public static LiteralArgumentBuilder<CommandSourceStack> buildUnslotAlias() {
+        return Commands.literal("unslot")
+                .then(Commands.argument("slot", IntegerArgumentType.integer(0))
+                        .executes(SlotSkillCommand::unSlot));
+    }
+
     public static LiteralArgumentBuilder<CommandSourceStack> buildDisplay() {
         return Commands.literal("show").executes(SlotSkillCommand::show);
     }
 
     private static int show(CommandContext<CommandSourceStack> context)
             throws CommandSyntaxException {
-        Player player = context.getSource().getPlayer();
+        Player player = context.getSource().getPlayerOrException();
         SkillCastHandler handler = player.getData(
                 AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER
         );
 
         for (int slot = 0; slot < handler.getMaxSlots(); slot++) {
             Identifier skill = handler.getSkill(slot);
-            player.sendSystemMessage(Component.literal(
+            context.getSource().sendSystemMessage(Component.literal(
                     "slot " + slot + " : " + (skill == null ? "null" : skill)
             ));
         }
@@ -89,7 +96,7 @@ public class SlotSkillCommand {
             throws CommandSyntaxException {
         Identifier skill = IdentifierArgument.getId(context, "skill");
         int slot = IntegerArgumentType.getInteger(context, "slot");
-        Player player = context.getSource().getPlayer();
+        Player player = context.getSource().getPlayerOrException();
 
         AscensionEntityDataProvider holder = player.getCapability(
                 CoreCapabilities.ASCENSION_ENTITY_DATA_PROVIDER_CAPABILITY
@@ -142,7 +149,7 @@ public class SlotSkillCommand {
     private static int unSlot(CommandContext<CommandSourceStack> context)
             throws CommandSyntaxException {
         int slot = IntegerArgumentType.getInteger(context, "slot");
-        Player player = context.getSource().getPlayer();
+        Player player = context.getSource().getPlayerOrException();
         SkillCastHandler handler = player.getData(
                 AscensionAttachments.ASCENSION_SKILL_CAST_HANDLER
         );
