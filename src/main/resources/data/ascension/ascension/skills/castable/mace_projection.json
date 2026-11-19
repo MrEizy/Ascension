@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.mace_projection.name"},
-  "description": {"translate": "ascension.skill.mace_projection.desc"},
+  "name": {
+    "translate": "ascension.skill.mace_projection.name"
+  },
+  "description": {
+    "translate": "ascension.skill.mace_projection.desc"
+  },
   "definitions": {
     "effects": {
       "crushing_slow": {
@@ -32,7 +36,10 @@
         3.2
       ],
       "damage": {
-        "base": 40.0,
+        "base": {
+          "base": 40.0,
+          "per_mastery": 2.2
+        },
         "weapon": 1.8,
         "stats": {
           "ascension:strength": 0.22
@@ -73,7 +80,15 @@
   ],
   "cost": {
     "resource": "ascension:qi",
-    "amount": 120.0
+    "amount": {
+      "base": 120.0,
+      "per_mastery": -3.0,
+      "minimum": 104.4
+    }
   },
-  "cooldown": 280.0
+  "cooldown": {
+    "base": 280.0,
+    "per_mastery": -9.8,
+    "minimum": 229.6
+  }
 }

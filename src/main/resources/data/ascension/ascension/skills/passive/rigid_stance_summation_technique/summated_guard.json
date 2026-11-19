@@ -9,9 +9,44 @@
   "modifiers": [
     {
       "type": "ascension:defense",
-      "flat_reduction": 0.8,
-      "percentage_reduction": 0.07,
-      "stagger_resistance": 0.18
+      "flat_reduction": {
+        "base": 0.8,
+        "per_level": 0.1
+      },
+      "percentage_reduction": {
+        "base": 0.07,
+        "per_level": 0.008
+      },
+      "stagger_resistance": {
+        "base": 0.18,
+        "per_level": 0.012
+      }
     }
-  ]
+  ],
+  "levels": 3,
+  "level_cap": 3,
+  "training": {
+    "milestones": [
+      {
+        "level": 2,
+        "requirements": [
+          {
+            "type": "ascension:path_realm",
+            "path": "ascension:foundation/body",
+            "minimum_major_realm": 2
+          }
+        ]
+      },
+      {
+        "level": 3,
+        "requirements": [
+          {
+            "type": "ascension:path_realm",
+            "path": "ascension:foundation/body",
+            "minimum_major_realm": 3
+          }
+        ]
+      }
+    ]
+  }
 }

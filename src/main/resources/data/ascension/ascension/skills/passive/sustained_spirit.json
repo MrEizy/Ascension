@@ -7,6 +7,17 @@
     "translate": "ascension.skill.sustained_spirit.desc"
   },
   "levels": 2,
+  "level_cap": 2,
+  "training": {
+    "milestones": [
+      {
+        "level": 2,
+        "requirements": [
+          { "type": "ascension:path_realm", "path": "ascension:foundation/soul", "minimum_major_realm": 2 }
+        ]
+      }
+    ]
+  },
   "modifiers": [
     {
       "type": "ascension:resources",

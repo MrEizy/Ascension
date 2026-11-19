@@ -1,7 +1,11 @@
 {
   "type": "ascension:passive",
-  "name": {"translate": "ascension.skill.bow_mastery.name"},
-  "description": {"translate": "ascension.skill.bow_mastery.desc"},
+  "name": {
+    "translate": "ascension.skill.bow_mastery.name"
+  },
+  "description": {
+    "translate": "ascension.skill.bow_mastery.desc"
+  },
   "modifiers": [
     {
       "type": "ascension:weapon_damage",
@@ -21,8 +25,35 @@
             },
             "operation": "multiply"
           }
-        ]
+        ],
+        "per_level": 0.08
       }
     }
-  ]
+  ],
+  "levels": 3,
+  "level_cap": 3,
+  "training": {
+    "milestones": [
+      {
+        "level": 2,
+        "requirements": [
+          {
+            "type": "ascension:path_realm",
+            "path": "ascension:weapon/bow",
+            "minimum_major_realm": 2
+          }
+        ]
+      },
+      {
+        "level": 3,
+        "requirements": [
+          {
+            "type": "ascension:path_realm",
+            "path": "ascension:weapon/bow",
+            "minimum_major_realm": 3
+          }
+        ]
+      }
+    ]
+  }
 }

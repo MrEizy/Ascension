@@ -1,7 +1,11 @@
 {
   "type": "ascension:passive",
-  "name": {"translate": "ascension.skill.spear_mastery.name"},
-  "description": {"translate": "ascension.skill.spear_mastery.desc"},
+  "name": {
+    "translate": "ascension.skill.spear_mastery.name"
+  },
+  "description": {
+    "translate": "ascension.skill.spear_mastery.desc"
+  },
   "modifiers": [
     {
       "type": "ascension:weapon_damage",
@@ -21,7 +25,8 @@
             },
             "operation": "multiply"
           }
-        ]
+        ],
+        "per_level": 0.08
       }
     }
   ],
@@ -64,7 +69,8 @@
                   },
                   "operation": "multiply"
                 }
-              ]
+              ],
+              "per_level": 0.35
             },
             "weapon": 0.5
           },
@@ -100,5 +106,31 @@
         }
       }
     }
-  ]
+  ],
+  "levels": 3,
+  "level_cap": 3,
+  "training": {
+    "milestones": [
+      {
+        "level": 2,
+        "requirements": [
+          {
+            "type": "ascension:path_realm",
+            "path": "ascension:weapon/spear",
+            "minimum_major_realm": 2
+          }
+        ]
+      },
+      {
+        "level": 3,
+        "requirements": [
+          {
+            "type": "ascension:path_realm",
+            "path": "ascension:weapon/spear",
+            "minimum_major_realm": 3
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -560,6 +560,10 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.toggle_passive.disable", "Disable passive");
         add("gui.ascension.introspection.back", "Back");
         add("gui.ascension.introspection.skill_mastery", "Mastery: %s");
+        add("gui.ascension.introspection.skill_mastery_progress", "Mastery: %s | %s/%s");
+        add("gui.ascension.introspection.skill_mastery_capped", "Mastery: %s (cap: %s)");
+        add("gui.ascension.introspection.skill_mastery_maxed", "Mastery: %s (maximum)");
+        add("gui.ascension.introspection.skill_mastery_unavailable", "Mastery: %s (progression unavailable)");
         add("gui.ascension.introspection.path_progress", "Path: %s%%");
         add("gui.ascension.introspection.skill_slots.open", "Show skill slots");
         add("gui.ascension.introspection.skill_slots.close", "Hide skill slots");
@@ -591,6 +595,8 @@ public class AscLangProvider extends LanguageProvider {
         add("toast.ascension.physique_changed", "Physique Changed");
         add("toast.ascension.bloodline_gained", "Bloodline Gained");
         add("toast.ascension.technique_learned", "Technique Learned");
+        add("toast.ascension.skill_mastery_advanced", "Skill Mastery Advanced");
+        add("toast.ascension.skill_mastery_message", "%s: %s");
         add("toast.ascension.realm_advanced", "Realm Advanced");
         add("toast.ascension.realm_regressed", "Realm Regressed");
         add("toast.ascension.realm_change_message", "%s: %s");

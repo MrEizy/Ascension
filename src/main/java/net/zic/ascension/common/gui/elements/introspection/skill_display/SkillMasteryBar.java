@@ -8,10 +8,16 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
+import net.zic.ascension.api.ascension.core.skill.SkillInstance;
 import net.zic.ascension.api.ascension.core.skill.SkillMasteryRank;
 import net.zic.ascension.api.ascension.core.skill.SkillProgressionResolver;
+import net.zic.ascension.api.ascension.core.skill.SkillProgressionSnapshot;
+import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.gui.data.ClientAscensionData;
 import net.zic.ascension.common.gui.elements.general.AscensionTooltip;
+import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
+
+import java.util.Locale;
 
 public class SkillMasteryBar extends RenderableElement {
     private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(
@@ -39,33 +45,73 @@ public class SkillMasteryBar extends RenderableElement {
         tooltip.setActive(true);
     }
 
-    private SkillMasteryRank getRank() {
+    private MasteryView getMastery() {
         Identifier skillId = owner.getSelectedSkill();
         if (skillId == null) {
             return null;
         }
 
         return ClientAscensionData.getSource().map(source -> {
-            int progression = SkillProgressionResolver.resolve(source, skillId).effectiveProgression();
-            return progression <= 0 ? null : SkillMasteryRank.fromProgression(progression);
+            SkillInstance<?> instance = AscensionOriginSourceHelper.getSkill(source, skillId);
+            if (instance == null || !(instance.getSkill() instanceof ActiveSkill skill)) {
+                return null;
+            }
+            SkillProgressionSnapshot snapshot = SkillProgressionResolver.resolve(source, skillId);
+            return snapshot.permanentProgression() < 1 ? null : new MasteryView(skill, snapshot);
         }).orElse(null);
     }
 
     @Override
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        SkillMasteryRank rank = getRank();
-        if (rank == null) {
+        MasteryView mastery = getMastery();
+        if (mastery == null) {
             return;
         }
 
+        SkillProgressionSnapshot state = mastery.snapshot();
+        SkillMasteryRank rank = SkillMasteryRank.fromProgression(state.permanentProgression());
         MASTERY_TEXTURES[rank.progression() - 1].render(graphics);
 
+        Component description;
+        if (state.trainedProgression() >= SkillMasteryRank.TRANSCENDENCE.progression()) {
+            description = Component.translatable("gui.ascension.introspection.skill_mastery_maxed", rank.displayName());
+        } else if (state.trainedProgression() >= state.accessibleCap()) {
+            description = Component.translatable(
+                    "gui.ascension.introspection.skill_mastery_capped",
+                    rank.displayName(),
+                    SkillMasteryRank.fromProgression(state.accessibleCap()).displayName()
+            );
+        } else {
+            double required = mastery.skill().getExperienceRequiredForNextProgression(state.trainedProgression());
+            if (!Double.isFinite(required) || required <= 0.0D) {
+                description = Component.translatable("gui.ascension.introspection.skill_mastery_unavailable", rank.displayName());
+            } else {
+                double fraction = Math.clamp(state.experience() / required, 0.0D, 1.0D);
+                int filled = (int) Math.round(getHeight() * fraction);
+                if (filled > 0) {
+                    graphics.enableScissor(0, getHeight() - filled, getWidth(), getHeight());
+                    MASTERY_TEXTURES[rank.progression()].render(graphics);
+                    graphics.disableScissor();
+                }
+                description = Component.translatable(
+                        "gui.ascension.introspection.skill_mastery_progress",
+                        rank.displayName(),
+                        formatExperience(state.experience()),
+                        formatExperience(required)
+                );
+            }
+        }
+
         if (isPointBounded(mouseX, mouseY)) {
-            tooltip.setText(Component.translatable(
-                    "gui.ascension.introspection.skill_mastery",
-                    rank.displayName()
-            ));
+            tooltip.setText(description);
             getUiFrame().setTooltip(tooltip);
         }
+    }
+
+    private static String formatExperience(double value) {
+        return String.format(Locale.ROOT, "%,.0f", value);
+    }
+
+    private record MasteryView(ActiveSkill skill, SkillProgressionSnapshot snapshot) {
     }
 }

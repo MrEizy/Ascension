@@ -32,10 +32,14 @@
     }
   ],
   "toggleable": true,
+  "levels": 3,
+  "level_cap": 3,
+  "level_xp": [10, 30],
+  "training": { "paid_uptime_ticks": 1200, "experience": 1 },
   "enabled_by_default": false,
   "upkeep": {
     "resource": "ascension:qi",
-    "amount": 2.0,
+    "amount": { "base": 2.0, "per_level": -0.1, "minimum": 0.5 },
     "interval": 20
   }
 }

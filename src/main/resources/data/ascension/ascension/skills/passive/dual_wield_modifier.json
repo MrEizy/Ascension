@@ -29,7 +29,21 @@
   "enabled_by_default": false,
   "upkeep": {
     "resource": "ascension:stamina",
-    "amount": 1.0,
+    "amount": {
+      "base": 1.0,
+      "per_level": -0.1,
+      "minimum": 0.7
+    },
     "interval": 30
+  },
+  "levels": 3,
+  "level_cap": 3,
+  "level_xp": [
+    10,
+    30
+  ],
+  "training": {
+    "paid_uptime_ticks": 1200,
+    "experience": 1
   }
 }

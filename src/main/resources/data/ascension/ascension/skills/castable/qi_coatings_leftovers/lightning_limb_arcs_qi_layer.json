@@ -18,5 +18,6 @@
       "type": "ascension:toggle_passive",
       "skill": "ascension:passive/qi_coatings_leftovers/lightning_limb_arcs_qi_layer"
     }
-  ]
+  ],
+  "mastery_xp_per_use": 0.0
 }

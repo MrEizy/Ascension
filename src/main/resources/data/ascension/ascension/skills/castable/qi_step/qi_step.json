@@ -18,5 +18,6 @@
       "type": "ascension:toggle_passive",
       "skill": "ascension:passive/qi_step/qi_step"
     }
-  ]
+  ],
+  "mastery_xp_per_use": 0.0
 }

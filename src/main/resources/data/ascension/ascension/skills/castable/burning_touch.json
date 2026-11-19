@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.burning_touch.name"},
-  "description": {"translate": "ascension.skill.burning_touch.desc"},
+  "name": {
+    "translate": "ascension.skill.burning_touch.name"
+  },
+  "description": {
+    "translate": "ascension.skill.burning_touch.desc"
+  },
   "target": {
     "type": "ascension:ray",
     "range": 10.0,
@@ -16,7 +20,11 @@
   "actions": [
     {
       "type": "ascension:effect",
-      "duration": 100.0,
+      "duration": {
+        "base": 100.0,
+        "per_mastery": 8,
+        "maximum": 144
+      },
       "potency": 3.0,
       "definition": "ascension:burning",
       "subject": "target"
@@ -41,5 +49,9 @@
     "resource": "ascension:qi",
     "amount": 6.0
   },
-  "cooldown": 30.0
+  "cooldown": {
+    "base": 30.0,
+    "per_mastery": -0.75,
+    "minimum": 26.4
+  }
 }

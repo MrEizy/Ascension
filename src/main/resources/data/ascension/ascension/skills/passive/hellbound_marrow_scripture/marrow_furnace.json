@@ -1,13 +1,26 @@
 {
   "type": "ascension:passive",
-  "name": {"translate": "ascension.skill.marrow_furnace.name"},
-  "description": {"translate": "ascension.skill.marrow_furnace.desc"},
+  "name": {
+    "translate": "ascension.skill.marrow_furnace.name"
+  },
+  "description": {
+    "translate": "ascension.skill.marrow_furnace.desc"
+  },
   "modifiers": [
     {
       "type": "ascension:defense",
-      "flat_reduction": 0.35,
-      "percentage_reduction": 0.035,
-      "stagger_resistance": 0.08
+      "flat_reduction": {
+        "base": 0.35,
+        "per_level": 0.1
+      },
+      "percentage_reduction": {
+        "base": 0.035,
+        "per_level": 0.008
+      },
+      "stagger_resistance": {
+        "base": 0.08,
+        "per_level": 0.012
+      }
     },
     {
       "type": "ascension:stats",
@@ -24,5 +37,31 @@
         }
       }
     }
-  ]
+  ],
+  "levels": 3,
+  "level_cap": 3,
+  "training": {
+    "milestones": [
+      {
+        "level": 2,
+        "requirements": [
+          {
+            "type": "ascension:path_realm",
+            "path": "ascension:foundation/body",
+            "minimum_major_realm": 2
+          }
+        ]
+      },
+      {
+        "level": 3,
+        "requirements": [
+          {
+            "type": "ascension:path_realm",
+            "path": "ascension:foundation/body",
+            "minimum_major_realm": 3
+          }
+        ]
+      }
+    ]
+  }
 }
