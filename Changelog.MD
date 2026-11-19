@@ -9,7 +9,7 @@
 ### Added
 * Added a new Technique, Bloodline and Physique Type (Connected type)
 * Added a new Technique and Physique using the Connected Types
-* Mastery related things to many skills
+* Mastery related changes to many skills
 
 ### Removed
 * Removed all divine senses
@@ -25,10 +25,11 @@
 ### Fixes
 * Projection Skills actually project, deal some damage and break blocks
 * Claiming Button in Auction Inbox actually functions now
-* Fixed so Phasing Recall can spawn on the top of pagoda.
+* Fixed so Phasing Recall can spawn on the top of pagoda
 * 
 
 ### Technical Changes
+* Unified RGB and ARGB colour handling across most skill visuals, particles, and Qi Coatings
 
 ---
 
