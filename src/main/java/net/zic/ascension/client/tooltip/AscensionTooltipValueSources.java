@@ -72,6 +72,8 @@ public final class AscensionTooltipValueSources {
 
     public static final Identifier TECHNIQUE_PROGRESSION_GAINS = AscensionCraft.prefix("technique_progression_gains");
     public static final Identifier TECHNIQUE_METADATA = AscensionCraft.prefix("technique_metadata");
+    public static final Identifier TECHNIQUE_PATH_BADGES = AscensionCraft.prefix("technique_path_badges");
+    public static final Identifier TECHNIQUE_MAX_REALM = AscensionCraft.prefix("technique_max_realm");
     public static final Identifier ALCHEMY_TECHNIQUE_REFINEMENT = AscensionCraft.prefix("alchemy_technique_refinement");
 
     public static final Identifier BLOODLINE_PURITY = AscensionCraft.prefix("bloodline_purity");
@@ -106,6 +108,7 @@ public final class AscensionTooltipValueSources {
         registered = true;
 
         ZenithTooltipSources.registerValue(PHYSIQUE_PATHS, AscensionTooltipValueSources::physiquePaths);
+        ZenithTooltipSources.registerValue(TECHNIQUE_PATH_BADGES, AscensionTooltipValueSources::techniquePaths);
         ZenithTooltipSources.registerValue(PHYSIQUE_STATS, AscensionTooltipValueSources::physiqueStats);
         ZenithTooltipSources.registerValue(PHYSIQUE_AFFINITIES, AscensionTooltipValueSources::physiqueAffinities);
 
@@ -128,6 +131,8 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerElement(PHYSIQUE_AFFINITIES, context -> rows(PHYSIQUE_AFFINITIES, context));
         ZenithTooltipSources.registerElement(TECHNIQUE_PROGRESSION_GAINS, AscensionTooltipValueSources::techniqueProgressionElements);
         ZenithTooltipSources.registerElement(TECHNIQUE_METADATA, AscensionTooltipValueSources::techniqueMetadataElements);
+        ZenithTooltipSources.registerElement(TECHNIQUE_PATH_BADGES, context -> badges(TECHNIQUE_PATH_BADGES, context, ZenithTooltipColor.ACCENT));
+        ZenithTooltipSources.registerElement(TECHNIQUE_MAX_REALM, AscensionTooltipValueSources::techniqueMaximumRealmElements);
         ZenithTooltipSources.registerElement(ALCHEMY_TECHNIQUE_REFINEMENT, AscensionTooltipValueSources::alchemyTechniqueElements);
         ZenithTooltipSources.registerElement(BLOODLINE_PURITY_GAINS, AscensionTooltipValueSources::bloodlinePurityElements);
         ZenithTooltipSources.registerElement(HERB_QUALITY_BADGE, AscensionTooltipValueSources::herbQualityBadge);
@@ -216,6 +221,20 @@ public final class AscensionTooltipValueSources {
                 .toList();
 
         return Optional.of(ZenithTooltipValue.textList(paths));
+    }
+
+    private static Optional<ZenithTooltipValue> techniquePaths(ZenithTooltipContext context) {
+        if (context.registryAccess().isEmpty()) {
+            return Optional.empty();
+        }
+        RegistryAccess access = context.registryAccess().orElseThrow();
+        return context.subject(SimpleTechnique.class)
+                .filter(technique -> !technique.getCultivationPaths().isEmpty())
+                .map(technique -> ZenithTooltipValue.textList(
+                        technique.getCultivationPaths().stream()
+                                .map(path -> pathName(path, access))
+                                .toList()
+                ));
     }
 
     private static Optional<ZenithTooltipValue> physiqueStats(
@@ -417,6 +436,31 @@ public final class AscensionTooltipValueSources {
                     ZenithTooltipText.resolved(limit), ZenithTooltipColor.ACCENT, ZenithTooltipColor.TEXT));
         }
         return List.copyOf(result);
+    }
+
+    private static List<ZenithTooltipElement> techniqueMaximumRealmElements(ZenithTooltipContext context) {
+        Optional<SimpleTechnique> technique = context.subject(SimpleTechnique.class);
+        if (technique.isEmpty() || technique.get().getMaxRealm().isEmpty() || context.registryAccess().isEmpty()) {
+            return List.of();
+        }
+
+        SimpleTechnique definition = technique.orElseThrow();
+        int major = definition.getMaxRealm().orElseThrow();
+        int minor = definition.getMaxMinorRealm().orElseGet(() -> {
+            if (definition.getCultivationPaths().isEmpty()) {
+                return 0;
+            }
+            Path<?> path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY,
+                    definition.getCultivationPaths().getFirst(), context.registryAccess().orElseThrow());
+            return path != null && major < path.getMaxMajorRealm() ? path.getMaxMinorRealm(major) : 0;
+        });
+
+        return List.of(new RowElement(
+                ZenithTooltipText.resolved(Component.translatable("ascension.tooltip.technique.maximum_realm")),
+                ZenithTooltipText.resolved(Component.translatable("ascension.tooltip.technique.realm_limit", major + 1, minor + 1)),
+                ZenithTooltipColor.ACCENT,
+                ZenithTooltipColor.TEXT
+        ));
     }
 
     private static List<ZenithTooltipElement> techniqueProgressionElements(
