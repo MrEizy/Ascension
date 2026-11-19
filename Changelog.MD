@@ -34,7 +34,7 @@
 * Projection Skills actually project, deal some damage and break blocks
 * Claiming Button in Auction Inbox actually functions now
 * Fixed so Phasing Recall can spawn on the top of pagoda
-* 
+* Fixed premature stat-sync dirty flag clearing by separating entity stat updates from network patch tracking in OriginSource
 
 ### Technical Changes
 * Unified RGB and ARGB colour handling across most skill visuals, particles, and Qi Coatings
