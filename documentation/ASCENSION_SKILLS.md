@@ -167,6 +167,29 @@ If `maximum_ticks` is omitted or `0`, the channel may continue until released or
 
 Charge/channel stages may contain `threshold`, `particle_field`, and periodic `sounds`.
 
+## Animation
+A cast may play a player animation on its caster for as long as it lasts (Player Animation Library, files in
+`assets/<namespace>/player_animations/`; the id is the animation's name inside the file, not the file name):
+```json
+"cast": {
+  "mode": "channel",
+  "animation": {
+    "id": "ascension:meditate",
+    "seated_from": 2.0,
+    "end": "ascension:meditate_end",
+    "seated_end": "ascension:meditate_land"
+  }
+}
+```
+`animation` can also be just the id (`"animation": "ascension:meditate"`). `seated_from` is the second to start at when
+the caster is already sitting on a cushion, skipping a sit-down at the start of the animation (default `0`). `end` plays
+once when the cast stops (standing back up), and `seated_end` when it stops on a cushion (floating back down, holding the
+seated pose); without them the player snaps back. Endings can be made from the intro with `convert.js --reverse`.
+`seated_only: true` plays the animation only on a cushion. Off a cushion, a cast animation (or its `end`) is cut off as
+soon as the player moves or is hit, and stays off until that cast ends. All cultivation skills use `ascension:meditate`
+with `seated_only` and `seated_end` (people often walk around while cultivating, which looked odd mid-meditation). Every client plays it from the cast state it already has, so nothing extra is
+synced. A player on a cushion who isn't casting shows `ascension:sit_crosslegged`.
+
 ## Mastery
 | Rank | JSON | Default XP |
 |---|---|---:|
