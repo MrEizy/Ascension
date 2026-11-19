@@ -16,12 +16,15 @@
         2.1
       ],
       "damage": {
-        "base": 1.8,
+        "base": {
+          "base": 2.16,
+          "per_mastery": 0.45
+        },
         "stats": {
           "ascension:strength": 0.035
         },
         "minimum": 1.0,
-        "maximum": 6.0,
+        "maximum": 8.0,
         "weapon": 1.0
       },
       "knockback": 0.15,
@@ -55,5 +58,9 @@
     "resource": "ascension:stamina",
     "amount": 0.8
   },
-  "cooldown": 18
+  "cooldown": {
+    "base": 18,
+    "per_mastery": -0.63,
+    "minimum": 14.76
+  }
 }

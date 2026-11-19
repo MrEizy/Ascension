@@ -15,7 +15,9 @@
   "cost": {
     "resource": "ascension:qi",
     "amount": {
-      "base": 150.0
+      "base": 150.0,
+      "per_mastery": -3.0,
+      "minimum": 135.0
     }
   },
   "require_targets": false,
@@ -24,7 +26,8 @@
       "type": "ascension:spherical_destruction",
       "radius": 8,
       "damage": {
-        "base": 40.0
+        "base": 40.0,
+        "per_mastery": 2.6
       },
       "sound_range": 64.0,
       "destroy_unbreakable": false,

@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.paralyzing_touch.name"},
-  "description": {"translate": "ascension.skill.paralyzing_touch.desc"},
+  "name": {
+    "translate": "ascension.skill.paralyzing_touch.name"
+  },
+  "description": {
+    "translate": "ascension.skill.paralyzing_touch.desc"
+  },
   "target": {
     "type": "ascension:ray",
     "range": 8.0,
@@ -16,7 +20,11 @@
   "actions": [
     {
       "type": "ascension:effect",
-      "duration": 30.0,
+      "duration": {
+        "base": 30.0,
+        "per_mastery": 2,
+        "maximum": 40
+      },
       "potency": 1.0,
       "definition": "ascension:paralysis",
       "subject": "target"
@@ -41,5 +49,9 @@
     "resource": "ascension:qi",
     "amount": 8.0
   },
-  "cooldown": 70.0
+  "cooldown": {
+    "base": 70.0,
+    "per_mastery": -1.75,
+    "minimum": 61.6
+  }
 }

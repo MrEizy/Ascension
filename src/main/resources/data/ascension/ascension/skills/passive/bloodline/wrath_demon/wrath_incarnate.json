@@ -1,13 +1,49 @@
 {
   "type": "ascension:passive",
-  "name": {"translate": "ascension.skill.wrath_incarnate.name"},
-  "description": {"translate": "ascension.skill.wrath_incarnate.desc"},
+  "name": {
+    "translate": "ascension.skill.wrath_incarnate.name"
+  },
+  "description": {
+    "translate": "ascension.skill.wrath_incarnate.desc"
+  },
   "modifiers": [
     {
       "type": "ascension:combat",
-      "outgoing_damage": 0.12,
+      "outgoing_damage": {
+        "base": 0.12,
+        "per_level": 0.02
+      },
       "incoming_damage": 0.05,
-      "lifesteal": 0.03
+      "lifesteal": {
+        "base": 0.03,
+        "per_level": 0.005
+      }
     }
-  ]
+  ],
+  "levels": 3,
+  "level_cap": 3,
+  "training": {
+    "milestones": [
+      {
+        "level": 2,
+        "requirements": [
+          {
+            "type": "ascension:bloodline_purity",
+            "bloodline": "ascension:2_profound/wrath_demon_bloodline",
+            "value": 25
+          }
+        ]
+      },
+      {
+        "level": 3,
+        "requirements": [
+          {
+            "type": "ascension:bloodline_purity",
+            "bloodline": "ascension:2_profound/wrath_demon_bloodline",
+            "value": 50
+          }
+        ]
+      }
+    ]
+  }
 }

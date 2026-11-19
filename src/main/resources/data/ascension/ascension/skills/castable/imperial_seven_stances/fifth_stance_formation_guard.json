@@ -9,7 +9,10 @@
   "definitions": {
     "barriers": {
       "formation_guard": {
-        "duration": 60,
+        "duration": {
+          "base": 60,
+          "per_mastery": 5
+        },
         "durability": {
           "base": 4.0,
           "terms": [
@@ -22,9 +25,14 @@
             }
           ],
           "minimum": 4.0,
-          "maximum": 10.0
+          "maximum": 10.0,
+          "per_mastery": 0.8
         },
-        "absorption": 0.45,
+        "absorption": {
+          "base": 0.45,
+          "per_mastery": 0.025,
+          "maximum": 0.6
+        },
         "overflow": true,
         "priority": 5,
         "replace_existing": true,
@@ -78,5 +86,9 @@
     "resource": "ascension:stamina",
     "amount": 2.0
   },
-  "cooldown": 120
+  "cooldown": {
+    "base": 120,
+    "per_mastery": -4.2,
+    "minimum": 98.4
+  }
 }

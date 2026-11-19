@@ -179,7 +179,8 @@
       "path": "ascension:foundation/essence",
       "base": {
         "base": 12.0,
-        "charge": 38.0
+        "charge": 38.0,
+        "per_mastery": 1.8
       },
       "stats": {
         "ascension:strength": 0.52,
@@ -210,7 +211,8 @@
         ],
         "minimum": 12.0,
         "maximum": 120.0,
-        "charge": 70.0
+        "charge": 70.0,
+        "per_mastery": 0.9
       },
       "definition": "#heaven_grinding"
     },
@@ -226,5 +228,9 @@
       "subject": "target"
     }
   ],
-  "cooldown": 420
+  "cooldown": {
+    "base": 420,
+    "per_mastery": -12,
+    "minimum": 365
+  }
 }
