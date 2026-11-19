@@ -12,8 +12,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.zic.ascension.AscensionCraft;
-import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
-import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.rpg_engine.RPGEngineRegistries;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSource;
 import net.zic.ascension.api.rpg_engine.source.data_source.DataSourceHolder;
@@ -48,6 +46,7 @@ public class OriginSource implements StatProvider {
     private final StatSheet statSheet = new StatSheet();
 
     private final HashSet<Stat> dirtyStats = new HashSet<>();
+    private final HashSet<Stat> dirtyEntityStats = new HashSet<>();
 
     private final HashSet<LivingEntity> attachedEntities = new HashSet<>();
 
@@ -82,6 +81,7 @@ public class OriginSource implements StatProvider {
         );
         dirtyDataSources.clear();
         removedDataSources.clear();
+        dirtyStats.clear();
         updateEntityStatHolder();
         return patch;
     }
@@ -94,6 +94,7 @@ public class OriginSource implements StatProvider {
 
         dirtyDataSources.clear();
         removedDataSources.clear();
+        dirtyStats.clear();
         updateEntityStatHolder();
         return patch;
     }
@@ -188,28 +189,33 @@ public class OriginSource implements StatProvider {
 
     public void addFlatStatModifier(Stat stat, Modifier<Double> modifier){
         statSheet.getStatInstance(stat).addFlatModifier(modifier);
-        dirtyStats.add(stat);
+        markStatDirty(stat);
     }
     public void addMultiplierStatModifier(Stat stat, Modifier<Double> modifier){
         statSheet.getStatInstance(stat).addMultiplierModifier(modifier);
-        dirtyStats.add(stat);
+        markStatDirty(stat);
     }
 
 
     public void removeStatModifier(Stat stat, Identifier modifier){
         statSheet.getStatInstance(stat).removeModifier(modifier);
+        markStatDirty(stat);
+    }
+
+    private void markStatDirty(Stat stat){
         dirtyStats.add(stat);
+        dirtyEntityStats.add(stat);
     }
 
 
     public void updateEntityStatHolder(){
-        if(dirtyStats.isEmpty()) return;
+        if(dirtyEntityStats.isEmpty()) return;
 
         for(LivingEntity entity : getAttachedEntities()){
 
-            entity.getData(ZenithAttachments.STAT_HOLDER).updateStats(dirtyStats);
+            entity.getData(ZenithAttachments.STAT_HOLDER).updateStats(dirtyEntityStats);
         }
-        dirtyStats.clear();
+        dirtyEntityStats.clear();
     }
 
     @Override
