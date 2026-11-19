@@ -16,7 +16,6 @@ import net.zic.ascension.impl.core.skill.passive.PassiveSkill;
 
 import java.util.List;
 
-// minor changes 'cause I thought it would be cleaner code-wise?
 public final class PassiveSkillType extends SkillType {
     private static final MapCodec<PassiveSkill> CODEC = createCodec(false);
     private static final MapCodec<PassiveSkill> TOGGLEABLE_DEFAULT_CODEC = createCodec(true);
@@ -34,9 +33,7 @@ public final class PassiveSkillType extends SkillType {
         return RecordCodecBuilder.<PassiveSkill>mapCodec(instance -> instance.group(
                 ComponentSerialization.CODEC.fieldOf("name").forGetter(PassiveSkill::getName),
                 ComponentSerialization.CODEC.fieldOf("description").forGetter(PassiveSkill::getDescription),
-                Codec.intRange(1, 1024).optionalFieldOf("levels", 1).forGetter(PassiveSkill::getConfiguredLevels),
-                Codec.INT.optionalFieldOf("level_cap", 1).forGetter(PassiveSkill::getConfiguredBaseLevelCap),
-                Codec.DOUBLE.listOf().optionalFieldOf("level_xp", List.of()).forGetter(PassiveSkill::getLevelExperienceRequirements),
+                PassiveSkill.ProgressionSettings.CODEC.forGetter(PassiveSkill::progressionSettings),
                 PassiveModifier.CODEC.listOf().optionalFieldOf("modifiers", List.of()).forGetter(PassiveSkill::modifiers),
                 PassiveTrigger.CODEC.listOf().optionalFieldOf("triggers", List.of()).forGetter(PassiveSkill::triggers),
                 SkillDefinitions.CODEC.codec().optionalFieldOf("definitions", SkillDefinitions.EMPTY).forGetter(PassiveSkill::definitions),

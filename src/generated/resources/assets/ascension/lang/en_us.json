@@ -1686,7 +1686,7 @@
   "gui.ascension.introspection.skill_mastery": "Mastery: %s",
   "gui.ascension.introspection.skill_mastery_capped": "Mastery: %s (cap: %s)",
   "gui.ascension.introspection.skill_mastery_maxed": "Mastery: %s (maximum)",
-  "gui.ascension.introspection.skill_mastery_progress": "Mastery: %s | %s/%s XP (%s%% to %s)",
+  "gui.ascension.introspection.skill_mastery_progress": "Mastery: %s | %s/%s",
   "gui.ascension.introspection.skill_mastery_unavailable": "Mastery: %s (progression unavailable)",
   "gui.ascension.introspection.skill_slots.close": "Hide skill slots",
   "gui.ascension.introspection.skill_slots.open": "Show skill slots",

@@ -6,6 +6,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillCostDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.SkillCondition;
@@ -27,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+@EventBusSubscriber(modid = AscensionCraft.MOD_ID)
 public final class PassiveTriggerService {
     public static final Identifier DAMAGE = AscensionCraft.prefix("trigger/damage");
     public static final Identifier RESOURCE_REQUESTED = AscensionCraft.prefix("trigger/resource_requested");
@@ -36,6 +40,7 @@ public final class PassiveTriggerService {
     public static final Identifier RESOURCE_MAXIMUM = AscensionCraft.prefix("trigger/resource_maximum");
 
     private static final Map<TriggerKey, Long> LAST_TRIGGER = new HashMap<>();
+    private static long lastCleanupTick = Long.MIN_VALUE;
     private static final ThreadLocal<Set<TriggerKey>> ACTIVE_TRIGGERS = ThreadLocal.withInitial(HashSet::new);
     private static final Comparator<Candidate> ORDER = Comparator
             .comparingInt((Candidate candidate) -> candidate.trigger().priority())
@@ -47,7 +52,14 @@ public final class PassiveTriggerService {
 
     public static void clearRuntimeState() {
         LAST_TRIGGER.clear();
+        lastCleanupTick = Long.MIN_VALUE;
         ACTIVE_TRIGGERS.remove();
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+        UUID playerId = event.getEntity().getUUID();
+        LAST_TRIGGER.keySet().removeIf(key -> key.owner().equals(playerId));
     }
 
     public static boolean tryAttack(ServerPlayer player) {
@@ -76,6 +88,10 @@ public final class PassiveTriggerService {
             return List.of();
         }
         long gameTime = owner.level().getGameTime();
+        if (lastCleanupTick == Long.MIN_VALUE || gameTime < lastCleanupTick || gameTime - lastCleanupTick >= 12000L) {
+            LAST_TRIGGER.entrySet().removeIf(entry -> gameTime - entry.getValue() > 72000L || gameTime < entry.getValue());
+            lastCleanupTick = gameTime;
+        }
         List<Candidate> candidates = new ArrayList<>();
         for (Identifier skillId : List.copyOf(AscensionOriginSourceHelper.getSkills(source))) {
             SkillInstance<PassiveSkill.Data> instance = PassiveSkillService.passiveInstance(source, skillId);

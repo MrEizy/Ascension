@@ -50,6 +50,9 @@ public final class SkillProgressionService {
                     }
 
                     double experience = data.getExperience() + amount;
+                    if (!Double.isFinite(experience)) {
+                        experience = Double.MAX_VALUE;
+                    }
                     while (progression < cap) {
                         double required = skill.getExperienceRequiredForNextProgression(progression);
                         if (!Double.isFinite(required) || required <= 0.0D || experience < required) {
