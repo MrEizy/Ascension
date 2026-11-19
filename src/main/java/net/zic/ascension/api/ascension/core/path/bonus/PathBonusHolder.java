@@ -62,8 +62,14 @@ public class PathBonusHolder{
         if(!hasPathBonus(category,path)) return;
         PathBonus bonus = PathBonus.of(category,path);
         getContainer(category,path).removeModifier(modifier);
-        if(getContainer(category,path).isEmpty()) pathBonuses.remove(bonus);
-        removedBonuses.add(bonus);
+
+        if(getContainer(category,path).isEmpty()){
+            pathBonuses.remove(bonus);
+            dirtyBonuses.remove(bonus);
+            removedBonuses.add(bonus);
+        }else{
+            dirtyBonuses.add(bonus);
+        }
 
     }
     public double getPathBonus(Identifier category,Identifier path){
@@ -73,6 +79,7 @@ public class PathBonusHolder{
     public void removePathBonusContainer(Identifier category,Identifier path){
         PathBonus bonus = PathBonus.of(category,path);
         pathBonuses.remove(bonus);
+        dirtyBonuses.remove(bonus);
         removedBonuses.add(bonus);
     }
 
@@ -80,6 +87,7 @@ public class PathBonusHolder{
     public void setPathBonusContainer(Identifier category,ValueContainer<Double> container){
         PathBonus bonus = PathBonus.of(category,container.getContainerId());
         pathBonuses.put(bonus,container);
+        removedBonuses.remove(bonus);
         dirtyBonuses.add(bonus);
     }
 
