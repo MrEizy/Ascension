@@ -529,7 +529,6 @@ public class AscGlobalLootModifierProvider extends GlobalLootModifierProvider {
 
         // Woodland Mansion
         addTechnique("ordinary/nine_paths_of_truth_from_mansion", "chests/woodland_mansion", AscAddedLootTableProvider.ORDINARY_NINE_PATHS, 0.22f);
-        addTechnique("ordinary/qi_coatings_dev_from_mansion", "chests/woodland_mansion", AscAddedLootTableProvider.ORDINARY_QI_COATINGS_DEV, 0.16f);
         addTechnique("ordinary/sustained_spirit_art_from_mansion", "chests/woodland_mansion", AscAddedLootTableProvider.ORDINARY_SUSTAINED_SPIRIT, 0.19f);
 
         // Mob drops
