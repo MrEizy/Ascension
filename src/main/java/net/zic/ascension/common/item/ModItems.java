@@ -1,8 +1,11 @@
 package net.zic.ascension.common.item;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -22,7 +25,13 @@ import net.zic.ascension.common.item.qi_holder.SpiritStone;
 import net.zic.ascension.common.item.transfer_item.BloodlineTransferItem;
 import net.zic.ascension.common.item.transfer_item.PhysiqueTransferItem;
 import net.zic.ascension.common.item.transfer_item.TechniqueTransferItem;
+import net.zic.ascension.common.item.weapons.ChakramItem;
+import net.zic.ascension.common.item.weapons.ChakramTier;
+import net.zic.ascension.common.item.weapons.Chakrams;
 import net.zic.zenithlib.registry.RegistryHelper;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(AscensionCraft.MOD_ID);
@@ -144,6 +153,82 @@ public class ModItems {
             properties -> new Item(properties.sword(ToolMaterial.DIAMOND, 2f, -2f)));
     public static final DeferredItem<Item> NETHERITE_BLADE = ITEMS.registerItem("netherite_blade",
             properties -> new Item(properties.sword(ToolMaterial.NETHERITE, 2f, -2f)));
+
+
+    public static final DeferredItem<Item> CLOTH_FIST_WRAPS = ITEMS.registerItem("cloth_fist_wraps",
+            properties -> new Item(properties.sword(ToolMaterial.WOOD, 2f, -1f)) {
+                @Override
+                public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+                    return enchantment.is(Enchantments.KNOCKBACK) || super.supportsEnchantment(stack, enchantment);
+                }
+
+                @Override
+                public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
+                    return enchantment.is(Enchantments.KNOCKBACK) || super.isPrimaryItemFor(stack, enchantment);
+                }
+            });
+
+
+    //Chakrams
+    public static final Map<ChakramTier, DeferredItem<Item>> CHAKRAMS =
+            new EnumMap<>(ChakramTier.class);
+
+    public static final DeferredItem<Item> COPPER_CHAKRAM =
+            ITEMS.registerItem("copper_chakram",
+                    p -> new ChakramItem(ChakramTier.COPPER,
+                            ChakramItem.buildProperties(ChakramTier.COPPER)));
+    public static final DeferredItem<Item> IRON_CHAKRAM =
+            ITEMS.registerItem("iron_chakram",
+                    p -> new ChakramItem(ChakramTier.IRON,
+                            ChakramItem.buildProperties(ChakramTier.IRON)));
+    public static final DeferredItem<Item> GOLDEN_CHAKRAM =
+            ITEMS.registerItem("golden_chakram",
+                    p -> new ChakramItem(ChakramTier.GOLDEN,
+                            ChakramItem.buildProperties(ChakramTier.GOLDEN)));
+    public static final DeferredItem<Item> DIAMOND_CHAKRAM =
+            ITEMS.registerItem("diamond_chakram",
+                    p -> new ChakramItem(ChakramTier.DIAMOND,
+                            ChakramItem.buildProperties(ChakramTier.DIAMOND)));
+    public static final DeferredItem<Item> NETHERITE_CHAKRAM =
+            ITEMS.registerItem("netherite_chakram",
+                    p -> new ChakramItem(ChakramTier.NETHERITE,
+                            ChakramItem.buildProperties(ChakramTier.NETHERITE)));
+    public static final DeferredItem<Item> BLACK_IRON_CHAKRAM =
+            ITEMS.registerItem("black_iron_chakram",
+                    p -> new ChakramItem(ChakramTier.BLACK_IRON,
+                            ChakramItem.buildProperties(ChakramTier.BLACK_IRON)));
+    public static final DeferredItem<Item> FROST_SILVER_CHAKRAM =
+            ITEMS.registerItem("frost_silver_chakram",
+                    p -> new ChakramItem(ChakramTier.FROST_SILVER,
+                            ChakramItem.buildProperties(ChakramTier.FROST_SILVER)));
+    public static final DeferredItem<Item> SPIRITUAL_STONE_CHAKRAM =
+            ITEMS.registerItem("spiritual_stone_chakram",
+                    p -> new ChakramItem(ChakramTier.SPIRITUAL_STONE,
+                            ChakramItem.buildProperties(ChakramTier.SPIRITUAL_STONE)));
+
+    static {
+        CHAKRAMS.put(ChakramTier.COPPER, COPPER_CHAKRAM);
+        CHAKRAMS.put(ChakramTier.IRON, IRON_CHAKRAM);
+        CHAKRAMS.put(ChakramTier.GOLDEN, GOLDEN_CHAKRAM);
+        CHAKRAMS.put(ChakramTier.DIAMOND, DIAMOND_CHAKRAM);
+        CHAKRAMS.put(ChakramTier.NETHERITE, NETHERITE_CHAKRAM);
+        CHAKRAMS.put(ChakramTier.BLACK_IRON, BLACK_IRON_CHAKRAM);
+        CHAKRAMS.put(ChakramTier.FROST_SILVER, FROST_SILVER_CHAKRAM);
+        CHAKRAMS.put(ChakramTier.SPIRITUAL_STONE, SPIRITUAL_STONE_CHAKRAM);
+
+        Chakrams.bind(ChakramTier.COPPER, COPPER_CHAKRAM);
+        Chakrams.bind(ChakramTier.IRON, IRON_CHAKRAM);
+        Chakrams.bind(ChakramTier.GOLDEN, GOLDEN_CHAKRAM);
+        Chakrams.bind(ChakramTier.DIAMOND, DIAMOND_CHAKRAM);
+        Chakrams.bind(ChakramTier.NETHERITE, NETHERITE_CHAKRAM);
+        Chakrams.bind(ChakramTier.BLACK_IRON, BLACK_IRON_CHAKRAM);
+        Chakrams.bind(ChakramTier.FROST_SILVER, FROST_SILVER_CHAKRAM);
+        Chakrams.bind(ChakramTier.SPIRITUAL_STONE, SPIRITUAL_STONE_CHAKRAM);
+    }
+
+    public static DeferredItem<Item> chakram(ChakramTier tier) {
+        return CHAKRAMS.get(tier);
+    }
 
 
 

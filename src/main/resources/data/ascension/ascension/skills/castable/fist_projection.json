@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.fist_projection.name"},
-  "description": {"translate": "ascension.skill.fist_projection.desc"},
+  "name": {
+    "translate": "ascension.skill.fist_projection.name"
+  },
+  "description": {
+    "translate": "ascension.skill.fist_projection.desc"
+  },
   "actions": [
     {
       "type": "ascension:weapon_swing",
@@ -13,7 +17,13 @@
         2.6
       ],
       "damage": {
-        "base": 9.0
+        "base": {
+          "base": 26.0,
+          "per_mastery": 1.43
+        },
+        "stats": {
+          "ascension:strength": 0.2
+        }
       },
       "knockback": 1.4,
       "duration": 40.0,
@@ -44,7 +54,15 @@
   ],
   "cost": {
     "resource": "ascension:qi",
-    "amount": 70.0
+    "amount": {
+      "base": 70.0,
+      "per_mastery": -1.75,
+      "minimum": 60.9
+    }
   },
-  "cooldown": 160.0
+  "cooldown": {
+    "base": 160.0,
+    "per_mastery": -5.6,
+    "minimum": 131.2
+  }
 }

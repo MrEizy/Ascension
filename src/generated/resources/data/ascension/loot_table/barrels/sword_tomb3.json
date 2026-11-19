@@ -65,6 +65,30 @@
       "bonus_rolls": 0.0,
       "conditions": [
         {
+          "chance": 0.2,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:2_profound/sanguine_abyss_technique"
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:technique_manual"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
           "chance": 0.15,
           "condition": "minecraft:random_chance"
         }
@@ -101,13 +125,46 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 2.0,
+                "max": 5.0,
+                "min": 2.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:iron_ingot",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 4.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:diamond"
+          "name": "minecraft:gold_ingot",
+          "weight": 40
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "ascension:iron_chakram",
+          "weight": 70
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ascension:golden_chakram",
+          "weight": 30
         }
       ],
       "rolls": 1.0
@@ -122,16 +179,17 @@
         },
         {
           "type": "minecraft:item",
-          "name": "ascension:diamond_blade",
+          "name": "ascension:gold_blade",
           "weight": 10
         },
         {
           "type": "minecraft:item",
-          "name": "ascension:netherite_blade"
+          "name": "ascension:diamond_blade",
+          "weight": 5
         },
         {
           "type": "minecraft:empty",
-          "weight": 39
+          "weight": 35
         }
       ],
       "rolls": 1.0

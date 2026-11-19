@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.bow_projection.name"},
-  "description": {"translate": "ascension.skill.bow_projection.desc"},
+  "name": {
+    "translate": "ascension.skill.bow_projection.name"
+  },
+  "description": {
+    "translate": "ascension.skill.bow_projection.desc"
+  },
   "actions": [
     {
       "type": "ascension:weapon_swing",
@@ -13,8 +17,15 @@
         4.5
       ],
       "damage": {
-        "base": 11.0,
-        "weapon": 1.0
+        "base": {
+          "base": 31.0,
+          "per_mastery": 1.71
+        },
+        "weapon": 1.5,
+        "stats": {
+          "ascension:agility": 0.13,
+          "ascension:strength": 0.07
+        }
       },
       "knockback": 0.4,
       "duration": 70.0,
@@ -45,7 +56,15 @@
   ],
   "cost": {
     "resource": "ascension:qi",
-    "amount": 90.0
+    "amount": {
+      "base": 90.0,
+      "per_mastery": -2.25,
+      "minimum": 78.3
+    }
   },
-  "cooldown": 180.0
+  "cooldown": {
+    "base": 180.0,
+    "per_mastery": -6.3,
+    "minimum": 147.6
+  }
 }

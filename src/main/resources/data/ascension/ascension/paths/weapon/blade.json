@@ -1,112 +1,54 @@
 {
   "type": "ascension:simple_path",
-  "name": {
-    "translate": "ascension.path.weapon.blade.name"
-  },
-  "description": {
-    "translate": "ascension.path.weapon.blade.desc"
-  },
+  "name": { "translate": "ascension.path.weapon.blade.name" },
+  "description": { "translate": "ascension.path.weapon.blade.desc" },
   "realms": [
     {
-      "name": {"translate": "ascension.path.weapon.blade.realm.0.name"},
+      "name": { "translate": "ascension.path.weapon.blade.realm.0.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 1000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 10000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 100000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 1000 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 10000 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 100000 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.weapon.blade.realm.1.name"},
+      "name": { "translate": "ascension.path.weapon.blade.realm.1.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 100000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 1000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 10000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 100000 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 1000000 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 10000000 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.weapon.blade.realm.2.name"},
+      "name": { "translate": "ascension.path.weapon.blade.realm.2.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 10000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 100000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 1000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 10000000 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 100000000 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 1000000000 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.weapon.blade.realm.3.name"},
+      "name": { "translate": "ascension.path.weapon.blade.realm.3.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 1000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 10000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 100000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 1000000000 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 10000000000 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 100000000000 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.weapon.blade.realm.4.name"},
+      "name": { "translate": "ascension.path.weapon.blade.realm.4.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 100000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 1000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 10000000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 100000000000 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 1000000000000 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 10000000000000 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.weapon.blade.realm.5.name"},
+      "name": { "translate": "ascension.path.weapon.blade.realm.5.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 10000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 100000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 1000000000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 10000000000000 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 100000000000000 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 1000000000000000 }
       ]
     }
   ],
@@ -118,7 +60,8 @@
           "type": "ascension:grant_skills",
           "skills": [
             "ascension:castable/qi_step/qi_step",
-            "ascension:passive/qi_step/qi_step"
+            "ascension:passive/qi_step/qi_step",
+            "ascension:passive/dual_wield_modifier"
           ]
         }
       ]

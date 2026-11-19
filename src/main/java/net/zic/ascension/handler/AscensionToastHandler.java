@@ -8,6 +8,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.skill.SkillMasteryRank;
+import net.zic.ascension.api.ascension.event.skill.SkillEvent;
+import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueInstance;
 import net.zic.ascension.api.ascension.datapack.path.realm.PathRealmChangeEvent;
 import net.zic.ascension.api.ascension.event.bloodline.BloodlineEvent;
@@ -99,6 +102,25 @@ public final class AscensionToastHandler {
                         "toast.ascension.realm_change_message",
                         path.getName(null),
                         path.getRealmName(event.getRealm().majorRealm(), event.getRealm().minorRealm())
+                ),
+                ItemStack.EMPTY
+        );
+    }
+
+    @SubscribeEvent
+    public static void onSkillMasteryAdvanced(SkillEvent.ProgressionChanged event) {
+        if (event.getReason() != SkillEvent.ProgressionChanged.Reason.EXPERIENCE
+                || !(event.getSkillInstance().getSkill() instanceof ActiveSkill)
+                || event.getCurrent().trainedProgression() <= event.getPrevious().trainedProgression()) {
+            return;
+        }
+        show(
+                event.getSource(),
+                Component.translatable("toast.ascension.skill_mastery_advanced"),
+                Component.translatable(
+                        "toast.ascension.skill_mastery_message",
+                        event.getSkillInstance().getSkill().getName(),
+                        SkillMasteryRank.fromProgression(event.getCurrent().trainedProgression()).displayName()
                 ),
                 ItemStack.EMPTY
         );

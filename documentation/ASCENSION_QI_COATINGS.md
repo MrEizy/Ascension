@@ -70,9 +70,11 @@ A coating's look is only visual. What an element **does** in a fight goes in its
 |---|---|---|
 | `body_on_hit` | Qi Coating is on and the player lands a **bare-handed** melee hit | The entity hit |
 | `body_on_hurt` | Qi Coating is on and the player **takes damage from an attacker** (melee, projectile or skill) | The attacker |
-| `external_on_hit` | External Qi Coating is on and the player lands a melee hit with a tool it shows on (swords, blades, axes, spears, including a spear charge, and pickaxes, shovels and hoes) | The entity hit |
+| `external_on_hit` | External Qi Coating is on and the player lands a melee hit with a tool it shows on (swords, blades, axes, spears, including a spear charge, chakrams, and pickaxes, shovels and hoes), or a chakram they threw coated hits (see below) | The entity hit |
 
 A hook only fires for the element the coating is showing right now. Hits with anything else in hand (a stick), projectiles the player fires and damage from their skills never fire the on-hit hooks. Damage a hook deals never sets off another hook, so two coated players can't loop each other.
+
+**Thrown chakrams** are the one projectile that does: a chakram keeps the External coating its thrower had on when it was thrown (`ChakramEntity`, the look synced to clients with the entity) and keeps showing that sword qi look in flight. Each entity it hits fires `external_on_hit` for the element the coating showed **at the throw**, even if the thrower has turned the coating off since, sharing the melee hook's cooldown and paying its costs as usual (`QiCoatingService.onThrownHit`).
 
 ```json
 {

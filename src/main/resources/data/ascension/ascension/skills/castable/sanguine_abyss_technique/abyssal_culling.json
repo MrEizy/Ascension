@@ -88,7 +88,10 @@
         4.5
       ],
       "damage": {
-        "base": 34.0,
+        "base": {
+          "base": 34.0,
+          "per_mastery": 2.4
+        },
         "weapon": 1.4
       },
       "knockback": 1.4,
@@ -115,6 +118,8 @@
     "amount": 90.0
   },
   "cooldown": {
-    "base": 400.0
+    "base": 400.0,
+    "per_mastery": -10,
+    "minimum": 355
   }
 }

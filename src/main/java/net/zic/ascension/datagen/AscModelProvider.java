@@ -3,6 +3,7 @@ package net.zic.ascension.datagen;
 import com.geckolib.renderer.internal.GeckolibItemSpecialRenderer;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.color.item.Dye;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
@@ -34,6 +35,7 @@ import net.zic.ascension.common.blocks.crops.herbs.PodHerbBlock;
 import net.zic.ascension.common.blocks.custom.SpiritualStoneClusterBlock;
 import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.geckolibblockitems.AlchemyFurnaceItem;
+import net.zic.ascension.common.item.weapons.ChakramTier;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;
@@ -94,6 +96,27 @@ public class AscModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.GOLD_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(ModItems.DIAMOND_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(ModItems.NETHERITE_BLADE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+
+        itemModels.itemModelOutput.accept(ModItems.CLOTH_FIST_WRAPS.get(), ItemModelUtils.tintedModel(
+                Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "item/cloth_fist_wraps"), new Dye(-1)));
+
+        // Chakrams
+        itemModels.generateFlatItem(ModItems.COPPER_CHAKRAM.get(), ModelTemplates.FLAT_ITEM);
+        chakram3dModel(itemModels, ChakramTier.COPPER);
+        itemModels.generateFlatItem(ModItems.IRON_CHAKRAM.get(), ModelTemplates.FLAT_ITEM);
+        chakram3dModel(itemModels, ChakramTier.IRON);
+        itemModels.generateFlatItem(ModItems.GOLDEN_CHAKRAM.get(), ModelTemplates.FLAT_ITEM);
+        chakram3dModel(itemModels, ChakramTier.GOLDEN);
+        itemModels.generateFlatItem(ModItems.DIAMOND_CHAKRAM.get(), ModelTemplates.FLAT_ITEM);
+        chakram3dModel(itemModels, ChakramTier.DIAMOND);
+        itemModels.generateFlatItem(ModItems.NETHERITE_CHAKRAM.get(), ModelTemplates.FLAT_ITEM);
+        chakram3dModel(itemModels, ChakramTier.NETHERITE);
+        itemModels.generateFlatItem(ModItems.BLACK_IRON_CHAKRAM.get(), ModelTemplates.FLAT_ITEM);
+        chakram3dModel(itemModels, ChakramTier.BLACK_IRON);
+        itemModels.generateFlatItem(ModItems.FROST_SILVER_CHAKRAM.get(), ModelTemplates.FLAT_ITEM);
+        chakram3dModel(itemModels, ChakramTier.FROST_SILVER);
+        itemModels.generateFlatItem(ModItems.SPIRITUAL_STONE_CHAKRAM.get(), ModelTemplates.FLAT_ITEM);
+        chakram3dModel(itemModels, ChakramTier.SPIRITUAL_STONE);
 
         // Pills
         pillItemModel(itemModels, ModItems.PROCEDURAL_PILL.get(), "qi_replenishing_pill");
@@ -495,6 +518,27 @@ public class AscModelProvider extends ModelProvider {
         }
 
         blockModels.blockStateOutput.accept(blockState);
+    }
+
+
+    private void chakram3dModel(ItemModelGenerators itemModels, ChakramTier tier) {
+        String itemPath = tier.itemName();          // e.g. "copper_chakram"
+        Identifier modelId = Identifier.fromNamespaceAndPath(
+                AscensionCraft.MOD_ID, "item/" + itemPath + "_3d");
+        Identifier parentId = Identifier.fromNamespaceAndPath(
+                AscensionCraft.MOD_ID, "item/chakram_3d");
+        Material discTexture = new Material(Identifier.fromNamespaceAndPath(
+                AscensionCraft.MOD_ID, "item/" + itemPath));
+
+        ModelTemplate template = ExtendedModelTemplateBuilder.builder()
+                .parent(parentId)
+                .requiredTextureSlot(TextureSlot.LAYER0)
+                .build();
+
+        template.create(
+                modelId,
+                new TextureMapping().put(TextureSlot.LAYER0, discTexture),
+                itemModels.modelOutput);
     }
 
 

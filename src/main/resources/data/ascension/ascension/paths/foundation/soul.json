@@ -1,212 +1,107 @@
 {
   "type": "ascension:simple_path",
-  "name": {"translate": "ascension.path.soul.name"},
-  "description": {"translate": "ascension.path.soul.desc"},
+  "name": { "translate": "ascension.path.soul.name" },
+  "description": { "translate": "ascension.path.soul.desc" },
   "realms": [
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.0.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.0.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 1000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 10000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 100000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 43182 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 118935 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 215847 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.1.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.1.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 100000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 1000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 10000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 215847 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 442913 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 757312 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.2.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.2.name" },
       "minor_realms": [
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 757312 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 1362447 },
         {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 10000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 100000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 1000000000,
+          "name": { "translate": "ascension.realm.minor.high" },
+          "progress": 2194663,
           "tribulation": "ascension:test_tribulation",
           "tribulation_mode": "auto"
         }
       ]
     },
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.3.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.3.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 1000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 10000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 100000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 2194663 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 2903761 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 3884127 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.4.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.4.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 100000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 1000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 10000000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 3884127 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 5773584 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 8382946 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.5.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.5.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 10000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 100000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 1000000000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 8382946 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 13581209 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 20761338 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.6.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.6.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 1000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 10000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 100000000000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 20761338 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 34935671 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 54506219 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.7.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.7.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 100000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 1000000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 10000000000000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 54506219 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 92307455 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 144512073 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.8.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.8.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 10000000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 100000000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 1000000000000000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 144512073 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 246570338 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 387504916 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.9.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.9.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 1000000000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 10000000000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 100000000000000000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 387504916 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 659667204 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 1035513242 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.10.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.10.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 100000000000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 1000000000000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 10000000000000000000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 1035513242 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 1761268915 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 2763497881 }
       ]
     },
     {
-      "name": {"translate": "ascension.path.foundation.soul.realm.11.name"},
+      "name": { "translate": "ascension.path.foundation.soul.realm.11.name" },
       "minor_realms": [
-        {
-          "name": {"translate": "ascension.realm.minor.low"},
-          "progress": 10000000000000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.mid"},
-          "progress": 100000000000000000000000000
-        },
-        {
-          "name": {"translate": "ascension.realm.minor.high"},
-          "progress": 1000000000000000000000000000
-        }
+        { "name": { "translate": "ascension.realm.minor.low" }, "progress": 2763497881 },
+        { "name": { "translate": "ascension.realm.minor.mid" }, "progress": 4638382406 },
+        { "name": { "translate": "ascension.realm.minor.high" }, "progress": 7227516394 }
       ]
     }
   ],
@@ -234,6 +129,7 @@
             "ascension:passive/qi_coating/qi_coating",
             "ascension:castable/qi_coating/external_qi_coating",
             "ascension:passive/qi_coating/external_qi_coating",
+            "ascension:passive/divine_sense/divine_sense_soul",
             "ascension:castable/inner_world"
           ]
         }
@@ -246,39 +142,19 @@
           "type": "ascension:give_stats",
           "stats": {
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:foundation_soul_spirit_a1",
-                  "value": 21.0
-                }
-              ],
+              "flat": [ { "id": "ascension:foundation_soul_spirit_a1", "value": 21.0 } ],
               "multiplier": []
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:foundation_soul_vitality_a1",
-                  "value": 6.0
-                }
-              ],
+              "flat": [ { "id": "ascension:foundation_soul_vitality_a1", "value": 6.0 } ],
               "multiplier": []
             },
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:foundation_soul_strength_a1",
-                  "value": 1.0
-                }
-              ],
+              "flat": [ { "id": "ascension:foundation_soul_strength_a1", "value": 1.0 } ],
               "multiplier": []
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:foundation_soul_agility_a1",
-                  "value": 0.2
-                }
-              ],
+              "flat": [ { "id": "ascension:foundation_soul_agility_a1", "value": 0.2 } ],
               "multiplier": []
             }
           }
@@ -292,39 +168,19 @@
           "type": "ascension:give_stats",
           "stats": {
             "ascension:spirit": {
-              "flat": [
-                {
-                  "id": "ascension:foundation_soul_spirit_a2",
-                  "value": 2.1
-                }
-              ],
+              "flat": [ { "id": "ascension:foundation_soul_spirit_a2", "value": 2.1 } ],
               "multiplier": []
             },
             "ascension:vitality": {
-              "flat": [
-                {
-                  "id": "ascension:foundation_soul_vitality_a2",
-                  "value": 0.6
-                }
-              ],
+              "flat": [ { "id": "ascension:foundation_soul_vitality_a2", "value": 0.6 } ],
               "multiplier": []
             },
             "ascension:strength": {
-              "flat": [
-                {
-                  "id": "ascension:foundation_soul_strength_a2",
-                  "value": 0.1
-                }
-              ],
+              "flat": [ { "id": "ascension:foundation_soul_strength_a2", "value": 0.1 } ],
               "multiplier": []
             },
             "ascension:agility": {
-              "flat": [
-                {
-                  "id": "ascension:foundation_soul_agility_a2",
-                  "value": 0.02
-                }
-              ],
+              "flat": [ { "id": "ascension:foundation_soul_agility_a2", "value": 0.02 } ],
               "multiplier": []
             }
           }

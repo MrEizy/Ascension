@@ -16,7 +16,7 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.zic.ascension.common.command.commands.mob.MobCommands;
+import net.zic.ascension.common.command.CommandInspectionTarget;
 import net.zic.zenithlib.common.ZenithAttachments;
 import net.zic.zenithlib.stats.EntityStatHolder;
 import net.zic.zenithlib.stats.Stat;
@@ -25,7 +25,10 @@ import net.zic.zenithlib.stats.Stat;
 public class ViewStats {
     private static final double MAX_INSPECTION_RANGE = 10;
     public static LiteralArgumentBuilder<CommandSourceStack> build() {
-        return Commands.literal("view_stats")
+        return buildAs("view_stats");
+    }
+    public static LiteralArgumentBuilder<CommandSourceStack> buildAs(String name) {
+        return Commands.literal(name)
                 .then(Commands.literal("target")
                         .executes(ViewStats::viewTargetDetails)
                 ).then(Commands.argument("entity", EntityArgument.entity())
@@ -39,16 +42,7 @@ public class ViewStats {
             return 0;
         }
 
-        Vec3 pos = cause.getEyePosition();
-        Vec3 dir = cause.getViewVector(1).scale(MAX_INSPECTION_RANGE);
-        Vec3 targetPos = pos.add(dir);
-
-        AABB boundingBox = cause.getBoundingBox()
-                .expandTowards(dir)
-                .inflate(1.0D);
-
-        EntityHitResult hitResult = ProjectileUtil.getEntityHitResult(
-                cause, pos, targetPos, boundingBox, entity -> !entity.isSpectator(), MAX_INSPECTION_RANGE * MAX_INSPECTION_RANGE);
+        EntityHitResult hitResult = CommandInspectionTarget.find(cause, MAX_INSPECTION_RANGE, entity -> true);
         if(hitResult == null) {
             context.getSource().sendFailure(Component.literal("did not hit anything"));
             return 0;

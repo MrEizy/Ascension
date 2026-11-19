@@ -2,6 +2,7 @@ package net.zic.ascension.api.ascension.core.qi_coating;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import net.zic.ascension.api.ascension.value.HexColorCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
@@ -49,14 +50,7 @@ public record QiCoatingDefinition(
         int foliageMillis,
         boolean foliageLocked
 ) {
-    /**
-     * ARGB colours as 8 digit hex strings ({@code #AARRGGBB}), or 6 digits for opaque. HexColorCodec drops the alpha when it
-     * encodes, and datapack registries are re-encoded to sync them to clients, so shell colours keep their own codec.
-     */
-    public static final Codec<Integer> ARGB_CODEC = Codec.STRING.comapFlatMap(
-            QiCoatingDefinition::parseArgb,
-            color -> String.format("#%08X", color)
-    );
+    public static final Codec<Integer> ARGB_CODEC = HexColorCodec.ARGB_CODEC;
 
     public static final Codec<QiCoatingDefinition> CODEC = RecordCodecBuilder.<QiCoatingDefinition>create(instance -> instance.group(
             Coverage.CODEC.fieldOf("coverage").forGetter(QiCoatingDefinition::coverage),
@@ -91,19 +85,6 @@ public record QiCoatingDefinition(
             }
         }
         return DataResult.success(definition);
-    }
-
-    private static DataResult<Integer> parseArgb(String value) {
-        String hex = value.startsWith("#") ? value.substring(1) : value;
-        if (hex.length() != 6 && hex.length() != 8) {
-            return DataResult.error(() -> "Colour must be a 6 or 8 digit hex code (#RRGGBB or #AARRGGBB), got: " + value);
-        }
-        try {
-            long parsed = Long.parseLong(hex, 16);
-            return DataResult.success((int) (hex.length() == 6 ? parsed | 0xFF000000L : parsed));
-        } catch (NumberFormatException exception) {
-            return DataResult.error(() -> "Invalid hex colour: " + value);
-        }
     }
 
     /**

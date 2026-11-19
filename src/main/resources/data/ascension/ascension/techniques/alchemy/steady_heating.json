@@ -6,6 +6,7 @@
   "refinement": {
     "stage": "heating",
     "heat": 1.0,
-    "control": 2.5
+    "control": 2.5,
+    "qi_per_tick": 1.0
   }
 }

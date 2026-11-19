@@ -1,0 +1,76 @@
+{
+  "type": "ascension:infinite_breakthrough",
+  "name": {"translate": "ascension.physique.god_envied_physique.name"},
+  "description": {"translate": "ascension.physique.god_envied_physique.desc"},
+  "paths": [
+    "ascension:foundation/essence",
+    "ascension:elemental/time",
+    "ascension:weapon/sword"
+  ],
+  "infinite_path": "ascension:foundation/essence",
+  "infinite_realm": 0,
+  "skills": [],
+  "stats": {
+    "ascension:spirit": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_god_envied_physique_spirit_base",
+          "value": 3.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:god_envied_physique_spirit_modifier",
+          "operation_group": 0,
+          "value": 0.1
+        }
+      ]
+    },
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:2_profound_god_envied_physique_vitality_base",
+          "value": 3.0
+        }
+      ],
+      "multiplier": [
+        {
+          "id": "ascension:god_envied_physique_vitality_modifier",
+          "operation_group": 0,
+          "value": 0.08
+        }
+      ]
+    }
+  },
+  "path_bonus": {
+    "ascension:affinity": {
+      "ascension:foundation/essence": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_god_envied_physique_affinity_foundation_essence_base",
+            "value": 4.0
+          },
+          {
+            "id": "ascension:god_envied_physique_essence_affinity_modifier",
+            "value": 0.2
+          }
+        ],
+        "multiplier": []
+      },
+      "ascension:elemental/time": {
+        "flat": [
+          {
+            "id": "ascension:2_profound_god_envied_physique_affinity_elemental_time_base",
+            "value": 1.5
+          }
+        ],
+        "multiplier": []
+      }
+    }
+  },
+  "item_tooltip": {
+    "theme": "ascension:physique_essence",
+    "template": "ascension:default_physique_essence",
+    "rank": "ascension:profound"
+  }
+}

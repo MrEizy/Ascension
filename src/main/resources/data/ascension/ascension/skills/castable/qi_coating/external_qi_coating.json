@@ -5,7 +5,11 @@
   },
   "description": {
     "translate": "ascension.skill.external_qi_coating.desc",
-    "with": [{ "keybind": "key.ascension.open_skill_wheel" }]
+    "with": [
+      {
+        "keybind": "key.ascension.open_skill_wheel"
+      }
+    ]
   },
   "cast": {
     "mode": "instant"
@@ -19,5 +23,6 @@
       "type": "ascension:toggle_passive",
       "skill": "ascension:passive/qi_coating/external_qi_coating"
     }
-  ]
+  ],
+  "mastery_xp_per_use": 0.0
 }

@@ -297,9 +297,39 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.stone_blade", "Stone Blade");
         add("item.ascension.copper_blade", "Copper Blade");
         add("item.ascension.iron_blade", "Iron Blade");
+        add("item.ascension.cloth_fist_wraps", "Wraps");
         add("item.ascension.gold_blade", "Gold Blade");
         add("item.ascension.diamond_blade", "Diamond Blade");
         add("item.ascension.netherite_blade", "Netherite Blade");
+
+        add("item.ascension.copper_chakram", "Copper Chakram");
+        add("item.ascension.iron_chakram", "Iron Chakram");
+        add("item.ascension.golden_chakram", "Golden Chakram");
+        add("item.ascension.diamond_chakram", "Diamond Chakram");
+        add("item.ascension.netherite_chakram", "Netherite Chakram");
+        add("item.ascension.black_iron_chakram", "Black Iron Chakram");
+        add("item.ascension.frost_silver_chakram", "Frost Silver Chakram");
+        add("item.ascension.spiritual_stone_chakram", "Spiritual Stone Chakram");
+
+
+
+        //Enchantments
+        add("enchantment.ascension.ricochet", "Ricochet");
+        add("enchantment.ascension.razor_edge", "Razor Edge");
+        add("enchantment.ascension.swift_return", "Swift Return");
+        add("enchantment.ascension.phasing_recall", "Phasing Recall");
+        add("enchantment.ascension.penetrating_strike", "Penetrating Strike");
+        add("enchantment.ascension.impact", "Impact");
+
+
+
+        //Sounds
+        add("subtitles.ascension.chakram.throw", "Chakram whooshes");
+        add("subtitles.ascension.chakram.ricochet", "Chakram ricochets");
+        add("subtitles.ascension.chakram.hit", "Chakram slices");
+        add("subtitles.ascension.chakram.return", "Chakram returns");
+        add("subtitles.ascension.chakram.catch", "Chakram caught");
+        add("subtitles.ascension.chakram.thud", "Chakram thuds");
 
 
 
@@ -488,7 +518,7 @@ public class AscLangProvider extends LanguageProvider {
         add("auction.ascension.cancel_has_bids", "You cannot cancel an auction after a bid has been placed.");
         add("auction.ascension.notifications_enabled", "Auction notifications enabled.");
         add("auction.ascension.notifications_disabled", "Auction notifications disabled.");
-        add("auction.ascension.five_minutes", "%s has 5 minutes remaining.");
+        add("auction.ascension.five_minutes", "%s ends in 5 minutes or less.");
         add("auction.ascension.lost", "You lost the auction for %s. Your %s Spiritual Stones were returned to your Auction Inbox.");
         add("auction.ascension.ended_watching", "The auction for %s has ended.");
         add("auction.ascension.cancelled_watching", "The auction for %s was cancelled.");
@@ -533,6 +563,10 @@ public class AscLangProvider extends LanguageProvider {
         add("gui.ascension.introspection.toggle_passive.disable", "Disable passive");
         add("gui.ascension.introspection.back", "Back");
         add("gui.ascension.introspection.skill_mastery", "Mastery: %s");
+        add("gui.ascension.introspection.skill_mastery_progress", "Mastery: %s | %s/%s");
+        add("gui.ascension.introspection.skill_mastery_capped", "Mastery: %s (cap: %s)");
+        add("gui.ascension.introspection.skill_mastery_maxed", "Mastery: %s (maximum)");
+        add("gui.ascension.introspection.skill_mastery_unavailable", "Mastery: %s (progression unavailable)");
         add("gui.ascension.introspection.path_progress", "Path: %s%%");
         add("gui.ascension.introspection.skill_slots.open", "Show skill slots");
         add("gui.ascension.introspection.skill_slots.close", "Hide skill slots");
@@ -564,9 +598,16 @@ public class AscLangProvider extends LanguageProvider {
         add("toast.ascension.physique_changed", "Physique Changed");
         add("toast.ascension.bloodline_gained", "Bloodline Gained");
         add("toast.ascension.technique_learned", "Technique Learned");
+        add("toast.ascension.skill_mastery_advanced", "Skill Mastery Advanced");
+        add("toast.ascension.skill_mastery_message", "%s: %s");
         add("toast.ascension.realm_advanced", "Realm Advanced");
         add("toast.ascension.realm_regressed", "Realm Regressed");
         add("toast.ascension.realm_change_message", "%s: %s");
+
+        add("ascension.connection.requires.physique", "Requires the physique: %s");
+        add("ascension.connection.requires.technique", "Requires the technique: %s");
+        add("ascension.connection.requires.bloodline", "Requires the bloodline: %s");
+        add("ascension.connection.requires.path", "Requires the path: %s");
 
 
 
@@ -660,7 +701,10 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.tooltip.jade_bottle", "Jade Bottle");
         add("ascension.tooltip.jade_bottle.contained", "Contained");
         add("ascension.tooltip.jade_bottle.contained_pill", "Contained Pill");
-        add("ascension.tooltip.jade_bottle.expiration", "Expiration");
+        add("ascension.tooltip.jade_bottle.expiration", "Time Remaining");
+        add("ascension.tooltip.jade_bottle.empty", "Empty");
+        add("ascension.tooltip.jade_bottle.expired", "Expired");
+        add("ascension.tooltip.jade_bottle.not_applicable", "X");
 
 
 
@@ -874,6 +918,9 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.physique.thunder_spirit_veins.name", "Thunder Spirit Veins");
         add("ascension.physique.thunder_spirit_veins.desc", "Fine channels run through the limbs like branching lightning, letting violent thunder qi pass through flesh with unusual speed.");
 
+        add("ascension.physique.god_envied_physique.name", "God Envied Physique");
+        add("ascension.physique.god_envied_physique.desc", "A body the heavens themselves begrudge. It's Qi Refining Stage has no ceiling, boasting god-slaying capabilities and immortality from the extremely pure and dense Qi!");
+
         //Heaven Physiques
         add("ascension.physique.lunar_dream_eyes.name", "Lunar Dream Eyes");
         add("ascension.physique.lunar_dream_eyes.desc", "Eyes born beneath an unachievable moon perceive the seam between waking thought and dream.");
@@ -1056,9 +1103,16 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.moonlit_current_combat_scripture.name", "Moonlit Current Combat Scripture");
         add("ascension.technique.moonlit_current_combat_scripture.desc", "A fluid combat style whose steps and waves change course before an opponents very eyes.");
 
+        add("ascension.technique.boundless_qi_scripture.name", "Boundless Qi Scripture");
+        add("ascension.technique.boundless_qi_scripture.desc", "A Qingming Sword Sect breathing technique with no limit and no ceiling. Condense the same breath ten thousand times and the qi within grows without end.");
+
+
         //Skills
         add("ascension.skill.divine_sense.name", "Divine Sense");
         add("ascension.skill.divine_sense.desc", "Release a pulse of spiritual perception that reveals nearby beings and items through obstacles.");
+
+        add("ascension.skill.boundless_cultivation.name", "Boundless Cultivation");
+        add("ascension.skill.boundless_cultivation.desc", "A breathing skill with no upper limit nor does it have a ceiling.");
 
         add("ascension.skill.eagle_claw_rending_palm.name", "Eagle-Claw Rending Palm");
         add("ascension.skill.eagle_claw_rending_palm.desc", "Hook the hand like a talon and drive a short tearing palm through the opponent's guard.");
@@ -1131,7 +1185,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.stillfrost_breathing.name", "Stillfrost Breathing");
         add("ascension.skill.stillfrost_breathing.desc", "Breathe slowly and draw frost into the soul, cultivating inner stillness while refining Soul through Ice");
         add("ascension.skill.dual_wield_modifier.name", "Dual Wielding");
-        add("ascension.skill.dual_wield_modifier.desc", "EIZY WRITE SOMETHING HERE PLS FOR THE LOVE OF GOD");
+        add("ascension.skill.dual_wield_modifier.desc", "Dual wield your goofy Fists or Blades (more to come)");
         add("ascension.skill.sustained_spirit.name", "Sustained Spirit");
         add("ascension.skill.sustained_spirit.desc", "Cold spiritual stillness suppresses wasteful movement, reducing exhaustion and stamina spent through travel");
         add("ascension.skill.frostbound_stillness.name", "Frostbound Stillness");

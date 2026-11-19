@@ -1,17 +1,21 @@
 {
   "type": "ascension:simple_technique",
   "name": {
-    "translate": "ascension.technique.reapers_calling.name"
+    "translate": "ascension.technique.nine_revolutions_slaughter_wheel.name"
   },
   "description": {
-    "translate": "ascension.technique.reapers_calling.desc"
+    "translate": "ascension.technique.nine_revolutions_slaughter_wheel.desc"
   },
   "on_added": [
     {
       "type": "ascension:grant_skills",
       "skills": [
-        "ascension:passive/samsaras_witness",
-        "ascension:castable/divine_sense/divine_sense_reapers_calling"
+        "ascension:castable/cultivation/nine_revolutions_circulation",
+        "ascension:passive/unending_revolution",
+        "ascension:castable/slaughter_wheel_manifestation",
+        "ascension:castable/revolving_butchers_guard",
+        "ascension:castable/ninefold_carnage_circuit",
+        "ascension:castable/heaven_grinding_slaughter_wheel"
       ]
     }
   ],
@@ -19,16 +23,16 @@
     "theme": "ascension:technique_manual",
     "theme_overrides": {
       "colors": {
-        "accent": "#A68BD4FF",
-        "border_top": "#DED5F2FF",
-        "border_bottom": "#30223FFF",
-        "background": "#09070DEE"
+        "accent": "#D5482CFF",
+        "border_top": "#F2B05DFF",
+        "border_bottom": "#290307FF",
+        "background": "#090304EE"
       },
       "background_style": {
         "pattern": "stars",
         "color": "accent",
-        "alpha": 6,
-        "spacing": 15
+        "alpha": 7,
+        "spacing": 13
       }
     },
     "template": "ascension:default_cultivation_technique",

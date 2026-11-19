@@ -50,7 +50,8 @@ import java.util.WeakHashMap;
 
 /**
  * Redraws held items with a coating's sword look (QiCoatingLooks, drawn by sword_qi.fsh). The item-in-hand mixins mark which
- * entity's item is being submitted, and ItemLayerSwordQiMixin hands each item layer's quads here before vanilla submits them.
+ * entity's item is being submitted (ChakramRenderer does the same for a thrown chakram, with the coating it was thrown with),
+ * and ItemLayerSwordQiMixin hands each item layer's quads here before vanilla submits them.
  */
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID, value = Dist.CLIENT)
 public final class SwordQiRenderer {
@@ -99,23 +100,41 @@ public final class SwordQiRenderer {
     private SwordQiRenderer() {
     }
 
+    /**
+     * Marks the item an entity is holding as the one being submitted, coated with that entity's External coating if it has one.
+     */
     public static void begin(int entityId, ItemStack itemStack) {
         Minecraft minecraft = Minecraft.getInstance();
         Entity entity = minecraft.level == null ? null : minecraft.level.getEntity(entityId);
         QiCoating coating = entity == null ? null : QiCoatingClientState.get(entity.getUUID(), QiCoatingChannel.EXTERNAL);
+        start(entityId, entity, itemStack, coating, false);
+    }
+
+    /**
+     * Marks a thrown weapon (ChakramEntity) as the item being submitted, coated with the coating it was thrown with. It shows
+     * fully formed, and its hits, echoes and foliage tint are worked out on the thrown entity rather than the thrower.
+     */
+    public static void beginThrown(int entityId, ItemStack itemStack, QiCoating coating) {
+        Minecraft minecraft = Minecraft.getInstance();
+        Entity entity = minecraft.level == null ? null : minecraft.level.getEntity(entityId);
+        start(entityId, entity, itemStack, entity == null ? null : coating, true);
+    }
+
+    private static void start(int entityId, Entity entity, ItemStack itemStack, QiCoating coating, boolean thrown) {
+        Minecraft minecraft = Minecraft.getInstance();
         currentLook = coating == null || !coating.swordQi() || !QiCoatingService.coatsWeapon(itemStack) ? null
                 : coating.definition().sword().map(sword -> QiCoatingLooks.sword(sword.look())).orElse(null);
         current = currentLook == null ? null : coating;
         currentQuietLook = current == null ? null
                 : coating.definition().sword().flatMap(QiCoatingDefinition.Sword::quietLook).map(QiCoatingLooks::sword).orElse(null);
         currentEntityId = entityId;
-        currentFreeze = current != null && current.grows() ? QiCoatingClientState.growth(entity.getUUID(), current) : 1.0F;
+        currentFreeze = current != null && current.grows() && !thrown ? QiCoatingClientState.growth(entity.getUUID(), current) : 1.0F;
         currentImpact = current != null && current.reacts() ? QiCoatingLayer.latestImpactData(current, entityId) : QiCoatingLayer.NO_IMPACT;
         if (currentLook != null && currentLook.foliage()) {
             currentImpact = packFoliage(QiCoatingLayer.foliageTint(current, entityId,
                     LevelRenderer.getLightCoords(minecraft.level, BlockPos.containing(entity.getEyePosition()))));
         }
-        currentGather = current != null && current.grows() ? current.definition().gather().orElse(null) : null;
+        currentGather = current != null && current.grows() && !thrown ? current.definition().gather().orElse(null) : null;
     }
 
     public static void end() {

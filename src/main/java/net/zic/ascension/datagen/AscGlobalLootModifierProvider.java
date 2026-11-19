@@ -20,6 +20,7 @@ import net.minecraft.world.entity.animal.fox.Fox;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
@@ -496,6 +497,67 @@ public class AscGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         new LootTableIdCondition.Builder(Identifier.withDefaultNamespace("chests/end_city_treasure")).build(),
                         LootItemRandomChanceCondition.randomChance(0.24f).build()},
                         new ItemStackTemplate(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE.get())));
+
+
+
+
+        // --- ORDINARY TECHNIQUES (16% - 24%) ---
+
+        // Simple Dungeon
+        addTechnique("ordinary/cinderveil_flame_battle_art_from_dungeon", "chests/simple_dungeon", AscAddedLootTableProvider.ORDINARY_CINDERVEIL_FLAME, 0.18f);
+        addTechnique("ordinary/iron_fist_tempering_manual_from_dungeon", "chests/simple_dungeon", AscAddedLootTableProvider.ORDINARY_IRON_FIST, 0.22f);
+
+        // Abandoned Mineshaft
+        addTechnique("ordinary/grasping_sand_technique_from_mineshaft", "chests/abandoned_mineshaft", AscAddedLootTableProvider.ORDINARY_GRASPING_SAND, 0.21f);
+        addTechnique("ordinary/shadowless_art_from_mineshaft", "chests/abandoned_mineshaft", AscAddedLootTableProvider.ORDINARY_SHADOWLESS_ART, 0.24f);
+
+        // Jungle Temple
+        addTechnique("ordinary/groveheart_endless_spring_art_from_jungle", "chests/jungle_temple", AscAddedLootTableProvider.ORDINARY_GROVEHEART, 0.19f);
+        addTechnique("ordinary/mountain_root_bone_scripture_from_jungle", "chests/jungle_temple", AscAddedLootTableProvider.ORDINARY_MOUNTAIN_ROOT, 0.20f);
+
+        // Desert Pyramid
+        addTechnique("ordinary/imperial_seven_stances_from_desert", "chests/desert_pyramid", AscAddedLootTableProvider.ORDINARY_IMPERIAL_SEVEN, 0.17f);
+        addTechnique("ordinary/eagle_claw_palm_technique_from_desert", "chests/desert_pyramid", AscAddedLootTableProvider.ORDINARY_EAGLE_CLAW, 0.21f);
+
+        // Nether Fortress
+        addTechnique("ordinary/hellbound_marrow_scripture_from_fortress", "chests/nether_bridge", AscAddedLootTableProvider.ORDINARY_HELLBOUND_MARROW, 0.16f);
+        addTechnique("ordinary/lightness_technique_from_fortress", "chests/nether_bridge", AscAddedLootTableProvider.ORDINARY_LIGHTNESS, 0.20f);
+
+        // Village
+        addTechnique("ordinary/martial_transcendence_vol_1_from_village", "chests/village/village_plains_house", AscAddedLootTableProvider.ORDINARY_MARTIAL_VOL_1, 0.18f);
+        addTechnique("ordinary/qi_coatings_leftovers_from_village", "chests/village/village_snowy_house", AscAddedLootTableProvider.ORDINARY_QI_COATINGS_LEFTOVERS, 0.17f);
+
+        // Woodland Mansion
+        addTechnique("ordinary/nine_paths_of_truth_from_mansion", "chests/woodland_mansion", AscAddedLootTableProvider.ORDINARY_NINE_PATHS, 0.22f);
+        addTechnique("ordinary/sustained_spirit_art_from_mansion", "chests/woodland_mansion", AscAddedLootTableProvider.ORDINARY_SUSTAINED_SPIRIT, 0.19f);
+
+        // Mob drops
+        addTechniqueMob("ordinary/pale_moon_scripture_from_evoker", "entities/evoker", AscAddedLootTableProvider.ORDINARY_PALE_MOON, 0.20f);
+        addTechniqueMob("ordinary/sword_draw_manual_from_vindicator", "entities/vindicator", AscAddedLootTableProvider.ORDINARY_SWORD_DRAW, 0.18f);
+        addTechniqueMob("ordinary/open_sky_breathing_scripture_from_witch", "entities/witch", AscAddedLootTableProvider.ORDINARY_OPEN_SKY, 0.19f);
+        addTechniqueMob("ordinary/piercing_dawn_spear_manual_from_pillager", "entities/pillager", AscAddedLootTableProvider.ORDINARY_PIERCING_DAWN, 0.21f);
+
+
+        // --- PROFOUND TECHNIQUES (14% - 19%) ---
+
+        // End City
+        addTechnique("profound/astral_essence_technique_from_end_city", "chests/end_city_treasure", AscAddedLootTableProvider.PROFOUND_ASTRAL_ESSENCE, 0.15f);
+        addTechnique("profound/scholarly_soul_technique_from_end_city", "chests/end_city_treasure", AscAddedLootTableProvider.PROFOUND_SCHOLARLY_SOUL, 0.16f);
+
+        // Bastion Remnant
+        addTechnique("profound/emberblood_dragon_sutra_from_bastion", "chests/bastion_treasure", AscAddedLootTableProvider.PROFOUND_EMBERBLOOD_DRAGON, 0.17f);
+        addTechnique("profound/martial_transcendence_vol_2_from_bastion", "chests/bastion_bridge", AscAddedLootTableProvider.PROFOUND_MARTIAL_VOL_2, 0.18f);
+
+
+        // Ocean Monument / Shipwreck
+        addTechnique("profound/locust_bleeding_manual_from_monument", "chests/monster_room", AscAddedLootTableProvider.PROFOUND_LOCUST_BLEEDING, 0.14f);
+        addTechnique("profound/windstring_hunting_canon_from_shipwreck_treasure", "chests/shipwreck_treasure", AscAddedLootTableProvider.PROFOUND_WINDSTRING, 0.16f);
+
+        // Mob Drops
+        addTechniqueMob("profound/burning_bones_technique_from_blaze", "entities/blaze", AscAddedLootTableProvider.PROFOUND_BURNING_BONES, 0.17f);
+        addTechniqueMob("profound/white_lightning_ten_stage_technique_from_charged_creeper", "entities/creeper", AscAddedLootTableProvider.PROFOUND_WHITE_LIGHTNING, 0.19f);
+        addTechniqueMob("profound/rigid_stance_summation_technique_from_iron_golem", "entities/iron_golem", AscAddedLootTableProvider.PROFOUND_RIGID_STANCE, 0.15f);
+        addTechniqueMob("profound/mountain_splitting_axe_art_from_ravager", "entities/ravager", AscAddedLootTableProvider.PROFOUND_MOUNTAIN_SPLITTING, 0.18f);
     }
 
     private LootItemCondition.Builder chickenVariant(ResourceKey<ChickenVariant> variant) {
@@ -524,6 +586,29 @@ public class AscGlobalLootModifierProvider extends GlobalLootModifierProvider {
         CompoundTag tag = new CompoundTag();
         tag.putBoolean(key, value);
         return new NbtPredicate(tag);
+    }
+
+    private void addTechnique(String path, String lootTable, ResourceKey<LootTable> addedTable, float chance) {
+        add(path, new AddTableLootModifier(
+                new LootItemCondition[]{
+                        new LootTableIdCondition.Builder(Identifier.withDefaultNamespace(lootTable)).build(),
+                        LootItemRandomChanceCondition.randomChance(chance).build()
+                },
+                IGlobalLootModifier.DEFAULT_PRIORITY,
+                addedTable
+        ));
+    }
+
+    private void addTechniqueMob(String path, String lootTable, ResourceKey<LootTable> addedTable, float chance) {
+        add(path, new AddTableLootModifier(
+                new LootItemCondition[]{
+                        new LootTableIdCondition.Builder(Identifier.withDefaultNamespace(lootTable)).build(),
+                        killedPersonallyByPlayer().build(),
+                        LootItemRandomChanceCondition.randomChance(chance).build()
+                },
+                IGlobalLootModifier.DEFAULT_PRIORITY,
+                addedTable
+        ));
     }
 
     /**

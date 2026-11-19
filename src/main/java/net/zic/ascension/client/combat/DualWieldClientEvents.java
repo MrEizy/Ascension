@@ -1,5 +1,6 @@
 package net.zic.ascension.client.combat;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.EntityHitResult;
@@ -8,18 +9,38 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.network.OffhandAttackPayload;
-
+import org.lwjgl.glfw.GLFW;
 
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID, value = Dist.CLIENT)
 public final class DualWieldClientEvents {
     private DualWieldClientEvents() {
     }
 
-    private static long lastSend = Long.MIN_VALUE;
+    private static boolean usePressed;
+
+    private static boolean isUseKey(InputConstants.Type type, int code) {
+        InputConstants.Key bound = Minecraft.getInstance().options.keyUse.getKey();
+        return bound.getType() == type && bound.getValue() == code;
+    }
+
+    @SubscribeEvent
+    public static void onMouseButton(InputEvent.MouseButton.Pre event) {
+        if (event.getAction() == GLFW.GLFW_PRESS && isUseKey(InputConstants.Type.MOUSE, event.getButton())) {
+            usePressed = true;
+        }
+    }
+
+    @SubscribeEvent
+    public static void onKey(InputEvent.Key event) {
+        if (event.getAction() == GLFW.GLFW_PRESS && isUseKey(InputConstants.Type.KEYSYM, event.getKey())) {
+            usePressed = true;
+        }
+    }
 
     @SubscribeEvent
     public static void onInteraction(InputEvent.InteractionKeyMappingTriggered event) {
@@ -32,22 +53,38 @@ public final class DualWieldClientEvents {
         }
         HitResult hit = minecraft.hitResult;
         if (hit != null && hit.getType() == HitResult.Type.BLOCK) {
-            return; // clicking a block: normal Minecraft
+            return;
         }
 
         event.setCanceled(true);
         event.setSwingHand(false);
-        long now = minecraft.level.getGameTime();
-        if (now - lastSend < 3) {
+
+        boolean fresh = usePressed;
+        usePressed = false;
+        if (!fresh) {
             return;
         }
-        lastSend = now;
+        if (DualWieldClientState.offhandCooldown() > 0) {
+            return;
+        }
+
+        DualWieldClientState.startOffhandSwing();
         minecraft.player.swing(InteractionHand.OFF_HAND);
-        ClientPacketDistributor.sendToServer(new OffhandAttackPayload(hit instanceof EntityHitResult entityHit ? entityHit.getEntity().getId() : -1));
+        ClientPacketDistributor.sendToServer(new OffhandAttackPayload(
+                hit instanceof EntityHitResult entityHit ? entityHit.getEntity().getId() : -1));
+    }
+
+    @SubscribeEvent
+    public static void onClientTick(ClientTickEvent.Post event) {
+        DualWieldClientState.tick();
+        if (!Minecraft.getInstance().options.keyUse.isDown()) {
+            usePressed = false;
+        }
     }
 
     @SubscribeEvent
     public static void onLogout(ClientPlayerNetworkEvent.LoggingOut event) {
-        DualWieldClientState.set(false);
+        DualWieldClientState.reset();
+        usePressed = false;
     }
 }

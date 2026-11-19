@@ -11,10 +11,13 @@ import net.minecraft.world.level.Level;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
+import net.zic.ascension.api.ascension.core.CoreRegistries;
+import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineInstance;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.impl.core.connection.Connected;
 
 import java.util.List;
 
@@ -45,6 +48,17 @@ public class BloodlineTransferItem extends Item {
 
         if(holder == null || holder.getData() == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData().getSource();
+
+        // connected_bloodline: the physique / technique it is connected to has to be held first
+        Bloodline<?> definition = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY, targetBloodline, level.registryAccess());
+        if (definition instanceof Connected connected) {
+            Component failure = connected.connections().failureMessage(source, level.registryAccess());
+            if (failure != null) {
+                player.sendOverlayMessage(failure);
+                return InteractionResult.FAIL;
+            }
+        }
+
         // The Qi Coatings Dev Bloodline (testing only) replaces every bloodline held, itself included, so it is the only one and
         // its purity actions run fresh each time instead of merging into a copy already held.
         if(targetBloodline.equals(DEV_BLOODLINE)){

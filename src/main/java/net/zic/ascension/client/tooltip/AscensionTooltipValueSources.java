@@ -2,6 +2,9 @@ package net.zic.ascension.client.tooltip;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.zic.ascension.AscensionCraft;
@@ -18,6 +21,7 @@ import net.zic.ascension.api.ascension.core.progression.ProgressActionReference;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.common.item.ModItems;
 import net.zic.ascension.common.item.herbs.HerbItem;
 import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
@@ -83,6 +87,8 @@ public final class AscensionTooltipValueSources {
     public static final Identifier PILL_DECAY = AscensionCraft.prefix("pill_decay");
     public static final Identifier PILL_IMPURITIES = AscensionCraft.prefix("pill_impurities");
     public static final Identifier PILL_BADGES = AscensionCraft.prefix("pill_badges");
+    public static final Identifier JADE_BOTTLE_CONTENTS = AscensionCraft.prefix("jade_bottle_contents");
+    public static final Identifier JADE_BOTTLE_EXPIRATION = AscensionCraft.prefix("jade_bottle_expiration");
 
     private static boolean registered;
 
@@ -110,6 +116,8 @@ public final class AscensionTooltipValueSources {
         ZenithTooltipSources.registerValue(PILL_EFFECT, AscensionTooltipValueSources::pillEffect);
         ZenithTooltipSources.registerValue(PILL_DECAY, AscensionTooltipValueSources::pillDecay);
         ZenithTooltipSources.registerValue(PILL_IMPURITIES, AscensionTooltipValueSources::pillImpurities);
+        ZenithTooltipSources.registerValue(JADE_BOTTLE_CONTENTS, AscensionTooltipValueSources::jadeBottleContents);
+        ZenithTooltipSources.registerValue(JADE_BOTTLE_EXPIRATION, AscensionTooltipValueSources::jadeBottleExpiration);
 
         ZenithTooltipSources.registerElement(PHYSIQUE_PATHS, context -> badges(PHYSIQUE_PATHS, context, ZenithTooltipColor.ACCENT));
         ZenithTooltipSources.registerElement(PHYSIQUE_STATS, context -> rows(PHYSIQUE_STATS, context));
@@ -694,6 +702,46 @@ public final class AscensionTooltipValueSources {
                         : String.format(java.util.Locale.ROOT, "~%ds", remaining / 20L));
         return Optional.of(ZenithTooltipValue.text(Component.translatable("ascension.alchemy.pill.vitality",
                 Math.round(vitality * 100.0D), time)));
+    }
+
+    private static Optional<ItemStack> jadeBottlePill(ZenithTooltipContext context) {
+        return context.stack().getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY)
+                .allItemsCopyStream()
+                .filter(stack -> !stack.isEmpty())
+                .findFirst();
+    }
+
+    private static Optional<ZenithTooltipValue> jadeBottleContents(ZenithTooltipContext context) {
+        Component contained = jadeBottlePill(context)
+                .map(stack -> stack.getCount() > 1
+                        ? stack.getHoverName().copy().append(" ×" + stack.getCount())
+                        : stack.getHoverName())
+                .orElseGet(() -> Component.translatable("ascension.tooltip.jade_bottle.empty"));
+        return Optional.of(ZenithTooltipValue.text(contained));
+    }
+
+    private static Optional<ZenithTooltipValue> jadeBottleExpiration(ZenithTooltipContext context) {
+        Component expiration = jadeBottlePill(context).map(stack -> {
+            if (stack.is(ModItems.PILL_RESIDUE.get())) {
+                return Component.translatable("ascension.tooltip.jade_bottle.expired");
+            }
+            MedicinalProfile profile = stack.get(AscensionComponents.MEDICINAL_PILL.get());
+            if (profile == null) return Component.translatable("ascension.tooltip.jade_bottle.not_applicable");
+            long now = tooltipTime(context);
+            MedicinalDecay.State state = stack.get(AscensionComponents.MEDICINAL_DECAY.get());
+            if (state == null) state = MedicinalDecay.fresh(now);
+            if (MedicinalDecay.vitality(profile, state, now) <= MedicinalDecay.EXPIRE_AT) {
+                return Component.translatable("ascension.tooltip.jade_bottle.expired");
+            }
+            long remaining = MedicinalDecay.ticksUntilExpiry(profile, state, now);
+            if (remaining == Long.MAX_VALUE) return Component.translatable("ascension.alchemy.pill.preserved");
+            return Component.literal(remaining >= 24000L
+                    ? String.format(java.util.Locale.ROOT, "~%.1f days", remaining / 24000.0D)
+                    : remaining >= 1000L
+                    ? String.format(java.util.Locale.ROOT, "~%.1f hours", remaining / 1000.0D)
+                    : String.format(java.util.Locale.ROOT, "~%ds", remaining / 20L));
+        }).orElseGet(() -> Component.translatable("ascension.tooltip.jade_bottle.not_applicable"));
+        return Optional.of(ZenithTooltipValue.text(expiration));
     }
 
     private static Optional<AscensionComponents.PillData> pillData(ZenithTooltipContext context) {

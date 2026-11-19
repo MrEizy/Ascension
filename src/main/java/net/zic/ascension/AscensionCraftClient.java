@@ -30,6 +30,7 @@ import net.zic.ascension.client.gui.AscensionHudOverlay;
 import net.zic.ascension.client.gui.QiCoatingWheelOverlay;
 import net.zic.ascension.client.gui.SkillWheelOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
+import net.zic.ascension.client.renderer.weapons.ChakramRenderer;
 import net.zic.ascension.client.visual.runtime.BarrierShellVisualController;
 import net.zic.ascension.client.visual.runtime.QiBarrierVisualController;
 import net.zic.ascension.client.visual.runtime.ClientRuntimeVisuals;
@@ -45,6 +46,7 @@ import net.zic.ascension.common.gui.menus.AscMenuTypes;
 import net.zic.ascension.common.gui.menus.jade_bottle.JadeBottleScreen;
 import net.zic.ascension.common.gui.menus.alchemy.AlchemyFurnaceScreen;
 import net.zic.ascension.client.renderer.alchemy.AlchemyFurnaceRenderer;
+import net.zic.ascension.client.alchemy.AlchemyStabilizationClient;
 import net.zic.ascension.common.blocks.entity.AscBlockEntities;
 import net.zic.ascension.common.particle.AscensionParticles;
 import net.zic.ascension.network.WeaponSwingRequestPacket;
@@ -67,6 +69,7 @@ public class AscensionCraftClient {
         modEventBus.addListener(AscensionCraftClient::registerKeyBindings);
         modEventBus.addListener(ClientEvents::onClientSetup);
         modEventBus.addListener(AscensionHudOverlay::registerGuiLayers);
+        modEventBus.addListener(AlchemyStabilizationClient::registerGuiLayers);
         NeoForge.EVENT_BUS.addListener(AscensionHudOverlay::hideVanillaHealth);
 
     }
@@ -161,6 +164,8 @@ public class AscensionCraftClient {
             event.registerEntityRenderer(AscEntities.SECT_ELDER.get(), ctx -> new CultivatorNpcRenderer<>(ctx, "sect_elder"));
             event.registerEntityRenderer(AscEntities.SECT_MASTER.get(), ctx -> new CultivatorNpcRenderer<>(ctx, "sect_master"));
             event.registerEntityRenderer(AscEntities.YOUNG_MASTER.get(), ctx -> new CultivatorNpcRenderer<>(ctx, "young_master"));
+
+            event.registerEntityRenderer(AscEntities.CHAKRAM.get(), ChakramRenderer::new);
             event.registerBlockEntityRenderer(AscBlockEntities.ALCHEMY_FURNACE_BE.get(), AlchemyFurnaceRenderer::new);
 
 

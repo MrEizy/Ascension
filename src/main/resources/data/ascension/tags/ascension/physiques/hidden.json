@@ -1,6 +1,6 @@
 {
   "values": [
-    "ascension:test",
-    "test_pack:simple_physique"
+    { "id": "ascension:test", "required": false },
+    { "id": "test_pack:simple_physique", "required": false }
   ]
 }

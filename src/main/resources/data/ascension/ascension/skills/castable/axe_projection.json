@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.axe_projection.name"},
-  "description": {"translate": "ascension.skill.axe_projection.desc"},
+  "name": {
+    "translate": "ascension.skill.axe_projection.name"
+  },
+  "description": {
+    "translate": "ascension.skill.axe_projection.desc"
+  },
   "actions": [
     {
       "type": "ascension:weapon_swing",
@@ -13,8 +17,14 @@
         3.0
       ],
       "damage": {
-        "base": 14.0,
-        "weapon": 1.0
+        "base": {
+          "base": 36.0,
+          "per_mastery": 1.98
+        },
+        "weapon": 1.7,
+        "stats": {
+          "ascension:strength": 0.18
+        }
       },
       "knockback": 1.3,
       "duration": 45.0,
@@ -46,7 +56,15 @@
   ],
   "cost": {
     "resource": "ascension:qi",
-    "amount": 100.0
+    "amount": {
+      "base": 100.0,
+      "per_mastery": -2.5,
+      "minimum": 87.0
+    }
   },
-  "cooldown": 240.0
+  "cooldown": {
+    "base": 240.0,
+    "per_mastery": -8.4,
+    "minimum": 196.8
+  }
 }

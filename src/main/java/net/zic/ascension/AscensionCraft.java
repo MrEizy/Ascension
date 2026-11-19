@@ -29,12 +29,20 @@ import net.zic.ascension.common.command.AscensionCommand;
 import net.zic.ascension.common.command.commands.StatDisplayCommand;
 import net.zic.ascension.common.command.commands.AuctionCommand;
 import net.zic.ascension.common.item.components.AscensionComponents;
+import net.zic.ascension.common.sounds.AscSounds;
 import net.zic.ascension.common.util.AscensionAttributes;
 import net.zic.ascension.datagen.loot.ModLootModifiers;
 import net.zic.ascension.configuration.mob_traits.traits.AscensionTraitTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationResolutionActionTypes;
 import net.zic.ascension.impl.datapack.tribulation.AscensionTribulationTypes;
+import net.zic.ascension.network.auction.AuctionActionPacket;
+import net.zic.ascension.network.auction.AuctionInboxActionPacket;
+import net.zic.ascension.network.auction.AuctionScreenPacket;
+import net.zic.ascension.network.auction.BidAuctionPacket;
+import net.zic.ascension.network.auction.CreateAuctionPacket;
 import net.zic.ascension.network.alchemy.ClientboundMedicinalCultivationProgressPacket;
+import net.zic.ascension.network.alchemy.ServerboundStabilizationHitPacket;
+import net.zic.ascension.network.alchemy.ClientboundStabilizationHitResultPacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationAddPacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationRemovePacket;
 import net.zic.ascension.network.tribulation.ClientboundTribulationUpdatePacket;
@@ -113,6 +121,9 @@ public class AscensionCraft {
         AscensionParticles.register(modEventBus);
 
         AscMenuTypes.register(modEventBus);
+
+        AscSounds.register(modEventBus);
+
 
 
         AscFluidTypes.register(modEventBus);
@@ -274,6 +285,32 @@ public class AscensionCraft {
             registrar.playToServer(NpcActionPacket.TYPE, NpcActionPacket.STREAM_CODEC, NpcActionPacket::handle);
             registrar.playToClient(NpcDialoguePacket.TYPE, NpcDialoguePacket.STREAM_CODEC, NpcDialoguePacket::handle);
 
+            registrar.playToClient(
+                    AuctionScreenPacket.TYPE,
+                    AuctionScreenPacket.STREAM_CODEC,
+                    AuctionScreenPacket::handle
+            );
+            registrar.playToServer(
+                    CreateAuctionPacket.TYPE,
+                    CreateAuctionPacket.STREAM_CODEC,
+                    CreateAuctionPacket::handle
+            );
+            registrar.playToServer(
+                    BidAuctionPacket.TYPE,
+                    BidAuctionPacket.STREAM_CODEC,
+                    BidAuctionPacket::handle
+            );
+            registrar.playToServer(
+                    AuctionActionPacket.TYPE,
+                    AuctionActionPacket.STREAM_CODEC,
+                    AuctionActionPacket::handle
+            );
+            registrar.playToServer(
+                    AuctionInboxActionPacket.TYPE,
+                    AuctionInboxActionPacket.STREAM_CODEC,
+                    AuctionInboxActionPacket::handle
+            );
+
             registrar.playToServer(
                     CycleDropModePacket.TYPE,
                     CycleDropModePacket.STREAM_CODEC,
@@ -332,6 +369,16 @@ public class AscensionCraft {
                     RuntimeVisualPacket.TYPE,
                     RuntimeVisualPacket.STREAM_CODEC,
                     RuntimeVisualPacket::handle
+            );
+            registrar.playToServer(
+                    ServerboundStabilizationHitPacket.TYPE,
+                    ServerboundStabilizationHitPacket.STREAM_CODEC,
+                    ServerboundStabilizationHitPacket::handle
+            );
+            registrar.playToClient(
+                    ClientboundStabilizationHitResultPacket.TYPE,
+                    ClientboundStabilizationHitResultPacket.STREAM_CODEC,
+                    ClientboundStabilizationHitResultPacket::handle
             );
             registrar.playToClient(
                     ClientboundMedicinalCultivationProgressPacket.TYPE,
@@ -439,6 +486,11 @@ public class AscensionCraft {
                     DualWieldStatePayload.TYPE,
                     DualWieldStatePayload.CODEC,
                     DualWieldStatePayload::handle
+            );
+            registrar.playToClient(
+                    OffhandCooldownPayload.TYPE,
+                    OffhandCooldownPayload.CODEC,
+                    OffhandCooldownPayload::handle
             );
 
         }

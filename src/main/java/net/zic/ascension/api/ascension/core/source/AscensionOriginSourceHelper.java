@@ -9,13 +9,11 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreAttachments;
 import net.zic.ascension.api.ascension.core.CoreDataSources;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
-import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineData;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineHolder;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineInstance;
 import net.zic.ascension.api.ascension.core.golden_core.GoldenCoreInstance;
 import net.zic.ascension.api.ascension.core.golden_core.data_source.GoldenCoreHolder;
-import net.zic.ascension.api.ascension.core.path.Path;
 import net.zic.ascension.api.ascension.core.path.realm.Realm;
 import net.zic.ascension.api.ascension.core.tribulation.TribulationInstance;
 import net.zic.ascension.api.ascension.event.golden_core.GoldenCoreEvent;
@@ -25,7 +23,6 @@ import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.bonus.EntityPathBonusHolder;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.path.bonus.data_source.DataSourcePathBonusHolder;
-import net.zic.ascension.api.ascension.core.physique.Physique;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueData;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueHolder;
 import net.zic.ascension.api.ascension.core.physique.PhysiqueInstance;
@@ -339,6 +336,8 @@ public class AscensionOriginSourceHelper {
         getBloodlineHolder(source).markBloodlineDirty(bloodline);
         resolveProcess(source,"modified_bloodline"+id);
     }
+    public static final Identifier COMMAND_PATH_OWNER = AscensionCraft.prefix("command");
+
     //──Path Access────────────────────────────────────────────────────────
 
     //TODO add accessor methods
@@ -369,7 +368,9 @@ public class AscensionOriginSourceHelper {
         if(path == null) return false;
         PathHolder holder = getPathHolder(source);
         if(holder.hasPath(path)){
+            if (holder.getOwners(path).contains(owner)) return false;
             holder.addPath(holder.getPath(path),owner);
+            markPathDirty(source, path);
             return true;
         }
         PathInstance<?> instance = PathInstance.create(path,source.getRegistryAccess());
@@ -390,7 +391,9 @@ public class AscensionOriginSourceHelper {
         Identifier path = instance.getPathId();
         PathHolder holder = getPathHolder(source);
         if(holder.hasPath(path)){
+            if (holder.getOwners(path).contains(owner)) return false;
             holder.addPath(instance,owner);
+            markPathDirty(source, path);
             return true;
         }
 
@@ -425,15 +428,22 @@ public class AscensionOriginSourceHelper {
 
 
     public static boolean removePath(OriginSource source,Identifier path,Identifier owner) {
-        if(path == null || !getPathHolder(source).hasPath(path)) return false;
+        if (path == null) return false;
+        PathHolder holder = getPathHolder(source);
+        if (!holder.hasPath(path) || !holder.getOwners(path).contains(owner)) return false;
 
-        if(!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
-        PathInstance<?> data = getPathHolder(source).getPath(path);
+        if (!CoreRegistries.PATH_REGISTRY.get(source.getRegistryAccess()).containsKey(path)) return false;
+        if (holder.getOwners(path).size() > 1) {
+            holder.removePath(path, owner);
+            markPathDirty(source, path);
+            return true;
+        }
+        PathInstance<?> data = holder.getPath(path);
         PathRemovedEvent.Pre pre = new PathRemovedEvent.Pre(path,data,source);
         NeoForge.EVENT_BUS.post(pre);
         if(pre.isCanceled()) return false;
 
-        boolean result = getPathHolder(source).removePath(path,owner);
+        boolean result = holder.removePath(path,owner);
         if(!result) return false;
 
         source.startProcess("remove_path");

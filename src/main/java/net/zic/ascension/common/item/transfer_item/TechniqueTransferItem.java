@@ -14,6 +14,7 @@ import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.ascension.core.technique.Technique;
+import net.zic.ascension.impl.core.connection.Connected;
 import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.item.components.AscensionComponents;
@@ -43,6 +44,15 @@ public class TechniqueTransferItem extends Item {
 
         if(holder == null || holder.getData() == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData().getSource();
+
+        // connected_technique: the physique / bloodline it is connected to has to be held first
+        if (targetTechnique instanceof Connected connected) {
+            Component failure = connected.connections().failureMessage(source, level.registryAccess());
+            if (failure != null) {
+                player.sendOverlayMessage(failure);
+                return InteractionResult.FAIL;
+            }
+        }
 
         if (targetTechnique instanceof AlchemyTechnique alchemy && !alchemy.basic()
                 && !AscensionOriginSourceHelper.hasTechnique(source, techniqueId)) {

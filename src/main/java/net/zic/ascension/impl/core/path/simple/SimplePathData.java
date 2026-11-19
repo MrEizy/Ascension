@@ -31,6 +31,11 @@ public final class SimplePathData implements PathData {
     SimplePathData() {
     }
 
+    public void setProgressFromCommand(double amount, double maxProgress) {
+        progress = Double.isFinite(maxProgress) && maxProgress > 0.0
+                ? Math.clamp(amount, 0.0, maxProgress) : 0.0;
+    }
+
     @Override
     public double getProgress() {
         return progress;

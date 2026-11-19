@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.blade_projection.name"},
-  "description": {"translate": "ascension.skill.blade_projection.desc"},
+  "name": {
+    "translate": "ascension.skill.blade_projection.name"
+  },
+  "description": {
+    "translate": "ascension.skill.blade_projection.desc"
+  },
   "actions": [
     {
       "type": "ascension:weapon_swing",
@@ -12,8 +16,15 @@
         3.0
       ],
       "damage": {
-        "base": 11.0,
-        "weapon": 1.0
+        "base": {
+          "base": 30.0,
+          "per_mastery": 1.65
+        },
+        "weapon": 1.5,
+        "stats": {
+          "ascension:strength": 0.13,
+          "ascension:agility": 0.08
+        }
       },
       "knockback": 0.8,
       "duration": 50.0,
@@ -45,7 +56,15 @@
   ],
   "cost": {
     "resource": "ascension:qi",
-    "amount": 75.0
+    "amount": {
+      "base": 75.0,
+      "per_mastery": -1.88,
+      "minimum": 65.25
+    }
   },
-  "cooldown": 180.0
+  "cooldown": {
+    "base": 180.0,
+    "per_mastery": -6.3,
+    "minimum": 147.6
+  }
 }

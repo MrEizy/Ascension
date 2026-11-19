@@ -71,6 +71,44 @@ public class AscAddedLootTableProvider implements LootTableSubProvider {
     public static final ResourceKey<LootTable> DUNGEON_SHALLOW_CORE_BODY_PHYSIQUE = key("added_loot/physiques/dungeon_shallow_core_body_physique");
     public static final ResourceKey<LootTable> WANDERING_TRADER_WEAK_SPIRIT_BODY_PHYSIQUE = key("added_loot/physiques/wandering_trader_weak_spirit_body_physique");
 
+    // Techniques - Ordinary
+    public static final ResourceKey<LootTable> ORDINARY_CINDERVEIL_FLAME = key("added_loot/techniques/ordinary/cinderveil_flame_battle_art");
+    public static final ResourceKey<LootTable> ORDINARY_IRON_FIST = key("added_loot/techniques/ordinary/iron_fist_tempering_manual");
+    public static final ResourceKey<LootTable> ORDINARY_GRASPING_SAND = key("added_loot/techniques/ordinary/grasping_sand_technique");
+    public static final ResourceKey<LootTable> ORDINARY_SHADOWLESS_ART = key("added_loot/techniques/ordinary/shadowless_art");
+    public static final ResourceKey<LootTable> ORDINARY_GROVEHEART = key("added_loot/techniques/ordinary/groveheart_endless_spring_art");
+    public static final ResourceKey<LootTable> ORDINARY_MOUNTAIN_ROOT = key("added_loot/techniques/ordinary/mountain_root_bone_scripture");
+    public static final ResourceKey<LootTable> ORDINARY_IMPERIAL_SEVEN = key("added_loot/techniques/ordinary/imperial_seven_stances");
+    public static final ResourceKey<LootTable> ORDINARY_EAGLE_CLAW = key("added_loot/techniques/ordinary/eagle_claw_palm_technique");
+    public static final ResourceKey<LootTable> ORDINARY_HELLBOUND_MARROW = key("added_loot/techniques/ordinary/hellbound_marrow_scripture");
+    public static final ResourceKey<LootTable> ORDINARY_LIGHTNESS = key("added_loot/techniques/ordinary/lightness_technique");
+    public static final ResourceKey<LootTable> ORDINARY_MARTIAL_VOL_1 = key("added_loot/techniques/ordinary/martial_transcendence_vol_1");
+    public static final ResourceKey<LootTable> ORDINARY_QI_COATINGS_LEFTOVERS = key("added_loot/techniques/ordinary/qi_coatings_leftovers");
+    public static final ResourceKey<LootTable> ORDINARY_NINE_PATHS = key("added_loot/techniques/ordinary/nine_paths_of_truth");
+    public static final ResourceKey<LootTable> ORDINARY_QI_COATINGS_DEV = key("added_loot/techniques/ordinary/qi_coatings_dev");
+    public static final ResourceKey<LootTable> ORDINARY_SUSTAINED_SPIRIT = key("added_loot/techniques/ordinary/sustained_spirit_art");
+    public static final ResourceKey<LootTable> ORDINARY_PALE_MOON = key("added_loot/techniques/ordinary/pale_moon_scripture");
+    public static final ResourceKey<LootTable> ORDINARY_SWORD_DRAW = key("added_loot/techniques/ordinary/sword_draw_manual");
+    public static final ResourceKey<LootTable> ORDINARY_OPEN_SKY = key("added_loot/techniques/ordinary/open_sky_breathing_scripture");
+    public static final ResourceKey<LootTable> ORDINARY_PIERCING_DAWN = key("added_loot/techniques/ordinary/piercing_dawn_spear_manual");
+
+    // Techniques - Profound
+    public static final ResourceKey<LootTable> PROFOUND_ASTRAL_ESSENCE = key("added_loot/techniques/profound/astral_essence_technique");
+    public static final ResourceKey<LootTable> PROFOUND_SCHOLARLY_SOUL = key("added_loot/techniques/profound/scholarly_soul_technique");
+    public static final ResourceKey<LootTable> PROFOUND_EMBERBLOOD_DRAGON = key("added_loot/techniques/profound/emberblood_dragon_sutra");
+    public static final ResourceKey<LootTable> PROFOUND_MARTIAL_VOL_2 = key("added_loot/techniques/profound/martial_transcendence_vol_2");
+    public static final ResourceKey<LootTable> PROFOUND_STILLWINTER = key("added_loot/techniques/profound/stillwinter_mirror_visualization");
+    public static final ResourceKey<LootTable> PROFOUND_SANGUINE_ABYSS = key("added_loot/techniques/profound/sanguine_abyss_technique");
+    public static final ResourceKey<LootTable> PROFOUND_MOONLIT_CURRENT = key("added_loot/techniques/profound/moonlit_current_combat_scripture");
+    public static final ResourceKey<LootTable> PROFOUND_MOUNT_HUA = key("added_loot/techniques/profound/mount_hua_sword_manual");
+    public static final ResourceKey<LootTable> PROFOUND_LOCUST_BLEEDING = key("added_loot/techniques/profound/locust_bleeding_manual");
+    public static final ResourceKey<LootTable> PROFOUND_WINDSTRING = key("added_loot/techniques/profound/windstring_hunting_canon");
+    public static final ResourceKey<LootTable> PROFOUND_BURNING_BONES = key("added_loot/techniques/profound/burning_bones_technique");
+    public static final ResourceKey<LootTable> PROFOUND_NINEFOLD_THUNDER = key("added_loot/techniques/profound/ninefold_thunder_meridian_scripture");
+    public static final ResourceKey<LootTable> PROFOUND_WHITE_LIGHTNING = key("added_loot/techniques/profound/white_lightning_ten_stage_technique");
+    public static final ResourceKey<LootTable> PROFOUND_RIGID_STANCE = key("added_loot/techniques/profound/rigid_stance_summation_technique");
+    public static final ResourceKey<LootTable> PROFOUND_MOUNTAIN_SPLITTING = key("added_loot/techniques/profound/mountain_splitting_axe_art");
+
 
     /** Physiques don't use purity yet, so every physique essence is generated at full purity. */
     static final int PHYSIQUE_PURITY = 100;
@@ -176,6 +214,45 @@ public class AscAddedLootTableProvider implements LootTableSubProvider {
                 .withPool(physiquePool(AscensionCraft.prefix("1_ordinary/shallow_core_body_physique"))));
         consumer.accept(WANDERING_TRADER_WEAK_SPIRIT_BODY_PHYSIQUE, LootTable.lootTable()
                 .withPool(physiquePool(AscensionCraft.prefix("1_ordinary/weak_spirit_body_physique"))));
+
+
+        // Ordinary Techniques
+        consumer.accept(ORDINARY_CINDERVEIL_FLAME, LootTable.lootTable().withPool(techniquePool("1_ordinary/cinderveil_flame_battle_art")));
+        consumer.accept(ORDINARY_IRON_FIST, LootTable.lootTable().withPool(techniquePool("1_ordinary/iron_fist_tempering_manual")));
+        consumer.accept(ORDINARY_GRASPING_SAND, LootTable.lootTable().withPool(techniquePool("1_ordinary/grasping_sand_technique")));
+        consumer.accept(ORDINARY_SHADOWLESS_ART, LootTable.lootTable().withPool(techniquePool("1_ordinary/shadowless_art")));
+        consumer.accept(ORDINARY_GROVEHEART, LootTable.lootTable().withPool(techniquePool("1_ordinary/groveheart_endless_spring_art")));
+        consumer.accept(ORDINARY_MOUNTAIN_ROOT, LootTable.lootTable().withPool(techniquePool("1_ordinary/mountain_root_bone_scripture")));
+        consumer.accept(ORDINARY_IMPERIAL_SEVEN, LootTable.lootTable().withPool(techniquePool("1_ordinary/imperial_seven_stances")));
+        consumer.accept(ORDINARY_EAGLE_CLAW, LootTable.lootTable().withPool(techniquePool("1_ordinary/eagle_claw_palm_technique")));
+        consumer.accept(ORDINARY_HELLBOUND_MARROW, LootTable.lootTable().withPool(techniquePool("1_ordinary/hellbound_marrow_scripture")));
+        consumer.accept(ORDINARY_LIGHTNESS, LootTable.lootTable().withPool(techniquePool("1_ordinary/lightness_technique")));
+        consumer.accept(ORDINARY_MARTIAL_VOL_1, LootTable.lootTable().withPool(techniquePool("1_ordinary/martial_transcendence_vol_1")));
+        consumer.accept(ORDINARY_QI_COATINGS_LEFTOVERS, LootTable.lootTable().withPool(techniquePool("1_ordinary/qi_coatings_leftovers")));
+        consumer.accept(ORDINARY_NINE_PATHS, LootTable.lootTable().withPool(techniquePool("1_ordinary/nine_paths_of_truth")));
+        consumer.accept(ORDINARY_QI_COATINGS_DEV, LootTable.lootTable().withPool(techniquePool("1_ordinary/qi_coatings_dev")));
+        consumer.accept(ORDINARY_SUSTAINED_SPIRIT, LootTable.lootTable().withPool(techniquePool("1_ordinary/sustained_spirit_art")));
+        consumer.accept(ORDINARY_PALE_MOON, LootTable.lootTable().withPool(techniquePool("1_ordinary/pale_moon_scripture")));
+        consumer.accept(ORDINARY_SWORD_DRAW, LootTable.lootTable().withPool(techniquePool("1_ordinary/sword_draw_manual")));
+        consumer.accept(ORDINARY_OPEN_SKY, LootTable.lootTable().withPool(techniquePool("1_ordinary/open_sky_breathing_scripture")));
+        consumer.accept(ORDINARY_PIERCING_DAWN, LootTable.lootTable().withPool(techniquePool("1_ordinary/piercing_dawn_spear_manual")));
+
+        // Profound Techniques
+        consumer.accept(PROFOUND_ASTRAL_ESSENCE, LootTable.lootTable().withPool(techniquePool("2_profound/astral_essence_technique")));
+        consumer.accept(PROFOUND_SCHOLARLY_SOUL, LootTable.lootTable().withPool(techniquePool("2_profound/scholarly_soul_technique")));
+        consumer.accept(PROFOUND_EMBERBLOOD_DRAGON, LootTable.lootTable().withPool(techniquePool("2_profound/emberblood_dragon_sutra")));
+        consumer.accept(PROFOUND_MARTIAL_VOL_2, LootTable.lootTable().withPool(techniquePool("2_profound/martial_transcendence_vol_2")));
+        consumer.accept(PROFOUND_STILLWINTER, LootTable.lootTable().withPool(techniquePool("2_profound/stillwinter_mirror_visualization")));
+        consumer.accept(PROFOUND_SANGUINE_ABYSS, LootTable.lootTable().withPool(techniquePool("2_profound/sanguine_abyss_technique")));
+        consumer.accept(PROFOUND_MOONLIT_CURRENT, LootTable.lootTable().withPool(techniquePool("2_profound/moonlit_current_combat_scripture")));
+        consumer.accept(PROFOUND_MOUNT_HUA, LootTable.lootTable().withPool(techniquePool("2_profound/mount_hua_sword_manual")));
+        consumer.accept(PROFOUND_LOCUST_BLEEDING, LootTable.lootTable().withPool(techniquePool("2_profound/locust_bleeding_manual")));
+        consumer.accept(PROFOUND_WINDSTRING, LootTable.lootTable().withPool(techniquePool("2_profound/windstring_hunting_canon")));
+        consumer.accept(PROFOUND_BURNING_BONES, LootTable.lootTable().withPool(techniquePool("2_profound/burning_bones_technique")));
+        consumer.accept(PROFOUND_NINEFOLD_THUNDER, LootTable.lootTable().withPool(techniquePool("2_profound/ninefold_thunder_meridian_scripture")));
+        consumer.accept(PROFOUND_WHITE_LIGHTNING, LootTable.lootTable().withPool(techniquePool("2_profound/white_lightning_ten_stage_technique")));
+        consumer.accept(PROFOUND_RIGID_STANCE, LootTable.lootTable().withPool(techniquePool("2_profound/rigid_stance_summation_technique")));
+        consumer.accept(PROFOUND_MOUNTAIN_SPLITTING, LootTable.lootTable().withPool(techniquePool("2_profound/mountain_splitting_axe_art")));
     }
 
     /**
@@ -190,6 +267,13 @@ public class AscAddedLootTableProvider implements LootTableSubProvider {
                     .apply(SetComponentsFunction.setComponent(AscensionComponents.PURITY.get(), purity)));
         }
         return pool;
+    }
+
+    static LootPool.Builder techniquePool(String technique) {
+        return LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .add(LootItem.lootTableItem(ModItems.TECHNIQUE_MANUAL.get())
+                        .apply(SetComponentsFunction.setComponent(AscensionComponents.REGISTRY_ID_HOLDER.get(), AscensionCraft.prefix(technique))));
     }
 
     static LootPool.Builder physiquePool(Identifier physique) {

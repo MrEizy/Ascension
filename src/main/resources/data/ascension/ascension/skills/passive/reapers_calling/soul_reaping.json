@@ -1,0 +1,24 @@
+
+{
+  "type": "ascension:passive",
+  "name": {
+    "translate": "ascension.skill.soul_reaping.name"
+  },
+  "description": {
+    "translate": "ascension.skill.soul_reaping.desc"
+  },
+  "triggers": [
+    {
+      "event": "kill",
+      "cooldown": 0,
+      "actions": [
+        {
+          "type": "ascension:cultivate",
+          "path": "ascension:foundation/soul",
+          "secondary_path": "ascension:elemental/death",
+          "rate": 100.0
+        }
+      ]
+    }
+  ]
+}

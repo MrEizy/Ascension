@@ -61,7 +61,7 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
 
         int ordinal = Math.max(0, Math.min(AlchemyFurnaceBlockEntity.Phase.values().length - 1, menu.phase()));
         AlchemyFurnaceBlockEntity.Phase phase = AlchemyFurnaceBlockEntity.Phase.values()[ordinal];
-        int duration = AlchemyFurnaceBlockEntity.duration(phase);
+        int duration = menu.phaseDuration(phase);
         String label = switch (phase) {
             case IDLE -> "Ready";
             case EXTRACTION -> "Extract";
@@ -76,6 +76,11 @@ public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnace
                     label + " " + (100 * Math.min(menu.phaseTicks(), duration) / duration) + "%";
             default -> label;
         };
+        if (phase == AlchemyFurnaceBlockEntity.Phase.REACTION) {
+            status += " | Qi " + menu.reactionQiProgress() + "%";
+        } else if (phase == AlchemyFurnaceBlockEntity.Phase.STABILIZATION) {
+            status += " | Score " + menu.stabilizationProgress() + "%";
+        }
         if (phase == AlchemyFurnaceBlockEntity.Phase.IDLE) {
             int relativeX = mouseX - leftPos;
             int relativeY = mouseY - topPos;

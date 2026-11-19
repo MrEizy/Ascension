@@ -42,7 +42,7 @@ public final class WeaponSwingVisualController implements RuntimeVisualControlle
         double age = Math.max(0.0D, now - state.primaryValue());
         int frameTicks = Math.max(1, layer.resources().frameTicks());
         int frameCount = Math.max(1, layer.resources().frames());
-        int frame = Math.clamp((int) Math.floor(age / frameTicks), 0, frameCount - 1);
+        int frame = Math.floorMod((int) Math.floor(age / frameTicks), frameCount);
         Identifier texture = Identifier.fromNamespaceAndPath(
                 textureBase.getNamespace(),
                 "textures/" + textureBase.getPath() + "/" + frame + ".png"
@@ -59,14 +59,15 @@ public final class WeaponSwingVisualController implements RuntimeVisualControlle
         Vec3 c = transform(new Vec3(0.5D * width, 0.0D, 0.5D * length), rotation).add(center);
         Vec3 d = transform(new Vec3(-0.5D * width, 0.0D, 0.5D * length), rotation).add(center);
         Vec3 normal = transform(new Vec3(0.0D, 1.0D, 0.0D), rotation).normalize();
+        RuntimeVisualDefinition.VisualColor tint = layer.appearance().resolved(state);
 
         MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
         VertexConsumer vertices = buffers.getBuffer(RenderTypes.entityTranslucent(texture));
         PoseStack.Pose pose = event.getPoseStack().last();
-        vertex(vertices, pose, a, 0.0F, 1.0F, normal);
-        vertex(vertices, pose, b, 1.0F, 1.0F, normal);
-        vertex(vertices, pose, c, 1.0F, 0.0F, normal);
-        vertex(vertices, pose, d, 0.0F, 0.0F, normal);
+        vertex(vertices, pose, a, 0.0F, 1.0F, normal, tint);
+        vertex(vertices, pose, b, 1.0F, 1.0F, normal, tint);
+        vertex(vertices, pose, c, 1.0F, 0.0F, normal, tint);
+        vertex(vertices, pose, d, 0.0F, 0.0F, normal, tint);
         buffers.endLastBatch();
     }
 
@@ -108,10 +109,11 @@ public final class WeaponSwingVisualController implements RuntimeVisualControlle
             Vec3 point,
             float u,
             float v,
-            Vec3 normal
+            Vec3 normal,
+            RuntimeVisualDefinition.VisualColor tint
     ) {
         vertices.addVertex(pose, (float) point.x, (float) point.y, (float) point.z)
-                .setColor(255, 255, 255, 255)
+                .setColor(tint.red(), tint.green(), tint.blue(), tint.alpha())
                 .setUv(u, v)
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(0x00F000F0)

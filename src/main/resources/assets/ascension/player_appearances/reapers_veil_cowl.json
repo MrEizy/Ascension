@@ -1,0 +1,47 @@
+
+{
+  "texture": "ascension:textures/entity/player_appearances/reapers_veil.png",
+  "texture_size": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "anchor": "head",
+      "cubes": [
+        {
+          "origin": [
+            -4.5,
+            -8.6,
+            -4.5
+          ],
+          "size": [
+            9,
+            9,
+            9
+          ],
+          "uv": [
+            0,
+            0
+          ]
+        },
+        {
+          "origin": [
+            -3.6,
+            -6.5,
+            -4.9
+          ],
+          "size": [
+            7.2,
+            6.0,
+            0.6
+          ],
+          "uv": [
+            36,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

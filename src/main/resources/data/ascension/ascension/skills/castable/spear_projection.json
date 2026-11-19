@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.spear_projection.name"},
-  "description": {"translate": "ascension.skill.spear_projection.desc"},
+  "name": {
+    "translate": "ascension.skill.spear_projection.name"
+  },
+  "description": {
+    "translate": "ascension.skill.spear_projection.desc"
+  },
   "actions": [
     {
       "type": "ascension:weapon_swing",
@@ -13,8 +17,15 @@
         5.5
       ],
       "damage": {
-        "base": 12.0,
-        "weapon": 1.0
+        "base": {
+          "base": 34.0,
+          "per_mastery": 1.87
+        },
+        "weapon": 1.6,
+        "stats": {
+          "ascension:strength": 0.14,
+          "ascension:agility": 0.05
+        }
       },
       "knockback": 0.7,
       "duration": 55.0,
@@ -45,7 +56,15 @@
   ],
   "cost": {
     "resource": "ascension:qi",
-    "amount": 85.0
+    "amount": {
+      "base": 85.0,
+      "per_mastery": -2.12,
+      "minimum": 73.95
+    }
   },
-  "cooldown": 180.0
+  "cooldown": {
+    "base": 180.0,
+    "per_mastery": -6.3,
+    "minimum": 147.6
+  }
 }

@@ -7,7 +7,6 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.zic.ascension.api.ascension.core.skill.Skill;
 import net.zic.ascension.api.ascension.core.skill.SkillDefinitions;
 import net.zic.ascension.api.ascension.core.skill.SkillMasteryRank;
-import net.zic.ascension.api.ascension.core.skill.SkillProgressionData;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveCastDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.ActiveSkillCostDefinition;
 import net.zic.ascension.api.ascension.core.skill.castable.action.SkillAction;
@@ -15,7 +14,6 @@ import net.zic.ascension.api.ascension.core.targeting.TargetingDefinition;
 import net.zic.ascension.api.ascension.datapack.skill.SkillType;
 import net.zic.ascension.api.ascension.value.ScaledValue;
 import net.zic.ascension.impl.core.skill.castable.ActiveSkill;
-import net.zic.ascension.impl.core.skill.castable.ActiveSkill.Data;
 import net.zic.ascension.impl.core.targeting.TargetingDefinitions;
 
 import java.util.List;
@@ -34,7 +32,8 @@ public final class ActiveSkillType extends SkillType {
                 SkillAction.CODEC.listOf().optionalFieldOf("actions", List.of()).forGetter(ActiveSkill::actions),
                 ActiveSkillCostDefinition.LIST_CODEC.optionalFieldOf("cost", List.of()).forGetter(ActiveSkill::costs),
                 ScaledValue.COMPACT_CODEC.optionalFieldOf("cooldown", ScaledValue.constant(0.0D)).forGetter(ActiveSkill::cooldown),
-                SkillMasteryRank.CODEC.optionalFieldOf("mastery_cap", SkillMasteryRank.INITIATE).forGetter(ActiveSkill::defaultMasteryCap),
+                SkillMasteryRank.CODEC.optionalFieldOf("mastery_cap", SkillMasteryRank.TRANSCENDENCE).forGetter(ActiveSkill::defaultMasteryCap),
+                Codec.DOUBLE.optionalFieldOf("mastery_xp_per_use", 1.0D).forGetter(ActiveSkill::masteryExperiencePerUse),
                 Codec.unboundedMap(SkillMasteryRank.CODEC, Codec.DOUBLE).optionalFieldOf("mastery_xp", Map.of())
                         .forGetter(ActiveSkill::masteryRequirements)
         ).apply(instance, ActiveSkill::new));

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ascension:registry_id_holder": "ascension:1_ordinary/pale_moon_scripture"
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ascension:technique_manual"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ascension:added_loot/techniques/ordinary/pale_moon_scripture"
+}

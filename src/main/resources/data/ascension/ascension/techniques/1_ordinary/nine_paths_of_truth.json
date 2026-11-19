@@ -11,8 +11,7 @@
       "type": "ascension:grant_skills",
       "skills": [
         "ascension:castable/cultivation/nine_paths_of_truth",
-        "ascension:passive/nine_paths_of_truth/truth_seeking_channels",
-        "ascension:castable/divine_sense/divine_sense_nine_paths_of_truth"
+        "ascension:passive/nine_paths_of_truth/truth_seeking_channels"
       ]
     }
   ],

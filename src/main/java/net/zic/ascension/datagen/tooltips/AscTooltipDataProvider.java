@@ -269,13 +269,13 @@ public final class AscTooltipDataProvider extends ZenithTooltipDataProvider {
                         .add(header(translated("ascension.tooltip.jade_bottle.contained"), ZenithTooltipColor.ACCENT))
                         .add(row(
                                 translated("ascension.tooltip.jade_bottle.contained_pill"),
-                                literal("null"),
+                                sourced("ascension:jade_bottle_contents"),
                                 ZenithTooltipColor.TEXT,
                                 ZenithTooltipColor.ACCENT
                         ))
                         .add(row(
                                 translated("ascension.tooltip.jade_bottle.expiration"),
-                                literal("20 seconds"),
+                                sourced("ascension:jade_bottle_expiration"),
                                 ZenithTooltipColor.TEXT,
                                 ZenithTooltipColor.WARNING
                         )));

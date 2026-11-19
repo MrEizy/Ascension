@@ -218,7 +218,7 @@ public final class BodyCultivationSkillService {
         for (Identifier skillId : List.copyOf(AscensionOriginSourceHelper.getSkills(source))) {
             SkillInstance<?> held = AscensionOriginSourceHelper.getSkill(source, skillId);
             SkillInstance<BodyCultivationSkill.Data> instance = held == null ? null : held.as(BodyCultivationSkill.class);
-            if (instance == null) {
+            if (instance == null || !instance.getData().enabled()) {
                 continue;
             }
             Entry candidate = new Entry(skillId, (BodyCultivationSkill) instance.getSkill(), instance.getData());

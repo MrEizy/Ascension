@@ -16,6 +16,7 @@ public record WeaponSwingSpec(
         Optional<Identifier> technique,
         String vfxType,
         String colorFolder,
+        int tint,
         Vec3 radius,
         AscensionDamageProfile damage,
         double knockback,

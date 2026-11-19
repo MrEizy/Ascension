@@ -8,6 +8,16 @@
     "yield": 0.96,
     "purity_delta": 0.005,
     "instability_delta": -0.18,
-    "safe_energy_bonus": 0.9
+    "safe_energy_bonus": 0.9,
+    "stabilization": {
+      "target_count": 7,
+      "prepare_ticks": 20,
+      "approach_ticks": 26,
+      "interval_ticks": 39,
+      "perfect_window": 5,
+      "good_window": 16,
+      "required_score": 0.72,
+      "pattern": "alternating"
+    }
   }
 }

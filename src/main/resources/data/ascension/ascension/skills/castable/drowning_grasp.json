@@ -1,7 +1,11 @@
 {
   "type": "ascension:active",
-  "name": {"translate": "ascension.skill.drowning_grasp.name"},
-  "description": {"translate": "ascension.skill.drowning_grasp.desc"},
+  "name": {
+    "translate": "ascension.skill.drowning_grasp.name"
+  },
+  "description": {
+    "translate": "ascension.skill.drowning_grasp.desc"
+  },
   "target": {
     "type": "ascension:ray",
     "range": 10.0,
@@ -16,7 +20,11 @@
   "actions": [
     {
       "type": "ascension:effect",
-      "duration": 120.0,
+      "duration": {
+        "base": 120.0,
+        "per_mastery": 6,
+        "maximum": 150
+      },
       "potency": 1.0,
       "definition": "ascension:drowning",
       "subject": "target"
@@ -41,5 +49,9 @@
     "resource": "ascension:qi",
     "amount": 10.0
   },
-  "cooldown": 100.0
+  "cooldown": {
+    "base": 100.0,
+    "per_mastery": -2.5,
+    "minimum": 88.0
+  }
 }

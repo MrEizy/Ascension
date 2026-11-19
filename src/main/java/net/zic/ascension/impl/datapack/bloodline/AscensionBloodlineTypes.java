@@ -16,6 +16,12 @@ public class AscensionBloodlineTypes {
             SimpleBloodlineType::new
     );
 
+
+    public static final DeferredHolder<BloodlineType,BloodlineType> CONNECTED_BLOODLINE_TYPE = BLOODLINE_TYPES.register(
+            "connected_bloodline",
+            ConnectedBloodlineType::new
+    );
+
     public static void register(IEventBus eventBus){
 
         BLOODLINE_TYPES.register(eventBus);
