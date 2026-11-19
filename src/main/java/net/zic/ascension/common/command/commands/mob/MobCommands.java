@@ -20,6 +20,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
+import net.zic.ascension.common.command.CommandInspectionTarget;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
 import net.zic.ascension.api.ascension.core.CoreDataSources;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
@@ -37,7 +38,10 @@ import java.util.List;
 public class MobCommands {
     private static final double MAX_INSPECTION_RANGE = 10;
     public static LiteralArgumentBuilder<CommandSourceStack> build() {
-        return Commands.literal("view_details")
+        return buildAs("view_details");
+    }
+    public static LiteralArgumentBuilder<CommandSourceStack> buildAs(String name) {
+        return Commands.literal(name)
                 .executes(MobCommands::viewDetails)
                 .then(Commands.literal("cultivation")
                         .executes(MobCommands::viewCultivation)
@@ -51,16 +55,8 @@ public class MobCommands {
             return 0;
         }
 
-        Vec3 pos = cause.getEyePosition();
-        Vec3 dir = cause.getViewVector(1).scale(MAX_INSPECTION_RANGE);
-        Vec3 targetPos = pos.add(dir);
-
-        AABB boundingBox = cause.getBoundingBox()
-                .expandTowards(dir)
-                .inflate(1.0D);
-
-        EntityHitResult hitResult = ProjectileUtil.getEntityHitResult(
-                cause, pos, targetPos, boundingBox, entity -> !entity.isSpectator(), MAX_INSPECTION_RANGE * MAX_INSPECTION_RANGE);
+        EntityHitResult hitResult = CommandInspectionTarget.find(cause, MAX_INSPECTION_RANGE,
+                entity -> true);
         if(hitResult == null) {
             context.getSource().sendFailure(Component.literal("did not hit anything"));
             return 0;
@@ -76,7 +72,10 @@ public class MobCommands {
         };
 
         MobConfigurationInstance instance = mob.getData(AscensionAttachments.MOB_CONFIG_HOLDER).getConfigurationInstance();
-
+        if (instance == null) {
+            context.getSource().sendFailure(Component.literal("Mob has no active configuration"));
+            return 0;
+        }
 
         context.getSource().sendSuccess(() -> buildMobDetails(instance,cause.registryAccess()), false);
         return Command.SINGLE_SUCCESS;
@@ -88,14 +87,8 @@ public class MobCommands {
             return 0;
         }
 
-        Vec3 pos = player.getEyePosition();
-        Vec3 direction = player.getViewVector(1).scale(MAX_INSPECTION_RANGE);
-        AABB area = player.getBoundingBox().expandTowards(direction).inflate(1.0D);
-        EntityHitResult hit = ProjectileUtil.getEntityHitResult(
-                player, pos, pos.add(direction), area,
-                entity -> entity instanceof LivingEntity && !entity.isSpectator(),
-                MAX_INSPECTION_RANGE * MAX_INSPECTION_RANGE
-        );
+        EntityHitResult hit = CommandInspectionTarget.find(player, MAX_INSPECTION_RANGE,
+                entity -> entity instanceof LivingEntity);
         if (hit == null) {
             context.getSource().sendFailure(Component.literal("No living entity in sight within 10 blocks. Try the target selector instead."));
             return 0;
