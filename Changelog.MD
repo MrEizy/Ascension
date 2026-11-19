@@ -16,6 +16,7 @@
   * Impact adds bonus melee damage (up to level 5).
   * Penetrating Strike ignores part of the target's armor, 15% per level (up to level 3).
 * Chakrams can now carry External Qi Coating. Thrown chakrams show the sword qi look in flight and apply the element's on-hit effect to whatever they hit.
+* Added an animation for sitting on cushions and cultivating on cushions
 
 ### Removed
 * Removed all divine senses
