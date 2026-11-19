@@ -10,10 +10,12 @@
 * Added a new Technique, Bloodline and Physique Type (Connected type)
 * Added a new Technique and Physique using the Connected Types
 * Mastery related changes to many skills
+* Added cultivation path assignment and management commands
 
 ### Removed
 * Removed all divine senses
 * Temporarily disabled all Spherical Devestation Skills
+* Removed obsolete testing commands
 
 ### Changes
 * Auction max and min time changed: 1 min to 1440 min
@@ -30,6 +32,7 @@
 
 ### Technical Changes
 * Unified RGB and ARGB colour handling across most skill visuals, particles, and Qi Coatings
+* Refactored and consolidated commands
 
 ---
 
