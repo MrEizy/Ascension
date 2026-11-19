@@ -408,8 +408,8 @@ public final class WeaponSwings {
                         RuntimeVisualDefinition.VisualValue.constant(1.0D)
                 ),
                 new RuntimeVisualDefinition.Appearance(
-                        new RuntimeVisualDefinition.VisualColor(255, 255, 255, 255),
-                        new RuntimeVisualDefinition.VisualColor(255, 255, 255, 255),
+                        RuntimeVisualDefinition.VisualColor.fromArgb(instance.spec.tint()),
+                        RuntimeVisualDefinition.VisualColor.fromArgb(instance.spec.tint()),
                         1.0F,
                         true,
                         false

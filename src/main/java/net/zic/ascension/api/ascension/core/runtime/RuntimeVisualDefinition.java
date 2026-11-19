@@ -7,6 +7,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.ascension.datapack.CodecHelpers;
+import net.zic.ascension.api.ascension.value.HexColorCodec;
+import com.mojang.datafixers.util.Either;
 
 import java.util.List;
 import java.util.Optional;
@@ -282,7 +284,7 @@ public record RuntimeVisualDefinition(List<Element> elements) {
 
     public record VisualColor(int red, int green, int blue, int alpha) {
         public static final VisualColor WHITE = new VisualColor(255, 255, 255, 255);
-        public static final Codec<VisualColor> CODEC = Codec.intRange(0, 255).listOf().comapFlatMap(values -> {
+        private static final Codec<VisualColor> ARRAY_CODEC = Codec.intRange(0, 255).listOf().comapFlatMap(values -> {
             if (values.size() == 3) {
                 return DataResult.success(new VisualColor(values.get(0), values.get(1), values.get(2), 255));
             }
@@ -291,6 +293,8 @@ public record RuntimeVisualDefinition(List<Element> elements) {
             }
             return DataResult.error(() -> "Visual tint must contain three or four values");
         }, color -> List.of(color.red, color.green, color.blue, color.alpha));
+        public static final Codec<VisualColor> CODEC = Codec.either(ARRAY_CODEC, HexColorCodec.ARGB_CODEC)
+                .xmap(value -> value.map(color -> color, VisualColor::fromArgb), color -> Either.left(color));
 
         public VisualColor {
             red = Math.clamp(red, 0, 255);
