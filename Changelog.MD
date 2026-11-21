@@ -20,6 +20,7 @@
 * Techniques now give stats, and have enforced max realms etc
 * Added new Skill; Sword Control and Twin Sword Control
 * Added weapon cultivation passives to the weapon paths (Techniques will be used to grant stronger ones and special effect ones hopefully)
+* Added Scythe Path and related stuff
 
 ### Removed
 * Removed all divine senses
