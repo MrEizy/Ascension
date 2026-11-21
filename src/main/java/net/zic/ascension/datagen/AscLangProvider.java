@@ -215,6 +215,7 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.pill.tooltip.effect", "Effect");
         add("ascension.alchemy.pill.vitality", "Medicinal vitality: %s%% | Time remaining: %s");
         add("ascension.alchemy.pill.expired", "Expired · medicinal essence dissipated");
+        add("ascension.alchemy.pill.realm_adjusted", " (base %s%% before realm penalty)");
         add("ascension.alchemy.pill.preserved", "preserved indefinitely");
         add("ascension.pill.grade.low", "Low-grade");
         add("ascension.pill.grade.mid", "Mid-grade");

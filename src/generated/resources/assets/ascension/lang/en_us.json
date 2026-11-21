@@ -78,6 +78,7 @@
   "ascension.alchemy.pill.purity": "Purity: %s%%",
   "ascension.alchemy.pill.rank": "Rank: %s | Grade: %s",
   "ascension.alchemy.pill.raw_warning": "Raw herbs absorb poorly and may overload weak cultivators.",
+  "ascension.alchemy.pill.realm_adjusted": " (base %s%% before realm penalty)",
   "ascension.alchemy.pill.toxicity": "Toxicity: %s",
   "ascension.alchemy.pill.vitality": "Medicinal vitality: %s%% | Time remaining: %s",
   "ascension.alchemy.technique.access": "Acquisition",

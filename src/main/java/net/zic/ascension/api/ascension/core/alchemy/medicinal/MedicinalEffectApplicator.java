@@ -39,6 +39,11 @@ public final class MedicinalEffectApplicator {
 
     public static void consume(MedicinalProfile profile, LivingEntity consumer,
                                double absorption, double adverseExposure) {
+        consume(profile, consumer, absorption, adverseExposure, false);
+    }
+
+    public static void consume(MedicinalProfile profile, LivingEntity consumer,
+                               double absorption, double adverseExposure, boolean refined) {
         if (profile == null || !(consumer.level() instanceof ServerLevel server) || profile.composition().isEmpty()) return;
         if (!Double.isFinite(absorption) || !Double.isFinite(adverseExposure)) return;
         double absorbed = Mth.clamp(absorption, 0.0D, 1.0D);
@@ -97,8 +102,9 @@ public final class MedicinalEffectApplicator {
                     PathInstance<?> path = AscensionOriginSourceHelper.getPathInstance(source, pathId);
                     if (path == null || !path.canProgress()) return;
                     int tier = Mth.clamp(profile.composition().substance().rankTier(), 0, 5);
-                    double fraction = Math.min(0.03D + 0.008D * tier,
-                            power * 0.002D * Math.pow(1.35D, tier));
+                    double fraction = MedicinalCultivationGain.fractionFromPower(tier, power);
+                    if (refined) fraction *= MedicinalCultivationGain.realmEffectiveness(
+                            tier, path.getCurrentMajorRealm());
                     double maximum = Math.max(0.0D, path.getMaxProgress());
                     double remaining = Math.max(0.0D, maximum - path.getProgress());
                     double progress = Math.min(remaining, maximum * fraction);
