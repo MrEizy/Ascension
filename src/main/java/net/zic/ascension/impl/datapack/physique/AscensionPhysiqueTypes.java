@@ -21,6 +21,10 @@ public class AscensionPhysiqueTypes {
             "connected_physique",
             ConnectedPhysiqueType::new
     );
+    public static final DeferredHolder<PhysiqueType,PhysiqueType> EVOLUTION_PHYSIQUE_TYPE = PHYSIQUE_TYPES.register(
+            "evolution_physique",
+            EvolutionPhysiqueType::new
+    );
 
     public static final DeferredHolder<PhysiqueType,PhysiqueType> INFINITE_BREAKTHROUGH_PHYSIQUE_TYPE = PHYSIQUE_TYPES.register(
             "infinite_breakthrough",
