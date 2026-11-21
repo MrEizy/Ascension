@@ -1,0 +1,25 @@
+{
+  "type": "ascension:simple_technique",
+  "name": {
+    "translate": "ascension.technique.twin_sword_manual.name"
+  },
+  "description": {
+    "translate": "ascension.technique.twin_sword_manual.desc"
+  },
+  "path": "ascension:weapon/sword",
+  "max_realm": 4,
+  "max_minor_realm": 2,
+  "on_added": [
+    {
+      "type": "ascension:grant_skills",
+      "skills": [
+        "ascension:castable/twin_sword_control"
+      ]
+    }
+  ],
+  "item_tooltip": {
+    "theme": "ascension:technique_manual",
+    "template": "ascension:default_cultivation_technique",
+    "rank": "ascension:profound"
+  }
+}

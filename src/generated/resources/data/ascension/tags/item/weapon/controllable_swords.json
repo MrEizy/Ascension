@@ -1,0 +1,24 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:swords",
+      "required": false
+    },
+    {
+      "id": "#c:tools/sword",
+      "required": false
+    },
+    {
+      "id": "#c:weapons/sword",
+      "required": false
+    },
+    {
+      "id": "#c:tools/swords",
+      "required": false
+    },
+    {
+      "id": "#c:weapons/swords",
+      "required": false
+    }
+  ]
+}

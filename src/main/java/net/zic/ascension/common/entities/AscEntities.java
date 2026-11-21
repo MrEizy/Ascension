@@ -20,6 +20,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.entities.weapons.ChakramEntity;
+import net.zic.ascension.common.entities.weapons.ControlledSwordEntity;
 import net.zic.ascension.impl.core.innerworld.InnerWorldGhost;
 
 public class AscEntities {
@@ -57,6 +58,14 @@ public class AscEntities {
 
 
     //Weapons
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ControlledSwordEntity>> CONTROLLED_SWORD =
+            ENTITY_TYPES.register("controlled_sword", id -> EntityType.Builder
+                    .<ControlledSwordEntity>of(ControlledSwordEntity::new, MobCategory.MISC)
+                    .sized(0.4F, 0.4F)
+                    .clientTrackingRange(12)
+                    .updateInterval(1)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, id)));
 
     public static final DeferredHolder<EntityType<?>, EntityType<ChakramEntity>> CHAKRAM =
             ENTITY_TYPES.register("chakram", id -> EntityType.Builder

@@ -416,6 +416,11 @@ public class AscensionCraft {
                     QiStepPlatePacket::handle
             );
             registrar.playToServer(
+                    SwordControlDistancePacket.TYPE,
+                    SwordControlDistancePacket.STREAM_CODEC,
+                    SwordControlDistancePacket::handle
+            );
+            registrar.playToServer(
                     QiStepActionPacket.TYPE,
                     QiStepActionPacket.STREAM_CODEC,
                     QiStepActionPacket::handle

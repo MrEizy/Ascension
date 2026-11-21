@@ -31,6 +31,7 @@ import net.zic.ascension.client.gui.QiCoatingWheelOverlay;
 import net.zic.ascension.client.gui.SkillWheelOverlay;
 import net.zic.ascension.client.renderer.TabletOutlineRenderer;
 import net.zic.ascension.client.renderer.weapons.ChakramRenderer;
+import net.zic.ascension.client.renderer.weapons.ControlledSwordRenderer;
 import net.zic.ascension.client.visual.runtime.BarrierShellVisualController;
 import net.zic.ascension.client.visual.runtime.QiBarrierVisualController;
 import net.zic.ascension.client.visual.runtime.ClientRuntimeVisuals;
@@ -166,6 +167,7 @@ public class AscensionCraftClient {
             event.registerEntityRenderer(AscEntities.YOUNG_MASTER.get(), ctx -> new CultivatorNpcRenderer<>(ctx, "young_master"));
 
             event.registerEntityRenderer(AscEntities.CHAKRAM.get(), ChakramRenderer::new);
+            event.registerEntityRenderer(AscEntities.CONTROLLED_SWORD.get(), ControlledSwordRenderer::new);
             event.registerBlockEntityRenderer(AscBlockEntities.ALCHEMY_FURNACE_BE.get(), AlchemyFurnaceRenderer::new);
 
 
