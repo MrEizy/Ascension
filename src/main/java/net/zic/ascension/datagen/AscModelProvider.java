@@ -230,12 +230,23 @@ public class AscModelProvider extends ModelProvider {
                 ));
 
 
+        itemModels.itemModelOutput.accept(ModBlocks.INSIGHT_ALCHEMY_FURNACE.get().asItem(),
+                new SpecialModelWrapper.Unbaked(
+                        AscensionCraft.prefix("item/alchemy_furnace"),
+                        Optional.empty(),
+                        new GeckolibItemSpecialRenderer.Unbaked<AlchemyFurnaceItem>()
+                ));
+
         //Block Entities
         fermentingBarrelModel(blockModels);
         spiritualStoneClusterModel(blockModels);
         spiritualStoneClusterModel2(blockModels);
         blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.dispatch(ModBlocks.ALCHEMY_FURNACE.get(),
+                        BlockModelGenerators.plainVariant(AscensionCraft.prefix("block/alchemy_furnace")))
+                        .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(ModBlocks.INSIGHT_ALCHEMY_FURNACE.get(),
                         BlockModelGenerators.plainVariant(AscensionCraft.prefix("block/alchemy_furnace")))
                         .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
 

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "alchemy",
+  "key": {
+    "A": "ascension:alchemy_furnace",
+    "F": "ascension:frost_silver_block",
+    "S": "ascension:jade"
+  },
+  "pattern": [
+    "FSF",
+    "SAS",
+    "FSF"
+  ],
+  "result": {
+    "id": "ascension:insight_alchemy_furnace"
+  }
+}

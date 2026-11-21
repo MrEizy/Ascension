@@ -44,6 +44,7 @@ import net.zic.ascension.api.ascension.core.alchemy.medicinal.*;
 import net.zic.ascension.common.gui.menus.alchemy.AlchemyFurnaceMenu;
 import net.zic.ascension.impl.core.technique.AlchemyTechnique;
 import net.zic.ascension.common.item.ModItems;
+import net.zic.ascension.common.blocks.ModBlocks;
 import java.util.UUID;
 import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
@@ -116,6 +117,7 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         super(AscBlockEntities.ALCHEMY_FURNACE_BE.get(), pos, state);
     }
 
+    public boolean hasPillPrediction() { return getBlockState().is(ModBlocks.INSIGHT_ALCHEMY_FURNACE.get()); }
     public Container inventory() { return items; }
     public ContainerData menuData() { return menuData; }
     public Phase phase() { return phase; }
@@ -355,7 +357,9 @@ public class AlchemyFurnaceBlockEntity extends BlockEntity implements MenuProvid
         if (level != null && !level.isClientSide()) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
     }
 
-    @Override public Component getDisplayName() { return Component.translatable("block.ascension.alchemy_furnace"); }
+    @Override public Component getDisplayName() {
+        return Component.translatable(hasPillPrediction() ? "block.ascension.insight_alchemy_furnace" : "block.ascension.alchemy_furnace");
+    }
     @Override public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new AlchemyFurnaceMenu(id, inventory, this);
     }

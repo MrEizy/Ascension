@@ -188,6 +188,16 @@ public class AscRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(ModItems.BLACK_IRON_INGOT.get()), has(ModItems.BLACK_IRON_INGOT))
                 .group("black_iron")
                 .save(output, "ascension:shaped/alchemy_furnace");
+        shaped(RecipeCategory.MISC, ModBlocks.INSIGHT_ALCHEMY_FURNACE.get())
+                .pattern("FSF")
+                .pattern("SAS")
+                .pattern("FSF")
+                .define('F', ModBlocks.FROST_SILVER_BLOCK.get())
+                .define('S', ModItems.JADE.get())
+                .define('A', ModBlocks.ALCHEMY_FURNACE.get())
+                .unlockedBy(getHasName(ModBlocks.ALCHEMY_FURNACE.get()), has(ModBlocks.ALCHEMY_FURNACE.get()))
+                .group("alchemy")
+                .save(output, "ascension:shaped/insight_alchemy_furnace");
         shapeless(RecipeCategory.MISC, ModBlocks.CULTIVATION_SOIL.get(), 2)
                 .requires(ModItems.SPIRITUAL_STONE, 2)
                 .requires(Items.DIRT, 2)
