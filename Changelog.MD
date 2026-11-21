@@ -21,6 +21,7 @@
 * Added new Skill; Sword Control and Twin Sword Control
 * Added weapon cultivation passives to the weapon paths (Techniques will be used to grant stronger ones and special effect ones hopefully)
 * Added Scythe Path and related stuff
+* Added a second furnace tier with a pill prediction feature
 
 ### Removed
 * Removed all divine senses
@@ -33,6 +34,7 @@
 * Turned all Divine senses into 3 different types. Soul, Essence and Body only.
 * Skills can actually gain Mastery now
 * Passive Skills have Levels, Active Skills have Ranks for master
+* Buffed the effect of focus steering 
 
 ### Fixes
 * Projection Skills actually project, deal some damage and break blocks
