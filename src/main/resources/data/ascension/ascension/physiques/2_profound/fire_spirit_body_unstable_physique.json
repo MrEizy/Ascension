@@ -1,5 +1,15 @@
 {
-  "type": "ascension:simple",
+  "type": "ascension:evolution_physique",
+  "evolution": {
+    "into": "ascension:4_saint/great_sun_sacred_body_physique",
+    "catalyst": "ascension:2_profound/golden_sun_heart_physique",
+    "realm": {
+      "path": "ascension:foundation/soul",
+      "major_realm": 4,
+      "minor_realm": 2
+    },
+    "path": "ascension:elemental/yang"
+  },
   "name": {
     "translate": "ascension.physique.fire_spirit_body_unstable_physique.name"
   },

@@ -37,6 +37,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TABLET_OF_DESTRUCTION_ASCENDANT);
 
                         output.accept(ModItems.JADE_BOTTLE);
+                        output.accept(ModItems.DESOLATE_BONES);
 
                         output.accept(ModItems.SPIRITUAL_STONE_UPGRADE_SMITHING_TEMPLATE);
                         output.accept(ModItems.SPIRITUAL_STONE);

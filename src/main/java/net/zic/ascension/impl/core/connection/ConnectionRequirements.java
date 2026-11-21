@@ -43,7 +43,6 @@ public record ConnectionRequirements(List<Identifier> physiques, List<Identifier
         return physiques.isEmpty() && techniques.isEmpty() && bloodlines.isEmpty() && paths.isEmpty();
     }
 
-    /** a connected type must have at least one requirement */
     public static <T extends Connected> MapCodec<T> requireAtLeastOne(MapCodec<T> codec) {
         return codec.flatXmap(
                 value -> value.connections().isEmpty()
@@ -57,7 +56,6 @@ public record ConnectionRequirements(List<Identifier> physiques, List<Identifier
         return unmetKind(source) == null;
     }
 
-    /** null if every requirement is met, otherwise a message naming the first one that is not */
     public @Nullable Component failureMessage(OriginSource source, RegistryAccess access) {
         Kind kind = unmetKind(source);
         if (kind == null) {
@@ -116,7 +114,7 @@ public record ConnectionRequirements(List<Identifier> physiques, List<Identifier
         return physique == null ? unknown(id, "physique") : physique.getName(null);
     }
 
-    private static Component techniqueName(Identifier id, RegistryAccess access) {
+    public static Component techniqueName(Identifier id, RegistryAccess access) {
         Technique<?> technique = CoreRegistries.safeAccess(CoreRegistries.TECHNIQUE_REGISTRY, id, access);
         return technique == null ? unknown(id, "technique") : technique.getName(null);
     }

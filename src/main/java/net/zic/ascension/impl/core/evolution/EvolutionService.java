@@ -4,6 +4,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
+import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.bloodline.BloodlineInstance;
@@ -12,14 +13,29 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.impl.core.connection.ConnectionRequirements;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-/**
- * Runs evolutions. The transfer items call this first: using a bloodline / physique item that is the catalyst of one of the
- * player's evolution definitions evolves it (or says what is missing) instead of giving the item's own bloodline / physique.
- */
+
 public final class EvolutionService {
+    // The catalyst used for each player's last physique evolution, and when. Holding right click on a stack repeats the use,
+    // and the repeat would otherwise swap the freshly evolved physique for the catalyst's own.
+    private static final Map<UUID, RecentEvolution> RECENT_PHYSIQUE = new HashMap<>();
+    private static final long REPEAT_GUARD_TICKS = 100L;
+
+    private record RecentEvolution(Identifier catalyst, long gameTime) {
+    }
+
     private EvolutionService() {
+    }
+
+    /** true if this player evolved their physique with this catalyst a moment ago, so this use is a repeat of the same click */
+    public static boolean isRepeatOfPhysiqueEvolution(Player player, Identifier catalystId) {
+        RecentEvolution recent = RECENT_PHYSIQUE.get(player.getUUID());
+        return recent != null && recent.catalyst().equals(catalystId)
+                && player.level().getGameTime() - recent.gameTime() < REPEAT_GUARD_TICKS;
     }
 
     public enum Result {
@@ -83,19 +99,17 @@ public final class EvolutionService {
             return Result.NOT_APPLICABLE;
         }
         EvolutionRequirements evolution = evolving.evolution();
-        Component failure = evolution.failureMessage(source, access, 0);
-        if (failure != null) {
-            player.sendOverlayMessage(failure);
-            return Result.FAILED;
+        if (evolution.failureMessage(source, access, 0) != null) {
+            return Result.NOT_APPLICABLE;
         }
         if (CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, evolution.into(), access) == null) {
-            player.sendOverlayMessage(Component.translatable("ascension.evolution.fail.unknown_target"));
-            return Result.FAILED;
+            AscensionCraft.LOGGER.warn("[Evolution] {} evolves into {}, which is not registered", heldId, evolution.into());
+            return Result.NOT_APPLICABLE;
         }
         if (!AscensionOriginSourceHelper.setPhysique(source, evolution.into())) {
-            player.sendOverlayMessage(Component.translatable("ascension.evolution.fail.cannot_add"));
-            return Result.FAILED;
+            return Result.NOT_APPLICABLE;
         }
+        RECENT_PHYSIQUE.put(player.getUUID(), new RecentEvolution(catalystId, player.level().getGameTime()));
         player.sendOverlayMessage(Component.translatable("ascension.evolution.success",
                 ConnectionRequirements.physiqueName(evolution.into(), access)));
         return Result.EVOLVED;
