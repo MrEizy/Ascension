@@ -194,6 +194,13 @@ public class AscItemTagProvider extends ItemTagsProvider {
                 .addOptionalTag(ModTags.Items.C_TOOLS_SPEAR)
                 .addOptionalTag(ModTags.Items.C_WEAPONS_SPEAR);
 
-        
+        tag(ModTags.Items.CONTROLLABLE_SWORDS)
+                .addOptionalTag(ItemTags.SWORDS)
+                .addOptionalTag(ModTags.Items.C_TOOLS_SWORD)
+                .addOptionalTag(ModTags.Items.C_WEAPONS_SWORD)
+                .addOptionalTag(ModTags.Items.C_TOOLS_SWORDS)
+                .addOptionalTag(ModTags.Items.C_WEAPONS_SWORDS);
+
+
     }
 }

@@ -44,6 +44,7 @@ public final class AscensionSkillActionTypes {
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> BEAM = TYPES.add("beam", SkillActions.Beam.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> WEAPON_SWING = TYPES.add("weapon_swing", SkillActions.WeaponSwing.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> SWORD_FLIGHT = TYPES.add("sword_flight", SkillActions.SwordFlight.CODEC);
+    public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> SWORD_CONTROL = TYPES.add("sword_control", SkillActions.SwordControl.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> SPHERICAL_DESTRUCTION = TYPES.add("spherical_destruction", SkillActions.SphericalDestruction.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> INNER_WORLD = TYPES.add("inner_world", SkillActions.InnerWorld.CODEC);
     public static final DeferredHolder<CodecType<SkillAction>, CodecType<SkillAction>> VOID_POCKET = TYPES.add("void_pocket", SkillActions.VoidPocket.CODEC);

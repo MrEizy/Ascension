@@ -1354,6 +1354,25 @@ public final class SkillActions {
         }
     }
 
+    public record SwordControl() implements SkillAction {
+        public static final MapCodec<SwordControl> CODEC = MapCodec.unit(SwordControl::new);
+
+        @Override
+        public CodecType<SkillAction> getType() {
+            return AscensionSkillActionTypes.SWORD_CONTROL.get();
+        }
+
+        @Override
+        public ActionSubject subject() {
+            return ActionSubject.CASTER;
+        }
+
+        @Override
+        public void apply(SkillActionContext context) {
+            SwordControlService.pulse(context.caster());
+        }
+    }
+
     public record SphericalDestruction(
             int radius,
             ScaledValue damage,

@@ -1257,6 +1257,10 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.blood_frenzy.desc", "W.I.P");
         add("ascension.skill.abyssal_culling.name", "Abyssal Culling");
         add("ascension.skill.abyssal_culling.desc", "Charge the abyss behind a single blade and release it as one culling stroke, paid for in the cultivator's own held-back blood.");
+        add("ascension.skill.sword_control.name", "Sword Control");
+        add("ascension.skill.sword_control.desc", "Hold to guide your sword through the air, striking foes as it flies. Release to recall it.");
+        add("ascension.skill.sword_control.requires_sword", "Hold a sword to use Sword Control");
+        add("ascension.skill.sword_control.returning", "Your sword is still returning");
         add("ascension.skill.sword_flight.name", "Sword Flight");
         add("ascension.skill.sword_flight.desc", "Bind spirit to steel and ride the blade itself through the sky, steering with nothing but where the eyes fall.");
         add("ascension.skill.spherical_devastation.name", "Spherical Devastation");

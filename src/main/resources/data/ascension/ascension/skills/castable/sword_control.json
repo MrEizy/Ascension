@@ -1,0 +1,25 @@
+{
+  "type": "ascension:active",
+  "name": {
+    "translate": "ascension.skill.sword_control.name"
+  },
+  "description": {
+    "translate": "ascension.skill.sword_control.desc"
+  },
+  "cast": {
+    "mode": "channel"
+  },
+  "require_targets": false,
+  "actions": [
+    {
+      "type": "ascension:sword_control"
+    }
+  ],
+  "cost": {
+    "resource": "ascension:qi",
+    "amount": 0.32
+  },
+  "cooldown": {
+    "base": 20.0
+  }
+}
