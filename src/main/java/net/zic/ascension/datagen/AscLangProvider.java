@@ -851,6 +851,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.spear_cultivation.desc", "Practice with spear weapons to cultivate the Spear Path.");
         add("ascension.skill.axe_cultivation.name", "Axe Cultivation");
         add("ascension.skill.axe_cultivation.desc", "Practice with axe weapons to cultivate the Axe Path.");
+        add("ascension.skill.scythe_cultivation.name", "Scythe Cultivation");
+        add("ascension.skill.scythe_cultivation.desc", "Practice with scythe weapons to cultivate the Axe Path.");
         add("ascension.skill.bow_cultivation.name", "Bow Cultivation");
         add("ascension.skill.bow_cultivation.desc", "Practice with bow weapons to cultivate the Bow Path.");
         add("ascension.skill.mace_cultivation.name", "Mace Cultivation");
@@ -1834,6 +1836,13 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.path.weapon.axe.realm.3.name", "Reaping Swing");
         add("ascension.path.weapon.axe.realm.4.name", "Felling Strike");
         add("ascension.path.weapon.axe.realm.5.name", "Unyielding Axe");
+
+        add("ascension.path.weapon.scythe.realm.0.name", "");
+        add("ascension.path.weapon.scythe.realm.1.name", "");
+        add("ascension.path.weapon.scythe.realm.2.name", "");
+        add("ascension.path.weapon.scythe.realm.3.name", "");
+        add("ascension.path.weapon.scythe.realm.4.name", "");
+        add("ascension.path.weapon.scythe.realm.5.name", "");
 
         add("ascension.path.weapon.blade.realm.0.name", "First Edge");
         add("ascension.path.weapon.blade.realm.1.name", "Honed Edge");

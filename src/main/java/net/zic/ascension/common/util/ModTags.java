@@ -85,6 +85,7 @@ public class ModTags {
         public static final TagKey<Item> WEAPON_FISTS = createItemTag("weapon/fists");
         public static final TagKey<Item> WEAPON_MACES = createItemTag("weapon/maces");
         public static final TagKey<Item> WEAPON_SPEARS = createItemTag("weapon/spears");
+        public static final TagKey<Item> WEAPON_SCYTHES = createItemTag("weapon/scythes");
 
         public static final TagKey<Item> CHAKRAMS = createItemTag("weapon/chakrams");
         public static final TagKey<Item> CONTROLLABLE_SWORDS = createItemTag("weapon/controllable_swords");
@@ -99,6 +100,8 @@ public class ModTags {
         public static final TagKey<Item> C_WEAPONS_SWORD = createCommonItemTag("weapons/sword");
         public static final TagKey<Item> C_TOOLS_SWORDS = createCommonItemTag("tools/swords");
         public static final TagKey<Item> C_WEAPONS_SWORDS = createCommonItemTag("weapons/swords");
+        public static final TagKey<Item> C_TOOLS_SCYTHE = createCommonItemTag("tools/scythe");
+        public static final TagKey<Item> C_WEAPONS_SCYTHE = createCommonItemTag("weapons/scythe");
 
         public static final TagKey<Item> ORDINARY_ITEMS = createItemTag("ordinary_items");
         public static final TagKey<Item> PROFOUND_ITEMS = createItemTag("profound_items");

@@ -1,0 +1,13 @@
+{
+  "values": [
+    "#minecraft:hoes",
+    {
+      "id": "#c:tools/scythe",
+      "required": false
+    },
+    {
+      "id": "#c:weapons/scythe",
+      "required": false
+    }
+  ]
+}
