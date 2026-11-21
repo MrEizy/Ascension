@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AlchemyFurnaceScreen extends AbstractContainerScreen<AlchemyFurnaceMenu> {
     private static final Identifier TEXTURE = AscensionCraft.prefix("textures/gui/pill_cauldron_low_human/pill_cauldron_low_human_menu.png");
-    private static final int PREVIEW_SLOT_X = 69;
+    private static final int PREVIEW_SLOT_X = 62;
     private static final int PREVIEW_SLOT_Y = 59;
     private int previewPage;
     private static final int TEXTURE_WIDTH = 256;

@@ -1,6 +1,7 @@
 package net.zic.ascension.client.tooltip;
 
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
@@ -12,6 +13,7 @@ import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.api.ascension.core.CoreRegistries;
 import net.zic.ascension.api.ascension.core.bloodline.Bloodline;
 import net.zic.ascension.api.ascension.core.path.Path;
+import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.ascension.core.path.bonus.PathBonus;
 import net.zic.ascension.api.ascension.core.progression.ProgressAction;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionDescription;
@@ -20,6 +22,7 @@ import net.zic.ascension.api.ascension.core.progression.ProgressActionConditionR
 import net.zic.ascension.api.ascension.core.progression.ProgressActionHolder;
 import net.zic.ascension.api.ascension.core.progression.ProgressActionReference;
 import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
+import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.herbs.HerbDefinition;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.common.item.ModItems;
@@ -28,7 +31,11 @@ import net.zic.ascension.common.item.artifacts.pills.ProceduralPillItem;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalProfile;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyMaterials;
 import net.zic.ascension.api.ascension.core.alchemy.AlchemyContext;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalCultivationGain;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalConsumptionService;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalDecay;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalEffectDefinition;
+import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalRegistries;
 import net.zic.ascension.api.ascension.core.alchemy.medicinal.MedicinalImpurities;
 import net.zic.ascension.client.tooltip.providers.AscensionHerbRelatedTooltipProvider;
 import net.zic.ascension.impl.core.bloodline.SimpleBloodline;
@@ -772,14 +779,45 @@ public final class AscensionTooltipValueSources {
             if (profile == null) return ZenithTooltipValue.text(Component.translatable("ascension.alchemy.pill.inert"));
             net.minecraft.network.chat.MutableComponent lines = Component.empty();
             double vitality = MedicinalDecay.vitality(context.stack(), tooltipTime(context));
+            RegistryAccess access = context.registryAccess().orElseGet(() -> {
+                var level = net.minecraft.client.Minecraft.getInstance().level;
+                return level == null ? null : level.registryAccess();
+            });
+            Registry<MedicinalEffectDefinition> definitions = access == null
+                    ? null : MedicinalRegistries.EFFECTS.get(access);
+            var viewer = net.minecraft.client.Minecraft.getInstance().player;
+            OriginSource source = viewer == null ? null : AscensionOriginSourceHelper.getEntitySource(viewer);
+            double absorption = viewer == null
+                    ? 0.90D * (0.60D + 0.40D * profile.composition().substance().purity())
+                    : MedicinalConsumptionService.absorption(profile, viewer, true);
+            int tier = profile.composition().substance().rankTier();
             for (MedicinalProfile.Effect effect : profile.effects()) {
                 if (!lines.getSiblings().isEmpty()) lines.append("\n");
                 String name = effect.id().getPath().replace('/', '.');
                 double potency = effect.potency() * (effect.adverse() ? 1.0D : vitality);
+                MedicinalEffectDefinition definition = definitions == null ? null : definitions.getValue(effect.id());
                 net.minecraft.network.chat.MutableComponent detail = Component.literal(effect.adverse() ? "− " : "+ ")
-                        .append(Component.translatable("ascension.alchemy.effect." + name))
-                        .append(" " + String.format(java.util.Locale.ROOT, "%.2f", potency)
-                                + (effect.durationTicks() > 0 ? " (" + Math.round(effect.durationTicks() * (effect.adverse() ? 1.0D : vitality)) / 20 + "s)" : ""));
+                        .append(Component.translatable("ascension.alchemy.effect." + name));
+                if (!effect.adverse() && definition != null
+                        && definition.application().action().equals("cultivation")) {
+                    double base = MedicinalCultivationGain.baseFraction(
+                            tier, potency, definition.application().scale(), absorption);
+                    double effectiveness = 1.0D;
+                    if (source != null && definition.application().path().isPresent()) {
+                        PathInstance<?> path = AscensionOriginSourceHelper.getPathInstance(
+                                source, definition.application().path().get());
+                        if (path != null) effectiveness = MedicinalCultivationGain.realmEffectiveness(
+                                tier, path.getCurrentMajorRealm());
+                    }
+                    detail.append(" " + String.format(java.util.Locale.ROOT, "%.2f%%", base * effectiveness * 100.0D));
+                    if (effectiveness < 1.0D) {
+                        detail.append(Component.translatable("ascension.alchemy.pill.realm_adjusted",
+                                String.format(java.util.Locale.ROOT, "%.2f", base * 100.0D)));
+                    }
+                } else {
+                    detail.append(" " + String.format(java.util.Locale.ROOT, "%.2f", potency)
+                            + (effect.durationTicks() > 0 ? " (" + Math.round(effect.durationTicks() * (effect.adverse() ? 1.0D : vitality)) / 20 + "s)" : ""));
+                }
                 lines.append(detail.withStyle(effect.adverse()
                         ? net.minecraft.ChatFormatting.RED : net.minecraft.ChatFormatting.GREEN));
             }
