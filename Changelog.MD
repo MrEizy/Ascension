@@ -22,6 +22,7 @@
 * Added weapon cultivation passives to the weapon paths (Techniques will be used to grant stronger ones and special effect ones hopefully)
 * Added Scythe Path and related stuff
 * Added a second furnace tier with a pill prediction feature
+* Server Configs for alchemy to restrict effectiveness of cultivation pills
 
 ### Removed
 * Removed all divine senses
@@ -35,6 +36,7 @@
 * Skills can actually gain Mastery now
 * Passive Skills have Levels, Active Skills have Ranks for master
 * Buffed the effect of focus steering 
+* Cultivation Pill Tooltips now show percentage of gain
 
 ### Fixes
 * Projection Skills actually project, deal some damage and break blocks
