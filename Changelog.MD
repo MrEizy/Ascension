@@ -19,6 +19,7 @@
 * Added an animation for sitting on cushions and cultivating on cushions
 * Techniques now give stats, and have enforced max realms etc
 * Added new Skill; Sword Control and Twin Sword Control
+* Added weapon cultivation passives to the weapon paths (Techniques will be used to grant stronger ones and special effect ones hopefully)
 
 ### Removed
 * Removed all divine senses
@@ -37,6 +38,7 @@
 * Claiming Button in Auction Inbox actually functions now
 * Fixed so Phasing Recall can spawn on the top of pagoda
 * Fixed premature stat-sync dirty flag clearing by separating entity stat updates from network patch tracking in OriginSource
+* Plum Blossom Sword Technique now cultivates sword and essence
 
 ### Technical Changes
 * Unified RGB and ARGB colour handling across most skill visuals, particles, and Qi Coatings
