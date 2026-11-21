@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.common.entities.weapons.ControlledSwordEntity;
 
 public final class ControlledSwordRenderer extends EntityRenderer<ControlledSwordEntity, ControlledSwordRenderer.State> {
@@ -32,8 +33,15 @@ public final class ControlledSwordRenderer extends EntityRenderer<ControlledSwor
     public void extractRenderState(ControlledSwordEntity sword, State state, float partialTick) {
         super.extractRenderState(sword, state, partialTick);
         models.updateForNonLiving(state.item, sword.sword(), ItemDisplayContext.GROUND, sword);
-        state.yaw = Mth.rotLerp(partialTick, sword.yRotO, sword.getYRot());
-        state.pitch = Mth.lerp(partialTick, sword.xRotO, sword.getXRot());
+        ControlledSwordEntity.VisualPose pose = sword.visualPose(
+                new Vec3(state.x, state.y, state.z),
+                Mth.rotLerp(partialTick, sword.yRotO, sword.getYRot()),
+                Mth.lerp(partialTick, sword.xRotO, sword.getXRot()));
+        state.x = pose.position().x;
+        state.y = pose.position().y;
+        state.z = pose.position().z;
+        state.yaw = pose.yaw();
+        state.pitch = pose.pitch();
         state.hover = sword.tickCount + partialTick;
     }
 

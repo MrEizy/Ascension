@@ -54,6 +54,21 @@ public final class SwordControlService {
         }
     }
 
+    public static void adjustDistance(ServerPlayer player, int steps) {
+        if (steps == 0) {
+            return;
+        }
+        SkillCaster caster = SkillCaster.getExisting(player);
+        if (caster == null || !SKILL.equals(caster.getCastingSkill())) {
+            return;
+        }
+        ControlledSwordEntity sword = ACTIVE.get(player.getUUID());
+        if (sword != null && !sword.isRemoved() && !sword.isRecalling()
+                && sword.level() == player.level()) {
+            sword.adjustDistance(steps);
+        }
+    }
+
     private static InteractionHand swordHand(Player player) {
         if (player.getMainHandItem().is(ModTags.Items.CONTROLLABLE_SWORDS)) {
             return InteractionHand.MAIN_HAND;

@@ -39,6 +39,11 @@ public final class ControlledSwordEntity extends Projectile {
     private static final EntityDataAccessor<Integer> DATA_SLOT = SynchedEntityData.defineId(ControlledSwordEntity.class, EntityDataSerializers.INT);
     private static final double MAX_RANGE = 24.0D;
     private static final double MAX_SPEED = 1.4D;
+    private static final double MIN_CONTROL_DISTANCE = 2.0D;
+    private static final double MAX_CONTROL_DISTANCE = 18.0D;
+    private static final double DEFAULT_CONTROL_DISTANCE = 5.0D;
+    private static final double DISTANCE_STEP = 1.5D;
+    private static final double CONTROL_ACCELERATION = 0.26D;
     private static final double RECALL_SPEED = 1.8D;
     private static final int HIT_COOLDOWN = 12;
     private final Map<UUID, Long> hitTimes = new HashMap<>();
@@ -46,6 +51,11 @@ public final class ControlledSwordEntity extends Projectile {
     private int lastCommandTick;
     private int recallTicks;
     private boolean recalling;
+    private double controlDistance = DEFAULT_CONTROL_DISTANCE;
+    private Vec3 visualPosition;
+    private float visualYaw;
+    private float visualPitch;
+    private long lastVisualFrame;
 
     public ControlledSwordEntity(EntityType<? extends ControlledSwordEntity> type, Level level) {
         super(type, level);
@@ -87,15 +97,44 @@ public final class ControlledSwordEntity extends Projectile {
                 && ItemStack.isSameItemSameComponents(player.getItemInHand(swordHand()), sword());
     }
 
+    public void adjustDistance(int steps) {
+        if (!recalling && steps != 0) {
+            controlDistance = Mth.clamp(controlDistance + Mth.clamp(steps, -4, 4) * DISTANCE_STEP,
+                    MIN_CONTROL_DISTANCE, MAX_CONTROL_DISTANCE);
+        }
+    }
+
+    public VisualPose visualPose(Vec3 rawPosition, float yaw, float pitch) {
+        long now = System.nanoTime();
+        long elapsed = now - lastVisualFrame;
+        if (visualPosition == null || elapsed < 0L || elapsed > 300_000_000L
+                || visualPosition.distanceToSqr(rawPosition) > 100.0D) {
+            visualPosition = rawPosition;
+            visualYaw = yaw;
+            visualPitch = pitch;
+        } else {
+            float amount = (float) (1.0D - Math.exp(-Math.min(elapsed / 1_000_000_000.0D, 0.1D) / 0.065D));
+            visualPosition = visualPosition.lerp(rawPosition, amount);
+            visualYaw = Mth.wrapDegrees(visualYaw + Mth.wrapDegrees(yaw - visualYaw) * amount);
+            visualPitch = Mth.lerp(amount, visualPitch, pitch);
+        }
+        lastVisualFrame = now;
+        return new VisualPose(visualPosition, visualYaw, visualPitch);
+    }
+
+    public record VisualPose(Vec3 position, float yaw, float pitch) {
+    }
+
     public void command(Player player) {
         if (recalling || player != getOwner()) {
             return;
         }
         lastCommandTick = tickCount;
         Vec3 eye = player.getEyePosition();
-        Vec3 far = eye.add(player.getLookAngle().scale(MAX_RANGE));
-        HitResult hit = level().clip(new ClipContext(eye, far, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
-        aim = hit.getType() == HitResult.Type.BLOCK ? hit.getLocation().subtract(player.getLookAngle().scale(0.3D)) : far;
+        Vec3 look = player.getLookAngle();
+        Vec3 target = eye.add(look.scale(controlDistance));
+        HitResult hit = level().clip(new ClipContext(eye, target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
+        aim = hit.getType() == HitResult.Type.BLOCK ? hit.getLocation().subtract(look.scale(0.55D)) : target;
     }
 
     public void recall() {
@@ -135,8 +174,16 @@ public final class ControlledSwordEntity extends Projectile {
         }
         Vec3 delta = destination.subtract(from);
         double maxSpeed = recalling ? RECALL_SPEED : MAX_SPEED;
-        Vec3 desired = delta.lengthSqr() < 1.0E-6D ? Vec3.ZERO : delta.normalize().scale(Math.min(maxSpeed, delta.length() * (recalling ? 0.42D : 0.30D)));
-        Vec3 velocity = getDeltaMovement().scale(recalling ? 0.64D : 0.78D).add(desired.scale(recalling ? 0.36D : 0.22D));
+        Vec3 desired = delta.scale(recalling ? 0.42D : 0.38D);
+        if (desired.lengthSqr() > maxSpeed * maxSpeed) {
+            desired = desired.normalize().scale(maxSpeed);
+        }
+        Vec3 acceleration = desired.subtract(getDeltaMovement());
+        double maxAcceleration = recalling ? 0.4D : CONTROL_ACCELERATION;
+        if (acceleration.lengthSqr() > maxAcceleration * maxAcceleration) {
+            acceleration = acceleration.normalize().scale(maxAcceleration);
+        }
+        Vec3 velocity = getDeltaMovement().add(acceleration);
         if (velocity.lengthSqr() > maxSpeed * maxSpeed) {
             velocity = velocity.normalize().scale(maxSpeed);
         }
