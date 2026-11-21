@@ -52,6 +52,7 @@ public final class ControlledSwordEntity extends Projectile {
     private boolean recalling;
     private double controlDistance = DEFAULT_CONTROL_DISTANCE;
     private double maximumControlDistance = DEFAULT_MAX_CONTROL_DISTANCE;
+    private double controlPrecision = 1.0D;
     private Vec3 visualPosition;
     private float visualYaw;
     private float visualPitch;
@@ -74,7 +75,18 @@ public final class ControlledSwordEntity extends Projectile {
         aim = position();
         lastCommandTick = tickCount;
     }
-    
+
+    public ControlledSwordEntity(EntityType<? extends ControlledSwordEntity> type, ServerLevel level,
+                                 Player owner, InteractionHand hand, double lateralOffset) {
+        this(type, level, owner, hand);
+        if (lateralOffset != 0.0D) {
+            double yaw = Math.toRadians(owner.getYRot());
+            Vec3 offset = new Vec3(-Math.cos(yaw), 0.0D, -Math.sin(yaw)).scale(lateralOffset);
+            Vec3 spawn = position().add(offset);
+            setPos(spawn.x, spawn.y, spawn.z);
+            aim = position();
+        }
+    }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
@@ -125,7 +137,7 @@ public final class ControlledSwordEntity extends Projectile {
     public record VisualPose(Vec3 position, float yaw, float pitch) {
     }
 
-    public void command(Player player, double maximumDistance) {
+    public void command(Player player, double maximumDistance, double lateralOffset, double precision) {
         if (recalling || player != getOwner()) {
             return;
         }
@@ -138,7 +150,17 @@ public final class ControlledSwordEntity extends Projectile {
         Vec3 look = player.getLookAngle();
         Vec3 target = eye.add(look.scale(controlDistance));
         HitResult hit = level().clip(new ClipContext(eye, target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
-        aim = hit.getType() == HitResult.Type.BLOCK ? hit.getLocation().subtract(look.scale(0.55D)) : target;
+        target = hit.getType() == HitResult.Type.BLOCK ? hit.getLocation().subtract(look.scale(0.55D)) : target;
+        if (lateralOffset != 0.0D) {
+            double yaw = Math.toRadians(player.getYRot());
+            Vec3 right = new Vec3(-Math.cos(yaw), 0.0D, -Math.sin(yaw));
+            target = target.add(right.scale(lateralOffset));
+            controlPrecision = Double.isFinite(precision) ? Mth.clamp(precision, 0.0D, 1.0D) : 1.0D;
+            aim = aim.lerp(target, 0.3D + 0.7D * controlPrecision);
+        } else {
+            controlPrecision = 1.0D;
+            aim = target;
+        }
     }
 
     public void recall() {
@@ -188,7 +210,7 @@ public final class ControlledSwordEntity extends Projectile {
             desired = desired.normalize().scale(maxSpeed);
         }
         Vec3 acceleration = desired.subtract(getDeltaMovement());
-        double maxAcceleration = recalling ? 0.4D : CONTROL_ACCELERATION;
+        double maxAcceleration = recalling ? 0.4D : CONTROL_ACCELERATION * (0.75D + 0.25D * controlPrecision);
         if (acceleration.lengthSqr() > maxAcceleration * maxAcceleration) {
             acceleration = acceleration.normalize().scale(maxAcceleration);
         }

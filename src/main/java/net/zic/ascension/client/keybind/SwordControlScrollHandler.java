@@ -25,7 +25,7 @@ public final class SwordControlScrollHandler {
             return;
         }
         SkillCaster caster = SkillCaster.getExisting(mc.player);
-        if (caster == null || !SwordControlService.SKILL.equals(caster.getCastingSkill())) {
+        if (caster == null || !SwordControlService.isControlSkill(caster.getCastingSkill())) {
             return;
         }
         event.setCanceled(true);

@@ -16,22 +16,28 @@ import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 import net.zic.ascension.AscensionCraft;
 import net.zic.ascension.common.entities.weapons.ControlledSwordEntity;
 
+import java.util.EnumSet;
+
 @EventBusSubscriber(modid = AscensionCraft.MOD_ID, value = Dist.CLIENT)
 public final class ControlledSwordHandRenderer {
     private ControlledSwordHandRenderer() {
     }
 
-    private static ControlledSwordEntity visibleSword(Player player) {
+    private static EnumSet<InteractionHand> hiddenHands(Player player) {
+        EnumSet<InteractionHand> hidden = EnumSet.noneOf(InteractionHand.class);
         if (player == null || player.level() == null) {
-            return null;
+            return hidden;
         }
         for (ControlledSwordEntity sword : player.level().getEntitiesOfClass(
-                ControlledSwordEntity.class, new AABB(player.blockPosition()).inflate(32.0D))) {
+                ControlledSwordEntity.class, new AABB(player.blockPosition()).inflate(64.0D))) {
             if (sword.hidesHeldSword(player)) {
-                return sword;
+                hidden.add(sword.swordHand());
+            }
+            if (hidden.size() == 2) {
+                break;
             }
         }
-        return null;
+        return hidden;
     }
 
     @SubscribeEvent
@@ -44,13 +50,17 @@ public final class ControlledSwordHandRenderer {
         if (!(entity instanceof Player player)) {
             return;
         }
-        ControlledSwordEntity sword = visibleSword(player);
-        if (sword == null) {
-            return;
-        }
         AvatarRenderState state = event.getRenderState();
-        HumanoidArm arm = sword.swordHand() == InteractionHand.MAIN_HAND
-                ? player.getMainArm() : player.getMainArm().getOpposite();
+        EnumSet<InteractionHand> hidden = hiddenHands(player);
+        if (hidden.contains(InteractionHand.MAIN_HAND)) {
+            clearHand(state, player.getMainArm());
+        }
+        if (hidden.contains(InteractionHand.OFF_HAND)) {
+            clearHand(state, player.getMainArm().getOpposite());
+        }
+    }
+
+    private static void clearHand(AvatarRenderState state, HumanoidArm arm) {
         if (arm == HumanoidArm.RIGHT) {
             state.rightHandItemState.clear();
             state.rightArmPose = HumanoidModel.ArmPose.EMPTY;
@@ -62,8 +72,7 @@ public final class ControlledSwordHandRenderer {
 
     @SubscribeEvent
     public static void onRenderHand(RenderHandEvent event) {
-        ControlledSwordEntity sword = visibleSword(Minecraft.getInstance().player);
-        if (sword != null && event.getHand() == sword.swordHand()) {
+        if (hiddenHands(Minecraft.getInstance().player).contains(event.getHand())) {
             event.setCanceled(true);
         }
     }

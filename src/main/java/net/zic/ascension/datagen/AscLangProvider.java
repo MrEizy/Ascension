@@ -1050,6 +1050,8 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.technique.shadowless_art.desc", "A qigong essence art that threads qi through each step until motion seems to outrun its own shadow.");
         add("ascension.technique.sword_draw_manual.name", "Sword Draw Manual");
         add("ascension.technique.sword_draw_manual.desc", "A plain sword manual devoted to the instant between stillness and steel, cultivating the sword through a single decisive draw.");
+        add("ascension.technique.twin_sword_manual.name", "Twin Sword Manual");
+        add("ascension.technique.twin_sword_manual.desc", "A sword art that divides the practitioner's attention between two blades, refining coordinated control through disciplined practice.");
         add("ascension.technique.burning_bones_technique.name", "Burning Bones Technique");
         add("ascension.technique.burning_bones_technique.desc", "A profound body technique that kindles fire within the marrow and uses the heat to temper bone from the inside out.");
         add("ascension.technique.martial_transcendence_vol_2.name", "Martial Transcendence, Volume II");
@@ -1261,6 +1263,9 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.skill.sword_control.desc", "Hold to guide your sword through the air, striking foes as it flies. Release to recall it.");
         add("ascension.skill.sword_control.requires_sword", "Hold a sword to use Sword Control");
         add("ascension.skill.sword_control.returning", "Your sword is still returning");
+        add("ascension.skill.twin_sword_control.name", "Twin Sword Control");
+        add("ascension.skill.twin_sword_control.desc", "Hold to guide a sword from each hand in parallel. Release to recall both.");
+        add("ascension.skill.twin_sword_control.requires_swords", "Hold a controllable sword in each hand to use Twin Sword Control");
         add("ascension.skill.sword_flight.name", "Sword Flight");
         add("ascension.skill.sword_flight.desc", "Bind spirit to steel and ride the blade itself through the sky, steering with nothing but where the eyes fall.");
         add("ascension.skill.spherical_devastation.name", "Spherical Devastation");

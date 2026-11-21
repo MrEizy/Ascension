@@ -1354,9 +1354,13 @@ public final class SkillActions {
         }
     }
 
-    public record SwordControl(ScaledValue maximumDistance) implements SkillAction {
+    public record SwordControl(ScaledValue maximumDistance, int swordCount, ScaledValue controlPrecision,
+                               double formationSpacing) implements SkillAction {
         public static final MapCodec<SwordControl> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ScaledValue.COMPACT_CODEC.optionalFieldOf("maximum_distance", ScaledValue.constant(18.0D)).forGetter(SwordControl::maximumDistance)
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("maximum_distance", ScaledValue.constant(18.0D)).forGetter(SwordControl::maximumDistance),
+                Codec.intRange(1, 2).optionalFieldOf("sword_count", 1).forGetter(SwordControl::swordCount),
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("control_precision", ScaledValue.constant(1.0D)).forGetter(SwordControl::controlPrecision),
+                Codec.doubleRange(0.2D, 4.0D).optionalFieldOf("formation_spacing", 1.2D).forGetter(SwordControl::formationSpacing)
         ).apply(instance, SwordControl::new));
 
         @Override
@@ -1371,7 +1375,8 @@ public final class SkillActions {
 
         @Override
         public void apply(SkillActionContext context) {
-            SwordControlService.pulse(context.caster(), maximumDistance.resolve(context.scaledValueContext()));
+            SwordControlService.pulse(context.caster(), maximumDistance.resolve(context.scaledValueContext()),
+                    swordCount, controlPrecision.resolve(context.scaledValueContext()), formationSpacing);
         }
     }
 
