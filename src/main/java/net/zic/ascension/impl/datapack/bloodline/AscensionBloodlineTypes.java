@@ -21,6 +21,10 @@ public class AscensionBloodlineTypes {
             "connected_bloodline",
             ConnectedBloodlineType::new
     );
+    public static final DeferredHolder<BloodlineType,BloodlineType> EVOLUTION_BLOODLINE_TYPE = BLOODLINE_TYPES.register(
+            "evolution_bloodline",
+            EvolutionBloodlineType::new
+    );
 
     public static void register(IEventBus eventBus){
 

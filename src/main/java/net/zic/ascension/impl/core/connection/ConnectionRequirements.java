@@ -111,7 +111,7 @@ public record ConnectionRequirements(List<Identifier> physiques, List<Identifier
         return joined;
     }
 
-    private static Component physiqueName(Identifier id, RegistryAccess access) {
+    public static Component physiqueName(Identifier id, RegistryAccess access) {
         Physique<?> physique = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, id, access);
         return physique == null ? unknown(id, "physique") : physique.getName(null);
     }
@@ -121,12 +121,12 @@ public record ConnectionRequirements(List<Identifier> physiques, List<Identifier
         return technique == null ? unknown(id, "technique") : technique.getName(null);
     }
 
-    private static Component pathName(Identifier id, RegistryAccess access) {
+    public static Component pathName(Identifier id, RegistryAccess access) {
         Path<?> path = CoreRegistries.safeAccess(CoreRegistries.PATH_REGISTRY, id, access);
         return path == null ? unknown(id, "path") : path.getName(null);
     }
 
-    private static Component bloodlineName(Identifier id, RegistryAccess access) {
+    public static Component bloodlineName(Identifier id, RegistryAccess access) {
         Bloodline<?> bloodline = CoreRegistries.safeAccess(CoreRegistries.BLOODLINE_REGISTRY, id, access);
         return bloodline == null ? unknown(id, "bloodline") : bloodline.getName(null);
     }
