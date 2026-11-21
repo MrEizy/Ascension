@@ -621,6 +621,13 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.connection.requires.bloodline", "Requires the bloodline: %s");
         add("ascension.connection.requires.path", "Requires the path: %s");
 
+        add("ascension.evolution.requires.purity", "Requires %s purity to ascend (current %s)");
+        add("ascension.evolution.requires.realm", "Requires %s at realm %s, stage %s");
+        add("ascension.evolution.success", "Ascended into %s");
+        add("ascension.evolution.fail.unknown_target", "The ascension target does not exist");
+        add("ascension.evolution.fail.cannot_add", "The ascension could not be applied");
+        add("ascension.evolution.requires.path", "Requires the path: %s");
+
 
 
         // Starter Screen Lang
@@ -672,6 +679,9 @@ public class AscLangProvider extends LanguageProvider {
         add("item.ascension.technique_manual.battle_style", "Battle Style");
         add("item.ascension.technique_manual.cultivation_technique", "Cultivation Technique");
         add("item.ascension.technique_manual.alchemy_technique", "Alchemy Technique");
+
+
+        add("item.ascension.desolate_bones", "Desolate Bones");
 
         add("ascension.alchemy.technique.stage", "Stage");
         add("ascension.alchemy.technique.access", "Acquisition");

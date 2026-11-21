@@ -17,6 +17,7 @@ import net.zic.ascension.api.ascension.core.source.AscensionOriginSourceHelper;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.item.components.AscensionComponents;
 import net.zic.ascension.impl.core.connection.Connected;
+import net.zic.ascension.impl.core.evolution.EvolutionService;
 
 public class PhysiqueTransferItem extends Item {
     public PhysiqueTransferItem(Properties properties) {
@@ -40,7 +41,16 @@ public class PhysiqueTransferItem extends Item {
         if(holder == null || holder.getData() == null) return InteractionResult.FAIL;
         OriginSource source = holder.getData().getSource();
 
-        // connected_physique: the technique / bloodline it is connected to has to be held first
+        if (EvolutionService.isRepeatOfPhysiqueEvolution(player, targetPhysique)) return InteractionResult.FAIL;
+
+        EvolutionService.Result evolution = EvolutionService.tryEvolvePhysique(player, source, targetPhysique, level.registryAccess());
+        if (evolution == EvolutionService.Result.EVOLVED) {
+            stack.shrink(1);
+            AscensionCraft.LOGGER.info("Player {} has evolved their physique", player.getName().getString());
+            return InteractionResult.SUCCESS;
+        }
+        if (evolution == EvolutionService.Result.FAILED) return InteractionResult.FAIL;
+
         Physique<?> definition = CoreRegistries.safeAccess(CoreRegistries.PHYSIQUE_REGISTRY, targetPhysique, level.registryAccess());
         if (definition instanceof Connected connected) {
             Component failure = connected.connections().failureMessage(source, level.registryAccess());
@@ -51,7 +61,6 @@ public class PhysiqueTransferItem extends Item {
         }
 
         if(!AscensionOriginSourceHelper.setPhysique(source,targetPhysique)){
-            //TODO return error message to player here
             return InteractionResult.FAIL;
         }
         stack.shrink(1);
