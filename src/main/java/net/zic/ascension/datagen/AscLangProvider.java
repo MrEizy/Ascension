@@ -843,6 +843,21 @@ public class AscLangProvider extends LanguageProvider {
         add("ascension.path.weapon.umbrella.name", "Umbrella");
         add("ascension.path.weapon.umbrella.desc", "cultivate the deceptive grace of the warding canopy, sheltering blow and blade alike");
 
+        add("ascension.skill.sword_cultivation.name", "Sword Cultivation");
+        add("ascension.skill.sword_cultivation.desc", "Practice with sword weapons to cultivate the Sword Path.");
+        add("ascension.skill.blade_cultivation.name", "Blade Cultivation");
+        add("ascension.skill.blade_cultivation.desc", "Practice with blade weapons to cultivate the Blade Path.");
+        add("ascension.skill.spear_cultivation.name", "Spear Cultivation");
+        add("ascension.skill.spear_cultivation.desc", "Practice with spear weapons to cultivate the Spear Path.");
+        add("ascension.skill.axe_cultivation.name", "Axe Cultivation");
+        add("ascension.skill.axe_cultivation.desc", "Practice with axe weapons to cultivate the Axe Path.");
+        add("ascension.skill.bow_cultivation.name", "Bow Cultivation");
+        add("ascension.skill.bow_cultivation.desc", "Practice with bow weapons to cultivate the Bow Path.");
+        add("ascension.skill.mace_cultivation.name", "Mace Cultivation");
+        add("ascension.skill.mace_cultivation.desc", "Practice with mace weapons to cultivate the Mace Path.");
+        add("ascension.skill.fist_cultivation.name", "Fist Cultivation");
+        add("ascension.skill.fist_cultivation.desc", "Practice unarmed strikes or fist weapons to cultivate the Fist Path.");
+
         //Golden Cores
         add("ascension.golden_core.test_core.name", "Test Golden Core");
         add("ascension.golden_core.test_core.desc", "A plain golden core used for testing. It strengthens the body, and grows stronger with every realm its path reaches.");

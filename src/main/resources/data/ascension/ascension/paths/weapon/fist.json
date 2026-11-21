@@ -54,6 +54,17 @@
   ],
   "actions": [
     {
+      "condition": "ascension:realm_change/on_gained",
+      "actions": [
+        {
+          "type": "ascension:grant_skills",
+          "skills": [
+            "ascension:passive/fist_cultivation"
+          ]
+        }
+      ]
+    },
+    {
       "condition": "ascension:realm_change/second_major_realm",
       "actions": [
         {

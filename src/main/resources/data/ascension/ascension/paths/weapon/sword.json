@@ -118,7 +118,8 @@
         {
           "type": "ascension:grant_skills",
           "skills": [
-            "ascension:castable/sword_control"
+            "ascension:castable/sword_control",
+            "ascension:passive/sword_cultivation"
           ]
         }
       ]
