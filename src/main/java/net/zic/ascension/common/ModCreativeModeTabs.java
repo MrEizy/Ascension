@@ -149,6 +149,7 @@ public class ModCreativeModeTabs {
                     .displayItems((_, output) -> {
                         output.accept(ModBlocks.CULTIVATION_SOIL);
                         output.accept(ModBlocks.ALCHEMY_FURNACE);
+                        output.accept(ModBlocks.INSIGHT_ALCHEMY_FURNACE);
                         output.accept(ModItems.JADE_DEW_GRASS);
                         output.accept(ModItems.JADE_DEW_GRASS_SEEDS);
                         output.accept(ModItems.GINSENG);

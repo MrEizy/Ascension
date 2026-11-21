@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_alchemy_furnace": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ascension:alchemy_furnace"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ascension:shaped/insight_alchemy_furnace"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_alchemy_furnace"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ascension:shaped/insight_alchemy_furnace"
+    ]
+  }
+}

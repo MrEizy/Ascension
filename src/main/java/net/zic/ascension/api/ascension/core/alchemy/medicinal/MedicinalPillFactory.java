@@ -15,6 +15,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public final class MedicinalPillFactory {
+    private static final double FOCUS_STEERING_MULTIPLIER = 2.75D;
+
     private MedicinalPillFactory() {
     }
 
@@ -31,25 +33,21 @@ public final class MedicinalPillFactory {
                                      long gameTime, double ingredientQuality, Identifier desiredEffect,
                                      double focusPrecision, int gradePenalty) {
         if (profile == null || profile.composition().isEmpty()) return ItemStack.EMPTY;
-        List<MedicinalProfile.Effect> beneficial = new ArrayList<>();
+        List<MedicinalProfile.Effect> beneficial = rankedBeneficialEffects(profile, access);
         List<MedicinalProfile.Effect> harmful = new ArrayList<>();
         for (MedicinalProfile.Effect effect : profile.effects()) {
             if (effect.adverse()) harmful.add(effect);
-            else beneficial.add(effect);
         }
         if (beneficial.isEmpty()) return ItemStack.EMPTY;
-
-        Registry<MedicinalEffectDefinition> expressions = access == null ? null : MedicinalRegistries.EFFECTS.get(access);
-        beneficial.sort(Comparator.<MedicinalProfile.Effect>comparingDouble(effect ->
-                -weightedPotency(effect, expressions)).thenComparing(effect -> effect.id().toString()));
         harmful.sort(Comparator.comparingDouble(MedicinalProfile.Effect::potency).reversed()
                 .thenComparing(effect -> effect.id().toString()));
 
         MedicinalProfile.Effect primary = beneficial.getFirst();
         if (desiredEffect != null) {
             for (MedicinalProfile.Effect candidate : beneficial) {
-                if (candidate.id().equals(desiredEffect) && candidate.potency() >= primary.potency()
-                        * Math.max(0.55D, 0.85D - Math.max(0.0D, Math.min(0.3D, focusPrecision)))) {
+                if (candidate.id().equals(desiredEffect) && candidate.potency() * FOCUS_STEERING_MULTIPLIER
+                        >= primary.potency() * Math.max(0.55D,
+                        0.85D - Math.max(0.0D, Math.min(0.3D, focusPrecision)))) {
                     primary = candidate;
                     break;
                 }
@@ -84,6 +82,15 @@ public final class MedicinalPillFactory {
         ));
         stack.set(DataComponents.ITEM_NAME, nameFor(result, primary.id(), access));
         return stack;
+    }
+
+    public static List<MedicinalProfile.Effect> rankedBeneficialEffects(MedicinalProfile profile, RegistryAccess access) {
+        if (profile == null) return List.of();
+        Registry<MedicinalEffectDefinition> expressions = access == null ? null : MedicinalRegistries.EFFECTS.get(access);
+        return profile.effects().stream().filter(effect -> !effect.adverse())
+                .sorted(Comparator.<MedicinalProfile.Effect>comparingDouble(effect ->
+                        -weightedPotency(effect, expressions)).thenComparing(effect -> effect.id().toString()))
+                .toList();
     }
 
     private static double weightedPotency(MedicinalProfile.Effect effect, Registry<MedicinalEffectDefinition> expressions) {

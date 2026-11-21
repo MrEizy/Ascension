@@ -9,6 +9,7 @@
     "ascension:auction_house_core",
     "ascension:auction_bidder",
     "ascension:alchemy_furnace",
+    "ascension:insight_alchemy_furnace",
     "ascension:spiritual_stone_cluster"
   ]
 }
