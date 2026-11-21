@@ -37,10 +37,9 @@ public final class ControlledSwordEntity extends Projectile {
     private static final EntityDataAccessor<ItemStack> DATA_SWORD = SynchedEntityData.defineId(ControlledSwordEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> DATA_HAND = SynchedEntityData.defineId(ControlledSwordEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_SLOT = SynchedEntityData.defineId(ControlledSwordEntity.class, EntityDataSerializers.INT);
-    private static final double MAX_RANGE = 24.0D;
     private static final double MAX_SPEED = 1.4D;
     private static final double MIN_CONTROL_DISTANCE = 2.0D;
-    private static final double MAX_CONTROL_DISTANCE = 18.0D;
+    private static final double DEFAULT_MAX_CONTROL_DISTANCE = 18.0D;
     private static final double DEFAULT_CONTROL_DISTANCE = 5.0D;
     private static final double DISTANCE_STEP = 1.5D;
     private static final double CONTROL_ACCELERATION = 0.26D;
@@ -52,6 +51,7 @@ public final class ControlledSwordEntity extends Projectile {
     private int recallTicks;
     private boolean recalling;
     private double controlDistance = DEFAULT_CONTROL_DISTANCE;
+    private double maximumControlDistance = DEFAULT_MAX_CONTROL_DISTANCE;
     private Vec3 visualPosition;
     private float visualYaw;
     private float visualPitch;
@@ -100,7 +100,7 @@ public final class ControlledSwordEntity extends Projectile {
     public void adjustDistance(int steps) {
         if (!recalling && steps != 0) {
             controlDistance = Mth.clamp(controlDistance + Mth.clamp(steps, -4, 4) * DISTANCE_STEP,
-                    MIN_CONTROL_DISTANCE, MAX_CONTROL_DISTANCE);
+                    MIN_CONTROL_DISTANCE, maximumControlDistance);
         }
     }
 
@@ -125,10 +125,14 @@ public final class ControlledSwordEntity extends Projectile {
     public record VisualPose(Vec3 position, float yaw, float pitch) {
     }
 
-    public void command(Player player) {
+    public void command(Player player, double maximumDistance) {
         if (recalling || player != getOwner()) {
             return;
         }
+        if (Double.isFinite(maximumDistance)) {
+            maximumControlDistance = Math.max(MIN_CONTROL_DISTANCE, maximumDistance);
+        }
+        controlDistance = Math.min(controlDistance, maximumControlDistance);
         lastCommandTick = tickCount;
         Vec3 eye = player.getEyePosition();
         Vec3 look = player.getLookAngle();
@@ -143,6 +147,11 @@ public final class ControlledSwordEntity extends Projectile {
 
     public boolean isRecalling() {
         return recalling;
+    }
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double distanceSqr) {
+        return true;
     }
 
     @Override
@@ -164,7 +173,7 @@ public final class ControlledSwordEntity extends Projectile {
             return;
         }
         Vec3 from = position();
-        if (!recalling && from.distanceToSqr(player.position()) > (MAX_RANGE + 5.0D) * (MAX_RANGE + 5.0D)) {
+        if (!recalling && from.distanceToSqr(player.position()) > (maximumControlDistance + 5.0D) * (maximumControlDistance + 5.0D)) {
             recall();
         }
         Vec3 destination = recalling ? player.getEyePosition().add(0.0D, -0.25D, 0.0D) : aim;

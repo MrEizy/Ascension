@@ -12,7 +12,12 @@
   "require_targets": false,
   "actions": [
     {
-      "type": "ascension:sword_control"
+      "type": "ascension:sword_control",
+      "maximum_distance": {
+        "base": 18.0,
+        "per_mastery": 4.0,
+        "maximum": 38.0
+      }
     }
   ],
   "cost": {

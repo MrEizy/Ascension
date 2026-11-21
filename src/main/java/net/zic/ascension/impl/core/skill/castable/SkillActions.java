@@ -1354,8 +1354,10 @@ public final class SkillActions {
         }
     }
 
-    public record SwordControl() implements SkillAction {
-        public static final MapCodec<SwordControl> CODEC = MapCodec.unit(SwordControl::new);
+    public record SwordControl(ScaledValue maximumDistance) implements SkillAction {
+        public static final MapCodec<SwordControl> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ScaledValue.COMPACT_CODEC.optionalFieldOf("maximum_distance", ScaledValue.constant(18.0D)).forGetter(SwordControl::maximumDistance)
+        ).apply(instance, SwordControl::new));
 
         @Override
         public CodecType<SkillAction> getType() {
@@ -1369,7 +1371,7 @@ public final class SkillActions {
 
         @Override
         public void apply(SkillActionContext context) {
-            SwordControlService.pulse(context.caster());
+            SwordControlService.pulse(context.caster(), maximumDistance.resolve(context.scaledValueContext()));
         }
     }
 

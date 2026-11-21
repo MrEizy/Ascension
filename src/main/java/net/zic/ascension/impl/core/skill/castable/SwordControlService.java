@@ -29,7 +29,7 @@ public final class SwordControlService {
     private SwordControlService() {
     }
 
-    public static void pulse(net.minecraft.world.entity.LivingEntity caster) {
+    public static void pulse(net.minecraft.world.entity.LivingEntity caster, double maximumDistance) {
         if (!(caster instanceof ServerPlayer player)) {
             return;
         }
@@ -50,7 +50,7 @@ public final class SwordControlService {
             ACTIVE.put(player.getUUID(), current);
         }
         if (!current.isRecalling()) {
-            current.command(player);
+            current.command(player, maximumDistance);
         }
     }
 
