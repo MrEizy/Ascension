@@ -18,6 +18,7 @@
 * Chakrams can now carry External Qi Coating. Thrown chakrams show the sword qi look in flight and apply the element's on-hit effect to whatever they hit.
 * Added an animation for sitting on cushions and cultivating on cushions
 * Techniques now give stats, and have enforced max realms etc
+* Added new Skill; Sword Control and Twin Sword Control
 
 ### Removed
 * Removed all divine senses
