@@ -63,7 +63,7 @@ public final class SkillRuntimeEvents {
         Map<Identifier, Double> variables = Map.of(PassiveTriggerService.DAMAGE, event.getDamage());
         if (attacker != null && attacker != event.getEntity()) {
             PassiveCombatService.applyLifesteal(event);
-            PassiveTriggerService.trigger(attacker, PassiveTrigger.Event.DAMAGE_DEALT, event.getEntity(), variables);
+            PassiveTriggerService.trigger(attacker, PassiveTrigger.Event.DAMAGE_DEALT, event.getEntity(), variables, event.getSource());
         }
         PassiveTriggerService.trigger(event.getEntity(), PassiveTrigger.Event.DAMAGE_TAKEN, attacker, variables);
     }
