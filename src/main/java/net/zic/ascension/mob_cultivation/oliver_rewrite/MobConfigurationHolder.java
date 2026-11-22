@@ -33,7 +33,7 @@ public class MobConfigurationHolder implements ConfigurableMobData {
     @Override
     public void setMobConfigurationInstance(MobConfigurationInstance instance) {
         if (configurationInstance != null && instance != null
-                && configurationInstance.getTier() == instance.getTier()
+                && configurationInstance.getSelections().equals(instance.getSelections())
                 && configurationInstance.getTraits().equals(instance.getTraits())) return;
         boolean reapplyEntity = entityApplied;
         boolean reapplySource = sourceApplied;

@@ -1,230 +1,280 @@
 {
   "values": {
     "minecraft:zombie": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:sturdy",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": []
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": []
+            }
+          ]
         }
-      },
-      "traits": {
-        "normal": [
-          {
-            "trait": "ascension:sturdy",
-            "chance": 1.0
-          }
-        ]
-      }
+      ]
     },
     "ascension:male_cultivator": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:male_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": [
+                {
+                  "trait": "ascension:male_cultivator",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:elite_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": [
+                {
+                  "trait": "ascension:male_cultivator",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:ancient_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
         }
-      },
-      "traits": {
-        "normal": [
-          {
-            "trait": "ascension:male_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "elite": [
-          {
-            "trait": "ascension:male_cultivator",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:elite_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "ancient": [
-          {
-            "trait": "ascension:male_cultivator",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:ancient_cultivator",
-            "chance": 1.0
-          }
-        ]
-      }
+      ]
     },
     "ascension:female_cultivator": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:female_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": [
+                {
+                  "trait": "ascension:female_cultivator",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:elite_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": [
+                {
+                  "trait": "ascension:female_cultivator",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:ancient_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
         }
-      },
-      "traits": {
-        "normal": [
-          {
-            "trait": "ascension:female_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "elite": [
-          {
-            "trait": "ascension:female_cultivator",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:elite_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "ancient": [
-          {
-            "trait": "ascension:female_cultivator",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:ancient_cultivator",
-            "chance": 1.0
-          }
-        ]
-      }
+      ]
     },
     "ascension:young_master": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:young_master",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": [
+                {
+                  "trait": "ascension:young_master",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:elite_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": [
+                {
+                  "trait": "ascension:young_master",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:ancient_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
         }
-      },
-      "traits": {
-        "normal": [
-          {
-            "trait": "ascension:young_master",
-            "chance": 1.0
-          }
-        ],
-        "elite": [
-          {
-            "trait": "ascension:young_master",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:elite_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "ancient": [
-          {
-            "trait": "ascension:young_master",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:ancient_cultivator",
-            "chance": 1.0
-          }
-        ]
-      }
+      ]
     },
     "ascension:sect_elder": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:sect_elder",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": [
+                {
+                  "trait": "ascension:sect_elder",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:elite_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": [
+                {
+                  "trait": "ascension:sect_elder",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:ancient_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
         }
-      },
-      "traits": {
-        "normal": [
-          {
-            "trait": "ascension:sect_elder",
-            "chance": 1.0
-          }
-        ],
-        "elite": [
-          {
-            "trait": "ascension:sect_elder",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:elite_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "ancient": [
-          {
-            "trait": "ascension:sect_elder",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:ancient_cultivator",
-            "chance": 1.0
-          }
-        ]
-      }
+      ]
     },
     "ascension:sect_master": {
-      "tiers": {
-        "normal": {
-          "base_weight": 90
-        },
-        "elite": {
-          "base_weight": 9
-        },
-        "ancient": {
-          "base_weight": 1
+      "pools": [
+        {
+          "id": "ascension:rarity",
+          "rolls": 1,
+          "exclusive": true,
+          "entries": [
+            {
+              "id": "normal",
+              "base_weight": 90,
+              "traits": [
+                {
+                  "trait": "ascension:sect_master",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "elite",
+              "base_weight": 9,
+              "traits": [
+                {
+                  "trait": "ascension:sect_master",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:elite_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            },
+            {
+              "id": "ancient",
+              "base_weight": 1,
+              "traits": [
+                {
+                  "trait": "ascension:sect_master",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:ancient_cultivator",
+                  "chance": 1.0
+                }
+              ]
+            }
+          ]
         }
-      },
-      "traits": {
-        "normal": [
-          {
-            "trait": "ascension:sect_master",
-            "chance": 1.0
-          }
-        ],
-        "elite": [
-          {
-            "trait": "ascension:sect_master",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:elite_cultivator",
-            "chance": 1.0
-          }
-        ],
-        "ancient": [
-          {
-            "trait": "ascension:sect_master",
-            "chance": 1.0
-          },
-          {
-            "trait": "ascension:ancient_cultivator",
-            "chance": 1.0
-          }
-        ]
-      }
+      ]
     }
   }
 }

@@ -15,10 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.zic.ascension.api.ascension.capabilities.AscensionEntityDataProvider;
 import net.zic.ascension.common.command.CommandInspectionTarget;
 import net.zic.ascension.api.ascension.capabilities.CoreCapabilities;
@@ -150,14 +147,16 @@ public class MobCommands {
     }
 
     public static Component buildMobDetails(MobConfigurationInstance configurationInstance, RegistryAccess access){
-        MutableComponent tier = Component.literal("==="+configurationInstance.getTier()+"===");
-        MutableComponent traits = Component.empty();
-        for(MobTraitReference reference : configurationInstance.getTraits()){
-            if(!reference.isValid(access)) continue;
-            traits.append(
-                    Component.literal("\n"+reference.id()+"(").append(reference.getTrait(access).name()).append(")")
-            );
+        MutableComponent result = Component.literal("=== MOB CONFIGURATION ===");
+        for (MobConfigurationInstance.PoolSelection selection : configurationInstance.getSelections()) {
+            result.append("\n" + selection.pool() + ": " + selection.entry());
         }
-        return tier.append(traits);
+        for (MobTraitReference reference : configurationInstance.getTraits()) {
+            if (!reference.isValid(access)) continue;
+            result.append(Component.literal("\n" + reference.id() + " (")
+                    .append(reference.getTrait(access).name()).append(")"));
+        }
+        return result;
     }
+
 }

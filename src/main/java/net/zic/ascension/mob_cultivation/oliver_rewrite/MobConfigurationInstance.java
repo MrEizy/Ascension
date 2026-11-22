@@ -12,23 +12,27 @@ import net.zic.ascension.configuration.mob_traits.MobTraitReference;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class MobConfigurationInstance {
+    public record PoolSelection(Identifier pool, String entry) {
+    }
 
-    private MobCultivationEliteTier tier = MobCultivationEliteTier.NORMAL;
+    private static final Identifier RARITY_POOL = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "rarity");
+    private final List<PoolSelection> selections = new ArrayList<>();
     private final List<MobTraitReference> traits = new ArrayList<>();
 
     public MobConfigurationInstance() {
     }
 
-    public MobConfigurationInstance(MobCultivationEliteTier tier, List<MobTraitReference> traits) {
-        this.tier = tier;
+    public MobConfigurationInstance(List<PoolSelection> selections, List<MobTraitReference> traits) {
+        this.selections.addAll(selections);
         this.traits.addAll(traits);
     }
 
-    public MobCultivationEliteTier getTier() {
-        return tier;
+    public List<PoolSelection> getSelections() {
+        return List.copyOf(selections);
     }
 
     public List<MobTraitReference> getTraits() {
@@ -71,7 +75,12 @@ public class MobConfigurationInstance {
     }
 
     public void write(ValueOutput output, RegistryAccess access) {
-        output.putString("tier", tier.name());
+        ValueOutput.ValueOutputList selectedPools = output.childrenList("selections");
+        for (PoolSelection selection : selections) {
+            ValueOutput child = selectedPools.addChild();
+            child.putString("pool", selection.pool().toString());
+            child.putString("entry", selection.entry());
+        }
         ValueOutput.ValueOutputList list = output.childrenList("traits");
         for (MobTraitReference trait : traits) {
             trait.write(list.addChild());
@@ -79,10 +88,22 @@ public class MobConfigurationInstance {
     }
 
     public void read(ValueInput input, RegistryAccess access) {
-        try {
-            tier = MobCultivationEliteTier.valueOf(input.getStringOr("tier", "NORMAL"));
-        } catch (IllegalArgumentException exception) {
-            tier = MobCultivationEliteTier.NORMAL;
+        selections.clear();
+        for (ValueInput selectionInput : input.childrenListOrEmpty("selections")) {
+            try {
+                Identifier pool = Identifier.parse(selectionInput.getStringOr("pool", ""));
+                String entry = selectionInput.getStringOr("entry", "");
+                PoolSelection selection = new PoolSelection(pool, entry);
+                if (!entry.isBlank() && !selections.contains(selection)) selections.add(selection);
+            } catch (Exception exception) {
+                AscensionCraft.LOGGER.debug("Unable to read mob trait pool selection", exception);
+            }
+        }
+        if (selections.isEmpty()) {
+            String legacyTier = input.getStringOr("tier", "").toLowerCase(Locale.ROOT);
+            if (legacyTier.equals("normal") || legacyTier.equals("elite") || legacyTier.equals("ancient")) {
+                selections.add(new PoolSelection(RARITY_POOL, legacyTier));
+            }
         }
         traits.clear();
         for (ValueInput traitInput : input.childrenListOrEmpty("traits")) {
