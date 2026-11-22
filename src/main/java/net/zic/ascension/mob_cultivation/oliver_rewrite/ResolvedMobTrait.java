@@ -15,6 +15,10 @@ import java.util.List;
 
 public record ResolvedMobTrait(MobTraitReference trait, MobTraitRoll roll) {
     public void applyToSource(OriginSource source, Identifier owner) {
+        applyRollToSource(source, owner, roll);
+    }
+
+    public static void applyRollToSource(OriginSource source, Identifier owner, MobTraitRoll roll) {
         if (source == null) return;
         for (MobTraitRoll.PathRoll path : roll.paths()) {
             boolean existing = AscensionOriginSourceHelper.hasPath(source, path.path());
@@ -31,6 +35,10 @@ public record ResolvedMobTrait(MobTraitReference trait, MobTraitRoll roll) {
     }
 
     public void removeFromSource(OriginSource source, Identifier owner) {
+        removeRollFromSource(source, owner, roll);
+    }
+
+    public static void removeRollFromSource(OriginSource source, Identifier owner, MobTraitRoll roll) {
         if (source == null) return;
         for (Identifier skill : roll.skills()) {
             AscensionOriginSourceHelper.removeSkill(source, skill, owner);
@@ -42,6 +50,10 @@ public record ResolvedMobTrait(MobTraitReference trait, MobTraitRoll roll) {
 
     public void write(ValueOutput output) {
         output.putString("trait", trait.id().toString());
+        writeRoll(output, roll);
+    }
+
+    public static void writeRoll(ValueOutput output, MobTraitRoll roll) {
         ValueOutput.ValueOutputList pathList = output.childrenList("paths");
         for (MobTraitRoll.PathRoll path : roll.paths()) {
             ValueOutput child = pathList.addChild();
@@ -57,6 +69,10 @@ public record ResolvedMobTrait(MobTraitReference trait, MobTraitRoll roll) {
 
     public static ResolvedMobTrait read(ValueInput input) {
         MobTraitReference trait = new MobTraitReference(Identifier.parse(input.getStringOr("trait", "none")));
+        return new ResolvedMobTrait(trait, readRoll(input));
+    }
+
+    public static MobTraitRoll readRoll(ValueInput input) {
         List<MobTraitRoll.PathRoll> paths = new ArrayList<>();
         for (ValueInput child : input.childrenListOrEmpty("paths")) {
             try {
@@ -78,6 +94,6 @@ public record ResolvedMobTrait(MobTraitReference trait, MobTraitRoll roll) {
             } catch (Exception ignored) {
             }
         }
-        return new ResolvedMobTrait(trait, new MobTraitRoll(paths, skills));
+        return new MobTraitRoll(paths, skills);
     }
 }

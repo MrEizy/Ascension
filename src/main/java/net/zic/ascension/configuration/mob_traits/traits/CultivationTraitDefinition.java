@@ -85,6 +85,12 @@ public record CultivationTraitDefinition(Component name, List<WeightedPath> foun
 
     @Override
     public MobTraitRoll roll(RandomSource random) {
+        return roll(random, foundationPaths, subpaths, subpathCount, skillPools);
+    }
+
+    public static MobTraitRoll roll(RandomSource random, List<WeightedPath> foundationPaths,
+                                    List<WeightedPath> subpaths, RollRange subpathCount,
+                                    List<SkillPool> skillPools) {
         Map<Identifier, MobTraitRoll.PathRoll> paths = new LinkedHashMap<>();
         WeightedPath foundation = select(foundationPaths, random, WeightedPath::weight);
         if (foundation != null) addPath(paths, foundation, random);

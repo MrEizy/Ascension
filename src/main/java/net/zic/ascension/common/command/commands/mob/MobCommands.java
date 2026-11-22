@@ -167,6 +167,16 @@ public class MobCommands {
                 result.append("\n  Skill: " + skill);
             }
         }
+        MobTraitRoll cultivation = configurationInstance.getCultivation();
+        if (!cultivation.isEmpty()) {
+            result.append("\nSpecies cultivation:");
+            for (MobTraitRoll.PathRoll path : cultivation.paths()) {
+                result.append("\n  " + path.path() + " (" + path.majorRealm() + "." + path.minorRealm() + ")");
+            }
+            for (Identifier skill : cultivation.skills()) {
+                result.append("\n  Skill: " + skill);
+            }
+        }
         return result;
     }
 

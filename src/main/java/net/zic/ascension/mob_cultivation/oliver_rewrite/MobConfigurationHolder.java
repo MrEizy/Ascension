@@ -35,7 +35,9 @@ public class MobConfigurationHolder implements ConfigurableMobData {
         if (configurationInstance != null && instance != null
                 && configurationInstance.getSelections().equals(instance.getSelections())
                 && configurationInstance.getTraits().equals(instance.getTraits())
-                && configurationInstance.getRolledTraits().equals(instance.getRolledTraits())) return;
+                && configurationInstance.getRolledTraits().equals(instance.getRolledTraits())
+                && configurationInstance.getCultivation().equals(instance.getCultivation())
+                && configurationInstance.getStatBiases().equals(instance.getStatBiases())) return;
         boolean reapplyEntity = entityApplied;
         boolean reapplySource = sourceApplied;
         removeConfigurationInstance();

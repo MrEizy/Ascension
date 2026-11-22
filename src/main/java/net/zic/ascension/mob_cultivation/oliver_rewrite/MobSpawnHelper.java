@@ -10,6 +10,7 @@ import net.zic.ascension.configuration.mob_traits.MobTraitDefinition;
 import net.zic.ascension.configuration.mob_traits.MobTraitRoll;
 import net.zic.ascension.configuration.mob_traits.RollableMobTraitDefinition;
 import net.zic.ascension.configuration.mobs.MobConfiguration;
+import net.zic.ascension.configuration.mobs.MobCultivationRules;
 import net.zic.ascension.configuration.mobs.MobTraitPool;
 import net.zic.ascension.configuration.mobs.MobTraitPoolEntry;
 import net.zic.ascension.configuration.mobs.PotentialTrait;
@@ -85,7 +86,19 @@ public class MobSpawnHelper {
                 if (!roll.isEmpty()) rolledTraits.add(new ResolvedMobTrait(trait, roll));
             }
         }
-        return new MobConfigurationInstance(selections, traits, rolledTraits);
+        MobCultivationRules rules = configuration.cultivation();
+        for (MobTraitPool pool : configuration.pools()) {
+            for (MobConfigurationInstance.PoolSelection selection : selections) {
+                if (!selection.pool().equals(pool.id())) continue;
+                for (MobTraitPoolEntry entry : pool.entries()) {
+                    if (selection.entry().equals(entry.id()) && entry.cultivation().isPresent()) {
+                        rules = entry.cultivation().get();
+                    }
+                }
+            }
+        }
+        MobTraitRoll cultivation = rules.roll(random);
+        return new MobConfigurationInstance(selections, traits, rolledTraits, cultivation, configuration.statBiases());
     }
 
     private static void addEntry(MobTraitPool pool, MobTraitPoolEntry entry, Mob mob, RandomSource random,
