@@ -14,18 +14,40 @@
                 {
                   "trait": "ascension:sturdy",
                   "chance": 1.0
+                },
+                {
+                  "trait": "ascension:zombie_potential",
+                  "chance": 1.0
                 }
               ]
             },
             {
               "id": "elite",
               "base_weight": 9,
-              "traits": []
+              "traits": [
+                {
+                  "trait": "ascension:elite_mob",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:awakened_zombie",
+                  "chance": 1.0
+                }
+              ]
             },
             {
               "id": "ancient",
               "base_weight": 1,
-              "traits": []
+              "traits": [
+                {
+                  "trait": "ascension:ancient_mob",
+                  "chance": 1.0
+                },
+                {
+                  "trait": "ascension:awakened_zombie",
+                  "chance": 1.0
+                }
+              ]
             }
           ]
         }

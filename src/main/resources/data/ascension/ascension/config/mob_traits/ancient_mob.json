@@ -1,0 +1,44 @@
+{
+  "type": "ascension:simple_trait",
+  "name": "Ancient Creature",
+  "stats": {
+    "ascension:vitality": {
+      "flat": [
+        {
+          "id": "ascension:mob_ancient_vitality",
+          "value": 30
+        }
+      ],
+      "multiplier": []
+    },
+    "ascension:strength": {
+      "flat": [
+        {
+          "id": "ascension:mob_ancient_strength",
+          "value": 12
+        }
+      ],
+      "multiplier": []
+    }
+  },
+  "attributes": {
+    "minecraft:max_health": {
+      "flat": [
+        {
+          "id": "ascension:mob_ancient_health",
+          "value": 70
+        }
+      ],
+      "multiplier": []
+    },
+    "minecraft:attack_damage": {
+      "flat": [
+        {
+          "id": "ascension:mob_ancient_attack",
+          "value": 16
+        }
+      ],
+      "multiplier": []
+    }
+  }
+}

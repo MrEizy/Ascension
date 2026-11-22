@@ -34,7 +34,8 @@ public class MobConfigurationHolder implements ConfigurableMobData {
     public void setMobConfigurationInstance(MobConfigurationInstance instance) {
         if (configurationInstance != null && instance != null
                 && configurationInstance.getSelections().equals(instance.getSelections())
-                && configurationInstance.getTraits().equals(instance.getTraits())) return;
+                && configurationInstance.getTraits().equals(instance.getTraits())
+                && configurationInstance.getRolledTraits().equals(instance.getRolledTraits())) return;
         boolean reapplyEntity = entityApplied;
         boolean reapplySource = sourceApplied;
         removeConfigurationInstance();

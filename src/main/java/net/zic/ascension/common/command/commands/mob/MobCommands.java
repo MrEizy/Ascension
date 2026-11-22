@@ -27,6 +27,8 @@ import net.zic.ascension.api.ascension.core.path.PathInstance;
 import net.zic.ascension.api.rpg_engine.source.OriginSource;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.configuration.mob_traits.MobTraitReference;
+import net.zic.ascension.configuration.mob_traits.MobTraitRoll;
+import net.zic.ascension.mob_cultivation.oliver_rewrite.ResolvedMobTrait;
 
 import net.zic.ascension.mob_cultivation.oliver_rewrite.MobConfigurationInstance;
 
@@ -155,6 +157,15 @@ public class MobCommands {
             if (!reference.isValid(access)) continue;
             result.append(Component.literal("\n" + reference.id() + " (")
                     .append(reference.getTrait(access).name()).append(")"));
+        }
+        for (ResolvedMobTrait rolled : configurationInstance.getRolledTraits()) {
+            result.append("\n" + rolled.trait().id() + " selections:");
+            for (MobTraitRoll.PathRoll path : rolled.roll().paths()) {
+                result.append("\n  " + path.path() + " (" + path.majorRealm() + "." + path.minorRealm() + ")");
+            }
+            for (Identifier skill : rolled.roll().skills()) {
+                result.append("\n  Skill: " + skill);
+            }
         }
         return result;
     }

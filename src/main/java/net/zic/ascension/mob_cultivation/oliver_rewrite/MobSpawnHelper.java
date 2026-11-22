@@ -6,6 +6,9 @@ import net.minecraft.world.entity.Mob;
 import net.zic.ascension.common.data_attachements.AscensionAttachments;
 import net.zic.ascension.configuration.ConfigurationDataMaps;
 import net.zic.ascension.configuration.mob_traits.MobTraitReference;
+import net.zic.ascension.configuration.mob_traits.MobTraitDefinition;
+import net.zic.ascension.configuration.mob_traits.MobTraitRoll;
+import net.zic.ascension.configuration.mob_traits.RollableMobTraitDefinition;
 import net.zic.ascension.configuration.mobs.MobConfiguration;
 import net.zic.ascension.configuration.mobs.MobTraitPool;
 import net.zic.ascension.configuration.mobs.MobTraitPoolEntry;
@@ -74,7 +77,15 @@ public class MobSpawnHelper {
                 selected.add(entry.id());
             }
         }
-        return new MobConfigurationInstance(selections, traits);
+        List<ResolvedMobTrait> rolledTraits = new ArrayList<>();
+        for (MobTraitReference trait : traits) {
+            MobTraitDefinition definition = trait.getTrait(mob.registryAccess());
+            if (definition instanceof RollableMobTraitDefinition rollable) {
+                MobTraitRoll roll = rollable.roll(random);
+                if (!roll.isEmpty()) rolledTraits.add(new ResolvedMobTrait(trait, roll));
+            }
+        }
+        return new MobConfigurationInstance(selections, traits, rolledTraits);
     }
 
     private static void addEntry(MobTraitPool pool, MobTraitPoolEntry entry, Mob mob, RandomSource random,

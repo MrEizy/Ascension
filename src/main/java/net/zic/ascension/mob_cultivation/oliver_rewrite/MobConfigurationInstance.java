@@ -22,13 +22,20 @@ public class MobConfigurationInstance {
     private static final Identifier RARITY_POOL = Identifier.fromNamespaceAndPath(AscensionCraft.MOD_ID, "rarity");
     private final List<PoolSelection> selections = new ArrayList<>();
     private final List<MobTraitReference> traits = new ArrayList<>();
+    private final List<ResolvedMobTrait> rolledTraits = new ArrayList<>();
 
     public MobConfigurationInstance() {
     }
 
     public MobConfigurationInstance(List<PoolSelection> selections, List<MobTraitReference> traits) {
+        this(selections, traits, List.of());
+    }
+
+    public MobConfigurationInstance(List<PoolSelection> selections, List<MobTraitReference> traits,
+                                    List<ResolvedMobTrait> rolledTraits) {
         this.selections.addAll(selections);
         this.traits.addAll(traits);
+        this.rolledTraits.addAll(rolledTraits);
     }
 
     public List<PoolSelection> getSelections() {
@@ -37,6 +44,15 @@ public class MobConfigurationInstance {
 
     public List<MobTraitReference> getTraits() {
         return List.copyOf(traits);
+    }
+
+    public List<ResolvedMobTrait> getRolledTraits() {
+        return List.copyOf(rolledTraits);
+    }
+
+    private Identifier rolledOwner(MobTraitReference trait, UUID mobId) {
+        Identifier base = owner(trait, mobId);
+        return Identifier.fromNamespaceAndPath(base.getNamespace(), base.getPath() + "/rolled");
     }
 
     private Identifier owner(MobTraitReference trait, UUID mobId) {
@@ -57,6 +73,9 @@ public class MobConfigurationInstance {
             MobTraitDefinition definition = trait.getTrait(source.getRegistryAccess());
             if (definition != null) definition.applyToSource(source, owner(trait, mobId));
         }
+        for (ResolvedMobTrait rolled : rolledTraits) {
+            rolled.applyToSource(source, rolledOwner(rolled.trait(), mobId));
+        }
     }
 
     public void removeFromMob(Mob mob) {
@@ -68,6 +87,9 @@ public class MobConfigurationInstance {
 
     public void removeFromSource(OriginSource source, UUID mobId) {
         if (source == null) return;
+        for (ResolvedMobTrait rolled : rolledTraits) {
+            rolled.removeFromSource(source, rolledOwner(rolled.trait(), mobId));
+        }
         for (MobTraitReference trait : traits) {
             MobTraitDefinition definition = trait.getTrait(source.getRegistryAccess());
             if (definition != null) definition.removeFromSource(source, owner(trait, mobId));
@@ -84,6 +106,10 @@ public class MobConfigurationInstance {
         ValueOutput.ValueOutputList list = output.childrenList("traits");
         for (MobTraitReference trait : traits) {
             trait.write(list.addChild());
+        }
+        ValueOutput.ValueOutputList rolls = output.childrenList("rolled_traits");
+        for (ResolvedMobTrait rolled : rolledTraits) {
+            rolled.write(rolls.addChild());
         }
     }
 
@@ -112,6 +138,18 @@ public class MobConfigurationInstance {
                 if (!traits.contains(reference)) traits.add(reference);
             } catch (Exception exception) {
                 AscensionCraft.LOGGER.debug("Unable to read mob trait reference", exception);
+            }
+        }
+        rolledTraits.clear();
+        for (ValueInput rollInput : input.childrenListOrEmpty("rolled_traits")) {
+            try {
+                ResolvedMobTrait rolled = ResolvedMobTrait.read(rollInput);
+                if (traits.contains(rolled.trait()) && rolledTraits.stream()
+                        .noneMatch(existing -> existing.trait().equals(rolled.trait()))) {
+                    rolledTraits.add(rolled);
+                }
+            } catch (Exception exception) {
+                AscensionCraft.LOGGER.debug("Unable to read resolved mob trait", exception);
             }
         }
     }
